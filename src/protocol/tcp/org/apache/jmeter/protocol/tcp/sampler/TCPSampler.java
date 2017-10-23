@@ -110,9 +110,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     static {
         boolean hsp = false;
-        log.debug("Status prefix=" + STATUS_PREFIX); //$NON-NLS-1$
-        log.debug("Status suffix=" + STATUS_SUFFIX); //$NON-NLS-1$
-        log.debug("Status properties=" + STATUS_PROPERTIES); //$NON-NLS-1$
+        log.debug("Status prefix={}, suffix={}, properties={}", 
+                STATUS_PREFIX, STATUS_SUFFIX, STATUS_PROPERTIES); //$NON-NLS-1$
         if (STATUS_PROPERTIES.length() > 0) {
             File f = new File(STATUS_PROPERTIES);
             try (FileInputStream fis = new FileInputStream(f)){
@@ -120,9 +119,9 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 log.debug("Successfully loaded properties"); //$NON-NLS-1$
                 hsp = true;
             } catch (FileNotFoundException e) {
-                log.debug("Property file not found"); //$NON-NLS-1$
+                log.debug("Property file {} not found", STATUS_PROPERTIES); //$NON-NLS-1$
             } catch (IOException e) {
-                log.debug("Property file error " + e.toString()); //$NON-NLS-1$
+                log.debug("Error reading property file {} error {}", STATUS_PROPERTIES, e.toString()); //$NON-NLS-1$
             }
         }
         HAVE_STATUS_PROPS = hsp;
@@ -140,7 +139,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     private transient volatile Socket currentSocket; // used for handling interrupt
 
     public TCPSampler() {
-        log.debug("Created " + this); //$NON-NLS-1$
+        log.debug("Created {}", this); //$NON-NLS-1$
     }
 
     private String getError() {
@@ -154,7 +153,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         if (isReUseConnection()) {
             con = (Socket) cp.get(socketKey);
             if (con != null) {
-                log.debug(this + " Reusing connection " + con); //$NON-NLS-1$
+                log.debug("{} Reusing connection {}", this, con); //$NON-NLS-1$
             }
         }
         if (con == null) {
@@ -168,15 +167,15 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 }
                 con.connect(sockaddr, getConnectTimeout());
                 if(log.isDebugEnabled()) {
-                    log.debug("Created new connection " + con); //$NON-NLS-1$
+                    log.debug("Created new connection {}", con); //$NON-NLS-1$
                 }
                 cp.put(socketKey, con);
             } catch (UnknownHostException e) {
-                log.warn("Unknown host for " + getLabel(), e);//$NON-NLS-1$
+                log.warn("Unknown host for {}", getLabel(), e);//$NON-NLS-1$
                 cp.put(ERRKEY, e.toString());
                 return null;
             } catch (IOException e) {
-                log.warn("Could not create socket for " + getLabel(), e); //$NON-NLS-1$
+                log.warn("Could not create socket for {}", getLabel(), e); //$NON-NLS-1$
                 cp.put(ERRKEY, e.toString());
                 return null;
             }     
@@ -186,10 +185,10 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             con.setSoTimeout(getTimeout());
             con.setTcpNoDelay(getNoDelay());
             if(log.isDebugEnabled()) {
-                log.debug(this + "  Timeout " + getTimeout() + " NoDelay " + getNoDelay()); //$NON-NLS-1$
+                log.debug("{} Timeout={}, NoDelay={}", this, getTimeout(), getNoDelay()); //$NON-NLS-1$
             }
         } catch (SocketException se) {
-            log.warn("Could not set timeout or nodelay for " + getLabel(), se); //$NON-NLS-1$
+            log.warn("Could not set timeout or nodelay for {}", getLabel(), se); //$NON-NLS-1$
             cp.put(ERRKEY, se.toString());
         }
         return con;
@@ -321,7 +320,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             try {
                 c = Class.forName(PROTO_PREFIX + className, false, Thread.currentThread().getContextClassLoader());
             } catch (ClassNotFoundException e1) {
-                log.error("Could not find protocol class '" + className+"'"); //$NON-NLS-1$
+                log.error("Could not find protocol class '{}'", className); //$NON-NLS-1$
             }
         }
         return c;
@@ -329,25 +328,25 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     }
 
     private TCPClient getProtocol() {
-        TCPClient TCPClient = null;
+        TCPClient tcpClient = null;
         Class<?> javaClass = getClass(getClassname());
         if (javaClass == null){
             return null;
         }
         try {
-            TCPClient = (TCPClient) javaClass.newInstance();
+            tcpClient = (TCPClient) javaClass.newInstance();
             if (getPropertyAsString(EOL_BYTE, "").length()>0){
-                TCPClient.setEolByte(getEolByte());
-                log.info("Using eolByte=" + getEolByte());
+                tcpClient.setEolByte(getEolByte());
+                log.info("Using eolByte={}", getEolByte());
             }
 
             if (log.isDebugEnabled()) {
-                log.debug(this + "Created: " + getClassname() + "@" + Integer.toHexString(TCPClient.hashCode())); //$NON-NLS-1$
+                log.debug("{} Created: {}@{}", this, getClassname(), Integer.toHexString(tcpClient.hashCode())); //$NON-NLS-1$
             }
         } catch (Exception e) {
-            log.error(this + " Exception creating: " + getClassname(), e); //$NON-NLS-1$
+            log.error("{} Exception creating: ", this, getClassname(), e); //$NON-NLS-1$
         }
-        return TCPClient;
+        return tcpClient;
     }
 
     @Override
@@ -476,13 +475,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
      * @return whether this represents success or not
      */
     private boolean checkResponseCode(String rc) {
-        if (rc.compareTo("400") >= 0 && rc.compareTo("499") <= 0) { //$NON-NLS-1$ $NON-NLS-2$
-            return false;
-        }
-        if (rc.compareTo("500") >= 0 && rc.compareTo("599") <= 0) { //$NON-NLS-1$ $NON-NLS-2$
-            return false;
-        }
-        return true;
+        int responseCode = Integer.parseInt(rc);
+        return responseCode >= 400 && responseCode <= 599;
     }
 
     @Override
@@ -494,8 +488,10 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     // Cannot do this as part of threadStarted() because the Config elements have not been processed.
     private void initSampling(){
         protocolHandler = getProtocol();
-        log.debug("Using Protocol Handler: " +  //$NON-NLS-1$
+        if(log.isDebugEnabled()) {
+            log.debug("Using Protocol Handler: {}",  //$NON-NLS-1$
                 (protocolHandler == null ? "NONE" : protocolHandler.getClass().getName())); //$NON-NLS-1$
+        }
         if (protocolHandler != null){
             protocolHandler.setupTest();
         }
@@ -508,11 +504,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         Map<String, Object> cp = tp.get();
         Socket con = (Socket) cp.remove(socketKey);
         if (con != null) {
-            log.debug(this + " Closing connection " + con); //$NON-NLS-1$
+            log.debug("{} Closing connection {}", this, con); //$NON-NLS-1$
             try {
                 con.close();
             } catch (IOException e) {
-                log.warn("Error closing socket "+e); //$NON-NLS-1$
+                log.warn("Error closing socket {}", e); //$NON-NLS-1$
             }
         }
     }
