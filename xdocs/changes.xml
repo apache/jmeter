@@ -127,6 +127,7 @@ Summary
     <li><bug>61607</bug>Add browse button in all beanshell elements to select beanshell script</li>
     <li><bug>61627</bug>Don't clear LogView anymore when clicking on Warning/Errors Indicator</li>
     <li><bug>61629</bug>Add Think Times to Children menu should not consider disabled elements</li>
+    <li><bug>61655</bug>SampleSender : Drop HoldSampleSender implementation</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
