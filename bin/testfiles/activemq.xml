@@ -15,10 +15,10 @@
                 <memoryUsage limit="64 mb"/>
             </memoryUsage>
             <storeUsage>
-                <storeUsage limit="20000 mb"/>
+                <storeUsage limit="5000 mb"/>
             </storeUsage>
             <tempUsage>
-                <tempUsage limit="20000 mb"/>
+                <tempUsage limit="5000 mb"/>
             </tempUsage>
         </systemUsage>
     </systemUsage>
