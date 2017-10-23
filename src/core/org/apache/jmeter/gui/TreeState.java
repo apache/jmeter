@@ -38,6 +38,7 @@ public interface TreeState {
      * Save tree expanded and selected state
      *
      * @param guiPackage {@link GuiPackage} to be used
+     * @return {@link TreeState}
      */
     public static TreeState from(GuiPackage guiPackage) {
         if (guiPackage == null) {
