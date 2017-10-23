@@ -1133,7 +1133,7 @@ FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/active
 </stringProp>
           <stringProp name="BeanShellSampler.filename"></stringProp>
           <stringProp name="BeanShellSampler.parameters"></stringProp>
-          <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+          <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
         <hashTree/>
       </hashTree>
