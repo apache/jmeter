@@ -30,8 +30,6 @@ public class SampleSenderFactory {
 
     private static final String MODE_STANDARD = "Standard"; // $NON-NLS-1$
 
-    private static final String MODE_HOLD = "Hold"; // $NON-NLS-1$
-
     private static final String MODE_BATCH = "Batch"; // $NON-NLS-1$
 
     private static final String MODE_STATISTICAL = "Statistical"; // $NON-NLS-1$
@@ -56,31 +54,17 @@ public class SampleSenderFactory {
      *         hold_samples until end of test or batch samples.
      */
     static SampleSender getInstance(RemoteSampleListener listener) {
-        // Support original property name
-        final boolean holdSamples = JMeterUtils.getPropDefault("hold_samples", false); // $NON-NLS-1$
-
         // Extended property name
         final String type = JMeterUtils.getPropDefault("mode", MODE_STRIPPED_BATCH); // $NON-NLS-1$
         
-        if (holdSamples || type.equalsIgnoreCase(MODE_HOLD)) {
-            if(holdSamples) {
-                log.warn(
-                        "Property hold_samples is deprecated and will be removed in upcoming version, use mode={} instead",
-                        MODE_HOLD);
-            }
-            HoldSampleSender h = new HoldSampleSender(listener);
-            return h;
-        } else if (type.equalsIgnoreCase(MODE_BATCH)) {
-            BatchSampleSender b = new BatchSampleSender(listener);
-            return b;
+        if (type.equalsIgnoreCase(MODE_BATCH)) {
+            return new BatchSampleSender(listener);
         }  else if(type.equalsIgnoreCase(MODE_STRIPPED_BATCH)) {
             return new DataStrippingSampleSender(new BatchSampleSender(listener));
         } else if (type.equalsIgnoreCase(MODE_STATISTICAL)) {
-            StatisticalSampleSender s = new StatisticalSampleSender(listener);
-            return s;
+            return new StatisticalSampleSender(listener);
         } else if (type.equalsIgnoreCase(MODE_STANDARD)) {
-            StandardSampleSender s = new StandardSampleSender(listener);
-            return s;
+            return new StandardSampleSender(listener);
         } else if(type.equalsIgnoreCase(MODE_STRIPPED)){
             return new DataStrippingSampleSender(listener);
         } else if(type.equalsIgnoreCase(MODE_ASYNCH)){
