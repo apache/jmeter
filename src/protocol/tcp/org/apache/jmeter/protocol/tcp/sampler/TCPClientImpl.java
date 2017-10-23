@@ -73,7 +73,7 @@ public class TCPClientImpl extends AbstractTCPClient {
     @Override
     public void write(OutputStream os, String s)  throws IOException{
         if(log.isDebugEnabled()) {
-            log.debug("WriteS: " + showEOL(s));
+            log.debug("WriteS: {}", showEOL(s));
         }
         os.write(s.getBytes(CHARSET)); 
         os.flush();
@@ -87,7 +87,7 @@ public class TCPClientImpl extends AbstractTCPClient {
         byte[] buff = new byte[512];
         while(is.read(buff) > 0){
             if(log.isDebugEnabled()) {
-                log.debug("WriteIS: " + showEOL(new String(buff, CHARSET)));
+                log.debug("WriteIS: {}", showEOL(new String(buff, CHARSET)));
             }
             os.write(buff);
             os.flush();
@@ -109,7 +109,7 @@ public class TCPClientImpl extends AbstractTCPClient {
         ByteArrayOutputStream w = new ByteArrayOutputStream();
         try {
             byte[] buffer = new byte[4096];
-            int x = 0;
+            int x;
             boolean first = true;
             while ((x = is.read(buffer)) > -1) {
                 if (first) {
@@ -124,7 +124,7 @@ public class TCPClientImpl extends AbstractTCPClient {
 
             // do we need to close byte array (or flush it?)
             if(log.isDebugEnabled()) {
-                log.debug("Read: " + w.size() + "\n" + w.toString());
+                log.debug("Read: {}\n{}", w.size(), w.toString());
             }
             return w.toString(CHARSET);
         } catch (IOException e) {
