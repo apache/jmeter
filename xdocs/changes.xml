@@ -73,6 +73,10 @@ Summary
 <ch_section>Incompatible changes</ch_section>
 <ul>
     <li><code>Start time</code> and <code>End date</code> of Thread Group have been removed, see <bugzilla>61549</bugzilla></li>
+    <li>In distributed testing, mode <code>Hold</code> has been removed. Use alternative and more efficient modes</li>
+    <li>For 3rd party plugins, the following method in <code>org.apache.jmeter.gui.tree.JMeterTreeNode</code> has been dropped for migration to Java 9
+    <source>public Enumeration&lt;JMeterTreeNode&gt; children()</source>
+    </li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -80,7 +84,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><pr>316</pr>Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
+    <li><pr>316</pr> - Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
     <li><bug>61639</bug>HTTP(S) Test Script Recorder : In request filtering tab, uncheck by default "Notify Child Listeners of filtered samplers"</li>
 </ul>
 
