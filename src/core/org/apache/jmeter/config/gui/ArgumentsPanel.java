@@ -97,10 +97,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /** Button to show the detail of an argument*/
     private JButton showDetail;
 
-    /** Enable Up & Down buttons */
+    /** Enable Up and Down buttons */
     private final boolean enableUpDown;
     
-    /** Disable buttons :Detail, Add, Add from Clipboard, Delete, Up & Down*/
+    /** Disable buttons :Detail, Add, Add from Clipboard, Delete, Up and Down*/
     private final boolean disableButtons;
 
     /** Command for adding a row to the table. */
