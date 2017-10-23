@@ -2737,6 +2737,11 @@ run JMeter unless all the JMeter jars are added.
     </antcall>
       
     <antcall target="batchtest">
+      <param name="batchtest.name" value="TCP_TESTS"/>
+      <param name="batchtest.jmx" value="TCP_TESTS.jmx"/>
+    </antcall>
+
+      <antcall target="batchtest">
       <param name="batchtest.name" value="JDBC_TESTS"/>
       <param name="batchtest.jmx" value="JDBC_TESTS.jmx"/>
     </antcall>
