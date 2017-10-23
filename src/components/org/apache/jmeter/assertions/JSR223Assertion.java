@@ -46,7 +46,7 @@ public class JSR223Assertion extends JSR223TestElement implements Cloneable, Ass
             bindings.put("AssertionResult", result);
             try {
                 processFileOrScript(scriptEngine, bindings);
-            } catch (AssertionError ae) {
+            } catch (AssertionError ae) { // NOSONAR We don't want to log the exception as it is handled 
                 result.setFailure(true);
                 result.setFailureMessage(ae.toString());
             }
