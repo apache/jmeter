@@ -74,9 +74,11 @@ Summary
 <ul>
     <li><code>Start time</code> and <code>End date</code> of Thread Group have been removed, see <bugzilla>61549</bugzilla></li>
     <li>In distributed testing, mode <code>Hold</code> has been removed. Use alternative and more efficient modes</li>
-    <li>For 3rd party plugins, the following method in <code>org.apache.jmeter.gui.tree.JMeterTreeNode</code> has been dropped for migration to Java 9
+    <li>For 3rd party plugins, the following method in <code>org.apache.jmeter.gui.tree.JMeterTreeNode</code> has been dropped for migration to Java 9 (<bugzilla>61529</bugzilla>)
     <source>public Enumeration&lt;JMeterTreeNode&gt; children()</source>
     </li>
+    <li><code>tearDown Thread Group</code> will now run on stop and shutdown of a test by default. If you don't want this behaviour, 
+    uncheck <code>Run tearDown Thread Groups after shutdown of main threads</code> on <code>Test Plan</code> element, see <bugzilla>61656</bugzilla></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -132,6 +134,7 @@ Summary
     <li><bug>61627</bug>Don't clear LogView anymore when clicking on Warning/Errors Indicator</li>
     <li><bug>61629</bug>Add Think Times to Children menu should not consider disabled elements</li>
     <li><bug>61655</bug>SampleSender : Drop HoldSampleSender implementation</li>
+    <li><bug>61656</bug><code>tearDown Thread Group</code> should run by default at stop or shutdown of test</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
