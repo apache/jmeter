@@ -49,8 +49,10 @@ public class UndoHistoryItem implements Serializable {
     }
 
     /**
-     * @param copy HashTree
-     * @param acomment String
+     * @param copy {@link HashTree}
+     * @param acomment String 
+     * @param treeState {@link TreeState}
+     * @param dirty boolean
      */
     public UndoHistoryItem(HashTree copy, String acomment, TreeState treeState, boolean dirty) {
         tree = copy;
