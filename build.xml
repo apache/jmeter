@@ -902,7 +902,8 @@
       <classpath>
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
       </classpath>
-      <jvmarg line="--add-modules java.activation" if:set="java9" />
+      <jvmarg value="--add-modules" if:set="java9" />
+      <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="${jacoco_params}run_gui:java(server)"/>
       <sysproperty key="jmeter.home" value="${basedir}"/>
     </java>
@@ -2455,7 +2456,8 @@ run JMeter unless all the JMeter jars are added.
             <path refid="classpath"/>
             <path refid="logging.classpath"/>
           </classpath>
-          <jvmarg line="--add-modules java.activation" if:set="java9" />
+          <jvmarg value="--add-modules" if:set="java9" />
+          <jvmarg value="java.activation" if:set="java9" />
           <jvmarg value="${jacoco_params}batchtest:daemon:java(server)"/>
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
@@ -2567,7 +2569,8 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
-      <jvmarg line="--add-modules java.activation" if:set="java9" />
+      <jvmarg value="--add-modules" if:set="java9" />
+      <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="${jacoco_params}batchtest:java(${taskname})"/>
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
       <sysproperty key="user.language" value="en"/>
@@ -2882,7 +2885,7 @@ run JMeter unless all the JMeter jars are added.
       <isset property="jacocoagent"/>
     </condition>
     <!-- fork="yes" is required or dir attribute is ignored -->
-    <java classname="org.apache.jorphan.test.AllTests" fork="yes" failonerror="true" dir="${basedir}/bin" newenvironment="true">
+    <java classname="org.apache.jorphan.test.AllTests" fork="yes" failonerror="true" dir="${basedir}/bin">
       <classpath>
         <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
         <fileset dir="${dest.jar}" includes="*.jar"/>
@@ -2891,7 +2894,8 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
-      <jvmarg line="--add-modules java.activation" if:set="java9" />
+      <jvmarg value="--add-modules" if:set="java9" />
+      <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="-server"/>
       <jvmarg value="${jacoco_params}_test:java"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
