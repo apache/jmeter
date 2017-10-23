@@ -156,8 +156,8 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     }
 
     /**
-     * @throws InstantiationException
-     * @throws IllegalAccessException
+     * @throws InstantiationException if function instanciation fails
+     * @throws IllegalAccessException if function instanciation fails
      */
     protected void initParameterPanel() throws InstantiationException, IllegalAccessException {
         Arguments args = new Arguments();
