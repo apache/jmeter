@@ -35,6 +35,7 @@ public class OnceOnlyController extends GenericController implements Serializabl
      * Constructor for the OnceOnlyController object.
      */
     public OnceOnlyController() {
+        super();
     }
 
     /**
@@ -43,7 +44,7 @@ public class OnceOnlyController extends GenericController implements Serializabl
     @Override
     public void iterationStart(LoopIterationEvent event) {
         int numIteration = 1;
-        // Bug 39509: iteration to 0 for all controller which not LoopController (and TG)
+        // Bug 39509: iteration to 0 for all controllers which are not LoopController (and TG)
         if (!(event.getSource() instanceof LoopController)) {
             numIteration = 0;
         }
