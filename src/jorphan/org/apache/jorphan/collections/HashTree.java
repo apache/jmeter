@@ -754,7 +754,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            Array of keys used to recurse into HashTree structure
      * @return Set of all keys found in end HashTree
      */
-    public Collection<?> list(Object[] treePath) { // TODO not used?
+    public Collection<?> list(Object[] treePath) {
         if (treePath != null) {
             return list(Arrays.asList(treePath));
         }
@@ -858,12 +858,11 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
 
     protected HashTree getTreePath(Collection<?> treePath) {
         HashTree tree = this;
-        for (Object aTreePath : treePath) {
-            // Fixme why is this check here ?
+        for (Object aTreePath : treePath) {            
+            tree = tree.getTree(aTreePath);
             if (tree == null) {
                 return null;
             }
-            tree = tree.getTree(aTreePath);
         }
         return tree;
     }
@@ -918,7 +917,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            Key to search for
      * @return HashTree mapped to key, if found, otherwise <code>null</code>
      */
-    public HashTree search(Object key) {// TODO does not appear to be used
+    public HashTree search(Object key) {
         HashTree result = getTree(key);
         if (result != null) {
             return result;
@@ -987,8 +986,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            the {@link HashTreeTraverser} to be notified
      */
     private void traverseInto(HashTreeTraverser visitor) {
-
-        if (list().size() == 0) {
+        if (list().isEmpty()) {
             visitor.processPath();
         } else {
             for (Object item : list()) {
@@ -1075,6 +1073,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
 
         @Override
         public void processPath() {
+            // NOOP
         }
 
         @Override
