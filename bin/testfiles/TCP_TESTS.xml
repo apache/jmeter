@@ -42,7 +42,7 @@
   </assertionResult>
 </sample>
 <sample s="true" lb="TCP Sampler-Binary-Quit" rc="200" rm="OK" tn="TG-BinaryTCPClientImpl 2-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
-<sample s="true" lb="TCP Sampler-ConnectError" rc="500" rm="java.net.ConnectException: Connection refused " tn="TG-TCPClientImpl-Errors 3-1" dt="" sc="1" ec="0" ng="1" na="1">
+<sample s="true" lb="TCP Sampler-ConnectError" rc="500" rm="java.net.ConnectException: Connection refused" tn="TG-TCPClientImpl-Errors 3-1" dt="" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>RC_500</name>
     <failure>false</failure>
