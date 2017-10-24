@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171023">
+<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171024">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -39,6 +39,7 @@ log.info(&quot;Creating activemq config from {}&quot;, JMeterUtils.getJMeterHome
 try {
 	String path = JMeterUtils.getJMeterHome()+ &quot;/bin/testfiles/activemq.xml&quot;;
 	path = path.replace(&apos;\\&apos;, &apos;/&apos;);
+	path = path.replaceAll(&quot; &quot;, &quot;%20&quot;);
 	BrokerService broker = BrokerFactory.createBroker(&quot;xbean:file:&quot;+path, true);
 	bsh.shared.myMap = new HashMap();
 	bsh.shared.myMap.put(&quot;ACTIVEMQ_BROKER&quot;, broker);
