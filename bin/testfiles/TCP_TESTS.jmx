@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171023">
+<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171024">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments">https://stackoverflow.com/questions/8403462/jmeter-execute-command-over-telnet-using-beanshell
@@ -135,6 +135,18 @@ bsh.shared.myMap.put(&quot;TCP_SERVER&quot;, o);
           <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
         </BeanShellSampler>
         <hashTree/>
+        <TestAction guiclass="TestActionGui" testclass="TestAction" testname="Think Time" enabled="true">
+          <intProp name="ActionProcessor.action">1</intProp>
+          <intProp name="ActionProcessor.target">0</intProp>
+          <stringProp name="ActionProcessor.duration">0</stringProp>
+        </TestAction>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Pause" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+            <stringProp name="RandomTimer.range">100</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
       </hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="TG-TCPClientImpl" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -250,7 +262,7 @@ vars.put(&quot;CR&quot;,URLDecoder.decode(&quot;%0A&quot;, &quot;ASCII&quot;)); 
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
-        <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="TCP Sampler-Hello" enabled="true">
+        <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="TCP Sampler-Binary-Hello" enabled="true">
           <stringProp name="TCPSampler.classname">org.apache.jmeter.protocol.tcp.sampler.BinaryTCPClientImpl</stringProp>
           <stringProp name="TCPSampler.server"></stringProp>
           <boolProp name="TCPSampler.reUseConnection">false</boolProp>
@@ -286,7 +298,7 @@ vars.put(&quot;result_decoded&quot;, new String(hex.decode(prev.getResponseData(
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="TCP Sampler-Timeout" enabled="true">
+        <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="TCP Sampler-Binary-Timeout" enabled="true">
           <stringProp name="TCPSampler.classname">org.apache.jmeter.protocol.tcp.sampler.BinaryTCPClientImpl</stringProp>
           <stringProp name="TCPSampler.server"></stringProp>
           <boolProp name="TCPSampler.reUseConnection">false</boolProp>
@@ -319,7 +331,7 @@ vars.put(&quot;result_decoded&quot;, new String(hex.decode(prev.getResponseData(
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="TCP Sampler-Quit" enabled="true">
+        <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="TCP Sampler-Binary-Quit" enabled="true">
           <stringProp name="TCPSampler.classname">org.apache.jmeter.protocol.tcp.sampler.BinaryTCPClientImpl</stringProp>
           <stringProp name="TCPSampler.server"></stringProp>
           <boolProp name="TCPSampler.reUseConnection">false</boolProp>
@@ -378,6 +390,19 @@ vars.put(&quot;result_decoded&quot;, new String(hex.decode(prev.getResponseData(
             <intProp name="Assertion.test_type">16</intProp>
             <stringProp name="Scope.variable">result_decoded</stringProp>
           </ResponseAssertion>
+          <hashTree/>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223PP_NormalizeResponseMessage" enabled="true">
+            <stringProp name="TestPlan.comments">We strip part of Response Message after &apos;(&apos; as it&apos;s different between JVMs and breaks results comparison</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">d65ff29e-5d0c-47df-b464-e7a84fa88e66</stringProp>
+            <stringProp name="script">String oldResponseMessage = prev.getResponseMessage();
+int indexOfParenthesis = oldResponseMessage.indexOf(&quot;(&quot;);
+if(indexOfParenthesis&gt;=0) {
+	prev.setResponseMessage(oldResponseMessage.substring(0, indexOfParenthesis));
+}</stringProp>
+          </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
         <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="TCP Sampler-HostUnknown" enabled="true">
