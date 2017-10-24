@@ -402,7 +402,7 @@ int indexOfParenthesis = oldResponseMessage.indexOf(&quot;(&quot;);
 if(indexOfParenthesis&gt;=0) {
 	prev.setResponseMessage(oldResponseMessage.substring(0, indexOfParenthesis).trim());
 } else {
-	indexOfParenthesis = oldResponseMessage.indexOf(&quot;:&quot;);
+	indexOfParenthesis = oldResponseMessage.lastIndexOf(&quot;:&quot;);
 	prev.setResponseMessage(oldResponseMessage.substring(0, indexOfParenthesis).trim());
 }
 </stringProp>
