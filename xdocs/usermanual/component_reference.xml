@@ -2090,8 +2090,6 @@ Bug Page, Bug Page.</p>
 <p>Note, the File Reporter is configured to store the results in a file named "<code>loop-test.dat</code>" in the current directory.</p>
 
 </example>
-<note>The behaviour of the Once Only controller under anything other than the
-Thread Group or a Loop Controller is not currently defined. Odd things may happen.</note>
 </component>
 
 <component name="Interleave Controller" index="&sect-num;.2.4"  width="626" height="127" screenshot="logic-controller/interleave-controller.png">
