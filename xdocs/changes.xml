@@ -135,6 +135,7 @@ Summary
     <li><bug>61629</bug>Add Think Times to Children menu should not consider disabled elements</li>
     <li><bug>61655</bug>SampleSender : Drop HoldSampleSender implementation</li>
     <li><bug>61656</bug><code>tearDown Thread Group</code> should run by default at stop or shutdown of test</li>
+    <li><bug>61659</bug>JMeterVariables#get() should apply toString() on non string objects</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
