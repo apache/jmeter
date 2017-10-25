@@ -43,7 +43,7 @@ Highly Extensible core:
 ## The Latest Version
 
 Details of the latest version can be found on the JMeter Apache 
-Project web site (http://jmeter.apache.org/).
+Project web site (https://jmeter.apache.org/).
 
 ## Requirements
 
@@ -102,7 +102,7 @@ and it may be browsed starting from the file called `index.html`.
 
 ## Reporting a bug/enhancement
 
-See [Issue Tracking](http://jmeter.apache.org/issues.html)
+See [Issue Tracking](https://jmeter.apache.org/issues.html)
 
 ## Build instructions
 
@@ -175,6 +175,8 @@ The optional property definition is required if the system
 does not have a suitable GUI display.
 
 ## Developer information
+
+Building and contributing is explained in details at https://jmeter.apache.org/building.html
 
 The code is maintained in SVN at https://svn.apache.org/repos/asf/jmeter/trunk
 
