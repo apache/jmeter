@@ -1,6 +1,6 @@
 ![Apache JMeter logo](https://jmeter.apache.org/images/logo.svg)
-# Apache JMeter
-
+<h4 align="center">Open Source by Apache Software Foundation, Java application designed to load test applications and measure performance</h4>
+<br>
 
 [![Build Status](https://api.travis-ci.org/apache/jmeter.svg?branch=trunk)](https://travis-ci.org/apache/jmeter/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
