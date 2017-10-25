@@ -1,8 +1,5 @@
 sudo: false
 language: java
-env:
-  global:
-    - CODECOV_TOKEN=6cb2d6a4-d344-453f-8e5a-3b4e2e7849eb
 
 before_script:
   - test "x$RUN_CHECKSTYLE" != 'x' || ant -Djava.awt.headless=true download_jars install
