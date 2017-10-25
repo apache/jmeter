@@ -1,4 +1,4 @@
-![Apache JMeter logo](https://jmeter.apache.org/images/logo.svg)
+<h1 align="center">[Apache JMeter logo](https://jmeter.apache.org/images/logo.svg)</h1>
 <h4 align="center">Open Source by Apache Software Foundation, Java application designed to load test applications and measure performance</h4>
 <br>
 
