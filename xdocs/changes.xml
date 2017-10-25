@@ -190,6 +190,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>61661</bug>Avoid startup/shutdown problems due to 3rd party Thread Listener plugins throwing RuntimeException</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
