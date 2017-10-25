@@ -3367,6 +3367,8 @@ run JMeter unless all the JMeter jars are added.
     </jacoco:report>
   </target>
 
+  <target name="coverage-travis"  depends="ant-version,_coverage.prepare, test, _coverage.report"/>
+
   <target name="coverage"  depends="ant-version,_coverage.prepare, test-both, _allbatchtests, _coverage.report"/>
 
   <target name="_check_exists" if="_check_exists">
