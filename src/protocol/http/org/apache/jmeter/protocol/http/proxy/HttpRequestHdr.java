@@ -87,16 +87,27 @@ public class HttpRequestHdr {
 
     private String firstLine; // saved copy of first line for error reports
 
+    private String prefix;
+
     public HttpRequestHdr() {
-        this.httpSamplerName = ""; // $NON-NLS-1$
-        this.firstLine = "" ; // $NON-NLS-1$
+        this("", "");
     }
 
     /**
      * @param httpSamplerName the http sampler name
      */
     public HttpRequestHdr(String httpSamplerName) {
+        this("", httpSamplerName);
+    }
+    
+    /**
+     * @param prefix Sampler prefix
+     * @param httpSamplerName the http sampler name
+     */
+    public HttpRequestHdr(String prefix, String httpSamplerName) {
+        this.prefix = prefix;
         this.httpSamplerName = httpSamplerName;
+        this.firstLine = "" ; // $NON-NLS-1$
     }
 
     /**
@@ -438,5 +449,12 @@ public class HttpRequestHdr {
             }
             return HTTP;
         }
+    }
+
+    /**
+     * @return the prefix
+     */
+    public String getPrefix() {
+        return prefix;
     }
 }

@@ -162,7 +162,7 @@ public class Proxy extends Thread {
         // Check which HTTPSampler class we should use
         String httpSamplerName = target.getSamplerTypeName();
 
-        HttpRequestHdr request = new HttpRequestHdr(httpSamplerName);
+        HttpRequestHdr request = new HttpRequestHdr(target.getPrefixHTTPSampleName(), httpSamplerName);
         SampleResult result = null;
         HeaderManager headers = null;
         HTTPSamplerBase sampler = null;
