@@ -2226,12 +2226,13 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
 
 <component name="Runtime Controller" index="&sect-num;.2.8" width="328" height="100" screenshot="runtimecontroller.png">
     <description>
-        <p>The Runtime Controller controls how long its children are allowed to run.
+        <p>The Runtime Controller controls how long its children how long its children will run. 
+        Controller will run its children until configured <code>Runtime(s)</code> is exceeded. 
         </p>
     </description>
 <properties>
     <property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-    <property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
+    <property name="Runtime (seconds)" required="Yes">Desired runtime in seconds. 0 means no run.</property>
 </properties>
 </component>
 
