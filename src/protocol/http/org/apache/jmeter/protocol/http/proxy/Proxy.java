@@ -95,7 +95,7 @@ public class Proxy extends Thread {
     static {
         String removeList = JMeterUtils.getPropDefault(PROXY_HEADERS_REMOVE,PROXY_HEADERS_REMOVE_DEFAULT);
         HEADERS_TO_REMOVE = JOrphanUtils.split(removeList,PROXY_HEADERS_REMOVE_SEPARATOR);
-        log.info("Proxy will remove the headers: "+removeList);
+        log.info("Proxy will remove the headers: {}", removeList);
     }
 
     // Use with SSL connection
@@ -134,24 +134,24 @@ public class Proxy extends Thread {
      * Should not be called after it has been passed to a new thread,
      * otherwise the variables may not be published correctly.
      *
-     * @param _clientSocket
+     * @param clientSocket
      *            the socket connection to the client
-     * @param _target
+     * @param target
      *            the ProxyControl which will receive the generated sampler
-     * @param _pageEncodings
+     * @param pageEncodings
      *            reference to the Map of Deamon, with mappings from page urls to encoding used
-     * @param _formEncodings
+     * @param formEncodings
      *            reference to the Map of Deamon, with mappings from form action urls to encoding used
      */
-    void configure(Socket _clientSocket, ProxyControl _target, Map<String, String> _pageEncodings, Map<String, String> _formEncodings) {
-        this.target = _target;
-        this.clientSocket = _clientSocket;
-        this.captureHttpHeaders = _target.getCaptureHttpHeaders();
-        this.pageEncodings = _pageEncodings;
-        this.formEncodings = _formEncodings;
+    void configure(Socket clientSocket, ProxyControl target, Map<String, String> pageEncodings, Map<String, String> formEncodings) {
+        this.target = target;
+        this.clientSocket = clientSocket;
+        this.captureHttpHeaders = target.getCaptureHttpHeaders();
+        this.pageEncodings = pageEncodings;
+        this.formEncodings = formEncodings;
         this.port = "["+ clientSocket.getPort() + "] ";
-        this.keyStore = _target.getKeyStore();
-        this.keyPassword = _target.getKeyPassword();
+        this.keyStore = target.getKeyStore();
+        this.keyPassword = target.getKeyPassword();
     }
 
     /**
@@ -167,18 +167,14 @@ public class Proxy extends Thread {
         HeaderManager headers = null;
         HTTPSamplerBase sampler = null;
         final boolean isDebug = log.isDebugEnabled();
-        if (isDebug) {
-            log.debug("{} ====================================================================", port);
-        }
+        log.debug("{} ====================================================================", port);
         SamplerCreator samplerCreator = null;
         try {
             JMeterContextService.getContext().setRecording(true);
             // Now, parse initial request (in case it is a CONNECT request)
             byte[] ba = request.parse(new BufferedInputStream(clientSocket.getInputStream()));
             if (ba.length == 0) {
-                if (isDebug) {
-                    log.debug("{} Empty request, ignored", port);
-                }
+                log.debug("{} Empty request, ignored", port);
                 throw new JMeterException(); // hack to skip processing
             }
             if (isDebug) {
@@ -187,22 +183,18 @@ public class Proxy extends Thread {
             outStreamClient = clientSocket.getOutputStream();
 
             if ((request.getMethod().startsWith(HTTPConstants.CONNECT)) && (outStreamClient != null)) {
-                if (isDebug) {
-                    log.debug("{} Method CONNECT => SSL", port);
-                }
+                log.debug("{} Method CONNECT => SSL", port);
                 // write a OK response to browser, to engage SSL exchange
                 outStreamClient.write(("HTTP/1.0 200 OK\r\n\r\n").getBytes(SampleResult.DEFAULT_HTTP_ENCODING)); // $NON-NLS-1$
                 outStreamClient.flush();
                // With ssl request, url is host:port (without https:// or path)
                 String[] param = request.getUrl().split(":");  // $NON-NLS-1$
                 if (param.length == 2) {
-                    if (isDebug) {
-                        log.debug("{} Start to negotiate SSL connection, host: {}", port ,param[0]);
-                    }
+                    log.debug("{} Start to negotiate SSL connection, host: {}", port ,param[0]);
                     clientSocket = startSSL(clientSocket, param[0]);
                 } else {
                     // Should not happen, but if it does we don't want to continue 
-                    log.error("In SSL request, unable to find host and port in CONNECT request: " + request.getUrl());
+                    log.error("In SSL request, unable to find host and port in CONNECT request: {}", request.getUrl());
                     throw new JMeterException(); // hack to skip processing
                 }
                 // Re-parse (now it's the http request over SSL)
@@ -213,12 +205,11 @@ public class Proxy extends Thread {
                     final String url = " for '"+ param[0] +"'";
                     log.warn("{} Problem with SSL certificate for url {}? Ensure browser is set to accept the JMeter proxy cert: {}", 
                             port, url,ioe.getMessage());
-                    // won't work: writeErrorToClient(HttpReplyHdr.formInternalError());
                     result = generateErrorResult(result, request, ioe, "\n**ensure browser is set to accept the JMeter proxy certificate**"); // Generate result (if nec.) and populate it
                     throw new JMeterException(); // hack to skip processing
                 }
                 if (isDebug) {
-                    log.debug("{} Reparse: ", port, new String(ba));
+                    log.debug("{} Reparse: {}", port, new String(ba));
                 }
                 if (ba.length == 0) {
                     log.warn("{} Empty response to http over SSL. Probably waiting for user to authorize the certificate for {}",
@@ -253,22 +244,22 @@ public class Proxy extends Thread {
         } catch (JMeterException jme) {
             // ignored, already processed
         } catch (UnknownHostException uhe) {
-            log.warn(port + "Server Not Found.", uhe);
+            log.warn("{} Server Not Found.", port, uhe);
             writeErrorToClient(HttpReplyHdr.formServerNotFound());
             result = generateErrorResult(result, request, uhe); // Generate result (if nec.) and populate it
         } catch (IllegalArgumentException e) {
-            log.error(port + "Not implemented (probably used https)", e);
+            log.error("{} Not implemented (probably used https)", port, e);
             writeErrorToClient(HttpReplyHdr.formNotImplemented("Probably used https instead of http. " +
                     "To record https requests, see " +
                     "<a href=\"http://jmeter.apache.org/usermanual/component_reference.html#HTTP(S)_Test_Script_Recorder\">HTTP(S) Test Script Recorder documentation</a>"));
             result = generateErrorResult(result, request, e); // Generate result (if nec.) and populate it
         } catch (Exception e) {
-            log.error(port + "Exception when processing sample", e);
+            log.error("{} Exception when processing sample", port, e);
             writeErrorToClient(HttpReplyHdr.formInternalError());
             result = generateErrorResult(result, request, e); // Generate result (if nec.) and populate it
         } finally {
             if(sampler != null && isDebug) {
-                log.debug(port + "Will deliver sample " + sampler.getName());
+                log.debug("{} Will deliver sample {}", port, sampler.getName());
             }
             /*
              * We don't want to store any cookies in the generated test plan
@@ -300,7 +291,7 @@ public class Proxy extends Thread {
             try {
                 clientSocket.close();
             } catch (Exception e) {
-                log.error(port + "Failed to close client socket", e);
+                log.error("{} Failed to close client socket", port, e);
             }
             if(sampler != null) {
                 sampler.threadFinished(); // Needed for HTTPSampler2
@@ -317,7 +308,7 @@ public class Proxy extends Thread {
      */
     private SSLSocketFactory getSSLSocketFactory(String host) {
         if (keyStore == null) {
-            log.error(port + "No keystore available, cannot record SSL");
+            log.error("{} No keystore available, cannot record SSL", port);
             return null;
         }
         final String hashAlias;
@@ -339,7 +330,7 @@ public class Proxy extends Thread {
                     keyAlias = alias;
                 }
             } catch (IOException | GeneralSecurityException e) {
-                log.error(port + "Problem with keystore", e);
+                log.error("{} Problem with keystore", port, e);
                 return null;
             }
             break;
@@ -355,9 +346,7 @@ public class Proxy extends Thread {
         synchronized (HOST2SSL_SOCK_FAC) {
             final SSLSocketFactory sslSocketFactory = HOST2SSL_SOCK_FAC.get(hashAlias);
             if (sslSocketFactory != null) {
-                if (log.isDebugEnabled()) {
-                    log.debug(port + "Good, already in map, host=" + host + " using alias " + hashAlias);
-                }
+                log.debug("{} Good, already in map, host={} using alias {}", port, host, hashAlias);
                 return sslSocketFactory;
             }
             try {
@@ -365,12 +354,12 @@ public class Proxy extends Thread {
                 sslcontext.init(getWrappedKeyManagers(keyAlias), null, null);
                 SSLSocketFactory sslFactory = sslcontext.getSocketFactory();
                 HOST2SSL_SOCK_FAC.put(hashAlias, sslFactory);
-                log.info(port + "KeyStore for SSL loaded OK and put host '" + host + "' in map with key ("+hashAlias+")");
+                log.info("{} KeyStore for SSL loaded OK and put host '{}' in map with key ({})", port, host, hashAlias);
                 return sslFactory;
             } catch (GeneralSecurityException e) {
-                log.error(port + "Problem with SSL certificate", e);
+                log.error("{} Problem with SSL certificate", port, e);
             } catch (IOException e) {
-                log.error(port + "Problem with keystore", e);
+                log.error("{} Problem with keystore", port, e);
             }
             return null;
         }
@@ -445,15 +434,15 @@ public class Proxy extends Thread {
                         sock.getInetAddress().getHostName(), sock.getPort(), true);
                 secureSocket.setUseClientMode(false);
                 if (log.isDebugEnabled()){
-                    log.debug(port + "SSL transaction ok with cipher: " + secureSocket.getSession().getCipherSuite());
+                    log.debug("{} SSL transaction ok with cipher: {}", port, secureSocket.getSession().getCipherSuite());
                 }
                 return secureSocket;
             } catch (IOException e) {
-                log.error(port + "Error in SSL socket negotiation: ", e);
+                log.error("{} Error in SSL socket negotiation: ", port, e);
                 throw e;
             }
         } else {
-            log.warn(port + "Unable to negotiate SSL transaction, no keystore?");
+            log.warn("{} Unable to negotiate SSL transaction, no keystore?", port);
             throw new IOException("Unable to negotiate SSL transaction, no keystore?");
         }
     }
@@ -493,9 +482,7 @@ public class Proxy extends Thread {
             out.write(CRLF_BYTES);
             out.write(res.getResponseData());
             out.flush();
-            if (log.isDebugEnabled()) {
-                log.debug(port + "Done writing to client");
-            }
+            log.debug("{} Done writing to client", port);
         } catch (IOException e) {
             log.error("", e);
             throw e;
@@ -503,7 +490,7 @@ public class Proxy extends Thread {
             try {
                 out.close();
             } catch (Exception ex) {
-                log.warn(port + "Error while closing socket", ex);
+                log.warn("{} Error while closing socket", port, ex);
             }
         }
     }
@@ -574,7 +561,7 @@ public class Proxy extends Thread {
             out.writeBytes(message);
             out.flush();
         } catch (Exception e) {
-            log.warn(port + "Exception while writing error", e);
+            log.warn("{} Exception while writing error", port, e);
         }
     }
 
@@ -589,7 +576,8 @@ public class Proxy extends Thread {
         try {
             pageEncoding = ConversionUtils.getEncodingFromContentType(result.getContentType());
         } catch(IllegalCharsetNameException ex) {
-            log.warn("Unsupported charset detected in contentType:'"+result.getContentType()+"', will continue processing with default charset", ex);
+            log.warn("Unsupported charset detected in contentType:'{}', will continue processing with default charset", 
+                    result.getContentType(), ex);
         }
         if (pageEncoding != null) {
             String urlWithoutQuery = getUrlWithoutQuery(result.getURL());
@@ -613,9 +601,7 @@ public class Proxy extends Thread {
             finder.addFormActionsAndCharSet(result.getResponseDataAsString(), formEncodings, pageEncoding);
         }
         catch (HTMLParseException parseException) {
-            if (log.isDebugEnabled()) {
-                log.debug(port + "Unable to parse response, could not find any form character set encodings");
-            }
+            log.debug("{} Unable to parse response, could not find any form character set encodings", port);
         }
     }
 
