@@ -47,7 +47,6 @@ import java.util.prefs.Preferences;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.conn.ssl.AbstractVerifier;
 import org.apache.jmeter.assertions.Assertion;
@@ -630,11 +629,6 @@ public class ProxyControl extends GenericController {
                 sampler.setFollowRedirects(samplerFollowRedirects);
                 sampler.setUseKeepAlive(useKeepAlive);
                 sampler.setImageParser(samplerDownloadImages);
-                String prefix = getPrefixHTTPSampleName();
-                if(!StringUtils.isEmpty(prefix)) {
-                    sampler.setName(prefix + sampler.getName());
-                    result.setSampleLabel(prefix + result.getSampleLabel());
-                }
                 Authorization authorization = createAuthorization(testElements, sampler);
                 if (authorization != null) {
                     setAuthorization(authorization, myTarget);
