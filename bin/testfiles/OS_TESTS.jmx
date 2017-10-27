@@ -163,9 +163,19 @@
           <SystemSampler guiclass="SystemSamplerGui" testclass="SystemSampler" testname="OSPS-listDirectory" enabled="true">
             <boolProp name="SystemSampler.checkReturnCode">true</boolProp>
             <stringProp name="SystemSampler.expectedReturnCode">0</stringProp>
-            <stringProp name="SystemSampler.command">dir</stringProp>
+            <stringProp name="SystemSampler.command">cmd</stringProp>
             <elementProp name="SystemSampler.arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="Argument">
+                  <stringProp name="Argument.name"></stringProp>
+                  <stringProp name="Argument.value">/C</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+                <elementProp name="" elementType="Argument">
+                  <stringProp name="Argument.name"></stringProp>
+                  <stringProp name="Argument.value">dir</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
                 <elementProp name="" elementType="Argument">
                   <stringProp name="Argument.name"></stringProp>
                   <stringProp name="Argument.value">${__groovy(org.apache.jmeter.util.JMeterUtils.getJMeterHome(),)}</stringProp>
@@ -207,9 +217,20 @@
           <SystemSampler guiclass="SystemSamplerGui" testclass="SystemSampler" testname="OSPS-listEnv" enabled="true">
             <boolProp name="SystemSampler.checkReturnCode">true</boolProp>
             <stringProp name="SystemSampler.expectedReturnCode">0</stringProp>
-            <stringProp name="SystemSampler.command">set</stringProp>
+            <stringProp name="SystemSampler.command">cmd</stringProp>
             <elementProp name="SystemSampler.arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-              <collectionProp name="Arguments.arguments"/>
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="Argument">
+                  <stringProp name="Argument.name"></stringProp>
+                  <stringProp name="Argument.value">/C</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+                <elementProp name="" elementType="Argument">
+                  <stringProp name="Argument.name"></stringProp>
+                  <stringProp name="Argument.value">set</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
             </elementProp>
             <elementProp name="SystemSampler.environment" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments">
@@ -254,16 +275,6 @@
                   <stringProp name="Argument.value">4</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
-                <elementProp name="" elementType="Argument">
-                  <stringProp name="Argument.name"></stringProp>
-                  <stringProp name="Argument.value">&gt;</stringProp>
-                  <stringProp name="Argument.metadata">=</stringProp>
-                </elementProp>
-                <elementProp name="" elementType="Argument">
-                  <stringProp name="Argument.name"></stringProp>
-                  <stringProp name="Argument.value">nul</stringProp>
-                  <stringProp name="Argument.metadata">=</stringProp>
-                </elementProp>
               </collectionProp>
             </elementProp>
             <elementProp name="SystemSampler.environment" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -277,13 +288,14 @@
             </elementProp>
             <stringProp name="SystemSampler.directory"></stringProp>
             <longProp name="SystemSampler.timeout">1000</longProp>
+            <stringProp name="SystemSampler.stdout">NUL</stringProp>
           </SystemSampler>
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="-57279347">Process timeout out after 1000 milliseconds</stringProp>
               </collectionProp>
-              <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
               <boolProp name="Assertion.assume_success">true</boolProp>
               <intProp name="Assertion.test_type">16</intProp>
             </ResponseAssertion>
