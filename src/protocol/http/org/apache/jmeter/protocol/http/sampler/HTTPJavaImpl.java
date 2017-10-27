@@ -404,7 +404,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @return the headers as a string
      */
     private String getOnlyCookieFromHeaders(HttpURLConnection conn, Map<String, String> securityHeaders) {
-        return getFromConnectionHeaders(conn, securityHeaders, ONLY_COOKIE, false);
+        String cookieHeader= getFromConnectionHeaders(conn, securityHeaders, ONLY_COOKIE, false).trim();
+        if(!cookieHeader.isEmpty()) {
+            return cookieHeader.substring((HTTPConstants.HEADER_COOKIE_IN_REQUEST).length(), cookieHeader.length()).trim();
+        }
+        return "";
     }
     
     /**
