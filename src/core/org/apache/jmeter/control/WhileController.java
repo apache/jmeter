@@ -57,7 +57,7 @@ public class WhileController extends GenericController implements Serializable {
         log.debug("Condition string: '{}'", cnd);
         boolean res;
         // If blank, only check previous sample when at end of loop
-        if ((loopEnd && cnd.length() == 0) || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
+        if ((loopEnd && cnd.isEmpty()) || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
             JMeterVariables threadVars = JMeterContextService.getContext().getVariables();
             res = "false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
         } else {
