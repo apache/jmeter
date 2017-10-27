@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.input.CountingInputStream;
@@ -207,8 +208,14 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         if (res != null) {
-            res.setRequestHeaders(getConnectionHeaders(conn, securityHeaders));
-            res.setCookies(cookies);
+            res.setRequestHeaders(getAllHeadersExceptCookie(conn, securityHeaders));
+            if(cookies != null && !cookies.isEmpty()) {
+                res.setCookies(cookies);
+            } else {
+                // During recording Cookie Manager doesn't handle cookies
+                res.setCookies(getOnlyCookieFromHeaders(conn, securityHeaders));
+                
+            }
         }
 
         return conn;
@@ -388,6 +395,19 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     }
 
     /**
+     * Get only the Cookie headers for the <code>HttpURLConnection</code> passed in
+     *
+     * @param conn
+     *            <code>HttpUrlConnection</code> which represents the URL
+     *            request
+     * @param securityHeaders Map of security Header
+     * @return the headers as a string
+     */
+    private String getOnlyCookieFromHeaders(HttpURLConnection conn, Map<String, String> securityHeaders) {
+        return getFromConnectionHeaders(conn, securityHeaders, ONLY_COOKIE, false);
+    }
+    
+    /**
      * Get all the headers for the <code>HttpURLConnection</code> passed in
      *
      * @param conn
@@ -396,14 +416,29 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param securityHeaders Map of security Header
      * @return the headers as a string
      */
-    private String getConnectionHeaders(HttpURLConnection conn, Map<String, String> securityHeaders) {
+    private String getAllHeadersExceptCookie(HttpURLConnection conn, Map<String, String> securityHeaders) {
+        return getFromConnectionHeaders(conn, securityHeaders, ALL_EXCEPT_COOKIE, true);
+    }
+    
+    /**
+     * Get all the headers for the <code>HttpURLConnection</code> passed in
+     *
+     * @param conn
+     *            <code>HttpUrlConnection</code> which represents the URL
+     *            request
+     * @param securityHeaders Map of security Header
+     * @param predicate {@link Predicate} 
+     * @return the headers as a string
+     */
+    private String getFromConnectionHeaders(HttpURLConnection conn, Map<String, String> securityHeaders,
+            Predicate<String> predicate, boolean addSecurityHeaders) {
         // Get all the request properties, which are the headers set on the connection
         StringBuilder hdrs = new StringBuilder(100);
         Map<String, List<String>> requestHeaders = conn.getRequestProperties();
         for(Map.Entry<String, List<String>> entry : requestHeaders.entrySet()) {
             String headerKey=entry.getKey();
             // Exclude the COOKIE header, since cookie is reported separately in the sample
-            if(!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(headerKey)) {
+            if(predicate.test(headerKey)) {
                 // value is a List of Strings
                 for (String value : entry.getValue()){
                     hdrs.append(headerKey);
@@ -413,9 +448,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 }
             }
         }
-        for(Map.Entry<String, String> entry : securityHeaders.entrySet()) {
-            hdrs.append(entry.getKey()).append(": ") // $NON-NLS-1$
-                .append(entry.getValue()).append("\n"); // $NON-NLS-1$
+        if(addSecurityHeaders) {
+            for(Map.Entry<String, String> entry : securityHeaders.entrySet()) {
+                hdrs.append(entry.getKey()).append(": ") // $NON-NLS-1$
+                    .append(entry.getValue()).append("\n"); // $NON-NLS-1$
+            }
         }
         return hdrs.toString();
     }
