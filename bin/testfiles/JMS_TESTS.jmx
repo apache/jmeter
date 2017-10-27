@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171024">
+<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171027">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -25,8 +25,12 @@
         <stringProp name="ThreadGroup.delay"></stringProp>
       </SetupThreadGroup>
       <hashTree>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BSS_startActiveMQ" enabled="true">
-          <stringProp name="BeanShellSampler.query">import org.apache.activemq.broker.BrokerService;
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="BSS_startActiveMQ" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">12bd6db8-b5be-4825-a7ce-b7f4ba5ba84e</stringProp>
+          <stringProp name="script">import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.broker.BrokerFactory;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.commons.io.FileUtils;
@@ -41,16 +45,12 @@ try {
 	path = path.replace(&apos;\\&apos;, &apos;/&apos;);
 	path = path.replaceAll(&quot; &quot;, &quot;%20&quot;);
 	BrokerService broker = BrokerFactory.createBroker(&quot;xbean:file:&quot;+path, true);
-	bsh.shared.myMap = new HashMap();
-	bsh.shared.myMap.put(&quot;ACTIVEMQ_BROKER&quot;, broker);
+	props.put(&quot;ACTIVEMQ_BROKER&quot;, broker);
 } catch(Exception ex) {
 	log.error(&quot;Error configuring ActiveMQ&quot;, ex);
 }
 </stringProp>
-          <stringProp name="BeanShellSampler.filename"></stringProp>
-          <stringProp name="BeanShellSampler.parameters"></stringProp>
-          <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
-        </BeanShellSampler>
+        </JSR223Sampler>
         <hashTree/>
         <TestAction guiclass="TestActionGui" testclass="TestAction" testname="Think Time" enabled="true">
           <intProp name="ActionProcessor.action">1</intProp>
@@ -1132,20 +1132,21 @@ propFloat	1.2</stringProp>
           <stringProp name="ConstantTimer.delay">5100</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BSS_stopActiveMQ" enabled="true">
-          <stringProp name="BeanShellSampler.query">import org.apache.activemq.broker.BrokerService;
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="BSS_stopActiveMQ" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">d47bf508-8239-4927-913f-238941a3e887</stringProp>
+          <stringProp name="script">import org.apache.activemq.broker.BrokerService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.commons.io.FileUtils;
 
-BrokerService broker = bsh.shared.myMap.get(&quot;ACTIVEMQ_BROKER&quot;);
+BrokerService broker = props.get(&quot;ACTIVEMQ_BROKER&quot;);
 broker.stop();
 
 FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/activemq-data&quot;));
 </stringProp>
-          <stringProp name="BeanShellSampler.filename"></stringProp>
-          <stringProp name="BeanShellSampler.parameters"></stringProp>
-          <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
-        </BeanShellSampler>
+        </JSR223Sampler>
         <hashTree/>
       </hashTree>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
