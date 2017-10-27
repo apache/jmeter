@@ -143,14 +143,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     @Override
     public void stateChanged(ChangeEvent event) {
         try {
-            Arguments args = new Arguments();
-            Function function = CompoundVariable.getFunctionClass(functionList.getText()).newInstance();
-            List<String> argumentDesc = function.getArgumentDesc();
-            for (String help : argumentDesc) {
-                args.addArgument(help, ""); //$NON-NLS-1$
-            }
-            parameterPanel.configure(args);
-            parameterPanel.revalidate();
+            initParameterPanel();
             getContentPane().remove(parameterPanel);
             this.pack();
             getContentPane().add(parameterPanel, BorderLayout.CENTER);
@@ -160,6 +153,21 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             this.repaint();
         } catch (InstantiationException | IllegalAccessException e) {
         }
+    }
+
+    /**
+     * @throws InstantiationException if function instanciation fails
+     * @throws IllegalAccessException if function instanciation fails
+     */
+    protected void initParameterPanel() throws InstantiationException, IllegalAccessException {
+        Arguments args = new Arguments();
+        Function function = CompoundVariable.getFunctionClass(functionList.getText()).newInstance();
+        List<String> argumentDesc = function.getArgumentDesc();
+        for (String help : argumentDesc) {
+            args.addArgument(help, ""); //$NON-NLS-1$
+        }
+        parameterPanel.configure(args);
+        parameterPanel.revalidate();
     }
 
     @Override
@@ -208,5 +216,17 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         setTitle(JMeterUtils.getResString("function_helper_title")); //$NON-NLS-1$
         this.getContentPane().removeAll(); // so we can add them again in init
         init();
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            try {
+                initParameterPanel();
+            } catch (InstantiationException | IllegalAccessException ex) {
+                log.error("Error initializing parameter panel", ex);
+            }
+        }
     }
 }

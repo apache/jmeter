@@ -41,8 +41,8 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -274,10 +274,19 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      */
     protected void computeSamplerName(HTTPSamplerBase sampler,
             HttpRequestHdr request) {
+        String prefix = request.getPrefix();
         if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
-            sampler.setName(incrementRequestNumberAndGet() + " " + sampler.getPath());
+            if(!StringUtils.isEmpty(prefix)) {
+                sampler.setName(incrementRequestNumberAndGet() + " " + prefix);
+            } else {
+                sampler.setName(incrementRequestNumberAndGet() + " " + sampler.getPath());
+            }
         } else {
-            sampler.setName(sampler.getPath());
+            if(!StringUtils.isEmpty(prefix)) {
+                sampler.setName(prefix);
+            } else {
+                sampler.setName(sampler.getPath());
+            }
         }
     }
 

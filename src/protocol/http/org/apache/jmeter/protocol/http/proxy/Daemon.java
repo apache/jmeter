@@ -33,7 +33,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 
 /**
- * Web daemon thread. Creates main socket on port 8080 and listens on it
+ * Web daemon thread. Creates main socket on port configured port (8888 by default) and listens on it
  * forever. For each client request, creates a Proxy thread to handle the
  * request.
  *

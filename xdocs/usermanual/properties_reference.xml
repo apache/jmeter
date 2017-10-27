@@ -853,10 +853,6 @@ JMETER-SERVER</source>
         <dt><code>Batch</code></dt>
         <dd>Accumulates SampleResults before sending them. Configured by
         properties <code>num_sample_threshold</code> and <code>time_threshold</code></dd>
-        <dt><code>Hold</code></dt>
-        <dd>retains samples until end of test (may need lots of memory)
-        <note>The related <code>hold_samples</code> was originally defined as a separate property, but is deprecated now.</note>
-        </dd>
         <dt><code>Statistical</code></dt>
         <dd>returns sample summary statistics. Configured by
         properties <code>key_on_threadname</code> and <code>time_threshold</code></dd>

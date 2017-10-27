@@ -210,6 +210,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 - Software produced at the ASF:
 
 * apache-bsf-2.4.0.jar
+* beanshell-2.0b6.jar
 * commons-codec-1.10.jar
 * commons-collections-3.2.2.jar
 * commons-dbcp2-2.1.1.jar
@@ -257,7 +258,6 @@ The following software is provided under the Apache License V 2.0 (as above):
 For details, please see the files under: licenses/bin
 
 * asm-5.2.jar (BSD)
-* beanshell-2.0b5.jar (SPL)
 * dnsjava-2.1.8.jar (BSD)
 * hamcrest-core-1.3.jar (BSD)
 * javamail-1.5.0-b01.jar (CDDL Version 1.0)
@@ -270,7 +270,7 @@ For details, please see the files under: licenses/bin
 * jodd-props-3.8.6.jar (Simplified BSD)
 * jtidy-r938.jar (?)
 * junit-4.12.jar (BSD)
-* rhino-1.7.7.1.jar (MPL 2.0)
+* rhino-1.7.7.2.jar (MPL 2.0)
 * rsyntaxtextarea-2.6.1.jar (BSD)
 * slf4j-api-1.7.25.jar (MIT)
 * slf4j-ext-1.7.25.jar (MIT)

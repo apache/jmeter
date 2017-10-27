@@ -2737,10 +2737,38 @@ run JMeter unless all the JMeter jars are added.
     </antcall>
       
     <antcall target="batchtest">
+      <param name="batchtest.name" value="TestCookieManager"/>
+      <param name="batchtest.jmx" value="TestCookieManager.jmx"/>
+    </antcall>
+      
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="TCP_TESTS"/>
+      <param name="batchtest.jmx" value="TCP_TESTS.jmx"/>
+      <param name="batchtest.ignoreErrorLogs" value="true" />
+    </antcall>
+
+    <antcall target="batchtest">
       <param name="batchtest.name" value="JDBC_TESTS"/>
       <param name="batchtest.jmx" value="JDBC_TESTS.jmx"/>
     </antcall>
+      
+	<antcall target="batchtest">
+	  <param name="batchtest.name" value="JMS_TESTS"/>
+      <param name="batchtest.jmx" value="JMS_TESTS.jmx"/>
+      <param name="batchtest.ignoreErrorLogs" value="true" />
+	</antcall>
 
+  	<antcall target="batchtest">
+  	  <param name="batchtest.name" value="OS_TESTS"/>
+      <param name="batchtest.jmx" value="OS_TESTS.jmx"/>
+  	</antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="FTP_TESTS"/>
+      <param name="batchtest.jmx" value="FTP_TESTS.jmx"/>
+      <param name="batchtest.ignoreErrorLogs" value="true" />
+    </antcall>
+      
     <antcall target="batchtest">
       <param name="batchtest.name" value="Bug60607"/>
       <param name="batchtest.jmx" value="Bug60607.jmx"/>
@@ -3199,6 +3227,10 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="xpp3"/>
     <process_jarfile jarname="xstream"/>
     <process_jarfile jarname="hsqldb" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="activemq-all" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="mina-core" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="ftplet-api" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="ftpserver-core" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="jacocoant" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="sonarqube-ant-task" dest.dir="${lib.coverage}" />
   </target>
@@ -3234,7 +3266,7 @@ run JMeter unless all the JMeter jars are added.
     <delete verbose="true">
       <!-- bcprov jars no longer have the same prefix so the wildcard delete does not work; drop any old ones -->
       <fileset dir="${lib.api}" includes="bcmail-jdk15-*.jar bcprov-jdk15-*.jar"/>
-      <fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar" />
+      <fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar bsh-2.0b5.jar" />
       <!-- tidy up unused Excalibur jars -->
       <fileset dir="${lib.dir}" includes="avalon-framework-4.1.4.jar excalibur-datasource-2.1.jar excalibur-instrument-1.0.jar excalibur-logger-1.1.jar excalibur-pool-api-2.1.jar excalibur-pool-impl-2.1.jar excalibur-pool-instrumented-2.1.jar"/>
       <!-- jdom jar has moved; drop the old one -->
@@ -3293,7 +3325,7 @@ run JMeter unless all the JMeter jars are added.
      />
   </target>
 
-  <target name="_coverage.report" depends="_coverage.prepare, init-svnVersion, init-version">
+  <target name="_coverage.report" depends="_coverage.prepare, init-version">
     <jacoco:report>
         <executiondata>
             <file file="reports/jacoco.exec"/>
@@ -3342,7 +3374,9 @@ run JMeter unless all the JMeter jars are added.
     </jacoco:report>
   </target>
 
-  <target name="coverage"  depends="ant-version,_coverage.prepare, test-both, _allbatchtests, _coverage.report"/>
+  <target name="coverage-travis"  depends="ant-version,_coverage.prepare, test, _coverage.report"/>
+
+  <target name="coverage"  depends="ant-version,_coverage.prepare, test-both, _allbatchtests, init-svnVersion, _coverage.report"/>
 
   <target name="_check_exists" if="_check_exists">
     <fail message="Invalid call sequence - file.exists should not be defined" if="file.exists"/>
@@ -3621,7 +3655,7 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="sonar" depends="compile, install, coverage, _sonar" />
 
-  <target name="nightlysonar" depends="_coverage.prepare, nightly, _coverage.report, _sonar" />
+  <target name="nightlysonar" depends="_coverage.prepare, nightly, init-svnVersion, _coverage.report, _sonar" />
 
   <target name="setproxy" if="${proxy.use}">
     <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"

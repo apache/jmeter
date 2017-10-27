@@ -73,6 +73,12 @@ Summary
 <ch_section>Incompatible changes</ch_section>
 <ul>
     <li><code>Start time</code> and <code>End date</code> of Thread Group have been removed, see <bugzilla>61549</bugzilla></li>
+    <li>In distributed testing, mode <code>Hold</code> has been removed. Use alternative and more efficient modes</li>
+    <li>For 3rd party plugins, the following method in <code>org.apache.jmeter.gui.tree.JMeterTreeNode</code> has been dropped for migration to Java 9 (<bugzilla>61529</bugzilla>)
+    <source>public Enumeration&lt;JMeterTreeNode&gt; children()</source>
+    </li>
+    <li><code>tearDown Thread Group</code> will now run on stop and shutdown of a test by default. If you don't want this behaviour, 
+    uncheck <code>Run tearDown Thread Groups after shutdown of main threads</code> on <code>Test Plan</code> element, see <bugzilla>61656</bugzilla></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -80,7 +86,9 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><pr>316</pr>Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
+    <li><pr>316</pr> - Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
+    <li><bug>61639</bug>HTTP(S) Test Script Recorder : In request filtering tab, uncheck by default "Notify Child Listeners of filtered samplers"</li>
+    <li><bug>61672</bug>HTTP(S) Test Script Recorder : When a prefix is set don't use path in Sampler Name</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -89,14 +97,20 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>61675</bug>If Controller : Use expression by default and add a warning when the other mode is used. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
+    <li><bug>57760</bug>View Results Tree : Cookie Header is wrongly shown as empty(no cookies) when viewing a recorder Sample Result. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>60213</bug>Boundary based extractor</li>
+    <li><bug>61644</bug>HTTP Cache Manager: "Use Cache-Control/Expires header when processing GET requests" should be checked by default</li>
+    <li><bug>61645</bug>Response Assertion : Add ability to assert on Request Data</li>
+    <li><bug>61534</bug>Convert AssertionError to a failed assertion in the JSR223Assertion allowing users to use assert in their code</li>
 </ul>
 
 <h3>Functions</h3>
@@ -120,10 +134,21 @@ Summary
     <li><bug>61549</bug>Thread Group : Remove start and end date</li>
     <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61607</bug>Add browse button in all beanshell elements to select beanshell script</li>
+    <li><bug>61627</bug>Don't clear LogView anymore when clicking on Warning/Errors Indicator</li>
+    <li><bug>61629</bug>Add Think Times to Children menu should not consider disabled elements</li>
+    <li><bug>61655</bug>SampleSender : Drop HoldSampleSender implementation</li>
+    <li><bug>61656</bug><code>tearDown Thread Group</code> should run by default at stop or shutdown of test</li>
+    <li><bug>61659</bug>JMeterVariables#get() should apply toString() on non string objects</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Updated to bsh-2.0b6 (from bsh-2.0b5)</li>
+    <li>Updated to rhino-1.7.7.2 (from rhino-1.7.7.1)</li>
+    <li><bug>61642</bug>Improve FTP test coverage</li>
+    <li><bug>61641</bug>Improve JMS test coverage</li>
+    <li><bug>61651</bug>Improve TCP test coverage</li>
+    <li><bug>61651</bug>Improve OS test coverage. Partly contributed by Aleksei Balan (abalanonline at gmail.com)</li> 
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -155,6 +180,8 @@ Summary
 <h3>Functions</h3>
 <ul>
     <li><bug>61588</bug>Better log message for RandomDate function</li>
+    <li><bug>61619</bug>In Function Helper Dialog, the 1st function doesn't display default parameters</li>
+    <li><bug>61628</bug>If split string has empty separator default separator is not used</li>
 </ul>
 
 <h3>I18N</h3>
@@ -167,6 +194,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>61661</bug>Avoid startup/shutdown problems due to 3rd party Thread Listener plugins throwing RuntimeException</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -180,6 +208,7 @@ Summary
     <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Justin McCartney (be_strew at yahoo.co.uk)</li>
     <li>Vincent Herilier (https://github.com/vherilier)</li>
+    <li>Aleksei Balan (abalanonline at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

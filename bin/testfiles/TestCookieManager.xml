@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="JSS_startMirror" rc="200" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<httpSample s="true" lb="HTTP-Request-HC4" rc="200" tn="TG-ManagedCookieHC4 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Request Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTPS-Request-HC4" rc="Non HTTP response code: java.net.ConnectException" tn="TG-ManagedCookieHC4 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Request Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP-Request-Java" rc="200" tn="TG-ManagedCookieJava 2-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Request Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTPS-Request-Java" rc="Non HTTP response code: java.net.ConnectException" tn="TG-ManagedCookieJava 2-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Request Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP-NonManagedCookie-HC4" rc="200" tn="TG-NonManagedCookieHC4 3-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Request Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTPS-NonManagedCookie-HC4" rc="Non HTTP response code: java.net.ConnectException" tn="TG-NonManagedCookieHC4 3-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Request Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP-NonManagedCookie-Java" rc="200" tn="TG-NonManagedCookieJava 4-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Request Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTPS-NonManagedCookie-Java" rc="Non HTTP response code: java.net.ConnectException" tn="TG-NonManagedCookieJava 4-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Request Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<sample s="true" lb="JSS_stopMirror" rc="200" tn="tearDown Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+
+</testResults>

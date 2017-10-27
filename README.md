@@ -1,11 +1,12 @@
-![Apache JMeter logo](https://jmeter.apache.org/images/logo.svg)
-# Apache JMeter
-
+<h1 align="center"><img src="https://jmeter.apache.org/images/logo.svg" alt="Apache JMeter logo" /></h1>
+<h4 align="center">Open Source application designed to load test applications and measure performance. By The Apache Software Foundation</h4>
+<br>
 
 [![Build Status](https://api.travis-ci.org/apache/jmeter.svg?branch=trunk)](https://travis-ci.org/apache/jmeter/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
 [![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![Stack Overflow](http://img.shields.io/:stack%20overflow-jmeter-brightgreen.svg)](http://stackoverflow.com/questions/tagged/jmeter)
+[![codecov](https://codecov.io/gh/apache/jmeter/branch/master/graph/badge.svg)](https://codecov.io/gh/apache/jmeter)
 
 ## What is it?
 
@@ -42,7 +43,7 @@ Highly Extensible core:
 ## The Latest Version
 
 Details of the latest version can be found on the JMeter Apache 
-Project web site (http://jmeter.apache.org/).
+Project web site (https://jmeter.apache.org/).
 
 ## Requirements
 
@@ -101,7 +102,7 @@ and it may be browsed starting from the file called `index.html`.
 
 ## Reporting a bug/enhancement
 
-See [Issue Tracking](http://jmeter.apache.org/issues.html)
+See [Issue Tracking](https://jmeter.apache.org/issues.html)
 
 ## Build instructions
 
@@ -175,6 +176,8 @@ does not have a suitable GUI display.
 
 ## Developer information
 
+Building and contributing is explained in details at https://jmeter.apache.org/building.html
+
 The code is maintained in SVN at https://svn.apache.org/repos/asf/jmeter/trunk
 
 There is a read-only mirror at GitHub: https://github.com/apache/jmeter
@@ -225,3 +228,4 @@ may be subject to export controls on cryptographic software:
 
 
 **Thank you for using Apache JMeter.**
+This closes #283
