@@ -6,7 +6,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
 [![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![Stack Overflow](http://img.shields.io/:stack%20overflow-jmeter-brightgreen.svg)](http://stackoverflow.com/questions/tagged/jmeter)
-[![codecov](https://codecov.io/gh/apache/jmeter/branch/master/graph/badge.svg)](https://codecov.io/gh/apache/jmeter)
+[![codecov](https://codecov.io/gh/apache/jmeter/branch/trunk/graph/badge.svg)](https://codecov.io/gh/apache/jmeter)
 
 ## What is it?
 
