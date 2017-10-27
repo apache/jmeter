@@ -155,27 +155,17 @@ mirrorServer.start();</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-          <stringProp name="HTTPSampler.connect_timeout">1000</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="735194388">Cookie Data:</stringProp>
-              <stringProp name="-1101339673">myCookie=value1; mySecureCookie=value3; myCookie2=value2</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
-            <boolProp name="Assertion.assume_success">true</boolProp>
-            <intProp name="Assertion.test_type">16</intProp>
-          </ResponseAssertion>
-          <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Request Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="735194388">Cookie Data:</stringProp>
               <stringProp name="-1101339673">myCookie=value1; mySecureCookie=value3; myCookie2=value2</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
+            <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
           <hashTree/>
@@ -296,27 +286,17 @@ mirrorServer.start();</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-          <stringProp name="HTTPSampler.connect_timeout">1000</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="735194388">Cookie Data:</stringProp>
-              <stringProp name="-1101339673">myCookie=value1; mySecureCookie=value3; myCookie2=value2</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
-            <boolProp name="Assertion.assume_success">true</boolProp>
-            <intProp name="Assertion.test_type">16</intProp>
-          </ResponseAssertion>
-          <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Request Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="735194388">Cookie Data:</stringProp>
               <stringProp name="-1101339673">myCookie=value1; mySecureCookie=value3; myCookie2=value2</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
+            <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
           <hashTree/>
@@ -388,8 +368,8 @@ mirrorServer.start();</stringProp>
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">8081</stringProp>
-          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.port">8082</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -411,23 +391,13 @@ mirrorServer.start();</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="735194388">Cookie Data:</stringProp>
-              <stringProp name="-1101339673">myCookie=value1; mySecureCookie=value3; myCookie2=value2</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
-            <boolProp name="Assertion.assume_success">true</boolProp>
-            <intProp name="Assertion.test_type">16</intProp>
-          </ResponseAssertion>
-          <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Request Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="735194388">Cookie Data:</stringProp>
               <stringProp name="-1101339673">myCookie=value1; mySecureCookie=value3; myCookie2=value2</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
+            <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
           <hashTree/>
@@ -514,8 +484,8 @@ mirrorServer.start();</stringProp>
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">8081</stringProp>
-          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.port">8082</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -537,23 +507,13 @@ mirrorServer.start();</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="735194388">Cookie Data:</stringProp>
-              <stringProp name="-1101339673">myCookie=value1; mySecureCookie=value3; myCookie2=value2</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
-            <boolProp name="Assertion.assume_success">true</boolProp>
-            <intProp name="Assertion.test_type">16</intProp>
-          </ResponseAssertion>
-          <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Request Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="735194388">Cookie Data:</stringProp>
               <stringProp name="-1101339673">myCookie=value1; mySecureCookie=value3; myCookie2=value2</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
+            <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
           <hashTree/>
