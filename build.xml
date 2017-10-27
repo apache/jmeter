@@ -2753,13 +2753,11 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.ignoreErrorLogs" value="true" />
 	</antcall>
 
-<!-- Comment for now as test fails on Windows -->      
-<!--
   	<antcall target="batchtest">
   	  <param name="batchtest.name" value="OS_TESTS"/>
       <param name="batchtest.jmx" value="OS_TESTS.jmx"/>
   	</antcall>
--->
+
     <antcall target="batchtest">
       <param name="batchtest.name" value="FTP_TESTS"/>
       <param name="batchtest.jmx" value="FTP_TESTS.jmx"/>
