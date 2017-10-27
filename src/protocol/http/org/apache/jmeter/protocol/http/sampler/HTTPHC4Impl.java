@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
@@ -461,7 +462,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (localAddr != null) {
                 request.addHeader(HEADER_LOCAL_ADDRESS, localAddr.toString());
             }
-            res.setRequestHeaders(getConnectionHeaders(request));
+            res.setRequestHeaders(getAllHeadersExceptCookie(request));
 
             Header contentType = httpResponse.getLastHeader(HTTPConstants.HEADER_CONTENT_TYPE);
             if (contentType != null){
@@ -542,7 +543,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (res.getRequestHeaders() != null) {
                 log.debug("Overwriting request old headers: {}", res.getRequestHeaders());
             }
-            res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST)));
+            res.setRequestHeaders(getAllHeadersExceptCookie((HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST)));
             errorResult(e, res);
             return res;
         } catch (RuntimeException e) {
@@ -1003,7 +1004,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
     
         if (res != null) {
-            res.setCookies(cookies);
+            if(cookies != null && !cookies.isEmpty()) {
+                res.setCookies(cookies);
+            } else {
+                // During recording Cookie Manager doesn't handle cookies
+                res.setCookies(getOnlyCookieFromHeaders(httpRequest));
+            }
         }
     }
     
@@ -1146,20 +1152,43 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * Get all the request headers for the <code>HttpMethod</code>
+     * Get all the request headers except Cookie for the <code>HttpRequest</code>
      *
      * @param method
      *            <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
-    private String getConnectionHeaders(HttpRequest method) {
+    private String getAllHeadersExceptCookie(HttpRequest method) {
+        return getFromHeadersMatchingPredicate(method, ALL_EXCEPT_COOKIE);
+    }
+    
+    /**
+     * Get only Cookie header for the <code>HttpRequest</code>
+     *
+     * @param method
+     *            <code>HttpMethod</code> which represents the request
+     * @return the headers as a string
+     */
+    private String getOnlyCookieFromHeaders(HttpRequest method) {
+        return getFromHeadersMatchingPredicate(method, ONLY_COOKIE);
+    }
+
+    
+    /**
+     * Get only cookies from request headers for the <code>HttpRequest</code>
+     *
+     * @param method
+     *            <code>HttpMethod</code> which represents the request
+     * @return the headers as a string
+     */
+    private String getFromHeadersMatchingPredicate(HttpRequest method, Predicate<String> predicate) {
         if(method != null) {
             // Get all the request headers
             StringBuilder hdrs = new StringBuilder(150);
             Header[] requestHeaders = method.getAllHeaders();
             for (Header requestHeader : requestHeaders) {
-                // Exclude the COOKIE header, since cookie is reported separately in the sample
-                if (!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(requestHeader.getName())) {
+                // Get header if it matches predicate
+                if (predicate.test(requestHeader.getName())) {
                     writeHeader(hdrs, requestHeader);
                 }
             }
