@@ -557,7 +557,7 @@ mirrorServer.stopServer();</stringProp>
             <success>true</success>
             <label>true</label>
             <code>true</code>
-            <message>true</message>
+            <message>false</message>
             <threadName>true</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
@@ -590,7 +590,7 @@ mirrorServer.stopServer();</stringProp>
             <success>true</success>
             <label>true</label>
             <code>true</code>
-            <message>true</message>
+            <message>false</message>
             <threadName>true</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
