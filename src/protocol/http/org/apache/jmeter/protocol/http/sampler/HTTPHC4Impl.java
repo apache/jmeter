@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -52,11 +53,14 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.AuthState;
+import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.ClientProtocolException;
@@ -79,6 +83,7 @@ import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.protocol.ResponseContentEncoding;
+import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.config.Lookup;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -122,6 +127,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.protocol.HttpRequestExecutor;
 import org.apache.http.util.CharArrayBuffer;
+import org.apache.http.util.EntityUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
@@ -238,6 +244,40 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
         
     };
+/*
+    HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor() {
+        //@Override
+        public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+            URI requestURI = null;
+            if (request instanceof HttpUriRequest) {
+                requestURI = ((HttpUriRequest) request).getURI();
+            } else {
+                try {
+                    requestURI = new URI(request.getRequestLine().getUri());
+                } catch (final URISyntaxException ignore) {
+                }
+            }
+            if(requestURI != null) {
+                Authorization authorization = 
+                        getAuthManager().getAuthForURL(requestURI.toURL());
+                if(authorization != null) {
+                    AuthState authState = (AuthState) context.getAttribute(HttpClientContext.TARGET_AUTH_STATE);
+                    //CredentialsProvider credsProvider = 
+                    //        (CredentialsProvider) context.getAttribute(HttpClientContext.CREDS_PROVIDER);
+                    //HttpHost targetHost = (HttpHost) context.getAttribute(HttpCoreContext.HTTP_TARGET_HOST);
+                    if (authState.getAuthScheme() == null) {
+                        //AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
+                        //Credentials creds = credsProvider.getCredentials(authScope);
+                        if(authorization.getMechanism() == Mechanism.BASIC_DIGEST)
+                        if (creds != null) {
+                            authState.update(new BasicScheme(), creds);
+                        }
+                    }
+                }
+            }
+        }
+    };
+    */
 
     // see  https://stackoverflow.com/questions/26166469/measure-bandwidth-usage-with-apache-httpcomponents-httpclient
     private static final HttpRequestExecutor REQUEST_EXECUTOR = new HttpRequestExecutor() {
@@ -497,7 +537,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             res.setResponseCode(Integer.toString(statusCode));
             res.setResponseMessage(statusLine.getReasonPhrase());
             res.setSuccessful(isSuccessCode(statusCode));
-
             res.setResponseHeaders(getResponseHeaders(httpResponse, localContext));
             if (res.isRedirect()) {
                 final Header headerLocation = httpResponse.getLastHeader(HTTPConstants.HEADER_LOCATION);
@@ -542,7 +581,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (cacheManager != null){
                 cacheManager.saveDetails(httpResponse, res);
             }
-
+/*
+            if(!isSuccessCode(statusCode)) {
+                EntityUtils.consumeQuietly(httpResponse.getEntity());
+            }
+*/
             // Follow redirects and download page resources if appropriate:
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
