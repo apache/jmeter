@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171023">
+<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171027">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -61,8 +61,12 @@
         <stringProp name="ThreadGroup.delay"></stringProp>
       </SetupThreadGroup>
       <hashTree>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BSS_startFtpServer" enabled="true">
-          <stringProp name="BeanShellSampler.query">import org.apache.ftpserver.FtpServer;
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="BSS_startFtpServer" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">92d044f3-7b32-4797-a3a8-49d07a78b01f</stringProp>
+          <stringProp name="script">import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.UserManager;
@@ -107,13 +111,9 @@ factory.addListener(&quot;default&quot;, listenerFactory.createListener());
 FtpServer server = factory.createServer();
 server.start();
 
-bsh.shared.myMap = new HashMap();
-bsh.shared.myMap.put(&quot;FTP_SERVER&quot;, server);
+props.put(&quot;FTP_SERVER&quot;, server);
 </stringProp>
-          <stringProp name="BeanShellSampler.filename"></stringProp>
-          <stringProp name="BeanShellSampler.parameters"></stringProp>
-          <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
-        </BeanShellSampler>
+        </JSR223Sampler>
         <hashTree/>
         <TestAction guiclass="TestActionGui" testclass="TestAction" testname="Think Time" enabled="true">
           <intProp name="ActionProcessor.action">1</intProp>
@@ -237,8 +237,12 @@ bsh.shared.myMap.put(&quot;FTP_SERVER&quot;, server);
         <stringProp name="ThreadGroup.delay"></stringProp>
       </PostThreadGroup>
       <hashTree>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BSS_stopFtpServer" enabled="true">
-          <stringProp name="BeanShellSampler.query">import org.apache.ftpserver.FtpServer;
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="BSS_stopFtpServer" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">d09f6f8d-0f86-4cae-b88c-0ad9bd587d31</stringProp>
+          <stringProp name="script">import org.apache.ftpserver.FtpServer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FileUtils;
@@ -246,7 +250,7 @@ import org.apache.commons.io.FileUtils;
 
 FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/ftp_test&quot;));
 
-FtpServer server = bsh.shared.myMap.get(&quot;FTP_SERVER&quot;);
+FtpServer server = (FtpServer) props.get(&quot;FTP_SERVER&quot;);
 try {
 	server.stop();
 } catch (Exception ex) {
@@ -254,10 +258,7 @@ try {
 }
 
 </stringProp>
-          <stringProp name="BeanShellSampler.filename"></stringProp>
-          <stringProp name="BeanShellSampler.parameters"></stringProp>
-          <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
-        </BeanShellSampler>
+        </JSR223Sampler>
         <hashTree/>
       </hashTree>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
