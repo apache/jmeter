@@ -16,7 +16,7 @@ rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
 
 rem  ============================================
-rem  Non-GUI version of JMETER.BAT (WinNT/2K only)
+rem  Non-GUI version of JMETER.BAT
 rem
 rem  Drop a JMX file on this batch script, and it
 rem  will run it in non-GUI mode, with a log file
