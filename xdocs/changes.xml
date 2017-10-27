@@ -97,6 +97,7 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>61675</bug>If Controller : Use expression by default and add a warning when the other mode is used. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
