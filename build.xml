@@ -2761,6 +2761,7 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="batchtest">
       <param name="batchtest.name" value="FTP_TESTS"/>
       <param name="batchtest.jmx" value="FTP_TESTS.jmx"/>
+      <param name="batchtest.ignoreErrorLogs" value="true" />
     </antcall>
       
     <antcall target="batchtest">
