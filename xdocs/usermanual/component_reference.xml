@@ -2236,27 +2236,32 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
 </properties>
 </component>
 
-<component name="If Controller" index="&sect-num;.2.9" width="497" height="131" screenshot="ifcontroller.png">
+<component name="If Controller" index="&sect-num;.2.9" width="814" height="262" screenshot="if_controller_expression.png">
     <description>
         <p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
         <p>
         By default, the condition is evaluated only once on initial entry, but you have the option to have it evaluated for every runnable element contained in the controller.
         </p>
         <p>
-        The script can be processed as a variable expression, rather than requiring JavaScript.
-        It was always possible to use functions and variables in the JavaScript condition, so long as they evaluated to "<code>true</code>" or "<code>false</code>";
-        now this can be done without the overhead of using JavaScript as well. For example, previously one could use the condition:
+        If Controller will internally use javascript to evaluate the condition but this can have a performance penalty.
+        <figure width="819" height="265" image="if_controller_javascript.png">If Controller using javascript</figure>
+        A better option (default one) is to check <code>Interpret Condition as Variable Expression?</code>, then in the condition field you have 2 options:
+        <ul>
+            <li>Option 1 : Use a variable that contains <code>true</code> or <code>false</code>
+            <note>If you want to test if last sample was successful, you can use <code>${JMeterThread.last_sample_ok}</code>
+            <figure width="815" height="260" image="if_controller_variable.png">If Controller using Variable</figure>
+            </note>
+            </li>
+            <li>Option 2 : Use a function (<code>${__jexl3()}</code> is advised) to evaluate an expression that must return <code>true</code> or <code>false</code>
+            <figure width="815" height="260" image="if_controller_expression.png">If Controller using expression</figure>
+            </li>
+        </ul>
+        
+        For example, previously one could use the condition:
         <code>${__jexl3(${VAR} == 23)}</code> and this would be evaluated as <code>true</code>/<code>false</code>, the result would then be passed to JavaScript
         which would then return <code>true</code>/<code>false</code>. If the Variable Expression option is selected, then the expression is evaluated
         and compared with "<code>true</code>", without needing to use JavaScript.
-        Also, variable expressions can return any value, whereas the
-        JavaScript condition must return "<code>true</code>"/"<code>false</code>" or an error is logged.
         </p>
-        <note>
-        No variables are made available to the script when the condition is interpreted as JavaScript.
-        If you need access to such variables, then select "<code>Interpret Condition as Variable Expression?</code>" and use
-        a <code><funclink name="__jexl3"/></code>, <code><funclink name="__groovy"/></code> or <code><funclink name="__javaScript()"/></code> (discouraged for performance) function call. You can then use the objects "<code>vars</code>", "<code>log</code>", "<code>ctx</code>" etc. in the script.
-        </note>
         <note>
         To test if a variable is undefined (or null) do the following, suppose var is named <code>myVar</code>, expression will be:
         <source>"${myVar}" == "\${myVar}"</source>
