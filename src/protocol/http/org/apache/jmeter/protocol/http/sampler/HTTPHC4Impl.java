@@ -965,51 +965,47 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     protected void setupRequest(URL url, HttpRequestBase httpRequest, HTTPSampleResult res)
         throws IOException {
-
-    HttpParams requestParams = httpRequest.getParams();
     
-    // Set up the local address if one exists
-    final InetAddress inetAddr = getIpSourceAddress();
-    if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
-        requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, inetAddr);
-    } else if (localAddress != null){
-        requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
-    } else { // reset in case was set previously
-        requestParams.removeParameter(ConnRoutePNames.LOCAL_ADDRESS);
-    }
-
-    int rto = getResponseTimeout();
-    if (rto > 0){
-        requestParams.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, rto);
-    }
-
-    int cto = getConnectTimeout();
-    if (cto > 0){
-        requestParams.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, cto);
-    }
-
-    requestParams.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, getAutoRedirects());
+        HttpParams requestParams = httpRequest.getParams();
+        // Set up the local address if one exists
+        final InetAddress inetAddr = getIpSourceAddress();
+        if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
+            requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, inetAddr);
+        } else if (localAddress != null){
+            requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
+        } else { // reset in case was set previously
+            requestParams.removeParameter(ConnRoutePNames.LOCAL_ADDRESS);
+        }
     
-    // a well-behaved browser is supposed to send 'Connection: close'
-    // with the last request to an HTTP server. Instead, most browsers
-    // leave it to the server to close the connection after their
-    // timeout period. Leave it to the JMeter user to decide.
-    if (getUseKeepAlive()) {
-        httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
-    } else {
-        httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
+        int rto = getResponseTimeout();
+        if (rto > 0){
+            requestParams.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, rto);
+        }
+    
+        int cto = getConnectTimeout();
+        if (cto > 0){
+            requestParams.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, cto);
+        }
+    
+        requestParams.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, getAutoRedirects());
+        
+        // a well-behaved browser is supposed to send 'Connection: close'
+        // with the last request to an HTTP server. Instead, most browsers
+        // leave it to the server to close the connection after their
+        // timeout period. Leave it to the JMeter user to decide.
+        if (getUseKeepAlive()) {
+            httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
+        } else {
+            httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
+        }
+    
+        setConnectionHeaders(httpRequest, url, getHeaderManager(), getCacheManager());
+        String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
+    
+        if (res != null) {
+            res.setCookies(cookies);
+        }
     }
-
-    setConnectionHeaders(httpRequest, url, getHeaderManager(), getCacheManager());
-
-    String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
-
-    if (res != null) {
-        res.setCookies(cookies);
-    }
-
-}
-
     
     /**
      * Set any default request headers to include
@@ -1036,25 +1032,25 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         headerBuf.append("\n"); // $NON-NLS-1$
 
         for (Header responseHeader : rh) {
-            writeResponseHeader(headerBuf, responseHeader);
+            writeHeader(headerBuf, responseHeader);
         }
         return headerBuf.toString();
     }
 
     /**
-     * Write responseHeader to headerBuffer in an optimized way
+     * Write header to headerBuffer in an optimized way
      * @param headerBuffer {@link StringBuilder}
-     * @param responseHeader {@link Header}
+     * @param header {@link Header}
      */
-    private void writeResponseHeader(StringBuilder headerBuffer, Header responseHeader) {
-        if(responseHeader instanceof BufferedHeader) {
-            CharArrayBuffer buffer = ((BufferedHeader)responseHeader).getBuffer();
+    private void writeHeader(StringBuilder headerBuffer, Header header) {
+        if(header instanceof BufferedHeader) {
+            CharArrayBuffer buffer = ((BufferedHeader)header).getBuffer();
             headerBuffer.append(buffer.buffer(), 0, buffer.length()).append('\n'); // $NON-NLS-1$
         }
         else {
-            headerBuffer.append(responseHeader.getName())
+            headerBuffer.append(header.getName())
             .append(": ") // $NON-NLS-1$
-            .append(responseHeader.getValue())
+            .append(header.getValue())
             .append('\n'); // $NON-NLS-1$
         }
     }
@@ -1164,7 +1160,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             for (Header requestHeader : requestHeaders) {
                 // Exclude the COOKIE header, since cookie is reported separately in the sample
                 if (!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(requestHeader.getName())) {
-                    writeResponseHeader(hdrs, requestHeader);
+                    writeHeader(hdrs, requestHeader);
                 }
             }
     
