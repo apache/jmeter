@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171024">
+<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171027">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments">https://stackoverflow.com/questions/8403462/jmeter-execute-command-over-telnet-using-beanshell
@@ -116,7 +116,7 @@ acceptor.setHandler( new TimeServerHandler() );
 acceptor.setReuseAddress(true);
 acceptor.getSessionConfig().setReadBufferSize( 2048 );
 acceptor.getSessionConfig().setIdleTime( IdleStatus.BOTH_IDLE, 10 );
-vars.putObject(&quot;TCP_SERVER&quot;, acceptor);
+props.put(&quot;TCP_SERVER&quot;, acceptor);
 def thread = Thread.start {
 	acceptor.bind( new InetSocketAddress(Integer.parseInt(vars.get(&quot;port&quot;))));
 };
@@ -124,16 +124,6 @@ def thread = Thread.start {
 SampleResult.setResponseMessageOK();
 SampleResult.setResponseData(&quot;Starting TCP Server&quot;, &quot;UTF-8&quot;);</stringProp>
         </JSR223Sampler>
-        <hashTree/>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BSS_startTcpServer" enabled="true">
-          <stringProp name="BeanShellSampler.query">Object o = vars.getObject(&quot;TCP_SERVER&quot;);
-bsh.shared.myMap = new HashMap();
-bsh.shared.myMap.put(&quot;TCP_SERVER&quot;, o);
-</stringProp>
-          <stringProp name="BeanShellSampler.filename"></stringProp>
-          <stringProp name="BeanShellSampler.parameters"></stringProp>
-          <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
-        </BeanShellSampler>
         <hashTree/>
         <TestAction guiclass="TestActionGui" testclass="TestAction" testname="Think Time" enabled="true">
           <intProp name="ActionProcessor.action">1</intProp>
@@ -554,21 +544,23 @@ vars.put(&quot;result_decoded&quot;, new String(hex.decode(prev.getResponseData(
         <stringProp name="ThreadGroup.delay"></stringProp>
       </PostThreadGroup>
       <hashTree>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BSS_stopTcpServer" enabled="true">
-          <stringProp name="BeanShellSampler.query">import org.apache.jmeter.util.JMeterUtils;
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223S_stopTcpServer" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">81a419ad-5207-446a-b0a0-2bfe2cd776ed</stringProp>
+          <stringProp name="script">import org.apache.jmeter.util.JMeterUtils;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.core.service.IoAcceptor;
-IoAcceptor acceptor = bsh.shared.myMap.get(&quot;TCP_SERVER&quot;);
+
+IoAcceptor acceptor = props.get(&quot;TCP_SERVER&quot;);
 acceptor.setCloseOnDeactivation(true);
 for (IoSession ss : acceptor.getManagedSessions().values()) {
   ss.close(true);
 }
 acceptor.unbind();
 acceptor.dispose();</stringProp>
-          <stringProp name="BeanShellSampler.filename"></stringProp>
-          <stringProp name="BeanShellSampler.parameters"></stringProp>
-          <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
-        </BeanShellSampler>
+        </JSR223Sampler>
         <hashTree/>
       </hashTree>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
