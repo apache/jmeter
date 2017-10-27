@@ -24,15 +24,8 @@ rem  formed from the input file name but with the
 rem  extension .jtl
 rem
 rem  Only the first parameter is used.
-rem  Only works for Win2k.
 rem
 rem  ============================================
-
-if "%OS%"=="Windows_NT" goto WinNT
-echo "Sorry, this command file requires Windows NT/ 2000 / XP"
-pause
-goto END
-:WinNT
 
 rem Check file is supplied
 if a == a%1 goto winNT2

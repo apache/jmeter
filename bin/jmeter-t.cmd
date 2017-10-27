@@ -21,16 +21,9 @@ rem  Drop a JMX file on this batch script, and it
 rem  will load it in the GUI.
 rem
 rem  Only the first parameter is used.
-rem  Only works for Win2k.
 rem
 rem  ============================================
 
-
-if "%OS%"=="Windows_NT" goto WinNT
-echo "Sorry, this command file requires Windows NT/ 2000 / XP"
-pause
-goto END
-:WinNT
 
 rem Check file is supplied
 if a == a%1 goto winNT2

@@ -19,7 +19,6 @@ rem   limitations under the License.
 set JM_START=start
 set JM_LAUNCH=javaw.exe
 
-rem Only works in Win2K
 call jmeter %*
 
 set JM_START=
