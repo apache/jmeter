@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3-SNAPSHOT.20170917">
+<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171027">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -208,13 +208,6 @@ if (list.size()==1) {
             <stringProp name="scriptLanguage">groovy</stringProp>
           </JSR223Assertion>
           <hashTree/>
-          <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
-            <boolProp name="displayJMeterProperties">false</boolProp>
-            <boolProp name="displayJMeterVariables">true</boolProp>
-            <boolProp name="displaySamplerProperties">true</boolProp>
-            <boolProp name="displaySystemProperties">false</boolProp>
-          </DebugPostProcessor>
-          <hashTree/>
         </hashTree>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC_SELECT_PREPARED" enabled="true">
           <stringProp name="dataSource">dbConfig</stringProp>
@@ -272,13 +265,6 @@ if (list.size()==1) {
             <stringProp name="Scope.variable">author_#</stringProp>
           </ResponseAssertion>
           <hashTree/>
-          <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
-            <boolProp name="displayJMeterProperties">false</boolProp>
-            <boolProp name="displayJMeterVariables">true</boolProp>
-            <boolProp name="displaySamplerProperties">true</boolProp>
-            <boolProp name="displaySystemProperties">false</boolProp>
-          </DebugPostProcessor>
-          <hashTree/>
           <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JA_checkResult" enabled="true">
             <stringProp name="cacheKey">23bf5ad0-233a-4505-971a-9273ea02c9c4</stringProp>
             <stringProp name="filename"></stringProp>
@@ -332,13 +318,6 @@ if (list.size()==1) {
             <stringProp name="variableNames"></stringProp>
           </JDBCSampler>
           <hashTree>
-            <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
-              <boolProp name="displayJMeterProperties">false</boolProp>
-              <boolProp name="displayJMeterVariables">true</boolProp>
-              <boolProp name="displaySamplerProperties">true</boolProp>
-              <boolProp name="displaySystemProperties">false</boolProp>
-            </DebugPostProcessor>
-            <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="1329970139">1 updates</stringProp>
@@ -361,13 +340,6 @@ if (list.size()==1) {
             <stringProp name="variableNames">number_user</stringProp>
           </JDBCSampler>
           <hashTree>
-            <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
-              <boolProp name="displayJMeterProperties">false</boolProp>
-              <boolProp name="displayJMeterVariables">true</boolProp>
-              <boolProp name="displaySamplerProperties">true</boolProp>
-              <boolProp name="displaySystemProperties">false</boolProp>
-            </DebugPostProcessor>
-            <hashTree/>
             <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JA_checkResult" enabled="true">
               <stringProp name="cacheKey">23bf5ad0-233a-4505-971a-9273ea02c9c4</stringProp>
               <stringProp name="filename"></stringProp>
@@ -416,13 +388,6 @@ if (list.size()==1) {
             <stringProp name="variableNames">number_user</stringProp>
           </JDBCSampler>
           <hashTree>
-            <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
-              <boolProp name="displayJMeterProperties">false</boolProp>
-              <boolProp name="displayJMeterVariables">true</boolProp>
-              <boolProp name="displaySamplerProperties">true</boolProp>
-              <boolProp name="displaySystemProperties">false</boolProp>
-            </DebugPostProcessor>
-            <hashTree/>
             <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JA_checkResult" enabled="true">
               <stringProp name="cacheKey">23bf5ad0-233a-4505-971a-9273ea02c9c4</stringProp>
               <stringProp name="filename"></stringProp>
@@ -447,6 +412,96 @@ if (list.size()==1) {
             </JSR223Assertion>
             <hashTree/>
           </hashTree>
+        </hashTree>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC_INSERT_2" enabled="true">
+          <stringProp name="dataSource">dbConfig</stringProp>
+          <stringProp name="queryType">Prepared Update Statement</stringProp>
+          <stringProp name="query">INSERT INTO USERS(title,author, submission_date) VALUES (?, ?, ?)</stringProp>
+          <stringProp name="queryArguments">Mr,Leon Tolstoi,${__time(yyyy-MM-dd,)}</stringProp>
+          <stringProp name="queryArgumentsTypes">VARCHAR,VARCHAR,DATE</stringProp>
+          <stringProp name="variableNames"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="resultSetHandler">Store as String</stringProp>
+        </JDBCSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="1329970139">1 updates</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <JDBCPreProcessor guiclass="TestBeanGUI" testclass="JDBCPreProcessor" testname="JDBC PreProcessor" enabled="true">
+            <stringProp name="dataSource">dbConfig</stringProp>
+            <stringProp name="query">select count(1) as number_user from USERS</stringProp>
+            <stringProp name="queryArguments"></stringProp>
+            <stringProp name="queryArgumentsTypes">INTEGER</stringProp>
+            <stringProp name="queryTimeout"></stringProp>
+            <stringProp name="queryType">Select Statement</stringProp>
+            <stringProp name="resultSetHandler">Store as String</stringProp>
+            <stringProp name="resultVariable"></stringProp>
+            <stringProp name="variableNames">number_user_before</stringProp>
+          </JDBCPreProcessor>
+          <hashTree/>
+          <JDBCPostProcessor guiclass="TestBeanGUI" testclass="JDBCPostProcessor" testname="JDBC PostProcessor" enabled="true">
+            <stringProp name="dataSource">dbConfig</stringProp>
+            <stringProp name="query">select count(1) as number_user from USERS</stringProp>
+            <stringProp name="queryArguments"></stringProp>
+            <stringProp name="queryArgumentsTypes">INTEGER</stringProp>
+            <stringProp name="queryTimeout"></stringProp>
+            <stringProp name="queryType">Select Statement</stringProp>
+            <stringProp name="resultSetHandler">Store as String</stringProp>
+            <stringProp name="resultVariable"></stringProp>
+            <stringProp name="variableNames">number_user_after</stringProp>
+          </JDBCPostProcessor>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_number_user_before_equal1" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49">1</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+            <stringProp name="Assertion.scope">variable</stringProp>
+            <stringProp name="Scope.variable">number_user_before_1</stringProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_number_user_after_equal2" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="50">2</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+            <stringProp name="Assertion.scope">variable</stringProp>
+            <stringProp name="Scope.variable">number_user_after_1</stringProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_number_user_before_count" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49">1</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+            <stringProp name="Assertion.scope">variable</stringProp>
+            <stringProp name="Scope.variable">number_user_before_#</stringProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_number_user_after_count" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49">1</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.request_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+            <stringProp name="Assertion.scope">variable</stringProp>
+            <stringProp name="Scope.variable">number_user_after_#</stringProp>
+          </ResponseAssertion>
+          <hashTree/>
         </hashTree>
       </hashTree>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
