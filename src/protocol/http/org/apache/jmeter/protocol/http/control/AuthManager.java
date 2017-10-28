@@ -100,7 +100,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     private static final boolean STRIP_PORT = JMeterUtils.getPropDefault("kerberos.spnego.strip_port", true);
 
     public enum Mechanism {
-        BASIC_DIGEST, KERBEROS
+        BASIC_DIGEST, BASIC, DIGEST, KERBEROS
     }
 
     private static final class NullCredentials implements Credentials {
@@ -442,6 +442,19 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         String protocol = url.getProtocol().toLowerCase(java.util.Locale.ENGLISH);
         return protocol.equals(HTTPConstants.PROTOCOL_HTTP) || protocol.equals(HTTPConstants.PROTOCOL_HTTPS);
     }    
+    
+    public void setupCredentials(Authorization auth, URL url, CredentialsProvider credentialsProvider,
+            String localhost) {
+        String username = auth.getUser();
+        String realm = auth.getRealm();
+        String domain = auth.getDomain();
+        if (log.isDebugEnabled()){
+            log.debug(username + " > D="+domain+" R="+realm + " M="+auth.getMechanism());
+        }
+        credentialsProvider.setCredentials(
+                new AuthScope(url.getHost(), url.getPort(), realm.length()==0 ? null : realm),
+                new NTCredentials(username, auth.getPass(), localhost, domain));
+    }
 
     /**
      * Configure credentials and auth scheme on client if an authorization is 

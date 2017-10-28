@@ -84,7 +84,6 @@ import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.protocol.ResponseContentEncoding;
-import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.config.Lookup;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -106,6 +105,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.auth.DigestScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -128,7 +128,6 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.protocol.HttpRequestExecutor;
 import org.apache.http.util.CharArrayBuffer;
-import org.apache.http.util.EntityUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
@@ -245,10 +244,17 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
         
     };
-/*
-    HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor() {
+
+    
+    private static final HttpRequestInterceptor PREEMPTIVE_AUTH_INTERCEPTOR = new HttpRequestInterceptor() {
         //@Override
         public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+            HttpClientContext localContext = HttpClientContext.adapt(context);
+
+            AuthManager authManager = (AuthManager) localContext.getAttribute(AUTH_MANAGER);
+            if(authManager == null) {
+                return;
+            }
             URI requestURI = null;
             if (request instanceof HttpUriRequest) {
                 requestURI = ((HttpUriRequest) request).getURI();
@@ -259,26 +265,49 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
             }
             if(requestURI != null) {
+                HttpHost targetHost = (HttpHost) context.getAttribute(HttpCoreContext.HTTP_TARGET_HOST);
+                URL url = null;
+                if(requestURI.isAbsolute()) {
+                    url = requestURI.toURL();
+                } else {
+                    url = new URL(targetHost.getSchemeName(), targetHost.getHostName(), targetHost.getPort(), 
+                            requestURI.getPath());
+                }
                 Authorization authorization = 
-                        getAuthManager().getAuthForURL(requestURI.toURL());
+                        authManager.getAuthForURL(url);
+                CredentialsProvider credentialsProvider = 
+                        (CredentialsProvider) context.getAttribute(HttpClientContext.CREDS_PROVIDER);
                 if(authorization != null) {
+                    AuthCache authCache = localContext.getAuthCache();
+                    if(authCache == null) {
+                        authCache = new BasicAuthCache();
+                        localContext.setAuthCache(authCache);
+                    }
+                    authManager.setupCredentials(authorization, url, credentialsProvider, LOCALHOST);
                     AuthState authState = (AuthState) context.getAttribute(HttpClientContext.TARGET_AUTH_STATE);
-                    //CredentialsProvider credsProvider = 
-                    //        (CredentialsProvider) context.getAttribute(HttpClientContext.CREDS_PROVIDER);
-                    //HttpHost targetHost = (HttpHost) context.getAttribute(HttpCoreContext.HTTP_TARGET_HOST);
                     if (authState.getAuthScheme() == null) {
-                        //AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
-                        //Credentials creds = credsProvider.getCredentials(authScope);
-                        if(authorization.getMechanism() == Mechanism.BASIC_DIGEST)
+                        AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort(),
+                                authorization.getRealm(), targetHost.getSchemeName());
+                        Credentials creds = credentialsProvider.getCredentials(authScope);
                         if (creds != null) {
-                            authState.update(new BasicScheme(), creds);
+                            if(authorization.getMechanism() == Mechanism.BASIC_DIGEST ||
+                                    authorization.getMechanism() == Mechanism.BASIC) {
+                                BasicScheme basicAuth = new BasicScheme();
+                                authCache.put(targetHost, basicAuth);
+                            } else if (authorization.getMechanism() == Mechanism.DIGEST) {
+                                DigestScheme digestAuth = new DigestScheme();
+                                digestAuth.overrideParamter("realm", authScope.getRealm());
+                                digestAuth.overrideParamter("nonce", "whatever");
+                                authCache.put(targetHost, digestAuth);
+                            }
                         }
                     }
+                } else {
+                    credentialsProvider.clear();
                 }
             }
         }
     };
-    */
 
     // see  https://stackoverflow.com/questions/26166469/measure-bandwidth-usage-with-apache-httpcomponents-httpclient
     private static final HttpRequestExecutor REQUEST_EXECUTOR = new HttpRequestExecutor() {
@@ -368,6 +397,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final ConnectionSocketFactory SLOW_CONNECTION_SOCKET_FACTORY;
     
+    private static final String AUTH_MANAGER = "__jmeter.AUTH_MANAGER__";
+
     private static final String USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
     
     static final String SAMPLER_RESULT_TOKEN = "__jmeter.SAMPLER_RESULT__"; //$NON-NLS-1$
@@ -491,6 +522,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         HttpContext localContext = new BasicHttpContext();
+        HttpClientContext clientContext = HttpClientContext.adapt(localContext);
+        clientContext.setAttribute(AUTH_MANAGER, getAuthManager());
         setupClientContextBeforeSample(localContext);
         
         res.sampleStart();
@@ -733,21 +766,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     throw new RuntimeException("Can't execute httpRequest with subject:" + subject, e);
                 }
             }
-
-            if(BASIC_AUTH_PREEMPTIVE) {
-                Authorization authorization = authManager.getAuthForURL(url);
-                if(authorization != null && Mechanism.BASIC_DIGEST.equals(authorization.getMechanism())) {
-                    HttpHost target = new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
-                    // Create AuthCache instance
-                    AuthCache authCache = new BasicAuthCache();
-                    // Generate BASIC scheme object and 
-                    // add it to the local auth cache
-                    BasicScheme basicAuth = new BasicScheme();
-                    authCache.put(target, basicAuth);
-                    // Add AuthCache to the execution context
-                    localContext.setAttribute(HttpClientContext.AUTH_CACHE, authCache);
-                }
-            }
         }
         return httpClient.execute(httpRequest, localContext);
     }
@@ -962,6 +980,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 builder.disableRedirectHandling();
             }
             builder.disableContentCompression().addInterceptorLast(RESPONSE_CONTENT_ENCODING);
+            if(BASIC_AUTH_PREEMPTIVE) {
+                builder.addInterceptorFirst(PREEMPTIVE_AUTH_INTERCEPTOR);
+            }
             httpClient = builder.build();
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
@@ -979,7 +1000,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         // TODO - should this be done when the client is created?
         // If so, then the details need to be added as part of HttpClientKey
-        setConnectionAuthorization(httpClient, url, getAuthManager(), key);
+        //setConnectionAuthorization(httpClient, url, getAuthManager(), key);
 
         return httpClient;
     }
