@@ -44,7 +44,7 @@
       <hashTree>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC_DROP_TABLE" enabled="true">
           <stringProp name="dataSource">dbConfig</stringProp>
-          <stringProp name="query">drop table USERS;
+          <stringProp name="query">drop table USERS IF EXISTS;
 </stringProp>
           <stringProp name="queryArguments"></stringProp>
           <stringProp name="queryArgumentsTypes"></stringProp>
@@ -55,10 +55,12 @@
           <stringProp name="variableNames"></stringProp>
         </JDBCSampler>
         <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_IgnoreError" enabled="true">
-            <collectionProp name="Asserion.test_strings"/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1157542694">0 updates</stringProp>
+            </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-            <boolProp name="Assertion.assume_success">true</boolProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
           <hashTree/>
@@ -81,7 +83,7 @@
           <stringProp name="variableNames"></stringProp>
         </JDBCSampler>
         <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_IgnoreError" enabled="true">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="-1157542694">0 updates</stringProp>
             </collectionProp>

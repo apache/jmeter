@@ -2,14 +2,14 @@
 <testResults version="1.2">
 <sample s="true" lb="JDBC_DROP_TABLE" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
-    <name>RA_IgnoreError</name>
+    <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </sample>
 <sample s="true" lb="JDBC_CREATE_TABLE" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
-    <name>RA_IgnoreError</name>
+    <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
