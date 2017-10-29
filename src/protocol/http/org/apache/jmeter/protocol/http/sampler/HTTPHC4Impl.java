@@ -64,7 +64,6 @@ import org.apache.http.auth.AuthState;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.AuthCache;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -128,6 +127,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.protocol.HttpRequestExecutor;
 import org.apache.http.util.CharArrayBuffer;
+import org.apache.http.util.EntityUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
@@ -262,6 +262,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 try {
                     requestURI = new URI(request.getRequestLine().getUri());
                 } catch (final URISyntaxException ignore) {
+                    // NOOP
                 }
             }
             if(requestURI != null) {
@@ -571,7 +572,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             res.setResponseCode(Integer.toString(statusCode));
             res.setResponseMessage(statusLine.getReasonPhrase());
             res.setSuccessful(isSuccessCode(statusCode));
-            res.setResponseHeaders(getResponseHeaders(httpResponse, localContext));
+            res.setResponseHeaders(getResponseHeaders(httpResponse));
             if (res.isRedirect()) {
                 final Header headerLocation = httpResponse.getLastHeader(HTTPConstants.HEADER_LOCATION);
                 if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
@@ -615,13 +616,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (cacheManager != null){
                 cacheManager.saveDetails(httpResponse, res);
             }
-/*
+
+            // Follow redirects and download page resources if appropriate:
+            res = resultProcessing(areFollowingRedirect, frameDepth, res);
             if(!isSuccessCode(statusCode)) {
                 EntityUtils.consumeQuietly(httpResponse.getEntity());
             }
-*/
-            // Follow redirects and download page resources if appropriate:
-            res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
         } catch (IOException e) {
             log.debug("IOException", e);
@@ -748,11 +748,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param url the target url (will be used to look up a possible subject for the execution)
      * @return the result of the execution of the httpRequest
      * @throws IOException
-     * @throws ClientProtocolException
      */
     private CloseableHttpResponse executeRequest(final CloseableHttpClient httpClient,
             final HttpRequestBase httpRequest, final HttpContext localContext, final URL url)
-            throws IOException, ClientProtocolException {
+            throws IOException {
         AuthManager authManager = getAuthManager();
         if (authManager != null) {
             Subject subject = authManager.getSubjectForUrl(url);
@@ -1088,10 +1087,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      *
      * @param response
      *            containing the headers
-     * @param localContext {@link HttpContext}
      * @return string containing the headers, one per line
      */
-    private String getResponseHeaders(HttpResponse response, HttpContext localContext) {
+    private String getResponseHeaders(HttpResponse response) {
         Header[] rh = response.getAllHeaders();
 
         StringBuilder headerBuf = new StringBuilder(40 * (rh.length+1));
@@ -1166,16 +1164,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                             jMeterProperty.getObjectValue();
                     String n = header.getName();
                     // Don't allow override of Content-Length
-                    // TODO - what other headers are not allowed?
                     if (! HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
                         String v = header.getValue();
                         if (HTTPConstants.HEADER_HOST.equalsIgnoreCase(n)) {
                             int port = getPortFromHostHeader(v, url.getPort());
                             v = v.replaceFirst(":\\d+$",""); // remove any port specification // $NON-NLS-1$ $NON-NLS-2$
-                            if (port != -1) {
-                                if (port == url.getDefaultPort()) {
-                                    port = -1; // no need to specify the port if it is the default
-                                }
+                            if (port != -1 && port == url.getDefaultPort()) {
+                                port = -1; // no need to specify the port if it is the default
                             }
                             if(port == -1) {
                                 request.addHeader(HEADER_HOST, v);
@@ -1301,8 +1296,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static class ViewableFileBody extends FileBody {
         private boolean hideFileData;
         
-        public ViewableFileBody(File file, String mimeType) {
-            super(file, ContentType.create(mimeType));
+        public ViewableFileBody(File file, ContentType contentType) {
+            super(file, contentType);
             hideFileData = false;
         }
 
@@ -1316,7 +1311,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    // TODO needs cleaning up
     /**
      * 
      * @param post {@link HttpPost}
@@ -1375,7 +1369,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 HTTPFileArg file = files[i];
                 
                 File reservedFile = FileServer.getFileServer().getResolvedFile(file.getPath());
-                fileBodies[i] = new ViewableFileBody(reservedFile, file.getMimeType());
+                fileBodies[i] = new ViewableFileBody(reservedFile, ContentType.create(file.getMimeType()));
                 multipartEntityBuilder.addPart(file.getParamName(), fileBodies[i] );
             }
 
@@ -1400,11 +1394,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             } else {
                 postedBody.append("<Multipart was not repeatable, cannot view what was sent>"); // $NON-NLS-1$
             }
-
-//            // Set the content type TODO - needed?
-//            String multiPartContentType = multiPart.getContentType().getValue();
-//            post.setHeader(HEADER_CONTENT_TYPE, multiPartContentType);
-
         } else { // not multipart
             // Check if the header manager had a content type header
             // This allows the user to specify his own content-type for a POST request
@@ -1425,7 +1414,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     }
                 }
 
-                FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),(ContentType) null);// TODO is null correct?
+                FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),(ContentType) null);
                 post.setEntity(fileRequestEntity);
 
                 // We just add placeholder text for file content
@@ -1447,7 +1436,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                             post.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                         }
                         else {
-                             // TODO - is this the correct default?
+                             // TODO - is this the correct default? no
                             post.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                         }
                     }
@@ -1521,10 +1510,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
         return postedBody.toString();
     }
-
-    // TODO merge put and post methods as far as possible.
-    // e.g. post checks for multipart form/files, and if not, invokes sendData(HttpEntityEnclosingRequestBase)
-
 
     /**
      * Creates the entity data to be sent.
@@ -1600,7 +1585,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             StringBuilder entityBody = null;
             if(entityEntry.isRepeatable()) {
                 entityBody = new StringBuilder(1000);
-                // FIXME Charset
                 try (InputStream in = entityEntry.getContent();
                         InputStream bounded = new BoundedInputStream(in, MAX_BODY_RETAIN_SIZE)) {
                     entityBody.append(IOUtils.toString(bounded, charset));
