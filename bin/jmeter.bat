@@ -99,12 +99,16 @@ rem set VERBOSE_GC=-verbose:gc -Xloggc:gc_jmeter_%%p.log -XX:+PrintGCDetails -XX
 rem Uncomment this to generate GC verbose file with Java 9 and above
 rem set VERBOSE_GC=-Xlog:gc*,gc+age=trace,gc+heap=debug:file=gc_jmeter_%%p.log
 
-
 set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20
 
 set SYSTEM_PROPS=-Djava.security.egd=file:/dev/urandom
+
 rem Always dump on OOM (does not cost anything unless triggered)
 set DUMP=-XX:+HeapDumpOnOutOfMemoryError
+
+rem Uncomment this if you run JMeter in DOCKER (need Java SE 8u131 or JDK 9)
+rem see https://blogs.oracle.com/java-platform-group/java-se-support-for-docker-cpu-and-memory-limits
+rem set RUN_IN_DOCKER=-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 
 rem Additional settings that might help improve GUI performance on some platforms
 rem See: http://www.oracle.com/technetwork/java/perf-graphics-135933.html
@@ -121,7 +125,7 @@ rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
 rem Server mode
 rem Collect the settings defined above
-set ARGS=%DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS%
+set ARGS=%DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %RUN_IN_DOCKER%
 
 %JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
