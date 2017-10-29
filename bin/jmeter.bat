@@ -93,8 +93,12 @@ rem See the unix startup file for the rationale of the following parameters,
 rem including some tuning recommendations
 set HEAP=-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m
 
-rem Uncomment this to generate GC verbose file
+rem Uncomment this to generate GC verbose file with Java prior to 9 
 rem set VERBOSE_GC=-verbose:gc -Xloggc:gc_jmeter_%%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps
+
+rem Uncomment this to generate GC verbose file with Java 9 and above
+rem set VERBOSE_GC=-Xlog:gc*,gc+age=trace,gc+heap=debug:file=gc_jmeter_%%p.log
+
 
 set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20
 
