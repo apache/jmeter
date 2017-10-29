@@ -140,6 +140,7 @@ Summary
     <li><bug>61656</bug><code>tearDown Thread Group</code> should run by default at stop or shutdown of test</li>
     <li><bug>61659</bug>JMeterVariables#get() should apply toString() on non string objects</li>
     <li><bug>61555</bug>Metaspace should be restricted as default</li>
+    <li><bug>61693</bug>JMeter aware of Docker (-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
