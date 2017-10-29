@@ -31,6 +31,11 @@ setlocal
 rem Minimal version to run JMeter
 set MINIMAL_VERSION=1.8.0
 
+
+rem --add-modules java.activation if JAVA 9
+set ADD_MODS=
+
+
 for /f "tokens=3" %%g in ('java -version 2^>^&1 ^| findstr /i "version"') do (
     rem @echo Debug Output: %%g
     set JAVAVER=%%g
@@ -40,10 +45,21 @@ if not defined JAVAVER (
     set ERRORLEVEL=2
     goto pause
 )
-set JAVAVER=%JAVAVER:"=%
-for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do (
-    set current_minor=%%w
+
+
+
+rem Check if version is from OpenJDK or Oracle Hotspot JVM prior to 9 containing 1.${version}.x
+IF "%variable:~0,2%"=="1." (
+    set JAVAVER=%JAVAVER:"=%
+    for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do (
+        set current_minor=%%w
 )
+) else (
+    rem Java 9 at least
+    set current_minor=9
+    set ADD_MODS=--add-modules java.activation
+)
+
 
 for /f "delims=. tokens=1-3" %%v in ("%MINIMAL_VERSION%") do (
     set minimal_minor=%%w
