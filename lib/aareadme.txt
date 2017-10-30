@@ -92,6 +92,11 @@ commons-text-1.1
 https://commons.apache.org/proper/commons-text/
 - Random Strings
 
+darcula
+-----------------
+https://github.com/bulenkov/Darcula/
+- Look and Feel
+
 dnsjava-2.1.8
 -----------------
 http://www.dnsjava.org/download/
