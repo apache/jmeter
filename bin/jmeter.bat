@@ -127,7 +127,7 @@ rem Server mode
 set SERVER=-server
 
 rem Collect the settings defined above
-set ARGS=%DUMP% %DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %RUN_IN_DOCKER%
+set ARGS=%SERVER% %DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %RUN_IN_DOCKER%
 
 %JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
