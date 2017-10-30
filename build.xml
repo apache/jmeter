@@ -402,6 +402,7 @@
     <include name="${lib.dir}/${commons-math3.jar}"/>
     <include name="${lib.dir}/${commons-net.jar}"/>
     <include name="${lib.dir}/${commons-pool2.jar}"/>
+    <include name="${lib.dir}/${darcula.jar}"/>
     <include name="${lib.dir}/${dnsjava.jar}"/>
     <include name="${lib.dir}/${freemarker.jar}"/>
     <include name="${lib.dir}/${groovy-all.jar}"/>
@@ -484,6 +485,7 @@
     <pathelement location="${lib.dir}/${commons-math3.jar}"/>
     <pathelement location="${lib.dir}/${commons-net.jar}"/>
     <pathelement location="${lib.dir}/${commons-pool2.jar}"/>
+    <pathelement location="${lib.dir}/${darcula.jar}"/>
     <pathelement location="${lib.dir}/${dnsjava.jar}"/>
     <pathelement location="${lib.dir}/${freemarker.jar}"/>
     <pathelement location="${lib.dir}/${groovy-all.jar}"/>
@@ -3178,6 +3180,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="commons-math3"/>
     <process_jarfile jarname="commons-net"/>
     <process_jarfile jarname="commons-pool2"/>
+    <process_jarfile jarname="darcula"/>
     <process_jarfile jarname="dnsjava"/>
     <process_jarfile jarname="freemarker"/>
     <process_jarfile jarname="groovy-all"/>
