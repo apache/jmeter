@@ -166,6 +166,7 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
+    <li><bug>61698</bug>Test Action: It stop is selected, samplers following Test Action can run</li>
 </ul>
 
 <h3>Controllers</h3>
