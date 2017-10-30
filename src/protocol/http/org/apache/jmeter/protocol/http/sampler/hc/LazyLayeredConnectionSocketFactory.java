@@ -28,7 +28,6 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLInitializationException;
 import org.apache.http.protocol.HttpContext;
-import org.apache.jmeter.protocol.http.sampler.LazySchemeSocketFactory;
 import org.apache.jmeter.util.HttpSSLProtocolSocketFactory;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
@@ -40,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * @since 3.4
  */
 public final class LazyLayeredConnectionSocketFactory implements LayeredConnectionSocketFactory{
-    private static final Logger LOG = LoggerFactory.getLogger(LazySchemeSocketFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LazyLayeredConnectionSocketFactory.class);
     private static final String PROTOCOL_LIST =
             JMeterUtils.getPropDefault("https.socket.protocols", ""); // $NON-NLS-1$ $NON-NLS-2$
 
