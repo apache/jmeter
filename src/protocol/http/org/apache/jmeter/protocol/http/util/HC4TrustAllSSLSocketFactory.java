@@ -33,8 +33,9 @@ import org.apache.jmeter.util.JsseSSLManager;
 
 /**
  * Apache HttpClient protocol factory to generate SSL sockets
+ * @deprecated since 4.0
  */
-
+@Deprecated
 public class HC4TrustAllSSLSocketFactory extends SSLSocketFactory {
 
     private static final TrustStrategy TRUSTALL = (chain, authType) -> true;
