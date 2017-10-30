@@ -105,6 +105,12 @@ public class JMeterVersionTest extends JMeterTestCase {
         propNames.remove("jdom");
         propNames.remove("velocity");
         propNames.remove("commons-lang"); // lang3 is bundled, lang2 is doc-only
+
+        // Darcula is not a maven artifact
+        propNames.remove("darcula"); // not needed in Maven
+        buildProp.remove("darcula.loc"); // not a Maven download
+        versions.remove("darcula");
+
         // remove optional checkstyle name
         propNames.remove("checkstyle-all"); // not needed in Maven
         buildProp.remove("checkstyle-all.loc"); // not a Maven download
@@ -270,7 +276,7 @@ public class JMeterVersionTest extends JMeterTestCase {
             if (m.matches()) {
                 final String name = m.group(1);
                 assertTrue("Duplicate jar in LICENSE file " + line, namesInLicenseFile.add(name));
-                if (!binaryJarNames.contains(name)) {
+                if (!binaryJarNames.contains(name) && !(line.indexOf("darcula")>=0)) {
                     fail("Unexpected entry in LICENCE file: " + line);                    
                 }
                 final String comment = m.group(2);
