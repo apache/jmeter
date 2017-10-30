@@ -47,6 +47,7 @@ import javax.security.auth.Subject;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BoundedInputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpConnectionMetrics;
@@ -105,6 +106,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.auth.DigestScheme;
+import org.apache.http.impl.auth.KerberosScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -205,7 +207,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 super.connect(conn, host, localAddress, connectTimeout, socketConfig, context);
             } finally {
                 SampleResult sample = 
-                        (SampleResult)context.getAttribute(HTTPHC4Impl.SAMPLER_RESULT_TOKEN);
+                        (SampleResult)context.getAttribute(HTTPHC4Impl.CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN);
                 if (sample != null) {
                     sample.connectEnd();
                 }
@@ -250,9 +252,21 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         //@Override
         public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
             HttpClientContext localContext = HttpClientContext.adapt(context);
-
-            AuthManager authManager = (AuthManager) localContext.getAttribute(AUTH_MANAGER);
-            if(authManager == null) {
+            AuthManager authManager = (AuthManager) localContext.getAttribute(CONTEXT_ATTRIBUTE_AUTH_MANAGER);
+            if (authManager == null) {
+                Credentials credentials = null;
+                HttpClientKey key = (HttpClientKey) localContext.getAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY);
+                AuthScope authScope = null;
+                CredentialsProvider credentialsProvider = 
+                        (CredentialsProvider) context.getAttribute(HttpClientContext.CREDS_PROVIDER);
+                if (key.hasProxy && !StringUtils.isEmpty(key.proxyUser)) {
+                    authScope = new AuthScope(key.proxyHost, key.proxyPort);
+                    credentials = credentialsProvider.getCredentials(authScope);
+                }
+                credentialsProvider.clear();
+                if (credentials != null) {
+                    credentialsProvider.setCredentials(authScope, credentials);
+                }
                 return;
             }
             URI requestURI = null;
@@ -300,6 +314,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                                 digestAuth.overrideParamter("realm", authScope.getRealm());
                                 digestAuth.overrideParamter("nonce", "whatever");
                                 authCache.put(targetHost, digestAuth);
+                            } else if (authorization.getMechanism() == Mechanism.KERBEROS) {
+                                KerberosScheme kerberosScheme = new KerberosScheme();
+                                authCache.put(targetHost, kerberosScheme);
                             }
                         }
                     }
@@ -398,13 +415,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final ConnectionSocketFactory SLOW_CONNECTION_SOCKET_FACTORY;
     
-    private static final String AUTH_MANAGER = "__jmeter.AUTH_MANAGER__";
+    private static final String CONTEXT_ATTRIBUTE_AUTH_MANAGER = "__jmeter.AUTH_MANAGER__";
 
-    private static final String USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
+    private static final String CONTEXT_ATTRIBUTE_USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
     
-    static final String SAMPLER_RESULT_TOKEN = "__jmeter.SAMPLER_RESULT__"; //$NON-NLS-1$
+    static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN = "__jmeter.SAMPLER_RESULT__"; //$NON-NLS-1$
     
-    private static final String HTTPCLIENT_TOKEN = "__jmeter.HTTPCLIENT_TOKEN__";
+    private static final String CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN = "__jmeter.HTTPCLIENT_TOKEN__";
+
+    private static final String CONTEXT_ATTRIBUTE_CLIENT_KEY = "__jmeter.CLIENT_KEY__";
 
     static {
         log.info("HTTP request retry count = {}", RETRY_COUNT);
@@ -481,8 +500,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         CloseableHttpClient httpClient = null;
         HttpRequestBase httpRequest = null;
+        HttpContext localContext = new BasicHttpContext();
+        HttpClientContext clientContext = HttpClientContext.adapt(localContext);
+        clientContext.setAttribute(CONTEXT_ATTRIBUTE_AUTH_MANAGER, getAuthManager());
+
         try {
-            httpClient = setupClient(url);
+            httpClient = setupClient(url, clientContext);
             URI uri = url.toURI();
             if (method.equals(HTTPConstants.POST)) {
                 httpRequest = new HttpPost(uri);
@@ -522,9 +545,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return res;
         }
 
-        HttpContext localContext = new BasicHttpContext();
-        HttpClientContext clientContext = HttpClientContext.adapt(localContext);
-        clientContext.setAttribute(AUTH_MANAGER, getAuthManager());
         setupClientContextBeforeSample(localContext);
         
         res.sampleStart();
@@ -538,7 +558,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             currentRequest = httpRequest;
             handleMethod(method, res, httpRequest, localContext);
             // store the SampleResult in LocalContext to compute connect time
-            localContext.setAttribute(SAMPLER_RESULT_TOKEN, res);
+            localContext.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN, res);
             // perform the sample
             httpResponse = 
                     executeRequest(httpClient, httpRequest, localContext, url);
@@ -645,7 +665,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         } finally {
             JOrphanUtils.closeQuietly(httpResponse);
             currentRequest = null;
-            JMeterContextService.getContext().getSamplerContext().remove(HTTPCLIENT_TOKEN);
+            JMeterContextService.getContext().getSamplerContext().remove(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN);
         }
         return res;
     }
@@ -658,11 +678,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private void extractClientContextAfterSample(HttpContext localContext) {
         Object userToken = localContext.getAttribute(HttpClientContext.USER_TOKEN);
         if(userToken != null) {
-            log.debug("Extracted from HttpContext user token:{} storing it as JMeter variable:{}", userToken, USER_TOKEN);
+            log.debug("Extracted from HttpContext user token:{} storing it as JMeter variable:{}", userToken, CONTEXT_ATTRIBUTE_USER_TOKEN);
             // During recording JMeterContextService.getContext().getVariables() is null
             JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
             if (jMeterVariables != null) {
-                jMeterVariables.putObject(USER_TOKEN, userToken); 
+                jMeterVariables.putObject(CONTEXT_ATTRIBUTE_USER_TOKEN, userToken); 
             }
         }
     }
@@ -677,10 +697,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // During recording JMeterContextService.getContext().getVariables() is null
         JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
         if(jMeterVariables != null) {
-            userToken = jMeterVariables.getObject(USER_TOKEN);            
+            userToken = jMeterVariables.getObject(CONTEXT_ATTRIBUTE_USER_TOKEN);            
         }
         if(userToken != null) {
-            log.debug("Found user token:{} as JMeter variable:{}, storing it in HttpContext", userToken, USER_TOKEN);
+            log.debug("Found user token:{} as JMeter variable:{}, storing it in HttpContext", userToken, CONTEXT_ATTRIBUTE_USER_TOKEN);
             localContext.setAttribute(HttpClientContext.USER_TOKEN, userToken);
         } else {
             // It would be better to create a ClientSessionManager that would compute this value
@@ -869,7 +889,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private CloseableHttpClient setupClient(URL url) throws GeneralSecurityException {
+    private CloseableHttpClient setupClient(URL url, HttpClientContext clientContext) throws GeneralSecurityException {
 
         Map<HttpClientKey, CloseableHttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         
@@ -895,11 +915,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         // Lookup key - must agree with all the values used to create the HttpClient.
         HttpClientKey key = new HttpClientKey(url, useProxy, proxyHost, proxyPort, proxyUser, proxyPass);
-        
+        clientContext.setAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY, key);
         CloseableHttpClient httpClient = null;
         boolean concurrentDwn = this.testElement.isConcurrentDwn();
         if(concurrentDwn) {
-            httpClient = (CloseableHttpClient) JMeterContextService.getContext().getSamplerContext().get(HTTPCLIENT_TOKEN);
+            httpClient = (CloseableHttpClient) JMeterContextService.getContext().getSamplerContext().get(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN);
         }
         
         if (httpClient == null) {
@@ -994,13 +1014,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         if(concurrentDwn) {
-            JMeterContextService.getContext().getSamplerContext().put(HTTPCLIENT_TOKEN, httpClient);
+            JMeterContextService.getContext().getSamplerContext().put(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN, httpClient);
         }
-
-        // TODO - should this be done when the client is created?
-        // If so, then the details need to be added as part of HttpClientKey
-        //setConnectionAuthorization(httpClient, url, getAuthManager(), key);
-
         return httpClient;
     }
 
@@ -1260,36 +1275,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return hdrs.toString();
         }
         return ""; ////$NON-NLS-1$
-    }
-
-    /**
-     * Setup credentials for url AuthScope but keeps Proxy AuthScope credentials
-     * @param client HttpClient
-     * @param url URL
-     * @param authManager {@link AuthManager}
-     * @param key key
-     */
-    private void setConnectionAuthorization(CloseableHttpClient client, URL url, AuthManager authManager, HttpClientKey key) {
-//        CredentialsProvider credentialsProvider = 
-//            ((AbstractHttpClient) client).getCredentialsProvider();
-//        if (authManager != null) {
-//            if(authManager.hasAuthForURL(url)) {
-//                authManager.setupCredentials(client, url, credentialsProvider, LOCALHOST);
-//            } else {
-//                credentialsProvider.clear();
-//            }
-//        } else {
-//            Credentials credentials = null;
-//            AuthScope authScope = null;
-//            if(key.hasProxy && !StringUtils.isEmpty(key.proxyUser)) {
-//                authScope = new AuthScope(key.proxyHost, key.proxyPort);
-//                credentials = credentialsProvider.getCredentials(authScope);
-//            }
-//            credentialsProvider.clear(); 
-//            if(credentials != null) {
-//                credentialsProvider.setCredentials(authScope, credentials);
-//            }
-//        }
     }
 
     // Helper class so we can generate request data without dumping entire file contents

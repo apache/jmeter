@@ -116,7 +116,7 @@ public class MeasuringConnectionManager extends JMeterPoolingClientConnectionMan
                 handler.open(route, context, params);
             } finally {
                 SampleResult sample = 
-                        (SampleResult)context.getAttribute(HTTPHC4Impl.SAMPLER_RESULT_TOKEN);
+                        (SampleResult)context.getAttribute(HTTPHC4Impl.CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN);
                 if (sample != null) {
                     sample.connectEnd();
                 }
