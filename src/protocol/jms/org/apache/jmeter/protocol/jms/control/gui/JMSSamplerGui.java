@@ -34,6 +34,7 @@ import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
 import org.apache.jmeter.protocol.jms.sampler.JMSSampler;
+import org.apache.jmeter.protocol.ldap.sampler.LDAPExtSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -73,13 +74,17 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField providerUrl = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
 
-    private String[] labels = new String[] { JMeterUtils.getResString("jms_request"),
-            JMeterUtils.getResString("jms_requestreply"),
-            JMeterUtils.getResString("jms_read"),
-            JMeterUtils.getResString("jms_browse"),
-            JMeterUtils.getResString("jms_clear")}; //$NON-NLS-1$
+    private final String[] JMS_COMMUNICATION_STYLE_LABELS = new String[] {
+    		JMeterUtils.getResString("jms_request"), // $NON-NLS-1$
+            JMeterUtils.getResString("jms_requestreply"), // $NON-NLS-1$
+            JMeterUtils.getResString("jms_read"), // $NON-NLS-1$
+            JMeterUtils.getResString("jms_browse"), // $NON-NLS-1$
+            JMeterUtils.getResString("jms_clear"), // $NON-NLS-1$
+            };
 
-    private JLabeledChoice jmsConnectionMode = new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), labels); //$NON-NLS-1$
+    private JLabeledChoice jmsCommunicationStyle = 
+    	new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), // $NON-NLS-1$
+    	JMS_COMMUNICATION_STYLE_LABELS);
 
     private JMSPropertiesPanel jmsPropertiesPanel;
 
@@ -104,7 +109,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         queueConnectionFactory.setText(""); // $NON-NLS-1$
         sendQueue.setText(""); // $NON-NLS-1$
         receiveQueue.setText(""); // $NON-NLS-1$
-        ((JComboBox<?>) jmsConnectionMode.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
+        jmsCommunicationStyle.setSelectedIndex(JMS_COMMUNICATION_STYLE_LABELS.length - 1);
+        //((JComboBox<?>) jmsCommunicationStyle.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
         timeout.setText("");  // $NON-NLS-1$
         expiration.setText("");  // $NON-NLS-1$
         priority.setText("");  // $NON-NLS-1$
@@ -130,7 +136,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setSendQueue(sendQueue.getText());
         element.setReceiveQueue(receiveQueue.getText());
 
-        element.setJmsConnectionMode(jmsConnectionMode.getText());
+        element.setProperty(JMSSampler.COMMUNICATIONSTYLE, String.valueOf(jmsCommunicationStyle.getSelectedIndex()));
+        //element.setJmsCommunicationStyle(jmsConnectionStyle.getText());
 
         element.setNonPersistent(useNonPersistentDelivery.isSelected());
         element.setUseReqMsgIdAsCorrelId(useReqMsgIdAsCorrelId.isSelected());
@@ -173,9 +180,10 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         sendQueue.setText(sampler.getSendQueue());
         receiveQueue.setText(sampler.getReceiveQueue());
 
-        JComboBox<?> box = (JComboBox<?>) jmsConnectionMode.getComponentList().get(1);
-        box.setSelectedItem(sampler.getJmsConnectionMode());
-
+        //JComboBox<?> box = (JComboBox<?>) jmsConnectionStyle.getComponentList().get(1);
+        //box.setSelectedItem(sampler.getJmsCommunicationStyle());
+        jmsCommunicationStyle.setSelectedIndex(el.getPropertyAsInt(JMSSampler.COMMUNICATIONSTYLE));
+        
         useNonPersistentDelivery.setSelected(sampler.isNonPersistent());
         useReqMsgIdAsCorrelId.setSelected(sampler.isUseReqMsgIdAsCorrelId());
         useResMsgIdAsCorrelId.setSelected(sampler.isUseResMsgIdAsCorrelId());
@@ -242,7 +250,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
         JPanel messageNorthPanel = new JPanel(new BorderLayout());
         JPanel onewayPanel = new HorizontalPanel();
-        onewayPanel.add(jmsConnectionMode);
+        onewayPanel.add(jmsCommunicationStyle);
         onewayPanel.add(correlationPanel);
         messageNorthPanel.add(onewayPanel, BorderLayout.NORTH);
 

@@ -3813,7 +3813,7 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
   
 <div class="property">
 <div class="name req-true">Number of samples to aggregate</div>
-<div class="description req-true">Number of samples to aggregate</div>
+<div class="description req-true">number of samples to aggregate</div>
 <div class="required req-true">Yes</div>
 </div>
   
@@ -4183,6 +4183,12 @@ The following table shows some values which may be useful when configuring JMS:
         
 <span class="code">Request Response</span> will be used when you want to test response time of a JMS service that processes messages sent to the Request Queue as this mode will wait for the response on the Reply queue sent by this service.<br>
         
+<span class="code">Read</span> reads a message from the queue (if any).<br>
+
+<span class="code">Browse</span> returns the current queue depth, i.e. the number of messages on the queue.<br>
+
+<span class="code">Clear</span> clears the queue, i.e. remove all messages from the queue.<br>
+
 </p>
         
 <p>
@@ -4246,6 +4252,12 @@ The following table shows some values which may be useful when configuring JMS:
   </div>
 <div class="required req-false">No</div>
 </div>
+
+<div class="property">
+<div class="name req-true">Number of samples to aggregate</div>
+<div class="description req-true">number of samples to aggregate</div>
+<div class="required req-true">Yes</div>
+</div>
   
 <div class="property">
 <div class="name req-false">JMS Selector</div>
@@ -4259,7 +4271,8 @@ The following table shows some values which may be useful when configuring JMS:
 <div class="property">
 <div class="name req-true">Communication style</div>
 <div class="description req-true">
-    The Communication style can be <span class="code">Request Only</span> (also known as Fire and Forget) or <span class="code">Request Response</span>:
+    The Communication style can be <span class="code">Request Only</span> (also known as Fire and Forget), <span class="code">Request Response</span>,
+    <span class="code">Read</span>, <span class="code">Browse</span> or <span class="code">Clear</span>:
     <dl>
     
 <dt>
@@ -4276,10 +4289,32 @@ The following table shows some values which may be useful when configuring JMS:
     temporary queues will be used for the communication between the requestor and the server.
     This is very different from the fixed reply queue. With temporary queues the sending thread will block until the reply message has been received.
     With <span class="code">Request Response</span> mode, you need to have a Server that listens to messages sent to Request Queue and sends replies to 
-    queue referenced by <span class="code">message.getJMSReplyTo()</span>.</dd>
-    
+    queue referenced by <span class="code">message.getJMSReplyTo()</span>.
+</dd>
+
+<dt>
+<span class="code">Read</span>
+</dt>
+<dd> will read a message from an outgoing queue which has no listeners attached. This can be convenient for testing purposes.
+     This method can be used if you need to handle queues without a binding file (in case the jmeter-jms-skip-jndi library is used),
+     which only works with the JMS Point-to-Point sampler.
+     In case binding files are used, one can also use the JMS Subscriber Sampler for reading from a queue.
+</dd>
+
+<dt>
+<span class="code">Browse</span>
+</dt>
+<dd> will determine the current queue depth without removing messages from the queue, returning the number of messages on the queue. 
+</dd>
+
+<dt>
+<span class="code">Clear</span>
+</dt>
+<dd> will clear the queue, i.e. remove all messages from the queue. 
+</dd>
+
 </dl>
-  
+
 </div>
 <div class="required req-true">Yes</div>
 </div>

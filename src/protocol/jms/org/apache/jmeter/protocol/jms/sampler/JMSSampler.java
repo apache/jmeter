@@ -91,7 +91,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 	private static final String JMS_NUMBEROFSAMPLES_DEFAULT = "1"; // $NON-NLS-1$
 
-	public static final String JMS_CONNECTIONMODE = "JMSSampler.connectionMode"; // $NON-NLS-1$
+	public static final String COMMUNICATIONSTYLE = "communicationstyle"; // $NON-NLS-1$
 
 	private static final String JMS_PROPERTIES = "arguments"; // $NON-NLS-1$
 
@@ -111,6 +111,16 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 	private static final boolean USE_RES_MSGID_AS_CORRELID_DEFAULT = false; // Default to be applied
 
+	private static final int ONE_WAY = 0;
+	
+    private static final int REQUEST_RESPONSE = 1;
+    
+    private static final int READ = 2;
+
+    private static final int BROWSE = 3;
+
+    private static final int CLEAR = 4;
+	
 	// --
 
 	// Should we use java.naming.security.[principal|credentials] to create the QueueConnection?
@@ -159,7 +169,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         res.sampleStart();
 
         try {
-    		LOGGER.debug("Point-to-point mode: " + this.getJmsConnectionMode());
+    		LOGGER.debug("Point-to-point mode: " + getCommunicationstyle());
             if (isBrowse()) {
 				handleBrowse(res);
 			} else if (isClearQueue()) {
@@ -479,19 +489,19 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	}
 
 	public boolean isOneway() {
-		return JMeterUtils.getResString("jms_request").equals(this.getJmsConnectionMode());
+		return ONE_WAY == getPropertyAsInt(COMMUNICATIONSTYLE);
 	}
 
 	public boolean isRead() {
-		return JMeterUtils.getResString("jms_read").equals(this.getJmsConnectionMode());
+		return READ == getPropertyAsInt(COMMUNICATIONSTYLE);
 	}
 
 	public boolean isBrowse() {
-		return JMeterUtils.getResString("jms_browse").equals(this.getJmsConnectionMode());
+		return BROWSE == getPropertyAsInt(COMMUNICATIONSTYLE);
 	}
 
 	public boolean isClearQueue() {
-		return JMeterUtils.getResString("jms_clear").equals(this.getJmsConnectionMode());
+		return CLEAR == getPropertyAsInt(COMMUNICATIONSTYLE);
 	}
 
 	public boolean isNonPersistent() {
@@ -523,13 +533,18 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	public String getContextProvider() {
 		return getPropertyAsString(JMSSampler.JNDI_CONTEXT_PROVIDER_URL);
 	}
-
-	public void setJmsConnectionMode(String mode) {
-		setProperty(JMS_CONNECTIONMODE, mode);
+	
+	public String getCommunicationstyle() {
+		//JMeterUtils.getProperty(propName) //getResString("jms_browse").equals(this.getJmsCommunicationStyle());
+		return getPropertyAsString(COMMUNICATIONSTYLE);
 	}
 
-	public String getJmsConnectionMode() {
-		return this.getPropertyAsString(JMS_CONNECTIONMODE);
+	public int getCommunicationstyleAsInt() {
+		return getPropertyAsInt(COMMUNICATIONSTYLE);
+	}
+	
+	public void setCommunicationstyle(String communicationStyle) {
+		setProperty(COMMUNICATIONSTYLE, communicationStyle);
 	}
 
 	public void setNonPersistent(boolean value) {
