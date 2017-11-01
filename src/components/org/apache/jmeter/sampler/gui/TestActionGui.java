@@ -179,7 +179,7 @@ public class TestActionGui extends AbstractSamplerGui {
             if (pauseButton.isSelected()) {
                 action = TestAction.PAUSE;
                 durationField.setEnabled(true);
-                targetBox.setEnabled(true);
+                targetBox.setEnabled(false);
             }
         });
         stopButton = new JRadioButton(stopAction, false);
