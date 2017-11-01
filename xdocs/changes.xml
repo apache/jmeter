@@ -168,6 +168,7 @@ Summary
 <h3>Other Samplers</h3>
 <ul>
     <li><bug>61698</bug>Test Action: It stop is selected, samplers following Test Action can run</li>
+    <li><bug>61707</bug>Test Action: Target is ignored when pause is selected, so it should be disabled</li>
 </ul>
 
 <h3>Controllers</h3>

@@ -1835,7 +1835,7 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Target" required="Yes"><code>Current Thread</code> / <code>All Threads</code> (ignored for Pause)</property>
+  <property name="Target" required="Yes"><code>Current Thread</code> / <code>All Threads</code> (ignored for <code>Pause</code> and <code>Go to next loop iteration</code>)</property>
   <property name="Action" required="Yes"><code>Pause</code> / <code>Stop</code> / <code>Stop Now</code> / <code>Go to next loop iteration</code></property>
   <property name="Duration" required="Yes, if Pause is selected">How long to pause for (milliseconds)</property>
 </properties>
