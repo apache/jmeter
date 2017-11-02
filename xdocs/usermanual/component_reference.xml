@@ -450,18 +450,21 @@ so the value may be greater than the number of bytes in the response content.
 <note>When those two properties are set  <code>false</code>, JMeter returns only data response size (uncompressed if request uses gzip/deflate mode).</note>
 <p>
 <b>Retry handling</b><br></br>
-For HttpClient4 the retry count has been set to <code>0</code>, meaning not retry is attempted. 
-Note that the Java implementation appears to retry 1 time.
-The retry count can be overridden by setting the relevant JMeter property, for example:
-</p>
+By default retry has been set to 0 for both HttpClient4 and Java implementations, meaning no retry is attempted.<br/>  
+For HttpClient4, the retry count can be overridden by setting the relevant JMeter property, for example:
+
 <source>
 httpclient4.retrycount=3
 </source>
+<note>
 With HC4 Implementation, retry will be done on Idempotent Http Methods by default.
 If you want to retry for all methods, then set property
 <source>
 httpclient4.request_sent_retry_enabled=true
-</source>
+</source></note>
+
+Note that the Java implementation does not retry neither by default, you can change this by setting <source>http.java.sampler.retries=3</source>
+</p>
 <p>
 <b>Note: Certificates does not conform to algorithm constraints</b><br></br>
 You may encounter the following error: <code>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</code>
