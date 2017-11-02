@@ -54,7 +54,6 @@ import javax.swing.event.PopupMenuListener;
  */
 public class MenuScroller {
 
-    // private JMenu menu;
     private JPopupMenu menu;
     private Component[] menuItems;
     private MenuScrollItem upItem;

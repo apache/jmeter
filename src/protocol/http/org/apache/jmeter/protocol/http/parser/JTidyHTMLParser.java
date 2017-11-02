@@ -178,9 +178,6 @@ class JTidyHTMLParser extends HTMLParser {
 
             break;
 
-        // case Node.TEXT_NODE:
-        // break;
-
         default:
             // ignored
             break;

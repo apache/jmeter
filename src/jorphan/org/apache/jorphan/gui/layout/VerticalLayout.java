@@ -150,7 +150,6 @@ public class VerticalLayout implements LayoutManager, Serializable {
     @Override
     public void layoutContainer(Container parent) {
         Insets insets = parent.getInsets();
-        // NOTUSED Dimension dim = layoutSize(parent, false);
         synchronized (parent.getTreeLock()) {
             int n = parent.getComponentCount();
             Dimension pd = parent.getSize();

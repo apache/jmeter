@@ -275,7 +275,6 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
             } else {
                 res.setResponseCode("501"); // TODO
                 res.setResponseMessage("Could not connect");
-                //res.setResponseCode(Integer.toString(ftp.getReplyCode()));
                 res.setResponseMessage(ftp.getReplyString());
             }
         } catch (IOException ex) {
