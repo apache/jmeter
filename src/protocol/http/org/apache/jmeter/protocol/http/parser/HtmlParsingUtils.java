@@ -283,14 +283,6 @@ public final class HtmlParsingUtils {
         String selectName = null;
         LinkedList<HTTPSamplerBase> urlConfigs = new LinkedList<>();
         recurseForm(doc, urlConfigs, context, selectName, false);
-        /*
-         * NamedNodeMap atts = formNode.getAttributes();
-         * if(atts.getNamedItem("action") == null) { throw new
-         * MalformedURLException(); } String action =
-         * atts.getNamedItem("action").getNodeValue(); UrlConfig url =
-         * createUrlFromAnchor(action, context); recurseForm(doc, url,
-         * selectName,true,formStart);
-         */
         return urlConfigs;
     }
 

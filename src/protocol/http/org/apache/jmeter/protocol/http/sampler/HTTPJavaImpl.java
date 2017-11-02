@@ -149,11 +149,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         if (proxyHost.length() > 0 && proxyPort > 0){
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
             //TODO - how to define proxy authentication for a single connection?
-            // It's not clear if this is possible
-//            String user = getProxyUser();
-//            if (user.length() > 0){
-//                Authenticator auth = new ProxyAuthenticator(user, getProxyPass());
-//            }
             conn = (HttpURLConnection) u.openConnection(proxy);
         } else {
             conn = (HttpURLConnection) u.openConnection();
@@ -316,11 +311,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     protected String getResponseHeaders(HttpURLConnection conn) {
         StringBuilder headerBuf = new StringBuilder();
         headerBuf.append(conn.getHeaderField(0));// Leave header as is
-        // headerBuf.append(conn.getHeaderField(0).substring(0, 8));
-        // headerBuf.append(" ");
-        // headerBuf.append(conn.getResponseCode());
-        // headerBuf.append(" ");
-        // headerBuf.append(conn.getResponseMessage());
         headerBuf.append("\n"); //$NON-NLS-1$
 
         String hfk;
