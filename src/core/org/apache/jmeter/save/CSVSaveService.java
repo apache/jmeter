@@ -751,7 +751,6 @@ public final class CSVSaveService {
         // quotes:
         public void append(String s) {
             addDelim();
-            // if (s == null) return;
             sb.append(quoteDelimiters(s, specials));
         }
 
