@@ -160,7 +160,6 @@ public class JMeterVersionTest extends JMeterTestCase {
             if (m.matches()) {
                 String jar = m.group(1);
                 String version = m.group(2);
-//                System.out.println(jar + " => " + version);
                 if (jar.endsWith("-jdk15on")) { // special handling
                     jar=jar.replace("-jdk15on","");
                 } else if (jar.equals("commons-jexl") && version.startsWith("2")) { // special handling

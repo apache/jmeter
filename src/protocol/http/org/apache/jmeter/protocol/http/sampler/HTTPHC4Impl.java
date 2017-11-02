@@ -1335,11 +1335,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             } else {
                 postedBody.append("<Multipart was not repeatable, cannot view what was sent>"); // $NON-NLS-1$
             }
-
-//            // Set the content type TODO - needed?
-//            String multiPartContentType = multiPart.getContentType().getValue();
-//            post.setHeader(HEADER_CONTENT_TYPE, multiPartContentType);
-
         } else { // not multipart
             // Check if the header manager had a content type header
             // This allows the user to specify his own content-type for a POST request
