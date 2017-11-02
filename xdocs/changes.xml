@@ -144,6 +144,7 @@ Summary
     <li><bug>61694</bug>Add -server option in jmeter.bat</li>
     <li><bug>61697</bug>Introduce Darcula Look And Feel to make JMeter UI more attractive</li>
     <li><bug>61704</bug>Toolbar : Improve a bit the right part</li>
+    <li><pr>319</pr> Removed commented out code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -217,6 +218,7 @@ Summary
     <li>Justin McCartney (be_strew at yahoo.co.uk)</li>
     <li>Vincent Herilier (https://github.com/vherilier)</li>
     <li>Aleksei Balan (abalanonline at gmail.com)</li>
+    <li>Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
