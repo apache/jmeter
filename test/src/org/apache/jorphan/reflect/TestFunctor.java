@@ -105,7 +105,6 @@ public class TestFunctor extends JMeterTestCase {
         Test2 t2 = new Test2("t2");
         Test1a t1a = new Test1a("aa");
         assertEquals("t1",f1.invoke(t1));
-        //assertEquals("t1",f1.invoke());
         try {
             f1.invoke(t2);
             fail("Should have generated error");
@@ -113,9 +112,7 @@ public class TestFunctor extends JMeterTestCase {
             
         }
         assertEquals("t2",f2.invoke(t2));
-        //assertEquals("t2",f2.invoke());
         assertEquals("1a:aa.",f1a.invoke(t1a));
-        //assertEquals("1a:aa.",f1a.invoke());
         try {
             f1a.invoke(t1);// can't call invoke using super class
             fail("Should have generated error");
@@ -124,7 +121,6 @@ public class TestFunctor extends JMeterTestCase {
         }
         // OK (currently) to invoke using sub-class 
         assertEquals("1a:aa.",f1.invoke(t1a));
-        //assertEquals("1a:aa.",f1.invoke());// N.B. returns different result from before
     }
     
     @Test
