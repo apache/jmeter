@@ -182,6 +182,7 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>61712</bug>Result Status Action Handler: It stop test/stop test now are selected, samplers following current sampler may run</li>
 </ul>
 
 <h3>Functions</h3>
