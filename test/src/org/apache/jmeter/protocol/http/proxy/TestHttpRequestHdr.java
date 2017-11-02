@@ -649,8 +649,6 @@ public class TestHttpRequestHdr extends JMeterTestCase {
             String contentEncoding,
             boolean expectedEncoded) throws IOException {
         assertEquals(expectedName, arg.getName());
-//        System.out.println("expect " + URLEncoder.encode(expectedValue, "UTF-8"));
-//        System.out.println("actual " + URLEncoder.encode(arg.getValue(), "UTF-8"));
         assertEquals(expectedValue, arg.getValue());
         if(contentEncoding != null && contentEncoding.length() > 0) {
             assertEquals(expectedEncodedValue, arg.getEncodedValue(contentEncoding));
