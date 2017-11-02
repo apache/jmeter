@@ -60,11 +60,9 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
         }
         if (!s.isSuccessful()) {
             if (isStopTestNow()) {
-                s.setStopThread(true);
                 s.setStopTestNow(true);
             }
             if (isStopTest()) {
-                s.setStopThread(true);
                 s.setStopTest(true);
             }
             if (isStopThread()) {
