@@ -275,6 +275,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     
     private URL location;
 
+    private transient boolean ignore;
+
     /**
      * Cache for responseData as string to avoid multiple computations
      */
@@ -1519,5 +1521,19 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         datasToSearch.add(getRequestHeaders());
         datasToSearch.add(getResponseHeaders());
         return datasToSearch;
+    }
+
+    /**
+     * @return boolean true if this SampleResult should not be sent to Listeners
+     */
+    public boolean isIgnore() {
+        return ignore;
+    }
+
+    /**
+     * Call this method to tell JMeter to ignore this SampleResult by Listeners
+     */
+    public void setIgnore() {
+        this.ignore = true;
     }
 }

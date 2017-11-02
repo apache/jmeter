@@ -1199,7 +1199,11 @@ Currently the only way to change these is via the <a href="../api/org/apache/jme
 <component name="JSR223 Sampler" index="&sect-num;.1.11.1" width="861" height="502" screenshot="jsr223-sampler.png">
 <description>
 <p>
-The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
+The JSR223 Sampler allows JSR223 script code to be used to perform a sample or some computation required to create/update variables.
+<note>
+If you don't want to generate a <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> when this sampler is run, call the following method:
+<source>SampleResult.setIgnore();</source>
+</note>
 </p>
 <p>
 The JSR223 test elements have a feature (compilation) that can significantly increase performance.
