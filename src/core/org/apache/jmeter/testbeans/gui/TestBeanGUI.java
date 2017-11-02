@@ -218,8 +218,6 @@ public TestElement createTestElement() {
             if(initialized) {
                 setValues(element);
             }
-            // configure(element);
-            // super.clear(); // set name, enabled.
             modifyTestElement(element); // put the default values back into the
             // new element
             return element;

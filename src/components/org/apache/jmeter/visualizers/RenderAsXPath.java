@@ -89,9 +89,8 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
     /** {@inheritDoc} */
     @Override
     public void clearData() {
+        // N.B. don't set xpathExpressionField to empty to keep xpath
         this.xmlDataField.setText(""); // $NON-NLS-1$
-        // don't set empty to keep xpath
-        // xpathExpressionField.setText(""); // $NON-NLS-1$
         this.xpathResultField.setText(""); // $NON-NLS-1$
     }
 

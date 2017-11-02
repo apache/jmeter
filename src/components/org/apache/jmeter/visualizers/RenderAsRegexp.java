@@ -74,9 +74,8 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     /** {@inheritDoc} */
     @Override
     public void clearData() {
+        // N.B. don't set regexpField to empty to keep regexp
         this.regexpDataField.setText(""); // $NON-NLS-1$
-        // don't set empty to keep regexp
-        // regexpField.setText(""); // $NON-NLS-1$
         this.regexpResultField.setText(""); // $NON-NLS-1$
     }
 
