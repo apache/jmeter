@@ -59,6 +59,9 @@ fi
 if [ -z "$JRE_HOME" ]; then
   JRE_HOME="$JAVA_HOME"
 fi
+if [ -z "$JAVA_HOME" ]; then
+  JAVA_HOME="$JRE_HOME"
+fi
 
 #--add-modules java.activation if JAVA 9
 ADD_MODS=
