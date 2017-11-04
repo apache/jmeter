@@ -50,6 +50,12 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     private static final String INCLUDE_EQUALS = "include_equals"; //$NON-NLS-1$
 
+    /** When pasting from the clipboard, split lines on linebreak or '&' */
+    private static final String CLIPBOARD_LINE_DELIMITERS = "\n|&"; //$NON-NLS-1$
+
+    /** When pasting from the clipboard, split parameters on tab or '=' */
+    private static final String CLIPBOARD_ARG_DELIMITERS = "\t|="; //$NON-NLS-1$
+
     @Override
     protected void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] {
@@ -142,6 +148,11 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     }
 
     @Override
+    protected void addFromClipboard() {
+        addFromClipboard(CLIPBOARD_LINE_DELIMITERS, CLIPBOARD_ARG_DELIMITERS);
+    }
+
+    @Override
     protected Argument createArgumentFromClipboard(String[] clipboardCols) {
         HTTPArgument argument = makeNewArgument();
         argument.setName(clipboardCols[0]);
@@ -151,10 +162,10 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
             if (clipboardCols.length > 2) {
                 
                 // default to false if the string is not a boolean
-                argument.setAlwaysEncoded(Boolean.parseBoolean(clipboardCols[2]));
+                argument.setAlwaysEncoded(Boolean.parseBoolean(clipboardCols[2].trim()));
                 
                 if (clipboardCols.length > 3) {
-                    Boolean useEqual = BooleanUtils.toBooleanObject(clipboardCols[3]);
+                    Boolean useEqual = BooleanUtils.toBooleanObject(clipboardCols[3].trim());
                     // default to true if the string is not a boolean
                     argument.setUseEquals(useEqual!=null?useEqual.booleanValue():true);
                 }
