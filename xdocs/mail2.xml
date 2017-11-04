@@ -56,7 +56,7 @@ Developers are also expected to be lurking on this list to offer support to user
 </p>
 <p>
 This list starts part-way through Nov 2011, when JMeter became an independent Apache project.
-For earlier postings, please see the Jakarta JMeter User list, below.
+For old postings, please see the Jakarta JMeter User list, below.
 </p>
 <ul>
 <li>Subscribe at <a href="mailto:user-subscribe@jmeter.apache.org">user-subscribe@jmeter.apache.org</a></li>
@@ -64,11 +64,6 @@ For earlier postings, please see the Jakarta JMeter User list, below.
 <li>Unsubscribe at <a href="mailto:user-unsubscribe@jmeter.apache.org">user-unsubscribe@jmeter.apache.org</a></li>
 <li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-user/">jmeter-user Archive</a></li>
 </ul>
-</subsection>
-<subsection name="Jakarta JMeter User" anchor="JakartaJMeterUser">
-This is the old JMeter user list from when JMeter was a sub-project of Apache Jakarta.
-<ul>
-<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-jmeter-user/">jakarta-jmeter-user Archive</a></li></ul>
 </subsection>
 <subsection name="Apache JMeter Developer" anchor="JMeterDev">
 <p>
@@ -107,6 +102,7 @@ Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
 <p>
 Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
 </p> 
+
 <ul>
 <li>Subscribe at <a href="mailto:issues-subscribe@jmeter.apache.org">issues-subscribe@jmeter.apache.org</a></li>
 <li>Unsubscribe at <a href="mailto:issues-unsubscribe@jmeter.apache.org">issues-unsubscribe@jmeter.apache.org</a></li>
@@ -118,6 +114,11 @@ Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
 <ul>
 <li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-dev/">jakarta-dev Archive</a></li>
 </ul>
+</subsection>
+<subsection name="Jakarta JMeter User" anchor="JakartaJMeterUser">
+This is the old JMeter user list from when JMeter was a sub-project of Apache Jakarta.
+<ul>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-jmeter-user/">jakarta-jmeter-user Archive</a></li></ul>
 </subsection>
 <subsection name="Jakarta JMeter Developer" anchor="JakartaJMeterDev">
 Historical list, up to April 2010.
