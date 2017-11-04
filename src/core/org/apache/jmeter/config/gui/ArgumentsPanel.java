@@ -118,6 +118,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /** Command for moving a row down in the table. */
     private static final String DOWN = "down"; // $NON-NLS-1$
 
+    /** When pasting from the clipboard, split lines on linebreak */
+    private static final String CLIPBOARD_LINE_DELIMITERS = "\n"; //$NON-NLS-1$
+
+    /** When pasting from the clipboard, split parameters on tab */
+    private static final String CLIPBOARD_ARG_DELIMITERS = "\t"; //$NON-NLS-1$
+
     /** Command for showing detail. */
     private static final String DETAIL = "detail"; // $NON-NLS-1$
 
@@ -531,8 +537,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /**
      * Add values from the clipboard
+     * @param lineDelimiter Delimiter string to split clipboard into lines
+     * @param argDelimiter Delimiter string to split line into key-value pair
      */
-    protected void addFromClipboard() {
+    protected void addFromClipboard(String lineDelimiter, String argDelimiter) {
         GuiUtils.stopTableEditing(table);
         int rowCount = table.getRowCount();
         try {
@@ -540,9 +548,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             if(clipboardContent == null) {
                 return;
             }
-            String[] clipboardLines = clipboardContent.split("\n");
+            String[] clipboardLines = clipboardContent.split(lineDelimiter);
             for (String clipboardLine : clipboardLines) {
-                String[] clipboardCols = clipboardLine.split("\t");
+                String[] clipboardCols = clipboardLine.split(argDelimiter);
                 if (clipboardCols.length > 0) {
                     Argument argument = createArgumentFromClipboard(clipboardCols);
                     tableModel.addRow(argument);
@@ -565,6 +573,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                     "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
                             + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    protected void addFromClipboard() {
+        addFromClipboard(CLIPBOARD_LINE_DELIMITERS, CLIPBOARD_ARG_DELIMITERS);
     }
 
     protected Argument createArgumentFromClipboard(String[] clipboardCols) {
