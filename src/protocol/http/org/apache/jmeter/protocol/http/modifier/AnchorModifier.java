@@ -101,7 +101,6 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
                 }
             } else {
                 sampler.setArguments(url.getArguments());
-                // config.parseArguments(url.getQueryString());
             }
             sampler.setProtocol(url.getProtocol());
         } else {

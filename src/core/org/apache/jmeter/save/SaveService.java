@@ -373,7 +373,6 @@ public class SaveService {
     static List<String> checkClasses(){
         final ClassLoader classLoader = SaveService.class.getClassLoader();
         List<String> missingClasses = new ArrayList<>();
-        //boolean OK = true;
         for (Object clazz : classToAlias.keySet()) {
             String name = (String) clazz;
             if (!NameUpdater.isMapped(name)) {// don't bother checking class is present if it is to be updated

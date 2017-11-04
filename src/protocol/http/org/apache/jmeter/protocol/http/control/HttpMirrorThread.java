@@ -297,8 +297,6 @@ public class HttpMirrorThread implements Runnable {
         Pattern pattern = JMeterUtils.getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
         if(localMatcher.contains(requestHeaders, pattern)) {
             // The value is in the first group, group 0 is the whole match
-//            System.out.println("Found:'"+localMatcher.getMatch().group(1)+"'");
-//            System.out.println("in: '"+localMatcher.getMatch().group(0)+"'");
             return localMatcher.getMatch().group(1);
         }
         else {

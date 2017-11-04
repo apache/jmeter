@@ -89,6 +89,7 @@ Summary
     <li><pr>316</pr> - Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
     <li><bug>61639</bug>HTTP(S) Test Script Recorder : In request filtering tab, uncheck by default "Notify Child Listeners of filtered samplers"</li>
     <li><bug>61672</bug>HTTP(S) Test Script Recorder : When a prefix is set don't use path in Sampler Name</li>
+    <li><bug>53957</bug>HTTP Request : In Parameters tab, allow pasting of content coming from Firefox and Chrome (unparsed)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -133,6 +134,7 @@ Summary
 <ul>
     <li><bug>61549</bug>Thread Group : Remove start and end date</li>
     <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61709</bug>SampleResult : Add a method <code>setIgnore()</code> to make JMeter ignore the SampleResult and not send it to listeners</li>
     <li><bug>61607</bug>Add browse button in all beanshell elements to select beanshell script</li>
     <li><bug>61627</bug>Don't clear LogView anymore when clicking on Warning/Errors Indicator</li>
     <li><bug>61629</bug>Add Think Times to Children menu should not consider disabled elements</li>
@@ -140,6 +142,11 @@ Summary
     <li><bug>61656</bug><code>tearDown Thread Group</code> should run by default at stop or shutdown of test</li>
     <li><bug>61659</bug>JMeterVariables#get() should apply toString() on non string objects</li>
     <li><bug>61555</bug>Metaspace should be restricted as default</li>
+    <li><bug>61693</bug>JMeter aware of Docker (-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap)</li>
+    <li><bug>61694</bug>Add -server option in jmeter.bat</li>
+    <li><bug>61697</bug>Introduce Darcula Look And Feel to make JMeter UI more attractive</li>
+    <li><bug>61704</bug>Toolbar : Improve a bit the right part</li>
+    <li><pr>319</pr> Removed commented out code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -163,11 +170,14 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
+    <li><bug>61698</bug>Test Action: It stop is selected, samplers following Test Action can run</li>
+    <li><bug>61707</bug>Test Action: Target is ignored when pause is selected, so it should be disabled</li>
 </ul>
 
 <h3>Controllers</h3>
 <ul>
     <li><bug>61556</bug>Clarify in documentation performance impacts of ${} var usage in IfController and groovy. Contributed by Justin McCartney (be_strew at yahoo.co.uk)</li>
+    <li><bug>61713</bug>Test Fragment has option to Change Controller and Insert Parent</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -176,6 +186,7 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>61716</bug>Header Manager : When pasting Headers from Firefox or Chrome spaces are introduced as first character of value</li>
 </ul>
 
 <h3>Functions</h3>
@@ -210,10 +221,12 @@ Summary
     <li>Justin McCartney (be_strew at yahoo.co.uk)</li>
     <li>Vincent Herilier (https://github.com/vherilier)</li>
     <li>Aleksei Balan (abalanonline at gmail.com)</li>
+    <li>Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
 <ul>
+    <li>user7294900 on Stackoverflow (orimarko at gmail.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.

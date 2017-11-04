@@ -506,7 +506,7 @@ public class JMeterThread implements Runnable, Interruptible {
             currentSampler = null;
         }
         // If we got any results, then perform processing on the result
-        if (result != null) {
+        if (result != null && !result.isIgnore()) {
             int nbActiveThreadsInThreadGroup = threadGroup.getNumberOfThreads();
             int nbTotalActiveThreads = JMeterContextService.getNumberOfThreads();
             result.setGroupThreads(nbActiveThreadsInThreadGroup);

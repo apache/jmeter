@@ -450,18 +450,21 @@ so the value may be greater than the number of bytes in the response content.
 <note>When those two properties are set  <code>false</code>, JMeter returns only data response size (uncompressed if request uses gzip/deflate mode).</note>
 <p>
 <b>Retry handling</b><br></br>
-For HttpClient4 the retry count has been set to <code>0</code>, meaning not retry is attempted. 
-Note that the Java implementation appears to retry 1 time.
-The retry count can be overridden by setting the relevant JMeter property, for example:
-</p>
+By default retry has been set to 0 for both HttpClient4 and Java implementations, meaning no retry is attempted.<br/>  
+For HttpClient4, the retry count can be overridden by setting the relevant JMeter property, for example:
+
 <source>
 httpclient4.retrycount=3
 </source>
+<note>
 With HC4 Implementation, retry will be done on Idempotent Http Methods by default.
 If you want to retry for all methods, then set property
 <source>
 httpclient4.request_sent_retry_enabled=true
-</source>
+</source></note>
+
+Note that the Java implementation does not retry neither by default, you can change this by setting <source>http.java.sampler.retries=3</source>
+</p>
 <p>
 <b>Note: Certificates does not conform to algorithm constraints</b><br></br>
 You may encounter the following error: <code>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</code>
@@ -1196,7 +1199,11 @@ Currently the only way to change these is via the <a href="../api/org/apache/jme
 <component name="JSR223 Sampler" index="&sect-num;.1.11.1" width="861" height="502" screenshot="jsr223-sampler.png">
 <description>
 <p>
-The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
+The JSR223 Sampler allows JSR223 script code to be used to perform a sample or some computation required to create/update variables.
+<note>
+If you don't want to generate a <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> when this sampler is run, call the following method:
+<source>SampleResult.setIgnore();</source>
+</note>
 </p>
 <p>
 The JSR223 test elements have a feature (compilation) that can significantly increase performance.
@@ -1835,7 +1842,7 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Target" required="Yes"><code>Current Thread</code> / <code>All Threads</code> (ignored for Pause)</property>
+  <property name="Target" required="Yes"><code>Current Thread</code> / <code>All Threads</code> (ignored for <code>Pause</code> and <code>Go to next loop iteration</code>)</property>
   <property name="Action" required="Yes"><code>Pause</code> / <code>Stop</code> / <code>Stop Now</code> / <code>Go to next loop iteration</code></property>
   <property name="Duration" required="Yes, if Pause is selected">How long to pause for (milliseconds)</property>
 </properties>

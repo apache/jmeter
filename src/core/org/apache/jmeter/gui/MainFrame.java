@@ -163,8 +163,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /** A message dialog shown while JMeter threads are stopping. */
     private JDialog stoppingMessage;
 
-    private JLabel totalThreads;
-    private JLabel activeThreads;
+    private JLabel activeAndTotalThreads;
 
     private JMeterToolBar toolbar;
 
@@ -177,10 +176,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * Indicator for Log errors and Fatals
      */
     private JButton warnIndicator;
-    /**
-     * Counter
-     */
-    private JLabel errorsOrFatalsLabel;
+
     /**
      * LogTarget that receives ERROR or FATAL
      */
@@ -203,8 +199,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      *            the listener for the test tree
      */
     public MainFrame(TreeModel treeModel, JMeterTreeListener treeListener) {
-
-        // TODO: Make the running indicator its own class instead of a JButton
         runningIndicator = new JButton(stoppedIcon);
         runningIndicator.setFocusable(false);
         runningIndicator.setBorderPainted(false);
@@ -215,11 +209,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         testTimeDuration.setToolTipText(JMeterUtils.getResString("duration_tooltip")); //$NON-NLS-1$
         testTimeDuration.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        totalThreads = new JLabel("0"); // $NON-NLS-1$
-        totalThreads.setToolTipText(JMeterUtils.getResString("total_threads_tooltip")); // $NON-NLS-1$
-
-        activeThreads = new JLabel("0"); // $NON-NLS-1$
-        activeThreads.setToolTipText(JMeterUtils.getResString("active_threads_tooltip")); // $NON-NLS-1$
+        activeAndTotalThreads = new JLabel("0/0"); // $NON-NLS-1$
+        activeAndTotalThreads.setToolTipText(JMeterUtils.getResString("active_total_threads_tooltip")); // $NON-NLS-1$
 
         warnIndicator = new JButton(warningIcon);
         warnIndicator.setMargin(new Insets(0, 0, 0, 0));
@@ -230,9 +221,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         warnIndicator.setCursor(new Cursor(Cursor.HAND_CURSOR));
         warnIndicator.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
         warnIndicator.addActionListener(this);
-
-        errorsOrFatalsLabel = new JLabel("0"); // $NON-NLS-1$
-        errorsOrFatalsLabel.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
 
         tree = makeTree(treeModel, treeListener);
 
@@ -261,8 +249,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     private void refreshErrors(ActionEvent evt) {
         if(errorOrFatal.get()>0) {
-            errorsOrFatalsLabel.setForeground(Color.RED);
-            errorsOrFatalsLabel.setText(Long.toString(errorOrFatal.get()));
+            warnIndicator.setForeground(Color.RED);
+            warnIndicator.setText(Integer.toString(errorOrFatal.get()));
         }
     }
     
@@ -408,7 +396,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         stoppingMessage.pack();
         ComponentUtil.centerComponentInComponent(this, stoppingMessage);
         SwingUtilities.invokeLater(() -> {
-                if (stoppingMessage != null) { // TODO - how can this be null?
+                if (stoppingMessage != null) {
                     stoppingMessage.setVisible(true);
                 }
         });
@@ -416,8 +404,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     public void updateCounts() {
         SwingUtilities.invokeLater(() -> {
-                activeThreads.setText(Integer.toString(JMeterContextService.getNumberOfThreads()));
-                totalThreads.setText(Integer.toString(JMeterContextService.getTotalThreads()));
+            activeAndTotalThreads.setText(String.format("%d/%d", JMeterContextService.getNumberOfThreads(),
+                    JMeterContextService.getTotalThreads()));
         });
     }
 
@@ -455,8 +443,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         hosts.add(host);
         computeTestDurationTimer.start();
         runningIndicator.setIcon(runningIcon);
-        activeThreads.setText("0"); // $NON-NLS-1$
-        totalThreads.setText("0"); // $NON-NLS-1$
+        activeAndTotalThreads.setText("0/0"); // $NON-NLS-1$
         menuBar.setRunning(true, host);
         if (LOCAL.equals(host)) {
             toolbar.setLocalTestStarted(true);
@@ -589,20 +576,18 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         guiInstance.setMainToolbar(toolbar);
         toolPanel.add(toolbar);
 
-        toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
+        toolPanel.add(Box.createRigidArea(new Dimension(5, 15)));
         toolPanel.add(Box.createGlue());
 
         toolPanel.add(testTimeDuration);
-        toolPanel.add(Box.createRigidArea(new Dimension(20, 15)));
+        toolPanel.add(Box.createRigidArea(new Dimension(5, 15)));
 
-        toolPanel.add(errorsOrFatalsLabel);
         toolPanel.add(warnIndicator);
-        toolPanel.add(Box.createRigidArea(new Dimension(20, 15)));
+        warnIndicator.setText("0");
+        toolPanel.add(Box.createRigidArea(new Dimension(5, 15)));
 
-        toolPanel.add(activeThreads);
-        toolPanel.add(new JLabel(" / "));
-        toolPanel.add(totalThreads);
-        toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
+        toolPanel.add(activeAndTotalThreads);
+        toolPanel.add(Box.createRigidArea(new Dimension(5, 15)));
         toolPanel.add(runningIndicator);
         return toolPanel;
     }
@@ -852,8 +837,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         public void clearData() {
             errorOrFatal.set(0);
             SwingUtilities.invokeLater(() -> {
-                    errorsOrFatalsLabel.setForeground(Color.BLACK);
-                    errorsOrFatalsLabel.setText(Integer.toString(errorOrFatal.get()));
+                    warnIndicator.setForeground(null);
+                    warnIndicator.setText(Integer.toString(errorOrFatal.get()));
                 });
         }
 

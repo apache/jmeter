@@ -125,7 +125,15 @@ PRGDIR=`dirname "$PRG"`
 # system's memory availability:
 HEAP="-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m"
 
-#VERBOSE_GC="-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps"
+# Uncomment this to generate GC verbose file with Java prior to 9 
+# VERBOSE_GC="-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps"
+
+# Uncomment this to generate GC verbose file with Java 9 and above
+# VERBOSE_GC="-Xlog:gc*,gc+age=trace,gc+heap=debug:file=gc_jmeter_%p.log"
+
+# Uncomment this if you run JMeter in DOCKER (need Java SE 8u131 or JDK 9)
+# see https://blogs.oracle.com/java-platform-group/java-se-support-for-docker-cpu-and-memory-limits
+# RUN_IN_DOCKER="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
 
 # Finally, some tracing to help in case things go astray:
 GC_ALGO="-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20"
@@ -136,6 +144,6 @@ DUMP="-XX:+HeapDumpOnOutOfMemoryError"
 SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom"
 SERVER="-server"
 
-ARGS="$SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $SYSTEM_PROPS"
+ARGS="$SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $SYSTEM_PROPS $RUN_IN_DOCKER"
 
 $JAVA_HOME/bin/java $ADD_MODS $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"

@@ -211,8 +211,6 @@ public class JMeterUtils implements UnitTestManager {
                 }
                 p.load(is);
             } catch (IOException ex) {
-                // JMeter.fail("Could not read internal resource. " +
-                // "Archive is broken.");
             }
         } finally {
             JOrphanUtils.closeQuietly(is);
