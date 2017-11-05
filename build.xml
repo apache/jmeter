@@ -18,7 +18,7 @@
 <project name="JMeter" default="install" basedir="."
     xmlns:rat="antlib:org.apache.rat.anttasks"
     xmlns:jacoco="antlib:org.jacoco.ant"
-    xmlns="antlib:org.apache.tools.ant" 
+    xmlns="antlib:org.apache.tools.ant"
     xmlns:if="ant:if" >
   <description>
 
@@ -2645,7 +2645,7 @@ run JMeter unless all the JMeter jars are added.
     <echo level="info">${batchtest.name} output files compared OK</echo>
 
     <local         name="BatchTestLocal.len"/>
-    <!-- We define "BatchTestLocal.len" property only if log file is empty 
+    <!-- We define "BatchTestLocal.len" property only if log file is empty
       or  batchtest.ignoreErrorLogs is false
     -->
     <condition property="BatchTestLocal.len">
@@ -2737,12 +2737,12 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="TEST_HTTPS.jmx"/>
       <param name="skip.batchtest" value="${skip.test_https}" />
     </antcall>
-      
+
     <antcall target="batchtest">
       <param name="batchtest.name" value="TestCookieManager"/>
       <param name="batchtest.jmx" value="TestCookieManager.jmx"/>
     </antcall>
-      
+
     <antcall target="batchtest">
       <param name="batchtest.name" value="TCP_TESTS"/>
       <param name="batchtest.jmx" value="TCP_TESTS.jmx"/>
@@ -2754,7 +2754,7 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="JDBC_TESTS.jmx"/>
       <param name="batchtest.ignoreErrorLogs" value="true" />
     </antcall>
-      
+
     <antcall target="batchtest">
       <param name="batchtest.name" value="JMS_TESTS"/>
       <param name="batchtest.jmx" value="JMS_TESTS.jmx"/>
@@ -2771,7 +2771,7 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="FTP_TESTS.jmx"/>
       <param name="batchtest.ignoreErrorLogs" value="true" />
     </antcall>
-      
+
     <antcall target="batchtest">
       <param name="batchtest.name" value="Bug60607"/>
       <param name="batchtest.jmx" value="Bug60607.jmx"/>
@@ -2811,7 +2811,7 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="TestKeepAlive.jmx"/>
       <param name="skip.batchtest" value="${skip.batchtest_TestKeepAlive}" />
     </antcall>
-      
+
     <antcall target="batchtest">
        <param name="batchtest.name" value="ResponseDecompression"/>
        <param name="batchtest.jmx" value="ResponseDecompression.jmx"/>
