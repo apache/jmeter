@@ -333,7 +333,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                             } else if (authorization.getMechanism() == Mechanism.DIGEST) {
                                 DigestScheme digestAuth = new DigestScheme();
                                 digestAuth.overrideParamter("realm", authScope.getRealm());
-                                digestAuth.overrideParamter("nonce", "whatever");
                                 authCache.put(targetHost, digestAuth);
                             } else if (authorization.getMechanism() == Mechanism.KERBEROS) {
                                 KerberosScheme kerberosScheme = new KerberosScheme();
