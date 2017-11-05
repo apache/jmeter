@@ -6,9 +6,9 @@
 ##   The ASF licenses this file to You under the Apache License, Version 2.0
 ##   (the "License"); you may not use this file except in compliance with
 ##   the License.  You may obtain a copy of the License at
-## 
+##
 ##       http://www.apache.org/licenses/LICENSE-2.0
-## 
+##
 ##   Unless required by applicable law or agreed to in writing, software
 ##   distributed under the License is distributed on an "AS IS" BASIS,
 ##   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,11 +25,11 @@
 ##   ==============================================
 # Make sure prerequisite environment variables are set
 if [ -z "$JAVA_HOME" -a -z "$JRE_HOME" ]; then
-  if [ "$(uname)" == "Darwin" ]; then
-    # 
+  if [ "$(uname)" = "Darwin" ]; then
+    #
     if [ -x '/usr/libexec/java_home' ] ; then
       export JAVA_HOME=`/usr/libexec/java_home`
-    # 
+    #
     elif [ -d "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home" ]; then
       export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
     fi
@@ -59,25 +59,23 @@ fi
 if [ -z "$JRE_HOME" ]; then
   JRE_HOME="$JAVA_HOME"
 fi
+if [ -z "$JAVA_HOME" ]; then
+  JAVA_HOME="$JRE_HOME"
+fi
 
 #--add-modules java.activation if JAVA 9
 ADD_MODS=
 
 # Minimal version to run JMeter
-MINIMAL_VERSION=1.8.0
+MINIMAL_VERSION=8
 
 _java=`type java | awk '{ print $ NF }'`
-CURRENT_VERSION=`"$_java" -version 2>&1 | awk -F'"' '/version/ {print $2}'`
 # Check if version is from OpenJDK or Oracle Hotspot JVM prior to 9 containing 1.${version}.x
-if [ ${#CURRENT_VERSION} -lt 1 ]; then
-	CURRENT_VERSION=`echo $CURRENT_VERSION | awk -F'.' '{ print $2 }'`
-else
-	MINIMAL_VERSION=`echo $MINIMAL_VERSION | awk -F'.' '{ print $2 }'`
-fi
+CURRENT_VERSION=`"$_java" -version 2>&1 | awk -F'"' '/version/ {gsub("^1[.]", "", $2); gsub("[^0-9].*$", "", $2); print $2}'`
 
 # Check if Java is present and the minimal version requirement
-if [ $CURRENT_VERSION -gt $MINIMAL_VERSION ]; then
-	ADD_MODS="--add-modules java.activation"	
+if [ "$CURRENT_VERSION" -gt "$MINIMAL_VERSION" ]; then
+    ADD_MODS="--add-modules java.activation"
 fi
 
 JMETER_OPTS=""
@@ -106,7 +104,7 @@ done
 PRGDIR=`dirname "$PRG"`
 
 #
-# Original page has disappeared, it is now only available at: 
+# Original page has disappeared, it is now only available at:
 # https://web.archive.org/web/20060614151434/http://www.atg.com/portal/myatg/developer?paf_dm=full&paf_gear_id=1100010&detailArticle=true&id=9606
 #
 # JMeter objects can generally be grouped into three life-length groups:
@@ -114,7 +112,7 @@ PRGDIR=`dirname "$PRG"`
 # - Per-sample objects (results, DOMs,...). An awful lot of those.
 #   Life length of milliseconds to a few seconds.
 #
-# - Per-run objects (threads, listener data structures,...). Not that many 
+# - Per-run objects (threads, listener data structures,...). Not that many
 #   of those unless we use the table or tree listeners on heavy runs.
 #   Life length of minutes to several hours, from creation to start of next run.
 #
@@ -125,7 +123,7 @@ PRGDIR=`dirname "$PRG"`
 # system's memory availability:
 HEAP="-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m"
 
-# Uncomment this to generate GC verbose file with Java prior to 9 
+# Uncomment this to generate GC verbose file with Java prior to 9
 # VERBOSE_GC="-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps"
 
 # Uncomment this to generate GC verbose file with Java 9 and above
@@ -146,4 +144,4 @@ SERVER="-server"
 
 ARGS="$SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $SYSTEM_PROPS $RUN_IN_DOCKER"
 
-$JAVA_HOME/bin/java $ADD_MODS $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
+"$JAVA_HOME/bin/java" $ADD_MODS $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
