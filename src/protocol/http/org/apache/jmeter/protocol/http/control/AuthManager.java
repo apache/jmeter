@@ -263,10 +263,10 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             String uRL = auth.getURL();
             log.debug("Checking match against auth'n entry: {}", uRL);
             if (s1.startsWith(uRL) || s2 != null && s2.startsWith(uRL)) {
-                log.debug("Matched");
+                log.debug("Matched against auth'n entry: {}", uRL);
                 return auth;
             }
-            log.debug("Did not match");
+            log.debug("Did not match against auth'n entry: {}", uRL);
         }
         return null;
     }
@@ -321,7 +321,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             }
             if (match(authorization,newAuthorization)) {
                 if (log.isDebugEnabled()) {
-                    log.debug("Found the same Authorization object:" + newAuthorization.toString());
+                    log.debug("Found the same Authorization object:{}", newAuthorization.toString());
                 }
                 //set true, if found the same one
                 alreadyExists=true;
@@ -417,7 +417,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                         getAuthObjects().addItem(auth);
                     }
                 } catch (NoSuchElementException e) {
-                    log.error("Error parsing auth line: '" + line + "'", e);
+                    log.error("Error parsing auth line: '{}'", line, e);
                     ok = false;
                 }
             }
@@ -480,7 +480,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         String realm = auth.getRealm();
         String domain = auth.getDomain();
         if (log.isDebugEnabled()){
-            log.debug(username + " > D="+domain+" R="+realm + " M="+auth.getMechanism());
+            log.debug("{} > D={} R={} M={}", username, domain, realm, auth.getMechanism());
         }
         if(Mechanism.KERBEROS.equals(auth.getMechanism())) {
             localContext.setAttribute(DynamicKerberosSchemeFactory.CONTEXT_ATTRIBUTE_STRIP_PORT, 
@@ -488,7 +488,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             credentialsProvider.setCredentials(new AuthScope(null, -1, null), USE_JAAS_CREDENTIALS);
         } else {
             credentialsProvider.setCredentials(
-                new AuthScope(url.getHost(), url.getPort(), realm.length()==0 ? null : realm),
+                new AuthScope(url.getHost(), url.getPort(), realm.isEmpty() ? null : realm),
                 new NTCredentials(username, auth.getPass(), localhost, domain));
         }
     }
