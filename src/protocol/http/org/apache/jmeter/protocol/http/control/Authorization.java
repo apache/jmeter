@@ -71,7 +71,7 @@ public class Authorization extends AbstractTestElement implements Serializable {
     }
 
     public Authorization() {
-        this("","","","","", Mechanism.DIGEST);
+        this("","","","","", Mechanism.BASIC);
     }
 
     public void addConfigElement(ConfigElement config) {
