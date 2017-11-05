@@ -60,12 +60,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthSchemeProvider;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.AuthState;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.DeflateInputStream;
@@ -105,8 +107,12 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.auth.BasicSchemeFactory;
 import org.apache.http.impl.auth.DigestScheme;
+import org.apache.http.impl.auth.DigestSchemeFactory;
 import org.apache.http.impl.auth.KerberosScheme;
+import org.apache.http.impl.auth.NTLMSchemeFactory;
+import org.apache.http.impl.auth.SPNegoSchemeFactory;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -136,6 +142,7 @@ import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
+import org.apache.jmeter.protocol.http.control.DynamicKerberosSchemeFactory;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.hc.LazyLayeredConnectionSocketFactory;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
@@ -163,6 +170,20 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class HTTPHC4Impl extends HTTPHCAbstractImpl {
+
+    private static final String CONTEXT_ATTRIBUTE_AUTH_MANAGER = "__jmeter.A_M__";
+
+    private static final String CONTEXT_ATTRIBUTE_USER_TOKEN = "__jmeter.U_T__"; //$NON-NLS-1$
+    
+    static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN = "__jmeter.S_R__"; //$NON-NLS-1$
+    
+    private static final String CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN = "__jmeter.H_T__";
+
+    private static final String CONTEXT_ATTRIBUTE_CLIENT_KEY = "__jmeter.C_K__";
+
+    private static final String CONTEXT_ATTRIBUTE_SENT_BYTES = "__jmeter.S_B__";
+    
+    private static final String CONTEXT_ATTRIBUTE_RECEIVED_BYTES = "__jmeter.R_B__";
 
     private static final int MAX_BODY_RETAIN_SIZE = JMeterUtils.getPropDefault("httpclient4.max_body_retain_size", 32 * 1024);
 
@@ -298,7 +319,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         authCache = new BasicAuthCache();
                         localContext.setAuthCache(authCache);
                     }
-                    authManager.setupCredentials(authorization, url, credentialsProvider, LOCALHOST);
+                    authManager.setupCredentials(authorization, url, localContext, credentialsProvider, LOCALHOST);
                     AuthState authState = (AuthState) context.getAttribute(HttpClientContext.TARGET_AUTH_STATE);
                     if (authState.getAuthScheme() == null) {
                         AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort(),
@@ -337,7 +358,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 final HttpContext context) throws IOException, HttpException {
             HttpResponse response = super.doSendRequest(request, conn, context);
             HttpConnectionMetrics metrics = conn.getMetrics();
-            context.setAttribute("SENT_BYTES_COUNT", metrics.getSentBytesCount());
+            context.setAttribute(CONTEXT_ATTRIBUTE_SENT_BYTES, metrics.getSentBytesCount());
             metrics.reset();
             return response;
         }
@@ -349,7 +370,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 final HttpContext context) throws HttpException, IOException {
             HttpResponse response = super.doReceiveResponse(request, conn, context);
             HttpConnectionMetrics metrics = conn.getMetrics();
-            context.setAttribute("RECEIVED_BYTES_COUNT", metrics.getReceivedBytesCount());
+            context.setAttribute(CONTEXT_ATTRIBUTE_RECEIVED_BYTES, metrics.getReceivedBytesCount());
             metrics.reset();
             return response;
         }
@@ -414,16 +435,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final ConnectionSocketFactory SLOW_CONNECTION_SOCKET_FACTORY;
-    
-    private static final String CONTEXT_ATTRIBUTE_AUTH_MANAGER = "__jmeter.AUTH_MANAGER__";
-
-    private static final String CONTEXT_ATTRIBUTE_USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
-    
-    static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN = "__jmeter.SAMPLER_RESULT__"; //$NON-NLS-1$
-    
-    private static final String CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN = "__jmeter.HTTPCLIENT_TOKEN__";
-
-    private static final String CONTEXT_ATTRIBUTE_CLIENT_KEY = "__jmeter.CLIENT_KEY__";
 
     static {
         log.info("HTTP request retry count = {}", RETRY_COUNT);
@@ -608,10 +619,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
               + (long) httpResponse.getAllHeaders().length // Add \r for each header
               + 1L // Add \r for initial header
               + 2L; // final \r\n before data
-            long totalBytes = (Long) localContext.getAttribute("RECEIVED_BYTES_COUNT");
+            long totalBytes = (Long) localContext.getAttribute(CONTEXT_ATTRIBUTE_RECEIVED_BYTES);
             res.setHeadersSize((int)headerBytes);
             res.setBodySize(totalBytes - headerBytes);
-            res.setSentBytes((Long) localContext.getAttribute("SENT_BYTES_COUNT"));
+            res.setSentBytes((Long) localContext.getAttribute(CONTEXT_ATTRIBUTE_SENT_BYTES));
             if (log.isDebugEnabled()) {
                 log.debug("ResponseHeadersSize={} Content-Length={} Total={}",
                         res.getHeadersSize(), res.getBodySizeAsLong(), (res.getHeadersSize() + res.getBodySizeAsLong()));
@@ -977,6 +988,17 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     setRedirectStrategy(new LaxRedirectStrategy()).
                     setRetryHandler(new StandardHttpRequestRetryHandler(RETRY_COUNT, REQUEST_SENT_RETRY_ENABLED)).
                     setConnectionReuseStrategy(DefaultClientConnectionReuseStrategy.INSTANCE);
+            
+            Lookup<AuthSchemeProvider> authSchemeRegistry =
+                    RegistryBuilder.<AuthSchemeProvider>create()
+                        .register(AuthSchemes.BASIC, new BasicSchemeFactory())
+                        .register(AuthSchemes.DIGEST, new DigestSchemeFactory())
+                        .register(AuthSchemes.NTLM, new NTLMSchemeFactory())
+                        .register(AuthSchemes.SPNEGO, new SPNegoSchemeFactory())
+                        .register(AuthSchemes.KERBEROS, new DynamicKerberosSchemeFactory(
+                                AuthManager.STRIP_PORT, AuthManager.USE_CANONICAL_HOST_NAME))
+                        .build();
+            builder.setDefaultAuthSchemeRegistry(authSchemeRegistry);
             
             if (IDLE_TIMEOUT > 0) {
                 builder.setKeepAliveStrategy(IDLE_STRATEGY);
