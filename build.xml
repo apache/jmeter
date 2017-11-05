@@ -2216,7 +2216,7 @@ run JMeter unless all the JMeter jars are added.
     <checksum algorithm="MD5" file="${path}" property="md5"/>
     <echo message="${md5} *${_base}" file="${path}.md5"/>
     <echo message="Creating SHA-512 for ${path}"/>
-  	<checksum algorithm="SHA-512" file="${path}" property="sha512"/>
+    <checksum algorithm="SHA-512" file="${path}" property="sha512"/>
     <echo message="${sha512} *${_base}" file="${path}.sha512"/>
   </target>
 
@@ -2755,16 +2755,16 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.ignoreErrorLogs" value="true" />
     </antcall>
       
-	<antcall target="batchtest">
-	  <param name="batchtest.name" value="JMS_TESTS"/>
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="JMS_TESTS"/>
       <param name="batchtest.jmx" value="JMS_TESTS.jmx"/>
       <param name="batchtest.ignoreErrorLogs" value="true" />
-	</antcall>
+    </antcall>
 
-  	<antcall target="batchtest">
-  	  <param name="batchtest.name" value="OS_TESTS"/>
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="OS_TESTS"/>
       <param name="batchtest.jmx" value="OS_TESTS.jmx"/>
-  	</antcall>
+    </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="FTP_TESTS"/>
