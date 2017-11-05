@@ -986,6 +986,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     setDefaultCookieSpecRegistry(cookieSpecRegistry).
                     setDefaultSocketConfig(SocketConfig.DEFAULT).
                     setRedirectStrategy(new LaxRedirectStrategy()).
+                    setConnectionTimeToLive(TIME_TO_LIVE, TimeUnit.MILLISECONDS).
                     setRetryHandler(new StandardHttpRequestRetryHandler(RETRY_COUNT, REQUEST_SENT_RETRY_ENABLED)).
                     setConnectionReuseStrategy(DefaultClientConnectionReuseStrategy.INSTANCE);
             
