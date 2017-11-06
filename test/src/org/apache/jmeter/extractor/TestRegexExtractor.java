@@ -353,7 +353,6 @@ public class TestRegexExtractor {
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$2$");
             extractor.setMatchNumber(4);
-            //extractor.setDefaultValue("default");
             vars.put("regVal", "initial");
             assertEquals("initial", vars.get("regVal"));
             extractor.process();

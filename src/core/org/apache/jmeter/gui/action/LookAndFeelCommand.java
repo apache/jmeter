@@ -100,7 +100,7 @@ public class LookAndFeelCommand extends AbstractAction {
         if (laf != null) {
             return checkLafName(laf);
         }
-        laf = JMeterUtils.getProperty(JMETER_LAF);
+        laf = JMeterUtils.getPropDefault(JMETER_LAF, JMeterMenuBar.DARCULA_LAF);
         if (laf != null) {
             return checkLafName(laf);
         }

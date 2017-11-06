@@ -964,6 +964,18 @@ The following variables are set before the script is executed:
 (*) means that this is set before the init file, if any, is processed. 
 Other variables vary from invocation to invocation.
 </p>
+<note>
+When using this function please use the variables defined above rather than using string replacement to access a variable in your script.  Following this pattern will ensure that your tests are performant by ensuring that the Groovy can be cached.
+</note>
+<p>
+For instance <strong>don't</strong> do the following:
+</p>
+
+<p><code>${__groovy("${myVar}".substring(0\,2))}</code></p>
+
+<p>Imagine that the variable myVar changes with each transaction, the Groovy above cannot be cached as the script changes each time.<br /><br />
+Instead do the following, which can be cached: <br /><br /><code>${__groovy(vars.get("myVar").substring(0\,2))}</code>
+</p>
 </description>
 
 <properties>
@@ -979,7 +991,7 @@ Other variables vary from invocation to invocation.
 Example:
 <dl>
 <dt><code>${__groovy(123*456)}</code></dt><dd>returns <code>56088</code></dd>
-<dt><code>${__groovy("${var}".substring(0\,2))}</code></dt><dd>If var's value is <code>JMeter</code>, it will return <code>JM</code> as it runs <code>String.substring(0,2)</code>. Note
+<dt><code>${__groovy(vars.get("myVar").substring(0\,2))}</code></dt><dd>If var's value is <code>JMeter</code>, it will return <code>JM</code> as it runs <code>String.substring(0,2)</code>. Note
 that <code>,</code> has been escaped to <code>\,</code> </dd>
 </dl>
 </p>

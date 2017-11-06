@@ -288,7 +288,7 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
      * 
      */
     protected void checkIfModifiedSinceHeader(HttpRequestBase httpMethod) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         try {
             assertEquals("Should have found 1 header "+HTTPConstantsInterface.IF_MODIFIED_SINCE, 
                     1, 

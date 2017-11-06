@@ -173,9 +173,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
         if (type.isInstance(node.getUserObject())) {
             nodeList.add(node);
         }
-        Enumeration<JMeterTreeNode> enumNode = node.children();
+        Enumeration<?> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
-            JMeterTreeNode child = enumNode.nextElement();
+            JMeterTreeNode child = (JMeterTreeNode)enumNode.nextElement();
             traverseAndFind(type, child, nodeList);
         }
     }
@@ -184,9 +184,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
         if (userObject == node.getUserObject()) {
             return node;
         }
-        Enumeration<JMeterTreeNode> enumNode = node.children();
+        Enumeration<?> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
-            JMeterTreeNode child = enumNode.nextElement();
+            JMeterTreeNode child = (JMeterTreeNode)enumNode.nextElement();
             JMeterTreeNode result = traverseAndFind(userObject, child);
             if (result != null) {
                 return result;
@@ -202,9 +202,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
      */
     public HashTree getCurrentSubTree(JMeterTreeNode node) {
         ListedHashTree hashTree = new ListedHashTree(node);
-        Enumeration<JMeterTreeNode> enumNode = node.children();
+        Enumeration<?> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
-            JMeterTreeNode child = enumNode.nextElement();
+            JMeterTreeNode child = (JMeterTreeNode)enumNode.nextElement();
             hashTree.add(node, getCurrentSubTree(child));
         }
         return hashTree;

@@ -153,7 +153,7 @@ public class RandomDate extends AbstractFunction {
                 formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
             } catch (IllegalArgumentException ex) {
                 log.error(
-                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java    ime/format/DateTimeFormatter.html)",
+                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
                         format, ex); // $NON-NLS-1$
                 return "";
             }
@@ -163,7 +163,7 @@ public class RandomDate extends AbstractFunction {
                 formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
             } catch (IllegalArgumentException ex) {
                 log.error(
-                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java    ime/format/DateTimeFormatter.html)",
+                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
                         format, ex); // $NON-NLS-1$
                 return "";
             }
@@ -174,13 +174,13 @@ public class RandomDate extends AbstractFunction {
             try {
                 localStartDate = LocalDate.parse(dateStart, formatter).toEpochDay();
             } catch (DateTimeParseException | NumberFormatException ex) {
-                log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateStart, formatter, ex); // $NON-NLS-1$
+                log.error("Failed to parse Start Date '{}'", dateStart, ex); // $NON-NLS-1$
             }
         } else {
             try {
                 localStartDate = LocalDate.now(systemDefaultZoneID).toEpochDay();
             } catch (DateTimeParseException | NumberFormatException ex) {
-                log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateStart, formatter, ex); // $NON-NLS-1$
+                log.error("Failed to create current date '{}'", dateStart, ex); // $NON-NLS-1$
             }
         }
 
@@ -188,23 +188,27 @@ public class RandomDate extends AbstractFunction {
         try {
             localEndDate = LocalDate.parse(dateEnd, formatter).toEpochDay();
         } catch (DateTimeParseException | NumberFormatException ex) {
-            log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateEnd, formatter, ex); // $NON-NLS-1$
+            log.error("Failed to parse End date '{}'", dateEnd, ex); // $NON-NLS-1$
         }
 
         // Generate the random date
         String dateString = "";
-        long randomDay = ThreadLocalRandom.current().nextLong(localStartDate, localEndDate);
-        try {
-            dateString = LocalDate.ofEpochDay(randomDay).format(formatter);
-        } catch (DateTimeParseException | NumberFormatException ex) {
-            log.error("Failed to parse the date '{}' to shift with formatter '{}'", randomDay, formatter, ex); // $NON-NLS-1$
-        }
+        if (localEndDate < localStartDate) {
+            log.error("End Date '{}' must be greater than Start Date '{}'", dateEnd, dateStart); // $NON-NLS-1$
+        } else {
+            long randomDay = ThreadLocalRandom.current().nextLong(localStartDate, localEndDate);
+            try {
+                dateString = LocalDate.ofEpochDay(randomDay).format(formatter);
+            } catch (DateTimeParseException | NumberFormatException ex) {
+                log.error("Failed to generate random date '{}'", randomDay, ex); // $NON-NLS-1$
+            }
 
-        variableName = ((CompoundVariable) values[4]).execute().trim();
-        if (!StringUtils.isEmpty(variableName)) {
-            JMeterVariables vars = getVariables();
-            if (vars != null) {// vars will be null on TestPlan
-                vars.put(variableName, dateString);
+            variableName = ((CompoundVariable) values[4]).execute().trim();
+            if (!StringUtils.isEmpty(variableName)) {
+                JMeterVariables vars = getVariables();
+                if (vars != null) {// vars will be null on TestPlan
+                    vars.put(variableName, dateString);
+                }
             }
         }
         return dateString;

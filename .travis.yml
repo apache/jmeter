@@ -5,6 +5,12 @@ before_script:
   - test "x$RUN_CHECKSTYLE" != 'x' || ant -Djava.awt.headless=true download_jars install
   - test "x$RUN_CHECKSTYLE" != 'xtrue' || ant -Djava.awt.headless=true download_checkstyle
 
+before_install:
+    - wget --no-check-certificate https://www.apache.org/dist/ant/binaries/apache-ant-1.10.1-bin.tar.gz
+    - tar -xzvf apache-ant-1.10.1-bin.tar.gz
+    - export PATH=`pwd`/apache-ant-1.10.1/bin:$PATH
+    - echo $(ant -version)
+
 # skip default "install" command
 install: true
 
@@ -14,5 +20,11 @@ matrix:
       env: RUN_CHECKSTYLE=true
       script: ant -Djava.awt.headless=true checkstyle
     - jdk: oraclejdk8
+      script: ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
+      sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
+    - jdk: oraclejdk9
       script: ant -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)

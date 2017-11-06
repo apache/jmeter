@@ -45,14 +45,19 @@ public class ResetSearchCommand extends AbstractAction {
     @Override
     public void doAction(ActionEvent e) {
         GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
-        for (JMeterTreeNode jMeterTreeNode : jMeterTreeModel.getNodesOfType(Searchable.class)) {
-            if (jMeterTreeNode.getUserObject() instanceof Searchable){
-                List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
-                for (JMeterTreeNode jMeterTreeNode2 : matchingNodes) {
-                    jMeterTreeNode2.setMarkedBySearch(false); 
+        try{
+            guiPackage.beginUndoTransaction();
+            JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
+            for (JMeterTreeNode jMeterTreeNode : jMeterTreeModel.getNodesOfType(Searchable.class)) {
+                if (jMeterTreeNode.getUserObject() instanceof Searchable){
+                    List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
+                    for (JMeterTreeNode jMeterTreeNode2 : matchingNodes) {
+                        jMeterTreeNode2.setMarkedBySearch(false); 
+                    }
                 }
             }
+        } finally {
+            guiPackage.endUndoTransaction();
         }
         GuiPackage.getInstance().getMainFrame().repaint();
     }

@@ -213,8 +213,6 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
         // doctype
         HorizontalPanel docTypePanel = new HorizontalPanel();
         docTypeBox = new JComboBox<>(new String[] { "omit", "auto", "strict", "loose" });
-        // docTypePanel.add(new
-        // JLabel(JMeterUtils.getResString("duration_assertion_label"))); //$NON-NLS-1$
         docTypePanel.add(new JLabel("Doctype:"));
         docTypePanel.add(docTypeBox);
         assertionPanel.add(docTypePanel);

@@ -18,7 +18,8 @@
 <project name="JMeter" default="install" basedir="."
     xmlns:rat="antlib:org.apache.rat.anttasks"
     xmlns:jacoco="antlib:org.jacoco.ant"
-    xmlns="antlib:org.apache.tools.ant" >
+    xmlns="antlib:org.apache.tools.ant"
+    xmlns:if="ant:if" >
   <description>
 
   N.B. To build JMeter from a release you need both the binary and source archives,
@@ -321,6 +322,9 @@
     <!-- docs.force uses the opposite sense to the anakia check -->
     <isfalse value="${docs.force}"/>
   </condition>
+  <condition property="java9">
+      <equals arg1="${ant.java.version}" arg2="9"/>
+  </condition>
 
   <!-- Directory where jars needed for creating documentation live -->
   <property name="lib.doc" value="lib/doc"/>
@@ -398,6 +402,7 @@
     <include name="${lib.dir}/${commons-math3.jar}"/>
     <include name="${lib.dir}/${commons-net.jar}"/>
     <include name="${lib.dir}/${commons-pool2.jar}"/>
+    <include name="${lib.dir}/${darcula.jar}"/>
     <include name="${lib.dir}/${dnsjava.jar}"/>
     <include name="${lib.dir}/${freemarker.jar}"/>
     <include name="${lib.dir}/${groovy-all.jar}"/>
@@ -480,6 +485,7 @@
     <pathelement location="${lib.dir}/${commons-math3.jar}"/>
     <pathelement location="${lib.dir}/${commons-net.jar}"/>
     <pathelement location="${lib.dir}/${commons-pool2.jar}"/>
+    <pathelement location="${lib.dir}/${darcula.jar}"/>
     <pathelement location="${lib.dir}/${dnsjava.jar}"/>
     <pathelement location="${lib.dir}/${freemarker.jar}"/>
     <pathelement location="${lib.dir}/${groovy-all.jar}"/>
@@ -566,7 +572,7 @@
       JMeter version
       This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="3.3"/>
+    <property name="jmeter.version" value="3.4-SNAPSHOT"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version"
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}.${DSTAMP}">
@@ -596,6 +602,7 @@
 
   <target name="ant-version" depends="_check_ant-version">
     <echo level="info">ant.version = ${ant.version}</echo>
+    <echo level="info">java.version = ${ant.java.version}</echo>
   </target>
 
   <target name="_check_ant-version">
@@ -897,6 +904,8 @@
       <classpath>
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
       </classpath>
+      <jvmarg value="--add-modules" if:set="java9" />
+      <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="${jacoco_params}run_gui:java(server)"/>
       <sysproperty key="jmeter.home" value="${basedir}"/>
     </java>
@@ -2207,7 +2216,7 @@ run JMeter unless all the JMeter jars are added.
     <checksum algorithm="MD5" file="${path}" property="md5"/>
     <echo message="${md5} *${_base}" file="${path}.md5"/>
     <echo message="Creating SHA-512 for ${path}"/>
-  	<checksum algorithm="SHA-512" file="${path}" property="sha512"/>
+    <checksum algorithm="SHA-512" file="${path}" property="sha512"/>
     <echo message="${sha512} *${_base}" file="${path}.sha512"/>
   </target>
 
@@ -2449,6 +2458,8 @@ run JMeter unless all the JMeter jars are added.
             <path refid="classpath"/>
             <path refid="logging.classpath"/>
           </classpath>
+          <jvmarg value="--add-modules" if:set="java9" />
+          <jvmarg value="java.activation" if:set="java9" />
           <jvmarg value="${jacoco_params}batchtest:daemon:java(server)"/>
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
@@ -2560,6 +2571,8 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
+      <jvmarg value="--add-modules" if:set="java9" />
+      <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="${jacoco_params}batchtest:java(${taskname})"/>
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
       <sysproperty key="user.language" value="en"/>
@@ -2632,7 +2645,7 @@ run JMeter unless all the JMeter jars are added.
     <echo level="info">${batchtest.name} output files compared OK</echo>
 
     <local         name="BatchTestLocal.len"/>
-    <!-- We define "BatchTestLocal.len" property only if log file is empty 
+    <!-- We define "BatchTestLocal.len" property only if log file is empty
       or  batchtest.ignoreErrorLogs is false
     -->
     <condition property="BatchTestLocal.len">
@@ -2726,6 +2739,40 @@ run JMeter unless all the JMeter jars are added.
     </antcall>
 
     <antcall target="batchtest">
+      <param name="batchtest.name" value="TestCookieManager"/>
+      <param name="batchtest.jmx" value="TestCookieManager.jmx"/>
+    </antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="TCP_TESTS"/>
+      <param name="batchtest.jmx" value="TCP_TESTS.jmx"/>
+      <param name="batchtest.ignoreErrorLogs" value="true" />
+    </antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="JDBC_TESTS"/>
+      <param name="batchtest.jmx" value="JDBC_TESTS.jmx"/>
+      <param name="batchtest.ignoreErrorLogs" value="true" />
+    </antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="JMS_TESTS"/>
+      <param name="batchtest.jmx" value="JMS_TESTS.jmx"/>
+      <param name="batchtest.ignoreErrorLogs" value="true" />
+    </antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="OS_TESTS"/>
+      <param name="batchtest.jmx" value="OS_TESTS.jmx"/>
+    </antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="FTP_TESTS"/>
+      <param name="batchtest.jmx" value="FTP_TESTS.jmx"/>
+      <param name="batchtest.ignoreErrorLogs" value="true" />
+    </antcall>
+
+    <antcall target="batchtest">
       <param name="batchtest.name" value="Bug60607"/>
       <param name="batchtest.jmx" value="Bug60607.jmx"/>
       <param name="skip.batchtest" value="${skip.bug60607}" />
@@ -2764,7 +2811,7 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="TestKeepAlive.jmx"/>
       <param name="skip.batchtest" value="${skip.batchtest_TestKeepAlive}" />
     </antcall>
-      
+
     <antcall target="batchtest">
        <param name="batchtest.name" value="ResponseDecompression"/>
        <param name="batchtest.jmx" value="ResponseDecompression.jmx"/>
@@ -2863,6 +2910,8 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
+      <jvmarg value="--add-modules" if:set="java9" />
+      <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="-server"/>
       <jvmarg value="${jacoco_params}_test:java"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
@@ -3131,6 +3180,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="commons-math3"/>
     <process_jarfile jarname="commons-net"/>
     <process_jarfile jarname="commons-pool2"/>
+    <process_jarfile jarname="darcula"/>
     <process_jarfile jarname="dnsjava"/>
     <process_jarfile jarname="freemarker"/>
     <process_jarfile jarname="groovy-all"/>
@@ -3179,6 +3229,11 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="xmlpull"/>
     <process_jarfile jarname="xpp3"/>
     <process_jarfile jarname="xstream"/>
+    <process_jarfile jarname="hsqldb" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="activemq-all" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="mina-core" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="ftplet-api" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="ftpserver-core" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="jacocoant" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="sonarqube-ant-task" dest.dir="${lib.coverage}" />
   </target>
@@ -3214,7 +3269,7 @@ run JMeter unless all the JMeter jars are added.
     <delete verbose="true">
       <!-- bcprov jars no longer have the same prefix so the wildcard delete does not work; drop any old ones -->
       <fileset dir="${lib.api}" includes="bcmail-jdk15-*.jar bcprov-jdk15-*.jar"/>
-      <fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar" />
+      <fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar bsh-2.0b5.jar" />
       <!-- tidy up unused Excalibur jars -->
       <fileset dir="${lib.dir}" includes="avalon-framework-4.1.4.jar excalibur-datasource-2.1.jar excalibur-instrument-1.0.jar excalibur-logger-1.1.jar excalibur-pool-api-2.1.jar excalibur-pool-impl-2.1.jar excalibur-pool-instrumented-2.1.jar"/>
       <!-- jdom jar has moved; drop the old one -->
@@ -3273,7 +3328,7 @@ run JMeter unless all the JMeter jars are added.
      />
   </target>
 
-  <target name="_coverage.report" depends="_coverage.prepare, init-svnVersion, init-version">
+  <target name="_coverage.report" depends="_coverage.prepare, init-version">
     <jacoco:report>
         <executiondata>
             <file file="reports/jacoco.exec"/>
@@ -3322,7 +3377,9 @@ run JMeter unless all the JMeter jars are added.
     </jacoco:report>
   </target>
 
-  <target name="coverage"  depends="ant-version,_coverage.prepare, test-both, _allbatchtests, _coverage.report"/>
+  <target name="coverage-travis"  depends="ant-version,_coverage.prepare, test, _coverage.report"/>
+
+  <target name="coverage"  depends="ant-version,_coverage.prepare, test-both, _allbatchtests, init-svnVersion, _coverage.report"/>
 
   <target name="_check_exists" if="_check_exists">
     <fail message="Invalid call sequence - file.exists should not be defined" if="file.exists"/>
@@ -3601,7 +3658,7 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="sonar" depends="compile, install, coverage, _sonar" />
 
-  <target name="nightlysonar" depends="_coverage.prepare, nightly, _coverage.report, _sonar" />
+  <target name="nightlysonar" depends="_coverage.prepare, nightly, init-svnVersion, _coverage.report, _sonar" />
 
   <target name="setproxy" if="${proxy.use}">
     <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"

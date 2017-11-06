@@ -270,9 +270,6 @@ public class TCLogParser implements LogParser {
             if (line == null) {
                 breader.close();
                 this.READER = null;
-                // this.READER = new BufferedReader(new
-                // FileReader(this.SOURCE));
-                // parse(this.READER,el);
             }
         } catch (IOException ioe) {
             log.error("Error reading log file", ioe);

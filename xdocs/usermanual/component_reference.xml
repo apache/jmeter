@@ -450,18 +450,21 @@ so the value may be greater than the number of bytes in the response content.
 <note>When those two properties are set  <code>false</code>, JMeter returns only data response size (uncompressed if request uses gzip/deflate mode).</note>
 <p>
 <b>Retry handling</b><br></br>
-For HttpClient4 the retry count has been set to <code>0</code>, meaning not retry is attempted. 
-Note that the Java implementation appears to retry 1 time.
-The retry count can be overridden by setting the relevant JMeter property, for example:
-</p>
+By default retry has been set to 0 for both HttpClient4 and Java implementations, meaning no retry is attempted.<br/>  
+For HttpClient4, the retry count can be overridden by setting the relevant JMeter property, for example:
+
 <source>
 httpclient4.retrycount=3
 </source>
+<note>
 With HC4 Implementation, retry will be done on Idempotent Http Methods by default.
 If you want to retry for all methods, then set property
 <source>
 httpclient4.request_sent_retry_enabled=true
-</source>
+</source></note>
+
+Note that the Java implementation does not retry neither by default, you can change this by setting <source>http.java.sampler.retries=3</source>
+</p>
 <p>
 <b>Note: Certificates does not conform to algorithm constraints</b><br></br>
 You may encounter the following error: <code>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</code>
@@ -1196,7 +1199,11 @@ Currently the only way to change these is via the <a href="../api/org/apache/jme
 <component name="JSR223 Sampler" index="&sect-num;.1.11.1" width="861" height="502" screenshot="jsr223-sampler.png">
 <description>
 <p>
-The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
+The JSR223 Sampler allows JSR223 script code to be used to perform a sample or some computation required to create/update variables.
+<note>
+If you don't want to generate a <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> when this sampler is run, call the following method:
+<source>SampleResult.setIgnore();</source>
+</note>
 </p>
 <p>
 The JSR223 test elements have a feature (compilation) that can significantly increase performance.
@@ -1506,7 +1513,7 @@ The following table shows some values which may be useful when configuring JMS:
 <component name="JMS Subscriber" index="&sect-num;.1.14"  width="739" height="607" screenshot="jmssubscriber.png">
     <description>
         <p>
-        JMS Publisher will subscribe to messages in a given destination (topic or queue). For those not
+        JMS Subscriber will subscribe to messages in a given destination (topic or queue). For those not
         familiar with JMS, it is the J2EE specification for messaging. There are
         numerous JMS servers on the market and several open source options.
         </p>
@@ -1529,7 +1536,7 @@ The following table shows some values which may be useful when configuring JMS:
   Be sure to add a variable like <code>${__threadNum}</code> when you have more than one Thread.</property>
   <property name="JMS Selector" required="No">Message Selector as defined by JMS specification to extract only 
   messages that respect the Selector condition. Syntax uses subpart of SQL 92.</property>
-  <property name="Setup" required="Yes">The destination setup type. With <code>At startup</code>, the destination name is static (i.e. always same name during the test), with <code>Each sample</code>, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)</property>
+  <property name="Setup" required="Yes">The destination setup type. With <code>At startup</code>, the destination name is static (i.e. always same name during the test), with <code>Each sample</code>, the destination name is dynamic and is evaluated at each sample (i.e. the destination name may be a variable)</property>
   <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
   <property name="User" required="No">User Name</property>
   <property name="Password" required="No">Password (N.B. this is stored unencrypted in the test plan)</property>
@@ -1835,7 +1842,7 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Target" required="Yes"><code>Current Thread</code> / <code>All Threads</code> (ignored for Pause)</property>
+  <property name="Target" required="Yes"><code>Current Thread</code> / <code>All Threads</code> (ignored for <code>Pause</code> and <code>Go to next loop iteration</code>)</property>
   <property name="Action" required="Yes"><code>Pause</code> / <code>Stop</code> / <code>Stop Now</code> / <code>Go to next loop iteration</code></property>
   <property name="Duration" required="Yes, if Pause is selected">How long to pause for (milliseconds)</property>
 </properties>
@@ -2090,8 +2097,6 @@ Bug Page, Bug Page.</p>
 <p>Note, the File Reporter is configured to store the results in a file named "<code>loop-test.dat</code>" in the current directory.</p>
 
 </example>
-<note>The behaviour of the Once Only controller under anything other than the
-Thread Group or a Loop Controller is not currently defined. Odd things may happen.</note>
 </component>
 
 <component name="Interleave Controller" index="&sect-num;.2.4"  width="626" height="127" screenshot="logic-controller/interleave-controller.png">
@@ -2228,36 +2233,42 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
 
 <component name="Runtime Controller" index="&sect-num;.2.8" width="328" height="100" screenshot="runtimecontroller.png">
     <description>
-        <p>The Runtime Controller controls how long its children are allowed to run.
+        <p>The Runtime Controller controls how long its children how long its children will run. 
+        Controller will run its children until configured <code>Runtime(s)</code> is exceeded. 
         </p>
     </description>
 <properties>
     <property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-    <property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
+    <property name="Runtime (seconds)" required="Yes">Desired runtime in seconds. 0 means no run.</property>
 </properties>
 </component>
 
-<component name="If Controller" index="&sect-num;.2.9" width="497" height="131" screenshot="ifcontroller.png">
+<component name="If Controller" index="&sect-num;.2.9" width="814" height="262" screenshot="if_controller_expression.png">
     <description>
         <p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
         <p>
         By default, the condition is evaluated only once on initial entry, but you have the option to have it evaluated for every runnable element contained in the controller.
         </p>
         <p>
-        The script can be processed as a variable expression, rather than requiring JavaScript.
-        It was always possible to use functions and variables in the JavaScript condition, so long as they evaluated to "<code>true</code>" or "<code>false</code>";
-        now this can be done without the overhead of using JavaScript as well. For example, previously one could use the condition:
+        If Controller will internally use javascript to evaluate the condition but this can have a performance penalty.
+        <figure width="819" height="265" image="if_controller_javascript.png">If Controller using javascript</figure>
+        A better option (default one) is to check <code>Interpret Condition as Variable Expression?</code>, then in the condition field you have 2 options:
+        <ul>
+            <li>Option 1 : Use a variable that contains <code>true</code> or <code>false</code>
+            <note>If you want to test if last sample was successful, you can use <code>${JMeterThread.last_sample_ok}</code>
+            <figure width="815" height="260" image="if_controller_variable.png">If Controller using Variable</figure>
+            </note>
+            </li>
+            <li>Option 2 : Use a function (<code>${__jexl3()}</code> is advised) to evaluate an expression that must return <code>true</code> or <code>false</code>
+            <figure width="815" height="260" image="if_controller_expression.png">If Controller using expression</figure>
+            </li>
+        </ul>
+        
+        For example, previously one could use the condition:
         <code>${__jexl3(${VAR} == 23)}</code> and this would be evaluated as <code>true</code>/<code>false</code>, the result would then be passed to JavaScript
         which would then return <code>true</code>/<code>false</code>. If the Variable Expression option is selected, then the expression is evaluated
         and compared with "<code>true</code>", without needing to use JavaScript.
-        Also, variable expressions can return any value, whereas the
-        JavaScript condition must return "<code>true</code>"/"<code>false</code>" or an error is logged.
         </p>
-        <note>
-        No variables are made available to the script when the condition is interpreted as JavaScript.
-        If you need access to such variables, then select "<code>Interpret Condition as Variable Expression?</code>" and use
-        a <code><funclink name="__jexl3"/></code>, <code><funclink name="__groovy"/></code> or <code><funclink name="__javaScript()"/></code> (discouraged for performance) function call. You can then use the objects "<code>vars</code>", "<code>log</code>", "<code>ctx</code>" etc. in the script.
-        </note>
         <note>
         To test if a variable is undefined (or null) do the following, suppose var is named <code>myVar</code>, expression will be:
         <source>"${myVar}" == "\${myVar}"</source>
@@ -2286,10 +2297,13 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
             <li><code>"${VAR}" == "abcd"</code></li>
         </ul>
         If there is an error interpreting the code, the condition is assumed to be <code>false</code>, and a message is logged in <code>jmeter.log</code>.
-        <note>Note it is advised to avoid using JavaScript mode for performances</note>
+        <note>Note it is advised to avoid using JavaScript mode for performance.<br /><br />When using <code><funclink name="__groovy"/></code> take care to not use variable replacement in the string, otherwise if using a variable that changes the script cannot be cached.  Instead get the variable using: <code>vars.get("myVar").</code>  See the Groovy examples below.</note>
     </example>
     <example title="Examples (Variable Expression)" anchor="example_if_variable">
         <ul>
+            <li><code>${__groovy(vars.get("myVar") != "Invalid" )}</code> (Groovy check myVar is not equal to Invalid)</li>
+            <li><code>${__groovy(vars.get("myInt").toInteger() &lt;=4 )}</code> (Groovy check myInt is less then or equal to 4)</li>
+            <li><code>${__groovy(vars.get("myMissing") != null )}</code> (Groovy check if the myMissing variable is not set)</li>
             <li><code>${__jexl3(${COUNT} &lt; 10)}</code></li>
             <li><code>${RESULT}</code></li>
             <li><code>${JMeterThread.last_sample_ok}</code> (check if the last sample succeeded)</li>
@@ -2319,7 +2333,7 @@ If the last sample just before the loop failed, don't enter loop.</li>
 </ul>
 <note>
 The condition can be any variable or function that eventually evaluates to the string "<code>false</code>".
-This allows the use of JavaScript, BeanShell, properties or variables as needed.
+This allows the use of <code>__jexl3</code>, <code>__groovy</code> function, properties or variables as needed.
 </note>
 <br></br>
 <note>
@@ -2330,14 +2344,14 @@ non idempotent functions in Condition (like <code><funclink name="__counter"/></
 For example:
 <ul>
     <li><code>${VAR}</code> - where <code>VAR</code> is set to false by some other test element</li>
-    <li><code>${__javaScript(${C}==10)}</code></li>
-    <li><code>${__javaScript("${VAR2}"=="abcd")}</code></li>
+    <li><code>${__jexl3(${C}==10)}</code></li>
+    <li><code>${__jexl3("${VAR2}"=="abcd")}</code></li>
     <li><code>${_P(property)}</code> - where property is set to "<code>false</code>" somewhere else</li>
 </ul>
     </description>
 <properties>
-    <property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-    <property name="Condition" required="Yes">blank, <code>LAST</code>, or variable/function</property>
+    <property name="Name" required="No">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+    <property name="Condition" required="No">blank, <code>LAST</code>, or variable/function</property>
 </properties>
 </component>
 
@@ -2362,8 +2376,8 @@ If there is no default, then no element is selected, and the controller will not
 </p>
 </description>
 <properties>
-    <property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-    <property name="Switch Value" required="Yes">The number (or name) of the subordinate element to be invoked. Elements are numbered from 0.</property>
+    <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+    <property name="Switch Value" required="No">The number (or name) of the subordinate element to be invoked. Elements are numbered from 0. Defaults to 0</property>
 </properties>
 </component>
 
@@ -3584,7 +3598,7 @@ By default, a Graphite implementation is provided.
   JMeter supports CSV header lines:
   if the variable name field empty, then the first line of the file is read and interpreted as the list of column names.
   </property>
-  <property name="Ignore first line (only used if Variable Names is not empty)" required="No">
+  <property name="Use first line as Variable Names" required="No">
   Ignore first line of CSV file, it will only be used used if Variable Names is not empty, 
   if Variable Names is empty the first line must contain the headers.
   </property>
@@ -5044,7 +5058,7 @@ The value can be changed in various ways:
 </p>
 <ul>
 <li>using a counter variable</li>
-<li>using a JavaScript or BeanShell function to provide a changing value</li>
+<li>using a <code>__jexl3</code>, <code>__groovy</code> function to provide a changing value</li>
 <li>using the remote BeanShell server to change a JMeter property</li>
 </ul>
 <p>See <a href="best-practices.html">Best Practices</a> for further details.
@@ -6150,6 +6164,95 @@ It will allow you to extract in a very easy way text content, see <a href="http:
 <figure width="855" height="276" image="json-post-processor.png">JSON PostProcessor</figure>
 </component>
 
+<component name="Boundary Extractor" index="&sect-num;.8.10"  width="1127" height="277" screenshot="boundary_extractor.png">
+<description><p>Allows the user to extract values from a server response using left and right boundaries.  As a post-processor,
+this element will execute after each Sample request in its scope, testing the boundaries, extracting the requested values,
+generate the template string, and store the result into the given variable name.</p></description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Apply to:" required="Yes">
+        This is for use with samplers that can generate sub-samples, 
+        e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
+        <ul>
+        <li><code>Main sample only</code> - only applies to the main sample</li>
+        <li><code>Sub-samples only</code> - only applies to the sub-samples</li>
+        <li><code>Main sample and sub-samples</code> - applies to both.</li>
+        <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
+        </ul>
+        Matching is applied to all qualifying samples in turn.
+        For example if there is a main sample and 3 sub-samples, each of which contains a single match test,
+        (i.e. 4 matches in total).
+        For match number = <code>3</code>, Sub-samples only, the extractor will match the 3<sup>rd</sup> sub-sample.
+        For match number = <code>3</code>, Main sample and sub-samples, the extractor will match the 2<sup>nd</sup> sub-sample (1<sup>st</sup> match is main sample).
+        For match number = <code>0</code> or negative, all qualifying samples will be processed.
+        For match number > <code>0</code>, matching will stop as soon as enough matches have been found.
+        </property>
+        <property name="Field to check" required="Yes">
+        The following fields can be checked:
+        <ul>
+        <li><code>Body</code> - the body of the response, e.g. the content of a web-page (excluding headers)</li>
+        <li><code>Body (unescaped)</code> - the body of the response, with all Html escape codes replaced.
+        Note that Html escapes are processed without regard to context, so some incorrect substitutions
+        may be made.
+        <note>Note that this option highly impacts performances, so use it only when absolutely necessary and be aware of its impacts</note>
+        </li>
+        <li><code>Body as a Document</code> - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).
+        <note>Note that the Body as a Document option can impact performances, so ensure it is OK for your test</note>
+        </li>
+        <li><code>Request Headers</code> - may not be present for non-HTTP samples</li>
+        <li><code>Response Headers</code> - may not be present for non-HTTP samples</li>
+        <li><code>URL</code></li>
+        <li><code>Response Code</code> - e.g. <code>200</code></li>
+        <li><code>Response Message</code> - e.g. <code>OK</code></li>
+        </ul>
+        Headers can be useful for HTTP samples; it may not be present for other sample types.
+        </property>
+        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
+        <property name="Left Boundary" required="Yes">Left boundary of value to find</property>
+        <property name="Right Boundary" required="Yes">Left boundary of value to find</property>
+        <property name="Match No. (0 for Random)" required="Yes">Indicates which match to use.  The boundaries may match multiple times.  
+            <ul>
+                <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
+                <li>A positive number N means to select the n<sup>th</sup> match.</li>
+                <li> Negative numbers are used in conjunction with the <complink name="ForEach Controller"/> - see below.</li>
+            </ul>
+        </property>
+        <property name="Default Value" required="No, but recommended">
+        If the boundaries do not match, then the reference variable will be set to the default value.
+        This is particularly useful for debugging tests. If no default is provided, then it is difficult to tell
+        whether the boundaries did not match, or maybe the wrong variable
+        is being used.
+        <p>
+        However, if you have several test elements that set the same variable, 
+        you may wish to leave the variable unchanged if the expression does not match.
+        In this case, remove the default value once debugging is complete.
+        </p> 
+        </property>
+</properties>
+<p>
+    If the match number is set to a non-negative number, and a match occurs, the variables are set as follows:
+</p>
+    <ul>
+        <li><code>refName</code> - the value of the extraction</li>
+    </ul>
+<p>
+    If no match occurs, then the <code>refName</code> variable is set to the default (unless this is absent). 
+</p>
+<p>
+    If the match number is set to a negative number, then all the possible matches in the sampler data are processed.
+    The variables are set as follows:
+</p>
+    <ul>
+        <li><code>refName_matchNr</code> - the number of matches found; could be <code>0</code></li>
+        <li><code>refName_<em>n</em></code>, where <code>n</code> = <code>1</code>, <code>2</code>, <code>3</code> etc. - the strings as generated by the template</li>
+        <li><code>refName_<em>n</em>_g<em>m</em></code>, where <code>m</code>=<code>0</code>, <code>1</code>, <code>2</code> - the groups for match <code>n</code></li>
+        <li><code>refName</code> - always set to the default value</li>
+    </ul>
+<p>
+    Note that the <code>refName</code> variable is always set to the default value in this case, 
+    and the associated group variables are not set.
+</p>
+</component>
 </section>
 
 <section name="&sect-num;.9 Miscellaneous Features" anchor="Miscellaneous_Features">
@@ -6266,19 +6369,13 @@ Behaviour can be modified with some properties by setting in user.properties:
         This is the original default, and is appropriate for tests where threads are active throughout most of the test.
         </property>
         <property name="Scheduler" required="Yes">If selected, enables the scheduler</property>
-        <property name="Start Time" required="No">If the scheduler checkbox is selected, one can choose an absolute start time.  When you start your test, JMeter will wait until the specified start time to begin testing.
-            Note: the <code>Startup Delay</code> field over-rides this - see below.
-            </property>
-        <property name="End Time" required="No">If the scheduler checkbox is selected, one can choose an absolute end time.  When you start your test, JMeter will wait until the specified start time to begin testing, and it will stop at the specified end time.
-            Note: the <code>Duration</code> field over-rides this - see below.
-            </property>
         <property name="Duration (seconds)" required="No">
             If the scheduler checkbox is selected, one can choose a relative end time. 
-            JMeter will use this to calculate the End Time, and ignore the <code>End Time</code> value.
+            JMeter will use this to calculate the End Time.
         </property>
         <property name="Startup delay (seconds)" required="No">
             If the scheduler checkbox is selected, one can choose a relative startup delay.
-            JMeter will use this to calculate the Start Time, and ignore the <code>Start Time</code> value.
+            JMeter will use this to calculate the Start Time.
         </property>
 </properties>
 </component>

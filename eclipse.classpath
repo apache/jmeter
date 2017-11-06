@@ -48,7 +48,7 @@
 	<classpathentry kind="lib" path="lib/accessors-smart-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/asm-5.2.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
-	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
+	<classpathentry kind="lib" path="lib/bsh-2.0b6.jar"/>
 	<classpathentry kind="lib" path="lib/caffeine-2.5.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.2.jar"/>
@@ -60,6 +60,7 @@
 	<classpathentry kind="lib" path="lib/commons-math3-3.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-3.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-pool2-2.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/darcula.jar"/>
 	<classpathentry kind="lib" path="lib/dec-0.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/dnsjava-2.1.8.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-2.3.23.jar"/>
@@ -92,7 +93,7 @@
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/ph-css-5.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/ph-commons-8.6.6.jar"/>
-	<classpathentry kind="lib" path="lib/rhino-1.7.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/rhino-1.7.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-2.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>

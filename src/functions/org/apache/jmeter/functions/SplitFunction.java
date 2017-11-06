@@ -74,6 +74,7 @@ public class SplitFunction extends AbstractFunction {
     private Object[] values;
 
     public SplitFunction() {
+        super();
     }
 
     /** {@inheritDoc} */
@@ -87,7 +88,8 @@ public class SplitFunction extends AbstractFunction {
         String splitString = ",";
 
         if (values.length > 2) { // Split string provided
-            splitString = ((CompoundVariable) values[2]).execute();
+            String newSplitString = ((CompoundVariable) values[2]).execute();
+            splitString = newSplitString.length() > 0 ? newSplitString : splitString;
         }
         if (log.isDebugEnabled()){
             log.debug("Split "+stringToSplit+ " using "+ splitString+ " into "+varNamePrefix);

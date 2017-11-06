@@ -105,6 +105,12 @@ public class JMeterVersionTest extends JMeterTestCase {
         propNames.remove("jdom");
         propNames.remove("velocity");
         propNames.remove("commons-lang"); // lang3 is bundled, lang2 is doc-only
+
+        // Darcula is not a maven artifact
+        propNames.remove("darcula"); // not needed in Maven
+        buildProp.remove("darcula.loc"); // not a Maven download
+        versions.remove("darcula");
+
         // remove optional checkstyle name
         propNames.remove("checkstyle-all"); // not needed in Maven
         buildProp.remove("checkstyle-all.loc"); // not a Maven download
@@ -114,8 +120,9 @@ public class JMeterVersionTest extends JMeterTestCase {
         versions.remove("rat");
         propNames.remove("rat-tasks");
         versions.remove("rat-tasks");
-        // remove optional jacoco and sonar jars (required for coverage reporting, not required for jmeter)
-        for (String optLib : Arrays.asList("jacocoant", "sonarqube-ant-task")) {
+        // remove optional hsqldb, jacoco and sonar jars (required for coverage reporting, not required for jmeter)
+        for (String optLib : Arrays.asList("jacocoant", "sonarqube-ant-task", "hsqldb", "activemq-all",
+                "mina-core", "ftplet-api", "ftpserver-core")) {
             propNames.remove(optLib);
             versions.remove(optLib);
         }
@@ -153,7 +160,6 @@ public class JMeterVersionTest extends JMeterTestCase {
             if (m.matches()) {
                 String jar = m.group(1);
                 String version = m.group(2);
-//                System.out.println(jar + " => " + version);
                 if (jar.endsWith("-jdk15on")) { // special handling
                     jar=jar.replace("-jdk15on","");
                 } else if (jar.equals("commons-jexl") && version.startsWith("2")) { // special handling
@@ -269,7 +275,7 @@ public class JMeterVersionTest extends JMeterTestCase {
             if (m.matches()) {
                 final String name = m.group(1);
                 assertTrue("Duplicate jar in LICENSE file " + line, namesInLicenseFile.add(name));
-                if (!binaryJarNames.contains(name)) {
+                if (!binaryJarNames.contains(name) && !(line.indexOf("darcula")>=0)) {
                     fail("Unexpected entry in LICENCE file: " + line);                    
                 }
                 final String comment = m.group(2);

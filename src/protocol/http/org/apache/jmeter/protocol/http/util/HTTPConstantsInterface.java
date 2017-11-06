@@ -56,6 +56,7 @@ public interface HTTPConstantsInterface { // CHECKSTYLE IGNORE InterfaceIsType
     String SEARCH = "SEARCH"; // $NON-NLS-1$
     String HEADER_AUTHORIZATION = "Authorization"; // $NON-NLS-1$
     String HEADER_COOKIE = "Cookie"; // $NON-NLS-1$
+    String HEADER_COOKIE_IN_REQUEST = "Cookie:"; // $NON-NLS-1$
     String HEADER_CONNECTION = "Connection"; // $NON-NLS-1$
     String CONNECTION_CLOSE = "close"; // $NON-NLS-1$
     String KEEP_ALIVE = "keep-alive"; // $NON-NLS-1$
