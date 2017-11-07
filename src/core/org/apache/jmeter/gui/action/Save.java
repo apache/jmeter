@@ -329,8 +329,8 @@ public class Save extends AbstractAction {
                     backupDir.getAbsolutePath()); //$NON-NLS-2$
         }
 
-        /**
-         *  select files matching
+        /*
+         * select files matching
          * {baseName}{versionSeparator}{version}{jmxExtension}
          * where {version} is a 6 digits number
          */
