@@ -54,7 +54,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
     // Name of the measurement
     private static final String EVENTS_FOR_ANNOTATION = "events";
-    
+
     private static final String TAGS = ",tags=";
     private static final String TEXT = "text=\"";
 
@@ -63,7 +63,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     private static final String TAG_TRANSACTION = ",transaction=";
 
-    // As influxdb can't rename tag for now, keep the old name for backward compatibility
+    // As influxdb can't rename tag for now, keep the old name for backward
+    // compatibility
     private static final String TAG_STATUS = ",statut=";
     private static final String TAG_APPLICATION = ",application=";
     private static final String TAG_RESPONSE_CODE = ",responseCode=";
@@ -92,17 +93,17 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private static final int MAX_POOL_SIZE = 1;
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
     private static final Object LOCK = new Object();
-    private static Map<String, String> defaultArg = new LinkedHashMap<>();
+    private static Map<String, String> DEFAULT_ARGS = new LinkedHashMap<>();
     static {
-        defaultArg.put("influxdbMetricsSender", HttpMetricsSender.class.getName());
-        defaultArg.put("influxdbUrl", "");
-        defaultArg.put("application", "application name");
-        defaultArg.put("measurement", DEFAULT_MEASUREMENT);
-        defaultArg.put("summaryOnly", "false");
-        defaultArg.put("samplersRegex", ".*");
-        defaultArg.put("percentiles", "99;95;90");
-        defaultArg.put("testTitle", "Test name");
-        defaultArg.put("eventTags", "");
+        DEFAULT_ARGS.put("influxdbMetricsSender", HttpMetricsSender.class.getName());
+        DEFAULT_ARGS.put("influxdbUrl", "");
+        DEFAULT_ARGS.put("application", "application name");
+        DEFAULT_ARGS.put("measurement", DEFAULT_MEASUREMENT);
+        DEFAULT_ARGS.put("summaryOnly", "false");
+        DEFAULT_ARGS.put("samplersRegex", ".*");
+        DEFAULT_ARGS.put("percentiles", "99;95;90");
+        DEFAULT_ARGS.put("testTitle", "Test name");
+        DEFAULT_ARGS.put("eventTags", "");
     }
 
     private boolean summaryOnly;
@@ -117,7 +118,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private String testTags;
     // Name of the application tested
     private String application = "";
-    private String TAG_USER = "";
+    private String tag_user = "";
     private InfluxdbMetricsSender influxdbMetricsManager;
 
     private ScheduledExecutorService scheduler;
@@ -199,8 +200,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             tag.append(TAG_TRANSACTION).append(transaction);
             tag.append(TAG_RESPONSE_CODE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseCode));
             tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage));
-            tag.append(TAG_USER);
-            
+            tag.append(tag_user);
+
             StringBuilder field = new StringBuilder(30);
             field.append(METRIC_COUNT).append(count);
             influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
@@ -215,8 +216,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             tag.append(TAG_APPLICATION).append(application);
             tag.append(TAG_STATUS).append(statut);
             tag.append(TAG_TRANSACTION).append(transaction);
-            tag.append(TAG_USER);
-            
+            tag.append(tag_user);
+
             StringBuilder field = new StringBuilder(80);
             field.append(METRIC_COUNT).append(count);
             if (!Double.isNaN(mean)) {
@@ -245,8 +246,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             tag.append(TAG_APPLICATION).append(application);
             tag.append(TAG_TRANSACTION).append(CUMULATED_METRICS);
             tag.append(TAG_STATUS).append(CUMULATED_METRICS);
-            tag.append(TAG_USER);
-            
+            tag.append(tag_user);
+
             field.append(METRIC_COUNT).append(total);
             field.append(",").append(METRIC_COUNT_ERROR).append(metric.getFailures());
 
@@ -336,12 +337,16 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             }
         }
         // Check if more fields are filled ( corresponding to user tag )
-        context.getParameterNamesIterator().forEachRemaining(name->{
-            if ( !defaultArg.containsKey(name)) {
-                TAG_USER += "," + AbstractInfluxdbMetricsSender.tagToStringValue(name.trim()) + "=" + AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter(name).trim());
+        tag_user = "";
+        context.getParameterNamesIterator().forEachRemaining(name -> {
+            if (StringUtils.isNotBlank(name) && !DEFAULT_ARGS.containsKey(name.trim())
+                    && StringUtils.isNotBlank(context.getParameter(name))) {
+                tag_user += "," + AbstractInfluxdbMetricsSender.tagToStringValue(name.trim()) + "="
+                        + AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter(name).trim());
+                log.debug("Adding '{}' tag with '{}' value ", name, context.getParameter(name));
             }
         });
-        
+
         Class<?> clazz = Class.forName(influxdbMetricsSender);
         this.influxdbMetricsManager = (InfluxdbMetricsSender) clazz.newInstance();
         influxdbMetricsManager.setup(influxdbUrl);
@@ -413,8 +418,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public Arguments getDefaultParameters() {
         Arguments arguments = new Arguments();
-        defaultArg.forEach((k, v) -> {
-            arguments.addArgument(k,v);
+        DEFAULT_ARGS.forEach((k, v) -> {
+            arguments.addArgument(k, v);
         });
         return arguments;
     }
