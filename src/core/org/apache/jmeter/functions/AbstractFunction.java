@@ -143,21 +143,24 @@ public abstract class AbstractFunction implements Function {
     }
     
     /**
-     * Utility method to store value in a variable 
-     * 
-     * @param value value of variable to update
-     * @param values array of {@link CompoundVariable} from which variable name will be extracted
-     * @param index index of variable in values array 
+     * Utility method to store value in a variable
+     * @param value
+     *            value of variable to update
+     * @param values
+     *            array of {@link CompoundVariable} from which variable name
+     *            will be extracted
+     * @param index
+     *            index of variable in values array
      */
-	protected final void addVariableValue(String value, CompoundVariable[] values, int index) {
-		if (values.length > index) {
-			String variableName = values[index].execute().trim();
-			if (StringUtils.isNotEmpty(variableName)) {
-				JMeterVariables vars = getVariables();
-				if (vars != null) {
-					vars.put(variableName, value);
-				}
-			}
-		}
-	}
+    protected final void addVariableValue(String value, CompoundVariable[] values, int index) {
+        if (values.length > index) {
+            String variableName = values[index].execute().trim();
+            if (StringUtils.isNotEmpty(variableName)) {
+                JMeterVariables vars = getVariables();
+                if (vars != null) {
+                    vars.put(variableName, value);
+                }
+            }
+        }
+    }
 }
