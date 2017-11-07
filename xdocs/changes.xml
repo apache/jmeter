@@ -118,6 +118,7 @@ Summary
 <ul>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
     <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
+    <li><bug>61724</bug>Add <code>__digest</code> function to provide computing of Hashes (SHA-XXX, MDX). Based on a contribution by orimarko at gmail.com</li>
 </ul>
 
 <h3>I18N</h3>
@@ -222,6 +223,7 @@ Summary
     <li>Vincent Herilier (https://github.com/vherilier)</li>
     <li>Aleksei Balan (abalanonline at gmail.com)</li>
     <li>Graham Russell (graham at ham1.co.uk)</li>
+    <li>orimarko at gmail.com</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
