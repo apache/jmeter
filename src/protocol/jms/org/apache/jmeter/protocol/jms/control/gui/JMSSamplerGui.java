@@ -23,7 +23,6 @@ import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -34,7 +33,6 @@ import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
 import org.apache.jmeter.protocol.jms.sampler.JMSSampler;
-import org.apache.jmeter.protocol.ldap.sampler.LDAPExtSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -110,7 +108,6 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         sendQueue.setText(""); // $NON-NLS-1$
         receiveQueue.setText(""); // $NON-NLS-1$
         jmsCommunicationStyle.setSelectedIndex(JMS_COMMUNICATION_STYLE_LABELS.length - 1);
-        //((JComboBox<?>) jmsCommunicationStyle.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
         timeout.setText("");  // $NON-NLS-1$
         expiration.setText("");  // $NON-NLS-1$
         priority.setText("");  // $NON-NLS-1$
@@ -136,8 +133,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setSendQueue(sendQueue.getText());
         element.setReceiveQueue(receiveQueue.getText());
 
-        element.setProperty(JMSSampler.COMMUNICATIONSTYLE, String.valueOf(jmsCommunicationStyle.getSelectedIndex()));
-        //element.setJmsCommunicationStyle(jmsConnectionStyle.getText());
+        element.setProperty(JMSSampler.COMMUNICATIONSTYLE, jmsCommunicationStyle.getSelectedIndex());
 
         element.setNonPersistent(useNonPersistentDelivery.isSelected());
         element.setUseReqMsgIdAsCorrelId(useReqMsgIdAsCorrelId.isSelected());
@@ -180,8 +176,6 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         sendQueue.setText(sampler.getSendQueue());
         receiveQueue.setText(sampler.getReceiveQueue());
 
-        //JComboBox<?> box = (JComboBox<?>) jmsConnectionStyle.getComponentList().get(1);
-        //box.setSelectedItem(sampler.getJmsCommunicationStyle());
         jmsCommunicationStyle.setSelectedIndex(el.getPropertyAsInt(JMSSampler.COMMUNICATIONSTYLE));
         
         useNonPersistentDelivery.setSelected(sampler.isNonPersistent());

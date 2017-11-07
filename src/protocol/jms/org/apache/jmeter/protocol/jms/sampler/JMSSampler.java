@@ -50,6 +50,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -91,7 +93,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 	private static final String JMS_NUMBEROFSAMPLES_DEFAULT = "1"; // $NON-NLS-1$
 
-	public static final String COMMUNICATIONSTYLE = "communicationstyle"; // $NON-NLS-1$
+	public static final String COMMUNICATIONSTYLE = "JMSSampler.communicationstyle"; // $NON-NLS-1$
 
 	private static final String JMS_PROPERTIES = "arguments"; // $NON-NLS-1$
 
@@ -109,23 +111,25 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 	private static final String USE_RES_MSGID_AS_CORRELID = "JMSSampler.useResMsgIdAsCorrelId"; // $NON-NLS-1$
 
-	private static final boolean USE_RES_MSGID_AS_CORRELID_DEFAULT = false; // Default to be applied
+	private static final boolean USE_RES_MSGID_AS_CORRELID_DEFAULT = false; // Default
+																			// to
+																			// be
+																			// applied
 
 	private static final int ONE_WAY = 0;
-	
-    private static final int REQUEST_RESPONSE = 1;
-    
-    private static final int READ = 2;
 
-    private static final int BROWSE = 3;
+	private static final int READ = 2;
 
-    private static final int CLEAR = 4;
-	
+	private static final int BROWSE = 3;
+
+	private static final int CLEAR = 4;
+
 	// --
 
-	// Should we use java.naming.security.[principal|credentials] to create the QueueConnection?
-	private static final boolean USE_SECURITY_PROPERTIES = 
-		JMeterUtils.getPropDefault("JMSSampler.useSecurity.properties", true); // $NON-NLS-1$
+	// Should we use java.naming.security.[principal|credentials] to create the
+	// QueueConnection?
+	private static final boolean USE_SECURITY_PROPERTIES = JMeterUtils
+			.getPropDefault("JMSSampler.useSecurity.properties", true); // $NON-NLS-1$
 
 	//
 	// Member variables
@@ -155,43 +159,43 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	private transient Context context = null;
 
 	/**
-     * {@inheritDoc}
-     */
-    @Override
-    public SampleResult sample(Entry entry) {
-    	JMeterContext context = JMeterContextService.getContext();
+	 * {@inheritDoc}
+	 */
+	@Override
+	public SampleResult sample(Entry entry) {
+		JMeterContext context = JMeterContextService.getContext();
 
-        SampleResult res = new SampleResult();
-        res.setSampleLabel(getName());
-        res.setSamplerData(getContent());
-        res.setSuccessful(false); // Assume failure
-        res.setDataType(SampleResult.TEXT);
-        res.sampleStart();
+		SampleResult res = new SampleResult();
+		res.setSampleLabel(getName());
+		res.setSamplerData(getContent());
+		res.setSuccessful(false); // Assume failure
+		res.setDataType(SampleResult.TEXT);
+		res.sampleStart();
 
-        try {
-    		LOGGER.debug("Point-to-point mode: " + getCommunicationstyle());
-            if (isBrowse()) {
+		try {
+			LOGGER.debug("Point-to-point mode: " + getCommunicationstyle());
+			if (isBrowse()) {
 				handleBrowse(res);
 			} else if (isClearQueue()) {
 				handleClearQueue(res);
 			} else if (isOneway()) {
 				handleOneWay(res);
-            }  else if (isRead()) {
-            	handleRead(context, res);
-            } else {
+			} else if (isRead()) {
+				handleRead(context, res);
+			} else {
 				handleRequestResponse(res);
-            }
-        } catch (Exception e) {
-            LOGGER.warn(e.getLocalizedMessage(), e);
-            if (thrown != null){
-                res.setResponseMessage(thrown.toString());
-            } else {                
-                res.setResponseMessage(e.getLocalizedMessage());
-            }
-        }
-        res.sampleEnd();
-        return res;
-    }
+			}
+		} catch (Exception e) {
+			LOGGER.warn(e.getLocalizedMessage(), e);
+			if (thrown != null) {
+				res.setResponseMessage(thrown.toString());
+			} else {
+				res.setResponseMessage(e.getLocalizedMessage());
+			}
+		}
+		res.sampleEnd();
+		return res;
+	}
 
 	private void handleBrowse(SampleResult res) throws JMSException {
 		LOGGER.debug("isBrowseOnly");
@@ -210,14 +214,12 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		sb.append(clearQueue(sendQueue, res));
 		res.setResponseData(sb.toString().getBytes());
 	}
-	
+
 	private void handleOneWay(SampleResult res) throws JMSException {
 		LOGGER.debug("isOneWay");
 		TextMessage msg = createMessage();
-		int deliveryMode = isNonPersistent() ? 
-		        DeliveryMode.NON_PERSISTENT:DeliveryMode.PERSISTENT;
-		producer.send(msg, deliveryMode, Integer.parseInt(getPriority()), 
-		        Long.parseLong(getExpiration()));
+		int deliveryMode = isNonPersistent() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT;
+		producer.send(msg, deliveryMode, Integer.parseInt(getPriority()), Long.parseLong(getExpiration()));
 		res.setRequestHeaders(Utils.messageProperties(msg));
 		res.setResponseOK();
 		res.setResponseData("Oneway request has no response data", null);
@@ -238,20 +240,20 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		int sampleCounter = 0;
 		int sampleTries = 0;
 		String result = null;
-		
+
 		StringBuilder buffer = new StringBuilder();
 		StringBuilder propBuffer = new StringBuilder();
-		
+
 		do {
 			result = browseQueueForConsumption(sendQueue, jmsSelector, res, buffer, propBuffer);
-			if (result!=null) {
+			if (result != null) {
 				sb.append(result);
 				sb.append('\n');
 				sampleCounter++;
 			}
 			sampleTries++;
 		} while ((result != null) && (sampleTries < getNumberOfSamplesToAggregateAsInt()));
-		
+
 		res.setResponseMessage(sampleCounter + " samples messages received");
 		res.setResponseData(buffer.toString().getBytes()); // TODO - charset?
 		res.setResponseHeaders(propBuffer.toString());
@@ -263,10 +265,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 			res.setSuccessful(true);
 		}
 		res.setResponseMessage(sampleCounter + " message(s) received successfully");
-		res.setSamplerData(getNumberOfSamplesToAggregateAsInt()+ " messages expected");
+		res.setSamplerData(getNumberOfSamplesToAggregateAsInt() + " messages expected");
 		res.setSampleCount(sampleCounter);
 	}
-	
+
 	private void handleRequestResponse(SampleResult res) throws JMSException {
 		TextMessage msg = createMessage();
 		if (!useTemporyQueue()) {
@@ -275,20 +277,19 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		}
 		LOGGER.debug("Create temp message");
 		Message replyMsg = executor.sendAndReceive(msg,
-		        isNonPersistent() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT, 
-		        Integer.parseInt(getPriority()), 
-		        Long.parseLong(getExpiration()));
+				isNonPersistent() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT,
+				Integer.parseInt(getPriority()), Long.parseLong(getExpiration()));
 		res.setRequestHeaders(Utils.messageProperties(msg));
 		if (replyMsg == null) {
-		    res.setResponseMessage("No reply message received");
+			res.setResponseMessage("No reply message received");
 		} else {
-		    if (replyMsg instanceof TextMessage) {
-		        res.setResponseData(((TextMessage) replyMsg).getText(), null);
-		    } else {
-		        res.setResponseData(replyMsg.toString(), null);
-		    }
-		    res.setResponseHeaders(Utils.messageProperties(replyMsg));
-		    res.setResponseOK();
+			if (replyMsg instanceof TextMessage) {
+				res.setResponseData(((TextMessage) replyMsg).getText(), null);
+			} else {
+				res.setResponseData(replyMsg.toString(), null);
+			}
+			res.setResponseHeaders(Utils.messageProperties(replyMsg));
+			res.setResponseOK();
 		}
 	}
 
@@ -368,9 +369,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 				corrID = message.getJMSCorrelationID();
 				if (corrID == null) {
 					corrID = message.getJMSMessageID();
-					messageBodies = messageBodies + numMsgs + " - MessageID: " + corrID + ": " + message.getText() + "\n";
+					messageBodies = messageBodies + numMsgs + " - MessageID: " + corrID + ": " + message.getText()
+							+ "\n";
 				} else {
-					messageBodies = messageBodies + numMsgs + " - CorrelationID: " + corrID + ": " + message.getText() + "\n";
+					messageBodies = messageBodies + numMsgs + " - CorrelationID: " + corrID + ": " + message.getText()
+							+ "\n";
 				}
 				numMsgs++;
 			}
@@ -442,7 +445,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	}
 
 	/**
-	 * @param jmsProperties JMS Properties
+	 * @param jmsProperties
+	 *            JMS Properties
 	 */
 	public void setJMSProperties(JMSProperties jmsProperties) {
 		setProperty(new TestElementProperty(JMS_PROPERTIES, jmsProperties));
@@ -511,7 +515,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	/**
 	 * Which request field to use for correlation?
 	 * 
-	 * @return true if correlation should use the request JMSMessageID rather than JMSCorrelationID
+	 * @return true if correlation should use the request JMSMessageID rather
+	 *         than JMSCorrelationID
 	 */
 	public boolean isUseReqMsgIdAsCorrelId() {
 		return getPropertyAsBoolean(USE_REQ_MSGID_AS_CORRELID);
@@ -520,7 +525,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	/**
 	 * Which response field to use for correlation?
 	 * 
-	 * @return true if correlation should use the response JMSMessageID rather than JMSCorrelationID
+	 * @return true if correlation should use the response JMSMessageID rather
+	 *         than JMSCorrelationID
 	 */
 	public boolean isUseResMsgIdAsCorrelId() {
 		return getPropertyAsBoolean(USE_RES_MSGID_AS_CORRELID, USE_RES_MSGID_AS_CORRELID_DEFAULT);
@@ -533,18 +539,18 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	public String getContextProvider() {
 		return getPropertyAsString(JMSSampler.JNDI_CONTEXT_PROVIDER_URL);
 	}
-	
-	public String getCommunicationstyle() {
-		//JMeterUtils.getProperty(propName) //getResString("jms_browse").equals(this.getJmsCommunicationStyle());
+
+	public int getCommunicationstyle() {
+		JMeterProperty prop = getProperty(COMMUNICATIONSTYLE);
+		return  Integer.parseInt(prop.getStringValue());
+	}
+
+	public String getCommunicationstyleString() {
 		return getPropertyAsString(COMMUNICATIONSTYLE);
 	}
 
-	public int getCommunicationstyleAsInt() {
-		return getPropertyAsInt(COMMUNICATIONSTYLE);
-	}
-	
-	public void setCommunicationstyle(String communicationStyle) {
-		setProperty(COMMUNICATIONSTYLE, communicationStyle);
+	public void setCommunicationstyle(int communicationStyle) {
+		setProperty(new IntegerProperty(COMMUNICATIONSTYLE, communicationStyle));
 	}
 
 	public void setNonPersistent(boolean value) {
@@ -672,7 +678,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 					LOGGER.debug("{}={}", entry.getKey(), entry.getValue());
 				}
 			} else {
-				LOGGER.warn("context.getEnvironment() returned null (should not happen according to javadoc but non compliant implementation can return this)");
+				LOGGER.warn(
+						"context.getEnvironment() returned null (should not happen according to javadoc but non compliant implementation can return this)");
 			}
 		} catch (javax.naming.OperationNotSupportedException ex) {
 			// Some JNDI implementation can return this
@@ -803,14 +810,16 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	}
 
 	/**
-	 * @param string name of the initial context factory to use
+	 * @param string
+	 *            name of the initial context factory to use
 	 */
 	public void setInitialContextFactory(String string) {
 		setProperty(JNDI_INITIAL_CONTEXT_FACTORY, string);
 	}
 
 	/**
-	 * @param string url of the provider
+	 * @param string
+	 *            url of the provider
 	 */
 	public void setContextProvider(String string) {
 		setProperty(JNDI_CONTEXT_PROVIDER_URL, string);
