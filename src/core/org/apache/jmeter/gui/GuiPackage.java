@@ -797,7 +797,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @param menuItemLoggerPanel The menu item LoggerPanel
      */
     public void setMenuItemLoggerPanel(JCheckBoxMenuItem menuItemLoggerPanel) {
-    	this.menuItemLoggerPanel = menuItemLoggerPanel;
+        this.menuItemLoggerPanel = menuItemLoggerPanel;
     }
         
     /**
@@ -806,7 +806,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @return the menu item LoggerPanel
      */
     public JCheckBoxMenuItem getMenuItemLoggerPanel() {
-    	return menuItemLoggerPanel;
+        return menuItemLoggerPanel;
     }
     
     /**
