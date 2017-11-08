@@ -216,11 +216,6 @@ public final class ActionRouter implements ActionListener {
         removeActionListener(action, listener, preActionListeners);
     }
 
-    /**
-     * @param action {@link Class}
-     * @param e {@link ActionListener}
-     * @param actionListeners {@link Set}
-     */
     private void removeActionListener(Class<?> action, ActionListener listener, Map<String, Set<ActionListener>> actionListeners) {
         if (action != null) {
             Set<ActionListener> set = actionListeners.get(action.getName());
@@ -248,7 +243,7 @@ public final class ActionRouter implements ActionListener {
 
     /**
      * @param action {@link Class}
-     * @param list {@link ActionListener}
+     * @param listener {@link ActionListener}
      * @param actionListeners {@link Set}
      */
     private void addActionListener(Class<?> action, ActionListener listener, Map<String, Set<ActionListener>> actionListeners) {

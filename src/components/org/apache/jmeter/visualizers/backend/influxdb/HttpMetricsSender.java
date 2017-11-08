@@ -110,11 +110,6 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
         httpClient.start();
     }
 
-    /**
-     * @param influxdbUrl
-     * @return 
-     * @throws URISyntaxException 
-     */
     private HttpPost createRequest(URL url) throws URISyntaxException {
         RequestConfig defaultRequestConfig = RequestConfig.custom()
                 .setConnectTimeout(JMeterUtils.getPropDefault("backend_influxdb.connection_timeout", 1000))
