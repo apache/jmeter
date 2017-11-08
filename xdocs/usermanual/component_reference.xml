@@ -434,11 +434,6 @@ If not using a file, attach a Header Manager to the sampler and define the Conte
 However the <code>Java</code> sampler only supports slow HTTPS connections.
 </p>
 <p><b>Response size calculation</b><br></br>
-Optional properties to allow change the method to get response size:<br></br></p>
-<ul><li>Gets the real network size in bytes for the body response
-<source>sampleresult.getbytes.body_real_size=true</source></li>
-<li>Add HTTP headers to full response size
-<source>sampleresult.getbytes.headers_size=true</source></li></ul>
 
 <note>
 The <code>Java</code> implementation does not include transport overhead such as
@@ -446,8 +441,7 @@ chunk headers in the response body size.<br></br>
 The <code>HttpClient4</code> implementation does include the overhead in the response body size,
 so the value may be greater than the number of bytes in the response content.
 </note>
-
-<note>When those two properties are set  <code>false</code>, JMeter returns only data response size (uncompressed if request uses gzip/deflate mode).</note>
+</p>
 <p>
 <b>Retry handling</b><br></br>
 By default retry has been set to 0 for both HttpClient4 and Java implementations, meaning no retry is attempted.<br/>  
