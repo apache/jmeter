@@ -163,6 +163,7 @@ Summary
     <li><bug>61651</bug>Improve OS test coverage. Partly contributed by Aleksei Balan (abalanonline at gmail.com)</li> 
     <li><pr>319</pr> Removed commented out code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>322</pr> General JavaDoc cleanup. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>323</pr> Extracted method and used streams to improve readability. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
