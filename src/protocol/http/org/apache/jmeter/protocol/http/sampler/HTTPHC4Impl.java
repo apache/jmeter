@@ -137,6 +137,7 @@ import org.apache.http.protocol.HttpRequestExecutor;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.http.api.auth.DigestParameters;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
@@ -268,6 +269,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         
     };
 
+    private static final String DIGEST_PARAMETERS = DigestParameters.VARIABLE_NAME;
+
     
     private static final HttpRequestInterceptor PREEMPTIVE_AUTH_INTERCEPTOR = new HttpRequestInterceptor() {
         //@Override
@@ -331,8 +334,21 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                                 BasicScheme basicAuth = new BasicScheme();
                                 authCache.put(targetHost, basicAuth);
                             } else if (authorization.getMechanism() == Mechanism.DIGEST) {
-                                DigestScheme digestAuth = new DigestScheme();
+                                DigestScheme digestAuth = (DigestScheme) authCache.get(targetHost);
+                                if(digestAuth == null) {
+                                    digestAuth = new DigestScheme();
+                                }
+                                JMeterVariables vars = JMeterContextService.getContext().getVariables();
+                                DigestParameters digestParameters = (DigestParameters)
+                                        vars.getObject(DIGEST_PARAMETERS);
                                 digestAuth.overrideParamter("realm", authScope.getRealm());
+                                if(digestParameters!=null) {
+                                    digestAuth.overrideParamter("algorithm", digestParameters.getAlgorithm());
+                                    digestAuth.overrideParamter("charset", digestParameters.getCharset());
+                                    digestAuth.overrideParamter("nonce", digestParameters.getNonce());
+                                    digestAuth.overrideParamter("opaque", digestParameters.getOpaque());
+                                    digestAuth.overrideParamter("qop", digestParameters.getQop());
+                                }
                                 authCache.put(targetHost, digestAuth);
                             } else if (authorization.getMechanism() == Mechanism.KERBEROS) {
                                 KerberosScheme kerberosScheme = new KerberosScheme();
