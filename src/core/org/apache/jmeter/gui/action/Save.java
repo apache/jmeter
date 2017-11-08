@@ -329,11 +329,9 @@ public class Save extends AbstractAction {
                     backupDir.getAbsolutePath()); //$NON-NLS-2$
         }
 
-        /**
-         *  select files matching
-         * {baseName}{versionSeparator}{version}{jmxExtension}
-         * where {version} is a 6 digits number
-         */
+        // select files matching
+        // {baseName}{versionSeparator}{version}{jmxExtension}
+        // where {version} is a 6 digits number
         String backupPatternRegex = Pattern.quote(baseName + versionSeparator) + "([\\d]{6})" + Pattern.quote(JMX_FILE_EXTENSION); //$NON-NLS-1$
         Pattern backupPattern = Pattern.compile(backupPatternRegex);
         // create a file filter that select files matching a given regex pattern
