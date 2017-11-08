@@ -120,6 +120,7 @@ Summary
 <h3>Functions</h3>
 <ul>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
+    <li><bug>61738</bug>Function Helper Dialog : Add Copy in Generate and clarify labels</li>
     <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
     <li><bug>61724</bug>Add <code>__digest</code> function to provide computing of Hashes (SHA-XXX, MDX). Based on a contribution by orimarko at gmail.com</li>
 </ul>
