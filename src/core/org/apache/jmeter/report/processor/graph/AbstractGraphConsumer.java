@@ -252,11 +252,11 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Adds a value map build from specified parameters to the result map.
-     *
+     * @param result {@link MapResultData}
+     * @param group 
+     * @param series
      * @param seriesData
-     *            the seriesData
-     * @param map
-     *            the groupData map
+     * @param aggregated
      */
     private void addKeyData(MapResultData result, String group, String series,
             SeriesData seriesData, boolean aggregated) {
@@ -387,13 +387,6 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Aggregate a value to the aggregator defined by the specified parameters.
-     *
-     * @param groupData
-     *            the map
-     * @param key
-     *            the key
-     * @param value
-     *            the value
      */
     private void aggregateValue(AggregatorFactory factory, SeriesData data,
             Double key, double value) {
