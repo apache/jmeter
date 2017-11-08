@@ -56,6 +56,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jorphan.gui.ComponentUtil;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
@@ -191,6 +192,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         }
         functionCall.append("}");
         cutPasteFunction.setText(functionCall.toString());
+        GuiUtils.copyTextToClipboard(cutPasteFunction.getText());
         CompoundVariable function = new CompoundVariable(functionCall.toString());
         try {
             resultTextArea.setText(function.execute().trim());
