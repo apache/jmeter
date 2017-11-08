@@ -149,7 +149,7 @@ Summary
     <li><bug>61694</bug>Add -server option in jmeter.bat</li>
     <li><bug>61697</bug>Introduce Darcula Look And Feel to make JMeter UI more attractive</li>
     <li><bug>61704</bug>Toolbar : Improve a bit the right part</li>
-    <li><pr>319</pr> Removed commented out code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61731</bug>Enhance Test plan Backup with option to save before run. Based on a contribution by orimarko at gmail.com</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -160,6 +160,7 @@ Summary
     <li><bug>61641</bug>Improve JMS test coverage</li>
     <li><bug>61651</bug>Improve TCP test coverage</li>
     <li><bug>61651</bug>Improve OS test coverage. Partly contributed by Aleksei Balan (abalanonline at gmail.com)</li> 
+    <li><pr>319</pr> Removed commented out code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

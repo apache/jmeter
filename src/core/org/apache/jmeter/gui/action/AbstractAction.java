@@ -22,7 +22,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.Iterator;
-import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -43,7 +42,7 @@ public abstract class AbstractAction implements Command {
         DELETE,
         ASK
     }
-    
+
     private static final ActionOnFile actionOnFile = 
             ActionOnFile.valueOf(
                     JMeterUtils.getPropDefault(
@@ -58,18 +57,22 @@ public abstract class AbstractAction implements Command {
     }
 
     /**
-     * @param e the event that led to the call of this method
+     * Check if we should save before run
+     * 
+     * @param e
+     *            the event that led to the call of this method
      */
     protected void popupShouldSave(ActionEvent e) {
         log.debug("popupShouldSave");
         if (GuiPackage.getInstance().getTestPlanFile() == null) {
             if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
-                    JMeterUtils.getResString("should_save"),  //$NON-NLS-1$
-                    JMeterUtils.getResString("warning"),  //$NON-NLS-1$
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(),ActionNames.SAVE));
+                    JMeterUtils.getResString("should_save"), //$NON-NLS-1$
+                    JMeterUtils.getResString("warning"), //$NON-NLS-1$
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
             }
+        } else if (GuiPackage.getInstance().shouldSaveBeforeRun()) {
+            ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
         }
     }
     
