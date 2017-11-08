@@ -332,6 +332,7 @@ public final class ClassFinder {
             }
             boolean found = false;
             for (String currentStrPathOrJar : strPathsOrJars) {
+                log.debug("Testing if {} ends with {}", classpathElement, currentStrPathOrJar);
                 if (currentStrPathOrJar != null && classpathElement.endsWith(currentStrPathOrJar)) {
                     found = true;
                     log.debug("Adding {}", classpathElement);
