@@ -340,18 +340,8 @@ public class Save extends AbstractAction {
         IOFileFilter patternFileFilter = new PrivatePatternFileFilter(backupPattern);
         // get all backup files in the backup directory
         List<File> backupFiles = new ArrayList<>(FileUtils.listFiles(backupDir, patternFileFilter, null));
-        // find the highest version number among existing backup files (this
-        // should be the more recent backup)
-        int lastVersionNumber = 0;
-        for (File backupFile : backupFiles) {
-            Matcher matcher = backupPattern.matcher(backupFile.getName());
-            if (matcher.find() && matcher.groupCount() > 0) {
-                // parse version number from the backup file name
-                // should never fail as it matches the regex
-                int version = Integer.parseInt(matcher.group(1));
-                lastVersionNumber = Math.max(lastVersionNumber, version);
-            }
-        }
+        // this should be the most recent backup
+        int lastVersionNumber = getHighestVersionNumber(backupPattern, backupFiles);
         // find expired backup files
         List<File> expiredFiles = new ArrayList<>();
         if (BACKUP_MAX_HOURS > 0) {
@@ -392,6 +382,15 @@ public class Save extends AbstractAction {
             expiredFiles.addAll(backupFiles.subList(0, backupFiles.size() - BACKUP_MAX_COUNT));
         }
         return expiredFiles;
+    }
+
+    private int getHighestVersionNumber(Pattern backupPattern, List<File> backupFiles) {
+        return backupFiles.stream()
+                .map(backupFile -> backupPattern.matcher(backupFile.getName()))
+                .filter(matcher -> matcher.find() && matcher.groupCount() > 0)
+                .mapToInt(matcher -> Integer.parseInt(matcher.group(1)))
+                .max()
+                .orElse(0);
     }
     
     /**
