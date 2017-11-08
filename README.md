@@ -220,7 +220,7 @@ may be subject to export controls on cryptographic software:
 
     - HTTPS support
 
-  Apache JMeter interfaces (via Apache HttpClient3) with the
+  Apache JMeter interfaces (via Apache HttpClient4) with the
   Java Cryptography Extension (JCE) API to provide
 
     - NTLM authentication
