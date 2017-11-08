@@ -20,9 +20,14 @@ package org.apache.jmeter.protocol.java.sampler;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.test.JavaTest;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -223,4 +228,27 @@ public class JavaSamplerContext {
             return defaultValue;
         }
     }
+    
+    /**
+     * 
+     * @return {@link JMeterContext}
+     */
+    public JMeterContext getJMeterContext() {
+        return JMeterContextService.getContext();
+    }
+    /**
+     * @return {@link JMeterVariables}
+     */
+    public final JMeterVariables getJMeterVariables() {
+        return JMeterContextService.getContext().getVariables();
+    }
+    
+    /**
+     * 
+     * @return {@link Properties} JMeter properties
+     */
+    public final Properties getJMeterProperties() {
+        return JMeterUtils.getJMeterProperties();
+    }
+    
 }
