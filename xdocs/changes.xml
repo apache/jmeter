@@ -80,6 +80,7 @@ Summary
     <li><code>tearDown Thread Group</code> will now run on stop and shutdown of a test by default. If you don't want this behaviour, 
     uncheck <code>Run tearDown Thread Groups after shutdown of main threads</code> on <code>Test Plan</code> element, see <bugzilla>61656</bugzilla></li>
     <li>Properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code> have been dropped, see <bugzilla>61587</bugzilla></li>
+    <li>JMeter will now save your test plan whenever you run it. This behaviour can be controlled by property <code>save_automatically_before_run</code></li>
 </ul>
 <!-- =================== Improvements =================== -->
 

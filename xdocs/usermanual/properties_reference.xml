@@ -270,6 +270,11 @@ gui.quick_9=ViewResultsFullVisualizer
     is set to a non zero value).<br/>
     Defaults to: <code>10</code>
 </property>
+<property name="save_automatically_before_run">
+Enable auto saving of the .jmx file before start run a test plan<br/>
+When enabled, before the run, the .jmx will be saved and also backed up to the directory pointed.<br/>
+Defaults to: <code>true</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.7 Remote hosts and RMI configuration" anchor="remote">
