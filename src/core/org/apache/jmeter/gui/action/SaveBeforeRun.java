@@ -23,33 +23,33 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
+
 /**
- * Save Before Run Action
- * To save test plan before GUI execution
+ * Save Before Run Action To save test plan before GUI execution
  * 
  * @since 4.0
  */
 public class SaveBeforeRun extends AbstractAction {
-	private static final Set<String> commands = new HashSet<>();
-		
-	static {
-		commands.add(ActionNames.SAVE_BEFORE_RUN);
-	}
+    private static final Set<String> commands = new HashSet<>();
 
-	@Override
-	public Set<String> getActionNames() {
-		return commands;
-	}
+    static {
+        commands.add(ActionNames.SAVE_BEFORE_RUN);
+    }
 
-	@Override
-	public void doAction(ActionEvent e) {
-		if (ActionNames.SAVE_BEFORE_RUN.equals(e.getActionCommand())) {
-			// toggle boolean preference value
+    @Override
+    public Set<String> getActionNames() {
+        return commands;
+    }
+
+    @Override
+    public void doAction(ActionEvent e) {
+        if (ActionNames.SAVE_BEFORE_RUN.equals(e.getActionCommand())) {
+            // toggle boolean preference value
             GuiPackage guiInstance = GuiPackage.getInstance();
-			boolean togglePreferenceValue = !guiInstance.shouldSaveBeforeRunByPreference();
-			guiInstance.setSaveBeforeRunByPreference(togglePreferenceValue);
-			// toggle check box
+            boolean togglePreferenceValue = !guiInstance.shouldSaveBeforeRunByPreference();
+            guiInstance.setSaveBeforeRunByPreference(togglePreferenceValue);
+            // toggle check box
             guiInstance.getMenuItemSaveBeforeRunPanel().getModel().setSelected(togglePreferenceValue);
-		}
-	}
+        }
+    }
 }

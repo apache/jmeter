@@ -371,7 +371,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem zoomOut = makeMenuItemRes("menu_zoom_out", ActionNames.ZOOM_OUT); //$NON-NLS-1$
         optionsMenu.add(zoomOut);        
         JCheckBoxMenuItem saveBeforeRun = makeCheckBoxMenuItemRes("menu_save_before_run", ActionNames.SAVE_BEFORE_RUN); //$NON-NLS-1$
-        if (guiInstance != null) {        	
+        if (guiInstance != null) {
             saveBeforeRun.setSelected(guiInstance.shouldSaveBeforeRunByPreference());
             guiInstance.setMenuItemSaveBeforeRunPanel(saveBeforeRun);
         }
