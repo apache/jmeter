@@ -111,8 +111,8 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     }
 
     /**
-     * @param influxdbUrl
-     * @return 
+     * @param url {@link URL} Influxdb Url
+     * @return {@link HttpPost}
      * @throws URISyntaxException 
      */
     private HttpPost createRequest(URL url) throws URISyntaxException {
