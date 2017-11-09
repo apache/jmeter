@@ -138,10 +138,10 @@ public class Save extends AbstractAction {
                 return;
             }
             subTree = GuiPackage.getInstance().getCurrentSubTree();
-        } 
+        }
         else if (e.getActionCommand().equals(ActionNames.SAVE_AS_TEST_FRAGMENT)) {
             JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
-            if(checkAcceptableForTestFragment(nodes)) {                
+            if(checkAcceptableForTestFragment(nodes)) {
                 subTree = GuiPackage.getInstance().getCurrentSubTree();
                 // Create Test Fragment node
                 TestElement element = GuiPackage.getInstance().createTestElement(TestFragmentControllerGui.class.getName());
@@ -154,9 +154,9 @@ public class Save extends AbstractAction {
                     // Add clone to tfTree
                     tfTree.add(cloner.getClonedTree());
                 }
-                                
+
                 subTree = hashTree;
-                
+
             } else {
                 JMeterUtils.reportErrorToUser(
                         JMeterUtils.getResString("save_as_test_fragment_error"), // $NON-NLS-1$
@@ -166,7 +166,7 @@ public class Save extends AbstractAction {
         } else {
             fullSave = true;
             HashTree testPlan = GuiPackage.getInstance().getTreeModel().getTestPlan();
-            // If saveWorkBench 
+            // If saveWorkBench
             if (isWorkbenchSaveable()) {
                 HashTree workbench = GuiPackage.getInstance().getTreeModel().getWorkBench();
                 testPlan.add(workbench);
@@ -327,13 +327,13 @@ public class Save extends AbstractAction {
         backupDir.mkdirs();
         if (!backupDir.isDirectory()) {
             log.error(
-                    "Could not backup file ! Backup directory does not exist, is not a directory or could not be created ! <{}>", //$NON-NLS-1$
-                    backupDir.getAbsolutePath()); //$NON-NLS-2$
+                    "Could not backup file! Backup directory does not exist, is not a directory or could not be created ! <{}>", //$NON-NLS-1$
+                    backupDir.getAbsolutePath());
         }
 
         // select files matching
         // {baseName}{versionSeparator}{version}{jmxExtension}
-        // where {version} is a 6 digits number
+        // where {version} is a 6 digit number
         String backupPatternRegex = Pattern.quote(baseName + versionSeparator) + "([\\d]{6})" + Pattern.quote(JMX_FILE_EXTENSION); //$NON-NLS-1$
         Pattern backupPattern = Pattern.compile(backupPatternRegex);
         // create a file filter that select files matching a given regex pattern
@@ -352,33 +352,27 @@ public class Save extends AbstractAction {
             IOFileFilter expiredFileFilter = FileFilterUtils.ageFileFilter(expiryDate, true);
             expiredFiles.addAll(FileFilterUtils.filterList(expiredFileFilter, backupFiles));
         }
-        // sort backups from by their last modified time
         Collections.sort(backupFiles, (o1, o2) -> {
             long diff = o1.lastModified() - o2.lastModified();
-            // convert the long to an int in order to comply with the method
-            // contract
             return diff < 0 ? -1 : diff > 0 ? 1 : 0;
         });
-        /**
-         *  backup name is of the form 
-         * {baseName}{versionSeparator}{version}{jmxExtension}
-         */
+
+        // backup name is of the form:
+        // {baseName}{versionSeparator}{version}{jmxExtension}
         String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1L) + JMX_FILE_EXTENSION;
         File backupFile = new File(backupDir, backupName);
         // create file backup
         try {
             FileUtils.copyFile(fileToBackup, backupFile);
         } catch (IOException e) {
-            log.error("Failed to backup file : {}", fileToBackup.getAbsolutePath(), e); //$NON-NLS-1$
+            log.error("Failed to backup file: {}", fileToBackup.getAbsolutePath(), e); //$NON-NLS-1$
             return EMPTY_FILE_LIST;
         }
         // add the fresh new backup file (list is still sorted here)
         backupFiles.add(backupFile);
-        // unless max backups is not set, ensure that we don't keep more backups
-        // than required
+        // if max backups is set, ensure that we don't keep more backups than required
         if (BACKUP_MAX_COUNT > 0 && backupFiles.size() > BACKUP_MAX_COUNT) {
-            // keep the most recent files in the limit of the specified max
-            // count
+            // keep the most recent files within limit of the specified max
             expiredFiles.addAll(backupFiles.subList(0, backupFiles.size() - BACKUP_MAX_COUNT));
         }
         return expiredFiles;
