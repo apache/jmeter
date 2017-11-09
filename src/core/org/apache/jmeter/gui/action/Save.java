@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -41,7 +40,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
-import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.jmeter.control.gui.TestFragmentControllerGui;
 import org.apache.jmeter.engine.TreeCloner;
@@ -98,7 +96,9 @@ public class Save extends AbstractAction {
 
     // NumberFormat to format version number in backup file names
     private static final DecimalFormat BACKUP_VERSION_FORMATER = new DecimalFormat("000000"); //$NON-NLS-1$
-    
+
+    private static final int MS_PER_HOUR = 60 * 60 * 1000;
+
     private static final Set<String> commands = new HashSet<>();
 
     static {
@@ -377,24 +377,35 @@ public class Save extends AbstractAction {
                 .orElse(0);
     }
 
+    /**
+     * Filters list of backup files to those which are candidates for deletion.
+     * @param backupFiles list of all backup files
+     * @return list of files to be deleted based upon properties described {@link #createBackupFile(File)}
+     */
     private List<File> backupFilesToDelete(List<File> backupFiles) {
-        List<File> expiredFiles = new ArrayList<>();
+        List<File> filesToDelete = new ArrayList<>();
         if (BACKUP_MAX_HOURS > 0) {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.HOUR_OF_DAY, -BACKUP_MAX_HOURS);
-            long expiryDate = cal.getTime().getTime();
-            // select expired files that should be deleted
-            IOFileFilter expiredFileFilter = FileFilterUtils.ageFileFilter(expiryDate, true);
-            expiredFiles.addAll(FileFilterUtils.filterList(expiredFileFilter, backupFiles));
+            filesToDelete.addAll(expiredBackupFiles(backupFiles));
         }
         // if max backups is set, ensure that we don't keep more backups than required
         if (BACKUP_MAX_COUNT > 0 && backupFiles.size() > BACKUP_MAX_COUNT) {
             // keep the most recent files within limit of the specified max
-            expiredFiles.addAll(backupFiles.subList(0, backupFiles.size() - BACKUP_MAX_COUNT));
+            filesToDelete.addAll(backupFiles.subList(0, backupFiles.size() - BACKUP_MAX_COUNT));
         }
-        return expiredFiles.stream()
-                .distinct() // ensure no duplicates
+        return filesToDelete.stream()
+                .distinct() // ensure no duplicates from the two checks
                 .collect(Collectors.toList());
+    }
+
+    private List<File> expiredBackupFiles(List<File> backupFiles) {
+        if (BACKUP_MAX_HOURS > 0) {
+            long expiryMillis = System.currentTimeMillis() - (BACKUP_MAX_HOURS * MS_PER_HOUR);
+            return backupFiles.stream()
+                    .filter(file -> file.lastModified() < expiryMillis)
+                    .collect(Collectors.toList());
+        } else {
+            return EMPTY_FILE_LIST;
+        }
     }
 
     /**
