@@ -85,7 +85,7 @@
   -->
 
   <!-- Minimal version of Apache Ant required by this Ant script -->
-  <property name="ant.version.required" value="1.8.2" />
+  <property name="ant.version.required" value="1.9.1" />
 
   <!-- Are we running under Gump? -->
   <property name="gump.run" value="false"/>
