@@ -24,16 +24,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -405,17 +408,16 @@ public class Save extends AbstractAction {
 
     /**
      * Check nodes does not contain a node of type TestPlan or ThreadGroup
-     * @param nodes
+     * @param nodes the nodes to check for TestPlans or ThreadGroups
      */
     private static boolean checkAcceptableForTestFragment(JMeterTreeNode[] nodes) {
-        for (JMeterTreeNode node : nodes) {
-            Object userObject = node.getUserObject();
-            if (userObject instanceof ThreadGroup ||
-                    userObject instanceof TestPlan) {
-                return false;
-            }
-        }
-        return true;
+        return Arrays.stream(nodes)
+                .map(DefaultMutableTreeNode::getUserObject)
+                .noneMatch(threadGroupOrTestPlan());
+    }
+
+    private static Predicate<Object> threadGroupOrTestPlan() {
+        return o -> o instanceof ThreadGroup || o instanceof TestPlan;
     }
 
     // package protected to allow access from test code
