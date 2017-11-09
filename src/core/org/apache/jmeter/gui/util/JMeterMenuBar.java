@@ -151,7 +151,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     public static final String DARCULA_LAF = "Darcula"; // $NON-NLS-1$
 
     public static final String DARCULA_LAF_CLASS = "com.bulenkov.darcula.DarculaLaf"; // $NON-NLS-1$
-
+    
     public JMeterMenuBar() {
         // List for recent files menu items
         fileLoadRecentFiles = new LinkedList<>();
@@ -369,7 +369,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem zoomIn = makeMenuItemRes("menu_zoom_in", ActionNames.ZOOM_IN); //$NON-NLS-1$
         optionsMenu.add(zoomIn);
         JMenuItem zoomOut = makeMenuItemRes("menu_zoom_out", ActionNames.ZOOM_OUT); //$NON-NLS-1$
-        optionsMenu.add(zoomOut);
+        optionsMenu.add(zoomOut);        
+        JCheckBoxMenuItem saveBeforeRun = makeCheckBoxMenuItemRes("menu_save_before_run", ActionNames.SAVE_BEFORE_RUN); //$NON-NLS-1$
+        if (guiInstance != null) {
+            saveBeforeRun.setSelected(guiInstance.shouldSaveBeforeRunByPreference());
+            guiInstance.setMenuItemSaveBeforeRunPanel(saveBeforeRun);
+        }
+        optionsMenu.add(saveBeforeRun);
 
         addPluginsMenuItems(optionsMenu, menuCreators, MENU_LOCATION.OPTIONS);
     }

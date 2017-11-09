@@ -20,6 +20,7 @@ package org.apache.jmeter.functions;
 
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -138,6 +139,28 @@ public abstract class AbstractFunction implements Function {
                     getReferenceKey() +
                     " called with wrong number of parameters. Actual: "+num+". Expected at least: "+minimum+"."
                    );
+        }
+    }
+    
+    /**
+     * Utility method to store value in a variable
+     * @param value
+     *            value of variable to update
+     * @param values
+     *            array of {@link CompoundVariable} from which variable name
+     *            will be extracted
+     * @param index
+     *            index of variable in values array
+     */
+    protected final void addVariableValue(String value, CompoundVariable[] values, int index) {
+        if (values.length > index) {
+            String variableName = values[index].execute().trim();
+            if (StringUtils.isNotEmpty(variableName)) {
+                JMeterVariables vars = getVariables();
+                if (vars != null) {
+                    vars.put(variableName, value);
+                }
+            }
         }
     }
 }

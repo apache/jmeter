@@ -307,7 +307,7 @@ public final class ClassFinder {
 
     /**
      * Returns the classpath entries that match the search list of jars and paths
-     * @param List can contain {@code null} element but must not be {@code null}
+     * @param strPathsOrJars can contain {@code null} element but must not be {@code null}
      * @return List of paths (jars or folders) that ends with one of the rows of strPathsOrJars
      */
     private static List<String> getClasspathMatches(List<String> strPathsOrJars) {
@@ -332,6 +332,7 @@ public final class ClassFinder {
             }
             boolean found = false;
             for (String currentStrPathOrJar : strPathsOrJars) {
+                log.debug("Testing if {} ends with {}", classpathElement, currentStrPathOrJar);
                 if (currentStrPathOrJar != null && classpathElement.endsWith(currentStrPathOrJar)) {
                     found = true;
                     log.debug("Adding {}", classpathElement);

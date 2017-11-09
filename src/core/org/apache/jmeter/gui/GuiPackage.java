@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.prefs.Preferences;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JOptionPane;
@@ -72,6 +73,14 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** Logging. */
     private static final Logger log = LoggerFactory.getLogger(GuiPackage.class);
 
+    private static final String SBR_PREFS_KEY = "save_before_run";
+
+    private static final String SAVE_BEFORE_RUN_PROPERTY = "save_automatically_before_run"; // $NON-NLS-1$
+    
+    private static final boolean SAVE_BEFORE_RUN_PROPERTY_DEFAULT_VALUE = true;
+
+    private static final Preferences PREFS = Preferences.userNodeForPackage(GuiPackage.class);
+
     /** Singleton instance. */
     private static GuiPackage guiPack;
 
@@ -115,12 +124,17 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /** The main JMeter toolbar. */
     private JToolBar toolbar;
-
+    
     /**
      * The LoggerPanel menu item
      */
     private JCheckBoxMenuItem menuItemLoggerPanel;
 
+    /**
+     * The LoggerPanel menu item
+     */
+    private JCheckBoxMenuItem menuItemSaveBeforeRunPanel;
+    
     /**
      * Logger Panel reference
      */
@@ -785,7 +799,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     public void setMenuItemLoggerPanel(JCheckBoxMenuItem menuItemLoggerPanel) {
         this.menuItemLoggerPanel = menuItemLoggerPanel;
     }
-
+        
     /**
      * Get the menu item LoggerPanel.
      *
@@ -793,6 +807,25 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public JCheckBoxMenuItem getMenuItemLoggerPanel() {
         return menuItemLoggerPanel;
+    }
+    
+    /**
+     * Set the menu item SaveBeforeRunPanel.
+     * 
+     * @param menuItemSaveBeforeRunPanel
+     *            The menu item SaveBeforeRunPanel
+     */
+    public void setMenuItemSaveBeforeRunPanel(JCheckBoxMenuItem menuItemSaveBeforeRunPanel) {
+        this.menuItemSaveBeforeRunPanel = menuItemSaveBeforeRunPanel;
+    }
+
+    /**
+     * Get the menu item SaveBeforeRunPanel.
+     *
+     * @return the menu item SaveBeforeRunPanel
+     */
+    public JCheckBoxMenuItem getMenuItemSaveBeforeRunPanel() {
+        return menuItemSaveBeforeRunPanel;
     }
 
     /**
@@ -919,5 +952,38 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public void endUndoTransaction() {
         undoHistory.endUndoTransaction();
+    }
+    
+    
+    /**
+     * Should Save Before Run by Preference Only
+     * @return boolean
+     */
+    public boolean shouldSaveBeforeRunByPreference() {
+        return Boolean.TRUE.toString().
+                equalsIgnoreCase(PREFS.get(SBR_PREFS_KEY, null));
+    }
+    
+    /**
+     * Should Save Before Run by Preference Only
+     * @param saveBeforeRun boolean
+     */
+    public void setSaveBeforeRunByPreference(boolean saveBeforeRun) {
+        PREFS.put(SBR_PREFS_KEY, Boolean.toString(saveBeforeRun)); // $NON-NLS-1$ // $NON-NLS-2$
+    }
+    
+    /**
+     * Should Save Before Run 
+     * Decide by Preference and if not exists by Property
+     */
+    public boolean shouldSaveBeforeRun() {
+        String sbr = PREFS.get(SBR_PREFS_KEY, null);
+        if (sbr == null) {
+            // use property if no preference
+            return JMeterUtils.getPropDefault(SAVE_BEFORE_RUN_PROPERTY, 
+                    SAVE_BEFORE_RUN_PROPERTY_DEFAULT_VALUE);         
+        } else {
+            return shouldSaveBeforeRunByPreference();
+        }
     }
 }
