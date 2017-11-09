@@ -25,7 +25,7 @@
 ##   ==============================================
 # Make sure prerequisite environment variables are set
 if [ -z "$JAVA_HOME" -a -z "$JRE_HOME" ]; then
-  if [ "$(uname)" = "Darwin" ]; then
+  if [ "`uname`" = "Darwin" ]; then
     #
     if [ -x '/usr/libexec/java_home' ] ; then
       export JAVA_HOME=`/usr/libexec/java_home`
