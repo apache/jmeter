@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -349,16 +350,6 @@ public class Save extends AbstractAction {
         backupFiles.sort(LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
         // this should be the most recent backup
         int lastVersionNumber = getHighestVersionNumber(backupPattern, backupFiles);
-        // find expired backup files
-        List<File> expiredFiles = new ArrayList<>();
-        if (BACKUP_MAX_HOURS > 0) {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.HOUR_OF_DAY, -BACKUP_MAX_HOURS);
-            long expiryDate = cal.getTime().getTime();
-            // select expired files that should be deleted
-            IOFileFilter expiredFileFilter = FileFilterUtils.ageFileFilter(expiryDate, true);
-            expiredFiles.addAll(FileFilterUtils.filterList(expiredFileFilter, backupFiles));
-        }
 
         // backup name is of the form:
         // {baseName}{versionSeparator}{version}{jmxExtension}
@@ -374,14 +365,10 @@ public class Save extends AbstractAction {
             log.error("Failed to backup file: {}", fileToBackup.getAbsolutePath(), e); //$NON-NLS-1$
             return EMPTY_FILE_LIST;
         }
-        // add the fresh new backup file (list is still sorted here)
+        // add the new backup file (list is still sorted here)
         backupFiles.add(backupFile);
-        // if max backups is set, ensure that we don't keep more backups than required
-        if (BACKUP_MAX_COUNT > 0 && backupFiles.size() > BACKUP_MAX_COUNT) {
-            // keep the most recent files within limit of the specified max
-            expiredFiles.addAll(backupFiles.subList(0, backupFiles.size() - BACKUP_MAX_COUNT));
-        }
-        return expiredFiles;
+
+        return backupFilesToDelete(backupFiles);
     }
 
     /**
@@ -397,7 +384,27 @@ public class Save extends AbstractAction {
                 .max()
                 .orElse(0);
     }
-    
+
+    private List<File> backupFilesToDelete(List<File> backupFiles) {
+        List<File> expiredFiles = new ArrayList<>();
+        if (BACKUP_MAX_HOURS > 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.HOUR_OF_DAY, -BACKUP_MAX_HOURS);
+            long expiryDate = cal.getTime().getTime();
+            // select expired files that should be deleted
+            IOFileFilter expiredFileFilter = FileFilterUtils.ageFileFilter(expiryDate, true);
+            expiredFiles.addAll(FileFilterUtils.filterList(expiredFileFilter, backupFiles));
+        }
+        // if max backups is set, ensure that we don't keep more backups than required
+        if (BACKUP_MAX_COUNT > 0 && backupFiles.size() > BACKUP_MAX_COUNT) {
+            // keep the most recent files within limit of the specified max
+            expiredFiles.addAll(backupFiles.subList(0, backupFiles.size() - BACKUP_MAX_COUNT));
+        }
+        return expiredFiles.stream()
+                .distinct() // ensure no duplicates
+                .collect(Collectors.toList());
+    }
+
     /**
      * check if the workbench should be saved
      */
