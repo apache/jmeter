@@ -336,14 +336,15 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
                 }
             }
         }
-        // Check if more fields are filled ( corresponding to user tag )
+        // Check if more row which started with 'TAG_' are filled ( corresponding to user tag )
         tag_user = "";
         context.getParameterNamesIterator().forEachRemaining(name -> {
             if (StringUtils.isNotBlank(name) && !DEFAULT_ARGS.containsKey(name.trim())
+                    && name.startsWith("TAG_")
                     && StringUtils.isNotBlank(context.getParameter(name))) {
-                tag_user += "," + AbstractInfluxdbMetricsSender.tagToStringValue(name.trim()) + "="
+                tag_user += "," + AbstractInfluxdbMetricsSender.tagToStringValue(name.trim().substring(4)) + "="
                         + AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter(name).trim());
-                log.debug("Adding '{}' tag with '{}' value ", name, context.getParameter(name));
+                log.debug("Adding '{}' tag with '{}' value ", name.trim().substring(4), context.getParameter(name).trim());
             }
         });
 
