@@ -40,7 +40,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.jmeter.control.gui.TestFragmentControllerGui;
 import org.apache.jmeter.engine.TreeCloner;
@@ -340,6 +340,7 @@ public class Save extends AbstractAction {
         IOFileFilter patternFileFilter = new PrivatePatternFileFilter(backupPattern);
         // get all backup files in the backup directory
         List<File> backupFiles = new ArrayList<>(FileUtils.listFiles(backupDir, patternFileFilter, null));
+        backupFiles.sort(LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
         // this should be the most recent backup
         int lastVersionNumber = getHighestVersionNumber(backupPattern, backupFiles);
         // find expired backup files
@@ -352,10 +353,6 @@ public class Save extends AbstractAction {
             IOFileFilter expiredFileFilter = FileFilterUtils.ageFileFilter(expiryDate, true);
             expiredFiles.addAll(FileFilterUtils.filterList(expiredFileFilter, backupFiles));
         }
-        Collections.sort(backupFiles, (o1, o2) -> {
-            long diff = o1.lastModified() - o2.lastModified();
-            return diff < 0 ? -1 : diff > 0 ? 1 : 0;
-        });
 
         // backup name is of the form:
         // {baseName}{versionSeparator}{version}{jmxExtension}
