@@ -11,7 +11,7 @@ This code is not exhaustive or complete. It serves to distill our common underst
 
 We strive to:
 
-## **Be open **
+## **Be open**
 we invite anyone to participate in our community. We preferably use public methods of communication for project-related messages, unless discussing something sensitive. This applies to messages for help or project-related support, too; not only is a public support request much more likely to result in an answer to a question, it also makes sure that any inadvertent mistakes made by people answering will be more easily detected and corrected.
 
 ## **Be empathetic**
