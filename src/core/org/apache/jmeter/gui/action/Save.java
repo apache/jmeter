@@ -238,17 +238,10 @@ public class Save extends AbstractAction {
             
             // delete expired backups : here everything went right so we can
             // proceed to deletion
-            for (File expiredBackupFile : expiredBackupFiles) {
-                try {
-                    FileUtils.deleteQuietly(expiredBackupFile);
-                } catch (Exception ex) {
-                    log.warn("Failed to delete backup file, {}", expiredBackupFile); //$NON-NLS-1$
-                }
-            }
-        } catch(RuntimeException ex) {
+            expiredBackupFiles.forEach(FileUtils::deleteQuietly);
+        } catch (RuntimeException ex) {
             throw ex;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             log.error("Error saving tree.", ex);
             throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
         } 
