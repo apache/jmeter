@@ -41,6 +41,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.jmeter.control.gui.TestFragmentControllerGui;
 import org.apache.jmeter.engine.TreeCloner;
@@ -321,7 +322,9 @@ public class Save extends AbstractAction {
         char versionSeparator = '-'; //$NON-NLS-1$
         String baseName = fileToBackup.getName();
         // remove .jmx extension if any
-        baseName = baseName.endsWith(JMX_FILE_EXTENSION) ? baseName.substring(0, baseName.length() - JMX_FILE_EXTENSION.length()) : baseName;
+        baseName = baseName.endsWith(JMX_FILE_EXTENSION)
+                ? baseName.substring(0, baseName.length() - JMX_FILE_EXTENSION.length())
+                : baseName;
         // get a file to the backup directory
         File backupDir = new File(BACKUP_DIRECTORY);
         backupDir.mkdirs();
@@ -329,17 +332,20 @@ public class Save extends AbstractAction {
             log.error(
                     "Could not backup file! Backup directory does not exist, is not a directory or could not be created ! <{}>", //$NON-NLS-1$
                     backupDir.getAbsolutePath());
+            return EMPTY_FILE_LIST;
         }
 
-        // select files matching
+        // select files matching:
         // {baseName}{versionSeparator}{version}{jmxExtension}
         // where {version} is a 6 digit number
-        String backupPatternRegex = Pattern.quote(baseName + versionSeparator) + "([\\d]{6})" + Pattern.quote(JMX_FILE_EXTENSION); //$NON-NLS-1$
+        String backupPatternRegex = Pattern.quote(baseName + versionSeparator)
+                + "([\\d]{6})" //$NON-NLS-1$
+                + Pattern.quote(JMX_FILE_EXTENSION);
         Pattern backupPattern = Pattern.compile(backupPatternRegex);
-        // create a file filter that select files matching a given regex pattern
-        IOFileFilter patternFileFilter = new PrivatePatternFileFilter(backupPattern);
         // get all backup files in the backup directory
-        List<File> backupFiles = new ArrayList<>(FileUtils.listFiles(backupDir, patternFileFilter, null));
+        List<File> backupFiles = new ArrayList<>(FileUtils.listFiles(
+                backupDir, new PrivatePatternFileFilter(backupPattern), null));
+        // oldest to newest
         backupFiles.sort(LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
         // this should be the most recent backup
         int lastVersionNumber = getHighestVersionNumber(backupPattern, backupFiles);
@@ -356,7 +362,10 @@ public class Save extends AbstractAction {
 
         // backup name is of the form:
         // {baseName}{versionSeparator}{version}{jmxExtension}
-        String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1L) + JMX_FILE_EXTENSION;
+        String backupName = baseName
+                + versionSeparator
+                + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1L)
+                + JMX_FILE_EXTENSION;
         File backupFile = new File(backupDir, backupName);
         // create file backup
         try {
