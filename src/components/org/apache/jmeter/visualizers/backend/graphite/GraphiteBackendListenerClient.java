@@ -110,7 +110,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
 
     private static final String METRIC_ALL_HITS_COUNT        = METRIC_HITS_PREFIX+METRIC_SEPARATOR+METRIC_COUNT;
 
-    private static final long SEND_INTERVAL = JMeterUtils.getPropDefault("backend_graphite.send_interval", 5);
+    private static final long SEND_INTERVAL = JMeterUtils.getPropDefault("backend_graphite.send_interval", 1);
     private static final int MAX_POOL_SIZE = 1;
     private static final String DEFAULT_PERCENTILES = "90;95;99";
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
