@@ -259,7 +259,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                 comp = getGuiFromCache(guiClass, testClass);
                 nodesToGui.put(node, comp);
             }
-            log.debug("Gui retrieved = " + comp);
+            log.debug("Gui retrieved = {}", comp);
             return comp;
         } catch (Exception e) {
             log.error("Problem retrieving gui", e);
@@ -298,7 +298,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
             currentNodeUpdated = false;
             return comp;
         } catch (Exception e) {
-            log.error("Problem retrieving gui", e);
+            log.error("Problem retrieving current gui", e);
             return null;
         }
     }
@@ -454,7 +454,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         
         try {
             if (currentNode != null && !currentNodeUpdated) {
-                log.debug("Updating current node " + currentNode.getName());
+                log.debug("Updating current node {}", currentNode.getName());
                 JMeterGUIComponent comp = getGui(currentNode.getTestElement());
                 if (comp == null) {
                     log.debug("No component found for {}", currentNode.getName());
@@ -641,7 +641,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public void displayPopUp(Component invoker, MouseEvent e, JPopupMenu popup) {
         if (popup != null) {
-            log.debug("Showing pop up for " + invoker + " at x,y = " + e.getX() + "," + e.getY());
+            log.debug("Showing pop up for {} at x,y = {},{}", invoker, e.getX(), e.getY());
 
             popup.pack();
             popup.show(invoker, e.getX(), e.getY());
