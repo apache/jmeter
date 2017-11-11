@@ -281,12 +281,12 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     protected void computeSamplerName(HTTPSamplerBase sampler,
             HttpRequestHdr request) {
         String prefix = request.getPrefix();
-        int HttpSampleNameMode = request.getHttpSampleNameMode();
+        int httpSampleNameMode = request.getHttpSampleNameMode();
         if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
             if(!StringUtils.isEmpty(prefix)) {
-                if (HttpSampleNameMode==SAMPLER_NAME_NAMING_MODE_PREFIX) {
+                if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_PREFIX) {
                 sampler.setName(prefix + incrementRequestNumberAndGet() + " " + sampler.getPath());
-                } else if (HttpSampleNameMode==SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+                } else if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_COMPLETE) {
                     sampler.setName(incrementRequestNumberAndGet() + " " + prefix);
                 } else {
                     log.debug("Sampler name naming mode not recognized");
@@ -296,9 +296,9 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             }
         } else {
             if(!StringUtils.isEmpty(prefix)) {
-                if (HttpSampleNameMode==SAMPLER_NAME_NAMING_MODE_PREFIX) {
+                if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_PREFIX) {
                     sampler.setName(prefix+sampler.getPath());
-                } else if (HttpSampleNameMode==SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+                } else if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_COMPLETE) {
                     sampler.setName(prefix);
                 } else {
                     log.debug("Sampler name naming mode not recognized");
