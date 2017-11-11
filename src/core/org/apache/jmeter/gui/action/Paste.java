@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Places a copied JMeterTreeNode under the selected node.
- *
  */
 public class Paste extends AbstractAction {
 
@@ -83,11 +82,10 @@ public class Paste extends AbstractAction {
             // Add this node
             JMeterTreeNode newNode = GuiPackage.getInstance().getTreeModel().addComponent(node.getTestElement(), parent);
             // Add all the child nodes of the node we are adding
-            for(int i = 0; i < node.getChildCount(); i++) {
+            for (int i = 0; i < node.getChildCount(); i++) {
                 addNode(newNode, (JMeterTreeNode)node.getChildAt(i));
             }
-        }
-        catch (IllegalUserActionException iuae) {
+        } catch (IllegalUserActionException iuae) {
             log.error("Illegal user action while adding a tree node.", iuae); // $NON-NLS-1$
             JMeterUtils.reportErrorToUser(iuae.getMessage());
         }

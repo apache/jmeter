@@ -78,29 +78,19 @@ public class ThreadGroup extends AbstractThreadGroup {
     
     private transient Object addThreadLock = new Object();
 
-    /**
-     * Is test (still) running?
-     */
+    /** Is test (still) running? */
     private volatile boolean running = false;
 
-    /**
-     * Thread Group number
-     */
+    /** Thread Group number */
     private int groupNumber;
 
-    /**
-     * Are we using delayed startup?
-     */
+    /** Are we using delayed startup? */
     private boolean delayedStartup;
 
-    /**
-     * Thread safe class
-     */
+    /** Thread safe class */
     private ListenerNotifier notifier;
 
-    /**
-     * This property will be cloned
-     */
+    /** This property will be cloned */
     private ListedHashTree threadGroupTree;
 
     /**
@@ -345,10 +335,10 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public boolean stopThread(String threadName, boolean now) {
-        for(Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
-            JMeterThread thrd = entry.getKey();
-            if (thrd.getThreadName().equals(threadName)) {
-                stopThread(thrd, entry.getValue(), now);
+        for (Entry<JMeterThread, Thread> threadEntry : allThreads.entrySet()) {
+            JMeterThread jMeterThread = threadEntry.getKey();
+            if (jMeterThread.getThreadName().equals(threadName)) {
+                stopThread(jMeterThread, threadEntry.getValue(), now);
                 return true;
             }
         }
@@ -547,10 +537,8 @@ public class ThreadGroup extends AbstractThreadGroup {
             this.engine = engine;
             // Store context from Root Thread to pass it to created threads
             this.context = JMeterContextService.getContext();
-            
         }
         
-
         /**
          * Wait for delay with RAMPUP_GRANULARITY
          * @param delay delay in ms

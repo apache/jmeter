@@ -38,7 +38,7 @@ public class RawTextSearcher implements Searcher {
     public RawTextSearcher(boolean caseSensitive, String textToSearch) {
         super();
         this.caseSensitive = caseSensitive;
-        if(caseSensitive) {
+        if (caseSensitive) {
             this.textToSearch = textToSearch;
         } else {
             this.textToSearch = textToSearch.toLowerCase();

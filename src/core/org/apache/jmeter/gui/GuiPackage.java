@@ -70,7 +70,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public final class GuiPackage implements LocaleChangeListener, HistoryListener {
-    /** Logging. */
+
     private static final Logger log = LoggerFactory.getLogger(GuiPackage.class);
 
     private static final String SBR_PREFS_KEY = "save_before_run";
@@ -125,29 +125,19 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** The main JMeter toolbar. */
     private JToolBar toolbar;
     
-    /**
-     * The LoggerPanel menu item
-     */
+    /** The LoggerPanel menu item */
     private JCheckBoxMenuItem menuItemLoggerPanel;
 
-    /**
-     * The LoggerPanel menu item
-     */
+    /** The LoggerPanel menu item */
     private JCheckBoxMenuItem menuItemSaveBeforeRunPanel;
     
-    /**
-     * Logger Panel reference
-     */
+    /** Logger Panel reference */
     private LoggerPanel loggerPanel;
 
-    /**
-     * History for tree states
-     */
+    /** History for tree states */
     private UndoHistory undoHistory = new UndoHistory();
 
-    /**
-     * GUI Logging Event Bus.
-     */
+    /** GUI Logging Event Bus. */
     private GuiLogEventBus logEventBus = new GuiLogEventBus();
 
     /**
@@ -156,7 +146,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     private GuiPackage(JMeterTreeModel treeModel, JMeterTreeListener treeListener) {
         this.treeModel = treeModel;
-        if(UndoHistory.isEnabled()) {
+        if (UndoHistory.isEnabled()) {
             this.treeModel.addTreeModelListener(undoHistory);
         }
         this.treeListener = treeListener;
@@ -451,7 +441,6 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * choosing the new node.
      */
     public void updateCurrentNode() {
-        
         try {
             if (currentNode != null && !currentNodeUpdated) {
                 log.debug("Updating current node {}", currentNode.getName());
@@ -464,11 +453,11 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                 int before = 0;
                 int after = 0;
                 final boolean historyEnabled = UndoHistory.isEnabled();
-                if(historyEnabled) {
+                if (historyEnabled) {
                     before = getTestElementCheckSum(el);
                 }
                 comp.modifyTestElement(el);
-                if(historyEnabled) {
+                if (historyEnabled) {
                     after = getTestElementCheckSum(el);
                 }
                 if (!historyEnabled || (before != after)) {
@@ -674,8 +663,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         // would populate the current node with the contents of the new GUI --
         // which is empty.]
         MainFrame mf = getMainFrame(); // Fetch once
-        if (mf == null) // Probably caused by unit testing on headless system
-        {
+        if (mf == null) { // Probably caused by unit testing on headless system
             log.warn("Mainframe is null");
         } else {
             mf.setMainPanel((javax.swing.JComponent) getCurrentGui());
@@ -752,7 +740,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     public static void showMessage(final String message, final String title, final int type){
         if (guiPack == null) {
-            return ;
+            return;
         }
         SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null,message,title,type));
 
@@ -774,16 +762,14 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /**
      * Register process to stop on reload
-     * 
-     * @param stoppable
-     *            The {@link Stoppable} to be registered
+     *
+     * @param stoppable The {@link Stoppable} to be registered
      */
     public void register(Stoppable stoppable) {
         stoppables.add(stoppable);
     }
 
     /**
-     *
      * @return copy of list of {@link Stoppable}s
      */
     public List<Stoppable> getStoppables() {
@@ -794,6 +780,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /**
      * Set the menu item LoggerPanel.
+     *
      * @param menuItemLoggerPanel The menu item LoggerPanel
      */
     public void setMenuItemLoggerPanel(JCheckBoxMenuItem menuItemLoggerPanel) {
@@ -885,17 +872,17 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         while (it.hasNext()) {
             JMeterProperty obj = it.next();
             if (obj instanceof TestElementProperty) {
-                ret ^= getTestElementCheckSum(((TestElementProperty) obj)
-                        .getElement());
+                ret ^= getTestElementCheckSum(
+                        ((TestElementProperty) obj).getElement());
             } else {
                 ret ^= obj.getName().hashCode();
                 String stringValue = obj.getStringValue();
-                if(stringValue != null) {
+                if (stringValue != null) {
                     ret ^= stringValue.hashCode();
                 } else {
-                    if(log.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         log.debug("obj.getStringValue() returned null for test element:"
-                                +el.getName()+" at property:"+obj.getName());
+                                + el.getName() + " at property:" + obj.getName());
                     }
                 }
             }
@@ -915,17 +902,17 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @return {@link TreeNodeNamingPolicy}
      */
     public TreeNodeNamingPolicy getNamingPolicy() {
-        if(namingPolicy == null) {
-            final String namingPolicyImplementation = 
+        if (namingPolicy == null) {
+            final String namingPolicyImplementation =
                     JMeterUtils.getPropDefault("naming_policy.impl", //$NON-NLS-1$ 
                             DefaultTreeNodeNamingPolicy.class.getName());
 
             try {
                 Class<?> implementationClass = Class.forName(namingPolicyImplementation);
                 this.namingPolicy = (TreeNodeNamingPolicy) implementationClass.newInstance();
-                
+
             } catch (Exception ex) {
-                log.error("Failed to create configured naming policy:"+namingPolicyImplementation+", will use default one", ex);
+                log.error("Failed to create configured naming policy:" + namingPolicyImplementation + ", will use default one", ex);
                 this.namingPolicy = new DefaultTreeNodeNamingPolicy();
             }
         }

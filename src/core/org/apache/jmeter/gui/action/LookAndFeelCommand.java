@@ -128,7 +128,10 @@ public class LookAndFeelCommand extends AbstractAction {
             UIManager.setLookAndFeel(className);
             JMeterUtils.refreshUI();
             PREFS.put(USER_PREFS_KEY, className);
-        } catch (javax.swing.UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException | IllegalAccessException e) {
+        } catch (UnsupportedLookAndFeelException
+                | InstantiationException
+                | ClassNotFoundException
+                | IllegalAccessException e) {
             JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
         }
     }

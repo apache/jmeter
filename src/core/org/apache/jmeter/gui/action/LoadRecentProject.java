@@ -150,13 +150,13 @@ public class LoadRecentProject extends Load {
      */
     private static void updateMenuItems(List<JComponent> menuItems) {
         // Update the menu items
-        for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
+        for (int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
             // Get the menu item
-            JMenuItem recentFile = (JMenuItem)menuItems.get(i);
+            JMenuItem recentFile = (JMenuItem) menuItems.get(i);
 
             // Find and set the file for this recent file command
             String recentFilePath = getRecentFile(i);
-            if(recentFilePath != null) {
+            if (recentFilePath != null) {
                 File file = new File(recentFilePath);
                 StringBuilder sb = new StringBuilder(60);
                 // Index before file name
@@ -166,8 +166,7 @@ public class LoadRecentProject extends Load {
                 recentFile.setToolTipText(recentFilePath);
                 recentFile.setEnabled(true);
                 recentFile.setVisible(true);
-            }
-            else {
+            } else {
                 recentFile.setEnabled(false);
                 recentFile.setVisible(false);
             }
@@ -182,7 +181,7 @@ public class LoadRecentProject extends Load {
         // Limit the length of the menu text if needed
         final int maxLength = 40;
         String menuText = file.getName();
-        if(menuText.length() > maxLength) {
+        if (menuText.length() > maxLength) {
             menuText = "..." + menuText.substring(menuText.length() - maxLength, menuText.length()); //$NON-NLS-1$
         }
         return menuText;
