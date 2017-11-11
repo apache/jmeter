@@ -159,7 +159,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     /**
      * To choose between a prefix or a transaction name
      */
-    private JComboBox<String> HTTPSampleNamingMode;
+    private JComboBox<String> httpSampleNamingMode;
     
     /**
      * Add a prefix/transaction name to HTTP sample name recorded
@@ -291,7 +291,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setSamplerFollowRedirects(samplerFollowRedirects.isSelected());
             model.setUseKeepAlive(useKeepAlive.isSelected());
             model.setSamplerDownloadImages(samplerDownloadImages.isSelected());
-            model.setHTTPSampleNamingMode(HTTPSampleNamingMode.getSelectedIndex());
+            model.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
             model.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
             model.setProxyPauseHTTPSample(proxyPauseHTTPSample.getText());
             model.setNotifyChildSamplerListenerOfFilteredSamplers(notifyChildSamplerListenerOfFilteredSamplersCB.isSelected());
@@ -354,7 +354,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         samplerFollowRedirects.setSelected(model.getSamplerFollowRedirects());
         useKeepAlive.setSelected(model.getUseKeepalive());
         samplerDownloadImages.setSelected(model.getSamplerDownloadImages());
-        HTTPSampleNamingMode.setSelectedIndex(model.getHTTPSampleNamingMode());
+        httpSampleNamingMode.setSelectedIndex(model.getHTTPSampleNamingMode());
         prefixHTTPSampleName.setText(model.getPrefixHTTPSampleName());
         proxyPauseHTTPSample.setText(model.getProxyPauseHTTPSample());
         notifyChildSamplerListenerOfFilteredSamplersCB.setSelected(model.getNotifyChildSamplerListenerOfFilteredSamplers());
@@ -389,7 +389,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         if (e.getSource() instanceof JComboBox) {
             JComboBox combo = (JComboBox) e.getSource();
             if(HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())){
-                model.setHTTPSampleNamingMode(HTTPSampleNamingMode.getSelectedIndex());
+                model.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
                 }
             }
         else {
@@ -854,9 +854,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         DefaultComboBoxModel<String> choice = new DefaultComboBoxModel<>();
         choice.addElement(JMeterUtils.getResString("sample_name_prefix")); // $NON-NLS-1$
         choice.addElement(JMeterUtils.getResString("sample_name_transaction")); // $NON-NLS-1$
-        HTTPSampleNamingMode = new JComboBox<>(choice);
-        HTTPSampleNamingMode.setName(HTTP_SAMPLER_NAMING_MODE);
-        HTTPSampleNamingMode.addItemListener(this);
+        httpSampleNamingMode = new JComboBox<>(choice);
+        httpSampleNamingMode.setName(HTTP_SAMPLER_NAMING_MODE);
+        httpSampleNamingMode.addItemListener(this);
         
         prefixHTTPSampleName = new JTextField(4);
         prefixHTTPSampleName.addKeyListener(this);
@@ -885,7 +885,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         JPanel panel = new JPanel(gridBagLayout);
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("proxy_sampler_settings"))); // $NON-NLS-1$
-        panel.add(HTTPSampleNamingMode, gbc.clone());
+        panel.add(httpSampleNamingMode, gbc.clone());
         gbc.gridx++;
         gbc.weightx = 3;
         gbc.fill=GridBagConstraints.HORIZONTAL;

@@ -392,8 +392,8 @@ public class ProxyControl extends GenericController {
         setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
     }
 
-    public void setHTTPSampleNamingMode(int HTTPNamingMode) {
-        setProperty(new IntegerProperty(HTTP_SAMPLER_NAMING_MODE, HTTPNamingMode));
+    public void setHTTPSampleNamingMode(int httpNamingMode) {
+        setProperty(new IntegerProperty(HTTP_SAMPLER_NAMING_MODE, httpNamingMode));
     }
     
     public void setPrefixHTTPSampleName(String prefixHTTPSampleName) {
