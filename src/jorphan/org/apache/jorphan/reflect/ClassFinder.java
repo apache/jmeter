@@ -203,14 +203,14 @@ public final class ClassFinder {
         Set<String> fullList = new HashSet<>();
         for (final String path : paths) {
             fullList.add(path); // Keep the unexpanded path
-            // TODO - allow directories to end with .jar by removing this check?
-            if (!path.endsWith(DOT_JAR)) {
-                File dir = new File(path);
-                if (dir.exists() && dir.isDirectory()) {
-                    String[] jars = dir.list((f, name) -> name.endsWith(DOT_JAR));
-                    if(jars != null) {
-                        Collections.addAll(fullList, jars);
-                    }
+            File dir = new File(path);
+            if (dir.exists() && dir.isDirectory()) {
+                String[] jars = dir.list((f, name) -> {
+                    File fileInDirectory = new File(f, name); 
+                    return fileInDirectory.isFile() && name.endsWith(DOT_JAR);
+                });
+                if(jars != null) {
+                    Collections.addAll(fullList, jars);
                 }
             }
         }
