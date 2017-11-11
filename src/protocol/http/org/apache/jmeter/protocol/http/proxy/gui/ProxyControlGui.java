@@ -384,18 +384,18 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      * Also handles samplerTypeName
      */
     /** {@inheritDoc} */
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		if (e.getSource() instanceof JComboBox) {
-			  JComboBox combo = (JComboBox) e.getSource();
-			   if(HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())){
-					model.setHTTPSampleNamingMode(HTTPSampleNamingMode.getSelectedIndex());
-			   }
-			}
-		else {
-			enableRestart();
-		}
-	}
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getSource() instanceof JComboBox) {
+            JComboBox combo = (JComboBox) e.getSource();
+            if(HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())){
+                model.setHTTPSampleNamingMode(HTTPSampleNamingMode.getSelectedIndex());
+                }
+            }
+        else {
+            enableRestart();
+        }
+    }
 
     /** {@inheritDoc} */
     @Override

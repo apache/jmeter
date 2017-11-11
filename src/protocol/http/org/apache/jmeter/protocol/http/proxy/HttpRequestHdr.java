@@ -107,7 +107,7 @@ public class HttpRequestHdr {
      * @param httpSamplerName the http sampler name
      */
     public HttpRequestHdr(String prefix, String httpSamplerName) {
-    	this(prefix, httpSamplerName,0);
+        this(prefix, httpSamplerName,0);
     }
 
     /**
@@ -116,13 +116,13 @@ public class HttpRequestHdr {
      * @param httpSampleNameMode the naming mode of sampler name
      */
     public HttpRequestHdr(String prefix, String httpSamplerName, int httpSampleNameMode) {
-		this.prefix = prefix;
+        this.prefix = prefix;
         this.httpSamplerName = httpSamplerName;
         this.firstLine = "" ; // $NON-NLS-1$
         this.httpSampleNameMode = httpSampleNameMode;
-	}
+    }
 
-	/**
+    /**
      * Parses a http header from a stream.
      *
      * @param in
@@ -341,7 +341,7 @@ public class HttpRequestHdr {
      */
     public int serverPort() {
         String str = url;
-        // chop to "server.name:x/thing"
+        // chop to "server.name:xhing"
         int i = str.indexOf("//");
         if (i > 0) {
             str = str.substring(i + 2);
