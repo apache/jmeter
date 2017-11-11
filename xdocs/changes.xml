@@ -130,6 +130,7 @@ Summary
 <ul>
     <li><bug>61559</bug>Better label/translation/documentation for label ignoreFirstLine.displayName for CSV Data Set Config</li>
     <li><bug>61606</bug>Translate button <code>Browse...</code> in some elements (which use FileEditor class)</li>
+    <li><bug>61747</bug>HTTP(S) Test Script Recorder : add the missing doc to "Create transaction after request (ms)"</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
