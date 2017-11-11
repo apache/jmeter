@@ -156,6 +156,8 @@ public class ProxyControl extends GenericController {
 
     private static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
     
+    private static final String HTTP_SAMPLER_NAMING_MODE = "ProxyControlGui.proxy_http_sampler_naming_mode"; // $NON-NLS-1$
+    
     private static final String PREFIX_HTTP_SAMPLER_NAME = "ProxyControlGui.proxy_prefix_http_sampler_name"; // $NON-NLS-1$
     
     private static final String PROXY_PAUSE_HTTP_SAMPLER = "ProxyControlGui.proxy_pause_http_sampler"; // $NON-NLS-1$
@@ -181,6 +183,7 @@ public class ProxyControl extends GenericController {
     private static final int GROUPING_STORE_FIRST_ONLY = 3;
     private static final int GROUPING_IN_TRANSACTION_CONTROLLERS = 4;
 
+    
     // Original numeric order (we now use strings)
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_JAVA = "0";
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
@@ -389,6 +392,10 @@ public class ProxyControl extends GenericController {
         setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
     }
 
+    public void setHTTPSampleNamingMode(int HTTPNamingMode) {
+        setProperty(new IntegerProperty(HTTP_SAMPLER_NAMING_MODE, HTTPNamingMode));
+    }
+    
     public void setPrefixHTTPSampleName(String prefixHTTPSampleName) {
         setProperty(PREFIX_HTTP_SAMPLER_NAME, prefixHTTPSampleName);
     }
@@ -479,6 +486,10 @@ public class ProxyControl extends GenericController {
         return getPropertyAsBoolean(SAMPLER_DOWNLOAD_IMAGES, false);
     }
 
+    public int getHTTPSampleNamingMode() {
+        return getPropertyAsInt(HTTP_SAMPLER_NAMING_MODE);
+    }
+    
     public String getPrefixHTTPSampleName() {
         return getPropertyAsString(PREFIX_HTTP_SAMPLER_NAME);
     }

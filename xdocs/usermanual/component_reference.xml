@@ -6646,6 +6646,7 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         </property>
         <property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
         <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, i.e. it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to <code>\b</code>. More information below in the paragraph about "<code>User Defined Variable replacement</code>".</property>
+        <property name="Prefix/Transaction name" required="No">Add a prefix to sampler name during recording (Prefix mode). Or replace sampler name by user choosen name (Transaction name)</property>
         <property name="Type" required="Yes">Which type of sampler to generate (the HTTPClient default or Java)</property>
         <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
         <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?<br/>

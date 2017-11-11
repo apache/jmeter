@@ -157,7 +157,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private JCheckBox samplerDownloadImages;
 
     /**
-     * Add a prefix to HTTP sample name recorded
+     * To choose between a prefix or a transaction name
+     */
+    private JComboBox<String> HTTPSampleNamingMode;
+    
+    /**
+     * Add a prefix/transaction name to HTTP sample name recorded
      */
     private JTextField prefixHTTPSampleName;
     
@@ -227,6 +232,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static final String ADD_TO_EXCLUDE_FROM_CLIPBOARD = "exclude_clipboard"; // $NON-NLS-1$
 
     private static final String ADD_SUGGESTED_EXCLUDES = "exclude_suggested";
+    
+    private static final String HTTP_SAMPLER_NAMING_MODE = "proxy_http_sampler_naming_mode"; // $NON-NLS-1$
 
     private static final String PREFIX_HTTP_SAMPLER_NAME = "proxy_prefix_http_sampler_name"; // $NON-NLS-1$
 
@@ -284,6 +291,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setSamplerFollowRedirects(samplerFollowRedirects.isSelected());
             model.setUseKeepAlive(useKeepAlive.isSelected());
             model.setSamplerDownloadImages(samplerDownloadImages.isSelected());
+            model.setHTTPSampleNamingMode(HTTPSampleNamingMode.getSelectedIndex());
             model.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
             model.setProxyPauseHTTPSample(proxyPauseHTTPSample.getText());
             model.setNotifyChildSamplerListenerOfFilteredSamplers(notifyChildSamplerListenerOfFilteredSamplersCB.isSelected());
@@ -346,6 +354,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         samplerFollowRedirects.setSelected(model.getSamplerFollowRedirects());
         useKeepAlive.setSelected(model.getUseKeepalive());
         samplerDownloadImages.setSelected(model.getSamplerDownloadImages());
+        HTTPSampleNamingMode.setSelectedIndex(model.getHTTPSampleNamingMode());
         prefixHTTPSampleName.setText(model.getPrefixHTTPSampleName());
         proxyPauseHTTPSample.setText(model.getProxyPauseHTTPSample());
         notifyChildSamplerListenerOfFilteredSamplersCB.setSelected(model.getNotifyChildSamplerListenerOfFilteredSamplers());
@@ -375,10 +384,18 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      * Also handles samplerTypeName
      */
     /** {@inheritDoc} */
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-        enableRestart();
-    }
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (e.getSource() instanceof JComboBox) {
+			  JComboBox combo = (JComboBox) e.getSource();
+			   if(HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())){
+					model.setHTTPSampleNamingMode(HTTPSampleNamingMode.getSelectedIndex());
+			   }
+			}
+		else {
+			enableRestart();
+		}
+	}
 
     /** {@inheritDoc} */
     @Override
@@ -834,12 +851,16 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         samplerDownloadImages.addActionListener(this);
         samplerDownloadImages.setActionCommand(ENABLE_RESTART);
 
+        DefaultComboBoxModel<String> choice = new DefaultComboBoxModel<>();
+        choice.addElement(JMeterUtils.getResString("sample_name_prefix")); // $NON-NLS-1$
+        choice.addElement(JMeterUtils.getResString("sample_name_transaction")); // $NON-NLS-1$
+        HTTPSampleNamingMode = new JComboBox<>(choice);
+        HTTPSampleNamingMode.setName(HTTP_SAMPLER_NAMING_MODE);
+        HTTPSampleNamingMode.addItemListener(this);
+        
         prefixHTTPSampleName = new JTextField(4);
         prefixHTTPSampleName.addKeyListener(this);
         prefixHTTPSampleName.setName(PREFIX_HTTP_SAMPLER_NAME);
-        prefixHTTPSampleName.setActionCommand(ENABLE_RESTART);
-        JLabel labelPrefix = new JLabel(JMeterUtils.getResString("proxy_prefix_http_sampler_name")); // $NON-NLS-1$
-        labelPrefix.setLabelFor(prefixHTTPSampleName);
 
         proxyPauseHTTPSample = new JTextField(6);
         proxyPauseHTTPSample.addKeyListener(this);
@@ -853,7 +874,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
               
         GridBagLayout gridBagLayout = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.fill = GridBagConstraints.NONE;
         gbc.gridheight = 1;
         gbc.gridwidth = 1;
@@ -864,7 +885,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         JPanel panel = new JPanel(gridBagLayout);
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("proxy_sampler_settings"))); // $NON-NLS-1$
-        panel.add(labelPrefix, gbc.clone());
+        panel.add(HTTPSampleNamingMode, gbc.clone());
         gbc.gridx++;
         gbc.weightx = 3;
         gbc.fill=GridBagConstraints.HORIZONTAL;
