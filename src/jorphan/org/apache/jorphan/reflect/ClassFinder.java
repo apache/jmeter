@@ -70,7 +70,7 @@ public final class ClassFinder {
         private final String contains; // class name should contain this string
         private final String notContains; // class name should not contain this string
 
-        private final transient ClassLoader contextClassLoader
+        private final ClassLoader contextClassLoader
             = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
 
         ExtendsClassFilter(Class<?> []parents, boolean inner, String contains, String notContains){
@@ -82,7 +82,6 @@ public final class ClassFinder {
 
         @Override
         public boolean accept(String className) {
-
             if (contains != null && !className.contains(contains)) {
                 return false; // It does not contain a required string
             }
@@ -90,11 +89,46 @@ public final class ClassFinder {
                 return false; // It contains a banned string
             }
             if (!className.contains("$") || inner) { // $NON-NLS-1$
-                if (isChildOf(parents, className, contextClassLoader)) {
-                    return true;
-                }
+                return isChildOf(parents, className, contextClassLoader);
             }
             return false;
+        }
+        
+       /**
+        *
+        * @param parentClasses list of classes to check for
+        * @param strClassName name of class to be checked
+        * @param contextClassLoader the classloader to use
+        * @return true if the class is a non-abstract, non-interface instance of at least one of the parent classes
+        */
+       private boolean isChildOf(Class<?> [] parentClasses, String strClassName,
+               ClassLoader contextClassLoader){
+               // might throw an exception, assume this is ignorable
+               try {
+                   Class<?> c = Class.forName(strClassName, false, contextClassLoader);
+
+                   if (!c.isInterface() && !Modifier.isAbstract(c.getModifiers())) {
+                       for (Class<?> parentClass : parentClasses) {
+                           if (parentClass.isAssignableFrom(c)) {
+                               return true;
+                           }
+                       }
+                   }
+               } catch (UnsupportedClassVersionError | ClassNotFoundException
+                       | NoClassDefFoundError | VerifyError e) {
+                   log.debug(e.getLocalizedMessage(), e);
+               }
+           return false;
+       }
+
+        /* (non-Javadoc)
+         * @see java.lang.Object#toString()
+         */
+        @Override
+        public String toString() {
+            return "ExtendsClassFilter [parents=" + 
+                    (parents != null ? Arrays.toString(parents) : "null") + ", inner=" + inner + ", contains="
+                    + contains + ", notContains=" + notContains + "]";
         }
     }
     
@@ -103,7 +137,7 @@ public final class ClassFinder {
         private final boolean inner; // are inner classes OK?
 
         private final Class<? extends Annotation>[] annotations; // annotation classes to check
-        private final transient ClassLoader contextClassLoader
+        private final ClassLoader contextClassLoader
             = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
         
         AnnoClassFilter(Class<? extends Annotation> []annotations, boolean inner){
@@ -114,12 +148,36 @@ public final class ClassFinder {
         @Override
         public boolean accept(String className) {
             if (!className.contains("$") || inner) { // $NON-NLS-1$
-                if (hasAnnotationOnMethod(annotations,className, contextClassLoader)) {
-                    return true;
-                }
+                return hasAnnotationOnMethod(annotations,className, contextClassLoader);
             }
             return false;
         }
+        
+        private boolean hasAnnotationOnMethod(Class<? extends Annotation>[] annotations, String classInQuestion,
+                ClassLoader contextClassLoader ){
+                try{
+                    Class<?> c = Class.forName(classInQuestion, false, contextClassLoader);
+                    for(Method method : c.getMethods()) {
+                        for(Class<? extends Annotation> annotation : annotations) {
+                            if(method.isAnnotationPresent(annotation)) {
+                                return true;
+                            }
+                        }
+                    }
+                } catch (NoClassDefFoundError | ClassNotFoundException | UnsupportedClassVersionError | VerifyError ignored) {
+                    log.debug(ignored.getLocalizedMessage(), ignored);
+                }
+                return false;
+            }
+
+        /**
+         * @see java.lang.Object#toString()
+         */
+        @Override
+        public String toString() {
+            return "AnnoClassFilter [inner=" + inner + ", annotations=" + 
+                    (annotations != null ? Arrays.toString(annotations) : "null")+ "]";
+        }        
     }
 
     /**
@@ -240,10 +298,12 @@ public final class ClassFinder {
                 String contains, String notContains, boolean annotations)
                 throws IOException  {
         if (log.isDebugEnabled()) {
-            log.debug("searchPathsOrJars : {}", Arrays.toString(searchPathsOrJars));
-            log.debug("superclass : {}", Arrays.toString(classNames));
-            log.debug("innerClasses : {} annotations: {}", innerClasses, annotations);
-            log.debug("contains: {}, notContains: {}", contains, notContains);
+            log.debug("findClassesThatExtend with searchPathsOrJars : {}, superclass : {}"+
+                    " innerClasses : {} annotations: {} contains: {}, notContains: {}", 
+                    Arrays.toString(searchPathsOrJars),
+                    Arrays.toString(classNames),
+                    innerClasses, annotations,
+                    contains, notContains);
         }
 
         
@@ -274,7 +334,8 @@ public final class ClassFinder {
      */
     public static List<String> findClasses(String[] searchPathsOrJars, ClassFilter filter) throws IOException  {
         if (log.isDebugEnabled()) {
-            log.debug("searchPathsOrJars : {}", Arrays.toString(searchPathsOrJars));
+            log.debug("findClasses with searchPathsOrJars : {} and classFilter : {}", 
+                    Arrays.toString(searchPathsOrJars), filter);
         }
     
         // Find all jars in the search path
@@ -341,7 +402,8 @@ public final class ClassFinder {
                 }
             }
             if (!found) {
-                log.debug("Did not find: {}", classpathElement);
+                log.debug("Classpath element {} does not match any search path {}", classpathElement,
+                        strPathsOrJars);
             }
         }
         return listPaths;
@@ -379,51 +441,6 @@ public final class ClassFinder {
     }
 
     /**
-     *
-     * @param parentClasses list of classes to check for
-     * @param strClassName name of class to be checked
-     * @param contextClassLoader the classloader to use
-     * @return true if the class is a non-abstract, non-interface instance of at least one of the parent classes
-     */
-    private static boolean isChildOf(Class<?> [] parentClasses, String strClassName,
-            ClassLoader contextClassLoader){
-            // might throw an exception, assume this is ignorable
-            try {
-                Class<?> c = Class.forName(strClassName, false, contextClassLoader);
-
-                if (!c.isInterface() && !Modifier.isAbstract(c.getModifiers())) {
-                    for (Class<?> parentClass : parentClasses) {
-                        if (parentClass.isAssignableFrom(c)) {
-                            return true;
-                        }
-                    }
-                }
-            } catch (UnsupportedClassVersionError | ClassNotFoundException
-                    | NoClassDefFoundError | VerifyError e) {
-                log.debug(e.getLocalizedMessage(), e);
-            }
-        return false;
-    }
-
-    private static boolean hasAnnotationOnMethod(Class<? extends Annotation>[] annotations, String classInQuestion,
-        ClassLoader contextClassLoader ){
-        try{
-            Class<?> c = Class.forName(classInQuestion, false, contextClassLoader);
-            for(Method method : c.getMethods()) {
-                for(Class<? extends Annotation> annotation : annotations) {
-                    if(method.isAnnotationPresent(annotation)) {
-                        return true;
-                    }
-                }
-            }
-        } catch (NoClassDefFoundError | ClassNotFoundException | UnsupportedClassVersionError | VerifyError ignored) {
-            log.debug(ignored.getLocalizedMessage(), ignored);
-        }
-        return false;
-    }
-
-
-    /*
      * Converts a class file from the text stored in a Jar file to a version
      * that can be used in Class.forName().
      *
@@ -432,11 +449,11 @@ public final class ClassFinder {
      * @return String the Java-style dotted version of the name
      */
     private static String fixClassName(String strClassName) {
-        strClassName = strClassName.replace('\\', '.'); // $NON-NLS-1$ // $NON-NLS-2$
-        strClassName = strClassName.replace('/', '.'); // $NON-NLS-1$ // $NON-NLS-2$
+        String fixedClassName = strClassName.replace('\\', '.'); // $NON-NLS-1$ // $NON-NLS-2$
+        fixedClassName = fixedClassName.replace('/', '.'); // $NON-NLS-1$ // $NON-NLS-2$
         // remove ".class"
-        strClassName = strClassName.substring(0, strClassName.length() - DOT_CLASS_LEN);
-        return strClassName;
+        fixedClassName = fixedClassName.substring(0, fixedClassName.length() - DOT_CLASS_LEN);
+        return fixedClassName;
     }
 
     
