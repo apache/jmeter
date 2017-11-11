@@ -88,7 +88,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><pr>316</pr> - Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
+    <li><pr>316</pr>Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
     <li><bug>61639</bug>HTTP(S) Test Script Recorder : In request filtering tab, uncheck by default "Notify Child Listeners of filtered samplers"</li>
     <li><bug>61672</bug>HTTP(S) Test Script Recorder : When a prefix is set don't use path in Sampler Name</li>
     <li><bug>53957</bug>HTTP Request : In Parameters tab, allow pasting of content coming from Firefox and Chrome (unparsed)</li>
@@ -163,9 +163,9 @@ Summary
     <li><bug>61641</bug>Improve JMS test coverage</li>
     <li><bug>61651</bug>Improve TCP test coverage</li>
     <li><bug>61651</bug>Improve OS test coverage. Partly contributed by Aleksei Balan (abalanonline at gmail.com)</li> 
-    <li><pr>319</pr> Removed commented out code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><pr>322</pr> General JavaDoc cleanup. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><pr>323</pr> Extracted method and used streams to improve readability. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>319</pr>Removed commented out code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>322</pr>General JavaDoc cleanup. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>323</pr>Extracted method and used streams to improve readability. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
