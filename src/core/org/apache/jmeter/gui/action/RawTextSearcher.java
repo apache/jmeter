@@ -50,20 +50,10 @@ public class RawTextSearcher implements Searcher {
      */
     @Override
     public boolean search(List<String> textTokens) {
-        boolean result;
-        for (String searchableToken : textTokens) {
-            if(!StringUtils.isEmpty(searchableToken)) {
-                if(caseSensitive) {
-                    result = searchableToken.contains(textToSearch);
-                } else {
-                    result = searchableToken.toLowerCase().contains(textToSearch);
-                }
-                if (result) {
-                    return result;
-                }
-            }
-        }
-        return false;
+        return textTokens.stream()
+                .filter(token -> !StringUtils.isEmpty(token))
+                .map(token -> caseSensitive ? token : token.toLowerCase())
+                .anyMatch(token -> token.contains(textToSearch));
     }
 
     /**

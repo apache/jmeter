@@ -53,16 +53,11 @@ public class RegexpSearcher implements Searcher {
      */
     @Override
     public boolean search(List<String> textTokens) {
-        for (String searchableToken : textTokens) {
-            if(!StringUtils.isEmpty(searchableToken)) {
-                Matcher matcher = caseSensitive ? 
-                    pattern.matcher(searchableToken) : 
-                    pattern.matcher(searchableToken.toLowerCase());
-                if(matcher.find()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return textTokens.stream()
+                .filter(token -> !StringUtils.isEmpty(token))
+                .map(token -> caseSensitive ?
+                        pattern.matcher(token) :
+                        pattern.matcher(token.toLowerCase()))
+                .anyMatch(Matcher::find);
     }
 }

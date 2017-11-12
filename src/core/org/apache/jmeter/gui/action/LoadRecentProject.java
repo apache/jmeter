@@ -247,11 +247,7 @@ public class LoadRecentProject extends Load {
      * @return true if at least on JMenuItem is visible
      */
     public static boolean hasVisibleMenuItem(List<JComponent> fileLoadRecentFiles) {
-        for (JComponent menuItem : fileLoadRecentFiles) {
-            if(menuItem.isVisible()) {
-                return true;
-            }
-        }
-        return false;
+        return fileLoadRecentFiles.stream()
+                .anyMatch(JComponent::isVisible);
     }
 }

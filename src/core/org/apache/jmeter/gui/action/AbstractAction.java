@@ -84,9 +84,7 @@ public abstract class AbstractAction implements Command {
 
         SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
         tree.traverse(resultListeners);
-        Iterator<ResultCollector> irc = resultListeners.getSearchResults().iterator();
-        while (irc.hasNext()) {
-            ResultCollector rc = irc.next();
+        for (ResultCollector rc : resultListeners.getSearchResults()) {
             File f = new File(rc.getFilename());
             if (f.exists()) {
                 switch (actionOnFile) {

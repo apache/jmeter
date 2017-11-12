@@ -24,7 +24,6 @@ import java.beans.Introspector;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
@@ -748,16 +747,11 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /**
      * Unregister stoppable
-     * @param stoppable Stoppable
+     *
+     * @param stoppableToUnregister Stoppable to unregister
      */
-    public void unregister(Stoppable stoppable) {
-        for (Iterator<Stoppable> iterator = stoppables .iterator(); iterator.hasNext();) {
-            Stoppable stopable = iterator.next();
-            if(stopable == stoppable)
-            {
-                iterator.remove();
-            }
-        }
+    public void unregister(Stoppable stoppableToUnregister) {
+        stoppables.removeIf(stoppable -> stoppable == stoppableToUnregister);
     }
 
     /**

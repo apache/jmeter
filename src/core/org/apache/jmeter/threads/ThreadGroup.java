@@ -388,10 +388,8 @@ public class ThreadGroup extends AbstractThreadGroup {
                 log.warn("Exception occurred interrupting ThreadStarter", e);
             }
         }
-        
-        for (Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
-            stopThread(entry.getKey(), entry.getValue(), true);
-        }
+
+        allThreads.forEach((key, value) -> stopThread(key, value, true));
     }
 
 
@@ -411,9 +409,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 log.warn("Exception occurred interrupting ThreadStarter", e);
             }            
         }
-        for (JMeterThread item : allThreads.keySet()) {
-            item.stop();
-        }
+        allThreads.keySet().forEach(JMeterThread::stop);
     }
 
     /**
@@ -433,9 +429,8 @@ public class ThreadGroup extends AbstractThreadGroup {
         if (delayedStartup) {
             stoppedAll = verifyThreadStopped(threadStarter);
         }
-        for (Thread t : allThreads.values()) {
-            stoppedAll = stoppedAll && verifyThreadStopped(t);
-        }
+        stoppedAll = stoppedAll &&
+                allThreads.values().stream().allMatch(this::verifyThreadStopped);
         return stoppedAll;
     }
 
@@ -471,13 +466,11 @@ public class ThreadGroup extends AbstractThreadGroup {
             waitThreadStopped(threadStarter);
         }
         /* @Bugzilla 60933
-         * Like threads can be added on the fly during a test into allThreads
-         * we have to check if allThreads is rly empty before stop 
+         * Threads can be added on the fly during a test into allThreads
+         * we have to check if allThreads is really empty before stopping
          */
-        while ( !allThreads.isEmpty() ) {
-            for (Thread t : allThreads.values()) {
-                waitThreadStopped(t);
-            }
+        while (!allThreads.isEmpty()) {
+            allThreads.values().forEach(this::waitThreadStopped);
         }   
       
     }

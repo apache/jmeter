@@ -19,11 +19,11 @@
 
 package org.apache.jmeter.threads;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
@@ -569,27 +569,15 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     private List<SampleListener> getSampleListeners(SamplePackage samplePack, SamplePackage transactionPack, TransactionSampler transactionSampler) {
         List<SampleListener> sampleListeners = samplePack.getSampleListeners();
-        // Do not send subsamples to listeners which receive the transaction sample
-        if(transactionSampler != null) {
-            List<SampleListener> onlySubSamplerListeners = new ArrayList<>();
-            List<SampleListener> transListeners = transactionPack.getSampleListeners();
-            for(SampleListener listener : sampleListeners) {
-                // Check if this instance is present in transaction listener list
-                boolean found = false;
-                for(SampleListener trans : transListeners) {
-                    // Check for the same instance
-                    if(trans == listener) {
-                        found = true;
-                        break;
-                    }
-                }
-                if(!found) {
-                    onlySubSamplerListeners.add(listener);
-                }
-            }
-            sampleListeners = onlySubSamplerListeners;
+        if (transactionSampler == null) {
+            return sampleListeners;
         }
-        return sampleListeners;
+
+        // Do not send sub-samples to listeners which receive the transaction sample
+        final List<SampleListener> transListeners = transactionPack.getSampleListeners();
+        return sampleListeners.stream()
+                .filter(listener -> !transListeners.contains(listener))
+                .collect(Collectors.toList());
     }
 
     /**
