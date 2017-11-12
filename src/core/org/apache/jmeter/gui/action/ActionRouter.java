@@ -311,16 +311,15 @@ public final class ActionRouter implements ActionListener {
     }
 
     private static List<String> findClassesThatExtend(String className, String excluding, String[] searchPath) throws IOException, ClassNotFoundException {
-            List<String> listClasses = ClassFinder.findClassesThatExtend(
-                    searchPath, // strPathsOrJars - pathNames or jarfiles to search for classes
-                    new Class[] { Class.forName(className) },
-                    false, // innerClasses - should we include inner classes?
-                    null, // contains - className should contain this string
-                    // Ignore the classes which are specific to the reporting tool
-                    excluding, // notContains - className should not contain this string
-                    false); // annotations - true if classNames are annotations
 
-            return listClasses;
+        return ClassFinder.findClassesThatExtend(
+                searchPath, // strPathsOrJars - pathNames or jar files to search for classes
+                new Class[] { Class.forName(className) },
+                false, // innerClasses - should we include inner classes?
+                null, // contains - className should contain this string
+                // Ignore the classes which are specific to the reporting tool
+                excluding, // notContains - className should not contain this string
+                false); // annotations - true if classNames are annotations
     }
 
     private static Optional<String[]> getCodeSourceSearchPath() {

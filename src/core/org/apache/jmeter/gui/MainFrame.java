@@ -70,7 +70,6 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -352,16 +351,17 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * Close the currently selected menu.
      */
     public void closeMenu() {
-        if (menuBar.isSelected()) {
-            MenuElement[] menuElement = menuBar.getSubElements();
-            if (menuElement != null) {
-                for (MenuElement element : menuElement) {
-                    JMenu menu = (JMenu) element;
-                    if (menu.isSelected()) {
-                        menu.setPopupMenuVisible(false);
-                        menu.setSelected(false);
-                        break;
-                    }
+        if (!menuBar.isSelected()) {
+            return;
+        }
+        MenuElement[] menuElement = menuBar.getSubElements();
+        if (menuElement != null) {
+            for (MenuElement element : menuElement) {
+                JMenu menu = (JMenu) element;
+                if (menu.isSelected()) {
+                    menu.setPopupMenuVisible(false);
+                    menu.setSelected(false);
+                    break;
                 }
             }
         }

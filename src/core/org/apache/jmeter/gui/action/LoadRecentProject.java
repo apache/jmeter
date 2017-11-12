@@ -158,11 +158,10 @@ public class LoadRecentProject extends Load {
             String recentFilePath = getRecentFile(i);
             if (recentFilePath != null) {
                 File file = new File(recentFilePath);
-                StringBuilder sb = new StringBuilder(60);
+                String sb = String.valueOf(i + 1) + " " + //$NON-NLS-1$
+                        getMenuItemDisplayName(file);
                 // Index before file name
-                sb.append(i+1).append(" "); //$NON-NLS-1$
-                sb.append(getMenuItemDisplayName(file));
-                recentFile.setText(sb.toString());
+                recentFile.setText(sb);
                 recentFile.setToolTipText(recentFilePath);
                 recentFile.setEnabled(true);
                 recentFile.setVisible(true);

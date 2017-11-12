@@ -187,24 +187,24 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     private void scheduleThread(JMeterThread thread, long now) {
 
-        // if true the Scheduler is enabled
-        if (getScheduler()) {
-            // set the start time for the Thread
-            if (getDelay() >= 0) {// Duration is in seconds
-                thread.setStartTime(getDelay() * 1000 + now);
-            } else {
-                throw new JMeterStopTestException("Invalid delay "+getDelay()+" set in Thread Group:"+getName());
-            }
-
-            // set the endtime for the Thread
-            if (getDuration() > 0) {// Duration is in seconds
-                thread.setEndTime(getDuration() * 1000 + (thread.getStartTime()));
-            } else {
-                throw new JMeterStopTestException("Invalid duration "+getDuration()+" set in Thread Group:"+getName());
-            }
-            // Enables the scheduler
-            thread.setScheduled(true);
+        if (!getScheduler()) { // if the Scheduler is not enabled
+            return;
         }
+
+        if (getDelay() >= 0) { // Duration is in seconds
+            thread.setStartTime(getDelay() * 1000 + now);
+        } else {
+            throw new JMeterStopTestException("Invalid delay " + getDelay() + " set in Thread Group:" + getName());
+        }
+
+        // set the endtime for the Thread
+        if (getDuration() > 0) {// Duration is in seconds
+            thread.setEndTime(getDuration() * 1000 + (thread.getStartTime()));
+        } else {
+            throw new JMeterStopTestException("Invalid duration " + getDuration() + " set in Thread Group:" + getName());
+        }
+        // Enables the scheduler
+        thread.setScheduled(true);
     }
 
     @Override
@@ -480,13 +480,14 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param thread Thread
      */
     private void waitThreadStopped(Thread thread) {
-        if (thread != null) {
-            while (thread.isAlive()) {
-                try {
-                    thread.join(WAIT_TO_DIE);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+        if (thread == null) {
+            return;
+        }
+        while (thread.isAlive()) {
+            try {
+                thread.join(WAIT_TO_DIE);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }

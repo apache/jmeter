@@ -861,11 +861,9 @@ public class JMeterThread implements Runnable, Interruptible {
     void notifyTestListeners() {
         threadVars.incIteration();
         for (TestIterationListener listener : testIterationStartListeners) {
+            listener.testIterationStart(new LoopIterationEvent(threadGroupLoopController, threadVars.getIteration()));
             if (listener instanceof TestElement) {
-                listener.testIterationStart(new LoopIterationEvent(threadGroupLoopController, threadVars.getIteration()));
                 ((TestElement) listener).recoverRunningVersion();
-            } else {
-                listener.testIterationStart(new LoopIterationEvent(threadGroupLoopController, threadVars.getIteration()));
             }
         }
     }
