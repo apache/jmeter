@@ -120,6 +120,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Input</td><td> <a href="#__CSVRead">CSVRead</a></td><td>read from CSV delimited file</td><td>1.9</td></tr>
         <tr><td>Input</td><td> <a href="#__XPath">XPath</a></td><td>Use an XPath expression to read from a file</td><td>2.0.3</td></tr>
         <tr><td>Calculation</td><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td><td>1.X</td></tr>
+        <tr><td>Formatting</td><td> <a href="#__dateTimeConvert">dateTimeConvert</a></td><td>Convert a date or time from source to target format</td><td>4.0</td></tr>
         <tr><td>Calculation</td><td> <a href="#__digest">digest</a></td><td>Generate a digest (SHA-1, SHA-256, MD5...)</td><td>4.0</td></tr>
         <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td><td>1.8.1</td></tr>
         <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td><td>2.3.2</td></tr>
@@ -1597,6 +1598,20 @@ becomes:
             results. </property>
         <property name="Name of variable" required="No">The name of
             the variable to set.</property>
+    </properties>
+</component>
+<component index="&sect-num;.5.35" name="__dateTimeConvert">
+    <description>
+        <p>The <code>__dateTimeConvert</code> function converts a date that is in source format
+        to a target format storing the result optionally in the variable name.</p>
+    </description>
+    <properties>
+        <property name="Date String" required="Yes">
+            The date string to convert from Source Date Format to Target Date Format.
+        </property>
+        <property name="Source Date Format" required="Yes">The original date format</property>
+        <property name="Target Date Format" required="Yes">The new date format</property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
     </properties>
 </component>
 </subsection>
