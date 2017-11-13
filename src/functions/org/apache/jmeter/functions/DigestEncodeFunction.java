@@ -47,9 +47,9 @@ import java.util.List;
  * 
  * @since 4.0
  */
-public class DigestEncode extends AbstractFunction {
+public class DigestEncodeFunction extends AbstractFunction {
 
-    private static final Logger log = LoggerFactory.getLogger(DigestEncode.class);
+    private static final Logger log = LoggerFactory.getLogger(DigestEncodeFunction.class);
     private static final String UTF_8 = "UTF-8";
 
     /**
