@@ -55,34 +55,33 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField receiveQueue = new JLabeledTextField(JMeterUtils.getResString("jms_receive_queue")); //$NON-NLS-1$
 
-    private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout"),10); //$NON-NLS-1$
+    private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout"), 10); //$NON-NLS-1$
 
-    private JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"),10); //$NON-NLS-1$
+    private JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"), 10); //$NON-NLS-1$
 
-    private JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"),1); //$NON-NLS-1$
+    private JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"), 1); //$NON-NLS-1$
 
     private JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
-    
+
     private JLabeledTextField numberOfSamplesToAggregate = new JLabeledTextField("Number of samples to aggregate"); //$NON-NLS-1$
 
-    private JSyntaxTextArea messageContent = JSyntaxTextArea.getInstance(10, 50); //$NON-NLS-1$
+    private JSyntaxTextArea messageContent = JSyntaxTextArea.getInstance(10, 50); // $NON-NLS-1$
 
     private JLabeledTextField initialContextFactory = new JLabeledTextField(
             JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
 
     private JLabeledTextField providerUrl = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
 
-    private final String[] JMS_COMMUNICATION_STYLE_LABELS = new String[] {
-    		JMeterUtils.getResString("jms_request"), // $NON-NLS-1$
+    private final String[] JMS_COMMUNICATION_STYLE_LABELS = new String[] { JMeterUtils.getResString("jms_request"), // $NON-NLS-1$
             JMeterUtils.getResString("jms_requestreply"), // $NON-NLS-1$
             JMeterUtils.getResString("jms_read"), // $NON-NLS-1$
             JMeterUtils.getResString("jms_browse"), // $NON-NLS-1$
             JMeterUtils.getResString("jms_clear"), // $NON-NLS-1$
-            };
+    };
 
-    private JLabeledChoice jmsCommunicationStyle = 
-    	new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), // $NON-NLS-1$
-    	JMS_COMMUNICATION_STYLE_LABELS);
+    private JLabeledChoice jmsCommunicationStyle = new JLabeledChoice(
+            JMeterUtils.getResString("jms_communication_style"), // $NON-NLS-1$
+            JMS_COMMUNICATION_STYLE_LABELS);
 
     private JMSPropertiesPanel jmsPropertiesPanel;
 
@@ -107,10 +106,10 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         queueConnectionFactory.setText(""); // $NON-NLS-1$
         sendQueue.setText(""); // $NON-NLS-1$
         receiveQueue.setText(""); // $NON-NLS-1$
-        jmsCommunicationStyle.setSelectedIndex(JMS_COMMUNICATION_STYLE_LABELS.length - 1);
-        timeout.setText("");  // $NON-NLS-1$
-        expiration.setText("");  // $NON-NLS-1$
-        priority.setText("");  // $NON-NLS-1$
+        jmsCommunicationStyle.setSelectedIndex(0);
+        timeout.setText(""); // $NON-NLS-1$
+        expiration.setText(""); // $NON-NLS-1$
+        priority.setText(""); // $NON-NLS-1$
         jmsSelector.setText(""); // $NON-NLS-1$
         numberOfSamplesToAggregate.setText(""); // $NON-NLS-1$
         messageContent.setInitialText(""); // $NON-NLS-1$
@@ -157,12 +156,15 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     /**
      *
-     * @param element the test element being created
+     * @param element
+     *            the test element being created
      */
     @Override
     public void modifyTestElement(TestElement element) {
         super.configureTestElement(element);
-        if (!(element instanceof JMSSampler)) { return; }
+        if (!(element instanceof JMSSampler)) {
+            return;
+        }
         JMSSampler sampler = (JMSSampler) element;
         transfer(sampler);
     }
@@ -170,14 +172,16 @@ public class JMSSamplerGui extends AbstractSamplerGui {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        if (!(el instanceof JMSSampler)) { return; }
+        if (!(el instanceof JMSSampler)) {
+            return;
+        }
         JMSSampler sampler = (JMSSampler) el;
         queueConnectionFactory.setText(sampler.getQueueConnectionFactory());
         sendQueue.setText(sampler.getSendQueue());
         receiveQueue.setText(sampler.getReceiveQueue());
 
         jmsCommunicationStyle.setSelectedIndex(el.getPropertyAsInt(JMSSampler.COMMUNICATIONSTYLE));
-        
+
         useNonPersistentDelivery.setSelected(sampler.isNonPersistent());
         useReqMsgIdAsCorrelId.setSelected(sampler.isUseReqMsgIdAsCorrelId());
         useResMsgIdAsCorrelId.setSelected(sampler.isUseResMsgIdAsCorrelId());
@@ -204,7 +208,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
      * Initializes the configuration screen.
      *
      */
-    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+    private void init() { // WARNING: called from ctor so must not be overridden
+                          // (i.e. must be private or final)
         setLayout(new BorderLayout());
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);
@@ -222,9 +227,9 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         jmsQueueingPanel.add(sendQueuePanel, BorderLayout.CENTER);
 
         JPanel receiveQueuePanel = new JPanel(new BorderLayout(5, 0));
-        receiveQueuePanel.add(jmsSelector,BorderLayout.SOUTH);
-        receiveQueuePanel.add(numberOfSamplesToAggregate,BorderLayout.CENTER);
-        receiveQueuePanel.add(receiveQueue,BorderLayout.NORTH);
+        receiveQueuePanel.add(jmsSelector, BorderLayout.SOUTH);
+        receiveQueuePanel.add(numberOfSamplesToAggregate, BorderLayout.CENTER);
+        receiveQueuePanel.add(receiveQueue, BorderLayout.NORTH);
         jmsQueueingPanel.add(receiveQueuePanel, BorderLayout.SOUTH);
 
         JPanel messagePanel = new JPanel(new BorderLayout());
@@ -235,9 +240,9 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         correlationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("jms_correlation_title"))); //$NON-NLS-1$
 
-        useReqMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_req_msgid_as_correlid"),false); //$NON-NLS-1$
+        useReqMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_req_msgid_as_correlid"), false); //$NON-NLS-1$
 
-        useResMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_res_msgid_as_correlid"),false); //$NON-NLS-1$
+        useResMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_res_msgid_as_correlid"), false); //$NON-NLS-1$
 
         correlationPanel.add(useReqMsgIdAsCorrelId);
         correlationPanel.add(useResMsgIdAsCorrelId);
@@ -248,7 +253,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         onewayPanel.add(correlationPanel);
         messageNorthPanel.add(onewayPanel, BorderLayout.NORTH);
 
-        useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
+        useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"), false); //$NON-NLS-1$
 
         JPanel timeoutPanel = new HorizontalPanel();
         timeoutPanel.add(timeout);
@@ -264,7 +269,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         messageContentPanel.add(JTextScrollPane.getInstance(messageContent), BorderLayout.CENTER);
         messagePanel.add(messageContentPanel, BorderLayout.CENTER);
 
-        jmsPropertiesPanel = new JMSPropertiesPanel(); //$NON-NLS-1$
+        jmsPropertiesPanel = new JMSPropertiesPanel(); // $NON-NLS-1$
         messagePanel.add(jmsPropertiesPanel, BorderLayout.SOUTH);
 
         Box mainPanel = Box.createVerticalBox();
