@@ -50,7 +50,7 @@ public class TestDigestFunction extends JMeterTestCase {
 
     @Before
     public void setUp() {
-    	digest = new DigestEncode();
+    	digest = new DigestEncodeFunction();
         result = new SampleResult();
         jmctx = JMeterContextService.getContext();
         String data = "dummy data";
