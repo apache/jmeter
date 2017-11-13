@@ -157,95 +157,104 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	private transient Throwable thrown = null;
 
 	private transient Context context = null;
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public SampleResult sample(Entry entry) {
-		JMeterContext context = JMeterContextService.getContext();
-
-		SampleResult res = new SampleResult();
-		res.setSampleLabel(getName());
-		res.setSamplerData(getContent());
-		res.setSuccessful(false); // Assume failure
-		res.setDataType(SampleResult.TEXT);
-		res.sampleStart();
-
+		SampleResult sampleResult;
 		try {
 			LOGGER.debug("Point-to-point mode: " + getCommunicationstyle());
 			if (isBrowse()) {
-				handleBrowse(res);
+				sampleResult = handleBrowse();
 			} else if (isClearQueue()) {
-				handleClearQueue(res);
+				sampleResult = handleClearQueue();
 			} else if (isOneway()) {
-				handleOneWay(res);
+				sampleResult = handleOneWay();
 			} else if (isRead()) {
-				handleRead(context, res);
+				sampleResult = handleRead();
 			} else {
-				handleRequestResponse(res);
+				sampleResult = handleRequestResponse();
 			}
 		} catch (Exception e) {
 			LOGGER.warn(e.getLocalizedMessage(), e);
+			sampleResult = constructSampleResult(false);
 			if (thrown != null) {
-				res.setResponseMessage(thrown.toString());
+				sampleResult.setResponseMessage(thrown.toString());
 			} else {
-				res.setResponseMessage(e.getLocalizedMessage());
+				sampleResult.setResponseMessage(e.getLocalizedMessage());
 			}
 		}
-		res.sampleEnd();
-		return res;
+		sampleResult.sampleEnd();
+		return sampleResult;
 	}
 
-	private void handleBrowse(SampleResult res) throws JMSException {
-		LOGGER.debug("isBrowseOnly");
-		StringBuffer sb = new StringBuffer("");
-		res.setSuccessful(true);
+	private SampleResult constructSampleResult(boolean successfull) {
+		SampleResult sampleResult = new SampleResult();
+		sampleResult.setSampleLabel(getName());
+		sampleResult.setSamplerData(getContent());
+		sampleResult.setSuccessful(successfull);
+		sampleResult.setDataType(SampleResult.TEXT);
+		sampleResult.sampleStart();
+		return sampleResult;
+	}
+	
+	private SampleResult handleBrowse() throws JMSException {
+		LOGGER.debug("handle browse");
+		StringBuilder sb = new StringBuilder();
+		SampleResult sampleResult = constructSampleResult(true);
 		sb.append("\n \n  Browse message on Send Queue " + sendQueue.getQueueName());
-		sb.append(browseQueueDetails(sendQueue, res));
-		res.setResponseData(sb.toString().getBytes());
+		sb.append(browseQueueDetails(sendQueue, sampleResult));
+		sampleResult.setResponseData(sb.toString().getBytes());
+		return sampleResult;
 	}
 
-	private void handleClearQueue(SampleResult res) throws JMSException {
-		LOGGER.debug("isClearQueue");
-		StringBuffer sb = new StringBuffer("");
-		res.setSuccessful(true);
+	private SampleResult handleClearQueue() throws JMSException {
+		LOGGER.debug("handle clear queue");
+		StringBuilder sb = new StringBuilder();
+		SampleResult sampleResult = constructSampleResult(true);
 		sb.append("\n \n  Clear messages on Send Queue " + sendQueue.getQueueName());
-		sb.append(clearQueue(sendQueue, res));
-		res.setResponseData(sb.toString().getBytes());
+		sb.append(clearQueue(sendQueue, sampleResult));
+		sampleResult.setResponseData(sb.toString().getBytes());
+		return sampleResult;
 	}
 
-	private void handleOneWay(SampleResult res) throws JMSException {
-		LOGGER.debug("isOneWay");
+	private SampleResult handleOneWay() throws JMSException {
+		LOGGER.debug("handle one way");
 		TextMessage msg = createMessage();
 		int deliveryMode = isNonPersistent() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT;
 		producer.send(msg, deliveryMode, Integer.parseInt(getPriority()), Long.parseLong(getExpiration()));
-		res.setRequestHeaders(Utils.messageProperties(msg));
-		res.setResponseOK();
-		res.setResponseData("Oneway request has no response data", null);
+		SampleResult sampleResult = constructSampleResult(false);
+		sampleResult.setRequestHeaders(Utils.messageProperties(msg));
+		sampleResult.setResponseOK();
+		sampleResult.setResponseData("Oneway request has no response data", null);
+		return sampleResult;
 	}
 
-	private void handleRead(JMeterContext context, SampleResult res) {
-		LOGGER.debug("isRead");
-		StringBuffer sb = new StringBuffer("");
-		res.setSuccessful(true);
-		Sampler sampler = context.getPreviousSampler();
-		SampleResult sr = context.getPreviousResult();
+	private SampleResult handleRead() {
+		LOGGER.debug("handle read");
+		JMeterContext jmeterContext = JMeterContextService.getContext();
+		Sampler previousSampler = jmeterContext.getPreviousSampler();
+		SampleResult previousSampleResult = jmeterContext.getPreviousResult();
 		String jmsSelector = getJMSSelector();
-		if (jmsSelector.equals("_PREV_SAMPLER_")) {
-			if (sampler instanceof JMSSampler) {
-				jmsSelector = sr.getResponseMessage();
-			}
+		if ("_PREV_SAMPLER_".equals(jmsSelector) && previousSampler instanceof JMSSampler) {
+			jmsSelector = previousSampleResult.getResponseMessage();
 		}
+		return processNumberOfSamplesFromQueue(jmsSelector);
+	}
+
+	private SampleResult processNumberOfSamplesFromQueue(String jmsSelector) {
 		int sampleCounter = 0;
 		int sampleTries = 0;
-		String result = null;
+		StringBuilder sb = new StringBuilder();
+		StringBuilder messageBuilder = new StringBuilder();
+		StringBuilder propertiesBuilder = new StringBuilder();
+		SampleResult sampleResult = constructSampleResult(true);
 
-		StringBuilder buffer = new StringBuilder();
-		StringBuilder propBuffer = new StringBuilder();
-
+		String result;
 		do {
-			result = browseQueueForConsumption(sendQueue, jmsSelector, res, buffer, propBuffer);
+			result = browseQueueForConsumption(jmsSelector, sampleResult, messageBuilder, propertiesBuilder);
 			if (result != null) {
 				sb.append(result);
 				sb.append('\n');
@@ -254,22 +263,47 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 			sampleTries++;
 		} while ((result != null) && (sampleTries < getNumberOfSamplesToAggregateAsInt()));
 
-		res.setResponseMessage(sampleCounter + " samples messages received");
-		res.setResponseData(buffer.toString().getBytes()); // TODO - charset?
-		res.setResponseHeaders(propBuffer.toString());
+		sampleResult.setResponseMessage(sampleCounter + " samples messages received");
+		sampleResult.setResponseData(messageBuilder.toString().getBytes());
+		sampleResult.setResponseHeaders(propertiesBuilder.toString());
 		if (sampleCounter == 0) {
-			res.setResponseCode("404");
-			res.setSuccessful(false);
+			sampleResult.setResponseCode("404");
+			sampleResult.setSuccessful(false);
 		} else {
-			res.setResponseCodeOK();
-			res.setSuccessful(true);
+			sampleResult.setResponseCodeOK();
+			sampleResult.setSuccessful(true);
 		}
-		res.setResponseMessage(sampleCounter + " message(s) received successfully");
-		res.setSamplerData(getNumberOfSamplesToAggregateAsInt() + " messages expected");
-		res.setSampleCount(sampleCounter);
+		sampleResult.setResponseMessage(sampleCounter + " message(s) received successfully");
+		sampleResult.setSamplerData(getNumberOfSamplesToAggregateAsInt() + " messages expected");
+		sampleResult.setSampleCount(sampleCounter);
+		return sampleResult;
 	}
 
-	private void handleRequestResponse(SampleResult res) throws JMSException {
+	private String browseQueueForConsumption(String jmsSelector, SampleResult sampleResult, StringBuilder messageBuilder,
+			StringBuilder propertiesBuilder) {
+		String returnValue = null;
+		try {
+			QueueReceiver consumer = session.createReceiver(sendQueue, jmsSelector);
+			Message reply = consumer.receive(Long.valueOf(getTimeout()));
+			LOGGER.debug("Message: " + reply);
+			consumer.close();
+			if (reply != null) {
+				sampleResult.setResponseMessage("1 message(s) received successfully");
+				sampleResult.setResponseHeaders(reply.toString());
+				TextMessage message = (TextMessage) reply;
+				returnValue = message.getText();
+				extractContent(messageBuilder, propertiesBuilder, message);
+			} else {
+				sampleResult.setResponseMessage("No message received");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			LOGGER.error(ex.getMessage());
+		}
+		return returnValue;
+	}
+	
+	private SampleResult handleRequestResponse() throws JMSException {
 		TextMessage msg = createMessage();
 		if (!useTemporyQueue()) {
 			LOGGER.debug("NO TEMP QUEUE");
@@ -279,75 +313,53 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		Message replyMsg = executor.sendAndReceive(msg,
 				isNonPersistent() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT,
 				Integer.parseInt(getPriority()), Long.parseLong(getExpiration()));
-		res.setRequestHeaders(Utils.messageProperties(msg));
+		SampleResult sampleResult = constructSampleResult(false);
+		sampleResult.setRequestHeaders(Utils.messageProperties(msg));
 		if (replyMsg == null) {
-			res.setResponseMessage("No reply message received");
+			sampleResult.setResponseMessage("No reply message received");
 		} else {
 			if (replyMsg instanceof TextMessage) {
-				res.setResponseData(((TextMessage) replyMsg).getText(), null);
+				sampleResult.setResponseData(((TextMessage) replyMsg).getText(), null);
 			} else {
-				res.setResponseData(replyMsg.toString(), null);
+				sampleResult.setResponseData(replyMsg.toString(), null);
 			}
-			res.setResponseHeaders(Utils.messageProperties(replyMsg));
-			res.setResponseOK();
+			sampleResult.setResponseHeaders(Utils.messageProperties(replyMsg));
+			sampleResult.setResponseOK();
 		}
+		return sampleResult;
 	}
 
-	private String browseQueueForConsumption(Queue queue, String jmsSelector, SampleResult res, StringBuilder buffer,
-			StringBuilder propBuffer) {
-		String retVal = null;
-		try {
-			QueueReceiver consumer = session.createReceiver(queue, jmsSelector);
-			Message reply = consumer.receive(Long.valueOf(getTimeout()));
-			LOGGER.debug("Message: " + reply);
-			consumer.close();
-			if (reply != null) {
-				res.setResponseMessage("1 message(s) received successfully");
-				res.setResponseHeaders(reply.toString());
-				TextMessage msg = (TextMessage) reply;
-				retVal = msg.getText();
-				extractContent(buffer, propBuffer, msg);
-			} else {
-				res.setResponseMessage("No message received");
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			LOGGER.error(ex.getMessage());
-		}
-		return retVal;
-	}
-
-	private void extractContent(StringBuilder buffer, StringBuilder propBuffer, Message msg) {
-		if (msg != null) {
+	private void extractContent(StringBuilder messageBuilder, StringBuilder propertiesBuilder, Message message) {
+		if (message != null) {
 			try {
-				if (msg instanceof TextMessage) {
-					buffer.append(((TextMessage) msg).getText());
-				} else if (msg instanceof ObjectMessage) {
-					ObjectMessage objectMessage = (ObjectMessage) msg;
+				if (message instanceof TextMessage) {
+					messageBuilder.append(((TextMessage) message).getText());
+				} else if (message instanceof ObjectMessage) {
+					ObjectMessage objectMessage = (ObjectMessage) message;
 					if (objectMessage.getObject() != null) {
-						buffer.append(objectMessage.getObject().getClass());
+						messageBuilder.append(objectMessage.getObject().getClass());
 					} else {
-						buffer.append("object is null");
+						messageBuilder.append("object is null");
 					}
-				} else if (msg instanceof BytesMessage) {
-					BytesMessage bytesMessage = (BytesMessage) msg;
-					buffer.append(bytesMessage.getBodyLength() + " bytes received in BytesMessage");
-				} else if (msg instanceof MapMessage) {
-					MapMessage mapm = (MapMessage) msg;
+				} else if (message instanceof BytesMessage) {
+					BytesMessage bytesMessage = (BytesMessage) message;
+					messageBuilder.append(bytesMessage.getBodyLength() + " bytes received in BytesMessage");
+				} else if (message instanceof MapMessage) {
+					MapMessage mapm = (MapMessage) message;
 					@SuppressWarnings("unchecked") // MapNames are Strings
 					Enumeration<String> enumb = mapm.getMapNames();
 					while (enumb.hasMoreElements()) {
 						String name = enumb.nextElement();
 						Object obj = mapm.getObject(name);
-						buffer.append(name);
-						buffer.append(",");
-						buffer.append(obj.getClass().getCanonicalName());
-						buffer.append(",");
-						buffer.append(obj);
-						buffer.append("\n");
+						messageBuilder.append(name);
+						messageBuilder.append(",");
+						messageBuilder.append(obj.getClass().getCanonicalName());
+						messageBuilder.append(",");
+						messageBuilder.append(obj);
+						messageBuilder.append("\n");
 					}
 				}
-				Utils.messageProperties(propBuffer, msg);
+				Utils.messageProperties(propertiesBuilder, message);
 			} catch (JMSException e) {
 				LOGGER.error(e.getMessage());
 			}
@@ -542,7 +554,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 	public int getCommunicationstyle() {
 		JMeterProperty prop = getProperty(COMMUNICATIONSTYLE);
-		return  Integer.parseInt(prop.getStringValue());
+		return Integer.parseInt(prop.getStringValue());
 	}
 
 	public String getCommunicationstyleString() {
