@@ -106,7 +106,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         queueConnectionFactory.setText(""); // $NON-NLS-1$
         sendQueue.setText(""); // $NON-NLS-1$
         receiveQueue.setText(""); // $NON-NLS-1$
-        jmsCommunicationStyle.setSelectedIndex(JMS_COMMUNICATION_STYLE_LABELS.length - 1);
+        jmsCommunicationStyle.setSelectedIndex(0);
         timeout.setText(""); // $NON-NLS-1$
         expiration.setText(""); // $NON-NLS-1$
         priority.setText(""); // $NON-NLS-1$

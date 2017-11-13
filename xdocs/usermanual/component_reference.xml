@@ -1596,7 +1596,7 @@ The following table shows some values which may be useful when configuring JMS:
     The JNDI name of the receiving queue. If a value is provided here and the communication style is <code>Request Response</code>
     this queue will be monitored for responses to the requests sent.
   </property>
-  <property name="Number of samples to aggregate" required="Yes">number of samples to aggregate</property>
+  <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate. Only applicable for Communication style Read.</property>
   <property name="JMS Selector" required="No">
     Message Selector as defined by JMS specification to extract only 
     messages that respect the Selector condition. Syntax uses subpart of SQL 92.
