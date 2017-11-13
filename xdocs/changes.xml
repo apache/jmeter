@@ -206,6 +206,7 @@ Summary
     <li><bug>61588</bug>Better log message for RandomDate function</li>
     <li><bug>61619</bug>In Function Helper Dialog, the 1st function doesn't display default parameters</li>
     <li><bug>61628</bug>If split string has empty separator default separator is not used</li>
+    <li><bug>61752</bug><code>__RandomDate</code> : Function does not allow missing last parameter used for variable name</li>
 </ul>
 
 <h3>I18N</h3>
