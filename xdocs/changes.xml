@@ -117,6 +117,7 @@ Summary
     <li><bug>61645</bug>Response Assertion : Add ability to assert on Request Data</li>
     <li><bug>61534</bug>Convert AssertionError to a failed assertion in the JSR223Assertion allowing users to use assert in their code</li>
     <li><bug>61756</bug>Extractors : Improve label name "Reference name" to make it clear what it makes</li>
+    <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions : When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default</li>
 </ul>
 
 <h3>Functions</h3>
