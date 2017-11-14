@@ -6345,7 +6345,7 @@ Behaviour can be modified with some properties by setting in user.properties:
         The possible choices are:
         <ul>
         <li><code>Continue</code> - ignore the error and continue with the test</li>
-        <li><code>Start Next Loop</code> - ignore the error, start next loop and continue with the test</li>
+        <li><code>Start Next Thread Loop</code> - ignore the error, start next loop and continue with the test</li>
         <li><code>Stop Thread</code> - current thread exits</li>
         <li><code>Stop Test</code> - the entire test is stopped at the end of any current samples.</li>
         <li><code>Stop Test Now</code> - the entire test is stopped abruptly. Any current samplers are interrupted if possible.</li>
