@@ -2794,8 +2794,8 @@ are part of the test plan.</p></description>
 <component name="View Results Tree" index="&sect-num;.3.6" width="910" height="659" screenshot="view_results_tree.png">
 <description>
 <note>
-View Results Tree MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
-during Test Plan debugging and Validation.
+View Results Tree MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU).
+Use it only for either functional testing or during Test Plan debugging and Validation.
 </note>
 The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
@@ -2895,8 +2895,9 @@ video/
 </source>
 <br/></td></tr>
 <tr><td><code>XML</code></td>
-<td>The <i>XML view</i> will show response in tree style. 
+<td>The <i>XML view</i> will show response in tree style.
 Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
+You can right-click on any node and expand or collapse all nodes below it.
 <br/></td></tr>
 <tr><td><code>XPath Tester</code></td>
 <td>The <i>XPath Tester</i> only works for text responses. It shows the plain text in the upper panel.
