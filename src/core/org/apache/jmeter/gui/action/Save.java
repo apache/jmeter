@@ -24,21 +24,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.jmeter.control.gui.TestFragmentControllerGui;
 import org.apache.jmeter.engine.TreeCloner;
@@ -95,7 +96,9 @@ public class Save extends AbstractAction {
 
     // NumberFormat to format version number in backup file names
     private static final DecimalFormat BACKUP_VERSION_FORMATER = new DecimalFormat("000000"); //$NON-NLS-1$
-    
+
+    private static final int MS_PER_HOUR = 60 * 60 * 1000;
+
     private static final Set<String> commands = new HashSet<>();
 
     static {
@@ -136,10 +139,10 @@ public class Save extends AbstractAction {
                 return;
             }
             subTree = GuiPackage.getInstance().getCurrentSubTree();
-        } 
+        }
         else if (e.getActionCommand().equals(ActionNames.SAVE_AS_TEST_FRAGMENT)) {
             JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
-            if(checkAcceptableForTestFragment(nodes)) {                
+            if(checkAcceptableForTestFragment(nodes)) {
                 subTree = GuiPackage.getInstance().getCurrentSubTree();
                 // Create Test Fragment node
                 TestElement element = GuiPackage.getInstance().createTestElement(TestFragmentControllerGui.class.getName());
@@ -152,9 +155,9 @@ public class Save extends AbstractAction {
                     // Add clone to tfTree
                     tfTree.add(cloner.getClonedTree());
                 }
-                                
+
                 subTree = hashTree;
-                
+
             } else {
                 JMeterUtils.reportErrorToUser(
                         JMeterUtils.getResString("save_as_test_fragment_error"), // $NON-NLS-1$
@@ -164,7 +167,7 @@ public class Save extends AbstractAction {
         } else {
             fullSave = true;
             HashTree testPlan = GuiPackage.getInstance().getTreeModel().getTestPlan();
-            // If saveWorkBench 
+            // If saveWorkBench
             if (isWorkbenchSaveable()) {
                 HashTree workbench = GuiPackage.getInstance().getTreeModel().getWorkBench();
                 testPlan.add(workbench);
@@ -234,17 +237,10 @@ public class Save extends AbstractAction {
             
             // delete expired backups : here everything went right so we can
             // proceed to deletion
-            for (File expiredBackupFile : expiredBackupFiles) {
-                try {
-                    FileUtils.deleteQuietly(expiredBackupFile);
-                } catch (Exception ex) {
-                    log.warn("Failed to delete backup file, {}", expiredBackupFile); //$NON-NLS-1$
-                }
-            }
-        } catch(RuntimeException ex) {
+            expiredBackupFiles.forEach(FileUtils::deleteQuietly);
+        } catch (RuntimeException ex) {
             throw ex;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             log.error("Error saving tree.", ex);
             throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
         } 
@@ -319,67 +315,52 @@ public class Save extends AbstractAction {
         char versionSeparator = '-'; //$NON-NLS-1$
         String baseName = fileToBackup.getName();
         // remove .jmx extension if any
-        baseName = baseName.endsWith(JMX_FILE_EXTENSION) ? baseName.substring(0, baseName.length() - JMX_FILE_EXTENSION.length()) : baseName;
+        baseName = baseName.endsWith(JMX_FILE_EXTENSION)
+                ? baseName.substring(0, baseName.length() - JMX_FILE_EXTENSION.length())
+                : baseName;
         // get a file to the backup directory
         File backupDir = new File(BACKUP_DIRECTORY);
         backupDir.mkdirs();
         if (!backupDir.isDirectory()) {
             log.error(
-                    "Could not backup file ! Backup directory does not exist, is not a directory or could not be created ! <{}>", //$NON-NLS-1$
-                    backupDir.getAbsolutePath()); //$NON-NLS-2$
+                    "Could not backup file! Backup directory does not exist, is not a directory or could not be created ! <{}>", //$NON-NLS-1$
+                    backupDir.getAbsolutePath());
+            return EMPTY_FILE_LIST;
         }
 
-        // select files matching
+        // select files matching:
         // {baseName}{versionSeparator}{version}{jmxExtension}
-        // where {version} is a 6 digits number
-        String backupPatternRegex = Pattern.quote(baseName + versionSeparator) + "([\\d]{6})" + Pattern.quote(JMX_FILE_EXTENSION); //$NON-NLS-1$
+        // where {version} is a 6 digit number
+        String backupPatternRegex = Pattern.quote(baseName + versionSeparator)
+                + "([\\d]{6})" //$NON-NLS-1$
+                + Pattern.quote(JMX_FILE_EXTENSION);
         Pattern backupPattern = Pattern.compile(backupPatternRegex);
-        // create a file filter that select files matching a given regex pattern
-        IOFileFilter patternFileFilter = new PrivatePatternFileFilter(backupPattern);
         // get all backup files in the backup directory
-        List<File> backupFiles = new ArrayList<>(FileUtils.listFiles(backupDir, patternFileFilter, null));
+        List<File> backupFiles = new ArrayList<>(FileUtils.listFiles(
+                backupDir, new PrivatePatternFileFilter(backupPattern), null));
+        // oldest to newest
+        backupFiles.sort(LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
         // this should be the most recent backup
         int lastVersionNumber = getHighestVersionNumber(backupPattern, backupFiles);
-        // find expired backup files
-        List<File> expiredFiles = new ArrayList<>();
-        if (BACKUP_MAX_HOURS > 0) {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.HOUR_OF_DAY, -BACKUP_MAX_HOURS);
-            long expiryDate = cal.getTime().getTime();
-            // select expired files that should be deleted
-            IOFileFilter expiredFileFilter = FileFilterUtils.ageFileFilter(expiryDate, true);
-            expiredFiles.addAll(FileFilterUtils.filterList(expiredFileFilter, backupFiles));
-        }
-        // sort backups from by their last modified time
-        Collections.sort(backupFiles, (o1, o2) -> {
-            long diff = o1.lastModified() - o2.lastModified();
-            // convert the long to an int in order to comply with the method
-            // contract
-            return diff < 0 ? -1 : diff > 0 ? 1 : 0;
-        });
-        /**
-         *  backup name is of the form 
-         * {baseName}{versionSeparator}{version}{jmxExtension}
-         */
-        String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1L) + JMX_FILE_EXTENSION;
+
+        // backup name is of the form:
+        // {baseName}{versionSeparator}{version}{jmxExtension}
+        String backupName = baseName
+                + versionSeparator
+                + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1L)
+                + JMX_FILE_EXTENSION;
         File backupFile = new File(backupDir, backupName);
         // create file backup
         try {
             FileUtils.copyFile(fileToBackup, backupFile);
         } catch (IOException e) {
-            log.error("Failed to backup file : {}", fileToBackup.getAbsolutePath(), e); //$NON-NLS-1$
+            log.error("Failed to backup file: {}", fileToBackup.getAbsolutePath(), e); //$NON-NLS-1$
             return EMPTY_FILE_LIST;
         }
-        // add the fresh new backup file (list is still sorted here)
+        // add the new backup file (list is still sorted here)
         backupFiles.add(backupFile);
-        // unless max backups is not set, ensure that we don't keep more backups
-        // than required
-        if (BACKUP_MAX_COUNT > 0 && backupFiles.size() > BACKUP_MAX_COUNT) {
-            // keep the most recent files in the limit of the specified max
-            // count
-            expiredFiles.addAll(backupFiles.subList(0, backupFiles.size() - BACKUP_MAX_COUNT));
-        }
-        return expiredFiles;
+
+        return backupFilesToDelete(backupFiles);
     }
 
     /**
@@ -395,7 +376,38 @@ public class Save extends AbstractAction {
                 .max()
                 .orElse(0);
     }
-    
+
+    /**
+     * Filters list of backup files to those which are candidates for deletion.
+     * @param backupFiles list of all backup files
+     * @return list of files to be deleted based upon properties described {@link #createBackupFile(File)}
+     */
+    private List<File> backupFilesToDelete(List<File> backupFiles) {
+        List<File> filesToDelete = new ArrayList<>();
+        if (BACKUP_MAX_HOURS > 0) {
+            filesToDelete.addAll(expiredBackupFiles(backupFiles));
+        }
+        // if max backups is set, ensure that we don't keep more backups than required
+        if (BACKUP_MAX_COUNT > 0 && backupFiles.size() > BACKUP_MAX_COUNT) {
+            // keep the most recent files within limit of the specified max
+            filesToDelete.addAll(backupFiles.subList(0, backupFiles.size() - BACKUP_MAX_COUNT));
+        }
+        return filesToDelete.stream()
+                .distinct() // ensure no duplicates from the two checks
+                .collect(Collectors.toList());
+    }
+
+    private List<File> expiredBackupFiles(List<File> backupFiles) {
+        if (BACKUP_MAX_HOURS > 0) {
+            long expiryMillis = System.currentTimeMillis() - (BACKUP_MAX_HOURS * MS_PER_HOUR);
+            return backupFiles.stream()
+                    .filter(file -> file.lastModified() < expiryMillis)
+                    .collect(Collectors.toList());
+        } else {
+            return EMPTY_FILE_LIST;
+        }
+    }
+
     /**
      * check if the workbench should be saved
      */
@@ -406,17 +418,12 @@ public class Save extends AbstractAction {
 
     /**
      * Check nodes does not contain a node of type TestPlan or ThreadGroup
-     * @param nodes
+     * @param nodes the nodes to check for TestPlans or ThreadGroups
      */
     private static boolean checkAcceptableForTestFragment(JMeterTreeNode[] nodes) {
-        for (JMeterTreeNode node : nodes) {
-            Object userObject = node.getUserObject();
-            if (userObject instanceof ThreadGroup ||
-                    userObject instanceof TestPlan) {
-                return false;
-            }
-        }
-        return true;
+        return Arrays.stream(nodes)
+                .map(DefaultMutableTreeNode::getUserObject)
+                .noneMatch(o -> o instanceof ThreadGroup || o instanceof TestPlan);
     }
 
     // package protected to allow access from test code
