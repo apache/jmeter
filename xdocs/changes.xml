@@ -98,6 +98,7 @@ Summary
 <h3>Other samplers</h3>
 <ul>
     <li><bug>61739</bug>Java Request / JavaSamplerClient : Improve <code>org.apache.jmeter.protocol.java.sampler.JavaSamplerContext</code></li>
+    <li><bug>61762</bug>Start Next Thread Loop should be used everywhere</li>
 </ul>
 
 <h3>Controllers</h3>
