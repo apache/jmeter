@@ -270,15 +270,19 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         if (replyMsg == null) {
             sampleResult.setResponseMessage("No reply message received");
         } else {
-            if (replyMsg instanceof TextMessage) {
-                sampleResult.setResponseData(((TextMessage) replyMsg).getText(), null);
-            } else {
-                sampleResult.setResponseData(replyMsg.toString(), null);
-            }
+            setResponseData(replyMsg, sampleResult);
             sampleResult.setResponseHeaders(Utils.messageProperties(replyMsg));
             sampleResult.setResponseOK();
         }
         return sampleResult;
+    }
+
+    private void setResponseData(Message replyMsg, SampleResult sampleResult) throws JMSException {
+        if (replyMsg instanceof TextMessage) {
+            sampleResult.setResponseData(((TextMessage) replyMsg).getText(), null);
+        } else {
+            sampleResult.setResponseData(replyMsg.toString(), null);
+        }
     }
 
     private SampleResult processNumberOfSamplesFromQueue(String jmsSelector) throws JMSException {
@@ -308,6 +312,14 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         sampleResult.setResponseMessage(sampleCounter + " samples messages received");
         sampleResult.setResponseData(messageBuilder.toString().getBytes());
         sampleResult.setResponseHeaders(propertiesBuilder.toString());
+        setResponseCodeAndSuccessfulIndicator(sampleCounter, sampleResult);
+        sampleResult.setResponseMessage(sampleCounter + " message(s) received successfully");
+        sampleResult.setSamplerData(getNumberOfSamplesToAggregateAsInt() + " messages expected");
+        sampleResult.setSampleCount(sampleCounter);
+        return sampleResult;
+    }
+
+    private void setResponseCodeAndSuccessfulIndicator(int sampleCounter, SampleResult sampleResult) {
         if (sampleCounter == 0) {
             sampleResult.setResponseCode("404");
             sampleResult.setSuccessful(false);
@@ -315,10 +327,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             sampleResult.setResponseCodeOK();
             sampleResult.setSuccessful(true);
         }
-        sampleResult.setResponseMessage(sampleCounter + " message(s) received successfully");
-        sampleResult.setSamplerData(getNumberOfSamplesToAggregateAsInt() + " messages expected");
-        sampleResult.setSampleCount(sampleCounter);
-        return sampleResult;
     }
 
     private String receiveFromQueue(String jmsSelector, StringBuilder messageBuilder, StringBuilder propertiesBuilder)
@@ -340,67 +348,95 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             throws JMSException {
         if (message != null) {
             if (message instanceof TextMessage) {
-                messageBuilder.append(((TextMessage) message).getText());
+                processTextMessage(messageBuilder, message);
             } else if (message instanceof ObjectMessage) {
-                ObjectMessage objectMessage = (ObjectMessage) message;
-                if (objectMessage.getObject() != null) {
-                    messageBuilder.append(objectMessage.getObject().getClass());
-                } else {
-                    messageBuilder.append("object is null");
-                }
+                processObjectMessage(messageBuilder, message);
             } else if (message instanceof BytesMessage) {
-                BytesMessage bytesMessage = (BytesMessage) message;
-                messageBuilder.append(bytesMessage.getBodyLength() + " bytes received in BytesMessage");
+                processBytesMessage(messageBuilder, message);
             } else if (message instanceof MapMessage) {
-                MapMessage mapm = (MapMessage) message;
-                @SuppressWarnings("unchecked") // MapNames are Strings
-                Enumeration<String> enumb = mapm.getMapNames();
-                while (enumb.hasMoreElements()) {
-                    String name = enumb.nextElement();
-                    Object obj = mapm.getObject(name);
-                    messageBuilder.append(name);
-                    messageBuilder.append(",");
-                    messageBuilder.append(obj.getClass().getCanonicalName());
-                    messageBuilder.append(",");
-                    messageBuilder.append(obj);
-                    messageBuilder.append("\n");
-                }
+                processMapMessage(messageBuilder, message);
             }
             Utils.messageProperties(propertiesBuilder, message);
         }
     }
 
+    private void processTextMessage(StringBuilder messageBuilder, Message message) throws JMSException {
+        messageBuilder.append(((TextMessage) message).getText());
+    }
+
+    private void processObjectMessage(StringBuilder messageBuilder, Message message) throws JMSException {
+        ObjectMessage objectMessage = (ObjectMessage) message;
+        if (objectMessage.getObject() != null) {
+            messageBuilder.append(objectMessage.getObject().getClass());
+        } else {
+            messageBuilder.append("object is null");
+        }
+    }
+
+    private void processBytesMessage(StringBuilder messageBuilder, Message message) throws JMSException {
+        BytesMessage bytesMessage = (BytesMessage) message;
+        messageBuilder.append(bytesMessage.getBodyLength() + " bytes received in BytesMessage");
+    }
+    
+
+    private void processMapMessage(StringBuilder messageBuilder, Message message) throws JMSException {
+        MapMessage mapMessage = (MapMessage) message;
+        
+        @SuppressWarnings("unchecked") // MapNames are Strings
+        Enumeration<String> keys = mapMessage.getMapNames();
+        while (keys.hasMoreElements()) {
+            String name = keys.nextElement();
+            Object obj = mapMessage.getObject(name);
+            messageBuilder.append(name);
+            messageBuilder.append(",");
+            messageBuilder.append(obj.getClass().getCanonicalName());
+            messageBuilder.append(",");
+            messageBuilder.append(obj);
+            messageBuilder.append("\n");
+        }
+    }
+    
     private String browseQueueDetails(Queue queue, SampleResult res) {
         try {
-            String messageBodies = new String("\n==== Browsing Messages === \n");
+            StringBuilder messageBuilder = new StringBuilder().append("\n==== Browsing Messages === \n");
+
             // get some queue details
             QueueBrowser qBrowser = session.createBrowser(queue);
+
             // browse the messages
-            Enumeration<?> e = qBrowser.getEnumeration();
-            int numMsgs = 0;
-            // count number of messages
-            String corrID = "";
-            while (e.hasMoreElements()) {
-                TextMessage message = (TextMessage) e.nextElement();
-                corrID = message.getJMSCorrelationID();
-                if (corrID == null) {
-                    corrID = message.getJMSMessageID();
-                    messageBodies = messageBodies + numMsgs + " - MessageID: " + corrID + ": " + message.getText()
-                            + "\n";
-                } else {
-                    messageBodies = messageBodies + numMsgs + " - CorrelationID: " + corrID + ": " + message.getText()
-                            + "\n";
-                }
-                numMsgs++;
-            }
-            res.setResponseMessage(numMsgs + " messages available on the queue");
+            Enumeration<?> messages = qBrowser.getEnumeration();
+
+            int numberOfMessages = processNumberOfMessages(messageBuilder, messages);
+
+            res.setResponseMessage(numberOfMessages + " messages available on the queue");
             res.setResponseHeaders(qBrowser.toString());
-            return (messageBodies + queue.getQueueName() + " has " + numMsgs + " messages");
+            
+            messageBuilder.append(queue.getQueueName()).append(" has " ).append(numberOfMessages).append(" messages");
+            
+            return messageBuilder.toString();
         } catch (Exception e) {
             res.setResponseMessage("Error counting message on the queue");
             LOGGER.error("Error counting message on the queue: ", e.getMessage());
             return "";
         }
+    }
+
+    private int processNumberOfMessages(StringBuilder messageBuilder, Enumeration<?> messages)
+            throws JMSException {
+        int numMsgs = 0;
+        String corrID;
+        while (messages.hasMoreElements()) {
+            TextMessage message = (TextMessage) messages.nextElement();
+            corrID = message.getJMSCorrelationID();
+            if (corrID == null) {
+                corrID = message.getJMSMessageID();
+                messageBuilder.append(numMsgs).append(" - MessageID: ").append(corrID).append(": ").append(message.getText()).append("\n");
+            } else {
+                messageBuilder.append(numMsgs).append(" - CorrelationID: ").append(corrID).append(": ").append(message.getText()).append("\n");
+            }
+            numMsgs++;
+        }
+        return numMsgs;
     }
 
     private String clearQueue(Queue queue, SampleResult res) throws JMSException {
