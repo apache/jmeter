@@ -5685,7 +5685,7 @@ generate the template string, and store the result into the given variable name.
         </ul>
         Headers can be useful for HTTP samples; it may not be present for other sample types.
         </property>
-        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
+        <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
         <property name="Regular Expression" required="Yes">The regular expression used to parse the response data. 
         This must contain at least one set of parentheses "<code>()</code>" to capture a portion of the string, unless using the group <code>$0$</code>.
         Do not enclose the expression in <code>/ /</code> - unless of course you want to match these characters as well.
@@ -5784,7 +5784,7 @@ extracting the node as text or attribute value and store the result into the giv
         </ul>
         If selector is set to empty, default implementation(JSoup) will be used.
         </property>
-        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
+        <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.</property>
         <property name="CSS/JQuery expression" required="Yes">The CSS/JQuery selector used to select nodes from the response data. 
         Selector, selectors combination and pseudo-selectors are supported, examples:
         <ul>
@@ -5901,7 +5901,7 @@ extracting the node as text or attribute value and store the result into the giv
     For example <code>//title</code> would return "<code>&lt;title&gt;Apache JMeter&lt;/title&gt;</code>" rather than "<code>Apache JMeter</code>".<br></br>
     In this case, <code>//title/text()</code> would return "<code>Apache JMeter</code>".
     </property>
-    <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
+    <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.</property>
     <property name="XPath Query" required="Yes">Element query in XPath language. Can return more than one match.</property>
     <property name="Match No. (0 for Random)" required="No">If the XPath Path query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
@@ -6143,7 +6143,7 @@ It will allow you to extract in a very easy way text content, see <a href="http:
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Variable Names" required="Yes">Semi-colon separated names of variables that will contain the results of JSON-PATH expressions (must match number of JSON-PATH expressions)</property>
+    <property name="Names of created variables" required="Yes">Semi-colon separated names of variables that will contain the results of JSON-PATH expressions (must match number of JSON-PATH expressions)</property>
     <property name="JSON Path Expressions" required="Yes">Semi-colon separated JSON-PATH expressions (must match number of variables)</property>
     <property name="Default Values" required="No">Semi-colon separated default values if JSON-PATH expressions do not return any result(must match number of variables)</property>
     <property name="Match No. (0 for Random)" required="No">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
@@ -6201,7 +6201,7 @@ generate the template string, and store the result into the given variable name.
         </ul>
         Headers can be useful for HTTP samples; it may not be present for other sample types.
         </property>
-        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
+        <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
         <property name="Left Boundary" required="Yes">Left boundary of value to find</property>
         <property name="Right Boundary" required="Yes">Left boundary of value to find</property>
         <property name="Match No. (0 for Random)" required="Yes">Indicates which match to use.  The boundaries may match multiple times.  
