@@ -269,7 +269,7 @@ public class JMeterThread implements Runnable, Interruptible {
                         triggerEndOfLoopOnParentControllers(sam, threadContext);
                         sam = null;
                         threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
-                        threadContext.setRestartNextLoop(false);
+                        threadContext.setStartNextThreadLoop(false);
                     }
                     else {
                         sam = threadGroupLoopController.next();
@@ -543,7 +543,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 stopTestNow();
             }
             if(result.isStartNextThreadLoop()) {
-                threadContext.setRestartNextLoop(true);
+                threadContext.setStartNextThreadLoop(true);
             }
         } else {
             compiler.done(pack); // Finish up

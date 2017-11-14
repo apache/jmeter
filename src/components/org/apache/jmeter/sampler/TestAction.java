@@ -104,7 +104,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
             }
         } else if (action == RESTART_NEXT_LOOP) {
             log.info("Restarting next loop from element {}", getName());
-            context.setRestartNextLoop(true);
+            context.setStartNextThreadLoop(true);
         }
 
         return null; // This means no sample is saved
