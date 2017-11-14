@@ -87,9 +87,7 @@ public interface TreeState {
             final JTree tree = mainframe.getTree();
 
             if (!savedExpanded.isEmpty()) {
-                for (int rowN : savedExpanded) {
-                    tree.expandRow(rowN);
-                }
+                savedExpanded.forEach(tree::expandRow);
             } else {
                 tree.expandRow(0);
             }
