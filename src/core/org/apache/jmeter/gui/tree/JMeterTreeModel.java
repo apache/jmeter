@@ -43,6 +43,16 @@ public class JMeterTreeModel extends DefaultTreeModel {
 
     private static final long serialVersionUID = 240L;
 
+    /**
+     * Deprecated after remove WorkBench
+     * @param tp - Test Plan
+     * @param wb - WorkBench
+     */
+    @Deprecated
+    public JMeterTreeModel(TestElement tp, TestElement wb) {
+        this(tp);
+    }
+
     public JMeterTreeModel(TestElement tp) {
         super(new JMeterTreeNode(tp, null));
         initTree(tp);
