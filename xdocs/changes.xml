@@ -155,7 +155,7 @@ Summary
     <li><bug>61697</bug>Introduce Darcula Look And Feel to make JMeter UI more attractive</li>
     <li><bug>61704</bug>Toolbar : Improve a bit the right part</li>
     <li><bug>61731</bug>Enhance Test plan Backup with option to save before run. Based on a contribution by orimarko at gmail.com</li>
-    <li>Drop Workbench from test tree. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
+    <li><bug>61591</bug>Drop Workbench from test tree. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
