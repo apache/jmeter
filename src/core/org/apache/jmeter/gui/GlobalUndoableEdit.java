@@ -25,9 +25,6 @@ import javax.swing.undo.CannotUndoException;
 
 public final class GlobalUndoableEdit extends AbstractUndoableEdit {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -4964577622742131354L;
     private final UndoHistoryItem item;
     private final UndoHistoryItem previous;

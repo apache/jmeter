@@ -70,7 +70,6 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -105,7 +104,6 @@ import org.slf4j.LoggerFactory;
 /**
  * The main JMeter frame, containing the menu bar, test tree, and an area for
  * JMeter component GUIs.
- *
  */
 public class MainFrame extends JFrame implements TestStateListener, Remoteable, DropTargetListener, Clearable, ActionListener {
 
@@ -167,19 +165,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     private JMeterToolBar toolbar;
 
-    /**
-     * Label at top right showing test duration
-     */
+    /** Label at top right showing test duration */
     private JLabel testTimeDuration;
 
-    /**
-     * Indicator for Log errors and Fatals
-     */
+    /** Indicator for Log errors and Fatals */
     private JButton warnIndicator;
 
-    /**
-     * LogTarget that receives ERROR or FATAL
-     */
+    /** LogTarget that receives ERROR or FATAL */
     private transient ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
     
     private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000, 
@@ -228,13 +220,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         init();
         initTopLevelDndHandler();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        
+
         addMouseWheelListener(e -> {
             if (e.isControlDown()) {
                 final float scale = 1.1f;
                 int rotation = e.getWheelRotation();
                 if (rotation > 0) { // DOWN
-                    JMeterUtils.applyScaleOnFonts(1.0f/scale);
+                    JMeterUtils.applyScaleOnFonts(1.0f / scale);
                 } else if (rotation < 0) { // UP
                     JMeterUtils.applyScaleOnFonts(scale);
                 }
@@ -248,7 +240,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @param evt {@link ActionEvent}
      */
     private void refreshErrors(ActionEvent evt) {
-        if(errorOrFatal.get()>0) {
+        if (errorOrFatal.get() > 0) {
             warnIndicator.setForeground(Color.RED);
             warnIndicator.setText(Integer.toString(errorOrFatal.get()));
         }
@@ -257,7 +249,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     protected void computeTestDuration(ActionEvent evt) {
         long startTime = JMeterContextService.getTestStartTime();
         if (startTime > 0) {
-            long elapsedSec = (System.currentTimeMillis()-startTime + 500) / 1000; // rounded seconds
+            long elapsedSec = (System.currentTimeMillis() - startTime + 500) / 1000; // rounded seconds
             testTimeDuration.setText(JOrphanUtils.formatDuration(elapsedSec));
         }
     }
@@ -359,16 +351,17 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * Close the currently selected menu.
      */
     public void closeMenu() {
-        if (menuBar.isSelected()) {
-            MenuElement[] menuElement = menuBar.getSubElements();
-            if (menuElement != null) {
-                for (MenuElement element : menuElement) {
-                    JMenu menu = (JMenu) element;
-                    if (menu.isSelected()) {
-                        menu.setPopupMenuVisible(false);
-                        menu.setSelected(false);
-                        break;
-                    }
+        if (!menuBar.isSelected()) {
+            return;
+        }
+        MenuElement[] menuElement = menuBar.getSubElements();
+        if (menuElement != null) {
+            for (MenuElement element : menuElement) {
+                JMenu menu = (JMenu) element;
+                if (menu.isSelected()) {
+                    menu.setPopupMenuVisible(false);
+                    menu.setSelected(false);
+                    break;
                 }
             }
         }
@@ -403,10 +396,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     }
 
     public void updateCounts() {
-        SwingUtilities.invokeLater(() -> {
-            activeAndTotalThreads.setText(String.format("%d/%d", JMeterContextService.getNumberOfThreads(),
-                    JMeterContextService.getTotalThreads()));
-        });
+        SwingUtilities.invokeLater(() ->
+                activeAndTotalThreads.setText(
+                        String.format("%d/%d",
+                                JMeterContextService.getNumberOfThreads(),
+                                JMeterContextService.getTotalThreads())));
     }
 
     public void setMainPanel(JComponent comp) {
@@ -541,7 +535,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         refreshErrorsTimer.start();
     }
 
-
     /**
      * Support for Test Plan Dnd
      * see BUG 52281 (when JDK6 will be minimum JDK target)
@@ -653,13 +646,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                             String comment = ((TestElement) testElement).getComment();
                             if (comment != null && comment.length() > 0) {
                                 return comment;
-                                }
                             }
                         }
                     }
-                return null;
                 }
-            };
+                return null;
+            }
+        };
         treevar.setToolTipText("");
         treevar.setCellRenderer(getCellRenderer());
         treevar.setRootVisible(false);
@@ -732,8 +725,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @return a renderer to draw the test tree nodes
      */
     private TreeCellRenderer getCellRenderer() {
-        DefaultTreeCellRenderer rend = new JMeterCellRenderer();
-        return rend;
+        return new JMeterCellRenderer();
     }
 
     /**
@@ -792,7 +784,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         } catch (UnsupportedFlavorException | IOException e) {
             log.warn("Dnd failed", e);
         }
-
     }
 
     public boolean openJmxFilesFromDragAndDrop(Transferable tr) throws UnsupportedFlavorException, IOException {
@@ -837,13 +828,12 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         public void clearData() {
             errorOrFatal.set(0);
             SwingUtilities.invokeLater(() -> {
-                    warnIndicator.setForeground(null);
-                    warnIndicator.setText(Integer.toString(errorOrFatal.get()));
-                });
+                warnIndicator.setForeground(null);
+                warnIndicator.setText(Integer.toString(errorOrFatal.get()));
+            });
         }
 
     }
-
 
     @Override
     public void clearData() {
@@ -876,16 +866,14 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                     log.warn("Error awt title: {}", nsfe.toString()); // $NON-NLS-1$
                 }
             }
-       }
+        }
     }
 
     /**
      * Update Undo/Redo icons state
-     * 
-     * @param canUndo
-     *            Flag whether the undo button should be enabled
-     * @param canRedo
-     *            Flag whether the redo button should be enabled
+     *
+     * @param canUndo Flag whether the undo button should be enabled
+     * @param canRedo Flag whether the redo button should be enabled
      */
     public void updateUndoRedoIcons(boolean canUndo, boolean canRedo) {
         toolbar.updateUndoRedoIcons(canUndo, canRedo);
