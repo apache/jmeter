@@ -38,6 +38,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * preparations for the test plan.
  *
  */
+@Deprecated
 public class WorkBenchGui extends AbstractJMeterGuiComponent {
     private static final long serialVersionUID = 240L;
     // This check-box defines whether to save  WorkBench content or not

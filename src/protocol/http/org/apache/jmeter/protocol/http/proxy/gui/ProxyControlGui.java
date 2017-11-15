@@ -77,7 +77,6 @@ import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.KeyToolUtils;
@@ -1131,7 +1130,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                     targetNodesModel.addElement(tnw);
                     name.append(separator);
                     buildNodesModel(cur, name.toString(), level + 1);
-                } else if (te instanceof TestPlan || te instanceof WorkBench) {
+                } else if (te instanceof TestPlan) {
                     name.append(cur.getName());
                     name.append(separator);
                     buildNodesModel(cur, name.toString(), 0);

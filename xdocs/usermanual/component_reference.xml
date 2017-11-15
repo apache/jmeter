@@ -2482,7 +2482,6 @@ For this reason it is best to ensure that the Controller name is changed from th
 otherwise a duplicate may be accidentally created when new elements are added to the test plan. 
 </p>
 </description>
-<note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan <code>.jmx</code> files.  Any such test will fail.</note>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
@@ -6374,24 +6373,6 @@ Behaviour can be modified with some properties by setting in user.properties:
 </properties>
 </component>
 
-<component name="WorkBench" index="&sect-num;.9.3"  width="384" height="103" screenshot="workbench.png">
-<description>
-<p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire. 
-When you save your test plan, WorkBench items are not saved with it by default unless you check "<code>Save Workbench</code>" option.
-Your WorkBench can be saved independently, if you like (right-click on <code>WorkBench</code> and choose <code>Save</code>).</p>
-<p>Certain test elements are only available on the WorkBench:</p>
-<ul>
-<li><complink name="HTTP(S) Test Script Recorder"/></li>
-<li><complink name="HTTP Mirror Server"/></li>
-<li><complink name="Property Display"/></li>
-</ul>
-<properties>
-         <property name="Save WorkBench" required="No">
-                Allow to save the WorkBench's elements into the JMX file.
-        </property>
-</properties>
-</description>
-</component>
 
 <component name="SSL Manager" index="&sect-num;.9.4" screenshot="">
 <p>
