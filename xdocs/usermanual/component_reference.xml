@@ -6373,6 +6373,7 @@ Behaviour can be modified with some properties by setting in user.properties:
 </properties>
 </component>
 
+<component name="WorkBench" />
 
 <component name="SSL Manager" index="&sect-num;.9.4" screenshot="">
 <p>
