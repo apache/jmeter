@@ -69,33 +69,32 @@ public class CollapseExpandTreeBranch extends AbstractAction {
         JTree jTree = GuiPackage.getInstance().getMainFrame().getTree();
         JMeterTreeNode[] selectedNodes = treeListener.getSelectedNodes();
         for (JMeterTreeNode currentNode : selectedNodes) {
-            if(!currentNode.isLeaf()) {
+            if (!currentNode.isLeaf()) {
                 TreeNode[] nodes = GuiPackage.getInstance().getTreeModel().getPathToRoot(currentNode);
                 TreePath path = new TreePath(nodes);
                 boolean collapse = ActionNames.COLLAPSE.equals(e.getActionCommand());
-                
+
                 expandCollapseNode(jTree, path, collapse);
             }
         }
     }
-    
+
     private void expandCollapseNode(JTree jTree, TreePath parent, boolean collapse) {
         TreeNode node = (TreeNode) parent.getLastPathComponent();
         if (node.isLeaf()) {
             return;
         }
-        
+
         Enumeration<?> children = node.children();
-        while(children.hasMoreElements()) {
+        while (children.hasMoreElements()) {
             TreeNode child = (TreeNode) children.nextElement();
             TreePath path = parent.pathByAddingChild(child);
             expandCollapseNode(jTree, path, collapse);
         }
-        
-        if(collapse) {
+
+        if (collapse) {
             jTree.collapsePath(parent);
-        }
-        else {
+        } else {
             jTree.expandPath(parent);
         }
     }
