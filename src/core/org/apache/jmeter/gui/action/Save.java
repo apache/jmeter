@@ -50,7 +50,6 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -163,13 +162,7 @@ public class Save extends AbstractAction {
             }
         } else {
             fullSave = true;
-            HashTree testPlan = GuiPackage.getInstance().getTreeModel().getTestPlan();
-            // If saveWorkBench 
-            if (isWorkbenchSaveable()) {
-                HashTree workbench = GuiPackage.getInstance().getTreeModel().getWorkBench();
-                testPlan.add(workbench);
-            }
-            subTree = testPlan;
+            subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
         }
 
         String updateFile = GuiPackage.getInstance().getTestPlanFile();
@@ -225,10 +218,6 @@ public class Save extends AbstractAction {
             if (fullSave) { // Only update the stored copy of the tree for a full save
                 FileServer.getFileServer().setScriptName(new File(updateFile).getName());
                 subTree = GuiPackage.getInstance().getTreeModel().getTestPlan(); // refetch, because convertSubTree affects it
-                if (isWorkbenchSaveable()) {
-                    HashTree workbench = GuiPackage.getInstance().getTreeModel().getWorkBench();
-                    subTree.add(workbench);
-                }
                 ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
             }
             
@@ -396,13 +385,6 @@ public class Save extends AbstractAction {
                 .orElse(0);
     }
     
-    /**
-     * check if the workbench should be saved
-     */
-    private boolean isWorkbenchSaveable() {
-        JMeterTreeNode workbenchNode = (JMeterTreeNode) ((JMeterTreeNode) GuiPackage.getInstance().getTreeModel().getRoot()).getChildAt(1);
-        return ((WorkBench) workbenchNode.getUserObject()).getSaveWorkBench();
-    }
 
     /**
      * Check nodes does not contain a node of type TestPlan or ThreadGroup

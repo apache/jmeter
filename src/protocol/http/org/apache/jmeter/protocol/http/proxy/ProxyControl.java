@@ -83,7 +83,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.TestStateListener;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -1055,7 +1054,6 @@ public class ProxyControl extends GenericController {
      * <li>The controller specified by the <code>target</code> property.
      * <li>If none was specified, the first RecordingController in the tree.
      * <li>If none is found, the first AbstractThreadGroup in the tree.
-     * <li>If none is found, the Workspace.
      * </ul>
      *
      * @return the tree node for the controller where the proxy must store the
@@ -1071,10 +1069,6 @@ public class ProxyControl extends GenericController {
             return myTarget;
         }
         myTarget = findFirstNodeOfType(AbstractThreadGroup.class);
-        if (myTarget != null) {
-            return myTarget;
-        }
-        myTarget = findFirstNodeOfType(WorkBench.class);
         if (myTarget != null) {
             return myTarget;
         }
