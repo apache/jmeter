@@ -33,7 +33,6 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
 
 /**
  * Move a node up/down/left/right 
@@ -120,7 +119,7 @@ public class Move extends AbstractAction {
     private JMeterTreeNode getParentNode(JMeterTreeNode currentNode) {
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
         TestElement te = currentNode.getTestElement();
-        if (te instanceof TestPlan || te instanceof WorkBench) {
+        if (te instanceof TestPlan) {
             parentNode = null; // So elements can only be added as children
         }
         return parentNode;

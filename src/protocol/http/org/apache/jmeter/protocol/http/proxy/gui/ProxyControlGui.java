@@ -48,6 +48,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -65,6 +66,7 @@ import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.HorizontalPanel;
@@ -77,7 +79,6 @@ import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.KeyToolUtils;
@@ -86,6 +87,10 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * GUI of HTTP(s) Test Script Recorder
+ *
+ */
 public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComponent, ActionListener, ItemListener,
         KeyListener, UnsharedComponent {
     private static final Logger log = LoggerFactory.getLogger(ProxyControlGui.class);
@@ -636,7 +641,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
         if (fieldName.equals(PORT_FIELD_NAME)) {
             try {
-                Integer.parseInt(portField.getText());
+                int port = Integer.parseInt(portField.getText());
+                log.debug("Using port {} for recording", port);
             } catch (NumberFormatException nfe) {
                 int length = portField.getText().length();
                 if (length > 0) {
@@ -1131,7 +1137,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                     targetNodesModel.addElement(tnw);
                     name.append(separator);
                     buildNodesModel(cur, name.toString(), level + 1);
-                } else if (te instanceof TestPlan || te instanceof WorkBench) {
+                } else if (te instanceof TestPlan) {
                     name.append(cur.getName());
                     name.append(separator);
                     buildNodesModel(cur, name.toString(), 0);
@@ -1139,5 +1145,24 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 // Ignore everything else
             }
         }
+    }
+    
+    /**
+     * Redefined to remove change parent and inserrt parent menu
+     * @see org.apache.jmeter.control.gui.AbstractControllerGui#createPopupMenu()
+     */
+    @Override
+    public JPopupMenu createPopupMenu() {
+        JPopupMenu pop = new JPopupMenu();
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, ActionNames.ADD));
+
+        pop.add(addMenu);
+        
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
     }
 }

@@ -81,6 +81,9 @@ Summary
     uncheck <code>Run tearDown Thread Groups after shutdown of main threads</code> on <code>Test Plan</code> element, see <bugzilla>61656</bugzilla></li>
     <li>Properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code> have been dropped, see <bugzilla>61587</bugzilla></li>
     <li>JMeter will now save your test plan whenever you run it. This behaviour can be controlled by property <code>save_automatically_before_run</code></li>
+    <li>Workbench element has been dropped, you now directly add <code>Non Test Element</code> as children of Test Plan. When loading a Test Plan that contains the element
+    JMeter will move the <code>Mirror Server</code>, <code>Property Display</code> and HTTP(s) <code>Test Script Recorder</code> elements as direct children of Test Plan. For 
+    any other element, it will create a <code>Test Fragment</code> element called <code>Workbench Test Fragment and move the elements in it</code>.</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -143,6 +146,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>61591</bug>Drop Workbench from test tree. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>61549</bug>Thread Group : Remove start and end date</li>
     <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61709</bug>SampleResult : Add a method <code>setIgnore()</code> to make JMeter ignore the SampleResult and not send it to listeners</li>
@@ -234,12 +238,14 @@ Summary
 <ul>
     <li>Igor Panainte (panainte.i at gmail.com)</li>
     <li>Emilian Bold (emi at apache.org)</li>
-    <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+    <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Justin McCartney (be_strew at yahoo.co.uk)</li>
     <li>Vincent Herilier (https://github.com/vherilier)</li>
     <li>Aleksei Balan (abalanonline at gmail.com)</li>
     <li>Graham Russell (graham at ham1.co.uk)</li>
     <li>orimarko at gmail.com</li>
+    <li>Artem Fedorov (artem at blazemeter.com)</li>
+    <li><a href="https://www.blazemeter.com">BlazeMeter Ltd</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
