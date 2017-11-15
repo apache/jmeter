@@ -89,9 +89,6 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 
     private JButton cancelButton;
 
-    /**
-     * Store last search
-     */
     private transient String lastSearch = null;
 
     private JButton searchAndExpandButton;
@@ -138,7 +135,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         this.getContentPane().setLayout(new BorderLayout(10,10));
 
         searchTF = new JLabeledTextField(JMeterUtils.getResString("search_text_field"), 20); //$NON-NLS-1$
-        if(!StringUtils.isEmpty(lastSearch)) {
+        if (!StringUtils.isEmpty(lastSearch)) {
             searchTF.setText(lastSearch);
         }
 
@@ -196,12 +193,11 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         statusLabel.setText("");
-        if (e.getSource()==cancelButton) {
+        if (e.getSource() == cancelButton) {
             searchTF.requestFocusInWindow();
             this.setVisible(false);
-            return;
-        } else if(e.getSource() == searchButton ||
-                e.getSource() == searchAndExpandButton) {
+        } else if (e.getSource() == searchButton
+                || e.getSource() == searchAndExpandButton) {
             doSearch(e);
         } else {
             doReplaceAll(e);
@@ -223,7 +219,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         // reset previous result
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SEARCH_RESET));
         // do search
-        Searcher searcher = null;
+        Searcher searcher;
         if (isRegexpCB.isSelected()) {
             searcher = new RegexpSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
         } else {
@@ -275,10 +271,10 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
     private void doReplaceAll(ActionEvent e) {
         String wordToSearch = searchTF.getText();
         String wordToReplace = replaceTF.getText();
-        
+
         if (StringUtils.isEmpty(wordToReplace)) {
             return;
-        } 
+        }
         // Save any change to current node
         GuiPackage.getInstance().updateCurrentNode();
         // reset previous result
@@ -305,21 +301,21 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
                 if (result && jMeterTreeNode.getUserObject() instanceof Replaceable) {
                     Replaceable replaceable = (Replaceable) jMeterTreeNode.getUserObject();
                     int numberOfReplacements = replaceable.replace(regex, wordToReplace, caseSensitiveReplacement);
-                    if(logger.isInfoEnabled()) {
-                        logger.info("Replaced "+numberOfReplacements+" in element:"
-                                +((TestElement)jMeterTreeNode.getUserObject()).getName());
+                    if (logger.isInfoEnabled()) {
+                        logger.info("Replaced " + numberOfReplacements + " in element:"
+                                + ((TestElement) jMeterTreeNode.getUserObject()).getName());
                     }
                     totalReplaced += numberOfReplacements;
-                    if(numberOfReplacements > 0) {
+                    if (numberOfReplacements > 0) {
                         List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
                         nodes.addAll(matchingNodes);
                     }
                 }
             } catch (Exception ex) {
-                logger.error("Error occurred replacing data in node:"+jMeterTreeNode.getName(), ex);
+                logger.error("Error occurred replacing data in node:" + jMeterTreeNode.getName(), ex);
             }
         }
-        statusLabel.setText(MessageFormat.format("Replaced {0} occurrences", new Object[]{totalReplaced}));
+        statusLabel.setText(MessageFormat.format("Replaced {0} occurrences", totalReplaced));
         GuiPackage guiInstance = GuiPackage.getInstance();
         JTree jTree = guiInstance.getMainFrame().getTree();
 
@@ -328,7 +324,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
             jTree.expandPath(new TreePath(jMeterTreeNode.getPath()));
         }
         // Update GUI as current node may be concerned by changes
-        if(totalReplaced>0) {
+        if (totalReplaced > 0) {
             GuiPackage.getInstance().refreshCurrentGui();
         }
         GuiPackage.getInstance().getMainFrame().repaint();
