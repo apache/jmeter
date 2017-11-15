@@ -272,15 +272,17 @@ public class JMeterTreeModel extends DefaultTreeModel {
      */
     private void moveWorkBenchToTestPlan(JMeterTreeNode current, HashTree workbenchTree) throws IllegalUserActionException {
         Object[] workbenchTreeArray = workbenchTree.getArray();
-        for (Object node : workbenchTreeArray) {
-            if (isNonTestElement(node)) {
-                HashTree subtree = workbenchTree.getTree(node);
-                workbenchTree.remove(node);
-                HashTree tree = new HashTree();
-                tree.add(node);
-                tree.add(node, subtree);
-                ((TestElement) node).setProperty(TestElement.ENABLED, false);
-                addSubTree(tree, current);
+        if (GuiPackage.getInstance() != null) {
+            for (Object node : workbenchTreeArray) {
+                if (isNonTestElement(node)) {
+                    HashTree subtree = workbenchTree.getTree(node);
+                    workbenchTree.remove(node);
+                    HashTree tree = new HashTree();
+                    tree.add(node);
+                    tree.add(node, subtree);
+                    ((TestElement) node).setProperty(TestElement.ENABLED, false);
+                    addSubTree(tree, current);
+                }
             }
         }
 
