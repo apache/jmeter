@@ -180,7 +180,7 @@ public class Load extends AbstractActionWithNoRunningTest {
 
         if (merging){ // Check if target of merge is reasonable
             final TestElement te = (TestElement)tree.getArray()[0];
-            if (!(te instanceof TestPlan)){// These are handled specially by addToTree
+            if (!(te instanceof TestPlan)) {// These are handled specially by addToTree
                 final boolean ok = MenuFactory.canAddTo(guiInstance.getCurrentNode(), te);
                 if (!ok){
                     String name = te.getName();
