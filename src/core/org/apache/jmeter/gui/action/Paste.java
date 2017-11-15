@@ -20,7 +20,9 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.jmeter.exceptions.IllegalUserActionException;
@@ -34,7 +36,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Places a copied JMeterTreeNode under the selected node.
- *
  */
 public class Paste extends AbstractAction {
 
@@ -67,11 +68,9 @@ public class Paste extends AbstractAction {
         JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
         JMeterTreeNode currentNode = treeListener.getCurrentNode();
         if (MenuFactory.canAddTo(currentNode, draggedNodes)) {
-            for (JMeterTreeNode draggedNode : draggedNodes) {
-                if (draggedNode != null) {
-                    addNode(currentNode, draggedNode);
-                }
-            }
+            Arrays.stream(draggedNodes)
+                    .filter(Objects::nonNull)
+                    .forEach(draggedNode -> addNode(currentNode, draggedNode));
         } else {
             Toolkit.getDefaultToolkit().beep();
         }
@@ -83,11 +82,10 @@ public class Paste extends AbstractAction {
             // Add this node
             JMeterTreeNode newNode = GuiPackage.getInstance().getTreeModel().addComponent(node.getTestElement(), parent);
             // Add all the child nodes of the node we are adding
-            for(int i = 0; i < node.getChildCount(); i++) {
+            for (int i = 0; i < node.getChildCount(); i++) {
                 addNode(newNode, (JMeterTreeNode)node.getChildAt(i));
             }
-        }
-        catch (IllegalUserActionException iuae) {
+        } catch (IllegalUserActionException iuae) {
             log.error("Illegal user action while adding a tree node.", iuae); // $NON-NLS-1$
             JMeterUtils.reportErrorToUser(iuae.getMessage());
         }

@@ -84,16 +84,14 @@ public abstract class AbstractAction implements Command {
 
         SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
         tree.traverse(resultListeners);
-        Iterator<ResultCollector> irc = resultListeners.getSearchResults().iterator();
-        while (irc.hasNext()) {
-            ResultCollector rc = irc.next();
+        for (ResultCollector rc : resultListeners.getSearchResults()) {
             File f = new File(rc.getFilename());
             if (f.exists()) {
                 switch (actionOnFile) {
                     case APPEND:
                         break;
                     case DELETE:
-                        if(f.delete()) {
+                        if (f.delete()) {
                             break;
                         } else {
                             log.error("Could not delete existing file {}", f.getAbsolutePath());
@@ -101,24 +99,24 @@ public abstract class AbstractAction implements Command {
                         }
                     case ASK:
                     default:
-                        String[] option = new String[] { JMeterUtils.getResString("concat_result"),
-                                JMeterUtils.getResString("dont_start"), JMeterUtils.getResString("replace_file") };
+                        String[] option = new String[]{JMeterUtils.getResString("concat_result"),
+                                JMeterUtils.getResString("dont_start"), JMeterUtils.getResString("replace_file")};
                         String question = MessageFormat.format(
                                 JMeterUtils.getResString("ask_existing_file"), // $NON-NLS-1$
                                 rc.getFilename());
                         // Interactive question
-                        int response = JOptionPane.showOptionDialog(GuiPackage.getInstance().getMainFrame(), 
+                        int response = JOptionPane.showOptionDialog(GuiPackage.getInstance().getMainFrame(),
                                 question, JMeterUtils.getResString("warning"),
-                                JOptionPane.YES_NO_CANCEL_OPTION, 
-                                JOptionPane.WARNING_MESSAGE, 
-                                null, 
-                                option, 
+                                JOptionPane.YES_NO_CANCEL_OPTION,
+                                JOptionPane.WARNING_MESSAGE,
+                                null,
+                                option,
                                 option[0]);
-        
+
                         switch (response) {
                             case JOptionPane.CANCEL_OPTION:
                                 // replace_file so delete the existing one
-                                if(f.delete()) {
+                                if (f.delete()) {
                                     break;
                                 } else {
                                     log.error("Could not delete existing file {}", f.getAbsolutePath());
