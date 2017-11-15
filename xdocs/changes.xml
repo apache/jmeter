@@ -162,7 +162,6 @@ Summary
     <li><bug>61697</bug>Introduce Darcula Look And Feel to make JMeter UI more attractive</li>
     <li><bug>61704</bug>Toolbar : Improve a bit the right part</li>
     <li><bug>61731</bug>Enhance Test plan Backup with option to save before run. Based on a contribution by orimarko at gmail.com</li>
-    <li><pr>324</pr> Save backup refactor. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -176,6 +175,8 @@ Summary
     <li><pr>319</pr>Removed commented out code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>322</pr>General JavaDoc cleanup. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>323</pr>Extracted method and used streams to improve readability. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>324</pr> Save backup refactor. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>327</pr> Utilising more modern Java, simplifying code and formatting code and comments. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
