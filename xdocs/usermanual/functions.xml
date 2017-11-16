@@ -1093,7 +1093,7 @@ If omitted, <code>,</code> is used. Note that <code>,</code> would need to be sp
 
 <properties>
         <property name="Format" required="No">
-        The format to be passed to SimpleDateFormat.
+        The format to be passed to <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a>.
         The function supports various shorthand aliases, see below.
         If omitted, the function returns the current time in milliseconds since the epoch.
         </property>
@@ -1542,7 +1542,7 @@ becomes:
 <properties>
         <property name="Format" required="No">
         The format to be passed to DateTimeFormatter.
-        See https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+        See <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
         If omitted, the function uses milliseconds since epoch format.
         </property>
         <property name="Date to shift" required="No">
