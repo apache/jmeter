@@ -5876,6 +5876,7 @@ extracting the node as text or attribute value and store the result into the giv
            <li>"<code>Use Tidy</code>" should be checked on for HTML response. Such response is converted to valid XHTML (XML compatible HTML) using Tidy</li>
            <li>"<code>Use Tidy</code>" should be unchecked for both XHTML or XML response (for example RSS)</li>
        </ul>
+       <note>For HTML, CSS/JQuery Extractor is the correct and performing solution. Don't use XPath for HTML extractions.</note>
        </property>
 <property name="Quiet"  required="If Tidy is selected">Sets the Tidy Quiet flag</property>
 <property name="Report Errors"  required="If Tidy is selected">If a Tidy error occurs, then set the Assertion accordingly</property>
@@ -5883,14 +5884,7 @@ extracting the node as text or attribute value and store the result into the giv
 <property name="Use Namespaces" required="If Tidy is not selected">
         If checked, then the XML parser will use namespace resolution.(see note below on NAMESPACES)
         Note that currently only namespaces declared on the root element will be recognised.
-        A later version of JMeter may support user-definition of additional workspace names.
-        Meanwhile, a work-round is to replace: 
-        <source>//mynamespace:tagname</source>
-        by
-        <source>//*[local-name()='tagname' and namespace-uri()='uri-for-namespace']</source>
-        where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</code>" namespace.
-        (not applicable if Tidy is selected)
-        
+        See below for user-definition of additional workspace names.        
 </property>
     <property name="Validate XML"   required="If Tidy is not selected">Check the document against its schema.</property>
     <property name="Ignore Whitespace"  required="If Tidy is not selected">Ignore Element Whitespace.</property>
@@ -5958,6 +5952,12 @@ prefix2=Full Namespace 2
 You reference this file in <code>jmeter.properties</code> file using the property:
     <source>xpath.namespace.config</source>
 </note>
+<p></p>
+Another option is to use the following code:
+<source>//mynamespace:tagname</source>
+by:
+<source>//*[local-name()='tagname' and namespace-uri()='uri-for-namespace']</source>
+where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</code>" namespace.(not applicable if Tidy is selected)
 </component>
 
 <component name="Result Status Action Handler" index="&sect-num;.8.4"  width="613" height="133" screenshot="resultstatusactionhandler.png">
