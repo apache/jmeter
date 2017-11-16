@@ -37,6 +37,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.extractor.json.jsonpath.JSONManager;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.RenderAsJSON;
@@ -44,6 +46,7 @@ import org.apache.jmeter.visualizers.ResultRenderer;
 import org.apache.jmeter.visualizers.ViewResultsFullVisualizer;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +65,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
     private JPanel jsonWithJSonPathPanel;
 
-    private JTextArea jsonDataField;
+    private JSyntaxTextArea jsonDataField;
 
     private JLabeledTextField jsonPathExpressionField;
 
@@ -181,13 +184,17 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
      * @return JSON PATH Tester panel
      */
     private JPanel createJSonPathExtractorPanel() {
-        
-        jsonDataField = new JTextArea();
+        jsonDataField = JSyntaxTextArea.getInstance(50, 80, true);
+        jsonDataField.setCodeFoldingEnabled(true);
         jsonDataField.setEditable(false);
+        jsonDataField.setBracketMatchingEnabled(false);
+        jsonDataField.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JSON);
+        jsonDataField.setLanguage(SyntaxConstants.SYNTAX_STYLE_JSON);
         jsonDataField.setLineWrap(true);
         jsonDataField.setWrapStyleWord(true);
+        
 
-        this.jsonDataPane = GuiUtils.makeScrollPane(jsonDataField);
+        this.jsonDataPane = JTextScrollPane.getInstance(jsonDataField, true);
         jsonDataPane.setPreferredSize(new Dimension(100, 200));
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
