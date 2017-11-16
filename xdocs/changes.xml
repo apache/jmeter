@@ -107,12 +107,13 @@ Summary
 <h3>Controllers</h3>
 <ul>
     <li><bug>61675</bug>If Controller : Use expression by default and add a warning when the other mode is used. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61770</bug>Module Controller : Inform user in UI that he needs to have at least one Controller in his plan. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
     <li><bug>57760</bug>View Results Tree : Cookie Header is wrongly shown as empty(no cookies) when viewing a recorder Sample Result. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>61769</bug>View Results Tree: Use syntax highlighter in XPath Tester, JSON Path Tester and CSS/JQuery Tester</li>
+    <li><bug>61769</bug>View Results Tree: Use syntax highlighter in XPath Tester, JSON Path Tester and CSS/JQuery Tester. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -122,13 +123,13 @@ Summary
     <li><bug>61645</bug>Response Assertion : Add ability to assert on Request Data</li>
     <li><bug>61534</bug>Convert AssertionError to a failed assertion in the JSR223Assertion allowing users to use assert in their code</li>
     <li><bug>61756</bug>Extractors : Improve label name "Reference name" to make it clear what it makes</li>
-    <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions : When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default</li>
+    <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions : When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
 <ul>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
-    <li><bug>61738</bug>Function Helper Dialog : Add Copy in Generate and clarify labels</li>
+    <li><bug>61738</bug>Function Helper Dialog : Add Copy in Generate and clarify labels. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
     <li><bug>61724</bug>Add <code>__digest</code> function to provide computing of Hashes (SHA-XXX, MDX). Based on a contribution by orimarko at gmail.com</li>
     <li><bug>61735</bug>Add <code>__dateTimeConvert</code> function to provide date formats conversions. Based on a contribution by orimarko at gmail.com</li>
@@ -136,7 +137,6 @@ Summary
 
 <h3>I18N</h3>
 <ul>
-    <li><bug>61559</bug>Better label/translation/documentation for label ignoreFirstLine.displayName for CSV Data Set Config</li>
     <li><bug>61606</bug>Translate button <code>Browse...</code> in some elements (which use FileEditor class)</li>
     <li><bug>61747</bug>HTTP(S) Test Script Recorder : add the missing doc to "Create transaction after request (ms)"</li>
 </ul>
@@ -198,7 +198,7 @@ Summary
 <h3>Controllers</h3>
 <ul>
     <li><bug>61556</bug>Clarify in documentation performance impacts of ${} var usage in IfController and groovy. Contributed by Justin McCartney (be_strew at yahoo.co.uk)</li>
-    <li><bug>61713</bug>Test Fragment has option to Change Controller and Insert Parent</li>
+    <li><bug>61713</bug>Test Fragment has option to Change Controller and Insert Parent. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
