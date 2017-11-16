@@ -102,6 +102,11 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     private JButton expandButton;
 
     /**
+     * Use this to warn about no selectable controller
+     */
+    private boolean hasAtLeastOneController;
+
+    /**
      * Initializes the gui panel for the ModuleController instance.
      */
     public ModuleControllerGui() {
@@ -259,6 +264,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     public void clearGui() {
         super.clearGui();
         selected = null;
+        hasAtLeastOneController = false;
     }
 
     /** {@inheritDoc}} */
@@ -377,6 +383,10 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             //expand Module to run tree to selected node and set selection path to it
             this.focusSelectedOnTree(selected);
         }
+        if(!hasAtLeastOneController) {
+            warningLabel.setText(JMeterUtils.getResString("module_controller_warning_no_controller"));
+            warningLabel.setVisible(true);
+        }
     }
 
     /**
@@ -392,22 +402,21 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
      */
     private void buildTreeNodeModel(JMeterTreeNode node, int level,
             DefaultMutableTreeNode parent) {
-
         if (node != null) {
             for (int i = 0; i < node.getChildCount(); i++) {
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
                 TestElement te = cur.getTestElement();
-
-                if (te instanceof Controller
-                        && !(te instanceof ModuleController) && level > 0) {
+                if (te instanceof TestFragmentController
+                        || te instanceof AbstractThreadGroup
+                        || (te instanceof Controller
+                                && !(te instanceof ModuleController) && level > 0)) {
                     DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(cur);
                     parent.add(newNode);
                     buildTreeNodeModel(cur, level + 1, newNode);
-                } else if (te instanceof TestFragmentController
-                        || te instanceof AbstractThreadGroup) {
-                    DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(cur);
-                    parent.add(newNode);
-                    buildTreeNodeModel(cur, level + 1, newNode);
+                    hasAtLeastOneController = 
+                            hasAtLeastOneController || (
+                                    te instanceof Controller && 
+                                    !(te instanceof ModuleController || te instanceof AbstractThreadGroup));
                 } else if (te instanceof TestPlan) {
                     ((DefaultMutableTreeNode) moduleToRunTreeModel.getRoot())
                             .setUserObject(cur);
