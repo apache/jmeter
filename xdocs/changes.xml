@@ -112,6 +112,7 @@ Summary
 <h3>Listeners</h3>
 <ul>
     <li><bug>57760</bug>View Results Tree : Cookie Header is wrongly shown as empty(no cookies) when viewing a recorder Sample Result. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61769</bug>View Results Tree: Use syntax highlighter in XPath Tester, JSON Path Tester and CSS/JQuery Tester</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
