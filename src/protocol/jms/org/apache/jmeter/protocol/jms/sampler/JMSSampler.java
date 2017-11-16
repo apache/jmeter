@@ -445,7 +445,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         Message deletedMsg;
         long deletedMsgCount = 0;
         do {
-            deletedMsg = consumer.receiveNoWait();
+            deletedMsg = consumer.receive(Long.valueOf(getTimeoutAsInt()));
             if (deletedMsg != null) {
                 deletedMsgCount++;
             }
