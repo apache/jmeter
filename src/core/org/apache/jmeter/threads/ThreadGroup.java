@@ -20,8 +20,6 @@ package org.apache.jmeter.threads;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,8 +46,6 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     private static final Logger log = LoggerFactory.getLogger(ThreadGroup.class);
     
-    private static final String DATE_FIELD_FORMAT = "yyyy/MM/dd HH:mm:ss"; //$NON-NLS-1$
-
     private static final long WAIT_TO_DIE = JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000); // 5 seconds
 
     /** How often to check for shutdown during ramp-up, default 1000ms */
@@ -67,12 +63,6 @@ public class ThreadGroup extends AbstractThreadGroup {
     /** Whether scheduler is being used */
     public static final String SCHEDULER = "ThreadGroup.scheduler";
 
-    /** Scheduler absolute start time */
-    public static final String START_TIME = "ThreadGroup.start_time";
-
-    /** Scheduler absolute end time */
-    public static final String END_TIME = "ThreadGroup.end_time";
-
     /** Scheduler duration, overrides end time */
     public static final String DURATION = "ThreadGroup.duration";
 
@@ -88,29 +78,19 @@ public class ThreadGroup extends AbstractThreadGroup {
     
     private transient Object addThreadLock = new Object();
 
-    /**
-     * Is test (still) running?
-     */
+    /** Is test (still) running? */
     private volatile boolean running = false;
 
-    /**
-     * Thread Group number
-     */
+    /** Thread Group number */
     private int groupNumber;
 
-    /**
-     * Are we using delayed startup?
-     */
+    /** Are we using delayed startup? */
     private boolean delayedStartup;
 
-    /**
-     * Thread safe class
-     */
+    /** Thread safe class */
     private ListenerNotifier notifier;
 
-    /**
-     * This property will be cloned
-     */
+    /** This property will be cloned */
     private ListedHashTree threadGroupTree;
 
     /**
@@ -136,25 +116,6 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     public boolean getScheduler() {
         return getPropertyAsBoolean(SCHEDULER);
-    }
-
-    /**
-     * Set the absolute StartTime value.
-     *
-     * @param stime -
-     *            the StartTime value.
-     */
-    public void setStartTime(long stime) {
-        setProperty(new LongProperty(START_TIME, stime));
-    }
-
-    /**
-     * Get the absolute start time value.
-     *
-     * @return the start time value.
-     */
-    public long getStartTime() {
-        return getPropertyAsLong(START_TIME);
     }
 
     /**
@@ -196,25 +157,6 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     /**
-     * Set the EndTime value.
-     *
-     * @param etime -
-     *            the EndTime value.
-     */
-    public void setEndTime(long etime) {
-        setProperty(new LongProperty(END_TIME, etime));
-    }
-
-    /**
-     * Get the end time value.
-     *
-     * @return the end time value.
-     */
-    public long getEndTime() {
-        return getPropertyAsLong(END_TIME);
-    }
-
-    /**
      * Set the ramp-up value.
      *
      * @param rampUp
@@ -245,35 +187,24 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     private void scheduleThread(JMeterThread thread, long now) {
 
-        // if true the Scheduler is enabled
-        if (getScheduler()) {
-            // set the start time for the Thread
-            if (getDelay() > 0) {// Duration is in seconds
-                thread.setStartTime(getDelay() * 1000 + now);
-            } else {
-                long start = getStartTime();
-                if (start < now) {
-                    start = now; // Force a sensible start time
-                }                
-                thread.setStartTime(start);
-            }
-
-            // set the endtime for the Thread
-            if (getDuration() > 0) {// Duration is in seconds
-                thread.setEndTime(getDuration() * 1000 + (thread.getStartTime()));
-            } else {
-                if( getEndTime() <= now ) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FIELD_FORMAT);
-                    throw new JMeterStopTestException("End Time ("
-                            + sdf.format(new Date(getEndTime()))+") of Scheduler for Thread Group "+getName() 
-                            + " is in the past, fix value of End Time field");
-                }
-                thread.setEndTime(getEndTime());
-            }
-
-            // Enables the scheduler
-            thread.setScheduled(true);
+        if (!getScheduler()) { // if the Scheduler is not enabled
+            return;
         }
+
+        if (getDelay() >= 0) { // Duration is in seconds
+            thread.setStartTime(getDelay() * 1000 + now);
+        } else {
+            throw new JMeterStopTestException("Invalid delay " + getDelay() + " set in Thread Group:" + getName());
+        }
+
+        // set the endtime for the Thread
+        if (getDuration() > 0) {// Duration is in seconds
+            thread.setEndTime(getDuration() * 1000 + (thread.getStartTime()));
+        } else {
+            throw new JMeterStopTestException("Invalid duration " + getDuration() + " set in Thread Group:" + getName());
+        }
+        // Enables the scheduler
+        thread.setScheduled(true);
     }
 
     @Override
@@ -404,10 +335,10 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public boolean stopThread(String threadName, boolean now) {
-        for(Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
-            JMeterThread thrd = entry.getKey();
-            if (thrd.getThreadName().equals(threadName)) {
-                stopThread(thrd, entry.getValue(), now);
+        for (Entry<JMeterThread, Thread> threadEntry : allThreads.entrySet()) {
+            JMeterThread jMeterThread = threadEntry.getKey();
+            if (jMeterThread.getThreadName().equals(threadName)) {
+                stopThread(jMeterThread, threadEntry.getValue(), now);
                 return true;
             }
         }
@@ -457,10 +388,8 @@ public class ThreadGroup extends AbstractThreadGroup {
                 log.warn("Exception occurred interrupting ThreadStarter", e);
             }
         }
-        
-        for (Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
-            stopThread(entry.getKey(), entry.getValue(), true);
-        }
+
+        allThreads.forEach((key, value) -> stopThread(key, value, true));
     }
 
 
@@ -480,9 +409,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 log.warn("Exception occurred interrupting ThreadStarter", e);
             }            
         }
-        for (JMeterThread item : allThreads.keySet()) {
-            item.stop();
-        }
+        allThreads.keySet().forEach(JMeterThread::stop);
     }
 
     /**
@@ -540,13 +467,11 @@ public class ThreadGroup extends AbstractThreadGroup {
             waitThreadStopped(threadStarter);
         }
         /* @Bugzilla 60933
-         * Like threads can be added on the fly during a test into allThreads
-         * we have to check if allThreads is rly empty before stop 
+         * Threads can be added on the fly during a test into allThreads
+         * we have to check if allThreads is really empty before stopping
          */
-        while ( !allThreads.isEmpty() ) {
-            for (Thread t : allThreads.values()) {
-                waitThreadStopped(t);
-            }
+        while (!allThreads.isEmpty()) {
+            allThreads.values().forEach(this::waitThreadStopped);
         }   
       
     }
@@ -556,13 +481,14 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param thread Thread
      */
     private void waitThreadStopped(Thread thread) {
-        if (thread != null) {
-            while (thread.isAlive()) {
-                try {
-                    thread.join(WAIT_TO_DIE);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+        if (thread == null) {
+            return;
+        }
+        while (thread.isAlive()) {
+            try {
+                thread.join(WAIT_TO_DIE);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -606,10 +532,8 @@ public class ThreadGroup extends AbstractThreadGroup {
             this.engine = engine;
             // Store context from Root Thread to pass it to created threads
             this.context = JMeterContextService.getContext();
-            
         }
         
-
         /**
          * Wait for delay with RAMPUP_GRANULARITY
          * @param delay delay in ms
@@ -635,32 +559,17 @@ public class ThreadGroup extends AbstractThreadGroup {
             try {
                 // Copy in ThreadStarter thread context from calling Thread
                 JMeterContextService.getContext().setVariables(this.context.getVariables());
-                long now = System.currentTimeMillis(); // needs to be constant for all threads
                 long endtime = 0;
                 final boolean usingScheduler = getScheduler();
                 if (usingScheduler) {
                     // set the start time for the Thread
                     if (getDelay() > 0) {// Duration is in seconds
                         delayBy(getDelay() * 1000);
-                    } else {
-                        long start = getStartTime();
-                        if (start >= now) {
-                            delayBy(start-now);
-                        } 
-                        // else start immediately
                     }
                     // set the endtime for the Thread
                     endtime = getDuration();
                     if (endtime > 0) {// Duration is in seconds, starting from when the threads start
                         endtime = endtime *1000 + System.currentTimeMillis();
-                    } else {
-                        if( getEndTime() <= now ) {
-                            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FIELD_FORMAT);
-                            throw new JMeterStopTestException("End Time ("
-                                    + sdf.format(new Date(getEndTime()))+") of Scheduler for Thread Group "+getName() 
-                                    + " is in the past, fix value of End Time field");
-                        }
-                        endtime = getEndTime();
                     }
                 }
                 final int numThreads = getNumThreads();

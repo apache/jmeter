@@ -71,7 +71,6 @@ public class LoggerPanelEnableDisable extends AbstractAction {
                 splitPane.setDividerLocation(0.8);
                 guiInstance.getMenuItemLoggerPanel().getModel().setSelected(true);
             } else {
-                guiInstance.getLoggerPanel().clear();
                 guiInstance.getLoggerPanel().setVisible(false);
                 splitPane.setDividerSize(0);
                 guiInstance.getMenuItemLoggerPanel().getModel().setSelected(false);

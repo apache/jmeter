@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171027">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+    </TestPlan>
+    <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="login" elementType="Argument">
+            <stringProp name="Argument.name">login</stringProp>
+            <stringProp name="Argument.value">admin</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="password" elementType="Argument">
+            <stringProp name="Argument.name">password</stringProp>
+            <stringProp name="Argument.value">password1234</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="port" elementType="Argument">
+            <stringProp name="Argument.name">port</stringProp>
+            <stringProp name="Argument.value">2222</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="passivePort" elementType="Argument">
+            <stringProp name="Argument.name">passivePort</stringProp>
+            <stringProp name="Argument.value">2223</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <ConfigTestElement guiclass="FtpConfigGui" testclass="ConfigTestElement" testname="FTP Request Defaults" enabled="true">
+        <stringProp name="FTPSampler.server">localhost</stringProp>
+        <stringProp name="FTPSampler.port">2222</stringProp>
+        <stringProp name="FTPSampler.filename"></stringProp>
+        <stringProp name="FTPSampler.localfilename"></stringProp>
+        <stringProp name="FTPSampler.inputdata"></stringProp>
+        <boolProp name="FTPSampler.binarymode">false</boolProp>
+        <boolProp name="FTPSampler.saveresponse">false</boolProp>
+        <boolProp name="FTPSampler.upload">false</boolProp>
+      </ConfigTestElement>
+      <hashTree/>
+      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </SetupThreadGroup>
+      <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="BSS_startFtpServer" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">92d044f3-7b32-4797-a3a8-49d07a78b01f</stringProp>
+          <stringProp name="script">import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.listener.ListenerFactory;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.apache.ftpserver.usermanager.impl.BaseUser;
+import org.apache.ftpserver.usermanager.impl.WritePermission;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.ftpserver.ftplet.Authority;
+import java.util.List;
+import java.util.ArrayList;
+import org.apache.commons.io.FileUtils;
+import org.apache.ftpserver.DataConnectionConfiguration;
+import org.apache.ftpserver.DataConnectionConfigurationFactory;
+
+FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/ftp_test&quot;));
+new File(JMeterUtils.getJMeterHome(), &quot;bin/ftp_test&quot;).mkdir();
+
+DataConnectionConfigurationFactory dataConnectionConfigurationFactory = 
+	new DataConnectionConfigurationFactory();
+dataConnectionConfigurationFactory.setPassivePorts(vars.get(&quot;passivePort&quot;));	
+DataConnectionConfiguration dataConnectionConfiguration = dataConnectionConfigurationFactory.createDataConnectionConfiguration();
+
+PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
+UserManager userManager = userManagerFactory.createUserManager();
+BaseUser user = new BaseUser();
+user.setName(vars.get(&quot;login&quot;));
+user.setPassword(vars.get(&quot;password&quot;));
+List authorities = new ArrayList();
+authorities.add(new WritePermission());
+user.setAuthorities(authorities);
+user.setHomeDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin&quot;).getAbsolutePath());
+userManager.save(user);
+ListenerFactory listenerFactory = new ListenerFactory();
+
+listenerFactory.setDataConnectionConfiguration(dataConnectionConfiguration);
+listenerFactory.setPort(Integer.parseInt(vars.get(&quot;port&quot;)));
+FtpServerFactory factory = new FtpServerFactory();
+factory.setUserManager(userManager);
+factory.addListener(&quot;default&quot;, listenerFactory.createListener());
+ 
+FtpServer server = factory.createServer();
+server.start();
+
+props.put(&quot;FTP_SERVER&quot;, server);
+</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+        <TestAction guiclass="TestActionGui" testclass="TestAction" testname="Think Time" enabled="true">
+          <intProp name="ActionProcessor.action">1</intProp>
+          <intProp name="ActionProcessor.target">0</intProp>
+          <stringProp name="ActionProcessor.duration">0</stringProp>
+        </TestAction>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Pause" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+            <stringProp name="RandomTimer.range">100</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="TG-FTP" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <FTPSampler guiclass="FtpTestSamplerGui" testclass="FTPSampler" testname="FTP Request-get-binary" enabled="true">
+          <stringProp name="FTPSampler.server"></stringProp>
+          <stringProp name="FTPSampler.port"></stringProp>
+          <stringProp name="FTPSampler.filename">jmeter.properties</stringProp>
+          <stringProp name="FTPSampler.localfilename">ftp_test/jmeter-from-ftp-binary.properties</stringProp>
+          <stringProp name="FTPSampler.inputdata"></stringProp>
+          <boolProp name="FTPSampler.binarymode">true</boolProp>
+          <boolProp name="FTPSampler.saveresponse">true</boolProp>
+          <boolProp name="FTPSampler.upload">false</boolProp>
+          <stringProp name="ConfigTestElement.username">${login}</stringProp>
+          <stringProp name="ConfigTestElement.password">${password}</stringProp>
+        </FTPSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-897552584">Apache JMeter Property file</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <FTPSampler guiclass="FtpTestSamplerGui" testclass="FTPSampler" testname="FTP Request-get-text" enabled="true">
+          <stringProp name="FTPSampler.server"></stringProp>
+          <stringProp name="FTPSampler.port"></stringProp>
+          <stringProp name="FTPSampler.filename">jmeter.properties</stringProp>
+          <stringProp name="FTPSampler.localfilename">ftp_test/jmeter-from-ftp-ascii.properties</stringProp>
+          <stringProp name="FTPSampler.inputdata"></stringProp>
+          <boolProp name="FTPSampler.binarymode">false</boolProp>
+          <boolProp name="FTPSampler.saveresponse">true</boolProp>
+          <boolProp name="FTPSampler.upload">false</boolProp>
+          <stringProp name="ConfigTestElement.username">${login}</stringProp>
+          <stringProp name="ConfigTestElement.password">${password}</stringProp>
+        </FTPSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-897552584">Apache JMeter Property file</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <FTPSampler guiclass="FtpTestSamplerGui" testclass="FTPSampler" testname="FTP Request-put-text" enabled="true">
+          <stringProp name="FTPSampler.server"></stringProp>
+          <stringProp name="FTPSampler.port"></stringProp>
+          <stringProp name="FTPSampler.filename">ftp_test/jmeter-from-ftp-ascii-write.properties</stringProp>
+          <stringProp name="FTPSampler.localfilename">ftp_test/jmeter-from-ftp-ascii.properties</stringProp>
+          <stringProp name="FTPSampler.inputdata"></stringProp>
+          <boolProp name="FTPSampler.binarymode">false</boolProp>
+          <boolProp name="FTPSampler.saveresponse">true</boolProp>
+          <boolProp name="FTPSampler.upload">true</boolProp>
+          <stringProp name="ConfigTestElement.username">${login}</stringProp>
+          <stringProp name="ConfigTestElement.password">${password}</stringProp>
+        </FTPSampler>
+        <hashTree/>
+        <FTPSampler guiclass="FtpTestSamplerGui" testclass="FTPSampler" testname="FTP Request-check-upload" enabled="true">
+          <stringProp name="FTPSampler.server"></stringProp>
+          <stringProp name="FTPSampler.port"></stringProp>
+          <stringProp name="FTPSampler.filename">ftp_test/jmeter-from-ftp-ascii-write.properties</stringProp>
+          <stringProp name="FTPSampler.localfilename">ftp_test/jmeter-from-ftp-ascii-write-tocheck.properties</stringProp>
+          <stringProp name="FTPSampler.inputdata"></stringProp>
+          <boolProp name="FTPSampler.binarymode">false</boolProp>
+          <boolProp name="FTPSampler.saveresponse">true</boolProp>
+          <boolProp name="FTPSampler.upload">false</boolProp>
+          <stringProp name="ConfigTestElement.username">${login}</stringProp>
+          <stringProp name="ConfigTestElement.password">${password}</stringProp>
+        </FTPSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-897552584">Apache JMeter Property file</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <PostThreadGroup guiclass="PostThreadGroupGui" testclass="PostThreadGroup" testname="tearDown Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </PostThreadGroup>
+      <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="BSS_stopFtpServer" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">d09f6f8d-0f86-4cae-b88c-0ad9bd587d31</stringProp>
+          <stringProp name="script">import org.apache.ftpserver.FtpServer;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FileUtils;
+
+
+FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/ftp_test&quot;));
+
+FtpServer server = (FtpServer) props.get(&quot;FTP_SERVER&quot;);
+try {
+	server.stop();
+} catch (Exception ex) {
+	log.info(&quot;Exception closing server&quot;, ex);
+}
+
+</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+      </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>false</time>
+            <latency>false</latency>
+            <timestamp>false</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <threadCounts>true</threadCounts>
+            <sampleCount>true</sampleCount>
+          </value>
+        </objProp>
+        <stringProp name="filename">FTP_TESTS.csv</stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>false</time>
+            <latency>false</latency>
+            <timestamp>false</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>true</xml>
+            <fieldNames>false</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <threadCounts>true</threadCounts>
+            <sampleCount>true</sampleCount>
+          </value>
+        </objProp>
+        <stringProp name="filename">FTP_TESTS.xml</stringProp>
+      </ResultCollector>
+      <hashTree/>
+    </hashTree>
+    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
+      <boolProp name="WorkBench.save">true</boolProp>
+    </WorkBench>
+    <hashTree>
+      <ConfigTestElement guiclass="PropertyControlGui" testclass="ConfigTestElement" testname="Property Display" enabled="true"/>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

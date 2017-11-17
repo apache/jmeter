@@ -97,8 +97,9 @@
       <ProxyControl guiclass="ProxyControlGui" testclass="ProxyControl" testname="HTTP(S) Test Script Recorder" enabled="true">
         <stringProp name="ProxyControlGui.port">8888</stringProp>
         <collectionProp name="ProxyControlGui.exclude_list">
-          <stringProp name="1409425616">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff|woff2)</stringProp>
-          <stringProp name="-2135475220">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff|woff2)[\?;].*</stringProp>
+          <stringProp name="1409425616">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|eot|otf|ttf|mp4|woff|woff2)</stringProp>
+          <stringProp name="-2135475220">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|eot|otf|ttf|mp4|woff|woff2)[\?;].*</stringProp>
+          <stringProp name="-2135475220">.*detectportal.firefox.com.*</stringProp>
         </collectionProp>
         <collectionProp name="ProxyControlGui.include_list"/>
         <boolProp name="ProxyControlGui.capture_http_headers">true</boolProp>
@@ -112,7 +113,7 @@
         <boolProp name="ProxyControlGui.regex_match">true</boolProp>
         <stringProp name="ProxyControlGui.content_type_include"></stringProp>
         <stringProp name="ProxyControlGui.content_type_exclude"></stringProp>
-        <boolProp name="ProxyControlGui.notify_child_sl_filtered">true</boolProp>
+        <boolProp name="ProxyControlGui.notify_child_sl_filtered">false</boolProp>
         <stringProp name="ProxyControlGui.proxy_prefix_http_sampler_name"></stringProp>
       </ProxyControl>
       <hashTree>

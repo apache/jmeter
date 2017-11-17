@@ -86,8 +86,6 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
         String[] defaultValues = getDefaultValues().split(SEPARATOR);
         int[] matchNumbers = getMatchNumbersAsInt(defaultValues.length);
 
-        //jsonResponse = jsonResponse.replaceAll("'", "\""); // $NON-NLS-1$  $NON-NLS-2$
-
         if (refNames.length != jsonPathExpressions.length ||
                 refNames.length != defaultValues.length) {
             log.error("Number of JSON Path variables must match number of default values and json-path expressions, check you use separator ';' if you have many values"); // $NON-NLS-1$

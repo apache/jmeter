@@ -34,6 +34,7 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
+import org.apache.jmeter.gui.util.FilePanelEntry;
 
 public class BeanShellSamplerGui extends AbstractSamplerGui {
 
@@ -41,7 +42,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 
     private JCheckBox resetInterpreter;// reset the bsh.Interpreter before each execution
 
-    private JTextField filename;// script file name (if present)
+    private final FilePanelEntry filename = new FilePanelEntry(JMeterUtils.getResString("bsh_script_file"),".bsh"); // script file name (if present)
 
     private JTextField parameters;// parameters to pass to script file (or script)
 
@@ -55,7 +56,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
     public void configure(TestElement element) {
         scriptField.setInitialText(element.getPropertyAsString(BeanShellSampler.SCRIPT));
         scriptField.setCaretPosition(0);
-        filename.setText(element.getPropertyAsString(BeanShellSampler.FILENAME));
+        filename.setFilename(element.getPropertyAsString(BeanShellSampler.FILENAME));
         parameters.setText(element.getPropertyAsString(BeanShellSampler.PARAMETERS));
         resetInterpreter.setSelected(element.getPropertyAsBoolean(BeanShellSampler.RESET_INTERPRETER));
         super.configure(element);
@@ -78,7 +79,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
         te.clear();
         super.configureTestElement(te);
         te.setProperty(BeanShellSampler.SCRIPT, scriptField.getText());
-        te.setProperty(BeanShellSampler.FILENAME, filename.getText());
+        te.setProperty(BeanShellSampler.FILENAME, filename.getFilename());
         te.setProperty(BeanShellSampler.PARAMETERS, parameters.getText());
         te.setProperty(new BooleanProperty(BeanShellSampler.RESET_INTERPRETER, resetInterpreter.isSelected()));
     }
@@ -90,7 +91,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
     public void clearGui() {
         super.clearGui();
 
-        filename.setText(""); //$NON-NLS-1$
+        filename.setFilename(""); //$NON-NLS-1$
         parameters.setText(""); //$NON-NLS-1$
         scriptField.setInitialText(""); //$NON-NLS-1$
         resetInterpreter.setSelected(false);
@@ -101,17 +102,11 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
         return "bsh_sampler_title"; // $NON-NLS-1$
     }
 
-    private JPanel createFilenamePanel()// TODO ought to be a FileChooser ...
+    private JPanel createFilenamePanel()
     {
-        JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_file")); // $NON-NLS-1$
-
-        filename = new JTextField(10);
-        filename.setName(BeanShellSampler.FILENAME);
-        label.setLabelFor(filename);
-
-        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
-        filenamePanel.add(label, BorderLayout.WEST);
+        JPanel filenamePanel = new JPanel(new BorderLayout());
         filenamePanel.add(filename, BorderLayout.CENTER);
+
         return filenamePanel;
     }
 

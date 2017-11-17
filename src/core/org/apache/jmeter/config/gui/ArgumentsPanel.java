@@ -97,7 +97,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /** Button to show the detail of an argument*/
     private JButton showDetail;
 
+    /** Enable Up and Down buttons */
     private final boolean enableUpDown;
+    
+    /** Disable buttons :Detail, Add, Add from Clipboard, Delete, Up and Down*/
+    private final boolean disableButtons;
 
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
@@ -113,6 +117,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /** Command for moving a row down in the table. */
     private static final String DOWN = "down"; // $NON-NLS-1$
+
+    /** When pasting from the clipboard, split lines on linebreak */
+    private static final String CLIPBOARD_LINE_DELIMITERS = "\n"; //$NON-NLS-1$
+
+    /** When pasting from the clipboard, split parameters on tab */
+    private static final String CLIPBOARD_ARG_DELIMITERS = "\t"; //$NON-NLS-1$
 
     /** Command for showing detail. */
     private static final String DETAIL = "detail"; // $NON-NLS-1$
@@ -152,6 +162,17 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     public ArgumentsPanel(String label, boolean enableUpDown) {
         this(label, null, enableUpDown, false);
     }
+    
+    /**
+     * Create a new ArgumentsPanel as an embedded component, using the specified
+     * title.
+     * 
+     * @param disableButtons Remove Edit all buttons 
+     * @param label the title for the component.
+     */
+    public ArgumentsPanel(boolean disableButtons, String label) {
+        this(label, null, false, false, null, disableButtons);
+    }
 
     /**
      * Create a new ArgumentsPanel with a border and color background
@@ -170,9 +191,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @param standalone is standalone
      */
     public ArgumentsPanel(String label, Color bkg, boolean enableUpDown, boolean standalone) {
-        this(label, bkg, enableUpDown, standalone, null);
+        this(label, bkg, enableUpDown, standalone, null, false);
     }
-       
+
     /**
      * Create a new ArgumentsPanel with a border and color background
      * @param label text for label
@@ -182,8 +203,22 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @param model the table model to use
      */
     public ArgumentsPanel(String label, Color bkg, boolean enableUpDown, boolean standalone, ObjectTableModel model) {
+        this(label, bkg, enableUpDown, standalone, model, false);
+    }
+
+    /**
+     * Create a new ArgumentsPanel with a border and color background
+     * @param label text for label
+     * @param bkg background colour
+     * @param enableUpDown Add up/down buttons
+     * @param standalone is standalone
+     * @param model the table model to use
+     * @param disableButtons Remove all buttons 
+     */
+    public ArgumentsPanel(String label, Color bkg, boolean enableUpDown, boolean standalone, ObjectTableModel model, boolean disableButtons) {
         tableLabel = new JLabel(label);
         this.enableUpDown = enableUpDown;
+        this.disableButtons = disableButtons;
         this.background = bkg;
         this.standalone = standalone;
         this.tableModel = model;
@@ -297,25 +332,27 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     }    
     
     protected void checkButtonsStatus() {
-        // Disable DELETE if there are no rows in the table to delete.
-        if (tableModel.getRowCount() == 0) {
-            delete.setEnabled(false);
-            showDetail.setEnabled(false);
-        } else {
-            delete.setEnabled(true);
-            showDetail.setEnabled(true);
+        if (!disableButtons) {
+            // Disable DELETE if there are no rows in the table to delete.
+            if (tableModel.getRowCount() == 0) {
+                delete.setEnabled(false);
+                showDetail.setEnabled(false);
+            } else {
+                delete.setEnabled(true);
+                showDetail.setEnabled(true);
+            }
+            if(enableUpDown) {
+                if(tableModel.getRowCount()>1) {
+                    up.setEnabled(true);
+                    down.setEnabled(true);
+                }
+                else {
+                    up.setEnabled(false);
+                    down.setEnabled(false);
+                }
+            }
         }
         
-        if(enableUpDown) {
-            if(tableModel.getRowCount()>1) {
-                up.setEnabled(true);
-                down.setEnabled(true);
-            }
-            else {
-                up.setEnabled(false);
-                down.setEnabled(false);
-            }
-        }
     }
 
     @Override
@@ -340,20 +377,23 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        String action = e.getActionCommand();
-        if (action.equals(DELETE)) {
-            deleteArgument();
-        } else if (action.equals(ADD)) {
-            addArgument();
-        } else if (action.equals(ADD_FROM_CLIPBOARD)) {
-            addFromClipboard();
-        } else if (action.equals(UP)) {
-            moveUp();
-        } else if (action.equals(DOWN)) {
-            moveDown();
-        } else if (action.equals(DETAIL)) {
-            showDetail();
+        if (!disableButtons) {
+            String action = e.getActionCommand();
+            if (action.equals(DELETE)) {
+                deleteArgument();
+            } else if (action.equals(ADD)) {
+                addArgument();
+            } else if (action.equals(ADD_FROM_CLIPBOARD)) {
+                addFromClipboard();
+            } else if (action.equals(UP)) {
+                moveUp();
+            } else if (action.equals(DOWN)) {
+                moveDown();
+            } else if (action.equals(DETAIL)) {
+                showDetail();
+            }
         }
+
     }
 
     
@@ -497,8 +537,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /**
      * Add values from the clipboard
+     * @param lineDelimiter Delimiter string to split clipboard into lines
+     * @param argDelimiter Delimiter string to split line into key-value pair
      */
-    protected void addFromClipboard() {
+    protected void addFromClipboard(String lineDelimiter, String argDelimiter) {
         GuiUtils.stopTableEditing(table);
         int rowCount = table.getRowCount();
         try {
@@ -506,9 +548,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             if(clipboardContent == null) {
                 return;
             }
-            String[] clipboardLines = clipboardContent.split("\n");
+            String[] clipboardLines = clipboardContent.split(lineDelimiter);
             for (String clipboardLine : clipboardLines) {
-                String[] clipboardCols = clipboardLine.split("\t");
+                String[] clipboardCols = clipboardLine.split(argDelimiter);
                 if (clipboardCols.length > 0) {
                     Argument argument = createArgumentFromClipboard(clipboardCols);
                     tableModel.addRow(argument);
@@ -531,6 +573,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                     "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
                             + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    protected void addFromClipboard() {
+        addFromClipboard(CLIPBOARD_LINE_DELIMITERS, CLIPBOARD_ARG_DELIMITERS);
     }
 
     protected Argument createArgumentFromClipboard(String[] clipboardCols) {
@@ -645,14 +691,15 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @return a GUI panel containing the buttons
      */
     private JPanel makeButtonPanel() {
+
         showDetail = new JButton(JMeterUtils.getResString("detail")); // $NON-NLS-1$
         showDetail.setActionCommand(DETAIL);
         showDetail.setEnabled(true);
-        
+
         add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
         add.setActionCommand(ADD);
         add.setEnabled(true);
-        
+
         // A button for adding new arguments to the table from the clipboard
         JButton addFromClipboard = new JButton(JMeterUtils.getResString("add_from_clipboard")); // $NON-NLS-1$
         addFromClipboard.setActionCommand(ADD_FROM_CLIPBOARD);
@@ -661,10 +708,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
         delete.setActionCommand(DELETE);
 
-        if(enableUpDown) {
+        if (enableUpDown) {
             up = new JButton(JMeterUtils.getResString("up")); // $NON-NLS-1$
             up.setActionCommand(UP);
-    
+
             down = new JButton(JMeterUtils.getResString("down")); // $NON-NLS-1$
             down.setActionCommand(DOWN);
         }
@@ -683,7 +730,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         buttonPanel.add(add);
         buttonPanel.add(addFromClipboard);
         buttonPanel.add(delete);
-        if(enableUpDown) {
+        if (enableUpDown) {
             up.addActionListener(this);
             down.addActionListener(this);
             buttonPanel.add(up);
@@ -711,7 +758,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         p.add(makeMainPanel(), BorderLayout.CENTER);
         // Force a minimum table height of 70 pixels
         p.add(Box.createVerticalStrut(70), BorderLayout.WEST);
-        p.add(makeButtonPanel(), BorderLayout.SOUTH);
+        if (!disableButtons) {
+            p.add(makeButtonPanel(), BorderLayout.SOUTH);
+        }
 
         if (standalone) {
             add(p, BorderLayout.CENTER);

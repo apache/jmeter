@@ -45,7 +45,6 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * About Command. It may be extended in the future to add a list of installed
  * protocols, config options, etc.
- *
  */
 public class AboutCommand extends AbstractAction {
     private static final Set<String> commandSet;

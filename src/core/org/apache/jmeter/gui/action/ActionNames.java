@@ -104,6 +104,7 @@ public final class ActionNames {
     public static final String EXPAND           = "expand"; // $NON-NLS-1$
     public static final String RUN_TG           = "run_tg"; // $NON-NLS-1$
     public static final String RUN_TG_NO_TIMERS = "run_tg_no_timers"; // $NON-NLS-1$
+    public static final String SAVE_BEFORE_RUN  = "save_before_run"; //$NON-NLS-1$
     public static final String THREAD_DUMP      = "thread_dump"; // $NON-NLS-1$
     public static final String VALIDATE_TG      = "validate_tg"; //$NON-NLS-1$
     public static final String ZOOM_IN          = "zoom_in"; //$NON-NLS-1$

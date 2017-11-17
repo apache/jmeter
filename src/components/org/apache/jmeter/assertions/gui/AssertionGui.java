@@ -82,6 +82,9 @@ public class AssertionGui extends AbstractAssertionGui {
     
     /** Radio button indicating that the request headers should be tested. */
     private JRadioButton requestHeadersButton;
+    
+    /** Radio button indicating that the request data should be tested. */
+    private JRadioButton requestDataButton;
 
     /**
      * Checkbox to indicate whether the response should be forced successful
@@ -177,6 +180,8 @@ public class AssertionGui extends AbstractAssertionGui {
                 ra.setTestFieldResponseMessage();
             } else if (requestHeadersButton.isSelected()) {
                 ra.setTestFieldRequestHeaders();
+            } else if (requestDataButton.isSelected()) {
+                ra.setTestFieldRequestData();
             } else if (responseHeadersButton.isSelected()) {
                 ra.setTestFieldResponseHeaders();
             } else { // Assume URL
@@ -223,6 +228,7 @@ public class AssertionGui extends AbstractAssertionGui {
         responseCodeButton.setSelected(false);
         responseMessageButton.setSelected(false);
         requestHeadersButton.setSelected(false);
+        requestDataButton.setSelected(false);
         responseHeadersButton.setSelected(false);
         assumeSuccess.setSelected(false);
 
@@ -270,6 +276,8 @@ public class AssertionGui extends AbstractAssertionGui {
             responseMessageButton.setSelected(true);
         } else if (model.isTestFieldRequestHeaders()) {
             requestHeadersButton.setSelected(true);
+        } else if (model.isTestFieldRequestData()) {
+            requestDataButton.setSelected(true);
         } else if (model.isTestFieldResponseHeaders()) {
             responseHeadersButton.setSelected(true);
         } else // Assume it is the URL
@@ -323,6 +331,7 @@ public class AssertionGui extends AbstractAssertionGui {
         responseMessageButton = new JRadioButton(JMeterUtils.getResString("assertion_message_resp")); //$NON-NLS-1$
         responseHeadersButton = new JRadioButton(JMeterUtils.getResString("assertion_headers")); //$NON-NLS-1$
         requestHeadersButton = new JRadioButton(JMeterUtils.getResString("assertion_req_headers")); //$NON-NLS-1$
+        requestDataButton = new JRadioButton(JMeterUtils.getResString("assertion_req_data")); //$NON-NLS-1$
 
         ButtonGroup group = new ButtonGroup();
         group.add(responseStringButton);
@@ -332,6 +341,7 @@ public class AssertionGui extends AbstractAssertionGui {
         group.add(responseMessageButton);
         group.add(requestHeadersButton);
         group.add(responseHeadersButton);
+        group.add(requestDataButton);
         
         responseStringButton.setSelected(true);
 
@@ -354,6 +364,9 @@ public class AssertionGui extends AbstractAssertionGui {
         addField(panel, urlButton, gbc);
         addField(panel, responseAsDocumentButton, gbc);
         addField(panel, assumeSuccess, gbc);
+
+        resetContraints(gbc);
+        addField(panel, requestDataButton, gbc);
         return panel;
     }
     

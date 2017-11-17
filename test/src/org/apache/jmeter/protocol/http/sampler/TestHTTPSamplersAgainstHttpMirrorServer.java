@@ -1081,13 +1081,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     // TODO any point in checking the other headers?
     private void checkHeaderTypeLength(String requestHeaders, String contentType, int contentLen) {
         boolean typeOK = isInRequestHeaders(requestHeaders, HTTPConstants.HEADER_CONTENT_TYPE, contentType);
-//        boolean lengOK = isInRequestHeaders(requestHeaders, HTTPConstants.HEADER_CONTENT_LENGTH, Integer.toString(contentLen));
         if (!typeOK){
             fail("Expected type:" + contentType + " in:\n"+ requestHeaders);
         }
-//        if (!lengOK){
-//            fail("Expected & length: " +contentLen + " in:\n"+requestHeaders);
-//        }
     }
    
     private String getSentRequestHeaderValue(String requestHeaders, String headerName) {
@@ -1144,7 +1140,6 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
 
     private void setupUrl(HTTPSamplerBase sampler, String contentEncoding) {
         String protocol = "http";
-        // String domain = "localhost";
         String domain = "localhost";
         String path = "/test/somescript.jsp";
         sampler.setProtocol(protocol);

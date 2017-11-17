@@ -53,7 +53,6 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.gui.GuiUtils;
@@ -616,9 +615,6 @@ public final class MenuFactory {
         if (null == parentNode) {
             return false;
         }
-        if (foundClass(nodes, new Class[]{WorkBench.class})){// Can't add a Workbench anywhere
-            return false;
-        }
         if (foundClass(nodes, new Class[]{TestPlan.class})){// Can't add a TestPlan anywhere
             return false;
         }
@@ -632,9 +628,11 @@ public final class MenuFactory {
             return false;
         }
 
-        if (parent instanceof WorkBench) {// allow everything else
-            return true;
+        // Cannot move Non-Test Elements from root of Test Plan
+        if (!(parent instanceof TestPlan) && foundMenuCategories(nodes, NON_TEST_ELEMENTS)) {
+            return false;
         }
+
         if (parent instanceof TestPlan) {
             if (foundClass(nodes,
                      new Class[]{Sampler.class, Controller.class}, // Samplers and Controllers need not apply ...
@@ -657,6 +655,7 @@ public final class MenuFactory {
             }
             return true;
         }
+
         // All other
         return false;
     }
@@ -666,6 +665,18 @@ public final class MenuFactory {
         for (JMeterTreeNode node : nodes) {
             for (Class<?> aClass : classes) {
                 if (aClass.isInstance(node.getUserObject())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Is any node an instance of one of the menu category?
+    private static boolean foundMenuCategories(JMeterTreeNode[] nodes, String category) {
+        for (JMeterTreeNode node : nodes) {
+            for (String c : node.getMenuCategories()) {
+                if (category.equals(c)) {
                     return true;
                 }
             }

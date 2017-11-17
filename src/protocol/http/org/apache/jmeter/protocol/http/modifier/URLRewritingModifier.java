@@ -52,7 +52,6 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 
     private transient Pattern pathExtensionNoEqualsNoQuestionmarkRegexp;
 
-    // transient Perl5Compiler compiler = new Perl5Compiler();
     private static final String ARGUMENT_NAME = "argument_name"; // $NON-NLS-1$
 
     private static final String PATH_EXTENSION = "path_extension"; // $NON-NLS-1$

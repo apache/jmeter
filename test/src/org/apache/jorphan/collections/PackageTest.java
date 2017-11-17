@@ -148,7 +148,6 @@ public class PackageTest {
 
             tree1.add("a1");
             tree1.add("a2");
-            // tree1.add("a3");
             tree2.add("a2");
             tree2.add("a1");
 

@@ -41,8 +41,8 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -54,6 +54,12 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class DefaultSamplerCreator extends AbstractSamplerCreator {
     private static final Logger log = LoggerFactory.getLogger(DefaultSamplerCreator.class);
+    
+    /*
+    * Must be the same order than in org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui class in createHTTPSamplerPanel method
+    */
+    private static final int SAMPLER_NAME_NAMING_MODE_PREFIX = 0;  // $NON-NLS-1$
+    private static final int SAMPLER_NAME_NAMING_MODE_COMPLETE = 1;  // $NON-NLS-1$
  
     /**
      * 
@@ -274,10 +280,32 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      */
     protected void computeSamplerName(HTTPSamplerBase sampler,
             HttpRequestHdr request) {
+        String prefix = request.getPrefix();
+        int httpSampleNameMode = request.getHttpSampleNameMode();
         if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
-            sampler.setName(incrementRequestNumberAndGet() + " " + sampler.getPath());
+            if(!StringUtils.isEmpty(prefix)) {
+                if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_PREFIX) {
+                sampler.setName(prefix + incrementRequestNumberAndGet() + " " + sampler.getPath());
+                } else if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+                    sampler.setName(incrementRequestNumberAndGet() + " " + prefix);
+                } else {
+                    log.debug("Sampler name naming mode not recognized");
+                }
+            } else {
+                sampler.setName(incrementRequestNumberAndGet() + " " + sampler.getPath());
+            }
         } else {
-            sampler.setName(sampler.getPath());
+            if(!StringUtils.isEmpty(prefix)) {
+                if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_PREFIX) {
+                    sampler.setName(prefix+sampler.getPath());
+                } else if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+                    sampler.setName(prefix);
+                } else {
+                    log.debug("Sampler name naming mode not recognized");
+                }
+            } else {
+                sampler.setName(sampler.getPath());
+            }
         }
     }
 

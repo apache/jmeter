@@ -37,7 +37,7 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
 
     private static final Logger log = LoggerFactory.getLogger(ResultAction.class);
 
-    /*
+    /**
      * Constructor is initially called once for each occurrence in the test plan
      * For GUI, several more instances are created Then clear is called at start
      * of test Called several times during test startup The name will not
@@ -56,7 +56,7 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
     public void sampleOccurred(SampleEvent e) {
         SampleResult s = e.getResult();
         if (log.isDebugEnabled()) {
-            log.debug("{} OK? {}", s.getSampleLabel(), s.isSuccessful());
+            log.debug("ResultStatusHandler {} for {} OK? {}", getName(), s.getSampleLabel(), s.isSuccessful());
         }
         if (!s.isSuccessful()) {
             if (isStopTestNow()) {

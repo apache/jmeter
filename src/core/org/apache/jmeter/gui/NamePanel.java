@@ -53,7 +53,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
      */
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(5, 0));
-        /** The label for the text field. */
+        // The label for the text field.
         JLabel nameLabel = new JLabel(JMeterUtils.getResString("name")); // $NON-NLS-1$
         nameLabel.setName("name");
         nameLabel.setLabelFor(nameField);

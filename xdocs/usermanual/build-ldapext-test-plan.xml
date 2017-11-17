@@ -40,9 +40,9 @@ needs.
 </p>
 
 <p>
-You will create four users that send requests for four tests on the LDAP server. Also, you will tell
-the users to run their tests one time. So,  the total number of requests is <code>(1 users) x (9 requests) x
-repeat 1 time) = 9</code> LDAP requests. To construct the Test Plan, you will use the following elements:<br/>
+You will create 1 user that send requests for nine tests on the LDAP server. Also, you will tell
+the users to run their tests one time. So, the total number of requests is <code>(1 user) x (9 requests) x
+(repeat 1 time) = 9</code> LDAP requests. To construct the Test Plan, you will use the following elements:<br/>
 <a href="test_plan.html#thread_group">Thread Group</a>,<br/>
 <complink name="Adding LDAP Extended Request Defaults"/>,<br/>
 <complink name="Adding LDAP Requests"/>, and<br/>
@@ -395,7 +395,7 @@ this will move the complete subtree, plus all retired people in the subtree to t
 </p>
 <p>
 <figure image="ldaptest/extmoddn.png">
-Figure &sect-num;.3.8. Rename example</figure>
+Figure &sect-num;.3.7. Rename example</figure>
 </p>
 </subsection>
 
@@ -417,7 +417,7 @@ you need to enter "<code>cn=John Junior Doe,ou=Users</code>" in the <code>Delete
 </p>
 <p>
 <figure image="ldaptest/extdel.png">
-Figure &sect-num;.3.7. Delete example</figure>
+Figure &sect-num;.3.8. Delete example</figure>
 </p>
 </subsection>
 

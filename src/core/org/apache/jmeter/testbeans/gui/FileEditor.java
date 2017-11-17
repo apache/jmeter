@@ -34,6 +34,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * A property editor for File properties.
@@ -81,7 +82,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
         }
 
         // Create a button to trigger the file chooser:
-        JButton button = new JButton("Browse...");
+        JButton button = new JButton(JMeterUtils.getResString("browse"));
         button.addActionListener(this);
 
         // Get a WrapperEditor to provide the field or combo -- we'll delegate
@@ -90,12 +91,12 @@ public class FileEditor implements PropertyEditor, ActionListener {
         boolean notExpression = GenericTestBeanCustomizer.notExpression(descriptor);
         boolean notOther = GenericTestBeanCustomizer.notOther(descriptor);
         Object defaultValue = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
-        ComboStringEditor cse = new ComboStringEditor(null, notExpression && notOther, notNull);
+        FieldStringEditor cse = new FieldStringEditor();
         editor = new WrapperEditor(this, new SimpleFileEditor(), cse,
                 !notNull, // acceptsNull
                 !notExpression, // acceptsExpressions
                 !notOther, // acceptsOther
-                defaultValue); // default
+                defaultValue == null ? "":defaultValue); // default // //$NON-NLS-1$
 
         // Create a panel containing the combo and the button:
         panel = new JPanel(new BorderLayout(5, 0));

@@ -21,10 +21,12 @@ package org.apache.jmeter.gui;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
-import javax.swing.JTree;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
 
 import org.apache.jmeter.gui.action.UndoCommand;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
@@ -41,9 +43,7 @@ import org.slf4j.LoggerFactory;
  * @since 2.12
  */
 public class UndoHistory implements TreeModelListener, Serializable {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     
     /**
@@ -53,61 +53,24 @@ public class UndoHistory implements TreeModelListener, Serializable {
         void notifyChangeInHistory(UndoHistory history);
     }
 
-    /**
-     * Avoid storing too many elements
-     *
-     * @param <T> Class that should be held in this container
-     */
-    private static class LimitedArrayList<T> extends ArrayList<T> {
-        /**
-         *
-         */
-        private static final long serialVersionUID = -6574380490156356507L;
-        private int limit;
-
-        public LimitedArrayList(int limit) {
-            this.limit = limit;
-        }
-
-        @Override
-        public boolean add(T item) {
-            if (this.size() + 1 > limit) {
-                this.remove(0);
-            }
-            return super.add(item);
-        }
-    }
-
     private static final Logger log = LoggerFactory.getLogger(UndoHistory.class);
-
-    /**
-     * temporary storage for GUI tree expansion state
-     */
-    private ArrayList<Integer> savedExpanded = new ArrayList<>();
-
-    /**
-     * temporary storage for GUI tree selected row
-     */
-    private int savedSelected = 0;
-
-    private static final int INITIAL_POS = -1;
-    private int position = INITIAL_POS;
 
     private static final int HISTORY_SIZE = JMeterUtils.getPropDefault("undo.history.size", 0);
 
-    private List<UndoHistoryItem> history = new LimitedArrayList<>(HISTORY_SIZE);
-
-    /**
-     * flag to prevent recursive actions
-     */
+    /** flag to prevent recursive actions */
     private boolean working = false;
 
-    /**
-     * History listeners
-     */
+    /** History listeners */
     private List<HistoryListener> listeners = new ArrayList<>();
 
+    private final UndoManager manager = new UndoManager();
+
+    private final Stack<SimpleCompoundEdit> transactions = new Stack<>();
+
+    private UndoHistoryItem lastKnownState = null;
+
     public UndoHistory() {
+        manager.setLimit(HISTORY_SIZE);
     }
 
     /**
@@ -118,8 +81,14 @@ public class UndoHistory implements TreeModelListener, Serializable {
             return;
         }
         log.debug("Clearing undo history");
-        history.clear();
-        position = INITIAL_POS;
+        manager.discardAllEdits();
+        if (isTransaction()) {
+            if(log.isWarnEnabled()) {
+                log.warn("Clearing undo history with {} unfinished transactions", transactions.size());
+            }
+            transactions.clear();
+        }
+        lastKnownState = null;
         notifyListeners();
     }
 
@@ -160,63 +129,46 @@ public class UndoHistory implements TreeModelListener, Serializable {
         // first clone to not convert original tree
         tree = (HashTree) tree.getTree(tree.getArray()[0]).clone();
 
-        position++;
-        while (history.size() > position) {
-            if (log.isDebugEnabled()) {
-                log.debug("Removing further record, position: {}, size: {}", position, history.size());
-            }
-            history.remove(history.size() - 1);
-        }
-
         // cloning is required because we need to immute stored data
         HashTree copy = UndoCommand.convertAndCloneSubTree(tree);
 
-        history.add(new UndoHistoryItem(copy, comment));
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        //or maybe a Boolean?
+        boolean dirty = guiPackage != null ? guiPackage.isDirty() : false;
+        addEdit(new UndoHistoryItem(copy, comment, TreeState.from(guiPackage), dirty));
 
-        log.debug("Added history element, position: {}, size: {}", position, history.size());
         working = false;
-        notifyListeners();
     }
 
-    /**
-     * Goes through undo history, changing GUI
-     *
-     * @param offset        the direction to go to, usually -1 for undo or 1 for redo
-     * @param acceptorModel TreeModel to accept the changes
-     */
-    public void moveInHistory(int offset, JMeterTreeModel acceptorModel) {
-        log.debug("Moving history from position {} with step {}, size is {}", position, offset, history.size());
-        if (offset < 0 && !canUndo()) {
+    public void undo() {
+        if (!canUndo()) {
             log.warn("Can't undo, we're already on the last record");
             return;
         }
+        manager.undo();
+    }
 
-        if (offset > 0 && !canRedo()) {
+    public void redo() {
+        if (!canRedo()) {
             log.warn("Can't redo, we're already on the first record");
             return;
         }
+        manager.redo();
+    }
 
-        if (history.isEmpty()) {
-            log.warn("Can't proceed, the history is empty");
-            return;
-        }
-
-        position += offset;
-
+    private void reload(UndoHistoryItem z) {
         final GuiPackage guiInstance = GuiPackage.getInstance();
+        JMeterTreeModel acceptorModel = guiInstance.getTreeModel();
 
-        // save tree expansion and selection state before changing the tree
-        saveTreeState(guiInstance);
-
-        // load the tree
-        loadHistoricalTree(acceptorModel, guiInstance);
-
-        // load tree UI state
-        restoreTreeState(guiInstance);
-
-        if (log.isDebugEnabled()) {
-            log.debug("Current position {}, size is {}", position, history.size());
+        try {
+            // load the tree
+            loadHistoricalTree(acceptorModel, guiInstance, z.getTree());
+        } finally {
+            // load tree UI state
+            z.getTreeState().restore(guiInstance);
+            guiInstance.setDirty(z.isDirty());
         }
+        setLastKnownState(z);
 
         // refresh the all ui
         guiInstance.updateCurrentGui();
@@ -230,8 +182,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
      * @param acceptorModel tree to accept the data
      * @param guiInstance {@link GuiPackage} to be used
      */
-    private void loadHistoricalTree(JMeterTreeModel acceptorModel, GuiPackage guiInstance) {
-        HashTree newModel = history.get(position).getTree();
+    private void loadHistoricalTree(JMeterTreeModel acceptorModel, GuiPackage guiInstance, HashTree newModel) {
         acceptorModel.removeTreeModelListener(this);
         working = true;
         try {
@@ -239,23 +190,24 @@ public class UndoHistory implements TreeModelListener, Serializable {
             guiInstance.addSubTree(newModel);
         } catch (Exception ex) {
             log.error("Failed to load from history", ex);
+        } finally {
+            acceptorModel.addTreeModelListener(this);
+            working = false;
         }
-        acceptorModel.addTreeModelListener(this);
-        working = false;
     }
 
     /**
      * @return true if remaining items
      */
     public boolean canRedo() {
-        return position < history.size() - 1;
+        return manager.canRedo();
     }
 
     /**
      * @return true if not at first element
      */
     public boolean canUndo() {
-        return position > INITIAL_POS + 1;
+        return manager.canUndo();
     }
 
     /**
@@ -308,45 +260,6 @@ public class UndoHistory implements TreeModelListener, Serializable {
     }
 
     /**
-     * Save tree expanded and selected state
-     *
-     * @param guiPackage {@link GuiPackage} to be used
-     */
-    private void saveTreeState(GuiPackage guiPackage) {
-        savedExpanded.clear();
-
-        MainFrame mainframe = guiPackage.getMainFrame();
-        if (mainframe != null) {
-            final JTree tree = mainframe.getTree();
-            savedSelected = tree.getMinSelectionRow();
-
-            for (int rowN = 0; rowN < tree.getRowCount(); rowN++) {
-                if (tree.isExpanded(rowN)) {
-                    savedExpanded.add(Integer.valueOf(rowN));
-                }
-            }
-        }
-    }
-
-    /**
-     * Restore tree expanded and selected state
-     *
-     * @param guiInstance GuiPackage to be used
-     */
-    private void restoreTreeState(GuiPackage guiInstance) {
-        final JTree tree = guiInstance.getMainFrame().getTree();
-
-        if (savedExpanded.size() > 0) {
-            for (int rowN : savedExpanded) {
-                tree.expandRow(rowN);
-            }
-        } else {
-            tree.expandRow(0);
-        }
-        tree.setSelectionRow(savedSelected);
-    }
-    
-    /**
      * @return true if history is enabled
      */
     public static boolean isEnabled() {
@@ -368,6 +281,55 @@ public class UndoHistory implements TreeModelListener, Serializable {
         for (HistoryListener listener : listeners) {
             listener.notifyChangeInHistory(this);
         }
+    }
+
+    private void addEdit(UndoHistoryItem item) {
+        if (lastKnownState != null) {
+            GlobalUndoableEdit edit = new GlobalUndoableEdit(item, lastKnownState, this::reload);
+            addEdit(edit);
+        } else {
+            log.debug("Skipping undo since there is no previous known state");
+        }
+        lastKnownState = item;
+    }
+
+    private void addEdit(UndoableEdit edit) {
+        if (isTransaction()) {
+            transactions.peek().addEdit(edit);
+            //XXX: Add sanity checks for transactions depth and number of edits?
+        } else {
+            manager.addEdit(edit);
+            notifyListeners();
+        }
+    }
+
+    void endUndoTransaction() {
+        if(!isEnabled()) {
+            return;
+        }
+        if (!isTransaction()) {
+            log.error("Undo transaction ended without beginning", new Exception());
+            return;
+        }
+        SimpleCompoundEdit edit = transactions.pop();
+        edit.end();
+        if (!edit.isEmpty()) {
+            addEdit(edit);
+        }
+    }
+
+    void beginUndoTransaction() {
+        if (isEnabled()) {
+            transactions.add(new SimpleCompoundEdit());
+        }
+    }
+
+    boolean isTransaction() {
+        return !transactions.isEmpty();
+    }
+
+    private void setLastKnownState(UndoHistoryItem previous) {
+        this.lastKnownState = previous;
     }
 
 }

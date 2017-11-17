@@ -85,9 +85,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     /** Flag to show whether test is running. Set to false to stop creating more threads. */
     private volatile boolean running = false;
 
-    /** Flag to show whether test was shutdown gracefully. */
-    private volatile boolean shutdown = false;
-
     /** Flag to show whether engine is active. Set to false at end of test. */
     private volatile boolean active = false;
 
@@ -264,7 +261,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
     @Override
     public synchronized void stopTest(boolean now) {
-        shutdown = !now;
         Thread stopThread = new Thread(new StopTest(now));
         stopThread.start();
     }
@@ -479,7 +475,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             JMeterContextService.clearTotalThreads();
             log.info("Starting tearDown thread groups");
             if (mainGroups && !running) { // i.e. shutdown/stopped during main thread groups
-                running = shutdown && tearDownOnShutdown; // re-enable for tearDown if necessary
+                running = tearDownOnShutdown; // re-enable for tearDown if necessary
             }
             while (running && postIter.hasNext()) {//for each setup thread group
                 AbstractThreadGroup group = postIter.next();

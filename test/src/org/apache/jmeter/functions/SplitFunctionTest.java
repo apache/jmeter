@@ -65,7 +65,16 @@ public class SplitFunctionTest extends JMeterTestCase {
         assertEquals("b", vars.get("VAR1_2"));
         assertEquals("c", vars.get("VAR1_3"));
         assertNull(vars.get("VAR1_4"));
-
+        
+        split = splitParams(src, "VAR1", "");
+        assertEquals(src, split.execute());
+        assertEquals(src, vars.get("VAR1"));
+        assertEquals("3", vars.get("VAR1_n"));
+        assertEquals("a", vars.get("VAR1_1"));
+        assertEquals("b", vars.get("VAR1_2"));
+        assertEquals("c", vars.get("VAR1_3"));
+        assertNull(vars.get("VAR1_4"));
+        
         split = splitParams(src, "VAR2", ",");
         assertEquals(src, split.execute());
         assertEquals(src, vars.get("VAR2"));

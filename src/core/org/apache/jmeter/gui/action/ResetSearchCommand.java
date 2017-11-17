@@ -19,13 +19,12 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.Searchable;
-import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 
 /**
@@ -45,14 +44,16 @@ public class ResetSearchCommand extends AbstractAction {
     @Override
     public void doAction(ActionEvent e) {
         GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
-        for (JMeterTreeNode jMeterTreeNode : jMeterTreeModel.getNodesOfType(Searchable.class)) {
-            if (jMeterTreeNode.getUserObject() instanceof Searchable){
-                List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
-                for (JMeterTreeNode jMeterTreeNode2 : matchingNodes) {
-                    jMeterTreeNode2.setMarkedBySearch(false); 
-                }
-            }
+        try {
+            guiPackage.beginUndoTransaction();
+            guiPackage.getTreeModel()
+                    .getNodesOfType(Searchable.class).stream()
+                    .filter(node -> node.getUserObject() instanceof Searchable)
+                    .map(JMeterTreeNode::getPathToThreadGroup)
+                    .flatMap(Collection::stream)
+                    .forEach(matchingNode ->  matchingNode.setMarkedBySearch(false));
+        } finally {
+            guiPackage.endUndoTransaction();
         }
         GuiPackage.getInstance().getMainFrame().repaint();
     }

@@ -202,9 +202,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     }
     /**
      * Create a customizer for a given test bean type.
-     *
-     * @param testBeanClass
-     *            a subclass of TestBean
+     * @param beanInfo {@link BeanInfo}
      * @see org.apache.jmeter.testbeans.TestBean
      */
     GenericTestBeanCustomizer(BeanInfo beanInfo) {
@@ -537,24 +535,6 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             }
         }
     }
-
-//  /**
-//   * Find the index of the property of the given name.
-//   *
-//   * @param name
-//   *            the name of the property
-//   * @return the index of that property in the descriptors array, or -1 if
-//   *         there's no property of this name.
-//   */
-//  private int descriptorIndex(String name) // NOTUSED
-//  {
-//      for (int i = 0; i < descriptors.length; i++) {
-//          if (descriptors[i].getName().equals(name)) {
-//              return i;
-//          }
-//      }
-//      return -1;
-//  }
 
     /**
      * Initialize the GUI.

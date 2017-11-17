@@ -101,11 +101,6 @@ public class TestBug60842HtmlParser {
                     new Object[] { parserToTest,
                             "<anytag style=\"foo: url('bar')'\"/>",
                             "http://example.org/bar" },
-                    // new Object[] {p,"<anytag style=\"foo: url(bar)'\"/>",
-                    // "http://example.org/bar"},
-                    // new Object[] {p,"<anytag style=\"foo: url(bar)'; other:
-                    // url(something);\"/>",
-                    // "http://example.org/bar,http://example.org/something"},
                     new Object[] { parserToTest,
                             "<link href='  abc\n.css  ' rel='stylesheet'/>",
                             "http://example.org/abc.css" },

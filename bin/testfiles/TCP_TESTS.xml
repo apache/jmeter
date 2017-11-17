@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="MinaTcpServerInitializer" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TCP Sampler-Hello" rc="200" rm="OK" tn="TG-TCPClientImpl 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RA_time</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="TCP Sampler-Timeout" rc="500" rm="org.apache.jmeter.protocol.tcp.sampler.ReadException: Error reading from server, bytes read: 0" tn="TG-TCPClientImpl 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RC_500</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_ReadException</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="TCP Sampler-Quit" rc="200" rm="OK" tn="TG-TCPClientImpl 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TCP Sampler-Binary-Hello" rc="200" rm="OK" tn="TG-BinaryTCPClientImpl 2-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RA_time</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="TCP Sampler-Binary-Timeout" rc="500" rm="org.apache.jmeter.protocol.tcp.sampler.ReadException: " tn="TG-BinaryTCPClientImpl 2-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RC_500</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_ReadException</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="TCP Sampler-Binary-Quit" rc="200" rm="OK" tn="TG-BinaryTCPClientImpl 2-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TCP Sampler-ConnectError" rc="500" rm="java.net.ConnectException: Connection refused" tn="TG-TCPClientImpl-Errors 3-1" dt="" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RC_500</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_ConnectException</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="TCP Sampler-HostUnknown" rc="500" rm="java.net.UnknownHostException: localhostXXXX" tn="TG-TCPClientImpl-Errors 3-1" dt="" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RC_500</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_UnknownHostException</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="TCP Sampler-ClassNotFoundException" rc="500" rm="Protocol handler not found" tn="TG-TCPClientImpl-Errors 3-1" dt="" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RC_500</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_no_protocol_handler</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JSR223S_stopTcpServer" rc="200" rm="OK" tn="tearDown Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+
+</testResults>

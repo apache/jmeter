@@ -116,16 +116,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private static final SampleResult[] EMPTY_SR = new SampleResult[0];
 
     private static final AssertionResult[] EMPTY_AR = new AssertionResult[0];
-    
-    private static final boolean GETBYTES_BODY_REALSIZE = 
-        JMeterUtils.getPropDefault("sampleresult.getbytes.body_real_size", true); // $NON-NLS-1$
-
-    private static final boolean GETBYTES_HEADERS_SIZE = 
-        JMeterUtils.getPropDefault("sampleresult.getbytes.headers_size", true); // $NON-NLS-1$
-    
-    private static final boolean GETBYTES_NETWORK_SIZE =
-            GETBYTES_HEADERS_SIZE && GETBYTES_BODY_REALSIZE;
-
+        
     private static final boolean START_TIMESTAMP = 
             JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);  // $NON-NLS-1$
 
@@ -274,6 +265,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private long sentBytes;
     
     private URL location;
+
+    private transient boolean ignore;
 
     /**
      * Cache for responseData as string to avoid multiple computations
@@ -1257,15 +1250,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return byte count
      */
     public long getBytesAsLong() {
-        if (GETBYTES_NETWORK_SIZE) {
-            long tmpSum = this.getHeadersSize() + this.getBodySizeAsLong();
-            return tmpSum == 0 ? bytes : tmpSum;
-        } else if (GETBYTES_HEADERS_SIZE) {
-            return this.getHeadersSize();
-        } else if (GETBYTES_BODY_REALSIZE) {
-            return this.getBodySizeAsLong();
-        }
-        return bytes == 0 ? responseData.length : bytes;
+        long tmpSum = this.getHeadersSize() + this.getBodySizeAsLong();
+        return tmpSum == 0 ? bytes : tmpSum;
     }
 
     /**
@@ -1519,5 +1505,19 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         datasToSearch.add(getRequestHeaders());
         datasToSearch.add(getResponseHeaders());
         return datasToSearch;
+    }
+
+    /**
+     * @return boolean true if this SampleResult should not be sent to Listeners
+     */
+    public boolean isIgnore() {
+        return ignore;
+    }
+
+    /**
+     * Call this method to tell JMeter to ignore this SampleResult by Listeners
+     */
+    public void setIgnore() {
+        this.ignore = true;
     }
 }

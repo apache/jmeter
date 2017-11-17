@@ -23,14 +23,14 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.gui.GuiPackage;
@@ -76,18 +76,14 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
      * @return {@link List} of {@link JMeterTreeNode}s
      */
     public List<JMeterTreeNode> getPathToThreadGroup() {
-        List<JMeterTreeNode> nodes = new ArrayList<>();
-        if (treeModel != null) {
-            TreeNode[] nodesToRoot = treeModel.getPathToRoot(this);
-            for (TreeNode node : nodesToRoot) {
-                JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) node;
-                int level = jMeterTreeNode.getLevel();
-                if (level >= TEST_PLAN_LEVEL) {
-                    nodes.add(jMeterTreeNode);
-                }
-            }
+        if (treeModel == null) {
+            return new ArrayList<>();
         }
-        return nodes;
+
+        return Arrays.stream(treeModel.getPathToRoot(this))
+                .map(node -> (JMeterTreeNode) node)
+                .filter(node -> node.getLevel() >= TEST_PLAN_LEVEL)
+                .collect(Collectors.toList());
     }
     
     /**
@@ -95,6 +91,9 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
      * @param tagged The flag to be used for tagging
      */
     public void setMarkedBySearch(boolean tagged) {
+        if (this.markedBySearch == tagged) {
+            return;
+        }
         this.markedBySearch = tagged;
         treeModel.nodeChanged(this);
     }
@@ -192,10 +191,4 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
         }
     }
 
-    // Override in order to provide type safety
-    @Override
-    @SuppressWarnings("unchecked")
-    public Enumeration<JMeterTreeNode> children() {
-        return (Enumeration<JMeterTreeNode>) super.children();
-    }
 }

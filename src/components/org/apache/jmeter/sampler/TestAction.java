@@ -85,24 +85,26 @@ public class TestAction extends AbstractSampler implements Interruptible {
         int action = getAction();
         if (action == PAUSE) {
             pause(getDurationAsString());
-        } else if (action == STOP || action == STOP_NOW || action == RESTART_NEXT_LOOP) {
+        } else if (action == STOP || action == STOP_NOW) {
             if (target == THREAD) {
-                if(action == STOP || action == STOP_NOW) {
-                    log.info("Stopping current thread from element {}", getName());
-                    context.getThread().stop();
-                } else {
-                    log.info("Restarting next loop from element {}", getName());
-                    context.setRestartNextLoop(true);
-                }
+                log.info("Stopping current thread from element {}", getName());
+                context.getThread().stop();
             } else if (target == TEST) {
                 if (action == STOP_NOW) {
+                    log.info("Stopping current thread from element {}", getName());
+                    context.getThread().stop();
                     log.info("Stopping all threads now from element {}", getName());
                     context.getEngine().stopTest();
                 } else {
+                    log.info("Stopping current thread from element {}", getName());
+                    context.getThread().stop();
                     log.info("Stopping all threads from element {}", getName());
                     context.getEngine().askThreadsToStop();
                 }
             }
+        } else if (action == RESTART_NEXT_LOOP) {
+            log.info("Restarting next loop from element {}", getName());
+            context.setStartNextThreadLoop(true);
         }
 
         return null; // This means no sample is saved

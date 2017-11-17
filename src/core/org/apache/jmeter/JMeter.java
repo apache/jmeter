@@ -355,6 +355,7 @@ public class JMeter implements JMeterPlugin {
         splash.showScreen();
         String jMeterLaf = LookAndFeelCommand.getJMeterLaf();
         try {
+            log.info("Setting LAF to: {}", jMeterLaf);
             UIManager.setLookAndFeel(jMeterLaf);
         } catch (Exception ex) {
             log.warn("Could not set LAF to: {}", jMeterLaf, ex);
