@@ -54,7 +54,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     implements Serializable, TestStateListener
 {
     private static final long serialVersionUID = 232L;
-        
+       
     /**
      * Cache of compiled scripts
      */
@@ -204,7 +204,8 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                             + "' does not exist or is unreadable for element:" + getName());
                 }
             } else if (!StringUtils.isEmpty(getScript())) {
-                if (supportsCompilable && !StringUtils.isEmpty(cacheKey)) {
+                if (supportsCompilable && 
+                        !ScriptingBeanInfoSupport.FALSE_AS_STRING.equals(cacheKey)) {
                     computeScriptMD5();
                     CompiledScript compiledScript = compiledScriptsCache.get(this.scriptMd5);
                     if (compiledScript == null) {
@@ -233,7 +234,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             }
         }
     }
-
+    
     /**
      * compute MD5 if it is null
      */

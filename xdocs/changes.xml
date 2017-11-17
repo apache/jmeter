@@ -163,6 +163,7 @@ Summary
     <li><bug>61697</bug>Introduce Darcula Look And Feel to make JMeter UI more attractive</li>
     <li><bug>61704</bug>Toolbar : Improve a bit the right part</li>
     <li><bug>61731</bug>Enhance Test plan Backup with option to save before run. Based on a contribution by orimarko at gmail.com</li>
+    <li><bug>61640</bug>JSR223 Test Elements : Enable by default caching. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
