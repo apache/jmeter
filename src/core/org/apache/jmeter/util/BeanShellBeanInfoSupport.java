@@ -51,13 +51,14 @@ public abstract class BeanShellBeanInfoSupport extends BeanInfoSupport {
         p = property("filename");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
+        p.setPropertyEditorClass(FileEditor.class);
 
         createPropertyGroup("filenameGroup", new String[] { "filename" });
 
         p = property("script");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        p.setPropertyEditorClass(FileEditor.class);
+        p.setPropertyEditorClass(TextAreaEditor.class);
 
         createPropertyGroup("scripting", new String[] { "script" });
     }
