@@ -36,7 +36,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +65,7 @@ public class RandomDate extends AbstractFunction {
 
     private static final String KEY = "__RandomDate"; // $NON-NLS-1$
 
-    private static final int MIN_PARAMETER_COUNT = 1;
+    private static final int MIN_PARAMETER_COUNT = 3;
 
     private static final int MAX_PARAMETER_COUNT = 5;
 
@@ -75,13 +74,9 @@ public class RandomDate extends AbstractFunction {
             JMeterUtils.getResString("locale_format"), JMeterUtils.getResString("function_name_paropt"));
 
     // Ensure that these are set, even if no parameters are provided
-    private String format = ""; //$NON-NLS-1$
     private Locale locale = JMeterUtils.getLocale(); // $NON-NLS-1$
-    private String variableName = ""; //$NON-NLS-1$
     private ZoneId systemDefaultZoneID = ZoneId.systemDefault(); // $NON-NLS-1$
-    private String dateStart; // $NON-NLS-1$
-    private String dateEnd; // $NON-NLS-1$
-    private Object[] values;
+    private CompoundVariable[] values;
 
     private static final class LocaleFormatObject {
 
@@ -137,23 +132,22 @@ public class RandomDate extends AbstractFunction {
     /** {@inheritDoc} */
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
-        long localStartDate = 0;
-        long localEndDate = 0;
-
         DateTimeFormatter formatter;
-        format = ((CompoundVariable) values[0]).execute().trim();
-        String localeAsString = ((CompoundVariable) values[3]).execute().trim();
-        if (!localeAsString.trim().isEmpty()) {
-            locale = LocaleUtils.toLocale(localeAsString);
+        if(values.length>3) {
+            String localeAsString = values[3].execute().trim();
+            if (!localeAsString.trim().isEmpty()) {
+                locale = LocaleUtils.toLocale(localeAsString);
+            }
         }
 
+        String format = values[0].execute().trim();
         if (!StringUtils.isEmpty(format)) {
             try {
                 LocaleFormatObject lfo = new LocaleFormatObject(format, locale);
                 formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
             } catch (IllegalArgumentException ex) {
                 log.error(
-                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java    ime/format/DateTimeFormatter.html)",
+                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
                         format, ex); // $NON-NLS-1$
                 return "";
             }
@@ -163,49 +157,47 @@ public class RandomDate extends AbstractFunction {
                 formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
             } catch (IllegalArgumentException ex) {
                 log.error(
-                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java    ime/format/DateTimeFormatter.html)",
+                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
                         format, ex); // $NON-NLS-1$
                 return "";
             }
         }
 
-        dateStart = ((CompoundVariable) values[1]).execute().trim();
+        String dateStart = values[1].execute().trim();
+        long localStartDate = 0;
         if (!dateStart.isEmpty()) {
             try {
                 localStartDate = LocalDate.parse(dateStart, formatter).toEpochDay();
             } catch (DateTimeParseException | NumberFormatException ex) {
-                log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateStart, formatter, ex); // $NON-NLS-1$
+                log.error("Failed to parse Start Date '{}'", dateStart, ex); // $NON-NLS-1$
             }
         } else {
             try {
                 localStartDate = LocalDate.now(systemDefaultZoneID).toEpochDay();
             } catch (DateTimeParseException | NumberFormatException ex) {
-                log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateStart, formatter, ex); // $NON-NLS-1$
+                log.error("Failed to create current date '{}'", dateStart, ex); // $NON-NLS-1$
             }
         }
-
-        dateEnd = ((CompoundVariable) values[2]).execute().trim();
+        long localEndDate = 0;
+        String dateEnd = values[2].execute().trim();
         try {
             localEndDate = LocalDate.parse(dateEnd, formatter).toEpochDay();
         } catch (DateTimeParseException | NumberFormatException ex) {
-            log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateEnd, formatter, ex); // $NON-NLS-1$
+            log.error("Failed to parse End date '{}'", dateEnd, ex); // $NON-NLS-1$
         }
-
+        
         // Generate the random date
         String dateString = "";
-        long randomDay = ThreadLocalRandom.current().nextLong(localStartDate, localEndDate);
-        try {
-            dateString = LocalDate.ofEpochDay(randomDay).format(formatter);
-        } catch (DateTimeParseException | NumberFormatException ex) {
-            log.error("Failed to parse the date '{}' to shift with formatter '{}'", randomDay, formatter, ex); // $NON-NLS-1$
-        }
-
-        variableName = ((CompoundVariable) values[4]).execute().trim();
-        if (!StringUtils.isEmpty(variableName)) {
-            JMeterVariables vars = getVariables();
-            if (vars != null) {// vars will be null on TestPlan
-                vars.put(variableName, dateString);
+        if (localEndDate < localStartDate) {
+            log.error("End Date '{}' must be greater than Start Date '{}'", dateEnd, dateStart); // $NON-NLS-1$
+        } else {
+            long randomDay = ThreadLocalRandom.current().nextLong(localStartDate, localEndDate);
+            try {
+                dateString = LocalDate.ofEpochDay(randomDay).format(formatter);
+            } catch (DateTimeParseException | NumberFormatException ex) {
+                log.error("Failed to generate random date '{}'", randomDay, ex); // $NON-NLS-1$
             }
+            addVariableValue(dateString, values, 4);
         }
         return dateString;
     }
@@ -223,7 +215,7 @@ public class RandomDate extends AbstractFunction {
     public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
 
         checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
-        values = parameters.toArray();
+        values = parameters.toArray(new CompoundVariable[parameters.size()]);
         // Create the cache
         if (dateRandomFormatterCache == null) {
             dateRandomFormatterCache = Caffeine.newBuilder().maximumSize(100).build();

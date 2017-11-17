@@ -65,6 +65,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     private static final String RESPONSE_HEADERS = "Assertion.response_headers"; // $NON-NLS-1$
     
     private static final String REQUEST_HEADERS = "Assertion.request_headers"; // $NON-NLS-1$
+    
+    private static final String REQUEST_DATA = "Assertion.request_data"; // $NON-NLS-1$
 
     private static final String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
 
@@ -145,6 +147,10 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     public void setTestFieldRequestHeaders() {
         setTestField(REQUEST_HEADERS);
     }
+    
+    public void setTestFieldRequestData() {
+        setTestField(REQUEST_DATA);
+    }
 
     public boolean isTestFieldURL(){
         return SAMPLE_URL.equals(getTestField());
@@ -172,6 +178,10 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     public boolean isTestFieldRequestHeaders(){
         return REQUEST_HEADERS.equals(getTestField());
+    }
+    
+    public boolean isTestFieldRequestData(){
+        return REQUEST_DATA.equals(getTestField());
     }
     
     private void setTestType(int testType) {
@@ -304,6 +314,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             toCheck = response.getResponseMessage();
         } else if (isTestFieldRequestHeaders()) {
             toCheck = response.getRequestHeaders();
+        } else if (isTestFieldRequestData()) {
+            toCheck = response.getSamplerData();
         } else if (isTestFieldResponseHeaders()) {
             toCheck = response.getResponseHeaders();
         } else { // Assume it is the URL
@@ -413,6 +425,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             sb.append("message");
         } else if (isTestFieldRequestHeaders()) {
             sb.append("request headers");
+        } else if (isTestFieldRequestData()) {
+            sb.append("request data");
         } else if (isTestFieldResponseHeaders()) {
             sb.append("headers");
         } else if (isTestFieldResponseDataAsDocument()) {

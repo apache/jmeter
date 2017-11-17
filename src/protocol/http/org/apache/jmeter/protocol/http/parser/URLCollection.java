@@ -81,9 +81,8 @@ public class URLCollection implements Iterable<URL> {
         if (url == null || url.length() == 0) {
             return false;
         }
-        //url.replace('+',' ');
         url=StringEscapeUtils.unescapeXml(url);
-        boolean b = false;
+        boolean b;
         try {
             b = this.add(ConversionUtils.makeRelativeURL(baseUrl, url));
         } catch (MalformedURLException mfue) {

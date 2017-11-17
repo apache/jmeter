@@ -24,6 +24,7 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
@@ -159,5 +160,15 @@ public final class GuiUtils {
                     screenSize.getHeight()*0.8/menu.getMenuComponent(0).getPreferredSize().getHeight());
             MenuScroller.setScrollerFor(menu, maxItems, 200);
         }
+    }
+    
+    /**
+     * Copy text to clipboard
+     * @param text Text to copy
+     */
+    public static final void copyTextToClipboard(String text) {
+        Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection stringSelection = new StringSelection(text);
+        clpbrd.setContents(stringSelection, null);
     }
 }

@@ -29,6 +29,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.function.Predicate;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -36,6 +37,7 @@ import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.SourceType;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.Interruptible;
@@ -71,6 +73,10 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      */
     private static final String RETURN_CUSTOM_STATUS_CODE = 
             JMeterUtils.getProperty("RETURN_CUSTOM_STATUS.code");//$NON-NLS-1$
+
+    protected static final Predicate<String> ALL_EXCEPT_COOKIE = s -> !HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(s);
+    
+    protected static final Predicate<String> ONLY_COOKIE = s -> HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(s);
 
     /**
      * Custom response message for cached resource

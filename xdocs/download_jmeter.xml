@@ -79,7 +79,7 @@
       <a href="https://www.apache.org/dist/jmeter/KEYS">KEYS</a>
       </p>
     </section>
-    <section name="Apache JMeter &release; (Requires Java 8 or later)">
+    <section name="Apache JMeter &release; (Requires Java 8. JMeter &release; does not yet support Java 9.)">
       <subsection name="Binaries" anchor="binaries">
         <table>
           <tr>

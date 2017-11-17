@@ -31,6 +31,11 @@ setlocal
 rem Minimal version to run JMeter
 set MINIMAL_VERSION=1.8.0
 
+
+rem --add-modules java.activation if JAVA 9
+set ADD_MODS=
+
+
 for /f "tokens=3" %%g in ('java -version 2^>^&1 ^| findstr /i "version"') do (
     rem @echo Debug Output: %%g
     set JAVAVER=%%g
@@ -40,10 +45,21 @@ if not defined JAVAVER (
     set ERRORLEVEL=2
     goto pause
 )
-set JAVAVER=%JAVAVER:"=%
-for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do (
-    set current_minor=%%w
+
+
+
+rem Check if version is from OpenJDK or Oracle Hotspot JVM prior to 9 containing 1.${version}.x
+IF "%variable:~0,2%"=="1." (
+    set JAVAVER=%JAVAVER:"=%
+    for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do (
+        set current_minor=%%w
 )
+) else (
+    rem Java 9 at least
+    set current_minor=9
+    set ADD_MODS=--add-modules java.activation
+)
+
 
 for /f "delims=. tokens=1-3" %%v in ("%MINIMAL_VERSION%") do (
     set minimal_minor=%%w
@@ -75,16 +91,24 @@ rem http://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html
 
 rem See the unix startup file for the rationale of the following parameters,
 rem including some tuning recommendations
-set HEAP=-Xms512m -Xmx512m
+set HEAP=-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m
 
-rem Uncomment this to generate GC verbose file
+rem Uncomment this to generate GC verbose file with Java prior to 9 
 rem set VERBOSE_GC=-verbose:gc -Xloggc:gc_jmeter_%%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps
+
+rem Uncomment this to generate GC verbose file with Java 9 and above
+rem set VERBOSE_GC=-Xlog:gc*,gc+age=trace,gc+heap=debug:file=gc_jmeter_%%p.log
 
 set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20
 
 set SYSTEM_PROPS=-Djava.security.egd=file:/dev/urandom
+
 rem Always dump on OOM (does not cost anything unless triggered)
 set DUMP=-XX:+HeapDumpOnOutOfMemoryError
+
+rem Uncomment this if you run JMeter in DOCKER (need Java SE 8u131 or JDK 9)
+rem see https://blogs.oracle.com/java-platform-group/java-se-support-for-docker-cpu-and-memory-limits
+rem set RUN_IN_DOCKER=-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 
 rem Additional settings that might help improve GUI performance on some platforms
 rem See: http://www.oracle.com/technetwork/java/perf-graphics-135933.html
@@ -100,8 +124,10 @@ rem Setting this flag to true enables hardware-accelerated scaling.
 rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
 rem Server mode
+set SERVER=-server
+
 rem Collect the settings defined above
-set ARGS=%DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS%
+set ARGS=%SERVER% %DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %RUN_IN_DOCKER%
 
 %JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 

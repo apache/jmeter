@@ -47,7 +47,6 @@ import java.util.prefs.Preferences;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.conn.ssl.AbstractVerifier;
 import org.apache.jmeter.assertions.Assertion;
@@ -84,7 +83,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.TestStateListener;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -157,6 +155,8 @@ public class ProxyControl extends GenericController {
 
     private static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
     
+    private static final String HTTP_SAMPLER_NAMING_MODE = "ProxyControlGui.proxy_http_sampler_naming_mode"; // $NON-NLS-1$
+    
     private static final String PREFIX_HTTP_SAMPLER_NAME = "ProxyControlGui.proxy_prefix_http_sampler_name"; // $NON-NLS-1$
     
     private static final String PROXY_PAUSE_HTTP_SAMPLER = "ProxyControlGui.proxy_pause_http_sampler"; // $NON-NLS-1$
@@ -182,6 +182,7 @@ public class ProxyControl extends GenericController {
     private static final int GROUPING_STORE_FIRST_ONLY = 3;
     private static final int GROUPING_IN_TRANSACTION_CONTROLLERS = 4;
 
+    
     // Original numeric order (we now use strings)
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_JAVA = "0";
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
@@ -390,6 +391,10 @@ public class ProxyControl extends GenericController {
         setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
     }
 
+    public void setHTTPSampleNamingMode(int httpNamingMode) {
+        setProperty(new IntegerProperty(HTTP_SAMPLER_NAMING_MODE, httpNamingMode));
+    }
+    
     public void setPrefixHTTPSampleName(String prefixHTTPSampleName) {
         setProperty(PREFIX_HTTP_SAMPLER_NAME, prefixHTTPSampleName);
     }
@@ -480,6 +485,10 @@ public class ProxyControl extends GenericController {
         return getPropertyAsBoolean(SAMPLER_DOWNLOAD_IMAGES, false);
     }
 
+    public int getHTTPSampleNamingMode() {
+        return getPropertyAsInt(HTTP_SAMPLER_NAMING_MODE);
+    }
+    
     public String getPrefixHTTPSampleName() {
         return getPropertyAsString(PREFIX_HTTP_SAMPLER_NAME);
     }
@@ -630,11 +639,6 @@ public class ProxyControl extends GenericController {
                 sampler.setFollowRedirects(samplerFollowRedirects);
                 sampler.setUseKeepAlive(useKeepAlive);
                 sampler.setImageParser(samplerDownloadImages);
-                String prefix = getPrefixHTTPSampleName();
-                if(!StringUtils.isEmpty(prefix)) {
-                    sampler.setName(prefix + sampler.getName());
-                    result.setSampleLabel(prefix + result.getSampleLabel());
-                }
                 Authorization authorization = createAuthorization(testElements, sampler);
                 if (authorization != null) {
                     setAuthorization(authorization, myTarget);
@@ -1000,9 +1004,9 @@ public class ProxyControl extends GenericController {
         ValueReplacer replacer = new ValueReplacer(variables);
         JMeterTreeNode mySelf = model.getNodeOf(this);
         if(mySelf != null) {
-            Enumeration<JMeterTreeNode> children = mySelf.children();
+            Enumeration<?> children = mySelf.children();
             while (children.hasMoreElements()) {
-                JMeterTreeNode templateNode = children.nextElement();
+                JMeterTreeNode templateNode = (JMeterTreeNode)children.nextElement();
                 if (templateNode.isEnabled()) {
                     TestElement template = templateNode.getTestElement();
                     if (template instanceof Timer) {
@@ -1050,7 +1054,6 @@ public class ProxyControl extends GenericController {
      * <li>The controller specified by the <code>target</code> property.
      * <li>If none was specified, the first RecordingController in the tree.
      * <li>If none is found, the first AbstractThreadGroup in the tree.
-     * <li>If none is found, the Workspace.
      * </ul>
      *
      * @return the tree node for the controller where the proxy must store the
@@ -1066,10 +1069,6 @@ public class ProxyControl extends GenericController {
             return myTarget;
         }
         myTarget = findFirstNodeOfType(AbstractThreadGroup.class);
-        if (myTarget != null) {
-            return myTarget;
-        }
-        myTarget = findFirstNodeOfType(WorkBench.class);
         if (myTarget != null) {
             return myTarget;
         }
@@ -1379,9 +1378,9 @@ public class ProxyControl extends GenericController {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
         if(myNode != null) {
-            Enumeration<JMeterTreeNode> kids = myNode.children();
+            Enumeration<?> kids = myNode.children();
             while (kids.hasMoreElements()) {
-                JMeterTreeNode subNode = kids.nextElement();
+                JMeterTreeNode subNode = (JMeterTreeNode)kids.nextElement();
                 if (subNode.isEnabled()) {
                     TestElement testElement = subNode.getTestElement();
                     if (testElement instanceof SampleListener) {
@@ -1400,9 +1399,9 @@ public class ProxyControl extends GenericController {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
         if(myNode != null) {
-            Enumeration<JMeterTreeNode> kids = myNode.children();
+            Enumeration<?> kids = myNode.children();
             while (kids.hasMoreElements()) {
-                JMeterTreeNode subNode = kids.nextElement();
+                JMeterTreeNode subNode = (JMeterTreeNode)kids.nextElement();
                 if (subNode.isEnabled()) {
                     TestElement testElement = subNode.getTestElement();
                     if (testElement instanceof TestStateListener) {
@@ -1421,9 +1420,9 @@ public class ProxyControl extends GenericController {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
         if(myNode != null) {
-            Enumeration<JMeterTreeNode> kids = myNode.children();
+            Enumeration<?> kids = myNode.children();
             while (kids.hasMoreElements()) {
-                JMeterTreeNode subNode = kids.nextElement();
+                JMeterTreeNode subNode = (JMeterTreeNode)kids.nextElement();
                 if (subNode.isEnabled()) {
                     TestElement testElement = subNode.getTestElement();
                     if (testElement instanceof TestStateListener) { // TL - TE

@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
@@ -461,7 +462,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (localAddr != null) {
                 request.addHeader(HEADER_LOCAL_ADDRESS, localAddr.toString());
             }
-            res.setRequestHeaders(getConnectionHeaders(request));
+            res.setRequestHeaders(getAllHeadersExceptCookie(request));
 
             Header contentType = httpResponse.getLastHeader(HTTPConstants.HEADER_CONTENT_TYPE);
             if (contentType != null){
@@ -542,7 +543,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (res.getRequestHeaders() != null) {
                 log.debug("Overwriting request old headers: {}", res.getRequestHeaders());
             }
-            res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST)));
+            res.setRequestHeaders(getAllHeadersExceptCookie((HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST)));
             errorResult(e, res);
             return res;
         } catch (RuntimeException e) {
@@ -965,51 +966,52 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     protected void setupRequest(URL url, HttpRequestBase httpRequest, HTTPSampleResult res)
         throws IOException {
-
-    HttpParams requestParams = httpRequest.getParams();
     
-    // Set up the local address if one exists
-    final InetAddress inetAddr = getIpSourceAddress();
-    if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
-        requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, inetAddr);
-    } else if (localAddress != null){
-        requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
-    } else { // reset in case was set previously
-        requestParams.removeParameter(ConnRoutePNames.LOCAL_ADDRESS);
-    }
-
-    int rto = getResponseTimeout();
-    if (rto > 0){
-        requestParams.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, rto);
-    }
-
-    int cto = getConnectTimeout();
-    if (cto > 0){
-        requestParams.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, cto);
-    }
-
-    requestParams.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, getAutoRedirects());
+        HttpParams requestParams = httpRequest.getParams();
+        // Set up the local address if one exists
+        final InetAddress inetAddr = getIpSourceAddress();
+        if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
+            requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, inetAddr);
+        } else if (localAddress != null){
+            requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
+        } else { // reset in case was set previously
+            requestParams.removeParameter(ConnRoutePNames.LOCAL_ADDRESS);
+        }
     
-    // a well-behaved browser is supposed to send 'Connection: close'
-    // with the last request to an HTTP server. Instead, most browsers
-    // leave it to the server to close the connection after their
-    // timeout period. Leave it to the JMeter user to decide.
-    if (getUseKeepAlive()) {
-        httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
-    } else {
-        httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
+        int rto = getResponseTimeout();
+        if (rto > 0){
+            requestParams.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, rto);
+        }
+    
+        int cto = getConnectTimeout();
+        if (cto > 0){
+            requestParams.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, cto);
+        }
+    
+        requestParams.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, getAutoRedirects());
+        
+        // a well-behaved browser is supposed to send 'Connection: close'
+        // with the last request to an HTTP server. Instead, most browsers
+        // leave it to the server to close the connection after their
+        // timeout period. Leave it to the JMeter user to decide.
+        if (getUseKeepAlive()) {
+            httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
+        } else {
+            httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
+        }
+    
+        setConnectionHeaders(httpRequest, url, getHeaderManager(), getCacheManager());
+        String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
+    
+        if (res != null) {
+            if(cookies != null && !cookies.isEmpty()) {
+                res.setCookies(cookies);
+            } else {
+                // During recording Cookie Manager doesn't handle cookies
+                res.setCookies(getOnlyCookieFromHeaders(httpRequest));
+            }
+        }
     }
-
-    setConnectionHeaders(httpRequest, url, getHeaderManager(), getCacheManager());
-
-    String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
-
-    if (res != null) {
-        res.setCookies(cookies);
-    }
-
-}
-
     
     /**
      * Set any default request headers to include
@@ -1036,25 +1038,25 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         headerBuf.append("\n"); // $NON-NLS-1$
 
         for (Header responseHeader : rh) {
-            writeResponseHeader(headerBuf, responseHeader);
+            writeHeader(headerBuf, responseHeader);
         }
         return headerBuf.toString();
     }
 
     /**
-     * Write responseHeader to headerBuffer in an optimized way
+     * Write header to headerBuffer in an optimized way
      * @param headerBuffer {@link StringBuilder}
-     * @param responseHeader {@link Header}
+     * @param header {@link Header}
      */
-    private void writeResponseHeader(StringBuilder headerBuffer, Header responseHeader) {
-        if(responseHeader instanceof BufferedHeader) {
-            CharArrayBuffer buffer = ((BufferedHeader)responseHeader).getBuffer();
+    private void writeHeader(StringBuilder headerBuffer, Header header) {
+        if(header instanceof BufferedHeader) {
+            CharArrayBuffer buffer = ((BufferedHeader)header).getBuffer();
             headerBuffer.append(buffer.buffer(), 0, buffer.length()).append('\n'); // $NON-NLS-1$
         }
         else {
-            headerBuffer.append(responseHeader.getName())
+            headerBuffer.append(header.getName())
             .append(": ") // $NON-NLS-1$
-            .append(responseHeader.getValue())
+            .append(header.getValue())
             .append('\n'); // $NON-NLS-1$
         }
     }
@@ -1150,21 +1152,48 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * Get all the request headers for the <code>HttpMethod</code>
+     * Get all the request headers except Cookie for the <code>HttpRequest</code>
      *
      * @param method
      *            <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
-    private String getConnectionHeaders(HttpRequest method) {
+    private String getAllHeadersExceptCookie(HttpRequest method) {
+        return getFromHeadersMatchingPredicate(method, ALL_EXCEPT_COOKIE);
+    }
+    
+    /**
+     * Get only Cookie header for the <code>HttpRequest</code>
+     *
+     * @param method
+     *            <code>HttpMethod</code> which represents the request
+     * @return the headers as a string
+     */
+    private String getOnlyCookieFromHeaders(HttpRequest method) {
+        String cookieHeader= getFromHeadersMatchingPredicate(method, ONLY_COOKIE).trim();
+        if(!cookieHeader.isEmpty()) {
+            return cookieHeader.substring((HTTPConstants.HEADER_COOKIE_IN_REQUEST).length(), cookieHeader.length()).trim();
+        }
+        return "";
+    }
+
+    
+    /**
+     * Get only cookies from request headers for the <code>HttpRequest</code>
+     *
+     * @param method
+     *            <code>HttpMethod</code> which represents the request
+     * @return the headers as a string
+     */
+    private String getFromHeadersMatchingPredicate(HttpRequest method, Predicate<String> predicate) {
         if(method != null) {
             // Get all the request headers
             StringBuilder hdrs = new StringBuilder(150);
             Header[] requestHeaders = method.getAllHeaders();
             for (Header requestHeader : requestHeaders) {
-                // Exclude the COOKIE header, since cookie is reported separately in the sample
-                if (!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(requestHeader.getName())) {
-                    writeResponseHeader(hdrs, requestHeader);
+                // Get header if it matches predicate
+                if (predicate.test(requestHeader.getName())) {
+                    writeHeader(hdrs, requestHeader);
                 }
             }
     
@@ -1306,11 +1335,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             } else {
                 postedBody.append("<Multipart was not repeatable, cannot view what was sent>"); // $NON-NLS-1$
             }
-
-//            // Set the content type TODO - needed?
-//            String multiPartContentType = multiPart.getContentType().getValue();
-//            post.setHeader(HEADER_CONTENT_TYPE, multiPartContentType);
-
         } else { // not multipart
             // Check if the header manager had a content type header
             // This allows the user to specify his own content-type for a POST request

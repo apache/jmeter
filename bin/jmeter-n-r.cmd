@@ -16,7 +16,7 @@ rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
 
 rem  ============================================
-rem  Non-GUI version of JMETER.BAT (WinNT/2K only)
+rem  Non-GUI version of JMETER.BAT
 rem
 rem  Drop a JMX file on this batch script, and it
 rem  will run it in non-GUI mode, with a log file
@@ -24,15 +24,8 @@ rem  formed from the input file name but with the
 rem  extension .jtl
 rem
 rem  Only the first parameter is used.
-rem  Only works for Win2k.
 rem
 rem  ============================================
-
-if "%OS%"=="Windows_NT" goto WinNT
-echo "Sorry, this command file requires Windows NT/ 2000 / XP"
-pause
-goto END
-:WinNT
 
 rem Check file is supplied
 if a == a%1 goto winNT2

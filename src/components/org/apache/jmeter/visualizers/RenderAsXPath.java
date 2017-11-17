@@ -44,6 +44,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.assertions.gui.XMLConfPanel;
 import org.apache.jmeter.extractor.XPathExtractor;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.TidyException;
@@ -51,6 +53,7 @@ import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -68,7 +71,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
 
     private JPanel xmlWithXPathPane;
 
-    private JTextArea xmlDataField;
+    private JSyntaxTextArea xmlDataField;
 
     private JLabeledTextField xpathExpressionField;
 
@@ -77,8 +80,6 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
     private JTabbedPane rightSide;
 
     private SampleResult sampleResult = null;
-
-    private JScrollPane xmlDataPane;
     
     // Should we return fragment as text, rather than text of fragment?
     private final JCheckBox getFragment =
@@ -89,9 +90,8 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
     /** {@inheritDoc} */
     @Override
     public void clearData() {
+        // N.B. don't set xpathExpressionField to empty to keep xpath
         this.xmlDataField.setText(""); // $NON-NLS-1$
-        // don't set empty to keep xpath
-        // xpathExpressionField.setText(""); // $NON-NLS-1$
         this.xpathResultField.setText(""); // $NON-NLS-1$
     }
 
@@ -213,13 +213,16 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
      * @return XPath Tester panel
      */
     private JPanel createXpathExtractorPanel() {
-        
-        xmlDataField = new JTextArea();
+        xmlDataField = JSyntaxTextArea.getInstance(50, 80, true);
+        xmlDataField.setCodeFoldingEnabled(true);
         xmlDataField.setEditable(false);
+        xmlDataField.setBracketMatchingEnabled(false);
+        xmlDataField.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
+        xmlDataField.setLanguage(SyntaxConstants.SYNTAX_STYLE_XML);
         xmlDataField.setLineWrap(true);
         xmlDataField.setWrapStyleWord(true);
 
-        this.xmlDataPane = GuiUtils.makeScrollPane(xmlDataField);
+        JScrollPane xmlDataPane = JTextScrollPane.getInstance(xmlDataField, true);
         xmlDataPane.setPreferredSize(new Dimension(0, 200));
 
         JPanel pane = new JPanel(new BorderLayout(0, 5));

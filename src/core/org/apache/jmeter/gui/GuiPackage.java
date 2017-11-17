@@ -24,9 +24,9 @@ import java.beans.Introspector;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.prefs.Preferences;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JOptionPane;
@@ -69,8 +69,16 @@ import org.slf4j.LoggerFactory;
  *
  */
 public final class GuiPackage implements LocaleChangeListener, HistoryListener {
-    /** Logging. */
+
     private static final Logger log = LoggerFactory.getLogger(GuiPackage.class);
+
+    private static final String SBR_PREFS_KEY = "save_before_run";
+
+    private static final String SAVE_BEFORE_RUN_PROPERTY = "save_automatically_before_run"; // $NON-NLS-1$
+    
+    private static final boolean SAVE_BEFORE_RUN_PROPERTY_DEFAULT_VALUE = true;
+
+    private static final Preferences PREFS = Preferences.userNodeForPackage(GuiPackage.class);
 
     /** Singleton instance. */
     private static GuiPackage guiPack;
@@ -115,25 +123,20 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /** The main JMeter toolbar. */
     private JToolBar toolbar;
-
-    /**
-     * The LoggerPanel menu item
-     */
+    
+    /** The LoggerPanel menu item */
     private JCheckBoxMenuItem menuItemLoggerPanel;
 
-    /**
-     * Logger Panel reference
-     */
+    /** The LoggerPanel menu item */
+    private JCheckBoxMenuItem menuItemSaveBeforeRunPanel;
+    
+    /** Logger Panel reference */
     private LoggerPanel loggerPanel;
 
-    /**
-     * History for tree states
-     */
+    /** History for tree states */
     private UndoHistory undoHistory = new UndoHistory();
 
-    /**
-     * GUI Logging Event Bus.
-     */
+    /** GUI Logging Event Bus. */
     private GuiLogEventBus logEventBus = new GuiLogEventBus();
 
     /**
@@ -142,7 +145,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     private GuiPackage(JMeterTreeModel treeModel, JMeterTreeListener treeListener) {
         this.treeModel = treeModel;
-        if(UndoHistory.isEnabled()) {
+        if (UndoHistory.isEnabled()) {
             this.treeModel.addTreeModelListener(undoHistory);
         }
         this.treeListener = treeListener;
@@ -245,7 +248,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                 comp = getGuiFromCache(guiClass, testClass);
                 nodesToGui.put(node, comp);
             }
-            log.debug("Gui retrieved = " + comp);
+            log.debug("Gui retrieved = {}", comp);
             return comp;
         } catch (Exception e) {
             log.error("Problem retrieving gui", e);
@@ -284,7 +287,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
             currentNodeUpdated = false;
             return comp;
         } catch (Exception e) {
-            log.error("Problem retrieving gui", e);
+            log.error("Problem retrieving current gui", e);
             return null;
         }
     }
@@ -437,10 +440,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * choosing the new node.
      */
     public void updateCurrentNode() {
-        
         try {
             if (currentNode != null && !currentNodeUpdated) {
-                log.debug("Updating current node " + currentNode.getName());
+                log.debug("Updating current node {}", currentNode.getName());
                 JMeterGUIComponent comp = getGui(currentNode.getTestElement());
                 if (comp == null) {
                     log.debug("No component found for {}", currentNode.getName());
@@ -450,11 +452,11 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                 int before = 0;
                 int after = 0;
                 final boolean historyEnabled = UndoHistory.isEnabled();
-                if(historyEnabled) {
+                if (historyEnabled) {
                     before = getTestElementCheckSum(el);
                 }
                 comp.modifyTestElement(el);
-                if(historyEnabled) {
+                if (historyEnabled) {
                     after = getTestElementCheckSum(el);
                 }
                 if (!historyEnabled || (before != after)) {
@@ -627,7 +629,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public void displayPopUp(Component invoker, MouseEvent e, JPopupMenu popup) {
         if (popup != null) {
-            log.debug("Showing pop up for " + invoker + " at x,y = " + e.getX() + "," + e.getY());
+            log.debug("Showing pop up for {} at x,y = {},{}", invoker, e.getX(), e.getY());
 
             popup.pack();
             popup.show(invoker, e.getX(), e.getY());
@@ -660,8 +662,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         // would populate the current node with the contents of the new GUI --
         // which is empty.]
         MainFrame mf = getMainFrame(); // Fetch once
-        if (mf == null) // Probably caused by unit testing on headless system
-        {
+        if (mf == null) { // Probably caused by unit testing on headless system
             log.warn("Mainframe is null");
         } else {
             mf.setMainPanel((javax.swing.JComponent) getCurrentGui());
@@ -738,7 +739,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     public static void showMessage(final String message, final String title, final int type){
         if (guiPack == null) {
-            return ;
+            return;
         }
         SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null,message,title,type));
 
@@ -746,30 +747,23 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /**
      * Unregister stoppable
-     * @param stoppable Stoppable
+     *
+     * @param stoppableToUnregister Stoppable to unregister
      */
-    public void unregister(Stoppable stoppable) {
-        for (Iterator<Stoppable> iterator = stoppables .iterator(); iterator.hasNext();) {
-            Stoppable stopable = iterator.next();
-            if(stopable == stoppable)
-            {
-                iterator.remove();
-            }
-        }
+    public void unregister(Stoppable stoppableToUnregister) {
+        stoppables.removeIf(stoppable -> stoppable == stoppableToUnregister);
     }
 
     /**
      * Register process to stop on reload
-     * 
-     * @param stoppable
-     *            The {@link Stoppable} to be registered
+     *
+     * @param stoppable The {@link Stoppable} to be registered
      */
     public void register(Stoppable stoppable) {
         stoppables.add(stoppable);
     }
 
     /**
-     *
      * @return copy of list of {@link Stoppable}s
      */
     public List<Stoppable> getStoppables() {
@@ -780,12 +774,13 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /**
      * Set the menu item LoggerPanel.
+     *
      * @param menuItemLoggerPanel The menu item LoggerPanel
      */
     public void setMenuItemLoggerPanel(JCheckBoxMenuItem menuItemLoggerPanel) {
         this.menuItemLoggerPanel = menuItemLoggerPanel;
     }
-
+        
     /**
      * Get the menu item LoggerPanel.
      *
@@ -793,6 +788,25 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public JCheckBoxMenuItem getMenuItemLoggerPanel() {
         return menuItemLoggerPanel;
+    }
+    
+    /**
+     * Set the menu item SaveBeforeRunPanel.
+     * 
+     * @param menuItemSaveBeforeRunPanel
+     *            The menu item SaveBeforeRunPanel
+     */
+    public void setMenuItemSaveBeforeRunPanel(JCheckBoxMenuItem menuItemSaveBeforeRunPanel) {
+        this.menuItemSaveBeforeRunPanel = menuItemSaveBeforeRunPanel;
+    }
+
+    /**
+     * Get the menu item SaveBeforeRunPanel.
+     *
+     * @return the menu item SaveBeforeRunPanel
+     */
+    public JCheckBoxMenuItem getMenuItemSaveBeforeRunPanel() {
+        return menuItemSaveBeforeRunPanel;
     }
 
     /**
@@ -810,12 +824,17 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     }
 
     /**
-     * Navigate back and forward through undo history
-     *
-     * @param offset int
+     * Navigate back through undo history
      */
-    public void goInHistory(int offset) {
-        undoHistory.moveInHistory(offset, this.treeModel);
+    public void undo() {
+        undoHistory.undo();
+    }
+
+    /**
+     * Navigate forward through undo history
+     */
+    public void redo() {
+        undoHistory.redo();
     }
 
     /**
@@ -847,17 +866,17 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         while (it.hasNext()) {
             JMeterProperty obj = it.next();
             if (obj instanceof TestElementProperty) {
-                ret ^= getTestElementCheckSum(((TestElementProperty) obj)
-                        .getElement());
+                ret ^= getTestElementCheckSum(
+                        ((TestElementProperty) obj).getElement());
             } else {
                 ret ^= obj.getName().hashCode();
                 String stringValue = obj.getStringValue();
-                if(stringValue != null) {
+                if (stringValue != null) {
                     ret ^= stringValue.hashCode();
                 } else {
-                    if(log.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         log.debug("obj.getStringValue() returned null for test element:"
-                                +el.getName()+" at property:"+obj.getName());
+                                + el.getName() + " at property:" + obj.getName());
                     }
                 }
             }
@@ -877,17 +896,17 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @return {@link TreeNodeNamingPolicy}
      */
     public TreeNodeNamingPolicy getNamingPolicy() {
-        if(namingPolicy == null) {
-            final String namingPolicyImplementation = 
+        if (namingPolicy == null) {
+            final String namingPolicyImplementation =
                     JMeterUtils.getPropDefault("naming_policy.impl", //$NON-NLS-1$ 
                             DefaultTreeNodeNamingPolicy.class.getName());
 
             try {
                 Class<?> implementationClass = Class.forName(namingPolicyImplementation);
                 this.namingPolicy = (TreeNodeNamingPolicy) implementationClass.newInstance();
-                
+
             } catch (Exception ex) {
-                log.error("Failed to create configured naming policy:"+namingPolicyImplementation+", will use default one", ex);
+                log.error("Failed to create configured naming policy:" + namingPolicyImplementation + ", will use default one", ex);
                 this.namingPolicy = new DefaultTreeNodeNamingPolicy();
             }
         }
@@ -900,5 +919,52 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public GuiLogEventBus getLogEventBus() {
         return logEventBus;
+    }
+
+    /**
+     * Begin a group of actions modeled as 1 undo
+     */
+    public void beginUndoTransaction() {
+        undoHistory.beginUndoTransaction();
+    }
+
+    /**
+     * End a group of actions modeled as 1 undo
+     */
+    public void endUndoTransaction() {
+        undoHistory.endUndoTransaction();
+    }
+    
+    
+    /**
+     * Should Save Before Run by Preference Only
+     * @return boolean
+     */
+    public boolean shouldSaveBeforeRunByPreference() {
+        return Boolean.TRUE.toString().
+                equalsIgnoreCase(PREFS.get(SBR_PREFS_KEY, null));
+    }
+    
+    /**
+     * Should Save Before Run by Preference Only
+     * @param saveBeforeRun boolean
+     */
+    public void setSaveBeforeRunByPreference(boolean saveBeforeRun) {
+        PREFS.put(SBR_PREFS_KEY, Boolean.toString(saveBeforeRun)); // $NON-NLS-1$ // $NON-NLS-2$
+    }
+    
+    /**
+     * Should Save Before Run 
+     * Decide by Preference and if not exists by Property
+     */
+    public boolean shouldSaveBeforeRun() {
+        String sbr = PREFS.get(SBR_PREFS_KEY, null);
+        if (sbr == null) {
+            // use property if no preference
+            return JMeterUtils.getPropDefault(SAVE_BEFORE_RUN_PROPERTY, 
+                    SAVE_BEFORE_RUN_PROPERTY_DEFAULT_VALUE);         
+        } else {
+            return shouldSaveBeforeRunByPreference();
+        }
     }
 }

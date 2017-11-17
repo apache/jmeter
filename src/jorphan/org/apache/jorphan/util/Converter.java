@@ -168,7 +168,6 @@ public class Converter {
             return (Date) date;
         } else if (date != null) {
             DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT);
-            // java.util.Date d = null;
             try {
                 val = formatter.parse(date.toString());
             } catch (ParseException e) {

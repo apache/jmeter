@@ -28,9 +28,9 @@ import org.apache.commons.lang3.StringUtils;
  * Regexp search implementation
  */
 public class RegexpSearcher implements Searcher {
+
     private boolean caseSensitive;
     private Pattern pattern;
-
 
     /**
      * Constructor
@@ -40,7 +40,7 @@ public class RegexpSearcher implements Searcher {
     public RegexpSearcher(boolean caseSensitive, String regexp) {
         super();
         this.caseSensitive = caseSensitive;
-        if(caseSensitive) {
+        if (caseSensitive) {
             pattern = Pattern.compile(regexp);
         } else {
             pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
@@ -53,16 +53,11 @@ public class RegexpSearcher implements Searcher {
      */
     @Override
     public boolean search(List<String> textTokens) {
-        for (String searchableToken : textTokens) {
-            if(!StringUtils.isEmpty(searchableToken)) {
-                Matcher matcher = caseSensitive ? 
-                    pattern.matcher(searchableToken) : 
-                    pattern.matcher(searchableToken.toLowerCase());
-                if(matcher.find()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return textTokens.stream()
+                .filter(token -> !StringUtils.isEmpty(token))
+                .map(token -> caseSensitive ?
+                        pattern.matcher(token) :
+                        pattern.matcher(token.toLowerCase()))
+                .anyMatch(Matcher::find);
     }
 }

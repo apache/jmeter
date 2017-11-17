@@ -196,12 +196,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         providerUrl.setText(sampler.getContextProvider());
 
         jmsPropertiesPanel.configure(sampler.getJMSProperties());
-        // (TestElement)
-        // el.getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue());
-
         jndiPropertiesPanel.configure(sampler.getJNDIProperties());
-        // (TestElement)
-        // el.getProperty(JMSSampler.JNDI_PROPERTIES).getObjectValue());
     }
 
     /**

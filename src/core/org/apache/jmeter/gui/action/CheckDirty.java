@@ -28,7 +28,6 @@ import java.util.Set;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -65,11 +64,12 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
     public CheckDirty() {
         previousGuiItems = new HashMap<>();
         ActionRouter.getInstance().addPreActionListener(ExitCommand.class, this);
+        ActionRouter.getInstance().addPostActionListener(UndoCommand.class, this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(ActionNames.EXIT)) {
+        if (e.getActionCommand().equals(ActionNames.EXIT) || e.getActionCommand().equals(ActionNames.UNDO) || e.getActionCommand().equals(ActionNames.REDO)) {
             doAction(e);
         }
     }
@@ -90,9 +90,6 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
         } else if (action.equals(ActionNames.ADD_ALL)) {
             previousGuiItems.clear();
             GuiPackage.getInstance().getTreeModel().getTestPlan().traverse(this);
-            if (isWorkbenchSaveable()) {
-                GuiPackage.getInstance().getTreeModel().getWorkBench().traverse(this);
-            }
         } else if (action.equals(ActionNames.CHECK_REMOVE) ||
                 action.equals(ActionNames.CHECK_CUT)) {
             GuiPackage guiPackage = GuiPackage.getInstance();
@@ -110,6 +107,13 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
         // If we are merging in another test plan, we know the test plan is dirty now
         if(action.equals(ActionNames.SUB_TREE_MERGED)) {
             dirty = true;
+        } else if (action.equals(ActionNames.UNDO) || action.equals(ActionNames.REDO)) {
+            dirty = GuiPackage.getInstance().isDirty();
+            log.debug("Restoring dirty after undo/redo");
+
+            //remember
+            previousGuiItems.clear();
+            GuiPackage.getInstance().getTreeModel().getTestPlan().traverse(this);
         }
         else {
             dirty = false;
@@ -118,13 +122,6 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
                 HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
                 wholeTree.traverse(this);
                 
-                // check the workbench for modification
-                if(!dirty) { // NOSONAR
-                    if (isWorkbenchSaveable()) {
-                        HashTree workbench = GuiPackage.getInstance().getTreeModel().getWorkBench();
-                        workbench.traverse(this);
-                    }
-                }
             } finally {
                 checkMode = false;
             }
@@ -132,13 +129,6 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
         GuiPackage.getInstance().setDirty(dirty);
     }
 
-    /**
-     * check if the workbench should be saved
-     */
-    private boolean isWorkbenchSaveable() {
-        JMeterTreeNode workbenchNode = (JMeterTreeNode) ((JMeterTreeNode) GuiPackage.getInstance().getTreeModel().getRoot()).getChildAt(1);
-        return ((WorkBench) workbenchNode.getUserObject()).getSaveWorkBench();
-    }
 
     /**
      * The tree traverses itself depth-first, calling addNode for each

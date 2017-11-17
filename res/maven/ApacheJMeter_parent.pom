@@ -55,7 +55,7 @@ under the License.
       <accessors-smart.version>1.2</accessors-smart.version>
       <apache-bsf.version>2.4.0</apache-bsf.version>
       <asm.version>5.2</asm.version>
-      <beanshell.version>2.0b5</beanshell.version>
+      <beanshell.version>2.0b6</beanshell.version>
       <bcmail.version>1.49</bcmail.version>
       <bcprov.version>1.49</bcprov.version>
       <bcpkix.version>1.49</bcpkix.version>
@@ -91,7 +91,7 @@ under the License.
       <json-path.version>2.4.0</json-path.version>
       <json-smart.version>2.3</json-smart.version>
       <jsoup.version>1.10.3</jsoup.version>
-      <rhino.version>1.7.7.1</rhino.version>
+      <rhino.version>1.7.7.2</rhino.version>
       <junit.version>4.12</junit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
       <ph-css.version>5.0.4</ph-css.version>
@@ -135,7 +135,7 @@ under the License.
         <version>${apache-bsf.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.beanshell</groupId>
+        <groupId>org.apache-extras.beanshell</groupId>
         <artifactId>bsh</artifactId>
         <version>${beanshell.version}</version>
       </dependency>

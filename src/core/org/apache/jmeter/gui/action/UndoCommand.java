@@ -46,9 +46,9 @@ public class UndoCommand extends AbstractAction {
         final String command = e.getActionCommand();
 
         if (command.equals(ActionNames.UNDO)) {
-            guiPackage.goInHistory(-1);
+            guiPackage.undo();
         } else if (command.equals(ActionNames.REDO)) {
-            guiPackage.goInHistory(1);
+            guiPackage.redo();
         } else {
             throw new IllegalArgumentException("Wrong action called: " + command);
         }

@@ -17,7 +17,10 @@
  */
 
 package org.apache.jmeter.testelement;
-
+/**
+ * @deprecated since 4.0
+ */
+@Deprecated
 public class WorkBench extends AbstractTestElement {
 
     private static final long serialVersionUID = 240L;

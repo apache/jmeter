@@ -70,7 +70,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         argsPanel = new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables")); // $NON-NLS-1$
         serializedMode = new JCheckBox(JMeterUtils.getResString("testplan.serialized")); // $NON-NLS-1$
         functionalMode = new JCheckBox(JMeterUtils.getResString("functional_mode")); // $NON-NLS-1$
-        tearDownOnShutdown = new JCheckBox(JMeterUtils.getResString("teardown_on_shutdown")); // $NON-NLS-1$
+        tearDownOnShutdown = new JCheckBox(JMeterUtils.getResString("teardown_on_shutdown"), true); // $NON-NLS-1$
         init();
     }
 
@@ -92,6 +92,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
         addMenu.add(MenuFactory.makeMenu(MenuFactory.THREADS, ActionNames.ADD));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.FRAGMENTS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.NON_TEST_ELEMENTS, ActionNames.ADD));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, ActionNames.ADD));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, ActionNames.ADD));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, ActionNames.ADD));
@@ -198,7 +199,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         super.clearGui();
         functionalMode.setSelected(false);
         serializedMode.setSelected(false);
-        tearDownOnShutdown.setSelected(false);
+        tearDownOnShutdown.setSelected(true);
         argsPanel.clear();
         browseJar.clearFiles();
     }
