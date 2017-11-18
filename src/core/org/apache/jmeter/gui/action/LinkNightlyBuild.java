@@ -62,3 +62,4 @@ public class LinkNightlyBuild extends AbstractAction {
     
 
 }
+
