@@ -106,7 +106,6 @@ public class BackendListener extends AbstractTestElement
      * This is needed for distributed testing where there is 1 instance
      * per server. But we need the total to be shared.
      */
-    //@GuardedBy("LOCK") - needed to ensure consistency between this and instanceCount
     private static final Map<String, ListenerClientData> queuesByTestElementName =
             new ConcurrentHashMap<>();
 

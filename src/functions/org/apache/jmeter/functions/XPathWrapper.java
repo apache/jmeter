@@ -47,7 +47,6 @@ final class XPathWrapper {
      * </ul>
      * The key is the concatenation of the file name and the XPath string
      */
-    //@GuardedBy("fileContainers")
     private static final Map<String, XPathFileContainer> fileContainers =
             new HashMap<>();
 
