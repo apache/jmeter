@@ -205,10 +205,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private boolean success;
 
-    //@GuardedBy("this"")
-    /** files that this sample has been saved in */
-    /** In Non GUI mode and when best config is used, size never exceeds 1, 
-     * but as a compromise set it to 3 
+    /**
+     * Files that this sample has been saved in.
+     * In Non GUI mode and when best config is used, size never exceeds 1,
+     * but as a compromise set it to 3
      */
     private final Set<String> files = new HashSet<>(3);
 
@@ -224,9 +224,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /** time to first response */
     private long latency = 0;
 
-    /**
-     * time to end connecting
-     */
+    /** time to end connecting */
     private long connectTime = 0;
 
     /** Should thread start next iteration ? */
@@ -321,9 +319,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         responseDataAsString = null;
         responseHeaders = res.responseHeaders;//OK
         responseMessage = res.responseMessage;//OK
-        /** 
-         * Don't copy this; it is per instance resultFileName = res.resultFileName;
-         */
+
+        // Don't copy this; it is per instance resultFileName = res.resultFileName;
+
         sampleCount = res.sampleCount;
         samplerData = res.samplerData;
         saveConfig = res.saveConfig;
@@ -1450,7 +1448,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             while(true) {
                 getOffset(NANOTHREAD_SLEEP); // Can now afford to wait a bit longer between checks
             }
-            
         }
 
         private static void getOffset(long wait) {
@@ -1464,7 +1461,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
                 Thread.currentThread().interrupt();
             }
         }
-        
     }
 
     /**

@@ -106,12 +106,8 @@ public class JMeterUtils implements UnitTestManager {
     private static volatile ResourceBundle resources;
 
     // What host am I running on?
-
-    //@GuardedBy("this")
     private static String localHostIP = null;
-    //@GuardedBy("this")
     private static String localHostName = null;
-    //@GuardedBy("this")
     private static String localHostFullName = null;
     
     // TODO needs to be synch? Probably not changed after threads have started
