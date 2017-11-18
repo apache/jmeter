@@ -1430,7 +1430,7 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
       If you do not specify a priority level, the default level is <code>4</code>. 
   </property>
   <property name="Reconnect on error codes (regex)" required="No">Regular expression for JMSException error codes which force reconnection. If empty no reconnection will be done</property>
-  <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate</property>
+  <property name="Number of samples to aggregate" required="Yes">number of samples to aggregate</property>
   <property name="Message source" required="Yes">Where to obtain the message:
   <dl>
     <dt><code>From File</code></dt><dd>means the referenced file will be read and reused by all samples. If file name changes it is reloaded since JMeter 3.0</dd>
@@ -1573,6 +1573,9 @@ The following table shows some values which may be useful when configuring JMS:
         <p>
         <code>Request Only</code> will typically be used to put load on a JMS System.<br></br>
         <code>Request Response</code> will be used when you want to test response time of a JMS service that processes messages sent to the Request Queue as this mode will wait for the response on the Reply queue sent by this service.<br></br>
+        <code>Browse</code> returns the current queue depth, i.e. the number of messages on the queue.<br></br>
+        <code>Read</code> reads a message from the queue (if any).<br></br>
+        <code>Clear</code> clears the queue, i.e. remove all messages from the queue.<br></br>
         </p>
         <p>
         JMeter use the properties <code>java.naming.security.[principal|credentials]</code> - if present -
@@ -1594,12 +1597,14 @@ The following table shows some values which may be useful when configuring JMS:
     The JNDI name of the receiving queue. If a value is provided here and the communication style is <code>Request Response</code>
     this queue will be monitored for responses to the requests sent.
   </property>
+  <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate. Only applicable for Communication style Read.</property>
   <property name="JMS Selector" required="No">
     Message Selector as defined by JMS specification to extract only 
     messages that respect the Selector condition. Syntax uses subpart of SQL 92.
   </property>
   <property name="Communication style" required="Yes">
-    The Communication style can be <code>Request Only</code> (also known as Fire and Forget) or <code>Request Response</code>:
+    The Communication style can be <code>Request Only</code> (also known as Fire and Forget), <code>Request Response</code>,
+    <code>Read</code>, <code>Browse</code>, <code>Clear</code>:
     <dl>
     <dt><code>Request Only</code></dt><dd> will only send messages and will not monitor replies. As such it can be used to put load on a system.</dd>
     <dt><code>Request Response</code></dt><dd> will send messages and monitor the replies it receives. Behaviour depends on the value of the JNDI Name Reply Queue.
@@ -1609,6 +1614,11 @@ The following table shows some values which may be useful when configuring JMS:
     This is very different from the fixed reply queue. With temporary queues the sending thread will block until the reply message has been received.
     With <code>Request Response</code> mode, you need to have a Server that listens to messages sent to Request Queue and sends replies to 
     queue referenced by <code>message.getJMSReplyTo()</code>.</dd>
+    <dt><code>Read</code></dt><dd> will read a message from an outgoing queue which has no listeners attached. This can be convenient for testing purposes.
+     This method can be used if you need to handle queues without a binding file (in case the jmeter-jms-skip-jndi library is used),
+     which only works with the JMS Point-to-Point sampler. In case binding files are used, one can also use the JMS Subscriber Sampler for reading from a queue.</dd>
+    <dt><code>Browse</code></dt><dd> will determine the current queue depth without removing messages from the queue, returning the number of messages on the queue.</dd>
+    <dt><code>Clear</code></dt><dd> will clear the queue, i.e. remove all messages from the queue.</dd>
     </dl>
   </property>
   <property name="Use alternate fields for message correlation" required="Yes">
