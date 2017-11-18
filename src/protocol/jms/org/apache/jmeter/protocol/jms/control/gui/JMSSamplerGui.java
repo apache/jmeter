@@ -44,7 +44,6 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * Configuration screen for Java Messaging Point-to-Point requests. <br>
- * Created on: October 28, 2004
  *
  */
 public class JMSSamplerGui extends AbstractSamplerGui {
@@ -137,7 +136,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setReceiveQueue(receiveQueue.getText());
 
         element.setProperty(JMSSampler.JMS_COMMUNICATION_STYLE, jmsCommunicationStyle.getSelectedIndex());
-
+        element.removeProperty(JMSSampler.IS_ONE_WAY);
         element.setNonPersistent(useNonPersistentDelivery.isSelected());
         element.setUseReqMsgIdAsCorrelId(useReqMsgIdAsCorrelId.isSelected());
         element.setUseResMsgIdAsCorrelId(useResMsgIdAsCorrelId.isSelected());

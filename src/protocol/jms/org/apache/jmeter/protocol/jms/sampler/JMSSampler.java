@@ -216,18 +216,22 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         LOGGER.debug("isBrowseOnly");
         StringBuilder sb = new StringBuilder("");
         res.setSuccessful(true);
-        sb.append("\n \n  Browse message on Send Queue " + sendQueue.getQueueName());
-        sb.append(browseQueueDetails(sendQueue, res));
+        sb.append("Browse message on Send Queue ").append(sendQueue.getQueueName())
+            .append(": ")
+            .append(browseQueueDetails(sendQueue, res));
         res.setResponseData(sb.toString().getBytes());
+        res.setResponseCodeOK();
     }
 
     private void handleClearQueue(SampleResult res) throws JMSException {
         LOGGER.debug("isClearQueue");
         StringBuilder sb = new StringBuilder("");
         res.setSuccessful(true);
-        sb.append("\n \n  Clear messages on Send Queue " + sendQueue.getQueueName());
-        sb.append(clearQueue(sendQueue, res));
+        sb.append("Clear messages on Send Queue ").append(sendQueue.getQueueName())
+                .append(": ")
+                .append(clearQueue(sendQueue, res));
         res.setResponseData(sb.toString().getBytes());
+        res.setResponseCodeOK();
     }
 
     private void handleOneWay(SampleResult res) throws JMSException {
