@@ -21,7 +21,6 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
