@@ -143,7 +143,6 @@ public class SMIMEAssertionTest {
     public void testSignerSignerDN() {
         SMIMEAssertionTestElement testElement = new SMIMEAssertionTestElement();
         testElement.setSignerCheckConstraints(true);
-//        String signerDn = "CN=alice example, E=alice@a.example.com, O=Example Ltd, L=Wherever, C=AU";
         String signerDn = "C=AU, L=Wherever, O=Example Ltd, E=alice@a.example.com, CN=alice example";
         testElement
                 .setSignerDn(signerDn);

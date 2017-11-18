@@ -85,9 +85,6 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     /** Indicates that the results file should be in CSV format. * */
     private static final String CSV = "csv"; // $NON_NLS-1$
 
-    /** Indicates that the results should be stored in a database. * */
-    //NOTUSED private static final String DATABASE = "db"; // $NON_NLS-1$
-
     /** A properties file indicator for true. * */
     private static final String TRUE = "true"; // $NON_NLS-1$
 
@@ -287,9 +284,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     public static final String DEFAULT_DELIMITER = ","; // $NON_NLS-1$
 
-    /**
-     * Read in the properties having to do with saving from a properties file.
-     */
+    // Read in the properties having to do with saving from a properties file.
     static {
         Properties props = JMeterUtils.getJMeterProperties();
 
