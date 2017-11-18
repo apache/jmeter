@@ -151,7 +151,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     public static final String DARCULA_LAF = "Darcula"; // $NON-NLS-1$
 
     public static final String DARCULA_LAF_CLASS = "com.bulenkov.darcula.DarculaLaf"; // $NON-NLS-1$
-
+    
     public JMeterMenuBar() {
         // List for recent files menu items
         fileLoadRecentFiles = new LinkedList<>();
@@ -301,6 +301,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem heapDump = makeMenuItemRes("heap_dump", ActionNames.HEAP_DUMP);//$NON-NLS-1$
 
         JMenuItem threadDump = makeMenuItemRes("thread_dump", ActionNames.THREAD_DUMP);//$NON-NLS-1$
+        
+        JMenuItem linkBugTracker = makeMenuItemRes("link_bug_tracker", ActionNames.LINK_BUG_TRACKER);//$NON-NLS-1$
+        
+        JMenuItem linkNightlyBuild = makeMenuItemRes("link_nightly_build", ActionNames.LINK_NIGHTLY_BUILD);//$NON-NLS-1$
 
         helpAbout = makeMenuItemRes("about", 'A', ActionNames.ABOUT); //$NON-NLS-1$
 
@@ -314,6 +318,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         addPluginsMenuItems(helpMenu, menuCreators, MENU_LOCATION.HELP);
         
+        helpMenu.addSeparator();
+        helpMenu.add(linkBugTracker);
+        helpMenu.add(linkNightlyBuild);
         helpMenu.addSeparator();
         helpMenu.add(helpAbout);
     }
@@ -369,7 +376,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem zoomIn = makeMenuItemRes("menu_zoom_in", ActionNames.ZOOM_IN); //$NON-NLS-1$
         optionsMenu.add(zoomIn);
         JMenuItem zoomOut = makeMenuItemRes("menu_zoom_out", ActionNames.ZOOM_OUT); //$NON-NLS-1$
-        optionsMenu.add(zoomOut);
+        optionsMenu.add(zoomOut);        
+        JCheckBoxMenuItem saveBeforeRun = makeCheckBoxMenuItemRes("menu_save_before_run", ActionNames.SAVE_BEFORE_RUN); //$NON-NLS-1$
+        if (guiInstance != null) {
+            saveBeforeRun.setSelected(guiInstance.shouldSaveBeforeRunByPreference());
+            guiInstance.setMenuItemSaveBeforeRunPanel(saveBeforeRun);
+        }
+        optionsMenu.add(saveBeforeRun);
 
         addPluginsMenuItems(optionsMenu, menuCreators, MENU_LOCATION.OPTIONS);
     }

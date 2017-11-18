@@ -78,29 +78,19 @@ public class ThreadGroup extends AbstractThreadGroup {
     
     private transient Object addThreadLock = new Object();
 
-    /**
-     * Is test (still) running?
-     */
+    /** Is test (still) running? */
     private volatile boolean running = false;
 
-    /**
-     * Thread Group number
-     */
+    /** Thread Group number */
     private int groupNumber;
 
-    /**
-     * Are we using delayed startup?
-     */
+    /** Are we using delayed startup? */
     private boolean delayedStartup;
 
-    /**
-     * Thread safe class
-     */
+    /** Thread safe class */
     private ListenerNotifier notifier;
 
-    /**
-     * This property will be cloned
-     */
+    /** This property will be cloned */
     private ListedHashTree threadGroupTree;
 
     /**
@@ -197,24 +187,24 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     private void scheduleThread(JMeterThread thread, long now) {
 
-        // if true the Scheduler is enabled
-        if (getScheduler()) {
-            // set the start time for the Thread
-            if (getDelay() >= 0) {// Duration is in seconds
-                thread.setStartTime(getDelay() * 1000 + now);
-            } else {
-                throw new JMeterStopTestException("Invalid delay "+getDelay()+" set in Thread Group:"+getName());
-            }
-
-            // set the endtime for the Thread
-            if (getDuration() > 0) {// Duration is in seconds
-                thread.setEndTime(getDuration() * 1000 + (thread.getStartTime()));
-            } else {
-                throw new JMeterStopTestException("Invalid duration "+getDuration()+" set in Thread Group:"+getName());
-            }
-            // Enables the scheduler
-            thread.setScheduled(true);
+        if (!getScheduler()) { // if the Scheduler is not enabled
+            return;
         }
+
+        if (getDelay() >= 0) { // Duration is in seconds
+            thread.setStartTime(getDelay() * 1000 + now);
+        } else {
+            throw new JMeterStopTestException("Invalid delay " + getDelay() + " set in Thread Group:" + getName());
+        }
+
+        // set the endtime for the Thread
+        if (getDuration() > 0) {// Duration is in seconds
+            thread.setEndTime(getDuration() * 1000 + (thread.getStartTime()));
+        } else {
+            throw new JMeterStopTestException("Invalid duration " + getDuration() + " set in Thread Group:" + getName());
+        }
+        // Enables the scheduler
+        thread.setScheduled(true);
     }
 
     @Override
@@ -345,10 +335,10 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public boolean stopThread(String threadName, boolean now) {
-        for(Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
-            JMeterThread thrd = entry.getKey();
-            if (thrd.getThreadName().equals(threadName)) {
-                stopThread(thrd, entry.getValue(), now);
+        for (Entry<JMeterThread, Thread> threadEntry : allThreads.entrySet()) {
+            JMeterThread jMeterThread = threadEntry.getKey();
+            if (jMeterThread.getThreadName().equals(threadName)) {
+                stopThread(jMeterThread, threadEntry.getValue(), now);
                 return true;
             }
         }
@@ -398,10 +388,8 @@ public class ThreadGroup extends AbstractThreadGroup {
                 log.warn("Exception occurred interrupting ThreadStarter", e);
             }
         }
-        
-        for (Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
-            stopThread(entry.getKey(), entry.getValue(), true);
-        }
+
+        allThreads.forEach((key, value) -> stopThread(key, value, true));
     }
 
 
@@ -421,9 +409,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 log.warn("Exception occurred interrupting ThreadStarter", e);
             }            
         }
-        for (JMeterThread item : allThreads.keySet()) {
-            item.stop();
-        }
+        allThreads.keySet().forEach(JMeterThread::stop);
     }
 
     /**
@@ -481,13 +467,11 @@ public class ThreadGroup extends AbstractThreadGroup {
             waitThreadStopped(threadStarter);
         }
         /* @Bugzilla 60933
-         * Like threads can be added on the fly during a test into allThreads
-         * we have to check if allThreads is rly empty before stop 
+         * Threads can be added on the fly during a test into allThreads
+         * we have to check if allThreads is really empty before stopping
          */
-        while ( !allThreads.isEmpty() ) {
-            for (Thread t : allThreads.values()) {
-                waitThreadStopped(t);
-            }
+        while (!allThreads.isEmpty()) {
+            allThreads.values().forEach(this::waitThreadStopped);
         }   
       
     }
@@ -497,13 +481,14 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param thread Thread
      */
     private void waitThreadStopped(Thread thread) {
-        if (thread != null) {
-            while (thread.isAlive()) {
-                try {
-                    thread.join(WAIT_TO_DIE);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+        if (thread == null) {
+            return;
+        }
+        while (thread.isAlive()) {
+            try {
+                thread.join(WAIT_TO_DIE);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -547,10 +532,8 @@ public class ThreadGroup extends AbstractThreadGroup {
             this.engine = engine;
             // Store context from Root Thread to pass it to created threads
             this.context = JMeterContextService.getContext();
-            
         }
         
-
         /**
          * Wait for delay with RAMPUP_GRANULARITY
          * @param delay delay in ms

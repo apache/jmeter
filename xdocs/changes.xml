@@ -79,6 +79,11 @@ Summary
     </li>
     <li><code>tearDown Thread Group</code> will now run on stop and shutdown of a test by default. If you don't want this behaviour, 
     uncheck <code>Run tearDown Thread Groups after shutdown of main threads</code> on <code>Test Plan</code> element, see <bugzilla>61656</bugzilla></li>
+    <li>Properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code> have been dropped, see <bugzilla>61587</bugzilla></li>
+    <li>JMeter will now save your test plan whenever you run it. This behaviour can be controlled by property <code>save_automatically_before_run</code></li>
+    <li>Workbench element has been dropped, you now directly add <code>Non Test Element</code> as children of Test Plan. When loading a Test Plan that contains the element
+    JMeter will move the <code>Mirror Server</code>, <code>Property Display</code> and HTTP(s) <code>Test Script Recorder</code> elements as direct children of Test Plan. For 
+    any other element, it will create a <code>Test Fragment</code> element called <code>Workbench Test Fragment and move the elements in it</code>.</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -86,24 +91,31 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><pr>316</pr> - Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
+    <li><pr>316</pr>Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
     <li><bug>61639</bug>HTTP(S) Test Script Recorder : In request filtering tab, uncheck by default "Notify Child Listeners of filtered samplers"</li>
-    <li><bug>61672</bug>HTTP(S) Test Script Recorder : When a prefix is set don't use path in Sampler Name</li>
+    <li><bug>61672</bug>HTTP(S) Test Script Recorder : Have the ability to choose the sampler name while keeping the ability to just add a prefix</li>
     <li><bug>53957</bug>HTTP Request : In Parameters tab, allow pasting of content coming from Firefox and Chrome (unparsed)</li>
+    <li><bug>61587</bug>Drop properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code></li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>61739</bug>Java Request / JavaSamplerClient : Improve <code>org.apache.jmeter.protocol.java.sampler.JavaSamplerContext</code></li>
+    <li><bug>61762</bug>Start Next Thread Loop should be used everywhere</li>
+    <li><bug>61544</bug>JMS Point-to-Point Sampler: Enhance communication styles with read, browse, clear. Based on a contribution by Benny van Wijngaarden (benny at smaragd-it.nl)</li>
 </ul>
 
 <h3>Controllers</h3>
 <ul>
     <li><bug>61675</bug>If Controller : Use expression by default and add a warning when the other mode is used. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61770</bug>Module Controller : Inform user in UI that he needs to have at least one Controller in his plan. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
     <li><bug>57760</bug>View Results Tree : Cookie Header is wrongly shown as empty(no cookies) when viewing a recorder Sample Result. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61769</bug>View Results Tree: Use syntax highlighter in XPath Tester, JSON Path Tester and CSS/JQuery Tester. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61776</bug>View Results Tree: Expansion of <code>Add expand/collapse all</code> menu in render XML view. Contributed by Maxime Chassagneux and Graham Russell</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -112,18 +124,23 @@ Summary
     <li><bug>61644</bug>HTTP Cache Manager: "Use Cache-Control/Expires header when processing GET requests" should be checked by default</li>
     <li><bug>61645</bug>Response Assertion : Add ability to assert on Request Data</li>
     <li><bug>61534</bug>Convert AssertionError to a failed assertion in the JSR223Assertion allowing users to use assert in their code</li>
+    <li><bug>61756</bug>Extractors : Improve label name "Reference name" to make it clear what it makes</li>
+    <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions : When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
 <ul>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
+    <li><bug>61738</bug>Function Helper Dialog : Add Copy in Generate and clarify labels. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
+    <li><bug>61724</bug>Add <code>__digest</code> function to provide computing of Hashes (SHA-XXX, MDX). Based on a contribution by orimarko at gmail.com</li>
+    <li><bug>61735</bug>Add <code>__dateTimeConvert</code> function to provide date formats conversions. Based on a contribution by orimarko at gmail.com</li>
 </ul>
 
 <h3>I18N</h3>
 <ul>
-    <li><bug>61559</bug>Better label/translation/documentation for label ignoreFirstLine.displayName for CSV Data Set Config</li>
     <li><bug>61606</bug>Translate button <code>Browse...</code> in some elements (which use FileEditor class)</li>
+    <li><bug>61747</bug>HTTP(S) Test Script Recorder : add the missing doc to "Create transaction after request (ms)"</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -132,6 +149,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>61591</bug>Drop Workbench from test tree. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>61549</bug>Thread Group : Remove start and end date</li>
     <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61709</bug>SampleResult : Add a method <code>setIgnore()</code> to make JMeter ignore the SampleResult and not send it to listeners</li>
@@ -146,7 +164,10 @@ Summary
     <li><bug>61694</bug>Add -server option in jmeter.bat</li>
     <li><bug>61697</bug>Introduce Darcula Look And Feel to make JMeter UI more attractive</li>
     <li><bug>61704</bug>Toolbar : Improve a bit the right part</li>
-    <li><pr>319</pr> Removed commented out code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61731</bug>Enhance Test plan Backup with option to save before run. Based on a contribution by orimarko at gmail.com</li>
+    <li><bug>61640</bug>JSR223 Test Elements : Enable by default caching. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61774</bug>Add a link to help menu to create an issue (it open the browser with the link to issues)</li>
+    <li><bug>61775</bug>Add a link to help menu to download nighty builds (it open the browser with the correct link)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -157,6 +178,11 @@ Summary
     <li><bug>61641</bug>Improve JMS test coverage</li>
     <li><bug>61651</bug>Improve TCP test coverage</li>
     <li><bug>61651</bug>Improve OS test coverage. Partly contributed by Aleksei Balan (abalanonline at gmail.com)</li> 
+    <li><pr>319</pr>Removed commented out code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>322</pr>General JavaDoc cleanup. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>323</pr>Extracted method and used streams to improve readability. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>324</pr> Save backup refactor. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>327</pr> Utilising more modern Java, simplifying code and formatting code and comments. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -177,11 +203,12 @@ Summary
 <h3>Controllers</h3>
 <ul>
     <li><bug>61556</bug>Clarify in documentation performance impacts of ${} var usage in IfController and groovy. Contributed by Justin McCartney (be_strew at yahoo.co.uk)</li>
-    <li><bug>61713</bug>Test Fragment has option to Change Controller and Insert Parent</li>
+    <li><bug>61713</bug>Test Fragment has option to Change Controller and Insert Parent. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
+    <li><bug>61742</bug>BackendListener : fix default value for <code>backend_graphite.send_interval</code></li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -194,6 +221,7 @@ Summary
     <li><bug>61588</bug>Better log message for RandomDate function</li>
     <li><bug>61619</bug>In Function Helper Dialog, the 1st function doesn't display default parameters</li>
     <li><bug>61628</bug>If split string has empty separator default separator is not used</li>
+    <li><bug>61752</bug><code>__RandomDate</code> : Function does not allow missing last parameter used for variable name</li>
 </ul>
 
 <h3>I18N</h3>
@@ -207,6 +235,7 @@ Summary
 <h3>General</h3>
 <ul>
     <li><bug>61661</bug>Avoid startup/shutdown problems due to 3rd party Thread Listener plugins throwing RuntimeException</li>
+    <li><bug>61625</bug>File Editor used in BeanInfo behaves strangely under all LAFs with impact on CSVDataSet, JSR223, BSF, Beanshell Element</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -217,11 +246,15 @@ Summary
 <ul>
     <li>Igor Panainte (panainte.i at gmail.com)</li>
     <li>Emilian Bold (emi at apache.org)</li>
-    <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+    <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Justin McCartney (be_strew at yahoo.co.uk)</li>
     <li>Vincent Herilier (https://github.com/vherilier)</li>
     <li>Aleksei Balan (abalanonline at gmail.com)</li>
     <li>Graham Russell (graham at ham1.co.uk)</li>
+    <li>orimarko at gmail.com</li>
+    <li>Artem Fedorov (artem at blazemeter.com)</li>
+    <li><a href="https://www.blazemeter.com">BlazeMeter Ltd</a></li>
+    <li>Benny van Wijngaarden (benny at smaragd-it.nl)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

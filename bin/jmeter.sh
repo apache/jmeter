@@ -45,15 +45,6 @@ if [ $current_version ]; then
          exit 1
 fi
 
-JMETER_OPTS=""
-case `uname` in
-   Darwin*)
-   # Add Mac-specific property - should be ignored elsewhere (Bug 47064)
-   JMETER_OPTS="-Xdock:name=JMeter -Xdock:icon="`dirname $0`/../docs/images/jmeter_square.png" -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"
-   ;;
-esac
-
-
 # resolve links - $0 may be a softlink (code as used by Tomcat)
 # N.B. readlink would be a lot simpler but is not supported on Solaris
 PRG="$0"
@@ -69,5 +60,14 @@ while [ -h "$PRG" ]; do
 done
 
 PRGDIR=`dirname "$PRG"`
+
+JMETER_OPTS=""
+case `uname` in
+   Darwin*)
+   # Add Mac-specific property - should be ignored elsewhere (Bug 47064)
+   JMETER_OPTS="-Xdock:name=JMeter -Xdock:icon=\"${PRGDIR}/../docs/images/jmeter_square.png\" -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"
+   ;;
+esac
+
 
 java $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"

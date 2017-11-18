@@ -30,12 +30,12 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Provides a RandomFromMultiResult function which returns a random element from a multi valued extracted variable.
- * Those kind of variable are extracted by:
+ * Provides a RandomFromMultipleVars function which returns a random element from a multi valued extracted variable.
+ * Those kind of variables are extracted by:
  * - Regular Expression extractor
  * - JSON extractor
  * - CSS/JQuery extractor
@@ -61,6 +61,7 @@ public class RandomFromMultipleVars extends AbstractFunction {
      * No-arg constructor.
      */
     public RandomFromMultipleVars() {
+        super();
     }
 
     /** {@inheritDoc} */
@@ -75,25 +76,25 @@ public class RandomFromMultipleVars extends AbstractFunction {
         if (vars != null) { // vars will be null on TestPlan
             List<String> results = new ArrayList<>();
             String[] variables = variablesNamesSplitBySeparatorValue.split(SEPARATOR);
-            for (String varName : variables) {
-                if(!StringUtils.isEmpty(varName)) {
-                    extractVariableValuesToList(varName, vars, results);
+            for (String currentVarName : variables) {
+                if(!StringUtils.isEmpty(currentVarName)) {
+                    extractVariableValuesToList(currentVarName, vars, results);
                 }
             }
 
-            if(results.size() > 0) {
+            if(!results.isEmpty()) {
                 int randomIndex = ThreadLocalRandom.current().nextInt(0, results.size());
                 outputValue = results.get(randomIndex);                
             } else {
                 if(log.isDebugEnabled()) {
-                    log.debug("RandomFromMultiResult didn't find <var>_matchNr in variables :'"+variablesNamesSplitBySeparatorValue
-                            +"' using separator:'"+separator+"', will return empty value");
+                    log.debug("RandomFromMultiResult didn't find <var>_matchNr in variables :'{}' using separator:'{}', will return empty value",
+                            variablesNamesSplitBySeparatorValue, separator);
                 }
             }
 
             if (varName != null) {
                 final String varTrim = varName.execute().trim();
-                if (varTrim.length() > 0){ 
+                if (!varTrim.isEmpty()){ 
                     vars.put(varTrim, outputValue);
                 }
             }
@@ -103,14 +104,14 @@ public class RandomFromMultipleVars extends AbstractFunction {
     }
 
     /**
+     * Get from vars the values of variableName (can be missing, contain 1 value or contain multiple values (_matchNr))
+     * and stores them in results
      * @param variableName String
      * @param vars {@link JMeterVariables}
      * @param results {@link List} where results are stored
-     * @throws NumberFormatException
      */
     private void extractVariableValuesToList(String variableName,
-            JMeterVariables vars, List<String> results)
-            throws NumberFormatException {
+            JMeterVariables vars, List<String> results) {
         String matchNumberAsStr = vars.get(variableName+"_matchNr");
         int matchNumber = 0;
         if(!StringUtils.isEmpty(matchNumberAsStr)) {

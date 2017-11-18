@@ -434,11 +434,6 @@ If not using a file, attach a Header Manager to the sampler and define the Conte
 However the <code>Java</code> sampler only supports slow HTTPS connections.
 </p>
 <p><b>Response size calculation</b><br></br>
-Optional properties to allow change the method to get response size:<br></br></p>
-<ul><li>Gets the real network size in bytes for the body response
-<source>sampleresult.getbytes.body_real_size=true</source></li>
-<li>Add HTTP headers to full response size
-<source>sampleresult.getbytes.headers_size=true</source></li></ul>
 
 <note>
 The <code>Java</code> implementation does not include transport overhead such as
@@ -446,8 +441,7 @@ chunk headers in the response body size.<br></br>
 The <code>HttpClient4</code> implementation does include the overhead in the response body size,
 so the value may be greater than the number of bytes in the response content.
 </note>
-
-<note>When those two properties are set  <code>false</code>, JMeter returns only data response size (uncompressed if request uses gzip/deflate mode).</note>
+</p>
 <p>
 <b>Retry handling</b><br></br>
 By default retry has been set to 0 for both HttpClient4 and Java implementations, meaning no retry is attempted.<br/>  
@@ -1577,8 +1571,11 @@ The following table shows some values which may be useful when configuring JMS:
         It is different from pub/sub messages and is generally used for handling transactions.
         </p>
         <p>
-        <code>Request Only</code> will typically be used to put load on a JMS System.<br></br>
-        <code>Request Response</code> will be used when you want to test response time of a JMS service that processes messages sent to the Request Queue as this mode will wait for the response on the Reply queue sent by this service.<br></br>
+        <code>request_only</code> will typically be used to put load on a JMS System.<br></br>
+        <code>request_reply</code> will be used when you want to test response time of a JMS service that processes messages sent to the Request Queue as this mode will wait for the response on the Reply queue sent by this service.<br></br>
+        <code>browse</code> returns the current queue depth, i.e. the number of messages on the queue.<br></br>
+        <code>read</code> reads a message from the queue (if any).<br></br>
+        <code>clear</code> clears the queue, i.e. remove all messages from the queue.<br></br>
         </p>
         <p>
         JMeter use the properties <code>java.naming.security.[principal|credentials]</code> - if present -
@@ -1600,12 +1597,14 @@ The following table shows some values which may be useful when configuring JMS:
     The JNDI name of the receiving queue. If a value is provided here and the communication style is <code>Request Response</code>
     this queue will be monitored for responses to the requests sent.
   </property>
+  <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate. Only applicable for Communication style Read.</property>
   <property name="JMS Selector" required="No">
     Message Selector as defined by JMS specification to extract only 
     messages that respect the Selector condition. Syntax uses subpart of SQL 92.
   </property>
   <property name="Communication style" required="Yes">
-    The Communication style can be <code>Request Only</code> (also known as Fire and Forget) or <code>Request Response</code>:
+    The Communication style can be <code>Request Only</code> (also known as Fire and Forget), <code>Request Response</code>,
+    <code>Read</code>, <code>Browse</code>, <code>Clear</code>:
     <dl>
     <dt><code>Request Only</code></dt><dd> will only send messages and will not monitor replies. As such it can be used to put load on a system.</dd>
     <dt><code>Request Response</code></dt><dd> will send messages and monitor the replies it receives. Behaviour depends on the value of the JNDI Name Reply Queue.
@@ -1615,6 +1614,11 @@ The following table shows some values which may be useful when configuring JMS:
     This is very different from the fixed reply queue. With temporary queues the sending thread will block until the reply message has been received.
     With <code>Request Response</code> mode, you need to have a Server that listens to messages sent to Request Queue and sends replies to 
     queue referenced by <code>message.getJMSReplyTo()</code>.</dd>
+    <dt><code>Read</code></dt><dd> will read a message from an outgoing queue which has no listeners attached. This can be convenient for testing purposes.
+     This method can be used if you need to handle queues without a binding file (in case the jmeter-jms-skip-jndi library is used),
+     which only works with the JMS Point-to-Point sampler. In case binding files are used, one can also use the JMS Subscriber Sampler for reading from a queue.</dd>
+    <dt><code>Browse</code></dt><dd> will determine the current queue depth without removing messages from the queue, returning the number of messages on the queue.</dd>
+    <dt><code>Clear</code></dt><dd> will clear the queue, i.e. remove all messages from the queue.</dd>
     </dl>
   </property>
   <property name="Use alternate fields for message correlation" required="Yes">
@@ -2488,7 +2492,6 @@ For this reason it is best to ensure that the Controller name is changed from th
 otherwise a duplicate may be accidentally created when new elements are added to the test plan. 
 </p>
 </description>
-<note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan <code>.jmx</code> files.  Any such test will fail.</note>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
@@ -2801,8 +2804,8 @@ are part of the test plan.</p></description>
 <component name="View Results Tree" index="&sect-num;.3.6" width="910" height="659" screenshot="view_results_tree.png">
 <description>
 <note>
-View Results Tree MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
-during Test Plan debugging and Validation.
+View Results Tree MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU).
+Use it only for either functional testing or during Test Plan debugging and Validation.
 </note>
 The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
@@ -2902,8 +2905,9 @@ video/
 </source>
 <br/></td></tr>
 <tr><td><code>XML</code></td>
-<td>The <i>XML view</i> will show response in tree style. 
+<td>The <i>XML view</i> will show response in tree style.
 Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
+You can right-click on any node and expand or collapse all nodes below it.
 <br/></td></tr>
 <tr><td><code>XPath Tester</code></td>
 <td>The <i>XPath Tester</i> only works for text responses. It shows the plain text in the upper panel.
@@ -4541,10 +4545,10 @@ These can be used anywhere within the expression and remain in effect until over
         This is for use with samplers that can generate sub-samples, 
         e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
         <ul>
-        <li><code>Main sample only</code> - assertion only applies to the main sample</li>
-        <li><code>Sub-samples only</code> - assertion only applies to the sub-samples</li>
-        <li><code>Main sample and sub-samples</code> - assertion applies to both.</li>
-        <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
+        <li><code>Main sample only</code> - only applies to the main sample</li>
+        <li><code>Sub-samples only</code> - only applies to the sub-samples</li>
+        <li><code>Main sample and sub-samples</code> - applies to both.</li>
+        <li><code>JMeter Variable Name to use</code> - assertion is to be applied to the contents of the named variable</li>
         </ul>
         </property>
         <property name="Field to Test" required="Yes">Instructs JMeter which field of the Request or Response to test.
@@ -4636,7 +4640,7 @@ the size be equal to, greater than, less than, or not equal to a given number of
         <li><code>Main sample only</code> - assertion only applies to the main sample</li>
         <li><code>Sub-samples only</code> - assertion only applies to the sub-samples</li>
         <li><code>Main sample and sub-samples</code> - assertion applies to both.</li>
-        <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
+        <li><code>JMeter Variable Name to use</code> - assertion is to be applied to the contents of the named variable</li>
         </ul>
         </property>
         <property name="Size in bytes" required="Yes">The number of bytes to use in testing the size of the response (or value of the JMeter variable).</property>
@@ -5661,7 +5665,7 @@ generate the template string, and store the result into the given variable name.
         <li><code>Main sample only</code> - only applies to the main sample</li>
         <li><code>Sub-samples only</code> - only applies to the sub-samples</li>
         <li><code>Main sample and sub-samples</code> - applies to both.</li>
-        <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
+        <li><code>JMeter Variable Name to use</code> - extraction is to be applied to the contents of the named variable</li>
         </ul>
         Matching is applied to all qualifying samples in turn.
         For example if there is a main sample and 3 sub-samples, each of which contains a single match for the regex,
@@ -5691,7 +5695,7 @@ generate the template string, and store the result into the given variable name.
         </ul>
         Headers can be useful for HTTP samples; it may not be present for other sample types.
         </property>
-        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
+        <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
         <property name="Regular Expression" required="Yes">The regular expression used to parse the response data. 
         This must contain at least one set of parentheses "<code>()</code>" to capture a portion of the string, unless using the group <code>$0$</code>.
         Do not enclose the expression in <code>/ /</code> - unless of course you want to match these characters as well.
@@ -5772,7 +5776,7 @@ extracting the node as text or attribute value and store the result into the giv
         <li><code>Main sample only</code> - only applies to the main sample</li>
         <li><code>Sub-samples only</code> - only applies to the sub-samples</li>
         <li><code>Main sample and sub-samples</code> - applies to both.</li>
-        <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
+        <li><code>JMeter Variable Name to use</code> - extraction is to be applied to the contents of the named variable</li>
         </ul>
         Matching is applied to all qualifying samples in turn.
         For example if there is a main sample and 3 sub-samples, each of which contains a single match for the regex,
@@ -5790,7 +5794,7 @@ extracting the node as text or attribute value and store the result into the giv
         </ul>
         If selector is set to empty, default implementation(JSoup) will be used.
         </property>
-        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
+        <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.</property>
         <property name="CSS/JQuery expression" required="Yes">The CSS/JQuery selector used to select nodes from the response data. 
         Selector, selectors combination and pseudo-selectors are supported, examples:
         <ul>
@@ -5874,7 +5878,7 @@ extracting the node as text or attribute value and store the result into the giv
         <li><code>Main sample only</code> - only applies to the main sample</li>
         <li><code>Sub-samples only</code> - only applies to the sub-samples</li>
         <li><code>Main sample and sub-samples</code> - applies to both.</li>
-        <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
+        <li><code>JMeter Variable Name to use</code> - extraction is to be applied to the contents of the named variable</li>
         </ul>
         XPath matching is applied to all qualifying samples in turn, and all the matching results will be returned.
        </property>
@@ -5883,6 +5887,7 @@ extracting the node as text or attribute value and store the result into the giv
            <li>"<code>Use Tidy</code>" should be checked on for HTML response. Such response is converted to valid XHTML (XML compatible HTML) using Tidy</li>
            <li>"<code>Use Tidy</code>" should be unchecked for both XHTML or XML response (for example RSS)</li>
        </ul>
+       <note>For HTML, CSS/JQuery Extractor is the correct and performing solution. Don't use XPath for HTML extractions.</note>
        </property>
 <property name="Quiet"  required="If Tidy is selected">Sets the Tidy Quiet flag</property>
 <property name="Report Errors"  required="If Tidy is selected">If a Tidy error occurs, then set the Assertion accordingly</property>
@@ -5890,14 +5895,7 @@ extracting the node as text or attribute value and store the result into the giv
 <property name="Use Namespaces" required="If Tidy is not selected">
         If checked, then the XML parser will use namespace resolution.(see note below on NAMESPACES)
         Note that currently only namespaces declared on the root element will be recognised.
-        A later version of JMeter may support user-definition of additional workspace names.
-        Meanwhile, a work-round is to replace: 
-        <source>//mynamespace:tagname</source>
-        by
-        <source>//*[local-name()='tagname' and namespace-uri()='uri-for-namespace']</source>
-        where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</code>" namespace.
-        (not applicable if Tidy is selected)
-        
+        See below for user-definition of additional workspace names.        
 </property>
     <property name="Validate XML"   required="If Tidy is not selected">Check the document against its schema.</property>
     <property name="Ignore Whitespace"  required="If Tidy is not selected">Ignore Element Whitespace.</property>
@@ -5907,7 +5905,7 @@ extracting the node as text or attribute value and store the result into the giv
     For example <code>//title</code> would return "<code>&lt;title&gt;Apache JMeter&lt;/title&gt;</code>" rather than "<code>Apache JMeter</code>".<br></br>
     In this case, <code>//title/text()</code> would return "<code>Apache JMeter</code>".
     </property>
-    <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
+    <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.</property>
     <property name="XPath Query" required="Yes">Element query in XPath language. Can return more than one match.</property>
     <property name="Match No. (0 for Random)" required="No">If the XPath Path query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
@@ -5965,6 +5963,12 @@ prefix2=Full Namespace 2
 You reference this file in <code>jmeter.properties</code> file using the property:
     <source>xpath.namespace.config</source>
 </note>
+<p></p>
+Another option is to use the following code:
+<source>//mynamespace:tagname</source>
+by:
+<source>//*[local-name()='tagname' and namespace-uri()='uri-for-namespace']</source>
+where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</code>" namespace.(not applicable if Tidy is selected)
 </component>
 
 <component name="Result Status Action Handler" index="&sect-num;.8.4"  width="613" height="133" screenshot="resultstatusactionhandler.png">
@@ -6149,7 +6153,7 @@ It will allow you to extract in a very easy way text content, see <a href="http:
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Variable Names" required="Yes">Semi-colon separated names of variables that will contain the results of JSON-PATH expressions (must match number of JSON-PATH expressions)</property>
+    <property name="Names of created variables" required="Yes">Semi-colon separated names of variables that will contain the results of JSON-PATH expressions (must match number of JSON-PATH expressions)</property>
     <property name="JSON Path Expressions" required="Yes">Semi-colon separated JSON-PATH expressions (must match number of variables)</property>
     <property name="Default Values" required="No">Semi-colon separated default values if JSON-PATH expressions do not return any result(must match number of variables)</property>
     <property name="Match No. (0 for Random)" required="No">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
@@ -6177,7 +6181,7 @@ generate the template string, and store the result into the given variable name.
         <li><code>Main sample only</code> - only applies to the main sample</li>
         <li><code>Sub-samples only</code> - only applies to the sub-samples</li>
         <li><code>Main sample and sub-samples</code> - applies to both.</li>
-        <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
+        <li><code>JMeter Variable Name to use</code> - assertion is to be applied to the contents of the named variable</li>
         </ul>
         Matching is applied to all qualifying samples in turn.
         For example if there is a main sample and 3 sub-samples, each of which contains a single match test,
@@ -6207,7 +6211,7 @@ generate the template string, and store the result into the given variable name.
         </ul>
         Headers can be useful for HTTP samples; it may not be present for other sample types.
         </property>
-        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
+        <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
         <property name="Left Boundary" required="Yes">Left boundary of value to find</property>
         <property name="Right Boundary" required="Yes">Left boundary of value to find</property>
         <property name="Match No. (0 for Random)" required="Yes">Indicates which match to use.  The boundaries may match multiple times.  
@@ -6351,7 +6355,7 @@ Behaviour can be modified with some properties by setting in user.properties:
         The possible choices are:
         <ul>
         <li><code>Continue</code> - ignore the error and continue with the test</li>
-        <li><code>Start Next Loop</code> - ignore the error, start next loop and continue with the test</li>
+        <li><code>Start Next Thread Loop</code> - ignore the error, start next loop and continue with the test</li>
         <li><code>Stop Thread</code> - current thread exits</li>
         <li><code>Stop Test</code> - the entire test is stopped at the end of any current samples.</li>
         <li><code>Stop Test Now</code> - the entire test is stopped abruptly. Any current samplers are interrupted if possible.</li>
@@ -6380,24 +6384,7 @@ Behaviour can be modified with some properties by setting in user.properties:
 </properties>
 </component>
 
-<component name="WorkBench" index="&sect-num;.9.3"  width="384" height="103" screenshot="workbench.png">
-<description>
-<p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire. 
-When you save your test plan, WorkBench items are not saved with it by default unless you check "<code>Save Workbench</code>" option.
-Your WorkBench can be saved independently, if you like (right-click on <code>WorkBench</code> and choose <code>Save</code>).</p>
-<p>Certain test elements are only available on the WorkBench:</p>
-<ul>
-<li><complink name="HTTP(S) Test Script Recorder"/></li>
-<li><complink name="HTTP Mirror Server"/></li>
-<li><complink name="Property Display"/></li>
-</ul>
-<properties>
-         <property name="Save WorkBench" required="No">
-                Allow to save the WorkBench's elements into the JMX file.
-        </property>
-</properties>
-</description>
-</component>
+<component name="WorkBench" />
 
 <component name="SSL Manager" index="&sect-num;.9.4" screenshot="">
 <p>
@@ -6640,7 +6627,6 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
            to treat them as separate "clicks". The default is <code>5000</code> (milliseconds) i.e. 5 seconds.
            If you are using grouping, please ensure that you leave the required gap between clicks.
         </property>
-        <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
         <property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?
         If specified, a Header Manager will be added to each HTTP Sampler.
         The Proxy server always removes Cookie and Authorization headers from the generated Header Managers.
@@ -6652,6 +6638,8 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         </property>
         <property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
         <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, i.e. it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to <code>\b</code>. More information below in the paragraph about "<code>User Defined Variable replacement</code>".</property>
+        <property name="Prefix/Transaction name" required="No">Add a prefix to sampler name during recording (Prefix mode). Or replace sampler name by user choosen name (Transaction name)</property>
+        <property name="Create new transaction after request (ms)">Inactivity time between two requests needed to consider them in two separate groups.</property>
         <property name="Type" required="Yes">Which type of sampler to generate (the HTTPClient default or Java)</property>
         <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
         <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?<br/>

@@ -202,9 +202,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     }
     /**
      * Create a customizer for a given test bean type.
-     *
-     * @param testBeanClass
-     *            a subclass of TestBean
+     * @param beanInfo {@link BeanInfo}
      * @see org.apache.jmeter.testbeans.TestBean
      */
     GenericTestBeanCustomizer(BeanInfo beanInfo) {

@@ -88,6 +88,8 @@ public class HttpRequestHdr {
     private String firstLine; // saved copy of first line for error reports
 
     private String prefix;
+    
+    private int httpSampleNameMode;
 
     public HttpRequestHdr() {
         this("", "");
@@ -105,9 +107,19 @@ public class HttpRequestHdr {
      * @param httpSamplerName the http sampler name
      */
     public HttpRequestHdr(String prefix, String httpSamplerName) {
+        this(prefix, httpSamplerName,0);
+    }
+
+    /**
+     * @param prefix Sampler prefix
+     * @param httpSamplerName the http sampler name
+     * @param httpSampleNameMode the naming mode of sampler name
+     */
+    public HttpRequestHdr(String prefix, String httpSamplerName, int httpSampleNameMode) {
         this.prefix = prefix;
         this.httpSamplerName = httpSamplerName;
         this.firstLine = "" ; // $NON-NLS-1$
+        this.httpSampleNameMode = httpSampleNameMode;
     }
 
     /**
@@ -329,7 +341,7 @@ public class HttpRequestHdr {
      */
     public int serverPort() {
         String str = url;
-        // chop to "server.name:x/thing"
+        // chop to "server.name:xhing"
         int i = str.indexOf("//");
         if (i > 0) {
             str = str.substring(i + 2);
@@ -456,5 +468,12 @@ public class HttpRequestHdr {
      */
     public String getPrefix() {
         return prefix;
+    }
+    
+    /**
+     * @return the httpSampleNameMode
+     */
+    public int getHttpSampleNameMode() {
+        return httpSampleNameMode;
     }
 }

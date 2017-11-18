@@ -170,21 +170,47 @@ public class JMeterContext {
     }
 
     /**
-     * if set to <code>true</code> a restart of the loop will occurs
+     * if set to <code>true</code> a restart of the loop will occur
      *
      * @param restartNextLoop
      *            flag whether restart will occur
      */
-    public void setRestartNextLoop(boolean restartNextLoop) {
+    public void setStartNextThreadLoop(boolean restartNextLoop) {
         this.restartNextLoop = restartNextLoop;
+    }
+    
+    /**
+     * if set to <code>true</code> current loop iteration will be interrupted and 
+     * JMeter will go to next iteration
+     *
+     * @param restartNextLoop
+     *            flag whether restart will occur
+     */
+    public boolean isStartNextThreadLoop() {
+        return restartNextLoop;
+    }
+    
+    /**
+     * if set to <code>true</code> current loop iteration will be interrupted and 
+     * JMeter will go to next iteration
+     *
+     * @param restartNextLoop
+     *            flag whether restart will occur
+     * @deprecated use {@link JMeterContext#setStartNextThreadLoop(boolean)}
+     */
+    @Deprecated
+    public void setRestartNextLoop(boolean restartNextLoop) {
+        setStartNextThreadLoop(restartNextLoop);
     }
 
     /**
      * a restart of the loop was required ?
      * @return the restartNextLoop
+     * @deprecated use {@link JMeterContext#isRestartNextLoop()}
      */
+    @Deprecated
     public boolean isRestartNextLoop() {
-        return restartNextLoop;
+        return isStartNextThreadLoop();
     }
 
     /**

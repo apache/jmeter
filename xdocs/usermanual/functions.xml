@@ -120,6 +120,8 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Input</td><td> <a href="#__CSVRead">CSVRead</a></td><td>read from CSV delimited file</td><td>1.9</td></tr>
         <tr><td>Input</td><td> <a href="#__XPath">XPath</a></td><td>Use an XPath expression to read from a file</td><td>2.0.3</td></tr>
         <tr><td>Calculation</td><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td><td>1.X</td></tr>
+        <tr><td>Formatting</td><td> <a href="#__dateTimeConvert">dateTimeConvert</a></td><td>Convert a date or time from source to target format</td><td>4.0</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__digest">digest</a></td><td>Generate a digest (SHA-1, SHA-256, MD5...)</td><td>4.0</td></tr>
         <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td><td>1.8.1</td></tr>
         <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td><td>2.3.2</td></tr>
         <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td><td>1.9</td></tr>
@@ -1091,7 +1093,7 @@ If omitted, <code>,</code> is used. Note that <code>,</code> would need to be sp
 
 <properties>
         <property name="Format" required="No">
-        The format to be passed to SimpleDateFormat.
+        The format to be passed to <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a>.
         The function supports various shorthand aliases, see below.
         If omitted, the function returns the current time in milliseconds since the epoch.
         </property>
@@ -1540,7 +1542,7 @@ becomes:
 <properties>
         <property name="Format" required="No">
         The format to be passed to DateTimeFormatter.
-        See https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+        See <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
         If omitted, the function uses milliseconds since epoch format.
         </property>
         <property name="Date to shift" required="No">
@@ -1565,7 +1567,53 @@ becomes:
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
 </component>
-
+<component index="&sect-num;.5.34" name="__digest">
+    <description>
+        <p>The digest function returns an encrypted value in the
+            specific hash algorithm with the optional salt, upper case
+            and variable name.</p>
+    </description>
+    <properties>
+        <property name="Algorithm" required="Yes">
+            The algorithm to be used to encrypt
+            For possible algorithms See MessageDigest in
+            <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html">StandardNames</a>
+            <ul>
+                <li>MD2</li>
+                <li>MD5</li>
+                <li>SHA-1</li>
+                <li>SHA-224</li>
+                <li>SHA-256</li>
+                <li>SHA-384</li>
+                <li>SHA-512</li>
+            </ul>
+            <note>Spaces are taken into account for <code>Salt to add</code> and <code>String to encode</code></note>
+        </property>
+        <property name="String to encode" required="Yes"> The String
+            that will be encrypted </property>
+        <property name="Salt to add" required="No"> Salt to be added
+            to string (after it)</property>
+        <property name="Upper Case value" required="No"> Result will
+            be in lower case by default. Choose true to upper case
+            results. </property>
+        <property name="Name of variable" required="No">The name of
+            the variable to set.</property>
+    </properties>
+</component>
+<component index="&sect-num;.5.35" name="__dateTimeConvert">
+    <description>
+        <p>The <code>__dateTimeConvert</code> function converts a date that is in source format
+        to a target format storing the result optionally in the variable name.</p>
+    </description>
+    <properties>
+        <property name="Date String" required="Yes">
+            The date string to convert from Source Date Format to Target Date Format.
+        </property>
+        <property name="Source Date Format" required="Yes">The original date format</property>
+        <property name="Target Date Format" required="Yes">The new date format</property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
+    </properties>
+</component>
 </subsection>
 
 <subsection name="&sect-num;.6 Pre-defined Variables" anchor="predefinedvars">
