@@ -303,6 +303,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem threadDump = makeMenuItemRes("thread_dump", ActionNames.THREAD_DUMP);//$NON-NLS-1$
         
         JMenuItem linkBugTracker = makeMenuItemRes("link_bug_tracker", ActionNames.LINK_BUG_TRACKER);//$NON-NLS-1$
+        
+        JMenuItem linkNightlyBuild = makeMenuItemRes("link_nightly_build", ActionNames.LINK_NIGHTLY_BUILD);//$NON-NLS-1$
 
         helpAbout = makeMenuItemRes("about", 'A', ActionNames.ABOUT); //$NON-NLS-1$
 
@@ -318,6 +320,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         
         helpMenu.addSeparator();
         helpMenu.add(linkBugTracker);
+        helpMenu.add(linkNightlyBuild);
         helpMenu.addSeparator();
         helpMenu.add(helpAbout);
     }
