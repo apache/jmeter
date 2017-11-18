@@ -123,15 +123,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     // Lock used to guard static mutable variables
     private static final Object LOCK = new Object();
 
-    //@GuardedBy("LOCK")
     private static final Map<String, FileEntry> files = new HashMap<>();
 
     /**
      * Shutdown Hook that ensures PrintWriter is flushed is CTRL+C or kill is called during a test
      */
-    //@GuardedBy("LOCK")
     private static Thread shutdownHook;
-
 
     /**
      * The instance count is used to keep track of whether any tests are currently running.
@@ -139,11 +136,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * e.g. a remote test may be started,
      * and then a local test started whilst the remote test is still running.
      */
-    //@GuardedBy("LOCK")
     private static int instanceCount; // Keep track of how many instances are active
 
     // Instance variables (guarded by volatile)
-
     private transient volatile PrintWriter out;
 
     /**

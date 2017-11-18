@@ -57,7 +57,6 @@ public class CounterConfig extends AbstractTestElement
     private static final boolean RESET_ON_THREAD_GROUP_ITERATION_DEFAULT = false;
 
     // This class is not cloned per thread, so this is shared
-    //@GuardedBy("this")
     private long globalCounter = Long.MIN_VALUE;
 
     // Used for per-thread/user numbers
