@@ -63,9 +63,7 @@ public final class JmeterKeyStore {
     private Map<String, PrivateKey> privateKeyByAlias = new HashMap<>();
     private Map<String, X509Certificate[]> certsByAlias = new HashMap<>();
 
-    //@GuardedBy("this")
     private int last_user;
-
 
     /**
      * @param type
