@@ -102,6 +102,7 @@ Summary
 <ul>
     <li><bug>61739</bug>Java Request / JavaSamplerClient : Improve <code>org.apache.jmeter.protocol.java.sampler.JavaSamplerContext</code></li>
     <li><bug>61762</bug>Start Next Thread Loop should be used everywhere</li>
+    <li><bug>61544</bug>JMS Point-to-Point Sampler: Enhance communication styles with read, browse, clear. Based on a contribution by Benny van Wijngaarden (benny at smaragd-it.nl)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -253,6 +254,7 @@ Summary
     <li>orimarko at gmail.com</li>
     <li>Artem Fedorov (artem at blazemeter.com)</li>
     <li><a href="https://www.blazemeter.com">BlazeMeter Ltd</a></li>
+    <li>Benny van Wijngaarden (benny at smaragd-it.nl)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
