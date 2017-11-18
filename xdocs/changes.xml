@@ -168,6 +168,7 @@ Summary
     <li><bug>61640</bug>JSR223 Test Elements : Enable by default caching. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61774</bug>Add a link to help menu to create an issue (it open the browser with the link to issues)</li>
     <li><bug>61775</bug>Add a link to help menu to download nighty builds (it open the browser with the correct link)</li>
+    <li><bug>61785</bug>Group "nighty builds" and "create an issue" menu in a "useful links" menu</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
