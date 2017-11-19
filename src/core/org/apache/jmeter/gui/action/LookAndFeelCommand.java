@@ -49,9 +49,11 @@ public class LookAndFeelCommand extends AbstractAction {
     // Note: Windows user preferences are stored relative to: HKEY_CURRENT_USER\Software\JavaSoft\Prefs
 
     /** Prefix for the user preference key */
-    private static final String USER_PREFS_KEY = "laf"; //$NON-NLS-1$
+    private static final String USER_PREFS_KEY = "laf.class"; //$NON-NLS-1$
 
     static {
+        log.info("Installing Darcula LAF");
+        UIManager.installLookAndFeel(new UIManager.LookAndFeelInfo(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS));
         UIManager.LookAndFeelInfo[] allLAFs = JMeterMenuBar.getAllLAFs();
         commands = Arrays.stream(allLAFs)
                 .map(lf -> ActionNames.LAF_PREFIX + lf.getClassName())
@@ -114,6 +116,7 @@ public class LookAndFeelCommand extends AbstractAction {
     }
 
     public LookAndFeelCommand() {
+        // NOOP
     }
 
     @Override
