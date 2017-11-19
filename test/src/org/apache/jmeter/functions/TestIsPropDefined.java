@@ -31,6 +31,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Before;
 import org.junit.Test;
+
 /**
  * 
  * Test {@link IsPropDefined} Function
@@ -39,63 +40,63 @@ import org.junit.Test;
  *
  */
 public class TestIsPropDefined extends JMeterTestCase {
-	protected AbstractFunction isPropDefined;
+    protected AbstractFunction isPropDefined;
 
-	private SampleResult result;
+    private SampleResult result;
 
-	private Collection<CompoundVariable> params;
+    private Collection<CompoundVariable> params;
 
-	private JMeterVariables vars;
+    private JMeterVariables vars;
 
-	private JMeterContext jmctx;
+    private JMeterContext jmctx;
 
-	@Before
-	public void setUp() {
-		isPropDefined = new IsPropDefined();
-		result = new SampleResult();
-		jmctx = JMeterContextService.getContext();
-		String data = "dummy data";
-		result.setResponseData(data, null);
-		vars = new JMeterVariables();
-		jmctx.setVariables(vars);
-		jmctx.setPreviousResult(result);
-		params = new LinkedList<>();
-	}
+    @Before
+    public void setUp() {
+        isPropDefined = new IsPropDefined();
+        result = new SampleResult();
+        jmctx = JMeterContextService.getContext();
+        String data = "dummy data";
+        result.setResponseData(data, null);
+        vars = new JMeterVariables();
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(result);
+        params = new LinkedList<>();
+    }
 
-	@Test
-	public void testParameterCountIsPropDefined() throws Exception {
-		checkInvalidParameterCounts(isPropDefined, 1, 1);
-	}
+    @Test
+    public void testParameterCountIsPropDefined() throws Exception {
+        checkInvalidParameterCounts(isPropDefined, 1, 1);
+    }
 
-	@Test
-	public void testIsPropDefined() throws Exception {
-		params.add(new CompoundVariable("file.encoding"));
-		isPropDefined.setParameters(params);
-		String returnValue = isPropDefined.execute(result, null);
-		assertEquals("true", returnValue);
-	}
+    @Test
+    public void testIsPropDefined() throws Exception {
+        params.add(new CompoundVariable("file.encoding"));
+        isPropDefined.setParameters(params);
+        String returnValue = isPropDefined.execute(result, null);
+        assertEquals("true", returnValue);
+    }
 
-	@Test
-	public void testIsPropNotDefined() throws Exception {
-		params.add(new CompoundVariable("emptyProperty"));
-		isPropDefined.setParameters(params);
-		String returnValue = isPropDefined.execute(result, null);
-		assertEquals("false", returnValue);
-	}
+    @Test
+    public void testIsPropNotDefined() throws Exception {
+        params.add(new CompoundVariable("emptyProperty"));
+        isPropDefined.setParameters(params);
+        String returnValue = isPropDefined.execute(result, null);
+        assertEquals("false", returnValue);
+    }
 
-	@Test
-	public void testIsPropNotDefinedOnlyVarDefined() throws Exception {
-		vars.put("emptyProperty", "emptyPropertyValue");
-		params.add(new CompoundVariable("emptyProperty"));
-		isPropDefined.setParameters(params);
-		String returnValue = isPropDefined.execute(result, null);
-		assertEquals("false", returnValue);
-	}
+    @Test
+    public void testIsPropNotDefinedOnlyVarDefined() throws Exception {
+        vars.put("emptyProperty", "emptyPropertyValue");
+        params.add(new CompoundVariable("emptyProperty"));
+        isPropDefined.setParameters(params);
+        String returnValue = isPropDefined.execute(result, null);
+        assertEquals("false", returnValue);
+    }
 
-	@Test(expected = InvalidVariableException.class)
-	public void testIsPropDefinedError() throws Exception {
-		isPropDefined.setParameters(params);
-		isPropDefined.execute(result, null);
-	}
+    @Test(expected = InvalidVariableException.class)
+    public void testIsPropDefinedError() throws Exception {
+        isPropDefined.setParameters(params);
+        isPropDefined.execute(result, null);
+    }
 
 }
