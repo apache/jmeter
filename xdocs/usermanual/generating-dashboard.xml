@@ -175,8 +175,8 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                              </note>
                              Example:
                              <source>jmeter.reportgenerator.apdex_per_transaction=sample(\\d+):1000|2000;\
-    										samples12:3000|4000;\
-										    scenar01-12:5000|6000</source>
+    samples12:3000|4000;\
+    scenar01-12:5000|6000</source>
                         </property>
                         <property name="sample_filter" required="No">
                             Sets the filter of samples to keep for generating
