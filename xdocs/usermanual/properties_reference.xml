@@ -404,13 +404,13 @@ JMETER-SERVER</source>
 <section name="&sect-num;.12 Apache HttpClient logging examples" anchor="httpclient_logging_examples">
 <description>
     Enable header wire and context logging - Best for Debugging
-	In log4j2.xml, set:
+    In log4j2.xml, set:
 <source>
 &lt;Logger name="org.apache.http" level="debug" /&gt;
 &lt;Logger name="org.apache.http.wire" level="error" /&gt;
 </source>
     Enable full wire and context logging
-	In log4j2.xml, set:
+    In log4j2.xml, set:
     <source>&lt;Logger name="org.apache.http" level="debug" /&gt;</source>
     Enable context logging for connection management
     <source>&lt;Logger name="org.apache.http.impl.conn" level="debug" /&gt;</source>
