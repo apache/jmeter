@@ -43,7 +43,7 @@ public class OpenLinkAction extends AbstractAction {
      */
     @Override
     public void doAction(ActionEvent e) {
-        String url = null;
+        String url;
         if (e.getActionCommand().equals(ActionNames.LINK_BUG_TRACKER)) {
             url = "https://jmeter.apache.org/issues.html";
         } else if (e.getActionCommand().equals(ActionNames.LINK_NIGHTLY_BUILD)) {
