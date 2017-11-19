@@ -113,6 +113,16 @@ public class AboutCommand extends AbstractAction {
             JLabel copyright = new JLabel(JMeterUtils.getJMeterCopyright(), SwingConstants.CENTER);
             JLabel rights = new JLabel("All Rights Reserved.", SwingConstants.CENTER);
             JLabel version = new JLabel("Apache JMeter Version " + JMeterUtils.getJMeterVersion(), SwingConstants.CENTER);
+            JLabel releaseNotes = new JLabel("<html><a href=\"https://jmeter.apache.org/changes.html\">Release notes</a></html>", SwingConstants.CENTER);
+            releaseNotes.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getClickCount() > 0) {
+                        ActionRouter.getInstance().doActionNow(
+                                new ActionEvent(e.getSource(), e.getID(), ActionNames.LINK_RELEASE_NOTES));
+                    }
+                }
+            });
             JPanel infos = new JPanel();
             infos.setOpaque(false);
             infos.setLayout(new GridLayout(0, 1));
@@ -120,6 +130,7 @@ public class AboutCommand extends AbstractAction {
             infos.add(copyright);
             infos.add(rights);
             infos.add(version);
+            infos.add(releaseNotes);
             Container panel = about.getContentPane();
             panel.setLayout(new BorderLayout());
             panel.setBackground(Color.white);

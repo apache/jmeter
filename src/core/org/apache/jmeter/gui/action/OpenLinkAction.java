@@ -35,6 +35,7 @@ public class OpenLinkAction extends AbstractAction {
     static {
         commands.add(ActionNames.LINK_BUG_TRACKER);
         commands.add(ActionNames.LINK_NIGHTLY_BUILD);
+        commands.add(ActionNames.LINK_RELEASE_NOTES);
     }
 
     /**
@@ -47,6 +48,11 @@ public class OpenLinkAction extends AbstractAction {
             url = "https://jmeter.apache.org/issues.html";
         } else if (e.getActionCommand().equals(ActionNames.LINK_NIGHTLY_BUILD)) {
             url = "https://jmeter.apache.org/nightly.html";
+        } else if (e.getActionCommand().equals(ActionNames.LINK_RELEASE_NOTES)) {
+            url = "https://jmeter.apache.org/changes.html";
+        } else {
+            log.warn("Action {} not handled by this class", e.getActionCommand());
+            return;
         }
         try {
             java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
