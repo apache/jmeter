@@ -177,9 +177,9 @@ In some scripts, we will need to:
 <p>
 To variabilize, we can use:
 <ul>
-	<li><code>CSV Data Set Config</code> to get input data from csv file</li>
-	<li>JMeter functions like <code>__counter</code>, <code>__time</code>...</li>
-	<li>etc.</li>
+  <li><code>CSV Data Set Config</code> to get input data from csv file</li>
+  <li>JMeter functions like <code>__counter</code>, <code>__time</code>...</li>
+  <li>etc.</li>
 </ul>
 </p>
 <p>
