@@ -135,6 +135,7 @@ Summary
     <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
     <li><bug>61724</bug>Add <code>__digest</code> function to provide computing of Hashes (SHA-XXX, MDX). Based on a contribution by orimarko at gmail.com</li>
     <li><bug>61735</bug>Add <code>__dateTimeConvert</code> function to provide date formats conversions. Based on a contribution by orimarko at gmail.com</li>
+    <li><bug>61760</bug>Add <code>__isPropDefined</code> and <code>__isVarDefined</code> functions to know if property or variable exist. Contributed by orimarko at gmail.com</li>
 </ul>
 
 <h3>I18N</h3>
