@@ -623,7 +623,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             res.setHeadersSize(responseHeaders.replaceAll("\n", "\r\n") // $NON-NLS-1$ $NON-NLS-2$
                     .length() + 2); // add 2 for a '\r\n' at end of headers (before data) 
             if (log.isDebugEnabled()) {
-                log.debug("Response headersSize={}, bodySize={}, Total=",
+                log.debug("Response headersSize={}, bodySize={}, Total={}",
                         res.getHeadersSize(),  res.getBodySizeAsLong(),
                         res.getHeadersSize() + res.getBodySizeAsLong());
             }
