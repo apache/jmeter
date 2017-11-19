@@ -29,43 +29,47 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Test if a JMeter property is defined
+ * 
  * @since 4.0
  */
 public class IsPropDefined extends AbstractFunction {
-	private static final List<String> desc = new LinkedList<>();
-	private static final String KEY = "__isPropDefined";
+    private static final List<String> desc = new LinkedList<>();
+    private static final String KEY = "__isPropDefined";
 
-	// Number of parameters expected - used to reject invalid calls
-	private static final int MIN_PARAMETER_COUNT = 1;
-	private static final int MAX_PARAMETER_COUNT = 1;
+    // Number of parameters expected - used to reject invalid calls
+    private static final int MIN_PARAMETER_COUNT = 1;
+    private static final int MAX_PARAMETER_COUNT = 1;
 
-	static {
-		desc.add(JMeterUtils.getResString("property_name_param"));
-	}
+    static {
+        desc.add(JMeterUtils.getResString("property_name_param"));
+    }
 
-	private CompoundVariable[] values;
+    private CompoundVariable[] values;
 
-	@Override
-	public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
-		String propertyName = values[0].execute();
-		String propertyValue = JMeterUtils.getProperty(propertyName);
-		return Boolean.toString(propertyValue != null);
-	}
+    @Override
+    public String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
+        String propertyName = values[0].execute();
+        String propertyValue = JMeterUtils.getProperty(propertyName);
+        return Boolean.toString(propertyValue != null);
+    }
 
-	@Override
-	public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
-		values = parameters.toArray(new CompoundVariable[parameters.size()]);
-	}
+    @Override
+    public void setParameters(Collection<CompoundVariable> parameters)
+            throws InvalidVariableException {
+        checkParameterCount(parameters, MIN_PARAMETER_COUNT,
+                MAX_PARAMETER_COUNT);
+        values = parameters.toArray(new CompoundVariable[parameters.size()]);
+    }
 
-	@Override
-	public String getReferenceKey() {
-		return KEY;
-	}
+    @Override
+    public String getReferenceKey() {
+        return KEY;
+    }
 
-	@Override
-	public List<String> getArgumentDesc() {
-		return desc;
-	}
+    @Override
+    public List<String> getArgumentDesc() {
+        return desc;
+    }
 
 }
