@@ -134,13 +134,15 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Nashorn)</td><td>1.9</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl2">jexl2</a></td><td>evaluate a Commons Jexl2 expression</td><td>jexl2(2.1.1)</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl3">jexl3</a></td><td>evaluate a Commons Jexl3 expression</td><td>jexl3 (3.0)</td></tr>
+        <tr><td>Properties</td><td> <a href="#__isPropDefined">isPropDefined</a> </td><td>Test if a property exists</td><td>4.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td><td>2.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__P">P</a></td><td>read a property (shorthand method)</td><td>2.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__setProperty">setProperty</a></td><td>set a JMeter property</td><td>2.1</td></tr>
         <tr><td>Variables</td><td> <a href="#__split">split</a></td><td>Split a string into variables</td><td>2.0.2</td></tr>
-        <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td><td>2.3RC3</td></tr>
         <tr><td>Variables</td><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td><td>2.3.1</td></tr>
         <tr><td>Variables</td><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td><td>2.3.1</td></tr>
+        <tr><td>Properties</td><td> <a href="#__isVarDefined">isVarDefined</a> </td><td>Test if a variable exists</td><td>4.0</td></tr>
+        <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td><td>2.3RC3</td></tr>
         <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td></tr>
         <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by ORO regular expression</td><td>2.9</td></tr>
         <tr><td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td><td>2.3.3</td></tr>
@@ -1612,6 +1614,26 @@ becomes:
         <property name="Source Date Format" required="Yes">The original date format</property>
         <property name="Target Date Format" required="Yes">The new date format</property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
+    </properties>
+</component>
+<component index="&sect-num;.5.35" name="__isPropDefined">
+    <description>
+        <p>The __isPropDefined function returns true if property exists or false if not.</p>
+    </description>
+    <properties>
+        <property name="Property Name" required="Yes">
+            The Property Name to be used to check if defined
+        </property>        
+    </properties>
+</component>
+<component index="&sect-num;.5.35" name="__isVarDefined">
+    <description>
+        <p>The isVarDefined function returns true if variable exists or false if not.</p>
+    </description>
+    <properties>
+        <property name="Variable Name" required="Yes">
+            The Variable Name to be used to check if defined
+        </property>        
     </properties>
 </component>
 </subsection>
