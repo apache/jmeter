@@ -1618,22 +1618,22 @@ becomes:
 </component>
 <component index="&sect-num;.5.35" name="__isPropDefined">
     <description>
-        <p>The __isPropDefined function returns true if property exists or false if not.</p>
+        <p>The <code>__isPropDefined</code> function returns true if property exists or false if not.</p>
     </description>
     <properties>
         <property name="Property Name" required="Yes">
             The Property Name to be used to check if defined
-        </property>        
+        </property>
     </properties>
 </component>
 <component index="&sect-num;.5.35" name="__isVarDefined">
     <description>
-        <p>The isVarDefined function returns true if variable exists or false if not.</p>
+        <p>The <code>__isVarDefined</code> function returns true if variable exists or false if not.</p>
     </description>
     <properties>
         <property name="Variable Name" required="Yes">
             The Variable Name to be used to check if defined
-        </property>        
+        </property>
     </properties>
 </component>
 </subsection>
