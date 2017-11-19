@@ -255,13 +255,13 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         Sampler sampler = context.getPreviousSampler();
         SampleResult sr = context.getPreviousResult();
         String jmsSelector = getJMSSelector();
-        if (jmsSelector.equals(JMSSampler.PREV_SAMPLER)
+        if (JMSSampler.PREV_SAMPLER.equals(jmsSelector)
                 && (sampler instanceof JMSSampler)) {
             jmsSelector = sr.getResponseMessage();
         }
         int sampleCounter = 0;
         int sampleTries = 0;
-        String result = null;
+        String result;
 
         StringBuilder buffer = new StringBuilder();
         StringBuilder propBuffer = new StringBuilder();
