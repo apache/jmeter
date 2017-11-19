@@ -323,7 +323,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         String retVal = null;
         QueueReceiver consumer = null;
         Message reply = null;
+        String queueName = null;
         try {
+            queueName = queue.getQueueName();
             consumer = session.createReceiver(queue, jmsSelector);
             reply = consumer.receive(Long.valueOf(getTimeout()));
             LOGGER.debug("Message: {}", reply);
@@ -337,7 +339,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 res.setResponseMessage("No message received");
             }
         } catch (Exception ex) {
-            LOGGER.error("Error browsing queue with selector {}", jmsSelector, ex);
+            res.setResponseMessage("Error browsing queue "+queueName+" with selector "
+                    + jmsSelector+ ", message:"+ex.getMessage());
+            LOGGER.error("Error browsing queue {} with selector {}", queueName, jmsSelector, ex);
         } finally {
             Utils.close(consumer, LOGGER);
         }
@@ -376,13 +380,16 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 }
                 Utils.messageProperties(propBuffer, msg);
             } catch (JMSException e) {
-                LOGGER.error(e.getMessage());
+                buffer.append("Error extracting content from message:"+e.getMessage());
+                LOGGER.error("Error extracting content from message", e);
             }
         }
     }
 
     private String browseQueueDetails(Queue queue, SampleResult res) {
+        String queueName = null;
         try {
+            queueName = queue.getQueueName();
             StringBuilder messageBodies = new StringBuilder(150);
             messageBodies.append("==== Browsing Messages ===\n");
             // get some queue details
@@ -417,7 +424,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             return (messageBodies + queue.getQueueName() + " has " + numMsgs + " messages");
         } catch (Exception e) {
             res.setResponseMessage("Error counting message on the queue");
-            LOGGER.error("Error browsing messages on the queue, message {}", e.getMessage());
+            LOGGER.error("Error browsing messages on the queue {}", queueName, e);
             return "Error browsing messages on the queue, message "+ e.getMessage();
         }
     }
@@ -425,7 +432,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     private String clearQueue(Queue queue, SampleResult res) {
         String retVal = null;
         QueueReceiver consumer = null;
+        String queueName = null;
         try {
+            queueName = queue.getQueueName();
             consumer = session.createReceiver(queue);
             Message deletedMsg = null;
             long deletedMsgCount = 0;
@@ -440,9 +449,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                     getTimeoutAsInt()+"ms";
             res.setResponseMessage(retVal);
         } catch (Exception ex) {
-            res.setResponseMessage("Error clearing queue");
-            LOGGER.error("Error clearing queue, message {}", ex.getMessage());
-            return "Error clearing queue, message" + ex.getMessage();
+            res.setResponseMessage("Error clearing queue:"+queueName);
+            LOGGER.error("Error clearing queue {}", queueName, ex);
+            return "Error clearing queue "+queueName+", message:" +ex.getMessage();
         } finally {
             Utils.close(consumer, LOGGER);
         }
