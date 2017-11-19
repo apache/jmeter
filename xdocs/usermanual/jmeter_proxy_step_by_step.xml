@@ -51,7 +51,7 @@ configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecor
 <ol>
   <li>Go to <code>JMETER_HOME/bin</code> and start JMeter with <code>jmeterw.cmd</code> on Windows
       and <code>jmeter</code> on Linux/Unix</li>
-  <li>Select <code>Templates...</code> on the menu bar</li>
+  <li>Select <code>Templates&hellip;code> on the menu bar</li>
   <figure image="Select-Templates-Icon.png"></figure>
   <li>Select <code>Recording template</code> on the list</li>
   <figure image="Select-Recording-Template.png"></figure>
@@ -170,20 +170,20 @@ Check with <code>View Results Tree</code> element if all is ok.
 <p>
 In some scripts, we will need to:
 <ul>
-  <li>Variabilize some input (login, password, search words...)</li>
-  <li>Correlate some data (session variable...) between two requests</li>
-</ul>  
+  <li>Variabilize some input (login, password, search words, &hellip;)</li>
+  <li>Correlate some data (session variable, &hellip;) between two requests</li>
+</ul>
 </p>
 <p>
 To variabilize, we can use:
 <ul>
   <li><code>CSV Data Set Config</code> to get input data from csv file</li>
-  <li>JMeter functions like <code>__counter</code>, <code>__time</code>...</li>
+  <li>JMeter functions like <code>__counter</code>, <code>__time</code>, &hellip;</li>
   <li>etc.</li>
 </ul>
 </p>
 <p>
-To correlate, we can get data from a request with <code>Post Processors</code> like <code>JSON Extractor</code>, <code>Regular Expression Extractor</code>... and inject it in another request.
+To correlate, we can get data from a request with <code>Post Processors</code> like <code>JSON Extractor</code>, <code>Regular Expression Extractor</code>, &hellip; and inject it in another request.
 </p>
 <p>
 To find data to correlate, the easiest way to do it is to use the Search function in <code>View Results Tree</code>.
