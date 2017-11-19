@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OpenLinkAction extends AbstractAction {
-    
+
     private static final Logger log = LoggerFactory.getLogger(OpenLinkAction.class);
 
     private static final Set<String> commands = new HashSet<>();
@@ -36,8 +36,7 @@ public class OpenLinkAction extends AbstractAction {
         commands.add(ActionNames.LINK_BUG_TRACKER);
         commands.add(ActionNames.LINK_NIGHTLY_BUILD);
     }
-    
-    
+
     /**
      * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
      */
