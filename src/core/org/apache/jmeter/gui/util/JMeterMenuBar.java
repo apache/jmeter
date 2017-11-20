@@ -303,17 +303,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem threadDump = makeMenuItemRes("thread_dump", ActionNames.THREAD_DUMP);//$NON-NLS-1$
         
         JMenu usefulLinks = makeMenuRes("useful_links");//$NON-NLS-1$
-        JMenuItem menuItem;
-        menuItem = new JMenuItem(JMeterUtils.getLocaleString("link_bug_tracker"));
-        menuItem.addActionListener(ActionRouter.getInstance());
-        menuItem.setActionCommand(ActionNames.LINK_BUG_TRACKER);
-        menuItem.setName("link_bug_tracker");
-        usefulLinks.add(menuItem);
-        menuItem = new JMenuItem(JMeterUtils.getLocaleString("link_nightly_build"));
-        menuItem.addActionListener(ActionRouter.getInstance());
-        menuItem.setActionCommand(ActionNames.LINK_NIGHTLY_BUILD);
-        menuItem.setName("link_nightly_build");
-        usefulLinks.add(menuItem);
+        JMenuItem subMenuLinkBugTraker = makeMenuItemRes("link_bug_tracker", ActionNames.LINK_BUG_TRACKER);//$NON-NLS-1$
+        usefulLinks.add(subMenuLinkBugTraker);
+        JMenuItem subMenuLinkNightlyBuild = makeMenuItemRes("link_nightly_build", ActionNames.LINK_NIGHTLY_BUILD);//$NON-NLS-1$
+        usefulLinks.add(subMenuLinkNightlyBuild);
 
         helpAbout = makeMenuItemRes("about", 'A', ActionNames.ABOUT); //$NON-NLS-1$
 
