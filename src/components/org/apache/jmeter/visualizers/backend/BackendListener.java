@@ -51,9 +51,6 @@ public class BackendListener extends AbstractTestElement
     implements Backend, Serializable, SampleListener, 
         TestStateListener, NoThreadClone, Remoteable {
 
-    /**
-     * 
-     */
     private static final class ListenerClientData {
         private BackendListenerClient client;
         private BlockingQueue<SampleResult> queue;
@@ -64,9 +61,6 @@ public class BackendListener extends AbstractTestElement
         private CountDownLatch latch;
     }
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     private static final Logger log = LoggerFactory.getLogger(BackendListener.class);
@@ -289,16 +283,11 @@ public class BackendListener extends AbstractTestElement
     }
 
     // TestStateListener implementation
-    /**
-     *  Implements TestStateListener.testStarted() 
-     **/
     @Override
     public void testStarted() {
         testStarted("local"); //$NON-NLS-1$
     }
 
-    /** Implements TestStateListener.testStarted(String) 
-     **/
     @Override
     public void testStarted(String host) {
         if (log.isDebugEnabled()) {
@@ -397,8 +386,6 @@ public class BackendListener extends AbstractTestElement
         }
     }
 
-    /** Implements TestStateListener.testEnded(String)
-     **/
     @Override
     public void testEnded() {
         testEnded("local"); //$NON-NLS-1$
@@ -487,7 +474,6 @@ public class BackendListener extends AbstractTestElement
      * Sets the queue size
      *
      * @param queueSize the size of the queue
-     *
      */
     public void setQueueSize(String queueSize) {
         setProperty(QUEUE_SIZE, queueSize, DEFAULT_QUEUE_SIZE);

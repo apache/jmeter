@@ -1,5 +1,4 @@
 /*
-
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -44,7 +43,6 @@ public class BackendListenerContext {
      * teardownTest.
      */
 
-    /** Logging */
     private static final Logger log = LoggerFactory.getLogger(BackendListenerContext.class);
 
     /**
@@ -53,7 +51,6 @@ public class BackendListenerContext {
     private final Map<String, String> params;
 
     /**
-     *
      * @param args
      *            the initialization parameters.
      */

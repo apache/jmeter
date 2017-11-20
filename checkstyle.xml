@@ -26,60 +26,63 @@
 <module name="Checker">
 
   <property name="localeLanguage" value="en"/>
+  <property name="charset" value="UTF-8"/>
+  <property name="severity" value="error"/>
+  <property name="fileExtensions" value="java, groovy, properties, xml"/>
 
   <!-- Verify that EVERY source file has the appropriate license -->
-<!-- 
-  <module name="Header">
-    <property name="headerFile" value="${checkstyle.header.file}"/>
+  <module name="RegexpHeader">
+    <property name="headerFile" value="java.header.regex"/>
+    <property name="multiLines" value="10"/>
+    <property name="fileExtensions" value="java, groovy"/>
   </module>
--->
- 
+
   <!-- No tabs allowed! -->
   <module name="FileTabCharacter">
-    <property name="fileExtensions" value="java, xml, xsd, dtd, htm, html, txt"/>
+    <property name="fileExtensions" value="java, groovy, xml, xsd, dtd, htm, html, txt"/>
   </module>
-  
+
   <module name="NewlineAtEndOfFile"/>
 
   <module name="TreeWalker">
-   
+
     <!-- Operator must be at end of wrapped line -->
-<!--     
+<!--
     <module name="OperatorWrap">
       <property name="option" value="eol"/>
     </module>
 -->
-    
+
     <!-- Interfaces must be types (not just constants) -->
     <module name="InterfaceIsType"/>
 
     <!-- Must have class / interface header comments -->
 <!--
     <module name="JavadocType"/>
--->        
+-->
      <!-- Require method javadocs, allow undeclared RTE -->
-<!-- 
+<!--
     <module name="JavadocMethod">
       <property name="allowUndeclaredRTE" value="true"/>
       <property name="allowMissingThrowsTags" value="true"/>
     </module>
--->        
+-->
 
     <!-- Require field javadoc -->
-<!--     
+<!--
     <module name="JavadocVariable"/>
--->        
-            
+-->
+
     <!-- No public fields -->
-<!-- 
+<!--
     <module name="VisibilityModifier">
        <property name="protectedAllowed" value="true"/>
     </module>
--->        
-    
+-->
+
     <!-- Require hash code override when equals is -->
     <module name="EqualsHashCode"/>
-    
+
     <!-- Disallow unnecessary instantiation of Boolean, String -->
     <module name="IllegalInstantiation">
       <property name="classes" value="java.lang.Boolean, java.lang.String"/>
@@ -91,11 +94,6 @@
     <module name="FileContentsHolder"/>
 
   </module>
-  
-  <!-- Require package javadoc -->
-<!--  
-  <module name="JavadocPackage"/>
--->
 
   <!-- Setup special comments to suppress specific checks from source files
   CHECKSTYLE\:OFF and CHECKSTYLE\:ON -->
@@ -106,7 +104,7 @@
     <property name="file" value="${config_loc}/checkstyle-suppressions.xml"/>
   </module>
 
-  <!-- 
+  <!--
       Allow comment to suppress checkstyle for a single line
       e.g. // CHECKSTYLE IGNORE MagicNumber
    -->
