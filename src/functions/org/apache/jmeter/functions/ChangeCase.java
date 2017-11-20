@@ -132,7 +132,7 @@ public class ChangeCase extends AbstractFunction {
         String[] tokens = NOT_ALPHANUMERIC_REGEX.split(str);
         for (int i = 0; i < tokens.length; i++) {
             if(i == 0) {
-                builder.append(isFirstCapitalized ? tokens[0]:
+                builder.append(isFirstCapitalized ? decapitalize(tokens[0]):
                     StringUtils.capitalize(tokens[i]));
             } else {
                 builder.append(StringUtils.capitalize(tokens[i]));
@@ -141,6 +141,18 @@ public class ChangeCase extends AbstractFunction {
         return builder.toString();
     }
 
+    /**
+     * @param string to decapitalize
+     */
+    private static String decapitalize(String string) {
+        if (string == null || string.length() == 0) {
+            return string;
+        }
+        char[] c = string.toCharArray();
+        c[0] = Character.toLowerCase(c[0]);
+        return new String(c);
+    }
+    
     /**
      * ChangeCase Modes
      * 
