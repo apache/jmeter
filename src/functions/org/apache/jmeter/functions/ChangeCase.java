@@ -181,8 +181,9 @@ public class ChangeCase extends AbstractFunction {
         public static ChangeCaseMode typeOf(String mode) {
             EnumSet<ChangeCaseMode> allOf = EnumSet.allOf(ChangeCaseMode.class);
             for (ChangeCaseMode zs : allOf) {
-                if (zs.getName().equals(mode))
+                if (zs.getName().equals(mode)) {
                     return zs;
+                }
             }
             return null;
         }
