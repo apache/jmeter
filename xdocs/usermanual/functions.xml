@@ -143,13 +143,14 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Variables</td><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td><td>2.3.1</td></tr>
         <tr><td>Properties</td><td> <a href="#__isVarDefined">isVarDefined</a> </td><td>Test if a variable exists</td><td>4.0</td></tr>
         <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td><td>2.3RC3</td></tr>
-        <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td></tr>
-        <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by ORO regular expression</td><td>2.9</td></tr>
         <tr><td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__changeCase">changeCase</a></td><td>Change case following different modes</td><td>4.0</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by ORO regular expression</td><td>2.9</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td></tr>
+        <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td></tr>
         <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td><td>2.3.3</td></tr>
-        <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
-        <tr><td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td></tr>
         <tr><td>String</td><td> <a href="#__urldecode">urldecode</a></td><td>Decode a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__urlencode">urlencode</a></td><td>Encode a string to a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__TestPlanName">TestPlanName</a></td><td>Return name of current test plan</td><td>2.6</td></tr>
@@ -1616,7 +1617,7 @@ becomes:
         <property name="Name of variable" required="No">The name of the variable to set.</property>
     </properties>
 </component>
-<component index="&sect-num;.5.35" name="__isPropDefined">
+<component index="&sect-num;.5.36" name="__isPropDefined">
     <description>
         <p>The <code>__isPropDefined</code> function returns true if property exists or false if not.</p>
     </description>
@@ -1626,7 +1627,7 @@ becomes:
         </property>
     </properties>
 </component>
-<component index="&sect-num;.5.35" name="__isVarDefined">
+<component index="&sect-num;.5.37" name="__isVarDefined">
     <description>
         <p>The <code>__isVarDefined</code> function returns true if variable exists or false if not.</p>
     </description>
@@ -1636,6 +1637,30 @@ becomes:
         </property>
     </properties>
 </component>
+<component index="&sect-num;.5.38" name="__changeCase">
+    <description>
+        <p>The change case function returns a string value which 
+        case has been changed following a specific mode.
+        Result can optionally be saved in a JMeter variable.</p>
+    </description>
+    <properties>
+    <property name="String to change case" required="Yes">The String
+            which case will be changed</property>
+        <property name="change case mode" required="Yes">
+            The mode to be used to change case, for example for ab-CD eF:
+            <ul>
+                <li><code>UPPER</code> result as AB-CD EF</li>
+                <li><code>LOWER</code> result as ab-cd ed</li>
+                <li><code>CAPITALIZE</code> result as Ab-CD eF</li>
+                <li><code>CAMEL_CASE</code>result as AbCDEF</li>
+                <li><code>CAMEL_CASE_FIRST_LOWER</code>result as abCDEF</li>
+            </ul>
+            <note>mode is case insensitive</note>
+        </property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
+    </properties>
+</component>
+
 </subsection>
 
 <subsection name="&sect-num;.6 Pre-defined Variables" anchor="predefinedvars">
