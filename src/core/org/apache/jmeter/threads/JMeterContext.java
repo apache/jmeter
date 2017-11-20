@@ -19,11 +19,13 @@
 package org.apache.jmeter.threads;
 
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Holds context for a thread.
@@ -60,6 +62,9 @@ public class JMeterContext {
         clear0();
     }
 
+    /**
+     * Internally called by JMeter, never call it directly
+     */
     public void clear() {
         clear0();
     }
@@ -87,7 +92,17 @@ public class JMeterContext {
                 variables : 
                 JMeterContextService.getClientSideVariables();
     }
+    
+    /**
+     * @return a pointer to the JMeter Properties.
+     */
+    public Properties getProperties() {
+        return JMeterUtils.getJMeterProperties();
+    }
 
+    /**
+     * Internally called by JMeter, never call it directly
+     */
     public void setVariables(JMeterVariables vars) {
         this.variables = vars;
     }
@@ -96,6 +111,9 @@ public class JMeterContext {
         return previousResult;
     }
 
+    /**
+     * Internally called by JMeter, never call it directly
+     */
     public void setPreviousResult(SampleResult result) {
         this.previousResult = result;
     }
@@ -104,6 +122,9 @@ public class JMeterContext {
         return currentSampler;
     }
 
+    /**
+     * Internally called by JMeter, never call it directly
+     */
     public void setCurrentSampler(Sampler sampler) {
         this.previousSampler = currentSampler;
         this.currentSampler = sampler;
@@ -129,7 +150,7 @@ public class JMeterContext {
 
     /**
      * Sets the threadNum.
-     *
+     * Internally called by JMeter, never call it directly
      * @param threadNum
      *            the threadNum to set
      */
@@ -140,7 +161,11 @@ public class JMeterContext {
     public JMeterThread getThread() {
         return this.thread;
     }
-
+    
+    /**
+     * Internally called by JMeter, never call it directly
+     * @param thread {@link JMeterThread}
+     */
     public void setThread(JMeterThread thread) {
         this.thread = thread;
     }
@@ -149,6 +174,10 @@ public class JMeterContext {
         return this.threadGroup;
     }
 
+    /**
+     * Internally called by JMeter, never call it directly
+     * @param threadgrp {@link AbstractThreadGroup}
+     */
     public void setThreadGroup(AbstractThreadGroup threadgrp) {
         this.threadGroup = threadgrp;
     }
@@ -157,6 +186,10 @@ public class JMeterContext {
         return engine;
     }
 
+    /**
+     * Internally called by JMeter, never call it directly
+     * @param engine {@link StandardJMeterEngine}
+     */
     public void setEngine(StandardJMeterEngine engine) {
         this.engine = engine;
     }
@@ -165,6 +198,10 @@ public class JMeterContext {
         return samplingStarted;
     }
 
+    /**
+     * Internally called by JMeter, never call it directly
+     * @param b boolean
+     */
     public void setSamplingStarted(boolean b) {
         samplingStarted = b;
     }
@@ -215,6 +252,7 @@ public class JMeterContext {
 
     /**
      * Clean cached data after sample
+     * Internally called by JMeter, never call it directly
      */
     public void cleanAfterSample() {
         if(previousResult != null) {
@@ -232,6 +270,7 @@ public class JMeterContext {
     }
 
     /**
+     * Internally called by JMeter, never call it directly
      * @param recording true if we are recording
      */
     public void setRecording(boolean recording) {
