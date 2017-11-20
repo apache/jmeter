@@ -69,9 +69,12 @@ public class ChangeCase extends AbstractFunction {
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String originalString = values[0].execute();
-        String mode = ChangeCaseMode.UPPER.getName(); // default
+        String mode = null; // default
         if (values.length > 1) {
             mode = values[1].execute();
+        }
+        if(StringUtils.isEmpty(mode)){
+            mode = ChangeCaseMode.UPPER.getName(); // default
         }
         String targetString = changeCase(originalString, mode);
         addVariableValue(targetString, values, 2);
