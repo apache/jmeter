@@ -125,6 +125,15 @@ public class TestChangeCase extends JMeterTestCase {
 		changeCase.setParameters(params);
 		changeCase.execute(result, null);
 	}    
+    
+    @Test
+    public void testEmptyMode() throws Exception {
+        params.add(new CompoundVariable("ab-CD eF"));
+        params.add(new CompoundVariable(""));
+        changeCase.setParameters(params);
+        String returnValue = changeCase.execute(result, null);
+        assertEquals("AB-CD EF", returnValue);
+    }
 
     @Test
     public void testChangeCaseWrongModeIgnore() throws Exception {
