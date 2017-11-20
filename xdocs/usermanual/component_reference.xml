@@ -520,7 +520,7 @@ the additional variables for rows four, five and six will be removed.
 
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-        <property name="Variable Name" required="Yes">
+        <property name="Variable Name of Pool declared in <code>JDBC Connection Configuration</code>" required="Yes">
         Name of the JMeter variable that the connection pool is bound to.
         This must agree with the '<code>Variable Name</code>' field of a <complink name="JDBC Connection Configuration"/>.
         </property>
@@ -4017,7 +4017,7 @@ instead. (see figures 12 and 13).</p>
     </description>
     <properties>
         <property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
-        <property name="Variable Name" required="Yes">The name of the variable the connection is tied to.  
+        <property name="Variable Name for created pool" required="Yes">The name of the variable the connection is tied to.  
         Multiple connections can be used, each tied to a different variable, allowing JDBC Samplers
         to select the appropriate connection.
         <note>Each name must be different. If there are two configuration elements using the same name,
