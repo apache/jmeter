@@ -19,10 +19,6 @@
     "-//Puppy Crawl//DTD Check Configuration 1.1//EN"
     "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
 
-<!--
-  Checkstyle checks configured for Maven.
--->
-
 <module name="Checker">
 
   <property name="localeLanguage" value="en"/>
@@ -61,10 +57,20 @@
     <module name="JavadocType"/>
 -->
      <!-- Require method javadocs, allow undeclared RTE -->
-<!--
     <module name="JavadocMethod">
+      <property name="minLineCount" value="3"/>
+      <property name="scope" value="protected"/>
       <property name="allowUndeclaredRTE" value="true"/>
       <property name="allowMissingThrowsTags" value="true"/>
+      <property name="allowMissingPropertyJavadoc" value="true"/>
+      <property name="ignoreMethodNamesRegex" value="(get|set|is).*"/>
+      <!-- Only check methods, i.e. ignore constructors  -->
+      <property name="tokens" value="METHOD_DEF"/>
+    </module>
+
+<!--
+    <module name="MethodName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>
     </module>
 -->
 
