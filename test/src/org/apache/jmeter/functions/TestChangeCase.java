@@ -121,12 +121,19 @@ public class TestChangeCase extends JMeterTestCase {
     }
     
     @Test
-    public void testChangeCaseCamelCaseFirstLower2() throws Exception {
+    public void testChangeCaseCamelCaseFirstLowerWithFirstUpperCaseChar() throws Exception {
         params.add(new CompoundVariable("Ab-CD eF"));
         params.add(new CompoundVariable("camel_CASE_FIRST_LOWER"));
         changeCase.setParameters(params);
         String returnValue = changeCase.execute(result, null);
         assertEquals("abCDEF", returnValue);
+        
+        params.clear();
+        params.add(new CompoundVariable(" zadad"));
+        params.add(new CompoundVariable("camel_CASE_FIRST_LOWER"));
+        changeCase.setParameters(params);
+        returnValue = changeCase.execute(result, null);
+        assertEquals("Zadad", returnValue);
     }
     
     @Test(expected=InvalidVariableException.class)
