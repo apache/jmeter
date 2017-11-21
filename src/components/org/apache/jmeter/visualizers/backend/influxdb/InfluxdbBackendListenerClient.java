@@ -156,10 +156,10 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         tag.append(TAG_APPLICATION).append(application);
         tag.append(TAG_TRANSACTION).append("internal");
         StringBuilder field = new StringBuilder(80);
-        field.append(METRIC_MIN_ACTIVE_THREADS).append(userMetrics.getMinActiveThreads()).append(",");
-        field.append(METRIC_MAX_ACTIVE_THREADS).append(userMetrics.getMaxActiveThreads()).append(",");
-        field.append(METRIC_MEAN_ACTIVE_THREADS).append(userMetrics.getMeanActiveThreads()).append(",");
-        field.append(METRIC_STARTED_THREADS).append(userMetrics.getStartedThreads()).append(",");
+        field.append(METRIC_MIN_ACTIVE_THREADS).append(userMetrics.getMinActiveThreads()).append(',');
+        field.append(METRIC_MAX_ACTIVE_THREADS).append(userMetrics.getMaxActiveThreads()).append(',');
+        field.append(METRIC_MEAN_ACTIVE_THREADS).append(userMetrics.getMeanActiveThreads()).append(',');
+        field.append(METRIC_STARTED_THREADS).append(userMetrics.getStartedThreads()).append(',');
         field.append(METRIC_ENDED_THREADS).append(userMetrics.getFinishedThreads());
 
         influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
@@ -220,16 +220,16 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             StringBuilder field = new StringBuilder(80);
             field.append(METRIC_COUNT).append(count);
             if (!Double.isNaN(mean)) {
-                field.append(",").append(METRIC_AVG).append(mean);
+                field.append(',').append(METRIC_AVG).append(mean);
             }
             if (!Double.isNaN(minTime)) {
-                field.append(",").append(METRIC_MIN).append(minTime);
+                field.append(',').append(METRIC_MIN).append(minTime);
             }
             if (!Double.isNaN(maxTime)) {
-                field.append(",").append(METRIC_MAX).append(maxTime);
+                field.append(',').append(METRIC_MAX).append(maxTime);
             }
             for (Float pct : pcts) {
-                field.append(",").append(METRIC_PCT_PREFIX).append(pct).append("=").append(
+                field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(
                         percentileProvider.getPercentileValue(pct));
             }
             influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
@@ -248,23 +248,23 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             tag.append(userTag);
 
             field.append(METRIC_COUNT).append(total);
-            field.append(",").append(METRIC_COUNT_ERROR).append(metric.getFailures());
+            field.append(',').append(METRIC_COUNT_ERROR).append(metric.getFailures());
 
             if (!Double.isNaN(metric.getOkMean())) {
-                field.append(",").append(METRIC_AVG).append(Double.toString(metric.getOkMean()));
+                field.append(',').append(METRIC_AVG).append(Double.toString(metric.getOkMean()));
             }
             if (!Double.isNaN(metric.getOkMinTime())) {
-                field.append(",").append(METRIC_MIN).append(Double.toString(metric.getOkMinTime()));
+                field.append(',').append(METRIC_MIN).append(Double.toString(metric.getOkMinTime()));
             }
             if (!Double.isNaN(metric.getOkMaxTime())) {
-                field.append(",").append(METRIC_MAX).append(Double.toString(metric.getOkMaxTime()));
+                field.append(',').append(METRIC_MAX).append(Double.toString(metric.getOkMaxTime()));
             }
 
-            field.append(",").append(METRIC_HIT).append(metric.getHits());
+            field.append(',').append(METRIC_HIT).append(metric.getHits());
             for (Float pct : pcts) {
-                field.append(",").append(METRIC_PCT_PREFIX).append(pct).append("=").append(Double.toString(metric.getAllPercentile(pct)));
+                field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(Double.toString(metric.getAllPercentile(pct)));
             }
-            field.append(",").append(METRIC_HIT).append(metric.getHits());
+            field.append(',').append(METRIC_HIT).append(metric.getHits());
             influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
         }
     }
