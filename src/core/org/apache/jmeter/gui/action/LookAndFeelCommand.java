@@ -53,7 +53,7 @@ public class LookAndFeelCommand extends AbstractAction {
 
     static {
         log.info("Installing Darcula LAF");
-        UIManager.installLookAndFeel(new UIManager.LookAndFeelInfo(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS));
+        UIManager.installLookAndFeel(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
         UIManager.LookAndFeelInfo[] allLAFs = JMeterMenuBar.getAllLAFs();
         commands = Arrays.stream(allLAFs)
                 .map(lf -> ActionNames.LAF_PREFIX + lf.getClassName())
@@ -61,7 +61,7 @@ public class LookAndFeelCommand extends AbstractAction {
         if (log.isInfoEnabled()) {
             final String jMeterLaf = getJMeterLaf();
             List<String> names = Arrays.stream(allLAFs)
-                    .filter(laf -> laf.getClassName().equals(jMeterLaf))
+                    .filter(laf -> laf.getClassName().equals(JMeterMenuBar.DARCULA_LAF_CLASS))
                     .map(UIManager.LookAndFeelInfo::getName)
                     .collect(Collectors.toList());
             log.info("Using look and feel: {} {}", jMeterLaf, names);
@@ -97,7 +97,7 @@ public class LookAndFeelCommand extends AbstractAction {
         if (laf != null) {
             return checkLafName(laf);
         }
-        laf = JMeterUtils.getPropDefault(JMETER_LAF, JMeterMenuBar.DARCULA_LAF);
+        laf = JMeterUtils.getPropDefault(JMETER_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
         if (laf != null) {
             return checkLafName(laf);
         }
