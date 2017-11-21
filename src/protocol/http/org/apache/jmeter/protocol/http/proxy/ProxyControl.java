@@ -80,6 +80,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.NonTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.TestStateListener;
@@ -107,7 +108,7 @@ import org.slf4j.LoggerFactory;
  * Class handles storing of generated samples, etc
  * For unit tests, see TestProxyControl
  */
-public class ProxyControl extends GenericController {
+public class ProxyControl extends GenericController implements NonTestElement {
 
     private static final Logger log = LoggerFactory.getLogger(ProxyControl.class);
 
