@@ -424,7 +424,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public Arguments getDefaultParameters() {
         Arguments arguments = new Arguments();
-        defaultArgs.forEach((k,v) -> arguments.addArgument(k, v));
+        defaultArgs.forEach(arguments::addArgument);
         return arguments;
     }
 }
