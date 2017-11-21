@@ -335,16 +335,23 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             }
         }
         // Check if more row which started with 'TAG_' are filled ( corresponding to user tag )
-        userTag = "";
+        StringBuilder userTagBuilder = new StringBuilder();
         context.getParameterNamesIterator().forEachRemaining(name -> {
             if (StringUtils.isNotBlank(name) && !defaultArgs.containsKey(name.trim())
                     && name.startsWith("TAG_")
                     && StringUtils.isNotBlank(context.getParameter(name))) {
-                userTag += "," + AbstractInfluxdbMetricsSender.tagToStringValue(name.trim().substring(4)) + "="
-                        + AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter(name).trim());
-                log.debug("Adding '{}' tag with '{}' value ", name.trim().substring(4), context.getParameter(name).trim());
+                final String tagName = name.trim().substring(4);
+                final String tagValue = context.getParameter(name).trim();
+                userTagBuilder.append(',')
+                        .append(AbstractInfluxdbMetricsSender
+                                .tagToStringValue(tagName))
+                        .append('=')
+                        .append(AbstractInfluxdbMetricsSender.tagToStringValue(
+                                tagValue));
+                log.debug("Adding '{}' tag with '{}' value ", tagName, tagValue);
             }
         });
+        userTag = userTagBuilder.toString();
 
         Class<?> clazz = Class.forName(influxdbMetricsSender);
         this.influxdbMetricsManager = (InfluxdbMetricsSender) clazz.newInstance();
