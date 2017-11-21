@@ -1,10 +1,13 @@
 label,responseCode,responseMessage,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
 JDBC_DROP_PROCEDURE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+JDBC_DROP_PROCEDURE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
 JDBC_DROP_TABLE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
 JDBC_CREATE_TABLE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
 JDBC_CREATE_PROCEDURE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+JDBC_CREATE_PROCEDURE_SELECT,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
 JDBC_INSERT,200,OK,TG-OK 1-1,text,true,1,1,1,0
 JDBC_CALL_PROCEDURE,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_CALL_PROCEDURE_SELECT,200,OK,TG-OK 1-1,text,true,1,1,1,0
 JDBC_SELECT,200,OK,TG-OK 1-1,text,true,1,1,1,0
 JDBC_SELECT_PREPARED,200,OK,TG-OK 1-1,text,true,1,1,1,0
 JDBC_COMMIT,200,OK,TG-OK 1-1,text,true,1,1,1,0

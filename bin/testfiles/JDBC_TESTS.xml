@@ -7,6 +7,13 @@
     <error>false</error>
   </assertionResult>
 </sample>
+<sample s="true" lb="JDBC_DROP_PROCEDURE" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
 <sample s="true" lb="JDBC_DROP_TABLE" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>RA</name>
@@ -28,6 +35,13 @@
     <error>false</error>
   </assertionResult>
 </sample>
+<sample s="true" lb="JDBC_CREATE_PROCEDURE_SELECT" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
 <sample s="true" lb="JDBC_INSERT" rc="200" rm="OK" tn="TG-OK 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>Response Assertion</name>
@@ -36,6 +50,33 @@
   </assertionResult>
 </sample>
 <sample s="true" lb="JDBC_CALL_PROCEDURE" rc="200" rm="OK" tn="TG-OK 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>JA_checkResult</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JDBC_CALL_PROCEDURE_SELECT" rc="200" rm="OK" tn="TG-OK 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>Response Assertion</name>
     <failure>false</failure>
