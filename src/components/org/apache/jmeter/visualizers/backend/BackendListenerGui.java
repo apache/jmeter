@@ -208,7 +208,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                         newArgs.addArgument(name, value);
                     }
                 }
-                userArgMap.forEach((k,v) -> newArgs.addArgument(k, v));
+                userArgMap.forEach(newArgs::addArgument);
 
                 className = newClassName;
                 argsPanel.configure(newArgs);
