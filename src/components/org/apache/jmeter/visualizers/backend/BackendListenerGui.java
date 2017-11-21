@@ -178,22 +178,19 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                 Arguments currArgs = new Arguments();
                 argsPanel.modifyTestElement(currArgs);
                 Map<String, String> currArgsMap = currArgs.getArgumentsAsMap();
-                Arguments currentUserArgs = new Arguments();
-                
                 Map<String, String> userArgMap = new HashMap<>();
                 userArgMap.putAll(currArgsMap);
                 Arguments newArgs = new Arguments();
                 Arguments defaultArgs = null;
                 try {
                     defaultArgs = client.getDefaultParameters();    
-                    currentUserArgs = oldClient.getDefaultParameters();
+                    Arguments currentUserArgs = oldClient.getDefaultParameters();
+                    userArgMap.keySet().removeAll(currentUserArgs.getArgumentsAsMap().keySet());
                 } catch (AbstractMethodError e) {
                     log.warn("BackendListenerClient doesn't implement "
                             + "getDefaultParameters.  Default parameters won't "
                             + "be shown.  Please update your client class: {}", newClassName);
                 }
-                userArgMap.keySet().removeAll(currentUserArgs.getArgumentsAsMap().keySet() );
-                
                 
                 if (defaultArgs != null) {
                     for (JMeterProperty jMeterProperty : defaultArgs.getArguments()) {
