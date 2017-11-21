@@ -49,10 +49,10 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
+import org.apache.jmeter.testelement.NonTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
@@ -640,8 +640,8 @@ public final class MenuFactory {
             if (foundClass(nodes,
                      new Class[]{Sampler.class, Controller.class}, // Samplers and Controllers need not apply ...
                      new Class[]{org.apache.jmeter.threads.AbstractThreadGroup.class,
-                             ProxyControl.class
-                     })  // but AbstractThreadGroup (Controller) and ProxyControl are OK
+                             NonTestElement.class
+                     })  // but AbstractThreadGroup (Controller) and Non Test Elements are OK
                 ){
                 return false;
             }
