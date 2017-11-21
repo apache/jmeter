@@ -184,6 +184,7 @@ Summary
     <li><pr>323</pr>Extracted method and used streams to improve readability. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>324</pr> Save backup refactor. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>327</pr> Utilising more modern Java, simplifying code and formatting code and comments. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>334</pr> Enable running of JUnit tests from within IntelliJ with default config. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
