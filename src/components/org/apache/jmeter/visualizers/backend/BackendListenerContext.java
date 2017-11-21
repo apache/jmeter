@@ -123,12 +123,14 @@ public class BackendListenerContext {
      *            the name of the parameter whose value should be retrieved
      * @return the value of the parameter
      *
+     * @throws IllegalArgumentException
+     *             if no value defined
      * @throws NumberFormatException
      *             if the parameter is not specified or is not an integer
      *
      * @see java.lang.Integer#decode(java.lang.String)
      */
-    public int getIntParameter(String name) throws NumberFormatException {
+    public int getIntParameter(String name)  {
         if (params == null || !params.containsKey(name)) {
             throw new IllegalArgumentException("No value for parameter named '" + name + "'.");
         }
@@ -183,9 +185,9 @@ public class BackendListenerContext {
      *
      * @see Long#decode(String)
      */
-    public long getLongParameter(String name) throws NumberFormatException {
+    public long getLongParameter(String name) {
         if (params == null || !params.containsKey(name)) {
-            throw new NumberFormatException("No value for parameter named '" + name + "'.");
+            throw new IllegalArgumentException("No value for parameter named '" + name + "'.");
         }
 
         return Long.parseLong(params.get(name));
