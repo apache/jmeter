@@ -108,6 +108,8 @@
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="lib/xstream-1.4.10.jar"/>
 	<!-- Needed for build and test -->
+	<classpathentry kind="lib" path="lib/spock-1.0-groovy-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/cglib-nodep-3.2.5.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcpkix-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.49.jar"/>

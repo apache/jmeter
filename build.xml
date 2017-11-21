@@ -519,6 +519,8 @@
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-ext.jar}"/>
+    <pathelement location="${lib.dir}/${spock.jar}"/>
+    <pathelement location="${lib.dir}/${cglib-nodep.jar}"/>
     <pathelement location="${lib.dir}/${jtidy.jar}"/>
     <pathelement location="${lib.dir}/${tika-core.jar}"/>
     <pathelement location="${lib.dir}/${tika-parsers.jar}"/>
@@ -726,6 +728,35 @@
         <path refid="logging.classpath"/>
       </classpath>
     </javac>
+
+    <!-- Compile Spock tests (groovy) -->
+    <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc">
+      <classpath>
+        <fileset dir="${lib.dir}" includes="*.jar"/>
+      </classpath>
+    </taskdef>
+    <groovyc srcdir="${src.test}" destdir="${build.test}" encoding="${encoding}">
+      <classpath>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+        <pathelement location="${build.components}"/>
+        <pathelement location="${build.http}"/>
+        <pathelement location="${build.ftp}"/>
+        <pathelement location="${build.functions}"/>
+        <pathelement location="${build.java}"/>
+        <pathelement location="${build.jdbc}"/>
+        <pathelement location="${build.ldap}"/>
+        <pathelement location="${build.mail}"/>
+        <pathelement location="${build.tcp}"/>
+        <!-- Include compiled jars to allow running tests without rebuilding source -->
+        <fileset dir="${dest.jar}" includes="*.jar"/>
+        <path refid="classpath"/>
+      </classpath>
+      <!-- Compile JUnit tests (Java) -->
+      <javac source="${src.java.version}" debug="on" target="${target.java.version}"
+             deprecation="${deprecation}" encoding="${encoding}">
+      </javac>
+    </groovyc>
   </target>
 
   <target name="compile-ftp" depends="compile-jorphan,compile-core" description="Compile components specific to FTP sampling.">
@@ -3217,6 +3248,8 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="log4j-1.2-api"/>
     <process_jarfile jarname="log4j-core"/>
     <process_jarfile jarname="log4j-slf4j-impl"/>
+    <process_jarfile jarname="spock"/>
+    <process_jarfile jarname="cglib-nodep"/>
     <process_jarfile jarname="jtidy"/>
     <process_jarfile jarname="tika-core"/>
     <process_jarfile jarname="tika-parsers"/>
