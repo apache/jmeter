@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,10 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
     /** A panel allowing the user to set arguments for this test. */
     private ArgumentsPanel argsPanel;
+    
+    /** The current className of the Backend listenenr **/
+    private String className;
+    
 
     /**
      * Create a new BackendListenerGui as a standalone component.
@@ -101,6 +106,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         classnameRequestPanel.add(createParameterPanel(), BorderLayout.CENTER);
 
         add(classnameRequestPanel, BorderLayout.CENTER);
+        className = ((String) classnameCombo.getSelectedItem()).trim();
     }
 
     /**
@@ -161,27 +167,36 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
     @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == classnameCombo) {
-            String className = ((String) classnameCombo.getSelectedItem()).trim();
+           
+            String newClassName = ((String) classnameCombo.getSelectedItem()).trim();
             try {
-                BackendListenerClient client = (BackendListenerClient) Class.forName(className, true,
+                BackendListenerClient client = (BackendListenerClient) Class.forName(newClassName, true,
                         Thread.currentThread().getContextClassLoader()).newInstance();
-
+                BackendListenerClient oldClient = (BackendListenerClient) Class.forName(className, true,
+                        Thread.currentThread().getContextClassLoader()).newInstance();
+                
                 Arguments currArgs = new Arguments();
                 argsPanel.modifyTestElement(currArgs);
                 Map<String, String> currArgsMap = currArgs.getArgumentsAsMap();
-
+                Arguments currentUserArgs = new Arguments();
+                
+                Map<String, String> userArgMap = new HashMap<>();
+                userArgMap.putAll(currArgsMap);
                 Arguments newArgs = new Arguments();
-                Arguments testParams = null;
+                Arguments defaultArgs = null;
                 try {
-                    testParams = client.getDefaultParameters();
+                    defaultArgs = client.getDefaultParameters();    
+                    currentUserArgs = oldClient.getDefaultParameters();
                 } catch (AbstractMethodError e) {
                     log.warn("BackendListenerClient doesn't implement "
                             + "getDefaultParameters.  Default parameters won't "
-                            + "be shown.  Please update your client class: {}", className);
+                            + "be shown.  Please update your client class: {}", newClassName);
                 }
-
-                if (testParams != null) {
-                    for (JMeterProperty jMeterProperty : testParams.getArguments()) {
+                userArgMap.keySet().removeAll(currentUserArgs.getArgumentsAsMap().keySet() );
+                
+                
+                if (defaultArgs != null) {
+                    for (JMeterProperty jMeterProperty : defaultArgs.getArguments()) {
                         Argument arg = (Argument) jMeterProperty.getObjectValue();
                         String name = arg.getName();
                         String value = arg.getValue();
@@ -199,10 +214,14 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                         newArgs.addArgument(name, value);
                     }
                 }
-
+                userArgMap.forEach((k,v) -> {
+                    newArgs.addArgument(k, v);
+                });
+                
+                className = newClassName;
                 argsPanel.configure(newArgs);
             } catch (Exception e) {
-                log.error("Error getting argument list for {}", className, e);
+                log.error("Error getting argument list for {}", newClassName, e);
             }
         }
     }
@@ -225,7 +244,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
         argsPanel.configure((Arguments) config.getProperty(BackendListener.ARGUMENTS).getObjectValue());
 
-        String className = config.getPropertyAsString(BackendListener.CLASSNAME);
+        className = config.getPropertyAsString(BackendListener.CLASSNAME);
         if(checkContainsClassName(classnameCombo.getModel(), className)) {
             classnameCombo.setSelectedItem(className);
         } else {
