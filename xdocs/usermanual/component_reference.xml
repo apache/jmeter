@@ -3505,7 +3505,7 @@ By default, a Graphite implementation is provided.
         A percentile may contain a fractional part, for example <code>12.5</code>.
         (The separator is always ".")
         List must be semicolon separated. Generally 3 or 4 values should be sufficient.</property>
-        <property name="TAG_WhatEverYouWant" required="No">You can add as many custom tags as you want. For each of them, just create a new line and prefix its name by "TAG_"</property>
+        <property name="TAG_WhatEverYouWant" required="No">You can add as many custom tags as you want. For each of them, just create a new line and prefix its name by "<code>TAG_</code>"</property>
     </properties>
     <p>See also <a href="realtime-results.html" >Real-time results</a> and <a href="http://docs.grafana.org/reference/annotations/#influxdb-annotations">Influxdb annotations in Grafana</a> for more details.</p>     
 </component>
