@@ -54,9 +54,6 @@ import org.slf4j.LoggerFactory;
  */
 public class BackendListenerGui extends AbstractListenerGui implements ActionListener {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     /** Logging */
@@ -64,7 +61,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
     /** A combo box allowing the user to choose a backend class. */
     private JComboBox<String> classnameCombo;
-    
+
     /**
      * A field allowing the user to specify the size of Queue
      */
@@ -72,10 +69,10 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
     /** A panel allowing the user to set arguments for this test. */
     private ArgumentsPanel argsPanel;
-    
+
     /** The current className of the Backend listenenr **/
     private String className;
-    
+
 
     /**
      * Create a new BackendListenerGui as a standalone component.
@@ -167,14 +164,14 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
     @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == classnameCombo) {
-           
+
             String newClassName = ((String) classnameCombo.getSelectedItem()).trim();
             try {
                 BackendListenerClient client = (BackendListenerClient) Class.forName(newClassName, true,
                         Thread.currentThread().getContextClassLoader()).newInstance();
                 BackendListenerClient oldClient = (BackendListenerClient) Class.forName(className, true,
                         Thread.currentThread().getContextClassLoader()).newInstance();
-                
+
                 Arguments currArgs = new Arguments();
                 argsPanel.modifyTestElement(currArgs);
                 Map<String, String> currArgsMap = currArgs.getArgumentsAsMap();
@@ -183,7 +180,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                 Arguments newArgs = new Arguments();
                 Arguments defaultArgs = null;
                 try {
-                    defaultArgs = client.getDefaultParameters();    
+                    defaultArgs = client.getDefaultParameters();
                     Arguments currentUserArgs = oldClient.getDefaultParameters();
                     userArgMap.keySet().removeAll(currentUserArgs.getArgumentsAsMap().keySet());
                 } catch (AbstractMethodError e) {
@@ -191,7 +188,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                             + "getDefaultParameters.  Default parameters won't "
                             + "be shown.  Please update your client class: {}", newClassName);
                 }
-                
+
                 if (defaultArgs != null) {
                     for (JMeterProperty jMeterProperty : defaultArgs.getArguments()) {
                         Argument arg = (Argument) jMeterProperty.getObjectValue();
@@ -212,7 +209,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                     }
                 }
                 userArgMap.forEach((k,v) -> newArgs.addArgument(k, v));
-                
+
                 className = newClassName;
                 argsPanel.configure(newArgs);
             } catch (Exception e) {
@@ -282,7 +279,6 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         backendListener.setArguments((Arguments) argsPanel.createTestElement());
         backendListener.setClassname(String.valueOf(classnameCombo.getSelectedItem()));
         backendListener.setQueueSize(queueSize.getText());
-        
     }
 
     /* (non-Javadoc)
