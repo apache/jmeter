@@ -93,17 +93,17 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private static final int MAX_POOL_SIZE = 1;
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
     private static final Object LOCK = new Object();
-    private static Map<String, String> defaultARGS = new LinkedHashMap<>();
+    private static Map<String, String> defaultArgs = new LinkedHashMap<>();
     static {
-        defaultARGS.put("influxdbMetricsSender", HttpMetricsSender.class.getName());
-        defaultARGS.put("influxdbUrl", "");
-        defaultARGS.put("application", "application name");
-        defaultARGS.put("measurement", DEFAULT_MEASUREMENT);
-        defaultARGS.put("summaryOnly", "false");
-        defaultARGS.put("samplersRegex", ".*");
-        defaultARGS.put("percentiles", "99;95;90");
-        defaultARGS.put("testTitle", "Test name");
-        defaultARGS.put("eventTags", "");
+        defaultArgs.put("influxdbMetricsSender", HttpMetricsSender.class.getName());
+        defaultArgs.put("influxdbUrl", "");
+        defaultArgs.put("application", "application name");
+        defaultArgs.put("measurement", DEFAULT_MEASUREMENT);
+        defaultArgs.put("summaryOnly", "false");
+        defaultArgs.put("samplersRegex", ".*");
+        defaultArgs.put("percentiles", "99;95;90");
+        defaultArgs.put("testTitle", "Test name");
+        defaultArgs.put("eventTags", "");
     }
 
     private boolean summaryOnly;
@@ -337,7 +337,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         // Check if more row which started with 'TAG_' are filled ( corresponding to user tag )
         userTag = "";
         context.getParameterNamesIterator().forEachRemaining(name -> {
-            if (StringUtils.isNotBlank(name) && !defaultARGS.containsKey(name.trim())
+            if (StringUtils.isNotBlank(name) && !defaultArgs.containsKey(name.trim())
                     && name.startsWith("TAG_")
                     && StringUtils.isNotBlank(context.getParameter(name))) {
                 userTag += "," + AbstractInfluxdbMetricsSender.tagToStringValue(name.trim().substring(4)) + "="
@@ -417,7 +417,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public Arguments getDefaultParameters() {
         Arguments arguments = new Arguments();
-        defaultARGS.forEach((k,v) -> arguments.addArgument(k, v));
+        defaultArgs.forEach((k,v) -> arguments.addArgument(k, v));
         return arguments;
     }
 }
