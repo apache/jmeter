@@ -94,7 +94,7 @@ public class BackendListener extends AbstractTestElement
     public static final String DEFAULT_QUEUE_SIZE = "5000";
 
     // Create unique object as marker for end of queue
-    private static transient final SampleResult FINAL_SAMPLE_RESULT = new SampleResult();
+    private static final transient SampleResult FINAL_SAMPLE_RESULT = new SampleResult();
 
     /*
      * This is needed for distributed testing where there is 1 instance
