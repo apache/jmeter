@@ -41,6 +41,7 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.control.TestFragmentController;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UndoHistory;
@@ -48,6 +49,7 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
@@ -628,15 +630,18 @@ public final class MenuFactory {
             return false;
         }
 
-        // Cannot move Non-Test Elements from root of Test Plan
-        if (!(parent instanceof TestPlan) && foundMenuCategories(nodes, NON_TEST_ELEMENTS)) {
+        // Cannot move Non-Test Elements from root of Test Plan or Test Fragment
+        if (!(parent instanceof TestPlan || parent instanceof TestFragmentController) 
+                && foundMenuCategories(nodes, NON_TEST_ELEMENTS)) {
             return false;
         }
 
         if (parent instanceof TestPlan) {
             if (foundClass(nodes,
                      new Class[]{Sampler.class, Controller.class}, // Samplers and Controllers need not apply ...
-                     org.apache.jmeter.threads.AbstractThreadGroup.class)  // but AbstractThreadGroup (Controller) is OK
+                     new Class[]{org.apache.jmeter.threads.AbstractThreadGroup.class,
+                             ProxyControl.class
+                     })  // but AbstractThreadGroup (Controller) and ProxyControl are OK
                 ){
                 return false;
             }
@@ -660,7 +665,12 @@ public final class MenuFactory {
         return false;
     }
 
-    // Is any node an instance of one of the classes?
+    /**
+     * Is any of nodes an instance of one of the classes?
+     * @param nodes Array of {@link JMeterTreeNode}
+     * @param classes Array of {@link Class}
+     * @return true if nodes is one of classes
+     */
     private static boolean foundClass(JMeterTreeNode[] nodes, Class<?>[] classes) {
         for (JMeterTreeNode node : nodes) {
             for (Class<?> aClass : classes) {
@@ -672,7 +682,12 @@ public final class MenuFactory {
         return false;
     }
 
-    // Is any node an instance of one of the menu category?
+    /**
+     * Is any node an instance of one of the menu category?
+     * @param nodes Array of {@link JMeterTreeNode}
+     * @param category Category
+     * @return true if nodes is in category
+     */
     private static boolean foundMenuCategories(JMeterTreeNode[] nodes, String category) {
         for (JMeterTreeNode node : nodes) {
             for (String c : node.getMenuCategories()) {
@@ -684,11 +699,24 @@ public final class MenuFactory {
         return false;
     }
 
-    // Is any node an instance of one of the classes, but not an exception?
-    private static boolean foundClass(JMeterTreeNode[] nodes, Class<?>[] classes, Class<?> except) {
+    /**
+     * Is any node an instance of one of the classes, but not an exceptions?
+     * @param nodes array of {@link JMeterTreeNode}
+     * @param classes Array of {@link Class}
+     * @param exceptions Array of {@link Class}
+     * @return boolean
+     */
+    private static boolean foundClass(JMeterTreeNode[] nodes, Class<?>[] classes, Class<?>[] exceptions) {
         for (JMeterTreeNode node : nodes) {
             Object userObject = node.getUserObject();
-            if (!except.isInstance(userObject)) {
+            boolean isException = false;
+            for (Class<?> except : exceptions) {
+                if (except.isInstance(userObject)) {
+                    isException = true;
+                    break;
+                }
+            }
+            if (!isException) {
                 for (Class<?> aClass : classes) {
                     if (aClass.isInstance(userObject)) {
                         return true;
