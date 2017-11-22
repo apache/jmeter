@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  * <li>capitalize</li>
  * <li>camel cases</li>
  * <li></li>
- * 
+ * </ul>
  * 
  * @since 4.0
  *
@@ -164,7 +164,7 @@ public class ChangeCase extends AbstractFunction {
         /**
          * Get ChangeCaseMode by mode
          * 
-         * @param mode
+         * @param mode Change new case mode
          * @return relevant ChangeCaseMode
          */
         public static ChangeCaseMode typeOf(String mode) {
