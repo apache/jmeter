@@ -96,10 +96,10 @@ public class TestChangeCase extends JMeterTestCase {
     @Test
     public void testChangeCaseCamelCase() throws Exception {
     	params.add(new CompoundVariable("ab-CD eF"));
-    	params.add(new CompoundVariable("CAMEL_CASE"));
+    	params.add(new CompoundVariable("UPPER_CAMEL_CASE"));
     	changeCase.setParameters(params);
     	String returnValue = changeCase.execute(result, null);
-    	assertEquals("AbCDEF", returnValue);
+    	assertEquals("AbCdEf", returnValue);
     }
     
     @Test
@@ -114,23 +114,23 @@ public class TestChangeCase extends JMeterTestCase {
     @Test
     public void testChangeCaseCamelCaseFirstLower() throws Exception {
     	params.add(new CompoundVariable("ab-CD eF"));
-        params.add(new CompoundVariable("camel_CASE_FIRST_LOWER"));
+        params.add(new CompoundVariable("LOWER_CAMEL_CASE"));
         changeCase.setParameters(params);
         String returnValue = changeCase.execute(result, null);
-        assertEquals("abCDEF", returnValue);
+        assertEquals("abCdEf", returnValue);
     }
     
     @Test
     public void testChangeCaseCamelCaseFirstLowerWithFirstUpperCaseChar() throws Exception {
         params.add(new CompoundVariable("Ab-CD eF"));
-        params.add(new CompoundVariable("camel_CASE_FIRST_LOWER"));
+        params.add(new CompoundVariable("lower_CAMEL_CASE"));
         changeCase.setParameters(params);
         String returnValue = changeCase.execute(result, null);
-        assertEquals("abCDEF", returnValue);
+        assertEquals("abCdEf", returnValue);
         
         params.clear();
         params.add(new CompoundVariable(" zadad"));
-        params.add(new CompoundVariable("camel_CASE_FIRST_LOWER"));
+        params.add(new CompoundVariable("lower_CAMEL_CASE"));
         changeCase.setParameters(params);
         returnValue = changeCase.execute(result, null);
         assertEquals("Zadad", returnValue);
