@@ -52,7 +52,7 @@ configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecor
   <li>Go to <code>JMETER_HOME/bin</code> and start JMeter with <code>jmeterw.bat</code> on Windows
       and <code>jmeter.sh
       </code> on Linux/Unix</li>
-  <li>Select <code>Templates&hellip;code> on the menu bar</li>
+  <li>Select <code>Templates&hellip;</code> on the menu bar</li>
   <figure image="Select-Templates-Icon.png"></figure>
   <li>Select <code>Recording template</code> on the list</li>
   <figure image="Select-Recording-Template.png"></figure>
