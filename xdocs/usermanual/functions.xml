@@ -1652,8 +1652,8 @@ becomes:
                 <li><code>UPPER</code> result as AB-CD EF</li>
                 <li><code>LOWER</code> result as ab-cd ed</li>
                 <li><code>CAPITALIZE</code> result as Ab-CD eF</li>
-                <li><code>CAMEL_CASE</code>result as AbCDEF</li>
-                <li><code>CAMEL_CASE_FIRST_LOWER</code>result as abCDEF</li>
+                <li><code>UPPER_CAMEL_CASE</code>result as AbCdEf</li>
+                <li><code>LOWER_CAMEL_CASE</code>result as abCdEf</li>
             </ul>
             <note>mode is case insensitive</note>
         </property>

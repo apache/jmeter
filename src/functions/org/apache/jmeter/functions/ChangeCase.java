@@ -96,10 +96,10 @@ public class ChangeCase extends AbstractFunction {
             case CAPITALIZE:
                 targetString = StringUtils.capitalize(originalString);
                 break;
-            case CAMEL_CASE:
+            case LOWER_CAMEL_CASE:
                 targetString = camel(originalString, false);
                 break;
-            case CAMEL_CASE_FIRST_LOWER:
+            case UPPER_CAMEL_CASE:
                 targetString = camel(originalString, true);
                 break;
             default:
@@ -131,26 +131,15 @@ public class ChangeCase extends AbstractFunction {
         StringBuilder builder = new StringBuilder(str.length());
         String[] tokens = NOT_ALPHANUMERIC_REGEX.split(str);
         for (int i = 0; i < tokens.length; i++) {
+            String lowerCased = StringUtils.lowerCase(tokens[i]);
             if(i == 0) {
-                builder.append(isFirstCapitalized ? decapitalize(tokens[0]):
-                    StringUtils.capitalize(tokens[i]));
+                builder.append(isFirstCapitalized ? StringUtils.capitalize(lowerCased):
+                    lowerCased);
             } else {
-                builder.append(StringUtils.capitalize(tokens[i]));
+                builder.append(StringUtils.capitalize(lowerCased));
             }
         }
         return builder.toString();
-    }
-
-    /**
-     * @param string to decapitalize
-     */
-    private static String decapitalize(String string) {
-        if (string == null || string.length() == 0) {
-            return string;
-        }
-        char[] c = string.toCharArray();
-        c[0] = Character.toLowerCase(c[0]);
-        return new String(c);
     }
     
     /**
@@ -160,8 +149,8 @@ public class ChangeCase extends AbstractFunction {
      *
      */
     public enum ChangeCaseMode {
-        UPPER("UPPER"), LOWER("LOWER"), CAPITALIZE("CAPITALIZE"), CAMEL_CASE("CAMEL_CASE"), CAMEL_CASE_FIRST_LOWER(
-                "CAMEL_CASE_FIRST_LOWER");
+        UPPER("UPPER"), LOWER("LOWER"), CAPITALIZE("CAPITALIZE"), 
+        UPPER_CAMEL_CASE("UPPER_CAMEL_CASE"), LOWER_CAMEL_CASE("LOWER_CAMEL_CASE");
         private String mode;
 
         private ChangeCaseMode(String mode) {
@@ -180,9 +169,9 @@ public class ChangeCase extends AbstractFunction {
          */
         public static ChangeCaseMode typeOf(String mode) {
             EnumSet<ChangeCaseMode> allOf = EnumSet.allOf(ChangeCaseMode.class);
-            for (ChangeCaseMode zs : allOf) {
-                if (zs.getName().equals(mode)) {
-                    return zs;
+            for (ChangeCaseMode csm : allOf) {
+                if (csm.getName().equals(mode)) {
+                    return csm;
                 }
             }
             return null;
