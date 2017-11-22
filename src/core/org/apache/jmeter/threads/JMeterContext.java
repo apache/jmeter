@@ -102,6 +102,8 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
+     * 
+     * @param vars JMeterVariables
      */
     public void setVariables(JMeterVariables vars) {
         this.variables = vars;
@@ -113,6 +115,8 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
+     * 
+     * @param result SampleResult
      */
     public void setPreviousResult(SampleResult result) {
         this.previousResult = result;
@@ -124,6 +128,8 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
+     * 
+     * @param sampler Sampler
      */
     public void setCurrentSampler(Sampler sampler) {
         this.previousSampler = currentSampler;
@@ -219,9 +225,8 @@ public class JMeterContext {
     /**
      * if set to <code>true</code> current loop iteration will be interrupted and 
      * JMeter will go to next iteration
-     *
-     * @param restartNextLoop
-     *            flag whether restart will occur
+     * 
+     * @return boolean restartNextLoop
      */
     public boolean isStartNextThreadLoop() {
         return restartNextLoop;

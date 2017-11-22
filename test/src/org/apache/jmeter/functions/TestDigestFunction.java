@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 /**
  * Test Digest function
- * @see DigestEncode
+ * @see DigestEncodeFunction
  * @since 4.0
  *
  */

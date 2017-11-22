@@ -17,7 +17,7 @@
 
 /**
  * Package contains all renderer for JMS publisher.
- * @see Renderers
- * @see MessageRenderer
+ * @see org.apache.jmeter.protocol.jms.sampler.render.Renderers
+ * @see org.apache.jmeter.protocol.jms.sampler.render.MessageRenderer
  */
 package org.apache.jmeter.protocol.jms.sampler.render;
