@@ -39,7 +39,7 @@ import java.util.List;
 
 /**
  * Digest Encode Function that provides computing of different SHA-XXX, can
- * uppercase the result and store it in a variable.<br/>
+ * uppercase the result and store it in a variable.
  * Algorithm names can be specified using MessageDigest Algorithms names at
  * <a href=
  * "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html"
