@@ -106,7 +106,7 @@ public class ChangeCase extends AbstractFunction {
                 // default not doing nothing to string
             }
         } else {
-            LOGGER.error("Unknown mode {}, returning {} unchanged", mode, targetString);
+            LOGGER.error("Unknown mode {}, returning {} unchanged", mode, targetString);
         }
         return targetString;
     }
