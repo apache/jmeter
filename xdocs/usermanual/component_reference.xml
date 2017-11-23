@@ -2467,7 +2467,7 @@ The Module Controller provides a mechanism for substituting test plan fragments 
 </p>
 <p>
 A test plan fragment consists of a Controller and all the test elements (samplers etc.) contained in it. 
-The fragment can be located in any Thread Group, or on the <complink name="WorkBench" />.
+The fragment can be located in any Thread Group.
 If the fragment is located in a Thread Group, then its Controller can be disabled to prevent the fragment being run
 except by the Module Controller. 
 Or you can store the fragments in a dummy Thread Group, and disable the entire Thread Group. 
@@ -6443,15 +6443,15 @@ directly into your test plan as you go (so you can view samples interactively wh
 Ensure you read this <a href="https://wiki.apache.org/jmeter/TestRecording210">wiki page</a> to setup correctly JMeter.
 </p>
 
-<p>To use the recorder, <i>add</i> the HTTP(S) Test Script Recorder element to the workbench.
-Select the WorkBench element in the tree, and right-click on this element to get the
-Add menu 
+<p>To use the recorder, <i>add</i> the HTTP(S) Test Script Recorder element.
+Right-click on the Test Plan element to get the Add menu:
 (<menuchoice>
   <guimenuitem>Add</guimenuitem>
   <guimenuitem>Non-Test Elements</guimenuitem>
   <guimenuitem>HTTP(S) Test Script Recorder</guimenuitem>
 </menuchoice>
-).</p>
+).
+</p>
 <p>
 The recorder is implemented as an HTTP(S) proxy server.
 You need to set up your browser use the proxy for all HTTP and HTTPS requests.
@@ -6914,7 +6914,6 @@ You can also use the following query parameters:
 <p>
 The Property Display shows the values of System or JMeter properties.
 Values can be changed by entering new text in the Value column.
-It is available only on the WorkBench.
 </p>
 </description>
 <properties>
