@@ -84,6 +84,7 @@ Summary
     <li>Workbench element has been dropped, you now directly add <code>Non Test Element</code> as children of Test Plan. When loading a Test Plan that contains the element
     JMeter will move the <code>Mirror Server</code>, <code>Property Display</code> and HTTP(s) <code>Test Script Recorder</code> elements as direct children of Test Plan. For 
     any other element, it will create a <code>Test Fragment</code> element called <code>Workbench Test Fragment and move the elements in it</code>.</li>
+    <li>Following classes have been dropped (<code>org.apache.jmeter.functions.util.ArgumentEncoder</code>, <code>org.apache.jmeter.functions.util.ArgumentDecoder</code>), see <pr>335</pr></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -186,6 +187,7 @@ Summary
     <li><pr>324</pr> Save backup refactor. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>327</pr> Utilising more modern Java, simplifying code and formatting code and comments. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>334</pr> Enable running of JUnit tests from within IntelliJ with default config. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>335</pr> Removed functions.util.* as they don't seem to be used (for many years). Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
