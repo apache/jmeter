@@ -91,7 +91,7 @@
         <h2>Overview</h2>
         This is a sample JSR223 sampler which shows how to use some of its features with Apache Groovy language
         <br/>
-        Please select a suitable location in the tree - e.g. Thread Group or WorkBench - before merging.
+        Please select a suitable location in the tree before merging.
         <h2>Useful links</h2>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#JSR223_Sampler" >JSR223 Sampler</a></li>
@@ -107,7 +107,7 @@
         <h2>Overview</h2>
         This is a sample BeanShell sampler which shows how to use some of its features.
         <br/>
-        Please select a suitable location in the tree - e.g. Thread Group or WorkBench - before merging.
+        Please select a suitable location in the tree before merging.
         <h2>Useful links</h2>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#BeanShell_Sampler" >http://jmeter.apache.org/usermanual/component_reference.html#BeanShell_Sampler</a></li>
