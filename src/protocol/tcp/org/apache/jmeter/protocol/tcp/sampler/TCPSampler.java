@@ -344,7 +344,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 log.debug("{} Created: {}@{}", this, getClassname(), Integer.toHexString(tcpClient.hashCode())); //$NON-NLS-1$
             }
         } catch (Exception e) {
-            log.error("{} Exception creating: ", this, getClassname(), e); //$NON-NLS-1$
+            log.error("{} Exception creating: {} ", this, getClassname(), e); //$NON-NLS-1$
         }
         return tcpClient;
     }

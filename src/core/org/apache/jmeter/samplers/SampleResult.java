@@ -116,16 +116,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private static final SampleResult[] EMPTY_SR = new SampleResult[0];
 
     private static final AssertionResult[] EMPTY_AR = new AssertionResult[0];
-    
-    private static final boolean GETBYTES_BODY_REALSIZE = 
-        JMeterUtils.getPropDefault("sampleresult.getbytes.body_real_size", true); // $NON-NLS-1$
-
-    private static final boolean GETBYTES_HEADERS_SIZE = 
-        JMeterUtils.getPropDefault("sampleresult.getbytes.headers_size", true); // $NON-NLS-1$
-    
-    private static final boolean GETBYTES_NETWORK_SIZE =
-            GETBYTES_HEADERS_SIZE && GETBYTES_BODY_REALSIZE;
-
+        
     private static final boolean START_TIMESTAMP = 
             JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);  // $NON-NLS-1$
 
@@ -214,10 +205,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private boolean success;
 
-    //@GuardedBy("this"")
-    /** files that this sample has been saved in */
-    /** In Non GUI mode and when best config is used, size never exceeds 1, 
-     * but as a compromise set it to 3 
+    /**
+     * Files that this sample has been saved in.
+     * In Non GUI mode and when best config is used, size never exceeds 1,
+     * but as a compromise set it to 3
      */
     private final Set<String> files = new HashSet<>(3);
 
@@ -233,9 +224,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /** time to first response */
     private long latency = 0;
 
-    /**
-     * time to end connecting
-     */
+    /** time to end connecting */
     private long connectTime = 0;
 
     /** Should thread start next iteration ? */
@@ -330,9 +319,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         responseDataAsString = null;
         responseHeaders = res.responseHeaders;//OK
         responseMessage = res.responseMessage;//OK
-        /** 
-         * Don't copy this; it is per instance resultFileName = res.resultFileName;
-         */
+
+        // Don't copy this; it is per instance resultFileName = res.resultFileName;
+
         sampleCount = res.sampleCount;
         samplerData = res.samplerData;
         saveConfig = res.saveConfig;
@@ -1259,15 +1248,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return byte count
      */
     public long getBytesAsLong() {
-        if (GETBYTES_NETWORK_SIZE) {
-            long tmpSum = this.getHeadersSize() + this.getBodySizeAsLong();
-            return tmpSum == 0 ? bytes : tmpSum;
-        } else if (GETBYTES_HEADERS_SIZE) {
-            return this.getHeadersSize();
-        } else if (GETBYTES_BODY_REALSIZE) {
-            return this.getBodySizeAsLong();
-        }
-        return bytes == 0 ? responseData.length : bytes;
+        long tmpSum = this.getHeadersSize() + this.getBodySizeAsLong();
+        return tmpSum == 0 ? bytes : tmpSum;
     }
 
     /**
@@ -1466,7 +1448,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             while(true) {
                 getOffset(NANOTHREAD_SLEEP); // Can now afford to wait a bit longer between checks
             }
-            
         }
 
         private static void getOffset(long wait) {
@@ -1480,7 +1461,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
                 Thread.currentThread().interrupt();
             }
         }
-        
     }
 
     /**

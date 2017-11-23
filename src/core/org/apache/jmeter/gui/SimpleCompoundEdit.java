@@ -22,9 +22,6 @@ import javax.swing.undo.CompoundEdit;
 
 public class SimpleCompoundEdit extends CompoundEdit {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 7125085226441904495L;
 
     /**

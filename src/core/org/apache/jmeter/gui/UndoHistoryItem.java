@@ -29,9 +29,6 @@ import org.apache.jmeter.engine.TreeCloner;
  */
 public class UndoHistoryItem implements Serializable {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -8683007040160205040L;
     private final HashTree tree;
     // TODO: find a way to show this comment in menu item and toolbar tooltip

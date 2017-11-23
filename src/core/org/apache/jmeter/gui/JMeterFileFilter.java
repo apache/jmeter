@@ -88,17 +88,7 @@ public class JMeterFileFilter extends javax.swing.filechooser.FileFilter impleme
      * @return true if the file should be allowed, false otherwise
      */
     public boolean accept(String filename) {
-        if (exts.length == 0) {
-            return true;
-        }
-
-        for (String ext : exts) {
-            if (filename.endsWith(ext)) {
-                return true;
-            }
-        }
-
-        return false;
+        return Arrays.stream(exts).anyMatch(filename::endsWith);
     }
 
     /**

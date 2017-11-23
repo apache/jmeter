@@ -117,7 +117,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
          * @param lastModified formatted string containing the last modification time of the http response
          * @param expires formatted string containing the expiration time of the http response
          * @param etag of the http response
-         * @deprecated use {@link CacheEntry(String lastModified, Date expires, String etag, String varyHeader)} instead
+         * @deprecated use {@link CacheEntry#CacheEntry(String lastModified, Date expires, String etag, String varyHeader)} instead
          */
         @Deprecated
         public CacheEntry(String lastModified, Date expires, String etag) {

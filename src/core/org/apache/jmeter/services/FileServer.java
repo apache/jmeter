@@ -75,10 +75,8 @@ public class FileServer {
         JMeterUtils.getPropDefault("jmeter.save.saveservice.base_prefix", // $NON-NLS-1$
                 BASE_PREFIX_DEFAULT);
 
-    //@GuardedBy("this")
     private File base;
 
-    //@GuardedBy("this") NOTE this also guards against possible window in checkForOpenFiles()
     private final Map<String, FileEntry> files = new HashMap<>();
 
     private static final FileServer server = new FileServer();

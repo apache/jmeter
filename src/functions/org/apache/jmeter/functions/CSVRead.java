@@ -35,11 +35,11 @@ import org.slf4j.LoggerFactory;
  * line-thru the data in the CSV file - one line per each test. E.g. inserting
  * the following in the test scripts :
  *
- * <pre>{@code
+ * <pre>{@code}
  * ${__CSVRead(c:/BOF/abcd.csv,0)} // read (first) line of 'c:/BOF/abcd.csv' ,
- * return the 1<sup>st</sup> column ( represented by the '0'),
+ * return the 1st column (represented by the '0'),
  * ${__CSVRead(c:/BOF/abcd.csv,1)} // read (first) line of 'c:/BOF/abcd.csv' ,
- * return the 2<sup>nd</sup> column ( represented by the '1'),
+ * return the 2nd column (represented by the '1'),
  * ${__CSVRead(c:/BOF/abcd.csv,next())} // Go to next line of 'c:/BOF/abcd.csv'
  * }</pre>
  * NOTE: A single instance of each different file is opened and used for all

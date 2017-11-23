@@ -49,9 +49,10 @@ configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecor
 <subsection name="&sect-num;.2 Basic Instructions" anchor="basic-instructions">
 
 <ol>
-  <li>Go to <code>JMETER_HOME/bin</code> and start JMeter with <code>jmeterw.cmd</code> on Windows
-      and <code>jmeter</code> on Linux/Unix</li>
-  <li>Select <code>Templates...</code> on the menu bar</li>
+  <li>Go to <code>JMETER_HOME/bin</code> and start JMeter with <code>jmeterw.bat</code> on Windows
+      and <code>jmeter.sh
+      </code> on Linux/Unix</li>
+  <li>Select <code>Templates&hellip;</code> on the menu bar</li>
   <figure image="Select-Templates-Icon.png"></figure>
   <li>Select <code>Recording template</code> on the list</li>
   <figure image="Select-Recording-Template.png"></figure>
@@ -59,7 +60,7 @@ configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecor
   <figure image="Test_Generated.png"></figure>
   <li>In the <code>HTTP Request Defaults</code> element:
     <dl>
-      <dt><code>Server name</code></dt><dd>enter <code>example.com</code></dd>
+      <dt><code>Server name or IP</code></dt><dd>enter <code>example.com</code></dd>
       <dt><code>Path</code></dt><dd>leave blank</dd>
     </dl>
     <figure image="http-config/http-request-defaults.png"></figure>
@@ -70,7 +71,7 @@ configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecor
 
 <p>
 This will start the JMeter proxy server which is used to intercept the browser requests.
-A file called <code>ApacheJMeterTemporaryRootCA.crt</code> will be generated in <code>jmeter/bin</code>
+A file called <code>ApacheJMeterTemporaryRootCA.crt</code> will be generated in <code>JMETER_HOME/bin</code>
 folder. Install this certificate in your browser, if you don't know how to do it,
 read <a href="component_reference.html#HTTP%28S%29_Test_Script_Recorder">Installing the JMeter CA certificate for HTTPS recording</a>
 </p>
@@ -139,8 +140,8 @@ is required by all pages, the request defaults is where one would add the entrie
 <ol>
   <li>Select <code>Thread Group</code> and change a few defaults:
     <dl>
-      <dt><code>Number of Threads</code></dt><dd>enter <code>5</code></dd>
-      <dt><code>Ramp-Up Period</code></dt><dd>do not change</dd>
+      <dt><code>Number of Threads (users)</code></dt><dd>enter <code>5</code></dd>
+      <dt><code>Ramp-Up Period (in seconds)</code></dt><dd>do not change</dd>
       <dt><code>Loop Count</code></dt><dd>enter <code>100</code></dd>
     </dl>
     <figure width="357" height="288" image="example-thread-group.png"></figure>
@@ -170,20 +171,20 @@ Check with <code>View Results Tree</code> element if all is ok.
 <p>
 In some scripts, we will need to:
 <ul>
-  <li>Variabilize some input (login, password, search words...)</li>
-  <li>Correlate some data (session variable...) between two requests</li>
-</ul>  
+  <li>Variabilize some input (login, password, search words, &hellip;)</li>
+  <li>Correlate some data (session variable, &hellip;) between two requests</li>
+</ul>
 </p>
 <p>
 To variabilize, we can use:
 <ul>
-	<li><code>CSV Data Set Config</code> to get input data from csv file</li>
-	<li>JMeter functions like <code>__counter</code>, <code>__time</code>...</li>
-	<li>etc.</li>
+  <li><code>CSV Data Set Config</code> to get input data from csv file</li>
+  <li>JMeter functions like <code>__counter</code>, <code>__time</code>, &hellip;</li>
+  <li>etc.</li>
 </ul>
 </p>
 <p>
-To correlate, we can get data from a request with <code>Post Processors</code> like <code>JSON Extractor</code>, <code>Regular Expression Extractor</code>... and inject it in another request.
+To correlate, we can get data from a request with <code>Post Processors</code> like <code>JSON Extractor</code>, <code>Regular Expression Extractor</code>, &hellip; and inject it in another request.
 </p>
 <p>
 To find data to correlate, the easiest way to do it is to use the Search function in <code>View Results Tree</code>.

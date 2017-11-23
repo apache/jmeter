@@ -21,6 +21,8 @@ package org.apache.jmeter.util;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -35,7 +37,7 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
  * to apply the test element to the parent sample, the child samples or both.
  *
  */
-public class ScopePanel extends JPanel implements ActionListener {
+public class ScopePanel extends JPanel implements ActionListener, FocusListener {
 
     private static final long serialVersionUID = 240L;
 
@@ -102,6 +104,7 @@ public class ScopePanel extends JPanel implements ActionListener {
             group.add(variableButton);
             buttonPanel.add(variableButton);
             buttonPanel.add(variableName);
+            variableName.addFocusListener(this);
         }
         add(buttonPanel);
     }
@@ -178,5 +181,15 @@ public class ScopePanel extends JPanel implements ActionListener {
 
     public String getVariable() {
         return variableName.getText();
+    }
+
+    @Override
+    public void focusGained(FocusEvent focusEvent) {
+        variableButton.setSelected(focusEvent.getSource() == variableName);
+    }
+
+    @Override
+    public void focusLost(FocusEvent focusEvent) {
+        // NOOP
     }
 }

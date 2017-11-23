@@ -57,6 +57,48 @@
     <error>false</error>
   </assertionResult>
 </sample>
+<sample s="true" lb="JMS-P2P-RequestOnly" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-Browse" rc="200" rm="1 messages available on the queue" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-Read" rc="200" rm="1 message(s) received successfully" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-RequestOnlyForClear" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-Clear" rc="200" rm="1 message(s) removed using receive timeout:100ms" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-BrowseAfterClear" rc="200" rm="0 messages available on the queue" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
 <sample s="true" lb="JMS Publisher-NonDurable" rc="200" rm="1 messages published" tn="TG-JMS-PS 2-1" dt="" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>Response Assertion</name>

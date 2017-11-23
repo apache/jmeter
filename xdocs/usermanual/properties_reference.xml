@@ -270,6 +270,11 @@ gui.quick_9=ViewResultsFullVisualizer
     is set to a non zero value).<br/>
     Defaults to: <code>10</code>
 </property>
+<property name="save_automatically_before_run">
+Enable auto saving of the .jmx file before start run a test plan<br/>
+When enabled, before the run, the .jmx will be saved and also backed up to the directory pointed.<br/>
+Defaults to: <code>true</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.7 Remote hosts and RMI configuration" anchor="remote">
@@ -399,13 +404,13 @@ JMETER-SERVER</source>
 <section name="&sect-num;.12 Apache HttpClient logging examples" anchor="httpclient_logging_examples">
 <description>
     Enable header wire and context logging - Best for Debugging
-	In log4j2.xml, set:
+    In log4j2.xml, set:
 <source>
 &lt;Logger name="org.apache.http" level="debug" /&gt;
 &lt;Logger name="org.apache.http.wire" level="error" /&gt;
 </source>
     Enable full wire and context logging
-	In log4j2.xml, set:
+    In log4j2.xml, set:
     <source>&lt;Logger name="org.apache.http" level="debug" /&gt;</source>
     Enable context logging for connection management
     <source>&lt;Logger name="org.apache.http.impl.conn" level="debug" /&gt;</source>
@@ -1276,17 +1281,6 @@ JMETER-SERVER</source>
 <property name="sampleresult.default.encoding">
     The encoding to be used if none is provided.<br/>
     Defaults to: <code>ISO-8859-1</code>
-</property>
-<property name="sampleresult.getbytes.body_real_size">
-    Network response size calculation method<br/>
-    Use real size: number of bytes for response body returned by webserver
-    (i.e. the network bytes received for response). If set to <code>false</code>,
-    the (uncompressed) response data size will used (default before version 2.5).<br/>
-    Defaults to: <code>true</code>
-</property>
-<property name="sampleresult.getbytes.headers_size">
-    Include headers: add the headers size in real size.<br/>
-    Defaults to: <code>true</code>
 </property>
 <property name="CookieManager.delete_null_cookies">
     CookieManager behaviour - should cookies with null/empty values be deleted?<br/>

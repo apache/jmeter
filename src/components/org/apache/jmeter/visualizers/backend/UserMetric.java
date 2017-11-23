@@ -36,11 +36,12 @@ public class UserMetric {
      * 
      */
     public UserMetric() {
+        super();
     }
 
     /**
      * Add a {@link SampleResult} to be used in the statistics
-     * @param result {@link SampleResult} to be used
+     * @param result {@link SampleResult} not used
      */
     public synchronized void add(SampleResult result) {
         usersStats.addValue(JMeterContextService.getThreadCounts().activeThreads);

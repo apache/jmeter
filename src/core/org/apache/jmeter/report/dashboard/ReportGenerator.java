@@ -449,7 +449,7 @@ public class ReportGenerator {
                         Long tolerated = entry.getValue()[1];
                         if(log.isDebugEnabled()) {
                             log.debug("Found match for sampleName:{}, Regex:{}, satisfied value:{}, tolerated value:{}", 
-                                    entry.getKey(), satisfied, tolerated);
+                                    sampleName, entry.getKey(), satisfied, tolerated);
                         }
                         info.setSatisfiedThreshold(satisfied);
                         info.setToleratedThreshold(tolerated);

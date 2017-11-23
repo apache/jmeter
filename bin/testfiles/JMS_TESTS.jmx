@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171027">
+<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171119">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -29,7 +29,7 @@
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="filename"></stringProp>
-          <stringProp name="cacheKey">12bd6db8-b5be-4825-a7ce-b7f4ba5ba84e</stringProp>
+          <stringProp name="cacheKey">true</stringProp>
           <stringProp name="script">import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.broker.BrokerFactory;
 import org.apache.jmeter.util.JMeterUtils;
@@ -82,7 +82,6 @@ try {
           <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
           <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue0</stringProp>
           <stringProp name="JMSSampler.ReceiveQueue">dynamicQueues/requestQueue0</stringProp>
-          <boolProp name="JMSSampler.isFireAndForget">false</boolProp>
           <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
           <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">true</boolProp>
           <stringProp name="JMSSampler.timeout"></stringProp>
@@ -96,6 +95,7 @@ try {
             <collectionProp name="JMSProperties.properties"/>
           </elementProp>
           <boolProp name="JMSSampler.useResMsgIdAsCorrelId">true</boolProp>
+          <intProp name="JMSSampler.communicationStyle">1</intProp>
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
@@ -109,7 +109,7 @@ try {
           <hashTree/>
         </hashTree>
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSS-ConsumeUpcomingMessage" enabled="true">
-          <stringProp name="cacheKey">c7334ba5-f18d-407c-9a7f-28c29a6bee84</stringProp>
+          <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters">dynamicQueues/requestQueue0-tmp</stringProp>
           <stringProp name="script">import org.apache.activemq.ActiveMQConnectionFactory;
@@ -190,7 +190,6 @@ class MyMessageListener implements MessageListener {
           <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
           <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue0-tmp</stringProp>
           <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
-          <boolProp name="JMSSampler.isFireAndForget">false</boolProp>
           <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
           <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">true</boolProp>
           <stringProp name="JMSSampler.timeout"></stringProp>
@@ -205,6 +204,7 @@ class MyMessageListener implements MessageListener {
           </elementProp>
           <boolProp name="JMSSampler.useResMsgIdAsCorrelId">true</boolProp>
           <stringProp name="TestPlan.comments">Test case where Request queue is empty meaning we&apos;ll wait for a reply on ReplyTo queue</stringProp>
+          <intProp name="JMSSampler.communicationStyle">1</intProp>
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
@@ -221,7 +221,6 @@ class MyMessageListener implements MessageListener {
           <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
           <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue1</stringProp>
           <stringProp name="JMSSampler.ReceiveQueue">dynamicQueues/requestQueue1</stringProp>
-          <boolProp name="JMSSampler.isFireAndForget">false</boolProp>
           <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
           <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
           <stringProp name="JMSSampler.timeout"></stringProp>
@@ -240,6 +239,7 @@ class MyMessageListener implements MessageListener {
               </elementProp>
             </collectionProp>
           </elementProp>
+          <intProp name="JMSSampler.communicationStyle">1</intProp>
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
@@ -256,7 +256,6 @@ class MyMessageListener implements MessageListener {
           <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
           <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue2</stringProp>
           <stringProp name="JMSSampler.ReceiveQueue">dynamicQueues/requestQueue2</stringProp>
-          <boolProp name="JMSSampler.isFireAndForget">false</boolProp>
           <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
           <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
           <stringProp name="JMSSampler.timeout"></stringProp>
@@ -281,6 +280,7 @@ class MyMessageListener implements MessageListener {
             </collectionProp>
           </elementProp>
           <stringProp name="JMSSampler.jmsSelector">NewsType=&apos;Opinion&apos;</stringProp>
+          <intProp name="JMSSampler.communicationStyle">1</intProp>
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
@@ -297,7 +297,6 @@ class MyMessageListener implements MessageListener {
           <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
           <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue3</stringProp>
           <stringProp name="JMSSampler.ReceiveQueue">dynamicQueues/requestQueue3</stringProp>
-          <boolProp name="JMSSampler.isFireAndForget">false</boolProp>
           <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
           <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
           <stringProp name="JMSSampler.timeout"></stringProp>
@@ -322,6 +321,7 @@ class MyMessageListener implements MessageListener {
             </collectionProp>
           </elementProp>
           <stringProp name="JMSSampler.jmsSelector">NewsType=&apos;Sports&apos;</stringProp>
+          <intProp name="JMSSampler.communicationStyle">1</intProp>
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
@@ -338,7 +338,6 @@ class MyMessageListener implements MessageListener {
           <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
           <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue4</stringProp>
           <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
-          <boolProp name="JMSSampler.isFireAndForget">true</boolProp>
           <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
           <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
           <stringProp name="JMSSampler.timeout"></stringProp>
@@ -357,6 +356,7 @@ class MyMessageListener implements MessageListener {
               </elementProp>
             </collectionProp>
           </elementProp>
+          <intProp name="JMSSampler.communicationStyle">0</intProp>
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
@@ -382,7 +382,7 @@ class MyMessageListener implements MessageListener {
           <hashTree/>
         </hashTree>
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSS-ConsumePreviousMessage" enabled="true">
-          <stringProp name="cacheKey">c7334ba5-f18d-407c-9a7f-28c29a6bee84</stringProp>
+          <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="script">import org.apache.activemq.ActiveMQConnectionFactory;
@@ -427,6 +427,236 @@ finally {
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="-487953317">Received : Test-send-only</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <JMSSampler guiclass="JMSSamplerGui" testclass="JMSSampler" testname="JMS-P2P-RequestOnly" enabled="true">
+          <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
+          <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue5</stringProp>
+          <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
+          <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
+          <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
+          <stringProp name="JMSSampler.timeout"></stringProp>
+          <stringProp name="HTTPSamper.xml_data">Test-send-only-for-count-and-read</stringProp>
+          <stringProp name="JMSSampler.initialContextFactory">org.apache.activemq.jndi.ActiveMQInitialContextFactory</stringProp>
+          <stringProp name="JMSSampler.contextProviderUrl">tcp://localhost:61616</stringProp>
+          <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <elementProp name="arguments" elementType="JMSProperties">
+            <collectionProp name="JMSProperties.properties">
+              <elementProp name="" elementType="JMSProperty">
+                <stringProp name="JMSProperty.name">JMSCorrelationId</stringProp>
+                <stringProp name="JMSProperty.value">MsgId-${__time(,)}</stringProp>
+                <stringProp name="JMSProperty.type">java.lang.String</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <intProp name="JMSSampler.communicationstyle">0</intProp>
+          <intProp name="JMSSampler.communicationStyle">0</intProp>
+        </JMSSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1549895784">Oneway request has no response data</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <TestAction guiclass="TestActionGui" testclass="TestAction" testname="Think Time" enabled="true">
+          <intProp name="ActionProcessor.action">1</intProp>
+          <intProp name="ActionProcessor.target">0</intProp>
+          <stringProp name="ActionProcessor.duration">0</stringProp>
+        </TestAction>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Pause" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+            <stringProp name="RandomTimer.range">100</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+        <JMSSampler guiclass="JMSSamplerGui" testclass="JMSSampler" testname="JMS-P2P-Browse" enabled="true">
+          <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
+          <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue5</stringProp>
+          <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
+          <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
+          <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
+          <stringProp name="JMSSampler.timeout"></stringProp>
+          <stringProp name="HTTPSamper.xml_data"></stringProp>
+          <stringProp name="JMSSampler.initialContextFactory">org.apache.activemq.jndi.ActiveMQInitialContextFactory</stringProp>
+          <stringProp name="JMSSampler.contextProviderUrl">tcp://localhost:61616</stringProp>
+          <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <elementProp name="arguments" elementType="JMSProperties">
+            <collectionProp name="JMSProperties.properties">
+              <elementProp name="" elementType="JMSProperty">
+                <stringProp name="JMSProperty.name">JMSCorrelationId</stringProp>
+                <stringProp name="JMSProperty.value">MsgId-${__time(,)}</stringProp>
+                <stringProp name="JMSProperty.type">java.lang.String</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <intProp name="JMSSampler.communicationstyle">3</intProp>
+          <intProp name="JMSSampler.communicationStyle">3</intProp>
+        </JMSSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1029016402">requestQueue5 has 1 messages</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <JMSSampler guiclass="JMSSamplerGui" testclass="JMSSampler" testname="JMS-P2P-Read" enabled="true">
+          <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
+          <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue5</stringProp>
+          <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
+          <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
+          <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
+          <stringProp name="JMSSampler.timeout">1000</stringProp>
+          <stringProp name="HTTPSamper.xml_data"></stringProp>
+          <stringProp name="JMSSampler.initialContextFactory">org.apache.activemq.jndi.ActiveMQInitialContextFactory</stringProp>
+          <stringProp name="JMSSampler.contextProviderUrl">tcp://localhost:61616</stringProp>
+          <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <elementProp name="arguments" elementType="JMSProperties">
+            <collectionProp name="JMSProperties.properties"/>
+          </elementProp>
+          <intProp name="JMSSampler.communicationstyle">2</intProp>
+          <intProp name="JMSSampler.communicationStyle">2</intProp>
+        </JMSSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1086280699">Test-send-only-for-count-and-read</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <JMSSampler guiclass="JMSSamplerGui" testclass="JMSSampler" testname="JMS-P2P-RequestOnlyForClear" enabled="true">
+          <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
+          <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue6</stringProp>
+          <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
+          <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
+          <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
+          <stringProp name="JMSSampler.timeout"></stringProp>
+          <stringProp name="HTTPSamper.xml_data">Test-send-only-for-clear</stringProp>
+          <stringProp name="JMSSampler.initialContextFactory">org.apache.activemq.jndi.ActiveMQInitialContextFactory</stringProp>
+          <stringProp name="JMSSampler.contextProviderUrl">tcp://localhost:61616</stringProp>
+          <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <elementProp name="arguments" elementType="JMSProperties">
+            <collectionProp name="JMSProperties.properties">
+              <elementProp name="" elementType="JMSProperty">
+                <stringProp name="JMSProperty.name">JMSCorrelationId</stringProp>
+                <stringProp name="JMSProperty.value">MsgId-${__time(,)}</stringProp>
+                <stringProp name="JMSProperty.type">java.lang.String</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <intProp name="JMSSampler.communicationstyle">0</intProp>
+          <intProp name="JMSSampler.communicationStyle">0</intProp>
+        </JMSSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1549895784">Oneway request has no response data</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <TestAction guiclass="TestActionGui" testclass="TestAction" testname="Think Time" enabled="true">
+          <intProp name="ActionProcessor.action">1</intProp>
+          <intProp name="ActionProcessor.target">0</intProp>
+          <stringProp name="ActionProcessor.duration">0</stringProp>
+        </TestAction>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Pause" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+            <stringProp name="RandomTimer.range">100</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+        <JMSSampler guiclass="JMSSamplerGui" testclass="JMSSampler" testname="JMS-P2P-Clear" enabled="true">
+          <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
+          <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue6</stringProp>
+          <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
+          <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
+          <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
+          <stringProp name="JMSSampler.timeout">100</stringProp>
+          <stringProp name="HTTPSamper.xml_data"></stringProp>
+          <stringProp name="JMSSampler.initialContextFactory">org.apache.activemq.jndi.ActiveMQInitialContextFactory</stringProp>
+          <stringProp name="JMSSampler.contextProviderUrl">tcp://localhost:61616</stringProp>
+          <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <elementProp name="arguments" elementType="JMSProperties">
+            <collectionProp name="JMSProperties.properties"/>
+          </elementProp>
+          <intProp name="JMSSampler.communicationstyle">4</intProp>
+          <stringProp name="JMSSampler.expiration">1000</stringProp>
+          <stringProp name="JMSSampler.jmsNumberOfSamplesToAggregate"></stringProp>
+          <intProp name="JMSSampler.communicationStyle">4</intProp>
+        </JMSSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="2008037952">requestQueue6: 1 message(s) removed</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <JMSSampler guiclass="JMSSamplerGui" testclass="JMSSampler" testname="JMS-P2P-BrowseAfterClear" enabled="true">
+          <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
+          <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue6</stringProp>
+          <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
+          <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
+          <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
+          <stringProp name="JMSSampler.timeout"></stringProp>
+          <stringProp name="HTTPSamper.xml_data">Test-send-only-for-count-and-read</stringProp>
+          <stringProp name="JMSSampler.initialContextFactory">org.apache.activemq.jndi.ActiveMQInitialContextFactory</stringProp>
+          <stringProp name="JMSSampler.contextProviderUrl">tcp://localhost:61616</stringProp>
+          <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <elementProp name="arguments" elementType="JMSProperties">
+            <collectionProp name="JMSProperties.properties">
+              <elementProp name="" elementType="JMSProperty">
+                <stringProp name="JMSProperty.name">JMSCorrelationId</stringProp>
+                <stringProp name="JMSProperty.value">MsgId-${__time(,)}</stringProp>
+                <stringProp name="JMSProperty.type">java.lang.String</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <intProp name="JMSSampler.communicationstyle">3</intProp>
+          <intProp name="JMSSampler.communicationStyle">3</intProp>
+        </JMSSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1343037074">requestQueue6 has 0 messages</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -1136,7 +1366,7 @@ propFloat	1.2</stringProp>
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="filename"></stringProp>
-          <stringProp name="cacheKey">d47bf508-8239-4927-913f-238941a3e887</stringProp>
+          <stringProp name="cacheKey">true</stringProp>
           <stringProp name="script">import org.apache.activemq.broker.BrokerService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.commons.io.FileUtils;
@@ -1180,6 +1410,7 @@ FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/active
           </value>
         </objProp>
         <stringProp name="filename">JMS_TESTS.csv</stringProp>
+        <stringProp name="TestPlan.comments">Clear messages on Send Queue requestQueue6:1 message(s) removed</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer" enabled="true">
@@ -1216,9 +1447,5 @@ FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/active
       </ResultCollector>
       <hashTree/>
     </hashTree>
-    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
-      <boolProp name="WorkBench.save">true</boolProp>
-    </WorkBench>
-    <hashTree/>
   </hashTree>
 </jmeterTestPlan>

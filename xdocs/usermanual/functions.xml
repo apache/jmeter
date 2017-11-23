@@ -120,6 +120,8 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Input</td><td> <a href="#__CSVRead">CSVRead</a></td><td>read from CSV delimited file</td><td>1.9</td></tr>
         <tr><td>Input</td><td> <a href="#__XPath">XPath</a></td><td>Use an XPath expression to read from a file</td><td>2.0.3</td></tr>
         <tr><td>Calculation</td><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td><td>1.X</td></tr>
+        <tr><td>Formatting</td><td> <a href="#__dateTimeConvert">dateTimeConvert</a></td><td>Convert a date or time from source to target format</td><td>4.0</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__digest">digest</a></td><td>Generate a digest (SHA-1, SHA-256, MD5...)</td><td>4.0</td></tr>
         <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td><td>1.8.1</td></tr>
         <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td><td>2.3.2</td></tr>
         <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td><td>1.9</td></tr>
@@ -132,20 +134,23 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Nashorn)</td><td>1.9</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl2">jexl2</a></td><td>evaluate a Commons Jexl2 expression</td><td>jexl2(2.1.1)</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl3">jexl3</a></td><td>evaluate a Commons Jexl3 expression</td><td>jexl3 (3.0)</td></tr>
+        <tr><td>Properties</td><td> <a href="#__isPropDefined">isPropDefined</a> </td><td>Test if a property exists</td><td>4.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td><td>2.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__P">P</a></td><td>read a property (shorthand method)</td><td>2.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__setProperty">setProperty</a></td><td>set a JMeter property</td><td>2.1</td></tr>
         <tr><td>Variables</td><td> <a href="#__split">split</a></td><td>Split a string into variables</td><td>2.0.2</td></tr>
-        <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td><td>2.3RC3</td></tr>
         <tr><td>Variables</td><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td><td>2.3.1</td></tr>
         <tr><td>Variables</td><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td><td>2.3.1</td></tr>
-        <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td></tr>
-        <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by ORO regular expression</td><td>2.9</td></tr>
+        <tr><td>Properties</td><td> <a href="#__isVarDefined">isVarDefined</a> </td><td>Test if a variable exists</td><td>4.0</td></tr>
+        <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td><td>2.3RC3</td></tr>
         <tr><td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__changeCase">changeCase</a></td><td>Change case following different modes</td><td>4.0</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by ORO regular expression</td><td>2.9</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td></tr>
+        <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td></tr>
         <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td><td>2.3.3</td></tr>
-        <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
-        <tr><td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td></tr>
         <tr><td>String</td><td> <a href="#__urldecode">urldecode</a></td><td>Decode a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__urlencode">urlencode</a></td><td>Encode a string to a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__TestPlanName">TestPlanName</a></td><td>Return name of current test plan</td><td>2.6</td></tr>
@@ -1091,7 +1096,7 @@ If omitted, <code>,</code> is used. Note that <code>,</code> would need to be sp
 
 <properties>
         <property name="Format" required="No">
-        The format to be passed to SimpleDateFormat.
+        The format to be passed to <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a>.
         The function supports various shorthand aliases, see below.
         If omitted, the function returns the current time in milliseconds since the epoch.
         </property>
@@ -1540,7 +1545,7 @@ becomes:
 <properties>
         <property name="Format" required="No">
         The format to be passed to DateTimeFormatter.
-        See https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+        See <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
         If omitted, the function uses milliseconds since epoch format.
         </property>
         <property name="Date to shift" required="No">
@@ -1564,6 +1569,96 @@ becomes:
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
+</component>
+<component index="&sect-num;.5.34" name="__digest">
+    <description>
+        <p>The digest function returns an encrypted value in the
+            specific hash algorithm with the optional salt, upper case
+            and variable name.</p>
+    </description>
+    <properties>
+        <property name="Algorithm" required="Yes">
+            The algorithm to be used to encrypt
+            For possible algorithms See MessageDigest in
+            <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html">StandardNames</a>
+            <ul>
+                <li>MD2</li>
+                <li>MD5</li>
+                <li>SHA-1</li>
+                <li>SHA-224</li>
+                <li>SHA-256</li>
+                <li>SHA-384</li>
+                <li>SHA-512</li>
+            </ul>
+            <note>Spaces are taken into account for <code>Salt to add</code> and <code>String to encode</code></note>
+        </property>
+        <property name="String to encode" required="Yes"> The String
+            that will be encrypted </property>
+        <property name="Salt to add" required="No"> Salt to be added
+            to string (after it)</property>
+        <property name="Upper Case value" required="No"> Result will
+            be in lower case by default. Choose true to upper case
+            results. </property>
+        <property name="Name of variable" required="No">The name of
+            the variable to set.</property>
+    </properties>
+</component>
+<component index="&sect-num;.5.35" name="__dateTimeConvert">
+    <description>
+        <p>The <code>__dateTimeConvert</code> function converts a date that is in source format
+        to a target format storing the result optionally in the variable name.</p>
+    </description>
+    <properties>
+        <property name="Date String" required="Yes">
+            The date string to convert from Source Date Format to Target Date Format.
+        </property>
+        <property name="Source Date Format" required="Yes">The original date format</property>
+        <property name="Target Date Format" required="Yes">The new date format</property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
+    </properties>
+</component>
+<component index="&sect-num;.5.36" name="__isPropDefined">
+    <description>
+        <p>The <code>__isPropDefined</code> function returns true if property exists or false if not.</p>
+    </description>
+    <properties>
+        <property name="Property Name" required="Yes">
+            The Property Name to be used to check if defined
+        </property>
+    </properties>
+</component>
+<component index="&sect-num;.5.37" name="__isVarDefined">
+    <description>
+        <p>The <code>__isVarDefined</code> function returns true if variable exists or false if not.</p>
+    </description>
+    <properties>
+        <property name="Variable Name" required="Yes">
+            The Variable Name to be used to check if defined
+        </property>
+    </properties>
+</component>
+<component index="&sect-num;.5.38" name="__changeCase">
+    <description>
+        <p>The change case function returns a string value which 
+        case has been changed following a specific mode.
+        Result can optionally be saved in a JMeter variable.</p>
+    </description>
+    <properties>
+    <property name="String to change case" required="Yes">The String
+            which case will be changed</property>
+        <property name="change case mode" required="Yes">
+            The mode to be used to change case, for example for ab-CD eF:
+            <ul>
+                <li><code>UPPER</code> result as AB-CD EF</li>
+                <li><code>LOWER</code> result as ab-cd ed</li>
+                <li><code>CAPITALIZE</code> result as Ab-CD eF</li>
+                <li><code>UPPER_CAMEL_CASE</code>result as AbCdEf</li>
+                <li><code>LOWER_CAMEL_CASE</code>result as abCdEf</li>
+            </ul>
+            <note>mode is case insensitive</note>
+        </property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
+    </properties>
 </component>
 
 </subsection>

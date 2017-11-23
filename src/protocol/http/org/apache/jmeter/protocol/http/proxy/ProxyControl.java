@@ -80,10 +80,10 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.NonTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.TestStateListener;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -108,7 +108,7 @@ import org.slf4j.LoggerFactory;
  * Class handles storing of generated samples, etc
  * For unit tests, see TestProxyControl
  */
-public class ProxyControl extends GenericController {
+public class ProxyControl extends GenericController implements NonTestElement {
 
     private static final Logger log = LoggerFactory.getLogger(ProxyControl.class);
 
@@ -156,6 +156,8 @@ public class ProxyControl extends GenericController {
 
     private static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
     
+    private static final String HTTP_SAMPLER_NAMING_MODE = "ProxyControlGui.proxy_http_sampler_naming_mode"; // $NON-NLS-1$
+    
     private static final String PREFIX_HTTP_SAMPLER_NAME = "ProxyControlGui.proxy_prefix_http_sampler_name"; // $NON-NLS-1$
     
     private static final String PROXY_PAUSE_HTTP_SAMPLER = "ProxyControlGui.proxy_pause_http_sampler"; // $NON-NLS-1$
@@ -181,6 +183,7 @@ public class ProxyControl extends GenericController {
     private static final int GROUPING_STORE_FIRST_ONLY = 3;
     private static final int GROUPING_IN_TRANSACTION_CONTROLLERS = 4;
 
+    
     // Original numeric order (we now use strings)
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_JAVA = "0";
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
@@ -389,6 +392,10 @@ public class ProxyControl extends GenericController {
         setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
     }
 
+    public void setHTTPSampleNamingMode(int httpNamingMode) {
+        setProperty(new IntegerProperty(HTTP_SAMPLER_NAMING_MODE, httpNamingMode));
+    }
+    
     public void setPrefixHTTPSampleName(String prefixHTTPSampleName) {
         setProperty(PREFIX_HTTP_SAMPLER_NAME, prefixHTTPSampleName);
     }
@@ -479,6 +486,10 @@ public class ProxyControl extends GenericController {
         return getPropertyAsBoolean(SAMPLER_DOWNLOAD_IMAGES, false);
     }
 
+    public int getHTTPSampleNamingMode() {
+        return getPropertyAsInt(HTTP_SAMPLER_NAMING_MODE);
+    }
+    
     public String getPrefixHTTPSampleName() {
         return getPropertyAsString(PREFIX_HTTP_SAMPLER_NAME);
     }
@@ -1044,7 +1055,6 @@ public class ProxyControl extends GenericController {
      * <li>The controller specified by the <code>target</code> property.
      * <li>If none was specified, the first RecordingController in the tree.
      * <li>If none is found, the first AbstractThreadGroup in the tree.
-     * <li>If none is found, the Workspace.
      * </ul>
      *
      * @return the tree node for the controller where the proxy must store the
@@ -1060,10 +1070,6 @@ public class ProxyControl extends GenericController {
             return myTarget;
         }
         myTarget = findFirstNodeOfType(AbstractThreadGroup.class);
-        if (myTarget != null) {
-            return myTarget;
-        }
-        myTarget = findFirstNodeOfType(WorkBench.class);
         if (myTarget != null) {
             return myTarget;
         }

@@ -123,15 +123,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     // Lock used to guard static mutable variables
     private static final Object LOCK = new Object();
 
-    //@GuardedBy("LOCK")
     private static final Map<String, FileEntry> files = new HashMap<>();
 
     /**
      * Shutdown Hook that ensures PrintWriter is flushed is CTRL+C or kill is called during a test
      */
-    //@GuardedBy("LOCK")
     private static Thread shutdownHook;
-
 
     /**
      * The instance count is used to keep track of whether any tests are currently running.
@@ -139,11 +136,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * e.g. a remote test may be started,
      * and then a local test started whilst the remote test is still running.
      */
-    //@GuardedBy("LOCK")
     private static int instanceCount; // Keep track of how many instances are active
 
     // Instance variables (guarded by volatile)
-
     private transient volatile PrintWriter out;
 
     /**
@@ -397,9 +392,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                         }
                     }
                 }
-            } catch (IOException | JMeterError | RuntimeException | OutOfMemoryError e) {
-                // FIXME Why do we catch OOM ?
-                log.warn("Problem reading JTL file: {}", file);
+            } catch (IOException | JMeterError | RuntimeException e) {
+                log.warn("Problem reading JTL file: {}", file, e);
             } finally {
                 if (!parsedOK) {
                     GuiPackage.showErrorMessage(
@@ -500,7 +494,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             if (len < MIN_XML_FILE_LEN) {
                 return false;
             }
-            raf.seek(len - TESTRESULTS_END.length() - 10);// TODO: may not work on all OSes?
+            raf.seek(len - TESTRESULTS_END.length() - 10);
             String line;
             long pos = raf.getFilePointer();
             int end = 0;
@@ -531,10 +525,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     @Override
     public void sampleStarted(SampleEvent e) {
+        // NOOP
     }
 
     @Override
     public void sampleStopped(SampleEvent e) {
+        // NOOP
     }
 
     /**
@@ -600,11 +596,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * Flush PrintWriter, called by Shutdown Hook to ensure no data is lost
      */
     private static void flushFileOutput() {
-        String key;
-        ResultCollector.FileEntry value;
         for(Map.Entry<String, ResultCollector.FileEntry> me : files.entrySet()) {
-            key = me.getKey();
-            value = me.getValue();
+            String key = me.getKey();
+            ResultCollector.FileEntry value = me.getValue();
             log.debug("Flushing: {}", key);
             value.pw.flush();
             if (value.pw.checkError()){
@@ -614,16 +608,18 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     }
     
     private void finalizeFileOutput() {
-        String key;
-        ResultCollector.FileEntry value;
         for(Map.Entry<String, ResultCollector.FileEntry> me : files.entrySet()) {
-            key = me.getKey();
-            value = me.getValue();
-            log.debug("Closing: {}", key);
-            writeFileEnd(value.pw, value.config);
-            value.pw.close();
-            if (value.pw.checkError()){
-                log.warn("Problem detected during use of {}", key);
+            String key = me.getKey();
+            ResultCollector.FileEntry value = me.getValue();
+            try {
+                log.debug("Closing: {}", key);
+                writeFileEnd(value.pw, value.config);
+                value.pw.close();
+                if (value.pw.checkError()){
+                    log.warn("Problem detected during use of {}", key);
+                }
+            } catch(Exception ex) {
+                log.error("Error closing file {}", key, ex);
             }
         }
         files.clear();
@@ -655,5 +651,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     // can find the Clearable nodes - the userObject has to implement the interface.
     @Override
     public void clearData() {
+        // NOOP
     }
 }

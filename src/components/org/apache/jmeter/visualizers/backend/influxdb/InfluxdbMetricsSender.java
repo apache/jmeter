@@ -60,7 +60,7 @@ interface InfluxdbMetricsSender {
      * @param influxDBUrl url pointing to influxdb
      * @throws Exception when setup fails
      */
-    public void setup(String influxDBUrl) throws Exception;
+    public void setup(String influxDBUrl) throws Exception; // NOSONAR
 
     /**
      * Destroy sender

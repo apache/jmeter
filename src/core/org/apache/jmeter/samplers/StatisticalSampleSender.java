@@ -70,7 +70,6 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
 
     private final List<SampleEvent> sampleStore = new ArrayList<>();
 
-    //@GuardedBy("sampleStore") TODO perhaps use ConcurrentHashMap ?
     private final Map<String, StatisticalSampleResult> sampleTable = new HashMap<>();
 
     // Settings; readResolve sets these from the server/client values as appropriate
@@ -81,9 +80,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
 
     private transient volatile boolean keyOnThreadName;
 
-
     // variables maintained by server code
-    // @GuardedBy("sampleStore")
     private transient int sampleCount; // maintain separate count of samples for speed
 
     private transient long batchSendTime = -1; // @GuardedBy("sampleStore")

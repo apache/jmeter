@@ -67,7 +67,6 @@ public class XPathUtil {
         super();
     }
 
-    //@GuardedBy("this")
     private static DocumentBuilderFactory documentBuilderFactory;
 
     /**

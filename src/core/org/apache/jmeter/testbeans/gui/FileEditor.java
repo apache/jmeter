@@ -91,12 +91,12 @@ public class FileEditor implements PropertyEditor, ActionListener {
         boolean notExpression = GenericTestBeanCustomizer.notExpression(descriptor);
         boolean notOther = GenericTestBeanCustomizer.notOther(descriptor);
         Object defaultValue = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
-        ComboStringEditor cse = new ComboStringEditor(null, notExpression && notOther, notNull);
+        FieldStringEditor cse = new FieldStringEditor();
         editor = new WrapperEditor(this, new SimpleFileEditor(), cse,
                 !notNull, // acceptsNull
                 !notExpression, // acceptsExpressions
                 !notOther, // acceptsOther
-                defaultValue); // default
+                defaultValue == null ? "":defaultValue); // default // //$NON-NLS-1$
 
         // Create a panel containing the combo and the button:
         panel = new JPanel(new BorderLayout(5, 0));
