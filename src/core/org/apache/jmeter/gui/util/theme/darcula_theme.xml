@@ -10,10 +10,10 @@
    <!--<baseFont family="..." size="13"/>-->
    
    <!--  General editor colors. -->
-   <background color="45494A" />
+   <background color="45494a" />
    <caret color="bbbbbb" />
-   <selection fg="ffffff" bg="0D293E" />
-   <currentLineHighlight color="ffffd7" fade="false" />
+   <selection fg="b0b4b9" bg="0d293e" />
+   <currentLineHighlight color="2c2c2f" fade="true" />
    <marginLine fg="b0b4b9" />
    <markAllHighlight color="ccccff" />
    <markOccurrencesHighlight color="ccccff" border="false" />
@@ -33,39 +33,39 @@
 
    <!-- Syntax tokens. -->
    <tokenStyles>
-      <style token="IDENTIFIER" fg="000000" />
-      <style token="RESERVED_WORD" fg="000080" bold="true" />
-      <style token="RESERVED_WORD_2" fg="000080" bold="true" />
-      <style token="ANNOTATION" fg="808000" />
-      <style token="COMMENT_DOCUMENTATION" fg="808080" italic="true" />
-      <style token="COMMENT_EOL" fg="808080" italic="true" />
-      <style token="COMMENT_MULTILINE" fg="808080" italic="true" />
-      <style token="COMMENT_KEYWORD" fg="808080" bold="true" underline="true" italic="true" />
-      <style token="COMMENT_MARKUP" fg="808080" bg="e2ffe2" italic="true" />
-      <style token="DATA_TYPE" fg="000080" bold="true" />
-      <style token="FUNCTION" fg="000000" />
-      <style token="LITERAL_BOOLEAN" fg="000080" bold="true" />
-      <style token="LITERAL_NUMBER_DECIMAL_INT" fg="0000ff" />
-      <style token="LITERAL_NUMBER_FLOAT" fg="0000ff" />
-      <style token="LITERAL_NUMBER_HEXADECIMAL" fg="0000ff" />
-      <style token="LITERAL_STRING_DOUBLE_QUOTE" fg="008000" bold="true" />
-      <style token="LITERAL_CHAR" fg="008000" bold="true" />
-      <style token="LITERAL_BACKQUOTE" fg="008000" bold="true" />
-      <style token="MARKUP_TAG_DELIMITER" fg="000000" bold="true" />
-      <style token="MARKUP_TAG_NAME" fg="000080" bold="true" />
-      <style token="MARKUP_TAG_ATTRIBUTE" fg="0000ff" bold="true" />
-      <style token="MARKUP_TAG_ATTRIBUTE_VALUE" fg="008000" bold="true" />
-      <style token="MARKUP_COMMENT" fg="808080" italic="true"/>
-      <style token="MARKUP_DTD" fg="808080"/>
-      <style token="MARKUP_PROCESSING_INSTRUCTION"  fg="808080"/>
-      <style token="MARKUP_CDATA" fg="cc6600"/>
-      <style token="MARKUP_CDATA_DELIMITER" fg="008080"/>
-      <style token="MARKUP_ENTITY_REFERENCE" fg="008000"/>
-      <style token="OPERATOR" fg="000000" />
-      <style token="PREPROCESSOR" fg="808080" />
-      <style token="REGEX" fg="008040" />
-      <style token="SEPARATOR" fg="000000" />
-      <style token="VARIABLE" fg="810ca8" bold="true" />
+      <style token="IDENTIFIER" fg="ffffff" />
+      <style token="RESERVED_WORD" fg="647cca" bold="true" />
+      <style token="RESERVED_WORD_2" fg="647cca" bold="true" />
+      <style token="ANNOTATION" fg="ef8963" />
+      <style token="COMMENT_DOCUMENTATION" fg="e3afed" italic="true" />
+      <style token="COMMENT_EOL" fg="e3afed" italic="true" />
+      <style token="COMMENT_MULTILINE" fg="e3afed" italic="true" />
+      <style token="COMMENT_KEYWORD" fg="e3afed" bold="true" underline="true" italic="true" />
+      <style token="COMMENT_MARKUP" fg="e3afed" bg="e2ffe2" italic="true" />
+      <style token="DATA_TYPE" fg="647cca" bold="true" />
+      <style token="FUNCTION" fg="55d265" />
+      <style token="LITERAL_BOOLEAN" fg="98e1ad" bold="true" />
+      <style token="LITERAL_NUMBER_DECIMAL_INT" fg="e6e14d" />
+      <style token="LITERAL_NUMBER_FLOAT" fg="e6e14d" />
+      <style token="LITERAL_NUMBER_HEXADECIMAL" fg="e6e14d" />
+      <style token="LITERAL_STRING_DOUBLE_QUOTE" fg="98e1ad" bold="true" />
+      <style token="LITERAL_CHAR" fg="e6e14d" bold="true" />
+      <style token="LITERAL_BACKQUOTE" fg="e198de" bold="true" />
+      <style token="MARKUP_TAG_DELIMITER" fg="e5b3e5" bold="true" />
+      <style token="MARKUP_TAG_NAME" fg="e5b3e5" bold="true" />
+      <style token="MARKUP_TAG_ATTRIBUTE" fg="e5b3e5" bold="true" />
+      <style token="MARKUP_TAG_ATTRIBUTE_VALUE" fg="e5b3e5" bold="true" />
+      <style token="MARKUP_COMMENT" fg="e5b3e5" italic="true"/>
+      <style token="MARKUP_DTD" fg="e5b3e5"/>
+      <style token="MARKUP_PROCESSING_INSTRUCTION"  fg="e5b3e5"/>
+      <style token="MARKUP_CDATA" fg="e5b3e5"/>
+      <style token="MARKUP_CDATA_DELIMITER" fg="e5b3e5"/>
+      <style token="MARKUP_ENTITY_REFERENCE" fg="e5b3e5"/>
+      <style token="OPERATOR" fg="ffffff" />
+      <style token="PREPROCESSOR" fg="ffffff" />
+      <style token="REGEX" fg="ffffff" />
+      <style token="SEPARATOR" fg="ffffff" />
+      <style token="VARIABLE" fg="ffffff" bold="true" />
       <style token="WHITESPACE" fg="000000" />
 
       <style token="ERROR_IDENTIFIER" fg="ff0000" />
