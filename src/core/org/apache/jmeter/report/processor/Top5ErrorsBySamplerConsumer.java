@@ -28,33 +28,48 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Top5ErrorsBySamplerConsumer extends
         AbstractSummaryConsumer<Top5ErrorsSummaryData> {
+
     static final int MAX_NUMBER_OF_ERRORS_IN_TOP = 5;
     
     private boolean ignoreTCFromTop5ErrorsBySampler;
 
-    /**
-     * Instantiates a new Top5 Errors by sampler consumer.
-     */
     public Top5ErrorsBySamplerConsumer() {
         super(false);
     }
 
+    @Override
+    protected void updateData(SummaryInfo info, Sample sample) {
+        SummaryInfo overallInfo = getOverallInfo();
+        if (overallInfo.getData() == null) {
+            overallInfo.setData(new Top5ErrorsSummaryData());
+        }
+
+        if (info.getData() == null) {
+            info.setData(new Top5ErrorsSummaryData());
+        }
+
+        if (!sample.isEmptyController()) {
+            aggregateSample(sample, info.getData(), false);
+            aggregateSample(sample, overallInfo.getData(), true);
+        }
+    }
+
     /**
-     * 
+     * Update the data based upon information from the sample.
+     *
      * @param sample {@link Sample}
      * @param data {@link Top5ErrorsSummaryData}
-     * @param isOverall boolean indicating if aggregation concerns the Overall results in which case we ignore Transaction Controller's SampleResult
+     * @param isOverall boolean indicating if aggregation concerns the overall results
+     *                  in which case we ignore Transaction Controller's SampleResult
      */
     private void aggregateSample(Sample sample, Top5ErrorsSummaryData data, boolean isOverall) {
-        if(isOverall && sample.isController()) {
-            return;
+        if (sample.isController()) {
+            if (isOverall || ignoreTCFromTop5ErrorsBySampler) {
+                return;
+            }
         }
-        
-        if(ignoreTCFromTop5ErrorsBySampler && sample.isController()) {
-            return;
-        }
-        
-        if(!sample.getSuccess()) {
+
+        if (!sample.getSuccess()) {
             data.registerError(ErrorsSummaryConsumer.getErrorKey(sample));
             data.incErrors();
         }
@@ -65,44 +80,14 @@ public class Top5ErrorsBySamplerConsumer extends
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#updateData
-     * (org.apache.jmeter.report.processor.AbstractSummaryConsumer.SummaryInfo,
-     * org.apache.jmeter.report.core.Sample)
-     */
-    @Override
-    protected void updateData(SummaryInfo info, Sample sample) {
-        SummaryInfo overallInfo = getOverallInfo();
-        Top5ErrorsSummaryData overallData = overallInfo.getData();
-        if (overallData == null) {
-            overallData = new Top5ErrorsSummaryData();
-            overallInfo.setData(overallData);
-        }
-
-        Top5ErrorsSummaryData data = info.getData();
-        if (data == null) {
-            data = new Top5ErrorsSummaryData();
-            info.setData(data);
-        }
-
-        if(!sample.isEmptyController()) {
-            aggregateSample(sample, data, false);
-            aggregateSample(sample, overallData, true);
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createDataResult
      * (java.lang.String)
      */
     @Override
-    protected ListResultData createDataResult(String key,
-            Top5ErrorsSummaryData data) {
+    protected ListResultData createDataResult(String key, Top5ErrorsSummaryData data) {
         ListResultData result = new ListResultData();
         long errors = data.getErrors();
-        if(errors > 0 || key == null) {
+        if (errors > 0 || key == null) {
             result.addResult(new ValueResultData(
                     key != null ? key : JMeterUtils.getResString("reportgenerator_top5_total")));
             long total = data.getTotal();
@@ -115,7 +100,7 @@ public class Top5ErrorsBySamplerConsumer extends
             for (int i = 0; i < top5.length; i++) {
                 result.addResult(new ValueResultData(top5[i][0]));
                 result.addResult(new ValueResultData(top5[i][1]));
-                numberOfValues++;            
+                numberOfValues++;
             }
             for (int i = numberOfValues; i < MAX_NUMBER_OF_ERRORS_IN_TOP; i++) {
                 result.addResult(new ValueResultData(""));
