@@ -20,8 +20,10 @@ package org.apache.jmeter.functions;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -34,129 +36,101 @@ import org.junit.Test;
 
 /**
  * Test{@link ChangeCase} ChangeCase
- *  
- * @see ChangeCase 
+ *
+ * @see ChangeCase
  * @since 4.0
  */
 public class TestChangeCase extends JMeterTestCase {
-	
-	protected AbstractFunction changeCase;
-	private SampleResult result;
 
-    private Collection<CompoundVariable> params;
-
-    private JMeterVariables vars;
-
-    private JMeterContext jmctx;
+    private AbstractFunction changeCase;
+    private SampleResult result;
 
     @Before
     public void setUp() {
-    	changeCase = new ChangeCase();
-        result = new SampleResult();
-        jmctx = JMeterContextService.getContext();
+        changeCase = new ChangeCase();
+        JMeterContext jmctx = JMeterContextService.getContext();
         String data = "dummy data";
+        result = new SampleResult();
         result.setResponseData(data, null);
-        vars = new JMeterVariables();
+        JMeterVariables vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
     }
 
     @Test
     public void testParameterCountIsPropDefined() throws Exception {
         checkInvalidParameterCounts(changeCase, 1, 3);
     }
-    
+
+    private String execute(String... params) throws InvalidVariableException {
+        List<CompoundVariable> testParams =
+                Arrays.stream(params)
+                        .map(CompoundVariable::new)
+                        .collect(Collectors.toList());
+        changeCase.setParameters(testParams);
+        return changeCase.execute(result, null);
+    }
+
     @Test
     public void testChangeCase() throws Exception {
-    	params.add(new CompoundVariable("myUpperTest"));
-    	changeCase.setParameters(params);
-    	String returnValue = changeCase.execute(result, null);
-    	assertEquals("MYUPPERTEST", returnValue);
+        String returnValue = execute("myUpperTest");
+        assertEquals("MYUPPERTEST", returnValue);
     }
 
     @Test
     public void testChangeCaseLower() throws Exception {
-    	params.add(new CompoundVariable("myUpperTest"));
-    	params.add(new CompoundVariable("LOWER"));
-    	changeCase.setParameters(params);
-    	String returnValue = changeCase.execute(result, null);
-    	assertEquals("myuppertest", returnValue);
+        String returnValue = execute("myUpperTest", "LOWER");
+        assertEquals("myuppertest", returnValue);
     }
-    
+
     @Test
     public void testChangeCaseWrongMode() throws Exception {
-    	params.add(new CompoundVariable("myUpperTest"));
-    	params.add(new CompoundVariable("Wrong"));
-    	changeCase.setParameters(params);
-    	String returnValue = changeCase.execute(result, null);
-    	assertEquals("myUpperTest", returnValue);
+        String returnValue = execute("myUpperTest", "Wrong");
+        assertEquals("myUpperTest", returnValue);
     }
-    
+
     @Test
     public void testChangeCaseCamelCase() throws Exception {
-    	params.add(new CompoundVariable("ab-CD eF"));
-    	params.add(new CompoundVariable("UPPER_CAMEL_CASE"));
-    	changeCase.setParameters(params);
-    	String returnValue = changeCase.execute(result, null);
-    	assertEquals("AbCdEf", returnValue);
+        String returnValue = execute("ab-CD eF", "UPPER_CAMEL_CASE");
+        assertEquals("AbCdEf", returnValue);
     }
-    
+
     @Test
     public void testChangeCaseCapitalize() throws Exception {
-    	params.add(new CompoundVariable("ab-CD eF"));
-    	params.add(new CompoundVariable("CAPITALIZE"));
-    	changeCase.setParameters(params);
-    	String returnValue = changeCase.execute(result, null);
-    	assertEquals("Ab-CD eF", returnValue);
+        String returnValue = execute("ab-CD eF", "CAPITALIZE");
+        assertEquals("Ab-CD eF", returnValue);
     }
-    
+
     @Test
     public void testChangeCaseCamelCaseFirstLower() throws Exception {
-    	params.add(new CompoundVariable("ab-CD eF"));
-        params.add(new CompoundVariable("LOWER_CAMEL_CASE"));
-        changeCase.setParameters(params);
-        String returnValue = changeCase.execute(result, null);
+        String returnValue = execute("ab-CD eF", "LOWER_CAMEL_CASE");
         assertEquals("abCdEf", returnValue);
     }
-    
+
     @Test
     public void testChangeCaseCamelCaseFirstLowerWithFirstUpperCaseChar() throws Exception {
-        params.add(new CompoundVariable("Ab-CD eF"));
-        params.add(new CompoundVariable("lower_CAMEL_CASE"));
-        changeCase.setParameters(params);
-        String returnValue = changeCase.execute(result, null);
+        String returnValue = execute("Ab-CD eF", "lower_CAMEL_CASE");
         assertEquals("abCdEf", returnValue);
-        
-        params.clear();
-        params.add(new CompoundVariable(" zadad"));
-        params.add(new CompoundVariable("lower_CAMEL_CASE"));
-        changeCase.setParameters(params);
-        returnValue = changeCase.execute(result, null);
+
+        returnValue = execute(" zadad", "lower_CAMEL_CASE");
         assertEquals("Zadad", returnValue);
     }
-    
-    @Test(expected=InvalidVariableException.class)
-	public void testChangeCaseError() throws Exception {
-		changeCase.setParameters(params);
-		changeCase.execute(result, null);
-	}    
-    
+
+    @Test(expected = InvalidVariableException.class)
+    public void testChangeCaseError() throws Exception {
+        changeCase.setParameters(new LinkedList<>());
+        changeCase.execute(result, null);
+    }
+
     @Test
     public void testEmptyMode() throws Exception {
-        params.add(new CompoundVariable("ab-CD eF"));
-        params.add(new CompoundVariable(""));
-        changeCase.setParameters(params);
-        String returnValue = changeCase.execute(result, null);
+        String returnValue = execute("ab-CD eF", "");
         assertEquals("AB-CD EF", returnValue);
     }
 
     @Test
     public void testChangeCaseWrongModeIgnore() throws Exception {
-    	params.add(new CompoundVariable("ab-CD eF"));
-        params.add(new CompoundVariable("Wrong"));
-        changeCase.setParameters(params);
-        String returnValue = changeCase.execute(result, null);
+        String returnValue = execute("ab-CD eF", "Wrong");
         assertEquals("ab-CD eF", returnValue);
     }
 
