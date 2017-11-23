@@ -11,8 +11,6 @@ class Top5ErrorsBySamplerConsumerSpec extends JMeterSpec {
         given:
             def mockSummaryInfo = Mock(AbstractSummaryConsumer.SummaryInfo)
             def mockSample = Mock(Sample) {
-                isEmptyController() >> false
-                isController() >> false
                 getSuccess() >> true
             }
         when:
@@ -26,9 +24,6 @@ class Top5ErrorsBySamplerConsumerSpec extends JMeterSpec {
         given:
             def mockSummaryInfo = Mock(AbstractSummaryConsumer.SummaryInfo)
             def mockSample = Mock(Sample) {
-                isEmptyController() >> false
-                isController() >> false
-                getSuccess() >> false
                 getResponseCode() >> "200"
             }
         when:
