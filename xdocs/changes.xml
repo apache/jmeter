@@ -235,6 +235,7 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
+    <li>Bug 61807 - Web Report : fix error in getTop5ErrorMetrics. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <h3>General</h3>
