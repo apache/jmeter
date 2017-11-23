@@ -521,6 +521,7 @@
     <pathelement location="${lib.dir}/${slf4j-ext.jar}"/>
     <pathelement location="${lib.dir}/${spock.jar}"/>
     <pathelement location="${lib.dir}/${cglib-nodep.jar}"/>
+    <pathelement location="${lib.dir}/${objenesis.jar}"/>
     <pathelement location="${lib.dir}/${jtidy.jar}"/>
     <pathelement location="${lib.dir}/${tika-core.jar}"/>
     <pathelement location="${lib.dir}/${tika-parsers.jar}"/>
@@ -3250,6 +3251,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="log4j-slf4j-impl"/>
     <process_jarfile jarname="spock"/>
     <process_jarfile jarname="cglib-nodep"/>
+    <process_jarfile jarname="objenesis"/>
     <process_jarfile jarname="jtidy"/>
     <process_jarfile jarname="tika-core"/>
     <process_jarfile jarname="tika-parsers"/>
