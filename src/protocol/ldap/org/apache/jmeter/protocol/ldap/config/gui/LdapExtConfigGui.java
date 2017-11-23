@@ -37,7 +37,6 @@ import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPExtSampler;
-import org.apache.jmeter.protocol.ldap.config.gui.LDAPArgumentsPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;

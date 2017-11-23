@@ -42,6 +42,25 @@
 
   <module name="TreeWalker">
 
+    <!-- Imports -->
+    <module name="AvoidStarImport">
+      <property name="allowClassImports" value="false"/>
+      <property name="allowStaticMemberImports" value="false"/>
+    </module>
+
+    <module name="RedundantImport"/>
+    <module name="UnusedImports"/>
+
+<!--
+   <module name="ImportOrder">
+      <property name="groups" value="/^java\./,javax,org,com"/>
+      <property name="ordered" value="true"/>
+      <property name="separated" value="true"/>
+      <property name="option" value="above"/>
+      <property name="sortStaticImportsAlphabetically" value="true"/>
+    </module>
+-->
+
     <!-- Operator must be at end of wrapped line -->
 <!--
     <module name="OperatorWrap">
@@ -56,7 +75,8 @@
 <!--
     <module name="JavadocType"/>
 -->
-     <!-- Require method javadocs, allow undeclared RTE -->
+     <!-- Require method JavaDocs, allow undeclared RTE -->
+<!--
     <module name="JavadocMethod">
       <property name="minLineCount" value="3"/>
       <property name="scope" value="protected"/>
@@ -64,9 +84,12 @@
       <property name="allowMissingThrowsTags" value="true"/>
       <property name="allowMissingPropertyJavadoc" value="true"/>
       <property name="ignoreMethodNamesRegex" value="(get|set|is).*"/>
+-->
       <!-- Only check methods, i.e. ignore constructors  -->
+<!--
       <property name="tokens" value="METHOD_DEF"/>
     </module>
+-->
 
 <!--
     <module name="MethodName">
@@ -99,6 +122,13 @@
     <module name="UnusedImports"/>
 
     <module name="NeedBraces"/>
+
+    <!-- code metrics -->
+    <!--<module name="BooleanExpressionComplexity"/>-->
+    <!--<module name="ClassFanOutComplexity"/>-->
+    <!--<module name="CyclomaticComplexity"/>-->
+    <!--<module name="NPathComplexity"/>-->
+
 
     <!-- Required for SuppressionCommentFilter below -->
     <module name="FileContentsHolder"/>
