@@ -376,7 +376,9 @@ public class JMeter implements JMeterPlugin {
         MainFrame main = new MainFrame(treeModel, treeLis);
         splash.setProgress(100);
         ComponentUtil.centerComponentInWindow(main, 80);
+        main.setLocationRelativeTo(splash);
         main.setVisible(true);
+        main.toFront();
         instance.actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
         if (testFile != null) {
             try {

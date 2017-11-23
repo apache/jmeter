@@ -174,6 +174,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Show JMeter window on the top of other windows. Show JMeter window relative to default graphics device with relative size to it. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li>Updated to bsh-2.0b6 (from bsh-2.0b5)</li>
     <li>Updated to rhino-1.7.7.2 (from rhino-1.7.7.1)</li>
     <li><bug>61642</bug>Improve FTP test coverage</li>
