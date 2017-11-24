@@ -1013,6 +1013,8 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${src.core}" includes="**/*.properties">
         <exclude name="*eucJP*"/>
       </fileset>
+      <fileset dir="${src.core}" includes="**/*.xml">
+      </fileset>
       <!-- This file is used by the jmeter -h option -->
       <fileset dir="${src.core}" includes="org/apache/jmeter/help.txt"/>
     </jar>
