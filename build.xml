@@ -139,7 +139,7 @@
               output="xml:withMessages"
               reportlevel="${findbugs.level}"
               excludeFilter="fb-excludes.xml"
-              jvmargs="-Xms512m -Xmx512m"
+              jvmargs="-Xms512m -Xmx1024m"
               omitVisitors="InefficientStringBuffering"
               outputFile="${findbugs.outName}.xml" >
       <sourcePath path="${src.core}" />
