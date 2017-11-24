@@ -90,6 +90,8 @@
 
     <module name="AvoidStarImport"/>
 
+    <module name="UnusedImports"/>
+
     <module name="NeedBraces"/>
 
     <!-- Required for SuppressionCommentFilter below -->
