@@ -18,7 +18,9 @@
 
 package org.apache.jorphan.gui;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 
 /**
  * This class is a Util for awt Component and could be used to place them in
