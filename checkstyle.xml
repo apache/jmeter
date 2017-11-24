@@ -88,6 +88,8 @@
       <property name="classes" value="java.lang.Boolean, java.lang.String"/>
     </module>
 
+    <module name="AvoidStarImport"/>
+
     <module name="NeedBraces"/>
 
     <!-- Required for SuppressionCommentFilter below -->
