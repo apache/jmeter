@@ -118,16 +118,16 @@
   <property name="findbugs.xsldir" value="${findbugs.homedir}/src/xsl" />
   <property name="findbugs.xslname" value="fancy" />
   <property name="findbugs.outName" value="reports/jmeter-fb" />
-  <property name="skip.batchtest" value="false" />
-  <property name="skip.bug52310" value="false" />
-  <property name="skip.bug60607" value="false" />
-  <property name="skip.batchtest_Http4ImplPreemptiveBasicAuth" value="false" />
-  <property name="skip.batchtest_SlowCharsFeature" value="false" />
-  <property name="skip.batchtest_TestKeepAlive" value="false" />
-  <property name="skip.batchtest_ResponseDecompression" value="false" />
-  <property name="skip.test_https" value="false" />
-  <property name="skip.test_http" value="false" />
-  <property name="skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server" value="false" />
+  <property name="skip.batchtest" value="true" />
+  <property name="skip.bug52310" value="true" />
+  <property name="skip.bug60607" value="true" />
+  <property name="skip.batchtest_Http4ImplPreemptiveBasicAuth" value="true" />
+  <property name="skip.batchtest_SlowCharsFeature" value="true" />
+  <property name="skip.batchtest_TestKeepAlive" value="true" />
+  <property name="skip.batchtest_ResponseDecompression" value="true" />
+  <property name="skip.test_https" value="true" />
+  <property name="skip.test_http" value="true" />
+  <property name="skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server" value="true" />
 
   <target name="findbugs" description="Run the stand-alone Findbugs detector">
     <echoproperties prefix="findbugs"/>
@@ -2855,7 +2855,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <!-- Run all batch tests; used by test target -->
-  <target name="_allbatchtests" depends="batchtest,batchtestserver,batch_scripts">
+  <target name="_allbatchtests" depends="batchtest,batch_scripts">
   </target>
 
    <!-- Generic test target, not intended to be called directly -->

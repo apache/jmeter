@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.afklm.maven.pom</groupId>
+		<artifactId>af-projects-pom</artifactId>
+		<version>4.0.2</version>
+	</parent>
+
+	<groupId>com.airfrance.qualif.jmeter</groupId>
+	<artifactId>apache-jmeter</artifactId>
+	<packaging>pom</packaging>
+	<version>4.0-SNAPSHOT</version>
+
+	<properties>
+		<scmCommentPrefix>AFKLM-</scmCommentPrefix>
+		<dist.dir>${basedir}/dist</dist.dir>
+		<maven.dir>${dist.dir}/maven</maven.dir>
+	</properties>
+
+	<scm>
+		<connection>scm:git:https://bitbucket.devnet.klm.com/scm/TCPOW/apache-jmeter.git</connection>
+		<developerConnection>scm:git:https://bitbucket.devnet.klm.com/scm/TCPOW/apache-jmeter.git</developerConnection>
+		<tag>master</tag>
+		<url>https://bitbucket.devnet.klm.com/projects/TCPOW/repos/apache-jmeter/browse</url>
+	</scm>
+
+	<profiles>
+		<profile>
+			<id>package</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+
+						<!-- Lifecycle -->
+						<executions>
+							<!-- compile -->
+							<execution>
+								<id>compile</id>
+								<configuration>
+									<target>
+										<ant target="compile">
+											<property name="java.awt.headless" value="true" />
+										</ant>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<phase>compile</phase>
+							</execution>
+							<!-- test -->
+							<execution>
+								<id>test</id>
+								<configuration>
+									<target>
+										<ant target="gump-test">
+											<property name="java.awt.headless" value="true" />
+										</ant>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<phase>test</phase>
+							</execution>
+
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>release</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+
+						<!-- Lifecycle -->
+						<executions>
+							<!-- package -->
+							<execution>
+								<id>package</id>
+								<configuration>
+									<target>
+										<ant target="distribution">
+											<property name="java.awt.headless" value="true" />
+											<property name="disable-svnCheck" value="true" />
+											<property name="disable-check-versions" value="true" />
+											<property name="jmeter.version" value="${project.version}" />
+										</ant>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<phase>package</phase>
+							</execution>
+							
+							<!-- Generates Maven JARs -->
+							<execution>
+								<id>_dist_maven</id>
+								<configuration>
+									<target>
+										<ant target="_dist_maven">
+											<property name="java.awt.headless" value="true" />
+											<property name="jmeter.version" value="${project.version}" />
+										</ant>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<phase>package</phase>
+							</execution>
+						</executions>
+					</plugin>
+					
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>1.12</version>
+						
+						<executions>
+							<execution>
+								<id>attach-zip</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attach-artifact</goal>
+								</goals>
+								<configuration>
+									<artifacts>
+										<artifact>
+											<file>${dist.dir}/apache-jmeter-${project.version}.tgz</file>
+											<type>tgz</type>
+											<classifier>bin</classifier>
+										</artifact>
+									</artifacts>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					
+					<plugin>
+						<artifactId>maven-install-plugin</artifactId>
+						<executions>
+						
+							<execution>
+								<id>ApacheJMeter_parent</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_parent.pom</file>
+									<pomFile>${maven.dir}/ApacheJMeter_parent.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>pom</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>jorphan</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/jorphan.jar</file>
+									<pomFile>${maven.dir}/jorphan.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_components</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_components.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_components.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_config</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_config.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_config.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_core</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_core.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_core.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_ftp</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_ftp.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_ftp.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_functions</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_functions.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_functions.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_http</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_http.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_http.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_java</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_java.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_java.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_jdbc</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_jdbc.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_jdbc.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_jms</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_jms.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_jms.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_junit</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_junit.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_junit.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_junit-test</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_junit-test.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_junit-test.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_ldap</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_ldap.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_ldap.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_mail</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_mail.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_mail.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_mongodb</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_mongodb.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_mongodb.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_native</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_native.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_native.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>ApacheJMeter_tcp</id>
+								<phase>install</phase>
+								<goals>
+									<goal>install-file</goal>
+								</goals>
+								<configuration>
+									<file>${maven.dir}/ApacheJMeter_tcp.jar</file>
+									<pomFile>${maven.dir}/ApacheJMeter_tcp.pom</pomFile>
+									<generatePom>false</generatePom>
+									<packaging>jar</packaging>
+								</configuration>
+							</execution>
+
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+
+				<configuration>
+					<releaseVersion>${clean.bamboo.jira.version}</releaseVersion>
+					<releaseProfiles>release</releaseProfiles>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+
+				<dependencies>
+					<dependency>
+						<groupId>com.sun</groupId>
+						<artifactId>tools</artifactId>
+						<version>1.7</version>
+						<scope>system</scope>
+						<systemPath>${java.home}/../lib/tools.jar</systemPath>
+					</dependency>
+				</dependencies>
+
+				<!-- Lifecycle -->
+				<executions>
+					<execution>
+						<id>clean</id>
+						<configuration>
+							<target>
+								<ant target="clean">
+									<property name="java.awt.headless" value="true" />
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<phase>clean</phase>
+					</execution>
+
+					<execution>
+						<id>initialize</id>
+						<configuration>
+							<target>
+								<ant target="download_jars">
+									<property name="java.awt.headless" value="true" />
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<phase>initialize</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
