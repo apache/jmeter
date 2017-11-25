@@ -18,11 +18,13 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -97,10 +99,10 @@ public class ChangeCase extends AbstractFunction {
                 targetString = StringUtils.capitalize(originalString);
                 break;
             case LOWER_CAMEL_CASE:
-                targetString = camel(originalString.trim(), false);
+                targetString = camel(originalString.trim(), true);
                 break;
             case UPPER_CAMEL_CASE:
-                targetString = camel(originalString.trim(), true);
+                targetString = camel(originalString.trim(), false);
                 break;
             default:
                 // default not doing nothing to string
@@ -127,24 +129,14 @@ public class ChangeCase extends AbstractFunction {
         return DESC;
     }
 
-    private static String camel(String str, boolean capitalizeFirst) {
-        StringBuilder builder = new StringBuilder(str.length());
-        String[] tokens = SPLIT_CHARS.split(str);
-        boolean first = true;
-        for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i].isEmpty()) {
-                continue;
-            }
-            String lowerCased = StringUtils.lowerCase(tokens[i]);
-            if (first) {
-                builder.append(capitalizeFirst ? StringUtils.capitalize(lowerCased):
-                    lowerCased);
-                first = false;
-            } else {
-                builder.append(StringUtils.capitalize(lowerCased));
-            }
+    private static String camel(String input, boolean uncapitalizeFirst) {
+        List<String> tokens = Arrays.asList(SPLIT_CHARS.split(input)).stream()
+                .filter(s -> !s.isEmpty()).map(StringUtils::lowerCase).map(StringUtils::capitalize)
+                .collect(Collectors.toList());
+        if (uncapitalizeFirst && !tokens.isEmpty()) {
+            tokens.set(0, StringUtils.uncapitalize(tokens.get(0)));
         }
-        return builder.toString();
+        return String.join("", tokens);
     }
     
     /**
