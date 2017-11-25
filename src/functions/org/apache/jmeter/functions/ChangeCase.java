@@ -131,14 +131,16 @@ public class ChangeCase extends AbstractFunction {
 
     private static String camel(String input, boolean uncapitalizeFirst) {
         List<String> tokens = Arrays.asList(SPLIT_CHARS.split(input)).stream()
-                .filter(s -> !s.isEmpty()).map(StringUtils::lowerCase).map(StringUtils::capitalize)
+                .filter(s -> !s.isEmpty())
+                .map(StringUtils::lowerCase)
+                .map(StringUtils::capitalize)
                 .collect(Collectors.toList());
         if (uncapitalizeFirst && !tokens.isEmpty()) {
             tokens.set(0, StringUtils.uncapitalize(tokens.get(0)));
         }
         return String.join("", tokens);
     }
-    
+
     /**
      * ChangeCase Modes
      * 
