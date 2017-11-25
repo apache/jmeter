@@ -211,6 +211,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 
 * apache-bsf-2.4.0.jar
 * beanshell-2.0b6.jar
+* cglib-nodep-3.2.5.jar
 * commons-codec-1.10.jar
 * commons-collections-3.2.2.jar
 * commons-dbcp2-2.1.1.jar
@@ -252,8 +253,10 @@ The following software is provided under the Apache License V 2.0 (as above):
 * json-path-2.4.0.jar
 * json-smart-2.3.jar
 * mongo-java-driver-2.11.3.jar
+* objenesis-2.6.jar
 * ph-commons-8.6.6.jar
 * ph-css-5.0.4.jar
+* spock-1.0-groovy-2.4.jar
 
 - Software produced outside the ASF which is available under other licenses (not AL 2.0):
 For details, please see the files under: licenses/bin

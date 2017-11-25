@@ -13,34 +13,28 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-package org.apache.jmeter.report.processor;
 
-/**
- * The class ApdexThresholdsInfo provides a container for APDEX threshold
- * information.
- *
- * @since 3.0
- */
-public class ApdexThresholdsInfo {
+package org.apache.jmeter.report.processor
 
-    private long satisfiedThreshold;
-    private long toleratedThreshold;
+import spock.lang.Specification
+import spock.lang.Unroll
 
-    public final long getSatisfiedThreshold() {
-        return satisfiedThreshold;
-    }
+@Unroll
+class ListResultDataSpec extends Specification {
 
-    public final void setSatisfiedThreshold(long satisfiedThreshold) {
-        this.satisfiedThreshold = satisfiedThreshold;
-    }
+    def sut = new ListResultData()
 
-    public final long getToleratedThreshold() {
-        return toleratedThreshold;
-    }
-
-    public final void setToleratedThreshold(long toleratedThreshold) {
-        this.toleratedThreshold = toleratedThreshold;
+    def "addResult adds #object to list and returns true"() {
+        given:
+            assert sut.getSize() == 0
+        when:
+            def result = sut.addResult(object)
+        then:
+            result
+            sut.getSize() == 1
+            sut.get(0) == object
+        where:
+            object << [null, Mock(ResultData), new ListResultData()]
     }
 }
