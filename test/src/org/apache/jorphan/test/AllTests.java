@@ -22,10 +22,10 @@ import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,15 +43,15 @@ import org.junit.runner.Computer;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Request;
 import org.junit.runner.Result;
-import org.junit.runner.notification.RunListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spock.lang.Specification;
 
 import junit.framework.TestCase;
 
 /**
  * Provides a quick and easy way to run all <a href="http://http://junit.org">junit</a> 
- * unit tests in your java project. 
+ * unit tests (including Spock tests) in your Java project.
  * It will find all unit test classes and run all their test methods.
  * There is no need to configure it in any way to find these classes except to
  * give it a path to search.
@@ -188,9 +188,8 @@ public final class AllTests {
         try {
             int maxKeyLen = Cipher.getMaxAllowedKeyLength("AES");
             System.out.println("JCE max key length = " + maxKeyLen);
-        } catch (NoSuchAlgorithmException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            log.warn(e.getLocalizedMessage());
         }
         System.out.println("+++++++++++");
         logprop("java.awt.headless", true);
@@ -205,8 +204,7 @@ public final class AllTests {
             
             // this listener is in the internal junit package
             // if it breaks, replace it with a custom text listener
-            RunListener listener = new TextListener(new RealSystem());
-            jUnitCore.addListener(listener);
+            jUnitCore.addListener(new TextListener(new RealSystem()));
             
             Request request = Request.classes(new Computer(), classes);
             if(GraphicsEnvironment.isHeadless()) {
@@ -227,7 +225,7 @@ public final class AllTests {
             String test = tests.get(i);
             classes[i] = Class.forName(test, true, Thread.currentThread().getContextClassLoader());
         }
-        
+
         return classes;
     }
 
@@ -256,70 +254,59 @@ public final class AllTests {
         }
     }
 
-    private static List<String> findJMeterJUnitTests(String searchPaths)  throws IOException {
-        List<String> classList = ClassFinder.findClasses(JOrphanUtils.split(searchPaths, ","), new JunitTestFilter());
-       
-        return classList;
+    private static List<String> findJMeterJUnitTests(String searchPathString) throws IOException {
+        final String[] searchPaths = JOrphanUtils.split(searchPathString, ",");
+        return ClassFinder.findClasses(searchPaths, new JunitTestFilter());
     }
-    
+
     /**
-     * find the junit tests in the test search path
+     * Match JUnit (including Spock) tests
      */
     private static class JunitTestFilter implements ClassFilter {
-        
-        private final transient ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+
+        private final transient ClassLoader contextClassLoader =
+                Thread.currentThread().getContextClassLoader();
 
         @Override
         public boolean accept(String className) {
-            
             boolean isJunitTest = false;
             try {
-                Class<?> c = Class.forName(className, false, contextClassLoader);
+                Class<?> clazz = Class.forName(className, false, contextClassLoader);
 
-                if (!c.isAnnotation() 
-                        && !c.isEnum() 
-                        && !c.isInterface() 
-                        && !Modifier.isAbstract(c.getModifiers())) 
-                {
-                    if (TestCase.class.isAssignableFrom(c)) {
-                        isJunitTest =  true;
-                    }
-                    else {
-                        isJunitTest = checkForJUnitAnnotations(c);
-                    }
+                if (!clazz.isAnnotation()
+                        && !clazz.isEnum()
+                        && !clazz.isInterface()
+                        && !Modifier.isAbstract(clazz.getModifiers())) {
+                    isJunitTest = TestCase.class.isAssignableFrom(clazz)
+                            || Specification.class.isAssignableFrom(clazz) // Spock
+                            || checkForJUnitAnnotations(clazz);
                 }
-            } catch (UnsupportedClassVersionError | ClassNotFoundException
+            } catch (UnsupportedClassVersionError
+                    | ClassNotFoundException
                     | NoClassDefFoundError e) {
                 log.debug("Exception while filtering class {}. {}", className, e.toString());
             }
 
             return isJunitTest;
         }
-        
-        private boolean checkForJUnitAnnotations(Class<?> clazz)
-        {
+
+        private boolean checkForJUnitAnnotations(Class<?> clazz) {
             Class<?> classToCheck = clazz;
-            while(classToCheck != null) {
-                if( checkforTestAnnotationOnMethods(classToCheck)) {
+            while (classToCheck != null) {
+                if (checkForTestAnnotationOnMethods(classToCheck)) {
                     return true;
                 }
                 classToCheck = classToCheck.getSuperclass();
             }
-            
+
             return false;
         }
 
-        private boolean checkforTestAnnotationOnMethods(Class<?> clazz)
-        {
-            for(Method method : clazz.getDeclaredMethods()) {
-                for(Annotation annotation : method.getAnnotations() ) {
-                    if (org.junit.Test.class.isAssignableFrom(annotation.annotationType())) {
-                        return true;
-                    }
-                }
-            }
-            
-            return false;
+        private boolean checkForTestAnnotationOnMethods(Class<?> clazz) {
+            return Arrays.stream(clazz.getDeclaredMethods())
+                    .flatMap(method -> Arrays.stream(method.getAnnotations()))
+                    .map(Annotation::annotationType)
+                    .anyMatch(org.junit.Test.class::isAssignableFrom);
         }
 
         /**
@@ -329,6 +316,5 @@ public final class AllTests {
         public String toString() {
             return "JunitTestFilter []";
         }
-        
     }
 }
