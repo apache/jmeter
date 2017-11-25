@@ -17,6 +17,7 @@
  */
 package org.apache.jmeter.report.processor;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -38,21 +39,10 @@ public class ApdexSummaryConsumer extends
 
     private ThresholdSelector thresholdSelector;
 
-    /**
-     * Gets the APDEX threshold selector.
-     *
-     * @return the threshold selector
-     */
     public final ThresholdSelector getThresholdSelector() {
         return thresholdSelector;
     }
 
-    /**
-     * Sets the APDEX threshold selector.
-     *
-     * @param thresholdSelector
-     *            the APDEX threshold selector to set
-     */
     public final void setThresholdSelector(ThresholdSelector thresholdSelector) {
         this.thresholdSelector = thresholdSelector;
     }
@@ -63,16 +53,18 @@ public class ApdexSummaryConsumer extends
 
     @Override
     protected ListResultData createDataResult(String key, ApdexSummaryData data) {
-        ListResultData result = new ListResultData();
-        result.addResult(new ValueResultData(Double.valueOf(getApdex(data))));
+        Double apdex = Double.valueOf(getApdex(data));
         ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
-        result.addResult(new ValueResultData(Long.valueOf(thresholdsInfo
-                .getSatisfiedThreshold())));
-        result.addResult(new ValueResultData(Long.valueOf(thresholdsInfo
-                .getToleratedThreshold())));
-        result.addResult(new ValueResultData(key != null ? key : JMeterUtils
-                .getResString("reportgenerator_summary_total")));
+        Long satisfiedThreshold = Long.valueOf(thresholdsInfo.getSatisfiedThreshold());
+        Long toleratedThreshold = Long.valueOf(thresholdsInfo.getToleratedThreshold());
+        String keyOrDefault = ObjectUtils.defaultIfNull(
+                key, JMeterUtils.getResString("reportgenerator_summary_total"));
 
+        ListResultData result = new ListResultData();
+        result.addResult(new ValueResultData(apdex));
+        result.addResult(new ValueResultData(satisfiedThreshold));
+        result.addResult(new ValueResultData(toleratedThreshold));
+        result.addResult(new ValueResultData(keyOrDefault));
         return result;
     }
 
