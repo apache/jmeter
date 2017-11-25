@@ -24,43 +24,22 @@ package org.apache.jmeter.report.processor;
  * @since 3.0
  */
 public class ApdexThresholdsInfo {
+
     private long satisfiedThreshold;
     private long toleratedThreshold;
 
-    /**
-     * Gets the satisfied users threshold (T).
-     *
-     * @return the satisfied threshold
-     */
     public final long getSatisfiedThreshold() {
         return satisfiedThreshold;
     }
 
-    /**
-     * Sets the satisfied users threshold (T).
-     *
-     * @param satisfiedThreshold
-     *            the satisfied threshold to set
-     */
     public final void setSatisfiedThreshold(long satisfiedThreshold) {
         this.satisfiedThreshold = satisfiedThreshold;
     }
 
-    /**
-     * Gets the tolerated threshold (F).
-     *
-     * @return the tolerated threshold
-     */
     public final long getToleratedThreshold() {
         return toleratedThreshold;
     }
 
-    /**
-     * Sets the tolerated threshold (F).
-     *
-     * @param toleratedThreshold
-     *            the tolerated threshold to set
-     */
     public final void setToleratedThreshold(long toleratedThreshold) {
         this.toleratedThreshold = toleratedThreshold;
     }
