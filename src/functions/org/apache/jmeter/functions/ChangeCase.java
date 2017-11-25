@@ -49,8 +49,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ChangeCase extends AbstractFunction {
 
-    private static final Pattern NOT_ALPHANUMERIC_REGEX = 
-            Pattern.compile("[^a-zA-Z]");
+    private static final Pattern SPLIT_CHARS =
+            Pattern.compile("[^\\p{IsAlphabetic}\\d]+");
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangeCase.class);
     private static final List<String> DESC = new LinkedList<>();
     private static final String KEY = "__changeCase";
@@ -97,10 +97,10 @@ public class ChangeCase extends AbstractFunction {
                 targetString = StringUtils.capitalize(originalString);
                 break;
             case LOWER_CAMEL_CASE:
-                targetString = camel(originalString, false);
+                targetString = camel(originalString.trim(), false);
                 break;
             case UPPER_CAMEL_CASE:
-                targetString = camel(originalString, true);
+                targetString = camel(originalString.trim(), true);
                 break;
             default:
                 // default not doing nothing to string
@@ -127,14 +127,19 @@ public class ChangeCase extends AbstractFunction {
         return DESC;
     }
 
-    private static String camel(String str, boolean isFirstCapitalized) {
+    private static String camel(String str, boolean capitalizeFirst) {
         StringBuilder builder = new StringBuilder(str.length());
-        String[] tokens = NOT_ALPHANUMERIC_REGEX.split(str);
+        String[] tokens = SPLIT_CHARS.split(str);
+        boolean first = true;
         for (int i = 0; i < tokens.length; i++) {
+            if (tokens[i].isEmpty()) {
+                continue;
+            }
             String lowerCased = StringUtils.lowerCase(tokens[i]);
-            if(i == 0) {
-                builder.append(isFirstCapitalized ? StringUtils.capitalize(lowerCased):
+            if (first) {
+                builder.append(capitalizeFirst ? StringUtils.capitalize(lowerCased):
                     lowerCased);
+                first = false;
             } else {
                 builder.append(StringUtils.capitalize(lowerCased));
             }
