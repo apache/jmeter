@@ -23,6 +23,7 @@ package org.apache.jmeter.report.processor;
  * @since 3.0
  */
 public class ApdexSummaryData {
+
     private final ApdexThresholdsInfo apdexThresholdInfo;
 
     private long satisfiedCount;
@@ -33,55 +34,26 @@ public class ApdexSummaryData {
         return apdexThresholdInfo;
     }
 
-    /**
-     * Gets the satisfied count.
-     *
-     * @return the satisfiedCount
-     */
     public final long getSatisfiedCount() {
         return satisfiedCount;
     }
 
-    /**
-     * Sets the satisfied count.
-     *
-     * @param satisfiedCount
-     *            the satisfiedCount to set
-     */
     public final void setSatisfiedCount(long satisfiedCount) {
         this.satisfiedCount = satisfiedCount;
     }
 
-    /**
-     * @return the toleratedCount
-     */
     public final long getToleratedCount() {
         return toleratedCount;
     }
 
-    /**
-     * Sets the tolerated count.
-     *
-     * @param toleratedCount
-     *            the toleratedCount to set
-     */
     public final void setToleratedCount(long toleratedCount) {
         this.toleratedCount = toleratedCount;
     }
 
-    /**
-     * Gets the total count.
-     *
-     * @return the totalCount
-     */
     public final long getTotalCount() {
         return totalCount;
     }
 
-    /**
-     * @param totalCount
-     *            the totalCount to set
-     */
     public final void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
     }
@@ -89,8 +61,7 @@ public class ApdexSummaryData {
     /**
      * Instantiates a new apdex summary data.
      *
-     * @param info
-     *            the threshold information
+     * @param info the threshold information
      */
     public ApdexSummaryData(ApdexThresholdsInfo info) {
         apdexThresholdInfo = info;
