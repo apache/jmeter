@@ -74,15 +74,15 @@ Summary
 <ul>
     <li><code>Start time</code> and <code>End date</code> of Thread Group have been removed, see <bugzilla>61549</bugzilla></li>
     <li>In distributed testing, mode <code>Hold</code> has been removed. Use alternative and more efficient modes</li>
-    <li>For 3rd party plugins, the following method in <code>org.apache.jmeter.gui.tree.JMeterTreeNode</code> has been dropped for migration to Java 9 (<bugzilla>61529</bugzilla>)
+    <li>For 3<sup>rd</sup> party plugins, the following method in <code>org.apache.jmeter.gui.tree.JMeterTreeNode</code> has been dropped for migration to Java 9 (<bugzilla>61529</bugzilla>)
     <source>public Enumeration&lt;JMeterTreeNode&gt; children()</source>
     </li>
-    <li><code>tearDown Thread Group</code> will now run on stop and shutdown of a test by default. If you don't want this behaviour, 
+    <li><code>tearDown Thread Group</code> will now run on stop and shutdown of a test by default. If you don't want this behaviour,
     uncheck <code>Run tearDown Thread Groups after shutdown of main threads</code> on <code>Test Plan</code> element, see <bugzilla>61656</bugzilla></li>
     <li>Properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code> have been dropped, see <bugzilla>61587</bugzilla></li>
     <li>JMeter will now save your test plan whenever you run it. This behaviour can be controlled by property <code>save_automatically_before_run</code></li>
     <li>Workbench element has been dropped, you now directly add <code>Non Test Element</code> as children of Test Plan. When loading a Test Plan that contains the element
-    JMeter will move the <code>Mirror Server</code>, <code>Property Display</code> and HTTP(s) <code>Test Script Recorder</code> elements as direct children of Test Plan. For 
+    JMeter will move the <code>Mirror Server</code>, <code>Property Display</code> and HTTP(s) <code>Test Script Recorder</code> elements as direct children of Test Plan. For
     any other element, it will create a <code>Test Fragment</code> element called <code>Workbench Test Fragment and move the elements in it</code>.</li>
     <li>Following classes have been dropped (<code>org.apache.jmeter.functions.util.ArgumentEncoder</code>, <code>org.apache.jmeter.functions.util.ArgumentDecoder</code>), see <pr>335</pr></li>
 </ul>
@@ -114,7 +114,7 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>57760</bug>View Results Tree : Cookie Header is wrongly shown as empty(no cookies) when viewing a recorder Sample Result. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>57760</bug>View Results Tree : Cookie Header is wrongly shown as empty (no cookies) when viewing a recorder Sample Result. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61769</bug>View Results Tree: Use syntax highlighter in XPath Tester, JSON Path Tester and CSS/JQuery Tester. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61776</bug>View Results Tree: Expansion of <code>Add expand/collapse all</code> menu in render XML view. Contributed by Maxime Chassagneux and Graham Russell</li>
     <li><bug>61794</bug>Influxdb backend : Add as many custom tags as wanted by just create new lines and prefix theirs name by "<code>TAG_</code>" on the GUI backend listener</li>
@@ -143,7 +143,7 @@ Summary
 
 <h3>I18N</h3>
 <ul>
-    <li><bug>61606</bug>Translate button <code>Browse...</code> in some elements (which use FileEditor class)</li>
+    <li><bug>61606</bug>Translate button <code>Browse&hellip;</code> in some elements (which use FileEditor class)</li>
     <li><bug>61747</bug>HTTP(S) Test Script Recorder : add the missing doc to "Create transaction after request (ms)"</li>
 </ul>
 
@@ -157,15 +157,15 @@ Summary
     <li><bug>61549</bug>Thread Group : Remove start and end date</li>
     <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61709</bug>SampleResult : Add a method <code>setIgnore()</code> to make JMeter ignore the SampleResult and not send it to listeners</li>
-    <li><bug>61607</bug>Add browse button in all beanshell elements to select beanshell script</li>
+    <li><bug>61607</bug>Add browse button in all BeanShell elements to select BeanShell script</li>
     <li><bug>61627</bug>Don't clear LogView anymore when clicking on Warning/Errors Indicator</li>
     <li><bug>61629</bug>Add Think Times to Children menu should not consider disabled elements</li>
     <li><bug>61655</bug>SampleSender : Drop HoldSampleSender implementation</li>
     <li><bug>61656</bug><code>tearDown Thread Group</code> should run by default at stop or shutdown of test</li>
-    <li><bug>61659</bug>JMeterVariables#get() should apply toString() on non string objects</li>
+    <li><bug>61659</bug><code>JMeterVariables#get()</code> should apply <code>toString()</code> on non string objects</li>
     <li><bug>61555</bug>Metaspace should be restricted as default</li>
-    <li><bug>61693</bug>JMeter aware of Docker (-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap)</li>
-    <li><bug>61694</bug>Add -server option in jmeter.bat</li>
+    <li><bug>61693</bug>JMeter aware of Docker (<code>-XX:+UnlockExperimentalVMOptions</code> <code>-XX:+UseCGroupMemoryLimitForHeap</code>)</li>
+    <li><bug>61694</bug>Add <code>-server</code> option in <code>jmeter.bat</code></li>
     <li><bug>61697</bug>Introduce Darcula Look And Feel to make JMeter UI more attractive</li>
     <li><bug>61704</bug>Toolbar : Improve a bit the right part</li>
     <li><bug>61731</bug>Enhance Test plan Backup with option to save before run. Based on a contribution by orimarko at gmail.com</li>
@@ -189,7 +189,7 @@ Summary
     <li><pr>324</pr> Save backup refactor. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>327</pr> Utilising more modern Java, simplifying code and formatting code and comments. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>334</pr> Enable running of JUnit tests from within IntelliJ with default config. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><pr>335</pr> Removed functions.util.* as they don't seem to be used (for many years). Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>335</pr> Removed <code>functions.util.*</code> as they don't seem to be used (for many years). Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -209,7 +209,7 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
-    <li><bug>61556</bug>Clarify in documentation performance impacts of ${} var usage in IfController and groovy. Contributed by Justin McCartney (be_strew at yahoo.co.uk)</li>
+    <li><bug>61556</bug>Clarify in documentation performance impacts of <code>${}</code> var usage in IfController and groovy. Contributed by Justin McCartney (be_strew at yahoo.co.uk)</li>
     <li><bug>61713</bug>Test Fragment has option to Change Controller and Insert Parent. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
@@ -225,8 +225,8 @@ Summary
 
 <h3>Functions</h3>
 <ul>
-    <li><bug>61588</bug>Better log message for RandomDate function</li>
-    <li><bug>61619</bug>In Function Helper Dialog, the 1st function doesn't display default parameters</li>
+    <li><bug>61588</bug>Better log message for <funclink name="__RandomDate()"/> function</li>
+    <li><bug>61619</bug>In Function Helper Dialog, the 1<sup>st</sup> function doesn't display default parameters</li>
     <li><bug>61628</bug>If split string has empty separator default separator is not used</li>
     <li><bug>61752</bug><code>__RandomDate</code> : Function does not allow missing last parameter used for variable name</li>
 </ul>
@@ -237,12 +237,12 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li>Bug 61807 - Web Report : fix error in getTop5ErrorMetrics. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li>Bug 61807 - Web Report : fix error in <code>getTop5ErrorMetrics</code>. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <h3>General</h3>
 <ul>
-    <li><bug>61661</bug>Avoid startup/shutdown problems due to 3rd party Thread Listener plugins throwing RuntimeException</li>
+    <li><bug>61661</bug>Avoid startup/shutdown problems due to 3<sup>rd</sup> party Thread Listener plugins throwing RuntimeException</li>
     <li><bug>61625</bug>File Editor used in BeanInfo behaves strangely under all LAFs with impact on CSVDataSet, JSR223, BSF, Beanshell Element</li>
 </ul>
 
