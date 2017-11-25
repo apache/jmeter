@@ -80,9 +80,7 @@ public class CSVRead extends AbstractFunction {
         String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
         String columnOrNext = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
 
-        if (log.isDebugEnabled()) {
-            log.debug("execute (" + fileName + " , " + columnOrNext + ")   ");
-        }
+        log.debug("execute ({}, {})   ", fileName, columnOrNext);
 
         // Process __CSVRead(filename,*ALIAS)
         if (columnOrNext.startsWith("*")) { //$NON-NLS-1$
@@ -114,16 +112,16 @@ public class CSVRead extends AbstractFunction {
                                                                 // is wanted?
             myValue = FileWrapper.getColumn(fileName, columnIndex);
         } catch (NumberFormatException e) {
-            log.warn(Thread.currentThread().getName() + " - can't parse column number: " + columnOrNext + " "
-                    + e.toString());
+            log.warn("{} - can't parse column number: {} {}",
+                    Thread.currentThread().getName(), columnOrNext,
+                    e.toString());
         } catch (IndexOutOfBoundsException e) {
-            log.warn(Thread.currentThread().getName() + " - invalid column number: " + columnOrNext + " at row "
-                    + FileWrapper.getCurrentRow(fileName) + " " + e.toString());
+            log.warn("{} - invalid column number: {} at row {} {}",
+                    Thread.currentThread().getName(), columnOrNext,
+                    FileWrapper.getCurrentRow(fileName), e.toString());
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("execute value: " + myValue);
-        }
+        log.debug("execute value: {}");
 
         return myValue;
     }
@@ -143,13 +141,15 @@ public class CSVRead extends AbstractFunction {
     /** {@inheritDoc} */
     @Override
     public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
-        log.debug("setParameter - Collection.size=" + parameters.size());
+        if (log.isDebugEnabled()) {
+            log.debug("setParameter - Collection.size={}", parameters.size());
+        }
 
         values = parameters.toArray();
 
         if (log.isDebugEnabled()) {
             for (int i = 0; i < parameters.size(); i++) {
-                log.debug("i:" + ((CompoundVariable) values[i]).execute());
+                log.debug("i: {}", ((CompoundVariable) values[i]).execute());
             }
         }
 
