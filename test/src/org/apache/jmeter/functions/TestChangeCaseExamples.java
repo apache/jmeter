@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -67,6 +67,7 @@ public class TestChangeCaseExamples extends JMeterTestCase {
                         new String[] { "$ $ SPECIAL SPACE", "$ $ special space",
                                 "$ $ special space", "SpecialSpace",
                                 "specialSpace" } },
+                { " ", new String[] { " ", " ", " ", "", "" }},
 
         });
     }
