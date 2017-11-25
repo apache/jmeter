@@ -18,7 +18,7 @@
 package org.apache.jmeter.report.processor;
 
 /**
- * The class ValueResultData provides a value result from samples processing.
+ * This provides a value result from samples processing.
  * 
  * @since 3.0
  */
@@ -26,39 +26,19 @@ public class ValueResultData implements ResultData {
 
     private Object value;
 
-    /**
-     * Gets the value of the result.
-     *
-     * @return the value of the result
-     */
+    public ValueResultData() {
+    }
+
+    public ValueResultData(Object value) {
+        setValue(value);
+    }
+
     public final Object getValue() {
         return value;
     }
 
-    /**
-     * Sets the value of the result.
-     *
-     * @param value
-     *            the new value of the result
-     */
     public final void setValue(Object value) {
         this.value = value;
-    }
-
-    /**
-     * Instantiates a new value result data.
-     */
-    public ValueResultData() {
-    }
-
-    /**
-     * Instantiates a new value result data.
-     *
-     * @param value
-     *            the value of the result
-     */
-    public ValueResultData(Object value) {
-        setValue(value);
     }
 
     /*
