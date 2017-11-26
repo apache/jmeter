@@ -75,9 +75,8 @@
 
     <!--Class Design-->
     <!--<module name="FinalClass"/>-->
-    <!--<module name="HideUtilityClassConstructor"/>-->
-    <!-- Interfaces must be types (not just constants) -->
-    <module name="InterfaceIsType"/>
+    <!--<module name="HideUtilityClassConstructor"/>--> <!--need to change 25 class APIs-->
+    <module name="InterfaceIsType"/> <!-- Interfaces must be types (not just constants) -->
     <module name="MutableException"/>
     <module name="OneTopLevelClass"/>
     <module name="ThrowsCount">
@@ -90,6 +89,7 @@
     <module name="IllegalInstantiation">
       <property name="classes" value="java.lang.Boolean"/>
     </module>
+    <module name="IllegalThrows"/>
 
     <!-- Imports -->
     <module name="AvoidStarImport">
@@ -116,8 +116,6 @@
       <property name="option" value="eol"/>
     </module>
 -->
-
-
 
     <!-- Must have class / interface header comments -->
 <!--
