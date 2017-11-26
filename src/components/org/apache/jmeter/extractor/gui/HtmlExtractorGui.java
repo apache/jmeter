@@ -125,7 +125,6 @@ public class HtmlExtractorGui extends AbstractPostProcessorGui {
             } else {
                 htmlExtractor.setExtractor(USE_DEFAULT_EXTRACTOR_IMPL);               
             }
-
         }
     }
 
@@ -155,8 +154,6 @@ public class HtmlExtractorGui extends AbstractPostProcessorGui {
         add(box, BorderLayout.NORTH);
         add(makeParameterPanel(), BorderLayout.CENTER);
     }
-
-    
 
     private Component makeExtractorPanel() {
         JPanel panel = new HorizontalPanel();

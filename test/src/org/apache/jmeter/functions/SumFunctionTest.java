@@ -35,30 +35,28 @@ public class SumFunctionTest extends JMeterTestCase {
 
     private JMeterContext jmctx = null;
     private JMeterVariables vars = null;
-    
+
     @Before
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmctx.setVariables(new JMeterVariables());
         vars = jmctx.getVariables();
     }
-    
+
     @Test
     public void sumTest() throws Exception {
         String maxIntVal = Integer.toString(Integer.MAX_VALUE);
         String minIntVal = Integer.toString(Integer.MIN_VALUE);
 
-        { // prevent accidental use of is below
-            IntSum is = new IntSum();
-            checkInvalidParameterCounts(is, 2);
-            checkSum(is,"3", new String[]{"1","2"});
-            checkSumNoVar(is,"3", new String[]{"1","2"});
-            checkSum(is,"1", new String[]{"-1","1","1","1","-2","1"});
-            checkSumNoVar(is,"1", new String[]{"-1","1","1","1","-2","1"});
-            checkSumNoVar(is,"-1", new String[]{"-1","1","1","1","-2","-1"});
-            checkSum(is,maxIntVal, new String[]{maxIntVal,"0"});
-            checkSum(is,minIntVal, new String[]{maxIntVal,"1"}); // wrap-round check
-        }
+        IntSum is = new IntSum();
+        checkInvalidParameterCounts(is, 2);
+        checkSum(is,"3", new String[]{"1","2"});
+        checkSumNoVar(is,"3", new String[]{"1","2"});
+        checkSum(is,"1", new String[]{"-1","1","1","1","-2","1"});
+        checkSumNoVar(is,"1", new String[]{"-1","1","1","1","-2","1"});
+        checkSumNoVar(is,"-1", new String[]{"-1","1","1","1","-2","-1"});
+        checkSum(is,maxIntVal, new String[]{maxIntVal,"0"});
+        checkSum(is,minIntVal, new String[]{maxIntVal,"1"}); // wrap-round check
 
         LongSum ls = new LongSum();
         checkInvalidParameterCounts(ls, 2);
@@ -75,7 +73,7 @@ public class SumFunctionTest extends JMeterTestCase {
         checkSum(ls,maxLongVal, new String[]{maxLongVal,"0"});
         checkSum(ls,minLongVal, new String[]{maxLongVal,"1"}); // wrap-round check
     }
-    
+
     // Perform a sum and check the results
     private void checkSum(AbstractFunction func, String value, String [] addends)  throws Exception {
         Collection<CompoundVariable> parms = new LinkedList<>();
@@ -85,9 +83,9 @@ public class SumFunctionTest extends JMeterTestCase {
         parms.add(new CompoundVariable("Result"));
         func.setParameters(parms);
         assertEquals(value, func.execute(null,null));
-        assertEquals(value, vars.getObject("Result"));       
+        assertEquals(value, vars.getObject("Result"));
     }
-    
+
     // Perform a sum and check the results
     private void checkSumNoVar(AbstractFunction func, String value, String [] addends)  throws Exception {
         Collection<CompoundVariable> parms = new LinkedList<>();

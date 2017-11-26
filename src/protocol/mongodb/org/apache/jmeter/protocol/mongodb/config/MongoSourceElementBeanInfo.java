@@ -24,8 +24,6 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
-  */
 public class MongoSourceElementBeanInfo
         extends BeanInfoSupport {
 

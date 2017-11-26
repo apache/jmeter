@@ -128,11 +128,10 @@ public class JsseSSLManager extends SSLManager {
      */
     @Override
     public void setContext(HttpURLConnection conn) {
-        if (conn instanceof HttpsURLConnection) {
-             // No point doing this on a per-connection basis,
-             // as there is currently no way to configure it.
-             // So we leave it to the defaults set up in the SSL Context
-        } else {
+        // No point doing this on a per-connection basis,
+        // as there is currently no way to configure it.
+        // So we leave it to the defaults set up in the SSL Context
+        if (!(conn instanceof HttpsURLConnection)) {
             if (log.isWarnEnabled()) {
                 log.warn("Unexpected HttpURLConnection class: {}", conn.getClass().getName());
             }
