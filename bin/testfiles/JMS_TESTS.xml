@@ -99,6 +99,13 @@
     <error>false</error>
   </assertionResult>
 </sample>
+<sample s="true" lb="JMS-P2P-Timeout" rc="" rm="No reply message received" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RA_noMessage</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
 <sample s="true" lb="JMS Publisher-NonDurable" rc="200" rm="1 messages published" tn="TG-JMS-PS 2-1" dt="" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>Response Assertion</name>

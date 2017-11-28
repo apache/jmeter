@@ -43,6 +43,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -678,7 +679,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 producer.setTimeToLive(Long.parseLong(getExpiration()));
             } else {
                 if (useTemporyQueue()) {
-                    executor = new TemporaryQueueExecutor(session, sendQueue);
+                    executor = new TemporaryQueueExecutor(session, sendQueue, getTimeoutAsInt());
                 } else {
                     producer = session.createSender(sendQueue);
                     executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
@@ -755,10 +756,12 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     private int getTimeoutAsInt() {
-        if (getPropertyAsInt(TIMEOUT) < 1) {
+        String propAsString = getPropertyAsString(TIMEOUT);
+        if(StringUtils.isEmpty(propAsString)){
             return DEFAULT_TIMEOUT;
+        } else {
+            return Integer.parseInt(propAsString);
         }
-        return getPropertyAsInt(TIMEOUT);
     }
 
     public String getTimeout() {
@@ -795,6 +798,13 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 context.close();
             } catch (NamingException ignored) {
                 // ignore
+            }
+        }
+        if (executor != null) {
+            try {
+                executor.close();
+            } catch (JMSException e) {
+                LOGGER.error("Error closing executor {}", executor.getClass(), e);
             }
         }
         Utils.close(session, LOGGER);

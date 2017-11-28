@@ -85,6 +85,7 @@ Summary
     JMeter will move the <code>Mirror Server</code>, <code>Property Display</code> and HTTP(s) <code>Test Script Recorder</code> elements as direct children of Test Plan. For
     any other element, it will create a <code>Test Fragment</code> element called <code>Workbench Test Fragment and move the elements in it</code>.</li>
     <li>Following classes have been dropped (<code>org.apache.jmeter.functions.util.ArgumentEncoder</code>, <code>org.apache.jmeter.functions.util.ArgumentDecoder</code>), see <pr>335</pr></li>
+    <li>In JMS Point-to-Point sampler, setting timeout to 0 will now mean infinite timeout while previously it would be switched to 2000 ms, see <bugzilla>61829</bugzilla></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -104,6 +105,7 @@ Summary
     <li><bug>61739</bug>Java Request / JavaSamplerClient : Improve <code>org.apache.jmeter.protocol.java.sampler.JavaSamplerContext</code></li>
     <li><bug>61762</bug>Start Next Thread Loop should be used everywhere</li>
     <li><bug>61544</bug>JMS Point-to-Point Sampler: Enhance communication styles with read, browse, clear. Based on a contribution by Benny van Wijngaarden (benny at smaragd-it.nl)</li>
+    <li><bug>61829</bug>JMS Point-to-Point : If Receive Queue is empty and a timeout is set, it is not taken into account. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Controllers</h3>
