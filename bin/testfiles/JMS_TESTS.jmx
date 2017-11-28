@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171119">
+<jmeterTestPlan version="1.2" properties="3.4" jmeter="4.0-SNAPSHOT.20171128">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -660,6 +660,37 @@ finally {
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <JMSSampler guiclass="JMSSamplerGui" testclass="JMSSampler" testname="JMS-P2P-Timeout" enabled="true">
+          <stringProp name="JMSSampler.queueconnectionfactory">ConnectionFactory</stringProp>
+          <stringProp name="JMSSampler.SendQueue">dynamicQueues/requestQueue7</stringProp>
+          <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
+          <intProp name="JMSSampler.communicationStyle">1</intProp>
+          <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
+          <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">true</boolProp>
+          <stringProp name="JMSSampler.timeout">2000</stringProp>
+          <stringProp name="JMSSampler.jmsNumberOfSamplesToAggregate"></stringProp>
+          <stringProp name="HTTPSamper.xml_data">test</stringProp>
+          <stringProp name="JMSSampler.initialContextFactory">org.apache.activemq.jndi.ActiveMQInitialContextFactory</stringProp>
+          <stringProp name="JMSSampler.contextProviderUrl">tcp://localhost:61616</stringProp>
+          <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <elementProp name="arguments" elementType="JMSProperties">
+            <collectionProp name="JMSProperties.properties"/>
+          </elementProp>
+          <boolProp name="JMSSampler.useResMsgIdAsCorrelId">true</boolProp>
+        </JMSSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_noMessage" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="1882001775">No reply message received</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
+            <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
           <hashTree/>

@@ -95,10 +95,11 @@ public class FixedQueueExecutor implements QueueExecutor {
             // This used to be request.wait(timeout_ms), where 0 means forever
             // However 0 means return immediately for the latch
             if (timeout == 0){
+                log.debug("Waiting infinitely for message");
                 countDownLatch.await(); //
             } else {
                 if(!countDownLatch.await(timeout, TimeUnit.MILLISECONDS)) {
-                    log.debug("Timeout reached before getting a reply message");
+                    log.debug("Timeout {} ms reached before getting a reply message", timeout);
                 }
             }
             log.debug("{} done waiting for {} on {} ended on {}",
@@ -109,5 +110,10 @@ public class FixedQueueExecutor implements QueueExecutor {
             Thread.currentThread().interrupt();
         }
         return admin.get(id);
+    }
+
+    @Override
+    public void close() throws JMSException {
+        // NOOP
     }
 }

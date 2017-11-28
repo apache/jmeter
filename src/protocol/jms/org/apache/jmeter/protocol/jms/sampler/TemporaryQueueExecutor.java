@@ -24,14 +24,19 @@ import javax.jms.Queue;
 import javax.jms.QueueRequestor;
 import javax.jms.QueueSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Request/reply executor with a temporary reply queue. <br>
  * 
  * Used by JMS Sampler (Point to Point)
  */
 public class TemporaryQueueExecutor implements QueueExecutor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemporaryQueueExecutor.class);
     /** The sender and receiver. */
-    private final QueueRequestor requestor;
+    private final TimeoutEnabledQueueRequestor requestor;
+    private int timeout;
 
     /**
      * Constructor.
@@ -40,13 +45,15 @@ public class TemporaryQueueExecutor implements QueueExecutor {
      *            the session to use to send the message
      * @param destination
      *            the queue to send the message on
+     * @param timeoutMs Timeout in millis
      * @throws JMSException
      *             when internally used {@link QueueRequestor} can not be
      *             constructed with <code>session</code> and
      *             <code>destination</code>
      */
-    public TemporaryQueueExecutor(QueueSession session, Queue destination) throws JMSException {
-        requestor = new QueueRequestor(session, destination);
+    public TemporaryQueueExecutor(QueueSession session, Queue destination, int timeoutMs) throws JMSException {
+        requestor = new TimeoutEnabledQueueRequestor(session, destination);
+        this.timeout = timeoutMs;
     }
 
     /**
@@ -57,6 +64,13 @@ public class TemporaryQueueExecutor implements QueueExecutor {
             int deliveryMode, 
             int priority, 
             long expiration) throws JMSException {
-        return requestor.request(request);
+        LOGGER.debug("Sending message and waiting for response in Temporary queue with timeout {} ms (0==infinite)", 
+                timeout);
+        return requestor.request(request, timeout);
+    }
+
+    @Override
+    public void close() throws JMSException {
+        requestor.close();
     }
 }
