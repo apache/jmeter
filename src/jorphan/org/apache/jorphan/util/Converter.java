@@ -94,27 +94,9 @@ public class Converter {
             cal.setTime((java.util.Date) date);
             return cal;
         } else if (date != null) {
-            DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT);
-            java.util.Date d = null;
-            try {
-                d = formatter.parse(date.toString());
-            } catch (ParseException e) {
-                formatter = DateFormat.getDateInstance(DateFormat.MEDIUM);
-                try {
-                    d = formatter.parse((String) date);
-                } catch (ParseException e1) {
-                    formatter = DateFormat.getDateInstance(DateFormat.LONG);
-                    try {
-                        d = formatter.parse((String) date);
-                    } catch (ParseException e2) {
-                        formatter = DateFormat.getDateInstance(DateFormat.FULL);
-                        try {
-                            d = formatter.parse((String) date);
-                        } catch (ParseException e3) {
-                            return defaultValue;
-                        }
-                    }
-                }
+            Date d = tryToParseDate(date);
+            if (d == null) {
+                return defaultValue;
             }
             cal.setTime(d);
         } else {
@@ -163,41 +145,48 @@ public class Converter {
      *         <code>defaultValue</code> if conversion failed
      */
     public static Date getDate(Object date, Date defaultValue) {
-        Date val = null;
         if (date instanceof java.util.Date) {
             return (Date) date;
         } else if (date != null) {
-            DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT);
-            try {
-                val = formatter.parse(date.toString());
-            } catch (ParseException e) {
-                formatter = DateFormat.getDateInstance(DateFormat.MEDIUM);
-                try {
-                    val = formatter.parse((String) date);
-                } catch (ParseException e1) {
-                    formatter = DateFormat.getDateInstance(DateFormat.LONG);
-                    try {
-                        val = formatter.parse((String) date);
-                    } catch (ParseException e2) {
-                        formatter = DateFormat.getDateInstance(DateFormat.FULL);
-                        try {
-                            val = formatter.parse((String) date);
-                        } catch (ParseException e3) {
-                            return defaultValue;
-                        }
-                    }
-                }
+            Date d = tryToParseDate(date);
+            if (d == null) {
+                return defaultValue;
+            } else {
+                return d;
             }
         } else {
             return defaultValue;
         }
-        return val;
+    }
+
+    private static Date tryToParseDate(Object date) {
+        DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT);
+        try {
+            return formatter.parse(date.toString());
+        } catch (ParseException e) {
+            formatter = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        }
+        try {
+            return formatter.parse((String) date);
+        } catch (ParseException e1) {
+            formatter = DateFormat.getDateInstance(DateFormat.LONG);
+        }
+        try {
+            return formatter.parse((String) date);
+        } catch (ParseException e2) {
+            formatter = DateFormat.getDateInstance(DateFormat.FULL);
+        }
+        try {
+            return formatter.parse((String) date);
+        } catch (ParseException e3) {
+            return null;
+        }
     }
 
     /**
      * Convert object to float, or <code>defaultValue</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @param defaultValue
@@ -222,7 +211,7 @@ public class Converter {
     /**
      * Convert object to float, or <code>0</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @return converted float or <code>0</code> if conversion
@@ -235,7 +224,7 @@ public class Converter {
     /**
      * Convert object to double, or <code>defaultValue</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @param defaultValue
@@ -260,7 +249,7 @@ public class Converter {
     /**
      * Convert object to double, or <code>0</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @return converted double or <code>0</code> if conversion
@@ -273,7 +262,7 @@ public class Converter {
     /**
      * Convert object to boolean, or <code>false</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @return converted boolean or <code>false</code> if conversion
@@ -286,7 +275,7 @@ public class Converter {
     /**
      * Convert object to boolean, or <code>defaultValue</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @param defaultValue
@@ -330,7 +319,7 @@ public class Converter {
     /**
      * Convert object to char, or ' ' if no conversion can
      * be applied
-     * 
+     *
      * @param o
      *            object to convert
      * @return converted char or ' ' if conversion failed
@@ -342,7 +331,7 @@ public class Converter {
     /**
      * Convert object to char, or <code>defaultValue</code> if no conversion can
      * be applied
-     * 
+     *
      * @param o
      *            object to convert
      * @param defaultValue
@@ -528,7 +517,7 @@ public class Converter {
 
     /**
      * Replace newlines "\n" with <code>insertion</code>
-     * 
+     *
      * @param v
      *            String in which the newlines should be replaced
      * @param insertion
@@ -562,10 +551,10 @@ public class Converter {
     public static String getString(Object o) {
         return getString(o, "");
     }
-    
+
     /**
      * Converts an object to a {@link File}
-     * 
+     *
      * @param o
      *            object to convert (must be a {@link String} or a {@link File})
      * @return converted file

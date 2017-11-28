@@ -92,6 +92,14 @@
     <module name="IllegalThrows"/>
     <module name="MissingSwitchDefault"/>
     <module name="ModifiedControlVariable"/>
+    <module name="MultipleVariableDeclarations"/>
+    <module name="NestedForDepth"/>
+    <module name="NestedIfDepth">
+      <property name="max" value="4"/> <!-- TODO: reduce this number! -->
+    </module>
+    <module name="NestedTryDepth">
+      <property name="max" value="2"/>
+    </module>
 
     <!-- Imports -->
     <module name="AvoidStarImport">
@@ -119,11 +127,7 @@
     </module>
 -->
 
-    <!-- Must have class / interface header comments -->
-<!--
-    <module name="JavadocType"/>
--->
-     <!-- Require method JavaDocs, allow undeclared RTE -->
+    <!-- Require method JavaDocs, allow undeclared RTE -->
 <!--
     <module name="JavadocMethod">
       <property name="minLineCount" value="3"/>
@@ -138,16 +142,10 @@
       <property name="tokens" value="METHOD_DEF"/>
     </module>
 -->
-
 <!--
     <module name="MethodName">
       <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>
     </module>
--->
-
-    <!-- Require field javadoc -->
-<!--
-    <module name="JavadocVariable"/>
 -->
 
     <!-- Require hash code override when equals is -->
@@ -166,8 +164,8 @@
     e.g. // CHECKSTYLE IGNORE MagicNumber
     -->
     <module name="SuppressWithNearbyCommentFilter">
-    <property name="commentFormat" value="CHECKSTYLE IGNORE (\w+)"/>
-    <property name="checkFormat" value="$1"/>
+      <property name="commentFormat" value="CHECKSTYLE IGNORE (\w+)"/>
+      <property name="checkFormat" value="$1"/>
     </module>
   </module>
 
