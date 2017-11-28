@@ -23,5 +23,4 @@ limitations under the License.
 <suppressions>
     <suppress checks="NewlineAtEndOfFile" files=".*.properties"/>
     <suppress checks="FileLength" files="HTTPSamplerBase.java"/>
-    <!--<suppress checks="EmptyCatchBlock" files="*Test.java"/>-->
 </suppressions>
