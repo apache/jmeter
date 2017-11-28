@@ -1651,7 +1651,7 @@ The following table shows some values which may be useful when configuring JMS:
   <property name="Timeout" required="Yes">
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
       time, the specific testcase fails and the specific reply message received after the timeout is discarded.
-      Default value is <code>2000</code> ms.
+      Default value is <code>2000</code> ms. <code>0</code> means no timeout.
   </property>
   <property name="Expiration" required="No">
       The expiration time (in milliseconds) of the message before it becomes obsolete.
