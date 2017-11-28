@@ -172,6 +172,7 @@ Summary
     <li><bug>61640</bug>JSR223 Test Elements : Enable by default caching. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61785</bug>Add <menuchoice><guimenuitem>Help</guimenuitem><guimenuitem>Useful links</guimenuitem></menuchoice> to create issues and download nightly build</li>
     <li><bug>61808</bug>Fix main frame position. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
+    <li><bug>61802</bug>Loop / ForEach Controller should expose a variable for current iteration. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
