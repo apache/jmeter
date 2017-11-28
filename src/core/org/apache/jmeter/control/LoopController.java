@@ -25,12 +25,16 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Class that implements the Loop Controller, ie iterate infinitely or a configured number of times
  */
 public class LoopController extends GenericController implements Serializable {
-
+    static final String INDEX_VAR_NAME_SUFFIX = "__idx";
+    
     public static final int INFINITE_LOOP_COUNT = -1; // $NON-NLS-1$
     
     public static final String LOOPS = "LoopController.loops"; // $NON-NLS-1$
@@ -114,15 +118,23 @@ public class LoopController extends GenericController implements Serializable {
      */
     @Override
     public Sampler next() {
-        if(endOfLoop()) {
-            if (!getContinueForever()) {
-                setDone(true);
+        try {
+            if(endOfLoop()) {
+                if (!getContinueForever()) {
+                    setDone(true);
+                }
+                return null;
             }
-            return null;
+            return super.next();
+        } finally {
+            JMeterVariables variables = JMeterContextService.getContext().getVariables();
+            if(variables != null) {
+                variables.putObject(
+                        JMeterUtils.formatJMeterExportedVariableName(getName()+INDEX_VAR_NAME_SUFFIX), loopCount);
+            }
         }
-        return super.next();
     }
-
+    
     private boolean endOfLoop() {
         final int loops = getLoops();
         return (loops > INFINITE_LOOP_COUNT) && (loopCount >= loops);
