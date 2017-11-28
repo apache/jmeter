@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
-import java.io.Closeable;
-
 import javax.jms.JMSException;
 import javax.jms.Message;
 
