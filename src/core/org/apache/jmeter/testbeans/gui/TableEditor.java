@@ -244,6 +244,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     private Functor[] createWriters(List<String> propNames) {
         return propNames.stream()
                 .map(propName -> "set" + propName) // $NON-NLS-1$
+                .map(Functor::new)
                 .toArray(Functor[]::new);
     }
 
@@ -253,6 +254,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
                 .collect(Collectors.toList());
         return propNames.stream()
                 .map(name -> methodNames.contains("get" + name) ? "get" + name : "is" + name)
+                .map(Functor::new)
                 .toArray(Functor[]::new);
     }
 
@@ -273,7 +275,6 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 
     @Override
     public void focusGained(FocusEvent e) {
-
     }
 
     @Override
