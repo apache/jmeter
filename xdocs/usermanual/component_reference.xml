@@ -2033,6 +2033,9 @@ loop through them a certain number of times, in addition to the loop value you
 specified for the Thread Group.  For example, if you add one HTTP Request to a
 Loop Controller with a loop count of two, and configure the Thread Group loop
 count to three, JMeter will send a total of <code>2 * 3 = 6</code> HTTP Requests.
+<note>JMeter will expose the looping index as a variable named <code>__jm__&lt;Name of your element&gt;__idx</code>. So for
+example, if your Loop Controller is named LC, then you can access the looping index through <code>${__jm__LC__idx}</code>.
+Index starts at 0</note>
 </p></description>
 
 <properties>
@@ -2403,6 +2406,9 @@ So for example when the input variable has the name <code>inputVar</code>, the f
 When the return variable is given as "<code>returnVar</code>", the collection of samplers and controllers under the ForEach controller will be executed <code>4</code> consecutive times,
 with the return variable having the respective above values, which can then be used in the samplers.
 </p>
+<p><note>JMeter will expose the looping index as a variable named <code>__jm__&lt;Name of your element&gt;__idx</code>. So for
+example, if your Loop Controller is named FEC, then you can access the looping index through <code>${__jm__FEC__idx}</code>.
+Index starts at 0</note></p>
 <p>
 It is especially suited for running with the regular expression post-processor. 
 This can "create" the necessary input variables out of the result data of a previous request.
