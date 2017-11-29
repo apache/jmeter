@@ -130,6 +130,7 @@ Summary
     <li><bug>61534</bug>Convert AssertionError to a failed assertion in the JSR223Assertion allowing users to use assert in their code</li>
     <li><bug>61756</bug>Extractors : Improve label name "Reference name" to make it clear what it makes</li>
     <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions : When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li>Migrate JSON Path Assertion into JMeter core. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd</li>
 </ul>
 
 <h3>Functions</h3>
