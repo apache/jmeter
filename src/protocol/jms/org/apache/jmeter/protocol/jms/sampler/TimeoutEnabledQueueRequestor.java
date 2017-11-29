@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
  */
 public class TimeoutEnabledQueueRequestor {
     private static final Logger logger = LoggerFactory.getLogger(TimeoutEnabledQueueRequestor.class);
-    private Session session; // The queue session to which the queue belongs.
     private TemporaryQueue tempQueue;
     private MessageProducer sender;
     private MessageConsumer receiver;
@@ -58,8 +57,8 @@ public class TimeoutEnabledQueueRequestor {
      * with a delivery mode of either <code>AUTO_ACKNOWLEDGE</code> or
      * <code>DUPS_OK_ACKNOWLEDGE</code>.
      *
-     * @paramsession the <code>QueueSession</code> the queue belongs to
-     * @paramqueue the queue to performthe request/reply call on
+     * @param session the <code>QueueSession</code> the queue belongs to, session will not be closed by {@link TimeoutEnabledQueueRequestor}
+     * @param queue the queue to performthe request/reply call on
      *
      * @exception JMSException
      *                if the JMS provider fails to create the
@@ -69,7 +68,6 @@ public class TimeoutEnabledQueueRequestor {
      *                if an invalid queue is specified.
      */
     public TimeoutEnabledQueueRequestor(Session session, Queue queue) throws JMSException {
-        this.session = session;
         tempQueue = session.createTemporaryQueue();
         sender = session.createProducer(queue);
         receiver = session.createConsumer(tempQueue);
@@ -80,7 +78,7 @@ public class TimeoutEnabledQueueRequestor {
      * the <code>JMSReplyTo</code> destination, and only one reply per request
      * is expected. The method blocks indefinitely until a message arrives!
      *
-     * @parammessage the message to send
+     * @param message the message to send
      *
      * @return the reply message
      *
@@ -139,15 +137,19 @@ public class TimeoutEnabledQueueRequestor {
     public void close() throws JMSException {
         String queueName = tempQueue.getQueueName();
         try {
+            sender.close();
+        } catch (Exception e1) {
+            logger.error("Error closing sender");
+        }
+        try {
+            receiver.close();
+        } catch (Exception e1) {
+            logger.error("Error closing receiver");
+        }
+        try {
             tempQueue.delete();
         } catch (Exception e) {
             logger.error("Error deleting tempQueue {}", queueName);
-        }
-        // publisher and consumer created by constructor are implicitly closed.
-        try {
-            session.close();
-        } catch (Exception e) {
-            logger.error("Error closing session", e);
         }
     }
 }
