@@ -483,6 +483,9 @@
 <li>
 <a href="#SMIME_Assertion">SMIME Assertion</a>
 </li>
+<li>
+    <a href="#JSON_Path_Assertion">JSON Path Assertion</a>
+</li>
 </ul>
 </li>
 <li>
@@ -12769,6 +12772,74 @@ please ensure that you select "<span class="code">Store the message using MIME (
 </div>
 </div>
 
+<div class="component">
+    <h2 id="JSON_Path_Assertion">JSON Path Assertion<a class="sectionlink" href="#JSON_Path_Assertion" title="Link to here">&para;</a>
+    </h2>
+    <div class="description">
+        <p>
+            This component allows you to perform validations of JSON documents.
+            First, it will parse the JSON and fail if the data is not JSON.
+            Second, it will search for specified path, using syntax from <a href="https://github.com/jayway/JsonPath" > Jayway JsonPath 1.2.0</a>. If the path is not found, it will fail.
+            Third, if JSON path was found in the document, and validation against expected value was requested, it will perform validation. For the <span class="code">null</span> value there is special checkbox in the GUI.
+            Note that if the path will return array object, it will be iterated and if expected value is found, the assertion will succeed. To validate empty array use <span class="code">[]</span> string. Also, if patch will return dictionary object, it will be converted to string before comparison.
+        </p>
+    </div>
+    <div class="properties">
+        <h3 id="JSON_Path_Assertion_parms1">
+            Parameters
+            <a class="sectionlink" href="#JSON_Path_Assertion_parms1" title="Link to here">&para;</a>
+        </h3>
+        <div class="property title">
+            <div class="name title">Attribute</div>
+            <div class="description title">Description</div>
+            <div class="required title">Required</div>
+        </div>
+
+        <div class="property">
+            <div class="name req-true">Assert JSON Path exists</div>
+            <div class="description req-true">Path to JSON element for assert.</div>
+            <div class="required req-true">Yes</div>
+        </div>
+
+        <div class="property">
+            <div class="name req-false">Additionally assert value</div>
+            <div class="description req-false">Select checkbox if you want make assert with some value</div>
+            <div class="required req-false">No</div>
+        </div>
+
+        <div class="property">
+            <div class="name req-false">Match as regular expression</div>
+            <div class="description req-false">Select checkbox if you want use regular expression</div>
+            <div class="required req-false">No</div>
+        </div>
+
+        <div class="property">
+            <div class="name req-false">Expected Value</div>
+            <div class="description req-false">Value for assert or regular expression for match</div>
+            <div class="required req-false">No</div>
+        </div>
+
+        <div class="property">
+            <div class="name req-false">Expect null</div>
+            <div class="description req-false">Select checkbox if you expect null</div>
+            <div class="required req-false">No</div>
+        </div>
+
+        <div class="property">
+            <div class="name req-false">Invert assertion (will fail if above conditions met)</div>
+            <div class="description req-false">Invert assertion (will fail if above conditions met)</div>
+            <div class="required req-false">No</div>
+        </div>
+
+    </div>
+    <figure>
+        <a href="../images/screenshots/json_path_assertion.png"><img src="../images/screenshots/json_path_assertion.png" width="1140" height="356" alt="JSON Path Assertion"></a>
+        <figcaption>JSON Path Assertion</figcaption>
+    </figure>
+    <div class="go-top">
+        <a href="#">^</a>
+    </div>
+</div>
 
 <a href="#">^</a>
 
