@@ -42,7 +42,7 @@
   <module name="RegexpMultiline">
     <!-- No more than 2 blank lines allowed. -->
     <property name="format" value="\r?\n[\t ]*\r?\n[\t ]*\r?\n[\t ]*\r?\n"/>
-    <property name="fileExtensions" value="java,xml,properties"/>
+    <property name="fileExtensions" value="java, xml, properties"/>
     <property name="message" value="Unnecessary consecutive lines"/>
   </module>
   <!--<module name="RegexpOnFilename">-->
@@ -54,7 +54,7 @@
 
   <!-- Size Violations -->
   <module name="FileLength">
-    <property name="fileExtensions" value="java"/>
+    <property name="fileExtensions" value="java, groovy"/>
   </module>
 
   <module name="TreeWalker">
@@ -100,16 +100,23 @@
     <module name="NestedTryDepth">
       <property name="max" value="2"/>
     </module>
+    <module name="OneStatementPerLine"/>
+    <!--<module name="ParameterAssignment"/>-->
+    <!--<module name="ReturnCount"/>-->
+    <module name="SimplifyBooleanExpression"/>
+    <module name="SimplifyBooleanReturn"/>
+    <module name="StringLiteralEquality"/>
+    <module name="SuperFinalize"/>
+    <module name="UnnecessaryParentheses"/>
+    <!--<module name="VariableDeclarationUsageDistance"/>-->
 
     <!-- Imports -->
     <module name="AvoidStarImport">
       <property name="allowClassImports" value="false"/>
       <property name="allowStaticMemberImports" value="false"/>
     </module>
-
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>
-
 <!--
    <module name="ImportOrder">
       <property name="groups" value="/^java\./,javax,org,com"/>
@@ -120,14 +127,7 @@
     </module>
 -->
 
-    <!-- Operator must be at end of wrapped line -->
-<!--
-    <module name="OperatorWrap">
-      <property name="option" value="eol"/>
-    </module>
--->
-
-    <!-- Require method JavaDocs, allow undeclared RTE -->
+    <!-- JavaDocs -->
 <!--
     <module name="JavadocMethod">
       <property name="minLineCount" value="3"/>
@@ -136,17 +136,15 @@
       <property name="allowMissingThrowsTags" value="true"/>
       <property name="allowMissingPropertyJavadoc" value="true"/>
       <property name="ignoreMethodNamesRegex" value="(get|set|is).*"/>
--->
-      <!-- Only check methods, i.e. ignore constructors  -->
-<!--
+      &lt;!&ndash; Only check methods, i.e. ignore constructors  &ndash;&gt;
       <property name="tokens" value="METHOD_DEF"/>
     </module>
--->
-<!--
-    <module name="MethodName">
-      <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>
-    </module>
--->
+    -->
+    <!--<module name="NonEmptyAtclauseDescription"/>-->
+
+    <!-- Misc -->
+    <module name="ArrayTypeStyle"/>
+    <module name="AvoidEscapedUnicodeCharacters"/>
 
     <!-- Require hash code override when equals is -->
     <module name="EqualsHashCode"/>

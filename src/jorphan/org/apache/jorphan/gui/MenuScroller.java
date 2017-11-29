@@ -447,7 +447,7 @@ public class MenuScroller {
         if (firstIndex <= topFixedCount) {
             firstIndex = topFixedCount;
         } else {
-            firstIndex += (topFixedCount - this.topFixedCount);
+            firstIndex = firstIndex + topFixedCount - this.topFixedCount;
         }
         this.topFixedCount = topFixedCount;
     }
@@ -519,13 +519,12 @@ public class MenuScroller {
      * Ensures that the <code>dispose</code> method of this MenuScroller is
      * called when there are no more references to it.
      * 
-     * @exception Throwable
-     *                if an error occurs.
      * @see MenuScroller#dispose()
      */
     @Override
     public void finalize() throws Throwable {
         dispose();
+        super.finalize();
     }
 
     private void refreshMenu() {

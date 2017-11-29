@@ -71,7 +71,7 @@ public class JsseSSLManager extends SSLManager {
     static {
         if (log.isInfoEnabled()) {
             log.info("Using default SSL protocol: {}", DEFAULT_SSL_PROTOCOL);
-            log.info("SSL session context: {}", (SHARED_SESSION_CONTEXT ? "shared" : "per-thread"));
+            log.info("SSL session context: {}", SHARED_SESSION_CONTEXT ? "shared" : "per-thread");
 
             if (CPS > 0) {
                 log.info("Setting up HTTPS SlowProtocol, cps={}", CPS);

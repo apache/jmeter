@@ -424,7 +424,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             }
             res.setResponseMessage(numMsgs + " messages available on the queue");
             res.setResponseHeaders(qBrowser.toString());
-            return (messageBodies + queue.getQueueName() + " has " + numMsgs + " messages");
+            return messageBodies + queue.getQueueName() + " has " + numMsgs + " messages";
         } catch (Exception e) {
             res.setResponseMessage("Error counting message on the queue");
             LOGGER.error("Error browsing messages on the queue {}", queueName, e);

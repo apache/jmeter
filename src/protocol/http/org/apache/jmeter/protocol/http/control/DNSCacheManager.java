@@ -128,7 +128,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             }
             ExtendedResolver result = new ExtendedResolver(serverNames);
             if (log.isDebugEnabled()) {
-                log.debug("Using DNS Resolvers: {}", Arrays.asList((result).getResolvers()));
+                log.debug("Using DNS Resolvers: {}", Arrays.asList(result.getResolvers()));
             }
             // resolvers will be chosen via round-robin
             result.setLoadBalance(true);

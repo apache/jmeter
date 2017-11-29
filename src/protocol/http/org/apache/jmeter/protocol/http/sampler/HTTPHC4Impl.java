@@ -507,8 +507,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             res.setBodySize(totalBytes - headerBytes);
             res.setSentBytes(metrics.getSentBytesCount());
             if (log.isDebugEnabled()) {
+                long total = res.getHeadersSize() + res.getBodySizeAsLong();
                 log.debug("ResponseHeadersSize={} Content-Length={} Total={}",
-                        res.getHeadersSize(), res.getBodySizeAsLong(), (res.getHeadersSize() + res.getBodySizeAsLong()));
+                        res.getHeadersSize(), res.getBodySizeAsLong(), total);
             }
 
             // If we redirected automatically, the URL may have changed

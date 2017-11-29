@@ -352,7 +352,7 @@ implements ChangeListener, ActionListener, ItemListener
     }
 
     private void setupMethods(){
-        String className = ((String) classnameCombo.getSelectedItem());
+        String className = (String) classnameCombo.getSelectedItem();
         methodName.removeAllItems();
         if (className != null) {
             try {
