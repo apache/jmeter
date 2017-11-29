@@ -28,7 +28,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetJsonPath() {
-        System.out.println("getJsonPath");
         JSONPathAssertion instance = new JSONPathAssertion();
         String expResult = "";
         String result = instance.getJsonPath();
@@ -37,7 +36,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testSetJsonPath() {
-        System.out.println("setJsonPath");
         String jsonPath = "";
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath(jsonPath);
@@ -45,7 +43,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetExpectedValue() {
-        System.out.println("getExpectedValue");
         JSONPathAssertion instance = new JSONPathAssertion();
         String expResult = "";
         String result = instance.getExpectedValue();
@@ -54,7 +51,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testSetExpectedValue() {
-        System.out.println("setExpectedValue");
         String expectedValue = "";
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setExpectedValue(expectedValue);
@@ -62,14 +58,12 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testSetJsonValidationBool() {
-        System.out.println("setJsonValidationBool");
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonValidationBool(false);
     }
 
     @Test
     public void testIsJsonValidationBool() {
-        System.out.println("isJsonValidationBool");
         JSONPathAssertion instance = new JSONPathAssertion();
         boolean result = instance.isJsonValidationBool();
         assertEquals(false, result);
@@ -77,7 +71,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_positive() {
-        System.out.println("getResult simple");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -93,7 +86,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_positive_regexp() {
-        System.out.println("getResult simple");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -113,7 +105,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_positive_invert() {
-        System.out.println("getResult simple");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -130,7 +121,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_not_regexp() {
-        System.out.println("not regexp");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": \"some complicated value\"}".getBytes());
 
@@ -148,7 +138,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_negative() {
-        System.out.println("getResult simple");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -164,7 +153,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_negative_invert() {
-        System.out.println("getResult simple");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -181,7 +169,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_null() {
-        System.out.println("getResult null");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": null}".getBytes());
 
@@ -197,7 +184,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_null_not_found() {
-        System.out.println("getResult null");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -213,7 +199,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_null_novalidate() {
-        System.out.println("getResult null novalidate");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": null}".getBytes());
 
@@ -228,7 +213,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_no_such_path() {
-        System.out.println("getResult notexist");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": null}".getBytes());
 
@@ -243,7 +227,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_list_val() {
-        System.out.println("getResult list-val");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": [{\"test\":1},{\"test\":2},{\"test\":3}]}".getBytes());
 
@@ -259,7 +242,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_list_negative() {
-        System.out.println("getResult list-neg");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": [{\"test\":1},{\"test\":2},{\"test\":3}]}".getBytes());
 
@@ -275,7 +257,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_list_empty_novalidate() {
-        System.out.println("getResult list-empty");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": []}".getBytes());
 
@@ -290,7 +271,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_list_empty_validate() {
-        System.out.println("getResult list-empty");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": []}".getBytes());
 
@@ -306,7 +286,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_dict() {
-        System.out.println("getResult notexist");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": {\"key\": \"val\"}}".getBytes());
 
@@ -322,7 +301,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_inverted_null() {
-        System.out.println("getResult notexist");
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": [{\"key\": null}]}".getBytes());
 
@@ -339,7 +317,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResult_match_msg_problem() {
-        System.out.println("getResult notexist");
         SampleResult samplerResult = new SampleResult();
         String str = "{\"execution\":[{\"scenario\":{\"requests\":[{\"headers\":{\"headerkey\":\"header value\"}}]}}]}";
         samplerResult.setResponseData(str.getBytes());
@@ -390,7 +367,6 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResultFloat() {
-        System.out.println("testGetResultFloat");
         SampleResult samplerResult = new SampleResult();
 
         samplerResult.setResponseData("{\"myval\": [{\"test\":0.0000123456789}]}".getBytes());
