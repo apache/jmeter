@@ -49,6 +49,7 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
     public static final String ISREGEX = "ISREGEX";
 
     public static final DecimalFormat decimalFormatter = new DecimalFormat("#.#");
+    
     static {
         decimalFormatter.setMaximumFractionDigits(340); // java.text.DecimalFormat.DOUBLE_FRACTION_DIGITS == 340
         decimalFormatter.setMinimumFractionDigits(1);
