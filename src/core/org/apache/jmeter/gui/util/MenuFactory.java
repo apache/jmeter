@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -615,19 +616,20 @@ public final class MenuFactory {
      * @return whether it is OK to add the dragged nodes to this parent
      */
     public static boolean canAddTo(JMeterTreeNode parentNode, JMeterTreeNode[] nodes) {
-        if (null == parentNode || foundClass(nodes, new Class[]{TestPlan.class})) {
+        if (parentNode == null
+                || foundClass(nodes, new Class[]{TestPlan.class})) {
             return false;
         }
         TestElement parent = parentNode.getTestElement();
 
         // Force TestFragment to only be pastable under a Test Plan
-        if (foundClass(nodes, new Class[]{org.apache.jmeter.control.TestFragmentController.class})){
+        if (foundClass(nodes, new Class[]{TestFragmentController.class})) {
             return parent instanceof TestPlan;
         }
 
         // Cannot move Non-Test Elements from root of Test Plan or Test Fragment
-        if (!(parent instanceof TestPlan || parent instanceof TestFragmentController) 
-                && foundMenuCategories(nodes, NON_TEST_ELEMENTS)) {
+        if (foundMenuCategories(nodes, NON_TEST_ELEMENTS)
+                && !(parent instanceof TestPlan || parent instanceof TestFragmentController)) {
             return false;
         }
 
@@ -638,7 +640,7 @@ public final class MenuFactory {
                     new Class[]{AbstractThreadGroup.class, NonTestElement.class});
         }
         // AbstractThreadGroup is only allowed under a TestPlan
-        if (foundClass(nodes, new Class[]{org.apache.jmeter.threads.AbstractThreadGroup.class})){
+        if (foundClass(nodes, new Class[]{AbstractThreadGroup.class})) {
             return false;
         }
         if (parent instanceof Controller) {// Includes thread group; anything goes
@@ -676,14 +678,9 @@ public final class MenuFactory {
      * @return true if nodes is in category
      */
     private static boolean foundMenuCategories(JMeterTreeNode[] nodes, String category) {
-        for (JMeterTreeNode node : nodes) {
-            for (String c : node.getMenuCategories()) {
-                if (category.equals(c)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return Arrays.stream(nodes)
+                .flatMap(node -> node.getMenuCategories().stream())
+                .anyMatch(category::equals);
     }
 
     /**
@@ -774,8 +771,8 @@ public final class MenuFactory {
      * [This is so Thread Group appears before setUp and tearDown]
      */
     private static void sortPluginMenus() {
-        for(Entry<String, List<MenuInfo>> me : menuMap.entrySet()){
-            Collections.sort(me.getValue(), new MenuInfoComparator(!me.getKey().equals(THREADS)));
+        for (Entry<String, List<MenuInfo>> me : menuMap.entrySet()) {
+            me.getValue().sort(new MenuInfoComparator(!me.getKey().equals(THREADS)));
         }
     }
 }

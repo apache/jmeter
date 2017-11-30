@@ -24,7 +24,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Optional;
 import java.util.StringTokenizer;
+import java.util.stream.Stream;
 
 /**
  * Converter utilities for TestBeans
@@ -91,11 +93,11 @@ public class Converter {
             cal.setTime((java.util.Date) date);
             return cal;
         } else if (date != null) {
-            Date d = tryToParseDate(date);
-            if (d == null) {
+            Optional<Date> d = tryToParseDate(date);
+            if (!d.isPresent()) {
                 return defaultValue;
             }
-            cal.setTime(d);
+            cal.setTime(d.get());
         } else {
             cal = defaultValue;
         }
@@ -145,60 +147,44 @@ public class Converter {
         if (date instanceof java.util.Date) {
             return (Date) date;
         } else if (date != null) {
-            Date d = tryToParseDate(date);
-            if (d == null) {
-                return defaultValue;
-            } else {
-                return d;
-            }
+            return tryToParseDate(date).orElse(defaultValue);
         } else {
             return defaultValue;
         }
     }
 
-    private static Date tryToParseDate(Object date) {
-        DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT);
+    private static Optional<Date> tryToParseDate(Object date) {
+        return Stream.of(DateFormat.SHORT, DateFormat.MEDIUM, DateFormat.LONG, DateFormat.FULL)
+                .map(DateFormat::getDateInstance)
+                .map(formatter -> tryToParseDate(formatter, date.toString()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
+    }
+
+    private static Optional<Date> tryToParseDate(DateFormat formatter, String dateString) {
         try {
-            return formatter.parse(date.toString());
+            return Optional.of(formatter.parse(dateString));
         } catch (ParseException e) {
-            formatter = DateFormat.getDateInstance(DateFormat.MEDIUM);
-        }
-        try {
-            return formatter.parse((String) date);
-        } catch (ParseException e1) {
-            formatter = DateFormat.getDateInstance(DateFormat.LONG);
-        }
-        try {
-            return formatter.parse((String) date);
-        } catch (ParseException e2) {
-            formatter = DateFormat.getDateInstance(DateFormat.FULL);
-        }
-        try {
-            return formatter.parse((String) date);
-        } catch (ParseException e3) {
-            return null;
+            return Optional.empty();
         }
     }
 
     /**
-     * Convert object to float, or <code>defaultValue</code> if conversion
-     * failed
+     * Convert object to float, or <code>defaultValue</code> if conversion failed
      *
-     * @param o
-     *            object to convert
-     * @param defaultValue
-     *            default value to use, when conversion failed
-     * @return converted float or <code>defaultValue</code> if conversion
-     *         failed
+     * @param o object to convert
+     * @param defaultValue default value to use, when conversion failed
+     * @return converted float or <code>defaultValue</code> if conversion failed
      */
     public static float getFloat(Object o, float defaultValue) {
+        if (o == null) {
+            return defaultValue;
+        }
+        if (o instanceof Number) {
+            return ((Number) o).floatValue();
+        }
         try {
-            if (o == null) {
-                return defaultValue;
-            }
-            if (o instanceof Number) {
-                return ((Number) o).floatValue();
-            }
             return Float.parseFloat(o.toString());
         } catch (NumberFormatException e) {
             return defaultValue;
