@@ -15,10 +15,9 @@
  * limitations under the License.
  *
  */
-package org.apache.jmeter.extractor.json.jsonpath.gui;
+package org.apache.jmeter.assertions.gui;
 
-import org.apache.jmeter.assertions.gui.AbstractAssertionGui;
-import org.apache.jmeter.extractor.json.jsonpath.JSONPathAssertion;
+import org.apache.jmeter.assertions.JSONPathAssertion;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
