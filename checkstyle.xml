@@ -51,6 +51,9 @@
     <!--<property name="match" value="false"/>-->
     <!--<message key="regexp.filepath.mismatch" value="Only java files should be located in the ''src/*/java'' folders."/>-->
   <!--</module>-->
+  <module name="UniqueProperties">
+    <property name="fileExtensions" value="properties"/>
+  </module>
 
   <!-- Size Violations -->
   <module name="FileLength">
@@ -86,6 +89,8 @@
 
     <!-- Coding -->
     <module name="CovariantEquals"/>
+    <!-- Require hash code override when equals is -->
+    <module name="EqualsHashCode"/>
     <module name="IllegalInstantiation">
       <property name="classes" value="java.lang.Boolean"/>
     </module>
@@ -127,8 +132,8 @@
       <property name="groups" value="/^java\./,javax,org,com"/>
       <property name="ordered" value="true"/>
       <property name="separated" value="true"/>
-      <property name="option" value="above"/>
-      <property name="sortStaticImportsAlphabetically" value="true"/>
+      <property name="option" value="top"/>
+     <property name="sortStaticImportsAlphabetically" value="true"/>
     </module>
 -->
 
@@ -150,11 +155,9 @@
     <!-- Misc -->
     <module name="ArrayTypeStyle"/>
     <module name="AvoidEscapedUnicodeCharacters"/>
-
-    <!-- Require hash code override when equals is -->
-    <module name="EqualsHashCode"/>
-
-    <module name="NeedBraces"/>
+    <!--<module name="CommentsIndentation"/>-->
+    <module name="OuterTypeFilename"/>
+    <module name="UpperEll"/>
 
     <!-- code metrics -->
     <!--<module name="BooleanExpressionComplexity"/>-->
