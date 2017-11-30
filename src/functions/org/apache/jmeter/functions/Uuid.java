@@ -18,14 +18,14 @@
 
 package org.apache.jmeter.functions;
 
-import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.samplers.Sampler;
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+
+import org.apache.jmeter.engine.util.CompoundVariable;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Sampler;
 
 /**
  * Function to create a UUID

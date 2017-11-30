@@ -18,10 +18,10 @@
 
 package org.apache.jmeter.gui;
 
-import org.apache.jorphan.collections.HashTree;
-
 import java.io.Serializable;
+
 import org.apache.jmeter.engine.TreeCloner;
+import org.apache.jorphan.collections.HashTree;
 
 /**
  * Undo history item

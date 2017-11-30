@@ -127,15 +127,13 @@
     </module>
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>
-<!--
    <module name="ImportOrder">
-      <property name="groups" value="/^java\./,javax,org,com"/>
+      <property name="groups" value="/^java\./,javax,org,net,com"/>
       <property name="ordered" value="true"/>
       <property name="separated" value="true"/>
       <property name="option" value="top"/>
      <property name="sortStaticImportsAlphabetically" value="true"/>
     </module>
--->
 
     <!-- JavaDocs -->
 <!--

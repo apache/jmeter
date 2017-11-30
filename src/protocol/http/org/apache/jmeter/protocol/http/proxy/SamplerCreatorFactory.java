@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * {@link SamplerCreator} factory
@@ -39,9 +39,6 @@ public class SamplerCreatorFactory {
 
     private final Map<String, SamplerCreator> samplerCreatorMap = new HashMap<>();
 
-    /**
-     * 
-     */
     public SamplerCreatorFactory() {
         init();
     }

@@ -44,16 +44,14 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Allows the user to specify if she needs HTTP header services, and give
  * parameters for this service.
- *
  */
-public class HeaderPanel extends AbstractConfigGui implements ActionListener
-{
+public class HeaderPanel extends AbstractConfigGui implements ActionListener {
     /** When pasting from the clipboard, split lines on linebreak */
     private static final String CLIPBOARD_LINE_DELIMITER = "\n"; //$NON-NLS-1$
 

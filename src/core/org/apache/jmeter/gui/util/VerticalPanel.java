@@ -18,8 +18,8 @@
 
 package org.apache.jmeter.gui.util;
 
-import java.awt.Color;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.Box;

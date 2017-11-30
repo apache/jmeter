@@ -52,17 +52,16 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Thread to handle one client request. Gets the request from the client and
  * passes it on to the server, then sends the response back to the client.
  * Information about the request and response is stored so it can be used in a
  * JMeter test plan.
- *
  */
 public class Proxy extends Thread {
     private static final Logger log = LoggerFactory.getLogger(Proxy.class);
