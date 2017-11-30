@@ -79,9 +79,11 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
      */
     public static String[] getSupportedEncodings() {
         // Only get JVM standard charsets
-        return Stream.concat(NO_ENCODING.stream(),
+        return Stream.concat(
+                NO_ENCODING.stream(),
                 Arrays.stream(StandardCharsets.class.getDeclaredFields())
-                        .filter(f -> Modifier.isStatic(f.getModifiers()) && Modifier.isPublic(f.getModifiers())
+                        .filter(f -> Modifier.isStatic(f.getModifiers())
+                                && Modifier.isPublic(f.getModifiers())
                                 && f.getType() == Charset.class)
                         .map(f -> {
                             try {
@@ -89,8 +91,10 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
                             } catch (IllegalArgumentException | IllegalAccessException e) {
                                 throw new RuntimeException(e);
                             }
-                        }).map(Charset::displayName).sorted())
-                .toArray(size -> new String[size]);
+                        })
+                        .map(Charset::displayName)
+                        .sorted())
+                .toArray(String[]::new);
     }
 
     private static final long serialVersionUID = 233L;
@@ -119,9 +123,9 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     private static final String JMS_FILE_ENCODING = "jms.file_encoding"; // $NON-NLS-1$
 
     /** File extensions for text files **/
-    private static final String[] EXT_FILE_TEXT = { ".txt", ".obj" };
+    private static final String[] TEXT_FILE_EXTS = { ".txt", ".obj" };
     /** File extensions for binary files **/
-    private static final String[] EXT_FILE_BIN = { ".dat" };
+    private static final String[] BIN_FILE_EXTS = { ".dat" };
 
     // --
 
@@ -193,8 +197,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     public SampleResult sample() {
         String configChoice = getConfigChoice();
         if (fileCache == null) {
-            Cache<Object, Object> newCache = buildCache(configChoice);
-            fileCache = newCache;
+            fileCache = buildCache(configChoice);
         }
 
         SampleResult result = new SampleResult();
@@ -224,19 +227,18 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
             for (int idx = 0; idx < loop; idx++) {
                 Message msg;
                 if (JMSPublisherGui.TEXT_MSG_RSC.equals(type)) {
-                    String tmsg = getRenderedContent(String.class, EXT_FILE_TEXT);
+                    String tmsg = getRenderedContent(String.class, TEXT_FILE_EXTS);
                     msg = publisher.publish(tmsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
                     buffer.append(tmsg);
                 } else if (JMSPublisherGui.MAP_MSG_RSC.equals(type)) {
                     @SuppressWarnings("unchecked")
-                    Map<String, Object> map = getRenderedContent(Map.class, EXT_FILE_TEXT);
-                    Map<String, Object> m = map;
-                    msg = publisher.publish(m, getDestination(), msgProperties, deliveryMode, priority, expiration);
+                    Map<String, Object> map = getRenderedContent(Map.class, TEXT_FILE_EXTS);
+                    msg = publisher.publish(map, getDestination(), msgProperties, deliveryMode, priority, expiration);
                 } else if (JMSPublisherGui.OBJECT_MSG_RSC.equals(type)) {
-                    Serializable omsg = getRenderedContent(Serializable.class, EXT_FILE_TEXT);
+                    Serializable omsg = getRenderedContent(Serializable.class, TEXT_FILE_EXTS);
                     msg = publisher.publish(omsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
                 } else if (JMSPublisherGui.BYTES_MSG_RSC.equals(type)) {
-                    byte[] bmsg = getRenderedContent(byte[].class, EXT_FILE_BIN);
+                    byte[] bmsg = getRenderedContent(byte[].class, BIN_FILE_EXTS);
                     msg = publisher.publish(bmsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
                 } else {
                     throw new JMSException(type + " is not recognised");
@@ -311,8 +313,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         case JMSPublisherGui.USE_FILE_RSC:
             return getInputFile();
         case JMSPublisherGui.USE_RANDOM_RSC:
-            String fname = FSERVER.getRandomFile(getRandomPath(), ext).getAbsolutePath();
-            return fname;
+            return FSERVER.getRandomFile(getRandomPath(), ext).getAbsolutePath();
         default:
             throw new IllegalArgumentException("Type of input not handled:" + getConfigChoice());
         }
