@@ -95,14 +95,19 @@
     <module name="MultipleVariableDeclarations"/>
     <module name="NestedForDepth"/>
     <module name="NestedIfDepth">
-      <property name="max" value="4"/> <!-- TODO: reduce this number! -->
+      <!-- TODO: reduce this number -->
+      <property name="max" value="4"/>
     </module>
     <module name="NestedTryDepth">
       <property name="max" value="2"/>
     </module>
     <module name="OneStatementPerLine"/>
     <!--<module name="ParameterAssignment"/>-->
-    <!--<module name="ReturnCount"/>-->
+    <module name="ReturnCount">
+      <!-- TODO: reduce these numbers -->
+      <property name="max" value="9" />
+      <property name="maxForVoid" value="9"/>
+    </module>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
     <module name="StringLiteralEquality"/>

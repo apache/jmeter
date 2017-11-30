@@ -55,6 +55,7 @@ import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.NonTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.gui.GuiUtils;
@@ -614,20 +615,14 @@ public final class MenuFactory {
      * @return whether it is OK to add the dragged nodes to this parent
      */
     public static boolean canAddTo(JMeterTreeNode parentNode, JMeterTreeNode[] nodes) {
-        if (null == parentNode) {
-            return false;
-        }
-        if (foundClass(nodes, new Class[]{TestPlan.class})){// Can't add a TestPlan anywhere
+        if (null == parentNode || foundClass(nodes, new Class[]{TestPlan.class})) {
             return false;
         }
         TestElement parent = parentNode.getTestElement();
 
         // Force TestFragment to only be pastable under a Test Plan
         if (foundClass(nodes, new Class[]{org.apache.jmeter.control.TestFragmentController.class})){
-            if (parent instanceof TestPlan) {
-                return true;
-            }
-            return false;
+            return parent instanceof TestPlan;
         }
 
         // Cannot move Non-Test Elements from root of Test Plan or Test Fragment
@@ -637,15 +632,10 @@ public final class MenuFactory {
         }
 
         if (parent instanceof TestPlan) {
-            if (foundClass(nodes,
-                     new Class[]{Sampler.class, Controller.class}, // Samplers and Controllers need not apply ...
-                     new Class[]{org.apache.jmeter.threads.AbstractThreadGroup.class,
-                             NonTestElement.class
-                     })  // but AbstractThreadGroup (Controller) and Non Test Elements are OK
-                ){
-                return false;
-            }
-            return true;
+            return !foundClass(
+                    nodes,
+                    new Class[]{Sampler.class, Controller.class}, // Samplers and Controllers need not apply ...
+                    new Class[]{AbstractThreadGroup.class, NonTestElement.class});
         }
         // AbstractThreadGroup is only allowed under a TestPlan
         if (foundClass(nodes, new Class[]{org.apache.jmeter.threads.AbstractThreadGroup.class})){
@@ -655,10 +645,7 @@ public final class MenuFactory {
             return true;
         }
         if (parent instanceof Sampler) {// Samplers and Controllers need not apply ...
-            if (foundClass(nodes, new Class[]{Sampler.class, Controller.class})){
-                return false;
-            }
-            return true;
+            return !foundClass(nodes, new Class[]{Sampler.class, Controller.class});
         }
 
         // All other

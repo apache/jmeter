@@ -34,46 +34,43 @@ public class Converter {
     /**
      * Convert the given value object to an object of the given type
      *
-     * @param value
-     *            object to convert
-     * @param toType
-     *            type to convert object to
-     * @return converted object or original value if no conversion could be
-     *         applied
+     * @param value  object to convert
+     * @param toType type to convert object to
+     * @return converted object or original value if no conversion could be applied
      */
     public static Object convert(Object value, Class<?> toType) {
-        if (value == null) {
-            value = ""; // TODO should we allow null for non-primitive types?
+        Object convertedValue = value;
+        if (value == null || toType == null) {
+            convertedValue = ""; // TODO should we allow null for non-primitive types?
         } else if (toType.isAssignableFrom(value.getClass())) {
-            return value;
+            convertedValue = value;
         } else if (toType.equals(float.class) || toType.equals(Float.class)) {
-            return Float.valueOf(getFloat(value));
+            convertedValue = Float.valueOf(getFloat(value));
         } else if (toType.equals(double.class) || toType.equals(Double.class)) {
-            return Double.valueOf(getDouble(value));
+            convertedValue = Double.valueOf(getDouble(value));
         } else if (toType.equals(String.class)) {
-            return getString(value);
+            convertedValue = getString(value);
         } else if (toType.equals(int.class) || toType.equals(Integer.class)) {
-            return Integer.valueOf(getInt(value));
+            convertedValue = Integer.valueOf(getInt(value));
         } else if (toType.equals(char.class) || toType.equals(Character.class)) {
-            return Character.valueOf(getChar(value));
+            convertedValue = Character.valueOf(getChar(value));
         } else if (toType.equals(long.class) || toType.equals(Long.class)) {
-            return Long.valueOf(getLong(value));
+            convertedValue = Long.valueOf(getLong(value));
         } else if (toType.equals(boolean.class) || toType.equals(Boolean.class)) {
-            return  Boolean.valueOf(getBoolean(value));
+            convertedValue = Boolean.valueOf(getBoolean(value));
         } else if (toType.equals(java.util.Date.class)) {
-            return getDate(value);
+            convertedValue = getDate(value);
         } else if (toType.equals(Calendar.class)) {
-            return getCalendar(value);
+            convertedValue = getCalendar(value);
         } else if (toType.equals(File.class)) {
-            return getFile(value);
+            convertedValue = getFile(value);
         } else if (toType.equals(Class.class)) {
             try {
-                return Class.forName(value.toString());
-            } catch (Exception e) {
-                // don't do anything
+                convertedValue = Class.forName(value.toString());
+            } catch (Exception ignored) {
             }
         }
-        return value;
+        return convertedValue;
     }
 
     /**
