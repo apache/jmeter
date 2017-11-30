@@ -17,8 +17,6 @@
  */
 package org.apache.jmeter.assertions;
 
-import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.jmeter.assertions.JSONPathAssertion;
 import org.apache.jmeter.samplers.SampleResult;
 import org.junit.Test;
 

@@ -17,7 +17,6 @@
  */
 package org.apache.jmeter.assertions;
 
-import org.apache.jmeter.assertions.JSONPathAssertion;
 import org.apache.jmeter.assertions.gui.JSONPathAssertionGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.junit.Test;
