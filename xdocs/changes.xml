@@ -98,6 +98,7 @@ Summary
     <li><bug>61672</bug>HTTP(S) Test Script Recorder : Have the ability to choose the sampler name while keeping the ability to just add a prefix</li>
     <li><bug>53957</bug>HTTP Request : In Parameters tab, allow pasting of content coming from Firefox and Chrome (unparsed)</li>
     <li><bug>61587</bug>Drop properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code></li>
+    <li><bug>61843</bug>HTTP(S) Test Script Recorder : Add SAN to JMeter generated CA Certificate. Contributed by Matthew Buckett</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -267,6 +268,7 @@ Summary
     <li>Artem Fedorov (artem at blazemeter.com)</li>
     <li><a href="https://www.blazemeter.com">BlazeMeter Ltd</a></li>
     <li>Benny van Wijngaarden (benny at smaragd-it.nl)</li>
+    <li>Matthew Buckett (https://github.com/buckett)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
