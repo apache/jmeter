@@ -137,7 +137,7 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
     }
 
     private boolean arrayMatched(JSONArray value) {
-        if (value.isEmpty() && getExpectedValue().equals("[]")) {
+        if (value.isEmpty() && "[]".equals(getExpectedValue())) {
             return true;
         }
 
