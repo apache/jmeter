@@ -19,17 +19,22 @@
     <error>false</error>
   </assertionResult>
   <assertionResult>
-    <name>RA_NoOtherHeader</name>
+    <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
-    <name>Response Assertion</name>
+    <name>RA_NoOtherHeader</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HTTP Request" rc="Non HTTP response code: java.net.ConnectException" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
   <assertionResult>
     <name>RA</name>
     <failure>false</failure>
@@ -37,11 +42,6 @@
   </assertionResult>
   <assertionResult>
     <name>RA_NoOtherHeader</name>
-    <failure>false</failure>
-    <error>false</error>
-  </assertionResult>
-  <assertionResult>
-    <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
