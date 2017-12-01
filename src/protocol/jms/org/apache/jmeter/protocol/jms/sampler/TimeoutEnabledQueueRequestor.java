@@ -138,18 +138,18 @@ public class TimeoutEnabledQueueRequestor {
         String queueName = tempQueue.getQueueName();
         try {
             sender.close();
-        } catch (Exception e1) {
-            logger.error("Error closing sender");
+        } catch (Exception ex) {
+            logger.error("Error closing sender", ex);
         }
         try {
             receiver.close();
-        } catch (Exception e1) {
-            logger.error("Error closing receiver");
+        } catch (Exception ex) {
+            logger.error("Error closing receiver", ex);
         }
         try {
             tempQueue.delete();
-        } catch (Exception e) {
-            logger.error("Error deleting tempQueue {}", queueName);
+        } catch (Exception ex) {
+            logger.error("Error deleting tempQueue {}", queueName, ex);
         }
     }
 }
