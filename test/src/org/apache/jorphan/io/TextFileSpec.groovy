@@ -5,6 +5,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.nio.charset.Charset
+import java.nio.charset.IllegalCharsetNameException
 import java.nio.charset.StandardCharsets
 
 @Unroll
@@ -71,5 +72,12 @@ class TextFileSpec extends Specification {
             "a\nb\nc\n" | "UTF_16"
             "a\nb\nc"   | "ISO_8859_1"
             "a\nb\nc\n" | "ISO_8859_1"
+    }
+
+    def "getText throws exception with invalid encoding"() {
+        when:
+            new TextFile(tempFile.getAbsolutePath(), "invalid encoding").getText()
+        then:
+            thrown(IllegalCharsetNameException)
     }
 }

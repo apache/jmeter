@@ -42,6 +42,4 @@ class TextMessageRenderer implements MessageRenderer<String> {
     String getContent(FileKey key) {
         return new TextFile(key.getFilename(), key.getEncoding()).getText();
     }
-
-
 }

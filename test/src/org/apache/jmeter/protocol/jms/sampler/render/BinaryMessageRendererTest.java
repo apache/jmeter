@@ -25,6 +25,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -76,27 +77,22 @@ public class BinaryMessageRendererTest extends MessageRendererTest<byte[]> {
 
     @Test
     public void getValueFromFile_withNoVar() {
-        String text = format("éè€%n");
+        String text = format("éè€");
         assertValueFromFile(text, "utf8.txt", true);
         assertCacheContentInString(text);
-
     }
 
     @Test
     public void getValueFromFile_withOneVar() {
         String value = "éè€";
         jmeterCtxService.get().getVariables().put("oneVar", value);
-        assertValueFromFile(format("%s%n", value), "oneVar.txt", true);
-        assertCacheContentInString(format("${oneVar}%n"));
+        assertValueFromFile(format("%s", value), "oneVar.txt", true);
+        assertCacheContentInString(format("${oneVar}"));
     }
-
-
 
     @Test
     public void getValueFromFile_withInvalidEncoding() {
-        error.expect(RuntimeException.class);
-        error.expectCause(instanceOf(UnsupportedEncodingException.class));
-
+        error.expect(UnsupportedCharsetException.class);
         render.getValueFromFile(getResourceFile("utf8.txt"), "banana", true, cache);
     }
 
