@@ -211,6 +211,7 @@ Summary
 <ul>
     <li><bug>61698</bug>Test Action: It stop is selected, samplers following Test Action can run</li>
     <li><bug>61707</bug>Test Action: Target is ignored when pause is selected, so it should be disabled</li>
+    <li><bug>61827</bug>JMSPublisher: Don't add new line at the end of the file. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <h3>Controllers</h3>
