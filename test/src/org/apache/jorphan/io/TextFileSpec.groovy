@@ -16,14 +16,14 @@ class TextFileSpec extends Specification {
         tempFile.deleteOnExit()
     }
 
-    def "read lines"() {
+    def "getText of empty file is empty string"() {
         given:
             def sut = new TextFile(tempFile.getAbsolutePath())
         expect:
             sut.getText() == ""
     }
 
-    def "read lines returns exact content of file"() {
+    def "getText returns exact content of file"() {
         given:
             def sut = new TextFile(tempFile.getAbsolutePath())
             FileUtils.write(tempFile, content, Charset.defaultCharset())
@@ -33,7 +33,7 @@ class TextFileSpec extends Specification {
             content << ["a\nb\nc", "\"a\nb\nc\n"]
     }
 
-    def "read lines returns exact content of file other charset"() {
+    def "getText returns exact content of file with specific charset"() {
         given:
             def sut = new TextFile(tempFile.getAbsolutePath(), encoding)
             FileUtils.write(tempFile, content, charset)
@@ -45,5 +45,31 @@ class TextFileSpec extends Specification {
             "a\nb\nc\n" | StandardCharsets.UTF_16     | "UTF_16"
             "a\nb\nc"   | StandardCharsets.ISO_8859_1 | "ISO_8859_1"
             "a\nb\nc\n" | StandardCharsets.ISO_8859_1 | "ISO_8859_1"
+    }
+
+    def "setText sets exact content of file"() {
+        given:
+            def sut = new TextFile(tempFile.getAbsolutePath())
+        when:
+            sut.setText(content)
+        then:
+            sut.getText() == content
+        where:
+            content << ["a\nb\nc", "\"a\nb\nc\n"]
+    }
+
+    def "setText sets exact content of file other charset"() {
+        given:
+            def sut = new TextFile(tempFile.getAbsolutePath(), encoding)
+        when:
+            sut.setText(content, encoding)
+        then:
+            sut.getText(encoding) == content
+        where:
+            content     | encoding
+            "a\nb\nc"   | "UTF_16"
+            "a\nb\nc\n" | "UTF_16"
+            "a\nb\nc"   | "ISO_8859_1"
+            "a\nb\nc\n" | "ISO_8859_1"
     }
 }
