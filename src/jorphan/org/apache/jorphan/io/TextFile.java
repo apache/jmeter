@@ -91,13 +91,10 @@ public class TextFile extends File {
      * @param body New content for the file.
      */
     public void setText(String body) {
-        Charset charset = encoding != null
-                ? Charset.forName(encoding)
-                : Charset.defaultCharset();
         try {
-            Files.write(this.toPath(), body.getBytes(charset));
-        } catch (IOException e) {
-            e.printStackTrace();
+            Files.write(this.toPath(), body.getBytes(getCharset()));
+        } catch (IOException ioe) {
+            log.error("", ioe);
         }
     }
 
@@ -107,16 +104,19 @@ public class TextFile extends File {
      * @return the content of the file
      */
     public String getText() {
-        Charset charset = encoding != null
-                ? Charset.forName(encoding)
-                : Charset.defaultCharset();
         try {
             byte[] encoded = Files.readAllBytes(this.toPath());
-            return new String(encoded, charset);
-        } catch (IOException ioex) {
-            log.error("Failed to getText", ioex);
+            return new String(encoded, getCharset());
+        } catch (IOException ioe) {
+            log.error("Failed to getText", ioe);
             return "";
         }
+    }
+
+    private Charset getCharset() {
+        return encoding != null
+                    ? Charset.forName(encoding)
+                    : Charset.defaultCharset();
     }
 
     /**
