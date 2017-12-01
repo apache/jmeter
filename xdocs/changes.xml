@@ -132,6 +132,7 @@ Summary
     <li><bug>61756</bug>Extractors : Improve label name "Reference name" to make it clear what it makes</li>
     <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions : When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61845</bug>New Component JSON Assertion based on AtlanBH JSON Path Asserion donated to JMeter-Plugins and migrated into JMeter core by Artem Fedorov (artem at blazemeter.com)</li>
+    <li><bug>61846</bug>Scoped Assertion should follow same order of evaluation as Post Processors</li>
 </ul>
 
 <h3>Functions</h3>
