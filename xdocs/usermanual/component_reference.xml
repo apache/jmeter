@@ -4981,6 +4981,26 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
     </property>
 </properties>
 </component>
+<component name="JSON Assertion" index="&sect-num;.5.14" anchor="JSON_Assertion">
+    <description>
+        <p>
+            This component allows you to perform validations of JSON documents.
+            First, it will parse the JSON and fail if the data is not JSON.
+            Second, it will search for specified path, using syntax from <a href="https://github.com/jayway/JsonPath" > Jayway JsonPath 1.2.0</a>. If the path is not found, it will fail.
+            Third, if JSON path was found in the document, and validation against expected value was requested, it will perform validation. For the <code>null</code> value there is special checkbox in the GUI.
+            Note that if the path will return array object, it will be iterated and if expected value is found, the assertion will succeed. To validate empty array use <code>[]</code> string. Also, if patch will return dictionary object, it will be converted to string before comparison.
+        </p>
+    </description>
+    <properties>
+        <property name="Assert JSON Path exists" required="Yes">Path to JSON element for assert.</property>
+        <property name="Additionally assert value" required="No">Select checkbox if you want make assert with some value</property>
+        <property name="Match as regular expression" required="No">Select checkbox if you want use regular expression</property>
+        <property name="Expected Value" required="No">Value for assert or regular expression for match</property>
+        <property name="Expect null" required="No">Select checkbox if you expect null</property>
+        <property name="Invert assertion (will fail if above conditions met)" required="No">Invert assertion (will fail if above conditions met)</property>
+    </properties>
+    <figure width="1140" height="356" image="json_path_assertion.png">JSON Assertion</figure>
+</component>
 
 <a href="#">^</a>
 
