@@ -5,29 +5,29 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.nio.charset.Charset
-import java.nio.charset.IllegalCharsetNameException
 import java.nio.charset.StandardCharsets
 
 @Unroll
 class TextFileSpec extends Specification {
 
-    def tempFile = File.createTempFile("TextFile", ".unittest")
+    def tmpFile = File.createTempFile("TextFile", ".unittest")
+    def tmpPath = tmpFile.getAbsolutePath()
 
     def setup() {
-        tempFile.deleteOnExit()
+        tmpFile.deleteOnExit()
     }
 
     def "getText of empty file is empty string"() {
         given:
-            def sut = new TextFile(tempFile.getAbsolutePath())
+            def sut = new TextFile(tmpPath)
         expect:
             sut.getText() == ""
     }
 
     def "getText returns exact content of file"() {
         given:
-            def sut = new TextFile(tempFile.getAbsolutePath())
-            FileUtils.write(tempFile, content, Charset.defaultCharset())
+            def sut = new TextFile(tmpPath)
+            FileUtils.write(tmpFile, content, Charset.defaultCharset())
         expect:
             sut.getText() == content
         where:
@@ -36,8 +36,8 @@ class TextFileSpec extends Specification {
 
     def "getText returns exact content of file with specific charset"() {
         given:
-            def sut = new TextFile(tempFile.getAbsolutePath(), encoding)
-            FileUtils.write(tempFile, content, charset)
+            def sut = new TextFile(tmpPath, encoding)
+            FileUtils.write(tmpFile, content, charset)
         expect:
             sut.getText() == content
         where:
@@ -50,7 +50,7 @@ class TextFileSpec extends Specification {
 
     def "setText sets exact content of file"() {
         given:
-            def sut = new TextFile(tempFile.getAbsolutePath())
+            def sut = new TextFile(tmpPath)
         when:
             sut.setText(content)
         then:
@@ -61,7 +61,7 @@ class TextFileSpec extends Specification {
 
     def "setText sets exact content of file other charset"() {
         given:
-            def sut = new TextFile(tempFile.getAbsolutePath(), encoding)
+            def sut = new TextFile(tmpPath, encoding)
         when:
             sut.setText(content, encoding)
         then:
@@ -75,9 +75,13 @@ class TextFileSpec extends Specification {
     }
 
     def "getText throws exception with invalid encoding"() {
+        given:
+            def sut = new TextFile(tmpPath, invalidEncoding)
         when:
-            new TextFile(tempFile.getAbsolutePath(), "invalid encoding").getText()
+            sut.getText()
         then:
-            thrown(IllegalCharsetNameException)
+            thrown(IllegalArgumentException)
+        where:
+            invalidEncoding << ["", "invalid", "invalid encoding"]
     }
 }
