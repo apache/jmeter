@@ -39,13 +39,11 @@ import org.slf4j.LoggerFactory;
 /**
  * Provides Session Filtering for the AccessLog Sampler.
  */
-public class SessionFilter implements Filter, Serializable, TestCloneable,ThreadListener {
+public class SessionFilter implements Filter, Serializable, TestCloneable, ThreadListener {
     private static final long serialVersionUID = 233L;
     private static final Logger log = LoggerFactory.getLogger(SessionFilter.class);
 
-    /**
-     * Protects access to managersInUse
-     */
+    /** Protects access to managersInUse */
     private static final Object LOCK = new Object();
     /**
      * These objects are static across multiple threads in a test, via clone()
@@ -65,24 +63,13 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
 
     /**
      * Creates a new SessionFilter, but re-uses the given collections
-     * 
-     * @param cookieManagers
-     *            {@link CookieManager}s to be used for the different IPs
-     * @param managersInUse
-     *            CookieManagers currently in use by other threads
+     *
+     * @param cookieManagers {@link CookieManager}s to be used for the different IPs
+     * @param managersInUse  CookieManagers currently in use by other threads
      */
     public SessionFilter(Map<String, CookieManager> cookieManagers, Set<CookieManager> managersInUse) {
         this.cookieManagers = cookieManagers;
         this.managersInUse = managersInUse;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.LogFilter#excPattern(java.lang.String)
-     */
-    protected boolean hasExcPattern(String text) {
-        return false;
     }
 
     protected String getIpAddress(String logLine) {
@@ -93,65 +80,41 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         return matcher.getMatch().group(0);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void reset() {
         cookieManagers.clear();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Object clone() {
         return new SessionFilter(cookieManagers, managersInUse);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void excludeFiles(String[] filenames) {
         // NOOP
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void excludePattern(String[] regexp) {
         // NOOP
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String filter(String text) {
         return text;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void includeFiles(String[] filenames) {
         // NOOP
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void includePattern(String[] regexp) {
         // NOOP
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isFiltered(String path,TestElement sampler) {
         String ipAddr = getIpAddress(path);
@@ -160,8 +123,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         return false;
     }
 
-    protected CookieManager getCookieManager(String ipAddr)
-    {
+    protected CookieManager getCookieManager(String ipAddr) {
         CookieManager cm;
         // First have to release the cookie we were using so other
         // threads stuck in wait can move on
@@ -199,17 +161,11 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         return cm;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setReplaceExtension(String oldextension, String newextension) {
         // NOOP
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void threadFinished() {
         synchronized(LOCK) {
@@ -218,9 +174,6 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void threadStarted() {
         // NOOP

@@ -521,7 +521,7 @@
             <stringProp name="logFile">log</stringProp>
             <stringProp name="parserClassName">org.apache.jmeter.protocol.http.util.accesslog.TCLogParser</stringProp>
             <stringProp name="portString">port</stringProp>
-            <stringProp name="filterClassName">org.apache.jmeter.protocol.http.util.accesslog.LogFilter</stringProp>
+            <stringProp name="filterClassName">org.apache.jmeter.protocol.http.util.accesslog.SessionFilter</stringProp>
           </AccessLogSampler>
           <hashTree/>
           <BSFSampler guiclass="BSFSamplerGui" testclass="BSFSampler" testname="BSF Sampler" enabled="true">
