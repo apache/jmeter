@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.jms.sampler.render;
 
-import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -46,35 +45,35 @@ public class TextMessageRendererTest extends MessageRendererTest<String> {
     private void assertContent(String resource, String encoding) {
         String filename = getResourceFile(resource);
         String actual = render.getContent(new FileKey(filename, encoding));
-        assertEquals(format("éè€"), actual);
+        assertEquals("éè€", actual);
     }
 
     @Test
     public void getValueFromFileWithNoVar() {
-        assertValueFromFile(format("noVar"), "noVar.txt", true);
+        assertValueFromFile("noVar", "noVar.txt", true);
     }
 
     @Test
     public void getValueFromFileWithOneVar() {
         jmeterCtxService.get().getVariables().put("oneVar", "foobar");
-        assertValueFromFile(format("foobar"), "oneVar.txt", true);
+        assertValueFromFile("foobar", "oneVar.txt", true);
     }
 
     @Test
     public void checkCache() {
         jmeterCtxService.get().getVariables().put("oneVar", "foo");
-        assertValueFromFile(format("foo"), "oneVar.txt", true);
-        assertEquals(format("${oneVar}"), getFirstCachedValue());
+        assertValueFromFile("foo", "oneVar.txt", true);
+        assertEquals("${oneVar}", getFirstCachedValue());
 
         jmeterCtxService.get().getVariables().put("oneVar", "bar");
-        assertValueFromFile(format("bar"), "oneVar.txt", true);
-        assertEquals(format("${oneVar}"), getFirstCachedValue());
+        assertValueFromFile("bar", "oneVar.txt", true);
+        assertEquals("${oneVar}", getFirstCachedValue());
     }
 
     @Test
     public void checkNoVariable() {
         jmeterCtxService.get().getVariables().put("oneVar", "RAW");
-        assertValueFromFile(format("${oneVar}"), "oneVar.txt", false);
+        assertValueFromFile("${oneVar}", "oneVar.txt", false);
     }
 
     @Test

@@ -62,7 +62,7 @@ public class ObjectMessageRendererTest extends MessageRendererTest<Serializable>
         String filename = getResourceFile("object_cp1252.xml");
         Serializable object = getRenderer().getValueFromFile(filename, "Cp1252", true, cache);
         assertObject(object, "eéè€");
-        assertEquals("cache", format("%s", getUnicodeContent()), getFirstCachedValue());
+        assertEquals("cache", getUnicodeContent(), getFirstCachedValue());
 
     }
 
@@ -71,7 +71,7 @@ public class ObjectMessageRendererTest extends MessageRendererTest<Serializable>
         String filename = getResourceFile("object_utf8.xml");
         Serializable object = getRenderer().getValueFromFile(filename, PublisherSampler.DEFAULT_ENCODING, true, cache);
         assertObject(object, "eéè€");
-        assertEquals("cache", format("%s", getUnicodeContent()), getFirstCachedValue());
+        assertEquals("cache", getUnicodeContent(), getFirstCachedValue());
 
     }
 

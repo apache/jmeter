@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.jms.sampler.render;
 
-import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -77,7 +76,7 @@ public class BinaryMessageRendererTest extends MessageRendererTest<byte[]> {
 
     @Test
     public void getValueFromFile_withNoVar() {
-        String text = format("éè€");
+        String text = "éè€";
         assertValueFromFile(text, "utf8.txt", true);
         assertCacheContentInString(text);
     }
@@ -86,8 +85,8 @@ public class BinaryMessageRendererTest extends MessageRendererTest<byte[]> {
     public void getValueFromFile_withOneVar() {
         String value = "éè€";
         jmeterCtxService.get().getVariables().put("oneVar", value);
-        assertValueFromFile(format("%s", value), "oneVar.txt", true);
-        assertCacheContentInString(format("${oneVar}"));
+        assertValueFromFile(value, "oneVar.txt", true);
+        assertCacheContentInString("${oneVar}");
     }
 
     @Test
