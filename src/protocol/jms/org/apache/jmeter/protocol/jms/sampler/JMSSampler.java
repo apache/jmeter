@@ -866,7 +866,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         int val = 1;
         try {
             val = getPropertyAsInt(JMS_NUMBEROFSAMPLES);
-        } catch (Exception e) {
+        } catch (Exception e) { // NOSONAR
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Failed parsing number of samples to aggregate");
+            }
             val = 1;
         }
         if (val < 1) {
