@@ -276,16 +276,19 @@ under the License.
         <groupId>org.spockframework</groupId>
         <artifactId>spock-core</artifactId>
         <version>${spock.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>cglib</groupId>
         <artifactId>cglib-nodep</artifactId>
         <version>${cglib-nodep.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.objenesis</groupId>
         <artifactId>objenesis</artifactId>
         <version>${objenesis.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>net.sf.jtidy</groupId>
@@ -451,11 +454,13 @@ under the License.
         <groupId>org.hamcrest</groupId>
         <artifactId>hamcrest-core</artifactId>
         <version>${hamcrest-core.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.exparity</groupId>
         <artifactId>hamcrest-date</artifactId>
         <version>${hamcrest-date.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
 
