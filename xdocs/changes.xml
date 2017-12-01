@@ -86,6 +86,7 @@ Summary
     any other element, it will create a <code>Test Fragment</code> element called <code>Workbench Test Fragment and move the elements in it</code>.</li>
     <li>Following classes have been dropped (<code>org.apache.jmeter.functions.util.ArgumentEncoder</code>, <code>org.apache.jmeter.functions.util.ArgumentDecoder</code>), see <pr>335</pr></li>
     <li>In JMS Point-to-Point sampler, setting timeout to 0 will now mean infinite timeout while previously it would be switched to 2000 ms, see <bugzilla>61829</bugzilla></li>
+    <li>When Assertions are at different scopes, they are executed starting with the most OUTER one to the most INNER one. See <bugzilla>61846</bugzilla></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
