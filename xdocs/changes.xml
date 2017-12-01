@@ -249,6 +249,7 @@ Summary
 <ul>
     <li><bug>61661</bug>Avoid startup/shutdown problems due to 3<sup>rd</sup> party Thread Listener plugins throwing RuntimeException</li>
     <li><bug>61625</bug>File Editor used in BeanInfo behaves strangely under all LAFs with impact on CSVDataSet, JSR223, BSF, Beanshell Element</li>
+    <li><bug>61844</bug>Maven pom.xml : Libraries used in testing should have scope test</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
