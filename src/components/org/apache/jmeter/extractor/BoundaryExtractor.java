@@ -239,7 +239,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
      * @param found
      * @return int found updated
      */
-    private int extract(String leftBoundary, String rightBoundary, int matchNumber, String inputString,
+    public int extract(String leftBoundary, String rightBoundary, int matchNumber, String inputString,
             List<String> result, int found) {
         int startIndex = -1;
         int endIndex;
