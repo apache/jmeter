@@ -144,7 +144,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
     /**
      * Gets a List of String-objects. Each String is one mail-address of the
      * addresses-String set by <code>setToAddress(str)</code>. The addresses
-     * must be seperated by commas. Only String-objects containing a "@" are
+     * must be separated by commas. Only String-objects containing a "@" are
      * added to the returned List.
      *
      * @return a List of String-objects wherein each String represents a
@@ -176,8 +176,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * Adds a SampleResult for display in the Visualizer.
      *
      * @param sample
-     *            the SampleResult encapsulating informations about the last
-     *            sample.
+     *            the SampleResult encapsulating information about the last sample.
      */
     public void add(SampleResult sample) {
         add(sample, false);
@@ -246,8 +245,6 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         }
         notifyChangeListeners();
     }
-
-
 
     /**
      * Resets the state of this object to its default. But: This method does not

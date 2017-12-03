@@ -19,7 +19,6 @@ package org.apache.jmeter.report.processor;
 
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SamplePredicate;
-import org.apache.jmeter.report.processor.AbstractSampleConsumer;
 
 /**
  * <p>

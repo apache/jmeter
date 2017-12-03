@@ -343,7 +343,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         } catch (Exception ex) {
             res.setResponseMessage("Error browsing queue '"+queueName+"' with selector '"
                     + jmsSelector+ "', timeout '"+getTimeout()+"', message:"+ex.getMessage());
-            LOGGER.error("Error browsing queue {} with selector {} and configured timeout {}", queueName, jmsSelector, 
+            LOGGER.error("Error browsing queue {} with selector {} and configured timeout {}", queueName, jmsSelector,
                     getTimeout(), ex);
         } finally {
             Utils.close(consumer, LOGGER);
@@ -424,7 +424,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             }
             res.setResponseMessage(numMsgs + " messages available on the queue");
             res.setResponseHeaders(qBrowser.toString());
-            return (messageBodies + queue.getQueueName() + " has " + numMsgs + " messages");
+            return messageBodies + queue.getQueueName() + " has " + numMsgs + " messages";
         } catch (Exception e) {
             res.setResponseMessage("Error counting message on the queue");
             LOGGER.error("Error browsing messages on the queue {}", queueName, e);
@@ -668,21 +668,21 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
             LOGGER.debug("Session created");
 
-            if (isBrowse() || isRead() || isClearQueue()) {
-                // Do nothing!
-            } else if (isOneway()) {
-                producer = session.createSender(sendQueue);
-                if (isNonPersistent()) {
-                    producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-                }
-                producer.setPriority(Integer.parseInt(getPriority()));
-                producer.setTimeToLive(Long.parseLong(getExpiration()));
-            } else {
-                if (useTemporyQueue()) {
-                    executor = new TemporaryQueueExecutor(session, sendQueue, getTimeoutAsInt());
-                } else {
+            if (!(isBrowse() || isRead() || isClearQueue())) {
+                if (isOneway()) {
                     producer = session.createSender(sendQueue);
-                    executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
+                    if (isNonPersistent()) {
+                        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+                    }
+                    producer.setPriority(Integer.parseInt(getPriority()));
+                    producer.setTimeToLive(Long.parseLong(getExpiration()));
+                } else {
+                    if (useTemporyQueue()) {
+                        executor = new TemporaryQueueExecutor(session, sendQueue, getTimeoutAsInt());
+                    } else {
+                        producer = session.createSender(sendQueue);
+                        executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
+                    }
                 }
             }
             LOGGER.debug("Starting connection");

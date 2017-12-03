@@ -17,6 +17,13 @@
  */
 package org.apache.jmeter.assertions.gui;
 
+import java.awt.BorderLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import org.apache.jmeter.assertions.JSONPathAssertion;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
@@ -24,22 +31,12 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-
-import javax.swing.JCheckBox;
-import javax.swing.BorderFactory;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.BorderLayout;
-
 /**
  * Java class representing GUI for the {@link JSONPathAssertion} component in JMeter
  * @since 4.0
  */
 public class JSONPathAssertionGui extends AbstractAssertionGui implements ChangeListener {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -6008018002423594040L;
     private JLabeledTextField jsonPath = null;
     private JLabeledTextArea jsonValue = null;

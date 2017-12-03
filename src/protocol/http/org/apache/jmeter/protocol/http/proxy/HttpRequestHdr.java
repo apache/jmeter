@@ -39,14 +39,11 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-
-//For unit tests, @see TestHttpRequestHdr
+import org.slf4j.LoggerFactory;
 
 /**
  * The headers of the client HTTP request.
- *
  */
 public class HttpRequestHdr {
     private static final Logger log = LoggerFactory.getLogger(HttpRequestHdr.class);

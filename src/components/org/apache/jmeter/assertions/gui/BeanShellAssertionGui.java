@@ -28,12 +28,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.assertions.BeanShellAssertion;
+import org.apache.jmeter.gui.util.FilePanelEntry;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.gui.util.FilePanelEntry;
 
 public class BeanShellAssertionGui extends AbstractAssertionGui {
 
@@ -88,8 +88,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
         return "bsh_assertion_title"; // $NON-NLS-1$
     }
 
-    private JPanel createFilenamePanel()
-    {
+    private JPanel createFilenamePanel() {
 
         JPanel filenamePanel = new JPanel(new BorderLayout());
         filenamePanel.add(filename, BorderLayout.CENTER);

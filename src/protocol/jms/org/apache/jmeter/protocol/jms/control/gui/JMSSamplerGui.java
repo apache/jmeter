@@ -43,8 +43,7 @@ import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * Configuration screen for Java Messaging Point-to-Point requests. <br>
- *
+ * Configuration screen for Java Messaging Point-to-Point requests.
  */
 public class JMSSamplerGui extends AbstractSamplerGui {
 

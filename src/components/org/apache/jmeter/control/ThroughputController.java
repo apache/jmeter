@@ -41,8 +41,9 @@ import org.slf4j.LoggerFactory;
  * The current implementation executes the first N samples (BYNUMBER)
  * or the last N% of samples (BYPERCENT).
  */
-public class ThroughputController extends GenericController implements Serializable, LoopIterationListener,
-        TestStateListener {
+public class ThroughputController
+        extends GenericController
+        implements Serializable, LoopIterationListener, TestStateListener {
 
     private static final long serialVersionUID = 234L;
 
@@ -80,19 +81,13 @@ public class ThroughputController extends GenericController implements Serializa
 
     private transient Object counterLock = new Object(); // ensure counts are updated correctly
 
-    /**
-     * Number of iterations on which we've chosen to deliver samplers.
-     */
+    /** Number of iterations on which we've chosen to deliver samplers. */
     private int numExecutions = 0;
 
-    /**
-     * Index of the current iteration. 0-based.
-     */
+    /** Index of the current iteration. 0-based. */
     private int iteration = -1;
 
-    /**
-     * Whether to deliver samplers on this iteration.
-     */
+    /** Whether to deliver samplers on this iteration. */
     private boolean runThisTime;
 
     public ThroughputController() {
@@ -135,7 +130,7 @@ public class ThroughputController extends GenericController implements Serializa
         JMeterProperty prop = getProperty(MAXTHROUGHPUT);
         int retVal = 1;
         if (prop instanceof IntegerProperty) {
-            retVal = ((IntegerProperty) prop).getIntValue();
+            retVal = prop.getIntValue();
         } else {
             String valueString = prop.getStringValue();
             try {
@@ -163,7 +158,7 @@ public class ThroughputController extends GenericController implements Serializa
         JMeterProperty prop = getProperty(PERCENTTHROUGHPUT);
         float retVal = 100;
         if (prop instanceof FloatProperty) {
-            retVal = ((FloatProperty) prop).getFloatValue();
+            retVal = prop.getFloatValue();
         } else {
             String valueString = prop.getStringValue();
             try {
@@ -214,8 +209,9 @@ public class ThroughputController extends GenericController implements Serializa
         if (subControllersAndSamplers.isEmpty()) {
             return true;
         } else {
-            return getStyle() == BYNUMBER && getExecutions() >= getMaxThroughputAsInt()
-                && current >= getSubControllers().size();
+            return getStyle() == BYNUMBER
+                    && getExecutions() >= getMaxThroughputAsInt()
+                    && current >= getSubControllers().size();
         }
     }
 

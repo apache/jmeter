@@ -55,17 +55,14 @@ public class ClientPool {
      * need to do this to make sure all the threads created during the test are
      * destroyed and cleaned up. In some cases, the client provided by the
      * manufacturer of the JMS server may have bugs and some threads may become
-     * zombie. In those cases, it is not the responsibility of JMeter for those
-     * bugs.
+     * zombie. In those cases, it is not JMeter's responsibility.
      */
     public static synchronized void clearClient() {
         for (Closeable client : clients) {
             try {
                 client.close();
-            } catch (IOException e) {
-                // Ignored
+            } catch (IOException ignored) {
             }
-            client = null;
         }
         clients.clear();
         client_map.clear();

@@ -28,9 +28,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // @see org.apache.jmeter.functions.PackageTest for unit tests
 

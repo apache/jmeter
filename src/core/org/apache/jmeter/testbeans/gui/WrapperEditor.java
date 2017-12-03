@@ -225,7 +225,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * @throws Error
      *             always throws an error.
      */
-    private void shouldNeverHappen(String msg) throws Error {
+    private void shouldNeverHappen(String msg) {
         throw new Error(msg); // Programming error: bail out.
     }
 
@@ -237,7 +237,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * @throws Error
      *             always throws one.
      */
-    private void shouldNeverHappen(Exception e) throws Error {
+    private void shouldNeverHappen(Exception e) {
         throw new Error(e.toString()); // Programming error: bail out.
     }
 
@@ -440,10 +440,11 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
             if (GuiPackage.getInstance() == null){
                 log.warn("Invalid value: {} {}", text, typeEditor);
             } else {
-                JOptionPane.showMessageDialog(guiEditor.getCustomEditor().getParent(),
-                   JMeterUtils.getResString("property_editor.value_is_invalid_message"),//$NON-NLS-1$
-                    JMeterUtils.getResString("property_editor.value_is_invalid_title"),  //$NON-NLS-1$
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(
+                        guiEditor.getCustomEditor().getParent(),
+                        JMeterUtils.getResString("property_editor.value_is_invalid_message"),//$NON-NLS-1$
+                        JMeterUtils.getResString("property_editor.value_is_invalid_title"),  //$NON-NLS-1$
+                        JOptionPane.WARNING_MESSAGE);
             }
             // Revert to the previous value:
             guiEditor.setAsText(lastValidValue);

@@ -63,8 +63,8 @@ public class DummyAnnotatedTest
     @Test
     // Succeeds only if Before method - verifyTwo() - is run.
     public void add() {
-        int four = two+2;
-        if(4!=four) {
+        int four = two + 2;
+        if (4 != four) {
             throw new RuntimeException("4 did not equal four.");
         }
         //or if you have assertions enabled
@@ -72,19 +72,21 @@ public class DummyAnnotatedTest
     }
 
     //should always fail
-    @Test(timeout=1000)
+    @Test(timeout = 1000)
     public void timeOutFail() {
-        try{
+        try {
             TimeUnit.SECONDS.sleep(2);
-        }catch (InterruptedException e) { }
+        } catch (InterruptedException ignored) {
+        }
     }
 
     //should not fail
-    @Test(timeout=1000)
+    @Test(timeout = 1000)
     public void timeOutPass() {
-        try{
+        try {
             TimeUnit.MILLISECONDS.sleep(500);
-        }catch (InterruptedException e) { }
+        } catch (InterruptedException ignored) {
+        }
     }
 
     @Test
