@@ -327,7 +327,7 @@ options when <code>-jar</code> is used.</p>
   <guimenuitem>File</guimenuitem>
   <guimenuitem>Templates&hellip;</guimenuitem>
 </menuchoice> or Templates icon:
-<figure image="template_menu.png">Templates icon item</figure>
+<figure image="Select-Templates-Icon.png">Templates icon item</figure>
 </p>
 <p>A popup appears, you can then choose a template among the list:
 <figure image="template_wizard.png">Templates popup</figure>
