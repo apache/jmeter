@@ -95,42 +95,43 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><pr>316</pr>Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
-    <li><bug>61639</bug>HTTP(S) Test Script Recorder : In request filtering tab, uncheck by default "Notify Child Listeners of filtered samplers"</li>
-    <li><bug>61672</bug>HTTP(S) Test Script Recorder : Have the ability to choose the sampler name while keeping the ability to just add a prefix</li>
-    <li><bug>53957</bug>HTTP Request : In Parameters tab, allow pasting of content coming from Firefox and Chrome (unparsed)</li>
+    <li><bug>61639</bug>HTTP(S) Test Script Recorder: In request filtering tab, uncheck by default "Notify Child Listeners of filtered samplers"</li>
+    <li><bug>61672</bug>HTTP(S) Test Script Recorder: Have the ability to choose the sampler name while keeping the ability to just add a prefix</li>
+    <li><bug>53957</bug>HTTP Request: In Parameters tab, allow pasting of content coming from Firefox and Chrome (unparsed)</li>
     <li><bug>61587</bug>Drop properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code></li>
-    <li><bug>61843</bug>HTTP(S) Test Script Recorder : Add SAN to JMeter generated CA Certificate. Contributed by Matthew Buckett</li>
+    <li><bug>61843</bug>HTTP(S) Test Script Recorder: Add SAN to JMeter generated CA Certificate. Contributed by Matthew Buckett</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-    <li><bug>61739</bug>Java Request / JavaSamplerClient : Improve <code>org.apache.jmeter.protocol.java.sampler.JavaSamplerContext</code></li>
+    <li><bug>61739</bug>Java Request / JavaSamplerClient: Improve <code>org.apache.jmeter.protocol.java.sampler.JavaSamplerContext</code></li>
     <li><bug>61762</bug>Start Next Thread Loop should be used everywhere</li>
     <li><bug>61544</bug>JMS Point-to-Point Sampler: Enhance communication styles with read, browse, clear. Based on a contribution by Benny van Wijngaarden (benny at smaragd-it.nl)</li>
-    <li><bug>61829</bug>JMS Point-to-Point : If Receive Queue is empty and a timeout is set, it is not taken into account. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61829</bug>JMS Point-to-Point: If Receive Queue is empty and a timeout is set, it is not taken into account. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Controllers</h3>
 <ul>
-    <li><bug>61675</bug>If Controller : Use expression by default and add a warning when the other mode is used. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>61770</bug>Module Controller : Inform user in UI that he needs to have at least one Controller in his plan. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61675</bug>If Controller: Use expression by default and add a warning when the other mode is used. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61770</bug>Module Controller: Inform user in UI that he needs to have at least one Controller in his plan. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>57760</bug>View Results Tree : Cookie Header is wrongly shown as empty (no cookies) when viewing a recorder Sample Result. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>57760</bug>View Results Tree: Cookie Header is wrongly shown as empty (no cookies) when viewing a recorder Sample Result. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61769</bug>View Results Tree: Use syntax highlighter in XPath Tester, JSON Path Tester and CSS/JQuery Tester. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61776</bug>View Results Tree: Expansion of <code>Add expand/collapse all</code> menu in render XML view. Contributed by Maxime Chassagneux and Graham Russell</li>
-    <li><bug>61794</bug>Influxdb backend : Add as many custom tags as wanted by just create new lines and prefix theirs name by "<code>TAG_</code>" on the GUI backend listener</li>
+    <li><bug>61852</bug>View Results Tree: Add a Boundary Extractor Tester</li>
+    <li><bug>61794</bug>Influxdb backend: Add as many custom tags as wanted by just create new lines and prefix theirs name by "<code>TAG_</code>" on the GUI backend listener</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
     <li><bug>60213</bug>Boundary based extractor</li>
     <li><bug>61644</bug>HTTP Cache Manager: "Use Cache-Control/Expires header when processing GET requests" should be checked by default</li>
-    <li><bug>61645</bug>Response Assertion : Add ability to assert on Request Data</li>
+    <li><bug>61645</bug>Response Assertion: Add ability to assert on Request Data</li>
     <li><bug>61534</bug>Convert AssertionError to a failed assertion in the JSR223Assertion allowing users to use assert in their code</li>
-    <li><bug>61756</bug>Extractors : Improve label name "Reference name" to make it clear what it makes</li>
+    <li><bug>61756</bug>Extractors: Improve label name "Reference name" to make it clear what it makes</li>
     <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions : When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61845</bug>New Component JSON Assertion based on AtlanBH JSON Path Assertion donated to JMeter-Plugins and migrated into JMeter core by Artem Fedorov (artem at blazemeter.com)</li>
     <li><bug>61846</bug>Scoped Assertion should follow same order of evaluation as Post Processors</li>
@@ -139,7 +140,7 @@ Summary
 <h3>Functions</h3>
 <ul>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
-    <li><bug>61738</bug>Function Helper Dialog : Add Copy in Generate and clarify labels. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61738</bug>Function Helper Dialog: Add Copy in Generate and clarify labels. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
     <li><bug>61724</bug>Add <code>__digest</code> function to provide computing of Hashes (SHA-XXX, MDX). Based on a contribution by orimarko at gmail.com</li>
     <li><bug>61735</bug>Add <code>__dateTimeConvert</code> function to provide date formats conversions. Based on a contribution by orimarko at gmail.com</li>
@@ -150,7 +151,7 @@ Summary
 <h3>I18N</h3>
 <ul>
     <li><bug>61606</bug>Translate button <code>Browse&hellip;</code> in some elements (which use FileEditor class)</li>
-    <li><bug>61747</bug>HTTP(S) Test Script Recorder : add the missing doc to "Create transaction after request (ms)"</li>
+    <li><bug>61747</bug>HTTP(S) Test Script Recorder: add the missing doc to "Create transaction after request (ms)"</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -160,22 +161,22 @@ Summary
 <h3>General</h3>
 <ul>
     <li><bug>61591</bug>Drop Workbench from test tree. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
-    <li><bug>61549</bug>Thread Group : Remove start and end date</li>
+    <li><bug>61549</bug>Thread Group: Remove start and end date</li>
     <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>61709</bug>SampleResult : Add a method <code>setIgnore()</code> to make JMeter ignore the SampleResult and not send it to listeners</li>
+    <li><bug>61709</bug>SampleResult: Add a method <code>setIgnore()</code> to make JMeter ignore the SampleResult and not send it to listeners</li>
     <li><bug>61607</bug>Add browse button in all BeanShell elements to select BeanShell script</li>
     <li><bug>61627</bug>Don't clear LogView anymore when clicking on Warning/Errors Indicator</li>
     <li><bug>61629</bug>Add Think Times to Children menu should not consider disabled elements</li>
-    <li><bug>61655</bug>SampleSender : Drop HoldSampleSender implementation</li>
+    <li><bug>61655</bug>SampleSender: Drop HoldSampleSender implementation</li>
     <li><bug>61656</bug><code>tearDown Thread Group</code> should run by default at stop or shutdown of test</li>
     <li><bug>61659</bug><code>JMeterVariables#get()</code> should apply <code>toString()</code> on non string objects</li>
     <li><bug>61555</bug>Metaspace should be restricted as default</li>
     <li><bug>61693</bug>JMeter aware of Docker (<code>-XX:+UnlockExperimentalVMOptions</code> <code>-XX:+UseCGroupMemoryLimitForHeap</code>)</li>
     <li><bug>61694</bug>Add <code>-server</code> option in <code>jmeter.bat</code></li>
     <li><bug>61697</bug>Introduce Darcula Look And Feel to make JMeter UI more attractive</li>
-    <li><bug>61704</bug>Toolbar : Improve a bit the right part</li>
+    <li><bug>61704</bug>Toolbar: Improve a bit the right part</li>
     <li><bug>61731</bug>Enhance Test plan Backup with option to save before run. Based on a contribution by orimarko at gmail.com</li>
-    <li><bug>61640</bug>JSR223 Test Elements : Enable by default caching. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61640</bug>JSR223 Test Elements: Enable by default caching. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61785</bug>Add <menuchoice><guimenuitem>Help</guimenuitem><guimenuitem>Useful links</guimenuitem></menuchoice> to create issues and download nightly build</li>
     <li><bug>61808</bug>Fix main frame position. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>61802</bug>Loop / ForEach Controller should expose a variable for current iteration. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
@@ -225,12 +226,12 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>61742</bug>BackendListener : fix default value for <code>backend_graphite.send_interval</code></li>
+    <li><bug>61742</bug>BackendListener: fix default value for <code>backend_graphite.send_interval</code></li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>61716</bug>Header Manager : When pasting Headers from Firefox or Chrome spaces are introduced as first character of value</li>
+    <li><bug>61716</bug>Header Manager: When pasting Headers from Firefox or Chrome spaces are introduced as first character of value</li>
 </ul>
 
 <h3>Functions</h3>
@@ -238,7 +239,7 @@ Summary
     <li><bug>61588</bug>Better log message for <funclink name="__RandomDate()"/> function</li>
     <li><bug>61619</bug>In Function Helper Dialog, the 1<sup>st</sup> function doesn't display default parameters</li>
     <li><bug>61628</bug>If split string has empty separator default separator is not used</li>
-    <li><bug>61752</bug><code>__RandomDate</code> : Function does not allow missing last parameter used for variable name</li>
+    <li><bug>61752</bug><code>__RandomDate</code>: Function does not allow missing last parameter used for variable name</li>
 </ul>
 
 <h3>I18N</h3>
@@ -254,7 +255,7 @@ Summary
 <ul>
     <li><bug>61661</bug>Avoid startup/shutdown problems due to 3<sup>rd</sup> party Thread Listener plugins throwing RuntimeException</li>
     <li><bug>61625</bug>File Editor used in BeanInfo behaves strangely under all LAFs with impact on CSVDataSet, JSR223, BSF, Beanshell Element</li>
-    <li><bug>61844</bug>Maven pom.xml : Libraries used in testing should have scope test</li>
+    <li><bug>61844</bug>Maven pom.xml: Libraries used in testing should have scope test</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

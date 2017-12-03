@@ -2920,6 +2920,11 @@ You can right-click on any node and expand or collapse all nodes below it.
 The "<code>Test</code>" button allows the user to apply the XPath query to the upper panel and the results
 will be displayed in the lower panel.<br/>
 </td></tr>
+<tr><td><code>Boundary Extractor Tester </code></td>
+<td>The <i>Boundary Extractor Tester</i> only works for text responses. It shows the plain text in the upper panel.
+The "<code>Test</code>" button allows the user to apply the Boundary Extractor query to the upper panel and the results
+will be displayed in the lower panel.<br/>
+</td></tr>
 </table>
 <p><code>Scroll automatically?</code> option permit to have last node display in tree selection</p>
 <note>Starting with version 3.2 the number of entries in the View is restricted to the value of the
