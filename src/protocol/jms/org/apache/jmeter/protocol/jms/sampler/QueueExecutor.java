@@ -45,6 +45,7 @@ public interface QueueExecutor {
     /**
      * Close the resources
      * @throws JMSException
+     *             in case of an exception from the messaging system
      */
     void close() throws JMSException;
 }
