@@ -180,7 +180,7 @@ Summary
     <li><bug>61785</bug>Add <menuchoice><guimenuitem>Help</guimenuitem><guimenuitem>Useful links</guimenuitem></menuchoice> to create issues and download nightly build</li>
     <li><bug>61808</bug>Fix main frame position. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>61802</bug>Loop / ForEach Controller should expose a variable for current iteration. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><pr>349</pr> add i18n resouces(zh_CN). Contributed by Helly Guo (https://github.com/hellyguo)</li>
+    <li><pr>349</pr>Add i18n resouces(zh_CN). Contributed by Helly Guo (https://github.com/hellyguo)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -200,7 +200,7 @@ Summary
     <li><pr>332</pr>Add the spock framework for groovy unit tests. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>334</pr>Enable running of JUnit tests from within IntelliJ with default config. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>335</pr>Removed <code>functions.util.*</code> as they don't seem to be used (for many years). Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><pr>345</pr>Updated to latest checkstyle (v8.5), Added many more rules to checkstyle, Included checking of test files and more file types. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61867</bug><pr>345</pr>Updated to latest checkstyle (v8.5), Added many more rules to checkstyle, Included checking of test files and more file types. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
