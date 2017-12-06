@@ -189,7 +189,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     }
 
     private void setTestTypeMasked(int testType) {
-        int value = getTestType() & ~(TYPE_MASK) | testType;
+        int value = getTestType() & ~TYPE_MASK | testType;
         setProperty(new IntegerProperty(TEST_TYPE, value));
     }
 
@@ -347,7 +347,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             return result.setResultForNull();
         }
 
-        boolean pass = true;
+        boolean pass;
         boolean hasTrue = false;
         ArrayList<String> allCheckMessage = new ArrayList<>();
         try {

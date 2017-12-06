@@ -45,7 +45,6 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * This is the GUI for JMS Publisher
- *
  */
 public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListener {
 
@@ -223,7 +222,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         msgChoice.setLayout(new BoxLayout(msgChoice, BoxLayout.X_AXIS));
         mainPanel.add(msgChoice);
 
-        fileEncoding = new JLabeledChoice(JMeterUtils.getResString("content_encoding") + "\u00A0\u00A0", // $NON-NLS-1$
+        String nonBreakingSpace = "\u00A0"; // CHECKSTYLE IGNORE AvoidEscapedUnicodeCharacters
+        fileEncoding = new JLabeledChoice(JMeterUtils.getResString("content_encoding") + nonBreakingSpace + nonBreakingSpace, // $NON-NLS-1$
                 PublisherSampler.getSupportedEncodings(), true, false);
         fileEncoding.setLayout(new BoxLayout(fileEncoding, BoxLayout.X_AXIS));
         fileEncoding.add(Box.createHorizontalGlue());

@@ -150,7 +150,7 @@ public class RenderAsXML extends SamplerResultTab
         }
 
         private void applyToChildren(TreePath parent, Consumer<TreePath> method) {
-            TreeNode node = ((TreeNode) parent.getLastPathComponent());
+            TreeNode node = (TreeNode) parent.getLastPathComponent();
             Enumeration<?> e = node.children();
             while (e.hasMoreElements()) {
                 TreeNode n = (TreeNode) e.nextElement();

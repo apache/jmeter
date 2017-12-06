@@ -38,7 +38,7 @@ import org.junit.Test;
  *
  */
 public class TestDigestFunction extends JMeterTestCase {
-	protected AbstractFunction digest;	
+    protected AbstractFunction digest;    
 
     private SampleResult result;
 
@@ -50,7 +50,7 @@ public class TestDigestFunction extends JMeterTestCase {
 
     @Before
     public void setUp() {
-    	digest = new DigestEncodeFunction();
+        digest = new DigestEncodeFunction();
         result = new SampleResult();
         jmctx = JMeterContextService.getContext();
         String data = "dummy data";
@@ -64,17 +64,17 @@ public class TestDigestFunction extends JMeterTestCase {
     
     @Test
     public void testParameterCount512() throws Exception {
-    	checkInvalidParameterCounts(digest, 2, 5);
+        checkInvalidParameterCounts(digest, 2, 5);
     }   
     
     @Test
     public void testSha512WithSalt() throws Exception {
-    	params.add(new CompoundVariable("SHA-512"));
-    	params.add(new CompoundVariable("nofile"));
-    	params.add(new CompoundVariable("salt"));
-    	digest.setParameters(params);
-    	String returnValue = digest.execute(result, null);
-    	assertEquals("abc8c7a1c814c74d5882e527d21fabfccf480716df9d17bae73e5e767992d8a2a47033459a9ea91aca3186f75bfbe559419109bc44c1e6dfd618101fdc0beb1b", returnValue);
+        params.add(new CompoundVariable("SHA-512"));
+        params.add(new CompoundVariable("nofile"));
+        params.add(new CompoundVariable("salt"));
+        digest.setParameters(params);
+        String returnValue = digest.execute(result, null);
+        assertEquals("abc8c7a1c814c74d5882e527d21fabfccf480716df9d17bae73e5e767992d8a2a47033459a9ea91aca3186f75bfbe559419109bc44c1e6dfd618101fdc0beb1b", returnValue);
     }  
     
     @Test
@@ -99,32 +99,32 @@ public class TestDigestFunction extends JMeterTestCase {
     
     @Test
     public void testSha1() throws Exception {
-    	params.add(new CompoundVariable("SHA-1"));    	
-    	params.add(new CompoundVariable("nofile"));    	
-    	digest.setParameters(params);
-    	String returnValue = digest.execute(result, null);
-    	assertEquals("4ea2ced10057872be25371cfe638d3b096c58f2f", returnValue);
+        params.add(new CompoundVariable("SHA-1"));        
+        params.add(new CompoundVariable("nofile"));        
+        digest.setParameters(params);
+        String returnValue = digest.execute(result, null);
+        assertEquals("4ea2ced10057872be25371cfe638d3b096c58f2f", returnValue);
     }
     
     @Test
     public void testSha1Variable() throws Exception {
-    	params.add(new CompoundVariable("SHA-1"));    	
-    	params.add(new CompoundVariable("nofile"));  
-    	params.add(new CompoundVariable(""));  
-    	params.add(new CompoundVariable("true"));
-    	params.add(new CompoundVariable("newVar"));  	
-    	digest.setParameters(params);
-    	String returnValue = digest.execute(result, null);
-    	assertEquals("4EA2CED10057872BE25371CFE638D3B096C58F2F", returnValue);
+        params.add(new CompoundVariable("SHA-1"));        
+        params.add(new CompoundVariable("nofile"));  
+        params.add(new CompoundVariable(""));  
+        params.add(new CompoundVariable("true"));
+        params.add(new CompoundVariable("newVar"));      
+        digest.setParameters(params);
+        String returnValue = digest.execute(result, null);
+        assertEquals("4EA2CED10057872BE25371CFE638D3B096C58F2F", returnValue);
     }
 
     @Test
-    public void testSha512Variable() throws Exception {    	
-    	params.add(new CompoundVariable("SHA-512"));
-    	params.add(new CompoundVariable("nofile"));  
-    	params.add(new CompoundVariable(""));  
-    	params.add(new CompoundVariable("true"));
-    	params.add(new CompoundVariable("newVar"));
+    public void testSha512Variable() throws Exception {        
+        params.add(new CompoundVariable("SHA-512"));
+        params.add(new CompoundVariable("nofile"));  
+        params.add(new CompoundVariable(""));  
+        params.add(new CompoundVariable("true"));
+        params.add(new CompoundVariable("newVar"));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
         assertEquals("58DA94D45A97B35B31D7F76D2EBAC184BC4BDA512B966CDBE43FDE1CAE1CFAF89617082CA89928FB5DC1C75D60B93ADB5631F518F970CA6DCC196E1AFC678B8C", returnValue);
@@ -132,15 +132,15 @@ public class TestDigestFunction extends JMeterTestCase {
     
     @Test(expected=InvalidVariableException.class)
     public void testSha512Error() throws Exception {
-    	params.add(new CompoundVariable("nofile"));		
-		digest.setParameters(params);
-		digest.execute(result, null);
+        params.add(new CompoundVariable("nofile"));        
+        digest.setParameters(params);
+        digest.execute(result, null);
     }
     
     @Test(expected=InvalidVariableException.class)
-	public void testSha1Error() throws Exception {
-		params.add(new CompoundVariable("SHA-1"));    	
-		digest.setParameters(params);
-		digest.execute(result, null);
-	}
+    public void testSha1Error() throws Exception {
+        params.add(new CompoundVariable("SHA-1"));        
+        digest.setParameters(params);
+        digest.execute(result, null);
+    }
 }

@@ -71,7 +71,7 @@ public class JsseSSLManager extends SSLManager {
     static {
         if (log.isInfoEnabled()) {
             log.info("Using default SSL protocol: {}", DEFAULT_SSL_PROTOCOL);
-            log.info("SSL session context: {}", (SHARED_SESSION_CONTEXT ? "shared" : "per-thread"));
+            log.info("SSL session context: {}", SHARED_SESSION_CONTEXT ? "shared" : "per-thread");
 
             if (CPS > 0) {
                 log.info("Setting up HTTPS SlowProtocol, cps={}", CPS);
@@ -128,11 +128,10 @@ public class JsseSSLManager extends SSLManager {
      */
     @Override
     public void setContext(HttpURLConnection conn) {
-        if (conn instanceof HttpsURLConnection) {
-             // No point doing this on a per-connection basis,
-             // as there is currently no way to configure it.
-             // So we leave it to the defaults set up in the SSL Context
-        } else {
+        // No point doing this on a per-connection basis,
+        // as there is currently no way to configure it.
+        // So we leave it to the defaults set up in the SSL Context
+        if (!(conn instanceof HttpsURLConnection)) {
             if (log.isWarnEnabled()) {
                 log.warn("Unexpected HttpURLConnection class: {}", conn.getClass().getName());
             }

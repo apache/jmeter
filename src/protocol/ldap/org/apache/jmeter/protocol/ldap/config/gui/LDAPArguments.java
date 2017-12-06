@@ -24,10 +24,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jmeter.config.ConfigTestElement;
 
 /**
  * A set of LDAPArgument objects. author Dolf Smits(Dolf.Smits@Siemens.com)

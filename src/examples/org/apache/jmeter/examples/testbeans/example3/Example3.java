@@ -34,12 +34,16 @@ public class Example3 extends AbstractSampler implements TestBean {
     private static final long serialVersionUID = 240L;
 
     private boolean mybool;
-    private Boolean myBoolean1, myBoolean2;
+    private Boolean myBoolean1;
+    private Boolean myBoolean2;
     private int myInt;
-    private Integer myInteger1, myInteger2;
+    private Integer myInteger1;
+    private Integer myInteger2;
     private long mylong;
-    private Long myLong1, myLong2;
-    private String myString1, myString2;
+    private Long myLong1;
+    private Long myLong2;
+    private String myString1;
+    private String myString2;
     private File myFile1;
     private String myFile2;
 
@@ -137,19 +141,15 @@ public class Example3 extends AbstractSampler implements TestBean {
     public void setMyString2(String myString2) {
         this.myString2 = myString2;
     }
-
     public File getMyFile1() {
         return myFile1;
     }
-
     public void setMyFile1(File myFile) {
         this.myFile1 = myFile;
     }
-
     public String getMyFile2() {
         return myFile2;
     }
-
     public void setMyFile2(String myFile) {
         this.myFile2 = myFile;
     }

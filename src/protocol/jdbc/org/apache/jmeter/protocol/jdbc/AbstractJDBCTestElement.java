@@ -476,7 +476,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 throw new SQLException("Invalid data type: "+jdbcType, e);
             }
         }
-        return (entry).intValue();
+        return entry.intValue();
     }
 
 

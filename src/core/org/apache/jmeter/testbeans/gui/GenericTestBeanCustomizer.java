@@ -685,7 +685,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         public int compare(PropertyDescriptor d1, PropertyDescriptor d2) {
             String g1 = group(d1);
             String g2 = group(d2);
-            Integer go1 = groupOrder(g1), go2 = groupOrder(g2);
+            Integer go1 = groupOrder(g1);
+            Integer go2 = groupOrder(g2);
 
             int result = go1.compareTo(go2);
             if (result != 0) {
