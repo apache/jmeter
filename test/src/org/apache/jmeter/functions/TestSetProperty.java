@@ -19,6 +19,8 @@
 package org.apache.jmeter.functions;
 
 import static org.junit.Assert.assertEquals;
+
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Assert;
 
 import java.util.Collection;
@@ -34,7 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestSetProperty extends JMeterTestCase {
+public class TestSetProperty extends JMeterTestCase implements JMeterSerialTest {
     protected AbstractFunction function;
 
     private SampleResult result;
@@ -72,7 +74,6 @@ public class TestSetProperty extends JMeterTestCase {
         assertEquals("value1", JMeterUtils.getProperty("prop1"));
         assertEquals("", returnValue);
     }
-    
 
     @Test
     public void testSetPropertyWithReturn() throws Exception {

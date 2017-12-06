@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class finds classes that extend one of a set of parent classes
- *
  */
 public final class ClassFinder {
     private static final Logger log = LoggerFactory.getLogger(ClassFinder.class);
@@ -73,7 +72,7 @@ public final class ClassFinder {
         private final ClassLoader contextClassLoader
             = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
 
-        ExtendsClassFilter(Class<?> []parents, boolean inner, String contains, String notContains){
+        ExtendsClassFilter(Class<?>[] parents, boolean inner, String contains, String notContains) {
             this.parents = parents;
             this.inner = inner;
             this.contains = contains;
@@ -93,58 +92,54 @@ public final class ClassFinder {
             }
             return false;
         }
-        
-       /**
-        *
-        * @param parentClasses list of classes to check for
-        * @param strClassName name of class to be checked
-        * @param contextClassLoader the classloader to use
-        * @return true if the class is a non-abstract, non-interface instance of at least one of the parent classes
-        */
-       private boolean isChildOf(Class<?> [] parentClasses, String strClassName,
-               ClassLoader contextClassLoader){
-               // might throw an exception, assume this is ignorable
-               try {
-                   Class<?> c = Class.forName(strClassName, false, contextClassLoader);
 
-                   if (!c.isInterface() && !Modifier.isAbstract(c.getModifiers())) {
-                       for (Class<?> parentClass : parentClasses) {
-                           if (parentClass.isAssignableFrom(c)) {
-                               return true;
-                           }
-                       }
-                   }
-               } catch (UnsupportedClassVersionError | ClassNotFoundException
-                       | NoClassDefFoundError | VerifyError e) {
-                   log.debug(e.getLocalizedMessage(), e);
-               }
-           return false;
-       }
+        /**
+         * @param parentClasses      list of classes to check for
+         * @param strClassName       name of class to be checked
+         * @param contextClassLoader the classloader to use
+         * @return true if the class is a non-abstract, non-interface instance of at least one of the parent classes
+         */
+        private boolean isChildOf(
+                Class<?>[] parentClasses, String strClassName, ClassLoader contextClassLoader) {
+            try {
+                Class<?> targetClass = Class.forName(strClassName, false, contextClassLoader);
+
+                if (!targetClass.isInterface()
+                        && !Modifier.isAbstract(targetClass.getModifiers())) {
+                    return Arrays.stream(parentClasses)
+                            .anyMatch(parent -> parent.isAssignableFrom(targetClass));
+                }
+            } catch (UnsupportedClassVersionError | ClassNotFoundException
+                    | NoClassDefFoundError | VerifyError e) {
+                log.debug(e.getLocalizedMessage(), e);
+            }
+            return false;
+        }
 
         /* (non-Javadoc)
          * @see java.lang.Object#toString()
          */
         @Override
         public String toString() {
-            return "ExtendsClassFilter [parents=" + 
+            return "ExtendsClassFilter [parents=" +
                     (parents != null ? Arrays.toString(parents) : "null") + ", inner=" + inner + ", contains="
                     + contains + ", notContains=" + notContains + "]";
         }
     }
-    
+
     private static class AnnoClassFilter implements ClassFilter {
-        
+
         private final boolean inner; // are inner classes OK?
 
         private final Class<? extends Annotation>[] annotations; // annotation classes to check
         private final ClassLoader contextClassLoader
             = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
-        
+
         AnnoClassFilter(Class<? extends Annotation> []annotations, boolean inner){
             this.annotations = annotations;
             this.inner = inner;
         }
-        
+
         @Override
         public boolean accept(String className) {
             if (!className.contains("$") || inner) { // $NON-NLS-1$
@@ -152,32 +147,29 @@ public final class ClassFinder {
             }
             return false;
         }
-        
-        private boolean hasAnnotationOnMethod(Class<? extends Annotation>[] annotations, String classInQuestion,
-                ClassLoader contextClassLoader ){
-                try{
-                    Class<?> c = Class.forName(classInQuestion, false, contextClassLoader);
-                    for(Method method : c.getMethods()) {
-                        for(Class<? extends Annotation> annotation : annotations) {
-                            if(method.isAnnotationPresent(annotation)) {
-                                return true;
-                            }
-                        }
-                    }
-                } catch (NoClassDefFoundError | ClassNotFoundException | UnsupportedClassVersionError | VerifyError ignored) {
-                    log.debug(ignored.getLocalizedMessage(), ignored);
-                }
-                return false;
+
+        private boolean hasAnnotationOnMethod(
+                Class<? extends Annotation>[] annotations,
+                String classInQuestion,
+                ClassLoader contextClassLoader) {
+            try {
+                Class<?> c = Class.forName(classInQuestion, false, contextClassLoader);
+                return Arrays.stream(c.getMethods())
+                        .anyMatch(method -> Arrays.stream(annotations).anyMatch(method::isAnnotationPresent));
+            } catch (NoClassDefFoundError | ClassNotFoundException | UnsupportedClassVersionError | VerifyError ignored) {
+                log.debug(ignored.getLocalizedMessage(), ignored);
             }
+            return false;
+        }
 
         /**
          * @see java.lang.Object#toString()
          */
         @Override
         public String toString() {
-            return "AnnoClassFilter [inner=" + inner + ", annotations=" + 
+            return "AnnoClassFilter [inner=" + inner + ", annotations=" +
                     (annotations != null ? Arrays.toString(annotations) : "null")+ "]";
-        }        
+        }
     }
 
     /**
@@ -185,16 +177,13 @@ public final class ClassFinder {
      * {@link #findClassesThatExtend(String[], Class[], boolean)} with the
      * option to include inner classes in the search set to false.
      *
-     * @param paths
-     *            pathnames or jarfiles to search for classes
-     * @param superClasses
-     *            required parent class(es)
+     * @param paths        pathnames or jarfiles to search for classes
+     * @param superClasses required parent class(es)
      * @return List of Strings containing discovered class names.
-     * @throws IOException
-     *             when scanning the classes fails
+     * @throws IOException when scanning the classes fails
      */
     public static List<String> findClassesThatExtend(String[] paths, Class<?>[] superClasses)
-        throws IOException {
+            throws IOException {
         return findClassesThatExtend(paths, superClasses, false);
     }
 
@@ -206,10 +195,10 @@ public final class ClassFinder {
             File dir = new File(path);
             if (dir.exists() && dir.isDirectory()) {
                 String[] jars = dir.list((f, name) -> {
-                    File fileInDirectory = new File(f, name); 
+                    File fileInDirectory = new File(f, name);
                     return fileInDirectory.isFile() && name.endsWith(DOT_JAR);
                 });
-                if(jars != null) {
+                if (jars != null) {
                     Collections.addAll(fullList, jars);
                 }
             }
@@ -219,10 +208,10 @@ public final class ClassFinder {
 
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
-     * @param strPathsOrJars - pathnames or jarfiles to search for classes
-     * @param superClasses - required parent class(es)
-     * @param innerClasses - should we include inner classes?
      *
+     * @param strPathsOrJars pathnames or jarfiles to search for classes
+     * @param superClasses   required parent class(es)
+     * @param innerClasses   should we include inner classes?
      * @return List containing discovered classes
      * @throws IOException when scanning for classes fails
      */
@@ -234,12 +223,12 @@ public final class ClassFinder {
 
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
-     * @param strPathsOrJars - pathnames or jarfiles to search for classes
-     * @param superClasses - required parent class(es)
-     * @param innerClasses - should we include inner classes?
-     * @param contains - classname should contain this string
-     * @param notContains - classname should not contain this string
      *
+     * @param strPathsOrJars pathnames or jarfiles to search for classes
+     * @param superClasses   required parent class(es)
+     * @param innerClasses   should we include inner classes?
+     * @param contains       classname should contain this string
+     * @param notContains    classname should not contain this string
      * @return List containing discovered classes
      * @throws IOException when scanning classes fails
      */
@@ -252,10 +241,10 @@ public final class ClassFinder {
 
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
-     * @param strPathsOrJars - pathnames or jarfiles to search for classes
-     * @param annotations - required annotations
-     * @param innerClasses - should we include inner classes?
      *
+     * @param strPathsOrJars pathnames or jarfiles to search for classes
+     * @param annotations    required annotations
+     * @param innerClasses   should we include inner classes?
      * @return List containing discovered classes
      * @throws IOException when scanning classes fails
      */
@@ -269,9 +258,8 @@ public final class ClassFinder {
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
      * Inner classes are not searched.
      *
-     * @param strPathsOrJars - pathnames or jarfiles to search for classes
-     * @param annotations - required annotations
-     *
+     * @param strPathsOrJars pathnames or jarfiles to search for classes
+     * @param annotations    required annotations
      * @return List containing discovered classes
      * @throws IOException when scanning classes fails
      */
@@ -283,13 +271,13 @@ public final class ClassFinder {
 
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
-     * @param searchPathsOrJars - pathnames or jarfiles to search for classes
-     * @param classNames - required parent class(es) or annotations
-     * @param innerClasses - should we include inner classes?
-     * @param contains - classname should contain this string
-     * @param notContains - classname should not contain this string
-     * @param annotations - true if classnames are annotations
      *
+     * @param searchPathsOrJars pathnames or jarfiles to search for classes
+     * @param classNames        required parent class(es) or annotations
+     * @param innerClasses      should we include inner classes?
+     * @param contains          classname should contain this string
+     * @param notContains       classname should not contain this string
+     * @param annotations       true if classnames are annotations
      * @return List containing discovered classes
      * @throws IOException when scanning classes fails
      */
@@ -299,48 +287,45 @@ public final class ClassFinder {
                 throws IOException  {
         if (log.isDebugEnabled()) {
             log.debug("findClassesThatExtend with searchPathsOrJars : {}, superclass : {}"+
-                    " innerClasses : {} annotations: {} contains: {}, notContains: {}", 
+                    " innerClasses : {} annotations: {} contains: {}, notContains: {}",
                     Arrays.toString(searchPathsOrJars),
                     Arrays.toString(classNames),
                     innerClasses, annotations,
                     contains, notContains);
         }
 
-        
         ClassFilter filter;
-        if(annotations) {
-            @SuppressWarnings("unchecked") // Should only be called with classes that extend annotations
+        if (annotations) {
+            @SuppressWarnings("unchecked")
+            // Should only be called with classes that extend annotations
             final Class<? extends Annotation>[] annoclassNames = (Class<? extends Annotation>[]) classNames;
             filter = new AnnoClassFilter(annoclassNames, innerClasses);
-        }
-        else {
+        } else {
             filter = new ExtendsClassFilter(classNames, innerClasses, contains, notContains);
         }
-        
+
         return findClasses(searchPathsOrJars, filter);
     }
 
     /**
      * Find all classes in the given jars that passes the class filter.
-     * 
-     * @param searchPathsOrJars
-     *            list of strings representing the jar locations
-     * @param filter
-     *            {@link ClassFilter} that the classes in the jars should
-     *            conform to
+     *
+     * @param searchPathsOrJars list of strings representing the jar locations
+     * @param filter            {@link ClassFilter} that the classes in the jars should
+     *                          conform to
      * @return list of all classes in the jars, that conform to {@code filter}
-     * @throws IOException
-     *             when reading the jar files fails
+     * @throws IOException when reading the jar files fails
      */
-    public static List<String> findClasses(String[] searchPathsOrJars, ClassFilter filter) throws IOException  {
+    public static List<String> findClasses(String[] searchPathsOrJars, ClassFilter filter) throws IOException {
         if (log.isDebugEnabled()) {
-            log.debug("findClasses with searchPathsOrJars : {} and classFilter : {}", 
+            log.debug("findClasses with searchPathsOrJars : {} and classFilter : {}",
                     Arrays.toString(searchPathsOrJars), filter);
         }
-    
+
         // Find all jars in the search path
-        List<String> strPathsOrJars = Arrays.asList(addJarsInPath(searchPathsOrJars)).stream()
-                .map(ClassFinder::fixPathEntry).collect(Collectors.toList());
+        List<String> strPathsOrJars = Arrays.stream(addJarsInPath(searchPathsOrJars))
+                .map(ClassFinder::fixPathEntry)
+                .collect(Collectors.toList());
 
         // Now eliminate any classpath entries that do not "match" the search
         List<String> listPaths = getClasspathMatches(strPathsOrJars);
@@ -349,13 +334,13 @@ public final class ClassFinder {
                 log.debug("listPaths : {}", path);
             }
         }
-    
+
         Set<String> listClasses = new TreeSet<>();
         // first get all the classes
         for (String path : listPaths) {
             findClassesInOnePath(path, listClasses, filter);
         }
-        
+
         if (log.isDebugEnabled()) {
             log.debug("listClasses.size()={}", listClasses.size());
             for (String clazz : listClasses) {
@@ -368,6 +353,7 @@ public final class ClassFinder {
 
     /**
      * Returns the classpath entries that match the search list of jars and paths
+     *
      * @param strPathsOrJars can contain {@code null} element but must not be {@code null}
      * @return List of paths (jars or folders) that ends with one of the rows of strPathsOrJars
      */
@@ -382,13 +368,13 @@ public final class ClassFinder {
 
         // find all jar files or paths that end with strPathOrJar
         List<String> listPaths = new ArrayList<>();
-        String classpathElement = null;
+        String classpathElement;
         StringTokenizer classpathElements =
                 new StringTokenizer(javaClassPath, File.pathSeparator);
 
         while (classpathElements.hasMoreTokens()) {
             classpathElement = fixPathEntry(classpathElements.nextToken());
-            if(classpathElement == null) {
+            if (classpathElement == null) {
                 continue;
             }
             boolean found = false;
@@ -420,8 +406,8 @@ public final class ClassFinder {
      * <li>remove all trailing {@code /}</li>
      * </ul>
      */
-    private static String fixPathEntry(String path){
-        if (path == null ) {
+    private static String fixPathEntry(String path) {
+        if (path == null) {
             return null;
         }
         if (path.equals(".")) { // $NON-NLS-1$
@@ -444,8 +430,7 @@ public final class ClassFinder {
      * Converts a class file from the text stored in a Jar file to a version
      * that can be used in Class.forName().
      *
-     * @param strClassName
-     *            the class name from a Jar file
+     * @param strClassName the class name from a Jar file
      * @return String the Java-style dotted version of the name
      */
     private static String fixClassName(String strClassName) {
@@ -456,19 +441,19 @@ public final class ClassFinder {
         return fixedClassName;
     }
 
-    
+
     private static void findClassesInOnePath(String strPath, Set<String> listClasses, ClassFilter filter) throws IOException {
         File file = new File(strPath);
         if (file.isDirectory()) {
             findClassesInPathsDir(strPath, file, listClasses, filter);
         } else if (file.exists()) {
-            try (ZipFile zipFile = new ZipFile(file);){
+            try (ZipFile zipFile = new ZipFile(file)) {
                 Enumeration<? extends ZipEntry> entries = zipFile.entries();
                 while (entries.hasMoreElements()) {
                     String strEntry = entries.nextElement().toString();
                     if (strEntry.endsWith(DOT_CLASS)) {
                         String fixedClassName = fixClassName(strEntry);
-                        if(filter.accept(fixedClassName)) {
+                        if (filter.accept(fixedClassName)) {
                             listClasses.add(fixedClassName);
                         }
                     }
@@ -482,27 +467,26 @@ public final class ClassFinder {
 
     private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses, ClassFilter filter) throws IOException {
         String[] list = dir.list();
-        if(list == null) {
+        if (list == null) {
             log.warn("{} is not a folder", dir.getAbsolutePath());
             return;
         }
-        
-        for (String aList : list) {
-            File file = new File(dir, aList);
+
+        for (String filePath : list) {
+            File file = new File(dir, filePath);
             if (file.isDirectory()) {
                 // Recursive call
                 findClassesInPathsDir(strPathElement, file, listClasses, filter);
-            }
-            else if (aList.endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
+            } else if (filePath.endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
                 final String path = file.getPath();
                 String className = path.substring(strPathElement.length() + 1,
                         path.lastIndexOf('.')) // $NON-NLS-1$
                         .replace(File.separator.charAt(0), '.');// $NON-NLS-1$
-                if(filter.accept(className)) {
+                if (filter.accept(className)) {
                     listClasses.add(className);
                 }
             }
         }
     }
-    
+
 }

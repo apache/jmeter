@@ -97,4 +97,13 @@ abstract class JMeterSpec extends Specification {
         System.out.println(prop + "=" + System.getProperty(prop))
     }
 
+    // Helper method to find a test path
+    protected static String findTestPath(String file) {
+        File f = new File(file)
+        if (filePrefix.length() > 0 && !f.isAbsolute()) {
+            return filePrefix + file// Add the offset
+        }
+        return file
+    }
+
 }
