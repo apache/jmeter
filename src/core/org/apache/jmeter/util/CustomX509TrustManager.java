@@ -52,7 +52,7 @@ public class CustomX509TrustManager implements X509TrustManager
      * @see javax.net.ssl.X509TrustManager#checkClientTrusted(X509Certificate[],String)
      */
     @Override
-    public void checkClientTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
+    public void checkClientTrusted(X509Certificate[] certificates, String authType) {
         if (log.isDebugEnabled() && certificates != null) {
             for (int i = 0; i < certificates.length; i++) {
                 X509Certificate cert = certificates[i];
@@ -63,7 +63,7 @@ public class CustomX509TrustManager implements X509TrustManager
                         + "  Valid from: {}\n"
                         + "  Valid until: {}\n"
                         + "  Issuer: {}",
-                        (i + 1),
+                        i + 1,
                         cert.getSubjectDN(),
                         cert.getSigAlgName(),
                         cert.getNotBefore(),
@@ -88,7 +88,7 @@ public class CustomX509TrustManager implements X509TrustManager
                         + "  Valid from: {}\n"
                         + "  Valid until: {}\n"
                         + "  Issuer: {}",
-                        (i + 1),
+                        i + 1,
                         cert.getSubjectDN(),
                         cert.getSigAlgName(),
                         cert.getNotBefore(),

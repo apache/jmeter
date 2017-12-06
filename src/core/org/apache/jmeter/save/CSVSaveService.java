@@ -572,7 +572,7 @@ public final class CSVSaveService {
                 return null; // unknown column name
             }
             if (current <= previous) {
-                log.warn("Column header number {} name {} is out of order.", (i + 1), label);
+                log.warn("Column header number {} name {} is out of order.", i + 1, label);
                 return null; // out of order
             }
             previous = current;

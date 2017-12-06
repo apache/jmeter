@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui;
 
 import java.util.function.Consumer;
+
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;

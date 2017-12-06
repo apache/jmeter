@@ -17,8 +17,6 @@
  */
 package org.apache.jmeter.report.core;
 
-import org.apache.jmeter.report.core.SampleMetadata;
-
 /**
  * Simple parser to get a {@link SampleMetadata} instance<br>
  * 

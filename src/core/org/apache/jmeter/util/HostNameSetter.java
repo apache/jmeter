@@ -54,8 +54,6 @@ public class HostNameSetter {
         return s;
     }
     
-
-
     private static void initFail(Exception e) {
         // ignore
     }

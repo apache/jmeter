@@ -200,13 +200,14 @@ public class JMeterUtils implements UnitTestManager {
             p.load(is);
         } catch (IOException e) {
             try {
-                is =
-                    ClassLoader.getSystemResourceAsStream("org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
+                is = ClassLoader.getSystemResourceAsStream(
+                        "org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
                 if (is == null) {
-                    throw new RuntimeException("Could not read JMeter properties file:"+file);
+                    throw new RuntimeException("Could not read JMeter properties file:" + file);
                 }
                 p.load(is);
             } catch (IOException ex) {
+                throw new RuntimeException("Could not read JMeter properties file:" + file);
             }
         } finally {
             JOrphanUtils.closeQuietly(is);
@@ -388,12 +389,13 @@ public class JMeterUtils implements UnitTestManager {
             resources = resBund;
             locale = loc;
             final Locale resBundLocale = resBund.getLocale();
-            if (isDefault || resBundLocale.equals(loc)) {// language change worked
-            // Check if we at least found the correct language:
-            } else if (resBundLocale.getLanguage().equals(loc.getLanguage())) {
-                log.info("Could not find resources for '"+loc.toString()+"', using '"+resBundLocale.toString()+"'");
-            } else {
-                log.error("Could not find resources for '"+loc.toString()+"'");
+            if (!isDefault && !resBundLocale.equals(loc)) {
+                // Check if we at least found the correct language:
+                if (resBundLocale.getLanguage().equals(loc.getLanguage())) {
+                    log.info("Could not find resources for '{}', using '{}'", loc.toString(), resBundLocale.toString());
+                } else {
+                    log.error("Could not find resources for '{}'", loc.toString());
+                }
             }
         }
         notifyLocaleChangeListeners();

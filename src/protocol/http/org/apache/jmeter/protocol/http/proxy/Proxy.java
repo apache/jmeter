@@ -52,17 +52,16 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Thread to handle one client request. Gets the request from the client and
  * passes it on to the server, then sends the response back to the client.
  * Information about the request and response is stored so it can be used in a
  * JMeter test plan.
- *
  */
 public class Proxy extends Thread {
     private static final Logger log = LoggerFactory.getLogger(Proxy.class);
@@ -185,7 +184,8 @@ public class Proxy extends Thread {
             if ((request.getMethod().startsWith(HTTPConstants.CONNECT)) && (outStreamClient != null)) {
                 log.debug("{} Method CONNECT => SSL", port);
                 // write a OK response to browser, to engage SSL exchange
-                outStreamClient.write(("HTTP/1.0 200 OK\r\n\r\n").getBytes(SampleResult.DEFAULT_HTTP_ENCODING)); // $NON-NLS-1$
+                outStreamClient.write(
+                        "HTTP/1.0 200 OK\r\n\r\n".getBytes(SampleResult.DEFAULT_HTTP_ENCODING)); // $NON-NLS-1$
                 outStreamClient.flush();
                // With ssl request, url is host:port (without https:// or path)
                 String[] param = request.getUrl().split(":");  // $NON-NLS-1$

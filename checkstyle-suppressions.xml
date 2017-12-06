@@ -18,10 +18,9 @@ limitations under the License.
 
 <!DOCTYPE suppressions PUBLIC
     "-//Puppy Crawl//DTD Suppressions 1.1//EN"
-    "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+    "http://checkstyle.sourceforge.net/dtds/suppressions_1_1.dtd">
 
 <suppressions>
-    <!-- On Windows, it appears that Checkstyle matches files using \ delims -->
-    <suppress checks="JavadocPackage" files="[/\\]examples[/\\].*\.java"/>
-    <suppress checks="JavadocPackage" files="[/\\]test[/\\].*\.java"/>
+    <suppress checks="NewlineAtEndOfFile" files=".*.properties"/>
+    <suppress checks="FileLength" files="HTTPSamplerBase.java"/>
 </suppressions>

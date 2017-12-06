@@ -220,7 +220,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
             }
             g.drawLine(adjustedWidth, height - data, adjustedWidth, height - data - 1);
             if (log.isDebugEnabled()) {
-                log.debug("Drawing coords = {}, {}", adjustedWidth, (height - data));
+                log.debug("Drawing coords = {}, {}", adjustedWidth, height - data);
             }
         }
 

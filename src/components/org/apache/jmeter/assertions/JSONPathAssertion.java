@@ -29,10 +29,10 @@ import org.apache.oro.text.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jayway.jsonpath.JsonPath;
-
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+
+import com.jayway.jsonpath.JsonPath;
 
 /**
  * This is main class for JSONPath Assertion which verifies assertion on

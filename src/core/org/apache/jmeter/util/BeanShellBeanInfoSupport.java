@@ -22,8 +22,8 @@ import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 import org.apache.jmeter.testbeans.gui.FileEditor;
+import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
 /**
  * Parent class to handle common GUI design

@@ -407,7 +407,7 @@ public class TestHTTPMirrorThread extends TestCase {
         long now = System.nanoTime();
         conn.connect();
         final InputStream inputStream = conn.getInputStream();
-        while(inputStream.read() != -1) {}
+        while(inputStream.read() != -1) {} // CHECKSTYLE IGNORE EmptyBlock
         inputStream.close();
         final long elapsed = (System.nanoTime() - now)/1000000L;
         assertTrue("Expected > 990 " + elapsed, elapsed >= 990);
