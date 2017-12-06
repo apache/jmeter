@@ -54,13 +54,12 @@ import org.apache.jmeter.visualizers.SearchTextExtension.ISearchTextExtensionPro
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.reflect.Functor;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Specializer panel to view a HTTP request parsed
- *
  */
 public class RequestViewHTTP implements RequestView {
 
@@ -281,10 +280,7 @@ public class RequestViewHTTP implements RequestView {
      */
     private boolean isMultipart(LinkedHashMap<String, String> headers) {
         String contentType = headers.get(HTTPConstants.HEADER_CONTENT_TYPE);
-        if (contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA)) {
-            return true;
-        }
-        return false;
+        return contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA);
     }
 
     /**
@@ -455,7 +451,7 @@ public class RequestViewHTTP implements RequestView {
                         Object o = tableParams.getModel().getValueAt(i, j);
                         if(o instanceof String) {
                             Matcher matcher = pattern.matcher((String) o);
-                            if ((matcher != null) && (matcher.find())) {
+                            if (matcher.find()) {
                                 found =  true;
                                 tableParams.setRowSelectionInterval(i, i);
                                 tableParams.scrollRectToVisible(tableParams.getCellRect(i, 0, true));

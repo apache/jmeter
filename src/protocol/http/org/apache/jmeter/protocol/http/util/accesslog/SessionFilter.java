@@ -30,15 +30,14 @@ import org.apache.jmeter.testelement.TestCloneable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides Session Filtering for the AccessLog Sampler.
- *
  */
 public class SessionFilter implements Filter, Serializable, TestCloneable,ThreadListener {
     private static final long serialVersionUID = 233L;

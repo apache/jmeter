@@ -23,13 +23,11 @@ import java.util.ArrayList;
 
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
-
-// For JUnit tests, @see TestLogFilter
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Description:<br>
@@ -68,7 +66,6 @@ import org.apache.oro.text.regex.Perl5Compiler;
  * which will return null if it is filtered and replace any part of the string
  * that should be replaced.
  */
-
 public class LogFilter implements Filter, Serializable {
 
     private static final long serialVersionUID = 241L;
@@ -103,9 +100,6 @@ public class LogFilter implements Filter, Serializable {
 
     protected String NEWFILE = null;
 
-    /**
-     * The default constructor is empty
-     */
     public LogFilter() {
         super();
     }

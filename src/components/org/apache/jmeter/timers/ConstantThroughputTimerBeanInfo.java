@@ -19,11 +19,11 @@
 package org.apache.jmeter.timers;
 
 import java.beans.PropertyDescriptor;
+
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 
 /**
  * BeanInfo for the ConstantThroughputTimer.
- *
  */
 public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport {
 

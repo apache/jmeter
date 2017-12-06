@@ -19,8 +19,6 @@ package org.apache.jmeter.report.core;
 
 import java.io.Closeable;
 
-import org.apache.jmeter.report.core.Sample;
-
 /**
  * Describes sample writer basic operations.<br>
  * <br>

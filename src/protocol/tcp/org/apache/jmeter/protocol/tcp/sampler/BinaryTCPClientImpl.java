@@ -77,7 +77,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
                     throw new IllegalArgumentException(
                     "Hex-encoded binary string contains an invalid hex digit in '"+sc[i * 2]+sc[i * 2 + 1]+"'");
                 }
-                ba[i] = (byte) ((nibble0 << 4) | (nibble1));
+                ba[i] = (byte) ((nibble0 << 4) | nibble1);
             }
 
             return ba;

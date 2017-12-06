@@ -83,20 +83,16 @@ public class MongoSourceElement
         this.source = source;
     }
 
-
-
     public static MongoDB getMongoDB(String source) {
 
         Object mongoSource = JMeterContextService.getContext().getVariables().getObject(source);
 
         if(mongoSource == null) {
             throw new IllegalStateException("mongoSource is null");
-        }
-        else {
+        } else {
             if(mongoSource instanceof MongoDB) {
                 return (MongoDB)mongoSource;
-            }
-            else {
+            } else {
                 throw new IllegalStateException("Variable:"+ source +" is not a MongoDB instance, class:"+mongoSource.getClass());
             }
         }
@@ -155,7 +151,8 @@ public class MongoSourceElement
                 log.debug(getSource() + "  is being defined.");
             }
             try {
-                getThreadContext().getVariables().putObject(getSource(), new MongoDB(MongoUtils.toServerAddresses(getConnection()), mongoOptions));
+                getThreadContext().getVariables().putObject(
+                        getSource(), new MongoDB(MongoUtils.toServerAddresses(getConnection()), mongoOptions));
             } catch (UnknownHostException e) {
                 throw new IllegalStateException(e);
             }

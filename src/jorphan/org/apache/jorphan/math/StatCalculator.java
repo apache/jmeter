@@ -21,8 +21,8 @@ package org.apache.jorphan.math;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.mutable.MutableLong;
 

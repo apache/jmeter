@@ -21,7 +21,6 @@ package org.apache.jmeter.assertions.gui;
 import java.util.Arrays;
 import java.util.Collection;
 
-
 import org.apache.jmeter.gui.AbstractScopedJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
 
@@ -32,7 +31,6 @@ import org.apache.jmeter.gui.util.MenuFactory;
  * need to use the createScopePanel() to add the panel to the GUI, and they also
  * need to use saveScopeSettings() and showScopeSettings() to keep the test element
  * and GUI in synch.
- *
  */
 public abstract class AbstractAssertionGui extends AbstractScopedJMeterGuiComponent {
 

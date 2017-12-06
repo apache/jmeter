@@ -28,8 +28,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
@@ -43,9 +43,6 @@ public class CssParser implements LinkExtractorParser {
     private static final URLCollection EMPTY_URL_COLLECTION = new URLCollection(Collections.emptyList());
     private static final Logger LOG = LoggerFactory.getLogger(CssParser.class);
 
-    /**
-     *
-     */
     private static final LoadingCache<Triple<String, URL, Charset>, URLCollection> CSS_URL_CACHE;
     static {
         final int cacheSize = JMeterUtils.getPropDefault(
@@ -55,7 +52,6 @@ public class CssParser implements LinkExtractorParser {
     }
 
     /**
-     *
      * @see org.apache.jmeter.protocol.http.parser.LinkExtractorParser#getEmbeddedResourceURLs
      *      (java.lang.String, byte[], java.net.URL, java.lang.String)
      */

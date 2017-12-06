@@ -22,15 +22,14 @@ import java.awt.BorderLayout;
 
 import javax.swing.Box;
 
-import org.apache.jmeter.reporters.ResultAction;
 import org.apache.jmeter.gui.OnErrorPanel;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
+import org.apache.jmeter.reporters.ResultAction;
 import org.apache.jmeter.testelement.OnErrorTestElement;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
  * Create a Result Action Test Element
- *
  */
 public class ResultActionGui extends AbstractPostProcessorGui {
 

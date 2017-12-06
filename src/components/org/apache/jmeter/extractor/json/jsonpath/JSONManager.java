@@ -28,13 +28,13 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.PathNotFoundException;
-
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
 
 /**
  * Handles the extractions

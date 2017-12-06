@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.testelement;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.jmeter.testelement.property.DoubleProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;

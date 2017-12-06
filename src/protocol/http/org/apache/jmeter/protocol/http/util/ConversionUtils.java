@@ -229,45 +229,37 @@ public class ConversionUtils {
 
         StringTokenizer st = new StringTokenizer(currentPath, SLASH);
         List<String> tokens = new ArrayList<>();
-        while (st.hasMoreTokens())
-        {
+        while (st.hasMoreTokens()) {
             tokens.add(st.nextToken());
         }
 
-        for (int i = 0; i < tokens.size(); i++)
-        {
-            if (i < tokens.size() - 1)
-            {
+        for (int i = 0; i < tokens.size(); i++) {
+            if (i < tokens.size() - 1) {
                 final String thisToken = tokens.get(i);
 
                 // Verify for a ".." component at next iteration
-                if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT))
-                {
+                if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT)) {
                     tokens.remove(i);
                     tokens.remove(i);
-                    i = i - 2;
-                    if (i < -1)
-                    {
-                        i = -1;
+                    i = i - 2; // CHECKSTYLE IGNORE ModifiedControlVariable
+                    if (i < -1) {
+                        i = -1; // CHECKSTYLE IGNORE ModifiedControlVariable
                     }
                 }
             }
-
         }
 
         StringBuilder newPath = new StringBuilder();
         if (startsWithSlash) {
             newPath.append(SLASH);
         }
-        for (int i = 0; i < tokens.size(); i++)
-        {
+        for (int i = 0; i < tokens.size(); i++) {
             newPath.append(tokens.get(i));
 
             // append '/' if this isn't the last token or it is but the original
             // path terminated w/ a '/'
             boolean appendSlash = i < (tokens.size() - 1) ? true : endsWithSlash;
-            if (appendSlash)
-            {
+            if (appendSlash) {
                 newPath.append(SLASH);
             }
         }
