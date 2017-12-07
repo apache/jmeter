@@ -33,10 +33,6 @@ public class SamplerMetricFixedModeTest {
 
     /**
      * Method to change a static final field
-     * 
-     * @param field
-     * @param newValue
-     * @throws Exception
      */
     static void setFinalStatic(Field field, Object newValue) throws Exception {
         field.setAccessible(true);
@@ -47,12 +43,12 @@ public class SamplerMetricFixedModeTest {
     }
 
     @Before
-    public void initMode() throws NoSuchFieldException, SecurityException, Exception {
+    public void initMode() throws Exception {
         setFinalStatic(SamplerMetric.class.getDeclaredField("WINDOW_MODE"), WindowMode.FIXED);
     }
 
     @Test
-    public void checkResetOkAndAllStats() throws NoSuchFieldException, SecurityException, Exception {
+    public void checkResetOkAndAllStats() throws Exception {
 
         SamplerMetric metric = new SamplerMetric();
         metric.add(createSampleResult(true));
@@ -67,11 +63,10 @@ public class SamplerMetricFixedModeTest {
         assertEquals("After reset in FIXED mode ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 0.001);
         assertEquals("After reset in FIXED mode all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.0);
         assertEquals("After reset failure", 0, metric.getHits(), 0.0);
-        metric = null;
     }
 
     @Test
-    public void checkResetKoAndAllStats() throws NoSuchFieldException, SecurityException, Exception {
+    public void checkResetKoAndAllStats() throws Exception {
 
         SamplerMetric metric = new SamplerMetric();
         metric.add(createSampleResult(false));
@@ -86,7 +81,6 @@ public class SamplerMetricFixedModeTest {
         assertEquals("After reset in FIXED mode  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 0.0);
         assertEquals("After reset in FIXED mode all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.0);
         assertEquals("After reset failure", 0, metric.getFailures(), 0.001);
-        metric = null;
     }
 
     @Test
@@ -100,7 +94,6 @@ public class SamplerMetricFixedModeTest {
         assertEquals("Count for '400 - bad request' error ", 2, metric.getErrors().get(error), 0.0);
         error = new ErrorMetric(createSampleResult("500", "Internal Server Error"));
         assertEquals("Count for '500 - Internal Server Error' error ", 1, metric.getErrors().get(error), 0.0);
-        metric = null;
     }
 
     private SampleResult createSampleResult(boolean success) {
