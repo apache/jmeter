@@ -213,7 +213,6 @@ public final class MenuFactory {
      */
     public static void addFileMenu(JPopupMenu menu, boolean addSaveTestFragmentMenu) {
         // the undo/redo as a standard goes first in Edit menus
-        // maybe there's better place for them in JMeter?
         if(UndoHistory.isEnabled()) {
             addUndoItems(menu);
         }
@@ -244,13 +243,8 @@ public final class MenuFactory {
         JMenuItem disabled = makeMenuItemRes("disable", ActionNames.DISABLE);// $NON-NLS-1$
         JMenuItem enabled = makeMenuItemRes("enable", ActionNames.ENABLE);// $NON-NLS-1$
         boolean isEnabled = GuiPackage.getInstance().getTreeListener().getCurrentNode().isEnabled();
-        if (isEnabled) {
-            disabled.setEnabled(true);
-            enabled.setEnabled(false);
-        } else {
-            disabled.setEnabled(false);
-            enabled.setEnabled(true);
-        }
+        disabled.setEnabled(isEnabled);
+        enabled.setEnabled(!isEnabled);
         menu.add(enabled);
         menu.add(disabled);
         JMenuItem toggle = makeMenuItemRes("toggle", ActionNames.TOGGLE, KeyStrokes.TOGGLE);// $NON-NLS-1$
