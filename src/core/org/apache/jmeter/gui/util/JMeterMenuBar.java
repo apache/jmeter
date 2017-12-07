@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -63,93 +64,36 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     private static final Logger log = LoggerFactory.getLogger(JMeterMenuBar.class);
 
     private JMenu fileMenu;
-
     private JMenuItem fileSaveAs;
-
-    private JMenuItem fileSelectionAs;
-
-    private JMenuItem fileSelectionAsTestFragment;
-
     private JMenuItem fileRevert;
-
     private JMenuItem fileLoad;
-    
     private JMenu recentFilesOpen;
-
-    private JMenuItem templates;
-
     private List<JComponent> fileLoadRecentFiles;
-
     private JMenuItem fileMerge;
-
-    private JMenuItem fileExit;
-
-    private JMenuItem fileNew;
-
     private JMenu editMenu;
-
     private JMenu editAdd;
-
     private JMenu runMenu;
-
     private JMenuItem runStart;
-
     private JMenuItem runStartNoTimers;
-
     private JMenu remoteStart;
-
-    private JMenuItem remoteStartAll;
-
     private Collection<JMenuItem> remoteEngineStart;
-
     private JMenuItem runStop;
-
     private JMenuItem runShut;
-
     private JMenu remoteStop;
-
     private JMenu remoteShut;
-
-    private JMenuItem remoteStopAll;
-
-    private JMenuItem remoteShutAll;
-
     private Collection<JMenuItem> remoteEngineStop;
-
     private Collection<JMenuItem> remoteEngineShut;
-
-    private JMenuItem runClear;
-
-    private JMenuItem runClearAll;
-
     private JMenu optionsMenu;
-
-    private JMenu lafMenu;
-
-    private JMenuItem sslManager;
-
     private JMenu helpMenu;
-
-    private JMenuItem helpAbout;
-
     private String[] remoteHosts;
-
     private JMenu remoteExit;
-
-    private JMenuItem remoteExitAll;
-
     private Collection<JMenuItem> remoteEngineExit;
-
     private JMenu searchMenu;
-
-    private ArrayList<MenuCreator> menuCreators;
+    private List<MenuCreator> menuCreators;
 
     public static final String SYSTEM_LAF = "System"; // $NON-NLS-1$
-
     public static final String CROSS_PLATFORM_LAF = "CrossPlatform"; // $NON-NLS-1$
-
     public static final String DARCULA_LAF = "Darcula"; // $NON-NLS-1$
-
     public static final String DARCULA_LAF_CLASS = "com.bulenkov.darcula.DarculaLaf"; // $NON-NLS-1$
     
     public JMeterMenuBar() {
@@ -170,7 +114,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     public void setFileSaveEnabled(boolean enabled) {
-        if(fileSaveAs != null) {
+        if (fileSaveAs != null) {
             fileSaveAs.setEnabled(enabled);
         }
     }
@@ -185,13 +129,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     public void setFileRevertEnabled(boolean enabled) {
-        if(fileRevert != null) {
+        if (fileRevert != null) {
             fileRevert.setEnabled(enabled);
         }
     }
 
     public void setProjectFileLoaded(String file) {
-        if(fileLoadRecentFiles != null && file != null) {
+        if (fileLoadRecentFiles != null && file != null) {
             LoadRecentProject.updateRecentFileMenuItems(fileLoadRecentFiles, file);
             recentFilesOpen.setEnabled(true);
         }
@@ -218,8 +162,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     public void setEditMenu(JPopupMenu menu) {
         if (menu != null) {
             editMenu.removeAll();
-            Component[] comps = menu.getComponents();
-            for (Component comp : comps) {
+            for (Component comp : menu.getComponents()) {
                 editMenu.add(comp);
             }
             editMenu.setEnabled(true);
@@ -244,7 +187,31 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
      * should be defined in a file somewhere, but that is for later.
      */
     public void createMenuBar() {
-        this.menuCreators = new ArrayList<>();
+
+        this.menuCreators = findMenuCreators();
+
+        makeFileMenu();
+        makeEditMenu();
+        makeRunMenu();
+        makeSearchMenu();
+        makeOptionsMenu();
+        makeHelpMenu();
+        this.add(fileMenu);
+        this.add(editMenu);
+        this.add(searchMenu);
+        this.add(runMenu);
+        this.add(optionsMenu);
+
+        menuCreators.stream()
+                .map(MenuCreator::getTopLevelMenus)
+                .flatMap(Arrays::stream)
+                .forEachOrdered(this::add);
+
+        this.add(helpMenu);
+    }
+
+    private List<MenuCreator> findMenuCreators() {
+        List<MenuCreator> creators = new ArrayList<>();
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
                     JMeterUtils.getSearchPaths(),
@@ -256,7 +223,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
                     if (!Modifier.isAbstract(commandClass.getModifiers())) {
                         log.debug("Instantiating: {}", commandClass);
                         MenuCreator creator = (MenuCreator) commandClass.newInstance();
-                        menuCreators.add(creator);
+                        creators.add(creator);
                     }
                 } catch (Exception e) {
                     log.error("Exception registering {} with implementation: {}", MenuCreator.class, strClassName, e);
@@ -265,50 +232,24 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         } catch (IOException e) {
             log.error("Exception finding implementations of {}", MenuCreator.class, e);
         }
-
-        makeFileMenu();
-        makeEditMenu();
-        makeRunMenu();
-        makeOptionsMenu();
-        makeHelpMenu();
-        makeSearchMenu();
-        this.add(fileMenu);
-        this.add(editMenu);
-        this.add(searchMenu);
-        this.add(runMenu);
-        this.add(optionsMenu);
-        for (MenuCreator menuCreator : menuCreators) {
-            JMenu[] topLevelMenus = menuCreator.getTopLevelMenus();
-            for (JMenu topLevelMenu : topLevelMenus) {
-                this.add(topLevelMenu);
-            }
-        }
-        this.add(helpMenu);
+        return creators;
     }
 
     private void makeHelpMenu() {
-        // HELP MENU
         helpMenu = makeMenuRes("help",'H'); //$NON-NLS-1$
 
         JMenuItem contextHelp = makeMenuItemRes("help", 'H', ActionNames.HELP, KeyStrokes.HELP); //$NON-NLS-1$
-
         JMenuItem whatClass = makeMenuItemRes("help_node", 'W', ActionNames.WHAT_CLASS, KeyStrokes.WHAT_CLASS);//$NON-NLS-1$
-
         JMenuItem setDebug = makeMenuItemRes("debug_on", ActionNames.DEBUG_ON, KeyStrokes.DEBUG_ON);//$NON-NLS-1$
-
         JMenuItem resetDebug = makeMenuItemRes("debug_off", ActionNames.DEBUG_OFF, KeyStrokes.DEBUG_OFF);//$NON-NLS-1$
-
         JMenuItem heapDump = makeMenuItemRes("heap_dump", ActionNames.HEAP_DUMP);//$NON-NLS-1$
-
         JMenuItem threadDump = makeMenuItemRes("thread_dump", ActionNames.THREAD_DUMP);//$NON-NLS-1$
         
         JMenu usefulLinks = makeMenuRes("useful_links");//$NON-NLS-1$
-        JMenuItem subMenuLinkBugTraker = makeMenuItemRes("link_bug_tracker", ActionNames.LINK_BUG_TRACKER);//$NON-NLS-1$
-        usefulLinks.add(subMenuLinkBugTraker);
-        JMenuItem subMenuLinkNightlyBuild = makeMenuItemRes("link_nightly_build", ActionNames.LINK_NIGHTLY_BUILD);//$NON-NLS-1$
-        usefulLinks.add(subMenuLinkNightlyBuild);
+        usefulLinks.add(makeMenuItemRes("link_bug_tracker", ActionNames.LINK_BUG_TRACKER));
+        usefulLinks.add(makeMenuItemRes("link_nightly_build", ActionNames.LINK_NIGHTLY_BUILD));
 
-        helpAbout = makeMenuItemRes("about", 'A', ActionNames.ABOUT); //$NON-NLS-1$
+        JMenuItem helpAbout = makeMenuItemRes("about", 'A', ActionNames.ABOUT);
 
         helpMenu.add(contextHelp);
         helpMenu.addSeparator();
@@ -327,20 +268,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     private void makeOptionsMenu() {
-        // OPTIONS MENU
         optionsMenu = makeMenuRes("option",'O'); //$NON-NLS-1$
-        JMenuItem functionHelper = makeMenuItemRes("function_dialog_menu_item", 'F', ActionNames.FUNCTIONS, KeyStrokes.FUNCTIONS); //$NON-NLS-1$
-
-        lafMenu = makeMenuRes("appearance",'L'); //$NON-NLS-1$
-        for (LookAndFeelInfo laf : getAllLAFs()) {
-            JMenuItem menuItem = new JMenuItem(laf.getName());
-            menuItem.addActionListener(ActionRouter.getInstance());
-            menuItem.setActionCommand(ActionNames.LAF_PREFIX + laf.getClassName());
-            menuItem.setToolTipText(laf.getClassName()); // show the classname to the user
-            lafMenu.add(menuItem);
-        }
-        optionsMenu.add(functionHelper);
-        optionsMenu.add(lafMenu);
+        optionsMenu.add(makeMenuItemRes("function_dialog_menu_item", 'F', ActionNames.FUNCTIONS, KeyStrokes.FUNCTIONS));
+        optionsMenu.add(createLaFMenu());
 
         JCheckBoxMenuItem menuLoggerPanel = makeCheckBoxMenuItemRes("menu_logger_panel", ActionNames.LOGGER_PANEL_ENABLE_DISABLE); //$NON-NLS-1$
         GuiPackage guiInstance = GuiPackage.getInstance();
@@ -381,6 +311,18 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         addPluginsMenuItems(optionsMenu, menuCreators, MENU_LOCATION.OPTIONS);
     }
 
+    private JMenu createLaFMenu() {
+        JMenu lafMenu = makeMenuRes("appearance", 'L');
+        for (LookAndFeelInfo laf : getAllLAFs()) {
+            JMenuItem menuItem = new JMenuItem(laf.getName());
+            menuItem.addActionListener(ActionRouter.getInstance());
+            menuItem.setActionCommand(ActionNames.LAF_PREFIX + laf.getClassName());
+            menuItem.setToolTipText(laf.getClassName()); // show the classname to the user
+            lafMenu.add(menuItem);
+        }
+        return lafMenu;
+    }
+
     private static class LangMenuHelper{
         final ActionRouter actionRouter = ActionRouter.getInstance();
         final JMenu languageMenu;
@@ -402,13 +344,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
             language.setName(locale); // This is used by the ChangeLanguage class to define the Locale
             languageMenu.add(language);
         }
-
    }
 
     /**
      * Generate the list of supported languages.
      *
-     * @return list of languages
+     * @return array of language Strings
      */
     // Also used by org.apache.jmeter.resources.PackageTest
     public static String[] getLanguages(){
@@ -425,17 +366,15 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         lang.add(Locale.SIMPLIFIED_CHINESE.toString()); // zh_CN
         lang.add(Locale.TRADITIONAL_CHINESE.toString()); // zh_TW
         final String addedLocales = JMeterUtils.getProperty("locales.add");
-        if (addedLocales != null){
-            String [] addLanguages =addedLocales.split(","); // $NON-NLS-1$
-            for(String newLang : addLanguages){
-                log.info("Adding locale {}", newLang);
-                lang.add(newLang);
-            }
+        if (addedLocales != null) {
+            Arrays.stream(addedLocales.split(","))
+                    .peek(newLang -> log.info("Adding locale {}", newLang))
+                    .forEachOrdered(lang::add);
         }
         return lang.toArray(new String[lang.size()]);
     }
 
-    static JMenu makeLanguageMenu() {
+    private static JMenu makeLanguageMenu() {
         final JMenu languageMenu = makeMenuRes("choose_language",'C'); //$NON-NLS-1$
 
         LangMenuHelper langMenu = new LangMenuHelper(languageMenu);
@@ -447,14 +386,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
          * Also, need to ensure that the names are valid resource entries too.
          */
 
-        for(String lang : getLanguages()){
+        for (String lang : getLanguages()) {
             langMenu.addLang(lang);
         }
         return languageMenu;
     }
 
     private void makeRunMenu() {
-        // RUN MENU
         runMenu = makeMenuRes("run",'R'); //$NON-NLS-1$
 
         runStart = makeMenuItemRes("start", 'S', ActionNames.ACTION_START, KeyStrokes.ACTION_START); //$NON-NLS-1$
@@ -467,16 +405,16 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         runShut = makeMenuItemRes("shutdown", 'Y', ActionNames.ACTION_SHUTDOWN, KeyStrokes.ACTION_SHUTDOWN); //$NON-NLS-1$
         runShut.setEnabled(false);
 
-        runClear = makeMenuItemRes("clear", 'C', ActionNames.CLEAR, KeyStrokes.CLEAR); //$NON-NLS-1$
+        JMenuItem runClear = makeMenuItemRes("clear", 'C', ActionNames.CLEAR, KeyStrokes.CLEAR);
 
-        runClearAll = makeMenuItemRes("clear_all", 'a', ActionNames.CLEAR_ALL, KeyStrokes.CLEAR_ALL); //$NON-NLS-1$
+        JMenuItem runClearAll = makeMenuItemRes("clear_all", 'a', ActionNames.CLEAR_ALL, KeyStrokes.CLEAR_ALL);
 
         runMenu.add(runStart);
         runMenu.add(runStartNoTimers);
         if (remoteStart != null) {
             runMenu.add(remoteStart);
         }
-        remoteStartAll = makeMenuItemRes("remote_start_all", ActionNames.REMOTE_START_ALL, KeyStrokes.REMOTE_START_ALL); //$NON-NLS-1$
+        JMenuItem remoteStartAll = makeMenuItemRes("remote_start_all", ActionNames.REMOTE_START_ALL, KeyStrokes.REMOTE_START_ALL);
 
         runMenu.add(remoteStartAll);
         runMenu.add(runStop);
@@ -484,19 +422,19 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         if (remoteStop != null) {
             runMenu.add(remoteStop);
         }
-        remoteStopAll = makeMenuItemRes("remote_stop_all", 'X', ActionNames.REMOTE_STOP_ALL, KeyStrokes.REMOTE_STOP_ALL); //$NON-NLS-1$
+        JMenuItem remoteStopAll = makeMenuItemRes("remote_stop_all", 'X', ActionNames.REMOTE_STOP_ALL, KeyStrokes.REMOTE_STOP_ALL);
         runMenu.add(remoteStopAll);
 
         if (remoteShut != null) {
             runMenu.add(remoteShut);
         }
-        remoteShutAll = makeMenuItemRes("remote_shut_all", 'X', ActionNames.REMOTE_SHUT_ALL, KeyStrokes.REMOTE_SHUT_ALL); //$NON-NLS-1$
+        JMenuItem remoteShutAll = makeMenuItemRes("remote_shut_all", 'X', ActionNames.REMOTE_SHUT_ALL, KeyStrokes.REMOTE_SHUT_ALL);
         runMenu.add(remoteShutAll);
 
         if (remoteExit != null) {
             runMenu.add(remoteExit);
         }
-        remoteExitAll = makeMenuItemRes("remote_exit_all", ActionNames.REMOTE_EXIT_ALL); //$NON-NLS-1$
+        JMenuItem remoteExitAll = makeMenuItemRes("remote_exit_all", ActionNames.REMOTE_EXIT_ALL);
         runMenu.add(remoteExitAll);
 
         runMenu.addSeparator();
@@ -507,7 +445,6 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     private void makeEditMenu() {
-        // EDIT MENU
         editMenu = makeMenuRes("edit",'E'); //$NON-NLS-1$
 
         // From the Java Look and Feel Guidelines: If all items in a menu
@@ -518,11 +455,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     private void makeFileMenu() {
-        // FILE MENU
         fileMenu = makeMenuRes("file",'F'); //$NON-NLS-1$
 
         JMenuItem fileSave = makeMenuItemRes("save", 'S', ActionNames.SAVE, KeyStrokes.SAVE); //$NON-NLS-1$
-        fileSave.setEnabled(true);
 
         fileSaveAs = makeMenuItemRes("save_all_as", 'A', ActionNames.SAVE_ALL_AS, KeyStrokes.SAVE_ALL_AS); //$NON-NLS-1$
         fileSaveAs.setEnabled(true);
@@ -547,9 +482,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem templates = makeMenuItemRes("template_menu", 'T', ActionNames.TEMPLATES);
         templates.setEnabled(true);
 
-        fileNew = makeMenuItemRes("new", 'N', ActionNames.CLOSE, KeyStrokes.CLOSE); //$NON-NLS-1$
+        JMenuItem fileNew = makeMenuItemRes("new", 'N', ActionNames.CLOSE, KeyStrokes.CLOSE);
 
-        fileExit = makeMenuItemRes("exit", 'X', ActionNames.EXIT, KeyStrokes.EXIT); //$NON-NLS-1$
+        JMenuItem fileExit = makeMenuItemRes("exit", 'X', ActionNames.EXIT, KeyStrokes.EXIT);
 
         fileMerge = makeMenuItemRes("menu_merge", 'M', ActionNames.MERGE); //$NON-NLS-1$
         fileMerge.setEnabled(false);
@@ -592,27 +527,26 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     /**
-     * @param menu
+     * Mutate the given menu by, for each menuCreator adding a separator
+     * followed by each of its menus based upon the menu location.
+     *
+     * @param menu the menu to mutate
      * @param menuCreators
      * @param location
      */
     private void addPluginsMenuItems(JMenu menu, List<MenuCreator> menuCreators, MENU_LOCATION location) {
-        boolean addedSeparator = false;
         for (MenuCreator menuCreator : menuCreators) {
             JMenuItem[] menuItems = menuCreator.getMenuItemsAtLocation(location);
-            for (JMenuItem jMenuItem : menuItems) {
-                if(!addedSeparator) {
-                    menu.addSeparator();
-                    addedSeparator = true;
-                }
-                menu.add(jMenuItem);
+            if (menuItems.length != 0) {
+                menu.addSeparator();
             }
+            Arrays.stream(menuItems).forEachOrdered(menu::add);
         }
     }
     
     public void setRunning(boolean running, String host) {
         log.info("setRunning({}, {})", running, host);
-        if(org.apache.jmeter.gui.MainFrame.LOCAL.equals(host)) {
+        if (org.apache.jmeter.gui.MainFrame.LOCAL.equals(host)) {
             return;
         }
         Iterator<JMenuItem> iter = remoteEngineStart.iterator();
@@ -721,6 +655,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         lafsAll[i]=new UIManager.LookAndFeelInfo(SYSTEM_LAF,UIManager.getSystemLookAndFeelClassName());
         return lafsAll;
     }
+
     /**
      * <p>Refreshes all texts in the menu and all submenus to a new locale.</p>
      *
