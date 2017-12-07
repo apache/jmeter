@@ -82,6 +82,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
             if ("true".equals(System.getProperty("java.awt.headless"))) { // $NON-NLS-1$ $NON-NLS-2$
                 return new JSyntaxTextArea(disableUndo) {
                     private static final long serialVersionUID = 1L;
+                    private String text;
                     @Override
                     protected void init() {
                         try {
@@ -98,7 +99,13 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
                     @Override
                     public void discardAllEdits() { }
                     @Override
-                    public void setText(String t) { }
+                    public void setText(String t) {
+                        this.text = t;
+                    }
+                    @Override
+                    public String getText() {
+                        return text;
+                    }
                     @Override
                     public boolean isCodeFoldingEnabled(){ return true; }
                 };
