@@ -147,7 +147,8 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
                     List<SampleEvent> l = new ArrayList<>();
                     SampleEvent e = queue.take();
                     // try to process as many as possible
-                    while (!(eof = FINAL_EVENT.equals(e)) && e != null) {
+                    // The == comparison is not an error
+                    while (!(eof = e == FINAL_EVENT) && e != null) {
                         l.add(e);
                         e = queue.poll(); // returns null if nothing on queue currently
                     }
