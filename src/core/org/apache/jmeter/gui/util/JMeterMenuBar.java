@@ -363,21 +363,14 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         optionsMenu.add(menuLoggerLevel);
 
         if (SSLManager.isSSLSupported()) {
-            sslManager = makeMenuItemRes("sslmanager", 'S', ActionNames.SSL_MANAGER, KeyStrokes.SSL_MANAGER); //$NON-NLS-1$
-            optionsMenu.add(sslManager);
+            optionsMenu.add(makeMenuItemRes("sslmanager", 'S', ActionNames.SSL_MANAGER, KeyStrokes.SSL_MANAGER));
         }
         optionsMenu.add(makeLanguageMenu());
 
-        JMenuItem collapse = makeMenuItemRes("menu_collapse_all", ActionNames.COLLAPSE_ALL, KeyStrokes.COLLAPSE_ALL); //$NON-NLS-1$
-        optionsMenu.add(collapse);
-
-        JMenuItem expand = makeMenuItemRes("menu_expand_all", ActionNames.EXPAND_ALL, KeyStrokes.EXPAND_ALL); //$NON-NLS-1$
-        optionsMenu.add(expand);
-
-        JMenuItem zoomIn = makeMenuItemRes("menu_zoom_in", ActionNames.ZOOM_IN); //$NON-NLS-1$
-        optionsMenu.add(zoomIn);
-        JMenuItem zoomOut = makeMenuItemRes("menu_zoom_out", ActionNames.ZOOM_OUT); //$NON-NLS-1$
-        optionsMenu.add(zoomOut);        
+        optionsMenu.add(makeMenuItemRes("menu_collapse_all", 'A', ActionNames.COLLAPSE_ALL, KeyStrokes.COLLAPSE_ALL));
+        optionsMenu.add(makeMenuItemRes("menu_expand_all", 'X', ActionNames.EXPAND_ALL, KeyStrokes.EXPAND_ALL));
+        optionsMenu.add(makeMenuItemRes("menu_zoom_in", 'I', ActionNames.ZOOM_IN));
+        optionsMenu.add(makeMenuItemRes("menu_zoom_out", 'U', ActionNames.ZOOM_OUT));
         JCheckBoxMenuItem saveBeforeRun = makeCheckBoxMenuItemRes("menu_save_before_run", ActionNames.SAVE_BEFORE_RUN); //$NON-NLS-1$
         if (guiInstance != null) {
             saveBeforeRun.setSelected(guiInstance.shouldSaveBeforeRunByPreference());
@@ -466,7 +459,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         runStart = makeMenuItemRes("start", 'S', ActionNames.ACTION_START, KeyStrokes.ACTION_START); //$NON-NLS-1$
 
-        runStartNoTimers = makeMenuItemRes("start_no_timers", ActionNames.ACTION_START_NO_TIMERS); //$NON-NLS-1$
+        runStartNoTimers = makeMenuItemRes("start_no_timers", 'N', ActionNames.ACTION_START_NO_TIMERS); //$NON-NLS-1$
         
         runStop = makeMenuItemRes("stop", 'T', ActionNames.ACTION_STOP, KeyStrokes.ACTION_STOP); //$NON-NLS-1$
         runStop.setEnabled(false);
@@ -534,24 +527,24 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         fileSaveAs = makeMenuItemRes("save_all_as", 'A', ActionNames.SAVE_ALL_AS, KeyStrokes.SAVE_ALL_AS); //$NON-NLS-1$
         fileSaveAs.setEnabled(true);
 
-        fileSelectionAs = makeMenuItemRes("save_as", ActionNames.SAVE_AS); //$NON-NLS-1$
-        fileSelectionAs.setEnabled(true);
+        JMenuItem fileSaveSelectionAs = makeMenuItemRes("save_as", 'L', ActionNames.SAVE_AS);
+        fileSaveSelectionAs.setEnabled(true);
 
-        fileSelectionAsTestFragment = makeMenuItemRes("save_as_test_fragment", ActionNames.SAVE_AS_TEST_FRAGMENT); //$NON-NLS-1$
+        JMenuItem fileSelectionAsTestFragment = makeMenuItemRes("save_as_test_fragment", 'F', ActionNames.SAVE_AS_TEST_FRAGMENT);
         fileSelectionAsTestFragment.setEnabled(true);
 
         fileRevert = makeMenuItemRes("revert_project", 'R', ActionNames.REVERT_PROJECT); //$NON-NLS-1$
         fileRevert.setEnabled(false);
 
         fileLoad = makeMenuItemRes("menu_open", 'O', ActionNames.OPEN, KeyStrokes.OPEN); //$NON-NLS-1$
-
-        recentFilesOpen = makeMenuRes("menu_recent"); //$NON-NLS-1$
-        recentFilesOpen.setEnabled(false);
         // Set default SAVE menu item to disabled since the default node that
         // is selected is ROOT, which does not allow items to be inserted.
         fileLoad.setEnabled(false);
 
-        templates = makeMenuItemRes("template_menu", 'T', ActionNames.TEMPLATES); //$NON-NLS-1$
+        recentFilesOpen = makeMenuRes("menu_recent", 'E'); //$NON-NLS-1$
+        recentFilesOpen.setEnabled(false);
+
+        JMenuItem templates = makeMenuItemRes("template_menu", 'T', ActionNames.TEMPLATES);
         templates.setEnabled(true);
 
         fileNew = makeMenuItemRes("new", 'N', ActionNames.CLOSE, KeyStrokes.CLOSE); //$NON-NLS-1$
@@ -569,16 +562,14 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         fileMenu.addSeparator();
         fileMenu.add(fileSave);
         fileMenu.add(fileSaveAs);
-        fileMenu.add(fileSelectionAs);
+        fileMenu.add(fileSaveSelectionAs);
         fileMenu.add(fileSelectionAsTestFragment);
         fileMenu.add(fileRevert);
         fileMenu.addSeparator();
         // Add the recent files, which will also add a separator that is
         // visible when needed
         fileLoadRecentFiles = LoadRecentProject.getRecentFileMenuItems();
-        for(JComponent jc : fileLoadRecentFiles){
-            recentFilesOpen.add(jc);
-        }
+        fileLoadRecentFiles.forEach(jc -> recentFilesOpen.add(jc));
         recentFilesOpen.setEnabled(LoadRecentProject.hasVisibleMenuItem(fileLoadRecentFiles));
 
         addPluginsMenuItems(fileMenu, menuCreators, MENU_LOCATION.FILE);
@@ -587,14 +578,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     private void makeSearchMenu() {
-        // Search MENU
-        searchMenu = makeMenuRes("menu_search"); //$NON-NLS-1$
+        searchMenu = makeMenuRes("menu_search", 'S'); //$NON-NLS-1$
 
         JMenuItem search = makeMenuItemRes("menu_search", 'F', ActionNames.SEARCH_TREE, KeyStrokes.SEARCH_TREE); //$NON-NLS-1$
         searchMenu.add(search);
         search.setEnabled(true);
 
-        JMenuItem searchReset = makeMenuItemRes("menu_search_reset", ActionNames.SEARCH_RESET); //$NON-NLS-1$
+        JMenuItem searchReset = makeMenuItemRes("menu_search_reset", 'R', ActionNames.SEARCH_RESET); //$NON-NLS-1$
         searchMenu.add(searchReset);
         searchReset.setEnabled(true);
 
