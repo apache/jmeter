@@ -80,26 +80,26 @@
                         <div class="panel-body">
                         <table id="generalInfos" class="table table-bordered table-condensed " >
                             <tr>
-                                <td>File:</td>
+                                <td>Source file</td>
                                 <td>${testFile!""}</td>
                             </tr>
                             <tr>
-                                <td>Start Time:</td>
+                                <td>Start Time</td>
                                 <td>${beginDate!""}</td>
                             </tr>
                             <tr>
-                                <td>End Time:</td>
+                                <td>End Time</td>
                                 <td>${endDate!""}</td>
                             </tr>
                             <#if overallFilter?has_content>
                                 <tr>
-                                    <td>Filter for computing:</td>
+                                    <td>Filter for computing</td>
                                     <td>${overallFilter}</td>
                                 </tr>
                             </#if>
                             <#if seriesFilter?has_content>
                                 <tr>
-                                    <td>Filter for display:</td>
+                                    <td>Filter for display</td>
                                     <td>${seriesFilter}</td>
                                 </tr>
                             </#if>
