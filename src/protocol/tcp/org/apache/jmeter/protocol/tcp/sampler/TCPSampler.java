@@ -559,6 +559,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             try {
                 sock.get().close();
             } catch (IOException ignored) {
+                // NOOP
             }
             return true;
         } else {
