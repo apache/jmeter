@@ -594,7 +594,7 @@ var bytesThroughputOverTimeInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Bytes/sec",
+                    axisLabel: "Bytes / sec",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -671,7 +671,7 @@ var responseTimesOverTimeInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Response time in ms",
+                    axisLabel: "Average response time in ms",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -748,7 +748,7 @@ var latenciesOverTimeInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Response latencies in ms",
+                    axisLabel: "Average response latencies in ms",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -979,7 +979,7 @@ var responseTimeVsRequestInfos = {
                 axisLabelPadding: 20,
             },
             yaxis: {
-                axisLabel: "Median Response Time (ms)",
+                axisLabel: "Median Response Time in ms",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
                 axisLabelFontFamily: 'Verdana, Arial',
@@ -1053,7 +1053,7 @@ var latenciesVsRequestInfos = {
                 axisLabelPadding: 20,
             },
             yaxis: {
-                axisLabel: "Median Latency (ms)",
+                axisLabel: "Median Latency in ms",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
                 axisLabelFontFamily: 'Verdana, Arial',
@@ -1200,7 +1200,7 @@ var codesPerSecondInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Number of responses/sec",
+                    axisLabel: "Number of responses / sec",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
