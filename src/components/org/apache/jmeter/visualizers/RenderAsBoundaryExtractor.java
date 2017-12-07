@@ -235,6 +235,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
     /** {@inheritDoc} */
     @Override
     public void setBackgroundColor(Color backGround) {
+        // NOOP
     }
 
 }
