@@ -1525,7 +1525,7 @@ JMETER-SERVER</source>
     Defaults to: <code>Response Time Distribution</code>
 </property>
 <property name="jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity">
-    Defaults to: <code>500</code>
+    Defaults to: <code>100</code>
 </property>
 <property name="jmeter.reportgenerator.graph.activeThreadsOverTime.classname">
     Active Threads Over Time graph definition<br/>
