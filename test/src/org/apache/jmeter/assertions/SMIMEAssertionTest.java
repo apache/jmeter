@@ -29,6 +29,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -89,7 +90,7 @@ import org.junit.Test;
  * If a new signed email is generated, the signer key and certificate will
  * change, and thus the tests will have to be changed as well (serial number!).
  */
-public class SMIMEAssertionTest {
+public class SMIMEAssertionTest implements JMeterSerialTest {
 
     private MimeMessage msg;
     private SampleResult parent;
