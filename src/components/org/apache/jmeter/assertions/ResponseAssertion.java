@@ -347,7 +347,6 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             return result.setResultForNull();
         }
 
-        boolean pass;
         boolean hasTrue = false;
         ArrayList<String> allCheckMessage = new ArrayList<>();
         try {
@@ -369,7 +368,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 } else {
                     found = localMatcher.matches(toCheck, pattern);
                 }
-                pass = notTest ? !found : found;
+                boolean pass = notTest ? !found : found;
                 if (orTest) {
                     if (!pass) {
                         log.debug("Failed: {}", stringPattern);
