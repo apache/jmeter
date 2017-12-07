@@ -219,7 +219,7 @@ public class BackendListener extends AbstractTestElement
                         }
                         // try to process as many as possible
                         // The == comparison is not a mistake
-                        while (!(endOfLoop = (sampleResult == FINAL_SAMPLE_RESULT)) && sampleResult != null ) { 
+                        while (!(endOfLoop = sampleResult == FINAL_SAMPLE_RESULT) && sampleResult != null ) { 
                             sampleResults.add(sampleResult);
                             if (isDebugEnabled) {
                                 log.debug("Thread: {} polling from queue: {}", Thread.currentThread().getName(),
