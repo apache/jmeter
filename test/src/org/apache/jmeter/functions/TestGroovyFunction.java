@@ -30,11 +30,12 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestGroovyFunction extends JMeterTestCase {
+public class TestGroovyFunction extends JMeterTestCase implements JMeterSerialTest {
     protected AbstractFunction function;
 
     private SampleResult result;
