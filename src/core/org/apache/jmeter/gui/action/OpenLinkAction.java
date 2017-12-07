@@ -20,7 +20,9 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -29,30 +31,36 @@ import org.slf4j.LoggerFactory;
 public class OpenLinkAction extends AbstractAction {
 
     private static final Logger log = LoggerFactory.getLogger(OpenLinkAction.class);
+    
+    private static final Map<String, String> LINK_MAP = 
+            initLinkMap();
 
     private static final Set<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.LINK_BUG_TRACKER);
+        commands.add(ActionNames.LINK_COMP_REF);
         commands.add(ActionNames.LINK_NIGHTLY_BUILD);
         commands.add(ActionNames.LINK_RELEASE_NOTES);
     }
 
+    private static final Map<String, String> initLinkMap() {
+        Map<String, String> map = new HashMap<>(4);
+        map.put(ActionNames.LINK_BUG_TRACKER, "https://jmeter.apache.org/issues.html");
+        map.put(ActionNames.LINK_COMP_REF, "https://jmeter.apache.org/usermanual/component_reference.html");
+        map.put(ActionNames.LINK_NIGHTLY_BUILD, "https://jmeter.apache.org/nightly.html");
+        map.put(ActionNames.LINK_RELEASE_NOTES, "https://jmeter.apache.org/changes.html");
+        return map;
+    }
     /**
      * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
      */
     @Override
     public void doAction(ActionEvent e) {
-        String url;
-        if (e.getActionCommand().equals(ActionNames.LINK_BUG_TRACKER)) {
-            url = "https://jmeter.apache.org/issues.html";
-        } else if (e.getActionCommand().equals(ActionNames.LINK_NIGHTLY_BUILD)) {
-            url = "https://jmeter.apache.org/nightly.html";
-        } else if (e.getActionCommand().equals(ActionNames.LINK_RELEASE_NOTES)) {
-            url = "https://jmeter.apache.org/changes.html";
-        } else {
+        String url = LINK_MAP.get(e.getActionCommand());
+        if(url == null) {
             log.warn("Action {} not handled by this class", e.getActionCommand());
-            return;
+            return; 
         }
         try {
             java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
