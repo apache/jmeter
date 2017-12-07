@@ -29,8 +29,6 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// @see TestWhileController for unit tests
-
 public class WhileController extends GenericController implements Serializable, IteratingController {
     private static final Logger log = LoggerFactory.getLogger(WhileController.class);
 
@@ -56,7 +54,7 @@ public class WhileController extends GenericController implements Serializable, 
      * @return true means end of loop has been reached
      */
     private boolean endOfLoop(boolean loopEnd) {
-        if(breakLoop) {
+        if (breakLoop) {
             return true;
         }
         String cnd = getCondition().trim();
@@ -80,7 +78,7 @@ public class WhileController extends GenericController implements Serializable, 
      * {@inheritDoc}
      */
     @Override
-    protected Sampler nextIsNull() throws NextIsNullException {
+    protected Sampler nextIsNull() {
         reInitialize();
         if (endOfLoop(true)){
             resetBreakLoop();
@@ -122,7 +120,7 @@ public class WhileController extends GenericController implements Serializable, 
     protected void resetLoopCount() {
         resetIterCount();
     }
-    
+
     /**
      * @param string
      *            the condition to save

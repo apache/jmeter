@@ -55,21 +55,10 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
      */
     private final TimeCountConsumer embeddedConsumer;
 
-    /**
-     * Gets the granularity.
-     *
-     * @return the granularity
-     */
     public long getGranularity() {
         return granularity;
     }
 
-    /**
-     * Sets the granularity.
-     *
-     * @param granularity
-     *            the granularity to set
-     */
     // Must be final because called by ctor
     public final void setGranularity(long granularity) {
         this.granularity = granularity;
@@ -171,10 +160,8 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             /**
              * Instantiates a new file info.
              *
-             * @param file
-             *            the file
-             * @param metadata
-             *            the metadata
+             * @param file     the file
+             * @param metadata the metadata
              */
             public FileInfo(File file, SampleMetadata metadata) {
                 this.file = file;
@@ -277,8 +264,10 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             int channelsCount = getConsumedChannelCount();
             for (int i = 0; i < channelsCount; i++) {
                 try {
-                    File tmpFile = File.createTempFile(parent.getName(), "-"
-                            + i, workDir);
+                    File tmpFile = File.createTempFile(
+                            parent.getName(),
+                            "-" + i,
+                            workDir);
                     tmpFile.deleteOnExit();
                     fileInfos.add(new FileInfo(tmpFile, getConsumedMetadata(i)));
                 } catch (IOException ex) {

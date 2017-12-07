@@ -27,22 +27,18 @@ import org.slf4j.LoggerFactory;
 
 /**
  * An Assertion which understands BeanShell
- *
  */
 @GUIMenuSortOrder(Integer.MAX_VALUE)
 public class BeanShellAssertion extends BeanShellTestElement implements Assertion {
+
     private static final Logger log = LoggerFactory.getLogger(BeanShellAssertion.class);
 
     private static final long serialVersionUID = 4;
 
     public static final String FILENAME = "BeanShellAssertion.filename"; //$NON-NLS-1$
-
     public static final String SCRIPT = "BeanShellAssertion.query"; //$NON-NLS-1$
-
     public static final String PARAMETERS = "BeanShellAssertion.parameters"; //$NON-NLS-1$
-
     public static final String RESET_INTERPRETER = "BeanShellAssertion.resetInterpreter"; //$NON-NLS-1$
-
     // can be specified in jmeter.properties
     public static final String INIT_FILE = "beanshell.assertion.init"; //$NON-NLS-1$
 
@@ -112,16 +108,15 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
             result.setError(false);
         }
         catch (NoClassDefFoundError ex) { // NOSONAR explicitly trap this error to make tests work better
-            log.error("BeanShell Jar missing? " + ex.toString());
+            log.error("BeanShell Jar missing?", ex);
             result.setError(true);
             result.setFailureMessage("BeanShell Jar missing? " + ex.toString());
             response.setStopThread(true); // No point continuing
-        } catch (Exception ex) // Mainly for bsh.EvalError
-        {
+        } catch (Exception ex) { // Mainly for bsh.EvalError
             result.setError(true);
             result.setFailureMessage(ex.toString());
             if (log.isWarnEnabled()) {
-                log.warn(ex.toString());
+                log.warn("Exception in BeanShellAssertion getResult", ex);
             }
         }
 

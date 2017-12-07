@@ -68,9 +68,4 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
             return 0;
         }
     }
-    
-    @Override
-    public Object clone() {
-        return super.clone();
-    }
 }

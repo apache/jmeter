@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * CompoundFunction.
- *
  */
 public class CompoundVariable implements Function {
     private static final Logger log = LoggerFactory.getLogger(CompoundVariable.class);
@@ -58,10 +57,12 @@ public class CompoundVariable implements Function {
 
     static {
         try {
-            final String contain = // Classnames must contain this string [.functions.]
-                JMeterUtils.getProperty("classfinder.functions.contain"); // $NON-NLS-1$
-            final String notContain = // Classnames must not contain this string [.gui.]
-                JMeterUtils.getProperty("classfinder.functions.notContain"); // $NON-NLS-1$
+            // Classnames must contain this string [.functions.]
+            final String contain = JMeterUtils.getProperty(
+                    "classfinder.functions.contain"); // $NON-NLS-1$
+            // Classnames must not contain this string [.gui.]
+            final String notContain = JMeterUtils.getProperty(
+                    "classfinder.functions.notContain"); // $NON-NLS-1$
             if (contain!=null){
                 log.info("Note: Function class names must contain the string: '{}'", contain);
             }
@@ -84,8 +85,8 @@ public class CompoundVariable implements Function {
             } else {
                 log.debug("Function count: {}", functions.size());
             }
-        } catch (Exception err) {
-            log.error("Exception occurred in static initialization of CompoundVariable.", err);
+        } catch (Exception ex) {
+            log.error("Exception occurred in static initialization of CompoundVariable.", ex);
         }
     }
 
@@ -98,8 +99,7 @@ public class CompoundVariable implements Function {
         try {
             setParameters(parameters);
         } catch (InvalidVariableException e) {
-            // TODO should level be more than debug ?
-            log.debug("Invalid variable: {}", parameters, e);
+            log.info("Invalid variable: {}", parameters, e);
         }
     }
 
@@ -135,11 +135,10 @@ public class CompoundVariable implements Function {
                 try {
                     results.append(((Function) item).execute(previousResult, currentSampler));
                 } catch (InvalidVariableException e) {
-                    // TODO should level be more than debug ?
-                    log.debug("Invalid variable: {}", item, e);
+                    log.info("Invalid variable: {}", item, e);
                 }
             } else if (item instanceof SimpleVariable) {
-                results.append(((SimpleVariable) item).toString());
+                results.append(item.toString());
             } else {
                 results.append(item);
             }

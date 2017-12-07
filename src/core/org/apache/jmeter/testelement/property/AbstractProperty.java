@@ -310,8 +310,7 @@ public abstract class AbstractProperty implements JMeterProperty {
      * Given a Map, it converts the Map into a collection of JMeterProperty
      * objects, appropriate for a MapProperty object.
      *
-     * @param coll
-     *            Map to convert
+     * @param coll Map to convert
      * @return converted Map
      */
     protected Map<String, JMeterProperty> normalizeMap(Map<?,?> coll) {

@@ -164,7 +164,7 @@ public class FileServer {
      * 
      * @throws IllegalStateException if there are any entries still in use
      */
-    private void checkForOpenFiles() throws IllegalStateException {
+    private void checkForOpenFiles() {
         if (filesOpen()) { // checks for entries in use
             throw new IllegalStateException("Files are still open, cannot change base directory");
         }

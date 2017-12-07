@@ -27,13 +27,11 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -43,18 +41,10 @@ import org.apache.jmeter.util.JMeterUtils;
  * Note that it never gives out File objects, but always Strings. This is
  * because JMeter is now too dumb to handle File objects (there's no
  * FileProperty).
- *
  */
 public class FileEditor implements PropertyEditor, ActionListener {
 
-    /**
-     * The editor's panel.
-     */
     private final JPanel panel;
-
-    /**
-     * The editor handling the text field inside:
-     */
     private final PropertyEditor editor;
 
     /**
@@ -105,9 +95,6 @@ public class FileEditor implements PropertyEditor, ActionListener {
         panel.add(button, BorderLayout.EAST);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void actionPerformed(ActionEvent e) {
         JFileChooser chooser = FileDialoger.promptToOpenFile();
@@ -116,110 +103,66 @@ public class FileEditor implements PropertyEditor, ActionListener {
             return;
         }
 
-        setValue(toUnix(chooser.getSelectedFile()));
+        setValue(chooser.getSelectedFile().getPath());
     }
 
-    private String toUnix(final File selectedFile) {
-        if (File.separatorChar == '\\') {
-            return FilenameUtils.separatorsToUnix(selectedFile.getPath());
-        }
-        return selectedFile.getPath();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         editor.addPropertyChangeListener(listener);
     }
 
-    /**
-     * @return the text
-     */
     @Override
     public String getAsText() {
         return editor.getAsText();
     }
 
-    /**
-     * @return custom editor panel
-     */
     @Override
     public Component getCustomEditor() {
         return panel;
     }
 
-    /**
-     * @return the Java initialisation string
-     */
     @Override
     public String getJavaInitializationString() {
         return editor.getJavaInitializationString();
     }
 
-    /**
-     * @return the editor tags
-     */
     @Override
     public String[] getTags() {
         return editor.getTags();
     }
 
-    /**
-     * @return the value
-     */
     @Override
     public Object getValue() {
         return editor.getValue();
     }
 
-    /**
-     * @return true if the editor is paintable
-     */
     @Override
     public boolean isPaintable() {
         return editor.isPaintable();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void paintValue(Graphics gfx, Rectangle box) {
         editor.paintValue(gfx, box);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         editor.removePropertyChangeListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setAsText(String text) {
         editor.setAsText(text);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setValue(Object value) {
         editor.setValue(value);
     }
 
-    /**
-     * @return true if supports a custom editor
-     */
     @Override
     public boolean supportsCustomEditor() {
         return editor.supportsCustomEditor();
     }
-
 }

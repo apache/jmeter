@@ -44,11 +44,8 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
     private static final Logger log = LoggerFactory.getLogger(JMeterTreeListener.class);
 
     private TreePath currentPath;
-
     private ActionListener actionHandler;
-
     private JMeterTreeModel model;
-
     private JTree tree;
 
     /**
@@ -228,7 +225,9 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
     }
 
     private boolean isRightClick(MouseEvent e) {
-        return e.isPopupTrigger() || (InputEvent.BUTTON2_MASK & e.getModifiers()) > 0 || (InputEvent.BUTTON3_MASK == e.getModifiers());
+        return e.isPopupTrigger()
+                || (InputEvent.BUTTON2_MASK & e.getModifiers()) > 0
+                || (InputEvent.BUTTON3_MASK == e.getModifiers());
     }
 
     private void displayPopUp(MouseEvent e) {

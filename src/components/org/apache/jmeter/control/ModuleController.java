@@ -41,11 +41,10 @@ import org.apache.jorphan.util.JMeterStopTestException;
  * functionality. These small units of functionality can be stored in
  * SimpleControllers as modules that can be linked together quickly to form
  * tests. ModuleController facilitates this by acting as a pointer to any
- * controller that sits under the WorkBench. The controller and it's subelements
+ * controller that sits under the WorkBench. The controller and its subelements
  * will be substituted in place of the ModuleController at runtime. Config
  * elements can be attached to the ModuleController to alter the functionality
  * (which user logs in, which account is created, etc.) of the module.
- *
  */
 public class ModuleController extends GenericController implements ReplaceableController {
 
@@ -80,8 +79,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
      * this object is pointing to. Used for building the test case upon
      * execution.
      *
-     * @param tn
-     *            JMeterTreeNode
+     * @param tn JMeterTreeNode
      * @see org.apache.jmeter.gui.tree.JMeterTreeNode
      */
     public void setSelectedNode(JMeterTreeNode tn) {

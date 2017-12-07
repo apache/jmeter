@@ -68,7 +68,6 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * - AbstractThreadGroup - cannot be referenced
  * - Controller (except ModuleController)
  * - TestFragmentController
- *
  */
 @GUIMenuSortOrder(MenuInfo.SORT_ORDER_DEFAULT+2)
 public class ModuleControllerGui extends AbstractControllerGui implements ActionListener { // NOSONAR Ignore parent warning
@@ -258,7 +257,6 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         return testElement != null
                 && !(testElement instanceof AbstractThreadGroup)
                 && !(testElement instanceof TestPlan);
-
     }
 
     /** {@inheritDoc}} */
@@ -347,8 +345,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
      * Expand module to run tree to selected JMeterTreeNode and set selection path to it
      * @param selected - referenced module to run
      */
-    private void focusSelectedOnTree(JMeterTreeNode selected)
-    {
+    private void focusSelectedOnTree(JMeterTreeNode selected) {
         TreeNode[] path = selected.getPath();
         TreeNode[] filteredPath = new TreeNode[path.length-1];
         
@@ -369,7 +366,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     /**
      * Reinitializes the visual representation of JMeter Tree keeping only the Controllers, Test Fragment, Thread Groups, Test Plan
      * <ol>
-     *  <li>Rebuilds moduleToRunTreeModel</li> 
+     *  <li>Rebuilds moduleToRunTreeModel</li>
      *  <li>selects the node referenced by ModuleController</li>
      *  <li>Updates warning label</li>
      * </ol>
@@ -407,8 +404,8 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
      * @param level - level of element in a tree
      * @param parent
      */
-    private void buildTreeNodeModel(JMeterTreeNode node, int level,
-            DefaultMutableTreeNode parent) {
+    private void buildTreeNodeModel(
+            JMeterTreeNode node, int level, DefaultMutableTreeNode parent) {
         if (node != null) {
             for (int i = 0; i < node.getChildCount(); i++) {
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
@@ -423,7 +420,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
                     final boolean isController = te instanceof Controller
                             && !(te instanceof ModuleController
                                     || te instanceof AbstractThreadGroup);
-                    hasAtLeastOneController = 
+                    hasAtLeastOneController =
                             hasAtLeastOneController || isController;
                 } else if (te instanceof TestPlan) {
                     ((DefaultMutableTreeNode) moduleToRunTreeModel.getRoot())
@@ -442,7 +439,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == expandButton) {
-            DefaultMutableTreeNode currentSelectedNodeInMC = (DefaultMutableTreeNode) 
+            DefaultMutableTreeNode currentSelectedNodeInMC = (DefaultMutableTreeNode)
                     this.moduleToRunTreeNodes.getLastSelectedPathComponent(); 
             JMeterTreeNode nodeToExpandInTestPlanTree = null;
             if (currentSelectedNodeInMC != null && currentSelectedNodeInMC.getUserObject() instanceof JMeterTreeNode){
@@ -486,8 +483,8 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
                 boolean leaf, int row, boolean hasFocus) {
             JMeterTreeNode node = (JMeterTreeNode)((DefaultMutableTreeNode) value).getUserObject();
             if (node != null){
-                super.getTreeCellRendererComponent(tree, node.getName(), selected, expanded, leaf, row,
-                        hasFocus);
+                super.getTreeCellRendererComponent(
+                        tree, node.getName(), selected, expanded, leaf, row, hasFocus);
                 //print same icon as in test plan tree
                 boolean enabled = node.isEnabled();
                 ImageIcon icon = node.getIcon(enabled);

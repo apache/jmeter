@@ -65,29 +65,18 @@ public class GenericController extends AbstractTestElement implements Controller
     // May be replaced by RandomOrderController
     protected transient List<TestElement> subControllersAndSamplers = new ArrayList<>();
 
-    /**
-     * Index of current sub controller or sampler
-     */
+    /** Index of current sub controller or sampler */
     protected transient int current;
 
-    /**
-     * Current iteration
-     */
+    /** Current iteration */
     private transient int iterCount;
     
-    /**
-     * Controller has ended
-     */
+    /** Controller has ended */
     private transient boolean done;
     
-    /**
-     * First sampler or sub-controller
-     */
+    /** First sampler or sub-controller */
     private transient boolean first;
 
-    /**
-     * Creates a Generic Controller
-     */
     public GenericController() {
     }
 
@@ -120,7 +109,6 @@ public class GenericController extends AbstractTestElement implements Controller
      * <li>sets first=true</li>
      * <li>recoverRunningVersion() to set the controller back to the initial state</li>
      * </ul>
-     *
      */
     protected void reInitialize() {
         resetCurrent();
@@ -133,21 +121,17 @@ public class GenericController extends AbstractTestElement implements Controller
      * <p>
      * Determines the next sampler to be processed.
      * </p>
-     *
      * <p>
      * If {@link #isDone()} is <code>true</code>, returns null.
      * </p>
-     *
      * <p>
      * Gets the list element using current pointer.
      * If this is <code>null</code>, calls {@link #nextIsNull()}.
      * </p>
-     *
      * <p>
      * If the list element is a {@link Sampler}, calls {@link #nextIsASampler(Sampler)},
      * otherwise calls {@link #nextIsAController(Controller)}
      * </p>
-     *
      * <p>
      * If any of the called methods throws {@link NextIsNullException}, returns <code>null</code>,
      * otherwise the value obtained above is returned.
@@ -217,8 +201,8 @@ public class GenericController extends AbstractTestElement implements Controller
      * @return the next sampler
      * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsAController(Controller controller) 
-            throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses 
+    protected Sampler nextIsAController(Controller controller)
+            throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses
         Sampler sampler = controller.next();
         if (sampler == null) {
             currentReturnedNull(controller);
@@ -237,7 +221,7 @@ public class GenericController extends AbstractTestElement implements Controller
      * @return input element
      * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsASampler(Sampler element) 
+    protected Sampler nextIsASampler(Sampler element)
             throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses
         incrementCurrent();
         return element;
@@ -250,7 +234,7 @@ public class GenericController extends AbstractTestElement implements Controller
      * @return null (always, for this class)
      * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsNull() 
+    protected Sampler nextIsNull()
             throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses
         reInitialize();
         return null;
@@ -378,8 +362,7 @@ public class GenericController extends AbstractTestElement implements Controller
     public void removeIterationListener(LoopIterationListener iterationListener) {
         for (Iterator<LoopIterationListener> iterator = iterationListeners.iterator(); iterator.hasNext();) {
             LoopIterationListener listener = iterator.next();
-            if(listener == iterationListener)
-            {
+            if (listener == iterationListener) {
                 iterator.remove();
                 break; // can only match once
             }

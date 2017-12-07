@@ -89,9 +89,4 @@ public class BeanShellListener extends BeanShellTestElement
     public boolean isStats() { // Needed by Visualizer interface
         return false;
     }
-
-    @Override
-    public Object clone() {
-        return super.clone();
-    }
 }

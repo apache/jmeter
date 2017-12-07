@@ -26,8 +26,8 @@ import org.apache.jmeter.util.BSFTestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BSFPostProcessor extends BSFTestElement implements Cloneable, PostProcessor, TestBean
-{
+public class BSFPostProcessor extends BSFTestElement
+        implements Cloneable, PostProcessor, TestBean {
     private static final Logger log = LoggerFactory.getLogger(BSFPostProcessor.class);
 
     private static final long serialVersionUID = 233L;
@@ -47,10 +47,5 @@ public class BSFPostProcessor extends BSFTestElement implements Cloneable, PostP
                 mgr.terminate();
             }
         }
-    }
-    
-    @Override
-    public Object clone() {
-        return super.clone();
     }
 }

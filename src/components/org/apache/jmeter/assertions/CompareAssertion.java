@@ -32,8 +32,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.StringSubstitution;
 import org.apache.oro.text.regex.Util;
 
-public class CompareAssertion extends AbstractTestElement implements Assertion, TestBean, Serializable,
-        LoopIterationListener {
+public class CompareAssertion extends AbstractTestElement
+        implements Assertion, TestBean, Serializable, LoopIterationListener {
 
     private static final long serialVersionUID = 240L;
 
@@ -116,7 +116,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
                     appendResultDetails(buf, prevResult);
                     buf.append(prevContent);
                     result.addToBaseResult(buf.toString());
-                    buf.setLength(0);                    
+                    buf.setLength(0);
                     appendResultDetails(buf, sResult);
                     buf.append(currentContent);
                     result.addToSecondaryResult(buf.toString());
@@ -149,8 +149,12 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
             String result = content;
             for (SubstitutionElement regex : stringsToSkip) {
                 emptySub.setSubstitution(regex.getSubstitute());
-                result = Util.substitute(JMeterUtils.getMatcher(), JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
-                        emptySub, result, Util.SUBSTITUTE_ALL);
+                result = Util.substitute(
+                        JMeterUtils.getMatcher(),
+                        JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
+                        emptySub,
+                        result,
+                        Util.SUBSTITUTE_ALL);
             }
             return result;
         }
@@ -169,8 +173,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
     }
 
     /**
-     * @param compareContent
-     *            The compareContent to set.
+     * @param compareContent The compareContent to set.
      */
     public void setCompareContent(boolean compareContent) {
         this.compareContent = compareContent;
@@ -184,8 +187,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
     }
 
     /**
-     * @param compareTime
-     *            The compareTime to set.
+     * @param compareTime The compareTime to set.
      */
     public void setCompareTime(long compareTime) {
         this.compareTime = compareTime;
@@ -199,8 +201,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
     }
 
     /**
-     * @param stringsToSkip
-     *            The stringsToSkip to set.
+     * @param stringsToSkip The stringsToSkip to set.
      */
     public void setStringsToSkip(Collection<SubstitutionElement> stringsToSkip) {
         this.stringsToSkip = stringsToSkip;

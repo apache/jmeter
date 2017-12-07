@@ -22,7 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -62,27 +61,19 @@ import org.slf4j.LoggerFactory;
 public class SelectTemplatesDialog extends JDialog implements ChangeListener, ActionListener, HyperlinkListener {
 
     private static final long serialVersionUID = 1;
-    
+    private static final Logger log = LoggerFactory.getLogger(SelectTemplatesDialog.class);
+
     // Minimal dimensions for dialog box
     private static final int MINIMAL_BOX_WIDTH = 500;
     private static final int MINIMAL_BOX_HEIGHT = 300;
-    
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
-
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
-    private static final Logger log = LoggerFactory.getLogger(SelectTemplatesDialog.class);
-
     private final JLabeledChoice templateList = new JLabeledChoice(JMeterUtils.getResString("template_choose"), false); //$NON-NLS-1$
-
     private final HtmlPane helpDoc = new HtmlPane();
-
     private final JButton reloadTemplateButton = new JButton(JMeterUtils.getResString("template_reload")); //$NON-NLS-1$
-
     private final JButton applyTemplateButton = new JButton();
-
     private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
-    
     private final JScrollPane scroller = new JScrollPane(helpDoc);
 
     public SelectTemplatesDialog() {
@@ -95,9 +86,6 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         JRootPane rootPane = new JRootPane();
         // Hide Window on ESC
         Action escapeAction = new AbstractAction("ESCAPE") { //$NON-NLS-1$
-            /**
-             *
-             */
             private static final long serialVersionUID = -6543764044868772971L;
 
             @Override
@@ -130,8 +118,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
      * what he wants to do if test plan is dirty
      * @param actionEvent {@link ActionEvent}
      */
-    private void checkDirtyAndLoad(final ActionEvent actionEvent)
-            throws HeadlessException {
+    private void checkDirtyAndLoad(final ActionEvent actionEvent) {
         final String selectedTemplate = templateList.getText();
         final Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);
         if (template == null) {
@@ -149,7 +136,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
                         JMeterUtils.getResString("template_load?"),  // $NON-NLS-1$
                         JOptionPane.YES_NO_CANCEL_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
-                if(response == JOptionPane.YES_OPTION) {
+                if (response == JOptionPane.YES_OPTION) {
                     ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.SAVE));
                 }
                 if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
@@ -237,7 +224,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
                 java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
             } catch (Exception ex) {
                 log.error("Error opening URL in browser: {}", e.getURL());
-            } 
+            }
         }
     }
 

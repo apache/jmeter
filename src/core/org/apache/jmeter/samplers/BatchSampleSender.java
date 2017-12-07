@@ -38,7 +38,6 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     private static final long serialVersionUID = 241L;
 
     private static final int DEFAULT_NUM_SAMPLE_THRESHOLD = 100;
-
     private static final long DEFAULT_TIME_THRESHOLD = 60000L;
 
     // Static fields are resolved on the server
@@ -56,7 +55,6 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
             JMeterUtils.getPropDefault("time_threshold", DEFAULT_TIME_THRESHOLD); // $NON-NLS-1$
 
     private final RemoteSampleListener listener;
-
     private final List<SampleEvent> sampleStore = new ArrayList<>();
 
     // Server-only work item
@@ -66,7 +64,6 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     private transient volatile int numSamplesThreshold;
 
     private transient volatile long timeThresholdMs;
-
 
     /**
      * @deprecated only for use by test code
@@ -79,8 +76,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     /**
      * Constructor
      *
-     * @param listener
-     *            that the List of sample events will be sent to.
+     * @param listener that the List of sample events will be sent to.
      */
     // protected added: Bug 50008 - allow BatchSampleSender to be subclassed
     protected BatchSampleSender(RemoteSampleListener listener) {
@@ -111,10 +107,9 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
 
     /**
      * Checks if any sample events are still present in the sampleStore and
-     * sends them to the listener. Informs the listener of the testended.
+     * sends them to the listener. Informs the listener of the test ended.
      *
-     * @param host
-     *            the host that the test has ended on.
+     * @param host the host that the test has ended on.
      */
     @Override
     public void testEnded(String host) {
@@ -137,8 +132,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
      * breached the list of sample events is sent to a listener where the event
      * are fired locally.
      *
-     * @param e
-     *            a Sample Event
+     * @param e a Sample Event
      */
     @Override
     public void sampleOccurred(SampleEvent e) {
@@ -192,10 +186,9 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
      * Processed by the RMI server code; acts as testStarted().
      *
      * @return this
-     * @throws ObjectStreamException
-     *             never
+     * @throws ObjectStreamException never
      */
-    private Object readResolve() throws ObjectStreamException{
+    private Object readResolve() throws ObjectStreamException {
         if (isClientConfigured()) {
             numSamplesThreshold = clientConfiguredNumSamplesThreshold;
             timeThresholdMs = clientConfiguredTimeThresholdMs;

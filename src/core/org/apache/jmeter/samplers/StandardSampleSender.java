@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Default behaviour for remote testing.
  */
-
 public class StandardSampleSender extends AbstractSampleSender implements Serializable {
     private static final long serialVersionUID = 241L;
 
@@ -77,8 +76,7 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
      * Processed by the RMI server code; acts as testStarted().
      *
      * @return this
-     * @throws ObjectStreamException
-     *             never
+     * @throws ObjectStreamException never
      */
     private Object readResolve() throws ObjectStreamException{
         log.info("Using StandardSampleSender for this test run");        

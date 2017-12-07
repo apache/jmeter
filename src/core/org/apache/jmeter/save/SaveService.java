@@ -266,18 +266,6 @@ public class SaveService {
         }
     }
 
-    /**
-     * Register converter.
-     * @param key
-     * @param jmxsaver
-     * @param useMapper
-     *
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
-     * @throws ClassNotFoundException
-     */
     private static void registerConverter(String key, XStream jmxsaver, boolean useMapper)
             throws InstantiationException, IllegalAccessException,
             InvocationTargetException, NoSuchMethodException,
@@ -445,7 +433,7 @@ public class SaveService {
      */
     private static HashTree readTree(InputStream inputStream, File file)
             throws IOException {
-        ScriptWrapper wrapper = null;
+        ScriptWrapper wrapper;
         try {
             // Get the InputReader to use
             InputStreamReader inputStreamReader = getInputStreamReader(inputStream);
@@ -487,10 +475,9 @@ public class SaveService {
      */
     // Used by ResultCollector when creating output files
     public static String getFileEncoding(String dflt){
-        if(fileEncoding != null && fileEncoding.length() > 0) {
+        if (fileEncoding != null && fileEncoding.length() > 0) {
             return fileEncoding;
-        }
-        else {
+        } else {
             return dflt;
         }
     }
@@ -498,10 +485,9 @@ public class SaveService {
     // @NotNull
     private static Charset getFileEncodingCharset() {
         // Check if we have a encoding to use from properties
-        if(fileEncoding != null && fileEncoding.length() > 0) {
+        if (fileEncoding != null && fileEncoding.length() > 0) {
             return Charset.forName(fileEncoding);
-        }
-        else {
+        } else {
             
             // We use the default character set encoding of the JRE
             log.info("fileEncoding not defined - using JRE default");
@@ -536,11 +522,9 @@ public class SaveService {
      * @return string with details of error
      */
     public static String CEtoString(ConversionException ce){
-        String msg =
-            "XStream ConversionException at line: " + ce.get("line number")
-            + "\n" + ce.get("message")
-            + "\nPerhaps a missing jar? See log file.";
-        return msg;
+        return "XStream ConversionException at line: " + ce.get("line number")
+        + "\n" + ce.get("message")
+        + "\nPerhaps a missing jar? See log file.";
     }
 
     public static String getPropertiesVersion() {

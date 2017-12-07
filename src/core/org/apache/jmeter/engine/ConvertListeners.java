@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
  * them with RemoteSampleListeners so that the samples are returned to the client.
  * 
  * N.B. Does not handle ThreadListeners.
- * 
  */
 public class ConvertListeners implements HashTreeTraverser {
     private static final Logger log = LoggerFactory.getLogger(ConvertListeners.class);
