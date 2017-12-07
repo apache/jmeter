@@ -202,6 +202,7 @@ Summary
     <li><pr>334</pr>Enable running of JUnit tests from within IntelliJ with default config. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>335</pr>Removed <code>functions.util.*</code> as they don't seem to be used (for many years). Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>61867</bug><pr>345</pr>Updated to latest checkstyle (v8.5), Added many more rules to checkstyle, Included checking of test files and more file types. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>350</pr> Parallelised unit tests</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

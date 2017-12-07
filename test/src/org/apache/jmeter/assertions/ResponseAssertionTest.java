@@ -61,6 +61,17 @@ public class ResponseAssertionTest {
     }
 
     @Test
+    public void testResponseAssertionNoText() throws Exception{
+        assertion.clearTestStrings();
+        assertion.unsetNotType();
+        assertion.setToSubstringType();
+        assertion.setTestFieldResponseData();
+        //assertion.addTestString("response Data");
+        result = assertion.getResult(sample);
+        assertPassed();
+    }
+    
+    @Test
     public void testResponseAssertionEquals() throws Exception{
         assertion.unsetNotType();
         assertion.setToEqualsType();

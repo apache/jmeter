@@ -16,9 +16,6 @@
  *
  */
 
-/*
- * Created on Oct 19, 2004
- */
 package org.apache.jmeter.services;
 
 import java.io.BufferedReader;
@@ -46,8 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
- * The point of this class is to provide thread-safe access to files, and to
+ * This class provides thread-safe access to files, and to
  * provide some simplifying assumptions about where to find files and how to
  * name them. For instance, putting supporting files in the same directory as
  * the saved test plan file allows users to refer to the file with just it's
@@ -378,13 +374,13 @@ public class FileServer {
     }
 
     /**
-     * Return BufferedReader handling close if EOF reached and recycle is true 
+     * Return BufferedReader handling close if EOF reached and recycle is true
      * and ignoring first line if ignoreFirstLine is true
-     * @param alias String alias
-     * @param recycle Recycle at eof
+     *
+     * @param alias           String alias
+     * @param recycle         Recycle at eof
      * @param ignoreFirstLine Ignore first line
      * @return {@link BufferedReader}
-     * @throws IOException
      */
     private BufferedReader getReader(String alias, boolean recycle, boolean ignoreFirstLine) throws IOException {
         FileEntry fileEntry = files.get(alias);
@@ -396,7 +392,7 @@ public class FileServer {
                 if (ignoreFirstLine) {
                     // read first line and forget
                     reader.readLine(); //NOSONAR
-                }                
+                }
             } else if (!(fileEntry.inputOutputObject instanceof Reader)) {
                 throw new IOException("File " + alias + " already in use");
             } else {
@@ -411,7 +407,7 @@ public class FileServer {
                         if (ignoreFirstLine) {
                             // read first line and forget
                             reader.readLine(); //NOSONAR
-                        }                
+                        }
                     } else { // OK, we still have some data, restore it
                         reader.reset();
                     }
@@ -457,7 +453,7 @@ public class FileServer {
 
     private BufferedWriter createBufferedWriter(FileEntry fileEntry) throws IOException {
         FileOutputStream fos = new FileOutputStream(fileEntry.file);
-        OutputStreamWriter osw = null;
+        OutputStreamWriter osw;
         // If file encoding is specified, write using that encoding, otherwise use default platform encoding
         String charsetName = fileEntry.charSetEncoding;
         if(!JOrphanUtils.isBlank(charsetName)) {
@@ -493,28 +489,21 @@ public class FileServer {
     }
 
     boolean filesOpen() { // package access for test code only
-        for (FileEntry fileEntry : files.values()) {
-            if (fileEntry.inputOutputObject != null) {
-                return true;
-            }
-        }
-        return false;
+        return files.values().stream()
+                .anyMatch(fileEntry -> fileEntry.inputOutputObject != null);
     }
 
     /**
-     * Method will get a random file in a base directory 
+     * Method will get a random file in a base directory
      * <p>
-     * TODO hey, not sure this
-     * method belongs here. FileServer is for threadsafe File access relative to
-     * current test's base directory.
+     * TODO hey, not sure this method belongs here.
+     * FileServer is for thread safe File access relative to current test's base directory.
      *
-     * @param basedir
-     *            name of the directory in which the files can be found
-     * @param extensions
-     *            array of allowed extensions, if <code>null</code> is given,
-     *            any file be allowed
+     * @param basedir    name of the directory in which the files can be found
+     * @param extensions array of allowed extensions, if <code>null</code> is given,
+     *                   any file be allowed
      * @return a random File from the <code>basedir</code> that matches one of
-     *         the extensions
+     * the extensions
      */
     public File getRandomFile(String basedir, String[] extensions) {
         File input = null;
@@ -533,8 +522,9 @@ public class FileServer {
     /**
      * Get {@link File} instance for provided file path,
      * resolve file location relative to base dir or script dir when needed
+     *
      * @param path original path to file, maybe relative
-     * @return {@link File} instance 
+     * @return {@link File} instance
      */
     public File getResolvedFile(String path) {
         reserveFile(path);
@@ -547,10 +537,11 @@ public class FileServer {
         private final File file;
         private Closeable inputOutputObject; 
         private final String charSetEncoding;
-        FileEntry(File f, Closeable o, String e){
-            file=f;
-            inputOutputObject=o;
-            charSetEncoding=e;
+
+        FileEntry(File f, Closeable o, String e) {
+            file = f;
+            inputOutputObject = o;
+            charSetEncoding = e;
         }
     }
     

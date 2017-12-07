@@ -40,13 +40,12 @@ public class SamplerMetricTimedModeTest {
     }
 
     @Before
-    public void initMode() throws NoSuchFieldException, SecurityException, Exception {
+    public void initMode() throws Exception {
         setFinalStatic(SamplerMetric.class.getDeclaredField("WINDOW_MODE"), WindowMode.TIMED);
     }
 
-
     @Test
-    public void checkResetOkAndAllStats() throws NoSuchFieldException, SecurityException, Exception {
+    public void checkResetOkAndAllStats() throws Exception {
 
         SamplerMetric metric = new SamplerMetric();
 
@@ -60,11 +59,10 @@ public class SamplerMetricTimedModeTest {
         assertEquals("After reset in TIMED mode ok.max", Double.NaN, metric.getOkMaxTime(), 0.0);
         assertEquals("After reset in TIMED mode all.max", Double.NaN, metric.getAllMaxTime(), 0.0);
         assertEquals("After reset failure", 0, metric.getHits(), 0.0);
-        metric = null;
     }
 
     @Test
-    public void checkResetKoAndAllStats() throws NoSuchFieldException, SecurityException, Exception {
+    public void checkResetKoAndAllStats() throws Exception {
 
         SamplerMetric metric = new SamplerMetric();
         metric.add(createSampleResult(false));
@@ -77,7 +75,6 @@ public class SamplerMetricTimedModeTest {
         assertEquals("After reset in TIMED mode  ko.max", Double.NaN, metric.getKoMaxTime(), 0.0);
         assertEquals("After reset in TIMED mode all.max", Double.NaN, metric.getAllMaxTime(), 0.0);
         assertEquals("After reset failure", 0, metric.getFailures(), 0.001);
-        metric = null;
     }
 
     private SampleResult createSampleResult(boolean success) {

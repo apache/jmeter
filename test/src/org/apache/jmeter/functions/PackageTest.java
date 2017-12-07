@@ -281,8 +281,8 @@ public class PackageTest extends JMeterTestCaseJUnit {
 
 
     public void CSVSetup() throws Exception {
-        cr1 = setCSVReadParams("testfiles/test.csv", "1");
-        cr4 = setCSVReadParams("testfiles/test.csv", "next");
+        cr1 = setCSVReadParams("testfiles/unit/FunctionsPackageTest.csv", "1");
+        cr4 = setCSVReadParams("testfiles/unit/FunctionsPackageTest.csv", "next");
     }
 
 
