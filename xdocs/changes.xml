@@ -157,6 +157,7 @@ Summary
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>61871</bug>Reduce jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity default value from 500ms to 100ms</li>
+    <li><bug>61879</bug>Remove useless files in HTML report template</li>
 </ul>
 
 <h3>General</h3>
