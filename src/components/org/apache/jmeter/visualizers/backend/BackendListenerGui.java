@@ -182,7 +182,9 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                 try {
                     defaultArgs = client.getDefaultParameters();
                     Arguments currentUserArgs = oldClient.getDefaultParameters();
-                    userArgMap.keySet().removeAll(currentUserArgs.getArgumentsAsMap().keySet());
+                    if(currentUserArgs != null) {
+                        userArgMap.keySet().removeAll(currentUserArgs.getArgumentsAsMap().keySet());
+                    }
                 } catch (AbstractMethodError e) {
                     log.warn("BackendListenerClient doesn't implement "
                             + "getDefaultParameters.  Default parameters won't "
