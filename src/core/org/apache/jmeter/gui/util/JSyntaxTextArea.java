@@ -98,6 +98,8 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
                     @Override
                     public void discardAllEdits() { }
                     @Override
+                    public void setText(String t) { }
+                    @Override
                     public boolean isCodeFoldingEnabled(){ return true; }
                 };
             } else {
