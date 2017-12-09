@@ -48,27 +48,24 @@ public class ThroughputController
     private static final long serialVersionUID = 234L;
 
     private static final Logger log = LoggerFactory.getLogger(ThroughputController.class);
-    public static final int BYNUMBER = 0;
 
+    public static final int BYNUMBER = 0;
     public static final int BYPERCENT = 1;
 
     private static final String STYLE = "ThroughputController.style";// $NON-NLS-1$
-
     private static final String PERTHREAD = "ThroughputController.perThread";// $NON-NLS-1$
-
     private static final String MAXTHROUGHPUT = "ThroughputController.maxThroughput";// $NON-NLS-1$
-
     private static final String PERCENTTHROUGHPUT = "ThroughputController.percentThroughput";// $NON-NLS-1$
 
     private static class MutableInteger{
         private int integer;
         MutableInteger(int value){
-            integer=value;
+            integer = value;
         }
         int incr(){
             return ++integer;
         }
-        public int intValue() {
+        int intValue() {
             return integer;
         }
     }
@@ -76,9 +73,7 @@ public class ThroughputController
     // These items are shared between threads in a group by the clone() method
     // They are initialised by testStarted() so don't need to be serialised
     private transient MutableInteger globalNumExecutions;
-
     private transient MutableInteger globalIteration;
-
     private transient Object counterLock = new Object(); // ensure counts are updated correctly
 
     /** Number of iterations on which we've chosen to deliver samplers. */
@@ -180,9 +175,6 @@ public class ThroughputController
         return numExecutions;
     }
 
-    /**
-     * @see org.apache.jmeter.control.Controller#next()
-     */
     @Override
     public Sampler next() {
         if (runThisTime) {
@@ -201,18 +193,12 @@ public class ThroughputController
         return (100.0 * executions + 50.0) / (iterations + 1) < getPercentThroughputAsFloat();
     }
 
-    /**
-     * @see org.apache.jmeter.control.Controller#isDone()
-     */
     @Override
     public boolean isDone() {
-        if (subControllersAndSamplers.isEmpty()) {
-            return true;
-        } else {
-            return getStyle() == BYNUMBER
-                    && getExecutions() >= getMaxThroughputAsInt()
-                    && current >= getSubControllers().size();
-        }
+        return subControllersAndSamplers.isEmpty()
+                || (getStyle() == BYNUMBER
+                && getExecutions() >= getMaxThroughputAsInt()
+                && current >= getSubControllers().size());
     }
 
     @Override

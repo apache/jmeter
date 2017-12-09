@@ -47,9 +47,6 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
     /** Key for storing assertion-information in the jmx-file. */
     private static final String MD5HEX_KEY = "MD5HexAssertion.size";
 
-    /*
-     * @param response @return
-     */
     @Override
     public AssertionResult getResult(SampleResult response) {
 
@@ -72,15 +69,16 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
             return result;
         }
 
-        String md5Result = baMD5Hex(resultData);
+        String md5Result = md5Hex(resultData);
 
         if (!md5Result.equalsIgnoreCase(getAllowedMD5Hex())) {
             result.setFailure(true);
 
             Object[] arguments = { md5Result, getAllowedMD5Hex() };
-            String message = MessageFormat.format(JMeterUtils.getResString("md5hex_assertion_failure"), arguments); // $NON-NLS-1$
+            String message = MessageFormat.format(
+                    JMeterUtils.getResString("md5hex_assertion_failure"), // $NON-NLS-1$
+                    arguments);
             result.setFailureMessage(message);
-
         }
 
         return result;
@@ -94,13 +92,11 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
         return getPropertyAsString(MD5HexAssertion.MD5HEX_KEY);
     }
 
-    // package protected so can be accessed by test class
-    static String baMD5Hex(byte[] ba) {
+    private static String md5Hex(byte[] bytes) {
         byte[] md5Result = {};
 
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md5Result = md.digest(ba);
+            md5Result = MessageDigest.getInstance("MD5").digest(bytes);
         } catch (NoSuchAlgorithmException e) {
             log.error("Message digestion failed.", e);
         }
