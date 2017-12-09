@@ -40,8 +40,7 @@ public class DynamicKerberosSchemeFactory extends KerberosSchemeFactory {
     @Override
     public AuthScheme create(final HttpContext context) {
         Boolean localStripPort = (Boolean) context.getAttribute(CONTEXT_ATTRIBUTE_STRIP_PORT);
-        return new KerberosScheme(localStripPort != null ? 
-                localStripPort : isStripPort(), 
-                isUseCanonicalHostname());
+        Boolean stripPort = localStripPort != null ? localStripPort : isStripPort();
+        return new KerberosScheme(stripPort, isUseCanonicalHostname());
     }
 }
