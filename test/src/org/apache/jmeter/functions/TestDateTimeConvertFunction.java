@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test {@link DateConvertFunction}
+ * Test {@link DateTimeConvertFunction}
  * 
  * @since 4.0
  */

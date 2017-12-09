@@ -31,6 +31,7 @@ import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
 import org.apache.jmeter.gui.Stoppable;
+import org.apache.jmeter.testelement.NonTestElement;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
@@ -43,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * For each client request, creates a thread to handle the request.
  *
  */
-public class HttpMirrorServer extends Thread implements Stoppable {
+public class HttpMirrorServer extends Thread implements Stoppable, NonTestElement {
 
     private static final int OPTIONS_OPT        = '?';// $NON-NLS-1$
     private static final int PORT_OPT           = 'P';// $NON-NLS-1$

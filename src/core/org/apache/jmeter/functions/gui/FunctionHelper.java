@@ -136,7 +136,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     private void initializeFunctionList() {
         String[] functionNames = CompoundVariable.getFunctionNames();
-        Arrays.sort(functionNames, (o1, o2) -> o1.compareToIgnoreCase(o2));
+        Arrays.sort(functionNames, String::compareToIgnoreCase);
         functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), functionNames); //$NON-NLS-1$
         functionList.addChangeListener(this);
     }
@@ -152,13 +152,14 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             this.validate();
             resultTextArea.setText("");
             this.repaint();
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException ex) {
+            log.info("Exception during stateChanged", ex);
         }
     }
 
     /**
-     * @throws InstantiationException if function instanciation fails
-     * @throws IllegalAccessException if function instanciation fails
+     * @throws InstantiationException if function instantiation fails
+     * @throws IllegalAccessException if function instantiation fails
      */
     protected void initParameterPanel() throws InstantiationException, IllegalAccessException {
         Arguments args = new Arguments();

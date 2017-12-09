@@ -215,7 +215,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
         if (log.isInfoEnabled()) {
             log.info(
                     "Using StatisticalSampleSender for this run. {} config: Thresholds: num={}, time={}. Key uses ThreadName: {}",
-                    (isClientConfigured() ? "Client" : "Server"), numSamplesThreshold, timeThresholdMs,
+                    isClientConfigured() ? "Client" : "Server", numSamplesThreshold, timeThresholdMs,
                     keyOnThreadName);
         }
         return this;

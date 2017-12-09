@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -42,6 +43,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -65,14 +67,17 @@ import org.slf4j.LoggerFactory;
  */
 public class JMSSampler extends AbstractSampler implements ThreadListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JMSSampler.class);
-
     private static final long serialVersionUID = 233L;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JMSSampler.class);
+
+    private static final String PREV_SAMPLER = "__PREV_SAMPLER__";
+
     private static final int DEFAULT_TIMEOUT = 2000;
+
     private static final String DEFAULT_TIMEOUT_STRING = Integer.toString(DEFAULT_TIMEOUT);
 
-    // ++ These are JMX names, and must not be changed
+    // These are JMX names, and must not be changed
     private static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory"; // $NON-NLS-1$
 
     private static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl"; // $NON-NLS-1$
@@ -93,7 +98,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      * @deprecated since 4.0 replaced by JMS_COMMUNICATION_STYLE
      */
     @Deprecated
-    public static final String IS_ONE_WAY = "JMSSampler.isFireAndForget"; // $NON-NLS-1$
+    public static final String IS_ONE_WAY = "JMSSampler.isFireAndForget"; // $NON-NLS-1$ // NOSONAR
     
     private static final String JMS_NUMBEROFSAMPLES = "JMSSampler.jmsNumberOfSamplesToAggregate"; // $NON-NLS-1$
 
@@ -178,7 +183,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      */
     @Override
     public SampleResult sample(Entry entry) {
-        JMeterContext context = JMeterContextService.getContext();
+        JMeterContext jmeterContext = JMeterContextService.getContext();
 
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
@@ -188,7 +193,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         res.sampleStart();
 
         try {
-            LOGGER.debug("Point-to-point mode: " + getCommunicationstyle());
+            LOGGER.debug("Point-to-point mode: {}", getCommunicationstyle());
             if (isBrowse()) {
                 handleBrowse(res);
             } else if (isClearQueue()) {
@@ -196,7 +201,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             } else if (isOneway()) {
                 handleOneWay(res);
             } else if (isRead()) {
-                handleRead(context, res);
+                handleRead(jmeterContext, res);
             } else {
                 handleRequestResponse(res);
             }
@@ -214,7 +219,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private void handleBrowse(SampleResult res) throws JMSException {
         LOGGER.debug("isBrowseOnly");
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder(75);
         res.setSuccessful(true);
         sb.append("Browse message on Send Queue ").append(sendQueue.getQueueName())
             .append(": ")
@@ -225,7 +230,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private void handleClearQueue(SampleResult res) throws JMSException {
         LOGGER.debug("isClearQueue");
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder(75);
         res.setSuccessful(true);
         sb.append("Clear messages on Send Queue ").append(sendQueue.getQueueName())
                 .append(": ")
@@ -246,18 +251,18 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private void handleRead(JMeterContext context, SampleResult res) {
         LOGGER.debug("isRead");
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder(75);
         res.setSuccessful(true);
         Sampler sampler = context.getPreviousSampler();
         SampleResult sr = context.getPreviousResult();
         String jmsSelector = getJMSSelector();
-        if (jmsSelector.equals("_PREV_SAMPLER_")
+        if (JMSSampler.PREV_SAMPLER.equals(jmsSelector)
                 && (sampler instanceof JMSSampler)) {
             jmsSelector = sr.getResponseMessage();
         }
         int sampleCounter = 0;
         int sampleTries = 0;
-        String result = null;
+        String result;
 
         StringBuilder buffer = new StringBuilder();
         StringBuilder propBuffer = new StringBuilder();
@@ -272,17 +277,18 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             sampleTries++;
         } while ((result != null) && (sampleTries < getNumberOfSamplesToAggregateAsInt()));
 
-        res.setResponseMessage(sampleCounter + " samples messages received");
-        res.setResponseData(buffer.toString().getBytes()); // TODO - charset?
+        res.setResponseData(buffer.toString(), StandardCharsets.UTF_8.name());
         res.setResponseHeaders(propBuffer.toString());
         if (sampleCounter == 0) {
-            res.setResponseCode("404");
             res.setSuccessful(false);
+            res.setResponseCode("404");
+            res.setResponseMessage(sampleCounter + " samples messages received, last try had following response message:"+
+                    res.getResponseMessage());
         } else {
-            res.setResponseCodeOK();
             res.setSuccessful(true);
+            res.setResponseCodeOK();
+            res.setResponseMessage(sampleCounter + " message(s) received successfully");
         }
-        res.setResponseMessage(sampleCounter + " message(s) received successfully");
         res.setSamplerData(getNumberOfSamplesToAggregateAsInt() + " messages expected");
         res.setSampleCount(sampleCounter);
     }
@@ -319,12 +325,14 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         String retVal = null;
         QueueReceiver consumer = null;
         Message reply = null;
+        String queueName = null;
         try {
+            queueName = queue.getQueueName();
             consumer = session.createReceiver(queue, jmsSelector);
-            reply = consumer.receive(Long.valueOf(getTimeout()));
+            reply = consumer.receive(getTimeoutAsInt());
             LOGGER.debug("Message: {}", reply);
             if (reply != null) {
-                res.setResponseMessage("1 message(s) received successfully");
+                res.setResponseMessage("1 message received successfully");
                 res.setResponseHeaders(reply.toString());
                 TextMessage msg = (TextMessage) reply;
                 retVal = msg.getText();
@@ -333,7 +341,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 res.setResponseMessage("No message received");
             }
         } catch (Exception ex) {
-            LOGGER.error("Error browsing queue with selector {}", jmsSelector, ex.getMessage());
+            res.setResponseMessage("Error browsing queue '"+queueName+"' with selector '"
+                    + jmsSelector+ "', timeout '"+getTimeout()+"', message:"+ex.getMessage());
+            LOGGER.error("Error browsing queue {} with selector {} and configured timeout {}", queueName, jmsSelector,
+                    getTimeout(), ex);
         } finally {
             Utils.close(consumer, LOGGER);
         }
@@ -372,40 +383,51 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 }
                 Utils.messageProperties(propBuffer, msg);
             } catch (JMSException e) {
-                LOGGER.error(e.getMessage());
+                buffer.append("Error extracting content from message:"+e.getMessage());
+                LOGGER.error("Error extracting content from message", e);
             }
         }
     }
 
     private String browseQueueDetails(Queue queue, SampleResult res) {
+        String queueName = null;
         try {
-            String messageBodies = "\n==== Browsing Messages === \n";
+            queueName = queue.getQueueName();
+            StringBuilder messageBodies = new StringBuilder(150);
+            messageBodies.append("==== Browsing Messages ===\n");
             // get some queue details
             QueueBrowser qBrowser = session.createBrowser(queue);
             // browse the messages
             Enumeration<?> e = qBrowser.getEnumeration();
             int numMsgs = 0;
             // count number of messages
-            String corrID = "";
+            String corrID;
             while (e.hasMoreElements()) {
                 TextMessage message = (TextMessage) e.nextElement();
                 corrID = message.getJMSCorrelationID();
                 if (corrID == null) {
                     corrID = message.getJMSMessageID();
-                    messageBodies = messageBodies + numMsgs + " - MessageID: " + corrID + ": " + message.getText()
-                            + "\n";
+                    messageBodies.append(numMsgs)
+                        .append(" - MessageID: ")
+                        .append(corrID)
+                        .append(": ").append(message.getText())
+                        .append("\n");
                 } else {
-                    messageBodies = messageBodies + numMsgs + " - CorrelationID: " + corrID + ": " + message.getText()
-                            + "\n";
+                    messageBodies.append(numMsgs)
+                    .append(" - CorrelationID: ")
+                    .append(corrID)
+                    .append(": ")
+                    .append(message.getText())
+                    .append("\n");
                 }
                 numMsgs++;
             }
             res.setResponseMessage(numMsgs + " messages available on the queue");
             res.setResponseHeaders(qBrowser.toString());
-            return (messageBodies + queue.getQueueName() + " has " + numMsgs + " messages");
+            return messageBodies + queue.getQueueName() + " has " + numMsgs + " messages";
         } catch (Exception e) {
             res.setResponseMessage("Error counting message on the queue");
-            LOGGER.error("Error browsing messages on the queue, message {}", e.getMessage());
+            LOGGER.error("Error browsing messages on the queue {}", queueName, e);
             return "Error browsing messages on the queue, message "+ e.getMessage();
         }
     }
@@ -413,7 +435,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     private String clearQueue(Queue queue, SampleResult res) {
         String retVal = null;
         QueueReceiver consumer = null;
+        String queueName = null;
         try {
+            queueName = queue.getQueueName();
             consumer = session.createReceiver(queue);
             Message deletedMsg = null;
             long deletedMsgCount = 0;
@@ -424,12 +448,13 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                     deletedMsg.acknowledge();
                 }
             } while (deletedMsg != null);
-            retVal = deletedMsgCount + " message(s) removed";
+            retVal = deletedMsgCount + " message(s) removed using receive timeout:"+
+                    getTimeoutAsInt()+"ms";
             res.setResponseMessage(retVal);
         } catch (Exception ex) {
-            res.setResponseMessage("Error clearing queue");
-            LOGGER.error("Error clearing queue, message {}", ex.getMessage());
-            return "Error clearing queue, message" + ex.getMessage();
+            res.setResponseMessage("Error clearing queue:"+queueName);
+            LOGGER.error("Error clearing queue {}", queueName, ex);
+            return "Error clearing queue "+queueName+", message:" +ex.getMessage();
         } finally {
             Utils.close(consumer, LOGGER);
         }
@@ -643,21 +668,21 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
             LOGGER.debug("Session created");
 
-            if (isBrowse() || isRead() || isClearQueue()) {
-                // Do nothing!
-            } else if (isOneway()) {
-                producer = session.createSender(sendQueue);
-                if (isNonPersistent()) {
-                    producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-                }
-                producer.setPriority(Integer.parseInt(getPriority()));
-                producer.setTimeToLive(Long.parseLong(getExpiration()));
-            } else {
-                if (useTemporyQueue()) {
-                    executor = new TemporaryQueueExecutor(session, sendQueue);
-                } else {
+            if (!(isBrowse() || isRead() || isClearQueue())) {
+                if (isOneway()) {
                     producer = session.createSender(sendQueue);
-                    executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
+                    if (isNonPersistent()) {
+                        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+                    }
+                    producer.setPriority(Integer.parseInt(getPriority()));
+                    producer.setTimeToLive(Long.parseLong(getExpiration()));
+                } else {
+                    if (useTemporyQueue()) {
+                        executor = new TemporaryQueueExecutor(session, sendQueue, getTimeoutAsInt());
+                    } else {
+                        producer = session.createSender(sendQueue);
+                        executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
+                    }
                 }
             }
             LOGGER.debug("Starting connection");
@@ -694,11 +719,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             table.put(me.getKey(), me.getValue());
         }
 
-        Context context = new InitialContext(table);
+        Context initialContext = new InitialContext(table);
         if (LOGGER.isDebugEnabled()) {
-            printEnvironment(context);
+            printEnvironment(initialContext);
         }
-        return context;
+        return initialContext;
     }
 
     private void printEnvironment(Context context) throws NamingException {
@@ -721,20 +746,22 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private void logThreadStart() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Thread started " + new Date());
-            LOGGER.debug("JMSSampler: [" + Thread.currentThread().getName() + "], hashCode=[" + hashCode() + "]");
-            LOGGER.debug("QCF: [" + getQueueConnectionFactory() + "], sendQueue=[" + getSendQueue() + "]");
-            LOGGER.debug("Timeout             = " + getTimeout() + "]");
-            LOGGER.debug("Use temporary queue =" + useTemporyQueue() + "]");
-            LOGGER.debug("Reply queue         =" + getReceiveQueue() + "]");
+            LOGGER.debug("Thread started {}", new Date());
+            LOGGER.debug("JMSSampler: [{}], hashCode=[{}]", Thread.currentThread().getName(), hashCode());
+            LOGGER.debug("QCF: [{}], sendQueue=[{}]", getQueueConnectionFactory(), getSendQueue());
+            LOGGER.debug("Timeout = [{}]", getTimeout());
+            LOGGER.debug("Use temporary queue =[{}]", useTemporyQueue());
+            LOGGER.debug("Reply queue         = [{}]", getReceiveQueue());
         }
     }
 
     private int getTimeoutAsInt() {
-        if (getPropertyAsInt(TIMEOUT) < 1) {
+        String propAsString = getPropertyAsString(TIMEOUT);
+        if(StringUtils.isEmpty(propAsString)){
             return DEFAULT_TIMEOUT;
+        } else {
+            return Integer.parseInt(propAsString);
         }
-        return getPropertyAsInt(TIMEOUT);
     }
 
     public String getTimeout() {
@@ -771,6 +798,13 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 context.close();
             } catch (NamingException ignored) {
                 // ignore
+            }
+        }
+        if (executor != null) {
+            try {
+                executor.close();
+            } catch (JMSException e) {
+                LOGGER.error("Error closing executor {}", executor.getClass(), e);
             }
         }
         Utils.close(session, LOGGER);
@@ -832,7 +866,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         int val = 1;
         try {
             val = getPropertyAsInt(JMS_NUMBEROFSAMPLES);
-        } catch (Exception e) {
+        } catch (Exception e) { // NOSONAR
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Failed parsing number of samples to aggregate");
+            }
             val = 1;
         }
         if (val < 1) {

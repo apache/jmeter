@@ -30,7 +30,8 @@ public enum TypeEditor {
     TableEditor    {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new TableEditor(); }}, // NOSONAR Keep naming for compatibility
     TextAreaEditor {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new TextAreaEditor(descriptor); }}, // NOSONAR Keep naming for compatibility
     ComboStringEditor {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new ComboStringEditor(descriptor); }}, // NOSONAR Keep naming for compatibility
-    ;
+    ; // CHECKSTYLE IGNORE OneStatementPerLine
+
     // Some editors may need the descriptor
     abstract PropertyEditor getInstance(PropertyDescriptor descriptor);
 }

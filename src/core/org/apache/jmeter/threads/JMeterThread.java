@@ -1,5 +1,4 @@
 /*
-
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -254,10 +253,10 @@ public class JMeterThread implements Runnable, Interruptible {
                     // restart of the next loop 
                     // - was requested through threadContext
                     // - or the last sample failed AND the onErrorStartNextLoop option is enabled
-                    if (threadContext.isRestartNextLoop()
+                    if (threadContext.isStartNextThreadLoop()
                             || (onErrorStartNextLoop
                             && !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK)))) {
-                        if (log.isDebugEnabled() && onErrorStartNextLoop && !threadContext.isRestartNextLoop()) {
+                        if (log.isDebugEnabled() && onErrorStartNextLoop && !threadContext.isStartNextThreadLoop()) {
                             log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
                         }
 

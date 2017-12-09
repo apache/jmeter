@@ -956,6 +956,8 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /**
      * Should Save Before Run 
      * Decide by Preference and if not exists by Property
+     * 
+     * @return boolean Should Save Before Run
      */
     public boolean shouldSaveBeforeRun() {
         String sbr = PREFS.get(SBR_PREFS_KEY, null);

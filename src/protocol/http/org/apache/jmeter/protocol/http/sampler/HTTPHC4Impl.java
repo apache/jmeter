@@ -639,8 +639,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             res.setBodySize(totalBytes - headerBytes);
             res.setSentBytes((Long) localContext.getAttribute(CONTEXT_ATTRIBUTE_SENT_BYTES));
             if (log.isDebugEnabled()) {
+                long total = res.getHeadersSize() + res.getBodySizeAsLong();
                 log.debug("ResponseHeadersSize={} Content-Length={} Total={}",
-                        res.getHeadersSize(), res.getBodySizeAsLong(), (res.getHeadersSize() + res.getBodySizeAsLong()));
+                        res.getHeadersSize(), res.getBodySizeAsLong(), total);
             }
 
             // If we redirected automatically, the URL may have changed
@@ -1213,31 +1214,32 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (headers != null) {
                 for (JMeterProperty jMeterProperty : headers) {
                     org.apache.jmeter.protocol.http.control.Header header
-                    = (org.apache.jmeter.protocol.http.control.Header)
+                            = (org.apache.jmeter.protocol.http.control.Header)
                             jMeterProperty.getObjectValue();
-                    String n = header.getName();
+                    String headerName = header.getName();
                     // Don't allow override of Content-Length
-                    if (! HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
-                        String v = header.getValue();
-                        if (HTTPConstants.HEADER_HOST.equalsIgnoreCase(n)) {
-                            int port = getPortFromHostHeader(v, url.getPort());
-                            v = v.replaceFirst(":\\d+$",""); // remove any port specification // $NON-NLS-1$ $NON-NLS-2$
+                    if (!HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(headerName)) {
+                        String headerValue = header.getValue();
+                        if (HTTPConstants.HEADER_HOST.equalsIgnoreCase(headerName)) {
+                            int port = getPortFromHostHeader(headerValue, url.getPort());
+                            // remove any port specification
+                            headerValue = headerValue.replaceFirst(":\\d+$", ""); // $NON-NLS-1$ $NON-NLS-2$
                             if (port != -1 && port == url.getDefaultPort()) {
                                 port = -1; // no need to specify the port if it is the default
                             }
                             if(port == -1) {
-                                request.addHeader(HEADER_HOST, v);
+                                request.addHeader(HEADER_HOST, headerValue);
                             } else {
-                                request.addHeader(HEADER_HOST, v+":"+port);
+                                request.addHeader(HEADER_HOST, headerValue+":"+port);
                             }
                         } else {
-                            request.addHeader(n, v);
+                            request.addHeader(headerName, headerValue);
                         }
                     }
                 }
             }
         }
-        if (cacheManager != null){
+        if (cacheManager != null) {
             cacheManager.setHeaders(url, request);
         }
     }

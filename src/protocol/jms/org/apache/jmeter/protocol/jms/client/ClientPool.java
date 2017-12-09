@@ -18,10 +18,11 @@
 package org.apache.jmeter.protocol.jms.client;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  *
@@ -29,25 +30,33 @@ import java.util.concurrent.ConcurrentHashMap;
  * this is to make it easier to clean up all the instances at the end of a test.
  * If we didn't do this, threads might become zombie.
  * 
- * N.B. This class needs to be fully synchronized as it is called from sample threads
+ * N.B. This class is thread safe as it is called from sample threads
  * and the thread that runs testEnded() methods.
  */
 public class ClientPool {
 
-    //GuardedBy("this")
-    private static final ArrayList<Closeable> clients = new ArrayList<>();
+    private static final List<Closeable> CLIENTS = Collections.synchronizedList(new ArrayList<>());
 
-    //GuardedBy("this")
-    private static final Map<Object, Object> client_map = new ConcurrentHashMap<>();
-
+    private ClientPool() {
+        super();
+    }
+    
     /**
      * Add a ReceiveClient to the ClientPool. This is so that we can make sure
      * to close all clients and make sure all threads are destroyed.
      *
      * @param client the ReceiveClient to add
      */
-    public static synchronized void addClient(Closeable client) {
-        clients.add(client);
+    public static void addClient(Closeable client) {
+        CLIENTS.add(client);
+    }
+
+    /**
+     * Remove publisher from clients
+     * @param publisher {@link Publisher}
+     */
+    public static void removeClient(Publisher publisher) {
+        CLIENTS.remove(publisher);
     }
 
     /**
@@ -55,37 +64,12 @@ public class ClientPool {
      * need to do this to make sure all the threads created during the test are
      * destroyed and cleaned up. In some cases, the client provided by the
      * manufacturer of the JMS server may have bugs and some threads may become
-     * zombie. In those cases, it is not the responsibility of JMeter for those
-     * bugs.
+     * zombie. In those cases, it is not JMeter's responsibility.
      */
-    public static synchronized void clearClient() {
-        for (Closeable client : clients) {
-            try {
-                client.close();
-            } catch (IOException e) {
-                // Ignored
-            }
-            client = null;
+    public static void clearClient() {
+        synchronized (CLIENTS) {
+            CLIENTS.forEach(JOrphanUtils::closeQuietly);            
         }
-        clients.clear();
-        client_map.clear();
-    }
-
-    // TODO Method with 0 reference, really useful ?
-    public static void put(Object key, Object client) {
-        client_map.put(key, client);
-    }
-
-    // TODO Method with 0 reference, really useful ?
-    public static Object get(Object key) {
-        return client_map.get(key);
-    }
-
-    /**
-     * Remove publisher from clients
-     * @param publisher {@link Publisher}
-     */
-    public static synchronized void removeClient(Publisher publisher) {
-        clients.remove(publisher);
+        CLIENTS.clear();
     }
 }

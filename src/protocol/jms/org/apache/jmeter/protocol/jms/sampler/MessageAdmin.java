@@ -126,9 +126,13 @@ public class MessageAdmin {
         if (holder != null) {
             holder.setReply(reply);
             CountDownLatch latch = holder.getLatch();
-            log.debug("{} releasing latch : {}", Thread.currentThread().getName(), latch);
+            if(log.isDebugEnabled()) {
+                log.debug("{} releasing latch : {}", Thread.currentThread().getName(), latch);
+            }
             latch.countDown();
-            log.debug("{} released latch : {}", Thread.currentThread().getName(), latch);
+            if(log.isDebugEnabled()) {
+                log.debug("{} released latch : {}", Thread.currentThread().getName(), latch);
+            }
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Failed to match reply: {}", reply);

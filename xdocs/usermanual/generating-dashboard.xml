@@ -175,8 +175,8 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                              </note>
                              Example:
                              <source>jmeter.reportgenerator.apdex_per_transaction=sample(\\d+):1000|2000;\
-    										samples12:3000|4000;\
-										    scenar01-12:5000|6000</source>
+    samples12:3000|4000;\
+    scenar01-12:5000|6000</source>
                         </property>
                         <property name="sample_filter" required="No">
                             Sets the filter of samples to keep for generating
@@ -520,8 +520,8 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
 #jmeter.reportgenerator.overall_granularity=60000
 
  Change this parameter if you want to change the granularity of Response time distribution
-# Set to 500 ms by default
-#jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity=500
+# Set to 100 ms by default
+#jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity=100
 
 # Change this parameter if you want to override the APDEX satisfaction threshold.
 jmeter.reportgenerator.apdex_satisfied_threshold=1500

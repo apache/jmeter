@@ -344,7 +344,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 log.debug("{} Created: {}@{}", this, getClassname(), Integer.toHexString(tcpClient.hashCode())); //$NON-NLS-1$
             }
         } catch (Exception e) {
-            log.error("{} Exception creating: ", this, getClassname(), e); //$NON-NLS-1$
+            log.error("{} Exception creating: {} ", this, getClassname(), e); //$NON-NLS-1$
         }
         return tcpClient;
     }
@@ -486,11 +486,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     }
 
     // Cannot do this as part of threadStarted() because the Config elements have not been processed.
-    private void initSampling(){
+    private void initSampling() {
         protocolHandler = getProtocol();
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("Using Protocol Handler: {}",  //$NON-NLS-1$
-                (protocolHandler == null ? "NONE" : protocolHandler.getClass().getName())); //$NON-NLS-1$
+                protocolHandler == null ? "NONE" : protocolHandler.getClass().getName()); //$NON-NLS-1$
         }
         if (protocolHandler != null){
             protocolHandler.setupTest();
@@ -555,11 +555,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     @Override
     public boolean interrupt() {
         Optional<Socket> sock = Optional.ofNullable(currentSocket); // fetch in case gets nulled later
-        if(sock.isPresent()) {
+        if (sock.isPresent()) {
             try {
                 sock.get().close();
-            } catch (IOException e) {
-                // ignored
+            } catch (IOException ignored) {
+                // NOOP
             }
             return true;
         } else {

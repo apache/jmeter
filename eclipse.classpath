@@ -64,7 +64,7 @@
 	<classpathentry kind="lib" path="lib/dec-0.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/dnsjava-2.1.8.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-2.3.23.jar"/>
-	<classpathentry kind="lib" path="lib/groovy-all-2.4.12.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-all-2.4.13.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-date-2.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
@@ -108,6 +108,9 @@
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="lib/xstream-1.4.10.jar"/>
 	<!-- Needed for build and test -->
+	<classpathentry kind="lib" path="lib/spock-1.0-groovy-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/cglib-nodep-3.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/objenesis-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcpkix-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.49.jar"/>

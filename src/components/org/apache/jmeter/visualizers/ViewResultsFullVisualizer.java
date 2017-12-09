@@ -485,27 +485,25 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 log.warn("Error loading result renderer: {}", clazz, e);
             }
         }
-        if(VIEWERS_ORDER.length()>0) {
-            String[] keys = VIEWERS_ORDER.split(",");
-            for (String key : keys) {
-                if(key.startsWith(".")) {
-                    key = "org.apache.jmeter.visualizers"+key; //$NON-NLS-1$
-                }
-                ResultRenderer renderer = map.remove(key);
-                if(renderer != null) {
-                    selectRenderPanel.addItem(renderer);
-                } else {
-                    log.warn(
-                            "Missing (check spelling error in renderer name) or already added(check doublon) "
-                                    + "result renderer, check property 'view.results.tree.renderers_order', renderer name: '{}'",
-                            key);
-                }
-            }
+        if (VIEWERS_ORDER.length() > 0) {
+            Arrays.stream(VIEWERS_ORDER.split(","))
+                    .map(key -> key.startsWith(".")
+                            ? "org.apache.jmeter.visualizers" + key //$NON-NLS-1$
+                            : key)
+                    .forEach(key -> {
+                        ResultRenderer renderer = map.remove(key);
+                        if (renderer != null) {
+                            selectRenderPanel.addItem(renderer);
+                        } else {
+                            log.warn(
+                                    "Missing (check renderer name) or already added (check doublon) result renderer," +
+                                            " check property 'view.results.tree.renderers_order', renderer name: '{}'",
+                                    key);
+                        }
+                    });
         }
         // Add remaining (plugins or missed in property)
-        for (ResultRenderer renderer : map.values()) {
-            selectRenderPanel.addItem(renderer);
-        }
+        map.values().forEach(renderer -> selectRenderPanel.addItem(renderer));
         nodesModel.setSelectedItem(textObject); // preset to "Text" option
         return selectRenderPanel;
     }

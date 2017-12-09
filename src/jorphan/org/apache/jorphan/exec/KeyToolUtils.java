@@ -281,18 +281,19 @@ public class KeyToolUtils {
     private static void generateSignedCert(File keystore, String password,
             int validity, String alias, String subject) throws IOException {
         String dname = "cn=" + subject + ", o=JMeter Proxy (TEMPORARY TRUST ONLY)";
-        KeyToolUtils.genkeypair(keystore, alias, password, validity, dname, null);
+        String ext = "san=dns:" + subject;
+        KeyToolUtils.genkeypair(keystore, alias, password, validity, dname, ext);
         //rem generate cert for DOMAIN using CA and import it
 
         // get the certificate request
         ByteArrayOutputStream certReqOut = new ByteArrayOutputStream();
-        KeyToolUtils.keytool("-certreq", keystore, password, alias, null, certReqOut);
+        KeyToolUtils.keytool("-certreq", keystore, password, alias, null, certReqOut, "-ext", ext);
 
         // create the certificate
         //rem ku:c=dig,keyE means KeyUsage:critical=digitalSignature,keyEncipherment
         InputStream certReqIn = new ByteArrayInputStream(certReqOut.toByteArray());
         ByteArrayOutputStream certOut = new ByteArrayOutputStream();
-        KeyToolUtils.keytool("-gencert", keystore, password, INTERMEDIATE_CA_ALIAS, certReqIn, certOut, "-ext", "ku:c=dig,keyE");
+        KeyToolUtils.keytool("-gencert", keystore, password, INTERMEDIATE_CA_ALIAS, certReqIn, certOut, "-ext", "ku:c=dig,keyE", "-ext ", ext);
 
         // import the certificate
         InputStream certIn = new ByteArrayInputStream(certOut.toByteArray());

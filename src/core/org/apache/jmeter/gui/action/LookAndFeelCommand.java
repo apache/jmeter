@@ -49,9 +49,11 @@ public class LookAndFeelCommand extends AbstractAction {
     // Note: Windows user preferences are stored relative to: HKEY_CURRENT_USER\Software\JavaSoft\Prefs
 
     /** Prefix for the user preference key */
-    private static final String USER_PREFS_KEY = "laf"; //$NON-NLS-1$
+    private static final String USER_PREFS_KEY = "laf.class"; //$NON-NLS-1$
 
     static {
+        log.info("Installing Darcula LAF");
+        UIManager.installLookAndFeel(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
         UIManager.LookAndFeelInfo[] allLAFs = JMeterMenuBar.getAllLAFs();
         commands = Arrays.stream(allLAFs)
                 .map(lf -> ActionNames.LAF_PREFIX + lf.getClassName())
@@ -59,7 +61,7 @@ public class LookAndFeelCommand extends AbstractAction {
         if (log.isInfoEnabled()) {
             final String jMeterLaf = getJMeterLaf();
             List<String> names = Arrays.stream(allLAFs)
-                    .filter(laf -> laf.getClassName().equals(jMeterLaf))
+                    .filter(laf -> laf.getClassName().equals(JMeterMenuBar.DARCULA_LAF_CLASS))
                     .map(UIManager.LookAndFeelInfo::getName)
                     .collect(Collectors.toList());
             log.info("Using look and feel: {} {}", jMeterLaf, names);
@@ -95,7 +97,7 @@ public class LookAndFeelCommand extends AbstractAction {
         if (laf != null) {
             return checkLafName(laf);
         }
-        laf = JMeterUtils.getPropDefault(JMETER_LAF, JMeterMenuBar.DARCULA_LAF);
+        laf = JMeterUtils.getPropDefault(JMETER_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
         if (laf != null) {
             return checkLafName(laf);
         }
@@ -114,6 +116,7 @@ public class LookAndFeelCommand extends AbstractAction {
     }
 
     public LookAndFeelCommand() {
+        // NOOP
     }
 
     @Override

@@ -196,8 +196,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
             }
             res.latencyEnd();
             int reply = ftp.getReplyCode();
-            if (FTPReply.isPositiveCompletion(reply))
-            {
+            if (FTPReply.isPositiveCompletion(reply)) {
                 if (ftp.login( getUsername(), getPassword())){
                     if (binaryTransfer) {
                         ftp.setFileType(FTP.BINARY_FILE_TYPE);
@@ -245,11 +244,8 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                             } else {
                                 long bytes = IOUtils.copy(input,target);
                                 ftpOK = bytes > 0;
-                                if (saveResponse && baos != null){
-                                    res.setResponseData(baos.toByteArray());
-                                    if (!binaryTransfer) {
-                                        res.setDataType(SampleResult.TEXT);
-                                    }
+                                if (saveResponse) {
+                                    saveResponse(res, binaryTransfer, baos);
                                 } else {
                                     res.setBytes(bytes);
                                 }
@@ -298,6 +294,13 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
 
         res.sampleEnd();
         return res;
+    }
+
+    private void saveResponse(SampleResult res, boolean binaryTransfer, ByteArrayOutputStream baos) {
+        res.setResponseData(baos.toByteArray());
+        if (!binaryTransfer) {
+            res.setDataType(SampleResult.TEXT);
+        }
     }
 
     /** {@inheritDoc} */

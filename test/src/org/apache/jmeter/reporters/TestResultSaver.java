@@ -27,15 +27,15 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-
 /**
  * Test for {@link ResultSaver}
  */
-public class TestResultSaver extends JMeterTestCase {
+public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest {
     private ResultSaver resultSaver;
     private SampleResult sampleResult;
     private final String data = "response Data";

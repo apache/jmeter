@@ -47,11 +47,7 @@ public abstract class AbstractProperty implements JMeterProperty {
     }
 
     protected boolean isEqualType(JMeterProperty prop) {
-        if (this.getClass().equals(prop.getClass())) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.getClass().equals(prop.getClass());
     }
 
     /** {@inheritDoc} */

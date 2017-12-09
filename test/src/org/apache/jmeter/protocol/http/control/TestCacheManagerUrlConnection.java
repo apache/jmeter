@@ -22,7 +22,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +51,7 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
 
     @Override
     protected void checkRequestHeader(String requestHeader, String expectedValue) {
-        Map<String, List<String>> properties = ((HttpURLConnection)this.urlConnection).getRequestProperties();
+        Map<String, List<String>> properties = this.urlConnection.getRequestProperties();
         checkProperty(properties, requestHeader, expectedValue);
     }
 
@@ -62,15 +61,11 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
     }
     
     private org.apache.jmeter.protocol.http.control.Header[] asHeaders(Map<String, List<String>> headers) {
-        List<org.apache.jmeter.protocol.http.control.Header> result = new ArrayList<>(headers.size());
-        for (Map.Entry<String, List<String>> header: headers.entrySet()) {
-            // Java Implementation returns a null header for URL
-            if(header.getKey() != null) {
-                result.add(new org.apache.jmeter.protocol.http.control.Header(
-                        header.getKey(), String.join(", ", header.getValue())));
-            }
-        }
-        return result.toArray(new org.apache.jmeter.protocol.http.control.Header[result.size()]);
+        // Java Implementation returns a null header for URL
+        return headers.entrySet().stream()
+                .filter(header -> header.getKey() != null)
+                .map(header -> new Header(header.getKey(), String.join(", ", header.getValue())))
+                .toArray(Header[]::new);
     }
 
     @Override

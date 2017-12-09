@@ -38,8 +38,8 @@ import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xbill.DNS.ARecord;
 import org.xbill.DNS.Cache;
 import org.xbill.DNS.ExtendedResolver;
@@ -59,7 +59,6 @@ import org.xbill.DNS.Type;
  *
  * @since 2.12
  */
-
 public class DNSCacheManager extends ConfigTestElement implements TestIterationListener, Serializable, DnsResolver {
 
     private static final long serialVersionUID = 2122L;
@@ -128,7 +127,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             }
             ExtendedResolver result = new ExtendedResolver(serverNames);
             if (log.isDebugEnabled()) {
-                log.debug("Using DNS Resolvers: {}", Arrays.asList((result).getResolvers()));
+                log.debug("Using DNS Resolvers: {}", Arrays.asList(result.getResolvers()));
             }
             // resolvers will be chosen via round-robin
             result.setLoadBalance(true);

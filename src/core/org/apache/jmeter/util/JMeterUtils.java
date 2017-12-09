@@ -79,7 +79,7 @@ import com.thoughtworks.xstream.security.NoTypePermission;
  */
 public class JMeterUtils implements UnitTestManager {
     private static final Logger log = LoggerFactory.getLogger(JMeterUtils.class);
-    
+    private static final String JMETER_VARS_PREFIX = "__jm__";
     // Note: cannot use a static variable here, because that would be processed before the JMeter properties
     // have been defined (Bug 52783)
     private static class LazyPatternCacheHolder {
@@ -200,13 +200,14 @@ public class JMeterUtils implements UnitTestManager {
             p.load(is);
         } catch (IOException e) {
             try {
-                is =
-                    ClassLoader.getSystemResourceAsStream("org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
+                is = ClassLoader.getSystemResourceAsStream(
+                        "org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
                 if (is == null) {
-                    throw new RuntimeException("Could not read JMeter properties file:"+file);
+                    throw new RuntimeException("Could not read JMeter properties file:" + file);
                 }
                 p.load(is);
             } catch (IOException ex) {
+                throw new RuntimeException("Could not read JMeter properties file:" + file);
             }
         } finally {
             JOrphanUtils.closeQuietly(is);
@@ -388,12 +389,13 @@ public class JMeterUtils implements UnitTestManager {
             resources = resBund;
             locale = loc;
             final Locale resBundLocale = resBund.getLocale();
-            if (isDefault || resBundLocale.equals(loc)) {// language change worked
-            // Check if we at least found the correct language:
-            } else if (resBundLocale.getLanguage().equals(loc.getLanguage())) {
-                log.info("Could not find resources for '"+loc.toString()+"', using '"+resBundLocale.toString()+"'");
-            } else {
-                log.error("Could not find resources for '"+loc.toString()+"'");
+            if (!isDefault && !resBundLocale.equals(loc)) {
+                // Check if we at least found the correct language:
+                if (resBundLocale.getLanguage().equals(loc.getLanguage())) {
+                    log.info("Could not find resources for '{}', using '{}'", loc.toString(), resBundLocale.toString());
+                } else {
+                    log.error("Could not find resources for '{}'", loc.toString());
+                }
             }
         }
         notifyLocaleChangeListeners();
@@ -1260,5 +1262,17 @@ public class JMeterUtils implements UnitTestManager {
         // See https://groups.google.com/forum/#!topic/xstream-user/wiKfdJPL8aY
         // TODO : How much are we concerned by CVE-2013-7285 
         xstream.addPermission(AnyTypePermission.ANY);
+    }
+    
+    /**
+     * @param elementName String elementName
+     * @return variable name for index following JMeter convention
+     */
+    public static String formatJMeterExportedVariableName(String elementName) {
+        StringBuilder builder = new StringBuilder(
+                JMETER_VARS_PREFIX.length()+elementName.length());
+        return builder.append(JMETER_VARS_PREFIX)
+                .append(elementName)
+                .toString();
     }
 }

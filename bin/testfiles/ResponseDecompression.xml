@@ -2,72 +2,72 @@
 <testResults version="1.2">
 <httpSample s="true" lb="HR1-GZIP" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA</name>
+    <name>RA_gzip</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
-    <name>RA_gzip</name>
+    <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HR2-GZIP" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA</name>
+    <name>RA_gzip</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
-    <name>RA_gzip</name>
+    <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HR1-DEFLATE" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA</name>
+    <name>RA_deflate</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
-    <name>RA_deflate</name>
+    <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HR2-DEFLATE" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA</name>
+    <name>RA_deflate</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
-    <name>RA_deflate</name>
+    <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HR-BROTLI" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA</name>
+    <name>RA_brotli</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
-    <name>RA_brotli</name>
+    <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HR-NoCompression" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA</name>
+    <name>RA_no_compression</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
-    <name>RA_no_compression</name>
+    <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>

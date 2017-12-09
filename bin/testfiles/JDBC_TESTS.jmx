@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171027">
+<jmeterTestPlan version="1.2" properties="3.4" jmeter="3.4-SNAPSHOT.20171120">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -45,6 +45,29 @@
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC_DROP_PROCEDURE" enabled="true">
           <stringProp name="dataSource">dbConfig</stringProp>
           <stringProp name="query">drop PROCEDURE new_user IF EXISTS;
+</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="queryType">Update Statement</stringProp>
+          <stringProp name="resultSetHandler">Store as String</stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+        </JDBCSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1157542694">0 updates</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC_DROP_PROCEDURE" enabled="true">
+          <stringProp name="dataSource">dbConfig</stringProp>
+          <stringProp name="query">drop PROCEDURE get_users IF EXISTS;
 </stringProp>
           <stringProp name="queryArguments"></stringProp>
           <stringProp name="queryArgumentsTypes"></stringProp>
@@ -126,6 +149,33 @@
      DECLARE result CURSOR FOR SELECT * FROM USERS WHERE ID = IDENTITY();
      INSERT INTO USERS VALUES (DEFAULT, title, author, CURRENT_DATE);
      OPEN result;    
+   END ;</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="queryType">Update Statement</stringProp>
+          <stringProp name="resultSetHandler">Store as String</stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+        </JDBCSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1157542694">0 updates</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC_CREATE_PROCEDURE_SELECT" enabled="true">
+          <stringProp name="dataSource">dbConfig</stringProp>
+          <stringProp name="query">CREATE PROCEDURE get_users()
+	MODIFIES SQL DATA DYNAMIC RESULT SETS 1
+   BEGIN ATOMIC
+     DECLARE result CURSOR FOR SELECT * FROM USERS order by id FOR READ ONLY;
+     OPEN result;   
    END ;</stringProp>
           <stringProp name="queryArguments"></stringProp>
           <stringProp name="queryArgumentsTypes"></stringProp>
@@ -241,7 +291,7 @@
           </ResponseAssertion>
           <hashTree/>
           <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JA_checkResult" enabled="true">
-            <stringProp name="cacheKey">23bf5ad0-233a-4505-971a-9273ea02c9c4</stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script">import java.util.Map;
@@ -257,6 +307,86 @@ if (list.size()==1) {
 } else {
 	AssertionResult.setFailure(true);
 	AssertionResult.setFailureMessage(&quot;Expected 1 row in result, got:&quot;+list.size());
+}
+
+</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+        </hashTree>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC_CALL_PROCEDURE_SELECT" enabled="true">
+          <stringProp name="dataSource">dbConfig</stringProp>
+          <stringProp name="query">call get_users()</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="queryType">Callable Statement</stringProp>
+          <stringProp name="resultSetHandler">Store as String</stringProp>
+          <stringProp name="resultVariable">result</stringProp>
+          <stringProp name="variableNames">id,title,author</stringProp>
+        </JDBCSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="48">0</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+            <stringProp name="Assertion.scope">variable</stringProp>
+            <stringProp name="Scope.variable">id_1</stringProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="2501">Mr</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+            <stringProp name="Assertion.scope">variable</stringProp>
+            <stringProp name="Scope.variable">title_1</stringProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="1324166668">Philip K. Dick</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+            <stringProp name="Assertion.scope">variable</stringProp>
+            <stringProp name="Scope.variable">author_1</stringProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="50">2</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+            <stringProp name="Assertion.scope">variable</stringProp>
+            <stringProp name="Scope.variable">author_#</stringProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JA_checkResult" enabled="true">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">import java.util.Map;
+def list = vars.getObject(&quot;result&quot;);
+if (list.size()==2) {
+	Map map = list.get(0);
+	if(map.get(&quot;AUTHOR&quot;).equals(&quot;Philip K. Dick&quot;)) {
+		AssertionResult.setFailure(false);
+	} else {
+		AssertionResult.setFailure(true);
+		AssertionResult.setFailureMessage(&quot;Expected first row AUTHOR to be equal to &apos;Philip K. Dick&apos;&quot;);
+	}
+} else {
+	AssertionResult.setFailure(true);
+	AssertionResult.setFailureMessage(&quot;Expected 2 rows in result, got:&quot;+list.size());
 }
 
 </stringProp>
@@ -321,7 +451,7 @@ if (list.size()==1) {
           </ResponseAssertion>
           <hashTree/>
           <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JA_checkResult" enabled="true">
-            <stringProp name="cacheKey">23bf5ad0-233a-4505-971a-9273ea02c9c4</stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script">import java.util.Map;
@@ -401,7 +531,7 @@ if (list.size()==1) {
           </ResponseAssertion>
           <hashTree/>
           <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JA_checkResult" enabled="true">
-            <stringProp name="cacheKey">23bf5ad0-233a-4505-971a-9273ea02c9c4</stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script">import java.util.Map;
@@ -476,7 +606,7 @@ if (list.size()==1) {
           </JDBCSampler>
           <hashTree>
             <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JA_checkResult" enabled="true">
-              <stringProp name="cacheKey">23bf5ad0-233a-4505-971a-9273ea02c9c4</stringProp>
+              <stringProp name="cacheKey">true</stringProp>
               <stringProp name="filename"></stringProp>
               <stringProp name="parameters"></stringProp>
               <stringProp name="script">import java.util.Map;
@@ -524,7 +654,7 @@ if (list.size()==1) {
           </JDBCSampler>
           <hashTree>
             <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JA_checkResult" enabled="true">
-              <stringProp name="cacheKey">23bf5ad0-233a-4505-971a-9273ea02c9c4</stringProp>
+              <stringProp name="cacheKey">true</stringProp>
               <stringProp name="filename"></stringProp>
               <stringProp name="parameters"></stringProp>
               <stringProp name="script">import java.util.Map;
@@ -695,7 +825,6 @@ if (list.size()==1) {
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
             <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
-            <stringProp name="Assertion.scope">all</stringProp>
             <stringProp name="Scope.variable">title_1</stringProp>
           </ResponseAssertion>
           <hashTree/>
@@ -940,9 +1069,5 @@ if (list.size()==1) {
       </ResultCollector>
       <hashTree/>
     </hashTree>
-    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
-      <boolProp name="WorkBench.save">true</boolProp>
-    </WorkBench>
-    <hashTree/>
   </hashTree>
 </jmeterTestPlan>

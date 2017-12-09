@@ -139,7 +139,7 @@
               output="xml:withMessages"
               reportlevel="${findbugs.level}"
               excludeFilter="fb-excludes.xml"
-              jvmargs="-Xms512m -Xmx512m"
+              jvmargs="-Xms512m -Xmx1024m"
               omitVisitors="InefficientStringBuffering"
               outputFile="${findbugs.outName}.xml" >
       <sourcePath path="${src.core}" />
@@ -519,6 +519,9 @@
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-ext.jar}"/>
+    <pathelement location="${lib.dir}/${spock.jar}"/>
+    <pathelement location="${lib.dir}/${cglib-nodep.jar}"/>
+    <pathelement location="${lib.dir}/${objenesis.jar}"/>
     <pathelement location="${lib.dir}/${jtidy.jar}"/>
     <pathelement location="${lib.dir}/${tika-core.jar}"/>
     <pathelement location="${lib.dir}/${tika-parsers.jar}"/>
@@ -572,7 +575,7 @@
       JMeter version
       This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="3.4-SNAPSHOT"/>
+    <property name="jmeter.version" value="4.0-SNAPSHOT"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version"
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}.${DSTAMP}">
@@ -726,6 +729,35 @@
         <path refid="logging.classpath"/>
       </classpath>
     </javac>
+
+    <!-- Compile Spock tests (groovy) -->
+    <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc">
+      <classpath>
+        <fileset dir="${lib.dir}" includes="*.jar"/>
+      </classpath>
+    </taskdef>
+    <groovyc srcdir="${src.test}" destdir="${build.test}" encoding="${encoding}">
+      <classpath>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+        <pathelement location="${build.components}"/>
+        <pathelement location="${build.http}"/>
+        <pathelement location="${build.ftp}"/>
+        <pathelement location="${build.functions}"/>
+        <pathelement location="${build.java}"/>
+        <pathelement location="${build.jdbc}"/>
+        <pathelement location="${build.ldap}"/>
+        <pathelement location="${build.mail}"/>
+        <pathelement location="${build.tcp}"/>
+        <!-- Include compiled jars to allow running tests without rebuilding source -->
+        <fileset dir="${dest.jar}" includes="*.jar"/>
+        <path refid="classpath"/>
+      </classpath>
+      <!-- Compile JUnit tests (Java) -->
+      <javac source="${src.java.version}" debug="on" target="${target.java.version}"
+             deprecation="${deprecation}" encoding="${encoding}">
+      </javac>
+    </groovyc>
   </target>
 
   <target name="compile-ftp" depends="compile-jorphan,compile-core" description="Compile components specific to FTP sampling.">
@@ -1012,6 +1044,8 @@ run JMeter unless all the JMeter jars are added.
         excludes="**/*.properties,org/apache/jmeter/images/toolbar/icons-custom/**"/>
       <fileset dir="${src.core}" includes="**/*.properties">
         <exclude name="*eucJP*"/>
+      </fileset>
+      <fileset dir="${src.core}" includes="**/*.xml">
       </fileset>
       <!-- This file is used by the jmeter -h option -->
       <fileset dir="${src.core}" includes="org/apache/jmeter/help.txt"/>
@@ -3218,6 +3252,9 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="log4j-1.2-api"/>
     <process_jarfile jarname="log4j-core"/>
     <process_jarfile jarname="log4j-slf4j-impl"/>
+    <process_jarfile jarname="spock"/>
+    <process_jarfile jarname="cglib-nodep"/>
+    <process_jarfile jarname="objenesis"/>
     <process_jarfile jarname="jtidy"/>
     <process_jarfile jarname="tika-core"/>
     <process_jarfile jarname="tika-parsers"/>
@@ -3400,57 +3437,18 @@ run JMeter unless all the JMeter jars are added.
     </antcall>
   </target>
 
-  <!-- Special: process to get RSyntaxTextArea-->
-  <!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
-  <!--
-  <target name="_process_rsyntaxtextarea">
-      <available file="./lib/${rsyntaxtextarea.jar}" property="rsyntaxtextarea.exists"/>
-      <antcall target="_get_rsyntaxtextarea"/>
-  </target>
-  -->
-  <!-- Get RSyntaxTextArea binary zip file, unpack it, pick up jar file and remove the zip -->
-  <!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
-  <!--
-  <target name="_get_rsyntaxtextarea" unless="rsyntaxtextarea.exists">
-    <property name="loc" value="${rsyntaxtextarea.loc}"/>
-    <property name="zip" value="${rsyntaxtextarea.name}_${rsyntaxtextarea.version}.zip"/>
-    <property name="jar" value="${rsyntaxtextarea.name}.jar"/>
-    <property name="md5" value="${rsyntaxtextarea.md5}"/>
-    <property name="path" value="./lib"/>
-    <get src="${loc}/${zip}"
-         dest="${build.dir}/${zip}"
-         usetimestamp="true" ignoreerrors="false"/>
-    <unzip dest="${build.dir}" src="${build.dir}/${zip}">
-      <patternset>
-        <include name="**/${jar}"/>
-      </patternset>
-      <mapper type="flatten"/>
-    </unzip>
-    <antcall target="_checkMD5">
-      <param name="file" value="${build.dir}/${jar}"/>
-      <param name="path" value="${build.dir}"/>
-      <param name="md5"  value="${md5}"/>
-    </antcall>
-    <delete>
-      <fileset dir="${path}" includes="${rsyntaxtextarea.name}-*.jar"/>
-    </delete>
-    <move preservelastmodified="true" overwrite="true"
-        file="${build.dir}/${jar}" tofile="${path}/${rsyntaxtextarea.jar}" verbose="true"/>
-    <delete file="${build.dir}/${zip}"/>
-  </target>
-  -->
-
   <!-- Need to define config_loc for use by Eclipse -->
   <property name="config_loc" value="."/>
   <target name="checkstyle">
     <available property="checkstyle.jar.available" file="${lib.opt}/${checkstyle-all.jar}"/>
-    <fail message="This task requires checkstyle, please run download_checkstyle target to download checkstyle" unless="checkstyle.jar.available"/>
+    <fail message="This task requires checkstyle, please run download_checkstyle target to download checkstyle"
+          unless="checkstyle.jar.available"/>
 
-    <antcall target="_process_checkstyle_jars"></antcall>
+    <antcall target="_process_checkstyle_jars"/>
     <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
              classpath="${lib.opt}/${checkstyle-all.jar}"/>
     <checkstyle config="checkstyle.xml">
-      <fileset dir="src" includes="**/*.java"/>
+      <fileset dir="src" includes="**/*"/>
       <formatter type="plain"/>
       <formatter type="xml" toFile="build/checkstyle_errors.xml"/>
     </checkstyle>
@@ -3459,7 +3457,8 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="rat">
     <available property="rat.jar.available" file="${lib.opt}/${rat.jar}"/>
-    <fail message="This task requires Apache Creadur RAT, please run download_rat target to download it" unless="rat.jar.available"/>
+    <fail message="This task requires Apache Creadur RAT, please run download_rat target to download it"
+          unless="rat.jar.available"/>
     <taskdef
       uri="antlib:org.apache.rat.anttasks"
       resource="org/apache/rat/anttasks/antlib.xml">

@@ -520,7 +520,7 @@ the additional variables for rows four, five and six will be removed.
 
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-        <property name="Variable Name" required="Yes">
+        <property name="Variable Name of Pool declared in JDBC Connection Configuration" required="Yes">
         Name of the JMeter variable that the connection pool is bound to.
         This must agree with the '<code>Variable Name</code>' field of a <complink name="JDBC Connection Configuration"/>.
         </property>
@@ -1651,7 +1651,7 @@ The following table shows some values which may be useful when configuring JMS:
   <property name="Timeout" required="Yes">
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
       time, the specific testcase fails and the specific reply message received after the timeout is discarded.
-      Default value is <code>2000</code> ms.
+      Default value is <code>2000</code> ms. <code>0</code> means no timeout.
   </property>
   <property name="Expiration" required="No">
       The expiration time (in milliseconds) of the message before it becomes obsolete.
@@ -2033,6 +2033,9 @@ loop through them a certain number of times, in addition to the loop value you
 specified for the Thread Group.  For example, if you add one HTTP Request to a
 Loop Controller with a loop count of two, and configure the Thread Group loop
 count to three, JMeter will send a total of <code>2 * 3 = 6</code> HTTP Requests.
+<note>JMeter will expose the looping index as a variable named <code>__jm__&lt;Name of your element&gt;__idx</code>. So for
+example, if your Loop Controller is named LC, then you can access the looping index through <code>${__jm__LC__idx}</code>.
+Index starts at 0</note>
 </p></description>
 
 <properties>
@@ -2403,6 +2406,9 @@ So for example when the input variable has the name <code>inputVar</code>, the f
 When the return variable is given as "<code>returnVar</code>", the collection of samplers and controllers under the ForEach controller will be executed <code>4</code> consecutive times,
 with the return variable having the respective above values, which can then be used in the samplers.
 </p>
+<p><note>JMeter will expose the looping index as a variable named <code>__jm__&lt;Name of your element&gt;__idx</code>. So for
+example, if your Loop Controller is named FEC, then you can access the looping index through <code>${__jm__FEC__idx}</code>.
+Index starts at 0</note></p>
 <p>
 It is especially suited for running with the regular expression post-processor. 
 This can "create" the necessary input variables out of the result data of a previous request.
@@ -2467,7 +2473,7 @@ The Module Controller provides a mechanism for substituting test plan fragments 
 </p>
 <p>
 A test plan fragment consists of a Controller and all the test elements (samplers etc.) contained in it. 
-The fragment can be located in any Thread Group, or on the <complink name="WorkBench" />.
+The fragment can be located in any Thread Group.
 If the fragment is located in a Thread Group, then its Controller can be disabled to prevent the fragment being run
 except by the Module Controller. 
 Or you can store the fragments in a dummy Thread Group, and disable the entire Thread Group. 
@@ -2912,6 +2918,11 @@ You can right-click on any node and expand or collapse all nodes below it.
 <tr><td><code>XPath Tester</code></td>
 <td>The <i>XPath Tester</i> only works for text responses. It shows the plain text in the upper panel.
 The "<code>Test</code>" button allows the user to apply the XPath query to the upper panel and the results
+will be displayed in the lower panel.<br/>
+</td></tr>
+<tr><td><code>Boundary Extractor Tester </code></td>
+<td>The <i>Boundary Extractor Tester</i> only works for text responses. It shows the plain text in the upper panel.
+The "<code>Test</code>" button allows the user to apply the Boundary Extractor query to the upper panel and the results
 will be displayed in the lower panel.<br/>
 </td></tr>
 </table>
@@ -3489,22 +3500,23 @@ By default, a Graphite implementation is provided.
     <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
     
     
-    <p>Since JMeter 3.2, a new implementation (in Beta state) has been added that allows writing directly in InfluxDB with a custom schema, it is called <code>InfluxdbBackendListenerClient</code> 
+    <p>Since JMeter 3.2, a new implementation has been added that allows writing directly in InfluxDB with a custom schema, it is called <code>InfluxdbBackendListenerClient</code> 
       The following parameters apply to the <a href="../api/org/apache/jmeter/visualizers/backend/influxdb/InfluxdbBackendListenerClient.html">InfluxdbBackendListenerClient</a> implementation:</p>
 
     <properties>
         <property name="influxdbMetricsSender" required="Yes"><code>org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender</code></property>
         <property name="influxdbUrl" required="Yes">Influx URL (example : http://influxHost:8086/write?db=jmeter)</property>
-        <property name="application" required="Yes">Name of tested application. This value is stored in the 'events' measurement as a tag named 'application' </property>
+        <property name="application" required="Yes">Name of tested application. This value is stored in the 'events' measurement too as a tag named 'application' </property>
         <property name="measurement" required="Yes">Measurement as per <a href="https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/">Influx Line Protocol Reference</a>. Defaults to "<code>jmeter</code>."</property>
         <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to <code>true</code>.</property>
         <property name="samplersRegex" required="Yes">Regular expression which will be matched against the names of samples and sent to the back end.</property>
         <property name="testTitle" required="Yes">Test name. Defaults to <code>Test name</code>. This value is stored in the 'events' measurement as a field named 'text'. JMeter generate automatically at the start and the end of the test an annotation with this value ending with ' started' and ' ended'</property>
-        <property name="eventTags" required="No">List of tags. This value is stored in the 'events' measurement as a tag named 'tags'.</property>
+        <property name="eventTags" required="No">Grafana allow to display tag for each annotation. You can fill them here. This value is stored in the 'events' measurement as a tag named 'tags'.</property>
         <property name="percentiles" required="Yes">The percentiles you want to send to the backend.
         A percentile may contain a fractional part, for example <code>12.5</code>.
         (The separator is always ".")
         List must be semicolon separated. Generally 3 or 4 values should be sufficient.</property>
+        <property name="TAG_WhatEverYouWant" required="No">You can add as many custom tags as you want. For each of them, just create a new line and prefix its name by "<code>TAG_</code>"</property>
     </properties>
     <p>See also <a href="realtime-results.html" >Real-time results</a> and <a href="http://docs.grafana.org/reference/annotations/#influxdb-annotations">Influxdb annotations in Grafana</a> for more details.</p>     
 </component>
@@ -4017,7 +4029,7 @@ instead. (see figures 12 and 13).</p>
     </description>
     <properties>
         <property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
-        <property name="Variable Name" required="Yes">The name of the variable the connection is tied to.  
+        <property name="Variable Name for created pool" required="Yes">The name of the variable the connection is tied to.  
         Multiple connections can be used, each tied to a different variable, allowing JDBC Samplers
         to select the appropriate connection.
         <note>Each name must be different. If there are two configuration elements using the same name,
@@ -4973,6 +4985,26 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
     Negative numbers count from the LAST message; <code>-1</code> means LAST, <code>-2</code> means penultimate etc.
     </property>
 </properties>
+</component>
+<component name="JSON Assertion" index="&sect-num;.5.14" anchor="JSON_Assertion">
+    <description>
+        <p>
+            This component allows you to perform validations of JSON documents.
+            First, it will parse the JSON and fail if the data is not JSON.
+            Second, it will search for specified path, using syntax from <a href="https://github.com/jayway/JsonPath" > Jayway JsonPath 1.2.0</a>. If the path is not found, it will fail.
+            Third, if JSON path was found in the document, and validation against expected value was requested, it will perform validation. For the <code>null</code> value there is special checkbox in the GUI.
+            Note that if the path will return array object, it will be iterated and if expected value is found, the assertion will succeed. To validate empty array use <code>[]</code> string. Also, if patch will return dictionary object, it will be converted to string before comparison.
+        </p>
+    </description>
+    <properties>
+        <property name="Assert JSON Path exists" required="Yes">Path to JSON element for assert.</property>
+        <property name="Additionally assert value" required="No">Select checkbox if you want make assert with some value</property>
+        <property name="Match as regular expression" required="No">Select checkbox if you want use regular expression</property>
+        <property name="Expected Value" required="No">Value for assert or regular expression for match</property>
+        <property name="Expect null" required="No">Select checkbox if you expect null</property>
+        <property name="Invert assertion (will fail if above conditions met)" required="No">Invert assertion (will fail if above conditions met)</property>
+    </properties>
+    <figure width="1140" height="356" image="json_path_assertion.png">JSON Assertion</figure>
 </component>
 
 <a href="#">^</a>
@@ -6442,15 +6474,15 @@ directly into your test plan as you go (so you can view samples interactively wh
 Ensure you read this <a href="https://wiki.apache.org/jmeter/TestRecording210">wiki page</a> to setup correctly JMeter.
 </p>
 
-<p>To use the recorder, <i>add</i> the HTTP(S) Test Script Recorder element to the workbench.
-Select the WorkBench element in the tree, and right-click on this element to get the
-Add menu 
+<p>To use the recorder, <i>add</i> the HTTP(S) Test Script Recorder element.
+Right-click on the Test Plan element to get the Add menu:
 (<menuchoice>
   <guimenuitem>Add</guimenuitem>
   <guimenuitem>Non-Test Elements</guimenuitem>
   <guimenuitem>HTTP(S) Test Script Recorder</guimenuitem>
 </menuchoice>
-).</p>
+).
+</p>
 <p>
 The recorder is implemented as an HTTP(S) proxy server.
 You need to set up your browser use the proxy for all HTTP and HTTPS requests.
@@ -6913,7 +6945,6 @@ You can also use the following query parameters:
 <p>
 The Property Display shows the values of System or JMeter properties.
 Values can be changed by entering new text in the Value column.
-It is available only on the WorkBench.
 </p>
 </description>
 <properties>

@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.reporters;
 
-import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.Visualizer;
 

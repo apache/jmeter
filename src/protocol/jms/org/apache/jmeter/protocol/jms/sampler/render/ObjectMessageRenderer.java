@@ -102,7 +102,6 @@ class ObjectMessageRenderer implements MessageRenderer<Serializable> {
     }
 
     protected Serializable getContent(String filename) {
-        Serializable object = (Serializable) new XStream().fromXML(new File(filename));
-        return object;
+        return (Serializable) new XStream().fromXML(new File(filename));
     }
 }

@@ -51,19 +51,23 @@ public abstract class JMeterTestCaseJUnit extends TestCase {
      * If not running under AllTests.java, make sure that the properties (and
      * log file) are set up correctly.
      * 
-     * N.B. In order for this to work correctly, the JUnit test must be started
-     * in the bin directory, and all the JMeter jars (plus any others needed at
-     * run-time) need to be on the classpath.
-     * 
+     * N.B. This assumes the JUnit test are executed in the
+     * project root, bin directory or one level down, and all the JMeter jars
+     * (plus any others needed at run-time) need to be on the classpath.
      */
     static {
         if (JMeterUtils.getJMeterProperties() == null) {
             String file = "jmeter.properties";
             File f = new File(file);
             if (!f.canRead()) {
-                System.out.println("Can't find " + file + " - trying bin directory");
-                file = "bin/" + file;// JMeterUtils assumes Unix-style separators
-                filePrefix = "bin/";
+                System.out.println("Can't find " + file + " - trying bin/ and ../bin");
+                if (!new File("bin/" + file).canRead()) {
+                    // When running tests inside IntelliJ
+                    filePrefix = "../bin/"; // JMeterUtils assumes Unix-style separators
+                } else {
+                    filePrefix = "bin/"; // JMeterUtils assumes Unix-style separators
+                }
+                file = filePrefix + file;
             } else {
                 filePrefix = "";
             }
