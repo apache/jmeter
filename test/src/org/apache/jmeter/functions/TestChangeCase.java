@@ -113,7 +113,7 @@ public class TestChangeCase extends JMeterTestCase {
         assertEquals("abCdEf", returnValue);
 
         returnValue = execute(" zadad", "lower_CAMEL_CASE");
-        assertEquals("Zadad", returnValue);
+        assertEquals("zadad", returnValue);
     }
 
     @Test(expected = InvalidVariableException.class)

@@ -18,11 +18,13 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -49,8 +51,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ChangeCase extends AbstractFunction {
 
-    private static final Pattern NOT_ALPHANUMERIC_REGEX = 
-            Pattern.compile("[^a-zA-Z]");
+    private static final Pattern SPLIT_CHARS =
+            Pattern.compile("[^\\p{IsAlphabetic}\\d]+");
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangeCase.class);
     private static final List<String> DESC = new LinkedList<>();
     private static final String KEY = "__changeCase";
@@ -97,10 +99,10 @@ public class ChangeCase extends AbstractFunction {
                 targetString = StringUtils.capitalize(originalString);
                 break;
             case LOWER_CAMEL_CASE:
-                targetString = camel(originalString, false);
+                targetString = camel(originalString.trim(), true);
                 break;
             case UPPER_CAMEL_CASE:
-                targetString = camel(originalString, true);
+                targetString = camel(originalString.trim(), false);
                 break;
             default:
                 // default not doing nothing to string
@@ -127,21 +129,18 @@ public class ChangeCase extends AbstractFunction {
         return DESC;
     }
 
-    private static String camel(String str, boolean isFirstCapitalized) {
-        StringBuilder builder = new StringBuilder(str.length());
-        String[] tokens = NOT_ALPHANUMERIC_REGEX.split(str);
-        for (int i = 0; i < tokens.length; i++) {
-            String lowerCased = StringUtils.lowerCase(tokens[i]);
-            if(i == 0) {
-                builder.append(isFirstCapitalized ? StringUtils.capitalize(lowerCased):
-                    lowerCased);
-            } else {
-                builder.append(StringUtils.capitalize(lowerCased));
-            }
+    private static String camel(String input, boolean uncapitalizeFirst) {
+        List<String> tokens = Arrays.asList(SPLIT_CHARS.split(input)).stream()
+                .filter(s -> !s.isEmpty())
+                .map(StringUtils::lowerCase)
+                .map(StringUtils::capitalize)
+                .collect(Collectors.toList());
+        if (uncapitalizeFirst && !tokens.isEmpty()) {
+            tokens.set(0, StringUtils.uncapitalize(tokens.get(0)));
         }
-        return builder.toString();
+        return String.join("", tokens);
     }
-    
+
     /**
      * ChangeCase Modes
      * 

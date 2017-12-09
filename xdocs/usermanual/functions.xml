@@ -1647,15 +1647,17 @@ becomes:
     <property name="String to change case" required="Yes">The String
             which case will be changed</property>
         <property name="change case mode" required="Yes">
-            The mode to be used to change case, for example for ab-CD eF:
+            The mode to be used to change case, for example for <code>ab-CD eF</code>:
             <ul>
-                <li><code>UPPER</code> result as AB-CD EF</li>
-                <li><code>LOWER</code> result as ab-cd ed</li>
-                <li><code>CAPITALIZE</code> result as Ab-CD eF</li>
-                <li><code>UPPER_CAMEL_CASE</code>result as AbCdEf</li>
-                <li><code>LOWER_CAMEL_CASE</code>result as abCdEf</li>
+                <li><code>UPPER</code> result as <code>AB-CD EF</code></li>
+                <li><code>LOWER</code> result as <code>ab-cd ed</code></li>
+                <li><code>CAPITALIZE</code> result as <code>Ab-CD eF</code></li>
+                <li><code>UPPER_CAMEL_CASE</code>result as <code>AbCdEf</code></li>
+                <li><code>LOWER_CAMEL_CASE</code>result as <code>abCdEf</code></li>
             </ul>
-            <note>mode is case insensitive</note>
+            <note><code>change case mode</code> is case insensitive</note>
+            <note>The camel case modes will trim the input string and drop all characters,
+              that are neither a digit nor an alphabetical character.</note>
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
     </properties>
