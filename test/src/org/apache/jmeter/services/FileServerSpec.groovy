@@ -129,7 +129,7 @@ class FileServerSpec extends JMeterSpec {
         when:
             sut.setBasedir("testfiles/unit/FileServerSpec.csv")
         then:
-            sut.getBaseDir().endsWith("testfiles/unit")
+            sut.getBaseDir().replaceAll("\\\\", "/").endsWith("testfiles/unit")
     }
 
     // TODO: what about throwing an exception in setBaseDir?
