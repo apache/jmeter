@@ -201,13 +201,17 @@ public class Save extends AbstractAction {
             }
         }
         
+        ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
         // backup existing file according to jmeter/user.properties settings
         List<File> expiredBackupFiles = EMPTY_FILE_LIST;
-        File fileToBackup = new File(updateFile);
-        try {
-            expiredBackupFiles = createBackupFile(fileToBackup);
-        } catch (Exception ex) {
-            log.error("Failed to create a backup for {}", fileToBackup, ex); //$NON-NLS-1$
+        if (GuiPackage.getInstance().isDirty()) {
+            File fileToBackup = new File(updateFile);
+            log.debug("Test plan has changed, make backup of {}", fileToBackup);
+            try {
+                expiredBackupFiles = createBackupFile(fileToBackup);
+            } catch (Exception ex) {
+                log.error("Failed to create a backup for {}", fileToBackup, ex); //$NON-NLS-1$
+            }
         }
         
         try {
