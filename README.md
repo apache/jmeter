@@ -30,9 +30,9 @@ Ability to load and performance test many different applications/server/protocol
 
 Full featured Test IDE that allows fast Test Plan **recording (from Browsers or native applications), building and debugging.**
 
-[** Command-line mode (Non GUI / headless mode)**](http://jmeter.apache.org/usermanual/get-started.html#non_gui) to load test from any Java compatible OS (Linux, Windows, Mac OSX, ...)
+[**Command-line mode (Non GUI / headless mode)**](http://jmeter.apache.org/usermanual/get-started.html#non_gui) to load test from any Java compatible OS (Linux, Windows, Mac OSX, ...)
 
-A complete and [** ready to present dynamic HTML report**](http://jmeter.apache.org/usermanual/generating-dashboard.html)
+A complete and [**ready to present dynamic HTML report**](http://jmeter.apache.org/usermanual/generating-dashboard.html)
 
 [**Live reporting**](http://jmeter.apache.org/usermanual/realtime-results.html) into 3rd party databases like InfluxDB or Graphite
 
@@ -47,7 +47,7 @@ Caching and offline analysis/replaying of test results.
 
 Highly Extensible core:
  -  Pluggable Samplers allow unlimited testing capabilities.
- -  ** Scriptable Samplers ** (JSR223-compatible languages like Groovy)
+ -  **Scriptable Samplers** (JSR223-compatible languages like Groovy)
  -  Several load statistics may be chosen with ** pluggable timers**.
  -  Data analysis and **visualization plugins** allow great extensibility and personalization.
  -  Functions can be used to provide dynamic input to a test or provide data manipulation.
