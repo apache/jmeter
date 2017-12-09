@@ -90,30 +90,9 @@ public class TestChangeCase extends JMeterTestCase {
     }
 
     @Test
-    public void testChangeCaseCamelCase() throws Exception {
-        String returnValue = execute("ab-CD eF", "UPPER_CAMEL_CASE");
-        assertEquals("AbCdEf", returnValue);
-    }
-
-    @Test
     public void testChangeCaseCapitalize() throws Exception {
         String returnValue = execute("ab-CD eF", "CAPITALIZE");
         assertEquals("Ab-CD eF", returnValue);
-    }
-
-    @Test
-    public void testChangeCaseCamelCaseFirstLower() throws Exception {
-        String returnValue = execute("ab-CD eF", "LOWER_CAMEL_CASE");
-        assertEquals("abCdEf", returnValue);
-    }
-
-    @Test
-    public void testChangeCaseCamelCaseFirstLowerWithFirstUpperCaseChar() throws Exception {
-        String returnValue = execute("Ab-CD eF", "lower_CAMEL_CASE");
-        assertEquals("abCdEf", returnValue);
-
-        returnValue = execute(" zadad", "lower_CAMEL_CASE");
-        assertEquals("Zadad", returnValue);
     }
 
     @Test(expected = InvalidVariableException.class)
