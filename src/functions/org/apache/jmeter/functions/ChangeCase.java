@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -40,7 +39,6 @@ import org.slf4j.LoggerFactory;
  * <li>upper case</li>
  * <li>lower case</li>
  * <li>capitalize</li>
- * <li>camel cases</li>
  * <li></li>
  * </ul>
  * 
@@ -48,9 +46,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ChangeCase extends AbstractFunction {
-
-    private static final Pattern NOT_ALPHANUMERIC_REGEX = 
-            Pattern.compile("[^a-zA-Z]");
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangeCase.class);
     private static final List<String> DESC = new LinkedList<>();
     private static final String KEY = "__changeCase";
@@ -96,12 +91,6 @@ public class ChangeCase extends AbstractFunction {
             case CAPITALIZE:
                 targetString = StringUtils.capitalize(originalString);
                 break;
-            case LOWER_CAMEL_CASE:
-                targetString = camel(originalString, false);
-                break;
-            case UPPER_CAMEL_CASE:
-                targetString = camel(originalString, true);
-                break;
             default:
                 // default not doing nothing to string
             }
@@ -126,21 +115,6 @@ public class ChangeCase extends AbstractFunction {
     public List<String> getArgumentDesc() {
         return DESC;
     }
-
-    private static String camel(String str, boolean isFirstCapitalized) {
-        StringBuilder builder = new StringBuilder(str.length());
-        String[] tokens = NOT_ALPHANUMERIC_REGEX.split(str);
-        for (int i = 0; i < tokens.length; i++) {
-            String lowerCased = StringUtils.lowerCase(tokens[i]);
-            if(i == 0) {
-                builder.append(isFirstCapitalized ? StringUtils.capitalize(lowerCased):
-                    lowerCased);
-            } else {
-                builder.append(StringUtils.capitalize(lowerCased));
-            }
-        }
-        return builder.toString();
-    }
     
     /**
      * ChangeCase Modes
@@ -149,8 +123,7 @@ public class ChangeCase extends AbstractFunction {
      *
      */
     public enum ChangeCaseMode {
-        UPPER("UPPER"), LOWER("LOWER"), CAPITALIZE("CAPITALIZE"), 
-        UPPER_CAMEL_CASE("UPPER_CAMEL_CASE"), LOWER_CAMEL_CASE("LOWER_CAMEL_CASE");
+        UPPER("UPPER"), LOWER("LOWER"), CAPITALIZE("CAPITALIZE");
         private String mode;
 
         private ChangeCaseMode(String mode) {
