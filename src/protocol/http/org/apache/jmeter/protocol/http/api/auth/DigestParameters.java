@@ -19,7 +19,9 @@
 package org.apache.jmeter.protocol.http.api.auth;
 
 /**
- * Allows digest customization
+ * Allows digest customization as per:
+ * https://en.wikipedia.org/wiki/Digest_access_authentication
+ * 
  * @since 4.0
  */
 public class DigestParameters {
@@ -29,20 +31,19 @@ public class DigestParameters {
     private String charset;
     private String algorithm;
     private String opaque;
-    /**
-     * 
-     */
+
+
     public DigestParameters() {
         super();
     }
     /**
-     * @return the qop
+     * @return the quality of protection
      */
     public String getQop() {
         return qop;
     }
     /**
-     * @param qop the qop to set
+     * @param qop the quality of protection to set
      */
     public void setQop(String qop) {
         this.qop = qop;
@@ -72,7 +73,7 @@ public class DigestParameters {
         this.charset = charset;
     }
     /**
-     * @return the algorithm
+     * @return the algorithm (MD5 usually)
      */
     public String getAlgorithm() {
         return algorithm;
