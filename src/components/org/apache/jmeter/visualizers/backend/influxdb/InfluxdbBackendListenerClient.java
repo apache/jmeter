@@ -93,17 +93,17 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private static final int MAX_POOL_SIZE = 1;
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
     private static final Object LOCK = new Object();
-    private static Map<String, String> defaultArgs = new LinkedHashMap<>();
+    private static final Map<String, String> DEFAULT_ARGS = new LinkedHashMap<>();
     static {
-        defaultArgs.put("influxdbMetricsSender", HttpMetricsSender.class.getName());
-        defaultArgs.put("influxdbUrl", "");
-        defaultArgs.put("application", "application name");
-        defaultArgs.put("measurement", DEFAULT_MEASUREMENT);
-        defaultArgs.put("summaryOnly", "false");
-        defaultArgs.put("samplersRegex", ".*");
-        defaultArgs.put("percentiles", "99;95;90");
-        defaultArgs.put("testTitle", "Test name");
-        defaultArgs.put("eventTags", "");
+        DEFAULT_ARGS.put("influxdbMetricsSender", HttpMetricsSender.class.getName());
+        DEFAULT_ARGS.put("influxdbUrl", "http://host_to_change:8086/write?db=jmeter");
+        DEFAULT_ARGS.put("application", "application name");
+        DEFAULT_ARGS.put("measurement", DEFAULT_MEASUREMENT);
+        DEFAULT_ARGS.put("summaryOnly", "false");
+        DEFAULT_ARGS.put("samplersRegex", ".*");
+        DEFAULT_ARGS.put("percentiles", "99;95;90");
+        DEFAULT_ARGS.put("testTitle", "Test name");
+        DEFAULT_ARGS.put("eventTags", "");
     }
 
     private boolean summaryOnly;
@@ -337,7 +337,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         // Check if more row which started with 'TAG_' are filled ( corresponding to user tag )
         StringBuilder userTagBuilder = new StringBuilder();
         context.getParameterNamesIterator().forEachRemaining(name -> {
-            if (StringUtils.isNotBlank(name) && !defaultArgs.containsKey(name.trim())
+            if (StringUtils.isNotBlank(name) && !DEFAULT_ARGS.containsKey(name.trim())
                     && name.startsWith("TAG_")
                     && StringUtils.isNotBlank(context.getParameter(name))) {
                 final String tagName = name.trim().substring(4);
@@ -424,7 +424,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public Arguments getDefaultParameters() {
         Arguments arguments = new Arguments();
-        defaultArgs.forEach(arguments::addArgument);
+        DEFAULT_ARGS.forEach(arguments::addArgument);
         return arguments;
     }
 }
