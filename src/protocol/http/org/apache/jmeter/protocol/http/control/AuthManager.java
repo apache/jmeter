@@ -118,10 +118,6 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
          */
         KERBEROS
     }
-    
-    public static void main(String[] args) {
-        System.out.println(Mechanism.values());
-    }
 
     private static final class NullCredentials implements Credentials {
         @Override
