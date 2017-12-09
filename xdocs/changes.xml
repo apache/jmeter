@@ -80,7 +80,7 @@ Summary
     <li><code>tearDown Thread Group</code> will now run on stop and shutdown of a test by default. If you don't want this behaviour,
     uncheck <code>Run tearDown Thread Groups after shutdown of main threads</code> on <code>Test Plan</code> element, see <bugzilla>61656</bugzilla></li>
     <li>Properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code> have been dropped, see <bugzilla>61587</bugzilla></li>
-    <li>JMeter will now save your test plan whenever you run it. This behaviour can be controlled by property <code>save_automatically_before_run</code></li>
+    <li>JMeter will now save your test plan whenever you run it. This behaviour can be controlled by property <code>save_automatically_before_run</code>, see <bugzilla>61731</bugzilla></li>
     <li>Workbench element has been dropped, you now directly add <code>Non Test Element</code> as children of Test Plan. When loading a Test Plan that contains the element
     JMeter will move the <code>Mirror Server</code>, <code>Property Display</code> and HTTP(s) <code>Test Script Recorder</code> elements as direct children of Test Plan. For
     any other element, it will create a <code>Test Fragment</code> element called <code>Workbench Test Fragment and move the elements in it</code>.</li>
@@ -264,6 +264,7 @@ Summary
     <li><bug>61661</bug>Avoid startup/shutdown problems due to 3<sup>rd</sup> party Thread Listener plugins throwing RuntimeException</li>
     <li><bug>61625</bug>File Editor used in BeanInfo behaves strangely under all LAFs with impact on CSVDataSet, JSR223, BSF, Beanshell Element</li>
     <li><bug>61844</bug>Maven pom.xml: Libraries used in testing should have scope test</li>
+    <li><bug>61842</bug>Saving with no changes causes a save and duplicate, identical backup file</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
