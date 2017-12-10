@@ -241,13 +241,14 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         int startIndex = -1;
         int endIndex;
         int newFound = found;
+        final int leftBoundarylength = leftBoundary.length();
         List<String> matches = new ArrayList<>();
         while(true) {
             startIndex = inputString.indexOf(leftBoundary, startIndex+1);
             if(startIndex >= 0) {
-                endIndex = inputString.indexOf(rightBoundary, startIndex+leftBoundary.length());
+                endIndex = inputString.indexOf(rightBoundary, startIndex+leftBoundarylength);
                 if(endIndex >= 0) {
-                    matches.add(inputString.substring(startIndex+leftBoundary.length(), endIndex));
+                    matches.add(inputString.substring(startIndex+leftBoundarylength, endIndex));
                 } else {
                     break;
                 }
@@ -255,7 +256,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
                 break;
             }
         }
-        
+
         for (String element : matches) {
             if (matchNumber <= 0 || newFound != matchNumber) {
                 result.add(element);
