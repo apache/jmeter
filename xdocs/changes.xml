@@ -182,7 +182,7 @@ Summary
     <li><bug>61785</bug>Add <menuchoice><guimenuitem>Help</guimenuitem><guimenuitem>Useful links</guimenuitem></menuchoice> to create issues and download nightly build</li>
     <li><bug>61808</bug>Fix main frame position. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>61802</bug>Loop / ForEach Controller should expose a variable for current iteration. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><pr>349</pr> Add i18n resouces(zh_CN). Contributed by Helly Guo (https://github.com/hellyguo)</li>
+    <li><pr>349</pr> Add i18n resources(zh_CN). Contributed by Helly Guo (https://github.com/hellyguo)</li>
     <li><pr>351</pr> Fixed about dialog position on first view. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>352</pr> Menu bar - added mnemonics to more menu items. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>353</pr> Re-wrote some existing tests in Spock. Contributed by Graham Russell (graham at ham1.co.uk)</li>
