@@ -247,17 +247,17 @@ public class JMeterUtils implements UnitTestManager {
             try {
                 final URL resource = JMeterUtils.class.getClassLoader().getResource(file);
                 if (resource == null) {
-                    log.warn("Cannot find " + file);
+                    log.warn("Cannot find {}", file);
                     return defaultProps;
                 }
                 is = resource.openStream();
                 if (is == null) {
-                    log.warn("Cannot open " + file);
+                    log.warn("Cannot open {}", file);
                     return defaultProps;
                 }
                 p.load(is);
             } catch (IOException ex) {
-                log.warn("Error reading " + file + " " + ex.toString());
+                log.warn("Error reading {} {}", file, ex.toString());
                 return defaultProps;
             }
         } finally {
@@ -360,7 +360,7 @@ public class JMeterUtils implements UnitTestManager {
      *            new locale
      */
     public static void setLocale(Locale loc) {
-        log.info("Setting Locale to " + loc.toString());
+        log.info("Setting Locale to {}", loc);
         /*
          * See bug 29920. getBundle() defaults to the property file for the
          * default Locale before it defaults to the base property file, so we
@@ -392,9 +392,9 @@ public class JMeterUtils implements UnitTestManager {
             if (!isDefault && !resBundLocale.equals(loc)) {
                 // Check if we at least found the correct language:
                 if (resBundLocale.getLanguage().equals(loc.getLanguage())) {
-                    log.info("Could not find resources for '{}', using '{}'", loc.toString(), resBundLocale.toString());
+                    log.info("Could not find resources for '{}', using '{}'", loc, resBundLocale);
                 } else {
-                    log.error("Could not find resources for '{}'", loc.toString());
+                    log.error("Could not find resources for '{}'", loc);
                 }
             }
         }
@@ -520,7 +520,7 @@ public class JMeterUtils implements UnitTestManager {
             if (bundle.containsKey(resKey)) {
                 resString = bundle.getString(resKey);
             } else {
-                log.warn("ERROR! Resource string not found: [" + resKey + "]");
+                log.warn("ERROR! Resource string not found: [{}]", resKey);
                 resString = defaultValue;                
             }
             if (ignoreResorces ){ // Special mode for debugging resource handling
@@ -530,7 +530,7 @@ public class JMeterUtils implements UnitTestManager {
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "[?"+key+"?]";
             }
-            log.warn("ERROR! Resource string not found: [" + resKey + "]", mre);
+            log.warn("ERROR! Resource string not found: [{}]", resKey, mre);
             resString = defaultValue;
         }
         return resString;
@@ -634,11 +634,11 @@ public class JMeterUtils implements UnitTestManager {
             if(url != null) {
                 return new ImageIcon(url); // $NON-NLS-1$
             } else {
-                log.warn("no icon for " + name);
+                log.warn("no icon for {}", name);
                 return null;                
             }
         } catch (NoClassDefFoundError | InternalError e) {// Can be returned by headless hosts
-            log.info("no icon for " + name + " " + e.getMessage());
+            log.info("no icon for {} {}", name, e.getMessage());
             return null;
         }
     }
@@ -701,7 +701,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = Integer.parseInt(appProperties.getProperty(propName, Integer.toString(defaultVal)).trim());
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching int property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '{}' occurred when fetching int property:'{}', defaulting to: {}", e.getMessage() , propName, defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -728,7 +728,7 @@ public class JMeterUtils implements UnitTestManager {
                 ans = Integer.parseInt(strVal) == 1;
             }
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching boolean property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '{}' occurred when fetching boolean property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -748,7 +748,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = Long.parseLong(appProperties.getProperty(propName, Long.toString(defaultVal)).trim());
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching long property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '{}' occurred when fetching long property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -768,7 +768,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = Float.parseFloat(appProperties.getProperty(propName, Float.toString(defaultVal)).trim());
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching float property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '{}' occurred when fetching float property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -792,7 +792,7 @@ public class JMeterUtils implements UnitTestManager {
                 ans = value.trim();
             }
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching String property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '{}' occurred when fetching String property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -810,7 +810,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = appProperties.getProperty(propName);
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching String property:'"+propName+"'");
+            log.warn("Exception '{}' occurred when fetching String property:'{}'", e.getMessage(), propName);
             ans = null;
         }
         return ans;
@@ -888,7 +888,7 @@ public class JMeterUtils implements UnitTestManager {
                     titleMsg,
                     JOptionPane.ERROR_MESSAGE);
         } catch (HeadlessException e) {
-            log.warn("reportErrorToUser(\"" + errorMsg + "\") caused", e);
+            log.warn("reportErrorToUser(\"{}\") caused", errorMsg, e);
         }
     }
 
@@ -1119,8 +1119,8 @@ public class JMeterUtils implements UnitTestManager {
                 try {
                     SwingUtilities.invokeAndWait(runnable);
                 } catch (InterruptedException e) {
-                    log.warn("Interrupted in thread "
-                            + Thread.currentThread().getName(), e);
+                    log.warn("Interrupted in thread {}",
+                            Thread.currentThread().getName(), e);
                     Thread.currentThread().interrupt();
                 } catch (InvocationTargetException e) {
                     throw new Error(e);
