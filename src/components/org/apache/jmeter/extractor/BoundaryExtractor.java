@@ -97,10 +97,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         if(log.isDebugEnabled()) {
             log.debug("Boundary Extractor {}: processing result", getName());
         }
-        if(StringUtils.isEmpty(getLeftBoundary()) ||
-                StringUtils.isEmpty(getRightBoundary()) ||
-                StringUtils.isEmpty(getRefName())
-                ) {
+        if(StringUtils.isAnyEmpty(getLeftBoundary(), getRightBoundary(), getRefName())) {
             throw new IllegalArgumentException("One of the mandatory properties is missing in Boundary Extractor:"+
                 getName());
         }
