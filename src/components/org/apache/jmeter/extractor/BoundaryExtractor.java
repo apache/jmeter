@@ -227,14 +227,27 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
     }
 
     /**
-     * 
+     * Extracts text fragments, that are between the boundaries, into
+     * {@code result}.<br>
+     * The number of extracted fragments can be controlled by
+     * {@code matchNumber}
+     *
      * @param leftBoundary
+     *            fragment representing the left boundary of the searched text
      * @param rightBoundary
+     *            fragment representing the right boundary of the searched text
      * @param matchNumber
+     *            if &lt; 0, all found matches will be added, else only those
+     *            matches, where {@code matchNumber} is less then {@code found}
+     *            plus the number of matches found in this round
      * @param inputString
+     *            text in which to look for the fragments
      * @param result
+     *            list where the found text fragments will be placed
      * @param found
-     * @return int found updated
+     *            specifies how many fragments where found before calling us
+     * @return updated found (found plus number of fragements added to
+     *         {@code result})
      */
     public int extract(String leftBoundary, String rightBoundary, int matchNumber, String inputString,
             List<String> result, int found) {
