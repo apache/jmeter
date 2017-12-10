@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -468,59 +468,26 @@ public final class MenuFactory {
 
     private static void initializeMenus() {
         try {
-            List<String> guiClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] {
-                    JMeterGUIComponent.class, TestBean.class });
-            Collections.sort(guiClasses);
+            List<String> guiClasses = ClassFinder
+                    .findClassesThatExtend(
+                        JMeterUtils.getSearchPaths(),
+                        new Class[] {JMeterGUIComponent.class, TestBean.class})
+                    .stream()
+                    // JMeterTreeNode and TestBeanGUI are special GUI classes,
+                    // and aren't intended to be added to menus
+                    .filter(name -> !name.endsWith("JMeterTreeNode"))
+                    .filter(name -> !name.endsWith("TestBeanGUI"))
+                    .filter(name -> !elementsToSkip.contains(name))
+                    .distinct()
+                    .sorted(Comparator.comparing(String::trim))
+                    .collect(Collectors.toList());
+
             for (String name : guiClasses) {
-
-                /*
-                 * JMeterTreeNode and TestBeanGUI are special GUI classes, and
-                 * aren't intended to be added to menus
-                 *
-                 * TODO: find a better way of checking this
-                 */
-                if (name.endsWith("JMeterTreeNode") // $NON-NLS-1$
-                        || name.endsWith("TestBeanGUI")) {// $NON-NLS-1$
-                    continue;// Don't try to instantiate these
-                }
-
-                if (elementsToSkip.contains(name)) { // No point instantiating class
-                    log.info("Skipping {}", name);
+                JMeterGUIComponent item = getItem(name);
+                if (item == null) {
                     continue;
                 }
 
-                boolean hideBean = false; // Should the TestBean be hidden?
-
-                JMeterGUIComponent item = null;
-                try {
-                    Class<?> c = Class.forName(name);
-                    if (TestBean.class.isAssignableFrom(c)) {
-                        TestBeanGUI tbgui = new TestBeanGUI(c);
-                        hideBean = tbgui.isHidden() || (tbgui.isExpert() && !JMeterUtils.isExpertMode());
-                        item = tbgui;
-                    } else {
-                        item = (JMeterGUIComponent) c.newInstance();
-                    }
-                } catch (NoClassDefFoundError e) {
-                    log.warn(
-                            "Configuration error, probably corrupt or missing third party library(jar) ? Could not create class: {}. {}",
-                            name, e, e);
-                    continue;
-                } catch(HeadlessException e) {
-                    log.warn("Could not instantiate class: {}", name, e); // NOSONAR
-                    continue;
-                } catch(RuntimeException e) {
-                    throw e;
-                } catch (Exception e) {
-                    log.warn("Could not instantiate class: {}", name, e); // NOSONAR
-                    continue;
-                }
-                if (hideBean || elementsToSkip.contains(item.getStaticLabel())) {
-                    log.info("Skipping {}", name);
-                    continue;
-                } else {
-                    elementsToSkip.add(name); // Don't add it again
-                }
                 Collection<String> categories = item.getMenuCategories();
                 if (categories == null) {
                     log.debug("{} participates in no menus.", name);
@@ -535,47 +502,71 @@ public final class MenuFactory {
                 if (categories.contains(TIMERS)) {
                     timers.add(new MenuInfo(item, name));
                 }
-
                 if (categories.contains(POST_PROCESSORS)) {
                     postProcessors.add(new MenuInfo(item, name));
                 }
-
                 if (categories.contains(PRE_PROCESSORS)) {
                     preProcessors.add(new MenuInfo(item, name));
                 }
-
                 if (categories.contains(CONTROLLERS)) {
                     controllers.add(new MenuInfo(item, name));
                 }
-
                 if (categories.contains(SAMPLERS)) {
                     samplers.add(new MenuInfo(item, name));
                 }
-
                 if (categories.contains(NON_TEST_ELEMENTS)) {
                     nonTestElements.add(new MenuInfo(item, name));
                 }
-
                 if (categories.contains(LISTENERS)) {
                     listeners.add(new MenuInfo(item, name));
                 }
-
                 if (categories.contains(CONFIG_ELEMENTS)) {
                     configElements.add(new MenuInfo(item, name));
                 }
                 if (categories.contains(ASSERTIONS)) {
                     assertions.add(new MenuInfo(item, name));
                 }
-
             }
         } catch (IOException e) {
             log.error("IO Exception while initializing menus.", e);
         }
     }
 
+    private static JMeterGUIComponent getItem(String name) {
+        JMeterGUIComponent item = null;
+        boolean hideBean = false; // Should the TestBean be hidden?
+        try {
+            Class<?> c = Class.forName(name);
+            if (TestBean.class.isAssignableFrom(c)) {
+                TestBeanGUI tbgui = new TestBeanGUI(c);
+                hideBean = tbgui.isHidden() || (tbgui.isExpert() && !JMeterUtils.isExpertMode());
+                item = tbgui;
+            } else {
+                item = (JMeterGUIComponent) c.newInstance();
+            }
+        } catch (NoClassDefFoundError e) {
+            log.warn("Configuration error, probably corrupt or missing third party library(jar) ? Could not create class: {}.",
+                    name, e);
+        } catch (HeadlessException e) {
+            log.warn("Could not instantiate class: {}", name, e);
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            log.warn("Could not instantiate class: {}", name, e);
+        }
+        if (hideBean || (item != null && elementsToSkip.contains(item.getStaticLabel()))) {
+            log.info("Skipping {}", name);
+            item = null;
+        } else {
+            elementsToSkip.add(name);
+        }
+        return item;
+    }
+
     private static void addSeparator(JPopupMenu menu) {
         MenuElement[] elements = menu.getSubElements();
-        if ((elements.length > 0) && !(elements[elements.length - 1] instanceof JPopupMenu.Separator)) {
+        if ((elements.length > 0)
+                && !(elements[elements.length - 1] instanceof JPopupMenu.Separator)) {
             menu.addSeparator();
         }
     }

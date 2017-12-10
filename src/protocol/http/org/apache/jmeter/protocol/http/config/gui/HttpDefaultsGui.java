@@ -50,46 +50,29 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * GUI for Http Request defaults
- *
  */
 public class HttpDefaultsGui extends AbstractConfigGui {
 
     private static final long serialVersionUID = 241L;
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
-    
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private UrlConfigGui urlConfigGui;
-
     private JCheckBox retrieveEmbeddedResources;
-    
     private JCheckBox concurrentDwn;
-    
-    private JTextField concurrentPool; 
-
+    private JTextField concurrentPool;
     private JCheckBox useMD5;
-
     private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
-
     private JTextField sourceIpAddr; // does not apply to Java implementation
-    
     private JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
-
     private JTextField proxyHost;
-
     private JTextField proxyPort;
-
     private JTextField proxyUser;
-
     private JPasswordField proxyPass;
-    
     private JComboBox<String> httpImplementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
-
     private JTextField connectTimeOut;
-
     private JTextField responseTimeOut;
-
 
     public HttpDefaultsGui() {
         super();
@@ -172,7 +155,6 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         config.setProperty(HTTPSamplerBase.IMPLEMENTATION, httpImplementation.getSelectedItem().toString(),"");
         config.setProperty(HTTPSamplerBase.CONNECT_TIMEOUT, connectTimeOut.getText());
         config.setProperty(HTTPSamplerBase.RESPONSE_TIMEOUT, responseTimeOut.getText());
-
     }
 
     /**

@@ -41,7 +41,6 @@ import org.apache.jmeter.testelement.TestElement;
  * @see org.apache.jmeter.samplers.gui.AbstractSamplerGui
  *
  */
-
 public interface JMeterGUIComponent extends ClearGui {
 
     /**
