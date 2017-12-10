@@ -34,28 +34,18 @@ import org.apache.jmeter.util.JMeterUtils;
  * The class is not thread-safe - it is only intended for use within a single thread.
  */
 public class JMeterContext {
+
     private JMeterVariables variables;
-
     private SampleResult previousResult;
-
     private Sampler currentSampler;
-
     private Sampler previousSampler;
-
     private boolean samplingStarted;
-
     private StandardJMeterEngine engine;
-
     private JMeterThread thread;
-
     private AbstractThreadGroup threadGroup;
-
     private int threadNum;
-
     private boolean restartNextLoop = false;
-
     private ConcurrentHashMap<String, Object> samplerContext = new ConcurrentHashMap<>(5);
-
     private boolean recording;
 
     JMeterContext() {
@@ -155,10 +145,7 @@ public class JMeterContext {
     }
 
     /**
-     * Sets the threadNum.
      * Internally called by JMeter, never call it directly
-     * @param threadNum
-     *            the threadNum to set
      */
     public void setThreadNum(int threadNum) {
         this.threadNum = threadNum;
@@ -170,7 +157,6 @@ public class JMeterContext {
     
     /**
      * Internally called by JMeter, never call it directly
-     * @param thread {@link JMeterThread}
      */
     public void setThread(JMeterThread thread) {
         this.thread = thread;
@@ -182,7 +168,6 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
-     * @param threadgrp {@link AbstractThreadGroup}
      */
     public void setThreadGroup(AbstractThreadGroup threadgrp) {
         this.threadGroup = threadgrp;
@@ -194,7 +179,6 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
-     * @param engine {@link StandardJMeterEngine}
      */
     public void setEngine(StandardJMeterEngine engine) {
         this.engine = engine;
@@ -206,7 +190,6 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
-     * @param b boolean
      */
     public void setSamplingStarted(boolean b) {
         samplingStarted = b;
@@ -214,9 +197,6 @@ public class JMeterContext {
 
     /**
      * if set to <code>true</code> a restart of the loop will occur
-     *
-     * @param restartNextLoop
-     *            flag whether restart will occur
      */
     public void setStartNextThreadLoop(boolean restartNextLoop) {
         this.restartNextLoop = restartNextLoop;
@@ -225,8 +205,6 @@ public class JMeterContext {
     /**
      * if set to <code>true</code> current loop iteration will be interrupted and 
      * JMeter will go to next iteration
-     * 
-     * @return boolean restartNextLoop
      */
     public boolean isStartNextThreadLoop() {
         return restartNextLoop;
@@ -236,8 +214,6 @@ public class JMeterContext {
      * if set to <code>true</code> current loop iteration will be interrupted and 
      * JMeter will go to next iteration
      *
-     * @param restartNextLoop
-     *            flag whether restart will occur
      * @deprecated use {@link JMeterContext#setStartNextThreadLoop(boolean)}
      */
     @Deprecated
@@ -246,9 +222,7 @@ public class JMeterContext {
     }
 
     /**
-     * a restart of the loop was required ?
-     * @return the restartNextLoop
-     * @deprecated use {@link JMeterContext#isRestartNextLoop()}
+     * @deprecated use {@link JMeterContext#isStartNextThreadLoop()}
      */
     @Deprecated
     public boolean isRestartNextLoop() {
@@ -260,7 +234,7 @@ public class JMeterContext {
      * Internally called by JMeter, never call it directly
      */
     public void cleanAfterSample() {
-        if(previousResult != null) {
+        if (previousResult != null) {
             previousResult.cleanAfterSample();
         }
         samplerContext.clear();
@@ -276,15 +250,11 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
-     * @param recording true if we are recording
      */
     public void setRecording(boolean recording) {
         this.recording = recording;
     }
 
-    /**
-     * @return the recording
-     */
     public boolean isRecording() {
         return recording;
     }
