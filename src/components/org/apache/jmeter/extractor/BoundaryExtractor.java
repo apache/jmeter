@@ -59,7 +59,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
 
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
     
-    private static final String UNDERSCORE = "_";  // $NON-NLS-1$
+    private static final char UNDERSCORE = '_';  // $NON-NLS-1$
     
     // What to match against. N.B. do not change the string value or test plans will break!
     private static final String MATCH_AGAINST = "BoundaryExtractor.useHeaders"; // $NON-NLS-1$
