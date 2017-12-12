@@ -752,7 +752,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
         
         @Override
-        public boolean equals (Object obj){
+        public boolean equals(Object obj) {
             if (this == obj) {
                 return true;
             }
@@ -1412,7 +1412,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     }
                     // Add the parameters
                     PropertyIterator args = getArguments().iterator();
-                    List <NameValuePair> nvps = new ArrayList<>();
+                    List<NameValuePair> nvps = new ArrayList<>();
                     String urlContentEncoding = contentEncoding;
                     if(urlContentEncoding == null || urlContentEncoding.length() == 0) {
                         // Use the default encoding for urls
@@ -1486,7 +1486,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // This is not obvious in GUI if you are not uploading any files,
         // but just sending the content of nameless parameters
         final HTTPFileArg file = files.length > 0? files[0] : null;
-        String contentTypeValue = null;
+        String contentTypeValue;
         if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
             contentTypeValue = file.getMimeType();
             entity.setHeader(HEADER_CONTENT_TYPE, contentTypeValue); // we provide the MIME type here
@@ -1533,7 +1533,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // our own stream, so we can return it
             final HttpEntity entityEntry = entity.getEntity();
             // Buffer to hold the entity body
-            StringBuilder entityBody = null;
+            StringBuilder entityBody;
             if(entityEntry.isRepeatable()) {
                 entityBody = new StringBuilder(1000);
                 // FIXME Charset

@@ -527,7 +527,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         JMeterVariables jmvars = getThreadContext().getVariables();
         String[] varNames = getVariableNames().split(COMMA);
         String currentResultVariable = getResultVariable().trim();
-        List<Map<String, Object> > results = null;
+        List<Map<String, Object>> results = null;
         if(!currentResultVariable.isEmpty()) {
             results = new ArrayList<>();
             jmvars.putObject(currentResultVariable, results);

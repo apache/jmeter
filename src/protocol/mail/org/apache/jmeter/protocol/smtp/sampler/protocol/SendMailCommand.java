@@ -64,7 +64,7 @@ public class SendMailCommand {
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
     private static final String FALSE = Boolean.FALSE.toString();
-    
+
     private boolean useSSL = false;
     private boolean useStartTLS = false;
     private boolean trustAllCerts = false;
@@ -204,7 +204,7 @@ public class SendMailCommand {
             Multipart multipart = new MimeMultipart();
             final int attachmentCount = attachments.size();
             if (plainBody && 
-               (attachmentCount == 0 ||  (mailBody.length() == 0 && attachmentCount == 1))) {
+               (attachmentCount == 0 || (mailBody.length() == 0 && attachmentCount == 1))) {
                 if (attachmentCount == 1) { // i.e. mailBody is empty
                     File first = attachments.get(0);
                     try (FileInputStream fis = new FileInputStream(first);

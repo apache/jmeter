@@ -114,7 +114,6 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         
         // this custom TreeSelectionModel forbid the selection of some test elements (test plan, thread group, etc..)
         TreeSelectionModel tsm =  new DefaultTreeSelectionModel() {
-
             private static final long serialVersionUID = 4062816201792954617L;
 
             private boolean isSelectedPathAllowed(DefaultMutableTreeNode lastSelected) {
@@ -128,7 +127,6 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void setSelectionPath(TreePath path) {
                 DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) path.getLastPathComponent();
-                
                 if (isSelectedPathAllowed(lastSelected)) {
                     super.setSelectionPath(path);
                 }
@@ -137,7 +135,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void setSelectionPaths(TreePath[] pPaths) {
                 DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) pPaths[pPaths.length-1].getLastPathComponent();
-                if(isSelectedPathAllowed(lastSelected)) {
+                if (isSelectedPathAllowed(lastSelected)) {
                     super.setSelectionPaths(pPaths);
                 }
             }
@@ -145,7 +143,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void addSelectionPath(TreePath path) {
                 DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) path.getLastPathComponent();
-                if(isSelectedPathAllowed(lastSelected)) {
+                if (isSelectedPathAllowed(lastSelected)) {
                     super.addSelectionPath(path);
                 }
             }
@@ -153,7 +151,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void addSelectionPaths(TreePath[] paths) {
                 DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) paths[paths.length-1].getLastPathComponent();
-                if(isSelectedPathAllowed(lastSelected)) {
+                if (isSelectedPathAllowed(lastSelected)) {
                     super.addSelectionPaths(paths);
                 }
             }

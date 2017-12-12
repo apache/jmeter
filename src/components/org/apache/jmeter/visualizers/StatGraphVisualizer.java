@@ -138,30 +138,22 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
-
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
-
     private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
     private JTable myJTable;
-
     private JScrollPane myScrollPane;
-
     private transient ObjectTableModel model;
 
     /**
      * Lock used to protect tableRows update + model update
      */
     private final transient Object lock = new Object();
-
     private final Map<String, SamplingStatCalculator> tableRows = new ConcurrentHashMap<>();
 
     private AxisGraph graphPanel = null;
-
     private JPanel settingsPane = null;
-
     private JSplitPane spane = null;
-
     private JTabbedPane tabbedGraph = new JTabbedPane(SwingConstants.TOP);
 
     private JButton displayButton =
@@ -202,81 +194,73 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"), 6);        //$NON-NLS-1$
 
     private String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
-
     private String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms");        //$NON-NLS-1$
-
     private boolean saveGraphToFile = false;
-
     private int defaultWidth = 400;
-
     private int defaultHeight = 300;
-
     private JComboBox<String> columnsList = new JComboBox<>(GRAPH_COLUMNS);
-
     private List<BarGraph> eltList = new ArrayList<>();
-
     private JCheckBox columnSelection = new JCheckBox(JMeterUtils.getResString("aggregate_graph_column_selection"), false); //$NON-NLS-1$
-
     private JTextField columnMatchLabel = new JTextField();
-
-    private JButton applyFilterBtn = new JButton(JMeterUtils.getResString("graph_apply_filter")); // $NON-NLS-1$
-
-    private JCheckBox caseChkBox = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), false); // $NON-NLS-1$
-
-    private JCheckBox regexpChkBox = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), true); // $NON-NLS-1$
-
-    private JComboBox<String> titleFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
-
+    private JButton applyFilterBtn =
+            new JButton(JMeterUtils.getResString("graph_apply_filter")); // $NON-NLS-1$
+    private JCheckBox caseChkBox =
+            new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), false); // $NON-NLS-1$
+    private JCheckBox regexpChkBox =
+            new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), true); // $NON-NLS-1$
+    private JComboBox<String> titleFontNameList =
+            new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
     private JComboBox<String> titleFontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
-
-    private JComboBox<String> titleFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
-
-    private JComboBox<String> valueFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
-
+    private JComboBox<String> titleFontStyleList =
+            new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> valueFontNameList =
+            new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
     private JComboBox<String> valueFontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
-
-    private JComboBox<String> valueFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
-
-    private JComboBox<String> fontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
-
+    private JComboBox<String> valueFontStyleList =
+            new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> fontNameList =
+            new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
     private JComboBox<String> fontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
-
-    private JComboBox<String> fontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
-
-    private JComboBox<String> legendPlacementList = new JComboBox<>(StatGraphProperties.getPlacementNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
-
-    private JCheckBox drawOutlinesBar = new JCheckBox(JMeterUtils.getResString("aggregate_graph_draw_outlines"), true); // Default checked // $NON-NLS-1$
-
-    private JCheckBox numberShowGrouping = new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), true); // Default checked // $NON-NLS-1$
-    
-    private JCheckBox valueLabelsVertical = new JCheckBox(JMeterUtils.getResString("aggregate_graph_value_labels_vertical"), true); // Default checked // $NON-NLS-1$
-
+    private JComboBox<String> fontStyleList =
+            new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> legendPlacementList =
+            new JComboBox<>(StatGraphProperties.getPlacementNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JCheckBox drawOutlinesBar =
+            new JCheckBox(JMeterUtils.getResString("aggregate_graph_draw_outlines"), true); // $NON-NLS-1$
+    private JCheckBox numberShowGrouping =
+            new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), true); // $NON-NLS-1$
+    private JCheckBox valueLabelsVertical =
+            new JCheckBox(JMeterUtils.getResString("aggregate_graph_value_labels_vertical"), true); // $NON-NLS-1$
     private Color colorBarGraph = Color.YELLOW;
-
     private Color colorForeGraph = Color.BLACK;
-    
     private int nbColToGraph = 1;
-
     private Pattern pattern = null;
-
     private Deque<SamplingStatCalculator> newRows = new ConcurrentLinkedDeque<>();
 
     public StatGraphVisualizer() {
         super();
         model = createObjectTableModel();
-        eltList.add(new BarGraph(JMeterUtils.getResString("average"), true, new Color(202, 0, 0)));
-        eltList.add(new BarGraph(JMeterUtils.getResString("aggregate_report_median"), false, new Color(49, 49, 181)));
-        eltList.add(new BarGraph(MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct1_line"),new Object[]{PCT1_LABEL}), false, new Color(42, 121, 42)));
-        eltList.add(new BarGraph(MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct2_line"),new Object[]{PCT2_LABEL}), false, new Color(242, 226, 8)));
-        eltList.add(new BarGraph(MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct3_line"),new Object[]{PCT3_LABEL}), false, new Color(202, 10 , 232)));
+        final Color red = new Color(202, 0, 0);
+        final Color blue = new Color(49, 49, 181);
+        final Color green = new Color(42, 121, 42);
+        final Color yellow = new Color(242, 226, 8);
+        final Color purple = new Color(202, 10, 232);
+        eltList.add(new BarGraph(JMeterUtils.getResString("average"), true, red));
+        eltList.add(new BarGraph(JMeterUtils.getResString("aggregate_report_median"), false, blue));
+        eltList.add(new BarGraph(
+                MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct1_line"), PCT1_LABEL), false, green));
+        eltList.add(new BarGraph(
+                MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct2_line"), PCT2_LABEL), false, yellow));
+        eltList.add(new BarGraph(
+                MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct3_line"), PCT3_LABEL), false, purple));
         eltList.add(new BarGraph(JMeterUtils.getResString("aggregate_report_min"), false, Color.LIGHT_GRAY));
         eltList.add(new BarGraph(JMeterUtils.getResString("aggregate_report_max"), false, Color.DARK_GRAY));
         clearData();
         init();
     }
     
-    static final Object[][] getColumnsMsgParameters() { 
-        Object[][] result =  { null, 
+    static final Object[][] getColumnsMsgParameters() {
+        return new Object[][]{ null,
             null,
             null,
             null,
@@ -289,7 +273,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             null,
             null,
             null};
-        return result;
     }
     
     /**

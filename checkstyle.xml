@@ -157,11 +157,37 @@
     <module name="OuterTypeFilename"/>
     <module name="UpperEll"/>
 
+    <!-- modifiers -->
+    <!--<module name="ModifierOrder"/>-->
+    <!--<module name="RedundantModifier"/>-->
+
     <!-- code metrics -->
     <!--<module name="BooleanExpressionComplexity"/>-->
     <!--<module name="ClassFanOutComplexity"/>-->
     <!--<module name="CyclomaticComplexity"/>-->
     <!--<module name="NPathComplexity"/>-->
+
+    <!-- size -->
+    <module name="AnonInnerLength">
+      <property name="max" value="45"/>
+    </module>
+    <module name="LineLength">
+      <!-- TODO: reduce this to 120 -->
+      <property name="max" value="165"/>
+    </module>
+    <!--<module name="MethodCount"/>-->
+    <!--<module name="MethodLength"/>-->
+    <!--<module name="ParameterNumber"/>-->
+
+    <!-- whitespace -->
+    <module name="EmptyForInitializerPad"/>
+    <module name="EmptyForIteratorPad"/>
+    <module name="GenericWhitespace"/>
+    <module name="MethodParamPad"/>
+    <module name="NoLineWrap"/>
+    <!--<module name="NoWhitespaceAfter"/>-->
+    <!--<module name="NoWhitespaceBefore"/>-->
+    <module name="TypecastParenPad"/>
 
     <!--
     Allow comment to suppress checkstyle for a single line

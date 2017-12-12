@@ -60,7 +60,6 @@ import org.apache.jorphan.reflect.Functor;
 
 /**
  * Right side in View Results Tree
- *
  */
 public abstract class SamplerResultTab implements ResultRenderer {
 
@@ -68,21 +67,15 @@ public abstract class SamplerResultTab implements ResultRenderer {
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
 
     private static final String NL = "\n"; // $NON-NLS-1$
-
     public static final Color SERVER_ERROR_COLOR = Color.red;
-
     public static final Color CLIENT_ERROR_COLOR = Color.blue;
-
     public static final Color REDIRECT_COLOR = Color.green;
 
     protected static final String TEXT_COMMAND = "text"; // $NON-NLS-1$
-    
     protected static final String REQUEST_VIEW_COMMAND = "change_request_view"; // $NON-NLS-1$
 
     private static final String STYLE_SERVER_ERROR = "ServerError"; // $NON-NLS-1$
-
     private static final String STYLE_CLIENT_ERROR = "ClientError"; // $NON-NLS-1$
-
     private static final String STYLE_REDIRECT = "Redirect"; // $NON-NLS-1$
 
     private JTextPane stats;
@@ -105,16 +98,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
     protected JTabbedPane rightSide;
 
     private int lastSelectedTab;
-
     private Object userObject = null; // Could be SampleResult or AssertionResult
 
-    private SampleResult sampleResult = null;
-
-    private AssertionResult assertionResult = null;
-
     protected SearchTextExtension searchTextExtension;
-
-    private JPanel searchPanel = null;
 
     protected boolean activateSearchExtension = true; // most current subclasses can process text
 
@@ -133,21 +119,10 @@ public abstract class SamplerResultTab implements ResultRenderer {
             "view_results_table_fields_value" }; // $NON-NLS-1$
 
     private final ObjectTableModel resultModel;
-
     private final ObjectTableModel resHeadersModel;
-
     private final ObjectTableModel resFieldsModel;
 
-    private JTable tableResult = null;
-
-    private JTable tableResHeaders = null;
-
-    private JTable tableResFields = null;
-
     private JTabbedPane tabbedResult = null;
-
-    private JScrollPane paneRaw = null;
-    
     private JSplitPane paneParsed = null;
     
     // to save last select tab (raw/parsed)
@@ -209,7 +184,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     @Override
     public void init() {
-        rightSide.addTab(JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel()); // $NON-NLS-1$
+        rightSide.addTab(
+                JMeterUtils.getResString("view_results_tab_sampler"),  // $NON-NLS-1$
+                createResponseMetadataPanel());
         // Create the panels for the other tabs
         requestPanel = new RequestPanel();
         resultsPane = createResponseDataPanel();
@@ -223,30 +200,40 @@ public abstract class SamplerResultTab implements ResultRenderer {
         StyledDocument statsDoc = stats.getStyledDocument();
         try {
             if (userObject instanceof SampleResult) {
-                sampleResult = (SampleResult) userObject;
+                SampleResult sampleResult = (SampleResult) userObject;
                 // We are displaying a SampleResult
                 setupTabPaneForSampleResult();
                 requestPanel.setSamplerResult(sampleResult);                
 
                 final String samplerClass = sampleResult.getClass().getName();
                 String typeResult = samplerClass.substring(1 + samplerClass.lastIndexOf('.'));
-                
-                StringBuilder statsBuff = new StringBuilder(200);
-                statsBuff.append(JMeterUtils.getResString("view_results_thread_name")).append(sampleResult.getThreadName()).append(NL); //$NON-NLS-1$
+
                 String startTime = dateFormat.format(new Date(sampleResult.getStartTime()));
-                statsBuff.append(JMeterUtils.getResString("view_results_sample_start")).append(startTime).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_load_time")).append(sampleResult.getTime()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_connect_time")).append(sampleResult.getConnectTime()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_latency")).append(sampleResult.getLatency()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_size_in_bytes")).append(sampleResult.getBytesAsLong()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_sent_bytes")).append(sampleResult.getSentBytes()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_size_headers_in_bytes")).append(sampleResult.getHeadersSize()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_size_body_in_bytes")).append(sampleResult.getBodySizeAsLong()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_sample_count")).append(sampleResult.getSampleCount()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_error_count")).append(sampleResult.getErrorCount()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_datatype")).append(sampleResult.getDataType()).append(NL); //$NON-NLS-1$
-                statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
-                statsBuff.setLength(0); // reset for reuse
+                String stats = JMeterUtils.getResString("view_results_thread_name") +
+                        sampleResult.getThreadName() + NL +
+                        JMeterUtils.getResString("view_results_sample_start") +
+                        startTime + NL +
+                        JMeterUtils.getResString("view_results_load_time") +
+                        sampleResult.getTime() + NL +
+                        JMeterUtils.getResString("view_results_connect_time") +
+                        sampleResult.getConnectTime() + NL +
+                        JMeterUtils.getResString("view_results_latency") +
+                        sampleResult.getLatency() + NL +
+                        JMeterUtils.getResString("view_results_size_in_bytes") +
+                        sampleResult.getBytesAsLong() + NL +
+                        JMeterUtils.getResString("view_results_sent_bytes") +
+                        sampleResult.getSentBytes() + NL +
+                        JMeterUtils.getResString("view_results_size_headers_in_bytes") +
+                        sampleResult.getHeadersSize() + NL +
+                        JMeterUtils.getResString("view_results_size_body_in_bytes") +
+                        sampleResult.getBodySizeAsLong() + NL +
+                        JMeterUtils.getResString("view_results_sample_count") +
+                        sampleResult.getSampleCount() + NL +
+                        JMeterUtils.getResString("view_results_error_count") +
+                        sampleResult.getErrorCount() + NL +
+                        JMeterUtils.getResString("view_results_datatype") +
+                        sampleResult.getDataType() + NL;
+                statsDoc.insertString(statsDoc.getLength(), stats, null);
 
                 String responseCode = sampleResult.getResponseCode();
 
@@ -274,38 +261,38 @@ public abstract class SamplerResultTab implements ResultRenderer {
                     break; // default - do nothing
                 }
 
-                statsBuff.append(JMeterUtils.getResString("view_results_response_code")).append(responseCode).append(NL); //$NON-NLS-1$
-                statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), style);
-                statsBuff.setLength(0); // reset for reuse
+                String viewResultsResponseCode =
+                        JMeterUtils.getResString("view_results_response_code") + //$NON-NLS-1$
+                        responseCode + NL;
+                statsDoc.insertString(statsDoc.getLength(), viewResultsResponseCode, style);
 
                 // response message label
                 String responseMsgStr = sampleResult.getResponseMessage();
 
-                statsBuff.append(JMeterUtils.getResString("view_results_response_message")).append(responseMsgStr).append(NL); //$NON-NLS-1$
-                statsBuff.append(NL);
-                statsBuff.append(JMeterUtils.getResString("view_results_response_headers")).append(NL); //$NON-NLS-1$
-                statsBuff.append(sampleResult.getResponseHeaders()).append(NL);
-                statsBuff.append(NL);
-                statsBuff.append(typeResult + " "+ JMeterUtils.getResString("view_results_fields")).append(NL); //$NON-NLS-1$ $NON-NLS-2$
-                statsBuff.append("ContentType: ").append(sampleResult.getContentType()).append(NL); //$NON-NLS-1$
-                statsBuff.append("DataEncoding: ").append(sampleResult.getDataEncodingNoDefault()).append(NL); //$NON-NLS-1$
-                statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
-                statsBuff = null; // NOSONAR Help gc
-                
+                String s =
+                        JMeterUtils.getResString("view_results_response_message") + responseMsgStr + NL + NL +
+                        JMeterUtils.getResString("view_results_response_headers") + NL +
+                        sampleResult.getResponseHeaders() + NL + NL +
+                        typeResult + " " +
+                        JMeterUtils.getResString("view_results_fields") + NL +
+                        "ContentType: " + sampleResult.getContentType() + NL +
+                        "DataEncoding: " + sampleResult.getDataEncodingNoDefault() + NL;
+                statsDoc.insertString(statsDoc.getLength(), s, null);
+
                 // Tabbed results: fill table
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_thread_name"), sampleResult.getThreadName())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_start"), startTime)); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_load_time"), sampleResult.getTime())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_connect_time"), sampleResult.getConnectTime())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_latency"), sampleResult.getLatency())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_in_bytes"), sampleResult.getBytesAsLong())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sent_bytes"),sampleResult.getSentBytes())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_headers_in_bytes"), sampleResult.getHeadersSize())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_body_in_bytes"), sampleResult.getBodySizeAsLong())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_count"), sampleResult.getSampleCount())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_error_count"), sampleResult.getErrorCount())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_code"), responseCode)); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_message"), responseMsgStr)); //$NON-NLS-1$
+                resultModel.addRow(createRowResult("view_results_thread_name", sampleResult.getThreadName()));
+                resultModel.addRow(createRowResult("view_results_sample_start", startTime));
+                resultModel.addRow(createRowResult("view_results_load_time", sampleResult.getTime()));
+                resultModel.addRow(createRowResult("view_results_connect_time", sampleResult.getConnectTime()));
+                resultModel.addRow(createRowResult("view_results_latency", sampleResult.getLatency()));
+                resultModel.addRow(createRowResult("view_results_size_in_bytes", sampleResult.getBytesAsLong()));
+                resultModel.addRow(createRowResult("view_results_sent_bytes", sampleResult.getSentBytes()));
+                resultModel.addRow(createRowResult("view_results_size_headers_in_bytes", sampleResult.getHeadersSize()));
+                resultModel.addRow(createRowResult("view_results_size_body_in_bytes", sampleResult.getBodySizeAsLong()));
+                resultModel.addRow(createRowResult("view_results_sample_count", sampleResult.getSampleCount()));
+                resultModel.addRow(createRowResult("view_results_error_count", sampleResult.getErrorCount()));
+                resultModel.addRow(createRowResult("view_results_response_code", responseCode));
+                resultModel.addRow(createRowResult("view_results_response_message", responseMsgStr));
                 
                 // Parsed response headers
                 LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getResponseHeaders());
@@ -324,23 +311,28 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 if (activateSearchExtension) {
                     searchTextExtension.resetTextToFind();
                 }
-
             } else if (userObject instanceof AssertionResult) {
-                assertionResult = (AssertionResult) userObject;
-
                 // We are displaying an AssertionResult
                 setupTabPaneForAssertionResult();
 
-                StringBuilder statsBuff = new StringBuilder(100);
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_error")).append(assertionResult.isError()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure")).append(assertionResult.isFailure()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure_message")).append(assertionResult.getFailureMessage()).append(NL); //$NON-NLS-1$
-                statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+                AssertionResult assertionResult = (AssertionResult) userObject;
+                String stat =
+                        JMeterUtils.getResString("view_results_assertion_error") +
+                                assertionResult.isError() + NL +
+                                JMeterUtils.getResString("view_results_assertion_failure") +
+                                assertionResult.isFailure() + NL +
+                                JMeterUtils.getResString("view_results_assertion_failure_message") +
+                                assertionResult.getFailureMessage() + NL;
+                statsDoc.insertString(statsDoc.getLength(), stat, null);
             }
             stats.setCaretPosition(1);
         } catch (BadLocationException exc) {
             stats.setText(exc.getLocalizedMessage());
         }
+    }
+
+    private RowResult createRowResult(String keyLookup, Object value) {
+        return new RowResult(JMeterUtils.getParsedLabel(keyLookup), value);
     }
 
     private void setupTabPaneForSampleResult() {
@@ -403,11 +395,11 @@ public abstract class SamplerResultTab implements ResultRenderer {
         style = doc.addStyle(STYLE_SERVER_ERROR, null);
         StyleConstants.setForeground(style, SERVER_ERROR_COLOR);
 
-        paneRaw = GuiUtils.makeScrollPane(stats);
+        JScrollPane paneRaw = GuiUtils.makeScrollPane(stats);
         paneRaw.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
         // Set up the 1st table Result with empty headers
-        tableResult = new JTable(resultModel);
+        JTable tableResult = new JTable(resultModel);
         JMeterUtils.applyHiDPI(tableResult);
         tableResult.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResult.addMouseListener(new TextBoxDoubleClick(tableResult));
@@ -415,7 +407,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         RendererUtils.applyRenderers(tableResult, RENDERERS_RESULT);
 
         // Set up the 2nd table 
-        tableResHeaders = new JTable(resHeadersModel);
+        JTable tableResHeaders = new JTable(resHeadersModel);
         JMeterUtils.applyHiDPI(tableResHeaders);
         tableResHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResHeaders.addMouseListener(new TextBoxDoubleClick(tableResHeaders));
@@ -425,7 +417,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         RendererUtils.applyRenderers(tableResHeaders, RENDERERS_HEADERS);
 
         // Set up the 3rd table 
-        tableResFields = new JTable(resFieldsModel);
+        JTable tableResFields = new JTable(resFieldsModel);
         JMeterUtils.applyHiDPI(tableResFields);
         tableResFields.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResFields.addMouseListener(new TextBoxDoubleClick(tableResFields));
@@ -475,7 +467,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
             // Add search text extension
             searchTextExtension = new SearchTextExtension();
             searchTextExtension.init(panel);
-            searchPanel = searchTextExtension.createSearchTextExtensionPane();
+            JPanel searchPanel = searchTextExtension.createSearchTextExtensionPane();
             searchTextExtension.setResults(results);
             searchPanel.setVisible(true);
             panel.add(searchPanel, BorderLayout.PAGE_END);
@@ -536,32 +528,18 @@ public abstract class SamplerResultTab implements ResultRenderer {
             this.value = value;
         }
 
-        /**
-         * @return the key
-         */
         public synchronized String getKey() {
             return key;
         }
 
-        /**
-         * @param key
-         *            the key to set
-         */
         public synchronized void setKey(String key) {
             this.key = key;
         }
 
-        /**
-         * @return the value
-         */
         public synchronized Object getValue() {
             return value;
         }
 
-        /**
-         * @param value
-         *            the value to set
-         */
         public synchronized void setValue(Object value) {
             this.value = value;
         }

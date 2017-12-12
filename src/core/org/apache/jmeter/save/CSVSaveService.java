@@ -197,11 +197,11 @@ public final class CSVSaveService {
             final SampleSaveConfiguration saveConfig, // may be updated
             final long lineNumber) {
 
-        SampleResult result = null;
+        SampleResult result;
         String hostname = "";// $NON-NLS-1$
         long timeStamp = 0;
         long elapsed = 0;
-        String text = null;
+        String text;
         String field = null; // Save the name for error reporting
         int i = 0;
         try {
@@ -219,8 +219,7 @@ public final class CSVSaveService {
                             SimpleDateFormat dateFormat = new SimpleDateFormat(fmt);
                             dateFormat.setLenient(false);
                             try {
-                                Date stamp = dateFormat.parse(text);
-                                timeStamp = stamp.getTime();
+                                timeStamp = dateFormat.parse(text).getTime();
                                 log.warn("Setting date format to: {}", fmt);
                                 saveConfig.setDateFormat(fmt);
                                 foundMatch = true;
@@ -446,8 +445,7 @@ public final class CSVSaveService {
     private static void appendFields(final boolean condition, StringBuilder textBuffer, String delim, String... fieldNames) {
         if (condition) {
             for (String name: fieldNames) {
-                textBuffer.append(name);
-                textBuffer.append(delim);
+                textBuffer.append(name).append(delim);
             }
         }
     }
@@ -501,9 +499,8 @@ public final class CSVSaveService {
      */
     public static SampleSaveConfiguration getSampleSaveConfiguration(
             String headerLine, String filename) {
-        String[] parts = splitHeader(headerLine, _saveConfig.getDelimiter()); // Try
-                                                                              // default
-                                                                              // delimiter
+        // Try default delimiter
+        String[] parts = splitHeader(headerLine, _saveConfig.getDelimiter());
 
         String delim = null;
 
@@ -520,8 +517,7 @@ public final class CSVSaveService {
                             Perl5Compiler.READ_ONLY_MASK);
             if (matcher.matches(input, pattern)) {
                 delim = matcher.getMatch().group(2);
-                parts = splitHeader(headerLine, delim);// now validate the
-                                                       // result
+                parts = splitHeader(headerLine, delim);// now validate the result
             }
         }
 

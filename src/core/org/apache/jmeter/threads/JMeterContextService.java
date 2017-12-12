@@ -25,30 +25,15 @@ import org.apache.jmeter.util.JMeterUtils;
  * Keeps track of active and total thread counts.
  */
 public final class JMeterContextService {
-    private static final ThreadLocal<JMeterContext> threadContext = new ThreadLocal<JMeterContext>() {
-        @Override
-        public JMeterContext initialValue() {
-            return new JMeterContext();
-        }
-    };
+    private static final ThreadLocal<JMeterContext> threadContext =
+            ThreadLocal.withInitial(JMeterContext::new);
 
-    //@GuardedBy(JMeterContextService.class)
     private static long testStart = 0;
-
-    //@GuardedBy(JMeterContextService.class)
     private static int numberOfActiveThreads = 0;
-
-    //@GuardedBy(JMeterContextService.class)
     private static int numberOfThreadsStarted = 0;
-
-    //@GuardedBy(JMeterContextService.class)
     private static int numberOfThreadsFinished = 0;
-
-    //@GuardedBy(JMeterContextService.class)
     private static int totalThreads = 0;
-    
     private static UnmodifiableJMeterVariables variables;
-
 
     /**
      * Private constructor to prevent instantiation.
@@ -184,7 +169,7 @@ public final class JMeterContextService {
         
         public final int finishedThreads;
         
-        ThreadCounts (int active, int started, int finished) {
+        ThreadCounts(int active, int started, int finished) {
             activeThreads = active;
             startedThreads = started;
             finishedThreads = finished;

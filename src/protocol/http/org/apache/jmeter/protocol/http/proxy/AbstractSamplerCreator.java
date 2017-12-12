@@ -52,15 +52,12 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
         JMeterUtils.getPropDefault("proxy.binary.directory",// $NON-NLS-1$
                 System.getProperty("user.dir")); // $NON-NLS-1$ proxy.binary.fileType=binary
 
-    /*
-     * Optionally number the requests
-     */
+    /** Optionally number the requests */
     private static final boolean NUMBER_REQUESTS =
         JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$
 
     private static AtomicInteger REQUEST_NUMBER = new AtomicInteger(0);// running number
-    
-    
+
     static {
         String binaries = JMeterUtils.getPropDefault("proxy.binary.types", // $NON-NLS-1$
                 "application/x-amf,application/x-java-serialized-object"); // $NON-NLS-1$
@@ -73,34 +70,18 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     }
 
 
-    /**
-     * 
-     */
-    /**
-     * 
-     */
     public AbstractSamplerCreator() {
         super();
     }
 
-    /**
-     * @return int request number
-     */
     protected static int getRequestNumber() {
         return REQUEST_NUMBER.get();
     }
 
-    /**
-     * Increment request number
-     */
     protected static void incrementRequestNumber() {
         incrementRequestNumberAndGet();
     }
     
-    /**
-     * Increment request number
-     * @return int number for created sampler
-     */
     protected static int incrementRequestNumberAndGet() {
         return REQUEST_NUMBER.incrementAndGet();
     }
@@ -117,28 +98,19 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
      * @return true if contentType is part of binary declared types
      */
     protected boolean isBinaryContent(String contentType) {
-        if (contentType == null) {
-            return false;
-        }
-        return BINARY_CONTENT_TYPES.contains(contentType);
+        return contentType != null && BINARY_CONTENT_TYPES.contains(contentType);
     }
     
-    /**
-     * @return String binary file suffix
-     */
     protected String getBinaryFileSuffix() {
         return BINARY_FILE_SUFFIX;
     }
 
-    /**
-     * @return String binary directory
-     */
     protected String getBinaryDirectory() {
         return BINARY_DIRECTORY;
     }
 
     /**
-     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#postProcessSampler(org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase, org.apache.jmeter.samplers.SampleResult)
+     * @see SamplerCreator#postProcessSampler(HTTPSamplerBase, SampleResult)
      */
     @Override
     public void postProcessSampler(HTTPSamplerBase sampler, SampleResult result) {
@@ -146,7 +118,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     }
 
     /**
-     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#createAndPopulateSampler(org.apache.jmeter.protocol.http.proxy.HttpRequestHdr, java.util.Map, java.util.Map)
+     * @see SamplerCreator#createAndPopulateSampler(HttpRequestHdr, Map, Map)
      */
     @Override
     public HTTPSamplerBase createAndPopulateSampler(HttpRequestHdr request,

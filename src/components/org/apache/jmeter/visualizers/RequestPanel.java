@@ -52,7 +52,7 @@ public class RequestPanel {
      */
     public RequestPanel() {
         listRequestView = new LinkedList<>();
-        List<String> classesToAdd = Collections.<String> emptyList();
+        List<String> classesToAdd = Collections.emptyList();
         try {
             classesToAdd = JMeterUtils.findClassesThatExtend(RequestView.class);
         } catch (IOException e1) {

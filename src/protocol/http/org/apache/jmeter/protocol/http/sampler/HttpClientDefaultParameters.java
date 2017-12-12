@@ -56,7 +56,7 @@ public class HttpClientDefaultParameters {
     public static void load(String file, 
             final org.apache.http.params.HttpParams params){
         load(file, 
-                new GenericHttpParams (){
+                new GenericHttpParams() {
                     @Override
                     public void setParameter(String name, Object value) {
                         params.setParameter(name, value);
