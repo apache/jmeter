@@ -42,6 +42,7 @@ import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
@@ -54,8 +55,8 @@ import org.apache.jorphan.gui.GuiUtils;
 
 /**
  * GUI interface for a {@link ResponseAssertion}.
- *
  */
+@GUIMenuSortOrder(1)
 public class AssertionGui extends AbstractAssertionGui {
     private static final long serialVersionUID = 240L;
 
