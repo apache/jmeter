@@ -98,8 +98,8 @@
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-ext-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/tika-core-1.16.jar"/>
-	<classpathentry kind="lib" path="lib/tika-parsers-1.16.jar"/>
+	<classpathentry kind="lib" path="lib/tika-core-1.17.jar"/>
+	<classpathentry kind="lib" path="lib/tika-parsers-1.17.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-1.4.01.jar"/>
