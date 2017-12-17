@@ -332,4 +332,10 @@ public interface TestElement extends Cloneable {
      *            to be associated
      */
     void setComment(String comment);
+
+    /**
+     * Called when the test element is removed from the test plan.
+     */
+    default void removed() {
+    }
 }
