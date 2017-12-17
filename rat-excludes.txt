@@ -16,6 +16,8 @@ bin/report-template/**
 bin/testfiles/**
 build/**
 build-local.properties
+dist/*.md5
+dist/*.sha512
 docs/**
 extras/*.txt
 extras/*.json
