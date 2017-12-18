@@ -34,37 +34,23 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * 
- */
 public class HtmlExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    public static final String EXTRACTOR_JSOUP = "JSOUP"; //$NON-NLS-1$
-
-    public static final String EXTRACTOR_JODD = "JODD"; //$NON-NLS-1$
-
-    public static final String DEFAULT_EXTRACTOR = ""; // $NON-NLS-1$
-
     private static final Logger log = LoggerFactory.getLogger(HtmlExtractor.class);
 
+    public static final String EXTRACTOR_JSOUP = "JSOUP"; //$NON-NLS-1$
+    public static final String EXTRACTOR_JODD = "JODD"; //$NON-NLS-1$
+    public static final String DEFAULT_EXTRACTOR = ""; // $NON-NLS-1$
+
     private static final String EXPRESSION = "HtmlExtractor.expr"; // $NON-NLS-1$
-
     private static final String ATTRIBUTE = "HtmlExtractor.attribute"; // $NON-NLS-1$
-
     private static final String REFNAME = "HtmlExtractor.refname"; // $NON-NLS-1$
-
     private static final String MATCH_NUMBER = "HtmlExtractor.match_number"; // $NON-NLS-1$
-
     private static final String DEFAULT = "HtmlExtractor.default"; // $NON-NLS-1$
-
     private static final String EXTRACTOR_IMPL = "HtmlExtractor.extractor_impl"; // $NON-NLS-1$
-
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
-    
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
-    
     private static final String DEFAULT_EMPTY_VALUE = "HtmlExtractor.default_empty_value"; // $NON-NLS-1$
 
     private Extractor extractor;
@@ -76,7 +62,6 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     public static String[] getImplementations(){
         return new String[]{EXTRACTOR_JSOUP,EXTRACTOR_JODD};
     }
-
 
     /**
      * Parses the response data using CSS/JQuery expressions and saving the results
@@ -103,7 +88,8 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         int matchNumber = getMatchNumber();
         final String defaultValue = getDefaultValue();
         
-        if (defaultValue.length() > 0  || isEmptyDefaultValue()){// Only replace default if it is provided or empty default value is explicitly requested
+        if (defaultValue.length() > 0  || isEmptyDefaultValue()) {
+            // Only replace default if it is provided or empty default value is explicitly requested
             vars.put(refName, defaultValue);
         }
         
@@ -136,14 +122,14 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 for (int i = 1; i <= matchCount; i++) {
                     match = getCorrectMatch(matches, i);
                     if (match != null) {
-                        final String refNameN = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
+                        final String refNameN = refName + UNDERSCORE + i;
                         vars.put(refNameN, match);
                     }
                 }
             }
             // Remove any left-over variables
             for (int i = matchCount + 1; i <= prevCount; i++) {
-                final String refNameN = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
+                final String refNameN = refName + UNDERSCORE + i;
                 vars.remove(refNameN);
             }
         } catch (RuntimeException e) {
@@ -151,16 +137,13 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 log.warn("{}: Error while generating result. {}", getName(), e.toString());
             }
         }
-
     }
 
     /**
      * Grab the appropriate result from the list.
      *
-     * @param matches
-     *            list of matches
-     * @param entry
-     *            the entry number in the list
+     * @param matches list of matches
+     * @param entry   the entry number in the list
      * @return MatchResult
      */
     private String getCorrectMatch(List<String> matches, int entry) {
@@ -170,17 +153,16 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
             return null;
         }
 
-        if (entry == 0) // Random match
-        {
+        if (entry == 0) { // Random match
             return matches.get(JMeterUtils.getRandomInt(matchSize));
         }
 
         return matches.get(entry - 1);
     }
 
-    private List<String> extractMatchingStrings(JMeterVariables vars,
-            String expression, String attribute, int matchNumber,
-            SampleResult previousResult) {
+    private List<String> extractMatchingStrings(
+            JMeterVariables vars, String expression, String attribute,
+            int matchNumber, SampleResult previousResult) {
         int found = 0;
         List<String> result = new ArrayList<>();
         if (isScopeVariable()){
@@ -227,10 +209,6 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         }
     }
     
-    /**
-     * 
-     * @return Extractor
-     */
     private Extractor getExtractorImpl() {
         if (extractor == null) {
             extractor = getExtractorImpl(getExtractor());
@@ -238,13 +216,11 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         return extractor;
     }
     
-
     /**
      * Set the extractor. Has to be one of the list that can be obtained by
      * {@link HtmlExtractor#getImplementations()}
      * 
-     * @param attribute
-     *            The name of the extractor to be used
+     * @param attribute The name of the extractor to be used
      */
     public void setExtractor(String attribute) {
         setProperty(EXTRACTOR_IMPL, attribute);
@@ -255,10 +231,9 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
      * @return The name of the extractor currently used
      */
     public String getExtractor() {
-        return getPropertyAsString(EXTRACTOR_IMPL); // $NON-NLS-1$
+        return getPropertyAsString(EXTRACTOR_IMPL);
     }
 
-    
     public void setAttribute(String attribute) {
         setProperty(ATTRIBUTE, attribute);
     }
@@ -307,8 +282,6 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
 
     /**
      * Sets the value of the variable if no matches are found
-     *
-     * @param defaultValue The default value for the variable
      */
     public void setDefaultValue(String defaultValue) {
         setProperty(DEFAULT, defaultValue);
