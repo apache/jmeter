@@ -42,6 +42,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.samplers.Clearable;
@@ -55,44 +56,34 @@ import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RendererUtils;
 
 /**
- * Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
- * who've done the other visualizers ahead of me (Stefano Mazzocchi), who I
- * borrowed code from to start me off (and much code may still exist). Thank
- * you!
- *
+ * Aggregrate Table-Based Reporting Visualizer for JMeter.
  */
+@GUIMenuSortOrder(3)
 public class StatVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
 
     private static final long serialVersionUID = 241L;
 
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
-
     private static final String SAVE_HEADERS = "saveHeaders"; //$NON-NLS-1$
-
-    private final String TOTAL_ROW_LABEL = JMeterUtils
+    private static final String TOTAL_ROW_LABEL = JMeterUtils
             .getResString("aggregate_report_total_label"); //$NON-NLS-1$
+    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500); // $NON-NLS-1$
 
     private JTable myJTable;
-
     private JScrollPane myScrollPane;
 
     private final JButton saveTable = new JButton(
             JMeterUtils.getResString("aggregate_graph_save_table")); //$NON-NLS-1$
 
-    // should header be saved with the data?
     private final JCheckBox saveHeaders = new JCheckBox(
             JMeterUtils.getResString("aggregate_graph_save_table_header"), true); //$NON-NLS-1$
 
     private final JCheckBox useGroupName = new JCheckBox(
             JMeterUtils.getResString("aggregate_graph_use_group_name")); //$NON-NLS-1$
 
-    private final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500); // $NON-NLS-1$
-
     private transient ObjectTableModel model;
 
-    /**
-     * Lock used to protect tableRows update + model update
-     */
+    /** Lock used to protect tableRows update + model update */
     private final transient Object lock = new Object();
 
     private final Map<String, SamplingStatCalculator> tableRows = new ConcurrentHashMap<>();
@@ -123,12 +114,14 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
     @Override
     public void add(final SampleResult res) {
-        SamplingStatCalculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()), label -> {
-           SamplingStatCalculator newRow = new SamplingStatCalculator(label);
-           newRows.add(newRow);
-           return newRow;
-        });
-        synchronized(row) {
+        SamplingStatCalculator row = tableRows.computeIfAbsent(
+                res.getSampleLabel(useGroupName.isSelected()),
+                label -> {
+                    SamplingStatCalculator newRow = new SamplingStatCalculator(label);
+                    newRows.add(newRow);
+                    return newRow;
+                });
+        synchronized (row) {
             /*
              * Synch is needed because multiple threads can update the counts.
              */

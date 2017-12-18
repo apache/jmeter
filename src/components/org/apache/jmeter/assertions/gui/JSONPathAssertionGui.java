@@ -25,6 +25,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.assertions.JSONPathAssertion;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -35,6 +36,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * Java class representing GUI for the {@link JSONPathAssertion} component in JMeter
  * @since 4.0
  */
+@GUIMenuSortOrder(2)
 public class JSONPathAssertionGui extends AbstractAssertionGui implements ChangeListener {
 
     private static final long serialVersionUID = -6008018002423594040L;
