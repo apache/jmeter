@@ -41,7 +41,6 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * JMeter GUI component representing the test plan which will be executed when
  * the test is run.
- *
  */
 public class TestPlanGui extends AbstractJMeterGuiComponent {
 
@@ -91,14 +90,18 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         JPopupMenu pop = new JPopupMenu();
         JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
         addMenu.add(MenuFactory.makeMenu(MenuFactory.THREADS, ActionNames.ADD));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.FRAGMENTS, ActionNames.ADD));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.NON_TEST_ELEMENTS, ActionNames.ADD));
+        addMenu.addSeparator();
         addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, ActionNames.ADD));
+        addMenu.addSeparator();
         addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, ActionNames.ADD));
+        addMenu.addSeparator();
         addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, ActionNames.ADD));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, ActionNames.ADD));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, ActionNames.ADD));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, ActionNames.ADD));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.FRAGMENTS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.NON_TEST_ELEMENTS, ActionNames.ADD));
         pop.add(addMenu);
         MenuFactory.addPasteResetMenu(pop);
         MenuFactory.addFileMenu(pop, false);
