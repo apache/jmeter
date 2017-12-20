@@ -36,9 +36,6 @@ import jodd.log.impl.Slf4jLogger;
  */
 public class JoddExtractor implements Extractor {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -7235814605293262972L;
 
     private static final String CACHE_KEY_PREFIX = JoddExtractor.class.getName()+"_PARSED_BODY";
@@ -47,9 +44,6 @@ public class JoddExtractor implements Extractor {
         LoggerFactory.setLoggerProvider(Slf4jLogger.PROVIDER);
     }
 
-    /**
-     * 
-     */
     public JoddExtractor() {
         super();
     }
