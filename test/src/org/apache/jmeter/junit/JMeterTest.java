@@ -243,8 +243,6 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         assertEquals("Should not have any names left over, check name of components in EN (default) Locale, which must match name attribute of component", 0, scanprintMap(guiTitles, "GUI"));
     }
 
-    
-
     /*
      * Test GUI elements - create the suite of tests
      */
@@ -456,7 +454,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
                         objects.add(c.newInstance());
                     } catch (InstantiationException e) {
                         caught = e;
-                        try {
+                        try { // CHECKSTYLE IGNORE NestedTryDepth
                             // Events often have this constructor
                             objects.add(c.getConstructor(new Class[] { Object.class }).newInstance(
                                     new Object[] { myThis }));
@@ -501,14 +499,14 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         if (objects.isEmpty()) {
             System.out.println("No classes found that extend " + exName + ". Check the following:");
             System.out.println("Search paths are:");
-            String ss[] = JMeterUtils.getSearchPaths();
+            String[] ss = JMeterUtils.getSearchPaths();
             for (String s : ss) {
                 System.out.println(s);
             }
             if (!classPathShown) {// Only dump it once
                 System.out.println("Class path is:");
                 String cp = System.getProperty("java.class.path");
-                String classPathElements[] = JOrphanUtils.split(cp, java.io.File.pathSeparator);
+                String[] classPathElements = JOrphanUtils.split(cp, java.io.File.pathSeparator);
                 for (String classPathElement : classPathElements) {
                     System.out.println(classPathElement);
                 }

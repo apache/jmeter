@@ -3557,7 +3557,7 @@ run JMeter unless all the JMeter jars are added.
     <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
              classpath="${lib.opt}/${checkstyle-all.jar}"/>
     <checkstyle config="checkstyle.xml">
-      <fileset dir="src" includes="**/*"/>
+      <fileset dir="." includes="test/**/*,src/**/*"/>
       <formatter type="plain"/>
       <formatter type="xml" toFile="build/checkstyle_errors.xml"/>
     </checkstyle>

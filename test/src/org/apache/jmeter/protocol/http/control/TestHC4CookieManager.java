@@ -97,8 +97,6 @@ public class TestHC4CookieManager extends JMeterTestCase {
             sampler.setMethod(HTTPConstants.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
-        
-
 
         /**
          * Test that the cookie domain field is actually handled as browsers do

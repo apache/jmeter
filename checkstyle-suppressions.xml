@@ -21,6 +21,10 @@ limitations under the License.
     "http://checkstyle.sourceforge.net/dtds/suppressions_1_1.dtd">
 
 <suppressions>
-    <suppress checks="NewlineAtEndOfFile" files=".*.properties"/>
-    <suppress checks="FileLength" files="HTTPSamplerBase.java"/>
+  <suppress checks="NewlineAtEndOfFile" files=".*.properties"/>
+  <suppress checks="FileLength" files="HTTPSamplerBase.java"/>
+  <!-- Slightly more lenient for tests -->
+  <suppress checks="(EmptyCatchBlock|AvoidEscapedUnicodeCharacters)"
+            files="test[\\/].*"/>
+  <suppress checks="NewlineAtEndOfFile" files="test[\\/].*.xml"/>
 </suppressions>

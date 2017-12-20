@@ -292,13 +292,6 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             default:
                 fail("Unexpected switch value: "+test);
         }
-        
-
-
-
-
-        
-
     }
 
     private void testPostRequest_FormMultipart(int samplerType, String samplerDefaultEncoding) throws Exception {
@@ -1186,7 +1179,6 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         // Set the file upload data
         HTTPFileArg[] hfa = {new HTTPFileArg(fileValue == null ? "" : fileValue.getAbsolutePath(), fileField, fileMimeType)};
         httpSampler.setHTTPFiles(hfa);
-
     }
 
     /**

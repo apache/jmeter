@@ -27,15 +27,14 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Test;
 
 public class TestKeyToolUtils {
 
-
     /*
      * Check the assumption that a missing executable will generate
      * either an IOException or status which is neither 0 nor 1 
-     *
      */
     @Test
     public void testCheckKeytool() throws Exception {
