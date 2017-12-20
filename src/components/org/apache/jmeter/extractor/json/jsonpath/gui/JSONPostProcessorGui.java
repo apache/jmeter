@@ -40,7 +40,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * GUI for {@link JSONPostProcessor}
  * @since 3.0
  */
-@GUIMenuSortOrder(3)
+@GUIMenuSortOrder(2)
 public class JSONPostProcessorGui extends AbstractPostProcessorGui {
 
     private static final long serialVersionUID = -2845056031828291476L;
