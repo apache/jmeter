@@ -54,22 +54,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Handles HTTP Caching
+ * Handles HTTP Caching.
  */
 public class CacheManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
-
-    private static final Date EXPIRED_DATE = new Date(0L);
 
     private static final long serialVersionUID = 235L;
 
     private static final Logger log = LoggerFactory.getLogger(CacheManager.class);
 
+    private static final Date EXPIRED_DATE = new Date(0L);
+    private static final int DEFAULT_MAX_SIZE = 5000;
+    private static final long ONE_YEAR_MS = 365*24*60*60*1000L;
     private static final String[] CACHEABLE_METHODS = JMeterUtils.getPropDefault("cacheable_methods", "GET").split("[ ,]");
 
     static {
-        log.info("Will only cache the following methods: "+Arrays.toString(CACHEABLE_METHODS));
+        if (log.isInfoEnabled()) {
+            log.info("Will only cache the following methods: " + Arrays.toString(CACHEABLE_METHODS));
+        }
     }
-
     //+ JMX attributes, do not change values
     public static final String CLEAR = "clearEachIteration"; // $NON-NLS-1$
     public static final String USE_EXPIRES = "useExpires"; // $NON-NLS-1$
@@ -80,11 +82,8 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private transient boolean useExpires; // Cached value
 
-    private static final int DEFAULT_MAX_SIZE = 5000;
-
-    private static final long ONE_YEAR_MS = 365*24*60*60*1000L;
-    
-    /** used to share the cache between 2 cache managers
+    /**
+     * used to share the cache between 2 cache managers
      * @see CacheManager#createCacheManagerProxy() 
      * @since 3.0 */
     private transient Map<String, CacheEntry> localCache;
