@@ -42,7 +42,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * Regular Expression Extractor Post-Processor GUI
  */
-@GUIMenuSortOrder(1)
+@GUIMenuSortOrder(4)
 public class RegexExtractorGui extends AbstractPostProcessorGui {
     private static final long serialVersionUID = 240L;
 

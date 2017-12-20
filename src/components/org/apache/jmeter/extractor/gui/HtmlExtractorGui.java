@@ -46,7 +46,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * CSS/JQuery Expression Extractor Post-Processor GUI
  * @since 2.9
  */
-@GUIMenuSortOrder(2)
+@GUIMenuSortOrder(1)
 public class HtmlExtractorGui extends AbstractPostProcessorGui {
     private static final long serialVersionUID = 240L;
 
