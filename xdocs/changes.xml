@@ -100,6 +100,7 @@ Summary
     <li><bug>53957</bug>HTTP Request: In Parameters tab, allow pasting of content coming from Firefox and Chrome (unparsed)</li>
     <li><bug>61587</bug>Drop properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code></li>
     <li><bug>61843</bug>HTTP(S) Test Script Recorder: Add SAN to JMeter generated CA Certificate. Contributed by Matthew Buckett</li>
+    <li><bug>61901</bug>Support for <code>https.cipherSuites</code> System property. Contributed by Jeremy Arnold (jeremy at arnoldzoo.org)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -290,6 +291,7 @@ Summary
     <li>Matthew Buckett (https://github.com/buckett)</li>
     <li>Helly Guo (https://github.com/hellyguo)</li>
     <li>Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
+    <li>Jeremy Arnold (jeremy at arnoldzoo.org)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
