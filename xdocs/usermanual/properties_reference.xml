@@ -83,9 +83,10 @@ These properties are only taken into account after restarting JMeter as they are
 </section>
 <section name="&sect-num;.3 SSL configuration" anchor="ssl_config">
 <note>SSL (Java) System properties are now in <code>system.properties</code><br/> 
-JMeter no longer converts <code>javax.<em>xxx</em></code> property entries in this file into System properties.<br/>
-These must now be defined in the <code>system.properties</code> file or on the command-line.<br/>
-The <code>system.properties</code> file gives more flexibility.</note>
+JMeter no longer converts <code>javax.<em>xxx</em></code> property entries in
+<code>jmeter.properties</code> into System properties. These must now be
+defined in the <code>system.properties</code> file or on the command-line. The
+<code>system.properties</code> file gives more flexibility.</note>
 <properties>
 <property name="https.sessioncontext.shared">
     By default, SSL session contexts are now created per-thread, rather than being shared.<br/>
@@ -104,6 +105,19 @@ The <code>system.properties</code> file gives more flexibility.</note>
     <code>javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated</code>
     or <code>java.net.SocketException: Connection reset</code>.<br/>
     See <bugzilla>54759</bugzilla>, example: <source>https.socket.protocols=SSLv2Hello SSLv3 TLSv1</source>
+</property>
+<property name="https.cipherSuites">
+    Comma-separated list of SSL cipher suites that may be used in HTTPS
+    connections.  It may be desirable to use a subset of cipher suites in order
+    to match expected client behavior or to reduce encryption overhead in
+    JMeter when running with large numbers of users. Errors may occur if the
+    JVM does not support the specified cipher suites, or if the cipher suites
+    supported by the HTTPS server do not overlap this list.  See the
+    <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#Customization">JSSE
+	    Reference Guide.</a><br/>
+    For example: <source>https.cipherSuites=TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256</source>
+    If not specified, JMeter will use the default list of cipher suites
+    supported by the JVM.
 </property>
 <property name="https.use.cached.ssl.context">
     Control if we allow reuse of cached SSL context between iterations.<br/>
@@ -606,8 +620,8 @@ JMETER-SERVER</source>
 <property name="jmeter.save.saveservice.default_delimiter">
     For use with Comma-separated value (CSV) files or other formats where the fields' values
     are separated by specified delimiters.<br/>
-    <note>For TAB, since JMeter version 2.3 one can use <code>\t</code></note>
     Defaults to: <code>,</code>
+    <note>For TAB, one can use <code>\t</code></note>
 </property>
 <property name="jmeter.save.saveservice.print_field_names">
     Only applies to CSV format files:<br/>
