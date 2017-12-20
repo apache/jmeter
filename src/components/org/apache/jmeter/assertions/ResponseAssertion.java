@@ -40,8 +40,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Test element to handle Response Assertions, @see AssertionGui
- * see org.apache.jmeter.assertions.ResponseAssertionTest for unit tests
+ * Test element to handle Response Assertions.
+ * See {@link AssertionGui} for GUI.
  */
 public class ResponseAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
     private static final Logger log = LoggerFactory.getLogger(ResponseAssertion.class);
@@ -53,25 +53,15 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     // Values for TEST_FIELD
     // N.B. we cannot change the text value as it is in test plans
     private static final String SAMPLE_URL = "Assertion.sample_label"; // $NON-NLS-1$
-
     private static final String RESPONSE_DATA = "Assertion.response_data"; // $NON-NLS-1$
-
     private static final String RESPONSE_DATA_AS_DOCUMENT = "Assertion.response_data_as_document"; // $NON-NLS-1$
-
     private static final String RESPONSE_CODE = "Assertion.response_code"; // $NON-NLS-1$
-
     private static final String RESPONSE_MESSAGE = "Assertion.response_message"; // $NON-NLS-1$
-
     private static final String RESPONSE_HEADERS = "Assertion.response_headers"; // $NON-NLS-1$
-    
     private static final String REQUEST_HEADERS = "Assertion.request_headers"; // $NON-NLS-1$
-    
     private static final String REQUEST_DATA = "Assertion.request_data"; // $NON-NLS-1$
-
     private static final String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
-
     private static final String TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
-
     private static final String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
 
     /**
@@ -79,15 +69,10 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
      * they are mutually exclusive
      */
     private static final int MATCH = 1; // 1 << 0; // NOSONAR We want this comment
-
     private static final int CONTAINS = 1 << 1;
-
     private static final int NOT = 1 << 2;
-
     private static final int EQUALS = 1 << 3;
-
     private static final int SUBSTRING = 1 << 4;
-
     private static final int OR = 1 << 5;
 
     // Mask should contain all types (but not NOT nor OR)
@@ -289,8 +274,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     /**
      * Make sure the response satisfies the specified assertion requirements.
      *
-     * @param response
-     *            an instance of SampleResult
+     * @param response an instance of SampleResult
      * @return an instance of AssertionResult
      */
     private AssertionResult evaluateResponse(SampleResult response) {
@@ -472,9 +456,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         return sb.toString();
     }
 
-
-    private static String trunc(final boolean right, final String str)
-    {
+    private static String trunc(final boolean right, final String str) {
         if (str.length() <= EQUALS_SECTION_DIFF_LEN) {
             return str;
         } else if (right) {

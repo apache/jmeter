@@ -45,6 +45,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.samplers.Clearable;
@@ -65,6 +66,7 @@ import org.apache.jorphan.reflect.Functor;
  * Simpler (lower memory) version of Aggregate Report (StatVisualizer).
  * Excludes the Median and 90% columns, which are expensive in memory terms
  */
+@GUIMenuSortOrder(2)
 public class SummaryReport extends AbstractVisualizer implements Clearable, ActionListener {
 
     private static final long serialVersionUID = 241L;
