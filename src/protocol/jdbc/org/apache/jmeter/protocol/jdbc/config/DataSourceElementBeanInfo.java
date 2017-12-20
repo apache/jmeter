@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 
 public class DataSourceElementBeanInfo extends BeanInfoSupport {
     private static final Logger log = LoggerFactory.getLogger(DataSourceElementBeanInfo.class);
-    private static Map<String,Integer> TRANSACTION_ISOLATION_MAP = new HashMap<>(5);
+    private static final Map<String,Integer> TRANSACTION_ISOLATION_MAP = new HashMap<>(5);
     static {
         // Will use default isolation
         TRANSACTION_ISOLATION_MAP.put("DEFAULT", Integer.valueOf(-1));
