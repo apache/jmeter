@@ -139,6 +139,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** GUI Logging Event Bus. */
     private GuiLogEventBus logEventBus = new GuiLogEventBus();
 
+    /** Listeners for events on test plan */
+    private List<TestPlanListener> testPlanListeners = Collections.synchronizedList(new ArrayList<>());
+
     /**
      * Private constructor to permit instantiation only from within this class.
      * Use {@link #getInstance()} to retrieve a singleton instance.
@@ -695,6 +698,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         } catch (IllegalStateException e1) {
             log.error("Failure setting file server's base dir", e1);
         }
+        testPlanListeners.stream().forEach(TestPlanListener::testPlanLoaded);
     }
 
     public String getTestPlanFile() {
@@ -706,9 +710,11 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * Clears the test plan file name.
      */
     public void clearTestPlan() {
+        testPlanListeners.stream().forEach(TestPlanListener::beforeTestPlanCleared);
         getTreeModel().clearTestPlan();
         nodesToGui.clear();
         setTestPlanFile(null);
+        testPlanListeners.stream().forEach(TestPlanListener::afterTestPlanCleared);
         undoHistory.clear();
         undoHistory.add(this.treeModel, "Initial Tree");
     }
@@ -969,4 +975,21 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
             return shouldSaveBeforeRunByPreference();
         }
     }
+
+    /**
+     * Adds a test plan listener.
+     * @param listener
+     */
+    public void addTestPlanListener(TestPlanListener listener) {
+        testPlanListeners.add(listener);
+    }
+
+    /**
+     * Removes a test plan listener.
+     * @param listener
+     */
+    public void removeTestPlanListener(TestPlanListener listener) {
+        testPlanListeners.remove(listener);
+    }
+
 }
