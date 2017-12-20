@@ -89,6 +89,7 @@ public class Remove extends AbstractAction {
         if (testElement.canRemove()) {
             GuiPackage.getInstance().getTreeModel().removeNodeFromParent(node);
             GuiPackage.getInstance().removeNode(testElement);
+            testElement.removed();
         } else {
             String message = testElement.getClass().getName() + " is busy";
             JOptionPane.showMessageDialog(null, message, "Cannot remove item", JOptionPane.ERROR_MESSAGE);
