@@ -38,6 +38,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -52,6 +53,7 @@ import org.slf4j.LoggerFactory;
  * {@link BackendListener} object.
  * @since 2.13
  */
+@GUIMenuSortOrder(4)
 public class BackendListenerGui extends AbstractListenerGui implements ActionListener {
 
     private static final long serialVersionUID = 1L;

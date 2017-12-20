@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.modifiers;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
@@ -29,6 +30,7 @@ import org.apache.jorphan.util.JMeterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@GUIMenuSortOrder(Integer.MAX_VALUE)
 public class BeanShellPreProcessor extends BeanShellTestElement
     implements Cloneable, PreProcessor, TestBean
 {

@@ -26,7 +26,7 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
  */
 public class MenuInfo {
 
-    public static final int SORT_ORDER_DEFAULT = Integer.MAX_VALUE;
+    public static final int SORT_ORDER_DEFAULT = 100;
     private final String label;
     private final String className;
     private final JMeterGUIComponent guiComp;

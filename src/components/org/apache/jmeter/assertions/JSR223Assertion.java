@@ -31,7 +31,7 @@ import org.apache.jmeter.util.JSR223TestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@GUIMenuSortOrder(3)
+@GUIMenuSortOrder(4)
 public class JSR223Assertion extends JSR223TestElement implements Cloneable, Assertion, TestBean
 {
     private static final Logger log = LoggerFactory.getLogger(JSR223Assertion.class);

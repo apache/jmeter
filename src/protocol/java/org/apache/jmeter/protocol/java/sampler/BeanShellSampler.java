@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
@@ -39,6 +40,7 @@ import org.slf4j.LoggerFactory;
  * A sampler which understands BeanShell
  *
  */
+@GUIMenuSortOrder(Integer.MAX_VALUE)
 public class BeanShellSampler extends BeanShellTestElement implements Sampler, Interruptible, ConfigMergabilityIndicator
 {
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
