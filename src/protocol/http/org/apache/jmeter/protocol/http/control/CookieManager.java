@@ -50,7 +50,6 @@ import org.slf4j.LoggerFactory;
 /**
  * This class provides an interface to the netscape cookies file to pass cookies
  * along with a request.
- *
  */
 public class CookieManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
     private static final long serialVersionUID = 234L;
@@ -59,11 +58,8 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     //++ JMX tag values
     private static final String CLEAR = "CookieManager.clearEachIteration";// $NON-NLS-1$
-
     private static final String COOKIES = "CookieManager.cookies";// $NON-NLS-1$
-
     private static final String POLICY = "CookieManager.policy"; //$NON-NLS-1$
-    
     private static final String IMPLEMENTATION = "CookieManager.implementation"; //$NON-NLS-1$
     //-- JMX tag values
 
@@ -92,8 +88,8 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
                 DELETE_NULL_COOKIES, CHECK_COOKIES, ALLOW_VARIABLE_COOKIES, 
                 SAVE_COOKIES, COOKIE_NAME_PREFIX);
     }
-    private transient CookieHandler cookieHandler;
 
+    private transient CookieHandler cookieHandler;
     private transient CollectionProperty initialCookies;
 
     /**
