@@ -71,7 +71,7 @@ public class HC4CookieHandler implements CookieHandler {
 
     private final transient CookieSpec cookieSpec;
     
-    private static PublicSuffixMatcher publicSuffixMatcher = PublicSuffixMatcherLoader.getDefault();
+    private static final PublicSuffixMatcher publicSuffixMatcher = PublicSuffixMatcherLoader.getDefault();
     private static Registry<CookieSpecProvider> registry  = 
             RegistryBuilder.<CookieSpecProvider>create()
             // case is ignored bug registry as it converts to lowerCase(Locale.US)
