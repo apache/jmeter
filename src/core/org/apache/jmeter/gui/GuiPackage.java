@@ -139,6 +139,10 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** GUI Logging Event Bus. */
     private GuiLogEventBus logEventBus = new GuiLogEventBus();
 
+    /** Listeners for events on test plan */
+    private List<TestPlanListener> testPlanListeners = Collections.synchronizedList(new ArrayList<>());
+
+
     /**
      * Private constructor to permit instantiation only from within this class.
      * Use {@link #getInstance()} to retrieve a singleton instance.
@@ -707,6 +711,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public void clearTestPlan() {
         getTreeModel().clearTestPlan();
+        testPlanListeners.stream().forEach(l -> l.testPlanCleared());
         nodesToGui.clear();
         setTestPlanFile(null);
         undoHistory.clear();
@@ -969,4 +974,21 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
             return shouldSaveBeforeRunByPreference();
         }
     }
+
+    /**
+     * Adds a test plan listener.
+     * @param listener
+     */
+    public void addTestPlanListener(TestPlanListener listener) {
+        testPlanListeners.add(listener);
+    }
+
+    /**
+     * Removes a test plan listener.
+     * @param listener
+     */
+    public void removeTestPlanListener(TestPlanListener listener) {
+        testPlanListeners.remove(listener);
+    }
+
 }
