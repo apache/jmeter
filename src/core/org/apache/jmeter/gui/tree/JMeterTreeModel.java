@@ -35,7 +35,7 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
+import org.apache.jmeter.testelement.WorkBench; // NOSONAR We need this for backward compatibility
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
@@ -232,7 +232,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
 
 
     /**
-     * Clear the test plan, and use default node for test plan and workbench.
+     * Clear the test plan, and use default node for test plan.
      *
      * N.B. Should only be called by {@link GuiPackage#clearTestPlan()}
      */
@@ -242,14 +242,14 @@ public class JMeterTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Clear the test plan, and use specified node for test plan and default node for workbench
+     * Clear the test plan, and use specified node for test plan
      *
      * N.B. Should only be called by {@link GuiPackage#clearTestPlan(TestElement)}
      *
      * @param testPlan the node to use as the testplan top node
      */
     public void clearTestPlan(TestElement testPlan) {
-        // Remove the workbench and testplan nodes
+        // Remove testplan nodes
         int children = getChildCount(getRoot());
         while (children > 0) {
             JMeterTreeNode child = (JMeterTreeNode)getChild(getRoot(), 0);
@@ -261,7 +261,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Initialize the model with nodes for testplan and workbench.
+     * Initialize the model with nodes for testplan.
      *
      * @param tp the element to use as testplan
      */
