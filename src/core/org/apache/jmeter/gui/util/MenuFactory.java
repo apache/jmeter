@@ -148,9 +148,9 @@ public final class MenuFactory {
                     log.debug("{} participates in no menus.", className);
                     continue;
                 }
-                for (String key: menus.keySet()) {
-                    if (categories.contains(key)) {
-                        menus.get(key).add(new MenuInfo(item, className));
+                for (Map.Entry<String, List<MenuInfo>> entry: menus.entrySet()) {
+                    if (categories.contains(entry.getKey())) {
+                        entry.getValue().add(new MenuInfo(item, className));
                     }
                 }
             }
@@ -315,7 +315,13 @@ public final class MenuFactory {
 
     public static JPopupMenu getDefaultControllerMenu() {
         JPopupMenu pop = new JPopupMenu();
-        pop.add(createDefaultAddMenu());
+        String addAction = ActionNames.ADD;
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.SAMPLERS, addAction));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONTROLLERS, addAction));
+        addMenu.addSeparator();
+        pop.add(addDefaultAddMenuToMenu(addMenu, addAction));
         pop.add(MenuFactory.makeMenuItemRes("add_think_times",// $NON-NLS-1$
                 ActionNames.ADD_THINK_TIME_BETWEEN_EACH_STEP));
 
@@ -337,6 +343,11 @@ public final class MenuFactory {
     private static JMenu createDefaultAddMenu() {
         String addAction = ActionNames.ADD;
         JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
+        addDefaultAddMenuToMenu(addMenu, addAction);
+        return addMenu;
+    }
+    
+    private static JMenu addDefaultAddMenuToMenu(JMenu addMenu, String addAction) {
         addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, addAction));
         addMenu.addSeparator();
         addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, addAction));
@@ -510,12 +521,6 @@ public final class MenuFactory {
 
     private static JMenuItem makeMenuItemRes(String resource, String actionCommand, KeyStroke accel) {
         JMenuItem item = makeMenuItemRes(resource, actionCommand);
-        item.setAccelerator(accel);
-        return item;
-    }
-
-    private static JMenuItem makeMenuItem(String label, String name, String actionCommand, KeyStroke accel) {
-        JMenuItem item = makeMenuItem(label, name, actionCommand);
         item.setAccelerator(accel);
         return item;
     }
