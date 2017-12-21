@@ -94,6 +94,8 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
         addMenu.add(MenuFactory.makeMenu(MenuFactory.SAMPLERS, addAction));
         addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONTROLLERS, addAction));
+        addMenu.addSeparator();
         addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, addAction));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, addAction));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, addAction));
