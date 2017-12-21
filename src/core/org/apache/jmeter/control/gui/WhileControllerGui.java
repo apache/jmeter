@@ -25,11 +25,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.control.WhileController;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+@GUIMenuSortOrder(4)
 public class WhileControllerGui extends AbstractControllerGui {
 
     private static final long serialVersionUID = 240L;
