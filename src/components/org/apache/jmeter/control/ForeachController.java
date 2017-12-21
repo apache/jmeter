@@ -20,6 +20,7 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * Iteration can take the full list or only a subset (configured through indexes)
  *
  */
+@GUIMenuSortOrder(5)
 public class ForeachController extends GenericController implements Serializable {
 
     private static final Logger log = LoggerFactory.getLogger(ForeachController.class);
