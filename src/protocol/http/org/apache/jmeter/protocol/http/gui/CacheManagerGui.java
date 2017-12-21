@@ -35,7 +35,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * The GUI for the HTTP Cache Manager {@link CacheManager}
  */
-@GUIMenuSortOrder(2)
+@GUIMenuSortOrder(4)
 public class CacheManagerGui extends AbstractConfigGui {
 
     private static final long serialVersionUID = 240L;
