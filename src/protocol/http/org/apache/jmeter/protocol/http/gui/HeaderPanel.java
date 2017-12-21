@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
  * Allows the user to specify if she needs HTTP header services, and give
  * parameters for this service.
  */
-@GUIMenuSortOrder(4)
+@GUIMenuSortOrder(2)
 public class HeaderPanel extends AbstractConfigGui implements ActionListener {
 
     private static final Logger log = LoggerFactory.getLogger(HeaderPanel.class);
