@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
 import java.awt.HeadlessException;
+import java.awt.MenuItem;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -315,7 +316,11 @@ public final class MenuFactory {
 
     public static JPopupMenu getDefaultControllerMenu() {
         JPopupMenu pop = new JPopupMenu();
-        pop.add(createDefaultAddMenu());
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$;
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.SAMPLERS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONTROLLERS, ActionNames.ADD));
+        addMenu.addSeparator();
+        pop.add(appendDefaultAddMenuItems(addMenu));
         pop.add(MenuFactory.makeMenuItemRes("add_think_times",// $NON-NLS-1$
                 ActionNames.ADD_THINK_TIME_BETWEEN_EACH_STEP));
 
@@ -335,18 +340,22 @@ public final class MenuFactory {
     }
 
     private static JMenu createDefaultAddMenu() {
-        String addAction = ActionNames.ADD;
         JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, addAction));
-        addMenu.addSeparator();
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, addAction));
-        addMenu.addSeparator();
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, addAction));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, addAction));
-        addMenu.addSeparator();
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, addAction));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, addAction));
-        return addMenu;
+        return appendDefaultAddMenuItems(addMenu);
+    }
+
+    private static JMenu appendDefaultAddMenuItems(JMenu menu) {
+        String addAction = ActionNames.ADD;
+        menu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, addAction));
+        menu.addSeparator();
+        menu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, addAction));
+        menu.addSeparator();
+        menu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, addAction));
+        menu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, addAction));
+        menu.addSeparator();
+        menu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, addAction));
+        menu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, addAction));
+        return menu;
     }
 
     public static JPopupMenu getDefaultSamplerMenu() {
