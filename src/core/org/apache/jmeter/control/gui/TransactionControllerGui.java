@@ -21,6 +21,7 @@ package org.apache.jmeter.control.gui;
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.control.TransactionController;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -29,6 +30,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * A Transaction controller component.
  */
+@GUIMenuSortOrder(2)
 public class TransactionControllerGui extends AbstractControllerGui {
 
     private static final long serialVersionUID = 240L;
