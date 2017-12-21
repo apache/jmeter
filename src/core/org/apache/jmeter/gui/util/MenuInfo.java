@@ -33,16 +33,17 @@ public class MenuInfo {
     private final int sortOrder;
 
     public MenuInfo(String displayLabel, String classFullName) {
-        label = displayLabel;
-        className = classFullName;
-        guiComp = null;
-        sortOrder = getSortOrderFromName(classFullName);
+        this(displayLabel, null, classFullName);
     }
 
     public MenuInfo(JMeterGUIComponent item, String classFullName) {
-        label = item.getStaticLabel();
-        className = classFullName;
+        this(item.getStaticLabel(), item, classFullName);
+    }
+    
+    public MenuInfo(String label, JMeterGUIComponent item, String classFullName) {
+        this.label = label;
         guiComp = item;
+        className = classFullName;
         sortOrder = getSortOrderFromName(classFullName);
     }
 
@@ -54,6 +55,7 @@ public class MenuInfo {
                 return menuSortOrder.value();
             }
         } catch (ClassNotFoundException ignored) {
+            // NOOP
         }
         return SORT_ORDER_DEFAULT;
     }
