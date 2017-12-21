@@ -79,7 +79,7 @@ public class HttpSSLProtocolSocketFactory
         if (!PROTOCOL_LIST.isEmpty()) {
             try {
                 sock.setEnabledProtocols(protocols);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) { // NOSONAR
                 if (log.isWarnEnabled()) {
                     log.warn("Could not set protocol list: {}.", PROTOCOL_LIST);
                     log.warn("Valid protocols are: {}", join(sock.getSupportedProtocols()));
@@ -90,7 +90,7 @@ public class HttpSSLProtocolSocketFactory
         if (!CIPHER_LIST.isEmpty()) {
             try {
                 sock.setEnabledCipherSuites(ciphers);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) { // NOSONAR
                 if (log.isWarnEnabled()) {
                     log.warn("Could not set cipher list: {}.", CIPHER_LIST);
                     log.warn("Valid ciphers are: {}", join(sock.getSupportedCipherSuites()));
