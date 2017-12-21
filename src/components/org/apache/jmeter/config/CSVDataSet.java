@@ -68,7 +68,7 @@ import org.slf4j.LoggerFactory;
  * threads with the same suffix.
  *
  */
-@GUIMenuSortOrder(4)
+@GUIMenuSortOrder(1)
 public class CSVDataSet extends ConfigTestElement 
     implements TestBean, LoopIterationListener, NoConfigMerge {
     private static final Logger log = LoggerFactory.getLogger(CSVDataSet.class);

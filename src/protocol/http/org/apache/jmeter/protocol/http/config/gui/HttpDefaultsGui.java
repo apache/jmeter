@@ -52,7 +52,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * GUI for Http Request defaults
  */
-@GUIMenuSortOrder(1)
+@GUIMenuSortOrder(5)
 public class HttpDefaultsGui extends AbstractConfigGui {
 
     private static final long serialVersionUID = 241L;
