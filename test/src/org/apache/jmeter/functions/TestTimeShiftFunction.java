@@ -25,13 +25,15 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.TimeZone;
 import java.util.Random;
+import java.util.TimeZone;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -117,7 +119,22 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
         assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
     }
+    
+    @Test
+    public void testPotentialBugWithComplexPeriod() throws Exception {
+        Collection<CompoundVariable> params = makeParams("YYYY-MM-dd'T'HH:mm:ss", "2017-12-21 12:00", "P10DT-1H-5M5S", "");
+        function.setParameters(params);
+        value = function.execute(result, null);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime baseDate = LocalDateTime.parse("2017-12-21 12:00", dateFormat);
+        LocalDateTime futureDate = baseDate.plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
+        LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
+        assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
+    }
 
+    public static void main(String[] args) {
+        System.out.println(java.time.Duration.parse("P10DT-1H-5M5S").toMillis());
+    }
     @Test
     public void testWrongAmountToAdd() throws Exception {
         // Nothing is add with wrong value, so check if return is now
