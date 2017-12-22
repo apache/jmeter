@@ -95,6 +95,7 @@ public final class GuiUtils {
         JPanel labelCombo = new JPanel();
         labelCombo.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         JLabel caption = new JLabel(label);
+        caption.setLabelFor(comboBox);
         caption.setBorder(new EmptyBorder(0, 5, 0, 5));
         labelCombo.add(caption);
         labelCombo.add(comboBox);
