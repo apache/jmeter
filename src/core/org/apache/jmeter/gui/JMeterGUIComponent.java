@@ -223,7 +223,7 @@ public interface JMeterGUIComponent extends ClearGui {
 
     /**
      * Returns whether a component of this type can be added to the test plan.
-     * @return true is the component can be added, false otherwise.
+     * @return true if the component can be added, false otherwise.
      */
     default boolean canBeAdded() {
         return true;
