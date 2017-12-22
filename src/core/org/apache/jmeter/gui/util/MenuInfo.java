@@ -82,9 +82,11 @@ public class MenuInfo {
      * @return true when menu item should be enabled, false otherwise.
      */
     public boolean getEnabled(String actionCommand) {
-        if (ActionNames.ADD.equals(actionCommand))
+        if (ActionNames.ADD.equals(actionCommand)) {
             return guiComp.canBeAdded();
-        else
+        }
+        else {
             return true;
+        }
     }
 }
