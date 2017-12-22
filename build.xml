@@ -519,7 +519,7 @@
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-ext.jar}"/>
-    <pathelement location="${lib.dir}/${spock.jar}"/>
+    <pathelement location="${lib.dir}/${spock-core.jar}"/>
     <pathelement location="${lib.dir}/${cglib-nodep.jar}"/>
     <pathelement location="${lib.dir}/${objenesis.jar}"/>
     <pathelement location="${lib.dir}/${jtidy.jar}"/>
@@ -3251,7 +3251,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="log4j-1.2-api"/>
     <process_jarfile jarname="log4j-core"/>
     <process_jarfile jarname="log4j-slf4j-impl"/>
-    <process_jarfile jarname="spock"/>
+    <process_jarfile jarname="spock-core"/>
     <process_jarfile jarname="cglib-nodep"/>
     <process_jarfile jarname="objenesis"/>
     <process_jarfile jarname="jtidy"/>

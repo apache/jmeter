@@ -158,8 +158,8 @@ public class JMeterVersionTest extends JMeterTestCase {
                     jar=jar.replace("-jdk15on","");
                 } else if (jar.equals("commons-jexl") && version.startsWith("2")) { // special handling
                     jar = "commons-jexl2";
-                } else if (jar.equals("spock-1.0-groovy")) { // special handling
-                    jar = "spock";
+                } else if (jar.equals("spock-core-1.0-groovy")) { // special handling
+                    jar = "spock-core";
                     version = "1.0-groovy-2.4";
                 } else {
                     String tmp = JAR_TO_BUILD_PROP.get(jar);
