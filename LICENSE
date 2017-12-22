@@ -256,7 +256,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * objenesis-2.6.jar
 * ph-commons-8.6.6.jar
 * ph-css-5.0.4.jar
-* spock-1.0-groovy-2.4.jar
+* spock-core-1.0-groovy-2.4.jar
 
 - Software produced outside the ASF which is available under other licenses (not AL 2.0):
 For details, please see the files under: licenses/bin
