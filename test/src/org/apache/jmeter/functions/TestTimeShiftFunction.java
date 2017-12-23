@@ -41,6 +41,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestTimeShiftFunction extends JMeterTestCase {
@@ -120,6 +121,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
     }
     
     @Test
+    @Ignore
     public void testPotentialBugWithComplexPeriod() throws Exception {
         Collection<CompoundVariable> params = makeParams("YYYY-MM-dd'T'HH:mm:ss", "2017-12-21 12:00", "P10DT-1H-5M5S", "");
         function.setParameters(params);
