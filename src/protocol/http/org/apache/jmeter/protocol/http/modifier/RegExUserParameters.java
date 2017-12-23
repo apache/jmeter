@@ -82,7 +82,8 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
                 arg.setValue(val);
             }
             if (log.isDebugEnabled()) {
-                log.debug("RegExUserParameters element:" + getName() + " => changed parameter: " + arg.getName() + " = " + arg.getValue() + ", was:" + oldValue);
+                log.debug("RegExUserParameters element:{} => changed parameter: {} = {}, was:{}",
+                        getName(), arg.getName(), arg.getValue(), oldValue);
             }
         }
     }

@@ -193,7 +193,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private final JLabeledTextField intervalField =
             new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_interval_label"), 7); //$NON-NLS-1$
 
-    private final JButton intervalButton = new JButton(JMeterUtils.getResString("graph_resp_time_interval_reload")); // $NON-NLS-1$
+    private final JButton intervalButton =
+            new JButton(JMeterUtils.getResString("graph_resp_time_interval_reload")); // $NON-NLS-1$
 
     private final JButton displayButton =
             new JButton(JMeterUtils.getResString("aggregate_graph_display")); //$NON-NLS-1$
@@ -201,7 +202,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private final JButton saveGraph =
             new JButton(JMeterUtils.getResString("aggregate_graph_save")); //$NON-NLS-1$
 
-    private final JCheckBox samplerSelection = new JCheckBox(JMeterUtils.getResString("graph_resp_time_series_selection"), false); //$NON-NLS-1$
+    private final JCheckBox samplerSelection =
+            new JCheckBox(JMeterUtils.getResString("graph_resp_time_series_selection"), false); //$NON-NLS-1$
 
     private final JTextField samplerMatchLabel = new JTextField();
 
@@ -211,26 +213,33 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final JCheckBox regexpChkBox = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), true); // $NON-NLS-1$
 
-    private final JComboBox<String> titleFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> titleFontNameList =
+            new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
     private final JComboBox<String> titleFontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private final JComboBox<String> titleFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> titleFontStyleList =
+            new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
-    private final JComboBox<String> fontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> fontNameList =
+            new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
     private final JComboBox<String> fontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private final JComboBox<String> fontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> fontStyleList =
+            new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
-    private final JComboBox<String> legendPlacementList = new JComboBox<>(StatGraphProperties.getPlacementNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> legendPlacementList =
+            new JComboBox<>(StatGraphProperties.getPlacementNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
     
-    private final JComboBox<String> pointShapeLine = new JComboBox<>(StatGraphProperties.getPointShapeMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> pointShapeLine =
+            new JComboBox<>(StatGraphProperties.getPointShapeMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
     private final JComboBox<String> strokeWidthList = new JComboBox<>(StatGraphProperties.getStrokeWidth());
 
-    private final JCheckBox numberShowGrouping = new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), // $NON-NLS-1$
-            DEFAULT_NUMBER_SHOW_GROUPING); // Default checked
+    private final JCheckBox numberShowGrouping =
+            new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), // $NON-NLS-1$
+                    DEFAULT_NUMBER_SHOW_GROUPING); // Default checked
 
     private final JButton syncWithName =
             new JButton(JMeterUtils.getResString("aggregate_graph_sync_with_name"));  //$NON-NLS-1$
@@ -239,7 +248,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_title_label")); //$NON-NLS-1$
 
     private final JLabeledTextField xAxisTimeFormat =
-            new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_xaxis_time_format"), 10); //$NON-NLS-1$ $NON-NLS-2$
+            new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_xaxis_time_format"), 10); //$NON-NLS-1$
 
     private final JLabeledTextField maxValueYAxisLabel =
             new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_yaxis_max_value"), 5); //$NON-NLS-1$
@@ -713,8 +722,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     }
 
     public String[] getXAxisLabels() {
-        SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText()); //$NON-NLS-1$ 
-        String[] xAxisLabels = new String[(int) durationTest]; // Test can't have a duration more than 2^31 secs (cast from long to int)
+        SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText()); //$NON-NLS-1$
+        // Test can't have a duration more than 2^31 secs (cast from long to int)
+        String[] xAxisLabels = new String[(int) durationTest];
         for (int j = 0; j < durationTest; j++) {
             xAxisLabels[j] = formatter.format(new Date((minStartTime + j) * intervalValue));
         }

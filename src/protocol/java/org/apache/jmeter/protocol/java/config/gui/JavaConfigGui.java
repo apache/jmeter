@@ -101,7 +101,10 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
     public JavaConfigGui(boolean displayNameField) {
         this.displayName = displayNameField;
         ImageIcon image = JMeterUtils.getImage("warning.png");
-        warningLabel = new JLabel(JMeterUtils.getResString("java_request_warning"), image, SwingConstants.LEFT); // $NON-NLS-1$
+        warningLabel = new JLabel(
+                JMeterUtils.getResString("java_request_warning"), // $NON-NLS-1$
+                image,
+                SwingConstants.LEFT);
         init();
     }
 
@@ -152,7 +155,10 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
             log.debug("Exception getting interfaces.", e);
         }
 
-        classNameLabeledChoice = new JLabeledChoice(JMeterUtils.getResString("protocol_java_classname"), possibleClasses.toArray(ArrayUtils.EMPTY_STRING_ARRAY), true, false);
+        classNameLabeledChoice = new JLabeledChoice(
+                JMeterUtils.getResString("protocol_java_classname"),
+                possibleClasses.toArray(ArrayUtils.EMPTY_STRING_ARRAY),
+                true, false);
         classNameLabeledChoice.addChangeListener(this);
 
         warningLabel.setForeground(Color.RED);
@@ -186,8 +192,11 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
     private void configureClassName() {
         String className = classNameLabeledChoice.getText().trim();
         try {
-            JavaSamplerClient client = (JavaSamplerClient) Class.forName(className, true,
-                    Thread.currentThread().getContextClassLoader()).newInstance();
+            JavaSamplerClient client = (JavaSamplerClient) Class.forName(
+                    className,
+                    true,
+                    Thread.currentThread().getContextClassLoader())
+                    .newInstance();
 
             Arguments currArgs = new Arguments();
             argsPanel.modifyTestElement(currArgs);
@@ -271,9 +280,9 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
             // Just to use client
             return client != null;
         } catch (Exception ex) {
-            log.error("Error creating class:'"+className+"' in JavaSampler "+getName()
-                +", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties",
-                ex);
+            log.error("Error creating class:'{}' in JavaSampler {}, check for a missing jar " +
+                    "in your jmeter 'search_paths' and 'plugin_dependency_paths' properties",
+                    className, getName(), ex);
             return false;
         }
     }

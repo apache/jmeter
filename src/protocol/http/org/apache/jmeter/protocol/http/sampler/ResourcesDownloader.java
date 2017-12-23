@@ -69,7 +69,8 @@ public class ResourcesDownloader {
     private static final Logger LOG = LoggerFactory.getLogger(ResourcesDownloader.class);
     
     /** this is the maximum time that excess idle threads will wait for new tasks before terminating */
-    private static final long THREAD_KEEP_ALIVE_TIME = JMeterUtils.getPropDefault("httpsampler.parallel_download_thread_keepalive_inseconds", 60L);
+    private static final long THREAD_KEEP_ALIVE_TIME =
+            JMeterUtils.getPropDefault("httpsampler.parallel_download_thread_keepalive_inseconds", 60L);
     
     private static final int MIN_POOL_SIZE = 1;
     private static final int MAX_POOL_SIZE = Integer.MAX_VALUE;
@@ -137,7 +138,8 @@ public class ResourcesDownloader {
     // probablyTheBestMethodNameInTheUniverseYeah!
     /**
      * This method will block until the downloads complete or it get interrupted
-     * the Future list returned by this method only contains tasks that have been scheduled in the threadpool.<br>
+     * the Future list returned by this method only contains tasks that have been
+     * scheduled in the threadpool.<br>
      * The status of those futures are either done or cancelled
      * 
      * @param maxConcurrentDownloads max concurrent downloads
@@ -145,7 +147,9 @@ public class ResourcesDownloader {
      * @return list tasks that have been scheduled
      * @throws InterruptedException when interrupted while waiting
      */
-    public List<Future<AsynSamplerResultHolder>> invokeAllAndAwaitTermination(int maxConcurrentDownloads, List<Callable<AsynSamplerResultHolder>> list) throws InterruptedException {
+    public List<Future<AsynSamplerResultHolder>> invokeAllAndAwaitTermination(
+            int maxConcurrentDownloads, List<Callable<AsynSamplerResultHolder>> list)
+            throws InterruptedException {
         List<Future<AsynSamplerResultHolder>> submittedTasks = new ArrayList<>();
         
         // paranoid fast path
@@ -157,10 +161,12 @@ public class ResourcesDownloader {
         concurrentExecutor.setMaximumPoolSize(MAX_POOL_SIZE);
         
         if(LOG.isDebugEnabled()) {
-            LOG.debug("PoolSize={} LargestPoolSize={}", concurrentExecutor.getPoolSize(), concurrentExecutor.getLargestPoolSize());
+            LOG.debug("PoolSize={} LargestPoolSize={}",
+                    concurrentExecutor.getPoolSize(), concurrentExecutor.getLargestPoolSize());
         }
         
-        CompletionService<AsynSamplerResultHolder> completionService = new ExecutorCompletionService<>(concurrentExecutor);
+        CompletionService<AsynSamplerResultHolder> completionService =
+                new ExecutorCompletionService<>(concurrentExecutor);
         int remainingTasksToTake = list.size();
         
         try {

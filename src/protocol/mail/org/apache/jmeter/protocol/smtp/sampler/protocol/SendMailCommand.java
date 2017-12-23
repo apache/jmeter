@@ -64,7 +64,7 @@ public class SendMailCommand {
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
     private static final String FALSE = Boolean.FALSE.toString();
-    
+
     private boolean useSSL = false;
     private boolean useStartTLS = false;
     private boolean trustAllCerts = false;

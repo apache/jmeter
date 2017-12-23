@@ -116,14 +116,16 @@ public class MultipartUrlConfig implements Serializable {
                 // Get the form field name
                 final String namePrefix = "name=\""; //$NON-NLS-1$
                 int index = contentDisposition.indexOf(namePrefix) + namePrefix.length();
-                String name = contentDisposition.substring(index, contentDisposition.indexOf('\"', index)); //$NON-NLS-1$
+                String name = contentDisposition.substring(
+                        index, contentDisposition.indexOf('\"', index)); //$NON-NLS-1$
 
                 // Check if it is a file being uploaded
                 final String filenamePrefix = "filename=\""; //$NON-NLS-1$
                 if (contentDisposition.contains(filenamePrefix)) {
                     // Get the filename
                     index = contentDisposition.indexOf(filenamePrefix) + filenamePrefix.length();
-                    String path = contentDisposition.substring(index, contentDisposition.indexOf('\"', index)); //$NON-NLS-1$
+                    String path = contentDisposition.substring(
+                            index, contentDisposition.indexOf('\"', index)); //$NON-NLS-1$
                     if (path != null && path.length() > 0) {
                         // Set the values retrieved for the file upload
                         files.addHTTPFileArg(path, name, contentType);
@@ -153,11 +155,13 @@ public class MultipartUrlConfig implements Serializable {
     private String getHeaderValue(String headerName, String multiPart) {
         String regularExpression = headerName + "\\s*:\\s*(.*)$"; //$NON-NLS-1$
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
-        Pattern pattern = JMeterUtils.getPattern(regularExpression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
-        if(localMatcher.contains(multiPart, pattern)) {
+        Pattern pattern = JMeterUtils.getPattern(regularExpression,
+                Perl5Compiler.READ_ONLY_MASK
+                        | Perl5Compiler.CASE_INSENSITIVE_MASK
+                        | Perl5Compiler.MULTILINE_MASK);
+        if (localMatcher.contains(multiPart, pattern)) {
             return localMatcher.getMatch().group(1).trim();
-        }
-        else {
+        } else {
             return null;
         }
     }

@@ -149,26 +149,26 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
      */
     protected void sendMetrics() {
         // Need to convert millis to seconds for Graphite
-        long timestampInSeconds = TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+        long timestampSecs = TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         synchronized (LOCK) {
             for (Map.Entry<String, SamplerMetric> entry : getMetricsPerSampler().entrySet()) {
                 final String key = entry.getKey();
                 final SamplerMetric metric = entry.getValue();
                 if(key.equals(CUMULATED_METRICS)) {
-                    addMetrics(timestampInSeconds, ALL_CONTEXT_NAME, metric);
+                    addMetrics(timestampSecs, ALL_CONTEXT_NAME, metric);
                 } else {
-                    addMetrics(timestampInSeconds, AbstractGraphiteMetricsSender.sanitizeString(key), metric);                
+                    addMetrics(timestampSecs, AbstractGraphiteMetricsSender.sanitizeString(key), metric);
                 }
                 // We are computing on interval basis so cleanup
                 metric.resetForTimeInterval();
             }
         }        
         UserMetric userMetric = getUserMetrics();
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(userMetric.getMinActiveThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(userMetric.getMaxActiveThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(userMetric.getMeanActiveThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(userMetric.getStartedThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_FINISHED_THREADS, Integer.toString(userMetric.getFinishedThreads()));
+        graphiteMetricsManager.addMetric(timestampSecs, TEST_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(userMetric.getMinActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampSecs, TEST_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(userMetric.getMaxActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampSecs, TEST_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(userMetric.getMeanActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampSecs, TEST_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(userMetric.getStartedThreads()));
+        graphiteMetricsManager.addMetric(timestampSecs, TEST_CONTEXT_NAME, METRIC_FINISHED_THREADS, Integer.toString(userMetric.getFinishedThreads()));
 
         graphiteMetricsManager.writeAndSendMetrics();
     }

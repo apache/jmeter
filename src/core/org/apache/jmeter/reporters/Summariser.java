@@ -82,7 +82,8 @@ public class Summariser extends AbstractTestElement
     private static final boolean TOOUT = JMeterUtils.getPropDefault("summariser.out", true); //$NON-NLS-1$
 
     /** Ignore TC generated SampleResult in summary */
-    private static final boolean IGNORE_TC_GENERATED_SAMPLERESULT = JMeterUtils.getPropDefault("summariser.ignore_transaction_controller_sample_result", true); //$NON-NLS-1$
+    private static final boolean IGNORE_TC_GENERATED_SAMPLERESULT = JMeterUtils.getPropDefault(
+            "summariser.ignore_transaction_controller_sample_result", true); //$NON-NLS-1$
 
     /*
      * Ensure that a report is not skipped if we are slightly late in checking

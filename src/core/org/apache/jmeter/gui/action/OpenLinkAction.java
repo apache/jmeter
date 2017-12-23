@@ -32,9 +32,7 @@ public class OpenLinkAction extends AbstractAction {
 
     private static final Logger log = LoggerFactory.getLogger(OpenLinkAction.class);
     
-    private static final Map<String, String> LINK_MAP = 
-            initLinkMap();
-
+    private static final Map<String, String> LINK_MAP = initLinkMap();
     private static final Set<String> commands = new HashSet<>();
 
     static {
@@ -65,9 +63,10 @@ public class OpenLinkAction extends AbstractAction {
         try {
             java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
         } catch (IOException err) {
-            log.error("OpenLinkAction: User default browser is not found, or it fails to be launched, or the default handler application failed to be launched on {}", err);
+            log.error("OpenLinkAction: User default browser is not found, or it fails to be " +
+                    "launched, or the default handler application failed to be launched on {}", err);
         } catch (UnsupportedOperationException err) {
-            log.error("OpenLinkAction: Current platform does not support the Desktop.Action.BROWSE actionon {}", err);
+            log.error("OpenLinkAction: Current platform does not support the Desktop.Action.BROWSE action on {}", err);
         } catch (SecurityException err) {
             log.error("OpenLinkAction: Security problem on {}", err);
         } catch (Exception err) {

@@ -46,9 +46,10 @@ import org.slf4j.LoggerFactory;
  * <pre>
  * testf = new LogFilter();
  * String[] incl = { &quot;hello.html&quot;, &quot;index.html&quot;, &quot;/index.jsp&quot; };
- * String[] thefiles = { &quot;/test/hello.jsp&quot;, &quot;/test/one/hello.html&quot;, &quot;hello.jsp&quot;, &quot;hello.htm&quot;, &quot;/test/open.jsp&quot;,
- *      &quot;/test/open.html&quot;, &quot;/index.jsp&quot;, &quot;/index.jhtml&quot;, &quot;newindex.jsp&quot;, &quot;oldindex.jsp&quot;, &quot;oldindex1.jsp&quot;,
- *      &quot;oldindex2.jsp&quot;, &quot;oldindex3.jsp&quot;, &quot;oldindex4.jsp&quot;, &quot;oldindex5.jsp&quot;, &quot;oldindex6.jsp&quot;, &quot;/test/index.htm&quot; };
+ * String[] thefiles =
+ *    { &quot;/test/hello.jsp&quot;, &quot;/test/one/hello.html&quot;, &quot;hello.jsp&quot;, &quot;hello.htm&quot;, &quot;/test/open.jsp&quot;,
+ *      &quot;/test/open.html&quot;, &quot;/index.jsp&quot;, &quot;/index.jhtml&quot;, &quot;newindex.jsp&quot;, &quot;oldindex.jsp&quot;,
+ *      &quot;oldindex2.jsp&quot;, &quot;oldindex3.jsp&quot;, &quot;oldindex4.jsp&quot;, &quot;/test/index.htm&quot; };
  * testf.excludeFiles(incl);
  * System.out.println(&quot; ------------ exclude test -------------&quot;);
  * for (int idx = 0; idx &lt; thefiles.length; idx++) {

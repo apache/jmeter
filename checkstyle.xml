@@ -163,6 +163,15 @@
     <!--<module name="CyclomaticComplexity"/>-->
     <!--<module name="NPathComplexity"/>-->
 
+    <!-- size -->
+    <module name="AnonInnerLength">
+      <property name="max" value="45"/>
+    </module>
+    <module name="LineLength">
+      <!-- TODO: reduce this to ~120 -->
+      <property name="max" value="160"/>
+    </module>
+
     <!--
     Allow comment to suppress checkstyle for a single line
     e.g. // CHECKSTYLE IGNORE MagicNumber
