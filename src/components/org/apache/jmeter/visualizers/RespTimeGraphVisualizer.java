@@ -672,7 +672,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     }
 
     public String[] getXAxisLabels() {
-        SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText()); //$NON-NLS-1$
+        SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText());
         // Test can't have a duration more than 2^31 secs (cast from long to int)
         String[] xAxisLabels = new String[(int) durationTest];
         for (int j = 0; j < durationTest; j++) {

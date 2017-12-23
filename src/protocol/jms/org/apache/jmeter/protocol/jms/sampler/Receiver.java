@@ -129,7 +129,7 @@ public final class Receiver implements Runnable {
                     } else {
                         messageKey = reply.getJMSCorrelationID();
                         if (messageKey == null) {// JMSMessageID cannot be null
-                            log.warn("Received message with correlation id null. Discarding message ...");
+                            log.warn("Received message with correlation id null. Discarding message...");
                         } else {
                             synchronized (admin) {
                                 admin.putReply(messageKey, reply);

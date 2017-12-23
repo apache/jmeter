@@ -51,7 +51,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  *
  * Parameters: - format date @see
  * https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
- * (optional - defaults to epoch time in millisecond) - date to shift formated
+ * (optional - defaults to epoch time in millisecond) - date to shift formatted
  * as first param (optional - defaults now) - amount of (seconds, minutes,
  * hours, days ) to add (optional - default nothing is add ) - a string of the locale for the format
  * ( optional ) - variable name ( optional )

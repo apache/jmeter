@@ -143,8 +143,7 @@ public class SystemCommand {
         if (err == null) {
             procBuild.redirectErrorStream(true);
         }
-        try
-        {
+        try {
             proc = procBuild.start();
 
             final OutputStream procOut = proc.getOutputStream();

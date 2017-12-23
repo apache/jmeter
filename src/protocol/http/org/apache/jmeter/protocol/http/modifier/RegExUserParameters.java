@@ -62,7 +62,7 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
 
         Map<String, String> paramMap = buildParamsMap();
         if(paramMap == null || paramMap.isEmpty()){
-            log.info("RegExUserParameters element:"+getName()+" => Referenced RegExp was not found, no parameter will be changed");
+            log.info("RegExUserParameters element:{} => Referenced RegExp was not found, no parameter will be changed", getName());
             return;
         }
 
