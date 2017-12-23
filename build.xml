@@ -736,7 +736,7 @@
         <fileset dir="${lib.dir}" includes="*.jar"/>
       </classpath>
     </taskdef>
-    <groovyc srcdir="${src.test}" destdir="${build.test}" encoding="${encoding}">
+    <groovyc srcdir="${src.test}" destdir="${build.test}" encoding="${encoding}" listfiles="true">
       <classpath>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
