@@ -23,6 +23,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -30,7 +31,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CsvSampleReaderTest {
+public class CsvSampleReaderTest extends JMeterTestCase {
 
     private static final int NR_ROWS = 100;
     private File tempCsv;
@@ -38,26 +39,17 @@ public class CsvSampleReaderTest {
 
     @Before
     public void setUp() throws IOException {
-        // We have to initialize JMeterUtils
-        if (JMeterUtils.getJMeterHome() == null) {
-            JMeterUtils.setJMeterHome(System.getenv("JMETER_HOME"));
-        }
-        JMeterUtils.loadJMeterProperties(
-                JMeterUtils.getJMeterBinDir() + "/jmeter.properties");
         tempCsv = File.createTempFile("samplecsv", ".csv");
+        tempCsv.deleteOnExit();
         try (CsvSampleWriter writer = new CsvSampleWriter(tempCsv, metadata)) {
             writer.setSeparator(',');
             for (long i = 0; i < NR_ROWS; i++) {
-                writer.write(new SampleBuilder(metadata).add(i).add("a" + i)
-                        .build());
+                final Sample sample = new SampleBuilder(metadata)
+                        .add(i)
+                        .add("a" + i)
+                        .build();
+                writer.write(sample);
             }
-        }
-    }
-
-    @After
-    public void tearDown() {
-        if (tempCsv.exists()) {
-            tempCsv.delete();
         }
     }
 
@@ -103,11 +95,12 @@ public class CsvSampleReaderTest {
     }
 
     @Test
-    public void testHasNext() {
+    public void testHasNextAndReadSample() {
         try (CsvSampleReader reader = new CsvSampleReader(tempCsv, metadata)) {
             for (long i = 0; i < NR_ROWS; i++) {
                 Assert.assertTrue(reader.hasNext());
-                reader.readSample();
+                final Sample sample = reader.readSample();
+                Assert.assertEquals(i, sample.getSampleRow());
             }
             Assert.assertFalse(reader.hasNext());
         }
@@ -120,7 +113,7 @@ public class CsvSampleReaderTest {
         try {
             reader.readSample();
             fail("Stream should be closed.");
-        } catch (SampleException e) {
+        } catch (SampleException expected) {
             // All is well
         }
     }

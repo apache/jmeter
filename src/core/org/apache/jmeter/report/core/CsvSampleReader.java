@@ -183,7 +183,7 @@ public class CsvSampleReader implements Closeable{
                     throw new SampleException("Mismatch between expected number of columns:"+columnCount+" and columns in CSV file:"+data.length+
                             ", check your jmeter.save.saveservice.* configuration");
                 }
-                sample = new Sample(row, metadata, data);
+                sample = new Sample(row++, metadata, data);
             }
             return sample;
         } catch (IOException e) {
