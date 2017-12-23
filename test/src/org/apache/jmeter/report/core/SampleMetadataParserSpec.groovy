@@ -35,6 +35,9 @@ class SampleMetadataParserSpec extends JMeterSpec {
             separator   	| headers   	| expectedNumberOfColumns
             ';'	as char		| "a;b;c;d;e"  	| 5
             '|' as char 	| "a|b|c|d|e" 	| 5
+            '|' as char 	| "aa|bb|cc|dd|eef" 	| 5
+            '&' as char 	| "a&b&c&d&e" 	| 5
+            '\t' as char 	| "a	b c	d	e" 	| 4
     }
 
 }
