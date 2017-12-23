@@ -15,29 +15,29 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.report.core;
+package org.apache.jmeter.report.core
 
-import org.apache.jmeter.junit.spock.JMeterSpec;
-import org.apache.jmeter.report.core.SampleMetaDataParser;
+import spock.lang.Specification
 import spock.lang.Unroll
 
-class SampleMetadataParserSpec extends JMeterSpec {
+@Unroll
+class SampleMetadataParserSpec extends Specification {
 
-    @Unroll
-    def "Parse headers (#headers) using separator (#separator) and get (#expectedNumberOfColumns)"() {
+    def "Parse headers (#headers) with separator (#separator) and get (#expectedNumberOfColumns) columns"() {
         given:
-            def dataParser = new SampleMetaDataParser(separator);
+            def sut = new SampleMetaDataParser(separator as char)
         when:
-            def metadata = dataParser.parse(headers);
+            def columns = sut.parse(headers).columns
         then:
-            metadata.columns.size() == expectedNumberOfColumns;
+            columns == expectedColumns
         where:
-            separator   	| headers   	| expectedNumberOfColumns
-            ';'	as char		| "a;b;c;d;e"  	| 5
-            '|' as char 	| "a|b|c|d|e" 	| 5
-            '|' as char 	| "aa|bb|cc|dd|eef" 	| 5
-            '&' as char 	| "a&b&c&d&e" 	| 5
-            '\t' as char 	| "a	b c	d	e" 	| 4
+            separator | headers           | expectedColumns
+            ';'       | "a;b;c;d;e"       | ["a", "b", "c", "d", "e"]
+            '|'       | "a|b|c|d|e"       | ["a", "b", "c", "d", "e"]
+            '|'       | "aa|bb|cc|dd|eef" | ["aa", "bb", "cc", "dd", "eef"]
+            '&'       | "a&b&c&d&e"       | ["a", "b", "c", "d", "e"]
+            '\t'      | "a\tb c\td\te"    | ["a", "b c", "d", "e"]
+            ','       | "abcdef"          | ["abcdef"]
     }
 
 }
