@@ -13,27 +13,28 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
+
 package org.apache.jmeter.report.core;
 
-import java.util.regex.Pattern;
+import org.apache.jmeter.junit.spock.JMeterSpec;
+import org.apache.jmeter.report.core.SampleMetaDataParser;
 
-/**
- * Simple parser to get a {@link SampleMetadata} instance<br>
- * 
- * @since 3.0
- */
-public class SampleMetaDataParser {
+class SampleMetadataParserSpec extends JMeterSpec {
 
-    private char separator;
-
-    public SampleMetaDataParser(char separator) {
-        this.separator = separator;
+    
+    def "Parse headers (#headers) using separator (#separator) and get (#expectedNumberOfColumns)"() {
+        given:
+            def dataParser = new SampleMetaDataParser(separator);
+        when:
+            def metadata = dataParser.parse(headers);
+        then:
+            metadata.columns.size() == expectedNumberOfColumns;
+        where:
+            separator   | headers   	| expectedNumberOfColumns
+            ";" 		| "a;b;c;d;e"  	| 5
+            // This should fail
+            "|"  		| "a|b|c|d|e" 	| 6
     }
 
-    public SampleMetadata parse(String headRow) {
-        String[] cols = headRow.split(Pattern.quote(Character.toString(separator)));
-        return new SampleMetadata(separator, cols);
-    }
 }

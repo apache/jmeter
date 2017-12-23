@@ -261,6 +261,7 @@ Summary
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>61807</bug>Web Report : fix error in <code>getTop5ErrorMetrics</code>. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61900</bug>Report Generator : Report generation fails if separator is a regex reserved char like <code>|</code></li>
 </ul>
 
 <h3>General</h3>
