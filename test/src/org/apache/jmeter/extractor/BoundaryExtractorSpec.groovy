@@ -59,7 +59,7 @@ class BoundaryExtractorSpec extends Specification {
         context.setPreviousResult(prevResult)
     }
 
-    def "Extract, where pattern exists, with matchNumber=#matchNumber from #occurances returns #expected"() {
+    def "Extract, where pattern exists, with matchNumber=#matchNumber from #occurences returns #expected"() {
         given:
             def input = createInputString(occurrences)
         when:
