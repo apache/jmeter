@@ -19,10 +19,11 @@ package org.apache.jmeter.report.core;
 
 import org.apache.jmeter.junit.spock.JMeterSpec;
 import org.apache.jmeter.report.core.SampleMetaDataParser;
+import spock.lang.Unroll
 
 class SampleMetadataParserSpec extends JMeterSpec {
 
-    
+    @Unroll
     def "Parse headers (#headers) using separator (#separator) and get (#expectedNumberOfColumns)"() {
         given:
             def dataParser = new SampleMetaDataParser(separator);
@@ -31,10 +32,10 @@ class SampleMetadataParserSpec extends JMeterSpec {
         then:
             metadata.columns.size() == expectedNumberOfColumns;
         where:
-            separator   | headers   	| expectedNumberOfColumns
-            ";" 		| "a;b;c;d;e"  	| 5
+            separator   	| headers   	| expectedNumberOfColumns
+            ';'	as char		| "a;b;c;d;e"  	| 5
             // This should fail
-            "|"  		| "a|b|c|d|e" 	| 6
+            '|' as char 	| "a|b|c|d|e" 	| 5
     }
 
 }
