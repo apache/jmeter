@@ -41,48 +41,40 @@ import org.slf4j.LoggerFactory;
  * Reader class for reading CSV files.
  * <p>
  * Handles {@link SampleMetadata} reading and sample extraction.
- * </p>
- * 
+ *
  * @since 3.0
  */
 public class CsvSampleReader implements Closeable{
 
     private static final Logger log = LoggerFactory.getLogger(CsvSampleReader.class);
+
     private static final int BUF_SIZE = 1024 * 1024;
-
     private static final String CHARSET = SaveService.getFileEncoding(StandardCharsets.UTF_8.displayName());
-
     private static final char DEFAULT_SEPARATOR =
-            // We cannot use JMeterUtils#getPropDefault as it applies a trim on value
+            // Cannot use JMeterUtils#getPropDefault as it trims the value
             JMeterUtils.getDelimiter(
-                    JMeterUtils.getJMeterProperties().getProperty(SampleSaveConfiguration.DEFAULT_DELIMITER_PROP, SampleSaveConfiguration.DEFAULT_DELIMITER)).charAt(0);
+                    JMeterUtils.getJMeterProperties().getProperty(
+                            SampleSaveConfiguration.DEFAULT_DELIMITER_PROP,
+                            SampleSaveConfiguration.DEFAULT_DELIMITER))
+                    .charAt(0);
 
     private File file;
-
     private InputStream fis;
     private Reader isr;
     private BufferedReader reader;
-
     private char separator;
-
     private long row;
-
     private SampleMetadata metadata;
-
     private int columnCount;
-
     private Sample lastSampleRead;
 
     /**
      * Instantiates a new csv sample reader.
      *
-     * @param inputFile
-     *            the input file (must not be {@code null})
-     * @param separator
-     *            the separator
-     * @param useSaveSampleCfg
-     *            indicates whether the reader uses jmeter
-     *            SampleSaveConfiguration to define metadata
+     * @param inputFile        the input file (must not be {@code null})
+     * @param separator        the separator
+     * @param useSaveSampleCfg indicates whether the reader uses jmeter
+     *                         SampleSaveConfiguration to define metadata
      */
     public CsvSampleReader(File inputFile, char separator, boolean useSaveSampleCfg) {
         this(inputFile, null, separator, useSaveSampleCfg);
@@ -91,10 +83,8 @@ public class CsvSampleReader implements Closeable{
     /**
      * Instantiates a new csv sample reader.
      *
-     * @param inputFile
-     *            the input file (must not be {@code null})
-     * @param metadata
-     *            the metadata
+     * @param inputFile the input file (must not be {@code null})
+     * @param metadata  the metadata
      */
     public CsvSampleReader(File inputFile, SampleMetadata metadata) {
         this(inputFile, metadata, DEFAULT_SEPARATOR, false);
@@ -134,14 +124,13 @@ public class CsvSampleReader implements Closeable{
             SampleMetadata result;
             // Read first line
             String line = reader.readLine();
-            if(line == null) {
+            if (line == null) {
                 throw new IllegalArgumentException("File is empty");
             }
-            // When we can use sample save config and there is no header in csv
-            // file
+            // When we can use sample save config and there is no header in csv file
             if (useSaveSampleCfg
-                    && CSVSaveService.getSampleSaveConfiguration(line,
-                            file.getAbsolutePath()) == null) {
+                    && CSVSaveService.getSampleSaveConfiguration(
+                            line, file.getAbsolutePath()) == null) {
                 // Build metadata from default save config
                 if (log.isWarnEnabled()) {
                     log.warn(
@@ -164,11 +153,6 @@ public class CsvSampleReader implements Closeable{
         }
     }
 
-    /**
-     * Gets the metadata.
-     *
-     * @return the metadata
-     */
     public SampleMetadata getMetadata() {
         return metadata;
     }
@@ -183,7 +167,7 @@ public class CsvSampleReader implements Closeable{
                     throw new SampleException("Mismatch between expected number of columns:"+columnCount+" and columns in CSV file:"+data.length+
                             ", check your jmeter.save.saveservice.* configuration");
                 }
-                sample = new Sample(row, metadata, data);
+                sample = new Sample(row++, metadata, data);
             }
             return sample;
         } catch (IOException e) {
@@ -193,8 +177,6 @@ public class CsvSampleReader implements Closeable{
 
     /**
      * Gets next sample from the file.
-     *
-     * @return the sample
      */
     public Sample readSample() {
         Sample out = lastSampleRead;
@@ -204,8 +186,6 @@ public class CsvSampleReader implements Closeable{
 
     /**
      * Gets next sample from file but keep the reading file position.
-     *
-     * @return the sample
      */
     public Sample peek() {
         return lastSampleRead;
@@ -213,16 +193,11 @@ public class CsvSampleReader implements Closeable{
 
     /**
      * Indicates whether the file contains more samples
-     *
-     * @return true, if the file contains more samples
      */
     public boolean hasNext() {
         return lastSampleRead != null;
     }
 
-    /**
-     * Close the reader.
-     */
     @Override
     public void close() {
         JOrphanUtils.closeQuietly(isr);
