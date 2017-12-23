@@ -42,17 +42,12 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
 
     private static final String MATCH_NR = "matchNr";
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 5486502839185386121L;
 
     private static final Logger log = LoggerFactory.getLogger(RegExUserParameters.class);
 
     public static final String REG_EX_REF_NAME = "RegExUserParameters.regex_ref_name";// $NON-NLS-1$
-
     public static final String REG_EX_PARAM_NAMES_GR_NR = "RegExUserParameters.param_names_gr_nr";// $NON-NLS-1$
-
     public static final String REG_EX_PARAM_VALUES_GR_NR = "RegExUserParameters.param_values_gr_nr";// $NON-NLS-1$
 
     @Override

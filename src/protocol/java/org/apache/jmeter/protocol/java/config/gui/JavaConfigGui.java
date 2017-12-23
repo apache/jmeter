@@ -55,12 +55,10 @@ import org.slf4j.LoggerFactory;
 /**
  * The <code>JavaConfigGui</code> class provides the user interface for the
  * {@link JavaConfig} object.
- *
  */
 public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
     private static final long serialVersionUID = 241L;
 
-    /** Logging */
     private static final Logger log = LoggerFactory.getLogger(JavaConfigGui.class);
 
     /** A combo box allowing the user to choose a test class. */
@@ -80,7 +78,6 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
      * Used in case the referenced class is not in classpath or does not implement {@link JavaSamplerClient}
      */
     private final JLabel warningLabel;
-
 
     /**
      * Create a new JavaConfigGui as a standalone component.

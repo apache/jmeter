@@ -103,7 +103,6 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Class handles storing of generated samples, etc
  * For unit tests, see TestProxyControl
@@ -115,14 +114,9 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final long serialVersionUID = 240L;
 
     private static final String ASSERTION_GUI = AssertionGui.class.getName();
-
-
     private static final String TRANSACTION_CONTROLLER_GUI = TransactionControllerGui.class.getName();
-
     private static final String LOGIC_CONTROLLER_GUI = LogicControllerGui.class.getName();
-
     private static final String AUTH_PANEL = AuthPanel.class.getName();
-
     private static final String AUTH_MANAGER = AuthManager.class.getName();
 
     public static final int DEFAULT_PORT = 8888;
@@ -133,47 +127,26 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     //+ JMX file attributes
     private static final String PORT = "ProxyControlGui.port"; // $NON-NLS-1$
-
     private static final String DOMAINS = "ProxyControlGui.domains"; // $NON-NLS-1$
-
     private static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list"; // $NON-NLS-1$
-
     private static final String INCLUDE_LIST = "ProxyControlGui.include_list"; // $NON-NLS-1$
-
     private static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers"; // $NON-NLS-1$
-
     private static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion"; // $NON-NLS-1$
-
     private static final String GROUPING_MODE = "ProxyControlGui.grouping_mode"; // $NON-NLS-1$
-
     private static final String SAMPLER_TYPE_NAME = "ProxyControlGui.sampler_type_name"; // $NON-NLS-1$
-
     private static final String SAMPLER_REDIRECT_AUTOMATICALLY = "ProxyControlGui.sampler_redirect_automatically"; // $NON-NLS-1$
-
     private static final String SAMPLER_FOLLOW_REDIRECTS = "ProxyControlGui.sampler_follow_redirects"; // $NON-NLS-1$
-
     private static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive"; // $NON-NLS-1$
-
     private static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
-    
     private static final String HTTP_SAMPLER_NAMING_MODE = "ProxyControlGui.proxy_http_sampler_naming_mode"; // $NON-NLS-1$
-    
     private static final String PREFIX_HTTP_SAMPLER_NAME = "ProxyControlGui.proxy_prefix_http_sampler_name"; // $NON-NLS-1$
-    
     private static final String PROXY_PAUSE_HTTP_SAMPLER = "ProxyControlGui.proxy_pause_http_sampler"; // $NON-NLS-1$
-
     private static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
-
     private static final String CONTENT_TYPE_EXCLUDE = "ProxyControlGui.content_type_exclude"; // $NON-NLS-1$
-
     private static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
-
     private static final String NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED = "ProxyControlGui.notify_child_sl_filtered"; // $NON-NLS-1$
-
     private static final String BASIC_AUTH = "Basic"; // $NON-NLS-1$
-
     private static final String DIGEST_AUTH = "Digest"; // $NON-NLS-1$
-
     //- JMX file attributes
 
     // Must agree with the order of entries in the drop-down
@@ -183,7 +156,6 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final int GROUPING_STORE_FIRST_ONLY = 3;
     private static final int GROUPING_IN_TRANSACTION_CONTROLLERS = 4;
 
-    
     // Original numeric order (we now use strings)
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_JAVA = "0";
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
@@ -206,9 +178,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         JMeterUtils.getPropDefault("proxy.cert.file", CERT_FILE_DEFAULT); // $NON-NLS-1$
 
     private static final File CERT_PATH = new File(CERT_DIRECTORY, CERT_FILE);
-
     private static final String CERT_PATH_ABS = CERT_PATH.getAbsolutePath();
-
     private static final String DEFAULT_PASSWORD = "password"; // $NON-NLS-1$ NOSONAR only default password, if user has not defined one
 
     /**

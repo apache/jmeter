@@ -49,22 +49,13 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
     private static final Logger log = LoggerFactory.getLogger(HTMLAssertion.class);
 
     public static final String DEFAULT_DOCTYPE = "omit"; //$NON-NLS-1$
-
     public static final String DOCTYPE_KEY = "html_assertion_doctype"; //$NON-NLS-1$
-
     public static final String ERRORS_ONLY_KEY = "html_assertion_errorsonly"; //$NON-NLS-1$
-
     public static final String ERROR_THRESHOLD_KEY = "html_assertion_error_threshold"; //$NON-NLS-1$
-
     public static final String WARNING_THRESHOLD_KEY = "html_assertion_warning_threshold"; //$NON-NLS-1$
-
     public static final String FORMAT_KEY = "html_assertion_format"; //$NON-NLS-1$
-
     public static final String FILENAME_KEY = "html_assertion_filename"; //$NON-NLS-1$
 
-    /**
-     * 
-     */
     public HTMLAssertion() {
         log.debug("HTMLAssertion(): called");
     }

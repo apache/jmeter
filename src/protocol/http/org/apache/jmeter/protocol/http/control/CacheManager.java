@@ -80,7 +80,6 @@ public class CacheManager extends ConfigTestElement
     //-
 
     private transient InheritableThreadLocal<Map<String, CacheEntry>> threadCache;
-
     private transient boolean useExpires; // Cached value
 
     /**

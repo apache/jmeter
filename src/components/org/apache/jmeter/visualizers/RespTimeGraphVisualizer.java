@@ -82,112 +82,62 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private static final Logger log = LoggerFactory.getLogger(RespTimeGraphVisualizer.class);
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
-
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
     //+ JMX property names; do not change
-
     public static final String INTERVAL = "RespTimeGraph.interval"; // $NON-NLS-1$
-
     public static final String SERIES_SELECTION = "RespTimeGraph.seriesselection"; // $NON-NLS-1$
-
     public static final String SERIES_SELECTION_MATCH_LABEL = "RespTimeGraph.seriesselectionmatchlabel"; // $NON-NLS-1$
-
     public static final String SERIES_SELECTION_CASE_SENSITIVE = "RespTimeGraph.seriesselectioncasesensitive"; // $NON-NLS-1$
-
     public static final String SERIES_SELECTION_REGEXP = "RespTimeGraph.seriesselectionregexp"; // $NON-NLS-1$
-    
     public static final String GRAPH_TITLE = "RespTimeGraph.graphtitle"; // $NON-NLS-1$
-
     public static final String GRAPH_TITLE_FONT_NAME = "RespTimeGraph.graphtitlefontname"; // $NON-NLS-1$
-
     public static final String GRAPH_TITLE_FONT_SIZE = "RespTimeGraph.graphtitlefondsize"; // $NON-NLS-1$
-
     public static final String GRAPH_TITLE_FONT_STYLE = "RespTimeGraph.graphtitlefontstyle"; // $NON-NLS-1$
-
     public static final String LINE_STROKE_WIDTH = "RespTimeGraph.linestrockwidth"; // $NON-NLS-1$
-
     public static final String LINE_SHAPE_POINT = "RespTimeGraph.lineshapepoint"; // $NON-NLS-1$
-
     public static final String GRAPH_SIZE_DYNAMIC = "RespTimeGraph.graphsizedynamic"; // $NON-NLS-1$
-
     public static final String GRAPH_SIZE_WIDTH = "RespTimeGraph.graphsizewidth"; // $NON-NLS-1$
-
     public static final String GRAPH_SIZE_HEIGHT = "RespTimeGraph.graphsizeheight"; // $NON-NLS-1$
-
     public static final String XAXIS_TIME_FORMAT = "RespTimeGraph.xaxistimeformat"; // $NON-NLS-1$
-
     public static final String YAXIS_SCALE_MAX_VALUE = "RespTimeGraph.yaxisscalemaxvalue"; // $NON-NLS-1$
-
     public static final String YAXIS_INCREMENT_SCALE = "RespTimeGraph.yaxisscaleincrement"; // $NON-NLS-1$
-
     public static final String YAXIS_NUMBER_GROUPING = "RespTimeGraph.yaxisnumbergrouping"; // $NON-NLS-1$
-
     public static final String LEGEND_PLACEMENT = "RespTimeGraph.legendplacement"; // $NON-NLS-1$
-
     public static final String LEGEND_FONT = "RespTimeGraph.legendfont"; // $NON-NLS-1$
-
     public static final String LEGEND_SIZE = "RespTimeGraph.legendsize"; // $NON-NLS-1$
-
     public static final String LEGEND_STYLE = "RespTimeGraph.legendstyle"; // $NON-NLS-1$
-
     //- JMX property names
 
     public static final int DEFAULT_INTERVAL = 10000; // in milli-seconds // TODO: properties?
-
     public static final boolean DEFAULT_SERIES_SELECTION = false;
-    
     public static final boolean DEFAULT_CASE_SENSITIVE = false;
-    
     public static final boolean DEFAULT_REGEXP = true;
-    
     public static final int DEFAULT_TITLE_FONT_NAME = 0; // default: sans serif
-    
     public static final int DEFAULT_TITLE_FONT_SIZE = 6; // default: 16
-
     public static final int DEFAULT_TITLE_FONT_STYLE = 1; // default: bold
-
     public static final int DEFAULT_STROKE_WIDTH_LIST = 4; // default: 3.0f
-    
     public static final int DEFAULT_LINE_SHAPE_POINT = 0; // default: circle
-
     public static final boolean DEFAULT_DYNAMIC_GRAPH_SIZE = true; // default: true
-
     public static final String DEFAULT_XAXIS_TIME_FORMAT = "HH:mm:ss"; // $NON-NLS-1$
-    
     public static final boolean DEFAULT_NUMBER_SHOW_GROUPING = true;
-    
     public static final int DEFAULT_LEGEND_PLACEMENT = 0; // default: bottom
-
     public static final int DEFAULT_LEGEND_FONT = 0; // default: sans serif
-    
     public static final int DEFAULT_LEGEND_SIZE = 2; // default: 10
-
     public static final int DEFAULT_LEGEND_STYLE = 0; // default: normal
-
     private static final int DEFAULT_WIDTH = 400;
-
     private static final int DEFAULT_HEIGTH = 300;
-
     private static final String Y_AXIS_LABEL = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
-
     private static final String Y_AXIS_TITLE = JMeterUtils.getResString("aggregate_graph_ms"); //$NON-NLS-1$
 
-    /**
-     * Lock used to protect list update
-     */
+    /** Lock used to protect list update */
     private final transient Object lock = new Object();
-    /**
-     * Lock used to protect refresh interval
-     */
+    /** Lock used to protect refresh interval */
     private final transient Object lockInterval = new Object();
 
     private RespTimeGraphChart graphPanel = null;
-
     private final JTabbedPane tabbedGraph = new JTabbedPane(SwingConstants.TOP);
-    
     private boolean saveGraphToFile = false;
-    
     private int intervalValue = DEFAULT_INTERVAL;
 
     private final JLabeledTextField intervalField =

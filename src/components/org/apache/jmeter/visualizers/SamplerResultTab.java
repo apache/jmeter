@@ -60,7 +60,6 @@ import org.apache.jorphan.reflect.Functor;
 
 /**
  * Right side in View Results Tree
- *
  */
 public abstract class SamplerResultTab implements ResultRenderer {
 
@@ -68,21 +67,15 @@ public abstract class SamplerResultTab implements ResultRenderer {
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
 
     private static final String NL = "\n"; // $NON-NLS-1$
-
     public static final Color SERVER_ERROR_COLOR = Color.red;
-
     public static final Color CLIENT_ERROR_COLOR = Color.blue;
-
     public static final Color REDIRECT_COLOR = Color.green;
 
     protected static final String TEXT_COMMAND = "text"; // $NON-NLS-1$
-    
     protected static final String REQUEST_VIEW_COMMAND = "change_request_view"; // $NON-NLS-1$
 
     private static final String STYLE_SERVER_ERROR = "ServerError"; // $NON-NLS-1$
-
     private static final String STYLE_CLIENT_ERROR = "ClientError"; // $NON-NLS-1$
-
     private static final String STYLE_REDIRECT = "Redirect"; // $NON-NLS-1$
 
     private JTextPane stats;
@@ -105,7 +98,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
     protected JTabbedPane rightSide;
 
     private int lastSelectedTab;
-
     private Object userObject = null; // Could be SampleResult or AssertionResult
 
     private SampleResult sampleResult = null;
@@ -133,9 +125,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
             "view_results_table_fields_value" }; // $NON-NLS-1$
 
     private final ObjectTableModel resultModel;
-
     private final ObjectTableModel resHeadersModel;
-
     private final ObjectTableModel resFieldsModel;
 
     private JTable tableResult = null;

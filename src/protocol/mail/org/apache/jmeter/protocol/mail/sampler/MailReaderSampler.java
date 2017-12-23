@@ -84,14 +84,12 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     //-
 
     private static final String RFC_822_DEFAULT_ENCODING = "iso-8859-1"; // RFC 822 uses ascii per default
-
     public static final String DEFAULT_PROTOCOL = "pop3";  // $NON-NLS-1$
 
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
 
     private static final String FALSE = "false";  // $NON-NLS-1$
-
     private static final String TRUE = "true";  // $NON-NLS-1$
 
     public boolean isUseLocalTrustStore() {
@@ -102,25 +100,20 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         return getPropertyAsString(SecuritySettingsPanel.TRUSTSTORE_TO_USE);
     }
 
-
     public boolean isUseSSL() {
         return getPropertyAsBoolean(SecuritySettingsPanel.USE_SSL);
     }
-
 
     public boolean isUseStartTLS() {
         return getPropertyAsBoolean(SecuritySettingsPanel.USE_STARTTLS);
     }
 
-
     public boolean isTrustAllCerts() {
         return getPropertyAsBoolean(SecuritySettingsPanel.SSL_TRUST_ALL_CERTS);
     }
 
-
     public boolean isEnforceStartTLS() {
         return getPropertyAsBoolean(SecuritySettingsPanel.ENFORCE_STARTTLS);
-
     }
 
     public static final int ALL_MESSAGES = -1; // special value

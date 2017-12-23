@@ -138,30 +138,22 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
-
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
-
     private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
     private JTable myJTable;
-
     private JScrollPane myScrollPane;
-
     private transient ObjectTableModel model;
 
     /**
      * Lock used to protect tableRows update + model update
      */
     private final transient Object lock = new Object();
-
     private final Map<String, SamplingStatCalculator> tableRows = new ConcurrentHashMap<>();
 
     private AxisGraph graphPanel = null;
-
     private JPanel settingsPane = null;
-
     private JSplitPane spane = null;
-
     private JTabbedPane tabbedGraph = new JTabbedPane(SwingConstants.TOP);
 
     private JButton displayButton =

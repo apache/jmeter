@@ -80,15 +80,12 @@ public class ResourcesDownloader {
     public static ResourcesDownloader getInstance() {
         return INSTANCE;
     }
-    
-    
-    private ThreadPoolExecutor concurrentExecutor = null;
 
+    private ThreadPoolExecutor concurrentExecutor = null;
     private ResourcesDownloader() {
         init();
     }
-    
-    
+
     private void init() {
         LOG.info("Creating ResourcesDownloader with keepalive_inseconds : {}", THREAD_KEEP_ALIVE_TIME);
         concurrentExecutor = new ThreadPoolExecutor(
@@ -99,9 +96,7 @@ public class ResourcesDownloader {
                     t.setName("ResDownload-" + t.getName()); //$NON-NLS-1$
                     t.setDaemon(true);
                     return t;
-                }) {
-
-        };
+                }) {};
     }
     
     /**
@@ -207,8 +202,7 @@ public class ResourcesDownloader {
         
         return submittedTasks;
     }
-    
-    
+
     /**
      * Holder of AsynSampler result
      */

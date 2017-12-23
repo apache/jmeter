@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Receiver of pseudo-synchronous reply messages.
- *
  */
 public final class Receiver implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(Receiver.class);
@@ -41,11 +40,8 @@ public final class Receiver implements Runnable {
     private volatile boolean active;
 
     private final Session session;
-
     private final MessageConsumer consumer;
-
     private final Connection conn;
-
     private final boolean useResMsgIdAsCorrelId;
 
 

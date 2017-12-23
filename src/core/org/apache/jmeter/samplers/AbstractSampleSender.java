@@ -38,9 +38,6 @@ public abstract class AbstractSampleSender implements SampleSender {
         return isClientConfigured;
     }
 
-    /**
-     * 
-     */
     public AbstractSampleSender() {
         super();
     }

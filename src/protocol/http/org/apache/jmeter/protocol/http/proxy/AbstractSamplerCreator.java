@@ -52,15 +52,12 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
         JMeterUtils.getPropDefault("proxy.binary.directory",// $NON-NLS-1$
                 System.getProperty("user.dir")); // $NON-NLS-1$ proxy.binary.fileType=binary
 
-    /*
-     * Optionally number the requests
-     */
+    /** Optionally number the requests */
     private static final boolean NUMBER_REQUESTS =
         JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$
 
     private static AtomicInteger REQUEST_NUMBER = new AtomicInteger(0);// running number
-    
-    
+
     static {
         String binaries = JMeterUtils.getPropDefault("proxy.binary.types", // $NON-NLS-1$
                 "application/x-amf,application/x-java-serialized-object"); // $NON-NLS-1$
