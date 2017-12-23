@@ -23,7 +23,7 @@ import spock.lang.Unroll
 @Unroll
 class SampleMetadataParserSpec extends Specification {
 
-    def "Parse headers (#headers) with separator (#separator) and get (#expectedNumberOfColumns) columns"() {
+    def "Parse headers (#headers) with separator (#separator) and get (#expectedColumns)"() {
         given:
             def sut = new SampleMetaDataParser(separator as char)
         when:
