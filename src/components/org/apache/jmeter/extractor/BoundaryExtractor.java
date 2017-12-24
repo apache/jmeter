@@ -113,7 +113,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         try {
             prevCount = removePrevCount(vars, refName);
             List<String> matches = extractMatches(previousResult, vars, matchNumber);
-            matchCount = saveMatches(vars, refName, matchNumber, matchCount, matches);
+            matchCount = saveMatches(vars, refName, matchNumber, matches);
         } catch (RuntimeException e) { // NOSONAR
             if (log.isWarnEnabled()) {
                 log.warn("{}: Error while generating result. {}", getName(), e.toString()); // NOSONAR We don't want to be too verbose
@@ -157,17 +157,21 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         }
     }
 
-    private int saveMatches(JMeterVariables vars, String refName, int matchNumber, int matchCount, List<String> matches) {
-        int localMC = matchCount;
+    /**
+     * @return 0 if there is only one match, else the number of matches
+     * this is used to remove
+     */
+    private int saveMatches(JMeterVariables vars, String refName, int matchNumber, List<String> matches) {
+        int matchCount = 0;
         if (matchNumber == 0) {
             saveRandomMatch(vars, refName, matches);
         } else if (matchNumber > 0) {
             saveOneMatch(vars, refName, matches);
         } else {
-            localMC = matches.size();
+            matchCount = matches.size();
             saveAllMatches(vars, refName, matches);
         }
-        return localMC;
+        return matchCount;
     }
 
     private void saveRandomMatch(JMeterVariables vars, String refName, List<String> matches) {
