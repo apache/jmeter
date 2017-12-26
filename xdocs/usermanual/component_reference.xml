@@ -5310,6 +5310,39 @@ to the random delay.</property>
 
 </component>
 
+<component name="Exponential Timer" index="&sect-num;.6.10" width="341" height="182" screenshot="timers/exponential_timer.png">
+<description><p>This timer produces poisson arrivals with given constant throughput. It provides the following features:
+<ul>
+    <li><i>Specific number of iterations per hour</i>.
+    The very basic requirement is to ensure you end up exactly 50
+    iterations per hour.</li>
+    <li><i>Bursty load</i> simulation. There is no easy way to test "50
+    iterations per hour as 10 bursts of 5 items".</li>
+    <li><i>Repeatable test profile</i>. All the random timers produce different
+    pattern on each test run. This is not good for low-level analysis
+    (e.g. compare of CPU% charts, etc).</li>
+    <li>
+    <li>Avoid all thread groups</li> to fire at 00:00:00. By default, all
+    thread groups would fire at 0, so there would be noticeable spike at
+    the start of the test.</li>
+</ul>
+</p></description>
+
+
+<properties>
+    <property name="Name" required="No">Descriptive name for this timer that is shown in the tree</property>
+    <property name="Target throughput (in samples per 'throughput period')" required="Yes">Maximum number of samples you want to obtain per "throughput period", including all threads in group, from all affected samplers.</property>
+    <property name="Throughput period (seconds)" required="Yes">Throughput period. For example, if "throughput" is set to 42 and "throughput period" to 21 sec, then you'll get 2 samples per second.</property>
+    <property name="Test duration (seconds)" required="Yes">This is used to ensure you'll get throughput*duration samples during "test duration" timeframe.</property>
+    <property name="Number of threads in the batch (threads)" required="Yes">If the value exceeds 1, then multiple threads depart from the timer simultaneously. Average throughput still meets "throughput" value.</property>
+    <property name="Delay between threads in the batch (ms)" required="Yes">For instance, if set to 42, and the batch size is 3, then threads will depart at x, x+42ms, x+84ms.</property>
+    <property name="Use approximate throughput when sequence length exceeds (samples)" required="Yes">When the required number of samples is less than this limit, timer will generate exact number of samples.</property>
+    <property name="Allowed throughput surplus (percents)" required="Yes">When more than "max exact samples" samples is required, timer might generate slightly more events than specified by throughput.</property>
+    <property name="Random seed (change from 0 to random)" required="Yes">Note: different timers should better have different seed values. Constant seed ensures timer generates the same delays each test start. The value of "0" means the timer is truly random (non-repeatable from one execution to another)..</property>
+</properties>
+
+</component>
+
 <a href="#">^</a>
 
 </section>
