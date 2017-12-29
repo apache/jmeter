@@ -511,6 +511,7 @@ public final class MenuFactory {
 
         JMenuItem newMenuChoice = new JMenuItem(info.getLabel());
         newMenuChoice.setName(info.getClassName());
+        newMenuChoice.setEnabled(info.getEnabled(actionCommand));
         newMenuChoice.addActionListener(ActionRouter.getInstance());
         if (actionCommand != null) {
             newMenuChoice.setActionCommand(actionCommand);
