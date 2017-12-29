@@ -199,6 +199,7 @@ Summary
     <li>Updated to groovy-all-2.4.13 (from groovy-all-2.4.12)</li>
     <li>Updated to rhino-1.7.7.2 (from rhino-1.7.7.1)</li>
     <li>Updated to tika-core and tika-parsers 1.17 (from 1.16)</li>
+    <li>Updated to commons-dbcp2-2.2.0 (from 2.1.1)</li>
     <li><bug>61642</bug>Improve FTP test coverage</li>
     <li><bug>61641</bug>Improve JMS test coverage</li>
     <li><bug>61651</bug>Improve TCP test coverage</li>

@@ -214,7 +214,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * cglib-nodep-3.2.5.jar
 * commons-codec-1.10.jar
 * commons-collections-3.2.2.jar
-* commons-dbcp2-2.1.1.jar
+* commons-dbcp2-2.2.0.jar
 * commons-io-2.5.jar
 * commons-jexl2-2.1.1.jar
 * commons-jexl3-3.1.jar

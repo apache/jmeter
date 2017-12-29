@@ -236,7 +236,7 @@ tika-1.17
 http://tika.apache.org/
 - Regular Expression Extractor
 
-commons-dbcp2-2.1.1 (org.apache.commons.dbcp2)
+commons-dbcp2-2.2.0 (org.apache.commons.dbcp2)
 --------------------------
 - DataSourceElement (JDBC)
 
