@@ -33,10 +33,10 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
     private static final Logger log = LoggerFactory.getLogger(ConstantPoissonProcessGenerator.class);
 
     private Random rnd = new Random();
-    public ThroughputProvider throughput;
+    private ThroughputProvider throughputProvider;
     private int batchSize;
     private int batchThreadDelay;
-    public DurationProvider duration;
+    private DurationProvider durationProvider;
     private double lastThroughput;
     private int exactLimit;
     private double allowedThroughputSurplus;
@@ -48,10 +48,10 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
             ThroughputProvider throughput, int batchSize, int batchThreadDelay,
             DurationProvider duration, int exactLimit, double allowedThroughputSurplus, 
             Long seed, boolean logFirstSamples) {
-        this.throughput = throughput;
+        this.throughputProvider = throughput;
         this.batchSize = batchSize;
         this.batchThreadDelay = batchThreadDelay;
-        this.duration = duration;
+        this.durationProvider = duration;
         this.exactLimit = exactLimit;
         this.allowedThroughputSurplus = allowedThroughputSurplus;
         this.logFirstSamples = logFirstSamples;
@@ -62,7 +62,7 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
     }
 
     private void ensureCapacity() {
-        int size = (int) Math.round((throughput.getThroughput() * duration.getDuration() + 1) * 3);
+        int size = (int) Math.round((throughputProvider.getThroughput() * durationProvider.getDuration() + 1) * 3);
         if (events != null && events.capacity() >= size) {
             return;
         }
@@ -70,19 +70,19 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
     }
 
     public void generateNext() {
-        double throughput = this.throughput.getThroughput();
+        double throughput = this.throughputProvider.getThroughput();
         lastThroughput = throughput;
         if (batchSize > 1) {
             throughput /= batchSize;
         }
-        long duration = this.duration.getDuration();
+        long duration = this.durationProvider.getDuration();
         ensureCapacity();
         int samples = (int) Math.ceil(throughput * duration);
         double time;
         int i = 0;
         long t = System.currentTimeMillis();
         int loops = 0;
-        double allowedThroughputSurplus = samples < exactLimit ? 0.0d : this.allowedThroughputSurplus / 100;
+        double currentAllowedThroughputSurplus = samples < exactLimit ? 0.0d : this.allowedThroughputSurplus / 100;
         do {
             time = 0;
             events.clear();
@@ -104,7 +104,7 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
             loops++;
         } while (System.currentTimeMillis() - t < 5000 &&
                 (i < samples + 1 // not enough samples
-                        || (i - 1 - samples) * 1.0f / samples > allowedThroughputSurplus));
+                        || (i - 1 - samples) * 1.0f / samples > currentAllowedThroughputSurplus));
         t = System.currentTimeMillis() - t;
         if (t > 1000) {
             log.warn("Spent {} ms while generating sequence of delays for {} samples, {} throughput, {} duration",
@@ -118,8 +118,8 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
             if(log.isInfoEnabled()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Generated ").append(events.position()).append(" timings (");
-                if (this.duration instanceof AbstractTestElement) {
-                    sb.append(((AbstractTestElement) this.duration).getName());
+                if (this.durationProvider instanceof AbstractTestElement) {
+                    sb.append(((AbstractTestElement) this.durationProvider).getName());
                 }
                 sb.append(" ").append(samples).append(" required, rate ").append(throughput).append(", duration ").append(duration);
                 sb.append(", exact lim ").append(exactLimit).append(", i").append(i);
@@ -157,7 +157,7 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
 
     @Override
     public double next() {
-        if (!events.hasRemaining() || throughput.getThroughput() != lastThroughput) {
+        if (!events.hasRemaining() || throughputProvider.getThroughput() != lastThroughput) {
             generateNext();
         }
         lastEvent = events.get();
