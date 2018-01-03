@@ -238,6 +238,7 @@ Summary
 <ul>
     <li><bug>61556</bug>Clarify in documentation performance impacts of <code>${}</code> var usage in IfController and groovy. Contributed by Justin McCartney (be_strew at yahoo.co.uk)</li>
     <li><bug>61713</bug>Test Fragment has option to Change Controller and Insert Parent. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61965</bug>Module and Include Controller should not allow to add meaningless elements in their context.</li>
 </ul>
 
 <h3>Listeners</h3>

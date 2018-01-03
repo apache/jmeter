@@ -33,7 +33,6 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
@@ -50,7 +49,6 @@ import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.ModuleController;
 import org.apache.jmeter.control.TestFragmentController;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
@@ -271,15 +269,6 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu menu = new JPopupMenu();
-        JMenu addMenu = MenuFactory.makeMenus(
-                new String[] {
-                        MenuFactory.CONFIG_ELEMENTS,
-                        MenuFactory.ASSERTIONS,
-                        MenuFactory.LISTENERS,
-                },
-                JMeterUtils.getResString("add"),  // $NON-NLS-1$
-                ActionNames.ADD);
-        menu.add(addMenu);
         MenuFactory.addEditMenu(menu, true);
         MenuFactory.addFileMenu(menu);
         return menu;
