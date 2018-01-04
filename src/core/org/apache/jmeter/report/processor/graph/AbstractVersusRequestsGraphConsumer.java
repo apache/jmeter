@@ -278,7 +278,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             for (int i = 0; i < channelsCount; i++) {
                 try {
                     File tmpFile = File.createTempFile(parent.getName(), "-"
-                            + String.valueOf(i), workDir);
+                            + i, workDir);
                     tmpFile.deleteOnExit();
                     fileInfos.add(new FileInfo(tmpFile, getConsumedMetadata(i)));
                 } catch (IOException ex) {
@@ -335,14 +335,15 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                     while (reader.hasNext()) {
                         Sample sample = reader.readSample();
                         // Ask parent to consume the altered sample
-                        Long requestsPerGranularity = counts.get(getTimeInterval(sample)).longValue()
-                                % parent.getGranularity();
+                        Long requestsPerGranularity = counts.get(getTimeInterval(sample));
                         Long requestsPerSecond = requestsPerGranularity * 1000 / parent.getGranularity();
                         parent.consumeBase(
                                 createIndexedSample(sample, i, requestsPerSecond), i);
                     }
                 } finally {
-                    file.delete();
+                    if(!file.delete()) {
+                        log.warn("Could not delete intermediate file {}", file.getAbsolutePath());
+                    }
                 }
             }
 
