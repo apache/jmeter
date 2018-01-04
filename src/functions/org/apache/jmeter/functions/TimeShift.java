@@ -192,11 +192,16 @@ public class TimeShift extends AbstractFunction {
 
     private DateTimeFormatter createFormatter(LocaleFormatObject format) {
         log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
-        return new DateTimeFormatterBuilder().appendPattern(format.getFormat()).parseDefaulting(ChronoField.NANO_OF_SECOND, 0)
-                .parseDefaulting(ChronoField.MILLI_OF_SECOND, 0).parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
-                .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0).parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1).parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
-                .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue()).toFormatter(format.getLocale());
+        return new DateTimeFormatterBuilder().appendPattern(format.getFormat())
+                .parseDefaulting(ChronoField.NANO_OF_SECOND, 0)
+                .parseDefaulting(ChronoField.MILLI_OF_SECOND, 0)
+                .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
+                .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
+                .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
+                .toFormatter(format.getLocale());
 
     }
 
