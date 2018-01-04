@@ -25,8 +25,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExponentialTimerTest {
-	private static final Logger LOG = LoggerFactory.getLogger(ExponentialTimerTest.class);
+public class PreciseThroughputTimerTest {
+	private static final Logger LOG = LoggerFactory.getLogger(PreciseThroughputTimerTest.class);
 
 	@Test
 	public void testTimer1() throws Exception {

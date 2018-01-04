@@ -130,7 +130,7 @@ Summary
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
     <li><bug>60213</bug>New component : Boundary based extractor</li>
-    <li><bug>61931</bug>New Component : Exponential Timer, timer that produces poisson arrivals with given constant throughput </li>
+    <li><bug>61931</bug>New Component : Precise Throughput Timer, timer that produces poisson arrivals with given constant throughput</li>
     <li><bug>61644</bug>HTTP Cache Manager: "Use Cache-Control/Expires header when processing GET requests" should be checked by default</li>
     <li><bug>61645</bug>Response Assertion: Add ability to assert on Request Data</li>
     <li><bug>61534</bug>Convert AssertionError to a failed assertion in the JSR223Assertion allowing users to use assert in their code</li>
