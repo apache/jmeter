@@ -270,6 +270,7 @@ Summary
     <li><bug>61900</bug>Report Generator : Report generation fails if separator is a regex reserved char like <code>|</code></li>
     <li><bug>61925</bug>CsvSampleReader does not increment row in nextSample(). Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>61956</bug>Report Generation : <code>-f</code> of <code>-forceDeleteResultFile</code> option does not work. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61899</bug>Report Generation : When <code>jmeter.save.saveservice.print_field_names</code> is false and <code>sample_variables</code> are set report generation fails. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>General</h3>
