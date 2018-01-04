@@ -5125,7 +5125,120 @@ Note that the throughput value should not be changed too often during a test
 </properties>
 </component>
 
-<component name="Synchronizing Timer" index="&sect-num;.6.5" width="410" height="145" screenshot="timers/sync_timer.png">
+<component name="Precise Throughput Timer" index="&sect-num;.6.5" width="523" height="318" screenshot="timers/precise_throughput_timer.png">
+<description><p>This timer introduces variable pauses, calculated to keep the total throughput (e.g. in terms of samples per minute) as close as possible to a give figure. Of course the throughput will be lower if the server is not capable of handling it, or if other timers, or if there's not enough threads, or time-consuming test elements prevent it.</p>
+<p>Although the Timer is called Precise Throughput Timer, it does not aim to produce precisely the same number of samples over one-second intervals during the test.</p>
+<p>The timer works best for rates under 36000 requests/hour, however your milage might vary (see monitoring section below if your goals are
+    vastly different).</p>
+
+<h4>Best location of a Precise Throughput Timer in a Test Plan</h4>
+<p>As you might know, the timers are inherited by all the siblings and their child elements. That is why one of the best places for
+    <code>Precise Throughput Timer</code> is under the first element in a test loop. For instance, you might add a dummy sampler at the beginnig,
+    and place the timer under that dummy sampler</p>
+
+<h4>Produced schedule</h4>
+<p><code>Precise Throughput Timer</code> models <a href="https://en.wikipedia.org/wiki/Poisson_point_process">poisson arrivals</a> schedule. That schedule often happens in a real-life, so it makes sense to use that for load testing.
+    For instance, it naturally might generate samples that are close together thus it might reveal concurrency issues. Even if you manage to generate poisson arrivals
+    with <complink name="Poisson Random Timer"/>, it would be suseptible to the issues listed below. For instance, true poisson arrivals might have indefinitely long
+    pause, and that is not practical for load testing. For instance, "regular" poisson arrivals with 1 per second rate might end up with 50 samples over 60 second long test.</p>
+<p><complink name="Constant Throughput Timer"/> converges to the specified rate, however it tends to produce samples at even intervals.</p>
+
+<h4>Ramp-up and startup spike</h4>
+<p>You might used "ramp-up" or similar approaches to avoid a spike at the test start. For instance, if you configure <complink name="Thread Group" /> to have
+    100 threads, and set <code>Ramp-up Period</code> to 0 (or to a small number), then all the threads would start at the same time, and it would produce an unwanted spike of the load. On top of that, if you set <code>Ramp-up Period</code> too high, it might result in "too few" threads being available at the very beginning to achieve
+the required load.</p>
+<p><code>Precise Throughput Timer</code> schedules executions in a random way, so it can be used to generate constant load, and it is recommended to set both
+    <code>Ramp-up Period</code> and <code>Delay</code> to <code>0</code>.</p>
+
+<h4>Multiple thread groups starting at the same time</h4>
+<p>A variation of <code>Ramp-up</code> issue might appear when <complink name="Test Plan" /> includes multiple <complink name="Thead Group" />s. To mitigate that issue
+    one typically adds "random" delay to each <complink name="Thead Group" /> so threads start at different times.</p>
+<p><code>Precise Throughput Timer</code> avoids that issue since it schedules executions in a random way. You do not need to add extra random delays to mitigate startup spike</p>
+
+<h4>Number of iterations per hour</h4>
+<p>One of the basic requirements is to issue N samples per M minutes. Let it be 60 iterations per hour. Business customers would not understand if you report load test
+    results with 57 executions "just because the random was random". In order to generate 60 iterations per hour, you need to configure as follows (other parameters
+    could be left with their default values)</p>
+<ul>
+    <li><code>Target throughput (samples)</code>: 60</li>
+    <li><code>Throughput period (seconds)</code>: 3600</li>
+    <li><code>Test duration (seconds)</code>: 3600</li>
+</ul>
+<p>The first two options set the throughput. Even though 60/3600, 30/1800, and 120/7200 represent exactly the same load level, pick the one that represents
+    business requirements better. For instance, if the requirement is to test for "60 sample per hour", then set 60/3600. If the requirement is to test "1 sample per minute",
+    then set 1/60.</p>
+<p><code>Test duration (seconds)</code> is there so the timer ensures exact number of samples for a given test duration. <code>Precise Throughput Timer</code> creates
+    a schedule for the samples at the test startup. For instance, if you
+    wish to perform 5 minutes test with 60 per hour throughput, you would set <code>Test duration (seconds)</code> to 300. This enables to configure throughput
+    in a business-friendly way. Note: <code>Test duration (seconds)</code> does <b>not</b> limit test duration. It is just a hint for the timer.</p>
+
+<h4>Number of threads and think times</h4>
+<p>One of the common pitfalls is to adjust number of threads and think times in order to end up with the desired throughput. Even though it might work, that approach
+    results in lots of time spent on the test runs. It might require to adjust threads and delays again when new application version arrives.</p>
+<p><code>Precise Throughput Timer</code> enables to set throughput goal and go for it no matter how well application performs. In order to do that, <code>Precise Throughput Timer</code>
+    creates a schedule at the test startup, then it uses that schedule to release threads. The main driver for the think times and number of threads should be business
+    requirements, not the desire to match troughput somehow.</p>
+<p>For instance, if you application is used by support engineers in a call center. Suppose there are 2 engineers in the call center, and the target throughput is 1 per minute.
+    Suppose it takes 4 minutes for the engineer to read and review the web page. For that case you should set 2 threads in the group, use 4 minutes
+    for think time delays, and specify 1 per minute in <code>Precise Throughput Timer</code>. Of course it would result in something around 2samples/4minutes=0.5 per minute
+    and the result of such a test means "you need more support engineers in a call center" or "you need to reduce the time it takes an engineer to fulfill a task".</p>
+
+<h4>Testing low rates and repeatable tests</h4>
+<p>Testing at low rates (e.g. 60 per hour) requires to know the desired test profile. For instance, if you need to inject load at even intervals (e.g. 60 seconds in between)
+    then you'd better use <complink name="Constant Throughput Timer"/>. However, if you need to have randomized schedule (e.g. to model real users that execute reports),
+    then <code>Precise Throughput Timer</code> is your friend.</p>
+<p>When comparing outcomes of multiple load tests, it is useful to be able to repeat exactly the same test profile. For instance, if action X (e.g. "Profit Report")
+    is invoked after 5 minutes of the test start, then it would be nice to replicate that pattern for subsequent test executions. Replicating the same load pattern
+    simplifies analysis of the test results (e.g. CPU% chart).</p>
+<p><code>Random seed (change from 0 to random)</code> enables to control the seed value that is used by <code>Precise Throughput Timer</code>. By default it is
+    initialized with <code>0</code> and that means random seed is used for each test execution. If you need to have repeatable load pattern, then change
+    <code>Random seed</code> so some random value. The general advice is to use non-zero seed, and "0 by default" is an implementation limit.</p>
+<p>Note: when using multiple thread groups with same throughput rates and same non-zero seed it might result in unwanted firing the samples at the same time.</p>
+
+<h4>Testing high rates and/or long test durations</h4>
+<p>When the number of samples is high (e.g. it exceeds 10'000), schedule generation might take noticeable time (e.g. seconds) as <code>Precise Throughput Timer</code> tries
+    to produce the exact number of samples. There's memory consumption as well, however it should not matter much as every item in the schedule consumes 8 bytes.
+    In order to reduce schedule generation overhead, <code>Precise Throughput Timer</code> allows some slack when generating long schedules. It is controlled by
+    <code>Accuracy of generated delays</code> properties. By default, inexact schedules are allowed when number of samples exceeds 10'000.</p>
+<p>If you want to perform 2-week long test with 5'000 per hour rate, you do not need to create a schedule for that 2 weeks.
+    You can set <code>Test duration (seconds)</code> property of the timer to 1 hour. The timer would create a schedule of 5'000 samples for an hour, and when the schedule is exhausted, the timer would generate
+    a schedule for the next hour.</p>
+
+<h4>Bursty load</h4>
+<p>There might be a case when all the samples should come in pairs, triples, etc. Certain cases might be solved via <complink name="Synchronizing Timer"/>, however
+    <code>Precise Throughput Timer</code> has native way to issue requests in packs. This behavior is disabled by default, and it is controlled with "Batched departures"
+    settings</p>
+<ul>
+    <li><code>Number of threads in the batch (threads)</code>. Specifies the number of samples in a batch. Note the overall number of samples will still be in line with <code>Target Throughput</code></li>
+    <li><code>Delay between threads in the batch (ms)</code>. For instance, if set to 42, and the batch size is 3, then threads will depart at x, x+42ms, x+84ms</li>
+</ul>
+
+<h4>Variable load rate</h4>
+    <p>Even though property values (e.g. throughput) can be defined via expressions, it is recommended to keep the value more or less the same through the test, as it takes time to recompute the new schedule to adapt new values.</p>
+
+<h4>Monitoring</h4>
+<p>As next schedule is generated, <code>Precise Throughput Timer</code> logs a message to <code>jmeter.log</code>:
+    <code>2018-01-04 17:34:03,635 INFO o.a.j.t.ConstantPoissonProcessGenerator: Generated 21 timings (... 20 required, rate 1.0, duration 20, exact lim 20000,
+    i21) in 0 ms, restart was issued 3 times. First 15 events will be fired at: 1.1869653574244292 (+1.1869653574244292), 1.4691340403043207 (+0.2821686828798915),
+    3.638151706179226 (+2.169017665874905), 3.836357090410566 (+0.19820538423134026), 4.709330071408575 (+0.8729729809980085), 5.61330076999953 (+0.903970698590955),
+        ...</code>
+This shows that schedule generation took 0ms, and it shows absolute timestamps in seconds. In the case above, the rate was set to be 1 per second, and the actual timestamps
+    became 1.2 sec, 1.5 sec, 3.6 sec, 3.8 sec, 4.7 sec, and so on.</p>
+</description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this timer that is shown in the tree</property>
+    <property name="Target throughput (in samples per 'throughput period')" required="Yes">Maximum number of samples you want to obtain per "throughput period", including all threads in group, from all affected samplers.</property>
+    <property name="Throughput period (seconds)" required="Yes">Throughput period. For example, if "throughput" is set to 42 and "throughput period" to 21 sec, then you'll get 2 samples per second.</property>
+    <property name="Test duration (seconds)" required="Yes">This is used to ensure you'll get throughput*duration samples during "test duration" timeframe.</property>
+    <property name="Number of threads in the batch (threads)" required="Yes">If the value exceeds 1, then multiple threads depart from the timer simultaneously. Average throughput still meets "throughput" value.</property>
+    <property name="Delay between threads in the batch (ms)" required="Yes">For instance, if set to 42, and the batch size is 3, then threads will depart at x, x+42ms, x+84ms.</property>
+    <property name="Use approximate throughput when sequence length exceeds (samples)" required="Yes">When the required number of samples is less than this limit, timer will generate exact number of samples.</property>
+    <property name="Allowed throughput surplus (percents)" required="Yes">When more than "max exact samples" samples is required, timer might generate slightly more events than specified by throughput.</property>
+    <property name="Random seed (change from 0 to random)" required="Yes">Note: different timers should better have different seed values. Constant seed ensures timer generates the same delays each test start. The value of "0" means the timer is truly random (non-repeatable from one execution to another)..</property>
+</properties>
+</component>
+
+<component name="Synchronizing Timer" index="&sect-num;.6.6" width="410" height="145" screenshot="timers/sync_timer.png">
 
 <description>
 <p>
@@ -5151,7 +5264,7 @@ of its containing Thread group considering 1 injector only.
 
 </component>
 
-<component name="BeanShell Timer" index="&sect-num;.6.6"  width="846" height="636" screenshot="timers/beanshell_timer.png">
+<component name="BeanShell Timer" index="&sect-num;.6.7"  width="846" height="636" screenshot="timers/beanshell_timer.png">
 <description>
 <p>
 The BeanShell Timer can be used to generate a delay.
@@ -5206,7 +5319,7 @@ vars.putObject("OBJ1",new Object());
 </component>
 
 
-<component name="BSF Timer (DEPRECATED)" index="&sect-num;.6.7"  width="844" height="636" screenshot="timers/bsf_timer.png">
+<component name="BSF Timer (DEPRECATED)" index="&sect-num;.6.8"  width="844" height="636" screenshot="timers/bsf_timer.png">
 <description>
 <p>
 The BSF Timer can be used to generate a delay using a BSF scripting language.
@@ -5249,7 +5362,7 @@ vars.putObject("OBJ1",new Object());</source></li>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
-<component name="JSR223 Timer" index="&sect-num;.6.8">
+<component name="JSR223 Timer" index="&sect-num;.6.9">
 <description>
 <p>
 The JSR223 Timer can be used to generate a delay using a JSR223 scripting language,
@@ -5294,11 +5407,13 @@ vars.putObject("OBJ1",new Object());</source></li>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
-<component name="Poisson Random Timer" index="&sect-num;.6.9" width="341" height="182" screenshot="timers/poisson_random_timer.png">
+<component name="Poisson Random Timer" index="&sect-num;.6.10" width="341" height="182" screenshot="timers/poisson_random_timer.png">
 
 <description><p>This timer pauses each thread request for a random amount of time, with most
 of the time intervals occurring near a particular value.  The total delay is the
-sum of the Poisson distributed value, and the offset value.</p></description>
+sum of the Poisson distributed value, and the offset value.</p>
+<p>Note: if you want to model poisson arrivals, consider using <complink name="Precise Throughput Timer"/> instead.</p>
+</description>
 
 
 <properties>
@@ -5329,17 +5444,6 @@ to the random delay.</property>
 </p></description>
 
 
-<properties>
-    <property name="Name" required="No">Descriptive name for this timer that is shown in the tree</property>
-    <property name="Target throughput (in samples per 'throughput period')" required="Yes">Maximum number of samples you want to obtain per "throughput period", including all threads in group, from all affected samplers.</property>
-    <property name="Throughput period (seconds)" required="Yes">Throughput period. For example, if "throughput" is set to 42 and "throughput period" to 21 sec, then you'll get 2 samples per second.</property>
-    <property name="Test duration (seconds)" required="Yes">This is used to ensure you'll get throughput*duration samples during "test duration" timeframe.</property>
-    <property name="Number of threads in the batch (threads)" required="Yes">If the value exceeds 1, then multiple threads depart from the timer simultaneously. Average throughput still meets "throughput" value.</property>
-    <property name="Delay between threads in the batch (ms)" required="Yes">For instance, if set to 42, and the batch size is 3, then threads will depart at x, x+42ms, x+84ms.</property>
-    <property name="Use approximate throughput when sequence length exceeds (samples)" required="Yes">When the required number of samples is less than this limit, timer will generate exact number of samples.</property>
-    <property name="Allowed throughput surplus (percents)" required="Yes">When more than "max exact samples" samples is required, timer might generate slightly more events than specified by throughput.</property>
-    <property name="Random seed (change from 0 to random)" required="Yes">Note: different timers should better have different seed values. Constant seed ensures timer generates the same delays each test start. The value of "0" means the timer is truly random (non-repeatable from one execution to another)..</property>
-</properties>
 
 </component>
 
