@@ -25,9 +25,9 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 /**
  * @since 4.0
  */
-public class ExponentialTimerBeanInfo extends BeanInfoSupport {
-    public ExponentialTimerBeanInfo() {
-        super(ExponentialTimer.class);
+public class PreciseThroughputTimerBeanInfo extends BeanInfoSupport {
+    public PreciseThroughputTimerBeanInfo() {
+        super(PreciseThroughputTimer.class);
         createPropertyGroup(
                 "delay", //$NON-NLS-1$
                 new String[]{
