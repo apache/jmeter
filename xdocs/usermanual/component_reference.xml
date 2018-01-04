@@ -5425,28 +5425,6 @@ to the random delay.</property>
 
 </component>
 
-<component name="Exponential Timer" index="&sect-num;.6.10" width="341" height="182" screenshot="timers/exponential_timer.png">
-<description><p>This timer produces poisson arrivals with given constant throughput. It provides the following features:
-<ul>
-    <li><i>Specific number of iterations per hour</i>.
-    The very basic requirement is to ensure you end up exactly 50
-    iterations per hour.</li>
-    <li><i>Bursty load</i> simulation. There is no easy way to test "50
-    iterations per hour as 10 bursts of 5 items".</li>
-    <li><i>Repeatable test profile</i>. All the random timers produce different
-    pattern on each test run. This is not good for low-level analysis
-    (e.g. compare of CPU% charts, etc).</li>
-    <li>
-    <li>Avoid all thread groups</li> to fire at 00:00:00. By default, all
-    thread groups would fire at 0, so there would be noticeable spike at
-    the start of the test.</li>
-</ul>
-</p></description>
-
-
-
-</component>
-
 <a href="#">^</a>
 
 </section>
