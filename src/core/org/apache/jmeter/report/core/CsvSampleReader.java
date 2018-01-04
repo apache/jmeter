@@ -29,6 +29,8 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.save.SaveService;
@@ -36,6 +38,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Reader class for reading CSV files.
@@ -67,6 +70,10 @@ public class CsvSampleReader implements Closeable{
     private SampleMetadata metadata;
     private int columnCount;
     private Sample lastSampleRead;
+    /**
+     * Number of sample_variables if csv file has no header
+     */
+    private int numberOfSampleVariablesInCsv;
 
     /**
      * Instantiates a new csv sample reader.
@@ -107,19 +114,28 @@ public class CsvSampleReader implements Closeable{
             JOrphanUtils.closeQuietly(this.reader);
             throw new SampleException("Could not create file reader !", ex);
         }
-
+        boolean usingHeadersInCsv = true;
         if (metadata == null) {
-            this.metadata = readMetadata(separator, useSaveSampleCfg);
+            Pair<Boolean, SampleMetadata> localMd = readMetadata(separator, useSaveSampleCfg);
+            this.metadata = localMd.getRight();
+            usingHeadersInCsv = localMd.getLeft();
         } else {
             this.metadata = metadata;
         }
         this.columnCount = this.metadata.getColumnCount();
         this.separator = this.metadata.getSeparator();
         this.row = 0;
+        if(!usingHeadersInCsv) {
+            String vars = JMeterUtils.getProperty(SampleEvent.SAMPLE_VARIABLES);
+            String[] variableNames=vars != null ? vars.split(",") : new String[0];
+            this.numberOfSampleVariablesInCsv = variableNames.length;
+        } else {
+            this.numberOfSampleVariablesInCsv = 0;
+        }
         this.lastSampleRead = nextSample();
     }
 
-    private SampleMetadata readMetadata(char separator, boolean useSaveSampleCfg) {
+    private Pair<Boolean, SampleMetadata> readMetadata(char separator, boolean useSaveSampleCfg) {
         try {
             SampleMetadata result;
             // Read first line
@@ -127,6 +143,7 @@ public class CsvSampleReader implements Closeable{
             if (line == null) {
                 throw new IllegalArgumentException("File is empty");
             }
+            boolean hasHeaders = false;
             // When we can use sample save config and there is no header in csv file
             if (useSaveSampleCfg
                     && CSVSaveService.getSampleSaveConfiguration(
@@ -135,19 +152,24 @@ public class CsvSampleReader implements Closeable{
                 if (log.isWarnEnabled()) {
                     log.warn(
                             "File '{}' does not contain the field names header, "
-                                    + "ensure the jmeter.save.saveservice.* properties are the same as when the CSV file was created or the file may be read incorrectly",
+                                    + "ensure the jmeter.save.saveservice.* properties are the same "
+                                    + "as when the CSV file was created or the file may be read incorrectly "
+                                    + "when generating report",
                             file.getAbsolutePath());
                 }
                 System.out.println("File '"+file.getAbsolutePath()+"' does not contain the field names header, "
-                        + "ensure the jmeter.save.saveservice.* properties are the same as when the CSV file was created or the file may be read incorrectly");
+                        + "ensure the jmeter.save.saveservice.* properties are the same "
+                        + "as when the CSV file was created or the file may be read incorrectly "
+                        + "when generating report");
                 result = new SampleMetadata(
                         SampleSaveConfiguration.staticConfig());
 
             } else {
                 // Build metadata from headers
                 result = new SampleMetaDataParser(separator).parse(line);
+                hasHeaders = true;
             }
-            return result;
+            return Pair.of(hasHeaders, result);
         } catch (Exception e) {
             throw new SampleException("Could not read metadata !", e);
         }
@@ -163,9 +185,9 @@ public class CsvSampleReader implements Closeable{
             data = CSVSaveService.csvReadFile(reader, separator);
             Sample sample = null;
             if (data.length > 0) {
-                if (data.length != columnCount) {
+                if (data.length != columnCount+numberOfSampleVariablesInCsv) {
                     throw new SampleException("Mismatch between expected number of columns:"+columnCount+" and columns in CSV file:"+data.length+
-                            ", check your jmeter.save.saveservice.* configuration");
+                            ", check your jmeter.save.saveservice.* configuration or check line is complete");
                 }
                 sample = new Sample(row++, metadata, data);
             }
