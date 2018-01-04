@@ -30,7 +30,7 @@
   <xsl:param name="sshotdir" select="concat($imgdir, '/screenshots')" />
   <xsl:param name="cssdir" select="concat($relative-path, '/css')" />
   <xsl:param name="jakarta-site" select="'http://jakarta.apache.org'" />
-  <xsl:param name="year" select="'2017'" />
+  <xsl:param name="year" select="'2018'" />
   <xsl:param name="max-img-width" select="'600'" />
 
   <!-- Output method -->
