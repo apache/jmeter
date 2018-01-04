@@ -943,6 +943,26 @@ public class JMeter implements JMeterPlugin {
             // For GUI runs this is done in Start.java
             convertSubTree(tree);
             
+            Summariser summariser = null;
+            String summariserName = JMeterUtils.getPropDefault("summariser.name", "");//$NON-NLS-1$
+            if (summariserName.length() > 0) {
+                log.info("Creating summariser <{}>", summariserName);
+                println("Creating summariser <" + summariserName + ">");
+                summariser = new Summariser(summariserName);
+            }
+            ResultCollector resultCollector = null;
+            if (logFile != null) {
+                resultCollector = new ResultCollector(summariser);
+                resultCollector.setFilename(logFile);
+                tree.add(tree.getArray()[0], resultCollector);
+            }
+            else {
+                // only add Summariser if it can not be shared with the ResultCollector
+                if (summariser != null) {
+                    tree.add(tree.getArray()[0], summariser);
+                }
+            }
+
             if (deleteResultFile) {
                 SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
                 tree.traverse(resultListeners);
@@ -950,34 +970,17 @@ public class JMeter implements JMeterPlugin {
                 while (irc.hasNext()) {
                     ResultCollector rc = irc.next();
                     File resultFile = new File(rc.getFilename());
-                    if (resultFile.exists()) {
-                        resultFile.delete();
+                    if (resultFile.exists() && !resultFile.delete()) {
+                        throw new IllegalStateException("Could not delete results file " + resultFile.getAbsolutePath()
+                            + "(canRead:"+resultFile.canRead()+", canWrite:"+resultFile.canWrite()+")");
                     }
                 }
             }
-
-            Summariser summer = null;
-            String summariserName = JMeterUtils.getPropDefault("summariser.name", "");//$NON-NLS-1$
-            if (summariserName.length() > 0) {
-                log.info("Creating summariser <{}>", summariserName);
-                println("Creating summariser <" + summariserName + ">");
-                summer = new Summariser(summariserName);
-            }
             ReportGenerator reportGenerator = null;
-            if (logFile != null) {
-                ResultCollector logger = new ResultCollector(summer);
-                logger.setFilename(logFile);
-                tree.add(tree.getArray()[0], logger);
-                if(generateReportDashboard) {
-                    reportGenerator = new ReportGenerator(logFile, logger);
-                }
+            if (logFile != null && generateReportDashboard) {
+                reportGenerator = new ReportGenerator(logFile, resultCollector);
             }
-            else {
-                // only add Summariser if it can not be shared with the ResultCollector
-                if (summer != null) {
-                    tree.add(tree.getArray()[0], summer);
-                }
-            }
+
             // Used for remote notification of threads start/stop,see BUG 54152
             // Summariser uses this feature to compute correctly number of threads 
             // when NON GUI mode is used
