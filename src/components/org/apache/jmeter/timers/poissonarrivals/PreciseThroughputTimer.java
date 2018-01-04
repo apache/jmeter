@@ -36,8 +36,8 @@ import org.slf4j.LoggerFactory;
  * On top of that, it tries to maintain the exact amount of arrivals for a given timeframe ({@link #throughputPeriod}.
  * @since 4.0
  */
-public class ExponentialTimer extends AbstractTestElement implements Cloneable, Timer, TestStateListener, TestBean, ThroughputProvider, DurationProvider {
-    private static final Logger log = LoggerFactory.getLogger(ExponentialTimer.class);
+public class PreciseThroughputTimer extends AbstractTestElement implements Cloneable, Timer, TestStateListener, TestBean, ThroughputProvider, DurationProvider {
+    private static final Logger log = LoggerFactory.getLogger(PreciseThroughputTimer.class);
 
     private static final long serialVersionUID = 3;
     private static final ConcurrentMap<AbstractThreadGroup, EventProducer> groupEvents = new ConcurrentHashMap<>();
@@ -78,7 +78,7 @@ public class ExponentialTimer extends AbstractTestElement implements Cloneable, 
 
     @Override
     public Object clone() {
-        final ExponentialTimer newTimer = (ExponentialTimer) super.clone();
+        final PreciseThroughputTimer newTimer = (PreciseThroughputTimer) super.clone();
         newTimer.testStarted = testStarted; // JMeter cloning does not clone fields
         return newTimer;
     }
@@ -132,7 +132,7 @@ public class ExponentialTimer extends AbstractTestElement implements Cloneable, 
         Long seed = randomSeed == null || randomSeed == 0 ? null : randomSeed;
         return 
                 groupEvents.computeIfAbsent(tg, x -> new ConstantPoissonProcessGenerator(
-                        () -> ExponentialTimer.this.getThroughput() / throughputPeriod, 
+                        () -> PreciseThroughputTimer.this.getThroughput() / throughputPeriod,
                         batchSize, batchThreadDelay, this, exactLimit, allowedThroughputSurplus, seed, true));
     }
 
