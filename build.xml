@@ -3657,7 +3657,7 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="sonar" depends="compile, install, coverage, _sonar" />
 
-  <target name="nightlysonar" depends="_coverage.prepare, nightly, init-svnVersion, _coverage.report, _sonar, complete-junit" />
+  <target name="nightlysonar" depends="_coverage.prepare, nightly, init-svnVersion, _coverage.report, _sonar" />
 
   <target name="setproxy" if="${proxy.use}">
     <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
