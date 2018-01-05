@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.jmeter.junit.JMeterTestUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.logging.log4j.LoggingException;
 import org.hamcrest.CoreMatchers;
@@ -37,12 +38,8 @@ public class TestClassFinder {
     private String[] libDirs;
 
     private String getJMeterHome() throws Exception {
-        String path;
-        if (JMeterUtils.getJMeterHome() == null) {
-            path = "lib";
-        } else {
-            path = JMeterUtils.getJMeterHome() + "/lib";
-        }
+        JMeterTestUtils.setupJMeterHome();
+        String path = JMeterUtils.getJMeterHome() + "/lib";
         return Paths.get(path).toRealPath().toString();
     }
 

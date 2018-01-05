@@ -28,17 +28,17 @@ import java.net.URI;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import junit.extensions.TestSetup;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * Class for testing the HTTPMirrorThread, which is handling the
  * incoming requests for the HTTPMirrorServer
  */
-public class TestHTTPMirrorThread extends TestCase {
+public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
     /** The encodings used for http headers and control information */
     private static final String ISO_8859_1 = "ISO-8859-1"; // $NON-NLS-1$
     private static final String UTF_8 = "UTF-8"; // $NON-NLS-1$

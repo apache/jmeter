@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -33,7 +34,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.junit.Test;
 
-public class TestTreeCloner {
+public class TestTreeCloner extends JMeterTestCase {
         
         @Test
         public void testCloning() throws Exception {
