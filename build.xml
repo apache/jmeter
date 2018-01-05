@@ -3023,6 +3023,9 @@ run JMeter unless all the JMeter jars are added.
       <path refid="logging.classpath"/>
     </classpath>
     <batchtest todir="reports" skipNonTests="true">
+        <fileset dir="${build.test}">
+            <include name="**/*Spec.class" />
+		</fileset>
         <fileset dir="${src.test}">
             <include name="**/*Test*.java" />
             <exclude name="**/AllTests.java" />
