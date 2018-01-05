@@ -57,28 +57,12 @@ public abstract class JMeterTestCaseJUnit extends TestCase {
      */
     static {
         if (JMeterUtils.getJMeterProperties() == null) {
-            String file = "jmeter.properties";
-            File f = new File(file);
-            if (!f.canRead()) {
-                System.out.println("Can't find " + file + " - trying bin/ and ../bin");
-                if (!new File("bin/" + file).canRead()) {
-                    // When running tests inside IntelliJ
-                    filePrefix = "../bin/"; // JMeterUtils assumes Unix-style separators
-                } else {
-                    filePrefix = "bin/"; // JMeterUtils assumes Unix-style separators
-                }
-                file = filePrefix + file;
-            } else {
-                filePrefix = "";
-            }
-            // Used to be done in initializeProperties
-            String home=new File(System.getProperty("user.dir"),filePrefix).getParent();
-            System.out.println("Setting JMeterHome: "+home);
-            JMeterUtils.setJMeterHome(home);
+            filePrefix = JMeterTestUtils.setupJMeterHome();
+            String home = JMeterUtils.getJMeterHome();
             System.setProperty("jmeter.home", home); // needed for scripts
             JMeterUtils jmu = new JMeterUtils();
             try {
-                jmu.initializeProperties(file);
+                jmu.initializeProperties(filePrefix+"jmeter.properties");
             } catch (MissingResourceException e) {
                 System.out.println("** Can't find resources - continuing anyway **");
             }

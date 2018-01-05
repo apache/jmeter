@@ -22,6 +22,8 @@ import static org.junit.Assert.fail;
 
 import java.io.StringWriter;
 import java.io.Writer;
+
+import org.apache.jmeter.junit.JMeterTestUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,9 +35,7 @@ public class TestCsvSampleWriter {
     @Before
     public void setUp() throws Exception {
         // We have to initialize JMeterUtils
-        if (JMeterUtils.getJMeterHome() == null) {
-            JMeterUtils.setJMeterHome(System.getenv("JMETER_HOME"));
-        }
+        JMeterTestUtils.setupJMeterHome();
         JMeterUtils.loadJMeterProperties(JMeterUtils.getJMeterBinDir() + "/jmeter.properties");
     }
 
