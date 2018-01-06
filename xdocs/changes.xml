@@ -87,6 +87,10 @@ Summary
     <li>Following classes have been dropped (<code>org.apache.jmeter.functions.util.ArgumentEncoder</code>, <code>org.apache.jmeter.functions.util.ArgumentDecoder</code>), see <pr>335</pr></li>
     <li>In JMS Point-to-Point sampler, setting timeout to 0 will now mean infinite timeout while previously it would be switched to 2000 ms, see <bugzilla>61829</bugzilla></li>
     <li>When Assertions are at different scopes, they are executed starting with the most OUTER one to the most INNER one. See <bugzilla>61846</bugzilla></li>
+    <li>JMeter now starts by default using English locale. This change is due to missing translations in many supported languages.
+        You can change locale by modifying in jmeter and jmeter.bat <code>JVM_ARGS</code> system property values.
+        We'd also be very grateful if you can contribute translations in supported languages.
+    </li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -194,6 +198,7 @@ Summary
     <li><bug>61920</bug>Plugins : Add ability to listen to Test Plan loading/closing. Contributed by Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
     <li><bug>61935</bug>Plugins : Let GUI component (dynamically) decide whether it can be added via the menu or not. Contributed by Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
     <li><bug>61969</bug>When changing LAF through GUI, user should be informed that it is better to restart</li>
+    <li><bug>61970</bug>JMeter now uses english as default locale to avoid missing translations in some locales make UI look weird</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

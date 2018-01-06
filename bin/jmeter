@@ -123,7 +123,8 @@ esac
 HEAP="-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m"
 
 # Set language
-# JMETER_LANGUAGE="-Duser.language=en -Duser.region=EN"
+# Default to en_EN
+JMETER_LANGUAGE="-Duser.language=en -Duser.region=EN"
 
 # Uncomment this to generate GC verbose file with Java prior to 9
 # VERBOSE_GC="-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintAdaptiveSizePolicy -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps"
