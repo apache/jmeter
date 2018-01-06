@@ -62,7 +62,9 @@ public class TestSwitchController extends JMeterTestCase {
         @Test
         public void test1() throws Exception {
             runSimpleTests("1", "one");
+            runSimpleTests(" 1 ", "one");
             runSimpleTests("one", "one"); // Match by name
+            runSimpleTests("one ", "one"); // Match by name with space
         }
 
         @Test
@@ -186,6 +188,7 @@ public class TestSwitchController extends JMeterTestCase {
             runTest2("7", new String[] { "zero" });
             runTest2("5", new String[] { "zero" });
             runTest2("4", new String[] { "six" });
+            runTest2("4 ", new String[] { "six" });
             runTest2("3", new String[] { "five" });
             runTest2("1", new String[] { "one", "two" });
             runTest2("2", new String[] { "three", "four" });
