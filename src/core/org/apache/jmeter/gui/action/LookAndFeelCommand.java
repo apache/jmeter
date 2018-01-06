@@ -26,9 +26,11 @@ import java.util.Set;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
@@ -126,6 +128,13 @@ public class LookAndFeelCommand extends AbstractAction {
             UIManager.setLookAndFeel(className);
             JMeterUtils.refreshUI();
             PREFS.put(USER_PREFS_KEY, className);
+            int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
+                    .getResString("laf_quit_after_change"), // $NON-NLS-1$
+                    JMeterUtils.getResString("exit"), // $NON-NLS-1$
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (chosenOption == JOptionPane.YES_OPTION) {
+                ActionRouter.getInstance().doActionNow(new ActionEvent(ev.getSource(), ev.getID(), ActionNames.EXIT));
+            }
         } catch (UnsupportedLookAndFeelException
                 | InstantiationException
                 | ClassNotFoundException
