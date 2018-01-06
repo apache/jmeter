@@ -63,7 +63,8 @@ public class SendMailCommand {
  
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
-
+    private static final String FALSE = Boolean.FALSE.toString();
+    
     private boolean useSSL = false;
     private boolean useStartTLS = false;
     private boolean trustAllCerts = false;
@@ -99,8 +100,6 @@ public class SendMailCommand {
     private boolean synchronousMode;
 
     private Session session;
-
-    private StringBuilder serverResponse = new StringBuilder(); // TODO this is not populated currently
 
     /** send plain body, i.e. not multipart/mixed */
     private boolean plainBody;
@@ -143,7 +142,7 @@ public class SendMailCommand {
             try {
                 String allProtocols = StringUtils.join(
                     SSLContext.getDefault().getSupportedSSLParameters().getProtocols(), " ");
-                logger.info("Use ssl/tls protocols for mail: " + allProtocols);
+                logger.info("Use ssl/tls protocols for mail: {}", allProtocols);
                 props.setProperty("mail." + protocol + ".ssl.protocols", allProtocols);
             } catch (Exception e) {
                 logger.error("Problem setting ssl/tls protocols for mail", e);
@@ -165,38 +164,38 @@ public class SendMailCommand {
         if (trustAllCerts) {
             if (useSSL) {
                 props.setProperty("mail.smtps.ssl.socketFactory.class", TRUST_ALL_SOCKET_FACTORY);
-                props.setProperty("mail.smtps.ssl.socketFactory.fallback", "false");
+                props.setProperty("mail.smtps.ssl.socketFactory.fallback", FALSE);
             } else if (useStartTLS) {
                 props.setProperty("mail.smtp.ssl.socketFactory.class", TRUST_ALL_SOCKET_FACTORY);
-                props.setProperty("mail.smtp.ssl.socketFactory.fallback", "false");
+                props.setProperty("mail.smtp.ssl.socketFactory.fallback", FALSE);
             }
         } else if (useLocalTrustStore){
             File truststore = new File(trustStoreToUse);
-            logger.info("load local truststore - try to load truststore from: "+truststore.getAbsolutePath());
+            logger.info("load local truststore - try to load truststore from: {}", truststore.getAbsolutePath());
             if(!truststore.exists()){
-                logger.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath());
+                logger.info("load local truststore -Failed to load truststore from: {}", truststore.getAbsolutePath());
                 truststore = new File(FileServer.getFileServer().getBaseDir(), trustStoreToUse);
-                logger.info("load local truststore -Attempting to read truststore from:  "+truststore.getAbsolutePath());
+                logger.info("load local truststore -Attempting to read truststore from: {}", truststore.getAbsolutePath());
                 if(!truststore.exists()){
-                    logger.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath() + ". Local truststore not available, aborting execution.");
+                    logger.info("load local truststore -Failed to load truststore from: {}. Local truststore not available, aborting execution.",
+                            truststore.getAbsolutePath());
                     throw new IOException("Local truststore file not found. Also not available under : " + truststore.getAbsolutePath());
                 }
             }
             if (useSSL) {
                 // Requires JavaMail 1.4.2+
                 props.put("mail.smtps.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
-                props.put("mail.smtps.ssl.socketFactory.fallback", "false");
+                props.put("mail.smtps.ssl.socketFactory.fallback", FALSE);
             } else if (useStartTLS) {
                 // Requires JavaMail 1.4.2+
                 props.put("mail.smtp.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
-                props.put("mail.smtp.ssl.socketFactory.fallback", "false");
+                props.put("mail.smtp.ssl.socketFactory.fallback", FALSE);
             }
         }
 
         session = Session.getInstance(props, null);
         
         Message message;
-
         if (sendEmlMessage) {
             message = new MimeMessage(session, new BufferedInputStream(new FileInputStream(emlMessage)));
         } else {
@@ -840,10 +839,6 @@ public class SendMailCommand {
      */
     public void setPlainBody(boolean plainBody){
         this.plainBody = plainBody;
-    }
-
-    public String getServerResponse() {
-        return this.serverResponse.toString();
     }
 
     public void setEnableDebug(boolean selected) {
