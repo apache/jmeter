@@ -91,6 +91,7 @@ Summary
         You can change locale by modifying in jmeter and jmeter.bat <code>JVM_ARGS</code> system property values.
         We'd also be very grateful if you can contribute translations in supported languages.
     </li>
+    <li>SwitchController now trims by default the content of switch to avoid issue related to unwanted spaces. See <bugzilla>61771</bugzilla></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -119,6 +120,7 @@ Summary
 <ul>
     <li><bug>61675</bug>If Controller: Use expression by default and add a warning when the other mode is used. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61770</bug>Module Controller: Inform user in UI that he needs to have at least one Controller in his plan. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61771</bug>SwitchController : Switch field should be trimmed by safety</li>
 </ul>
 
 <h3>Listeners</h3>
