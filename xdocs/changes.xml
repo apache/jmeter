@@ -193,6 +193,7 @@ Summary
     <li><bug>61919</bug>UX : Reorder Menus. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>61920</bug>Plugins : Add ability to listen to Test Plan loading/closing. Contributed by Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
     <li><bug>61935</bug>Plugins : Let GUI component (dynamically) decide whether it can be added via the menu or not. Contributed by Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
+    <li><bug>61969</bug>When changing LAF through GUI, user should be informed that it is better to restart</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
