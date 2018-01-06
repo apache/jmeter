@@ -1691,8 +1691,42 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="users.xml"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="report-template/**/*.*" />
     </jar>
+    <antcall target="generate_src_artifacts" />
   </target>
-
+    
+  <target name="generate_src_artifacts">
+      <jar destfile="${maven.dir}/ApacheJMeter-sources.jar">
+	      <fileset dir="${src.core}" includes="**/NewDriver*.java,**/DynamicClassLoader*.java,**/ShutdownClient.java"
+	          excludes="**/*.png,**/*.xml,**/*.properties,**/*.txt,**/.html" />
+	  </jar>
+      <jar destfile="${maven.dir}/ApacheJMeter_core-sources.jar">
+      	  <fileset dir="${src.core}" excludes="**/NewDriver*.java,**/DynamicClassLoader*.java,**/ShutdownClient.java,**/*.png,**/*.xml,**/*.properties,**/*.txt,**/.html" />
+      </jar>
+      <generate_src_artifact artifactname="ApacheJMeter_http" srcdir="${src.http}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_ftp" srcdir="${src.ftp}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_jdbc" srcdir="${src.jdbc}" targetdir="${maven.dir}" />
+	  <generate_src_artifact artifactname="ApacheJMeter_java" srcdir="${src.java}" targetdir="${maven.dir}" />
+	  <generate_src_artifact artifactname="ApacheJMeter_junit" srcdir="${src.junit}" targetdir="${maven.dir}" />
+	  <generate_src_artifact artifactname="ApacheJMeter_components" srcdir="${src.components}" targetdir="${maven.dir}" />
+	  <generate_src_artifact artifactname="ApacheJMeter_functions" srcdir="${src.functions}" targetdir="${maven.dir}" />
+	  <generate_src_artifact artifactname="jorphan" srcdir="${src.jorphan}" targetdir="${maven.dir}" />
+	  <generate_src_artifact artifactname="ApacheJMeter_ldap" srcdir="${src.ldap}" targetdir="${maven.dir}" />
+	  <generate_src_artifact artifactname="ApacheJMeter_tcp" srcdir="${src.tcp}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_mail" srcdir="${src.mail}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_jms" srcdir="${src.jms}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_native" srcdir="${src.native}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_mongodb" srcdir="${src.mongodb}" targetdir="${maven.dir}" />
+  </target>
+  <macrodef name="generate_src_artifact">
+    <attribute name="artifactname"/>
+  	<attribute name="srcdir" />
+    <attribute name="targetdir"/>
+    <sequential>
+        <jar destfile="@{targetdir}/@{artifactname}-sources.jar">
+            <fileset dir="@{srcdir}" includes="**/*.java" excludes="**/*.png,**/*.xml,**/*.properties,**/*.txt,**/.html"/>
+        </jar>
+    </sequential>
+  </macrodef>
   <!--
       Beanshell script to create the svnmucc scripts for upload, delete and publish.
 
