@@ -117,15 +117,18 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
                 log.debug("Generated {} events ({} required, rate {}) in {} ms, restart was issued {} times",
                         events.position(), samples, throughput, t, loops);
             }
-            if(log.isInfoEnabled()) {
+            if (log.isInfoEnabled()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Generated ").append(events.position()).append(" timings (");
                 if (this.durationProvider instanceof AbstractTestElement) {
                     sb.append(((AbstractTestElement) this.durationProvider).getName());
                 }
-                sb.append(" ").append(samples).append(" required, rate ").append(throughput).append(", duration ").append(duration);
-                sb.append(", exact lim ").append(exactLimit).append(", i").append(i);
-                sb.append(") in ").append(t).append(" ms, restart was issued ").append(loops).append(" times. ");
+                sb.append(" ").append(samples).append(" required, rate ").append(throughput)
+                        .append(", duration ").append(duration)
+                        .append(", exact lim ").append(exactLimit)
+                        .append(", i").append(i)
+                        .append(") in ").append(t)
+                        .append(" ms, restart was issued ").append(loops).append(" times. ");
                 sb.append("First 15 events will be fired at: ");
                 double prev = 0;
                 for (i = 0; i < events.position() && i < 15; i++) {
@@ -159,7 +162,8 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
 
     @Override
     public double next() {
-        if (!events.hasRemaining() || throughputProvider.getThroughput() != lastThroughput) {
+        if (!events.hasRemaining()
+                || throughputProvider.getThroughput() != lastThroughput) {
             generateNext();
         }
         lastEvent = events.get();
