@@ -1692,6 +1692,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="report-template/**/*.*" />
     </jar>
     <antcall target="generate_src_artifacts" />
+    <antcall target="generate_javadoc_artifacts" />
   </target>
 
   <target name="generate_src_artifacts">
@@ -1726,6 +1727,63 @@ run JMeter unless all the JMeter jars are added.
             <fileset dir="@{srcdir}" includes="**/*.java" excludes="**/*.png,**/*.xml,**/*.properties,**/*.txt,**/.html"/>
         </jar>
     </sequential>
+  </macrodef>
+    
+  <target name="generate_javadoc_artifacts">
+      <generate_javadoc_artifact artifactname="ApacheJMeter_core" srcdir="${src.core}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_http" srcdir="${src.http}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_ftp" srcdir="${src.ftp}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_jdbc" srcdir="${src.jdbc}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_java" srcdir="${src.java}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_junit" srcdir="${src.junit}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_components" srcdir="${src.components}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_functions" srcdir="${src.functions}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="jorphan" srcdir="${src.jorphan}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_ldap" srcdir="${src.ldap}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_tcp" srcdir="${src.tcp}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_mail" srcdir="${src.mail}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_jms" srcdir="${src.jms}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_native" srcdir="${src.native}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_mongodb" srcdir="${src.mongodb}" targetdir="${maven.dir}" />
+  </target>
+  <macrodef name="generate_javadoc_artifact">
+      <attribute name="artifactname"/>
+      <attribute name="srcdir" />
+      <attribute name="targetdir"/>
+      <attribute name="additionalclasspath" default="${maven.dir}"/>
+      <sequential>
+        <mkdir dir="@{targetdir}/@{artifactname}" />
+        <local name="THISYEAR" />
+        <tstamp>
+          <!-- Used to ensure end-year is up to date -->
+          <format property="THISYEAR" pattern="yyyy"/>
+        </tstamp>
+          <javadoc 
+              sourcepath="@{srcdir}"
+            additionalparam="-breakiterator -notimestamp"
+            destdir="@{targetdir}/@{artifactname}"
+            encoding="${javadoc.encoding}"
+            verbose="false"
+            protected="yes"
+            version="yes"
+            doctitle="Apache JMeter @{artifactname} API"
+            windowtitle="Apache JMeter @{artifactname} API"
+            header="&lt;b&gt;Apache JMeter&lt;/b&gt;"
+            bottom="Copyright &amp;#xA9; 1998-${THISYEAR} Apache Software Foundation. All Rights Reserved.">
+            <classpath>
+              <path refid="classpath"/>
+              <path refid="logging.classpath"/>
+              <fileset dir="@{additionalclasspath}">
+                <include name="*.jar" />
+              </fileset>
+            </classpath>
+            <link href="http://docs.oracle.com/javase/8/docs/api/"/>
+          </javadoc>
+        <jar destfile="@{targetdir}/@{artifactname}-javadoc.jar">
+          <fileset dir="@{targetdir}/@{artifactname}" includes="**/*.*" />
+        </jar>
+        <delete failonerror="true" dir="@{targetdir}/@{artifactname}" />
+      </sequential>
   </macrodef>
   <!--
       Beanshell script to create the svnmucc scripts for upload, delete and publish.
@@ -2374,8 +2432,7 @@ run JMeter unless all the JMeter jars are added.
       windowtitle="Apache JMeter API"
       header="&lt;b&gt;Apache JMeter&lt;/b&gt;"
       bottom="Copyright &amp;#xA9; 1998-${THISYEAR} Apache Software Foundation. All Rights Reserved."
-      packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
-      excludepackagenames="org.apache.jorphan.timer">
+      packagenames="org.apache.jmeter.*,org.apache.jorphan.*">
       <classpath>
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
@@ -2396,7 +2453,7 @@ run JMeter unless all the JMeter jars are added.
              destdir="reports"
              docletpath="${lib.opt}/doccheck.jar"
              packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
-             excludepackagenames="org.apache.jmeter.util.keystore,org.apache.jorphan.timer">
+             excludepackagenames="org.apache.jmeter.util.keystore">
       <classpath refid="classpath"/>
       <doclet name="com.sun.tools.doclets.doccheck.DocCheck">
         <!--
