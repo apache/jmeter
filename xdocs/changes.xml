@@ -202,6 +202,7 @@ Summary
     <li><bug>61969</bug>When changing LAF through GUI, user should be informed that it is better to restart</li>
     <li><bug>61970</bug>JMeter now uses english as default locale to avoid missing translations in some locales make UI look weird</li>
     <li><bug>56368</bug>Create and Deploy source artifacts to Maven central</li>
+    <li><bug>61973</bug>Create and Deploy javadoc artifacts to Maven central</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
