@@ -94,12 +94,14 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
                 log.info("Duration should exceed 5 seconds");
                 break;
             }
-            for (i = 0; time < duration; i++) {
+            i = 0;
+            while (time < duration) {
                 double u = rnd.nextDouble();
                 // https://en.wikipedia.org/wiki/Exponential_distribution#Generating_exponential_variates
                 double delay = -Math.log(1 - u) / throughput;
                 time += delay;
                 events.put(time + lastEvent);
+                i++;
             }
             loops++;
         } while (System.currentTimeMillis() - t < 5000 &&
