@@ -519,7 +519,7 @@
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-ext.jar}"/>
-    <pathelement location="${lib.dir}/${spock.jar}"/>
+    <pathelement location="${lib.dir}/${spock-core.jar}"/>
     <pathelement location="${lib.dir}/${cglib-nodep.jar}"/>
     <pathelement location="${lib.dir}/${objenesis.jar}"/>
     <pathelement location="${lib.dir}/${jtidy.jar}"/>
@@ -736,7 +736,7 @@
         <fileset dir="${lib.dir}" includes="*.jar"/>
       </classpath>
     </taskdef>
-    <groovyc srcdir="${src.test}" destdir="${build.test}" encoding="${encoding}">
+    <groovyc srcdir="${src.test}" destdir="${build.test}" encoding="${encoding}" listfiles="true">
       <classpath>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
@@ -1691,8 +1691,100 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="users.xml"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="report-template/**/*.*" />
     </jar>
+    <antcall target="generate_src_artifacts" />
+    <antcall target="generate_javadoc_artifacts" />
   </target>
 
+  <target name="generate_src_artifacts">
+      <jar destfile="${maven.dir}/ApacheJMeter-sources.jar">
+          <fileset dir="${src.core}" includes="**/NewDriver*.java,**/DynamicClassLoader*.java,**/ShutdownClient.java"
+              excludes="**/*.png,**/*.xml,**/*.properties,**/*.txt,**/.html" />
+      </jar>
+      <jar destfile="${maven.dir}/ApacheJMeter_core-sources.jar">
+          <fileset dir="${src.core}" excludes="**/NewDriver*.java,**/DynamicClassLoader*.java,**/ShutdownClient.java,**/*.png,**/*.xml,**/*.properties,**/*.txt,**/.html" />
+      </jar>
+      <generate_src_artifact artifactname="ApacheJMeter_http" srcdir="${src.http}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_ftp" srcdir="${src.ftp}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_jdbc" srcdir="${src.jdbc}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_java" srcdir="${src.java}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_junit" srcdir="${src.junit}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_components" srcdir="${src.components}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_functions" srcdir="${src.functions}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="jorphan" srcdir="${src.jorphan}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_ldap" srcdir="${src.ldap}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_tcp" srcdir="${src.tcp}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_mail" srcdir="${src.mail}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_jms" srcdir="${src.jms}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_native" srcdir="${src.native}" targetdir="${maven.dir}" />
+      <generate_src_artifact artifactname="ApacheJMeter_mongodb" srcdir="${src.mongodb}" targetdir="${maven.dir}" />
+  </target>
+  <macrodef name="generate_src_artifact">
+    <attribute name="artifactname"/>
+    <attribute name="srcdir" />
+    <attribute name="targetdir"/>
+    <sequential>
+        <jar destfile="@{targetdir}/@{artifactname}-sources.jar">
+            <fileset dir="@{srcdir}" includes="**/*.java" excludes="**/*.png,**/*.xml,**/*.properties,**/*.txt,**/.html"/>
+        </jar>
+    </sequential>
+  </macrodef>
+    
+  <target name="generate_javadoc_artifacts">
+      <generate_javadoc_artifact artifactname="ApacheJMeter_core" srcdir="${src.core}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_http" srcdir="${src.http}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_ftp" srcdir="${src.ftp}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_jdbc" srcdir="${src.jdbc}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_java" srcdir="${src.java}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_junit" srcdir="${src.junit}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_components" srcdir="${src.components}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_functions" srcdir="${src.functions}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="jorphan" srcdir="${src.jorphan}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_ldap" srcdir="${src.ldap}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_tcp" srcdir="${src.tcp}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_mail" srcdir="${src.mail}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_jms" srcdir="${src.jms}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_native" srcdir="${src.native}" targetdir="${maven.dir}" />
+      <generate_javadoc_artifact artifactname="ApacheJMeter_mongodb" srcdir="${src.mongodb}" targetdir="${maven.dir}" />
+  </target>
+  <macrodef name="generate_javadoc_artifact">
+      <attribute name="artifactname"/>
+      <attribute name="srcdir" />
+      <attribute name="targetdir"/>
+      <attribute name="additionalclasspath" default="${maven.dir}"/>
+      <sequential>
+        <mkdir dir="@{targetdir}/@{artifactname}" />
+        <local name="THISYEAR" />
+        <tstamp>
+          <!-- Used to ensure end-year is up to date -->
+          <format property="THISYEAR" pattern="yyyy"/>
+        </tstamp>
+          <javadoc 
+              sourcepath="@{srcdir}"
+            additionalparam="-breakiterator -notimestamp"
+            destdir="@{targetdir}/@{artifactname}"
+            encoding="${javadoc.encoding}"
+            verbose="false"
+            protected="yes"
+            version="yes"
+            doctitle="Apache JMeter @{artifactname} API"
+            windowtitle="Apache JMeter @{artifactname} API"
+            header="&lt;b&gt;Apache JMeter&lt;/b&gt;"
+            bottom="Copyright &amp;#xA9; 1998-${THISYEAR} Apache Software Foundation. All Rights Reserved.">
+            <classpath>
+              <path refid="classpath"/>
+              <path refid="logging.classpath"/>
+              <fileset dir="@{additionalclasspath}">
+                <include name="*.jar" />
+              </fileset>
+            </classpath>
+            <link href="http://docs.oracle.com/javase/8/docs/api/"/>
+          </javadoc>
+        <jar destfile="@{targetdir}/@{artifactname}-javadoc.jar">
+          <fileset dir="@{targetdir}/@{artifactname}" includes="**/*.*" />
+        </jar>
+        <delete failonerror="true" dir="@{targetdir}/@{artifactname}" />
+      </sequential>
+  </macrodef>
   <!--
       Beanshell script to create the svnmucc scripts for upload, delete and publish.
 
@@ -2002,6 +2094,19 @@ run JMeter unless all the JMeter jars are added.
       <attribute name="url" default="${@{type}.url}"/>
       <attribute name="repositoryId" default="${@{type}.repositoryId}"/>
       <sequential>
+        <local name="artifact_has_source"/>
+        <local name="artifact_has_javadoc"/>
+        <condition property="artifact_has_source" value="" else="XX">
+          <and>
+            <available file="${maven.dir}/@{stem}-sources.jar"/>
+          </and>
+        </condition>
+        <condition property="artifact_has_javadoc" value="" else="XX">
+          <and>
+            <available file="${maven.dir}/@{stem}-javadoc.jar"/>
+          </and>
+        </condition>
+        <echo>Artifact @{stem} => artifact_has_source='${artifact_has_source}', artifact_has_javadoc='${artifact_has_javadoc}'</echo>
         <java classname="org.codehaus.classworlds.Launcher"
               fork="true"
               dir="${basedir}"
@@ -2025,6 +2130,10 @@ run JMeter unless all the JMeter jars are added.
           <arg value="-Durl=@{url}"/>
           <arg value="-DrepositoryId=@{repositoryId}"/>
           <arg value="-DpomFile=${maven.dir}/@{stem}.pom"/>
+          <!-- if artifact has no sources artifact_has_source=XX so -D will be ignored  -->
+          <arg value="-D${artifact_has_source}sources=${maven.dir}/@{stem}-sources.jar"/>
+          <!-- if artifact has no javadoc artifact_has_javadoc=XX so -D will be ignored  -->
+          <arg value="-D${artifact_has_javadoc}javadoc=${maven.dir}/@{stem}-javadoc.jar"/>  
           <arg value="-Dpackaging=@{packaging}"/>
           <arg value="-Dfile=${maven.dir}/@{stem}.${packaging}"/>
           <!--
@@ -2040,7 +2149,6 @@ run JMeter unless all the JMeter jars are added.
         </java>
       </sequential>
     </macrodef>
-
 
     <deployfile stem="ApacheJMeter_parent" packaging="pom"/>
     <deployfile stem="jorphan"/>
@@ -2332,8 +2440,7 @@ run JMeter unless all the JMeter jars are added.
       windowtitle="Apache JMeter API"
       header="&lt;b&gt;Apache JMeter&lt;/b&gt;"
       bottom="Copyright &amp;#xA9; 1998-${THISYEAR} Apache Software Foundation. All Rights Reserved."
-      packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
-      excludepackagenames="org.apache.jorphan.timer">
+      packagenames="org.apache.jmeter.*,org.apache.jorphan.*">
       <classpath>
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
@@ -2354,7 +2461,7 @@ run JMeter unless all the JMeter jars are added.
              destdir="reports"
              docletpath="${lib.opt}/doccheck.jar"
              packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
-             excludepackagenames="org.apache.jmeter.util.keystore,org.apache.jorphan.timer">
+             excludepackagenames="org.apache.jmeter.util.keystore">
       <classpath refid="classpath"/>
       <doclet name="com.sun.tools.doclets.doccheck.DocCheck">
         <!--
@@ -3024,6 +3131,9 @@ run JMeter unless all the JMeter jars are added.
       <path refid="logging.classpath"/>
     </classpath>
     <batchtest todir="reports" skipNonTests="true">
+        <fileset dir="${build.test}">
+            <include name="**/*Spec.class" />
+        </fileset>
         <fileset dir="${src.test}">
             <include name="**/*Test*.java" />
             <exclude name="**/AllTests.java" />
@@ -3252,7 +3362,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="log4j-1.2-api"/>
     <process_jarfile jarname="log4j-core"/>
     <process_jarfile jarname="log4j-slf4j-impl"/>
-    <process_jarfile jarname="spock"/>
+    <process_jarfile jarname="spock-core"/>
     <process_jarfile jarname="cglib-nodep"/>
     <process_jarfile jarname="objenesis"/>
     <process_jarfile jarname="jtidy"/>
@@ -3658,7 +3768,7 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="sonar" depends="compile, install, coverage, _sonar" />
 
-  <target name="nightlysonar" depends="_coverage.prepare, nightly, init-svnVersion, _coverage.report, _sonar" />
+  <target name="nightlysonar" depends="_coverage.prepare, nightly, init-svnVersion, _coverage.report, _sonar, complete-junit" />
 
   <target name="setproxy" if="${proxy.use}">
     <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"

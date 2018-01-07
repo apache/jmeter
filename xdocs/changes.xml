@@ -80,13 +80,18 @@ Summary
     <li><code>tearDown Thread Group</code> will now run on stop and shutdown of a test by default. If you don't want this behaviour,
     uncheck <code>Run tearDown Thread Groups after shutdown of main threads</code> on <code>Test Plan</code> element, see <bugzilla>61656</bugzilla></li>
     <li>Properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code> have been dropped, see <bugzilla>61587</bugzilla></li>
-    <li>JMeter will now save your test plan whenever you run it. This behaviour can be controlled by property <code>save_automatically_before_run</code></li>
+    <li>JMeter will now save your test plan whenever you run it. This behaviour can be controlled by property <code>save_automatically_before_run</code>, see <bugzilla>61731</bugzilla></li>
     <li>Workbench element has been dropped, you now directly add <code>Non Test Element</code> as children of Test Plan. When loading a Test Plan that contains the element
     JMeter will move the <code>Mirror Server</code>, <code>Property Display</code> and HTTP(s) <code>Test Script Recorder</code> elements as direct children of Test Plan. For
     any other element, it will create a <code>Test Fragment</code> element called <code>Workbench Test Fragment and move the elements in it</code>.</li>
     <li>Following classes have been dropped (<code>org.apache.jmeter.functions.util.ArgumentEncoder</code>, <code>org.apache.jmeter.functions.util.ArgumentDecoder</code>), see <pr>335</pr></li>
     <li>In JMS Point-to-Point sampler, setting timeout to 0 will now mean infinite timeout while previously it would be switched to 2000 ms, see <bugzilla>61829</bugzilla></li>
     <li>When Assertions are at different scopes, they are executed starting with the most OUTER one to the most INNER one. See <bugzilla>61846</bugzilla></li>
+    <li>JMeter now starts by default using English locale. This change is due to missing translations in many supported languages.
+        You can change locale by modifying in jmeter and jmeter.bat <code>JVM_ARGS</code> system property values.
+        We'd also be very grateful if you can contribute translations in supported languages.
+    </li>
+    <li>SwitchController now trims by default the content of switch to avoid issue related to unwanted spaces. See <bugzilla>61771</bugzilla></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -100,6 +105,7 @@ Summary
     <li><bug>53957</bug>HTTP Request: In Parameters tab, allow pasting of content coming from Firefox and Chrome (unparsed)</li>
     <li><bug>61587</bug>Drop properties <code>sampleresult.getbytes.headers_size</code> and <code>sampleresult.getbytes.body_real_size</code></li>
     <li><bug>61843</bug>HTTP(S) Test Script Recorder: Add SAN to JMeter generated CA Certificate. Contributed by Matthew Buckett</li>
+    <li><bug>61901</bug>Support for <code>https.cipherSuites</code> System property. Contributed by Jeremy Arnold (jeremy at arnoldzoo.org)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -114,6 +120,7 @@ Summary
 <ul>
     <li><bug>61675</bug>If Controller: Use expression by default and add a warning when the other mode is used. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61770</bug>Module Controller: Inform user in UI that he needs to have at least one Controller in his plan. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61771</bug>SwitchController : Switch field should be trimmed by safety</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -123,11 +130,13 @@ Summary
     <li><bug>61776</bug>View Results Tree: Expansion of <code>Add expand/collapse all</code> menu in render XML view. Contributed by Maxime Chassagneux and Graham Russell</li>
     <li><bug>61852</bug>View Results Tree: Add a Boundary Extractor Tester</li>
     <li><bug>61794</bug>Influxdb backend: Add as many custom tags as wanted by just create new lines and prefix theirs name by "<code>TAG_</code>" on the GUI backend listener</li>
+    <li><bug>61950</bug>Content-Type <code>audio/mpegurl</code> is wrongly considered as binary</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>60213</bug>Boundary based extractor</li>
+    <li><bug>60213</bug>New component : Boundary based extractor</li>
+    <li><bug>61931</bug>New Component : Precise Throughput Timer, timer that produces poisson arrivals with given constant throughput. Contributed by Vladimir Sitnikov (sitnikov.vladimir at gmail.com)</li>
     <li><bug>61644</bug>HTTP Cache Manager: "Use Cache-Control/Expires header when processing GET requests" should be checked by default</li>
     <li><bug>61645</bug>Response Assertion: Add ability to assert on Request Data</li>
     <li><bug>61534</bug>Convert AssertionError to a failed assertion in the JSR223Assertion allowing users to use assert in their code</li>
@@ -135,6 +144,7 @@ Summary
     <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions : When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61845</bug>New Component JSON Assertion based on AtlanBH JSON Path Assertion donated to JMeter-Plugins and migrated into JMeter core by Artem Fedorov (artem at blazemeter.com)</li>
     <li><bug>61846</bug>Scoped Assertion should follow same order of evaluation as Post Processors</li>
+   
 </ul>
 
 <h3>Functions</h3>
@@ -182,10 +192,17 @@ Summary
     <li><bug>61785</bug>Add <menuchoice><guimenuitem>Help</guimenuitem><guimenuitem>Useful links</guimenuitem></menuchoice> to create issues and download nightly build</li>
     <li><bug>61808</bug>Fix main frame position. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>61802</bug>Loop / ForEach Controller should expose a variable for current iteration. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><pr>349</pr> Add i18n resouces(zh_CN). Contributed by Helly Guo (https://github.com/hellyguo)</li>
-    <li><pr>351</pr> Fixed about dialog position on first view. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><pr>352</pr> Menu bar - added mnemonics to more menu items. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><pr>353</pr> Re-wrote some existing tests in Spock. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>349</pr>Add i18n resources(zh_CN). Contributed by Helly Guo (https://github.com/hellyguo)</li>
+    <li><pr>351</pr>Fixed about dialog position on first view. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>352</pr>Menu bar - added mnemonics to more menu items. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>353</pr>Re-wrote some existing tests in Spock. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61919</bug>UX : Reorder Menus. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61920</bug>Plugins : Add ability to listen to Test Plan loading/closing. Contributed by Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
+    <li><bug>61935</bug>Plugins : Let GUI component (dynamically) decide whether it can be added via the menu or not. Contributed by Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
+    <li><bug>61969</bug>When changing LAF through GUI, user should be informed that it is better to restart</li>
+    <li><bug>61970</bug>JMeter now uses english as default locale to avoid missing translations in some locales make UI look weird</li>
+    <li><bug>56368</bug>Create and Deploy source artifacts to Maven central</li>
+    <li><bug>61973</bug>Create and Deploy javadoc artifacts to Maven central</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -193,6 +210,8 @@ Summary
     <li>Updated to bsh-2.0b6 (from bsh-2.0b5)</li>
     <li>Updated to groovy-all-2.4.13 (from groovy-all-2.4.12)</li>
     <li>Updated to rhino-1.7.7.2 (from rhino-1.7.7.1)</li>
+    <li>Updated to tika-core and tika-parsers 1.17 (from 1.16)</li>
+    <li>Updated to commons-dbcp2-2.2.0 (from 2.1.1)</li>
     <li><bug>61642</bug>Improve FTP test coverage</li>
     <li><bug>61641</bug>Improve JMS test coverage</li>
     <li><bug>61651</bug>Improve TCP test coverage</li>
@@ -206,7 +225,8 @@ Summary
     <li><pr>334</pr>Enable running of JUnit tests from within IntelliJ with default config. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>335</pr>Removed <code>functions.util.*</code> as they don't seem to be used (for many years). Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>61867</bug><pr>345</pr>Updated to latest checkstyle (v8.5), Added many more rules to checkstyle, Included checking of test files and more file types. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><pr>350</pr> Parallelised unit tests. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>350</pr>Parallelised unit tests. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61966</bug>Setup Test Results Analyzer in jenkins</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -229,6 +249,7 @@ Summary
 <ul>
     <li><bug>61556</bug>Clarify in documentation performance impacts of <code>${}</code> var usage in IfController and groovy. Contributed by Justin McCartney (be_strew at yahoo.co.uk)</li>
     <li><bug>61713</bug>Test Fragment has option to Change Controller and Insert Parent. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61965</bug>Module and Include Controller should not allow to add meaningless elements in their context.</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -257,6 +278,11 @@ Summary
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>61807</bug>Web Report : fix error in <code>getTop5ErrorMetrics</code>. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61900</bug>Report Generator : Report generation fails if separator is a regex reserved char like <code>|</code></li>
+    <li><bug>61925</bug>CsvSampleReader does not increment row in nextSample(). Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61956</bug>Report Generation : <code>-f</code> of <code>-forceDeleteResultFile</code> option does not work. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61899</bug>Report Generation : When <code>jmeter.save.saveservice.print_field_names</code> is false and <code>sample_variables</code> are set report generation fails. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61962</bug>Latency Vs Request graph does not exceed 1000 RPS. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -264,6 +290,7 @@ Summary
     <li><bug>61661</bug>Avoid startup/shutdown problems due to 3<sup>rd</sup> party Thread Listener plugins throwing RuntimeException</li>
     <li><bug>61625</bug>File Editor used in BeanInfo behaves strangely under all LAFs with impact on CSVDataSet, JSR223, BSF, Beanshell Element</li>
     <li><bug>61844</bug>Maven pom.xml: Libraries used in testing should have scope test</li>
+    <li><bug>61842</bug>Saving with no changes causes a save and duplicate, identical backup file</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -285,6 +312,9 @@ Summary
     <li>Benny van Wijngaarden (benny at smaragd-it.nl)</li>
     <li>Matthew Buckett (https://github.com/buckett)</li>
     <li>Helly Guo (https://github.com/hellyguo)</li>
+    <li>Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
+    <li>Jeremy Arnold (jeremy at arnoldzoo.org)</li>
+    <li>Vladimir Sitnikov (sitnikov.vladimir at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

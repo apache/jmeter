@@ -214,7 +214,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * cglib-nodep-3.2.5.jar
 * commons-codec-1.10.jar
 * commons-collections-3.2.2.jar
-* commons-dbcp2-2.1.1.jar
+* commons-dbcp2-2.2.0.jar
 * commons-io-2.5.jar
 * commons-jexl2-2.1.1.jar
 * commons-jexl3-3.1.jar
@@ -237,8 +237,8 @@ The following software is provided under the Apache License V 2.0 (as above):
 * log4j-slf4j-impl-2.8.2.jar
 * serializer-2.7.2.jar
 * startbootstrap-sb-admin-2-1.0.7
-* tika-core-1.16.jar
-* tika-parsers-1.16.jar
+* tika-core-1.17.jar
+* tika-parsers-1.17.jar
 * xalan-2.7.2.jar
 * xerces-2.11.0.jar
 * xml-apis-1.4.01.jar
@@ -256,7 +256,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * objenesis-2.6.jar
 * ph-commons-8.6.6.jar
 * ph-css-5.0.4.jar
-* spock-1.0-groovy-2.4.jar
+* spock-core-1.0-groovy-2.4.jar
 
 - Software produced outside the ASF which is available under other licenses (not AL 2.0):
 For details, please see the files under: licenses/bin

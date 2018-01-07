@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
@@ -41,6 +42,7 @@ import org.slf4j.LoggerFactory;
  * 
  * This class is intended to be ThreadSafe.
  */
+@GUIMenuSortOrder(1)
 public class ThreadGroup extends AbstractThreadGroup {
     private static final long serialVersionUID = 282L;
 

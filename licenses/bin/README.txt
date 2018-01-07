@@ -7,7 +7,7 @@ bsf-2.4.0.jar
 bshclient.jar (part of JMeter)
 commons-codec-1.10.jar
 commons-collections-3.2.2.jar
-commons-dbcp2-2.1.1.jar
+commons-dbcp2-2.2.0.jar
 commons-io-2.5.jar
 commons-jexl-2.1.1.jar
 commons-jexl3-3.1.jar
@@ -26,8 +26,8 @@ jorphan.jar (part of JMeter)
 logkit-2.0.jar
 oro-2.0.8.jar
 serializer-2.7.2.jar
-tika-core-1.16.jar
-tika-parsers-1.16.jar
+tika-core-1.17.jar
+tika-parsers-1.17.jar
 xalan-2.7.2.jar
 xercesImpl-2.11.0.jar
 xml-apis-1.4.01.jar

@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.ConstantTimer;
 import org.apache.jmeter.util.JMeterUtils;
@@ -31,23 +32,16 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
  * The GUI for ConstantTimer.
- *
  */
+@GUIMenuSortOrder(1)
 public class ConstantTimerGui extends AbstractTimerGui {
     private static final long serialVersionUID = 240L;
 
-    /**
-     * The default value for the delay.
-     */
     private static final String DEFAULT_DELAY = "300";
-
     private static final String DELAY_FIELD = "Delay Field";
 
     private JTextField delayField;
 
-    /**
-     * No-arg constructor.
-     */
     public ConstantTimerGui() {
         init();
     }
@@ -55,10 +49,8 @@ public class ConstantTimerGui extends AbstractTimerGui {
     /**
      * Handle an error.
      *
-     * @param e
-     *            the Exception that was thrown.
-     * @param thrower
-     *            the JComponent that threw the Exception.
+     * @param e       the Exception that was thrown.
+     * @param thrower the JComponent that threw the Exception.
      */
     public static void error(Exception e, JComponent thrower) {
         JOptionPane.showMessageDialog(thrower, e, "Error", JOptionPane.ERROR_MESSAGE);

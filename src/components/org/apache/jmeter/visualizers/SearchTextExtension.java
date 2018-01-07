@@ -272,7 +272,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
     private static class JEditorPaneSearchProvider implements ISearchTextExtensionProvider {
 
         private static volatile int LAST_POSITION_DEFAULT = 0;
-        private static final Color HILIT_COLOR = Color.LIGHT_GRAY;
+        private static final Color HIGHLIGHT_COLOR = Color.GREEN;
         private JEditorPane results;
         private Highlighter selection;
         private Highlighter.HighlightPainter painter;
@@ -283,7 +283,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
             
             // prepare highlighter to show text find with search command
             selection = new DefaultHighlighter();
-            painter = new DefaultHighlighter.DefaultHighlightPainter(HILIT_COLOR);
+            painter = new DefaultHighlighter.DefaultHighlightPainter(HIGHLIGHT_COLOR);
             results.setHighlighter(selection);
         }
 

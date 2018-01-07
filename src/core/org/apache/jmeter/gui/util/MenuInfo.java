@@ -18,32 +18,50 @@
 
 package org.apache.jmeter.gui.util;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.action.ActionNames;
 
 /**
  * Class to hold additional information needed when building the GUI lists
  */
 public class MenuInfo {
 
+    public static final int SORT_ORDER_DEFAULT = 100;
     private final String label;
-
     private final String className;
-
     private final JMeterGUIComponent guiComp;
+    private final int sortOrder;
 
     public MenuInfo(String displayLabel, String classFullName) {
-        label = displayLabel;
-        className = classFullName;
-        guiComp = null;
+        this(displayLabel, null, classFullName);
     }
 
     public MenuInfo(JMeterGUIComponent item, String classFullName) {
-        label = item.getStaticLabel();
-        className = classFullName;
+        this(item.getStaticLabel(), item, classFullName);
+    }
+    
+    public MenuInfo(String label, JMeterGUIComponent item, String classFullName) {
+        this.label = label;
         guiComp = item;
+        className = classFullName;
+        sortOrder = getSortOrderFromName(classFullName);
     }
 
-    public String getLabel(){
+    private int getSortOrderFromName(String classFullName) {
+        try {
+            GUIMenuSortOrder menuSortOrder = Class.forName(classFullName)
+                    .getDeclaredAnnotation(GUIMenuSortOrder.class);
+            if (menuSortOrder != null) {
+                return menuSortOrder.value();
+            }
+        } catch (ClassNotFoundException ignored) {
+            // NOOP
+        }
+        return SORT_ORDER_DEFAULT;
+    }
+
+    public String getLabel() {
         if (guiComp != null) {
             return guiComp.getStaticLabel();
         }
@@ -52,5 +70,23 @@ public class MenuInfo {
 
     public String getClassName(){
         return className;
+    }
+
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    /**
+     * Returns whether the menu item represented by this MenuInfo object should be enabled
+     * @param actionCommand    the action command name for the menu item
+     * @return true when menu item should be enabled, false otherwise.
+     */
+    public boolean getEnabled(String actionCommand) {
+        if (ActionNames.ADD.equals(actionCommand)) {
+            return guiComp.canBeAdded();
+        }
+        else {
+            return true;
+        }
     }
 }

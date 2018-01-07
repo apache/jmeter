@@ -70,6 +70,7 @@ import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -80,8 +81,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Base for ViewResults
- *
  */
+@GUIMenuSortOrder(1)
 public class ViewResultsFullVisualizer extends AbstractVisualizer
 implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
@@ -90,34 +91,24 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private static final Logger log = LoggerFactory.getLogger(ViewResultsFullVisualizer.class);
 
     public static final Color SERVER_ERROR_COLOR = Color.red;
-
     public static final Color CLIENT_ERROR_COLOR = Color.blue;
-
     public static final Color REDIRECT_COLOR = Color.green;
-    
-    private static final Border RED_BORDER = BorderFactory.createLineBorder(Color.red);
-    
-    private static final Border BLUE_BORDER = BorderFactory.createLineBorder(Color.blue);
-
-    private  JSplitPane mainSplit;
-
-    private DefaultMutableTreeNode root;
-
-    private DefaultTreeModel treeModel;
-
-    private JTree jTree;
-
-    private Component leftSide;
-
-    private JTabbedPane rightSide;
-
-    private JComboBox<ResultRenderer> selectRenderPanel;
-
-    private int selectedTab;
 
     protected static final String COMBO_CHANGE_COMMAND = "change_combo"; // $NON-NLS-1$
 
+    private static final Border RED_BORDER = BorderFactory.createLineBorder(Color.red);
+    private static final Border BLUE_BORDER = BorderFactory.createLineBorder(Color.blue);
     private static final String ICON_SIZE = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
+
+    // Default limited to 10 megabytes
+    private static final int MAX_DISPLAY_SIZE =
+            JMeterUtils.getPropDefault("view.results.tree.max_size", 10485760); // $NON-NLS-1$
+
+    // default display order
+    private static final String VIEWERS_ORDER =
+            JMeterUtils.getPropDefault("view.results.tree.renderers_order", ""); // $NON-NLS-1$ //$NON-NLS-2$
+
+    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
     private static final ImageIcon imageSuccess = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
@@ -127,26 +118,19 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
                     "vrt/" + ICON_SIZE + "/security-low-2.png")); //$NON-NLS-1$ $NON-NLS-2$
 
-    // Maximum size that we will display
-    // Default limited to 10 megabytes
-    private static final int MAX_DISPLAY_SIZE =
-        JMeterUtils.getPropDefault("view.results.tree.max_size", 10485760); // $NON-NLS-1$
-
-    // default display order
-    private static final String VIEWERS_ORDER =
-        JMeterUtils.getPropDefault("view.results.tree.renderers_order", ""); // $NON-NLS-1$ //$NON-NLS-2$
-
-    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
-
+    private JSplitPane mainSplit;
+    private DefaultMutableTreeNode root;
+    private DefaultTreeModel treeModel;
+    private JTree jTree;
+    private Component leftSide;
+    private JTabbedPane rightSide;
+    private JComboBox<ResultRenderer> selectRenderPanel;
+    private int selectedTab;
     private ResultRenderer resultsRender = null;
     private Object resultsObject = null;
-
     private TreeSelectionEvent lastSelectionEvent;
-
     private JCheckBox autoScrollCB;
-
     private Buffer buffer;
-
     private boolean dataChanged;
 
     /**

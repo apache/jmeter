@@ -26,6 +26,7 @@ import java.util.Collection;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -45,13 +46,9 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
 
     // Sampler error action buttons
     private JRadioButton continueBox;
-
     private JRadioButton startNextLoop;
-
-    private JRadioButton stopThrdBox;
-
+    private JRadioButton stopThreadBox;
     private JRadioButton stopTestBox;
-
     private JRadioButton stopTestNowBox;
 
     public AbstractThreadGroupGui(){
@@ -68,53 +65,48 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
     @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
-        pop.add(MenuFactory.makeMenus(new String[] {
-                MenuFactory.CONTROLLERS,
-                MenuFactory.CONFIG_ELEMENTS,
-                MenuFactory.TIMERS,
-                MenuFactory.PRE_PROCESSORS,
-                MenuFactory.SAMPLERS,
-                MenuFactory.POST_PROCESSORS,
-                MenuFactory.ASSERTIONS,
-                MenuFactory.LISTENERS,
-                },
-                JMeterUtils.getResString("add"), // $NON-NLS-1$
-                ActionNames.ADD));
-        
-        if(this.isEnabled() && 
-                // Check test is not started already
-                !JMeterUtils.isTestRunning()) {
+        pop.add(createAddMenu());
+
+        if (this.isEnabled() && !JMeterUtils.isTestRunning()) {
             pop.addSeparator();
 
-            JMenuItem addThinkTimesToChildren = new JMenuItem(JMeterUtils.getResString("add_think_times"));
-            addThinkTimesToChildren.setName("add_think_times");
-            addThinkTimesToChildren.addActionListener(ActionRouter.getInstance());
-            addThinkTimesToChildren.setActionCommand(ActionNames.ADD_THINK_TIME_BETWEEN_EACH_STEP);
-            pop.add(addThinkTimesToChildren);
-
-            JMenuItem runTg = new JMenuItem(JMeterUtils.getResString("run_threadgroup"));
-            runTg.setName("run_threadgroup");
-            runTg.addActionListener(ActionRouter.getInstance());
-            runTg.setActionCommand(ActionNames.RUN_TG);
-            pop.add(runTg);
-    
-            JMenuItem runTgNotimers = new JMenuItem(JMeterUtils.getResString("run_threadgroup_no_timers"));
-            runTgNotimers.setName("run_threadgroup_no_timers");
-            runTgNotimers.addActionListener(ActionRouter.getInstance());
-            runTgNotimers.setActionCommand(ActionNames.RUN_TG_NO_TIMERS);
-            pop.add(runTgNotimers);
-
-            JMenuItem validateTg = new JMenuItem(JMeterUtils.getResString("validate_threadgroup"));
-            validateTg.setName("validate_threadgroup");
-            validateTg.addActionListener(ActionRouter.getInstance());
-            validateTg.setActionCommand(ActionNames.VALIDATE_TG);
-            pop.add(validateTg);
-
+            pop.add(createMenuItem("add_think_times", ActionNames.ADD_THINK_TIME_BETWEEN_EACH_STEP));
+            pop.add(createMenuItem("run_threadgroup", ActionNames.RUN_TG));
+            pop.add(createMenuItem("run_threadgroup_no_timers", ActionNames.RUN_TG_NO_TIMERS));
+            pop.add(createMenuItem("validate_threadgroup", ActionNames.VALIDATE_TG));
         }
         
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop, false);
         return pop;
+    }
+
+    private JMenuItem createMenuItem(String name, String actionCommand) {
+        JMenuItem addThinkTimesToChildren = new JMenuItem(JMeterUtils.getResString(name));
+        addThinkTimesToChildren.setName(name);
+        addThinkTimesToChildren.addActionListener(ActionRouter.getInstance());
+        addThinkTimesToChildren.setActionCommand(actionCommand);
+        return addThinkTimesToChildren;
+    }
+
+    private JMenu createAddMenu() {
+        String addAction = ActionNames.ADD;
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.SAMPLERS, addAction));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONTROLLERS, addAction));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, addAction));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, addAction));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, addAction));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, addAction));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.FRAGMENTS, addAction));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, addAction));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, addAction));
+        return addMenu;
     }
 
     @Override
@@ -128,7 +120,8 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         initGui();
     }
 
-    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+    // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+    private void init() {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
 
@@ -144,27 +137,33 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
 
     private JPanel createOnErrorPanel() {
         JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action"))); // $NON-NLS-1$
+        panel.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("sampler_on_error_action"))); // $NON-NLS-1$
 
         ButtonGroup group = new ButtonGroup();
 
-        continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue")); // $NON-NLS-1$
+        continueBox = new JRadioButton(
+                JMeterUtils.getResString("sampler_on_error_continue")); // $NON-NLS-1$
         group.add(continueBox);
         panel.add(continueBox);
 
-        startNextLoop = new JRadioButton(JMeterUtils.getResString("sampler_on_error_start_next_loop")); // $NON-NLS-1$
+        startNextLoop = new JRadioButton(
+                JMeterUtils.getResString("sampler_on_error_start_next_loop")); // $NON-NLS-1$
         group.add(startNextLoop);
         panel.add(startNextLoop);
 
-        stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread")); // $NON-NLS-1$
-        group.add(stopThrdBox);
-        panel.add(stopThrdBox);
+        stopThreadBox = new JRadioButton(
+                JMeterUtils.getResString("sampler_on_error_stop_thread")); // $NON-NLS-1$
+        group.add(stopThreadBox);
+        panel.add(stopThreadBox);
 
-        stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test")); // $NON-NLS-1$
+        stopTestBox = new JRadioButton(
+                JMeterUtils.getResString("sampler_on_error_stop_test")); // $NON-NLS-1$
         group.add(stopTestBox);
         panel.add(stopTestBox);
 
-        stopTestNowBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test_now")); // $NON-NLS-1$
+        stopTestNowBox = new JRadioButton(
+                JMeterUtils.getResString("sampler_on_error_stop_test_now")); // $NON-NLS-1$
         group.add(stopTestNowBox);
         panel.add(stopTestNowBox);
 
@@ -177,7 +176,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         } else if (te.getOnErrorStopTestNow()) {
             stopTestNowBox.setSelected(true);
         } else if (te.getOnErrorStopThread()) {
-            stopThrdBox.setSelected(true);
+            stopThreadBox.setSelected(true);
         } else if (te.getOnErrorStartNextLoop()) {
             startNextLoop.setSelected(true);
         } else {
@@ -192,7 +191,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         if (stopTestNowBox.isSelected()) {
             return AbstractThreadGroup.ON_SAMPLE_ERROR_STOPTEST_NOW;
         }
-        if (stopThrdBox.isSelected()) {
+        if (stopThreadBox.isSelected()) {
             return AbstractThreadGroup.ON_SAMPLE_ERROR_STOPTHREAD;
         }
         if (startNextLoop.isSelected()) {

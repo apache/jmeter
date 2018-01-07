@@ -42,6 +42,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -766,23 +767,19 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     @Override
     public void drop(DropTargetDropEvent dtde) {
-        try {
-            Transferable tr = dtde.getTransferable();
-            DataFlavor[] flavors = tr.getTransferDataFlavors();
-            for (DataFlavor flavor : flavors) {
-                // Check for file lists specifically
-                if (flavor.isFlavorJavaFileListType()) {
-                    dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                    try {
-                        openJmxFilesFromDragAndDrop(tr);
-                    } finally {
-                        dtde.dropComplete(true);
-                    }
-                    return;
-                }
+        Transferable tr = dtde.getTransferable();
+        boolean anyFlavourIsJavaFileList =
+                Arrays.stream(tr.getTransferDataFlavors())
+                        .anyMatch(DataFlavor::isFlavorJavaFileListType);
+        if (anyFlavourIsJavaFileList) {
+            dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+            try {
+                openJmxFilesFromDragAndDrop(tr);
+            } catch (UnsupportedFlavorException | IOException e) {
+                log.warn("Dnd failed", e);
+            } finally {
+                dtde.dropComplete(true);
             }
-        } catch (UnsupportedFlavorException | IOException e) {
-            log.warn("Dnd failed", e);
         }
     }
 
@@ -832,7 +829,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 warnIndicator.setText(Integer.toString(errorOrFatal.get()));
             });
         }
-
     }
 
     @Override
@@ -847,7 +843,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == warnIndicator) {
-            ActionRouter.getInstance().doActionNow(new ActionEvent(event.getSource(), event.getID(), ActionNames.LOGGER_PANEL_ENABLE_DISABLE));
+            ActionRouter.getInstance().doActionNow(
+                    new ActionEvent(event.getSource(), event.getID(), ActionNames.LOGGER_PANEL_ENABLE_DISABLE));
         }
     }
 

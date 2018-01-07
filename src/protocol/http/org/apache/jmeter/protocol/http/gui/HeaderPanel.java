@@ -37,6 +37,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.protocol.http.control.Header;
@@ -51,39 +52,26 @@ import org.slf4j.LoggerFactory;
  * Allows the user to specify if she needs HTTP header services, and give
  * parameters for this service.
  */
+@GUIMenuSortOrder(2)
 public class HeaderPanel extends AbstractConfigGui implements ActionListener {
-    /** When pasting from the clipboard, split lines on linebreak */
-    private static final String CLIPBOARD_LINE_DELIMITER = "\n"; //$NON-NLS-1$
-
-    /** When pasting from the clipboard, split parameters on ':' */
-    private static final String CLIPBOARD_COLON_DELIMITER = ":"; //$NON-NLS-1$
-
-    /** When pasting from the clipboard, split parameters on '\t' */
-    private static final String CLIPBOARD_TAB_DELIMITER = "\t";
-    
-    private static final long serialVersionUID = 241L;
 
     private static final Logger log = LoggerFactory.getLogger(HeaderPanel.class);
 
+    private static final long serialVersionUID = 241L;
+
+    private static final String CLIPBOARD_LINE_DELIMITER = "\n";
+    private static final String CLIPBOARD_COLON_DELIMITER = ":";
+    private static final String CLIPBOARD_TAB_DELIMITER = "\t";
     private static final String ADD_COMMAND = "Add"; // $NON-NLS-1$
-
     private static final String DELETE_COMMAND = "Delete"; // $NON-NLS-1$
-
     private static final String LOAD_COMMAND = "Load"; // $NON-NLS-1$
-
     private static final String SAVE_COMMAND = "Save"; // $NON-NLS-1$
-
-    /** Command for adding rows from the clipboard */
     private static final String ADD_FROM_CLIPBOARD = "addFromClipboard"; // $NON-NLS-1$
 
     private final InnerTableModel tableModel;
-
     private final HeaderManager headerManager;
-
     private JTable headerTable;
-
     private JButton deleteButton;
-
     private JButton saveButton;
 
     public HeaderPanel() {
@@ -111,9 +99,6 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
         configureTestElement(el);
     }
 
-    /**
-     * Implements JMeterGUIComponent.clearGui
-     */
     @Override
     public void clearGui() {
         super.clearGui();
@@ -362,25 +347,16 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
             return manager.getHeaders().size();
         }
 
-        /**
-         * Required by table model interface.
-         */
         @Override
         public int getColumnCount() {
             return manager.getColumnCount();
         }
 
-        /**
-         * Required by table model interface.
-         */
         @Override
         public String getColumnName(int column) {
             return manager.getColumnName(column);
         }
 
-        /**
-         * Required by table model interface.
-         */
         @Override
         public Object getValueAt(int row, int column) {
             Header head = manager.getHeader(row);
@@ -392,9 +368,6 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
             return null;
         }
 
-        /**
-         * Required by table model interface.
-         */
         @Override
         public void setValueAt(Object value, int row, int column) {
             Header header = manager.getHeader(row);

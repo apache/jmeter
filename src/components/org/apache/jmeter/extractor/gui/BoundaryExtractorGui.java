@@ -33,6 +33,7 @@ import javax.swing.JRadioButton;
 
 import org.apache.jmeter.extractor.BoundaryExtractor;
 import org.apache.jmeter.extractor.RegexExtractor;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -43,6 +44,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * Boundary Extractor Post-Processor GUI
  * @since 4.0
  */
+@GUIMenuSortOrder(4)
 public class BoundaryExtractorGui extends AbstractPostProcessorGui {
     private static final long serialVersionUID = 240L;
 

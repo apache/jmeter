@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -41,7 +40,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-
 
 /**
  * Implement ResultsRender for Boundary Extractor tester
@@ -95,17 +93,20 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
     
     private String process(String textToParse) {
 
-        List<String> result = new ArrayList<>();
         BoundaryExtractor extractor = new BoundaryExtractor();
-        
-        final int nbFound = extractor.extract(boundaryExtractorFieldLeft.getText(),boundaryExtractorFieldRight.getText(), -1, textToParse, result, 0);
 
+        List<String> matches = extractor.extractAll(
+                boundaryExtractorFieldLeft.getText(),
+                boundaryExtractorFieldRight.getText(),
+                textToParse);
+
+        int nbFound = matches.size();
         // Construct a multi-line string with all matches
         StringBuilder sb = new StringBuilder();
         sb.append("Match count: ").append(nbFound).append("\n");
         for (int j = 0; j < nbFound; j++) {
-            String mr = result.get(j);
-            sb.append("Match[").append(j+1).append("]=").append(mr).append("\n");
+            String match = matches.get(j);
+            sb.append("Match[").append(j+1).append("]=").append(match).append("\n");
         }
         return sb.toString();
 

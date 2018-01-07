@@ -48,7 +48,7 @@ Caching and offline analysis/replaying of test results.
 Highly Extensible core:
  -  Pluggable Samplers allow unlimited testing capabilities.
  -  **Scriptable Samplers** (JSR223-compatible languages like Groovy)
- -  Several load statistics may be chosen with ** pluggable timers**.
+ -  Several load statistics may be chosen with **pluggable timers**.
  -  Data analysis and **visualization plugins** allow great extensibility and personalization.
  -  Functions can be used to provide dynamic input to a test or provide data manipulation.
  -  Easy Continuous Integration through 3rd party Open Source libraries for Maven, Graddle and Jenkins

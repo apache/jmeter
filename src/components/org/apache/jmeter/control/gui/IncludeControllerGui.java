@@ -18,11 +18,9 @@
 
 package org.apache.jmeter.control.gui;
 
-import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.control.IncludeController;
-import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
@@ -91,14 +89,6 @@ public class IncludeControllerGui extends AbstractControllerGui
     @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu menu = new JPopupMenu();
-        JMenu addMenu = MenuFactory.makeMenus(new String[] {
-                MenuFactory.CONFIG_ELEMENTS,
-                MenuFactory.ASSERTIONS,
-                MenuFactory.TIMERS,
-                MenuFactory.LISTENERS,
-                }, JMeterUtils.getResString("add"), // $NON-NLS-1$
-                ActionNames.ADD);
-        menu.add(addMenu);
         MenuFactory.addEditMenu(menu, true);
         MenuFactory.addFileMenu(menu);
         return menu;

@@ -52,7 +52,7 @@
 	<classpathentry kind="lib" path="lib/caffeine-2.5.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-dbcp2-2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-dbcp2-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jexl-2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jexl3-3.1.jar"/>
@@ -98,8 +98,8 @@
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-ext-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/tika-core-1.16.jar"/>
-	<classpathentry kind="lib" path="lib/tika-parsers-1.16.jar"/>
+	<classpathentry kind="lib" path="lib/tika-core-1.17.jar"/>
+	<classpathentry kind="lib" path="lib/tika-parsers-1.17.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-1.4.01.jar"/>
@@ -108,7 +108,7 @@
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="lib/xstream-1.4.10.jar"/>
 	<!-- Needed for build and test -->
-	<classpathentry kind="lib" path="lib/spock-1.0-groovy-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/spock-core-1.0-groovy-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/cglib-nodep-3.2.5.jar"/>
 	<classpathentry kind="lib" path="lib/objenesis-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.49.jar"/>

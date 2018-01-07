@@ -149,13 +149,13 @@ public class SaveService {
     
     // Must match _version property value in saveservice.properties
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String PROPVERSION = "3.4";// Expected version $NON-NLS-1$
+    static final String PROPVERSION = "4.0";// Expected version $NON-NLS-1$
 
     // Internal information only
     private static String fileVersion = ""; // computed from saveservice.properties file// $NON-NLS-1$
     // Must match the sha1 checksum of the file saveservice.properties (without newline character),
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String FILEVERSION = "0acd8200bf252acf41d5eeca6aa56b0eaee06f0f"; // Expected value $NON-NLS-1$
+    static final String FILEVERSION = "8e85129da2151ee8b4ecefa08b22aecb77d156cd"; // Expected value $NON-NLS-1$
 
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
