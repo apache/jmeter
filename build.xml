@@ -2095,12 +2095,18 @@ run JMeter unless all the JMeter jars are added.
       <attribute name="repositoryId" default="${@{type}.repositoryId}"/>
       <sequential>
         <local name="artifact_has_source"/>
+        <local name="artifact_has_javadoc"/>
         <condition property="artifact_has_source" value="" else="XX">
           <and>
             <available file="${maven.dir}/@{stem}-sources.jar"/>
           </and>
         </condition>
-        <echo>Artifact @{stem} => artifact_has_source='${artifact_has_source}'</echo>
+        <condition property="artifact_has_javadoc" value="" else="XX">
+          <and>
+            <available file="${maven.dir}/@{stem}-javadoc.jar"/>
+          </and>
+        </condition>
+        <echo>Artifact @{stem} => artifact_has_source='${artifact_has_source}', artifact_has_javadoc='${artifact_has_javadoc}'</echo>
         <java classname="org.codehaus.classworlds.Launcher"
               fork="true"
               dir="${basedir}"
@@ -2126,6 +2132,8 @@ run JMeter unless all the JMeter jars are added.
           <arg value="-DpomFile=${maven.dir}/@{stem}.pom"/>
           <!-- if artifact has no sources artifact_has_source=XX so -D will be ignored  -->
           <arg value="-D${artifact_has_source}sources=${maven.dir}/@{stem}-sources.jar"/>
+          <!-- if artifact has no javadoc artifact_has_javadoc=XX so -D will be ignored  -->
+          <arg value="-D${artifact_has_javadoc}javadoc=${maven.dir}/@{stem}-javadoc.jar"/>  
           <arg value="-Dpackaging=@{packaging}"/>
           <arg value="-Dfile=${maven.dir}/@{stem}.${packaging}"/>
           <!--
