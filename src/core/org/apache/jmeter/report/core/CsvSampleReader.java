@@ -198,7 +198,7 @@ public class CsvSampleReader implements Closeable{
     }
 
     /**
-     * Gets next sample from the file.
+     * @return next sample from the file.
      */
     public Sample readSample() {
         Sample out = lastSampleRead;
@@ -207,14 +207,14 @@ public class CsvSampleReader implements Closeable{
     }
 
     /**
-     * Gets next sample from file but keep the reading file position.
+     * @return next sample from file but keep the reading file position.
      */
     public Sample peek() {
         return lastSampleRead;
     }
 
     /**
-     * Indicates whether the file contains more samples
+     * @return flag, that indicates whether the file contains more samples
      */
     public boolean hasNext() {
         return lastSampleRead != null;
