@@ -2059,6 +2059,7 @@ run JMeter unless all the JMeter jars are added.
           <arg value="-Durl=@{url}"/>
           <arg value="-DrepositoryId=@{repositoryId}"/>
           <arg value="-DpomFile=${maven.dir}/@{stem}.pom"/>
+          <arg value="-Dsources=${maven.dir}/@{stem}-sources.jar"/>
           <arg value="-Dpackaging=@{packaging}"/>
           <arg value="-Dfile=${maven.dir}/@{stem}.${packaging}"/>
           <!--
