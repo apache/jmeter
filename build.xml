@@ -2075,9 +2075,55 @@ run JMeter unless all the JMeter jars are added.
         </java>
       </sequential>
     </macrodef>
+      
+	<macrodef name="deploypomfile">
+	      <attribute name="stem" />
+	      <attribute name="packaging" default="jar"/>
+	      <attribute name="type" default="${repoType}"/>
+	      <attribute name="url" default="${@{type}.url}"/>
+	      <attribute name="repositoryId" default="${@{type}.repositoryId}"/>
+	      <sequential>
+	        <java classname="org.codehaus.classworlds.Launcher"
+	              fork="true"
+	              dir="${basedir}"
+	              failonerror="true">
+	          <jvmarg value="-Xmx512m"/>
+	          <classpath>
+	            <fileset dir="${maven.home}/boot">
+	              <include name="*.jar" />
+	            </fileset>
+	            <fileset dir="${maven.home}/lib">
+	              <include name="*.jar" />
+	            </fileset>
+	          </classpath>
+	          <sysproperty key="classworlds.conf" value="${maven.home}/bin/m2.conf" />
+	          <sysproperty key="maven.home" value="${maven.home}" />
+	          <!-- The following property must be defined for Maven 3.3.[123] at least -->
+	          <sysproperty key="maven.multiModuleProjectDirectory" value="${maven.home}"/>
+	          <arg value="--batch-mode"/>
+	          <!--arg value="-X"/-->
+	          <arg value="-DgeneratePom=false"/>
+	          <arg value="-Durl=@{url}"/>
+	          <arg value="-DrepositoryId=@{repositoryId}"/>
+	          <arg value="-DpomFile=${maven.dir}/@{stem}.pom"/>
+	          <arg value="-Dpackaging=@{packaging}"/>
+	          <arg value="-Dfile=${maven.dir}/@{stem}.${packaging}"/>
+	          <!--
+	               The XX property is a hack to avoid creating conditional code.
+	               It will be empty if the sigs exist; if not it will be XX which will be ignored by Maven
+	          -->
+	          <!-- If packaging == pom, this will just upload the pom twice. Simpler than trying to conditionalise. -->
+	          <arg value="-D${XX}files=${maven.dir}/@{stem}.${packaging}.asc,${maven.dir}/@{stem}.pom.asc"/>
+	          <arg value="-D${XX}types=${packaging}.asc,pom.asc"/>
+	          <arg value="-D${XX}classifiers=,"/>
+	          <!-- Need at least version 2.7 of the plugin to upload additional files-->
+	          <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy-file"/>
+	        </java>
+	      </sequential>
+	    </macrodef>
 
 
-    <deployfile stem="ApacheJMeter_parent" packaging="pom"/>
+    <deploypomfile stem="ApacheJMeter_parent" packaging="pom"/>
     <deployfile stem="jorphan"/>
     <deployfile stem="ApacheJMeter"/>
     <deployfile stem="ApacheJMeter_components"/>
