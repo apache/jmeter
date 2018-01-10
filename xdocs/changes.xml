@@ -139,6 +139,7 @@ Summary
     <li><bug>61931</bug>New Component : Precise Throughput Timer, timer that produces poisson arrivals with given constant throughput. Contributed by Vladimir Sitnikov (sitnikov.vladimir at gmail.com)</li>
     <li><bug>61644</bug>HTTP Cache Manager: "Use Cache-Control/Expires header when processing GET requests" should be checked by default</li>
     <li><bug>61645</bug>Response Assertion: Add ability to assert on Request Data</li>
+    <li><bug>51140</bug>Response Assertion: add ability to set a specific error/failure message that is later shown in the Assertion Result. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61534</bug>Convert AssertionError to a failed assertion in the JSR223Assertion allowing users to use assert in their code</li>
     <li><bug>61756</bug>Extractors: Improve label name "Reference name" to make it clear what it makes</li>
     <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions : When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>

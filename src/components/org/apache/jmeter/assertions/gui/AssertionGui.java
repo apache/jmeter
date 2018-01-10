@@ -45,6 +45,8 @@ import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.TextAreaCellRenderer;
 import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
@@ -134,6 +136,8 @@ public class AssertionGui extends AbstractAssertionGui {
 
     /** Table model for the pattern table. */
     private PowerTableModel tableModel;
+    
+    private JSyntaxTextArea alternativeFailureMessage;
 
     /**
      * Create a new AssertionGui panel.
@@ -162,7 +166,7 @@ public class AssertionGui extends AbstractAssertionGui {
         configureTestElement(el);
         if (el instanceof ResponseAssertion) {
             ResponseAssertion ra = (ResponseAssertion) el;
-
+            ra.setCustomFailureMessage(alternativeFailureMessage.getText());
             saveScopeSettings(ra);
 
             ra.clearTestStrings();
@@ -236,6 +240,7 @@ public class AssertionGui extends AbstractAssertionGui {
         substringBox.setSelected(true);
         notBox.setSelected(false);
         orBox.setSelected(false);
+        alternativeFailureMessage.setText(""); //$NON-NLS-1$
     }
 
     /**
@@ -254,6 +259,9 @@ public class AssertionGui extends AbstractAssertionGui {
 
         showScopeSettings(model, true);
 
+        if(model.getCustomFailureMessage() != null) {
+            alternativeFailureMessage.setText(model.getCustomFailureMessage());
+        }
         if (model.isContainsType()) {
             containsBox.setSelected(true);
         } else if (model.isEqualsType()) {
@@ -316,6 +324,7 @@ public class AssertionGui extends AbstractAssertionGui {
         box.add(createTypePanel());
         add(box, BorderLayout.NORTH);
         add(createStringPanel(), BorderLayout.CENTER);
+        add(createCustomAssertionMessagePanel(), BorderLayout.SOUTH);
     }
 
     /**
@@ -461,6 +470,14 @@ public class AssertionGui extends AbstractAssertionGui {
         panel.add(new JScrollPane(stringTable), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);
 
+        return panel;
+    }
+    
+    private JPanel createCustomAssertionMessagePanel() {
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_custom_message"))); //$NON-NLS-1$
+        alternativeFailureMessage = JSyntaxTextArea.getInstance(3, 80);
+        panel.add(JTextScrollPane.getInstance(alternativeFailureMessage));
         return panel;
     }
 
