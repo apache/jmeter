@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.assertions.gui.AssertionGui;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -63,6 +64,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     private static final String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
     private static final String TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
     private static final String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
+    private static final String CUSTOM_MESSAGE = "Assertion.custom_message"; // $NON-NLS-1$
 
     /**
      * Mask values for TEST_TYPE 
@@ -137,6 +139,14 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         setTestField(REQUEST_DATA);
     }
 
+    public void setCustomFailureMessage(String customFailureMessage) {
+        setProperty(CUSTOM_MESSAGE, customFailureMessage);
+    }
+    
+    public String getCustomFailureMessage() {
+        return getPropertyAsString(CUSTOM_MESSAGE);
+    }
+    
     public boolean isTestFieldURL(){
         return SAMPLE_URL.equals(getTestField());
     }
@@ -365,7 +375,12 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                     if (!pass) {
                         log.debug("Failed: {}", stringPattern);
                         result.setFailure(true);
-                        result.setFailureMessage(getFailText(stringPattern,toCheck));
+                        String customMsg = getCustomFailureMessage();
+                        if(StringUtils.isEmpty(customMsg)) {
+                            result.setFailureMessage(getFailText(stringPattern,toCheck));
+                        } else {
+                            result.setFailureMessage(customMsg);
+                        }
                         break;
                     }
                     log.debug("Passed: {}", stringPattern);
@@ -377,7 +392,12 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                     errorMsg.append(tmp).append('\t');
                 }
                 result.setFailure(true);
-                result.setFailureMessage(errorMsg.toString());   
+                String customMsg = getCustomFailureMessage();
+                if(StringUtils.isEmpty(customMsg)) {
+                    result.setFailureMessage(errorMsg.toString());
+                } else {
+                    result.setFailureMessage(customMsg);
+                }
             }
         } catch (MalformedCachePatternException e) {
             result.setError(true);
