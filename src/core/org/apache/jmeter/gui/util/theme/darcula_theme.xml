@@ -33,7 +33,7 @@
   <marginLine fg="b0b4b9"/>
   <markAllHighlight color="ccccff"/>
   <markOccurrencesHighlight color="ccccff" border="false"/>
-  <matchedBracket fg="D8D8D8" bg="D8D8D8" highlightBoth="true" animate="false"/>
+  <matchedBracket fg="babcd2" bg="2c6fff" highlightBoth="true" animate="true"/>
   <hyperlinks fg="6897BB"/>
   <secondaryLanguages>
     <language index="1" bg="fff0cc"/>
