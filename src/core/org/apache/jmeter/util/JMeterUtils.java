@@ -175,7 +175,6 @@ public class JMeterUtils implements UnitTestManager {
             } else {
                 setLocale(new Locale(loc, "")); // $NON-NLS-1$
             }
-
         } else {
             setLocale(Locale.getDefault());
         }
