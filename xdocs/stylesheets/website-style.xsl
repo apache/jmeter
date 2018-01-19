@@ -524,6 +524,19 @@
     -
   </xsl:template>
 
+  <xsl:template match="pr[following-sibling::pr or following-sibling::bug]">
+    <a href="https://github.com/apache/jmeter/pull/{./text()}">
+      Pull request #<xsl:value-of select="./text()" />
+    </a>,
+  </xsl:template>
+
+  <xsl:template match="pr[not(following-sibling::pr) and (not(preceding-sibling::*) or preceding-sibling::bug)]">
+    <a href="https://github.com/apache/jmeter/pull/{./text()}">
+      Pull request #<xsl:value-of select="./text()" />
+    </a>
+    -
+  </xsl:template>
+
   <xsl:template match="pr">
     <a href="https://github.com/apache/jmeter/pull/{./text()}">
       Pull request #<xsl:value-of select="./text()" />
