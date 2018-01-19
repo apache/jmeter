@@ -4786,8 +4786,8 @@ on XPath.
 </p>
 Some sample expressions:
 <ul>
-<li><code>//title[text()='Text to match']</code> - matches <code>&lt;text&gt;Text to match&lt;/text&gt;</code> anywhere in the response</li>
-<li><code>/title[text()='Text to match']</code> - matches <code>&lt;text&gt;Text to match&lt;/text&gt;</code> at root level in the response</li>
+<li><code>//title[text()='Text to match']</code> - matches <code>&lt;title&gt;Text to match&lt;/title&gt;</code> anywhere in the response</li>
+<li><code>/title[text()='Text to match']</code> - matches <code>&lt;title&gt;Text to match&lt;/title&gt;</code> at root level in the response</li>
 </ul>
 </description>
 
