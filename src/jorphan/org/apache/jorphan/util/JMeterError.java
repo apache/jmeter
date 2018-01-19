@@ -19,9 +19,7 @@
 package org.apache.jorphan.util;
 
 /**
- * The rationale for this class was originally to support chained Errors in JDK 1.3
- * However, the class is now used in its own right.
- * 
+ *  Custom JMeter {@link Error}
  */
 public class JMeterError extends Error {
 
@@ -41,6 +39,10 @@ public class JMeterError extends Error {
 
     public JMeterError(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    public JMeterError(String s, Throwable ex, boolean enableSuppression, boolean writableStackTrace) {
+        super(s, ex, enableSuppression, writableStackTrace);
     }
 
 }
