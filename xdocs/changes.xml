@@ -204,6 +204,7 @@ Summary
     <li><bug>61970</bug>JMeter now uses english as default locale to avoid missing translations in some locales make UI look weird</li>
     <li><bug>56368</bug>Create and Deploy source artifacts to Maven central</li>
     <li><bug>61973</bug>Create and Deploy javadoc artifacts to Maven central</li>
+    <li><pr>371</pr>Fix example in documentation for <complink name="XPath Assertion"/>. Contributed by Konstantin Kalinin (kkalinin at hotmail.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -316,6 +317,7 @@ Summary
     <li>Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
     <li>Jeremy Arnold (jeremy at arnoldzoo.org)</li>
     <li>Vladimir Sitnikov (sitnikov.vladimir at gmail.com)</li>
+    <li>Konstantin Kalinin (kkalinin at hotmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
