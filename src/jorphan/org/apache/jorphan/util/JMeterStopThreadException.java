@@ -41,4 +41,8 @@ public class JMeterStopThreadException extends RuntimeException {
     public JMeterStopThreadException(Throwable cause) {
         super(cause);
     }
+
+    public JMeterStopThreadException(String s, Throwable ex, boolean enableSuppression, boolean writableStackTrace) {
+        super(s, ex, enableSuppression, writableStackTrace);
+    }
 }
