@@ -28,6 +28,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.assertions.BeanShellAssertion;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.FilePanelEntry;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
@@ -35,6 +36,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
+@GUIMenuSortOrder(Integer.MAX_VALUE)
 public class BeanShellAssertionGui extends AbstractAssertionGui {
 
     private static final long serialVersionUID = 240L;
