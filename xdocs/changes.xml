@@ -74,7 +74,10 @@ Summary
 </p>
 <p><a href="usermanual/component_reference.html#Loop_Controller"><code>Loop controller</code></a> and
  <a href="usermanual/component_reference.html#ForEach_Controller"><code>ForEach Controller</code></a>
- now expose their current iteration as a variable named <code>__jm__&lt;Name of your element&gt;__idx</code>., see <bugzilla>61802</bugzilla></p>
+ now expose their current iteration as a variable named <code>__jm__&lt;Name of your element&gt;__idx</code> that
+ you can use like this for example for a Loop Controller named <code>MyLoopController</code>: 
+ <source>${__jm__&lt;MyLoopController&gt;__idx}</source>. 
+ See <bugzilla>61802</bugzilla></p>
 <p>Cookies are now shown in View Results Tree during recording. They were previously always shown as empty.</p>
 <p><a href="usermanual/component_reference.html#Response_Assertion"><code>Response Assertion</code></a> now allows you to customize assertion message and assert on Request Data</p>
 <ch_title>UX improvements</ch_title>
@@ -93,11 +96,17 @@ Summary
 </p>
 
 <ch_title>Functions</ch_title>
-<p>New Function <a href="usermanual/functions.html#__digest"><code>__digest</code></a> provides easy computing of SHA-XXX, MDX hashes</p>
-<p>New Function <a href="usermanual/functions.html#__dateTimeConvert"><code>__dateTimeConvert</code></a> provides easy conversion between date formats</p>
-<p>New Function <a href="usermanual/functions.html#__changeCase"><code>__changeCase</code></a> provides ability to switch to Upper / Lower / Capitalized cases</p>
+<p>New Function <a href="usermanual/functions.html#__digest"><code>__digest</code></a> provides easy computing of SHA-XXX, MDX hashes:
+<source>${__digest(MD5,Apache JMeter 4.0 rocks !,,,)}</source> will return <code>0e16c3ce9b6c9971c69ad685fd875d2b</code></p>
+<p>New Function <a href="usermanual/functions.html#__dateTimeConvert"><code>__dateTimeConvert</code></a> provides easy conversion between date formats:
+<source>${__dateTimeConvert(01 Jan 2017,dd MMM yyyy,dd/MM/yyyy,)}</source> will return <code>01/01/2017</code></p>
+<p>New Function <a href="usermanual/functions.html#__changeCase"><code>__changeCase</code></a> provides ability to switch to Upper / Lower / Capitalized cases
+<source>${__changeCase(Avaro omnia desunt\, inopi pauca\, sapienti nihil,UPPER,)}</source> will return <code>AVARO OMNIA DESUNT, INOPI PAUCA, SAPIENTI NIHIL</code></p>
 <p>New Functions <a href="usermanual/functions.html#__isVarDefined"><code>__isVarDefined</code></a> 
-and <a href="usermanual/functions.html#__isPropDefined"><code>__isPropDefined</code></a> provide testing of properties and variables availability</p>
+and <a href="usermanual/functions.html#__isPropDefined"><code>__isPropDefined</code></a> provide testing of properties and variables availability
+<source>${__isPropDefined(START.HMS)}</source> will return <code>true</code>
+<source>${__isVarDefined(JMeterThread.last_sample_ok)}</source> will return <code>true</code>
+</p>
 
 <ch_title>Scripting and Plugin Development</ch_title>
 <p>You can now call <code>SampleResult#setIgnore()</code> if you don't want your sampler to be visible in results</p>
