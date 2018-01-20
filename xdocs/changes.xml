@@ -66,7 +66,12 @@ Summary
 <p>New <a href="usermanual/component_reference.html#JSON_Assertion"><code>JSON Assertion</code></a> element available to assert on JSON responses.</p>
 <p>New <a href="usermanual/component_reference.html#Precise_Throughput_Timer"><code>Precise Throughput Timer</code></a> element available which produces poisson arrivals with given constant throughput.</p>
 <p>JMS Point-to-Point sampler has been enhanced with <code>read</code>, <code>browse</code>, <code>clear</code> options.</p>
-<p>Best property values are now selected on many Test Elements to ensure best practices are the defaults.</p>
+<p>Best property values are now selected on many Test Elements to ensure best practices are the defaults:
+    <ul>
+        <li>Newly added <code>If Controller</code> now uses by default Expression which is the most performing option</li>
+        <li>Newly added JSR223 Test Element now cache compiled script by default if language used provides this feature</li>
+    </ul>
+</p>
 <p><a href="usermanual/component_reference.html#Loop_Controller"><code>Loop controller</code></a> and
  <a href="usermanual/component_reference.html#ForEach_Controller"><code>ForEach Controller</code></a>
  now expose their current iteration as a variable named <code>__jm__&lt;Name of your element&gt;__idx</code>., see <bugzilla>61802</bugzilla></p>
@@ -78,7 +83,14 @@ Summary
 <p>Menu UX have been improved to make most used elements available more rapidly</p>
 <p>HTTP(S) Test Script Recorder now allows you to name your transactions while recording in a more human readable way</p>
 <p></p>
-<p>UX improvements made on Function Helper Dialog (The wizard that helps using and testing functions)</p>
+<p>UX improvements made on, among the most notable :
+<ul>
+    <li>Module Controller informs user at least one Controller is required</li>
+    <li>Function Helper Dialog (The wizard that helps using and testing functions) has been improved in many fields</li>
+    <li>Switch Controller trims text to avoid issues when a space is introduced before/after name</li>
+    <li>Test Plan is now saved before running the test plan</li>
+</ul>
+</p>
 
 <ch_title>Functions</ch_title>
 <p>New Function <a href="usermanual/functions.html#__digest"><code>__digest</code></a> provides easy computing of SHA-XXX, MDX hashes</p>
@@ -87,8 +99,17 @@ Summary
 <p>New Functions <a href="usermanual/functions.html#__isVarDefined"><code>__isVarDefined</code></a> 
 and <a href="usermanual/functions.html#__isPropDefined"><code>__isPropDefined</code></a> provide testing of properties and variables availability</p>
 
+<ch_title>Scripting and Plugin Development</ch_title>
+<p>You can now call <code>SampleResult#setIgnore()</code> if you don't want your sampler to be visible in results</p>
+<p><code>JavaSamplerContext</code> used by <code>AbstractJavaSamplerClient</code> has been enhanced with new methods to easy plugin development.</p>
+<p>JMeter now distributes additional Maven sources and javadoc artifacts into <a href="https://repo1.maven.org/maven2/org/apache/jmeter/ApacheJMeter_core/4.0/">Maven repository</a></p>
+<p>Plugins can now register listeners to be notified when a Test Plan is opened/closed</p>
 
-<ch_title>Documentation improvements</ch_title>
+<ch_title>Live Reporting and Web Report</ch_title>
+<p>InfluxDB backend listener now allows you to add custom tags by adding them with prefix <code>TAG_</code>, see <bugzilla>61794</bugzilla></p>
+<p>In Web Report responseTime distribution graph is more precise</p>
+<p>Some bugfixes have been made on report generation, see <bugzilla>61900</bugzilla>, <bugzilla>61900</bugzilla>61956, <bugzilla>61899</bugzilla>.
+Graphs <i>Latency Vs Request</i> and <i>Response Time Vs Request</i> did not exceed 1000 RPS due to <bugzilla>61962</bugzilla></p>
 
 
 <!-- =================== Incompatible changes =================== -->
@@ -308,7 +329,7 @@ and <a href="usermanual/functions.html#__isPropDefined"><code>__isPropDefined</c
     <li><bug>61925</bug>CsvSampleReader does not increment row in nextSample(). Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>61956</bug>Report Generation : <code>-f</code> of <code>-forceDeleteResultFile</code> option does not work. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61899</bug>Report Generation : When <code>jmeter.save.saveservice.print_field_names</code> is false and <code>sample_variables</code> are set report generation fails. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>61962</bug>Latency Vs Request graph does not exceed 1000 RPS. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61962</bug>Latency Vs Request and Response Time Vs Request graphs do not exceed 1000 RPS. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>General</h3>
