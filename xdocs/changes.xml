@@ -208,6 +208,7 @@ Graphs <i>Latency Vs Request</i> and <i>Response Time Vs Request</i> did not exc
     <li><bug>61759</bug>Add <code>__changeCase</code> function to change different cases of a string. Based on a contribution by orimarko at gmail.com</li>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
     <li><bug>61738</bug>Function Helper Dialog: Add Copy in Generate and clarify labels. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62027</bug>Function Helper Dialog : Make Help button open browser on function documentation instead of Internal Dialog</li>
     <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
 </ul>
 
