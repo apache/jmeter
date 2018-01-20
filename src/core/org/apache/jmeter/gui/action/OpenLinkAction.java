@@ -40,14 +40,16 @@ public class OpenLinkAction extends AbstractAction {
     static {
         commands.add(ActionNames.LINK_BUG_TRACKER);
         commands.add(ActionNames.LINK_COMP_REF);
+        commands.add(ActionNames.LINK_FUNC_REF);
         commands.add(ActionNames.LINK_NIGHTLY_BUILD);
         commands.add(ActionNames.LINK_RELEASE_NOTES);
     }
 
     private static final Map<String, String> initLinkMap() {
-        Map<String, String> map = new HashMap<>(4);
+        Map<String, String> map = new HashMap<>(5);
         map.put(ActionNames.LINK_BUG_TRACKER, "https://jmeter.apache.org/issues.html");
         map.put(ActionNames.LINK_COMP_REF, "https://jmeter.apache.org/usermanual/component_reference.html");
+        map.put(ActionNames.LINK_FUNC_REF, "https://jmeter.apache.org/usermanual/functions.html");
         map.put(ActionNames.LINK_NIGHTLY_BUILD, "https://jmeter.apache.org/nightly.html");
         map.put(ActionNames.LINK_RELEASE_NOTES, "https://jmeter.apache.org/changes.html");
         return map;
@@ -63,6 +65,9 @@ public class OpenLinkAction extends AbstractAction {
             return; 
         }
         try {
+            if(e.getSource() instanceof String) {
+                url += "#"+((String)e.getSource());
+            }
             java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
         } catch (IOException err) {
             log.error("OpenLinkAction: User default browser is not found, or it fails to be launched, or the default handler application failed to be launched on {}", err);
