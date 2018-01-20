@@ -65,8 +65,8 @@ public class OpenLinkAction extends AbstractAction {
             return; 
         }
         try {
-            if(e.getSource() instanceof String) {
-                url += "#"+((String)e.getSource());
+            if(e.getSource() instanceof String[]) {
+                url += "#"+((String[])e.getSource())[1];
             }
             java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
         } catch (IOException err) {
