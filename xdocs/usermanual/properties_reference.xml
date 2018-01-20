@@ -1807,6 +1807,16 @@ JMETER-SERVER</source>
 <a href="#">^</a>
 </section>
 
+<section name="&sect-num;.42 Help" anchor="help">
+<description>Controls how documentation in JMeter is displayed</description>
+<properties>
+    <property name="help.local">
+    Switch that allows using Local documentation opened in JMeter GUI.<br/>
+    By default we use Online documentation opened in Browser.
+    Defaults to <code>false</code>
+    </property>
+</properties>
+</section>
 <!-- 
 <section name="&sect-num;.10 Reports" anchor="Reports">
 <description>
