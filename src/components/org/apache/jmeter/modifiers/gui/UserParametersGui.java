@@ -41,6 +41,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -54,6 +55,7 @@ import org.apache.jorphan.gui.GuiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@GUIMenuSortOrder(5)
 public class UserParametersGui extends AbstractPreProcessorGui {
 
     private static final long serialVersionUID = 241L;

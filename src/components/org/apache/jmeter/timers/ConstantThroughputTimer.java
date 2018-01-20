@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -46,6 +47,7 @@ import org.slf4j.LoggerFactory;
  * - delay each thread according to when it last ran
  * - delay each thread according to when any thread last ran
  */
+@GUIMenuSortOrder(4)
 public class ConstantThroughputTimer extends AbstractTestElement implements Timer, TestStateListener, TestBean {
     private static final long serialVersionUID = 4;
 
