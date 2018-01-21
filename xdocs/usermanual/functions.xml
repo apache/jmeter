@@ -1678,7 +1678,7 @@ returns:
     <p>Examples:
     <source>${__changeCase(Avaro omnia desunt\, inopi pauca\, sapienti nihil,UPPER,)}</source> will return <code>AVARO OMNIA DESUNT, INOPI PAUCA, SAPIENTI NIHIL</code>
     <source>${__changeCase(LABOR OMNIA VINCIT IMPROBUS,LOWER,)}</source> will return <code>labor omnia vincit improbus</code>
-    <source>${__changeCase(omnibus viis romam pervenitur ,CAPITALIZE,)}</source> will return <code>Omnibus viis romam pervenitur</code>
+    <source>${__changeCase(omnibus viis romam pervenitur,CAPITALIZE,)}</source> will return <code>Omnibus viis romam pervenitur</code>
     </p>
 </component>
 
