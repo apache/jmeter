@@ -35,7 +35,7 @@ dec-0.1.2 (org.brotli.dec)
 https://github.com/google/brotli/tree/master/java/org/brotli
 - Used by HTTP4 HC Impl for brotli decoding
 
-caffeine 2.5.5
+caffeine 2.6.1
 -----------------
 https://github.com/ben-manes/caffeine/
 - Used by CssParser
