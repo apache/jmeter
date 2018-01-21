@@ -62,14 +62,22 @@ Summary
 <!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
 <ch_title>Core improvements</ch_title>
 <p>JMeter now supports JAVA 9.</p>
-<p>New <a href="usermanual/component_reference.html#Boundary_Extractor"><code>Boundary Extractor</code></a> element available which provides easy extraction with better performances</p>
-<p>New <a href="usermanual/component_reference.html#JSON_Assertion"><code>JSON Assertion</code></a> element available to assert on JSON responses.</p>
-<p>New <a href="usermanual/component_reference.html#Precise_Throughput_Timer"><code>Precise Throughput Timer</code></a> element available which produces poisson arrivals with given constant throughput.</p>
-<p>JMS Point-to-Point sampler has been enhanced with <code>read</code>, <code>browse</code>, <code>clear</code> options.</p>
+<p>New <a href="usermanual/component_reference.html#Boundary_Extractor"><code>Boundary Extractor</code></a> element available which provides easy extraction with better performances
+<figure width="1078" height="315" image="changes/4.0/boundary_extractor.png"></figure>
+</p>
+<p>New <a href="usermanual/component_reference.html#JSON_Assertion"><code>JSON Assertion</code></a> element available to assert on JSON responses.
+<figure width="1095" height="307" image="changes/4.0/json_assertion.png"></figure></p>
+<p>New <a href="usermanual/component_reference.html#Precise_Throughput_Timer"><code>Precise Throughput Timer</code></a> element available which produces poisson arrivals with given constant throughput.
+<figure width="1080" height="381" image="changes/4.0/precise_throughput_timer.png"></figure></p>
+<p>JMS Point-to-Point sampler has been enhanced with <code>read</code>, <code>browse</code>, <code>clear</code> options.
+<figure width="1080" height="489" image="changes/4.0/jmsptp_communication_styles.png"></figure></p>
 <p>Best property values are now selected on many Test Elements to ensure best practices are the defaults:
     <ul>
-        <li>Newly added <code>If Controller</code> now uses by default Expression which is the most performing option</li>
-        <li>Newly added JSR223 Test Element now cache compiled script by default if language used provides this feature</li>
+        <li>Newly added <code>If Controller</code> now uses by default Expression which is the most performing option.
+        <figure width="716" height="248" image="changes/4.0/if_controller_condition.png"></figure>
+        <figure width="717" height="251" image="changes/4.0/if_controller_expression.png"></figure></li>
+        <li>Newly added JSR223 Test Element now cache compiled script by default if language used provides this feature.
+        <figure width="346" height="49" image="changes/4.0/jsr223_cache_compilation.png"></figure></li>
     </ul>
 </p>
 <p><a href="usermanual/component_reference.html#Loop_Controller"><code>Loop controller</code></a> and
@@ -79,17 +87,22 @@ Summary
  <source>${__jm__&lt;MyLoopController&gt;__idx}</source>. 
  See <bugzilla>61802</bugzilla></p>
 <p>Cookies are now shown in View Results Tree during recording. They were previously always shown as empty.</p>
-<p><a href="usermanual/component_reference.html#Response_Assertion"><code>Response Assertion</code></a> now allows you to customize assertion message and assert on Request Data</p>
+<p><a href="usermanual/component_reference.html#Response_Assertion"><code>Response Assertion</code></a> now allows you to customize assertion message and assert on Request Data.
+<figure width="909" height="617" image="changes/4.0/response_assertion_enhancements.png"></figure></p>
 <ch_title>UX improvements</ch_title>
 <p>JMeter now uses <a href="https://github.com/bulenkov/Darcula">Darcula LAF</a> by default</p>
-<p>Workbench has been dropped from UI, you can now use Non Test Elements as immediate children of Test Plan</p>
-<p>Menu UX have been improved to make most used elements available more rapidly</p>
-<p>HTTP(S) Test Script Recorder now allows you to name your transactions while recording in a more human readable way</p>
+<p>Workbench has been dropped from UI, you can now use Non Test Elements as immediate children of Test Plan.
+<figure width="282" height="144" image="changes/4.0/goodbye_workbench.png"></figure></p>
+<p>Menu UX have been improved to make most used elements available more rapidly.
+<figure width="711" height="322" image="changes/4.0/menu_organization.png"></figure></p>
+<p>HTTP(S) Test Script Recorder now allows you to name your transactions while recording in a more human readable way.
+<figure width="1011" height="502" image="changes/4.0/recorder_naming_samplers.png"></figure></p>
 <p></p>
 <p>UX improvements made on, among the most notable :
 <ul>
     <li>Module Controller informs user at least one Controller is required</li>
-    <li>Function Helper Dialog (The wizard that helps using and testing functions) has been improved in many fields</li>
+    <li>Function Helper Dialog (The wizard that helps using and testing functions) has been improved in many fields.
+    <figure width="772" height="315" image="changes/4.0/function_helper_dialog_enhancements.png"></figure></li>
     <li>Switch Controller trims text to avoid issues when a space is introduced before/after name</li>
     <li>Test Plan is now saved before running the test plan</li>
 </ul>
