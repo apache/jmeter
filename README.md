@@ -36,7 +36,11 @@ Full featured Test IDE that allows fast Test Plan **recording (from Browsers or 
 
 A complete and [**ready to present dynamic HTML report**](http://jmeter.apache.org/usermanual/generating-dashboard.html)
 
+[![Dashboard screenshot](https://raw.githubusercontent.com/apache/jmeter/trunk/xdocs/images/screenshots/dashboard/response_time_percentiles_over_time.png)]
+
 [**Live reporting**](http://jmeter.apache.org/usermanual/realtime-results.html) into 3rd party databases like InfluxDB or Graphite
+
+[![Live report](https://raw.githubusercontent.com/apache/jmeter/trunk/xdocs/images/screenshots/grafana_dashboard.png)]
 
 Easy correlation through ability to extract data from most popular response formats, [**HTML**](http://jmeter.apache.org/usermanual/component_reference.html#CSS/JQuery_Extractor), [**JSON**](http://jmeter.apache.org/usermanual/component_reference.html#JSON_Extractor), [**XML**](http://jmeter.apache.org/usermanual/component_reference.html#XPath_Extractor) or [**any textual format**](http://jmeter.apache.org/usermanual/component_reference.html#Regular_Expression_Extractor)
 
