@@ -261,7 +261,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 - Software produced outside the ASF which is available under other licenses (not AL 2.0):
 For details, please see the files under: licenses/bin
 
-* asm-5.2.jar (BSD)
+* asm-6.0.jar (BSD)
 * dnsjava-2.1.8.jar (BSD)
 * hamcrest-core-1.3.jar (BSD)
 * javamail-1.5.0-b01.jar (CDDL Version 1.0)
