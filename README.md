@@ -14,6 +14,8 @@
 Apache JMeter may be used to test performance both on static and dynamic resources, Web dynamic applications.
 It can be used to simulate a heavy load on a server, group of servers, network or object to test its strength or to analyze overall performance under different load types.
 
+![Image of JMeter 4.0](https://raw.githubusercontent.com/apache/jmeter/trunk/xdocs/images/screenshots/JMETER_4.0.png)
+
 Apache JMeter features include:
 
 Ability to load and performance test many different applications/server/protocol types: 
