@@ -82,7 +82,7 @@ commons-net-3.6
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler
 
-commons-pool2-2.4.2
+commons-pool2-2.5.0
 -----------------
 http://commons.apache.org/proper/commons-pool/download_pool.cgi
 - BackendListener
