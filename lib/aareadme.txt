@@ -52,7 +52,7 @@ http://commons.apache.org/downloads/download_collections.cgi
 - ListenerNotifier
 - Anakia
 
-commons-io-2.5
+commons-io-2.6
 --------------
 http://commons.apache.org/downloads/download_io.cgi
 - FTPSampler
