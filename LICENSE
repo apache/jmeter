@@ -215,7 +215,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * commons-codec-1.11.jar
 * commons-collections-3.2.2.jar
 * commons-dbcp2-2.2.0.jar
-* commons-io-2.5.jar
+* commons-io-2.6.jar
 * commons-jexl2-2.1.1.jar
 * commons-jexl3-3.1.jar
 * commons-lang3-3.6.jar
