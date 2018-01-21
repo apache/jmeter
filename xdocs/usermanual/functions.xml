@@ -976,10 +976,10 @@ When using this function please use the variables defined above rather than usin
 For instance <strong>don't</strong> do the following:
 </p>
 
-<p><code>${__groovy("${myVar}".substring(0\,2))}</code></p>
+<p><source>${__groovy("${myVar}".substring(0\,2))}</source></p>
 
 <p>Imagine that the variable myVar changes with each transaction, the Groovy above cannot be cached as the script changes each time.<br /><br />
-Instead do the following, which can be cached: <br /><br /><code>${__groovy(vars.get("myVar").substring(0\,2))}</code>
+Instead do the following, which can be cached: <source>${__groovy(vars.get("myVar").substring(0\,2))}</source>
 </p>
 </description>
 
@@ -995,8 +995,8 @@ Instead do the following, which can be cached: <br /><br /><code>${__groovy(vars
 <p>
 Example:
 <dl>
-<dt><code>${__groovy(123*456)}</code></dt><dd>returns <code>56088</code></dd>
-<dt><code>${__groovy(vars.get("myVar").substring(0\,2))}</code></dt><dd>If var's value is <code>JMeter</code>, it will return <code>JM</code> as it runs <code>String.substring(0,2)</code>. Note
+<dt><source>${__groovy(123*456)}</source></dt><dd>returns <code>56088</code></dd>
+<dt><source>${__groovy(vars.get("myVar").substring(0\,2))}</source></dt><dd>If var's value is <code>JMeter</code>, it will return <code>JM</code> as it runs <code>String.substring(0,2)</code>. Note
 that <code>,</code> has been escaped to <code>\,</code> </dd>
 </dl>
 </p>
@@ -1022,7 +1022,7 @@ Remember to include any necessary quotes for text strings and JMeter variables t
     <br></br>
     Define <code>VAR</code>="<code>a||c|</code>" in the test plan.
     <br></br>
-    <code>${__split(${VAR},VAR,|)}</code>
+    <source>${__split(${VAR},VAR,|)}</source>
     <br></br>
     This will return the contents of <code>VAR</code>, i.e. "<code>a||c|</code>" and set the following variables:
     <br></br>
@@ -1119,6 +1119,9 @@ The following shorthand aliases are provided:
 <p>The defaults can be changed by setting the appropriate JMeter property, e.g.
 <code>time.YMD=yyMMdd</code>
 </p>
+<p><source>${__time(dd/MM/yyyy,)}</source>  will return <code>21/01/2018</code> if ran on 21 january 2018</p>
+<p><source>${__time(YMD,)}</source>  will return <code>20180121</code> if ran on 21 january 2018</p>
+<p><source>${__time()}</source>  will return time in millis <code>1516540541624</code></p>
 </component>
 
 <component index="&sect-num;.5.18" name="__jexl2">
@@ -1345,12 +1348,12 @@ to a string containing the actual Unicode characters corresponding to the escape
 Supports HTML 4.0 entities.
 </p>
 <p>
-For example, the string <code>"&#38;lt;Fran&#38;ccedil;ais&#38;gt;"</code>
-will become <code>"&lt;Fran&ccedil;ais&gt;"</code>.
+For example, the string <source>${__unescapeHtml(&#38;lt;Fran&#38;ccedil;ais&#38;gt;)}</source>
+will return <code>&lt;Fran&ccedil;ais&gt;</code>.
 </p>
 <p>
 If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
-e.g. <code>"&amp;gt;&amp;zzzz;x"</code> will become <code>"&gt;&amp;zzzz;x"</code>.
+e.g. <code>${__unescapeHtml(&amp;gt;&amp;zzzz;x)}</code> will return <code>&gt;&amp;zzzz;x</code>.
 </p>
     <p>
     Uses <code>StringEscapeUtils#unescapeHtml(String)</code> from Commons Lang.
@@ -1371,8 +1374,8 @@ Function which escapes the characters in a String using HTML entities.
 Supports HTML 4.0 entities.
 </p>
 <p>
-For example,<code>&quot;bread&quot; &amp; &quot;butter&quot;</code>
-becomes:
+For example,<source>${__escapeHtml(&quot;bread&quot; &amp; &quot;butter&quot;)}</source>
+return:
 <code>&#38;quot;bread&#38;quot; &#38;amp; &#38;quot;butter&#38;quot;</code>.
 </p>
     <p>
@@ -1394,7 +1397,7 @@ Function to decode a <code>application/x-www-form-urlencoded</code> string.
 Note: use UTF-8 as the encoding scheme.
 </p>
 <p>
-For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code> would get converted to
+For example, the string <source>${__urldecode(Word+%22school%22+is+%22%C3%A9cole%22+in+french)}</source> returns
  <code>Word &quot;school&quot; is &quot;&eacute;cole&quot; in french</code>.
 </p>
     <p>
@@ -1415,7 +1418,7 @@ For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</c
 Function to encode a string to a <code>application/x-www-form-urlencoded</code> string.
 </p>
 <p>
-For example, the string <code>Word &quot;school&quot; is &quot;&eacute;cole&quot; in french</code> would get converted to
+For example, the string <source>${__urldecode(Word "school" is "école" in french)}</source> returns
  <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code>.
 </p>
     <p>
@@ -1468,6 +1471,7 @@ A reference name - <code>refName</code> - for reusing the value created by this 
     and Http Cookie Manager, and in this case the functions are resolved in the context of the Http Sampler.
     Pre-Processors, Post-Processors and Assertions always have an associated Sampler.
     </p>
+    <p>Example: <source>${__samplerName()}</source></p>
 </description>
 
 <properties>
@@ -1496,8 +1500,8 @@ A reference name - <code>refName</code> - for reusing the value created by this 
 Function which escapes the ORO Regexp meta characters, it is the equivalent of <code>\Q</code> <code>\E</code> in Java Regexp Engine.
 </p>
 <p>
-For example,<code>[^&quot;].+?</code>
-becomes:
+For example,<source>${__escapeOroRegexpChars([^&quot;].+?,)}</source>
+returns:
 <code>\[\^\&quot;\]\.\+\?</code>.
 </p>
     <p>
@@ -1521,8 +1525,8 @@ A reference name - <code>refName</code> - for reusing the value created by this 
 Function which escapes the characters in a String using XML 1.0 entities.
 </p>
 <p>
-For example,<code>&quot;bread&quot; &amp; &apos;butter&apos;</code>
-becomes:
+For example,<source>${__escapeXml("bread" &amp; 'butter')}</source>
+returns:
 <code>&#38;quot;bread&#38;quot; &#38;amp; &#38;apos;butter&#38;apos;</code>.
 </p>
     <p>
@@ -1569,6 +1573,10 @@ becomes:
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
+<p>Examples:
+<source>${__timeShift(dd/MM/yyyy,21/01/2018,P2D,,)}</source> returns <code>23/01/2018</code>
+<source>${__timeShift(dd MMMM yyyy,21 février 2018,P2D,fr_FR,)}</source> returns <code>23 février 2018</code>
+</p>
 </component>
 <component index="&sect-num;.5.34" name="__digest">
     <description>
@@ -1602,6 +1610,11 @@ becomes:
         <property name="Name of variable" required="No">The name of
             the variable to set.</property>
     </properties>
+    <p>Examples:
+        <source>${__digest(MD5,Errare humanum est,,,)}</source> returns <code>c49f00b92667a35c63708933384dad52</code><br/>
+        <source>${__digest(SHA-256,Felix qui potuit rerum cognoscere causas,mysalt,,)}</source> returns <code>a3bc6900fe2b2fc5fa8a601a4a84e27a079bf2c581d485009bc5c00516729ac7</code><br/>
+        
+    </p>
 </component>
 <component index="&sect-num;.5.35" name="__dateTimeConvert">
     <description>
@@ -1616,6 +1629,9 @@ becomes:
         <property name="Target Date Format" required="Yes">The new date format</property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
     </properties>
+    <p>Example:
+    <source>${__dateTimeConvert(01212018,MMddyyyy,dd/MM/yyyy,)}</source> returns <code>21/01/2018</code>
+    </p>
 </component>
 <component index="&sect-num;.5.36" name="__isPropDefined">
     <description>
@@ -1626,6 +1642,7 @@ becomes:
             The Property Name to be used to check if defined
         </property>
     </properties>
+    <p>Example: <source>${__isPropDefined(START.HMS)}</source> will return <code>true</code></p>
 </component>
 <component index="&sect-num;.5.37" name="__isVarDefined">
     <description>
@@ -1636,6 +1653,7 @@ becomes:
             The Variable Name to be used to check if defined
         </property>
     </properties>
+    <p>Example: <source>${__isVarDefined(JMeterThread.last_sample_ok)}</source> will return <code>true</code></p>
 </component>
 <component index="&sect-num;.5.38" name="__changeCase">
     <description>
@@ -1657,6 +1675,11 @@ becomes:
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
     </properties>
+    <p>Examples:
+    <source>${__changeCase(Avaro omnia desunt\, inopi pauca\, sapienti nihil,UPPER,)}</source> will return <code>AVARO OMNIA DESUNT, INOPI PAUCA, SAPIENTI NIHIL</code>
+    <source>${__changeCase(LABOR OMNIA VINCIT IMPROBUS,LOWER,)}</source> will return <code>labor omnia vincit improbus</code>
+    <source>${__changeCase(omnibus viis romam pervenitur ,CAPITALIZE,)}</source> will return <code>Omnibus viis romam pervenitur</code>
+    </p>
 </component>
 
 </subsection>
