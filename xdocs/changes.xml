@@ -291,6 +291,7 @@ Graphs <i>Latency Vs Request</i> and <i>Response Time Vs Request</i> did not exc
     <li>Updated to ph-css 6.0.0 (from 5.0.4)</li>
     <li>Updated to ph-commons 9.0.0 (from 8.6.6)</li>
     <li>Updated to log4j2 2.9.1 (from 2.8.2)</li>
+    <li>Updated to httpcore 4.4.9 (from 4.4.7)</li>
     <li><bug>61642</bug>Improve FTP test coverage</li>
     <li><bug>61641</bug>Improve JMS test coverage</li>
     <li><bug>61651</bug>Improve TCP test coverage</li>
