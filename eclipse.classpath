@@ -91,8 +91,8 @@
 	<classpathentry kind="lib" path="lib/mail-1.5.0-b01.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.3.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/ph-css-5.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/ph-commons-8.6.6.jar"/>
+	<classpathentry kind="lib" path="lib/ph-css-6.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/ph-commons-9.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.7.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-2.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
