@@ -196,7 +196,7 @@ junit 4.12
 - unit tests, JUnit sampler
 
 HttpComponents
-- HttpComponents Core 4.4.6 
+- HttpComponents Core 4.4.9 
 - HttpComponents Client 4.5.3
 - HttpComponents AsyncClient 4.1.3
 - HttpComponents Core NIO 4.4.6
