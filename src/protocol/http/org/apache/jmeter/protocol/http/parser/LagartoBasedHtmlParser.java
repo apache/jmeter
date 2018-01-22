@@ -215,7 +215,9 @@ public class LagartoBasedHtmlParser extends HTMLParser {
             config.setCaseSensitive(false);
             // Conditional comments only apply for IE < 10
             config.setEnableConditionalComments(isEnableConditionalComments(ieVersion));
-            config.setCondCommentIEVersion(ieVersion);
+            if(ieVersion != null) {
+                config.setCondCommentIEVersion(ieVersion);
+            }
             lagartoParser.setConfig(config);
             JMeterTagVisitor tagVisitor = new JMeterTagVisitor(new URLPointer(baseUrl), coll, ieVersion);
             lagartoParser.parse(tagVisitor);
