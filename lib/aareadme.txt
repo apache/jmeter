@@ -197,9 +197,9 @@ junit 4.12
 
 HttpComponents
 - HttpComponents Core 4.4.9 
-- HttpComponents Client 4.5.3
+- HttpComponents Client 4.5.5
 - HttpComponents AsyncClient 4.1.3
-- HttpComponents Core NIO 4.4.6
+- HttpComponents Core NIO 4.4.9
 -----------
 http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler

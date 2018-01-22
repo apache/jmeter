@@ -77,10 +77,10 @@ under the License.
       <hamcrest-core.version>1.3</hamcrest-core.version>
       <hamcrest-date.version>2.0.4</hamcrest-date.version>
       <httpasyncclient.version>4.1.3</httpasyncclient.version>
-      <httpclient.version>4.5.3</httpclient.version>
+      <httpclient.version>4.5.5</httpclient.version>
       <httpcore.version>4.4.9</httpcore.version>
       <httpcore-nio.version>4.4.9</httpcore-nio.version>
-      <httpmime.version>4.5.3</httpmime.version>
+      <httpmime.version>4.5.5</httpmime.version>
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <jcharts.version>0.7.5</jcharts.version>
       <jcl-over-slf4j.version>1.7.25</jcl-over-slf4j.version>
