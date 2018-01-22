@@ -34,10 +34,10 @@ import jodd.lagarto.LagartoParser;
 import jodd.lagarto.LagartoParserConfig;
 import jodd.lagarto.Tag;
 import jodd.lagarto.TagType;
-import jodd.lagarto.TagUtil;
 import jodd.lagarto.dom.HtmlCCommentExpressionMatcher;
 import jodd.log.LoggerFactory;
 import jodd.log.impl.Slf4jLogger;
+import jodd.util.CharSequenceUtil;
 
 /**
  * Parser based on Lagarto
@@ -135,7 +135,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 } else if (tag.nameEquals(TAG_INPUT)) {
                     // we check the input tag type for image
                     CharSequence type = tag.getAttributeValue(ATT_TYPE);
-                    if (type != null && TagUtil.equalsIgnoreCase(ATT_IS_IMAGE, type)) {
+                    if (type != null && CharSequenceUtil.equalsIgnoreCase(ATT_IS_IMAGE, type)) {
                         // then we need to download the binary
                         extractAttribute(tag, ATT_SRC);
                     }
@@ -151,7 +151,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 } else if (tag.nameEquals(TAG_LINK)) {
                     CharSequence relAttribute = tag.getAttributeValue(ATT_REL);
                     // Putting the string first means it works even if the attribute is null
-                    if (relAttribute != null && TagUtil.equalsIgnoreCase(STYLESHEET,relAttribute)) {
+                    if (relAttribute != null && CharSequenceUtil.equalsIgnoreCase(STYLESHEET,relAttribute)) {
                         extractAttribute(tag, ATT_HREF);
                     }
                 } else {
@@ -210,8 +210,8 @@ public class LagartoBasedHtmlParser extends HTMLParser {
             
             String contents = new String(html,encoding); 
             // As per Jodd javadocs, emitStrings should be false for visitor for better performances
-            LagartoParser lagartoParser = new LagartoParser(contents, false);
-            LagartoParserConfig<LagartoParserConfig<?>> config = new LagartoParserConfig<>();
+            LagartoParser lagartoParser = new LagartoParser(contents.toCharArray());
+            LagartoParserConfig<?> config = new LagartoParserConfig<>();
             config.setCaseSensitive(false);
             // Conditional comments only apply for IE < 10
             config.setEnableConditionalComments(isEnableConditionalComments(ieVersion));
