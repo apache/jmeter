@@ -95,7 +95,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     /** {@inheritDoc} */
     @Override
     public void stopTest(boolean now) {
-        log.info("about to {} remote test on {}", (now ? "stop" : "shutdown"), hostAndPort);
+        log.info("about to {} remote test on {}", now ? "stop" : "shutdown", hostAndPort);
         try {
             remote.rstopTest(now);
         } catch (Exception ex) {
