@@ -21,6 +21,7 @@ package org.apache.jmeter.samplers;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -40,7 +41,7 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
         JMeterUtils.getPropDefault("client.rmi.localport", 0); // $NON-NLS-1$
 
     public RemoteSampleListenerImpl(Object listener) throws RemoteException {
-        super(DEFAULT_LOCAL_PORT);
+        super(DEFAULT_LOCAL_PORT, RmiUtils.createClientSocketFactory(),  RmiUtils.createServerSocketFactory());
         if (listener instanceof TestStateListener) {
             testListener = (TestStateListener) listener;
         } else {
