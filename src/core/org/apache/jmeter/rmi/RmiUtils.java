@@ -73,7 +73,7 @@ public final class RmiUtils {
 
     static{
         if (DEFAULT_LOCAL_PORT != 0){
-            System.out.println("Using local port: " + DEFAULT_LOCAL_PORT);
+            System.out.println("Using local port: " + DEFAULT_LOCAL_PORT); // NOSONAR
         }
     }
 
