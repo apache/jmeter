@@ -98,7 +98,7 @@ Summary
 <p>HTTP(S) Test Script Recorder now allows you to name your transactions while recording in a more human readable way.
 <figure width="1011" height="502" image="changes/4.0/recorder_naming_samplers.png"></figure></p>
 <p></p>
-<p>UX improvements made on, among the most notable :
+<p>UX improvements made on, among the most notable :</p>
 <ul>
     <li>Module Controller informs user at least one Controller is required</li>
     <li>Function Helper Dialog (The wizard that helps using and testing functions) has been improved in many fields.
@@ -106,7 +106,6 @@ Summary
     <li>Switch Controller trims text to avoid issues when a space is introduced before/after name</li>
     <li>Test Plan is now saved before running the test plan</li>
 </ul>
-</p>
 
 <ch_title>Functions</ch_title>
 <p>New Function <a href="usermanual/functions.html#__digest"><code>__digest</code></a> provides easy computing of SHA-XXX, MDX hashes:
@@ -132,6 +131,11 @@ and <a href="usermanual/functions.html#__isPropDefined"><code>__isPropDefined</c
 <p>In Web Report responseTime distribution graph is more precise</p>
 <p>Some bugfixes have been made on report generation, see <bugzilla>61900</bugzilla>, <bugzilla>61900</bugzilla>61956, <bugzilla>61899</bugzilla>.
 Graphs <i>Latency Vs Request</i> and <i>Response Time Vs Request</i> did not exceed 1000 RPS due to <bugzilla>61962</bugzilla></p>
+
+<ch_title>Configuration of JMeter environment</ch_title>
+<p>JVM settings for the JMeter start scripts can be placed in a separate file (<code>bin/setenv.sh</code> on Unix
+and <code>bin\setenv.bat</code> on Windows), that gets called on startup. The startup script
+itself does not have to be edited anymore.</p>
 
 
 <!-- =================== Incompatible changes =================== -->
@@ -271,6 +275,7 @@ Graphs <i>Latency Vs Request</i> and <i>Response Time Vs Request</i> did not exc
     <li><bug>56368</bug>Create and Deploy source artifacts to Maven central</li>
     <li><bug>61973</bug>Create and Deploy javadoc artifacts to Maven central</li>
     <li><pr>371</pr>Fix example in documentation for <complink name="XPath Assertion"/>. Contributed by Konstantin Kalinin (kkalinin at hotmail.com)</li>
+    <li><bug>62026</bug>Use a <code>setenv.sh</code> script if available to preset variables when starting JMeter with <code>bin/jmeter</code>.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

@@ -22,7 +22,59 @@
 ##   e.g.
 ##   JVM_ARGS="-Xms512m -Xmx512m" jmeter etc.
 ##
+##   Do not set the variables in this script. Instead put them into a script
+##   setenv.sh in JMETER_HOME/bin to keep your customizations separate.
+##
+##   JAVA_HOME        Must point at your Java Development Kit installation.
+##                    Required to run the with the "debug" argument.
+##
+##   JRE_HOME         Must point at your Java Runtime installation.
+##                    Defaults to JAVA_HOME if empty. If JRE_HOME and JAVA_HOME
+##                    are both empty, JMeter will try to guess JAVA_HOME.
+##                    If JRE_HOME and JAVA_HOME are both set, JAVA_HOME is used.
+##
+##   JMETER_GC_ALGO   (Optional) Java runtime options to specify JVM garbage collection
+##                    algorithm
+##                    Defaults to "-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20"
+##
+##   JMETER_HEAP      (Optional) Java runtime options for memory management
+##                    used when JMeter is started.
+##                    Defaults to "-Xms512m -Xmx512m -X:MaxMetaspaceSize=256m"
+##
+##   JMETER_HOME      (Optional) May point to your JMeter install dir. If empty
+##                    it will be set relativ to this script.
+##
+##   JMETER_LANGUAGE  (Optional) Java runtime options to specify used language
+##                    Defaults to "-Duser.language=en -Duser.region=EN"
+##
+##   JMETER_OPTS      (Optional) Java runtime options used when JMeter is started.
+##                    Special options for operating systems might be added by JMeter.
+##
 ##   ==============================================
+
+# resolve links - $0 may be a softlink (code as used by Tomcat)
+# N.B. readlink would be a lot simpler but is not supported on Solaris
+PRG="$0"
+
+while [ -h "$PRG" ]; do
+  ls=`ls -ld "$PRG"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '/.*' > /dev/null; then
+    PRG="$link"
+  else
+    PRG=`dirname "$PRG"`/"$link"
+  fi
+done
+
+PRGDIR=`dirname "$PRG"`
+
+# Only set JMETER_HOME if not already set
+[ -z "$JMETER_HOME" ] && JMETER_HOME=`cd "$PRGDIR/.." >/dev/null; pwd`
+
+if [ -r "${JMETER_HOME}/bin/setenv.sh" ]; then
+  . "${JMETER_HOME}/bin/setenv.sh"
+fi
+
 # Make sure prerequisite environment variables are set
 if [ -z "$JAVA_HOME" -a -z "$JRE_HOME" ]; then
   if [ "`uname`" = "Darwin" ]; then
@@ -77,27 +129,11 @@ if [ "$CURRENT_VERSION" -gt "$MINIMAL_VERSION" ]; then
     ADD_MODS="--add-modules java.activation"
 fi
 
-# resolve links - $0 may be a softlink (code as used by Tomcat)
-# N.B. readlink would be a lot simpler but is not supported on Solaris
-PRG="$0"
-
-while [ -h "$PRG" ]; do
-  ls=`ls -ld "$PRG"`
-  link=`expr "$ls" : '.*-> \(.*\)$'`
-  if expr "$link" : '/.*' > /dev/null; then
-    PRG="$link"
-  else
-    PRG=`dirname "$PRG"`/"$link"
-  fi
-done
-
-PRGDIR=`dirname "$PRG"`
-
-JMETER_OPTS=""
+: "${JMETER_OPTS:=""}"
 case `uname` in
    Darwin*)
    # Add Mac-specific property - should be ignored elsewhere (Bug 47064)
-   JMETER_OPTS="-Xdock:name=JMeter -Xdock:icon=\"${PRGDIR}/../docs/images/jmeter_square.png\" -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"
+   JMETER_OPTS="${JMETER_OPTS} -Xdock:name=JMeter -Xdock:icon=\"${PRGDIR}/../docs/images/jmeter_square.png\" -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"
    ;;
 esac
 
@@ -120,11 +156,11 @@ esac
 
 # This is the base heap size -- you may increase or decrease it to fit your
 # system's memory availability:
-HEAP="-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m"
+: "${JMETER_HEAP:="-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m"}"
 
 # Set language
 # Default to en_EN
-JMETER_LANGUAGE="-Duser.language=en -Duser.region=EN"
+: "${JMETER_LANGUAGE:="-Duser.language=en -Duser.region=EN"}"
 
 # Uncomment this to generate GC verbose file with Java prior to 9
 # VERBOSE_GC="-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintAdaptiveSizePolicy -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps"
@@ -137,7 +173,7 @@ JMETER_LANGUAGE="-Duser.language=en -Duser.region=EN"
 # RUN_IN_DOCKER="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
 
 # Finally, some tracing to help in case things go astray:
-GC_ALGO="-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20"
+: "${JMETER_GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20"}"
 
 
 # Always dump on OOM (does not cost anything unless triggered)
@@ -145,6 +181,6 @@ DUMP="-XX:+HeapDumpOnOutOfMemoryError"
 SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom"
 SERVER="-server"
 
-ARGS="$SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
+ARGS="$SERVER $DUMP $JMETER_HEAP $VERBOSE_GC $JMETER_GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
 
 "$JAVA_HOME/bin/java" $ADD_MODS $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
