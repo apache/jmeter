@@ -20,7 +20,6 @@ package org.apache.jmeter.engine;
 
 import java.io.File;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -28,6 +27,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
 import java.util.Properties;
 
+import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * This is the JMeter server main code.
  */
 public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject implements RemoteJMeterEngine {
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     private static final Logger log = LoggerFactory.getLogger(RemoteJMeterEngineImpl.class);
 
@@ -48,63 +48,36 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     
     private transient Thread ownerThread;
 
-    private static final int DEFAULT_RMI_PORT =
-        JMeterUtils.getPropDefault("server.rmi.port", 1099); // $NON-NLS-1$
-
-    private static final int DEFAULT_LOCAL_PORT =
-        JMeterUtils.getPropDefault("server.rmi.localport", 0); // $NON-NLS-1$
-
-    static{
-        if (DEFAULT_LOCAL_PORT != 0){
-            System.out.println("Using local port: "+DEFAULT_LOCAL_PORT);
-        }
-    }
-
     // Should we create our own copy of the RMI registry?
     private static final boolean CREATE_SERVER =
         JMeterUtils.getPropDefault("server.rmi.create", true); // $NON-NLS-1$
 
     private final Object LOCK = new Object();
 
-    private final int rmiPort;
+    /**
+     * RMI Registry port
+     */
+    private final int rmiRegistryPort;
 
     private Properties remotelySetProperties;
 
-    private RemoteJMeterEngineImpl(int localPort, int rmiPort) throws RemoteException {
-        super(localPort); // Create this object using the specified port (0 means anonymous)
-        this.rmiPort = rmiPort;
+    private RemoteJMeterEngineImpl(int localPort, int rmiRegistryPort) throws RemoteException {
+        super(localPort, RmiUtils.createClientSocketFactory(), RmiUtils.createServerSocketFactory()); // Create this object using the specified port (0 means anonymous)
+        this.rmiRegistryPort = rmiRegistryPort;
         System.out.println("Created remote object: "+this.getRef().remoteToString());
     }
 
-    public static void startServer(int rmiPort) throws RemoteException {
-        RemoteJMeterEngineImpl engine = new RemoteJMeterEngineImpl(DEFAULT_LOCAL_PORT, rmiPort == 0 ? DEFAULT_RMI_PORT : rmiPort);
+    public static void startServer(int rmiRegistryPort) throws RemoteException {
+        RemoteJMeterEngineImpl engine = 
+                new RemoteJMeterEngineImpl(
+                RmiUtils.DEFAULT_LOCAL_PORT, 
+                rmiRegistryPort);
         engine.init();
     }
 
     private void init() throws RemoteException {
-        log.info("Starting backing engine on {}", this.rmiPort);
-        InetAddress localHost=null;
-        // Bug 47980 - allow override of local hostname
-        String host = System.getProperties().getProperty("java.rmi.server.hostname"); // $NON-NLS-1$
-        try {
-            if( host==null ) {
-                log.info("System property 'java.rmi.server.hostname' is not defined, using localHost address");
-                localHost = InetAddress.getLocalHost();
-            } else {
-                log.info("Resolving by name the value of System property 'java.rmi.server.hostname': {}", host);
-                localHost = InetAddress.getByName(host);
-            }
-        } catch (UnknownHostException e1) {
-            throw new RemoteException("Cannot start. Unable to get local host IP address.", e1);
-        }
-        if (log.isInfoEnabled()) {
-            log.info("Local IP address={}", localHost.getHostAddress());
-        }
-        // BUG 52469 : Allow loopback address for SSH Tunneling of RMI traffic
-        if (host == null && localHost.isLoopbackAddress()){
-            String hostName = localHost.getHostName();
-            throw new RemoteException("Cannot start. "+hostName+" is a loopback address.");
-        }
+        log.info("Starting backing engine on {}", this.rmiRegistryPort);
+        InetAddress localHost = RmiUtils.getRmiHost();
         if (localHost.isSiteLocalAddress()){
             // should perhaps be log.warn, but this causes the client-server test to fail
             log.info("IP address is a site-local address; this may cause problems with remote access.\n"
@@ -115,7 +88,9 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         if (CREATE_SERVER){
             log.info("Creating RMI registry (server.rmi.create=true)");
             try {
-                reg = LocateRegistry.createRegistry(this.rmiPort);
+                reg = LocateRegistry.createRegistry(this.rmiRegistryPort, 
+                        RmiUtils.createClientSocketFactory(), 
+                        RmiUtils.createServerSocketFactory());
                 log.debug("Created registry: {}", reg);
             } catch (RemoteException e){
                 String msg="Problem creating registry: "+e;
@@ -127,11 +102,14 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         try {
             if (reg == null) {
                 log.debug("Locating registry");
-                reg = LocateRegistry.getRegistry(this.rmiPort);
+                reg = LocateRegistry.getRegistry(
+                        RmiUtils.getRmiHost().getHostName(),
+                        this.rmiRegistryPort,
+                        RmiUtils.createClientSocketFactory());
             }
             log.debug("About to rebind registry: {}", reg);
             reg.rebind(JMETER_ENGINE_RMI_NAME, this);
-            log.info("Bound to registry on port {}", this.rmiPort);
+            log.info("Bound to RMI registry on port {}", this.rmiRegistryPort);
         } catch (Exception ex) {
             log.error("rmiregistry needs to be running to start JMeter in server mode. {}", ex.toString());
             // Throw an Exception to ensure caller knows ...
@@ -170,14 +148,14 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     }
 
     @Override
-    public void rrunTest() throws RemoteException, JMeterEngineException, IllegalStateException {
+    public void rrunTest() throws RemoteException, JMeterEngineException {
         log.info("Running test");
         checkOwner("runTest");
         backingEngine.runTest();
     }
 
     @Override
-    public void rreset() throws RemoteException, IllegalStateException {
+    public void rreset() throws RemoteException {
         // Mail on userlist reported NPE here - looks like only happens if there are network errors, but check anyway
         if (backingEngine != null) {
             log.info("Reset");
@@ -216,7 +194,10 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         };
         et.setDaemon(false);
         // Tidy up any objects we created
-        Registry reg = LocateRegistry.getRegistry(this.rmiPort);        
+        Registry reg = LocateRegistry.getRegistry(
+                RmiUtils.getRmiHost().getHostName(),
+                this.rmiRegistryPort,
+                RmiUtils.createClientSocketFactory());        
         try {
             reg.unbind(JMETER_ENGINE_RMI_NAME);
         } catch (NotBoundException e) {
@@ -229,7 +210,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     }
 
     @Override
-    public void rsetProperties(Properties p) throws RemoteException, IllegalStateException {
+    public void rsetProperties(Properties p) throws RemoteException {
         checkOwner("setProperties");
         if(remotelySetProperties != null) {
             Properties jmeterProperties = JMeterUtils.getJMeterProperties();
@@ -247,11 +228,11 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
      * @param methodName the name of the method for the log message
      * @throws IllegalStateException if the caller is not the owner.
      */
-    private void checkOwner(String methodName) throws IllegalStateException {
+    private void checkOwner(String methodName) {
         if (ownerThread != null && ownerThread != Thread.currentThread()){
             String msg = "The engine is not owned by this thread - cannot call "+methodName;
             log.warn(msg);
-            throw new IllegalStateException(msg);            
+            throw new IllegalStateException(msg);
         }
     }
 }

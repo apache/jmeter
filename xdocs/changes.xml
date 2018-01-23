@@ -275,7 +275,7 @@ itself does not have to be edited anymore.</p>
     <li><bug>56368</bug>Create and Deploy source artifacts to Maven central</li>
     <li><bug>61973</bug>Create and Deploy javadoc artifacts to Maven central</li>
     <li><pr>371</pr>Fix example in documentation for <complink name="XPath Assertion"/>. Contributed by Konstantin Kalinin (kkalinin at hotmail.com)</li>
-    <li><bug>62026</bug>Use a <code>setenv.sh</code> script if available to preset variables when starting JMeter with <code>bin/jmeter</code>.</li>
+    <li><bug>62039</bug>Distributed testing : Provide ability to use SSL</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

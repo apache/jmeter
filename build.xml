@@ -2577,10 +2577,11 @@ run JMeter unless all the JMeter jars are added.
     <property name="batchtestserver.out" location="${basedir}/bin"/>
     <property name="batchtestserver.log" value="BatchTestServer.log"/>
     <!-- rmi_force_localhost is used by the Travis build -->
+    <exec executable="hostname" outputproperty="computer.hostname"/>
     <condition property="rmi_hostname_option" value="-Ddummy=true">
       <not><isset property="rmi_force_localhost"/></not>
     </condition>
-    <condition property="rmi_hostname_option" value="-Djava.rmi.server.hostname=localhost">
+    <condition property="rmi_hostname_option" value="-Djava.rmi.server.hostname=${computer.hostname}">
       <isset property="rmi_force_localhost"/>
     </condition>
     <condition property="jacoco_params" value="${jacocoagent}" else="-Djacoco_dummy=">
@@ -2622,7 +2623,7 @@ run JMeter unless all the JMeter jars are added.
         <!-- Increase as necessary to ensure server has time to start -->
         <sleep seconds="2"/>
         <antcall target="batchtest">
-          <param name="remote" value="-Rlocalhost:${rmi_port}"/>
+          <param name="remote" value="-R${computer.hostname}:${rmi_port}"/>
           <param name="taskname" value="client"/>
           <!-- Default the test name so we can override with a parameter -->
         </antcall>
