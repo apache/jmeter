@@ -27,8 +27,8 @@ rem
 rem   =====================================================
 
 setlocal
-# Set language
-# Default to en_EN
+rem Set language
+rem Default to en_EN
 set JVM_ARGS=-Duser.language="en" -Duser.region="EN"
 rem Minimal version to run JMeter
 set MINIMAL_VERSION=1.8.0
