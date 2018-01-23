@@ -1292,6 +1292,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/user.properties"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
+    <exclude name="${dest.jar.jmeter}/rmi_keystore.jks"/>
     <include name="${dest.jar.jmeter}/examples/**"/>
     <include name="${dest.jar.jmeter}/templates/*.dtd"/>
     <!-- report-templates files which need to have native eol -->
@@ -1340,6 +1341,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/proxyserver.jks"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
+    <exclude name="${dest.jar.jmeter}/rmi_keystore.jks"/>
     <!-- report-template files non native -->
     <include name="${dest.jar.jmeter}/report-template/content/pages/*.png"/>
     <include name="${dest.jar.jmeter}/report-template/sbadmin2*/**"/>
