@@ -5137,10 +5137,10 @@ Note that the throughput value should not be changed too often during a test
     and place the timer under that dummy sampler</p>
 
 <h4>Produced schedule</h4>
-<p><code>Precise Throughput Timer</code> models <a href="https://en.wikipedia.org/wiki/Poisson_point_process">poisson arrivals</a> schedule. That schedule often happens in a real-life, so it makes sense to use that for load testing.
-    For instance, it naturally might generate samples that are close together thus it might reveal concurrency issues. Even if you manage to generate poisson arrivals
-    with <complink name="Poisson Random Timer"/>, it would be suseptible to the issues listed below. For instance, true poisson arrivals might have indefinitely long
-    pause, and that is not practical for load testing. For instance, "regular" poisson arrivals with 1 per second rate might end up with 50 samples over 60 second long test.</p>
+<p><code>Precise Throughput Timer</code> models <a href="https://en.wikipedia.org/wiki/Poisson_point_process">Poisson arrivals</a> schedule. That schedule often happens in a real-life, so it makes sense to use that for load testing.
+    For instance, it naturally might generate samples that are close together thus it might reveal concurrency issues. Even if you manage to generate Poisson arrivals
+    with <complink name="Poisson Random Timer"/>, it would be suseptible to the issues listed below. For instance, true Poisson arrivals might have indefinitely long
+    pause, and that is not practical for load testing. For instance, "regular" Poisson arrivals with 1 per second rate might end up with 50 samples over 60 second long test.</p>
 <p><complink name="Constant Throughput Timer"/> converges to the specified rate, however it tends to produce samples at even intervals.</p>
 
 <h4>Ramp-up and startup spike</h4>
@@ -5412,7 +5412,7 @@ vars.putObject("OBJ1",new Object());</source></li>
 <description><p>This timer pauses each thread request for a random amount of time, with most
 of the time intervals occurring near a particular value.  The total delay is the
 sum of the Poisson distributed value, and the offset value.</p>
-<p>Note: if you want to model poisson arrivals, consider using <complink name="Precise Throughput Timer"/> instead.</p>
+<p>Note: if you want to model Poisson arrivals, consider using <complink name="Precise Throughput Timer"/> instead.</p>
 </description>
 
 
