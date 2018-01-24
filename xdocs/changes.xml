@@ -67,7 +67,7 @@ Summary
 </p>
 <p>New <a href="usermanual/component_reference.html#JSON_Assertion"><code>JSON Assertion</code></a> element available to assert on JSON responses.
 <figure width="1095" height="307" image="changes/4.0/json_assertion.png"></figure></p>
-<p>New <a href="usermanual/component_reference.html#Precise_Throughput_Timer"><code>Precise Throughput Timer</code></a> element available which produces poisson arrivals with given constant throughput.
+<p>New <a href="usermanual/component_reference.html#Precise_Throughput_Timer"><code>Precise Throughput Timer</code></a> element available which produces Poisson arrivals with given constant throughput.
 <figure width="1080" height="381" image="changes/4.0/precise_throughput_timer.png"></figure></p>
 <p>JMS Point-to-Point sampler has been enhanced with <code>read</code>, <code>browse</code>, <code>clear</code> options.
 <figure width="1080" height="489" image="changes/4.0/jmsptp_communication_styles.png"></figure></p>
@@ -158,7 +158,7 @@ itself does not have to be edited anymore.</p>
     <li>In JMS Point-to-Point sampler, setting timeout to 0 will now mean infinite timeout while previously it would be switched to 2000 ms, see <bugzilla>61829</bugzilla></li>
     <li>When Assertions are at different scopes, they are executed starting with the most OUTER one to the most INNER one. See <bugzilla>61846</bugzilla></li>
     <li>JMeter now starts by default using English locale. This change is due to missing translations in many supported languages.
-        You can change locale by modifying in jmeter and jmeter.bat <code>JVM_ARGS</code> system property values.
+        You can change locale by modifying in jmeter and jmeter.bat (or preferably setenv.sh/setenv.bat) the <code>JVM_ARGS</code> system property values.
         We'd also be very grateful if you can contribute translations in supported languages.
     </li>
     <li>SwitchController now trims by default the content of switch to avoid issue related to unwanted spaces. See <bugzilla>61771</bugzilla></li>
@@ -190,7 +190,7 @@ itself does not have to be edited anymore.</p>
 <ul>
     <li><bug>61675</bug>If Controller: Use expression by default and add a warning when the other mode is used. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61770</bug>Module Controller: Inform user in UI that he needs to have at least one Controller in his plan. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>61771</bug>SwitchController : Switch field should be trimmed by safety</li>
+    <li><bug>61771</bug>SwitchController: Switch field should be trimmed by safety</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -204,15 +204,15 @@ itself does not have to be edited anymore.</p>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>60213</bug>New component : Boundary based extractor</li>
+    <li><bug>60213</bug>New component: Boundary based extractor</li>
     <li><bug>61845</bug>New Component JSON Assertion based on AtlanBH JSON Path Assertion donated to JMeter-Plugins and migrated into JMeter core by Artem Fedorov (artem at blazemeter.com)</li>
-    <li><bug>61931</bug>New Component : Precise Throughput Timer, timer that produces poisson arrivals with given constant throughput. Contributed by Vladimir Sitnikov (sitnikov.vladimir at gmail.com)</li>
+    <li><bug>61931</bug>New Component: Precise Throughput Timer, timer that produces Poisson arrivals with given constant throughput. Contributed by Vladimir Sitnikov (sitnikov.vladimir at gmail.com)</li>
     <li><bug>61644</bug>HTTP Cache Manager: "Use Cache-Control/Expires header when processing GET requests" should be checked by default</li>
     <li><bug>61645</bug>Response Assertion: Add ability to assert on Request Data</li>
     <li><bug>51140</bug>Response Assertion: add ability to set a specific error/failure message that is later shown in the Assertion Result. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61534</bug>Convert AssertionError to a failed assertion in the JSR223Assertion allowing users to use assert in their code</li>
     <li><bug>61756</bug>Extractors: Improve label name "Reference name" to make it clear what it makes</li>
-    <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions : When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61758</bug><code>Apply to:</code> field in Extractors, Assertions: When entering a value in <code>JMeter Variable Name</code>, the radio box <code>JMeter Variable Name</code> should be selected by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61846</bug>Scoped Assertion should follow same order of evaluation as Post Processors</li>
    
 </ul>
@@ -225,7 +225,7 @@ itself does not have to be edited anymore.</p>
     <li><bug>61759</bug>Add <code>__changeCase</code> function to change different cases of a string. Based on a contribution by orimarko at gmail.com</li>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
     <li><bug>61738</bug>Function Helper Dialog: Add Copy in Generate and clarify labels. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>62027</bug>Help : Introduce property <code>help.local</code> to allow choosing between local (offline) documentation and online documentation</li>
+    <li><bug>62027</bug>Help: Introduce property <code>help.local</code> to allow choosing between local (offline) documentation and online documentation</li>
     <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
 </ul>
 
@@ -267,15 +267,15 @@ itself does not have to be edited anymore.</p>
     <li><pr>351</pr>Fixed about dialog position on first view. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>352</pr>Menu bar - added mnemonics to more menu items. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>353</pr>Re-wrote some existing tests in Spock. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><bug>61919</bug>UX : Reorder Menus. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><bug>61920</bug>Plugins : Add ability to listen to Test Plan loading/closing. Contributed by Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
-    <li><bug>61935</bug>Plugins : Let GUI component (dynamically) decide whether it can be added via the menu or not. Contributed by Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
+    <li><bug>61919</bug>UX: Reorder Menus. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61920</bug>Plugins: Add ability to listen to Test Plan loading/closing. Contributed by Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
+    <li><bug>61935</bug>Plugins: Let GUI component (dynamically) decide whether it can be added via the menu or not. Contributed by Peter Doornbosch (https://bitbucket.org/pjtr/)</li>
     <li><bug>61969</bug>When changing LAF through GUI, user should be informed that it is better to restart</li>
-    <li><bug>61970</bug>JMeter now uses english as default locale to avoid missing translations in some locales make UI look weird</li>
+    <li><bug>61970</bug>JMeter now uses English as default locale to avoid missing translations in some locales make UI look weird</li>
     <li><bug>56368</bug>Create and Deploy source artifacts to Maven central</li>
     <li><bug>61973</bug>Create and Deploy javadoc artifacts to Maven central</li>
     <li><pr>371</pr>Fix example in documentation for <complink name="XPath Assertion"/>. Contributed by Konstantin Kalinin (kkalinin at hotmail.com)</li>
-    <li><bug>62039</bug>Distributed testing : Provide ability to use SSL</li>
+    <li><bug>62039</bug>Distributed testing: Provide ability to use SSL</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -343,8 +343,8 @@ itself does not have to be edited anymore.</p>
 <h3>Listeners</h3>
 <ul>
     <li><bug>61742</bug>BackendListener: fix default value for <code>backend_graphite.send_interval</code></li>
-    <li><bug>61878</bug>BackendListener : NPE if BackendListenerClient#getDefaultParameters returns null</li>
-    <li><bug>61950</bug>View Results Tree : Content-Type <code>audio/mpegurl</code> is wrongly considered as binary</li>
+    <li><bug>61878</bug>BackendListener: NPE if BackendListenerClient#getDefaultParameters returns null</li>
+    <li><bug>61950</bug>View Results Tree: Content-Type <code>audio/mpegurl</code> is wrongly considered as binary</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -366,11 +366,11 @@ itself does not have to be edited anymore.</p>
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>61807</bug>Web Report : fix error in <code>getTop5ErrorMetrics</code>. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><bug>61900</bug>Report Generator : Report generation fails if separator is a regex reserved char like <code>|</code></li>
+    <li><bug>61807</bug>Web Report: fix error in <code>getTop5ErrorMetrics</code>. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>61900</bug>Report Generator: Report generation fails if separator is a regex reserved char like <code>|</code></li>
     <li><bug>61925</bug>CsvSampleReader does not increment row in nextSample(). Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><bug>61956</bug>Report Generation : <code>-f</code> of <code>-forceDeleteResultFile</code> option does not work. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>61899</bug>Report Generation : When <code>jmeter.save.saveservice.print_field_names</code> is false and <code>sample_variables</code> are set report generation fails. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61956</bug>Report Generation: <code>-f</code> of <code>-forceDeleteResultFile</code> option does not work. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61899</bug>Report Generation: When <code>jmeter.save.saveservice.print_field_names</code> is false and <code>sample_variables</code> are set report generation fails. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61962</bug>Latency Vs Request and Response Time Vs Request graphs do not exceed 1000 RPS. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
