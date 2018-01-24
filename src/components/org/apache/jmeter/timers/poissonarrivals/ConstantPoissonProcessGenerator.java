@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Generates events for poisson processes, ensuring throughput*duration events will be present in each "duration"
+ * Generates events for Poisson processes, ensuring throughput*duration events will be present in each "duration"
  * @since 4.0
  */
 public class ConstantPoissonProcessGenerator implements EventProducer {
