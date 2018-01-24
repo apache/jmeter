@@ -33,8 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This timer generates poisson arrivals with constant throughput.
- * On top of that, it tries to maintain the exact amount of arrivals for a given timeframe ({@link #throughputPeriod}.
+ * This timer generates Poisson arrivals with constant throughput.
+ * On top of that, it tries to maintain the exact amount of arrivals for a given timeframe ({@link #throughputPeriod}).
  * @since 4.0
  */
 @GUIMenuSortOrder(3)
