@@ -209,7 +209,6 @@ public class LagartoBasedHtmlParser extends HTMLParser {
             Float ieVersion = extractIEVersion(userAgent);
             
             String contents = new String(html,encoding); 
-            // As per Jodd javadocs, emitStrings should be false for visitor for better performances
             LagartoParser lagartoParser = new LagartoParser(contents.toCharArray());
             LagartoDomBuilderConfig config = new LagartoDomBuilderConfig();
             config.setCaseSensitive(false);
