@@ -157,7 +157,7 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
     /**
      * Allows to use business values for throughput configuration.
      * For instance, 100 samples per hour vs 100 samples per minute.
-     * @return
+     * @return the length of the throughput period in seconds
      */
     public int getThroughputPeriod() {
         return throughputPeriod;
