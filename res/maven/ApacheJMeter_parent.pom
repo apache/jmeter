@@ -84,10 +84,10 @@ under the License.
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <jcharts.version>0.7.5</jcharts.version>
       <jcl-over-slf4j.version>1.7.25</jcl-over-slf4j.version>
-      <jodd-core.version>4.1.0</jodd-core.version>
-      <jodd-lagarto.version>4.1.0</jodd-lagarto.version>
-      <jodd-log.version>4.1.0</jodd-log.version>
-      <jodd-props.version>4.1.0</jodd-props.version>
+      <jodd-core.version>4.1.1</jodd-core.version>
+      <jodd-lagarto.version>4.1.1</jodd-lagarto.version>
+      <jodd-log.version>4.1.1</jodd-log.version>
+      <jodd-props.version>4.1.1</jodd-props.version>
       <json-path.version>2.4.0</json-path.version>
       <json-smart.version>2.3</json-smart.version>
       <jsoup.version>1.11.2</jsoup.version>
