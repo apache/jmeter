@@ -298,7 +298,7 @@ itself does not have to be edited anymore.</p>
     <li>Updated to log4j2 2.10.0 (from 2.8.2)</li>
     <li>Updated to httpcore 4.4.9 (from 4.4.7)</li>
     <li>Updated to httpclient 4.5.5 (from 4.5.3)</li>
-    <li>Updated to jodd 4.1.0 (from 3.8.6)</li>
+    <li>Updated to jodd 4.1.1 (from 3.8.6)</li>
     <li><bug>61642</bug>Improve FTP test coverage</li>
     <li><bug>61641</bug>Improve JMS test coverage</li>
     <li><bug>61651</bug>Improve TCP test coverage</li>
