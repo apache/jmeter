@@ -281,7 +281,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     }
 
     /**
-     * Sets the value of the variable if no matches are found
+     * @param defaultValue value of the variable if no matches are found
      */
     public void setDefaultValue(String defaultValue) {
         setProperty(DEFAULT, defaultValue);
