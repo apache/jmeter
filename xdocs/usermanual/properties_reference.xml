@@ -353,6 +353,38 @@ JMETER-SERVER</source>
     From JMeter version 2.3.1, define this property to cause JMeter to exit after the first test.<br/>
     Defaults to: <code>true</code>
 </property>
+<property name="server.rmi.ssl.keystore.type">
+    Type of keystore for RMI connection security
+    Defaults to: <code>JKS</code>
+</property>
+<property name="server.rmi.ssl.keystore.file">
+    Keystore file that contains private key
+    Defaults to: <code>rmi_keystore.jks</code>
+</property>
+<property name="server.rmi.ssl.keystore.password">
+    Password of Keystore
+    Defaults to: <code>changeit</code>
+</property>
+<property name="server.rmi.ssl.keystore.alias">
+    Key alias
+    Defaults to: <code>rmi</code>
+</property>
+<property name="server.rmi.ssl.truststore.type">
+    Type of truststore for RMI connection security
+    Defaults to: <code>JKS</code>
+</property>
+<property name="server.rmi.ssl.truststore.file">
+    Keystore file that contains certificate
+    Defaults to: <code>rmi_keystore.jks</code>
+</property>
+<property name="server.rmi.ssl.truststore.password">
+    Password of Trust store
+    Defaults to: <code>changeit</code>
+</property>
+<property name="server.rmi.ssl.disable">
+    Set this to true if you don't want to use SSL for RMI
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.8 Include Controller" anchor="include_controller">
