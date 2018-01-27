@@ -92,7 +92,8 @@ if not defined JAVAVER (
 
 
 rem Check if version is from OpenJDK or Oracle Hotspot JVM prior to 9 containing 1.${version}.x
-IF "%variable:~0,2%"=="1." (
+rem JAVAVER will contain "XXXX", so we extract 2 chars starting from index 1
+IF "%JAVAVER:~1,2%"=="1." (
     set JAVAVER=%JAVAVER:"=%
     for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do (
         set current_minor=%%w
