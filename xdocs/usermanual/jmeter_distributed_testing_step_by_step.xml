@@ -43,6 +43,7 @@ This short tutorial explains how to use multiple systems to perform stress testi
       If the server doesn't use <code>192.xx</code> or <code>10.xx</code> IP address, there shouldn't be any problems.</li>
   <li>Make sure JMeter can access the server.</li>
   <li>Make sure you use the same version of JMeter and Java on all the systems. Mixing versions will not work correctly.</li>
+  <li>You have <a href="remote-test.html#setup_ssl">setup SSL for RMI</a> or disabled it.</li>
 </ul>
 
 <p>
