@@ -146,6 +146,7 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
+     * @param threadNum number of threads
      */
     public void setThreadNum(int threadNum) {
         this.threadNum = threadNum;
@@ -157,6 +158,7 @@ public class JMeterContext {
     
     /**
      * Internally called by JMeter, never call it directly
+     * @param thread to use
      */
     public void setThread(JMeterThread thread) {
         this.thread = thread;
@@ -168,6 +170,7 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
+     * @param threadgrp ThreadGroup to use
      */
     public void setThreadGroup(AbstractThreadGroup threadgrp) {
         this.threadGroup = threadgrp;
@@ -179,6 +182,7 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
+     * @param engine to use
      */
     public void setEngine(StandardJMeterEngine engine) {
         this.engine = engine;
@@ -190,21 +194,21 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
+     * @param b flag whether sampling has started
      */
     public void setSamplingStarted(boolean b) {
         samplingStarted = b;
     }
 
     /**
-     * if set to <code>true</code> a restart of the loop will occur
+     * @param restartNextLoop if set to <code>true</code> a restart of the loop will occur
      */
     public void setStartNextThreadLoop(boolean restartNextLoop) {
         this.restartNextLoop = restartNextLoop;
     }
     
     /**
-     * if set to <code>true</code> current loop iteration will be interrupted and 
-     * JMeter will go to next iteration
+     * @return {@code true} when current loop iteration will be interrupted and JMeter will go to next iteration
      */
     public boolean isStartNextThreadLoop() {
         return restartNextLoop;
@@ -213,6 +217,7 @@ public class JMeterContext {
     /**
      * if set to <code>true</code> current loop iteration will be interrupted and 
      * JMeter will go to next iteration
+     * @param restartNextLoop flag whether to restart
      *
      * @deprecated use {@link JMeterContext#setStartNextThreadLoop(boolean)}
      */
@@ -222,6 +227,7 @@ public class JMeterContext {
     }
 
     /**
+     * @return flag whether restart is set
      * @deprecated use {@link JMeterContext#isStartNextThreadLoop()}
      */
     @Deprecated
@@ -250,6 +256,7 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
+     * @param recording flag whether recording should be done
      */
     public void setRecording(boolean recording) {
         this.recording = recording;
