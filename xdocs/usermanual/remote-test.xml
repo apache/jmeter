@@ -145,7 +145,7 @@ The simplest setup is to use one key/cert pair for all JMeter servers and client
 contains one key (and its corresponding certificate) named <code>rmi</code>. The script is located in the <code>bin</code> directory and is available for Windows systems (called <code>bin/create-rmi-keystore.bat</code>) and Unix like systems (called <code>bin/create-rmi-keystore.sh</code>). It will generate a key-pair, that is valid for seven days, with a default passphrase of value '<code>changeit</code>'. It is advised to call it from inside the <code>bin</code> directory.
 </p>
 <p>
-When you run the script, it will ask you some questions about some names it will embed in the certificate. You can type in whatever you want, except for the <code>first and last name</code>. That value has to match the property <code>server.rmi.ssl.keystore.alias</code>, which defaults to <code>rmi</code>. A sample session to create the keystore is shown below.
+When you run the script, it will ask you some questions about some names it will embed in the certificate. You can type in whatever you want, as long the keystore tool accepts it. That value has to match the property <code>server.rmi.ssl.keystore.alias</code>, which defaults to <code>rmi</code>. A sample session to create the keystore is shown below.
 </p>
 <source>$ cd jmeter/bin
 $ ./create-rmi-keystore.sh
