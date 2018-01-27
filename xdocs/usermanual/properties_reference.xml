@@ -354,7 +354,7 @@ JMETER-SERVER</source>
     Defaults to: <code>true</code>
 </property>
 <property name="server.rmi.ssl.keystore.type">
-    Type of keystore for RMI connection security
+    Type of keystore for RMI connection security. Possible values are dependent on the JVM in use, but commonly supported are <code>JKS</code> and <code>PKCS12</code>.
     Defaults to: <code>JKS</code>
 </property>
 <property name="server.rmi.ssl.keystore.file">
@@ -371,18 +371,18 @@ JMETER-SERVER</source>
 </property>
 <property name="server.rmi.ssl.truststore.type">
     Type of truststore for RMI connection security
-    Defaults to: <code>JKS</code>
+    Defaults to: the value of <code>server.rmi.ssl.keystore.type</code>, which is <code>JKS</code>
 </property>
 <property name="server.rmi.ssl.truststore.file">
     Keystore file that contains certificate
-    Defaults to: <code>rmi_keystore.jks</code>
+    Defaults to: the value of <code>server.rmi.ssl.keystore.file</code>, which is <code>rmi_keystore.jks</code>
 </property>
 <property name="server.rmi.ssl.truststore.password">
     Password of Trust store
-    Defaults to: <code>changeit</code>
+    Defaults to: the value of <code>server.rmi.ssl.keystore.password</code>, which is <code>changeit</code>
 </property>
 <property name="server.rmi.ssl.disable">
-    Set this to true if you don't want to use SSL for RMI
+    Set this to <code>true</code> if you don't want to use SSL for RMI
     Defaults to: <code>false</code>
 </property>
 </properties>
