@@ -35,7 +35,7 @@
 ##
 ##   JMETER_GC_ALGO   (Optional) Java runtime options to specify JVM garbage collection
 ##                    algorithm
-##                    Defaults to "-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20"
+##                    Defaults to "-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem"
 ##
 ##   JMETER_HEAP      (Optional) Java runtime options for memory management
 ##                    used when JMeter is started.
@@ -173,7 +173,7 @@ esac
 # RUN_IN_DOCKER="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
 
 # Finally, some tracing to help in case things go astray:
-: "${JMETER_GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20"}"
+: "${JMETER_GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem"}"
 
 
 # Always dump on OOM (does not cost anything unless triggered)
