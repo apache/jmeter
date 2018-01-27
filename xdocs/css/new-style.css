@@ -279,7 +279,6 @@ figure>a>img, .screenshot>a>img {
 
 .property .required {
   vertical-align: top;
-  width: 20%;
 }
 
 .property+.property {
