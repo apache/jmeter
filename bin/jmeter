@@ -20,7 +20,7 @@
 ##   JVM_ARGS - optional java args, e.g. -Dprop=val
 ##
 ##   e.g.
-##   JVM_ARGS="-Xms512m -Xmx512m" jmeter etc.
+##   JVM_ARGS="-Xms1g -Xmx1g" jmeter etc.
 ##
 ##   Do not set the variables in this script. Instead put them into a script
 ##   setenv.sh in JMETER_HOME/bin to keep your customizations separate.
@@ -35,11 +35,11 @@
 ##
 ##   JMETER_GC_ALGO   (Optional) Java runtime options to specify JVM garbage collection
 ##                    algorithm
-##                    Defaults to "-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem"
+##                    Defaults to "-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20"
 ##
 ##   JMETER_HEAP      (Optional) Java runtime options for memory management
 ##                    used when JMeter is started.
-##                    Defaults to "-Xms512m -Xmx512m -X:MaxMetaspaceSize=256m"
+##                    Defaults to "-Xms1g -Xmx1g -X:MaxMetaspaceSize=256m"
 ##
 ##   JMETER_HOME      (Optional) May point to your JMeter install dir. If empty
 ##                    it will be set relativ to this script.
@@ -156,7 +156,7 @@ esac
 
 # This is the base heap size -- you may increase or decrease it to fit your
 # system's memory availability:
-: "${JMETER_HEAP:="-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m"}"
+: "${JMETER_HEAP:="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"}"
 
 # Set language
 # Default to en_EN
@@ -173,7 +173,9 @@ esac
 # RUN_IN_DOCKER="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
 
 # Finally, some tracing to help in case things go astray:
-: "${JMETER_GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem"}"
+# You may want to add those settings:
+# -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem
+: "${JMETER_GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20"}"
 
 
 # Always dump on OOM (does not cost anything unless triggered)

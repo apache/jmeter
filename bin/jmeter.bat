@@ -37,10 +37,10 @@ rem   JVM_ARGS    - (Optional) Java options used when starting JMeter, e.g. -Dpr
 rem                 Defaults to '-Duser.language="en" -Duser.region="EN"'
 rem
 rem   GC_ALGO     - (Optional) JVM garbage collector options 
-rem                 Defaults to '-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem'
+rem                 Defaults to '-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20'
 rem
 rem   HEAP        - (Optional) JVM memory settings used when starting JMeter
-rem                 Defaults to '-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m'
+rem                 Defaults to '-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m'
 rem
 rem   =====================================================
 
@@ -138,7 +138,7 @@ rem http://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html
 if not defined HEAP (
     rem See the unix startup file for the rationale of the following parameters,
     rem including some tuning recommendations
-    set HEAP=-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m
+    set HEAP=-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m
 )
 
 rem Uncomment this to generate GC verbose file with Java prior to 9 
@@ -146,9 +146,10 @@ rem set VERBOSE_GC=-verbose:gc -Xloggc:gc_jmeter_%%p.log -XX:+PrintGCDetails -XX
 
 rem Uncomment this to generate GC verbose file with Java 9 and above
 rem set VERBOSE_GC=-Xlog:gc*,gc+age=trace,gc+heap=debug:file=gc_jmeter_%%p.log
-
+rem You may want to add those settings
+rem -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem
 if not defined GC_ALGO (
-    set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem
+    set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20
 )
 
 set SYSTEM_PROPS=-Djava.security.egd=file:/dev/urandom
