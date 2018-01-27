@@ -37,7 +37,7 @@ rem   JVM_ARGS    - (Optional) Java options used when starting JMeter, e.g. -Dpr
 rem                 Defaults to '-Duser.language="en" -Duser.region="EN"'
 rem
 rem   GC_ALGO     - (Optional) JVM garbage collector options 
-rem                 Defaults to '-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20'
+rem                 Defaults to '-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem'
 rem
 rem   HEAP        - (Optional) JVM memory settings used when starting JMeter
 rem                 Defaults to '-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m'
@@ -92,7 +92,9 @@ if not defined JAVAVER (
 
 
 rem Check if version is from OpenJDK or Oracle Hotspot JVM prior to 9 containing 1.${version}.x
-rem JAVAVER will contain "XXXX", so we extract 2 chars starting from index 1
+rem JAVAVER will be equal to "9.0.4" (quotes are part of the value) for Oracle Java 9
+rem JAVAVER will be equal to "1.8.0_161" (quotes are part of the value) for Oracle Java 8
+rem so we extract 2 chars starting from index 1
 IF "%JAVAVER:~1,2%"=="1." (
     set JAVAVER=%JAVAVER:"=%
     for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do (
@@ -146,7 +148,7 @@ rem Uncomment this to generate GC verbose file with Java 9 and above
 rem set VERBOSE_GC=-Xlog:gc*,gc+age=trace,gc+heap=debug:file=gc_jmeter_%%p.log
 
 if not defined GC_ALGO (
-    set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20
+    set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem
 )
 
 set SYSTEM_PROPS=-Djava.security.egd=file:/dev/urandom
