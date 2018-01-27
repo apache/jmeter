@@ -178,7 +178,7 @@ set SERVER=-server
 rem Collect the settings defined above
 set ARGS=%SERVER% %DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %RUN_IN_DOCKER%
 
-%JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
+%JM_START% %JM_LAUNCH% %ADD_MODS% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
 rem If the errorlevel is not zero, then display it and pause
 
