@@ -82,6 +82,10 @@ public final class RmiUtils {
     }
 
     public static RMIClientSocketFactory createClientSocketFactory() {
+        if (SSL_DISABLED) {
+            log.info("Disabling SSL for RMI as server.rmi.ssl.disable is set to 'true'");
+            return null;
+        }
         if (StringUtils.isBlank(KEYSTORE_FILE)) {
             Validate.validState(SSL_DISABLED,
                     "No keystore for RMI over SSL specified. Set 'server.rmi.ssl.disable' to true, if this is intentional,"
@@ -97,6 +101,10 @@ public final class RmiUtils {
     }
 
     public static RMIServerSocketFactory createServerSocketFactory() throws RemoteException {
+        if (SSL_DISABLED) {
+            log.info("Disabling SSL for RMI as server.rmi.ssl.disable is set to 'true'");
+            return null;
+        }
         if (StringUtils.isBlank(KEYSTORE_FILE)) {
             Validate.validState(SSL_DISABLED,
                     "No keystore for RMI over SSL specified. Set 'server.rmi.ssl.disable' to true, if this is intentional.");
