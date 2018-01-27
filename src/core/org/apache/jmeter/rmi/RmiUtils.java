@@ -110,8 +110,8 @@ public final class RmiUtils {
     }
 
     /**
-     * @return
-     * @throws RemoteException
+     * @return the configure address for usage by RMI
+     * @throws RemoteException when no valid address can be found
      */
     public static InetAddress getRmiHost() throws RemoteException {
         InetAddress localHost=null;
