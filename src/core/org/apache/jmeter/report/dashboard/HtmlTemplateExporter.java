@@ -122,7 +122,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         /**
          * Sets the extra options to inject in the result data
          * 
-         * @param extraOptions
+         * @param extraOptions to inject
          */
         public final void setExtraOptions(SubConfiguration extraOptions) {
             this.extraOptions = extraOptions;
@@ -185,9 +185,9 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         /**
          * Instantiates a new EmptyGraphChecker.
          * 
-         * @param filtersOnlySampleSeries
-         * @param showControllerSeriesOnly
-         * @param filterPattern
+         * @param filtersOnlySampleSeries flag to control filter for samples
+         * @param showControllerSeriesOnly flag to control visibility of controller
+         * @param filterPattern to use
          */
         public EmptyGraphChecker(boolean filtersOnlySampleSeries,
                 boolean showControllerSeriesOnly, Pattern filterPattern) {
