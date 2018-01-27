@@ -31,15 +31,11 @@ import javax.net.ServerSocketFactory;
  * @since 4.0
  */
 public class RMIServerSocketFactoryImpl implements RMIServerSocketFactory, Serializable {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 6106381149147208254L;
     private final InetAddress localAddress;
 
-    /**
-     * 
-     */
+
     public RMIServerSocketFactoryImpl(final InetAddress pAddress) {
         this.localAddress = pAddress;
     }
