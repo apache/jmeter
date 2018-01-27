@@ -156,7 +156,7 @@ public class JMeterUtils implements UnitTestManager {
 
     /**
      * Initialise JMeter logging
-     * @deprecated
+     * @deprecated does not do anything anymore
      */
     @Deprecated
     public static void initLogging() {

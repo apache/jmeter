@@ -43,10 +43,9 @@ interface InfluxdbMetricsSender {
     }
 
     /**
-     * 
-     * @param measurement 
-     * @param tag
-     * @param field
+     * @param measurement name of the influxdb measurement
+     * @param tag tag set for influxdb
+     * @param field field set for influxdb
      */
     public void addMetric(String measurement, String tag, String field);
 
