@@ -1851,6 +1851,7 @@ run JMeter unless all the JMeter jars are added.
       }
     }
       type = attributes.get("type");
+  	  RCdir = "";
       if (type.equals("delete")) {
         version = project.getProperty("jmeter.old.version");
         RC="";
