@@ -1852,9 +1852,10 @@ run JMeter unless all the JMeter jars are added.
     }
       type = attributes.get("type");
       RCdir = "";
+      RC="";
+      version = "";
       if (type.equals("delete")) {
         version = project.getProperty("jmeter.old.version");
-        RC="";
       } else {
         version = project.getProperty("jmeter.version");
         RC = project.getProperty("RC");
