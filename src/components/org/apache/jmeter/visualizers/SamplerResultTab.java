@@ -60,7 +60,6 @@ import org.apache.jorphan.reflect.Functor;
 
 /**
  * Right side in View Results Tree
- *
  */
 public abstract class SamplerResultTab implements ResultRenderer {
 
@@ -68,21 +67,15 @@ public abstract class SamplerResultTab implements ResultRenderer {
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
 
     private static final String NL = "\n"; // $NON-NLS-1$
-
     public static final Color SERVER_ERROR_COLOR = Color.red;
-
     public static final Color CLIENT_ERROR_COLOR = Color.blue;
-
     public static final Color REDIRECT_COLOR = Color.green;
 
     protected static final String TEXT_COMMAND = "text"; // $NON-NLS-1$
-    
     protected static final String REQUEST_VIEW_COMMAND = "change_request_view"; // $NON-NLS-1$
 
     private static final String STYLE_SERVER_ERROR = "ServerError"; // $NON-NLS-1$
-
     private static final String STYLE_CLIENT_ERROR = "ClientError"; // $NON-NLS-1$
-
     private static final String STYLE_REDIRECT = "Redirect"; // $NON-NLS-1$
 
     private JTextPane stats;
@@ -105,7 +98,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
     protected JTabbedPane rightSide;
 
     private int lastSelectedTab;
-
     private Object userObject = null; // Could be SampleResult or AssertionResult
 
     private SampleResult sampleResult = null;
@@ -133,9 +125,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
             "view_results_table_fields_value" }; // $NON-NLS-1$
 
     private final ObjectTableModel resultModel;
-
     private final ObjectTableModel resHeadersModel;
-
     private final ObjectTableModel resFieldsModel;
 
     private JTable tableResult = null;
@@ -209,7 +199,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     @Override
     public void init() {
-        rightSide.addTab(JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel()); // $NON-NLS-1$
+        rightSide.addTab(
+                JMeterUtils.getResString("view_results_tab_sampler"), // $NON-NLS-1$
+                createResponseMetadataPanel());
         // Create the panels for the other tabs
         requestPanel = new RequestPanel();
         resultsPane = createResponseDataPanel();
@@ -293,19 +285,19 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 statsBuff = null; // NOSONAR Help gc
                 
                 // Tabbed results: fill table
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_thread_name"), sampleResult.getThreadName())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_start"), startTime)); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_load_time"), sampleResult.getTime())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_connect_time"), sampleResult.getConnectTime())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_latency"), sampleResult.getLatency())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_in_bytes"), sampleResult.getBytesAsLong())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sent_bytes"),sampleResult.getSentBytes())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_headers_in_bytes"), sampleResult.getHeadersSize())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_body_in_bytes"), sampleResult.getBodySizeAsLong())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_count"), sampleResult.getSampleCount())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_error_count"), sampleResult.getErrorCount())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_code"), responseCode)); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_message"), responseMsgStr)); //$NON-NLS-1$
+                resultModel.addRow(createRowResult("view_results_thread_name", sampleResult.getThreadName()));
+                resultModel.addRow(createRowResult("view_results_sample_start", startTime));
+                resultModel.addRow(createRowResult("view_results_load_time", sampleResult.getTime()));
+                resultModel.addRow(createRowResult("view_results_connect_time", sampleResult.getConnectTime()));
+                resultModel.addRow(createRowResult("view_results_latency", sampleResult.getLatency()));
+                resultModel.addRow(createRowResult("view_results_size_in_bytes", sampleResult.getBytesAsLong()));
+                resultModel.addRow(createRowResult("view_results_sent_bytes", sampleResult.getSentBytes()));
+                resultModel.addRow(createRowResult("view_results_size_headers_in_bytes", sampleResult.getHeadersSize()));
+                resultModel.addRow(createRowResult("view_results_size_body_in_bytes", sampleResult.getBodySizeAsLong()));
+                resultModel.addRow(createRowResult("view_results_sample_count", sampleResult.getSampleCount()));
+                resultModel.addRow(createRowResult("view_results_error_count", sampleResult.getErrorCount()));
+                resultModel.addRow(createRowResult("view_results_response_code", responseCode));
+                resultModel.addRow(createRowResult("view_results_response_message", responseMsgStr));
                 
                 // Parsed response headers
                 LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getResponseHeaders());
@@ -324,23 +316,28 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 if (activateSearchExtension) {
                     searchTextExtension.resetTextToFind();
                 }
-
             } else if (userObject instanceof AssertionResult) {
-                assertionResult = (AssertionResult) userObject;
-
                 // We are displaying an AssertionResult
                 setupTabPaneForAssertionResult();
 
-                StringBuilder statsBuff = new StringBuilder(100);
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_error")).append(assertionResult.isError()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure")).append(assertionResult.isFailure()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure_message")).append(assertionResult.getFailureMessage()).append(NL); //$NON-NLS-1$
-                statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+                AssertionResult assertionResult = (AssertionResult) userObject;
+                statsDoc.insertString(statsDoc.getLength(),
+                        JMeterUtils.getResString("view_results_assertion_error") +
+                                assertionResult.isError() + NL +
+                                JMeterUtils.getResString("view_results_assertion_failure") +
+                                assertionResult.isFailure() + NL +
+                                JMeterUtils.getResString("view_results_assertion_failure_message") +
+                                assertionResult.getFailureMessage() + NL,
+                        null);
             }
             stats.setCaretPosition(1);
         } catch (BadLocationException exc) {
             stats.setText(exc.getLocalizedMessage());
         }
+    }
+
+    private RowResult createRowResult(String keyLookup, Object value) {
+        return new RowResult(JMeterUtils.getParsedLabel(keyLookup), value);
     }
 
     private void setupTabPaneForSampleResult() {

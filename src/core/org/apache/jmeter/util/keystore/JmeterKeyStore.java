@@ -109,7 +109,8 @@ public final class JmeterKeyStore {
      *             if the key can not be recovered from the store (should not
      *             happen here, either)
      */
-    public void load(InputStream is, String pword) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
+    public void load(InputStream is, String pword)
+            throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
         char[] pw = pword==null ? null : pword.toCharArray();
         store.load(is, pw);
     
@@ -259,7 +260,8 @@ public final class JmeterKeyStore {
      *             when <code>startIndex</code> &lt; 0, <code>endIndex</code>
      *             &lt; 0, or <code>endIndex</code> &lt; <code>startIndex</code>
      */
-    public static JmeterKeyStore getInstance(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws KeyStoreException  {
+    public static JmeterKeyStore getInstance(String type, int startIndex, int endIndex, String clientCertAliasVarName)
+            throws KeyStoreException  {
         return new JmeterKeyStore(type, startIndex, endIndex, clientCertAliasVarName);
     }
 

@@ -103,7 +103,6 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Class handles storing of generated samples, etc
  * For unit tests, see TestProxyControl
@@ -115,14 +114,9 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final long serialVersionUID = 240L;
 
     private static final String ASSERTION_GUI = AssertionGui.class.getName();
-
-
     private static final String TRANSACTION_CONTROLLER_GUI = TransactionControllerGui.class.getName();
-
     private static final String LOGIC_CONTROLLER_GUI = LogicControllerGui.class.getName();
-
     private static final String AUTH_PANEL = AuthPanel.class.getName();
-
     private static final String AUTH_MANAGER = AuthManager.class.getName();
 
     public static final int DEFAULT_PORT = 8888;
@@ -133,47 +127,26 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     //+ JMX file attributes
     private static final String PORT = "ProxyControlGui.port"; // $NON-NLS-1$
-
     private static final String DOMAINS = "ProxyControlGui.domains"; // $NON-NLS-1$
-
     private static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list"; // $NON-NLS-1$
-
     private static final String INCLUDE_LIST = "ProxyControlGui.include_list"; // $NON-NLS-1$
-
     private static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers"; // $NON-NLS-1$
-
     private static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion"; // $NON-NLS-1$
-
     private static final String GROUPING_MODE = "ProxyControlGui.grouping_mode"; // $NON-NLS-1$
-
     private static final String SAMPLER_TYPE_NAME = "ProxyControlGui.sampler_type_name"; // $NON-NLS-1$
-
     private static final String SAMPLER_REDIRECT_AUTOMATICALLY = "ProxyControlGui.sampler_redirect_automatically"; // $NON-NLS-1$
-
     private static final String SAMPLER_FOLLOW_REDIRECTS = "ProxyControlGui.sampler_follow_redirects"; // $NON-NLS-1$
-
     private static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive"; // $NON-NLS-1$
-
     private static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
-    
     private static final String HTTP_SAMPLER_NAMING_MODE = "ProxyControlGui.proxy_http_sampler_naming_mode"; // $NON-NLS-1$
-    
     private static final String PREFIX_HTTP_SAMPLER_NAME = "ProxyControlGui.proxy_prefix_http_sampler_name"; // $NON-NLS-1$
-    
     private static final String PROXY_PAUSE_HTTP_SAMPLER = "ProxyControlGui.proxy_pause_http_sampler"; // $NON-NLS-1$
-
     private static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
-
     private static final String CONTENT_TYPE_EXCLUDE = "ProxyControlGui.content_type_exclude"; // $NON-NLS-1$
-
     private static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
-
     private static final String NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED = "ProxyControlGui.notify_child_sl_filtered"; // $NON-NLS-1$
-
     private static final String BASIC_AUTH = "Basic"; // $NON-NLS-1$
-
     private static final String DIGEST_AUTH = "Digest"; // $NON-NLS-1$
-
     //- JMX file attributes
 
     // Must agree with the order of entries in the drop-down
@@ -183,7 +156,6 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final int GROUPING_STORE_FIRST_ONLY = 3;
     private static final int GROUPING_IN_TRANSACTION_CONTROLLERS = 4;
 
-    
     // Original numeric order (we now use strings)
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_JAVA = "0";
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
@@ -206,9 +178,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         JMeterUtils.getPropDefault("proxy.cert.file", CERT_FILE_DEFAULT); // $NON-NLS-1$
 
     private static final File CERT_PATH = new File(CERT_DIRECTORY, CERT_FILE);
-
     private static final String CERT_PATH_ABS = CERT_PATH.getAbsolutePath();
-
     private static final String DEFAULT_PASSWORD = "password"; // $NON-NLS-1$ NOSONAR only default password, if user has not defined one
 
     /**
@@ -224,12 +194,14 @@ public class ProxyControl extends GenericController implements NonTestElement {
     /**
      * Whether to use dynamic key generation (if supported)
      */
-    private static final boolean USE_DYNAMIC_KEYS = JMeterUtils.getPropDefault("proxy.cert.dynamic_keys", true); // $NON-NLS-1$
+    private static final boolean USE_DYNAMIC_KEYS =
+            JMeterUtils.getPropDefault("proxy.cert.dynamic_keys", true); // $NON-NLS-1$
 
     // The alias to be used if dynamic host names are not possible
     static final String JMETER_SERVER_ALIAS = ":jmeter:"; // $NON-NLS-1$
 
-    public static final int CERT_VALIDITY = JMeterUtils.getPropDefault("proxy.cert.validity", 7); // $NON-NLS-1$
+    public static final int CERT_VALIDITY =
+            JMeterUtils.getPropDefault("proxy.cert.validity", 7); // $NON-NLS-1$
 
     // If this is defined, it is assumed to be the alias of a user-supplied certificate; overrides dynamic mode
     static final String CERT_ALIAS = JMeterUtils.getProperty("proxy.cert.alias"); // $NON-NLS-1$
@@ -246,16 +218,21 @@ public class ProxyControl extends GenericController implements NonTestElement {
     static {
         if (CERT_ALIAS != null) {
             KEYSTORE_MODE = KeystoreMode.USER_KEYSTORE;
-            log.info("HTTP(S) Test Script Recorder will use the keystore '"+ CERT_PATH_ABS + "' with the alias: '" + CERT_ALIAS + "'");
+            log.info("HTTP(S) Test Script Recorder will use the keystore '{}' with the alias: '{}'",
+                    CERT_PATH_ABS, CERT_ALIAS);
         } else {
             if (!KeyToolUtils.haveKeytool()) {
                 KEYSTORE_MODE = KeystoreMode.NONE;
             } else if (USE_DYNAMIC_KEYS) {
                 KEYSTORE_MODE = KeystoreMode.DYNAMIC_KEYSTORE;
-                log.info("HTTP(S) Test Script Recorder SSL Proxy will use keys that support embedded 3rd party resources in file " + CERT_PATH_ABS);
+                log.info("HTTP(S) Test Script Recorder SSL Proxy will use keys that" +
+                        " support embedded 3rd party resources in file {}",
+                        CERT_PATH_ABS);
             } else {
                 KEYSTORE_MODE = KeystoreMode.JMETER_KEYSTORE;
-                log.warn("HTTP(S) Test Script Recorder SSL Proxy will use keys that may not work for embedded resources in file " + CERT_PATH_ABS);
+                log.warn("HTTP(S) Test Script Recorder SSL Proxy will use keys that " +
+                        "may not work for embedded resources in file {}",
+                        CERT_PATH_ABS);
             }
         }
     }
@@ -605,7 +582,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * TODO param serverResponse to be added to allow saving of the
      * server's response while recording.
      */
-    public synchronized void deliverSampler(final HTTPSamplerBase sampler, final TestElement[] testElements, final SampleResult result) {
+    public synchronized void deliverSampler(
+            final HTTPSamplerBase sampler, final TestElement[] testElements, final SampleResult result) {
         boolean notifySampleListeners = true;
         if (sampler != null) {
             if (ATTEMPT_REDIRECT_DISABLING && (samplerRedirectAutomatically || samplerFollowRedirects)
@@ -630,9 +608,11 @@ public class ProxyControl extends GenericController implements NonTestElement {
             if (filterContentType(result) && filterUrl(sampler)) {
                 JMeterTreeNode myTarget = findTargetControllerNode();
                 @SuppressWarnings("unchecked") // OK, because find only returns correct element types
-                Collection<ConfigTestElement> defaultConfigurations = (Collection<ConfigTestElement>) findApplicableElements(myTarget, ConfigTestElement.class, false);
+                Collection<ConfigTestElement> defaultConfigurations =
+                        (Collection<ConfigTestElement>) findApplicableElements(myTarget, ConfigTestElement.class, false);
                 @SuppressWarnings("unchecked") // OK, because find only returns correct element types
-                Collection<Arguments> userDefinedVariables = (Collection<Arguments>) findApplicableElements(myTarget, Arguments.class, true);
+                Collection<Arguments> userDefinedVariables =
+                        (Collection<Arguments>) findApplicableElements(myTarget, Arguments.class, true);
 
                 removeValuesFromSampler(sampler, defaultConfigurations);
                 replaceValues(sampler, testElements, userDefinedVariables);
@@ -647,7 +627,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 placeSampler(sampler, testElements, myTarget);
             } else {
                 if(log.isDebugEnabled()) {
-                    log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
+                    log.debug("Sample excluded based on url or content-type: {} - {}",
+                            result.getUrlAsString(), result.getContentType());
                 }
                 notifySampleListeners = notifyChildSamplerListenersOfFilteredSamples;
                 result.setSampleLabel("["+result.getSampleLabel()+"]");
@@ -657,7 +638,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
             // SampleEvent is not passed JMeterVariables, because they don't make sense for Proxy Recording
             notifySampleListeners(new SampleEvent(result, "WorkBench"));
         } else {
-            log.debug("Sample not delivered to Child Sampler Listener based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
+            log.debug("Sample not delivered to Child Sampler Listener based on url or content-type: {} - {}",
+                    result.getUrlAsString(), result.getContentType());
         }
     }
 
@@ -667,7 +649,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * Construct Authentication object
      * Removes Authorization if present 
      *
-     * @param subConfigs {@link TestElement}[]
+     * @param testElements {@link TestElement}[]
      * @param sampler {@link HTTPSamplerBase}
      * @return {@link Authorization}
      */
@@ -678,7 +660,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
         for (TestElement te : testElements) {
             if (te instanceof HeaderManager) {
                 @SuppressWarnings("unchecked") // headers should only contain the correct classes
-                List<TestElementProperty> headers = (ArrayList<TestElementProperty>) ((HeaderManager) te).getHeaders().getObjectValue();
+                List<TestElementProperty> headers =
+                        (ArrayList<TestElementProperty>) ((HeaderManager) te).getHeaders().getObjectValue();
                 for (Iterator<?> iterator = headers.iterator(); iterator.hasNext();) {
                     TestElementProperty tep = (TestElementProperty) iterator
                             .next();
@@ -760,7 +743,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 return new String[]
                         {
                         caCert.getSubjectX500Principal().toString(),
-                        "Fingerprint(SHA1): " + JOrphanUtils.baToHexString(DigestUtils.sha1(caCert.getEncoded()), ' '),
+                        "Fingerprint(SHA1): "
+                                + JOrphanUtils.baToHexString(DigestUtils.sha1(caCert.getEncoded()), ' '),
                         "Created: "+ caCert.getNotBefore().toString()
                         };
             } catch (GeneralSecurityException e) {
@@ -848,12 +832,15 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private boolean testPattern(String expression, String sampleContentType, boolean expectedToMatch) {
         if(expression != null && expression.length() > 0) {
             if(log.isDebugEnabled()) {
-                log.debug("Testing Expression : " + expression + " on sampleContentType:"+sampleContentType+", expected to match:"+expectedToMatch);
+                log.debug("Testing Expression : {} on sampleContentType:{}, expected to match:{}",
+                        expression, sampleContentType, expectedToMatch);
             }
 
-            Pattern pattern = null;
+            Pattern pattern;
             try {
-                pattern = JMeterUtils.getPatternCache().getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+                pattern = JMeterUtils.getPatternCache().getPattern(
+                        expression,
+                        Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
                 if(JMeterUtils.getMatcher().contains(sampleContentType, pattern) != expectedToMatch) {
                     return false;
                 }
@@ -1099,7 +1086,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @return a collection of applicable objects of the given class.
      */
     // TODO - could be converted to generic class?
-    private Collection<?> findApplicableElements(JMeterTreeNode myTarget, Class<? extends TestElement> myClass, boolean ascending) {
+    private Collection<?> findApplicableElements(
+            JMeterTreeNode myTarget, Class<? extends TestElement> myClass, boolean ascending) {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         LinkedList<TestElement> elements = new LinkedList<>();
 
@@ -1122,8 +1110,9 @@ public class ProxyControl extends GenericController implements NonTestElement {
             }
         }
         // Look for arguments elements in the target controller or higher up:
-        for (JMeterTreeNode controller = myTarget; controller != null; controller = (JMeterTreeNode) controller
-                .getParent()) {
+        for (JMeterTreeNode controller = myTarget;
+             controller != null;
+             controller = (JMeterTreeNode) controller.getParent()) {
             Enumeration<?> kids = controller.children();
             while (kids.hasMoreElements()) {
                 JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
@@ -1157,8 +1146,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
         return elements;
     }
 
-    private void placeSampler(final HTTPSamplerBase sampler, final TestElement[] testElements,
-            JMeterTreeNode myTarget) {
+    private void placeSampler(
+            final HTTPSamplerBase sampler, final TestElement[] testElements, JMeterTreeNode myTarget) {
         try {
             final JMeterTreeModel treeModel = getJmeterTreeModel();
 
@@ -1276,14 +1265,17 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @param configurations
      *            ConfigTestElements in descending priority.
      */
-    private void removeValuesFromSampler(HTTPSamplerBase sampler, Collection<ConfigTestElement> configurations) {
+    private void removeValuesFromSampler(
+            HTTPSamplerBase sampler, Collection<ConfigTestElement> configurations) {
         for (PropertyIterator props = sampler.propertyIterator(); props.hasNext();) {
             JMeterProperty prop = props.next();
             String name = prop.getName();
             String value = prop.getStringValue();
 
             // There's a few properties which are excluded from this processing:
-            if (name.equals(TestElement.ENABLED) || name.equals(TestElement.GUI_CLASS) || name.equals(TestElement.NAME)
+            if (name.equals(TestElement.ENABLED)
+                    || name.equals(TestElement.GUI_CLASS)
+                    || name.equals(TestElement.NAME)
                     || name.equals(TestElement.TEST_CLASS)) {
                 continue; // go on with next property.
             }
@@ -1452,9 +1444,11 @@ public class ProxyControl extends GenericController implements NonTestElement {
             initJMeterKeyStore();
             break;
         case USER_KEYSTORE:
-            storePassword = JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD); // $NON-NLS-1$
-            keyPassword = JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD); // $NON-NLS-1$
-            log.info("HTTP(S) Test Script Recorder will use the keystore '"+ CERT_PATH_ABS + "' with the alias: '" + CERT_ALIAS + "'");
+            storePassword = JMeterUtils.getPropDefault(
+                    "proxy.cert.keystorepass", DEFAULT_PASSWORD); // $NON-NLS-1$
+            keyPassword = JMeterUtils.getPropDefault(
+                    "proxy.cert.keypassword", DEFAULT_PASSWORD); // $NON-NLS-1$
+            log.info("HTTP(S) Test Script Recorder will use the keystore '{}' with the alias: '{}'", CERT_PATH_ABS, CERT_ALIAS);
             initUserKeyStore();
             break;
         case NONE:
@@ -1511,20 +1505,28 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 }
             } catch (CertificateExpiredException e) {
                 keyStore = null; // if cert is not valid, flag up to recreate it
-                log.warn("Existing ROOT Certificate has expired, a new one will be created, ensure you install it in browser, message: " + e.getMessage(), e);
+                log.warn("Existing ROOT Certificate has expired, a new one will " +
+                        "be created, ensure you install it in browser, message: {}",
+                        e.getMessage(), e);
             } catch (CertificateNotYetValidException e) {
                 keyStore = null; // if cert is not valid, flag up to recreate it
-                log.warn("Existing ROOT Certificate is not yet valid, a new one will be created, ensure you install it in browser, message: " + e.getMessage(), e);
+                log.warn("Existing ROOT Certificate is not yet valid, a new one " +
+                        "will be created, ensure you install it in browser, message: {}",
+                        e.getMessage(), e);
             } catch (GeneralSecurityException e) {
                 keyStore = null; // if cert is not valid, flag up to recreate it
-                log.warn("Problem reading key store, a new one will be created, ensure you install it in browser, message: " + e.getMessage(), e);
+                log.warn("Problem reading key store, a new one will be created, " +
+                        "ensure you install it in browser, message: {}",
+                        e.getMessage(), e);
             }
         }
         if (keyStore == null) { // no existing file or not valid
             storePassword = RandomStringUtils.randomAlphanumeric(20); // Alphanum to avoid issues with command-line quoting
             keyPassword = storePassword; // we use same password for both
             setPassword(storePassword);
-            log.info("Creating HTTP(S) Test Script Recorder Root CA in " + CERT_PATH_ABS+", ensure you install certificate in your Browser for recording");
+            log.info("Creating HTTP(S) Test Script Recorder Root CA in {}, ensure " +
+                    "you install certificate in your Browser for recording",
+                    CERT_PATH_ABS);
             KeyToolUtils.generateProxyCA(CERT_PATH, storePassword, CERT_VALIDITY);
             log.info("Created keystore in " + CERT_PATH_ABS);
             keyStore = getKeyStore(storePassword.toCharArray()); // This should now work
@@ -1582,12 +1584,15 @@ public class ProxyControl extends GenericController implements NonTestElement {
             }
         }
         if (keyStore == null) { // no existing file or not valid
-            storePassword = RandomStringUtils.randomAlphanumeric(20); // Alphanum to avoid issues with command-line quoting
+            // Alphanum to avoid issues with command-line quoting
+            storePassword = RandomStringUtils.randomAlphanumeric(20);
             keyPassword = storePassword; // we use same password for both
             setPassword(storePassword);
             log.info("Generating standard keypair in " + CERT_PATH_ABS);
             if(!CERT_PATH.delete()){ // safer to start afresh
-                log.warn("Could not delete "+CERT_PATH.getAbsolutePath()+", this could create issues, stop jmeter, ensure file is deleted and restart again");
+                log.warn("Could not delete {}, this could create issues, stop " +
+                        "jmeter, ensure file is deleted and restart again",
+                        CERT_PATH.getAbsolutePath());
             }
             KeyToolUtils.genkeypair(CERT_PATH, JMETER_SERVER_ALIAS, storePassword, CERT_VALIDITY, null, null);
             keyStore = getKeyStore(storePassword.toCharArray()); // This should now work

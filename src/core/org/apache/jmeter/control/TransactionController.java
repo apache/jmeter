@@ -214,7 +214,9 @@ public class TransactionController extends GenericController implements SampleLi
                 }
                 res.setIdleTime(pauseTime+res.getIdleTime());
                 res.sampleEnd();
-                res.setResponseMessage(TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX + calls + ", number of failing samples : " + noFailingSamples);
+                res.setResponseMessage(String.format(
+                        "%s%d, number of failing samples : %d",
+                        TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX, calls, noFailingSamples));
                 if(res.isSuccessful()) {
                     res.setResponseCodeOK();
                 }
@@ -249,7 +251,9 @@ public class TransactionController extends GenericController implements SampleLi
                 res.setIdleTime(pauseTime + res.getIdleTime());
                 res.sampleEnd();
                 res.setSuccessful(TRUE.equals(JMeterContextService.getContext().getVariables().get(JMeterThread.LAST_SAMPLE_OK)));
-                res.setResponseMessage(TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX + calls + ", number of failing samples : " + noFailingSamples);
+                res.setResponseMessage(String.format(
+                        "%s%d, number of failing samples : %d",
+                        TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX, calls, noFailingSamples));
                 notifyListeners();
             }
         } else {

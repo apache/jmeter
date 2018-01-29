@@ -66,39 +66,25 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     private static final long serialVersionUID = 240L;
 
     private static final int TAB_PARAMETERS = 0;
-    
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
+    private static final Font FONT_SMALL =
+            new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
+
     private int tabRawBodyIndex = 1;
-    
     private int tabFileUploadIndex = 2;
 
-    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
-    
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
-
     private HTTPArgumentsPanel argsPanel;
-    
     private HTTPFileArgsPanel filesPanel;
-
     private JLabeledTextField domain;
-
     private JLabeledTextField port;
-
     private JLabeledTextField protocol;
-
     private JLabeledTextField contentEncoding;
-
     private JLabeledTextField path;
-
     private JCheckBox followRedirects;
-
     private JCheckBox autoRedirects;
-
     private JCheckBox useKeepAlive;
-
     private JCheckBox useMultipartForPost;
-
     private JCheckBox useBrowserCompatibleMultipartMode;
-
     private JLabeledChoice method;
     
     // set this false to suppress some items for use in HTTP Request defaults
@@ -230,7 +216,10 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             element.setProperty(new BooleanProperty(HTTPSamplerBase.AUTO_REDIRECTS, autoRedirects.isSelected()));
             element.setProperty(new BooleanProperty(HTTPSamplerBase.USE_KEEPALIVE, useKeepAlive.isSelected()));
             element.setProperty(new BooleanProperty(HTTPSamplerBase.DO_MULTIPART_POST, useMultipartForPost.isSelected()));
-            element.setProperty(HTTPSamplerBase.BROWSER_COMPATIBLE_MULTIPART, useBrowserCompatibleMultipartMode.isSelected(),HTTPSamplerBase.BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT);
+            element.setProperty(
+                    HTTPSamplerBase.BROWSER_COMPATIBLE_MULTIPART,
+                    useBrowserCompatibleMultipartMode.isSelected(),
+                    HTTPSamplerBase.BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT);
         }
     }
 
@@ -308,7 +297,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             useKeepAlive.setSelected(el.getPropertyAsBoolean(HTTPSamplerBase.USE_KEEPALIVE));
             useMultipartForPost.setSelected(el.getPropertyAsBoolean(HTTPSamplerBase.DO_MULTIPART_POST));
             useBrowserCompatibleMultipartMode.setSelected(el.getPropertyAsBoolean(
-                    HTTPSamplerBase.BROWSER_COMPATIBLE_MULTIPART, HTTPSamplerBase.BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT));
+                    HTTPSamplerBase.BROWSER_COMPATIBLE_MULTIPART,
+                    HTTPSamplerBase.BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT));
         }
     }
 
@@ -333,7 +323,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      *
      * @return the panel
      */
-    protected final JPanel getWebServerPanel() {        
+    protected final JPanel getWebServerPanel() {
         // PROTOCOL
         protocol = new JLabeledTextField(JMeterUtils.getResString("protocol"), 4); // $NON-NLS-1$
         port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"), 7); // $NON-NLS-1$
@@ -390,7 +380,6 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             useBrowserCompatibleMultipartMode = new JCheckBox(JMeterUtils.getResString("use_multipart_mode_browser")); // $NON-NLS-1$
             useBrowserCompatibleMultipartMode.setFont(null);
             useBrowserCompatibleMultipartMode.setSelected(HTTPSamplerBase.BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT);
-
         }
 
         JPanel pathPanel =  new HorizontalPanel();
@@ -426,7 +415,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         if(showRawBodyPane) {
             tabRawBodyIndex = ++indx;
             postBodyContent = JSyntaxTextArea.getInstance(30, 50);// $NON-NLS-1$
-            postContentTabbedPane.add(JMeterUtils.getResString("post_body"), JTextScrollPane.getInstance(postBodyContent));// $NON-NLS-1$
+            postContentTabbedPane.add(
+                    JMeterUtils.getResString("post_body"), // $NON-NLS-1$
+                    JTextScrollPane.getInstance(postBodyContent));
         }
         
         if(showFileUploadPane) {
@@ -488,7 +479,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
                     if(oldSelectedIndex == tabRawBodyIndex) {
                         
                         // If RAW data and Parameters match we allow switching
-                        if(index == TAB_PARAMETERS && postBodyContent.getText().equals(computePostBody((Arguments)argsPanel.createTestElement()).trim())) {
+                        if (index == TAB_PARAMETERS &&
+                                postBodyContent.getText().equals(
+                                        computePostBody((Arguments)argsPanel.createTestElement()).trim())) {
                             super.setSelectedIndex(index);
                         }
                         else {

@@ -241,11 +241,12 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         argsPanel.configure((Arguments) config.getProperty(BackendListener.ARGUMENTS).getObjectValue());
 
         className = config.getPropertyAsString(BackendListener.CLASSNAME);
-        if(checkContainsClassName(classnameCombo.getModel(), className)) {
+        if (checkContainsClassName(classnameCombo.getModel(), className)) {
             classnameCombo.setSelectedItem(className);
         } else {
-            log.error(
-                    "Error setting class: '{}' in BackendListener: {}, check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties",
+            log.error("Error setting class: '{}' in BackendListener: {}, check " +
+                            "for a missing jar in your jmeter 'search_paths' " +
+                            "and 'plugin_dependency_paths' properties",
                     className, getName());
         }
         queueSize.setText(((BackendListener)config).getQueueSize());

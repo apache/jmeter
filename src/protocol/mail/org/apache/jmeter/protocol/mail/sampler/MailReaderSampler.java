@@ -84,14 +84,12 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     //-
 
     private static final String RFC_822_DEFAULT_ENCODING = "iso-8859-1"; // RFC 822 uses ascii per default
-
     public static final String DEFAULT_PROTOCOL = "pop3";  // $NON-NLS-1$
 
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
 
     private static final String FALSE = "false";  // $NON-NLS-1$
-
     private static final String TRUE = "true";  // $NON-NLS-1$
 
     public boolean isUseLocalTrustStore() {
@@ -102,25 +100,20 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         return getPropertyAsString(SecuritySettingsPanel.TRUSTSTORE_TO_USE);
     }
 
-
     public boolean isUseSSL() {
         return getPropertyAsBoolean(SecuritySettingsPanel.USE_SSL);
     }
-
 
     public boolean isUseStartTLS() {
         return getPropertyAsBoolean(SecuritySettingsPanel.USE_STARTTLS);
     }
 
-
     public boolean isTrustAllCerts() {
         return getPropertyAsBoolean(SecuritySettingsPanel.SSL_TRUST_ALL_CERTS);
     }
 
-
     public boolean isEnforceStartTLS() {
         return getPropertyAsBoolean(SecuritySettingsPanel.ENFORCE_STARTTLS);
-
     }
 
     public static final int ALL_MESSAGES = -1; // special value
@@ -149,9 +142,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         String samplerString = toString();
         parent.setSamplerData(samplerString);
 
-        /*
-         * Perform the sampling
-         */
+        // Perform the sampling
         parent.sampleStart(); // Start timing
         try {
             // Create empty properties
@@ -167,34 +158,46 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
 
             if (isTrustAllCerts()) {
                 if (isUseSSL()) {
-                    props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.class"), TRUST_ALL_SOCKET_FACTORY);  // $NON-NLS-1$
-                    props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
+                    props.setProperty(
+                            mailProp(serverProtocol, "ssl.socketFactory.class"),
+                            TRUST_ALL_SOCKET_FACTORY);
+                    props.setProperty(
+                            mailProp(serverProtocol, "ssl.socketFactory.fallback"),
+                            FALSE);
                 } else if (isUseStartTLS()) {
-                    props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.class"), TRUST_ALL_SOCKET_FACTORY);  // $NON-NLS-1$
-                    props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
+                    props.setProperty(
+                            mailProp(serverProtocol, "ssl.socketFactory.class"),
+                            TRUST_ALL_SOCKET_FACTORY);
+                    props.setProperty(
+                            mailProp(serverProtocol, "ssl.socketFactory.fallback"),
+                            FALSE);
                 }
             } else if (isUseLocalTrustStore()){
                 File truststore = new File(getTrustStoreToUse());
-                log.info("load local truststore - try to load truststore from: "+truststore.getAbsolutePath());
+                final String absolutePath = truststore.getAbsolutePath();
+                log.info("load local truststore - try to load truststore from: "+ absolutePath);
                 if(!truststore.exists()){
-                    log.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath());
+                    log.info("load local truststore -Failed to load truststore from: "+ absolutePath);
                     truststore = new File(FileServer.getFileServer().getBaseDir(), getTrustStoreToUse());
-                    log.info("load local truststore -Attempting to read truststore from:  "+truststore.getAbsolutePath());
+                    log.info("load local truststore -Attempting to read truststore from:  "+ absolutePath);
                     if(!truststore.exists()){
-                        log.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath() + ". Local truststore not available, aborting execution.");
-                        throw new IOException("Local truststore file not found. Also not available under : " + truststore.getAbsolutePath());
+                        log.info("load local truststore -Failed to load truststore from: {}." +
+                                "Local truststore not available, aborting execution.",
+                                absolutePath);
+                        throw new IOException(
+                                "Local truststore file not found. Also not available under : " + absolutePath);
                     }
                 }
                 if (isUseSSL()) {
                     // Requires JavaMail 1.4.2+
-                    props.put(mailProp(serverProtocol, "ssl.socketFactory"),   // $NON-NLS-1$ 
+                    props.put(mailProp(serverProtocol, "ssl.socketFactory"), // $NON-NLS-1$
                             new LocalTrustStoreSSLSocketFactory(truststore));
-                    props.put(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
+                    props.put(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE); // $NON-NLS-1$
                 } else if (isUseStartTLS()) {
                     // Requires JavaMail 1.4.2+
-                    props.put(mailProp(serverProtocol, "ssl.socketFactory"),  // $NON-NLS-1$
+                    props.put(mailProp(serverProtocol, "ssl.socketFactory"), // $NON-NLS-1$
                             new LocalTrustStoreSSLSocketFactory(truststore));
-                    props.put(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
+                    props.put(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE); // $NON-NLS-1$
                 }
             }
 

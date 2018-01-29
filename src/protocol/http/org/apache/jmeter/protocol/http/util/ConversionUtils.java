@@ -34,8 +34,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
-// @see TestHTTPUtils for unit tests
-
 /**
  * General purpose conversion utilities related to HTTP/HTML
  */
@@ -105,7 +103,8 @@ public class ConversionUtils {
      * @param location the location, possibly with extraneous leading "../"
      * @return URL with extraneous ../ removed
      * @throws MalformedURLException when the given <code>URL</code> is malformed
-     * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=46690">Bug 46690 - handling of 302 redirects with invalid relative paths</a>
+     * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=46690">
+     *     Bug 46690 - handling of 302 redirects with invalid relative paths</a>
      */
     public static URL makeRelativeURL(URL baseURL, String location) throws MalformedURLException{
         URL initial = new URL(baseURL,location);
@@ -133,7 +132,9 @@ public class ConversionUtils {
     public static String escapeIllegalURLCharacters(String url) throws Exception{
         String decodeUrl = URLDecoder.decode(url,StandardCharsets.UTF_8.name());
         URL urlString = new URL(decodeUrl);
-        URI uri = new URI(urlString.getProtocol(), urlString.getUserInfo(), urlString.getHost(), urlString.getPort(), urlString.getPath(), urlString.getQuery(), urlString.getRef());
+        URI uri = new URI(
+                urlString.getProtocol(), urlString.getUserInfo(), urlString.getHost(),
+                urlString.getPort(), urlString.getPath(), urlString.getQuery(), urlString.getRef());
         return uri.toString();
     }
     
@@ -168,7 +169,8 @@ public class ConversionUtils {
      * 
      * @param url in which the '/..'s should be removed
      * @return collapsed URL
-     * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=49083">Bug 49083 - collapse /.. in redirect URLs</a>
+     * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=49083">
+     *     Bug 49083 - collapse /.. in redirect URLs</a>
      */
     public static String removeSlashDotDot(String url)
     {
@@ -181,13 +183,8 @@ public class ConversionUtils {
             return url;
         }
         
-        /**
-         * http://auth@host:port/path1/path2/path3/?query#anchor
-         */
-
-        // get to 'path' part of the URL, preserving schema, auth, host if
-        // present
-
+        // http://auth@host:port/path1/path2/path3/?query#anchor
+        // get to 'path' part of the URL, preserving schema, auth, host if present
         // find index of path start
 
         int dotSlashSlashIndex = url.indexOf(COLONSLASHSLASH);
@@ -238,7 +235,9 @@ public class ConversionUtils {
                 final String thisToken = tokens.get(i);
 
                 // Verify for a ".." component at next iteration
-                if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT)) {
+                if (thisToken.length() > 0
+                        && !thisToken.equals(DOTDOT)
+                        && tokens.get(i + 1).equals(DOTDOT)) {
                     tokens.remove(i);
                     tokens.remove(i);
                     i = i - 2; // CHECKSTYLE IGNORE ModifiedControlVariable

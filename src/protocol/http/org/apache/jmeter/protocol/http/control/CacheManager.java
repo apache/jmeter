@@ -56,7 +56,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Handles HTTP Caching.
  */
-public class CacheManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
+public class CacheManager extends ConfigTestElement
+        implements TestStateListener, TestIterationListener, Serializable {
 
     private static final long serialVersionUID = 235L;
 
@@ -79,7 +80,6 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     //-
 
     private transient InheritableThreadLocal<Map<String, CacheEntry>> threadCache;
-
     private transient boolean useExpires; // Cached value
 
     /**
@@ -220,12 +220,15 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String etag = getHeader(method ,HTTPConstants.ETAG);
             String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
             String date = getHeader(method, HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date, getVaryHeader(varyHeader, asHeaders(res.getRequestHeaders()))); // TODO correct URL?
+            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date,
+                    getVaryHeader(varyHeader, asHeaders(res.getRequestHeaders()))); // TODO correct URL?
         }
     }
 
     // helper method to save the cache entry
-    private void setCache(String lastModified, String cacheControl, String expires, String etag, String url, String date, Pair<String, String> varyHeader) {
+    private void setCache(
+            String lastModified, String cacheControl, String expires,
+            String etag, String url, String date, Pair<String, String> varyHeader) {
         log.debug("setCache({}, {}, {}, {}, {}, {}, {})", lastModified,
                 cacheControl, expires, etag, url, date, varyHeader);
         Date expiresDate = null; // i.e. not using Expires
@@ -254,7 +257,9 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                         varyUrl(url, varyHeader.getLeft(), varyHeader.getRight()));
             }
             getCache().put(url, new CacheEntry(lastModified, expiresDate, etag, varyHeader.getLeft()));
-            getCache().put(varyUrl(url, varyHeader.getLeft(), varyHeader.getRight()), new CacheEntry(lastModified, expiresDate, etag, null));
+            getCache().put(
+                    varyUrl(url, varyHeader.getLeft(), varyHeader.getRight()),
+                    new CacheEntry(lastModified, expiresDate, etag, null));
         } else {
             if (getCache().get(url) != null) {
                 log.debug("Entry for {} already in cache.", url);
@@ -269,14 +274,13 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     private Date extractExpiresDateFromExpires(String expires) {
         Date expiresDate;
         try {
-            expiresDate = org.apache.http.client.utils.DateUtils
-                    .parseDate(expires);
+            expiresDate = DateUtils.parseDate(expires);
         } catch (IllegalArgumentException e) {
             if (log.isDebugEnabled()) {
                 log.debug("Unable to parse Expires: '" + expires + "' " + e);
             }
-            expiresDate = CacheManager.EXPIRED_DATE; // invalid dates must be
-                                                     // treated as expired
+            // invalid dates must be treated as expired
+            expiresDate = CacheManager.EXPIRED_DATE;
         }
         return expiresDate;
     }

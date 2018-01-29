@@ -67,7 +67,10 @@ public class SystemCommand {
      * @param stderr File name that will contain err stream (may be null)
      * @throws IOException if the input file is not found or output cannot be written
      */
-    public SystemCommand(File directory, long timeoutMillis, int pollInterval, Map<String, String> env, String stdin, String stdout, String stderr) throws IOException {
+    public SystemCommand(
+            File directory, long timeoutMillis, int pollInterval, Map<String,
+            String> env, String stdin, String stdout, String stderr)
+            throws IOException {
         this(directory, timeoutMillis, pollInterval, env, checkIn(stdin), checkOut(stdout), checkOut(stderr));
     }
 
@@ -99,7 +102,9 @@ public class SystemCommand {
      * @param stdout File name that will contain out stream (may be null)
      * @param stderr File name that will contain err stream (may be null)
      */
-    public SystemCommand(File directory, long timeoutMillis, int pollInterval, Map<String, String> env, InputStream stdin, OutputStream stdout, OutputStream stderr) {
+    public SystemCommand(
+            File directory, long timeoutMillis, int pollInterval, Map<String,
+            String> env, InputStream stdin, OutputStream stdout, OutputStream stderr) {
         super();
         this.timeoutMillis = timeoutMillis;
         this.directory = directory;
@@ -126,7 +131,8 @@ public class SystemCommand {
     }
 
     // helper method to allow input and output to be changed for chaining
-    private int run(List<String> arguments, InputStream in, OutputStream out, OutputStream err) throws InterruptedException, IOException {
+    private int run(List<String> arguments, InputStream in, OutputStream out, OutputStream err)
+            throws InterruptedException, IOException {
         Process proc = null;
         final ProcessBuilder procBuild = new ProcessBuilder(arguments);
         if (env != null) {
@@ -137,8 +143,7 @@ public class SystemCommand {
         if (err == null) {
             procBuild.redirectErrorStream(true);
         }
-        try
-        {
+        try {
             proc = procBuild.start();
 
             final OutputStream procOut = proc.getOutputStream();
@@ -231,7 +236,8 @@ public class SystemCommand {
                 return proc.exitValue();
             } catch (IllegalThreadStateException e) { // not yet terminated
                 // N.B. proc.destroy() is called by the finally clause in the run() method
-                throw new InterruptedException( "Process timeout out after " + timeoutInMillis + " milliseconds" );
+                throw new InterruptedException(
+                        "Process timeout out after " + timeoutInMillis + " milliseconds" );
             }
         }
     }

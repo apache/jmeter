@@ -82,118 +82,69 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private static final Logger log = LoggerFactory.getLogger(RespTimeGraphVisualizer.class);
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
-
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
     //+ JMX property names; do not change
-
     public static final String INTERVAL = "RespTimeGraph.interval"; // $NON-NLS-1$
-
     public static final String SERIES_SELECTION = "RespTimeGraph.seriesselection"; // $NON-NLS-1$
-
     public static final String SERIES_SELECTION_MATCH_LABEL = "RespTimeGraph.seriesselectionmatchlabel"; // $NON-NLS-1$
-
     public static final String SERIES_SELECTION_CASE_SENSITIVE = "RespTimeGraph.seriesselectioncasesensitive"; // $NON-NLS-1$
-
     public static final String SERIES_SELECTION_REGEXP = "RespTimeGraph.seriesselectionregexp"; // $NON-NLS-1$
-    
     public static final String GRAPH_TITLE = "RespTimeGraph.graphtitle"; // $NON-NLS-1$
-
     public static final String GRAPH_TITLE_FONT_NAME = "RespTimeGraph.graphtitlefontname"; // $NON-NLS-1$
-
     public static final String GRAPH_TITLE_FONT_SIZE = "RespTimeGraph.graphtitlefondsize"; // $NON-NLS-1$
-
     public static final String GRAPH_TITLE_FONT_STYLE = "RespTimeGraph.graphtitlefontstyle"; // $NON-NLS-1$
-
     public static final String LINE_STROKE_WIDTH = "RespTimeGraph.linestrockwidth"; // $NON-NLS-1$
-
     public static final String LINE_SHAPE_POINT = "RespTimeGraph.lineshapepoint"; // $NON-NLS-1$
-
     public static final String GRAPH_SIZE_DYNAMIC = "RespTimeGraph.graphsizedynamic"; // $NON-NLS-1$
-
     public static final String GRAPH_SIZE_WIDTH = "RespTimeGraph.graphsizewidth"; // $NON-NLS-1$
-
     public static final String GRAPH_SIZE_HEIGHT = "RespTimeGraph.graphsizeheight"; // $NON-NLS-1$
-
     public static final String XAXIS_TIME_FORMAT = "RespTimeGraph.xaxistimeformat"; // $NON-NLS-1$
-
     public static final String YAXIS_SCALE_MAX_VALUE = "RespTimeGraph.yaxisscalemaxvalue"; // $NON-NLS-1$
-
     public static final String YAXIS_INCREMENT_SCALE = "RespTimeGraph.yaxisscaleincrement"; // $NON-NLS-1$
-
     public static final String YAXIS_NUMBER_GROUPING = "RespTimeGraph.yaxisnumbergrouping"; // $NON-NLS-1$
-
     public static final String LEGEND_PLACEMENT = "RespTimeGraph.legendplacement"; // $NON-NLS-1$
-
     public static final String LEGEND_FONT = "RespTimeGraph.legendfont"; // $NON-NLS-1$
-
     public static final String LEGEND_SIZE = "RespTimeGraph.legendsize"; // $NON-NLS-1$
-
     public static final String LEGEND_STYLE = "RespTimeGraph.legendstyle"; // $NON-NLS-1$
-
     //- JMX property names
 
     public static final int DEFAULT_INTERVAL = 10000; // in milli-seconds // TODO: properties?
-
     public static final boolean DEFAULT_SERIES_SELECTION = false;
-    
     public static final boolean DEFAULT_CASE_SENSITIVE = false;
-    
     public static final boolean DEFAULT_REGEXP = true;
-    
     public static final int DEFAULT_TITLE_FONT_NAME = 0; // default: sans serif
-    
     public static final int DEFAULT_TITLE_FONT_SIZE = 6; // default: 16
-
     public static final int DEFAULT_TITLE_FONT_STYLE = 1; // default: bold
-
     public static final int DEFAULT_STROKE_WIDTH_LIST = 4; // default: 3.0f
-    
     public static final int DEFAULT_LINE_SHAPE_POINT = 0; // default: circle
-
     public static final boolean DEFAULT_DYNAMIC_GRAPH_SIZE = true; // default: true
-
     public static final String DEFAULT_XAXIS_TIME_FORMAT = "HH:mm:ss"; // $NON-NLS-1$
-    
     public static final boolean DEFAULT_NUMBER_SHOW_GROUPING = true;
-    
     public static final int DEFAULT_LEGEND_PLACEMENT = 0; // default: bottom
-
     public static final int DEFAULT_LEGEND_FONT = 0; // default: sans serif
-    
     public static final int DEFAULT_LEGEND_SIZE = 2; // default: 10
-
     public static final int DEFAULT_LEGEND_STYLE = 0; // default: normal
-
     private static final int DEFAULT_WIDTH = 400;
-
     private static final int DEFAULT_HEIGTH = 300;
-
     private static final String Y_AXIS_LABEL = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
-
     private static final String Y_AXIS_TITLE = JMeterUtils.getResString("aggregate_graph_ms"); //$NON-NLS-1$
 
-    /**
-     * Lock used to protect list update
-     */
+    /** Lock used to protect list update */
     private final transient Object lock = new Object();
-    /**
-     * Lock used to protect refresh interval
-     */
+    /** Lock used to protect refresh interval */
     private final transient Object lockInterval = new Object();
 
     private RespTimeGraphChart graphPanel = null;
-
     private final JTabbedPane tabbedGraph = new JTabbedPane(SwingConstants.TOP);
-    
     private boolean saveGraphToFile = false;
-    
     private int intervalValue = DEFAULT_INTERVAL;
 
     private final JLabeledTextField intervalField =
             new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_interval_label"), 7); //$NON-NLS-1$
 
-    private final JButton intervalButton = new JButton(JMeterUtils.getResString("graph_resp_time_interval_reload")); // $NON-NLS-1$
+    private final JButton intervalButton =
+            new JButton(JMeterUtils.getResString("graph_resp_time_interval_reload")); // $NON-NLS-1$
 
     private final JButton displayButton =
             new JButton(JMeterUtils.getResString("aggregate_graph_display")); //$NON-NLS-1$
@@ -201,7 +152,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private final JButton saveGraph =
             new JButton(JMeterUtils.getResString("aggregate_graph_save")); //$NON-NLS-1$
 
-    private final JCheckBox samplerSelection = new JCheckBox(JMeterUtils.getResString("graph_resp_time_series_selection"), false); //$NON-NLS-1$
+    private final JCheckBox samplerSelection =
+            new JCheckBox(JMeterUtils.getResString("graph_resp_time_series_selection"), false); //$NON-NLS-1$
 
     private final JTextField samplerMatchLabel = new JTextField();
 
@@ -211,26 +163,33 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final JCheckBox regexpChkBox = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), true); // $NON-NLS-1$
 
-    private final JComboBox<String> titleFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> titleFontNameList =
+            new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
     private final JComboBox<String> titleFontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private final JComboBox<String> titleFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> titleFontStyleList =
+            new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
-    private final JComboBox<String> fontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> fontNameList =
+            new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
     private final JComboBox<String> fontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private final JComboBox<String> fontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> fontStyleList =
+            new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
-    private final JComboBox<String> legendPlacementList = new JComboBox<>(StatGraphProperties.getPlacementNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> legendPlacementList =
+            new JComboBox<>(StatGraphProperties.getPlacementNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
     
-    private final JComboBox<String> pointShapeLine = new JComboBox<>(StatGraphProperties.getPointShapeMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> pointShapeLine =
+            new JComboBox<>(StatGraphProperties.getPointShapeMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
     private final JComboBox<String> strokeWidthList = new JComboBox<>(StatGraphProperties.getStrokeWidth());
 
-    private final JCheckBox numberShowGrouping = new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), // $NON-NLS-1$
-            DEFAULT_NUMBER_SHOW_GROUPING); // Default checked
+    private final JCheckBox numberShowGrouping =
+            new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), // $NON-NLS-1$
+                    DEFAULT_NUMBER_SHOW_GROUPING); // Default checked
 
     private final JButton syncWithName =
             new JButton(JMeterUtils.getResString("aggregate_graph_sync_with_name"));  //$NON-NLS-1$
@@ -239,7 +198,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_title_label")); //$NON-NLS-1$
 
     private final JLabeledTextField xAxisTimeFormat =
-            new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_xaxis_time_format"), 10); //$NON-NLS-1$ $NON-NLS-2$
+            new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_xaxis_time_format"), 10); //$NON-NLS-1$
 
     private final JLabeledTextField maxValueYAxisLabel =
             new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_yaxis_max_value"), 5); //$NON-NLS-1$
@@ -713,8 +672,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     }
 
     public String[] getXAxisLabels() {
-        SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText()); //$NON-NLS-1$ 
-        String[] xAxisLabels = new String[(int) durationTest]; // Test can't have a duration more than 2^31 secs (cast from long to int)
+        SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText());
+        // Test can't have a duration more than 2^31 secs (cast from long to int)
+        String[] xAxisLabels = new String[(int) durationTest];
         for (int j = 0; j < durationTest; j++) {
             xAxisLabels[j] = formatter.format(new Date((minStartTime + j) * intervalValue));
         }
