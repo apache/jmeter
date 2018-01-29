@@ -79,7 +79,10 @@ public class ReportGenerator {
     private static final char CSV_DEFAULT_SEPARATOR =
             // We cannot use JMeterUtils#getPropDefault as it applies a trim on value
             JMeterUtils.getDelimiter(
-                    JMeterUtils.getJMeterProperties().getProperty(SampleSaveConfiguration.DEFAULT_DELIMITER_PROP, SampleSaveConfiguration.DEFAULT_DELIMITER)).charAt(0);
+                    JMeterUtils.getJMeterProperties().getProperty(
+                            SampleSaveConfiguration.DEFAULT_DELIMITER_PROP,
+                            SampleSaveConfiguration.DEFAULT_DELIMITER))
+                    .charAt(0);
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not valid.";
     private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";
@@ -101,10 +104,6 @@ public class ReportGenerator {
 
     private final File testFile;
     private final ReportGeneratorConfiguration configuration;
-
-    /**
-     * ResultCollector used
-     */
     private final ResultCollector resultCollector;
 
     /**
@@ -120,7 +119,8 @@ public class ReportGenerator {
             throws ConfigurationException {
         if (!CSV_OUTPUT_FORMAT) {
             throw new IllegalArgumentException(
-                    "Report generation requires csv output format, check 'jmeter.save.saveservice.output_format' property");
+                    "Report generation requires csv output format, check " +
+                            "'jmeter.save.saveservice.output_format' property");
         }
 
         log.info("ReportGenerator will use for Parsing the separator: '{}'", CSV_DEFAULT_SEPARATOR);
@@ -177,7 +177,7 @@ public class ReportGenerator {
      */
     private static String getSetterName(String propertyKey) {
         Matcher matcher = POTENTIAL_CAMEL_CASE_PATTERN.matcher(propertyKey);
-        StringBuffer buffer = new StringBuffer(); // NOSONAR Unfortunately Matcher does not support StringBuilder
+        StringBuffer buffer = new StringBuffer(); // NOSONAR Matcher does not support StringBuilder
         while (matcher.find()) {
             matcher.appendReplacement(buffer, matcher.group(1).toUpperCase());
         }
@@ -232,10 +232,9 @@ public class ReportGenerator {
                 .getGraphConfigurations();
 
         // Process configuration to build graph consumers
-        for (Map.Entry<String, GraphConfiguration> entryGraphCfg : graphConfigurations
-                .entrySet()) {
-            addGraphConsumer(nameFilter, excludeControllerFilter,
-                    entryGraphCfg);
+        for (Map.Entry<String, GraphConfiguration> entryGraphCfg :
+                graphConfigurations.entrySet()) {
+            addGraphConsumer(nameFilter, excludeControllerFilter, entryGraphCfg);
         }
 
         // Generate data
@@ -266,7 +265,6 @@ public class ReportGenerator {
         removeTempDir(tmpDir, tmpDirCreated);
 
         log.debug("End of report generation");
-
     }
 
     /**
@@ -280,17 +278,17 @@ public class ReportGenerator {
                 if(configuration.getStartDate() != null) {
                     if(sampleStartTime >= configuration.getStartDate().getTime()) {
                         if(configuration.getEndDate() != null) {
-                            return sampleStartTime <= configuration.getEndDate().getTime();                             
+                            return sampleStartTime <= configuration.getEndDate().getTime();
                         } else {
-                            return true;                            
+                            return true;
                         }
                     }
                     return false;
                 } else {
                     if(configuration.getEndDate() != null) {
-                        return sampleStartTime <= configuration.getEndDate().getTime(); 
+                        return sampleStartTime <= configuration.getEndDate().getTime();
                     } else {
-                        return true;                            
+                        return true;
                     }
                 }
             });     
@@ -410,7 +408,8 @@ public class ReportGenerator {
         Top5ErrorsBySamplerConsumer top5ErrorsBySamplerConsumer = new Top5ErrorsBySamplerConsumer();
         top5ErrorsBySamplerConsumer.setName(TOP5_ERRORS_BY_SAMPLER_CONSUMER_NAME);
         top5ErrorsBySamplerConsumer.setHasOverallResult(true);
-        top5ErrorsBySamplerConsumer.setIgnoreTransactionController(configuration.isIgnoreTCFromTop5ErrorsBySampler());
+        top5ErrorsBySamplerConsumer.setIgnoreTransactionController(
+                configuration.isIgnoreTCFromTop5ErrorsBySampler());
         return top5ErrorsBySamplerConsumer;
     }
 
@@ -442,7 +441,8 @@ public class ReportGenerator {
                 // by property jmeter.reportgenerator.apdex_per_transaction
                 // key in entry below can be a hardcoded name or a regex
                 for (Map.Entry<String, Long[]> entry : configuration.getApdexPerTransaction().entrySet()) {
-                    org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(entry.getKey());
+                    org.apache.oro.text.regex.Pattern regex =
+                            JMeterUtils.getPatternCache().getPattern(entry.getKey());
                     PatternMatcher matcher = JMeterUtils.getMatcher();
                     if (sampleName != null && matcher.matches(sampleName, regex)) {
                         Long satisfied = entry.getValue()[0];
@@ -538,8 +538,7 @@ public class ReportGenerator {
                             .getParameterTypes();
                     if (parameterTypes.length == 1) {
                         Class<?> parameterType = parameterTypes[0];
-                        if (parameterType
-                                .isAssignableFrom(String.class)) {
+                        if (parameterType.isAssignableFrom(String.class)) {
                             method.invoke(obj, propertyValue);
                         } else {
                             StringConverter<?> converter = Converters
@@ -548,11 +547,9 @@ public class ReportGenerator {
                                 throw new GenerationException(
                                         String.format(
                                                 NOT_SUPPORTED_CONVERSION_FMT,
-                                                parameterType
-                                                        .getName()));
+                                                parameterType.getName()));
                             }
-                            method.invoke(obj, converter
-                                    .convert(propertyValue));
+                            method.invoke(obj, converter.convert(propertyValue));
                         }
                         return;
                     }
@@ -561,9 +558,9 @@ public class ReportGenerator {
             }
             log.warn("'{}' is not a valid property for class '{}', skip it", propertyName, className);
         } catch (InvocationTargetException | ConvertException ex) {
-            String message = String
-                    .format("Cannot assign \"%s\" to property \"%s\" (mapped as \"%s\"), skip it",
-                            propertyValue, propertyName, setterName);
+            String message = String.format(
+                    "Cannot assign \"%s\" to property \"%s\" (mapped as \"%s\"), skip it",
+                    propertyValue, propertyName, setterName);
             log.error(message, ex);
             throw new GenerationException(message, ex);
         }

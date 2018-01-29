@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Receiver of pseudo-synchronous reply messages.
- *
  */
 public final class Receiver implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(Receiver.class);
@@ -41,11 +40,8 @@ public final class Receiver implements Runnable {
     private volatile boolean active;
 
     private final Session session;
-
     private final MessageConsumer consumer;
-
     private final Connection conn;
-
     private final boolean useResMsgIdAsCorrelId;
 
 
@@ -59,7 +55,10 @@ public final class Receiver implements Runnable {
      * @param jmsSelector JMS Selector
      * @throws JMSException
      */
-    private Receiver(ConnectionFactory factory, Destination receiveQueue, String principal, String credentials, boolean useResMsgIdAsCorrelId, String jmsSelector) throws JMSException {
+    private Receiver(
+            ConnectionFactory factory, Destination receiveQueue, String principal,
+            String credentials, boolean useResMsgIdAsCorrelId, String jmsSelector)
+            throws JMSException {
         if (null != principal && null != credentials) {
             log.info("creating receiver WITH authorisation credentials. UseResMsgId={}", useResMsgIdAsCorrelId);
             conn = factory.createConnection(principal, credentials);
@@ -103,7 +102,8 @@ public final class Receiver implements Runnable {
     public static Receiver createReceiver(ConnectionFactory factory, Destination receiveQueue,
             String principal, String credentials, boolean useResMsgIdAsCorrelId, String jmsSelector)
             throws JMSException {
-        Receiver receiver = new Receiver(factory, receiveQueue, principal, credentials, useResMsgIdAsCorrelId, jmsSelector);
+        Receiver receiver = new Receiver(
+                factory, receiveQueue, principal, credentials, useResMsgIdAsCorrelId, jmsSelector);
         Thread thread = new Thread(receiver, Thread.currentThread().getName()+"-JMS-Receiver");
         thread.start();
         return receiver;
@@ -115,7 +115,6 @@ public final class Receiver implements Runnable {
         Message reply;
 
         while (active) {
-            reply = null;
             try {
                 reply = consumer.receive(5000);
                 if (reply != null) {
@@ -129,7 +128,7 @@ public final class Receiver implements Runnable {
                     } else {
                         messageKey = reply.getJMSCorrelationID();
                         if (messageKey == null) {// JMSMessageID cannot be null
-                            log.warn("Received message with correlation id null. Discarding message ...");
+                            log.warn("Received message with correlation id null. Discarding message...");
                         } else {
                             synchronized (admin) {
                                 admin.putReply(messageKey, reply);

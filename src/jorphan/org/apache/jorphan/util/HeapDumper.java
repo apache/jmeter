@@ -188,14 +188,14 @@ public class HeapDumper {
             }
         } catch (RuntimeMBeanException e) {
             Throwable f = e.getCause();
-            if (f instanceof Exception){
-                throw (Exception )f;
+            if (f instanceof Exception) {
+                throw (Exception) f;
             }
             throw e;
         } catch (MBeanException e) {
             Throwable f = e.getCause();
-            if (f instanceof Exception){
-                throw (Exception )f;
+            if (f instanceof Exception) {
+                throw (Exception) f;
             }
             throw e;
         }

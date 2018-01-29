@@ -31,7 +31,6 @@ import org.apache.commons.lang3.mutable.MutableLong;
  * It is not threadsafe.
  *
  * @param <T> type parameter for the calculator
- *
  */
 public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
@@ -41,27 +40,16 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     // Running values, updated for each sample
     private double sum = 0;
-
     private double sumOfSquares = 0;
-
     private double mean = 0;
-
     private double deviation = 0;
-
     private long count = 0;
-
     private T min;
-
     private T max;
-
     private long bytes = 0;
-    
     private long sentBytes = 0;
-
     private final T ZERO;
-
     private final T MAX_VALUE; // e.g. Long.MAX_VALUE
-
     private final T MIN_VALUE; // e.g. Long.MIN_VALUE
 
     /**
@@ -162,7 +150,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         }
 
         // use Math.round () instead of simple (long) to provide correct value rounding
-        long target = Math.round (count * percent);
+        long target = Math.round(count * percent);
         try {
             for (Entry<T, MutableLong> val : valuesMap.entrySet()) {
                 target -= val.getValue().longValue();

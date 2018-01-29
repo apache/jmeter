@@ -50,7 +50,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * Axis graph is used by StatGraphVisualizer, which generates bar graphs
  * from the statistical data.
  */
@@ -62,6 +61,7 @@ public class AxisGraph extends JPanel {
 
     private static final String ELLIPSIS = "..."; //$NON-NLS-1$
     private static final int ELLIPSIS_LEN = ELLIPSIS.length();
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
 
     protected double[][] data = null;
     protected String title;
@@ -72,34 +72,18 @@ public class AxisGraph extends JPanel {
     protected String[] xAxisLabels;
     protected int width;
     protected int height;
-    
     protected String[] legendLabels = { JMeterUtils.getResString("aggregate_graph_legend") }; // $NON-NLS-1$
-    
     protected int maxYAxisScale;
-
     protected Font titleFont;
-
     protected Font legendFont;
-
-    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
-
     protected Font valueFont = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.6));
-
     protected Color[] color = { Color.YELLOW };
-
     protected Color foreColor = Color.BLACK;
-
     protected boolean outlinesBarFlag = false;
-
     protected boolean showGrouping = true;
-    
     protected boolean valueOrientation = true;
-
     protected int legendPlacement = LegendAreaProperties.BOTTOM;
 
-    /**
-     *
-     */
     public AxisGraph() {
         super();
     }
@@ -331,7 +315,7 @@ public class AxisGraph extends JPanel {
         return max;
     }
 
-    private String squeeze (String input, int _maxLength){
+    private String squeeze(String input, int _maxLength){
         if (input.length()>_maxLength){
             return input.substring(0,_maxLength-ELLIPSIS_LEN)+ELLIPSIS;
         }
@@ -344,7 +328,7 @@ public class AxisGraph extends JPanel {
             Font legendFont, Graphics g) {
         double max = maxYAxisScale > 0 ? maxYAxisScale : findMax(_data); // define max scale y axis
         try {
-            /** These controls are already done in StatGraphVisualizer
+            /* These controls are already done in StatGraphVisualizer
             if (_width == 0) {
                 _width = 450;
             }

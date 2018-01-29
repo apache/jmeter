@@ -726,10 +726,11 @@ public class ReportGeneratorConfiguration {
      * sample names as keys and an array of 2 longs [satisfied, tolerated] as values.
      * The sample name can be a regex supplied by the user.
      * @param apdexPerTransaction the string coming from properties
-     * @return {@link Map} containing for each sample name or sample name regex an array of Long corresponding to satisfied and tolerated apdex thresholds.
+     * @return {@link Map} containing for each sample name or sample name regex
+     * an array of Long corresponding to satisfied and tolerated apdex thresholds.
      */
     public static Map<String, Long[]> getApdexPerTransactionParts(String apdexPerTransaction) {
-        Map <String, Long[]> specificApdexes = new HashMap<>();
+        Map<String, Long[]> specificApdexes = new HashMap<>();
         if (StringUtils.isEmpty(apdexPerTransaction) || 
                 apdexPerTransaction.trim().length()==0) {
             log.info(

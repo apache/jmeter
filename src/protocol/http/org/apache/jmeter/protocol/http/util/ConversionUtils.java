@@ -34,8 +34,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
-// @see TestHTTPUtils for unit tests
-
 /**
  * General purpose conversion utilities related to HTTP/HTML
  */
@@ -66,34 +64,31 @@ public class ConversionUtils {
      *             if the found charset is not supported
      */
     public static String getEncodingFromContentType(String contentType){
-        String charSet = null;
         if (contentType != null) {
             int charSetStartPos = contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf(CHARSET_EQ);
             if (charSetStartPos >= 0) {
-                charSet = contentType.substring(charSetStartPos + CHARSET_EQ_LEN);
-                if (charSet != null) {
-                    // Remove quotes from charset name, see bug 55852
-                    charSet = StringUtils.replaceChars(charSet, "\'\"", null);
-                    charSet = charSet.trim();
-                    if (charSet.length() > 0) {
-                        // See Bug 44784
-                        int semi = charSet.indexOf(';');
-                        if (semi == 0){
-                            return null;
-                        }
-                        if (semi != -1) {
-                            charSet = charSet.substring(0,semi);
-                        }
-                        if (!Charset.isSupported(charSet)){
-                            return null;
-                        }
-                        return charSet;
+                String charSet = contentType.substring(charSetStartPos + CHARSET_EQ_LEN);
+                // Remove quotes from charset name, see bug 55852
+                charSet = StringUtils.replaceChars(charSet, "\'\"", null);
+                charSet = charSet.trim();
+                if (charSet.length() > 0) {
+                    // See Bug 44784
+                    int semi = charSet.indexOf(';');
+                    if (semi == 0){
+                        return null;
                     }
-                    return null;
+                    if (semi != -1) {
+                        charSet = charSet.substring(0,semi);
+                    }
+                    if (!Charset.isSupported(charSet)){
+                        return null;
+                    }
+                    return charSet;
                 }
+                return null;
             }
         }
-        return charSet;
+        return null;
     }
 
     /**
@@ -105,7 +100,8 @@ public class ConversionUtils {
      * @param location the location, possibly with extraneous leading "../"
      * @return URL with extraneous ../ removed
      * @throws MalformedURLException when the given <code>URL</code> is malformed
-     * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=46690">Bug 46690 - handling of 302 redirects with invalid relative paths</a>
+     * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=46690">
+     *     Bug 46690 - handling of 302 redirects with invalid relative paths</a>
      */
     public static URL makeRelativeURL(URL baseURL, String location) throws MalformedURLException{
         URL initial = new URL(baseURL,location);
@@ -133,7 +129,9 @@ public class ConversionUtils {
     public static String escapeIllegalURLCharacters(String url) throws Exception{
         String decodeUrl = URLDecoder.decode(url,StandardCharsets.UTF_8.name());
         URL urlString = new URL(decodeUrl);
-        URI uri = new URI(urlString.getProtocol(), urlString.getUserInfo(), urlString.getHost(), urlString.getPort(), urlString.getPath(), urlString.getQuery(), urlString.getRef());
+        URI uri = new URI(
+                urlString.getProtocol(), urlString.getUserInfo(), urlString.getHost(),
+                urlString.getPort(), urlString.getPath(), urlString.getQuery(), urlString.getRef());
         return uri.toString();
     }
     
@@ -168,36 +166,30 @@ public class ConversionUtils {
      * 
      * @param url in which the '/..'s should be removed
      * @return collapsed URL
-     * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=49083">Bug 49083 - collapse /.. in redirect URLs</a>
+     * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=49083">
+     *     Bug 49083 - collapse /.. in redirect URLs</a>
      */
     public static String removeSlashDotDot(String url)
     {
         if (url == null) {
-            return url;
+            return null;
         }
         
         url = url.trim();
-        if(url.length() < 4 || !url.contains(SLASHDOTDOT)) {
+        if (url.length() < 4 || !url.contains(SLASHDOTDOT)) {
             return url;
         }
         
-        /**
-         * http://auth@host:port/path1/path2/path3/?query#anchor
-         */
-
-        // get to 'path' part of the URL, preserving schema, auth, host if
-        // present
-
+        // http://auth@host:port/path1/path2/path3/?query#anchor
+        // get to 'path' part of the URL, preserving schema, auth, host if present
         // find index of path start
 
         int dotSlashSlashIndex = url.indexOf(COLONSLASHSLASH);
         final int pathStartIndex;
-        if (dotSlashSlashIndex >= 0)
-        {
+        if (dotSlashSlashIndex >= 0) {
             // absolute URL
             pathStartIndex = url.indexOf(SLASH, dotSlashSlashIndex + COLONSLASHSLASH.length());
-        } else
-        {
+        } else {
             // document or context-relative URL like:
             // '/path/to'
             // OR '../path/to'
@@ -209,13 +201,11 @@ public class ConversionUtils {
         int pathEndIndex = url.length();
 
         int questionMarkIdx = url.indexOf('?');
-        if (questionMarkIdx > 0)
-        {
+        if (questionMarkIdx > 0) {
             pathEndIndex = questionMarkIdx;
         } else {
             int anchorIdx = url.indexOf('#');
-            if (anchorIdx > 0)
-            {
+            if (anchorIdx > 0) {
                 pathEndIndex = anchorIdx;
             }
         }
@@ -238,7 +228,9 @@ public class ConversionUtils {
                 final String thisToken = tokens.get(i);
 
                 // Verify for a ".." component at next iteration
-                if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT)) {
+                if (thisToken.length() > 0
+                        && !thisToken.equals(DOTDOT)
+                        && tokens.get(i + 1).equals(DOTDOT)) {
                     tokens.remove(i);
                     tokens.remove(i);
                     i = i - 2; // CHECKSTYLE IGNORE ModifiedControlVariable
@@ -258,7 +250,7 @@ public class ConversionUtils {
 
             // append '/' if this isn't the last token or it is but the original
             // path terminated w/ a '/'
-            boolean appendSlash = i < (tokens.size() - 1) ? true : endsWithSlash;
+            boolean appendSlash = i < (tokens.size() - 1) || endsWithSlash;
             if (appendSlash) {
                 newPath.append(SLASH);
             }

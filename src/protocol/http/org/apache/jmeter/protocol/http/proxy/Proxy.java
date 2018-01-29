@@ -116,7 +116,8 @@ public class Proxy extends Thread {
 
     private String port; // For identifying log messages
 
-    private KeyStore keyStore; // keystore for SSL keys; fixed at config except for dynamic host key generation
+    // keystore for SSL keys; fixed at config except for dynamic host key generation
+    private KeyStore keyStore;
 
     private String keyPassword;
 
@@ -142,7 +143,9 @@ public class Proxy extends Thread {
      * @param formEncodings
      *            reference to the Map of Deamon, with mappings from form action urls to encoding used
      */
-    void configure(Socket clientSocket, ProxyControl target, Map<String, String> pageEncodings, Map<String, String> formEncodings) {
+    void configure(
+            Socket clientSocket, ProxyControl target, Map<String,
+            String> pageEncodings, Map<String, String> formEncodings) {
         this.target = target;
         this.clientSocket = clientSocket;
         this.captureHttpHeaders = target.getCaptureHttpHeaders();
@@ -161,7 +164,10 @@ public class Proxy extends Thread {
         // Check which HTTPSampler class we should use
         String httpSamplerName = target.getSamplerTypeName();
         
-        HttpRequestHdr request = new HttpRequestHdr(target.getPrefixHTTPSampleName(), httpSamplerName,target.getHTTPSampleNamingMode());
+        HttpRequestHdr request = new HttpRequestHdr(
+                target.getPrefixHTTPSampleName(),
+                httpSamplerName,
+                target.getHTTPSampleNamingMode());
         SampleResult result = null;
         HeaderManager headers = null;
         HTTPSamplerBase sampler = null;
@@ -205,14 +211,17 @@ public class Proxy extends Thread {
                     final String url = " for '"+ param[0] +"'";
                     log.warn("{} Problem with SSL certificate for url {}? Ensure browser is set to accept the JMeter proxy cert: {}", 
                             port, url,ioe.getMessage());
-                    result = generateErrorResult(result, request, ioe, "\n**ensure browser is set to accept the JMeter proxy certificate**"); // Generate result (if nec.) and populate it
+                    // Generate result (if nec.) and populate it
+                    result = generateErrorResult(result, request, ioe,
+                            "\n**ensure browser is set to accept the JMeter proxy certificate**");
                     throw new JMeterException(); // hack to skip processing
                 }
                 if (isDebug) {
                     log.debug("{} Reparse: {}", port, new String(ba));
                 }
                 if (ba.length == 0) {
-                    log.warn("{} Empty response to http over SSL. Probably waiting for user to authorize the certificate for {}",
+                    log.warn("{} Empty response to http over SSL. Probably waiting " +
+                                    "for user to authorize the certificate for {}",
                                 port, request.getUrl());
                     throw new JMeterException(); // hack to skip processing
                 }
@@ -251,7 +260,8 @@ public class Proxy extends Thread {
             log.error("{} Not implemented (probably used https)", port, e);
             writeErrorToClient(HttpReplyHdr.formNotImplemented("Probably used https instead of http. " +
                     "To record https requests, see " +
-                    "<a href=\"http://jmeter.apache.org/usermanual/component_reference.html#HTTP(S)_Test_Script_Recorder\">HTTP(S) Test Script Recorder documentation</a>"));
+                    "<a href=\"http://jmeter.apache.org/usermanual/component_reference.html#" +
+                    "HTTP(S)_Test_Script_Recorder\">HTTP(S) Test Script Recorder documentation</a>"));
             result = generateErrorResult(result, request, e); // Generate result (if nec.) and populate it
         } catch (Exception e) {
             log.error("{} Exception when processing sample", port, e);
@@ -434,7 +444,8 @@ public class Proxy extends Thread {
                         sock.getInetAddress().getHostName(), sock.getPort(), true);
                 secureSocket.setUseClientMode(false);
                 if (log.isDebugEnabled()){
-                    log.debug("{} SSL transaction ok with cipher: {}", port, secureSocket.getSession().getCipherSuite());
+                    log.debug("{} SSL transaction ok with cipher: {}",
+                            port, secureSocket.getSession().getCipherSuite());
                 }
                 return secureSocket;
             } catch (IOException e) {
@@ -447,11 +458,13 @@ public class Proxy extends Thread {
         }
     }
 
-    private SampleResult generateErrorResult(SampleResult result, HttpRequestHdr request, Exception e) {
+    private SampleResult generateErrorResult(
+            SampleResult result, HttpRequestHdr request, Exception e) {
         return generateErrorResult(result, request, e, "");
     }
 
-    private static SampleResult generateErrorResult(SampleResult result, HttpRequestHdr request, Exception e, String msg) {
+    private static SampleResult generateErrorResult(
+            SampleResult result, HttpRequestHdr request, Exception e, String msg) {
         if (result == null) {
             result = new SampleResult();
             ByteArrayOutputStream text = new ByteArrayOutputStream(200);
@@ -521,7 +534,7 @@ public class Proxy extends Thread {
                 if (HTTPConstants.HEADER_CONTENT_ENCODING.equalsIgnoreCase(parts[0])
                     && (HTTPConstants.ENCODING_GZIP.equalsIgnoreCase(parts[1])
                             || HTTPConstants.ENCODING_DEFLATE.equalsIgnoreCase(parts[1])
-                            // TODO BROTLI not supported by HC4, so no uncompression would occur, add it once available
+                            // TODO BROTLI not supported by HC4, so no decompression would occur, add once available
                             // || HTTPConstants.ENCODING_BROTLI.equalsIgnoreCase(parts[1]) 
                             )
                 ){

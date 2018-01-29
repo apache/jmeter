@@ -56,7 +56,6 @@ public class BackendListener extends AbstractTestElement
         private BlockingQueue<SampleResult> queue;
         private LongAdder queueWaits; // how many times we had to wait to queue a SampleResult        
         private LongAdder queueWaitTime; // how long we had to wait (nanoSeconds)
-        // @GuardedBy("LOCK")
         private int instanceCount; // number of active tests
         private CountDownLatch latch;
     }
@@ -70,9 +69,6 @@ public class BackendListener extends AbstractTestElement
      */
     public static final String CLASSNAME = "classname";
 
-    /**
-     * Queue size
-     */
     public static final String QUEUE_SIZE = "QUEUE_SIZE";
 
     /**
@@ -189,7 +185,10 @@ public class BackendListener extends AbstractTestElement
         private final ListenerClientData listenerClientData;
         private final BackendListenerContext context;
         private final BackendListenerClient backendListenerClient;
-        private Worker(BackendListenerClient backendListenerClient, Arguments arguments, ListenerClientData listenerClientData){
+        private Worker(
+                BackendListenerClient backendListenerClient,
+                Arguments arguments,
+                ListenerClientData listenerClientData){
             this.listenerClientData = listenerClientData;
             // Allow BackendListenerClient implementations to get access to test element name
             arguments.addArgument(TestElement.NAME, getName());
@@ -207,7 +206,8 @@ public class BackendListener extends AbstractTestElement
                     boolean endOfLoop = false;
                     while (!endOfLoop) {
                         if (isDebugEnabled) {
-                            log.debug("Thread: {} taking SampleResult from queue: {}", Thread.currentThread().getName(),
+                            log.debug("Thread: {} taking SampleResult from queue: {}",
+                                    Thread.currentThread().getName(),
                                     listenerClientData.queue.size());
                         }
                         SampleResult sampleResult = listenerClientData.queue.take();
@@ -219,15 +219,19 @@ public class BackendListener extends AbstractTestElement
                         }
                         // try to process as many as possible
                         // The == comparison is not a mistake
-                        while (!(endOfLoop = sampleResult == FINAL_SAMPLE_RESULT) && sampleResult != null ) { 
+                        while (!(endOfLoop = sampleResult == FINAL_SAMPLE_RESULT)
+                                && sampleResult != null) {
                             sampleResults.add(sampleResult);
                             if (isDebugEnabled) {
-                                log.debug("Thread: {} polling from queue: {}", Thread.currentThread().getName(),
+                                log.debug("Thread: {} polling from queue: {}",
+                                        Thread.currentThread().getName(),
                                         listenerClientData.queue.size());
                             }
-                            sampleResult = listenerClientData.queue.poll(); // returns null if nothing on queue currently
+                            // returns null if nothing on queue currently
+                            sampleResult = listenerClientData.queue.poll();
                             if (isDebugEnabled) {
-                                log.debug("Thread: {} took from queue: {}, isFinal: {}", Thread.currentThread().getName(),
+                                log.debug("Thread: {} took from queue: {}, isFinal: {}",
+                                        Thread.currentThread().getName(),
                                         sampleResult, sampleResult == FINAL_SAMPLE_RESULT);
                             }
                         }
@@ -324,10 +328,11 @@ public class BackendListener extends AbstractTestElement
                 listenerClientData.latch = new CountDownLatch(1);
                 listenerClientData.client = backendListenerClient;
                 if (log.isInfoEnabled()) {
-                    log.info("{}: Starting worker with class: {} and queue capacity: {}", getName(), clientClass,
-                            getQueueSize());
+                    log.info("{}: Starting worker with class: {} and queue capacity: {}",
+                            getName(), clientClass, getQueueSize());
                 }
-                Worker worker = new Worker(backendListenerClient, (Arguments) getArguments().clone(), listenerClientData);
+                Worker worker = new Worker(
+                        backendListenerClient, (Arguments) getArguments().clone(), listenerClientData);
                 worker.setDaemon(true);
                 worker.start();
                 if (log.isInfoEnabled()) {
@@ -357,7 +362,8 @@ public class BackendListener extends AbstractTestElement
         synchronized (LOCK) {
             ListenerClientData listenerClientDataForName = queuesByTestElementName.get(myName);
             if (log.isDebugEnabled()) {
-                log.debug("testEnded called on instance {}#{}", myName, listenerClientDataForName.instanceCount);
+                log.debug("testEnded called on instance {}#{}",
+                        myName, listenerClientDataForName.instanceCount);
             }
             if(listenerClientDataForName != null) {
                 listenerClientDataForName.instanceCount--;
@@ -378,7 +384,8 @@ public class BackendListener extends AbstractTestElement
         }
         if (listenerClientData.queueWaits.longValue() > 0) {
             log.warn(
-                    "QueueWaits: {}; QueueWaitTime: {} (nanoseconds), you may need to increase queue capacity, see property 'backend_queue_capacity'",
+                    "QueueWaits: {}; QueueWaitTime: {} (nanoseconds), you may need " +
+                            "to increase queue capacity, see property 'backend_queue_capacity'",
                     listenerClientData.queueWaits, listenerClientData.queueWaitTime);
         }
         try {

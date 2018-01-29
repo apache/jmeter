@@ -136,8 +136,8 @@ class FunctionParser {
                             reader.reset();// set to start of string
                             char []cb = new char[100];
                             int nbRead = reader.read(cb);
-                            throw new InvalidVariableException
-                            ("Expected } after "+funcName+" function call in "+new String(cb, 0, nbRead));
+                            throw new InvalidVariableException(
+                                    "Expected } after "+funcName+" function call in "+new String(cb, 0, nbRead));
                         }
                         if (function instanceof TestStateListener) {
                             StandardJMeterEngine.register((TestStateListener) function);
@@ -149,7 +149,7 @@ class FunctionParser {
                 } else if (current[0] == '}') {// variable, or function with no parameter list
                     function = CompoundVariable.getNamedFunction(buffer.toString());
                     if (function instanceof Function){// ensure that setParameters() is called.
-                        ((Function) function).setParameters(new LinkedList<CompoundVariable>());
+                        ((Function) function).setParameters(new LinkedList<>());
                     }
                     buffer.setLength(0);
                     return function;

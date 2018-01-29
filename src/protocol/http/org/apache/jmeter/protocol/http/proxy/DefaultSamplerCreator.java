@@ -34,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
+import org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.PostWriter;
@@ -55,20 +56,17 @@ import org.xml.sax.helpers.DefaultHandler;
 public class DefaultSamplerCreator extends AbstractSamplerCreator {
     private static final Logger log = LoggerFactory.getLogger(DefaultSamplerCreator.class);
     
-    /*
-    * Must be the same order than in org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui class in createHTTPSamplerPanel method
+    /**
+    * Must be the same order as {@link ProxyControlGui#createHTTPSamplerPanel()}
     */
     private static final int SAMPLER_NAME_NAMING_MODE_PREFIX = 0;  // $NON-NLS-1$
     private static final int SAMPLER_NAME_NAMING_MODE_COMPLETE = 1;  // $NON-NLS-1$
  
-    /**
-     * 
-     */
     public DefaultSamplerCreator() {
     }
 
     /**
-     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#getManagedContentTypes()
+     * @see SamplerCreator#getManagedContentTypes()
      */
     @Override
     public String[] getManagedContentTypes() {
@@ -76,8 +74,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     }
 
     /**
-     * 
-     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#createSampler(org.apache.jmeter.protocol.http.proxy.HttpRequestHdr, java.util.Map, java.util.Map)
+     * @see SamplerCreator#createSampler(HttpRequestHdr, Map, Map)
      */
     @Override
     public HTTPSamplerBase createSampler(HttpRequestHdr request,
@@ -98,7 +95,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     }
 
     /**
-     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#populateSampler(org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase, org.apache.jmeter.protocol.http.proxy.HttpRequestHdr, java.util.Map, java.util.Map)
+     * @see SamplerCreator#populateSampler(HTTPSamplerBase, HttpRequestHdr, Map, Map)
      */
     @Override
     public final void populateSampler(HTTPSamplerBase sampler,
@@ -111,13 +108,15 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             log.debug("sampler path = " + sampler.getPath());
         }
         Arguments arguments = sampler.getArguments();
-        if(arguments.getArgumentCount() == 1 && arguments.getArgument(0).getName().length()==0) {
+        if (arguments.getArgumentCount() == 1
+                && arguments.getArgument(0).getName().length() == 0) {
             sampler.setPostBodyRaw(true);
         }
     }
 
     /**
-     * Compute sampler informations from Request Header
+     * Compute sampler information from Request Header
+     *
      * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
      * @param pageEncodings Map of page encodings
@@ -127,24 +126,19 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     protected void computeFromHeader(HTTPSamplerBase sampler,
             HttpRequestHdr request, Map<String, String> pageEncodings,
             Map<String, String> formEncodings) throws Exception {
+
         computeDomain(sampler, request);
-        
         computeMethod(sampler, request);
-        
         computePort(sampler, request);
-        
         computeProtocol(sampler, request);
-
-        computeContentEncoding(sampler, request,
-                pageEncodings, formEncodings);
-
+        computeContentEncoding(sampler, request, pageEncodings, formEncodings);
         computePath(sampler, request);
-        
         computeSamplerName(sampler, request);
     }
 
     /**
-     * Compute sampler informations from Request Header
+     * Compute sampler information from Request Header
+     *
      * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
      * @throws Exception when something fails
@@ -154,13 +148,14 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         // If it was a HTTP GET request, then all parameters in the URL
         // has been handled by the sampler.setPath above, so we just need
         // to do parse the rest of the request if it is not a GET request
-        if((!HTTPConstants.CONNECT.equals(request.getMethod())) && (!HTTPConstants.GET.equals(request.getMethod()))) {
+        if (!HTTPConstants.CONNECT.equals(request.getMethod())
+                && !HTTPConstants.GET.equals(request.getMethod())) {
             // Check if it was a multipart http post request
             final String contentType = request.getContentType();
             MultipartUrlConfig urlConfig = request.getMultipartConfig(contentType);
             String contentEncoding = sampler.getContentEncoding();
             // Get the post data using the content encoding of the request
-            String postData = null;
+            String postData;
             if (log.isDebugEnabled()) {
                 if(!StringUtils.isEmpty(contentEncoding)) {
                     log.debug("Using encoding " + contentEncoding + " for request body");
@@ -169,8 +164,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                     log.debug("No encoding found, using JRE default encoding for request body");
                 }
             }
-            
-            
+
             if (!StringUtils.isEmpty(contentEncoding)) {
                 postData = new String(request.getRawPostData(), contentEncoding);
             } else {
@@ -219,7 +213,8 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                     }
                 } else {
                     // Just put the whole postbody as the value of a parameter
-                    sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
+                    // used when postData is pure xml (ex. an xml-rpc call)
+                    sampler.addNonEncodedArgument("", postData, "");
                 }
             }
         }
@@ -317,8 +312,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     protected void computePath(HTTPSamplerBase sampler, HttpRequestHdr request) {
         if(sampler.getContentEncoding() != null) {
             sampler.setPath(request.getPath(), sampler.getContentEncoding());
-        }
-        else {
+        } else {
             // Although the spec says UTF-8 should be used for encoding URL parameters,
             // most browser use ISO-8859-1 for default if encoding is not known.
             // We use null for contentEncoding, then the url parameters will be added
@@ -342,11 +336,10 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     protected void computeContentEncoding(HTTPSamplerBase sampler,
             HttpRequestHdr request, Map<String, String> pageEncodings,
             Map<String, String> formEncodings) throws MalformedURLException {
-        URL pageUrl = null;
-        if(sampler.isProtocolDefaultPort()) {
+        URL pageUrl;
+        if (sampler.isProtocolDefaultPort()) {
             pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), request.getPath());
-        }
-        else {
+        } else {
             pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), 
                     sampler.getPort(), request.getPath());
         }

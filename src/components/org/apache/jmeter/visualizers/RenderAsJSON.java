@@ -75,7 +75,6 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
     public static String prettyJSON(String json, String tabSeparator) {
         StringBuilder pretty = new StringBuilder(json.length() * 2); // Educated guess
 
-        final String tab = tabSeparator; // $NON-NLS-1$
         StringBuilder index = new StringBuilder();
         String nl = ""; // $NON-NLS-1$
 
@@ -83,17 +82,17 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
 
         boolean misparse = false;
 
-        for (int i = 0; i < json.length(); ) {
+        for (int i = 0; i < json.length();) {
             final char currentChar = json.charAt(i);
             if ((currentChar == '{') || (currentChar == '[')) {
                 pretty.append(nl).append(index).append(currentChar);
                 i++;
-                index.append(tab);
+                index.append(tabSeparator);
                 misparse = false;
             }
             else if ((currentChar == '}') || (currentChar == ']')) {
                 if (index.length() > 0) {
-                    index.delete(0, tab.length());
+                    index.delete(0, tabSeparator.length());
                 }
                 pretty.append(nl).append(index).append(currentChar);
                 i++;
