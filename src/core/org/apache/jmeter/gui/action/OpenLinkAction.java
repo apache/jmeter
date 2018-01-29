@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 public class OpenLinkAction extends AbstractAction {
 
     private static final Logger log = LoggerFactory.getLogger(OpenLinkAction.class);
-    
-    private static final Map<String, String> LINK_MAP = 
+
+    private static final Map<String, String> LINK_MAP =
             initLinkMap();
 
     private static final Set<String> commands = new HashSet<>();
