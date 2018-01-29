@@ -4512,7 +4512,7 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
     "<code>true</code>" or "<code>false</code>" after all assertions for a sampler have been run.
      </note>
 </description>
-<component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="921" height="423" screenshot="assertion/assertion.png">
+<component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="909" height="607" screenshot="assertion/assertion.png">
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
     fields of the request or response.
@@ -4566,6 +4566,7 @@ These can be used anywhere within the expression and remain in effect until over
         <property name="Field to Test" required="Yes">Instructs JMeter which field of the Request or Response to test.
         <ul>
         <li><code>Text Response</code> - the response text from the server, i.e. the body, excluding any HTTP headers.</li>
+        <li><code>Request data</code> - the request text sent to the server, i.e. the body, excluding any HTTP headers.</li>
         <li><code>Response Code</code> - e.g. <code>200</code></li>
         <li><code>Response Message</code> - e.g. <code>OK</code></li>
         <li><code>Response Headers</code>, including Set-Cookie headers (if any)</li>
@@ -4608,6 +4609,8 @@ These can be used anywhere within the expression and remain in effect until over
         <note>However, when the <code>Ignore Status</code> checkbox is selected, this has the effect of cancelling any
         previous assertion failures - so make sure that the <code>Ignore Status</code> checkbox is only used on
         the first Assertion.</note>
+        </property>
+        <property name="Custom failure message" required="No">Lets you define the failure message that will replace the generated one
         </property>
 </properties>
 <p>
@@ -4986,7 +4989,7 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
     </property>
 </properties>
 </component>
-<component name="JSON Assertion" index="&sect-num;.5.14" anchor="JSON_Assertion">
+<component name="JSON Assertion" index="&sect-num;.5.14" anchor="JSON_Assertion" width="1095" height="307" screenshot="assertion/json_assertion.png">
     <description>
         <p>
             This component allows you to perform validations of JSON documents.
@@ -5004,7 +5007,6 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
         <property name="Expect null" required="No">Select checkbox if you expect null</property>
         <property name="Invert assertion (will fail if above conditions met)" required="No">Invert assertion (will fail if above conditions met)</property>
     </properties>
-    <figure width="1140" height="356" image="json_path_assertion.png">JSON Assertion</figure>
 </component>
 
 <a href="#">^</a>
@@ -6315,7 +6317,7 @@ It will allow you to extract in a very easy way text content, see <a href="http:
 <figure width="855" height="276" image="json-post-processor.png">JSON PostProcessor</figure>
 </component>
 
-<component name="Boundary Extractor" index="&sect-num;.8.10"  width="1127" height="277" screenshot="boundary_extractor.png">
+<component name="Boundary Extractor" index="&sect-num;.8.10" width="1078" height="315" screenshot="extractor/boundary_extractor.png">
 <description><p>Allows the user to extract values from a server response using left and right boundaries.  As a post-processor,
 this element will execute after each Sample request in its scope, testing the boundaries, extracting the requested values,
 generate the template string, and store the result into the given variable name.</p></description>
@@ -6461,7 +6463,7 @@ See <a href="get-started.html#classpath">JMeter's Classpath</a> and
 </description>
 </component>
 
-<component name="Thread Group" index="&sect-num;.9.2"  width="706" height="407" screenshot="threadgroup.png">
+<component name="Thread Group" index="&sect-num;.9.2"  width="911" height="390" screenshot="threadgroup.png">
 <description>
 <p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (number of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p>
 <p>
@@ -7118,7 +7120,7 @@ This is done by default since JMeter 2.13.
 </note>
 </component>
 
-<component name="setUp Thread Group" index="&sect-num;.9.10" width="678" height="377" screenshot="setup_thread_group.png">
+<component name="setUp Thread Group" index="&sect-num;.9.10" width="908" height="364" screenshot="setup_thread_group.png">
 <description>
     <p>
     A special type of ThreadGroup that can be utilized to perform Pre-Test Actions.  The behavior of these threads
@@ -7128,7 +7130,7 @@ This is done by default since JMeter 2.13.
 </description>
 </component>
 
-<component name="tearDown Thread Group" index="&sect-num;.9.11" width="677" height="379" screenshot="teardown_thread_group.png">
+<component name="tearDown Thread Group" index="&sect-num;.9.11" width="909" height="366" screenshot="teardown_thread_group.png">
 <description>
     <p>
     A special type of ThreadGroup that can be utilized to perform Post-Test Actions.  The behavior of these threads
