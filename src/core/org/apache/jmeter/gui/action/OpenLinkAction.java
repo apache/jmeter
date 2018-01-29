@@ -18,12 +18,15 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import javax.swing.JOptionPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +65,7 @@ public class OpenLinkAction extends AbstractAction {
         String url = LINK_MAP.get(e.getActionCommand());
         if(url == null) {
             log.warn("Action {} not handled by this class", e.getActionCommand());
-            return; 
+            return;
         }
         try {
             if(e.getSource() instanceof String[]) {
@@ -73,6 +76,7 @@ public class OpenLinkAction extends AbstractAction {
             log.error("OpenLinkAction: User default browser is not found, or it fails to be launched, or the default handler application failed to be launched on {}", url, err);
         } catch (UnsupportedOperationException err) {
             log.error("OpenLinkAction: Current platform does not support the Desktop.Action.BROWSE action on {}", url, err);
+            showBrowserWarning(e.getSource(), url);
         } catch (SecurityException err) {
             log.error("OpenLinkAction: Security problem on {}", url, err);
         } catch (Exception err) {
@@ -83,6 +87,19 @@ public class OpenLinkAction extends AbstractAction {
     @Override
     public Set<String> getActionNames() {
         return commands;
+    }
+
+    private void showBrowserWarning(Object targetObject, String url) {
+        String problemSolver;
+        if (url.startsWith(LINK_MAP.get(ActionNames.LINK_COMP_REF))) {
+            problemSolver = "\n\nTry to set the system property help.local to true.";
+        } else {
+            problemSolver = "";
+        }
+        JOptionPane.showMessageDialog(null, String.format(
+                "Problem opening a browser to show the content of the URL\n%s%s",
+                url, problemSolver), "Problem opening browser",
+                JOptionPane.WARNING_MESSAGE);
     }
 
 }
