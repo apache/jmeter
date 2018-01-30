@@ -76,7 +76,7 @@ set MINIMAL_VERSION=1.8.0
 
 
 rem --add-modules java.activation if JAVA 9
-set ADD_MODS=
+set JAVA9_OPTS=
 
 
 for /f "tokens=3" %%g in ('java -version 2^>^&1 ^| findstr /i "version"') do (
@@ -103,7 +103,7 @@ IF "%JAVAVER:~1,2%"=="1." (
 ) else (
     rem Java 9 at least
     set current_minor=9
-    set ADD_MODS=--add-modules java.activation
+    set JAVA9_OPTS=--add-modules java.activation --add-opens java.desktop/sun.awt=ALL-UNNAMED --add-opens java.desktop/javax.swing.text.html=ALL-UNNAMED --add-opens java.desktop/sun.swing=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
 )
 
 
@@ -179,7 +179,7 @@ if not defined DDRAW (
 rem Collect the settings defined above
 set ARGS=%DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %RUN_IN_DOCKER%
 
-%JM_START% %JM_LAUNCH% %ADD_MODS% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
+%JM_START% %JM_LAUNCH% %JAVA9_OPTS% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
 rem If the errorlevel is not zero, then display it and pause
 
