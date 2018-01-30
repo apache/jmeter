@@ -80,6 +80,35 @@ class ThroughputControllerSpec extends Specification {
             sut.testEnded()
     }
 
+    /**
+     * <pre>
+     *   - innerLoop
+     *     - ThroughputController (sut)
+     *        - sampler one
+     *        - sampler two
+     * </pre>
+     */
+    def "0 maxThroughput does not run any samplers inside the TC and cause StackOverFlowError"() {
+        given:
+        sut.setStyle(ThroughputController.BYNUMBER)
+        sut.setMaxThroughput(0)
+
+        LoopController innerLoop = new LoopController()
+        innerLoop.setLoops(10000)
+        innerLoop.addTestElement(sut)
+        innerLoop.addIterationListener(sut)
+        innerLoop.initialize()
+        innerLoop.setRunningVersion(true)
+        sut.testStarted()
+        sut.setRunningVersion(true)
+
+        when:
+            innerLoop.next() == null;
+            innerLoop.next() == null
+        then:
+            sut.testEnded()
+    }
+
     def "33.33% will run all the samplers inside the TC every 3 iterations"() {
         given:
             sut.setStyle(ThroughputController.BYPERCENT)
