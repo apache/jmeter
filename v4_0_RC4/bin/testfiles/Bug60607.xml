@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<httpSample s="true" lb="HTTP Request" rc="200" rm="OK" tn="Thread Group 1-1" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP Request" rc="Non HTTP response code: java.net.UnknownHostException" rm="Non HTTP response message: Failed to resolve host name: jmeter.apache.org" tn="Thread Group 2-1" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+
+</testResults>

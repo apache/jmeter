@@ -1,0 +1,13 @@
+# Test file for AuthManager
+# Format:
+# URL\tuser\tpass
+
+http://a.b.c/1	login1	password1
+http://a.b.c/2	login2	password2
+http://a.b.c/1/1	login11	password11
+http://a.b.c/22	login22	password22
+http://a.b.c/	login	password
+http://d.e.f:80/	user	pass	domain	realm
+https://j.k.l/	jkl	pass
+https://l.m.n:443/	lmn443	pass
+https://l.m.n:8443/	lmn8443	pass

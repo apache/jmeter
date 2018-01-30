@@ -1,0 +1,861 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document>
+
+  <properties>
+
+     <title>Extending JMeter</title>
+
+  </properties>
+
+<body>
+
+<section name="Extending JMeter">
+
+
+
+<h2>Extending JMeter</h2>:
+
+<p>There are several ways to extend JMeter and add functionality.  JMeter is designed
+
+to make this task easier.
+
+</p>
+
+<ul>
+    <li><a href="JMeter Extension Scenario.html">A good overview of the process of extending JMeter</a></li>
+<p/>
+    <li><a href="#timer">Creating your own Timer</a></li>
+
+    <li><a href="#listener">Creating your own SampleListener (such as a visualizer, or reporter)</a></li>
+
+    <li><a href="#config">Creating your own Config Element</a></li>
+
+    <li><a href="#logical">Creating your own logic SamplerController</a></li>
+
+    <li><a href="#testsample">Creating your own test sample SamplerController</a></li>
+
+    <li><a href="#sampler">Creating your own Sampler</a></li>
+
+    <li><a href="#uicomponent">Making your custom elements play nice as a JMeter UI component</a></li>
+
+    <li><a href="#saveable">Making your custom elements saveable and loadable from within JMeter</a></li>
+
+</ul>
+
+<hr/>
+
+<a name="timer"/>
+
+<h3>Creating your own Timer</h3>
+
+<p>The timer interface:</p>
+
+<pre>
+
+      public long delay();
+
+</pre>
+
+<p>Not too complicated.  Your delay method must, each time it is called, return a
+
+long representing the number of milliseconds to delay.  The constant timer returns the
+
+same number every time it's called.  A random timer returns a different number each time.
+
+</p>
+
+<hr/>
+
+<a name="listener"/>
+
+<h3>Creating your own SampleListener</h3>
+
+<p>The SampleListener interface:</p>
+
+<pre>
+
+      public void sampleOccurred(SampleEvent e);
+
+      public void sampleStarted(SampleEvent e);
+
+      public void sampleStopped(SampleEvent e);
+
+</pre>
+
+<p>sampleOccurred is the method called when a sample is completed, and the data has been
+
+collected.  The SampleEvent object should contain all the information gathered
+
+from the sample.  If your sample listener is primarily concerned with collecting the
+
+data from a test run, you can implement this method - the other two are for other purposes and
+
+can be ignored (though the methods have to be there for your class to compile).
+
+</p>
+
+<p>sampleStarted and sampleStopped are used to indicate the state of the sampling thread.
+
+This is useful for visualizers that show the user the state of all running threads
+
+(ie, they are running and waiting for response, or they're stopped and waiting
+
+to begin again).
+
+</p>
+
+<hr/>
+
+<a name="config"/>
+
+<h3>Creating your own Config Element</h3>
+
+<p>The ConfigElement interface:</p>
+
+<pre>
+
+      public void addConfigElement(ConfigElement config);
+
+      public boolean expectsModification();
+
+      public Object clone();
+
+</pre>
+
+<p>The ConfigElement interface is sparse.  All ConfigElements are expected to implement
+
+a public <b>clone()</b> method.  The reason for this is that config elements will be cloned
+
+for each different sampling thread, and most will be cloned for each sample.  </p>
+
+<p>If your config element expects to be modified in the process of a test run,
+
+and you want those modifications to carry over from sample to sample (as in
+
+a cookie manager - you want to save all cookies that gets set throughout
+
+the test), then return true for the <b>expectsModification()</b> method. Your config element will not be
+
+cloned for each sample. If your config elements are more static in nature,
+
+return false. If in doubt, return false.</p>
+
+<p><b>addConfigElement()</b> is required so that config elements can be layered.  For
+
+instance, let's say a user creates a URL entry that contains default values -
+
+they might use this to specify a server.  Then, all their test samples configure
+
+individual test cases, but leave out the server field.  This information is combined
+
+via the <b>addConfigElement()</b> method.  Your custom config elements should do the right
+
+thing when this method is called.  Normally, this involves ignoring such calls unless
+
+the passed in ConfigElement is of the same type as yours, and then only merging in
+
+values that are not already set in the object receiving the call (ie you probably
+
+don't want to overwrite any values).
+
+</p>
+
+<p>You may have noticed there's no specification on how to get the config information
+
+<b>out</b> of a ConfigElement.  This raises the question, who is going to use it?
+
+At the end of the line, there will be a Sampler that will need the information held
+
+in your config element.  The sampler that uses your config element needs to know more
+
+about the class than the rest of JMeter - that information is not part of this interface.
+
+</p>
+
+<p>If at all possible, extend <b>AbstractConfigElement</b> when creating your own.  By doing so,
+
+and by following some simple rules, you will get cloning and saving to XML of your
+
+config element for free (as in, you don't have to do anything!).  <b>AbstractConfigElement</b>
+
+stores all its values in a Map, and provides getProperty and putProperty methods.  Your
+
+config element can provide <b>getXXX()</b> and <b>setXXX()</b> methods, but these should delegate
+
+to <b>getProperty()</b> and <b>setProperty()</b>, probably using static Strings as keys in the Map.
+
+<br/>You can store any type of object, provided the objects are clonable and Saveable
+
+(Strings, Integer, Long, Double, Float are all good in this regard).
+
+</p>
+
+<p>One caveat - if your config element has been restored from file, all the values
+
+held in the Map will be String objects (except for elements that implement Saveable
+
+on their own), and you may have to do casting and parsing.  Example: an Integer will
+
+have to be converted from a String to an int, so your getXXX() method should check
+
+for this possibility to avoid exceptions.
+
+</p>
+
+<hr/>
+
+<a name="logical"/>
+
+<h3>Creating your own logic SamplerController</h3>
+
+<p>The SamplerController interface looks as follows:</p>
+
+<pre>
+
+      Entry nextEntry();
+
+      Collection getListeners();
+
+      void addSamplerController(SamplerController controller);
+
+      void addConfigElement(ConfigElement config);
+
+      Object clone();
+
+</pre>
+
+<p>Again, <b>clone()</b> is a method that must be implemented to all SamplerControllers to avoid
+
+contamination between sampling threads.</p>
+
+<p>The <b>nextEntry()</b> method is the essential job of a SamplerController - to deliver
+
+Entry objects to be sampled.  An Entry object encapsulates all the information needed
+
+by a Sampler to do its job.  The <b>nextEntry()</b> method should work like an iterator and
+
+continuously return new Entry objects.
+
+</p>
+
+<p>There are two boundary conditions that need to be handled.  If the Controller has no
+
+more Entries to give, for the rest of the test, it should return <b>null</b>.  Therefore,
+
+if your Controller has sub-controllers it is receiving Entries from, it should remove
+
+them from its list of controllers to get Entries from.  The other condition is when
+
+your controller reaches the end of its list of Entries, and it needs to start over
+
+from the beginning.  The parent Controller needs to know this so that it can move
+
+on to its next controller in its list.  Therefore, at the end of each iteration,
+
+your SamplerController needs to return a CycleEntry object instead of a normal Entry.
+
+Conversely, this means that if your Controller receives a CycleEntry object, it should
+
+move on to the next Controller in its list.</p>
+
+<p>A logic controller does not generate Entries on its own, but simply regulates
+
+the flow of Entries from its sub-controllers.  A logic controller might provide
+
+looping logic, or it might modify the Entries that pass through it, or whatever.
+
+GenericController provides an implementation that does absolutely nothing but
+
+pass Entries on from its sub-controllers.  This class is useful both for reference
+
+purposes and to extend, since it provides a lot of methods you're likely to find
+
+useful
+
+</p>
+
+<p><b>getListeners()</b> is an odd member of this Class.  It's there to serve those who
+
+want their controller to receive sample data.  This would be useful for a controller
+
+that modified Entry objects based on previous sample results (like an HTML spider
+
+that dynamically reacted to previously sampled webpages for links and forms).  The
+
+responsibility of the controller implementer is to collect all potential listeners
+
+from the sub-controller list, and add themselves if desired.  Most SamplerControllers
+
+that extend GenericController don't have to do anything.</p>
+
+<p><b>addSamplerController(SamplerController controller)</b> is the method used to
+
+add sub controllers to your SamplerController. </p>
+
+<p><b>addConfigElement(ConfigElement config)</b> Your SamplerController should also
+
+be capable of holding configuration elements and adding them to Entries as they
+
+pass through your controller.  Again, see GenericController for reference.  Essentially,
+
+all Entry objects that get returned by <b>nextEntry()</b> are handed all the ConfigElements
+
+of the controller.
+
+</p>
+
+<hr/>
+
+<a name="testsample"/>
+
+<h3>Creating your own test sample SamplerController</h3>
+
+<p>A SamplerController that generates Entry objects is just like a logic controller
+
+except that it creates its own Entry objects instead of gathering them from
+
+sub-controllers (although, to be fully correct, your test sample SamplerController
+
+should handle both possibilities).  Your test sample SamplerController can also
+
+benefit from extending GenericController.  By doing so, most of your cloning and
+
+saving needs are handled (but probably not entirely).  See HttpTestSample as
+
+reference.</p>
+
+<hr/>
+
+<a name="sampler"/>
+
+<h3>Creating your own Sampler</h3>
+
+<p>The Sampler interface:</p>
+
+<pre>
+
+      public SampleResult sample(Entry e)
+
+</pre>
+
+<p>Your Sampler has two responsibilities.  Of lesser importance, it should do whatever
+
+it is you want to do, given an Entry object that hopefully contains information
+
+about what is to be sampled.  Of greater importance, your sampler should return
+
+a <b>SampleResult</b> object that holds information about the sampling.  Information such
+
+as how long the sample took, the text response from the sample (if appropriate), and
+
+a string that describes the location of what was sampled.  The SampleResult interface
+
+is essentially a Map with public static Strings as keys. </p>
+
+<hr/>
+
+<a name="uicomponent"/>
+
+<h3>Making your custom elements play nice as a JMeter UI component</h3>
+
+<p>In order to take part in the JMeter UI, your component needs to implement the
+
+JMeterComponentModel interface:</p>
+
+<pre>
+
+      Class getGuiClass();
+
+      public String getName();
+
+      public void setName(String name);
+
+      public Collection getAddList();
+
+      public String getClassLabel();
+
+      public void uncompile();
+
+</pre>
+
+<p>Most of this stuff is easy, boring, and tedious.  <b>getName()</b>, <b>setName()</b> is a simple
+
+String property that is the name of the object.  <b>getClassLabel()</b> should return
+
+a String that describes the class.  This string will be displayed to the user and
+
+so should be short but meaningful.  <b>getGuiClass()</b> should return a Class object for
+
+the class that will be used as a GUI component.  This class should be a subclass
+
+of java.awt.Container, and preferably a subclass of <b>javax.swing.JComponent</b>.</p>
+
+<p><b>getAddList()</b> should return a list of either Strings or JMenus.  These Strings
+
+represent the Classes that can be added to your SamplerController.  Each String
+
+should correspond to the target class's <b>getClassLabel()</b> String.  <b>MenuFactory</b> is
+
+a class that will return some preset menu lists (such as all available SamplerControllers,
+
+all available ConfigElements, etc).</p>
+
+<p><b>uncompile()</b> is a cleanup method used between sampling runs.  When the user
+
+hits "Start", JMeter "compiles" the objects in the tree.  Child nodes are added
+
+to their parent objects recursively until there is one TestPlan object, which is
+
+then submitted for testing.  Afterward, these elements have to un-added from their
+
+parent objects, or uncompiled.  To uncompile your class, simply clear all your
+
+data structures that are holding sub-elements.  For your SamplerController, this
+
+will be the list of sub-controllers and the list of ConfigElements.</p>
+
+<p>That's it, except for your GUI class.  If your SamplerController has no
+
+configuration needs, just return org.apache.jmeter.gui.NamePanel, and the user will
+
+at least be able to change the name of your component.  Otherwise, create a gui class
+
+that implements the <b>ModelSupported</b> interface:</p>
+
+<pre>
+
+      void setModel(Object model);
+
+      public void updateGui();
+
+</pre>
+
+<p><b>setModel()</b> is used to hand your JMeterModelComponent class to the GUI class when
+
+it is instantiated.  It is your responsibility for providing the means by which
+
+the Gui class updates the values in the model class.  For updating in the other
+
+direction, there is <b>updateGui()</b>, which the model class can call if necessary.
+
+Note, normally, this call is made for you automatically whenever the Gui is brought
+
+to the screen.  If you are creating a Visualizer, then you may need to use <b>updateGui()</b>.
+
+For reference, refer to UrlConfigGui (in org.apache.jmeter.protocol.http.config.gui).</p>
+
+<p>If you have done all this correctly, there's just one more step.  If you compile
+
+your classes into the ApacheJMeter.jar file, then you're done.  Your classes will
+
+be automatically found and used.  Otherwise, you will need to modify jmeter.properties.
+
+The <i>search_paths</i> property should be modified to include the path where your
+
+classes are.  This does not obviate the need for your classes to be in the JVM's
+
+CLASSPATH - it is an additional requirement.  Otherwise, your classes will not be
+
+detected, and the Gui will not make them available to the user.</p>
+
+<hr/>
+
+<a name="saveable"/>
+
+<h3>Making your custom elements saveable and loadable from within JMeter</h3>
+
+<p>The Saveable interface has just one method:</p>
+
+<pre>
+
+      public Class getTagHandlerClass()
+
+</pre>
+
+<p>This method simply returns the Class object that represents the Class that handles
+
+the saving and loading of your component.</p>
+
+<p>To write this SaveHandler, make a class that extends <b>TagHandler</b>
+
+(from org.apache.jmeter.save.xml).  Note, if your component extends AbstractConfigElement,
+
+it is already fully Saveable - provided you only have information stored in
+
+the Map from AbstractConfigElement.</p>
+
+<p>To write your own TagHandler, you will have to implement the following methods:</p>
+
+<pre>
+
+      public abstract void setAtts(Attributes atts) throws Exception
+
+      public String getPrimaryTagName()
+
+      public void save(Saveable objectToSave,Writer out) throws IOException
+
+</pre>
+
+<p><b>getPrimaryTagName()</b> should return the String that is the XML tagname that your
+
+class handles.  When you save your object, it should all be contained within an
+
+XML tag of the same name.  This will ensure that when JMeter's parser hits that tag,
+
+your class will be called upon to handle the data.</p>
+
+<p><b>setAtts(Attributes atts)</b> is called when the parser first hits your tag.
+
+If this primary tag has any attributes, this method represents your chance to save
+
+the information.</p>
+
+<p><b>save(Saveable objectToSave,Writer out)</b> - when the user selects "Save",
+
+JMeter will call this method and hand the Saveable object to be saved (it will be
+
+the object that specified your TagHandler as the class responsible for saving it).
+
+This method should use the given Writer object to print all the XML necessary to
+
+save the current state of the objectToSave.</p>
+
+<p>There's more you have to do to handle creating a new Object when JMeter parses
+
+an XML file.  However, there's no standard interface you need to implement, but rather,
+
+JMeter uses reflection to generate method calls into your class.  When JMeter hits
+
+a tag that corresponds to your PrimaryTagName, an instance of your TagHandler will
+
+be created, and its <b>setAtts()</b> method will get called.  Thereafter, methods are called
+
+depending on subsequent tags and character data.  For every tag, JMeter calls
+
+<b>&lt;tag-name&gt;TagStart(Attributes atts)</b>, and for every end tag, JMeter calls
+
+<b>&lt;tag-name&gt;TagEnd()</b>.</p>
+
+<p>Additionally, JMeter will call a method that corresponds to all tags that are
+
+current.  So, for instance, if JMeter runs into a tag name "foo", then
+
+<b>foo(Attributes atts)</b> will be called.  If JMeter then parses character data,
+
+then <b>foo(String data)</b> will be called.  If JMeter parses a tag within foo, called
+
+"nestedFoo", then JMeter will call <b>foo_nestedFoo(Attributes atts)</b> and
+
+<b>foo_nestedFoo(String data)</b>.  And so on.
+
+</p>
+
+<p>An annotated example:</p>
+
+<pre>
+
+public class AbstractConfigElementHandler extends TagHandler
+
+{
+
+    private AbstractConfigElement config;
+
+    private String currentProperty;
+
+
+
+    public AbstractConfigElementHandler()
+
+    {
+
+    }
+
+
+
+    <font color="blue">/**
+
+     * Returns the AbstractConfigElement object parsed from the XML.  This method
+
+     * is required to fulfill the SaveHandler interface.  It is used by the XML
+
+     * routines to gather all the saved objects.
+
+     */</font>
+
+    public Object getModel()
+
+    {
+
+        return config;
+
+    }
+
+
+
+    <font color="blue">/**
+
+     * This is called when a tag is first encountered for this handler class to handle.
+
+     * The attributes of the tag are passed, and the SaveHandler object is expected
+
+     * to instantiate a new object.
+
+     */</font>
+
+    public void setAtts(Attributes atts) throws Exception
+
+    {
+
+        String className = atts.getValue("type");
+
+        config = (AbstractConfigElement)Class.forName(className).newInstance();
+
+    }
+
+
+
+    <font color="blue">/**
+
+     * Called by reflection when a &lt;property&gt; tag is encountered.  Again, the
+
+     * attributes are passed.
+
+     */</font>
+
+    public void property(Attributes atts)
+
+    {
+
+        currentProperty = atts.getValue("name");
+
+    }
+
+
+
+    <font color="blue">/**
+
+     * Called by reflection when text between the begin and end &lt;property&gt;
+
+     * tag is encountered.
+
+     */</font>
+
+    public void property(String data)
+
+    {
+
+
+
+        if(data != null &amp;&amp; data.trim().length() &gt; 0)
+
+        {
+
+            config.putProperty(currentProperty,data);
+
+            currentProperty = null;
+
+        }
+
+    }
+
+
+
+    <font color="blue">/**
+
+     * Called by reflection when the &lt;property&gt; tag is ended.
+
+     */</font>
+
+    public void propertyTagEnd()
+
+    {
+
+        <font color="blue">// Here's a tricky bit.  See below for explanation.</font>
+
+        List children = xmlParent.takeChildObjects(this);
+
+        if(children.size() == 1)
+
+        {
+
+            config.putProperty(currentProperty,((TagHandler)children.get(0)).getModel());
+
+        }
+
+    }
+
+
+
+
+
+      <font color="blue">/**
+
+    * Gets the tag name that will trigger the use of this object's TagHandler.
+
+    */</font>
+
+    public String getPrimaryTagName()
+
+    {
+
+        return "ConfigElement";
+
+    }
+
+
+
+  <font color="blue">/**
+
+    * Tells the object to save itself to the given output stream.
+
+    */</font>
+
+    public void save(Saveable obj,Writer out) throws IOException
+
+    {
+
+        AbstractConfigElement saved = (AbstractConfigElement)obj;
+
+        out.write("&lt;ConfigElement type=\"");
+
+        out.write(saved.getClass().getName());
+
+        out.write("\">\n");
+
+        Iterator iter = saved.getPropertyNames().iterator();
+
+        while (iter.hasNext())
+
+        {
+
+            String key = (String)iter.next();
+
+            Object value = saved.getProperty(key);
+
+            writeProperty(out,key,value);
+
+        }
+
+        out.write(&lt;/ConfigElement&gt;");
+
+    }
+
+
+
+    <font color="blue">/**
+
+     * Routine to write each property to xml.
+
+     */</font>
+
+    private void writeProperty(Writer out,String key,Object value) throws IOException
+
+    {
+
+        out.write("&lt;property name=\"");
+
+        out.write(key);
+
+        out.write("\">\n");
+
+        JMeterHandler.writeObject(value,out);
+
+        out.write("\n&lt;/property&gt;\n");
+
+    }
+
+</pre>
+
+<p>
+
+In the <b>propertyTagEnd()</b> method, <b>takeChildObjects()</b> is called on the xmlParent
+
+instance variable.  xmlParent is inherited from TagHandler - the DocumentHandler
+
+object that is running the show.  xmlParent takes an XML file that represents a portion of
+
+the test configuration tree, and recreates a tree-like data structure.  When it is
+
+done, it will convert its tree-like data structure into the test configuration tree
+
+structure.
+
+</p>
+
+<p>However, sometimes, a tree element has sub objects that you do not want represented
+
+in the tree - rather, they are part of your object.  But, they may
+
+be complicated enough to warrant their own SaveHandler class, and thus, the xmlParent
+
+picks them up as part of its tree.  When the tag is done, and you know that there are
+
+child objects you want to grab, you can call the <b>takeChildObjects()</b> method and get a
+
+List object containing them all.  This will remove them from the tree, and you can add
+
+them to your object that you're creating.
+
+</p>
+
+<p>
+
+UrlConfig is good example.  It extends AbstractConfigElement, so it uses exactly the
+
+code above to save and reload itself from XML.  However, one of the pieces of data
+
+that UrlConfig stores is an Arguments object.  Arguments is too complicated to save
+
+to file as a simple string, so it has its own Handler object (ArgumentsHandler).  In
+
+the above code, when the call to <b>JMeterHandler.writeObject(value,out)</b> is made, the
+
+writeObject method detects whether the object implements Saveable, and if so, calls
+
+the object's SaveHandler class to deal with it.  This means, however, that when
+
+reading that XML file, the Argument object will show up as a separate entity in
+
+the data tree, whereas it originally was just part of the data of the UrlConfig
+
+object.  In order to preserve that relationship, it's necessary for the
+
+AbstractConfigElementHandler to check after each property tag is done for child
+
+objects in the tree, and take them for its own use.
+
+</p>
+
+<p>
+
+Study the other SaveHandler objects and the TagHandler class to learn more
+
+about how saving is accomplished.  Once you understand the design, writing your
+
+own SaveHandler is very easy.
+
+</p>
+
+
+
+</section>
+
+</body>
+
+</document>

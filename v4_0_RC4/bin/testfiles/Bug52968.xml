@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="TNP1-JR0-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TC-NOPARENT-1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="JR-MUSTEXECUTE" rc="" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TNP1-JR0-1" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TC-NOPARENT-1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="JR-MUSTEXECUTE" rc="" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TNP1-JR0-2" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TC-NOPARENT-1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="JR-MUSTEXECUTE" rc="" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="TNPF-JR0-0" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String"></responseData>
+</sample>
+<sample s="false" lb="TC-NOPARENT-FAILING0" rc="" rm="Number of samples in transaction : 1, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="false" lb="TNPF-JR0-1" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String"></responseData>
+</sample>
+<sample s="false" lb="TC-NOPARENT-FAILING0" rc="" rm="Number of samples in transaction : 1, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="false" lb="TNPF-JR0-2" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String"></responseData>
+</sample>
+<sample s="false" lb="TC-NOPARENT-FAILING0" rc="" rm="Number of samples in transaction : 1, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="true" lb="TNPF-JR0-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="TNPF-JR1-0" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String"></responseData>
+</sample>
+<sample s="false" lb="TC-NOPARENT-FAILING1" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="true" lb="TNPF-JR0-1" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="TNPF-JR1-1" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String"></responseData>
+</sample>
+<sample s="false" lb="TC-NOPARENT-FAILING1" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="true" lb="TNPF-JR0-2" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="TNPF-JR1-2" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String"></responseData>
+</sample>
+<sample s="false" lb="TC-NOPARENT-FAILING1" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="true" lb="TNPF2-JR1-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="TNPF2-JR2-0" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String"></responseData>
+</sample>
+<sample s="false" lb="TC-NOPARENT-FAILING2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="true" lb="TNPF2-JR1-1" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="TNPF2-JR2-1" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String"></responseData>
+</sample>
+<sample s="false" lb="TC-NOPARENT-FAILING2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="true" lb="TNPF2-JR1-2" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="TNPF2-JR2-2" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String"></responseData>
+</sample>
+<sample s="false" lb="TC-NOPARENT-FAILING2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="true" lb="TNPTA-JR1-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TNPTA-JR2-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TC-NOPARENT-TestAction" rc="" rm="Number of samples in transaction : 3, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TNPTA-JR1-1" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TNPTA-JR2-1" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TC-NOPARENT-TestAction" rc="" rm="Number of samples in transaction : 3, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TNPTA-JR1-2" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TNPTA-JR2-2" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TC-NOPARENT-TestAction" rc="" rm="Number of samples in transaction : 3, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TC-PARENT" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1">
+  <sample s="true" lb="TP-JR0-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+</sample>
+<sample s="true" lb="JR-MUSTEXECUTE" rc="" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TC-PARENT" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1">
+  <sample s="true" lb="TP-JR0-1" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+</sample>
+<sample s="true" lb="JR-MUSTEXECUTE" rc="" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="TC-PARENT" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1">
+  <sample s="true" lb="TP-JR0-2" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+</sample>
+<sample s="true" lb="JR-MUSTEXECUTE" rc="" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="TC-PARENT-FAILING1" rc="500" rm="Number of samples in transaction : 1, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="TPF-JR0-0" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+    <responseData class="java.lang.String"></responseData>
+  </sample>
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="false" lb="TC-PARENT-FAILING1" rc="500" rm="Number of samples in transaction : 1, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="TPF-JR0-1" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+    <responseData class="java.lang.String"></responseData>
+  </sample>
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="false" lb="TC-PARENT-FAILING1" rc="500" rm="Number of samples in transaction : 1, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="TPF-JR0-2" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+    <responseData class="java.lang.String"></responseData>
+  </sample>
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="false" lb="TC-PARENT-FAILING1" rc="500" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <sample s="true" lb="TP-JR0-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+  <sample s="false" lb="TP-JR1-0" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+    <responseData class="java.lang.String"></responseData>
+  </sample>
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="false" lb="TC-PARENT-FAILING1" rc="500" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <sample s="true" lb="TP-JR0-1" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+  <sample s="false" lb="TP-JR1-1" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+    <responseData class="java.lang.String"></responseData>
+  </sample>
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="false" lb="TC-PARENT-FAILING1" rc="500" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <sample s="true" lb="TP-JR0-2" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+  <sample s="false" lb="TP-JR1-2" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+    <responseData class="java.lang.String"></responseData>
+  </sample>
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="false" lb="TC-PARENT-FAILING2" rc="500" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <sample s="true" lb="TPF-JR1-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+  <sample s="false" lb="TPF-JR2-0" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+    <responseData class="java.lang.String"></responseData>
+  </sample>
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="false" lb="TC-PARENT-FAILING2" rc="500" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <sample s="true" lb="TPF-JR1-1" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+  <sample s="false" lb="TPF-JR2-1" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+    <responseData class="java.lang.String"></responseData>
+  </sample>
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="false" lb="TC-PARENT-FAILING2" rc="500" rm="Number of samples in transaction : 2, number of failing samples : 1" dt="" sc="1" ec="1" ng="1" na="1">
+  <sample s="true" lb="TPF-JR1-2" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+  <sample s="false" lb="TPF-JR2-2" rc="500" rm="" dt="text" sc="1" ec="1" ng="1" na="1">
+    <responseData class="java.lang.String"></responseData>
+  </sample>
+  <responseData class="java.lang.String">Non-TEXT response data, cannot record: ()</responseData>
+</sample>
+<sample s="true" lb="TC-PARENT-TestAction" rc="200" rm="Number of samples in transaction : 2, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1">
+  <sample s="true" lb="TPTA-JR1-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+  <sample s="true" lb="TPTA-JR2-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+</sample>
+<sample s="true" lb="TC-PARENT-TestAction" rc="200" rm="Number of samples in transaction : 2, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1">
+  <sample s="true" lb="TPTA-JR1-1" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+  <sample s="true" lb="TPTA-JR2-1" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+</sample>
+<sample s="true" lb="TC-PARENT-TestAction" rc="200" rm="Number of samples in transaction : 2, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1">
+  <sample s="true" lb="TPTA-JR1-2" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+  <sample s="true" lb="TPTA-JR2-2" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
+</sample>
+
+</testResults>

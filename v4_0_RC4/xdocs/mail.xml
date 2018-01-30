@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+
+  <properties>
+    <author email="dev.AT.jmeter.DOT.apache.DOT.org">Apache JMeter Project</author>
+    <title>Mailing Lists</title>
+  </properties>
+
+<body>
+
+<section name="Mailing Lists - Guidelines">
+
+<p>A mailing list is an electronic discussion forum that anyone can
+subscribe to. When someone sends an email message to the mailing list,
+a copy of that message is broadcast to everyone who is subscribed to
+that mailing list. Mailing lists provide a simple and effective
+communication mechanism. With potentially thousands of subscribers,
+there is a common set of etiquette guidelines that you should observe.
+Please keep on reading.
+</p>
+
+<p>
+Please note that usage of these mailing lists is subject to the
+<a href="http://www.apache.org/foundation/public-archives.html">Public Forum Archive Policy</a>.
+</p>
+
+<p>
+<strong>
+      Respect the mailing list type
+</strong><br/>
+ There are generally two types of lists.
+</p>
+
+<p>
+<ul>
+    <li>
+    The "User" lists where you can send questions and comments about
+    configuration, setup, usage and other "user" types of questions.
+    </li>
+    <li>
+    The "Developer" lists where you can send questions and
+    comments about the actual software source code and general
+    "development" types of questions.
+    </li>
+</ul>
+</p>
+
+<p>Some questions are appropriate for posting on both the "user" and
+the "developer" lists. In this case, pick one and only one. Do not
+cross post.</p>
+
+<p>Asking a configuration question on the developers list is frowned
+upon because developers' time is as precious as yours. By contacting
+them directly instead of the user base you are abusing resources. In
+fact, it is unlikely that you will get a quicker answer, if at
+all.</p>
+
+<p>
+<strong>
+      Join the lists that are appropriate for your discussion.
+</strong><br/>
+Please make sure that you are joining the list that is appropriate for the 
+topic or product that you would like to discuss. For example, 
+please do not join the Regexp mailing list and ask questions about Tomcat. 
+Instead, you should join the Tomcat User list and ask your questions
+there. 
+</p>
+
+<p>
+<strong>
+    Ask smart questions.  </strong><br/> 
+
+Every volunteer project obtains its strength from the people involved
+in it. You are welcome to join any of our mailing lists.  You can
+choose to lurk, or actively participate; it's up to you.  The level of
+community responsiveness to specific questions is generally directly
+proportional to the amount of effort you spend formulating your
+question. Eric Raymond and Rick Moen have even written an essay entitled <a
+href="http://www.catb.org/~esr/faqs/smart-questions.html">"<b>Asking
+Smart Questions</b>"</a> precisely on this topic.  Although somewhat
+militant, it is definitely worth reading.<br/>
+<b>Note</b>: Please do NOT send your Java problems to the two authors. They welcome feedback on the FAQ's contents, but are simply not a Java help resource. Follow the essay's advice and <a href="http://www.catb.org/~esr/faqs/smart-questions.html#forum">choose your forum</a> carefully.
+</p>
+
+<p>
+<strong>
+    Give feedback when you get a good answer.  </strong><br/> 
+
+If an answer given to you helped you solve your problem then send a mail saying so and don't forget to say <b>THANKS</b>.
+If you fixed the problem yourself then contribute to the mailing list by writing how you solved your issue.
+Giving feedback is useful to people who faced/will face same problems as you and will be your way 
+to contribute to the project. Don't forget that people answering your questions are volunteers 
+doing so on their personal time.<br/>
+</p>
+
+<p>
+<strong>
+    Keep your email short and to the point; use a suitable subject line.
+</strong><br/>
+If your email is more than about a page of text, chances are that it
+won't get read by very many people. It is much better to try to pack a
+lot of informative information (see above about asking smart questions)
+into as small of an email as possible. If you are replying to a previous
+email, it is a good idea to only quote the parts that you are replying
+to and to remove the unnecessary bits. This makes it easier for people
+to follow a thread as well as making the email archives easier to search
+and read.
+</p>
+
+<p>
+<strong>
+    Start a new thread for a new topic
+</strong><br/>
+When asking a new question, please start a new thread with an appropriate new subject line.
+This makes it easier to read, and to find later in the archives.
+</p>
+
+<p>
+<strong>
+    Do your best to ensure that you are not sending HTML or
+    "Stylized" email to the list.
+</strong><br/>
+If you are using Outlook or Outlook Express or Eudora, chances are that
+you are sending HTML email by default. There is usually a setting that
+will allow you to send "Plain Text" email. If you are using Microsoft
+products to send email, there are several bugs in the software that
+prevent you from turning off the sending of HTML email. 
+</p>
+
+<p>
+<strong>
+Please don't send attachments or include large chunks of code</strong><br/>
+Attachments can be difficult to read and are rarely needed by all recipients.
+Some mailing lists are set up to drop them.
+If you need to send more than a few lines of code, ask first.
+Note that code is often mangled by word-wrapping, so it is better to provide a link to a downloadable file.
+If necessary, arrange with the person(s) responding to the posting how best to give access to the data,
+should it prove necessary. 
+</p>
+
+<p>
+<strong>
+    Watch where you are sending email.
+</strong><br/>
+The majority of our mailing lists have set the Reply-To to go back to the 
+list. That means that when you Reply to a message, it will go to the list
+and not to the original author directly. The reason is because it helps
+facilitate discussion on the list for everyone to benefit from. Be careful 
+of this as sometimes you may intend to reply to a message directly to someone 
+instead of the entire list.
+<em>
+The appropriate contents of the Reply-To header is an age-old debate that
+should not be brought up on the mailing lists.  You can
+examine opposing points of view
+<a href="http://www.unicom.com/pw/reply-to-harmful.html">condemning</a>
+our convention and 
+<a href="http://www.metasystema.net/essays/reply-to.mhtml">
+condoning</a> 
+it.  Bringing this up for debate on a mailing list will add nothing
+new and is considered off-topic.
+</em>
+</p>
+
+<p>
+<strong>
+    Do not cross post messages.
+</strong><br/>
+In other words, pick a mailing list and send your messages to that mailing 
+list only. Do not send your messages to multiple mailing lists. The reason is 
+that people may be subscribed to one list and not to the other. Therefore, 
+some people will only see part of the conversation.
+</p>
+</section>
+
+<section name="Conclusion">
+<p>
+<strong>Now that you have read the guidelines above</strong>, <a
+href="./mail2.html"><strong>here</strong></a> is the page that gives
+you a listing of the different mailing lists that you can join. If you
+managed to find this without reading the above information, chances
+are you will be sent back here. You might as well read it now and save
+yourself the embarrassment.
+</p>
+</section>
+
+</body>
+</document>

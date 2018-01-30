@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '15'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document prev="generating-dashboard.html" next="best-practices.html" id="$Id: realtime-results.xml 1457581 2013-03-17 22:58:08Z sebb $">
+
+<properties>
+  <author email="dev@jmeter.apache.org">Apache JMeter developers</author>
+  <title>User's Manual: Live Statistics</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Real-time results" anchor="realtime-results">
+<p>Since JMeter 2.13 you can get real-time results sent to a backend through the 
+<a href="component_reference.html#Backend_Listener">Backend Listener</a> using potentially any backend (JDBC, JMS, Webservice, &hellip;)
+by providing a class which implements <a href="../api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" >AbstractBackendListenerClient</a>.<br/>
+JMeter ships with:
+<ul>
+<li>a GraphiteBackendListenerClient which allows you to send metrics to a Graphite Backend.<br/>
+This feature provides:
+<ul>
+<li>Live results</li>
+<li>Nice graphs for metrics</li>
+<li>Ability to compare 2 or more load tests</li>
+<li>Storing monitoring data as long as JMeter results in the same backend</li>
+<li>&hellip;</li>
+</ul>
+</li>
+<li>an InfluxDBBackendListenerClient introduced in JMeter 3.2 which allows you to send metrics to an InfluxDB Backend using UDP or HTTP protocols
+This feature provides:
+<ul>
+<li>Live results</li>
+<li>Nice graphs for metrics</li>
+<li>Ability to compare 2 or more load tests</li>
+<li>Ability to add annotations to graphs</li>
+<li>Storing monitoring data as long as JMeter results in the same backend</li>
+<li>&hellip;</li>
+</ul>
+</li>
+</ul>
+In this document we will present the configuration setup to graph and historize the data in different backends:
+<ul>
+<li>InfluxDB setup for InfluxDBBackendListenerClient</li>
+<li>InfluxDB setup for GraphiteBackendListenerClient</li>
+<li>Grafana</li>
+<li>Graphite</li>
+</ul>
+</p>
+<subsection name="&sect-num;.1 Metrics exposed" anchor="metrics">
+    <subsection name="&sect-num;.1.1 Thread/Virtual Users metrics" anchor="metrics-threads">
+    <p>
+    Thread metrics are the following:
+    </p>
+    <dl>
+      <dt><code>&lt;rootMetricsPrefix&gt;test.minAT</code></dt><dd>Min active threads</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;test.maxAT</code></dt><dd>Max active threads</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;test.meanAT</code></dt><dd>Mean active threads</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;test.startedT</code></dt><dd>Started threads</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;test.endedT</code></dt><dd>Finished threads</dd>
+    </dl>
+    </subsection>
+    <subsection name="&sect-num;.1.2 Response times metrics" anchor="metrics-response-times">
+    <p>Response related metrics are the following:</p>
+    <dl>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.count</code></dt>
+      <dd>Number of successful responses for sampler name</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.h.count</code></dt>
+      <dd>Server hits per seconds, this metric cumulates Sample Result and Sub results (if using Transaction Controller, "Generate parent sampler" should be unchecked)</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.min</code></dt>
+      <dd>Min response time for successful responses of sampler name</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.max</code></dt>
+      <dd>Max response time for successful responses of sampler name</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.avg</code></dt>
+      <dd>Average response time for successful responses of sampler name.</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.pct&lt;percentileValue&gt;</code></dt>
+      <dd>Percentile computed for successful responses of sampler name. There will be one metric for each calculated value.</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.count</code></dt>
+      <dd>Number of failed responses for sampler name</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.min</code></dt>
+      <dd>Min response time for failed responses of sampler name</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.max</code></dt>
+      <dd>Max response time for failed responses of sampler name</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.avg</code></dt>
+      <dd>Average response time for failed responses of sampler name.</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</code></dt>
+      <dd>Percentile computed for failed responses of sampler name. There will be one metric for each calculated value.</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.count</code></dt>
+      <dd>Number of responses for sampler name (sum of ok.count and ko.count)</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.min</code></dt>
+      <dd>Min response time for responses of sampler name (min of ok.count and ko.count)</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.max</code></dt>
+      <dd>Max response time for responses of sampler name (max of ok.count and ko.count)</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.avg</code></dt>
+      <dd>Average response time for responses of sampler name (avg of ok.count and ko.count)</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</code></dt>
+      <dd>Percentile computed for responses of sampler name. There will be one metric for each calculated value. (calculated on the totals for OK and failed samples)</dd>
+    </dl>
+    <p>
+    The default <code>percentiles</code> setting on the <complink name="Backend Listener"/> is "90;95;99", 
+    i.e. the 3 percentiles 90%, 95% and 99%.
+    </p>
+    <p>
+    The <a href="http://graphite.readthedocs.io/en/latest/feeding-carbon.html#step-1-plan-a-naming-hierarchy">Graphite naming hierarchy</a>
+    uses dot (".") to separate elements. This could be confused with decimal percentile values.
+    JMeter converts any such values, replacing dot (".") with underscore ("-"). 
+    For example, "<code>99.9</code>" becomes "<code>99_9</code>"
+    </p>
+    <p>
+    By default JMeter sends metrics for all samplers accumulated under the samplerName "<code>all</code>".
+    If the Backend Listener <code>samplersList</code> is configured, then JMeter also sends the metrics
+    for the matching sample names unless <code>summaryOnly=true</code>
+    </p>
+    </subsection>
+</subsection>
+<subsection name="&sect-num;.2 JMeter configuration" anchor="jmeter-configuration">
+    <p>
+    To make JMeter send metrics to backend add a <a href="./component_reference.html#Backend_Listener" >BackendListener</a> using the GraphiteBackendListenerClient.
+    </p>
+    <figure width="902" height="341" image="backend_listener.png">Graphite configuration</figure>
+</subsection>
+
+<subsection name="&sect-num;.3 InfluxDB database configuration" anchor="influxdb_db_configuration">
+    <p>Connect to InfluxDB using <a href="https://docs.influxdata.com/influxdb/v1.1/introduction/getting_started/" >influx shell</a> and <a href="https://docs.influxdata.com/influxdb/v1.1/query_language/database_management/" >create two databases</a>:
+    <ul>
+        <li>grafana : Used by Grafana to store the dashboards we will create</li>
+        <li>jmeter : Used by InfluxDB to store the data sent to Graphite Listener as per database="jmeter" config
+        element in <code>influxdb.conf</code> or <code>config.toml</code></li>
+    </ul>
+    </p>
+
+<subsection name="&sect-num;.3.1 InfluxDB setup for InfluxDBBackendListenerClient" anchor="influxdb">
+<p>InfluxDB is an open-source, distributed, time-series database that allows to 
+easily store metrics.
+Installation and configuration is very easy, read this for more details <a href="https://docs.influxdata.com/influxdb/v1.1/introduction/installation/" target="_blank" >InfluxDB documentation</a>.<br/>
+InfluxDB data can be easily viewed in a browser through either <a href="https://github.com/hakobera/influga"  target="_blank">Influga</a> or <a href="http://grafana.org/"  target="_blank">Grafana</a>.
+We will use Grafana in this case.
+<b>There is no particular configuration to setup when using <code>InfluxDBBackendListenerClient</code></b>
+</p>
+</subsection>
+
+<subsection name="&sect-num;.3.2 InfluxDB setup for GraphiteBackendListenerClient" anchor="influxdb_through_graphite_configuration">
+    <p>To enable Graphite listener in InfluxDB for <code>GraphiteBackendListenerClient</code>, edit files <code>/opt/influxdb/shared/config.toml</code> or <code>/usr/local/etc/influxdb.conf</code>,
+    find "<code>[[graphite]]</code>" and set this:
+    </p>
+    <source>
+# Configure the graphite api
+[[graphite]]
+enabled = true
+bind-address = ":2003" # If not set, is actually set to bind-address.
+database = "jmeter"  # store graphite data in this database
+    </source>
+</subsection>
+</subsection>
+    
+<subsection name="&sect-num;.4 Grafana configuration" anchor="grafana_configuration">
+    <p>
+    Installing grafana is just a matter of putting the unzipped bundle behind an Apache HTTP server.<br/>
+    Read <a href="http://grafana.org/docs/" target="_blank">documentation</a> for more details.
+    Open <code>config.js</code> file and find <code>datasources</code> element, and edit it like this:<br/>
+    </p>
+    <source>
+datasources: {
+  influxdb: {
+    type: 'influxdb',
+    url: "http://influx_db_host:8086/db/jmeter",
+    username: 'root',
+    password: 'root',
+  },
+  grafana: {
+    type: 'influxdb',
+    url: "http://influx_db_host:8086/db/grafana",
+    username: 'root',
+    password: 'root',
+    grafanaDB: true
+  },
+},
+    </source>
+    <note>
+    Note that grafana has "<code>grafanaDB:true</code>". Also note that here we use <code>root</code> user for simplicity
+    It is better to dedicate a special user with restricted rights.
+    </note>
+    Here is the kind of dashboard that you could obtain:
+    <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure> 
+</subsection>
+
+<subsection name="&sect-num;.5 Graphite" anchor="graphite">
+<p>HELP WELCOME for this section, see <a href="../building.html" >Contributing documentation</a></p>
+</subsection>
+
+
+</section>
+
+</body>
+</document>

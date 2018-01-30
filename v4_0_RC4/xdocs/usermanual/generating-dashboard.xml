@@ -1,0 +1,718 @@
+<?xml version="1.0"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to You 
+    under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed 
+    to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations 
+    under the License. -->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '14'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document prev="remote-test.html" next="realtime-results.html" id="$Id$">
+    <properties>
+        <title>User's Manual: Generating Dashboard Report</title>
+    </properties>
+    <body>
+        <section name="&sect-num;. Generating Report Dashboard" anchor="generation">
+            <p>JMeter supports dashboard report generation to get graphs and
+            statistics from a test plan.<br />
+            This chapter describes how to configure and use the generator.</p>
+            <subsection name="&sect-num;.1 Overview" anchor="overview">
+                <p>The dashboard generator is a modular extension of JMeter.
+                    Its default behavior is to read and process samples from
+                    CSV files to generate HTML files containing graph views.
+                    It can generate the report at end of a load test or on demand.
+                </p>
+                <p>
+                This report provides the following metrics:
+                <ul>
+                    <li><a href="https://en.wikipedia.org/wiki/Apdex" title="Application Performance Index" target="_blank">APDEX</a> (Application Performance Index) table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
+                    <li>A request summary graph showing the Success and failed requests (Transaction Controller Sample Results are not taken into account) percentage: <figure width="1636" height="982" image="dashboard/report_apdex_and_summary.png" ></figure></li>
+                    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="1639" height="467" image="dashboard/report_statistics.png" ></figure></li>
+                    <li>An error table providing a summary of all errors and their proportion in the total requests : <figure width="1344" height="455" image="dashboard/report_errors.png" ></figure></li>
+                    <li>A Top 5 Errors by Sampler table providing for every Sampler (excluding Transaction Controller by default) the top 5 Errors : <figure width="1609" height="508" image="dashboard/top_5_errors_by_sampler.png" ></figure></li>
+                    <li>Zoomable chart where you can check/uncheck every transaction to show/hide it for:
+                        <ul>
+                            <li>Response times Over Time (Includes Transaction Controller Sample Results) : <figure width="1398" height="566" image="dashboard/report_response_times_over_time.png" ></figure></li>
+                            <li>Response times Percentiles Over Time (successful responses only) : <figure width="1640" height="539" image="dashboard/response_time_percentiles_over_time.png" ></figure></li>
+                            <li>Active Threads Over Time : <figure width="1638" height="544" image="dashboard/report_active_threads_over_time.png" ></figure></li>
+                            <li>Bytes throughput Over Time (Ignores Transaction Controller Sample Results)  : <figure width="1373" height="543" image="dashboard/report_bytes_throughput_over_time.png" ></figure></li>
+                            <li>Latencies Over Time (Includes Transaction Controller Sample Results) : <figure width="1373" height="547" image="dashboard/report_latencies_over_time.png" ></figure></li>
+                            <li>Connect Time Over Time (Includes Transaction Controller Sample Results) : <figure width="1635" height="520" image="dashboard/report_connect_time_over_time.png" ></figure></li>
+                            <li>Hits per second (Ignores Transaction Controller Sample Results): <figure width="1375" height="552" image="dashboard/report_hits_per_second.png" ></figure></li>
+                            <li>Response codes per second (Ignores Transaction Controller Sample Results): <figure width="1380" height="558" image="dashboard/report_codes_per_second.png" ></figure></li>
+                            <li>Transactions per second (Includes Transaction Controller Sample Results): <figure width="1372" height="577" image="dashboard/report_transactions_per_second.png" ></figure></li>
+                            <li>Response Time vs Request per second (Ignores Transaction Controller Sample Results): <figure width="1380" height="545" image="dashboard/report_response_time_vs_request.png" ></figure></li>
+                            <li>Latency vs Request per second (Ignores Transaction Controller Sample Results): <figure width="1373" height="543" image="dashboard/report_latencies_vs_request.png" ></figure></li>
+                            <li>Response time Overview (Excludes Transaction Controller Sample Results) : <figure width="1645" height="562" image="dashboard/response_time_overview.png" ></figure></li>
+                            <li>Response times percentiles (Includes Transaction Controller Sample Results): <figure width="1374" height="551" image="dashboard/report_response_time_percentiles.png" ></figure></li>
+                            <li>Times vs Threads (Includes Transaction Controller Sample Results): <figure width="1373" height="567" image="dashboard/report_time_vs_threads.png" ></figure>
+                            <note>In distributed mode, this graph shows a horizontal axis the number of threads for 1 server. It's a current limitation</note>
+                            </li>
+                            <li>Response Time Distribution (Includes Transaction Controller Sample Results): <figure width="1373" height="549" image="dashboard/report_response_time_distribution.png" ></figure></li>
+                        </ul>
+                    </li>
+                </ul>
+                </p>
+                <!-- <p> It is designed to support different way of data exportation, if Html files are not relevant. </p> -->
+            </subsection>
+            <subsection name="&sect-num;.2 Configuring Dashboard Generation" anchor="configuration">
+                <p>
+                    Dashboard generation uses JMeter properties to customize the
+                    report. Some properties are used for general settings and others are
+                    used for a particular graph configuration or exporter configuration.
+                    <note>All report generator properties can be found in file <code>reportgenerator.properties</code>.
+                    To customize these properties, you should copy them in <code>user.properties</code> file and modify them.</note>
+                </p>
+                <subsection name="&sect-num;.2.1 Requirements" anchor="configuration_requirements">
+                    <p>
+                        To enable the generator to operate, the input CSV files
+                        must include certain required data. Check that your JMeter
+                        configuration follows these settings (these are the defaults):
+                        <source>
+jmeter.save.saveservice.bytes = true
+# Only available with HttpClient4
+#jmeter.save.saveservice.sent_bytes=true
+jmeter.save.saveservice.label = true
+jmeter.save.saveservice.latency = true
+jmeter.save.saveservice.response_code = true
+jmeter.save.saveservice.response_message = true
+jmeter.save.saveservice.successful = true
+jmeter.save.saveservice.thread_counts = true
+jmeter.save.saveservice.thread_name = true
+jmeter.save.saveservice.time = true
+jmeter.save.saveservice.connect_time = true
+# the timestamp format must include the time and should include the date.
+# For example the default, which is milliseconds since the epoch: 
+jmeter.save.saveservice.timestamp_format = ms
+# Or the following would also be suitable
+jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
+                        </source>
+                        <note>
+                            The input CSV file must include the timeStamp
+                        </note>
+                        <note>
+                        To ensure most accurate results, if you use a transaction controller, uncheck the box:
+                        <code>Generate parent sample</code>
+                        <figure image="transactioncontroller.png"></figure>
+                        </note>
+                        <note>
+                            The "<code>Errors</code>" summary table shows more
+                            accurate data if these settings are fulfilled:
+                            <ul>
+                                <li><source>jmeter.save.saveservice.assertion_results_failure_message = true</source></li>
+                                <li>
+                                    If you use a transaction controller, uncheck the box
+                                    <code>Generate parent sample</code>
+                                    <figure image="transactioncontroller.png"></figure>
+                                </li>
+                            </ul>
+                        </note>
+                        <note>When using JMeter distributed mode with multiple jmeter-server instances, ensure you add in your Thread Groups something that uniquely identifies ThreadGroup for every JVM, example:
+                        <source>ThreadXXX_${__P(JVM_ID)}</source>
+                        where you pass a different JVM_ID property for each jmeter-server through:
+                        <source>-JJVM_ID=i</source> where <code>i</code> varies between 1 and the number of jmeter-server you are using. 
+                        </note>
+                    </p>
+                </subsection>
+
+                <subsection name="&sect-num;.2.2 General settings" anchor="configuration_general">
+                    <note>
+                        All properties must be prefixed with
+                        <source>jmeter.reportgenerator.</source>
+                    </note>
+                    <properties>
+                        <property name="report_title" required="No">
+                            Title used in the generated report.<br/>
+                            Default: "Apache JMeter Dashboard"
+                        </property>
+                        <property name="date_format" required="No">
+                            Default date format from <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">
+                            SimpleDateFormat Java API</a> with Locale.ENGLISH.<br/>
+                            Default Date format is <code>yyyyMMddHHmmss</code><br/>
+                            Useful when you would like to generate a report after the load test, and the results file contains timestamp in
+                            another time zone. In this case the date format must include the time zone (zzz).
+                            <note>If <code>jmeter.save.saveservice.timestamp_format</code> does not contain year then use 1970 as year</note>
+                            <br/>
+                            Example: <code>dd/MM/yyyy HH:mm:ss zzz</code>
+                        </property>
+                        <property name="start_date" required="No">
+                            Start date of the range of data to use for report.<br/>
+                            Date format is defined by date_format property.<br/>
+                            Default: not filled which means data range will be used from the beginning
+                        </property>
+                        <property name="end_date" required="No">
+                            End date of the range of data to use for report.<br/>
+                            Date format is defined by date_format property.<br/>
+                            Default: not filled which means data range will be used until the end
+                        </property>
+                        <property name="overall_granularity" required="No">
+                            Granularity of over time graphs. Data is aggregated to have 1 minute ticks.<br/>
+                            <note>Granularity must be higher than 1 second (1000) otherwise throughput graphs will be incorrect</note>
+                            Default: "60000" (1 minute)
+                        </property>
+                        <property name="apdex_satisfied_threshold" required="No">
+                            Sets the satisfaction threshold for the
+                            <a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a>
+                            calculation (in ms).<br/>
+                            Default: <code>500</code>
+                        </property>
+                        <property name="apdex_tolerated_threshold" required="No">
+                            Sets the tolerance threshold for the APDEX calculation
+                            (in ms).<br/>
+                            Default: <code>1500</code>
+                        </property>
+                        <property name="jmeter.reportgenerator.apdex_per_transaction" required="No">
+                             Sets satisfaction and tolerance threshold to specific samples.<br/>
+                             Use sample names or regular expression.<br/> 
+                             Format is <code>sample_name:satisfaction|tolerance[;]</code><br/>
+                             Values are in milliseconds.
+                             <note>
+                             Notice the colon between sample name and values, the pipe between thresholds and the 
+                             semicolon at the end to separate different samples. Don't forget to escape after
+                             semicolon to span multiple lines.
+                             </note>
+                             Example:
+                             <source>jmeter.reportgenerator.apdex_per_transaction=sample(\\d+):1000|2000;\
+    samples12:3000|4000;\
+    scenar01-12:5000|6000</source>
+                        </property>
+                        <property name="sample_filter" required="No">
+                            Sets the filter of samples to keep for generating
+                            graphs and statistics. An empty value deactivates the
+                            filtering.<br/>
+                            Format: Regular expression.<br/>
+                            Default: ""
+                        </property>
+                        <property name="temp_dir" required="No">
+                            Sets the temporary directory used by the generation
+                            process if it needs file I/O
+                            operations.<br/>
+                            Default: <code>temp</code>
+                        </property>
+                        <property name="statistic_window" required="No">
+                            Sets the size of the sliding window used by percentile
+                            evaluation. Caution: higher value provides a
+                            better accuracy but needs more memory.<br/>
+                            Default: <code>20000</code>
+                        </property>
+                    </properties>
+                    <note>Percentiles used by Summary table and Percentile graphs can be adjusted to different values by using the 3 properties:
+                    <ul>
+                        <li>aggregate_rpt_pct1 : Defaults to 90</li>
+                        <li>aggregate_rpt_pct2 : Defaults to 95</li>
+                        <li>aggregate_rpt_pct3 : Defaults to 99</li>
+                    </ul>
+                    </note>
+                    <note>Relative paths are built from the JMeter working directory
+                        (default: <code>bin</code>).</note>
+
+                    <note>
+                        <p>
+                            You can define some overall properties which are used by the
+                            generator configuration.  These properties are freely named
+                            but you should use the prefix
+                            <source>jmeter.reportgenerator.</source>
+                            in order to avoid property overlap.
+                        </p>
+                        <p>
+                            E.g.:
+                        </p>
+                        <dl>
+                            <dt>Property definition:</dt>
+                            <dd><source>jmeter.reportgenerator.overall_granularity=60000</source></dd>
+                            <dt>Property reference:</dt>
+                            <dd><source>${jmeter.reportgenerator.overall_granularity}</source></dd>
+                        </dl>
+                    </note>
+                </subsection>
+
+                <subsection name="&sect-num;.2.3 Graph settings" anchor="configure_graph">
+                    <p>
+                        Each property describing a graph configuration must be prefixed
+                        with
+                        <source>jmeter.reportgenerator.graph.</source>
+                        followed by the graph identifier.
+                    </p>
+                    <!-- <note> The identifier is used to group properties by graph.</note> -->
+
+                    <subsection name="&sect-num;.2.3.1 General properties" anchor="general_graph_properties">
+                        <p>All graphs support these properties:</p>
+                        <properties>
+                            <property name="classname" required="Yes">
+                                The fully qualified class name of the graph
+                                <br />
+                                The class of the graph must extend
+                                <code>org.apache.jmeter.report.processor.graph.AbstractGraphConsumer</code>.
+                                <br />
+                                See
+                                <a href="#default_graphs">Default graph section</a>
+                                for more details.
+                            </property>
+                            <property name="exclude_controllers" required="No">Defines
+                                whether the graph discards controller samples.
+                                Default: <code>false</code>
+                            </property>
+                            <property name="title" required="No">Sets the title of the
+                                graph.
+                                Default: ""
+                            </property>
+                        </properties>
+                    </subsection>
+
+                    <subsection name="&sect-num;.2.3.2 Specific properties" anchor="specific_graph_properties">
+                        <p>
+                            Specific graph properties must use the prefix:
+                            <source>jmeter.reportgenerator.graph.&lt;graph_id&gt;.property</source>
+                            The name of the property will be mapped using camel case
+                            transformation and the matching method of the class will be
+                            called with the property value as argument.
+                        </p>
+                        <p>
+                            E.g.:
+                            <source>jmeter.reportgenerator.graph.&lt;graph_id&gt;.property.set_granularity=150</source>
+                            induces the call of the method <code>setGranularity(150)</code> on the
+                            instance of the graph.
+                        </p>
+                    </subsection>
+
+                </subsection>
+
+                <subsection name="&sect-num;.2.4 Export settings" anchor="configure_export">
+                    <p>
+                        Each property describing an exporter configuration must be
+                        prefixed with
+                        <source>jmeter.reportgenerator.exporter</source>
+                        followed by the exporter identifier.
+                    </p>
+
+                    <subsection name="&sect-num;.2.4.1 General properties" anchor="general_export_properties">
+                        <p>All exporters support these properties:</p>
+                        <properties>
+                            <property name="classname" required="Yes">
+                                The fully qualified class name of the exporter
+                                <br />
+                                The class of the exporter must implement
+                                <code>org.apache.jmeter.report.dashboard.DataExporter</code>
+                                .
+                            </property>
+                            <property name="filters_only_sample_series" required="No">
+                                Defines whether <code>series_filter</code> (see below)
+                                apply only on sample series.
+                                Default: <code>true</code></property>
+                            <property name="series_filter" required="No">Sets the filter
+                                of series. An empty value deactivates the filtering.
+                                If not empty, regex should end with <code>(-success|-failure)?$</code><br/>
+                                Format: regular expression.
+                                Default: ""
+                            </property>
+                            <property name="show_controllers_only" required="No">
+                                Defines whether only controller series are shown.
+                                Default: <code>false</code>
+                            </property>
+                        </properties>
+                    </subsection>
+
+                    <subsection name="&sect-num;.2.4.2 Specific properties" anchor="specific_export_properties">
+                        <p>
+                            Specific exporter properties must use the prefix
+                            <source>jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.property</source>
+                        </p>
+                        <properties>
+                            <property name="output_dir" required="No">
+                                Sets the destination directory for generated html pages.
+                                Default: <code>report-output</code>
+                            </property>
+                            <property name="template_dir" required="No">
+                                Sets the source directory of template files from
+                                which the html pages are generated.
+                                Default: <code>report-template</code>
+                            </property>
+                        </properties>
+                    </subsection>
+
+                    <subsection name="&sect-num;.2.4.3 Graph properties" anchor="graph_export_properties">
+                        <p>
+                            Graph properties allow exporters to overwrite some graph data.
+                            <br />
+                            They must use the prefix:
+                            <source>jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.graph_options.&lt;graph_id&gt;</source>
+                        </p>
+                        <properties>
+                            <property name="minX" required="No">Sets the minimum
+                                abscissa for the graph.</property>
+                            <property name="maxX" required="No">Sets the maximum
+                                abscissa for the graph.</property>
+                            <property name="minY" required="No">Sets the minimum
+                                ordinate for the graph.</property>
+                            <property name="maxY" required="No">Sets the maximum
+                                ordinate for the graph.</property>
+                        </properties>
+                    </subsection>
+
+                    <subsection name="&sect-num;.2.4.4 Filtering mechanisms" anchor="export_filtering">
+                        <p>
+                            Unlike the filtering in the section
+                            <a href="#configure_general">General properties</a>
+                            which discards data before calculations, here the
+                            filtering is performed after the calculations and serves
+                            to simplify the final report.
+                        </p>
+                        <p>
+                            The property <code>series_filter</code>
+                            allows to filter which series of a graph (resp. rows of
+                            a summary table) using regular expression that matches
+                            the name of the series (resp. of the row).
+                            However, even if the name of the
+                            series (resp. row) matches the filter, the setting
+                            of the other filtering properties can lead to its
+                            discarding. Conversely if there is no matching, the
+                            other properties can allow to keep it.
+                        </p>
+                        <p>
+                            The following tables show how the setting of filtering
+                            properties works.
+                        </p>
+                        <p>
+                            <table>
+                                <caption>Cases of discarding when there is pattern matching</caption>
+                                <thead>
+                                    <tr>
+                                        <th>filter_only_sample_series</th>
+                                        <th>Graph/Summary supports controllers discrimination</th>
+                                        <th>The current series is a controller series</th>
+                                        <th>show_controllers_only</th>
+                                        <th>Discarded</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black" rowspan="8">False</td>
+                                        <td style="border-bottom:1px solid black" rowspan="4">False</td>
+                                        <td style="border-bottom:1px solid black" rowspan="2">-</td>
+                                        <td style="border-bottom:1px solid black">False</td>
+                                        <td style="border-bottom:1px solid black" rowspan="13">False</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black">True</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black" rowspan="2">-</td>
+                                        <td style="border-bottom:1px solid black">False</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black">True</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black" rowspan="4">True</td>
+                                        <td style="border-bottom:1px solid black" rowspan="2">False</td>
+                                        <td style="border-bottom:1px solid black">False</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black">True</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black" rowspan="2">True</td>
+                                        <td style="border-bottom:1px solid black">False</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black">True</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="8">True</td>
+                                        <td style="border-bottom:1px solid black" rowspan="4">False</td>
+                                        <td style="border-bottom:1px solid black" rowspan="2">-</td>
+                                        <td style="border-bottom:1px solid black">False</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black">True</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black" rowspan="2">-</td>
+                                        <td style="border-bottom:1px solid black">False</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black">True</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="4">True</td>
+                                        <td style="border-bottom:1px solid black" rowspan="2">False</td>
+                                        <td style="border-bottom:1px solid black">False</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black">True</td>
+                                        <td style="border-bottom:1px solid black">True</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2">True</td>
+                                        <td style="border-bottom:1px solid black">False</td>
+                                        <td rowspan="2">False</td>
+                                    </tr>
+                                    <tr>
+                                        <td>True</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </p>
+                        <p>
+                            <table>
+                                <caption>Cases of retention when there is no pattern matching</caption>
+                                <thead>
+                                    <tr>
+                                        <th>filter_only_sample_series</th>
+                                        <th>Graph/Summary supports controllers discrimination</th>
+                                        <th>Kept</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black" rowspan="2">False</td>
+                                        <td style="border-bottom:1px solid black">False</td>
+                                        <td style="border-bottom:1px solid black" rowspan="2">False</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:1px solid black">True</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2">True</td>
+                                        <td style="border-bottom:1px solid black">False</td>
+                                        <td style="border-bottom:1px solid black">True</td>
+                                    </tr>
+                                    <tr>
+                                        <td>True</td>
+                                        <td>False</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </p>
+                        <note>
+                            Incorrect filter configuration can lead to generate empty
+                            graphs/summary tables:
+                            <ul>
+                                <li>
+                                    If you set the property
+                                    <code>show_controllers_only</code>
+                                    and the graph is configured to exclude
+                                    controllers.
+                                </li>
+                                <li>
+                                    If the property
+                                    <code>series_filter</code>
+                                    matches none series.
+                                </li>
+                            </ul>
+
+                        </note>
+                    </subsection>
+                </subsection>
+
+                <subsection name="&sect-num;.2.5 Sample configuration" anchor="sample_configuration">
+                    <p>You can copy the following configuration to your user.properties
+                        file in order to test the report generator.</p>
+                    <source>
+# Configure this property to change the report title
+#jmeter.reportgenerator.report_title=Apache JMeter Dashboard
+
+# Change this parameter if you want to change the granularity of over time graphs.
+# Granularity must be higher than 1000 (1second) otherwise Throughput graphs will be incorrect
+# see Bug 60149
+#jmeter.reportgenerator.overall_granularity=60000
+
+ Change this parameter if you want to change the granularity of Response time distribution
+# Set to 100 ms by default
+#jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity=100
+
+# Change this parameter if you want to override the APDEX satisfaction threshold.
+jmeter.reportgenerator.apdex_satisfied_threshold=1500
+
+# Change this parameter if you want to override the APDEX tolerance threshold.
+jmeter.reportgenerator.apdex_tolerated_threshold=3000
+
+# Sets the destination directory for generated html pages, it is better to change it for every generation
+# This will override the value set through -o command line option
+# jmeter.reportgenerator.exporter.html.property.output_dir=/tmp/test-report
+
+# Indicates which graph series are filtered (regular expression)
+# In the below example we filter on Search and Order samples
+# Note that the end of the pattern should always include (-success|-failure)?$
+# Transactions per second suffixes Transactions with "-success" or "-failure" depending 
+# on the result
+#jmeter.reportgenerator.exporter.html.series_filter=^(Search|Order)(-success|-failure)?$
+
+# Indicates whether series filter apply only on sample series
+jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
+                    </source>
+                    <note>
+                        Adapt the parameter
+                        <code>output_dir</code>
+                        to your environment.
+                    </note>
+                    <p>
+                        This configuration allows to generate a report where:
+                        <ul>
+                            <li>Over time graphs have a time granularity equal to 1 minute.</li>
+                            <li>The satisfaction threshold for ADPEX calculation is 1 second and half.</li>
+                            <li>The tolerance threshold for ADPEX calculation is 3 seconds.</li>
+                            <li>The HTML files are generated in the directory <code>/tmp/test-report</code>.</li>
+                            <li>Only series which the name begins with "<code>s0</code>" or "<code>s1</code>" are shown.</li>
+                            <li>The previous filter only applies to graphs (resp. summary tables) where the series (resp. rows) match samples</li>
+                        </ul>
+                    </p>
+                </subsection>
+
+            </subsection>
+
+            <subsection name="&sect-num;.3 Generating reports" anchor="report">
+                <p>
+                    The report generation can be done as a stand alone process from a
+                    sample log file or automatically after running load test.
+                </p>
+
+                <subsection name="&sect-num;.3.1 Generation from an existing sample CSV log file" anchor="report_only">
+                    <p>
+                        Use the following command:
+                        <source>jmeter -g &lt;log file&gt; -o &lt;Path to output folder&gt;</source>
+                    </p>
+                </subsection>
+
+                <subsection name="&sect-num;.3.2 Generation after load test" anchor="report_after_load_test">
+                    <p>
+                        Use the following command:
+                        <source>jmeter -n -t &lt;test JMX file&gt; -l &lt;test log file&gt; -e -o &lt;Path to output folder&gt;</source>
+                    </p>
+                </subsection>
+            </subsection>
+
+            <subsection name="&sect-num;.4 Default graphs" anchor="default_graphs">
+                <note>Due to limitations of this early version, each default graph
+                    must be declared in JMeter properties. Otherwise, the graph
+                    views will be empty.</note>
+
+                <p>
+                    All graphs provided by this report engine are located in the
+                    package
+                    <code>org.apache.jmeter.report.processor.graph.impl</code>
+                </p>
+                <p>The dashboard generator provides the following graph classes:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Graph</th>
+                            <th>Description</th>
+                            <th>Supports controller discrimination</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ActiveThreadsGraphConsumer</td>
+                            <td>This graph represents the number of active threads over time.</td>
+                            <td>False</td>
+                        </tr>
+                        <tr>
+                            <td>BytesThroughputGraphConsumer</td>
+                            <td>This graph represents the throughput of received and sent data
+                                over time.</td>
+                            <td>False</td>
+                        </tr>
+                        <tr>
+                            <td>CodesPerSecondGraphConsumer</td>
+                            <td>This graph represents the rate of response codes over time.</td>
+                            <td>False</td>
+                        </tr>
+                        <tr>
+                            <td>HitsPerSecondGraphConsumer</td>
+                            <td>This graph represents the rate of finished requests over
+                                time.</td>
+                            <td>False</td>
+                        </tr>
+                        <tr>
+                            <td>LatencyOverTimeGraphConsumer</td>
+                            <td>This graph represents the average latency time over time.</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>ConnectTimeOverTimeGraphConsumer</td>
+                            <td>This graph represents the connection time over time.</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>LatencyVSRequestGraphConsumer</td>
+                            <td>This graph represents the median and average latency time
+                                depending on the number of current requests.</td>
+                            <td>False</td>
+                        </tr>
+                        <tr>
+                            <td>ResponseTimeDistributionGraphConsumer</td>
+                            <td>This graph represents the distribution of the samples
+                                depending on their elapsed time and name.</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>ResponseTimeOverTimeGraphConsumer</td>
+                            <td>This graph represents the average response time over time.</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>ResponseTimePercentilesGraphConsumer</td>
+                            <td>This graph represents the percentiles of the elapsed time
+                                over time.</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>ResponseTimePercentilesOverTimeGraphConsumer</td>
+                            <td>This graph shows Min/Max and 3 percentiles response time over time.</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>ResponseTimeVSRequestGraphConsumer</td>
+                            <td>This graph represents the median and average response time
+                                depending on the number of current requests.</td>
+                            <td>False</td>
+                        </tr>
+                        <tr>
+                            <td>TimeVSThreadGraphConsumer</td>
+                            <td>
+                                This graph represents the average response time
+                                depending on the number of current active threads.
+                                <p>
+                                    The *-aggregated series represent the average
+                                    response time regardless of the number of
+                                    current active threads. These series are
+                                    represented by a sole point because the number of
+                                    current active threads is aggregated
+                                    to an average. So for these points:
+                                    <ul>
+                                        <li>The abscissa is the average
+                                            of the number of current active
+                                            threads when samples of the
+                                            series finish.</li>
+                                        <li>The ordinate is the average of the
+                                            response time for the samples of the
+                                            series regardless of the number of current
+                                            active threads.</li>
+                                    </ul>
+                                </p>
+                            </td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>TransactionsPerSecondGraphConsumer</td>
+                            <td>This graph represents the rate of transaction by
+                                sample name over time.</td>
+                            <td>True</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </subsection>
+            <subsection name="&sect-num;.5  Want to improve Report Dashboard ?" anchor="development">
+            If you want to contribute new graphs or improve current ones, you
+            can read this <a href="../devguide-dashboard.html" >developer documentation</a>.<br/>
+            Read this <a href="../building.html" >documentation</a> on contributing.
+            </subsection>
+
+        </section>
+
+    </body>
+</document>
+

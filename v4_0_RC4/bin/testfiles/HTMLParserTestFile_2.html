@@ -1,0 +1,1277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!-- Content Stylesheet for Site -->
+<!-- start the processing -->
+<!-- ====================================================================== -->
+<!-- Main Page Section -->
+<!-- ====================================================================== -->
+<html><head>
+<link rel="stylesheet" type="text/css" href="HTMLParserTestFile_2_files/style.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+<title>JMeter - User's Manual: Elements of a Test Plan</title>
+</head>
+
+<body bgcolor="#ffffff" link="#525D76" text="#000000">
+<table border="0" cellspacing="0">
+<!-- TOP IMAGE -->
+<tbody><tr>
+<td>
+<!-- Need to specify height otherwise iframe seems to grab extra -->
+<iframe src="HTMLParserTestFile_2_files/halfbanner.htm" style="border-width: 0pt; float: left;" frameborder="0" height="102" scrolling="no"></iframe>
+</td>
+<td align="left">
+<a href="http://jakarta.apache.org/"><img src="HTMLParserTestFile_2_files/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0" height="48" width="505"></a>
+</td>
+<td align="right">
+<a href="http://jakarta.apache.org/jmeter/"><img src="HTMLParserTestFile_2_files/logo.jpg" alt="JMeter" title="JMeter" border="0" height="102" width="221"></a>
+</td>
+</tr>
+</tbody></table>
+<table border="0" cellspacing="4" width="100%">
+<tbody><tr><td colspan="2">
+<hr noshade="noshade" size="1">
+</td></tr>
+<tr>
+<!-- LEFT SIDE NAVIGATION -->
+<td nowrap="true" valign="top" width="20%">
+<p><strong>About</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/jmeter/index.html">Overview</a>
+</li>
+<li><a href="http://jakarta.apache.org/jmeter/changes.html">Changes</a>
+</li>
+<li><a href="http://jakarta.apache.org/jmeter/issues.html">Issues</a>
+</li>
+<li><a href="http://www.apache.org/licenses/">License</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+</li>
+</ul>
+<p><strong>Download</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
+</li>
+<li><a href="http://jakarta.apache.org/jmeter/nightly.html">Developer (Nightly) Builds</a>
+</li>
+</ul>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/jmeter/usermanual/index.html">User Manual</a>
+</li>
+<li><a href="http://jakarta.apache.org/jmeter/api/index.html">Javadocs</a>
+</li>
+<li><a href="http://jakarta.apache.org/jmeter/localising/index.html">Localisation (Translator's Guide)</a>
+</li>
+<li><a href="http://jakarta.apache.org/jmeter/building.html">Building JMeter and Add-Ons</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+</li>
+</ul>
+<p><strong>Tutorials (PDF format)</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/jmeter/usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a>
+</li>
+<li><a href="http://jakarta.apache.org/jmeter/usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a>
+</li>
+<li><a href="http://jakarta.apache.org/jmeter/usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a>
+</li>
+<li><a href="http://jakarta.apache.org/jmeter/usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a>
+</li>
+<li><a href="http://jakarta.apache.org/jmeter/extending/jmeter_tutorial.pdf">Extending JMeter</a>
+</li>
+</ul>
+<p><strong>Community</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+</li>
+<li><a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+</li>
+<li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+</li>
+</ul>
+<p><strong>Foundation</strong></p>
+<ul>
+<li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</li>
+<li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</li>
+</ul>
+</td>
+<td align="left" valign="top" width="80%">
+<table>
+<tbody><tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="http://jakarta.apache.org/jmeter/usermanual/index.html"><font color="#ffffff" face="arial,helvetica,sanserif" size="-1">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="http://jakarta.apache.org/jmeter/usermanual/build-web-test-plan.html"><font color="#ffffff" face="arial,helvetica,sanserif" size="-1">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="http://jakarta.apache.org/jmeter/usermanual/build-test-plan.html"><font color="#ffffff" face="arial,helvetica,sanserif" size="-1">Prev</font></a></div>
+</td>
+</tr>
+</tbody></table>
+<br>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<strong>4. Elements of a Test Plan</strong></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+The Test Plan object has a checkbox called "Functional Testing".  If selected, it
+will cause JMeter to record the data returned from the server for each sample.  If you have 
+selected a file in your test listeners, this data will be written to file.  This can be useful if
+you are doing a small run to ensure that JMeter is configured correctly, and that your server
+is returning the expected results.  The consequence is that the file will grow huge quickly, and
+JMeter's performance will suffer.  This option should be off if you are doing stress-testing (it
+is off by default).  
+</p>
+<p>
+If you are not recording the data to file, this option makes no difference.
+</p>
+<p>
+You can also use the Configuration button on a listener to decide what fields to save.
+</p>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="thread_group"><strong>4.1 ThreadGroup</strong></a>
+<a class="sectionlink" href="#thread_group" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Thread group elements are the beginning points of any test plan.
+All controllers and samplers must be under a thread group.
+Other elements, e.g. Listeners, may be placed directly under the test plan,
+in which case they will apply to all the thread groups.  
+As the name implies, the thread group
+element controls the number of threads JMeter will use to execute your test.  The
+controls for a thread group allow you to:
+
+</p><ul>
+<li>
+Set the number of threads
+</li>
+
+
+<li>
+Set the ramp-up period
+</li>
+
+
+<li>
+Set the number of times to execute the test
+</li>
+
+
+</ul>
+<p></p>
+<p>
+Each thread will execute the test plan in its entirety and completely independently
+of other test threads.  Multiple threads are used to simulate concurrent connections
+to your server application.
+</p>
+<p>
+The ramp-up period tells JMeter how long to take to "ramp-up" to the full number of
+threads chosen.  If 10 threads are used, and the ramp-up period is 100 seconds, then
+JMeter will take 100 seconds to get all 10 threads up and running.  Each thread will
+start 10 (100/10) seconds after the previous thread was begun.  If there are 30 threads
+and a ramp-up period of 120 seconds, then each successive thread will be delayed by 4 seconds.
+</p>
+<p>
+Ramp-up needs to be long enough to avoid too large a work-load at the start
+of a test, and short enough that the last threads start running before
+the first ones finish (unless one wants that to happen).
+
+</p>
+<p>
+
+Start with Ramp-up = number of threads and adjust up or down as needed.
+
+</p>
+<p>
+By default, the thread group is configured to loop once through its elements.
+</p>
+<p>
+Version 1.9 introduces a test run 
+<b>
+scheduler
+</b>
+. 
+	Click the checkbox at the bottom of the Thread Group panel to reveal extra fields
+	 in which you can enter the start and end times of the run. 
+	 When the test is started, JMeter will wait if necessary until the start-time has been reached.
+	 At the end of each cycle, JMeter checks if the end-time has been reached, and if so, the run is stopped,
+	 otherwise the test is allowed to continue until the iteration limit is reached.
+</p>
+<p>
+Alternatively, one can use the relative delay and duration fields. 
+	 Note that delay overrides start-time, and duration over-rides end-time.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="controllers"><strong>4.2 Controllers</strong></a>
+<a class="sectionlink" href="#controllers" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+JMeter has two types of Controllers: Samplers and Logical Controllers.
+These drive the processing of a test.
+
+</p>
+<p>
+Samplers tell JMeter to send requests to a server. For
+example, add an HTTP Request Sampler if you want JMeter
+to send an HTTP request.  You can also customize a request by adding one
+or more Configuration Elements to a Sampler.  For more
+information, see
+
+<a href="#samplers">
+Samplers
+</a>
+.
+</p>
+<p>
+Logical Controllers let you customize the logic that JMeter uses to
+decide when to send requests.  For example, you can add an Interleave
+Logic Controller to alternate between two HTTP Request Samplers.
+For more information, see 
+<a href="#logic_controller">
+Logical Controllers
+</a>
+.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="samplers"><strong>4.2.1 Samplers</strong></a>
+<a class="sectionlink" href="#samplers" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+Samplers tell JMeter to send requests to a server and wait for a response.
+They are processed in the order they appear in the tree.
+Controllers can be used to modify the number of repetitions of a sampler.
+
+</p>
+<p>
+
+JMeter samplers include:
+
+</p><ul>
+
+	
+<li>
+FTP Request
+</li>
+
+	
+<li>
+HTTP Request
+</li>
+
+	
+<li>
+JDBC Request
+</li>
+
+	
+<li>
+Java object request
+</li>
+
+	
+<li>
+LDAP Request
+</li>
+
+	
+<li>
+SOAP/XML-RPC Request
+</li>
+
+	
+<li>
+WebService (SOAP) Request
+</li>
+
+
+</ul>
+
+Each sampler has several properties you can set.
+You can further customize a sampler by adding one or more Configuration Elements to the Test Plan.
+
+<p></p>
+<p>
+If you are going to send multiple requests of the same type (for example,
+HTTP Request) to the same server, consider using a Defaults Configuration
+Element. Each controller has one or more Defaults elements (see below). 
+</p>
+<p>
+Remember to add a Listener to your test plan to view and/or store the
+results of your requests to disk.
+</p>
+<p>
+If you are interested in having JMeter perform basic validation on
+the response of your request, add an 
+<a href="#assertions">
+Assertion
+</a>
+ to
+the sampler.  For example, in stress testing a web application, the server
+may return a successful "HTTP Response" code, but the page may have errors on it or
+may be missing sections. You could add assertions to check for certain HTML tags,
+common error strings, and so on. JMeter lets you create these assertions using regular
+expressions.
+</p>
+<p>
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#samplers">
+JMeter's built-in samplers
+</a>
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="logic_controller"><strong>4.2.2 Logic Controllers</strong></a>
+<a class="sectionlink" href="#logic_controller" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Logic Controllers let you customize the logic that JMeter uses to
+decide when to send requests.
+Logic Controllers can change the order of requests coming from their
+child elements.  They can modify the requests themselves, cause JMeter to repeat
+requests, etc.
+
+</p>
+<p>
+To understand the effect of Logic Controllers on a test plan, consider the
+following test tree:
+</p>
+<p>
+
+
+</p><ul>
+
+
+<li>
+Test Plan
+</li>
+
+	
+<ul>
+
+	
+<li>
+Thread Group
+</li>
+
+		
+<ul>
+
+		
+<li>
+Once Only Controller
+</li>
+
+			
+<ul>
+
+			
+<li>
+Login Request (an 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#HTTP_Request">HTTP Request</a>
+)
+</li>
+
+			
+</ul>
+
+		
+<li>
+Load Search Page (HTTP Sampler)
+</li>
+
+		
+<li>
+Interleave Controller
+</li>
+
+			
+<ul>
+
+			
+<li>
+Search "A" (HTTP Sampler)
+</li>
+
+			
+<li>
+Search "B" (HTTP Sampler)
+</li>
+
+			
+<li>
+HTTP default request (Configuration Element)
+</li>
+
+			
+</ul>
+
+		
+<li>
+HTTP default request (Configuration Element)
+</li>
+
+		
+<li>
+Cookie Manager (Configuration Element)
+</li>
+
+		
+</ul>
+
+	
+</ul>
+
+
+</ul>
+
+
+<p></p>
+<p>
+The first thing about this test is that the login request will be executed only
+the first time through.  Subsequent iterations will skip it.  This is due to the
+effects of the 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#Once_Only_Controller">Once Only Controller</a>
+.
+</p>
+<p>
+After the login, the next Sampler loads the search page (imagine a
+web application where the user logs in, and then goes to a search page to do a search).  This
+is just a simple request, not filtered through any Logic Controller.
+</p>
+<p>
+After loading the search page, we want to do a search.  Actually, we want to do
+two different searches.  However, we want to re-load the search page itself between
+each search.  We could do this by having 4 simple HTTP request elements (load search,
+search "A", load search, search "B").  Instead, we use the 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#Interleave_Controller">Interleave Controller</a>
+ which passes on one child request each time through the test.  It keeps the
+ordering (ie - it doesn't pass one on at random, but "remembers" its place) of its
+child elements.  Interleaving 2 child requests may be overkill, but there could easily have
+been 8, or 20 child requests.
+</p>
+<p>
+Note the 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#HTTP_Request_Defaults">HTTP Request Defaults</a>
+ that
+belongs to the Interleave Controller.  Imagine that "Search A" and "Search B" share
+the same PATH info (an HTTP request specification includes domain, port, method, protocol,
+path, and arguments, plus other optional items).  This makes sense - both are search requests,
+ hitting the same back-end search engine (a servlet or cgi-script, let's say).  Rather than
+ configure both HTTP Samplers with the same information in their PATH field, we
+ can abstract that information out to a single Configuration Element.  When the Interleave
+ Controller "passes on" requests from "Search A" or "Search B", it will fill in the blanks with
+ values from the HTTP default request Configuration Element.  So, we leave the PATH field
+ blank for those requests, and put that information into the Configuration Element.  In this
+case, this is a minor benefit at best, but it demonstrates the feature.
+</p>
+<p>
+The next element in the tree is another HTTP default request, this time added to the
+Thread Group itself.  The Thread Group has a built-in Logic Controller, and thus, it uses
+this Configuration Element exactly as described above.  It fills in the blanks of any
+Request that passes through.  It is extremely useful in web testing to leave the DOMAIN
+field blank in all your HTTP Sampler elements, and instead, put that information
+into an HTTP default request element, added to the Thread Group.  By doing so, you can
+test your application on a different server simply by changing one field in your Test Plan.
+Otherwise, you'd have to edit each and every Sampler.
+</p>
+<p>
+The last element is a 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#HTTP_Cookie_Manager">HTTP Cookie Manager</a>
+.  A Cookie Manager should be added to all web tests - otherwise JMeter will
+ignore cookies.  By adding it at the Thread Group level, we ensure that all HTTP requests
+will share the same cookies.
+</p>
+<p>
+Logic Controllers can be combined to achieve various results.  See the list of 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#logic_controllers">
+built-in
+Logic Controllers
+</a>
+.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="test_fragments"><strong>4.2.3 Test Fragments</strong></a>
+<a class="sectionlink" href="#test_fragments" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+The Test Fragment element is a special type of 
+<a href="#controllers">
+controller
+</a>
+ that
+exists on the Test Plan tree at the same level as the Thread Group element.  It is distinguished
+from a Thread Group in that it is not executed unless it is 
+referenced by either a 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#Module_Controller">Module Controller</a>
+ or an 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#Include_Controller">Include_Controller</a>
+.
+
+</p>
+<p>
+This element is purely for code re-use within Test Plans and was introduced in Version 2.5
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="listeners"><strong>4.3 Listeners</strong></a>
+<a class="sectionlink" href="#listeners" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Listeners provide access to the information JMeter gathers about the test cases while
+JMeter runs.  The  
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#Graph_Results">Graph Results</a>
+ listener plots the response times on a graph.  
+The "View Results Tree" Listener shows details of sampler requests and 
+responses, and can display basic HTML and XML representations of the 
+response.
+Other listeners provide summary or aggregation information.
+
+</p>
+<p>
+
+Additionally, listeners can direct the data to a file for later use.  
+Every listener in JMeter provides a field to indicate the file to store data to.
+There is also a Configuration button which can be used to choose which fields to save, and whether to use CSV or XML format.
+
+<b>
+Note that all Listeners save the same data; the only difference is in the way the data is presented on the screen.
+</b>
+
+
+</p>
+<p>
+
+Listeners can be added anywhere in the test, including directly under the test plan.
+They will collect data only from elements at or below their level.
+
+</p>
+<p>
+There are several 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#listeners">
+listeners
+</a>
+
+that come with JMeter.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="timers"><strong>4.4 Timers</strong></a>
+<a class="sectionlink" href="#timers" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+By default, a JMeter thread sends requests without pausing between each request.
+We recommend that you specify a delay by adding one of the available timers to
+your Thread Group. If you do not add a delay, JMeter could overwhelm your server by
+making too many requests in a very short amount of time.
+</p>
+<p>
+The timer will cause JMeter to delay a certain amount of time 
+<b>
+before
+</b>
+ each
+sampler which is in its 
+<a href="#scoping_rules">
+scope
+</a>
+.
+</p>
+<p>
+
+If you choose to add more than one timer to a Thread Group, JMeter takes the sum of
+the timers and pauses for that amount of time before executing the samplers to which the timers apply.
+Timers can be added as children of samplers or controllers in order to restrict the samplers to which they are applied.
+
+</p>
+<p>
+
+To provide a pause at a single place in a test plan, one can use the 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#Test_Action">Test Action</a>
+ Sampler.
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="assertions"><strong>4.5 Assertions</strong></a>
+<a class="sectionlink" href="#assertions" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Assertions allow you to assert facts about responses received from the
+server being tested. Using an assertion, you can essentially "test" that your
+application is returning the results you expect it to. 
+</p>
+<p>
+For instance, you can assert that the response to a query will contain some
+particular text. The text you specify can be a Perl-style regular expression, and
+you can indicate that the response is to contain the text, or that it should match
+the whole response.
+</p>
+<p>
+You can add an assertion to any Sampler. For example, you can
+add an assertion to a HTTP Request that checks for the text, "&lt;/HTML&gt;".  JMeter
+will then check that the text is present in the HTTP response.  If JMeter cannot find the
+text, then it will mark this as a failed request.
+</p>
+<p>
+
+Note that assertions apply to all samplers which are in its 
+<a href="#scoping_rules">
+scope
+</a>
+.
+To restrict the assertion to a single sampler, add the assertion as a child of the sampler.
+
+</p>
+<p>
+To view the assertion results, add an Assertion Listener to the Thread Group.
+Failed Assertions will also show up in the Tree View and Table Listeners, 
+and will count towards the error %age for example in the Aggregate and Summary reports.
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="config_elements"><strong>4.6 Configuration Elements</strong></a>
+<a class="sectionlink" href="#config_elements" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+A configuration element works closely with a Sampler.  Although it does not send requests
+(except for 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#HTTP_Proxy_Server">HTTP Proxy Server</a>
+), it can add to or modify requests.
+</p>
+<p>
+A configuration element is accessible from only inside the tree branch where you place the element.
+For example, if you place an HTTP Cookie Manager inside a Simple Logic Controller, the Cookie Manager will
+only be accessible to HTTP Request Controllers you place inside the Simple Logic Controller (see figure 1).
+The Cookie Manager is accessible to the HTTP requests "Web Page 1" and "Web Page 2", but not "Web Page 3".  
+</p>
+<p>
+Also, a configuration element inside a tree branch has higher precedence than the same element in a "parent"
+branch.  For example, we defined two HTTP Request Defaults elements, "Web Defaults 1" and "Web Defaults 2".
+Since we placed "Web Defaults 1" inside a Loop Controller, only "Web Page 2" can access it.  The other HTTP
+requests will use "Web Defaults 2", since we placed it in the Thread Group (the "parent" of all other branches).
+</p>
+<p></p><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><img src="HTMLParserTestFile_2_files/http-config-example.png"><br>
+<font size="-1">Figure 1 -
+	Test Plan Showing Accessibility of Configuration Elements
+</font></td></tr></tbody></table><p></p>
+<p>
+</p><table bgcolor="#bbbb00" border="1" cellpadding="2" cellspacing="0" width="50%">
+<tbody><tr><td>
+The 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#User_Defined_Variables">User Defined Variables</a>
+ Configuration element is different. 
+It is processed at the start of a test, no matter where it is placed.
+For simplicity, it is suggested that the element is placed only at the start of a Thread Group.
+
+</td></tr>
+</tbody></table>
+<p></p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="preprocessors"><strong>4.7 Pre-Processor Elements</strong></a>
+<a class="sectionlink" href="#preprocessors" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+A Pre-Processor executes some action prior to a Sampler Request being 
+made. 
+If a Pre-Processor is attached to a Sampler element, then it will 
+execute just prior to that sampler element running. 
+A Pre-Processor is most often used to modify the settings of a Sample 
+Request just before it runs, or to update variables that aren't 
+extracted from response text.  
+See the 
+<a href="http://jakarta.apache.org/jmeter/usermanual/build-test-plan.html#scoping_rules">
+<b>
+scoping rules
+</b>
+</a>
+ for more details on when Pre-Processors are executed.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="postprocessors"><strong>4.8 Post-Processor Elements</strong></a>
+<a class="sectionlink" href="#postprocessors" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+A Post-Processor executes some action after a Sampler Request has been made.
+If a Post-Processor is attached to a Sampler element, then it will execute just after that sampler element runs.
+A Post-Processor is most often used to process the response data, often to extract values from it.  
+See the 
+<a href="http://jakarta.apache.org/jmeter/usermanual/build-test-plan.html#scoping_rules">
+<b>
+scoping rules
+</b>
+</a>
+ for more details on when Post-Processors are executed.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="executionorder"><strong>4.9 Execution order</strong></a>
+<a class="sectionlink" href="#executionorder" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<ol start="0">
+
+
+<li>
+Configuration elements
+</li>
+
+
+<li>
+Pre-Processors
+</li>
+
+
+<li>
+Timers
+</li>
+
+
+<li>
+Sampler
+</li>
+
+
+<li>
+Post-Processors (unless SampleResult is null)
+</li>
+
+
+<li>
+Assertions (unless SampleResult is null)
+</li>
+
+
+<li>
+Listeners (unless SampleResult is null)
+</li>
+
+
+</ol>
+<p>
+</p><table bgcolor="#bbbb00" border="1" cellpadding="2" cellspacing="0" width="50%">
+<tbody><tr><td>
+Please note that Timers, Assertions, Pre- and Post-Processors are only processed if there is a sampler to which they apply.
+Logic Controllers and Samplers are processed in the order in which they appear in the tree. 
+Other test elements are processed according to the scope in which they are found, and the type of test element.
+[Within a type, elements are processed in the order in which they appear in the tree].
+
+</td></tr>
+</tbody></table>
+<p></p>
+<p>
+
+For example, in the following test plan:
+
+</p><ul>
+
+
+<li>
+Controller
+</li>
+
+
+<ul>
+
+
+<li>
+Post-Processor 1
+</li>
+
+
+<li>
+Sampler 1
+</li>
+
+
+<li>
+Sampler 2
+</li>
+
+
+<li>
+Timer 1
+</li>
+
+
+<li>
+Assertion 1
+</li>
+
+
+<li>
+Pre-Processor 1
+</li>
+
+
+<li>
+Timer 2
+</li>
+
+
+<li>
+Post-Processor 2
+</li>
+
+
+</ul>
+
+
+</ul>
+
+The order of execution would be:
+
+<pre>
+Pre-Processor 1
+Timer 1
+Timer 2
+Sampler 1
+Post-Processor 1
+Post-Processor 2
+Assertion 1
+
+Pre-Processor 1
+Timer 1
+Timer 2
+Sampler 2
+Post-Processor 1
+Post-Processor 2
+Assertion 1
+
+</pre>
+
+
+<p></p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="scoping_rules"><strong>4.10 Scoping Rules</strong></a>
+<a class="sectionlink" href="#scoping_rules" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+The JMeter test tree contains elements that are both hierarchical and 
+ordered.  Some elements in the test trees are strictly hierarchical 
+(Listeners, Config Elements, Post-Procesors, Pre-Processors, Assertions,
+ Timers), and some are primarily ordered (controllers, samplers).  When 
+you create your test plan, you will create an ordered list of sample 
+request (via Samplers) that represent a set of steps to be executed.  
+These requests are often organized within controllers that are also 
+ordered.  Given the following test tree:
+</p>
+<p></p><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><img src="HTMLParserTestFile_2_files/scoping1.png"><br>
+<font size="-1">Example test tree
+</font></td></tr></tbody></table><p></p>
+<p>
+The order of requests will be, One, Two, Three, Four.
+</p>
+<p>
+Some controllers affect the order of their subelements, and you can read about these specific controllers in 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html">
+the component reference
+</a>
+.
+</p>
+<p>
+Other elements are hierarchical.  An Assertion, for instance, is hierarchical in the test tree.  
+If its parent is a request, then it is applied to that request. If its
+parent is a Controller, then it affects all requests that are descendants of
+that Controller.  In the following test tree:
+</p>
+<p></p><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><img src="HTMLParserTestFile_2_files/scoping2.png"><br>
+<font size="-1">Hierarchy example
+</font></td></tr></tbody></table><p></p>
+<p>
+Assertion #1 is applied only to Request One, while Assertion #2 is applied to Requests Two and Three.
+</p>
+<p>
+Another example, this time using Timers:
+</p>
+<p></p><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><img src="HTMLParserTestFile_2_files/scoping3.png"><br>
+<font size="-1">complex example
+</font></td></tr></tbody></table><p></p>
+<p>
+In this example, the requests are named to reflect the order in which 
+they will be executed.  Timer #1 will apply to Requests Two, Three, and 
+Four (notice how order is irrelevant for hierarchical elements).  
+Assertion #1 will apply only to Request Three.  Timer #2 will affect all
+ the requests.
+</p>
+<p>
+Hopefully these examples make it clear how configuration (hierarchical) 
+elements are applied.  If you imagine each Request being passed up the 
+tree branches, to its parent, then to its parent's parent, etc, and each
+ time collecting all the configuration elements of that parent, then you
+ will see how it works.  
+</p>
+<b>
+
+The Configuration elements Header Manager, Cookie Manager and Authorization manager are
+treated differently from the Configuration Default elements.
+The settings from the Configuration Default elements are merged into a set of values that the Sampler has access to.
+However, the settings from the Managers are not merged.
+If more than one Manager is in the scope of a Sampler, 
+only one Manager is used, but there is currently no way to specify 
+<b>
+which
+</b>
+ is used.
+
+</b>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="properties"><strong>4.11 Properties and Variables</strong></a>
+<a class="sectionlink" href="#properties" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+JMeter 
+<b>
+properties
+</b>
+ are defined in jmeter.properties (see 
+<a href="http://jakarta.apache.org/jmeter/usermanual/get-started.html#configuring_jmeter">
+Gettting Started - Configuring JMeter
+</a>
+ for more details).
+
+<br>
+<br>
+
+Properties are global to jmeter, and are mostly used to define some of the defaults JMeter uses.
+For example the property remote_hosts defines the servers that JMeter will try to run remotely.
+Properties can be referenced in test plans 
+- see 
+<a href="http://jakarta.apache.org/jmeter/usermanual/functions.html#__property">
+Functions - read a property
+</a>
+ -
+but cannot be used for thread-specific values.
+
+</p>
+<p>
+
+JMeter 
+<b>
+variables
+</b>
+ are local to each thread. The values may be the same for each thread, or they may be different.
+
+<br>
+<br>
+
+If a variable is updated by a thread, only the thread copy of the variable is changed.
+For example the 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#Regular_Expression_Extractor">Regular Expression Extractor</a>
+ Post-Processor 
+will set its variables according to the sample that its thread has read, and these can be used later
+by the same thread.
+For details of how to reference variables and functions, see 
+<a href="http://jakarta.apache.org/jmeter/usermanual/functions.html">
+Functions and Variables
+</a>
+
+
+</p>
+<p>
+
+Note that the values defined by the 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#Test_Plan">Test Plan</a>
+  and the 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#User_Defined_Variables">User Defined Variables</a>
+ configuration element
+are made available to the whole test plan at startup. 
+If the same variable is defined by multiple UDV elements, then the last one takes effect.
+Once a thread has started, the initial set of variables is copied to each thread.
+Other elements such as the 
+
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#User_Parameters">User Parameters</a>
+ Pre-Processor or 
+<a href="http://jakarta.apache.org/jmeter/usermanual/component_reference.html#Regular_Expression_Extractor">Regular Expression Extractor</a>
+ Post-Processor
+may be used to redefine the same variables (or create new ones). These redefinitions only apply to the current thread.
+
+</p>
+<p>
+
+The 
+<a href="http://jakarta.apache.org/jmeter/usermanual/functions.html#__setProperty">
+setProperty
+</a>
+ function can be used to define a JMeter property.
+These are global to the test plan, so can be used to pass information between threads - should that be needed.
+
+</p>
+<p>
+</p><table bgcolor="#bbbb00" border="1" cellpadding="2" cellspacing="0" width="50%">
+<tbody><tr><td>Both variables and properties are case-sensitive.
+</td></tr>
+</tbody></table>
+<p></p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tbody><tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="using_variables"><strong>4.12 Using Variables to parameterise tests</strong></a>
+<a class="sectionlink" href="#using_variables" title="Link to here">¶</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+Variables don't have to vary - they can be defined once, and if left alone, will not change value.
+So you can use them as short-hand for expressions that appear frequently in a test plan.
+Or for items which are constant during a run, but which may vary between runs.
+For example, the name of a host, or the number of threads in a thread group.
+
+</p>
+<p>
+
+When deciding how to structure a Test Plan, 
+make a note of which items are constant for the run, but which may change between runs.
+Decide on some variable names for these - 
+perhaps use a naming convention such as prefixing them with C_ or K_ or using uppercase only
+to distinguish them from variables that need to change during the test.
+Also consider which items need to be local to a thread - 
+for example counters or values extracted with the Regular Expression Post-Processor.
+You may wish to use a different naming convention for these.
+
+</p>
+<p>
+
+For example, you might define the following on the Test Plan:
+
+</p><pre>
+HOST             www.example.com
+THREADS          10
+LOOPS            20
+
+</pre>
+
+You can refer to these in the test plan as ${HOST} ${THREADS} etc.
+If you later want to change the host, just change the value of the HOST variable.
+This works fine for small numbers of tests, but becomes tedious when testing lots of different combinations.
+One solution is to use a property to define the value of the variables, for example:
+
+<pre>
+HOST             ${__P(host,www.example.com)}
+THREADS          ${__P(threads,10)}
+LOOPS            ${__P(loops,20)}
+
+</pre>
+
+You can then change some or all of the values on the command-line as follows:
+
+<pre>
+jmeter ... -Jhost=www3.example.org -Jloops=13
+
+</pre>
+
+
+<p></p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+</blockquote>
+<p></p>
+</td></tr>
+<tr><td><br></td></tr>
+</tbody></table>
+<table>
+<tbody><tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="http://jakarta.apache.org/jmeter/usermanual/index.html"><font color="#ffffff" face="arial,helvetica,sanserif" size="-1">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="http://jakarta.apache.org/jmeter/usermanual/build-web-test-plan.html"><font color="#ffffff" face="arial,helvetica,sanserif" size="-1">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="http://jakarta.apache.org/jmeter/usermanual/build-test-plan.html"><font color="#ffffff" face="arial,helvetica,sanserif" size="-1">Prev</font></a></div>
+</td>
+</tr>
+</tbody></table>
+<br>
+</td>
+</tr>
+<tr><td colspan="2">
+<hr noshade="noshade" size="1">
+</td></tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1"><em>
+Copyright © 1999-2011, Apache Software Foundation
+</em></font></div>
+</td></tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</tbody></table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
+<!-- end the processing -->

@@ -1,0 +1,239 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '27'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document prev="jmeter_proxy_step_by_step.html" next="jmeter_accesslog_sampler_step_by_step.html" id="$Id$">
+
+<properties>
+  <author email="dev@jmeter.apache.org">JMeter developers</author>
+  <title>JUnit Sampler Tutorial</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. JUnit Sampler Tutorial" anchor="junit">
+
+<p>
+This tutorial attempts to explain the basic design, functionality and usage of the new JUnit Sampler for JMeter.
+The sampler was introduced in version 2.1.2 release of JMeter. Earlier releases do not have the sampler.
+</p>
+
+<subsection name="&sect-num;.1 Design" anchor="design">
+
+<p>
+The current implementation supports standard JUnit convention and extensions, like <code>oneTimeSetUp</code>
+and <code>oneTimeTearDown</code>. Other features can be added on request. The sampler works like the JavaSampler
+with some differences.
+</p>
+
+<ul>
+  <li>Rather than use JMeter's test interface, it scans the jar files for classes extending JUnit's
+      <code>TestCase</code> class. This means any class or subclass.</li>
+  <li>JUnit test jar files are copied to <code>jmeter/lib/junit</code> instead of
+      <code>jmeter/lib</code></li>
+  <li>JUnit sampler does not use name/value pairs for configuration. The sampler assumes
+      <code>setUp</code> and <code>tearDown</code> will configure the test correctly.
+      <note>Note: <code>setUp</code> and <code>tearDown</code> methods must be declared <code>public</code>,
+       so that JMeter can use it.</note>
+  </li>
+  <li>The sampler measures the elapsed time only for the test method and does not include
+      <code>setUp</code> and <code>tearDown</code>.
+  </li>
+  <li>Each time the test method is called, JMeter will pass the result to the listeners.</li>
+  <li>Support for <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code> is done as a method.
+      Since JMeter is multi-threaded, we cannot call <code>oneTimeSetUp</code>/<code>oneTimeTearDown</code>
+      the same way maven does it.</li>
+  <li>The sampler reports unexpected exceptions as errors.</li>
+</ul>
+
+</subsection>
+
+<subsection name="&sect-num;.2 Functionality" anchor="functionality">
+
+<p>
+Here is a description of the functionality.
+</p>
+
+<dl>
+  <dt>Name</dt><dd>name for the sample. This is the same as all JMeter samplers.</dd>
+  <dt>Package Filter</dt><dd>provides a way to filter the classes by package name.</dd>
+  <dt>Classname</dt><dd>the name of the class to test. The sampler will scan the jar files in
+      <code>jmeter/lib/ext</code> and <code>jmeter/lib/junit</code> for classes extending
+      JUnit's <code>TestCase</code>.</dd>
+  <dt>Constructor String</dt><dd>a string to pass to the string constructor of the test class.</dd>
+  <dt>Test Method</dt><dd>the name of the method to test in the sampler.</dd>
+  <dt>Success message</dt><dd>a descriptive message indicating what success means.</dd>
+  <dt>Success code</dt><dd>an unique code indicating the test was successful.</dd>
+  <dt>Failure message</dt><dd>a descriptive message indicating what failure means.</dd>
+  <dt>Failure code</dt><dd>an unique code indicating the test failed</dd>
+  <dt>Error message</dt><dd>a description for errors</dd>
+  <dt>Error code</dt><dd>some code for errors. Does not need to be unique</dd>
+  <dt>Do not call <code>setUp</code> and <code>tearDown</code></dt><dd>set the sampler not
+      to call <code>setUp</code> and <code>tearDown</code>. By default, <code>setUp</code> and
+      <code>tearDown</code> should be called. Not calling those methods could affect the test and
+      make it inaccurate. This option should be used with caution.
+      <note>If the selected method is <code>oneTimeSetUp</code> or <code>oneTimeTearDown</code>,
+      this option should be checked.</note></dd>
+  <dt>Append assertion error</dt><dd>By default, the sampler will not append the assert failures
+      to the failure message. To see the message in the result tree, check the option.</dd>
+  <dt>Append runtime exception</dt><dd>By default, the sampler will not append the exceptions
+      to the failure message. To see the stacktrace, check the option</dd>
+</dl>
+
+<figure width="397" height="536" image="junit_sampler.png">JUnit Request</figure>
+
+<p>
+The current implementation of the sampler will try to create an instance using the string constructor
+first. If the test class does not declare a string constructor, the sampler will look for an empty
+constructor. Example below:
+</p>
+
+<example title="Constructor Examples" anchor="constructor-examples">
+Empty Constructor:
+<source>
+public class myTestCase {
+  public myTestCase() {}
+}
+</source>
+
+String Constructor:
+<source>
+public class myTestCase {
+  public myTestCase(String text) {
+    super(text);
+  }
+}
+</source>
+</example>
+
+<p>
+By default, JMeter will provide some default values for the success/failure code and message.
+Users should define a set of unique success and failure codes and use them uniformly across all tests.
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.3 Usage" anchor="usage">
+
+<p>
+Here is a short step-by-step.
+</p>
+
+<ol>
+  <li>Write your JUnit test and jar the classes</li>
+  <li>Copy and paste the jar files into <code>jmeter/lib/junit</code> directory</li>
+  <li>Start JMeter</li>
+  <li>Select <code>Test Plan</code></li>
+  <li>Right click
+     <menuchoice>
+       <guimenuitem>Add</guimenuitem>
+       <guimenuitem>Thread Group</guimenuitem>
+     </menuchoice></li>
+  <li>Select <code>Thread Group</code></li>
+  <li>Right click
+      <menuchoice>
+        <guimenuitem>Add</guimenuitem>
+        <guimenuitem>Sampler</guimenuitem>
+        <guimenuitem>JUnit Request</guimenuitem>
+      </menuchoice></li>
+  <li>Enter <code>my unit test</code> in the name</li>
+  <li>Enter the package of your JUnit test</li>
+  <li>Select the class you want to test</li>
+  <li>Select a method to test</li>
+  <li>Enter <code>test successful</code> in success message</li>
+  <li>Enter <code>1000</code> in success code</li>
+  <li>Enter <code>test failed</code> in failure message</li>
+  <li>Enter <code>0001</code> in failure code</li>
+  <li>Select the Thread Group</li>
+  <li>Right click
+      <menuchoice>
+        <guimenuitem>Add</guimenuitem>
+        <guimenuitem>Listener</guimenuitem>
+        <guimenuitem>View Results Tree</guimenuitem>
+      </menuchoice></li>
+</ol>
+
+<p>
+One benefit of the JUnit sampler is it allows the user to select any method from a variety
+of unit tests to create a test plan. This should reduce the amount of code an user needs to
+write to create a variety of test scenarios. From a basic set of test methods, different
+sequences and tests can be created using JMeter's GUI.
+</p>
+
+<p>
+For example:
+</p>
+
+<p>
+Test Plan1
+<source>
+TestCase1.testImportCustomer
+TestCase2.testUpdateRandomCustomer
+TestCase1.testSelect100
+TestCase2.testUpdateOrder
+TestCase1.testSelect1000
+</source>
+</p>
+
+<p>
+TestPlan2
+<source>
+TestCase1.testImportCustomer
+TestCase1.testSelect100
+TestCase1.testSelect1000
+TestCase2.testAdd100Customers
+</source>
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.4 General Guidelines" anchor="guidelines">
+
+<p>
+Here are some general guidelines for writing JUnit tests so they work well with JMeter. Since JMeter
+runs multi-threaded, it is important to keep certain things in mind.
+</p>
+
+<ul>
+  <li>Write the <code>setUp</code> and <code>tearDown</code> methods so they are thread safe. This
+      generally means avoid using static members.</li>
+  <li>Make the test methods discrete units of work and not long sequences of actions. By keeping
+      the test method to a discrete operation, it makes it easier to combine test methods to create
+      new test plans.</li>
+  <li>Avoid making test methods depend on each other. Since JMeter allows arbitrary sequencing of
+      test methods, the runtime behavior is different than the default JUnit behavior.</li>
+  <li>If a test method is configurable, be careful about where the properties are stored. Reading
+      the properties from the Jar file is recommended.</li>
+  <li>Each sampler creates an instance of the test class, so write your test so the setup happens
+      in <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code>.</li>
+  <li>If you select a class and no methods show up, it means the sampler had a problem creating an
+      instance of the test class. The best way to debug this is to add some <code>System.out</code>
+      to your class constructor and see what is happening.</li>
+</ul>
+
+</subsection>
+
+</section>
+
+</body>
+
+</document>

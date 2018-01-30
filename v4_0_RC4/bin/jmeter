@@ -1,0 +1,188 @@
+#! /bin/sh
+
+##   Licensed to the Apache Software Foundation (ASF) under one or more
+##   contributor license agreements.  See the NOTICE file distributed with
+##   this work for additional information regarding copyright ownership.
+##   The ASF licenses this file to You under the Apache License, Version 2.0
+##   (the "License"); you may not use this file except in compliance with
+##   the License.  You may obtain a copy of the License at
+##
+##       http://www.apache.org/licenses/LICENSE-2.0
+##
+##   Unless required by applicable law or agreed to in writing, software
+##   distributed under the License is distributed on an "AS IS" BASIS,
+##   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+##   See the License for the specific language governing permissions and
+##   limitations under the License.
+
+##   ==============================================
+##   Environment variables:
+##   JVM_ARGS - optional java args, e.g. -Dprop=val
+##
+##   e.g.
+##   JVM_ARGS="-Xms1g -Xmx1g" jmeter etc.
+##
+##   Do not set the variables in this script. Instead put them into a script
+##   setenv.sh in JMETER_HOME/bin to keep your customizations separate.
+##
+##   JAVA_HOME        Must point at your Java Development Kit installation.
+##                    Required to run the with the "debug" argument.
+##
+##   JRE_HOME         Must point at your Java Runtime installation.
+##                    Defaults to JAVA_HOME if empty. If JRE_HOME and JAVA_HOME
+##                    are both empty, JMeter will try to guess JAVA_HOME.
+##                    If JRE_HOME and JAVA_HOME are both set, JAVA_HOME is used.
+##
+##   JMETER_GC_ALGO   (Optional) Java runtime options to specify JVM garbage collection
+##                    algorithm
+##                    Defaults to "-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20"
+##
+##   JMETER_HEAP      (Optional) Java runtime options for memory management
+##                    used when JMeter is started.
+##                    Defaults to "-Xms1g -Xmx1g -X:MaxMetaspaceSize=256m"
+##
+##   JMETER_HOME      (Optional) May point to your JMeter install dir. If empty
+##                    it will be set relativ to this script.
+##
+##   JMETER_LANGUAGE  (Optional) Java runtime options to specify used language
+##                    Defaults to "-Duser.language=en -Duser.region=EN"
+##
+##   JMETER_OPTS      (Optional) Java runtime options used when JMeter is started.
+##                    Special options for operating systems might be added by JMeter.
+##
+##   ==============================================
+
+# resolve links - $0 may be a softlink (code as used by Tomcat)
+# N.B. readlink would be a lot simpler but is not supported on Solaris
+PRG="$0"
+
+while [ -h "$PRG" ]; do
+  ls=`ls -ld "$PRG"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '/.*' > /dev/null; then
+    PRG="$link"
+  else
+    PRG=`dirname "$PRG"`/"$link"
+  fi
+done
+
+PRGDIR=`dirname "$PRG"`
+
+# Only set JMETER_HOME if not already set
+[ -z "$JMETER_HOME" ] && JMETER_HOME=`cd "$PRGDIR/.." >/dev/null; pwd`
+
+if [ -r "${JMETER_HOME}/bin/setenv.sh" ]; then
+  . "${JMETER_HOME}/bin/setenv.sh"
+fi
+
+# Make sure prerequisite environment variables are set
+if [ -z "$JAVA_HOME" -a -z "$JRE_HOME" ]; then
+  if [ "`uname`" = "Darwin" ]; then
+    #
+    if [ -x '/usr/libexec/java_home' ] ; then
+      export JAVA_HOME=`/usr/libexec/java_home`
+    #
+    elif [ -d "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home" ]; then
+      export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
+    fi
+  else
+    JAVA_PATH=`which java 2>/dev/null`
+    if [ "x$JAVA_PATH" != "x" ]; then
+      JAVA_PATH=`dirname $JAVA_PATH 2>/dev/null`
+      JRE_HOME=`dirname $JAVA_PATH 2>/dev/null`
+    fi
+    if [ "x$JRE_HOME" = "x" ]; then
+      # XXX: Should we try other locations?
+      if [ -x /usr/bin/java ]; then
+        JRE_HOME=/usr
+      fi
+    fi
+  fi
+  if [ -z "$JAVA_HOME" -a -z "$JRE_HOME" ]; then
+    echo "Neither the JAVA_HOME nor the JRE_HOME environment variable is defined"
+    echo "At least one of these environment variable is needed to run this program"
+    exit 1
+  fi
+fi
+if [ -z "$JAVA_HOME" -a "$1" = "debug" ]; then
+  echo "JAVA_HOME should point to a JDK in order to run in debug mode."
+  exit 1
+fi
+if [ -z "$JRE_HOME" ]; then
+  JRE_HOME="$JAVA_HOME"
+fi
+if [ -z "$JAVA_HOME" ]; then
+  JAVA_HOME="$JRE_HOME"
+fi
+
+#--add-modules java.activation if JAVA 9
+ADD_MODS=
+
+# Minimal version to run JMeter
+MINIMAL_VERSION=8
+
+# Check if version is from OpenJDK or Oracle Hotspot JVM prior to 9 containing 1.${version}.x
+CURRENT_VERSION=`"${JAVA_HOME}/bin/java" -version 2>&1 | awk -F'"' '/version/ {gsub("^1[.]", "", $2); gsub("[^0-9].*$", "", $2); print $2}'`
+
+# Check if Java is present and the minimal version requirement
+if [ "$CURRENT_VERSION" -gt "$MINIMAL_VERSION" ]; then
+    ADD_MODS="--add-modules java.activation"
+fi
+
+: "${JMETER_OPTS:=""}"
+case `uname` in
+   Darwin*)
+   # Add Mac-specific property - should be ignored elsewhere (Bug 47064)
+   JMETER_OPTS="${JMETER_OPTS} -Xdock:name=JMeter -Xdock:icon=\"${PRGDIR}/../docs/images/jmeter_square.png\" -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"
+   ;;
+esac
+
+
+#
+# Original page has disappeared, it is now only available at:
+# https://web.archive.org/web/20060614151434/http://www.atg.com/portal/myatg/developer?paf_dm=full&paf_gear_id=1100010&detailArticle=true&id=9606
+#
+# JMeter objects can generally be grouped into three life-length groups:
+#
+# - Per-sample objects (results, DOMs,...). An awful lot of those.
+#   Life length of milliseconds to a few seconds.
+#
+# - Per-run objects (threads, listener data structures,...). Not that many
+#   of those unless we use the table or tree listeners on heavy runs.
+#   Life length of minutes to several hours, from creation to start of next run.
+#
+# - Per-work-session objects (test plans, GUIs,...).
+#   Life length: for the life of the JVM.
+
+# This is the base heap size -- you may increase or decrease it to fit your
+# system's memory availability:
+: "${JMETER_HEAP:="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"}"
+
+# Set language
+# Default to en_EN
+: "${JMETER_LANGUAGE:="-Duser.language=en -Duser.region=EN"}"
+
+# Uncomment this to generate GC verbose file with Java prior to 9
+# VERBOSE_GC="-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintAdaptiveSizePolicy -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps"
+
+# Uncomment this to generate GC verbose file with Java 9 and above
+# VERBOSE_GC="-Xlog:gc*,gc+age=trace,gc+heap=debug:file=gc_jmeter_%p.log"
+
+# Uncomment this if you run JMeter in DOCKER (need Java SE 8u131 or JDK 9)
+# see https://blogs.oracle.com/java-platform-group/java-se-support-for-docker-cpu-and-memory-limits
+# RUN_IN_DOCKER="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
+
+# Finally, some tracing to help in case things go astray:
+# You may want to add those settings:
+# -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem
+: "${JMETER_GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20"}"
+
+
+# Always dump on OOM (does not cost anything unless triggered)
+DUMP="-XX:+HeapDumpOnOutOfMemoryError"
+SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom"
+SERVER="-server"
+
+ARGS="$SERVER $DUMP $JMETER_HEAP $VERBOSE_GC $JMETER_GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
+
+"$JAVA_HOME/bin/java" $ADD_MODS $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"

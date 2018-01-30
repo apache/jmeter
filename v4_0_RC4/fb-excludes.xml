@@ -1,0 +1,85 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<FindBugsFilter>
+     <Match classregex=".*\.PackageTest">
+        <BugCode name="OS"/>
+     </Match>
+     <Match classregex=".*\$Test">
+        <BugCode name="OS"/>
+     </Match> 
+     <Match classregex=".*" >
+        <!--
+        EI,EI2 - may expose internal representation
+        IS2 - Inconsistent synchronisation
+        MS - mutable static field
+        Se - serialisation
+        SIC - should be static inner class?
+        HE - hashcode/equals
+        -->  
+       <BugCode name="EI,EI2,HE" />
+     </Match>
+   
+     <Match>
+          <Class name="org.apache.jmeter.engine.RemoteJMeterEngineImpl" />
+          <Method name="rexit" />
+          <Bug pattern="DM_GC" />
+     </Match>
+     <Match>
+          <Class name="org.apache.jmeter.engine.StandardJMeterEngine" />
+          <Method name="run" />
+          <Bug pattern="DM_GC" />
+     </Match>
+     <Match>
+          <Class name="org.apache.jmeter.protocol.jdbc.AbstractJDBCTestElement" />
+          <Method name="getPreparedStatement" />
+          <Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
+     </Match>
+     <Match>
+          <Class name="org.apache.jmeter.protocol.jms.sampler.MessageAdmin" />
+          <Method name="putReply" />
+          <Bug pattern="NN_NAKED_NOTIFY" />
+     </Match>
+     <Match>
+          <Class name="org.apache.jmeter.JMeter" />
+          <Method name="start" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+     <Match>
+          <Class name="org.apache.jmeter.JMeterReport" />
+          <Method name="start" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+    <Match>
+          <Class name="org.apache.jmeter.engine.StandardJMeterEngine$1" />
+          <Method name="run" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+     <Match>
+          <Class name="org.apache.jmeter.engine.StandardJMeterEngine$StopTest" />
+          <Method name="run" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+     <Match>
+          <Class name="org.apache.jmeter.gui.action.ExitCommand" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+     <Match>
+          <Class name="org.apache.jmeter.report.gui.action.ReportExitCommand" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+    -->
+</FindBugsFilter>

@@ -1,0 +1,889 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '29'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document prev="jmeter_accesslog_sampler_step_by_step.html" id="$Id$">
+
+<properties>
+  <author email="dev@jmeter.apache.org">JMeter developers</author>
+  <title>How to write a plugin for JMeter</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. How to write a plugin for JMeter" anchor="howto">
+
+<h3>Introduction from Peter Lin</h3>
+<p>
+On more than one occasion, users have complained JMeter's developer documentation is out of
+date and not very useful. In an effort to make it easier for developers, I decided to write a simple
+step-by-step tutorial. When I mentioned this to mike, he had some ideas about what the tutorial
+should cover.
+</p>
+<p>
+Before we dive into the tutorial, I'd like to say writing a plugin isn't necessarily easy, even for
+someone with several years of java experience. The first extension I wrote for JMeter was a
+simple utility to parse HTTP access logs and produce requests in XML format. It wasn't really a
+plugin, since it was a stand alone command line utility. My first real plugin for JMeter was the
+webservice sampler. I was working on a .NET project and needed to stress test a webservice.
+Most of the commercial tools out there for testing .NET webservices suck and cost too much.
+Rather than fork over several hundred dollars for a lame testing tool, or a couple thousand dollars
+for a good one, I decided it was easier and cheaper to write a plugin for JMeter.
+</p>
+<p>
+After a two weeks of coding on my free time, I had a working prototype using Apache Soap driver.
+I submitted it back to JMeter and mike asked me if I want to be a committer. I had contributed
+patches to Jakarta JSTL and tomcat in the past, so I considered it an honor. Since then, I've
+written the access log sampler, Tomcat 5 monitor and distribution graph. Mike has since then
+improved the access log sampler tremendously and made it much more useful.
+</p>
+
+<h3>Introduction from Mike Stover</h3>
+<p>
+One of my primary goals in designing JMeter was to make it easy to write plugins to enhance as
+many of JMeter's features as possible. Part of the benefit of being open-source is that a lot of
+people could potentially lend their efforts to improve the application. I made a conscious decision
+to sacrifice some simplicity in the code to make plugin writing a way of life for a JMeter developer.
+</p>
+<p>
+While some folks have successfully dug straight into the code and made improvements to JMeter,
+a real tutorial on how to do this has been lacking. I tried a long time ago to write some
+documentation about it, but most people did not find it useful. Hopefully, with Peter's help, this
+attempt will be more successful.
+</p>
+
+<subsection name="&sect-num;.1 Basic structure of JMeter" anchor="basic-structure">
+
+<p>
+JMeter is organized by protocols and functionality. This is done so that developers can build new
+jars for a single protocol without having to build the entire application. We'll go into the details of
+building JMeter later in the tutorial. Since most of the JMeter developers use eclipse, the article will
+use eclipse directory as a reference point.
+</p>
+
+<p>
+Root directory - <code>/eclipse/workspace/apache-jmeter/</code>
+</p>
+
+<p>
+The folders inside of <code>apache-jmeter</code>
+</p>
+
+<dl>
+  <dt><code>bin</code></dt><dd>contains the <code>.bat</code> and <code>.sh</code> files for starting JMeter.
+      It also contains <code>ApacheJMeter.jar</code> and properties file</dd>
+  <dt><code>docs</code></dt><dd>directory contains the JMeter documentation files</dd>
+  <dt><code>extras</code></dt><dd>ant related extra files</dd>
+  <dt><code>lib</code></dt><dd>contains the required jar files for JMeter</dd>
+  <dt><code>lib/ext</code></dt><dd>contains the core jar files for JMeter and the protocols</dd>
+  <dt><code>src</code></dt><dd>contains subdirectory for each protocol and component</dd>
+  <dt><code>test</code></dt><dd>unit test related directory</dd>
+  <dt><code>xdocs</code></dt><dd>XML files for documentation. JMeter generates its documentation from XML.</dd>
+</dl>
+
+<p>
+As the tutorial progresses, an explanation of the subdirectories will be provided. For now, lets
+focus on <code>src</code> directory.
+</p>
+
+<p>
+The folders inside of <code>src</code>
+</p>
+
+<dl>
+  <dt><code>components</code></dt><dd>contains non-protocol-specific components like visualizers, assertions, etc.</dd>
+  <dt><code>core</code></dt><dd>the core code of JMeter including all core interfaces and abstract classes.</dd>
+  <dt><code>examples</code></dt><dd>example sampler demonstrating how to use the new bean framework</dd>
+  <dt><code>functions</code></dt><dd>standard functions used by all components</dd>
+  <dt><code>jorphan</code></dt><dd>utility classes providing common utility functions</dd>
+  <dt><code>protocol</code></dt><dd>contains the different protocols JMeter supports</dd>
+</dl>
+
+<p>
+Within <code>protocol</code> directory, are the protocol specific components.
+</p>
+
+<p>
+The folders inside of <code>protocol</code>
+</p>
+
+<dl>
+  <dt><code>ftp</code></dt><dd>components for load testing ftp servers</dd>
+  <dt><code>http</code></dt><dd>components for load testing web servers</dd>
+  <dt><code>java</code></dt><dd>components for load testing java components</dd>
+  <dt><code>jdbc</code></dt><dd>components for load testing database servers using JDBC</dd>
+  <dt><code>jndi</code></dt><dd>components for load testing JNDI</dd>
+  <dt><code>ldap</code></dt><dd>components for load testing LDAP servers</dd>
+  <dt><code>mail</code></dt><dd>components for load testing mail servers</dd>
+  <dt><code>tcp</code></dt><dd>components for load testing TCP services</dd>
+</dl>
+
+<p>
+As a general rule, all samplers related to HTTP will reside in <code>http</code> directory. The exception to the
+rule is the Tomcat5 monitor. It is separate, because the functionality of the monitor is slightly
+different than stress or functional testing. It may eventually be reorganized, but for now it is in its
+own directory. In terms of difficulty, writing visualizers is probably one of the harder plugins to
+write.
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.2 JMeter Gui – TestElement Contract" anchor="testelement-contract">
+
+<p>
+When writing any JMeter component, there are certain contracts you must be aware of – ways a
+JMeter component is expected to behave if it will run properly in the JMeter environment. This
+section describes the contract that the GUI part of your component must fulfill.
+</p>
+
+<p>
+GUI code in JMeter is strictly separated from Test Element code. Therefore, when you write a
+component, there will be a class for the Test Element, and another for the GUI presentation. The
+GUI presentation class is stateless in the sense that it should never hang onto a reference to the
+Test Element (there are exceptions to this though).
+</p>
+
+<p>
+A GUI element should extend the appropriate abstract class provided:
+</p>
+
+<ul>
+  <li><code>AbstractSamplerGui</code></li>
+  <li><code>AbstractAssertionGui</code></li>
+  <li><code>AbstractConfigGui</code></li>
+  <li><code>AbstractControllerGui</code></li>
+  <li><code>AbstractPostProcessorGui</code></li>
+  <li><code>AbstractPreProcessorGui</code></li>
+  <li><code>AbstractVisualizer</code></li>
+  <li><code>AbstractTimerGui</code></li>
+</ul>
+
+<p>
+These abstract classes provide so much plumbing work for you that not extending them, and
+instead implementing the interfaces directly is hardly an option. If you have some burning need to
+not extend these classes, then you can join me in IRC where I can convince you otherwise :-).
+</p>
+
+<p>
+So, you've extended the appropriate GUI class, what's left to do? Follow these steps:
+</p>
+
+<ol>
+  <li>Implement <code>getResourceLabel()</code>
+    <ol>
+      <li>This method should return the name of the resource that represents the title/name of the
+component. The resource will have to be entered into JMeters <code>messages.properties</code> file
+(and possibly translations as well).</li>
+    </ol>
+  </li>
+  <li>Create your GUI. Whatever style you like, layout your GUI. Your class ultimately extends
+    <code>JPanel</code>, so your layout must be in your class's own <code>ContentPane</code>.
+    Do not hook up GUI elements to your <code>TestElement</code> class via actions and events.
+    Let swing's internal model hang onto all the data as much as you possibly can.
+    <ol>
+      <li>Some standard GUI stuff should be added to all JMeter GUI components:
+        <ol>
+          <li>Call <code>setBorder(makeBorder())</code> for your class. This will give it the standard JMeter
+border</li>
+          <li>Add the title pane via <code>makeTitlePanel()</code>. Usually this is the first thing added to your
+            GUI, and should be done in a Box vertical layout scheme, or with JMeter's <code>VerticalLayout</code>
+            class. Here is an example <code>init()</code> method:
+<source>
+private void init() {
+    setLayout(new BorderLayout());
+    setBorder(makeBorder());
+    Box box = Box.createVerticalBox();
+    box.add(makeTitlePanel());
+    box.add(makeSourcePanel());
+    add(box,BorderLayout.NORTH);
+    add(makeParameterPanel(),BorderLayout.CENTER);
+}
+</source>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li>Implement <code>public void configure(TestElement el)</code>
+    <ol>
+      <li>Be sure to call <code>super.configure(e)</code>. This will populate some of the data for you, like
+         the name of the element.</li>
+      <li>Use this method to set data into your GUI elements. Example:
+<source>
+public void configure(TestElement el) {
+    super.configure(el);
+    useHeaders.setSelected(
+            el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
+    useBody.setSelected(
+            !el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
+    regexField.setText(
+            el.getPropertyAsString(RegexExtractor.REGEX));
+    templateField.setText(
+            el.getPropertyAsString(RegexExtractor.TEMPLATE));
+    defaultField.setText(
+            el.getPropertyAsString(RegexExtractor.DEFAULT));
+    matchNumberField.setText(
+            el.getPropertyAsString(RegexExtractor.MATCH_NUM));
+    refNameField.setText(
+            el.getPropertyAsString(RegexExtractor.REFNAME));
+}
+</source>
+      </li>
+      <li>Implement <code>public void modifyTestElement(TestElement e)</code>. This is where you
+         move the data from your GUI elements to the <code>TestElement</code>. It is the logical reverse of the
+         previous method.
+         <ol>
+           <li>Call <code>super.configureTestElement(e)</code>. This will take care of some default data for
+             you.</li>
+           <li>Example:
+<source>
+public void modifyTestElement(TestElement e) {
+    super.configureTestElement(e);
+    e.setProperty(new BooleanProperty(
+            RegexExtractor.USEHEADERS,
+            useHeaders.isSelected()));
+    e.setProperty(RegexExtractor.MATCH_NUMBER,
+            matchNumberField.getText());
+    if (e instanceof RegexExtractor) {
+        RegexExtractor regex = (RegexExtractor)e;
+        regex.setRefName(refNameField.getText());
+        regex.setRegex(regexField.getText());
+        regex.setTemplate(templateField.getText());
+        regex.setDefaultValue(defaultField.getText());
+    }
+}
+</source>
+           </li>
+         </ol>
+       </li>
+       <li>Implement <code>public TestElement createTestElement()</code>. This method should create a
+         new instance of your <code>TestElement</code> class, and then pass it to the <code>modifyTestElement(TestElement)</code>
+         method you made above
+<source>
+public TestElement createTestElement() {
+    RegexExtractor extractor = new RegexExtractor();
+    modifyTestElement(extractor);
+    return extractor;
+}
+</source>
+       </li>
+    </ol>
+  </li>
+</ol>
+
+<p>
+The reason you cannot hold onto a reference for your Test Element is because JMeter reuses
+instance of GUI class objects for multiple Test Elements. This saves a lot of memory. It also
+makes it incredibly easy to write the GUI part of your new component. You still have to struggle
+with the layout in Swing, but you don't have to worry about creating the right events and actions for
+getting the data from the GUI elements into the <code>TestElement</code> where it can do some good. JMeter
+knows when to call your configure, and <code>modifyTestElement</code> methods where you can do it in a very
+straightforward way.
+</p>
+
+<p>
+Writing Visualizers is somewhat of a special case, however.
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.3 Writing a Visualizer" anchor="visualizer">
+<note>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
+a look at more up to date components like:
+<ul>
+<li><a href="generating-dashboard.html">Web report</a></li>
+<li><a href="realtime-results.html">Real-Time results</a> with <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a></li>
+</ul>
+</note>
+<p>
+Of the component types, visualizers require greater depth in Swing than something like controllers,
+functions or samplers. You can find the full source for the distribution graph in
+<code>components/org/apache/jmeter/visualizers/</code>. The distribution graph visualizer is divided into two
+classes.
+</p>
+
+<dl>
+  <dt><code>DistributionGraphVisualizer</code></dt><dd>visualizer which JMeter instantiates</dd>
+  <dt><code>DistributionGraph</code></dt><dd>JComponent which draws the actual graph</dd>
+</dl>
+
+<p>
+The easiest way to write a visualizer is to do the following:
+</p>
+
+<ol>
+  <li>Extend <code>org.apache.jmeter.visualizers.gui.AbstractVisualizer</code></li>
+  <li>Implement any additional interfaces need for call back and event notification.
+     For example, the <code>DistributionGraphVisualizer</code> implements the following interfaces:
+     <ul>
+       <li><code>ImageVisualizer</code></li>
+       <li><code>ItemListener</code> – according to the comments in the class,
+         <code>ItemListener</code> is out of date and isn't used anymore.</li>
+       <li><code>GraphListener</code></li>
+       <li><code>Clearable</code></li>
+     </ul>
+   </li>
+</ol>
+
+<p>
+<code>AbstractVisualizer</code> provides some common functionality, which most visualizers like 
+<code>Graph Results</code> use. The common functionality provided by the abstract class includes:
+</p>
+
+<ul>
+  <li>Configure test elements – This means it create a new <code>ResultCollector</code>, sets the file and sets the error log</li>
+  <li>Create the stock menu</li>
+  <li>Update the test element when changes are made</li>
+  <li>Create a file panel for the log file</li>
+  <li>Create the title panel</li>
+</ul>
+
+<p>
+In some cases, you may not want to display the menu for the file textbox. In that case, you can
+override the <code>init()</code> method. Here is the implementation for <code>DistributionGraphVisualizer</code>.
+</p>
+
+<source>
+/**
+ * Initialize the GUI.
+ */
+private void init() {
+    this.setLayout(new BorderLayout());
+
+    // MAIN PANEL
+    Border margin = new EmptyBorder(10, 10, 5, 10);
+    this.setBorder(margin);
+
+    // Set up the graph with header, footer, Y axis and graph display
+    JPanel graphPanel = new JPanel(new BorderLayout());
+    graphPanel.add(createGraphPanel(), BorderLayout.CENTER);
+    graphPanel.add(createGraphInfoPanel(), BorderLayout.SOUTH);
+
+    // Add the main panel and the graph
+    this.add(makeTitlePanel(), BorderLayout.NORTH);
+    this.add(graphPanel, BorderLayout.CENTER);
+}
+</source>
+
+<p>
+The first thing the <code>init</code> method does is create a new <code>BorderLayout</code>. Depending on how you want to
+layout the widgets, you may want to use a different layout manager. Keep mind using different
+layout managers is for experts.
+</p>
+
+<p>
+The second thing the <code>init</code> method does is create a border. If you want to increase or decrease
+the border, change the four integer values. Each integer value represents pixels. If you want your
+visualizer to have no border, skip lines 8 and 9. Line 13 calls <code>createGraphPanel</code>, which is
+responsible for configuring and adding the <code>DistributionGraph</code> to the visualizer.
+</p>
+
+<source>
+private Component createGraphPanel() {
+    graphPanel = new JPanel();
+    graphPanel.setBorder(BorderFactory.createBevelBorder(
+    BevelBorder.LOWERED,Color.lightGray,Color.darkGray));
+    graphPanel.add(graph);
+    graphPanel.setBackground(Color.white);
+    return graphPanel;
+}
+</source>
+
+<p>
+At line 5, the graph component is added to the graph panel. The constructor is where a new
+instance of <code>DistributionGraph</code> is created.
+</p>
+
+<source>
+public DistributionGraphVisualizer() {
+    model = new SamplingStatCalculator("Distribution");
+    graph = new DistributionGraph(model);
+    graph.setBackground(Color.white);
+    init();
+}
+</source>
+
+<p>
+The constructor of <code>DistributionGraphVisualizer</code> is responsible for creating the model and the
+graph. Every time a new result is complete, the engine passes the result to all the listeners by
+calling <code>add(SampleResult res)</code>. The visualizer passes the new <code>SampleResult</code> to the model.
+</p>
+
+<source>
+public synchronized void add(SampleResult res) {
+    model.addSample(res);
+    updateGui(model.getCurrentSample());
+}
+</source>
+
+<p>
+In the case of the <code>DistributionGraphVisualizer</code>, the <code>add</code> method doesn't actually update the
+graph. Instead, it calls <code>updateGui</code> in line three.
+</p>
+
+<source>
+public synchronized void updateGui(Sample s) {
+    // We have received one more sample
+    if (delay == counter) {
+        updateGui();
+        counter = 0;
+    } else {
+        counter++;
+    }
+}
+</source>
+
+<p>
+Unlike <code>GraphVisualizer</code>, the distribution graph attempts to show how the results clump; therefore
+the <code>DistributionGraphVisualizer</code> delays the update. The default delay is <code>10</code> sampleresults.
+</p>
+
+<source>
+public synchronized void updateGui() {
+    if (graph.getWidth() &lt; 10) {
+        graph.setPreferredSize(
+                new Dimension(getWidth() - 40,
+                getHeight() - 160));
+    }
+    graphPanel.updateUI();
+    graph.repaint();
+}
+</source>
+
+<p>
+Lines 2 to 3 are suppose to resize the graph, if the user resizes the window or drags the divider.
+Line 7 updates the panel containing the graph. Line 8 triggers the update of the <code>DistributionGraph</code>.
+Before we cover writing graphs, there are a couple of important methods visualizer must
+implement.
+</p>
+
+<source>
+public String getLabelResource() {
+    return "distribution_graph_title";
+}
+</source>
+
+<p>
+The label resource retrieves the name of the visualizer from the properties file. The file is located
+in <code>core/org/apache/jmeter/resources</code>. It's best not to hardcode the name of the visualizer.
+<code>Message.properties</code> file is organized alphabetically, so adding a new entry is easy.
+</p>
+
+<source>
+public synchronized void clear() {
+    this.graph.clear();
+    model.clear();
+    repaint();
+}
+</source>
+
+<p>
+Every component in JMeter should implement logic for <code>clear()</code> method. If this isn't done, the
+component will not clear the UI or model when the user tries to clear the last results and run a
+new test. If clear is not implemented, it can result in a memory leak.
+</p>
+
+<source>
+public JComponent getPrintableComponent() {
+    return this.graphPanel;
+}
+</source>
+
+<p>
+The last method visualizers should implement is <code>getPrintableComponent()</code>. The method is
+responsible for returning the JComponent that can be saved or printed. This feature was recently
+added so that users can save a screen capture of any given visualizer.
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.4 GraphListener" anchor="graphlistener">
+<note>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
+a look at more up to date components like:
+<ul>
+<li><a href="generating-dashboard.html">Web report</a></li>
+<li><a href="realtime-results.html">Real-Time results</a> with <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a></li>
+</ul>
+</note>
+<p>
+Visualizers should implement <code>GraphListener</code>. This is done to make it simpler to add new Sample
+instances to listeners. As a general rule, if the custom graph does not plot every single sample,
+it does not need to implement the interface.
+</p>
+
+<source>
+public interface GraphListener {
+    public void updateGui(Sample s);
+    public void updateGui();
+}
+</source>
+
+<p>
+The important method in the interface is <code>updateGui(Sample s)</code>. From
+<code>DistributionGraphVisualizer</code>, we see it calls <code>graph.repaint()</code>
+to refresh the graph. In most cases,
+the implementation of <code>updateGui(Sample s)</code> should do just that.
+<code>ItemListenerVisualizers</code> generally do not need to implement this interface. The interface is used with combo
+boxes, checkbox and lists. If your visualizer uses one of these and needs to know when it has
+been updated, the visualizer will need to implement the interface. For an example of how to
+implement the interface, please look at <code>GraphVisualizer</code>.
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.5 Writing Custom Graphs" anchor="custom-graphs">
+<note>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
+a look at more up to date components like:
+<ul>
+<li><a href="generating-dashboard.html">Web report</a></li>
+<li><a href="realtime-results.html">Real-Time results</a> with <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a></li>
+</ul>
+</note>
+<p>
+For those new to Swing and haven't written custom JComponents yet, I would suggest getting a
+book on Swing and get a good feel for how Swing widgets work. This tutorial will not attempt to
+explain basic Swing concepts and assumes the reader is already familiar with the Swing API and
+MVC (Model View Controller) design pattern. From the constructor of <code>DistributionGraphVisualizer</code>,
+we see a new instance of <code>DistributionGraph</code> is created with an instance of the model.
+</p>
+
+<source>
+public DistributionGraph(SamplingStatCalculator model) {
+    this();
+    setModel(model);
+}
+</source>
+
+<p>
+The implementation of <code>setModel</code> method is straight forward.
+</p>
+
+<source>
+private void setModel(Object model) {
+    this.model = (SamplingStatCalculator) model;
+    repaint();
+}
+</source>
+
+<p>
+Notice the method calls <code>repaint</code> after it sets the model. If <code>repaint</code> isn't called, it can cause the
+GUI to not draw the graph. Once the test starts, the graph would redraw, so calling <code>repaint</code> isn't
+critical.
+</p>
+
+<source>
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    final SamplingStatCalculator m = this.model;
+    synchronized (m) {
+        drawSample(m, g);
+    }
+}
+</source>
+
+<p>
+The other important aspect of updating the widget is placing the call to <code>drawSample</code> within a
+synchronized block. If <code>drawSample</code> wasn't synchronized, JMeter would throw a
+<code>ConcurrentModificationException</code> at runtime. Depending on the test plan, there may be a dozen or
+more threads adding results to the model. The synchronized block does not affect the accuracy of
+each individual request and time measurement, but it does affect JMeter's ability to generate large
+loads. As the number of threads in a test plan increases, the likelihood a thread will have to wait
+until the graph is done redrawing before starting a new request increases. Here is the
+implementation of <code>drawSample</code>.
+</p>
+
+<source>
+private void drawSample(SamplingStatCalculator model, Graphics g) {
+    width = getWidth();
+    double height = (double)getHeight() - 1.0;
+
+    // first lets draw the grid
+    for (int y=0; y &lt; 4; y++){
+        int q1 = (int)(height - (height * 0.25 * y));
+        g.setColor(Color.lightGray);
+        g.drawLine(xborder,q1,width,q1);
+        g.setColor(Color.black);
+        g.drawString(String.valueOf((25 * y) + "%"),0,q1);
+    }
+    g.setColor(Color.black);
+    // draw the X axis
+    g.drawLine(xborder,(int)height,width,(int)height);
+    // draw the Y axis
+    g.drawLine(xborder,0,xborder,(int)height);
+    // the test plan has to have more than 200 samples
+    // for it to generate half way decent distribution
+    // graph. The larger the sample, the better the
+    // results.
+    if (model != null &amp;&amp; model.getCount() &gt; 50) {
+        // now draw the bar chart
+        Number ninety = model.getPercentPoint(0.90);
+        Number fifty = model.getPercentPoint(0.50);
+        total = model.getCount();
+        Collection values = model.getDistribution().values();
+        Object[] objval = new Object[values.size()];
+        objval = values.toArray(objval);
+        // we sort the objects
+        Arrays.sort(objval,new NumberComparator());
+        int len = objval.length;
+        for (int count=0; count &lt; len; count++) {
+            // calculate the height
+            Number[] num = (Number[])objval[count];
+            double iper = (double)num[1].intValue() / (double)total;
+            double iheight = height * iper;
+            // if the height is less than one, we set it
+            // to one pixel
+            if (iheight &lt; 1) {
+                iheight = 1.0;
+            }
+            int ix = (count * 4) + xborder + 5;
+            int dheight = (int)(height - iheight);
+            g.setColor(Color.blue);
+            g.drawLine(ix -1,(int)height,ix -1,dheight);
+            g.drawLine(ix,(int)height,ix,dheight);
+            g.setColor(Color.black);
+            // draw a red line for 90% point
+            if (num[0].longValue() == ninety.longValue()) {
+                g.setColor(Color.red);
+                g.drawLine(ix,(int)height,ix,55);
+                g.drawLine(ix,(int)35,ix,0);
+                g.drawString("90%",ix - 30,20);
+                g.drawString(
+                        String.valueOf(num[0].longValue()),
+                        ix + 8, 20);
+            }
+            // draw an orange line for 50% point
+            if (num[0].longValue() == fifty.longValue()) {
+                g.setColor(Color.orange);
+                g.drawLine(ix,(int)height,ix,30);
+                g.drawString("50%",ix - 30,50);
+                g.drawString(
+                        String.valueOf(num[0].longValue()),
+                        ix + 8, 50);
+            }
+        }
+    }
+}
+</source>
+
+<p>
+In general, the rendering of the graph should be fairly quick and shouldn't be a bottleneck. As a
+general rule, it is a good idea to profile custom plugins. The only way to make sure a visualizer
+isn't a bottleneck is to run it with a tool like Borland OptimizeIt. A good way to test a plugin is to
+create a simple test plan and run it. The heap and garbage collection behavior should be regular
+and predictable.
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.6 Making a TestBean Plugin For JMeter" anchor="testbean">
+
+<p>
+In this part, we will go through the process of creating a simple component for JMeter that uses
+the new <code>TestBean</code> framework.
+</p>
+
+<p>
+This component will be a CSV file reading element that will let users easily vary their input data
+using CSV files. To most effectively use this tutorial, open the three files specified below (found in
+JMeter's <code>src/components</code> directory).
+</p>
+
+<ol>
+  <li>Pick a package and make three files:
+    <ul>
+      <li>[ComponentName].java (org.apache.jmeter.config.CSVDataSet.java)</li>
+      <li>[ComponentName]BeanInfo.java (org.apache.jmeter.config.CSVDataSetBeanInfo.java)</li>
+      <li>[ComponentName]Resources.properties (org.apache.jmeter.config.CSVDataSetResources.properties)</li>
+    </ul>
+  </li>
+  <li><code>CSVDataSet.java</code> must implement the <code>TestBean</code> interface. In addition, it will extend
+    <code>ConfigTestElement</code>, and implement <code>LoopIterationListener</code>.
+    <ul>
+      <li><code>TestBean</code> is a marker interface, so there are no methods to implement.</li>
+      <li>Extending <code>ConfigTestElement</code> will make our component a <code>Config</code> element in a test
+        plan. By extending different abstract classes, you can control the type of element your
+        component will be (i.e. <code>AbstractSampler</code>, <code>AbstractVisualizer</code>, <code>GenericController</code>, etc -
+        though you can also make different types of elements just by instantiating the right
+        interfaces, the abstract classes can make your life easier).
+      </li>
+    </ul>
+  </li>
+  <li><code>CSVDataSetBeanInfo.java</code> should extend <code>org.apache.jmeter.testbeans.BeanInfoSupport</code>
+    <ul>
+      <li>create a zero-parameter constructor in which we call <code>super(CSVDataSet.class);</code></li>
+      <li>we'll come back to this.</li>
+    </ul>
+  </li>
+  <li><code>CSVDataSetResources.properties</code> - blank for now</li>
+  <li>Implement your special logic for you plugin class.
+    <ol>
+      <li>The <code>CSVDataSet</code> will read a single CSV file and will store the values it finds into
+        JMeter's running context. The user will define the file, define the variable names for
+        each "<code>column</code>". The <code>CSVDataSet</code> will open the file when the test starts, and close it
+        when the test ends (thus we implement <code>TestListener</code>). The <code>CSVDataSet</code> will update
+        the contents of the variables for every test thread, and for each iteration through its
+        parent controller, by reading new lines in the file. When we reach the end of the file,
+        we'll start again at the beginning.
+        When implementing a <code>TestBean</code>, pay careful
+        attention to your properties. These properties will become the basis of a GUI form by
+        which users will configure the <code>CSVDataSet</code> element.
+      </li>
+      <li>Your element will be cloned by JMeter when the test starts. Each thread will get it's
+        own instance. However, you will have a chance to control how the cloning is done, if
+        you need it.
+      </li>
+      <li>Properties: <code>filename</code>, <code>variableNames</code>. With public getters and setters.
+        <ul>
+          <li><code>filename</code> is self-explanatory, it will hold the name of the CSV file we'll read</li>
+          <li><code>variableNames</code> is a String which will allow a user to enter the names of the
+            variables we'll assign values to. Why a String? Why not a Collection? Surely
+            users will need to enter multiple (and unknown number of) variable names? True,
+            but if we used a List or Collection, we'd have to write a GUI component to handle
+            collections, and I just want to do this quickly. Instead, we'll let users input
+            comma-delimited list of variable names.</li>
+        </ul>
+      </li>
+      <li>I then implemented the <code>IterationStart</code> method of the <code>LoopIterationListener</code> interface.
+        The point of this "event" is that your component is notified of when the test has entered
+        it's parent controller. For our purposes, every time the <code>CSVDataSet</code>'s parent controller
+        is entered, we will read a new line of the data file and set the variables. Thus, for a
+        regular controller, each loop through the test will result in a new set of values being
+        read. For a loop controller, each iteration will do likewise. Every test thread will get
+        different values as well.
+      </li>
+    </ol>
+  </li>
+  <li>Setting up your GUI elements in <code>CSVDataSetBeanInfo</code>:
+    <ul>
+      <li>You can create groupings for your component's properties. Each grouping you create
+        needs a label and a list of property names to include in that grouping. I.e.:
+<source>
+createPropertyGroup("csv_data",
+        new String[] { "filename", "variableNames" });
+</source>
+      </li>
+      <li>Creates a grouping called <code>csv_data</code> that will include GUI input elements for the
+        <code>filename</code> and <code>variableNames</code> properties of <code>CSVDataSet</code>.
+        Then, we need to define what kind of properties we want these to be:
+<source>
+p = property("filename");
+p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+p.setValue(DEFAULT, "");
+p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+
+p = property("variableNames");
+p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+p.setValue(DEFAULT, "");
+p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+</source>
+        This essentially creates two properties whose value is not allowed to be <code>null</code>, and
+        whose default values are <code>""</code>. There are several such attributes that can be set for each
+        property. Here is a rundown:
+
+        <dl>
+          <dt><code>NOT_UNDEFINED</code></dt><dd>The property will not be left <code>null</code>.</dd>
+          <dt><code>DEFAULT</code></dt><dd>A default values must be given if <code>NOT_UNDEFINED</code> is <code>true</code>.</dd>
+          <dt><code>NOT_EXPRESSION</code></dt><dd>The value will not be parsed for functions if this is <code>true</code>.</dd>
+          <dt><code>NOT_OTHER</code></dt><dd>This is not a free form entry field – a list of values has to be provided.</dd>
+          <dt><code>TAGS</code></dt><dd>With a <code>String[]</code> as the value, this sets up a predefined
+            list of acceptable values, and JMeter will create a dropdown select.</dd>
+        </dl>
+
+        Additionally, a custom property editor can be specified for a property:
+
+<source>
+p.setPropertyEditorClass(FileEditor.class);
+</source>
+
+        This will create a text input plus browse button that opens a dialog for finding a file.
+        Usually, complex property settings are not needed, as now. For a more complex
+        example, look at <code>org.apache.jmeter.protocol.http.sampler.AccessLogSamplerBeanInfo</code>
+      </li>
+    </ul>
+  </li>
+  <li>Defining your resource strings. In <code>CSVDataSetResources.properties</code> we have to define all our
+    string resources. To provide translations, one would create additional files such as
+    <code>CSVDataSetResources_ja.properties</code>, and <code>CSVDataSetResources_de.properties</code>. For our
+    component, we must define the following resources:
+    <dl>
+      <dt><code>displayName</code></dt><dd>This will provide a name for the element that will appear in menus.</dd>
+      <dt><code>csv_data.displayName</code></dt><dd>we create a property grouping called <code>csv_data</code>,
+         so we have to provide a label for the grouping</dd>
+      <dt><code>filename.displayName</code></dt><dd>a label for the filename input element.</dd>
+      <dt><code>filename.shortDescription</code></dt><dd>a tool-tip-like help text blurb.</dd>
+      <dt><code>variableNames.displayName</code></dt><dd>a label for the variable name input element.</dd>
+      <dt><code>variableNames.shortDescription</code></dt><dd>tool tip for the <code>variableNames</code> input element.</dd>
+    </dl>
+  </li>
+  <li>Debug your component.</li>
+</ol>
+
+</subsection>
+
+<subsection name="&sect-num;.6 Building JMeter" anchor="building">
+
+<p>
+Like other Jakarta projects, JMeter uses ANT to compile and build the distribution. JMeter has
+several tasks defined, which make it easier for developers. For those unfamiliar with ANT, it's a
+build tool similar to make on Unix. A list of the ANT tasks with a short description is provided
+below.
+</p>
+
+<dl>
+  <dt><code>all</code></dt><dd>builds all components and protocols</dd>
+  <dt><code>compile</code></dt><dd>compiles all the directories and components</dd>
+  <dt><code>compile-core</code></dt><dd>compiles the core directory and all dependencies</dd>
+  <dt><code>compile-components</code></dt><dd>compiles the components directory and all dependencies</dd>
+  <dt><code>compile-ftp</code></dt><dd>compiles the samples in ftp directory and all dependencies</dd>
+  <dt><code>compile-functions</code></dt><dd>compiles the functions and all dependencies</dd>
+  <dt><code>compile-htmlparser</code></dt><dd>compiles htmlparser and all dependencies</dd>
+  <dt><code>compile-http</code></dt><dd>compiles the samplers in http directory and all dependencies</dd>
+  <dt><code>compile-java</code></dt><dd>compiles the samplers in java directory and all dependencies</dd>
+  <dt><code>compile-jdbc</code></dt><dd>compiles the samplers in jdbc directory and all dependencies</dd>
+  <dt><code>compile-jorphan</code></dt><dd>compiles the jorphan utility classes</dd>
+  <dt><code>compile-ldap</code></dt><dd>compiles the samplers in ldap directory and all dependencies</dd>
+  <dt><code>compile-monitor</code></dt><dd>compiles the sampler in monitor directory and all dependencies</dd>
+  <dt><code>compile-rmi</code></dt><dd>compiles the samplers in rmi directory and all dependencies</dd>
+  <dt><code>compile-tests</code></dt><dd>compiles the tests and all dependencies</dd>
+  <dt><code>docs-api</code></dt><dd>creates the javadocs</dd>
+  <dt><code>docs-all</code></dt><dd>generates all docs.</dd>
+  <dt><code>package</code></dt><dd>compiles everything and creates jar files of the compiled protocols</dd>
+  <dt><code>package-only</code></dt><dd>creates jar files of the compiled components</dd>
+</dl>
+
+<p>
+Here are some example commands.
+</p>
+
+<dl>
+  <dt><code>ant compile-http</code></dt><dd>Compiles just http components</dd>
+  <dt><code>ant package</code></dt><dd>Creates the jar files</dd>
+  <dt><code>ant docs-all</code></dt><dd>Generates the html documentation and javadocs</dd>
+</dl>
+
+</subsection>
+
+</section>
+
+</body>
+
+</document>

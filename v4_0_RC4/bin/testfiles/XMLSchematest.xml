@@ -1,0 +1,20 @@
+<recipe name="Black Pepper Shrimp" description="Black Pepper shrimp dishes is very tasty.">
+    <ingredients>
+        <ingredient index="1" amount="3 pounds"
+                description="fresh shrimp, unpeeled" />
+        <ingredient index="2" amount="8 tablespoons"
+                description="butter" />
+        <ingredient index="3" amount="4 tablespoons"
+                description="freshly ground pepper" />
+        </ingredients>
+        <steps>
+            <step index="1"
+                description="Wash and drain shrimp, and place in a shallow baking pan." />
+            <step index="1"
+                description="In a saucepan, melt the butter, add the garlic, and saute for 3 to 4 minutes." />
+            <step index="1"
+                description="Pour the butter mixture over the shrimp and toss to coat." />
+            <step index="1"
+                description="Bake until pink, approximately 5 minutes, turn, bake a few minutes longer, and pepper again." />
+         </steps>
+</recipe>

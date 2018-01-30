@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<document>
+
+  <properties>
+    <author email="dev.AT.jmeter.DOT.apache.DOT.org">Apache JMeter Project</author>
+    <title>Mailing Lists</title>
+  </properties>
+
+<body>
+
+<section name="Mailing Lists - Guidelines">
+<p>
+<strong>Before subscribing to any of the mailing lists, please make sure that you have
+read and understand the <a href="mail.html">guidelines</a></strong>.
+</p>
+
+<p>
+Please note that usage of these mailing lists is subject to the
+<a href="http://www.apache.org/foundation/public-archives.html">Public Forum Archive Policy</a>.
+</p>
+
+<p>
+For details of how to subscribe/unsubscribe please read
+<a href="http://www.apache.org/foundation/mailinglists.html#subscribing">Subscribing and Unsubscribing</a>
+</p>
+
+</section>
+
+<section name="JMeter lists and archives at the ASF">
+<p>
+The following mailing lists are available:
+</p>
+<subsection name="Apache JMeter User" anchor="JMeterUser">
+<p>
+This is the list where users of Apache JMeter meet and discuss issues. 
+</p>
+<p>
+Developers are also expected to be lurking on this list to offer support to users of JMeter.
+</p>
+<p>
+This list starts part-way through Nov 2011, when JMeter became an independent Apache project.
+For old postings, please see the Jakarta JMeter User list, below.
+</p>
+<ul>
+<li>Subscribe at <a href="mailto:user-subscribe@jmeter.apache.org">user-subscribe@jmeter.apache.org</a></li>
+<li>Send your message to: <a href="mailto:user@jmeter.apache.org">user@jmeter.apache.org</a> (after the subscription process)</li>
+<li>Unsubscribe at <a href="mailto:user-unsubscribe@jmeter.apache.org">user-unsubscribe@jmeter.apache.org</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-user/">jmeter-user Archive</a></li>
+</ul>
+</subsection>
+<subsection name="Apache JMeter Developer" anchor="JMeterDev">
+<p>
+This is the list where participating developers meet and discuss issues, code changes/additions etc.
+</p>
+<note>Please do not send usage questions to this list, see user list above.</note>
+<p>
+This list also collects Wiki update messages.
+</p>
+<p>
+This list starts part-way through Nov 2011, when JMeter became an independent Apache project.
+For earlier postings, please see below.
+</p>
+<ul>
+<li>Subscribe at <a href="mailto:dev-subscribe@jmeter.apache.org">dev-subscribe@jmeter.apache.org</a></li>
+<li>Send your message to: <a href="mailto:dev@jmeter.apache.org">dev@jmeter.apache.org</a> (after the subscription process)</li>
+<li>Unsubscribe at <a href="mailto:dev-unsubscribe@jmeter.apache.org">dev-unsubscribe@jmeter.apache.org</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-dev/">jmeter-dev Archive</a></li>
+</ul>
+</subsection>
+<subsection name="Apache JMeter Commits" anchor="JMeterCommits">
+<p>
+SVN commit messages are sent here.
+</p>
+Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below. 
+<ul>
+<li>Subscribe at <a href="mailto:commits-subscribe@jmeter.apache.org">commits-subscribe@jmeter.apache.org</a></li>
+<li>Unsubscribe at <a href="mailto:commits-unsubscribe@jmeter.apache.org">commits-unsubscribe@jmeter.apache.org</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-commits/">jmeter-commits Archive</a></li>
+</ul>
+</subsection>
+<subsection name="Apache JMeter Issues" anchor="JMeterIssues">
+<p>
+<a href="https://bz.apache.org/bugzilla/">Bugzilla</a> messages are sent here.
+</p>
+<p>
+Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
+</p> 
+
+<ul>
+<li>Subscribe at <a href="mailto:issues-subscribe@jmeter.apache.org">issues-subscribe@jmeter.apache.org</a></li>
+<li>Unsubscribe at <a href="mailto:issues-unsubscribe@jmeter.apache.org">issues-unsubscribe@jmeter.apache.org</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-issues/">jmeter-issues Archive</a></li>
+</ul>
+</subsection>
+<subsection name="Jakarta Developer" anchor="JakartaDev">
+<p>Combined Jakarta developer list, April 2010 to November 2011</p>
+<ul>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-dev/">jakarta-dev Archive</a></li>
+</ul>
+</subsection>
+<subsection name="Jakarta JMeter User" anchor="JakartaJMeterUser">
+This is the old JMeter user list from when JMeter was a sub-project of Apache Jakarta.
+<ul>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-jmeter-user/">jakarta-jmeter-user Archive</a></li></ul>
+</subsection>
+<subsection name="Jakarta JMeter Developer" anchor="JakartaJMeterDev">
+Historical list, up to April 2010.
+<ul>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-jmeter-dev/">jakarta-jmeter-dev Archive</a></li>
+</ul>
+</subsection>
+<subsection name="Jakarta Notifications" anchor="JakartaNotif">
+Combined Jakarta notifications to November 2011.
+Includes Bugzilla, SVN and Wiki commit mails for JMeter.
+<ul>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-notifications/">jakarta-notifications Archive</a></li>
+</ul>
+</subsection>
+</section>
+
+<section name="Other Archives and Searching">
+<p>
+There are several 3<sup>rd</sup> party sites that archive and provide searching for our mailing lists:
+</p>
+<p>
+<ul>
+<li><a href="http://jmeter.markmail.org/">Mark Mail</a> </li>
+<li><a href="http://www.mail-archive.com/">mail-archive.com</a> </li>
+</ul>
+</p>
+</section>
+
+</body>
+</document>

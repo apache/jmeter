@@ -1,0 +1,4 @@
+label,responseCode,responseMessage,threadName,dataType,success
+JSR223 Sampler,200,OK,setUp Thread Group 1-1,text,true
+ApacheJMeter-HP-NonSecure,206,Partial Content,Thread Group 1-1,text,true
+ApacheJMeter-HP-Secure,206,Partial Content,Thread Group 1-1,text,true

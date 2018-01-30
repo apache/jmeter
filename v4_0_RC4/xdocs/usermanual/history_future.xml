@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!DOCTYPE document
+[
+<!ENTITY sect-num '24'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+<document id="$Id$" prev="glossary.html" >
+
+<properties>
+  <title>User's Manual: History/Future</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. History and Future" anchor="history_future">
+<subsection name="&sect-num;.1 History" anchor="history">
+<p>Stefano Mazzocchi of the Apache Software Foundation was the original developer of JMeter.
+He wrote it primarily to test the performance of Apache JServ (a project that has
+since been replaced by the Apache Tomcat project).  We redesigned JMeter to enhance the GUI
+and to add functional-testing capabilities.
+</p>
+
+<p>JMeter became a Top Level Apache project in November 2011, which means it has a Project Management Committee and a dedicated website.</p>
+</subsection>
+
+<subsection name="&sect-num;.2 The Future" anchor="future">
+<p>We hope to see JMeter's capabilities rapidly expand as developers take advantage of its
+pluggable architecture. <br/>
+The primary goal of further developments will be:
+<ul>
+<li>Support of HTTP/2 protocol</li>
+<li>Possible rework of core architecture to introduce a pool of threads or switch to async model allowing us to take advantage of async io</li>
+<li>Enhancements to Webservices protocols (REST / SOAP)</li>
+<li>Enhancements to JMS protocol implementation</li>
+<li>&hellip;</li>
+</ul>
+<note>You can help us by contributing to JMeter through any piece of work, read <a href="../building.html" >this document</a></note>
+</p>
+</subsection>
+</section>
+
+</body>
+</document>

@@ -1,0 +1,60 @@
+TNP1-JR0-0,200,,TG0-SNL 1-1,text,true,1,1,1,0
+TC-NOPARENT-1,200,"Number of samples in transaction : 1, number of failing samples : 0",TG0-SNL 1-1,,true,1,1,1,0
+JR-MUSTEXECUTE,,,TG0-SNL 1-1,text,true,1,1,1,0
+TNP1-JR0-1,200,,TG0-SNL 1-1,text,true,1,1,1,0
+TC-NOPARENT-1,200,"Number of samples in transaction : 1, number of failing samples : 0",TG0-SNL 1-1,,true,1,1,1,0
+JR-MUSTEXECUTE,,,TG0-SNL 1-1,text,true,1,1,1,0
+TNP1-JR0-2,200,,TG0-SNL 1-1,text,true,1,1,1,0
+TC-NOPARENT-1,200,"Number of samples in transaction : 1, number of failing samples : 0",TG0-SNL 1-1,,true,1,1,1,0
+JR-MUSTEXECUTE,,,TG0-SNL 1-1,text,true,1,1,1,0
+TNPF-JR0-0,500,,TG1-SNL 2-1,text,false,1,1,1,1
+TC-NOPARENT-FAILING0,,"Number of samples in transaction : 1, number of failing samples : 1",TG1-SNL 2-1,,false,1,1,1,1
+TNPF-JR0-1,500,,TG1-SNL 2-1,text,false,1,1,1,1
+TC-NOPARENT-FAILING0,,"Number of samples in transaction : 1, number of failing samples : 1",TG1-SNL 2-1,,false,1,1,1,1
+TNPF-JR0-2,500,,TG1-SNL 2-1,text,false,1,1,1,1
+TC-NOPARENT-FAILING0,,"Number of samples in transaction : 1, number of failing samples : 1",TG1-SNL 2-1,,false,1,1,1,1
+TNPF-JR0-0,200,,TG2-SNL 3-1,text,true,1,1,1,0
+TNPF-JR1-0,500,,TG2-SNL 3-1,text,false,1,1,1,1
+TC-NOPARENT-FAILING1,,"Number of samples in transaction : 2, number of failing samples : 1",TG2-SNL 3-1,,false,1,1,1,1
+TNPF-JR0-1,200,,TG2-SNL 3-1,text,true,1,1,1,0
+TNPF-JR1-1,500,,TG2-SNL 3-1,text,false,1,1,1,1
+TC-NOPARENT-FAILING1,,"Number of samples in transaction : 2, number of failing samples : 1",TG2-SNL 3-1,,false,1,1,1,1
+TNPF-JR0-2,200,,TG2-SNL 3-1,text,true,1,1,1,0
+TNPF-JR1-2,500,,TG2-SNL 3-1,text,false,1,1,1,1
+TC-NOPARENT-FAILING1,,"Number of samples in transaction : 2, number of failing samples : 1",TG2-SNL 3-1,,false,1,1,1,1
+TNPF2-JR1-0,200,,TG3-SNL 4-1,text,true,1,1,1,0
+TNPF2-JR2-0,500,,TG3-SNL 4-1,text,false,1,1,1,1
+TC-NOPARENT-FAILING2,,"Number of samples in transaction : 2, number of failing samples : 1",TG3-SNL 4-1,,false,1,1,1,1
+TNPF2-JR1-1,200,,TG3-SNL 4-1,text,true,1,1,1,0
+TNPF2-JR2-1,500,,TG3-SNL 4-1,text,false,1,1,1,1
+TC-NOPARENT-FAILING2,,"Number of samples in transaction : 2, number of failing samples : 1",TG3-SNL 4-1,,false,1,1,1,1
+TNPF2-JR1-2,200,,TG3-SNL 4-1,text,true,1,1,1,0
+TNPF2-JR2-2,500,,TG3-SNL 4-1,text,false,1,1,1,1
+TC-NOPARENT-FAILING2,,"Number of samples in transaction : 2, number of failing samples : 1",TG3-SNL 4-1,,false,1,1,1,1
+TNPTA-JR1-0,200,,TG4-SNL 5-1,text,true,1,1,1,0
+TNPTA-JR2-0,200,,TG4-SNL 5-1,text,true,1,1,1,0
+TC-NOPARENT-TestAction,,"Number of samples in transaction : 3, number of failing samples : 0",TG4-SNL 5-1,,true,1,1,1,0
+TNPTA-JR1-1,200,,TG4-SNL 5-1,text,true,1,1,1,0
+TNPTA-JR2-1,200,,TG4-SNL 5-1,text,true,1,1,1,0
+TC-NOPARENT-TestAction,,"Number of samples in transaction : 3, number of failing samples : 0",TG4-SNL 5-1,,true,1,1,1,0
+TNPTA-JR1-2,200,,TG4-SNL 5-1,text,true,1,1,1,0
+TNPTA-JR2-2,200,,TG4-SNL 5-1,text,true,1,1,1,0
+TC-NOPARENT-TestAction,,"Number of samples in transaction : 3, number of failing samples : 0",TG4-SNL 5-1,,true,1,1,1,0
+TC-PARENT,200,"Number of samples in transaction : 1, number of failing samples : 0",TG5-SNL 6-1,,true,1,1,1,0
+JR-MUSTEXECUTE,,,TG5-SNL 6-1,text,true,1,1,1,0
+TC-PARENT,200,"Number of samples in transaction : 1, number of failing samples : 0",TG5-SNL 6-1,,true,1,1,1,0
+JR-MUSTEXECUTE,,,TG5-SNL 6-1,text,true,1,1,1,0
+TC-PARENT,200,"Number of samples in transaction : 1, number of failing samples : 0",TG5-SNL 6-1,,true,1,1,1,0
+JR-MUSTEXECUTE,,,TG5-SNL 6-1,text,true,1,1,1,0
+TC-PARENT-FAILING1,500,"Number of samples in transaction : 1, number of failing samples : 1",TG6-SNL 7-1,,false,1,1,1,1
+TC-PARENT-FAILING1,500,"Number of samples in transaction : 1, number of failing samples : 1",TG6-SNL 7-1,,false,1,1,1,1
+TC-PARENT-FAILING1,500,"Number of samples in transaction : 1, number of failing samples : 1",TG6-SNL 7-1,,false,1,1,1,1
+TC-PARENT-FAILING1,500,"Number of samples in transaction : 2, number of failing samples : 1",TG7-SNL 8-1,,false,1,1,1,1
+TC-PARENT-FAILING1,500,"Number of samples in transaction : 2, number of failing samples : 1",TG7-SNL 8-1,,false,1,1,1,1
+TC-PARENT-FAILING1,500,"Number of samples in transaction : 2, number of failing samples : 1",TG7-SNL 8-1,,false,1,1,1,1
+TC-PARENT-FAILING2,500,"Number of samples in transaction : 2, number of failing samples : 1",TG8-SNL 9-1,,false,1,1,1,1
+TC-PARENT-FAILING2,500,"Number of samples in transaction : 2, number of failing samples : 1",TG8-SNL 9-1,,false,1,1,1,1
+TC-PARENT-FAILING2,500,"Number of samples in transaction : 2, number of failing samples : 1",TG8-SNL 9-1,,false,1,1,1,1
+TC-PARENT-TestAction,200,"Number of samples in transaction : 2, number of failing samples : 0",TG9-SNL 10-1,,true,1,1,1,0
+TC-PARENT-TestAction,200,"Number of samples in transaction : 2, number of failing samples : 0",TG9-SNL 10-1,,true,1,1,1,0
+TC-PARENT-TestAction,200,"Number of samples in transaction : 2, number of failing samples : 0",TG9-SNL 10-1,,true,1,1,1,0

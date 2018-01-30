@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '9'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document prev="build-ldapext-test-plan.html" next="build-jms-point-to-point-test-plan.html" id="$Id$">
+
+<properties>
+  <title>User's Manual: Building a SOAP WebService Test Plan</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Building a WebService Test Plan" anchor="building">
+<p>In this section, you will learn how to create a 
+<a href="build-test-plan.html">Test Plan</a> to test a WebService. You will
+create five users that send requests to One page.
+Also, you will tell the users to run their tests twice. So, the total number of
+requests is (5 users) x (1 requests) x (repeat 2 times) = 10 HTTP requests. To
+construct the Test Plan, you will use the following elements:
+<a href="test_plan.html#thread_group">Thread Group</a>,
+<complink name="HTTP Request"/>, and
+<complink name="Aggregate Graph"/>.</p>
+
+<p>If the sampler appears to be getting an error from the webservice, double check the
+SOAP message and make sure the format is correct. In particular, make sure the
+<code>xmlns</code> attributes are exactly the same as the WSDL. If the xml namespace is
+different, the webservice will likely return an error.</p>
+
+</section>
+
+<section name="&sect-num;.1 Creating WebService Test Plan" anchor="soap_webservice_template">
+
+<p>In our Test Plan, we will use a .NET webservice. We won't go into the details of writing a
+webservice. If you don't know how to write a webservice, google for
+webservice and familiarize yourself with writing webservices for
+Java and .NET. It should be noted there is a significant difference
+between how .NET and Java implement webservices. The topic is too
+broad to cover in the user manual. Please refer to other sources to
+get a better idea of the differences.</p>
+
+<note>JMeter sends requests in the order that they appear in the tree.</note>
+
+<p>Start by using menu
+  <menuchoice><guimenuitem>File</guimenuitem><guimenuitem>Templates&hellip;</guimenuitem></menuchoice>
+  and select template "<code>Building a SOAP Webservice Test Plan</code>".
+Then, click "<code>Create</code>" button.
+
+<figure image="ws_template.png" width="1050" height="684">
+Figure &sect-num;.1.0. Webservice Template</figure>
+Change the following:
+<ol>
+<li>In "<code>HTTP Request Defaults</code>" change "<code>Server Name of IP</code>"</li>
+<li>In "<code>Soap Request</code>", change "<code>Path:</code>"
+<figure width="955" height="501" image="ws_http_request.png">Figure &sect-num;.1.1 Webservice Path</figure>
+</li>
+</ol>
+</p>
+
+<p>Next, select "<code>HTTP Header Manager</code>" and update "<code>SOAPAction</code>" header to match your webservice.
+Some webservices may not use SOAPAction in this case remove it.<br/>
+Currently, only .NET uses SOAPAction, so it is normal to have a blank SOAPAction for all other webservices. The list includes JWSDP, Weblogic, Axis, The Mind Electric Glue, and gSoap.
+</p>
+<figure image="ws_header.png" width="1327" height="348">Figure &sect-num;.1.2 Webservice Headers</figure>
+
+<p>The last step is to paste the SOAP message in the "<code>Body Data</code>"
+text area.</p>
+<figure width="955" height="501" image="ws_http_request.png">Figure &sect-num;.1.3 Webservice Body</figure>
+
+
+</section>
+
+<section name="&sect-num;.2 Adding Users" anchor="adding_users">
+<p>The <a href="test_plan.html#thread_group">Thread Group</a> tells
+JMeter the number of users you want to simulate, how often the users should send
+requests, and the how many requests they should send.</p>
+
+<p>Select the Thread Group element
+in the tree, if you have not already selected it. You should now see the Thread
+Group Control Panel in the right section of the JMeter window (see Figure &sect-num;.2
+below)</p>
+
+<figure image="webtest/threadgroup.png">
+Figure &sect-num;.2. Thread Group with Default Values</figure>
+
+<p>Start by providing a more descriptive name for our Thread Group. In the name
+field, enter JMeter Users.</p>
+
+<p>Next, increase the number of users (called threads) to 10.</p>
+
+<p>In the next field, the Ramp-Up Period, leave the default value of 0
+seconds.  This property tells JMeter how long to delay between starting each
+user. For example, if you enter a Ramp-Up Period of 5 seconds, JMeter will
+finish starting all of your users by the end of the 5 seconds.  So, if we have
+5 users and a 5 second Ramp-Up Period, then the delay between starting users
+would be 1 second (5 users / 5 seconds = 1 user per second).  If you set the
+value to 0, then JMeter will immediately start all of your users.</p>
+
+<p>Finally, clear the checkbox labeled "<code>Forever</code>", and enter a value of <code>2</code> in
+the Loop Count field.  This property tells JMeter how many times to repeat your
+test. If you enter a loop count value of <code>0</code>, then JMeter will run your test only
+once. To have JMeter repeatedly run your Test Plan, select the <code>Forever</code>
+checkbox.</p>
+
+<note>In most applications, you have to manually accept
+changes you make in a Control Panel.  However, in JMeter, the Control Panel
+automatically accepts your changes as you make them.  If you change the
+name of an element, the tree will be updated with the new text after you
+leave the Control Panel (for example, when selecting another tree element).</note>
+
+<p>See Figure &sect-num;.2 for the completed JMeter Users Thread Group.</p>
+
+<figure image="webtest/threadgroup2.png">
+Figure &sect-num;.3. JMeter Users Thread Group</figure>
+</section>
+
+<section name="&sect-num;.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
+<p>The final element you need to add to your Test Plan is a
+ <a href="component_reference.html#listeners">Listener</a>. This element is
+responsible for storing all of the results of your HTTP requests in a file and presenting
+a visual model of the data.</p>
+
+<p>Select the JMeter Users element and add a <complink name="Aggregate Graph"/> listener 
+(<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Listener</guimenuitem>
+  <guimenuitem>Aggregate Graph</guimenuitem>
+</menuchoice>).  Next, you need to specify a directory and filename of the
+output file.  You can either type it into the filename field, or select the
+Browse button and browse to a directory and then enter a filename.</p>
+
+<figure width="1256" height="802" image="ws_listener.png">
+Figure &sect-num;.4. Graph Results Listener</figure>
+
+</section>
+
+<section name="&sect-num;.4 Rest Webservice" anchor="rest_webservice">
+<p>Testing a REST Webservice is very similar as you only need to modify in HTTP Request
+<ul>
+<li><code>Method</code>: to select the one you want to test</li>
+<li><code>Body Data</code>: which can be JSON, XML or any custom text</li>
+</ul>
+You may also need to modify "<code>HTTP Header Manager</code>" to select the correct "<code>Content-Type</code>"
+</p>
+</section>
+</body>
+</document>

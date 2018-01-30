@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<httpSample s="true" lb="HTTP-Request-WithNoMatchingAuth" rc="200" rm="OK" tn="Thread Group 1-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP-Request-WithNoMatchingAuth" rc="200" rm="OK" tn="Thread Group 1-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTPS-Request-WithNoMatchingAuth" rc="200" rm="OK" tn="Thread Group 2-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTPS-Request-WithNoMatchingAuth" rc="200" rm="OK" tn="Thread Group 2-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP-Request-NoAuthManager" rc="200" rm="OK" tn="Thread Group 3-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP-Request-NoAuthManager" rc="200" rm="OK" tn="Thread Group 3-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTPS-Request-NoAuthManager" rc="200" rm="OK" tn="Thread Group 4-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTPS-Request-NoAuthManager" rc="200" rm="OK" tn="Thread Group 4-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP-Request-WithMatchingBasicAuth" rc="200" rm="OK" tn="Thread Group 5-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP-Request-WithMatchingBasicAuth" rc="200" rm="OK" tn="Thread Group 5-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTPS-Request-WithMatchingBasicAuth" rc="200" rm="OK" tn="Thread Group 6-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTPS-Request-WithMatchingBasicAuth" rc="200" rm="OK" tn="Thread Group 6-1" dt="text">
+  <assertionResult>
+    <name>JSA_CheckAuthorization</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+
+</testResults>

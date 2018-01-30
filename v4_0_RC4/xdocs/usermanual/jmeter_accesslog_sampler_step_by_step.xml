@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '28'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document prev="junitsampler_tutorial.html" next="jmeter_tutorial.html" id="$Id$">
+
+<properties>
+  <author email="dev@jmeter.apache.org">JMeter developers</author>
+  <title>Access log sampler Step-by-step</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Access log sampler Step-by-step" anchor="access-log-sampler">
+
+<p>
+This is a short tutorial on JMeter's access log sampler. The purpose of the Access Log Sampler
+is to provide an easy way to simulate production traffic. There are several benefits to using access logs.
+</p>
+
+<ul>
+  <li>Rather than guess what users are doing, the test plan is using real traffic data</li>
+  <li>As the traffic pattern changes, the access log provides a record of individual changes and general shifts in usage</li>
+  <li>Access logs contain a lot of useful data, which may provide some insight</li>
+  <li>Access logs can be minded to determine different types of users</li>
+  <li>Access logs can capture detailed session information</li>
+</ul>
+
+<p>
+The down side of using access logs for test plans is you have to configure the webserver to output the request
+information. This may not be appropriate where security is an issue. For example, if the webserver dumps the post
+data from each request to the access logs, users login and password would be stored in plain text. Here are some
+general cases where access logs might be inappropriate.
+</p>
+
+<ul>
+  <li>Security sensitive applications where the data is encrypted</li>
+  <li>The application does not allow fine grain control of which request parameters are written to the access logs</li>
+  <li>The application needs correlation between requests</li>
+  <li>The webserver cannot be configured to append the post data to the access log</li>
+  <li>The webserver is hosting multiple applications, but doesn't provide a way to log the requests of one application to a separate file</li>
+</ul>
+
+<p>
+To take advantage of access logs, the first thing is the webserver needs to be configured to use extended
+log format. Links for configuring the popular containers are provided below.
+</p>
+
+<ul>
+  <li><a href="http://e-docs.bea.com/wls/docs70/adminguide/web_server.html#113868">BEA Weblogic</a></li>
+  <li><a href="http://tomcat.apache.org/tomcat-8.5-doc/config/valve.html#Access_Log_Valve">Tomcat</a></li>
+  <li><a href="http://e-docs.bea.com/wls/docs61/adminguide/web_server.html#113868">Websphere</a></li>
+  <li><a href="http://www.caucho.com/resin-3.0/config/log.xtp#access-log">Resin</a></li>
+</ul>
+
+<p>
+In some cases, it may be desirable to write custom logging, so that sensitive information is not written
+to the access logs. This article does not cover the techniques for writing custom logging.
+</p>
+
+<subsection name="&sect-num;.1 Step-by-Step" anchor="step-by-step">
+
+<ol>
+  <li>Start JMeter</li>
+  <li>Select <code>Test Plan</code></li>
+  <li>Right click
+      <menuchoice>
+        <guimenuitem>Add</guimenuitem>
+        <guimenuitem>Threads (Users)</guimenuitem>
+        <guimenuitem>Thread Group</guimenuitem>
+      </menuchoice>
+      <figure width="676" height="233" image="add-threadgroup.png">Add Thread Group</figure>
+   </li>
+  <li>Select <code>Thread Group</code></li>
+  <li>Right click
+      <menuchoice>
+        <guimenuitem>Add</guimenuitem>
+        <guimenuitem>Sampler</guimenuitem>
+        <guimenuitem>Access Log Sampler</guimenuitem>
+      </menuchoice>
+      <figure width="704" height="283" image="add-access-log-sampler.png">Add Access Log Sampler</figure>
+  </li>
+  <li>Right click on <code>Thread Group</code>
+      <menuchoice>
+        <guimenuitem>Add</guimenuitem>
+        <guimenuitem>Listener</guimenuitem>
+        <guimenuitem>Aggregate Report</guimenuitem>
+      </menuchoice>
+      <figure width="752" height="326" image="add-aggregate-report.png">Add Aggregate Report</figure>
+  </li>
+  <li>Select the <code>Access Log Sampler</code>
+      <figure width="702" height="305" image="accesslogsampler.png">Access Log Sampler</figure>
+  </li>
+  <li>Enter the IP address or hostname in <code>Server</code></li>
+  <li>Enter the port in <code>Port</code></li>
+  <li>If you want to download the images, set <code>Parse images</code> to <code>true</code>.</li>
+  <li>Select a file for <code>Log File Location</code>
+      <figure width="703" height="315" image="example-access-log-sampler.png">Filled in Access Log Sampler</figure>
+  </li>
+  <li>Select Aggregate Report</li>
+  <li>Enter <code>results.jtl</code> for filename
+      <figure width="344" height="150" image="example-aggregate-report.png">Aggregate Report with filename</figure>
+  </li>
+</ol>
+
+<p>
+At this point, the test plan is ready. Start the test with
+  <keycombo><keysym>Ctrl</keysym><keysym>R</keysym></keycombo>
+or from the menu
+   <menuchoice>
+     <guimenuitem>Start</guimenuitem>
+     <guimenuitem>Run</guimenuitem>
+   </menuchoice>.
+</p>
+
+</subsection>
+
+</section>
+
+</body>
+
+</document>

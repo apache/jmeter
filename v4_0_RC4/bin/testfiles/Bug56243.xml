@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="Starting iteration" rc="200" rm="OK" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="Debug RE" rc="200" rm="OK" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="DS-123" rc="200" rm="OK" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="Starting iteration" rc="200" rm="OK" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="Debug RE" rc="200" rm="OK" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="DS-123" rc="200" rm="OK" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="Starting iteration" rc="200" rm="OK" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="Debug RE" rc="200" rm="OK" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="DS-123" rc="200" rm="OK" dt="text" sc="1" ec="0" ng="1" na="1"/>
+
+</testResults>

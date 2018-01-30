@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!DOCTYPE document
+[
+<!ENTITY sect-num '22'>
+]>
+<document prev="regular_expressions.html" next="glossary.html" id="$Id: $">
+
+<properties>
+  <title>User's Manual: Hints and Tips</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Hints and Tips" anchor="hints">
+<p>
+This section is a collection of various hints and tips that have been suggested by various questions on the JMeter User list.
+If you don't find what you are looking for here, please check the <a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>.
+Also, try search the JMeter User list; someone may well have already provided a solution.
+</p>
+<subsection name="&sect-num;.1 Passing variables between threads" anchor="variable_and_threads">
+<p>
+JMeter variables have thread scope. This is deliberate, so that threads can act independently.
+However sometimes there is a need to pass variables between different threads, in the same or different Thread Groups.
+</p>
+<p>
+One way to do this is to use a property instead. 
+Properties are shared between all JMeter threads, so if one thread <a href="functions.html#__setProperty">sets a property</a>,
+another thread can <a href="functions.html#__P">read</a> the updated value.
+</p>
+<p>
+If there is a lot of information that needs to be passed between threads, then consider using a file.
+For example you could use the <a href="component_reference.html#Save_Responses_to_a_file">Save Responses to a file</a>
+listener or perhaps a BeanShell PostProcessor in one thread, and read the file using the HTTP Sampler "<code>file:</code>" protocol,
+and extract the information using a PostProcessor or BeanShell element.
+</p>
+<p>
+If you can derive the data before starting the test, then it may well be better to store it in a file,
+read it using CSV Dataset.
+</p>
+</subsection>
+
+<subsection name="&sect-num;.2 Enabling Debug logging" anchor="debug_logging">
+<p>
+Most test elements include debug logging. If running a test plan from the GUI, 
+select the test element and use the Help Menu to enable or disable logging.
+The Help Menu also has an option to display the GUI and test element class names.
+You can use these to determine the correct property setting to change the logging level.
+</p>
+
+<p>
+It is sometimes very useful to see Log messages to debug dynamic scripting languages like BeanShell or
+groovy used in JMeter.
+You can view log messages directly in JMeter GUI, to do so:</p>
+<ul>
+<li>use menu <menuchoice><guimenuitem>Options</guimenuitem><guimenuitem>Log Viewer</guimenuitem></menuchoice>,
+a log console will appear at the bottom of the interface</li>
+<li>Or click on the Warning icon in the upper right corner of GUI</li>
+</ul>
+By default this log console is disabled, you can enable it by changing in <code>jmeter.properties</code>:
+<source>jmeter.loggerpanel.display=true</source>
+
+To avoid using too much memory, this components limits the number of characters used by this panel:
+
+<source>jmeter.loggerpanel.maxlength=80000</source>
+</subsection>
+
+<subsection name="&sect-num;.3 Searching" anchor="searching">
+<p>
+It is sometimes hard to find in a Test Plan tree and elements using a variable or containing a certain URL or parameter.
+A new feature is now available since 2.6, you can access it in Menu Search.
+It provides search with following options:
+</p>
+<dl>
+<dt><code>Case sensitive</code></dt><dd>Makes search case sensitive</dd>
+<dt><code>Regular exp.</code></dt><dd>Is text to search a regexp, if so Regexp will be searched in Tree of components, example "<code>\btest\b</code>"
+will match any component that contains test in searchable elements of the component</dd>
+</dl>
+
+<figure width="768" height="339" image="searching/raw-search.png">Figure 1 - Search raw text in TreeView</figure>
+<figure width="767" height="316" image="searching/raw-search-result.png">Figure 2 - Result in TreeView</figure>
+<figure width="772" height="319" image="searching/regexp-search.png">Figure 3 - Search Regexp in TreeView (in this example we search whole word)</figure>
+<figure width="771" height="302" image="searching/regexp-search-result.png">Figure 4 - Result in TreeView</figure>
+
+</subsection>
+
+<subsection name="&sect-num;.4 JMeter with a HiDPI screen on Linux or Windows" anchor="hidpi">
+<description>
+    <p>
+    The HiDPI mode isn't currently support by the Swing API in Java on Linux, MacOS or Windows. Therefore
+    JMeter can be very hard to read with a HiDPI screen (little icons and chars).
+    </p>
+    <p>You can improve the JMeter's display on HiDPI screen by changing some properties:</p>
+    <dl>
+      <dt><code>jmeter.hidpi.mode</code></dt>
+      <dd>set to <code>true</code> to activate a '<em>pseudo</em>'-hidpi mode allowing to increase size of some UI elements</dd>
+      <dt><code>jmeter.hidpi.scale.factor</code></dt>
+      <dd>set to <code>2.0</code> to scale the size of some UI elements</dd>
+      <dt><code>jmeter.toolbar.icons.size</code></dt>
+      <dd>with these values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</code> (Suggested value for HiDPI)</dd>
+      <dt><code>jmeter.tree.icons.size</code></dt>
+      <dd>with these values: <code>19x19</code> (default size), <code>24x24</code>, <code>32x32</code> (Suggested value for HiDPI) or <code>48x48</code></dd>
+    </dl>
+    <p>Additionally you can increase the font size of the text areas in some elements like JSR223 sampler by changing theses properties:</p>
+    <dl>
+      <dt><code>jsyntaxtextarea.font.family</code></dt>
+      <dd>set to <code>Hack</code> to activate and to change the font and their size</dd>
+      <dt><code>jsyntaxtextarea.font.size</code></dt>
+      <dd>set to a greater value, like <code>28</code> (Suggested value for HiDPI)</dd>
+    </dl>
+    <note>This is not a full HiDPI support and only affects
+      <ul>
+        <li>JMeter tree nodes</li>
+        <li>Icons in the toolbar</li>
+        <li>Tables content</li>
+        <li>Font size into text areas</li>
+      </ul>
+    </note>
+</description>
+</subsection>
+
+<subsection name="&sect-num;.5 Autosave process configuration" anchor="autosave">
+<description>
+    <p>Since JMeter 3.0, JMeter automatically saves up to ten backups of every saved jmx files. When enabled, just before the jmx file is saved,
+    it will be backed up to the <code>${JMETER_HOME}/backups</code> subfolder. Backup files are named after the saved jmx file and assigned a
+    version number that is automatically incremented, ex: <code>test-plan-000001.jmx</code>, <code>test-plan-000002.jmx</code>, <code>test-plan-000003.jmx</code>, etc.
+    To control auto-backup, add the following properties to <code>user.properties</code>.</p>
+    <dl>
+      <dt><code>backup_on_save</code></dt>
+      <dd>
+       To enable/disable auto-backup, set the following property to <code>true</code>/<code>false</code> (default is <code>true</code>):
+       <source>jmeter.gui.action.save.backup_on_save=false</source>
+      </dd>
+      <dt><code>backup_directory</code></dt>
+      <dd>
+    The backup directory can also be set to a different location. Setting the <code>jmeter.gui.action.save.backup_directory</code> property
+    to the path of the desired directory
+    will cause backup files to be stored inside instead of the <code>${JMETER_HOME}/backups</code> folder. If the specified directory does not exist
+    it will be created. Leaving this property unset will cause the <code>${JMETER_HOME}/backups</code> folder to be used.
+    <source>jmeter.gui.action.save.backup_directory=/path/to/backups/dir</source>
+      </dd>
+      <dt><code>keep_backup_max_hours</code></dt>
+      <dd>
+    You can also configure the maximum time (in hours) that backup files should be preserved since the most recent save time.
+    By default a zero expiration time is set which instructs JMeter to preserve backup files for ever.
+    Use the following property to control max preservation time:
+    <source>jmeter.gui.action.save.keep_backup_max_hours=0</source>
+      </dd>
+      <dt><code>keep_backup_max_count</code></dt>
+      <dd>
+    You can set the maximum number of backup files that should be preserved. By default <code>10</code> backups will be kept.
+    Setting this to zero will cause the backups to never being deleted (unless <code>keep_backup_max_hours</code> is set to a non null value)
+    Maximum backup files selection is processed <em>after</em> time expiration selection, so even if you set one year as the expiry time,
+    only the <code>keep_backup_max_count</code> most recent backups files will be kept.
+    <source>jmeter.gui.action.save.keep_backup_max_count=10</source>
+      </dd>
+    </dl>
+</description>
+</subsection>
+
+    <subsection name="&sect-num;.5 Adding Elements with Hotkeys" anchor="component_hotkeys">
+        <p>
+            When you do intense scripting with JMeter, there is a way to add elements to test plan quickly
+            with keyboard shortcuts. Default bindings are:
+        </p>
+        <dl>
+            <dt>
+                <keycombo><keysym>Ctrl</keysym><keysym>0</keysym></keycombo>
+            </dt>
+            <dd>Thread Group</dd>
+            <dt>
+                <keycombo><keysym>Ctrl</keysym><keysym>1</keysym></keycombo>
+            </dt>
+            <dd>HTTP Request</dd>
+            <dt>
+                <keycombo><keysym>Ctrl</keysym><keysym>2</keysym></keycombo>
+            </dt>
+            <dd>Regular Expression Extractor</dd>
+            <dt>
+                <keycombo><keysym>Ctrl</keysym><keysym>3</keysym></keycombo>
+            </dt>
+            <dd>Response Assertion</dd>
+            <dt>
+                <keycombo><keysym>Ctrl</keysym><keysym>4</keysym></keycombo>
+            </dt>
+            <dd>Constant Timer</dd>
+            <dt>
+                <keycombo><keysym>Ctrl</keysym><keysym>5</keysym></keycombo>
+            </dt>
+            <dd>Test Action</dd>
+            <dt>
+                <keycombo><keysym>Ctrl</keysym><keysym>6</keysym></keycombo>
+            </dt>
+            <dd>JSR223 PostProcessor</dd>
+            <dt>
+                <keycombo><keysym>Ctrl</keysym><keysym>7</keysym></keycombo>
+            </dt>
+            <dd>JSR223 PreProcessor</dd>
+            <dt>
+                <keycombo><keysym>Ctrl</keysym><keysym>8</keysym></keycombo>
+            </dt>
+            <dd>Debug Sampler</dd>
+            <dt>
+                <keycombo><keysym>Ctrl</keysym><keysym>9</keysym></keycombo>
+            </dt>
+            <dd>View Results Tree</dd>
+        </dl>
+        <note>The binding above are made for Windows QWERTY keyboards. For other platforms and keyboards ensure you adapt those values.</note>
+        <p>
+            To change these binding, please find "<code>gui.quick_*</code>" properties within <code>jmeter.properties</code> file as example,
+            it is recommended to put overrides for them into <code>user.properties</code> file.
+        </p>
+    </subsection>
+</section>
+
+</body>
+</document>

@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!DOCTYPE document
+[
+<!ENTITY hellip   "&#x02026;" >
+]>
+<document>
+  <properties>
+    <title>Building and Contributing to JMeter</title>
+  </properties>
+<body>
+<section name="Building JMeter" >
+
+Before you can compile JMeter, you will need a few things:
+<ul>
+<li>a Java 8 compatible JDK (Java Development Kit)</li>
+<li>a working installation of <a href="http://ant.apache.org">Ant</a> (at least version 1.9.1)</li>
+<li>the JMeter sources as shown in the next section</li>
+</ul>
+
+<h3>Acquiring the source</h3>
+<p>The full source is distributed alongside the binary, and you can also find it <a href="./svnindex.html">in the source repositories.</a></p>
+<p>
+The source archive, SVN and GIT do not contain any of the required library files.
+
+<h3>Compiling and packaging JMeter using Eclipse</h3>
+<h4>Option 1 : Setting up Eclipse project with Ant task</h4>
+Once you have downloaded the sources using git or svn, you can setup the Eclipse project by running:
+
+<source>ant setup-eclipse-project</source>
+
+You can then import the project using 
+<menuchoice>
+    <guimenuitem>File</guimenuitem>
+    <guimenuitem>Import</guimenuitem>
+    <guimenuitem>Existing projects into Workspace</guimenuitem>
+</menuchoice> and select the folder containing JMeter sources.
+
+<h4>Option 2 : Setting up Eclipse project manually</h4> 
+The first step is to download dependencies by running the Ant command:</p>
+<source>
+ant download_jars
+</source>
+<p>Or you can download the binary distribution archive for a release and unpack it into the same directory structure as the source.
+This will ensure that the <code>lib/</code> directory contains the jar files needed for running JMeter.
+There are a few additional jars that are needed to build JMeter, download these using:
+</p>
+<source>
+ant download_jars
+</source>
+<p>
+This will retrieve any missing jars.
+</p>
+<note>
+If you are behind a proxy, you can set a few build properties in <code>build-local.properties</code> for ant to use the proxy:
+<source>
+proxy.use=true
+proxy.host=proxy.example.invalid
+proxy.port=8080
+proxy.user=your_user_name
+proxy.pass=your_password
+</source>
+You might also want to skip some tests - that are failing without proper access to the internet - by adding some more
+properties into <code>build-local.properties</code>:
+<source>
+skip.bug52310=true
+skip.bug60607=true
+skip.batchtest_Http4ImplPreemptiveBasicAuth=true
+skip.batchtest_SlowCharsFeature=true
+skip.batchtest_TestKeepAlive=true
+skip.test_http=true
+skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
+</source>
+</note>
+
+<p>
+Once you have downloaded the source from SVN or the release archives and run the ant <code>download_jars</code> target to
+install the dependent jars, you can configure Eclipse. The easiest way to do this is to replace the Eclipse <code>.classpath</code>
+file with the <code>eclipse.classpath</code> file provided with JMeter. This will set up the source-paths and most of the libraries.
+</p>
+<p>
+Ensure you read <code>eclipse.md</code> for project configuration.
+</p>
+
+
+<h3>Compiling and packaging JMeter using Ant</h3>
+<p>
+JMeter can be built entirely using Ant.
+The basic command is:</p>
+<source>
+ant install
+</source>
+<p>
+See <code>build.xml</code> (or call <code>ant -p</code>) for the other targets that can be used. Note that you can skip the word <code><em>install</em></code> after <code>ant</code> as it is the default target.
+</p>
+</section>
+
+<section name="Contributing to JMeter">
+<h2>We love contribution</h2>
+<p>
+We are very grateful to you if you take some time to contribute to the project.
+If you have some time to spend on the project you can pick existing enhancement or bug from <a target="_blank" href="issues.html">Issues page</a>.<br/>
+You can also contribute to translation, see <a href="localising/index.html">JMeter Localisation (Translator's Guide)</a>.
+</p>
+
+<h2>Submitting a patch</h2>
+<p>
+If you want to contribute to JMeter for a bug fix or enhancement, here is the procedure to follow:
+</p>
+
+<h3>Check your patch</h3>
+<p>
+Before submitting your patch ensure you do the following:<br/>
+
+Check that patch compiles and follows Tab space policy by running:
+</p>
+<source>ant package-and-check</source>
+<p>
+Check that patch does not break JUnit tests by running:
+</p>
+<source>ant test</source>
+
+<h3>Create a PR using GIT</h3>
+<ul>
+    <li>Open a bugzilla issue, see <a target="_blank" href="issues.html">Issues page</a></li>
+    <li>Fork <a href="https://www.github.com/apache/jmeter" >Apache JMeter mirror</a></li>
+    <li>Clone your forked repository locally : <source>git clone https://github.com/yourid/jmeter/</source></li>
+    <li>Create a branch using for example bugzilla id: <source>git branch BUGID</source></li>
+    <li>Checkout the new branch : <source>git checkout BUGID</source></li>
+    <li>commit your fix there : <source>git commit -m 'Fix to BUGID' list of files</source></li>
+    <li>Add JMeter repository as upstream : <source>git remote add upstream http://www.github.com/apache/jmeter</source></li>
+    <li>push it : <source>git push origin BUGID</source></li>
+    <li>Create a PR and link it in the bugzilla issue</li>
+</ul>
+
+<h3>Create a PR using Patch</h3>
+<ul>
+    <li>Open a bugzilla issue, see <a target="_blank" href="issues.html">Issues page</a></li>
+    <li>Checkout Apache JMeter source</li>
+    <li>Code your fix</li>
+    <li>Create your patch by Right clicking on Eclipse project and select 
+        <menuchoice>
+            <guimenuitem>Team</guimenuitem>
+            <guimenuitem>Create Patch &hellip;</guimenuitem>
+        </menuchoice></li>
+    <li>Attach your patch to the bugzilla issue</li>
+</ul>
+</section>
+
+<section name="Automated builds">
+<h2>Automated (nightly) builds</h2>
+<p>
+As part of the development process, the JMeter project has access to various Continuous Integration (CI) server builds.
+The build output can be useful for testing recent changes to the code-base. 
+</p>
+<p>
+Please note that the builds have not undergone any QA and should only be used for development testing.
+For further information, see the <a href="nightly.html">Nightly builds for developers</a> page.
+</p>
+</section>
+
+<section name="Building Add-Ons">
+<h2>Building Add-Ons</h2>
+<p>
+There is no need to build JMeter if you just want to build an add-on.
+Just download the binary archive and add the jars to the classpath or use Maven artifacts to build your add-ons.
+You may want to also download the source so it can be used by the IDE.
+</p>
+<p>See the <code>extras/addons*</code> files in the source tree for some suggestions</p>
+</section>
+</body>
+</document>

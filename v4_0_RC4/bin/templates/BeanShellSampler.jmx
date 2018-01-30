@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.5" jmeter="2.10-SNAPSHOT.20130710">
+  <hashTree>
+    <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BeanShell Sampler" enabled="true">
+      <stringProp name="BeanShellSampler.query">// A simple script
+log.info(&quot;Example&quot;);
+
+type = bsh.args[0];
+
+log.info(type);
+
+if (&quot;1&quot;.equals(type)) {
+	ResponseCode = 2 * 100;
+	ResponseMessage = bsh.args[1];
+} else {
+	ResponseCode = 500;
+	ResponseMessage = &quot;Invalid Type: &quot; + type;
+	IsSuccess = false;
+}
+return Parameters;</stringProp>
+      <stringProp name="BeanShellSampler.filename"></stringProp>
+      <stringProp name="BeanShellSampler.parameters">2 OK</stringProp>
+      <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+    </BeanShellSampler>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>

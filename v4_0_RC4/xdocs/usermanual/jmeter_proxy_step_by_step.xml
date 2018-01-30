@@ -1,0 +1,243 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '26'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document prev="jmeter_distributed_testing_step_by_step.html" next="junitsampler_tutorial.html" id="$Id$">
+
+<properties>
+  <author email="dev@jmeter.apache.org">JMeter developers</author>
+  <title>Apache JMeter HTTP(S) Test Script Recorder</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Apache JMeter HTTP(S) Test Script Recorder" anchor="script-recorder">
+
+<p>
+This tutorial attempts to explain the exact steps for recording HTTP/HTTPS. For those new to JMeter, one easy way to create a test plan is to use the Recorder.
+</p>
+
+<subsection name="&sect-num;.1 JMeter configuration" anchor="configuration">
+
+<p>
+Since JMeter 2.10, recording has been improved to better handle embedded resources and creation of certificates on the fly.
+To enable these features, JMeter uses <code>keytool</code> utility (available in JRE/JDK) so you need to ensure your
+configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecording210">this wiki page before starting.</a>
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.2 Basic Instructions" anchor="basic-instructions">
+
+<ol>
+  <li>Go to <code>JMETER_HOME/bin</code> and start JMeter with <code>jmeterw.bat</code> on Windows
+      and <code>jmeter.sh
+      </code> on Linux/Unix</li>
+  <li>Select <code>Templates&hellip;</code> on the menu bar</li>
+  <figure image="Select-Templates-Icon.png"></figure>
+  <li>Select <code>Recording template</code> on the list</li>
+  <figure image="Select-Recording-Template.png"></figure>
+  <li>A complete <code>Test Plan</code> is generated</li>
+  <figure image="Test_Generated.png"></figure>
+  <li>In the <code>HTTP Request Defaults</code> element:
+    <dl>
+      <dt><code>Server name or IP</code></dt><dd>enter <code>example.com</code></dd>
+      <dt><code>Path</code></dt><dd>leave blank</dd>
+    </dl>
+    <figure image="http-config/http-request-defaults.png"></figure>
+  </li>
+  <li>Return to <code>HTTP(S) Test Script Recorder</code>, and click the <code>Start</code> button at the top.</li>
+  <figure image="Proxy_Run.png"></figure>
+</ol>
+
+<p>
+This will start the JMeter proxy server which is used to intercept the browser requests.
+A file called <code>ApacheJMeterTemporaryRootCA.crt</code> will be generated in <code>JMETER_HOME/bin</code>
+folder. Install this certificate in your browser, if you don't know how to do it,
+read <a href="component_reference.html#HTTP%28S%29_Test_Script_Recorder">Installing the JMeter CA certificate for HTTPS recording</a>
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.3 Configure your browser to use the JMeter Proxy" anchor="configure-browser">
+
+<p>
+At this point, JMeter's proxy is running. For this exercise, we will use Iceweasel/Firefox
+to view some pages on the JMeter website.
+</p>
+
+<ol>
+  <li>Start Iceweasel/Firefox, but do not close JMeter.</li>
+  <li>From the tool bar, click 
+      <menuchoice>
+        <guimenuitem>Edit</guimenuitem>
+        <guimenuitem>Preferences</guimenuitem>
+      </menuchoice> (or 
+      <menuchoice>
+        <guimenuitem>Tools</guimenuitem>
+        <guimenuitem>Preferences</guimenuitem>
+      </menuchoice> or type <code>about:preferences#advanced</code>
+      as URL). This should bring up the options.
+    <figure width="914" height="566" image="firefox-network-settings.png"></figure>
+  </li>
+  <li>Select the <code>Advanced</code> tab, and <code>Network</code> tab</li>
+  <li>Click <code>Settings</code> button near the top.</li>
+  <li>On the new pop-up, check <code>Manual proxy configuration</code>. The address and
+      port fields should be enabled now.
+    <dl>
+      <dt><code>Address</code></dt><dd>enter <code>localhost</code> or the IP address of your system</dd>
+      <dt><code>Port</code></dt><dd>enter <code>8888</code>.</dd>
+    </dl>
+    <figure width="532" height="240" image="firefox-configure-proxy.png"></figure>
+  </li>
+  <li>Check <code>Use this proxy server for all protocols</code></li>
+  <li>Click <code>OK</code> button. This should return you to the browser</li>
+</ol>
+
+</subsection>
+
+<subsection name="&sect-num;.4 Record your navigation" anchor="navigation-recording">
+
+<ol>
+  <li>With your browser, in the <code>Address</code> bar at the top, enter <code>http://example.com/index.html</code> (replace <code>example.com</code> with your websites address).
+  and hit the <code>enter</code> key.</li>
+  <li>Click on a few links on your sites pages.</li>
+  <li>Close your browser and bring up the JMeter window.</li>
+</ol>
+
+<p>
+Expand the <code>Thread Group</code> and there should be several samplers. At this point, the test plan can
+be saved as is.
+<note>If you forget to add default HTTP Request settings, you will have to manually
+delete the server name, and port.</note>
+</p>
+
+<figure width="258" height="194" image="example-recording.png"></figure>
+<p>
+In this sample, there aren't any default request parameters. If a particular request parameter
+is required by all pages, the request defaults is where one would add the entries.
+</p>
+
+<ol>
+  <li>Select <code>Thread Group</code> and change a few defaults:
+    <dl>
+      <dt><code>Number of Threads (users)</code></dt><dd>enter <code>5</code></dd>
+      <dt><code>Ramp-Up Period (in seconds)</code></dt><dd>do not change</dd>
+      <dt><code>Loop Count</code></dt><dd>enter <code>100</code></dd>
+    </dl>
+    <figure width="357" height="288" image="example-thread-group.png"></figure>
+  </li>
+</ol>
+
+</subsection>
+
+<subsection name="&sect-num;.5 Validate the script" anchor="validate-script">
+
+<p>
+Now we need to validate the script before to run our test plan. Save the test plan.
+</p>
+<p>
+Right click on the <code>Thread Group</code>
+  <menuchoice>
+    <guimenuitem>Validate</guimenuitem>
+  </menuchoice>
+  <figure image="Validate-Test-Plan.png"></figure>
+</p>
+<p>
+Check with <code>View Results Tree</code> element if all is ok.
+</p>
+</subsection>
+
+<subsection name="&sect-num;.6 Variabilize and Correlate the script" anchor="correlate-start">
+<p>
+In some scripts, we will need to:
+<ul>
+  <li>Variabilize some input (login, password, search words, &hellip;)</li>
+  <li>Correlate some data (session variable, &hellip;) between two requests</li>
+</ul>
+</p>
+<p>
+To variabilize, we can use:
+<ul>
+  <li><code>CSV Data Set Config</code> to get input data from csv file</li>
+  <li>JMeter functions like <code>__counter</code>, <code>__time</code>, &hellip;</li>
+  <li>etc.</li>
+</ul>
+</p>
+<p>
+To correlate, we can get data from a request with <code>Post Processors</code> like <code>JSON Extractor</code>, <code>Regular Expression Extractor</code>, &hellip; and inject it in another request.
+</p>
+<p>
+To find data to correlate, the easiest way to do it is to use the Search function in <code>View Results Tree</code>.
+<figure image="Search-Correlation.png"></figure>
+</p>
+</subsection>
+
+<subsection name="&sect-num;.7 Start the test" anchor="test-start">
+
+<p>
+At this point, we are ready to run our test plan and see what happens. When you're
+ready to run the test, there are two ways:
+<ol>
+  <li>With the gui, but it's not recommended to big load test.</li>
+  <li>With the command line.</li>
+</ol>
+</p>
+
+
+<p>
+Solution 1, with the gui, but just during debug phase, use Non GUI for your load test.
+</p>
+<p>
+  <menuchoice>
+    <guimenuitem>Run</guimenuitem>
+    <guimenuitem>Start</guimenuitem>
+  </menuchoice>
+or use the keyboard and press <keycombo><keysym>Ctrl</keysym><keysym>R</keysym></keycombo>
+</p>
+
+<p>
+  Before you start the test,  add a <code>Summary Report</code> element and select it. As the test runs, the statistics will change
+  until the test is done. At the end of the test, the summary report should look like this.
+  <figure width="984" height="220" image="example-summary-report.png"></figure>
+</p>
+
+
+<p>
+  While the test is running, in the upper right-hand corner, there should be a green circle. When the test is done, the circle should be grey.
+  <figure width="132" height="39" image="example-running.png"></figure>
+</p>
+
+<p>
+Solution 2, in command line, use <code>jmeter -n -t [jmx file] -l [results file] -e -o [Path to output folder]</code>
+</p>
+<p>
+At the end of the test, an HTML report will be generated and available in [Path to output folder] used in command line.
+</p>
+
+</subsection>
+
+</section>
+
+</body>
+
+</document>

@@ -1,0 +1,211 @@
+<?xml version="1.0"?> 
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document>   
+<properties>     
+    <title>User's Manual: LDAP answer XML description</title>   
+    <author email="dev@jmeter.apache.org">Apache JMeter developers</author>
+  </properties> 
+<body> 
+
+<section name="description of the ldapanswer XML definition" anchor="ldapans_xml">
+<p>
+    The extended LDAP sampler was built to support testing for very complex testpurposes.
+    It was aimed at supporting the LDAP operations as close as possible.
+    As the results are not passed back in a user-readable form, I invented my own xml definition to 
+    construct an answer in xml encoding, so the results may be parsed with regextracter or alike functions.
+</p>
+
+<subsection name="1 Global overview" anchor="overview">
+<p>
+    The global structure is as follows:<br/>
+<!--
+<ol>
+<li>
+    &lt;ldapanswer&gt; and &lt;ldapanswer/&gt; are the begin and endtags which are used to define the beginning ands end of the answer.
+
+</li>
+<li>
+    each ldapanswer contains 4 sections, an "operation" section (enclosed by 
+    &lt;operation&gt; tags) a response code section (enclosed by &lt;responsecode&gt; tags), a 
+    response message (enclosed by &lt;responsemessage&gt; tags and (only with a search 
+    request) a searchresult section (enclosed with &ltsearchresult&gt tags>
+</li>
+</ol>
+-->
+</p>
+<subsection name="1.1 The operation section" anchor="operation">
+<p>
+The operation section defines the operation as it is sent to the LDAP Server. The 
+following tags (with a short explanation) are used
+<!--
+<ol>
+<li>
+    &lt;opertype&gt;<br>
+    Thise describes which kind of operation was sent, it can have the following values:
+    <ol>
+    <li>
+    bind<br>
+    (this code is used for both a thread bind as a single bind/unbind operation)
+    </li>
+    <li>
+    unbind
+    </li>
+    <li>
+    compare
+    </li>
+    <li>
+    add
+    </li>
+    <li>
+    delete
+    </li>
+    <li>
+    modfiy
+    </li>
+    <li>
+    rename
+    </li>
+    <li>
+    search
+    </li>
+    </ol>
+</li>
+<li>
+&lt;attributes&gt;
+This will name all attributes that will be added or modified during an "add" or a "modify"
+operation.
+</li>
+<li>
+&lt;baseobject&gt;
+This will hold the value of the root or context prefix that will be used in the current session.
+This value is given for any "thread bind" and "thread unbind" operation
+</li>
+<li>
+&lt;binddn&gt;
+This is the DN of the user that is binding to the directory, it is used in the 
+"thread bind", "thread unbind" and "single bind" operations.
+</li>
+<li>
+&lt;comparedn&gt;
+This is the DN of the object from which an attribute is compared to a given attributevalue
+It is only used in the "compare" operation.
+</li>
+<li>
+&lt;comparefilter&gt;
+This is the filter, in the form (attribute= value) that is used in the "compare" operation.
+</li>
+<li>
+&lt;countlimit&gt;
+This is the maximum number of searchresults that will be returned, as it is requested by the client.
+The actual number might be smaller as the server can have its own countlimit configured.
+This will be used only in search requests.</li>
+<li>
+&lt;dn&gt;
+This is the distinguished name of the object on which the actions are performed.
+It is used in Add, Delete, Modify and ModifyDN operations
+</li>
+<li>
+&lt;newdn&gt;
+This is the new distinghuised name of an object to which the object will be renamed 
+or moved, it is used in de ModifyDN operation
+</li>
+<li>
+&lt;scope&gt;
+This is used in search operations, it can be 0 (object), 1 (onelevel) or 2 (subtree).
+It defines the scope of the search which can be limited to the above settings.
+</li>
+<li>
+&lt;searchfilter&gt;
+The searchfilter that will be used in a search request, it should be in proper LDAP syntax.
+</li>
+<li>
+&lt;searchbase&gt;
+The searchbase where a search is started, this is given, relative to the baseobject of the current connection.
+</li>
+<li>
+&lt;timelimit&gt;
+This is the maximum timethe server will use in finding the requested objects.as it is requested by the client.
+The actual number might be smaller as the server can have its own countlimit configured.
+This will be used only in search requests.</li>
+</ol>
+-->
+</p>
+</subsection>
+
+<subsection name="1.2 Response message section" anchor="response_message">
+<p>
+As the response code, the official LDAP error definitions are used, so this section
+contains the error message as returned from the server.
+A successful request always returns "Success" as the response message.
+The following tag is used:
+<!--
+&lt;responsemessage&gt;<br>
+--></p>
+</subsection>
+<subsection name="1.3 Response code section" anchor="response_code">
+<p>
+As the response code, the official LDAP error definitions are used, so this section
+contains the error number as returned from the server.
+A successful request always returns 0 (zero) as the response code.
+The following tag is used:
+<!--
+&lt;responsecode&gt;<br>
+-->
+</p>
+</subsection>
+<subsection name="1.4 Search Result section" anchor="search">
+<p>
+The following tag is used:
+<!--
+&lt;searchresult&gt;<br>
+This gives the results from a serachrequest, as they are returned by the server.
+It contains the following tags:
+<ol>
+<li>
+&lt;dn&gt;
+This contains the complete distinguished name of the object which is represented here
+</li>
+<li>
+&lt;returnedattr&gt;
+This contains the number of returned attributes.
+</li>
+<li>
+&lt;attribute&gt;
+Each returned attribute is given between these tags, it always consists of an 
+attribute name and attribute value pair
+<ol>
+<li>
+&lt;attributename&gt;
+This contains the official attributename as returned by the server.
+</li>
+<li>
+&lt;attributevalue&gt;
+This contains the attribute value as returned by the server.
+</li>
+</ol>
+</li>
+</ol>
+
+--></p>
+
+</subsection>
+</subsection>
+</section>
+
+</body>
+</document>

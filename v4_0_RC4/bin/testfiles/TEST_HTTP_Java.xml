@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="JSS_startMirror" rc="200" dt="text"/>
+<httpSample s="true" lb="GET_NO_PARAMETERS" rc="200" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_NoContentLength</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="GET_WITH_PARAMETERS_IN_URL" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_NoContentLength</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="GET_WITH_PARAMETERS" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_NoContentLength</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-Gzip" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_Gzip</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_NoContentLength</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-NoGzip" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_NoGZIP_IN_RESPONSE</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_NoContentLength</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_NoGzip_IN_REQUEST</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-NoFollowRedirect" rc="302" dt="text">
+  <assertionResult>
+    <name>RA_Gzip</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_NoContentLength</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-FollowRedirect" rc="Non HTTP response code: java.io.IOException" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_NoContentLength</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <httpSample s="true" lb="http://localhost:8081/" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
+  <httpSample s="false" lb="http://localhost:8081/redirect" rc="Non HTTP response code: java.io.IOException" dt="text"/>
+</httpSample>
+<httpSample s="true" lb="HR-FollowRedirect" rc="Non HTTP response code: java.net.ProtocolException" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-POST_WITH_PARAMETERS" rc="200" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-POST_WITH_PARAMETERS_MULTIPART" rc="200" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-POST_WITH_PARAMETERS_MULTIPART_UTF-8" rc="200" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>JSR223-Assertion-CheckCorrectEncodingForParam</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-POST_WITH_BODY" rc="200" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-POST_WITH_FILE" rc="200" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-POST_MULTIPART_WITH_FILE" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_not_present</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_response_contains</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-POST_MULTIPART_WITH_FILE_AND_CONTENTTYPE" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_not_present</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_response_contains</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-PUT_MULTIPART_WITH_FILE_AND_CONTENTTYPE" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_not_present</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_response_contains</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-PUT_WITH_BODY" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_not_present</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_response_contains</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-PUT_WITH_PARAMETERS" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_not_present</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_response_contains</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<sample s="true" lb="JSS_stopMirror" rc="200" dt="text"/>
+
+</testResults>

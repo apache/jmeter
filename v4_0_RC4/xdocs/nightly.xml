@@ -1,0 +1,80 @@
+<?xml version="1.0"?> 
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document>   
+<properties>     
+    <title>Nightly builds for developers</title>   
+</properties> 
+<body> 
+<section name="Nightly builds for developers">
+    <p></p>
+    <h2>What are the nightly builds?</h2>
+    <p>
+    The nightly builds are interim builds that are <b>untested and unsupported</b>.
+    <i>Use at your own risk!</i>
+    <br/>
+    These unreleased builds may not even load, may have undocumented features, 
+    known defects, and any number of other issues.
+    <br/>
+    They are intended for use by developers and others wishing to help with resolving JMeter bugs.
+    </p>
+    <note><b>These builds should not be used in production.</b></note>
+    
+    <h2>Last Build status on Jenkins</h2>
+    <a href='https://builds.apache.org/job/JMeter-trunk/'><img src='https://builds.apache.org/buildStatus/icon?job=JMeter-trunk' /></a>
+
+    <h2>Last Quality Report on Sonar</h2>
+    <a href="https://builds.apache.org/analysis/dashboard/index/org.apache.jmeter:JMeter">Apache JMeter quality report</a>
+    
+    <h2>Where are the nightly builds?</h2>
+    <p>JMeter CI builds are currently run by Jenkins and Buildbot</p>
+    <p>These are located at:
+    <ul>
+    <li><a href="https://builds.apache.org/job/JMeter-trunk/lastSuccessfulBuild/artifact/trunk/dist/">Last Successful Jenkins build for JMeter-trunk</a></li>
+    <li><a href="http://ci.apache.org/projects/jmeter/nightlies/">Buildbot nightly builds for JMeter-trunk</a></li>
+    <li><a href="https://repository.apache.org/content/repositories/snapshots/org/apache/jmeter/">Maven Snapshots (Buildbot nightly builds)</a></li>
+    </ul>
+    </p>
+    <h2>What do they consist of?</h2>
+<p>
+JMeter is distributed as a set of zip (or tar-gz) archive files as are the released versions.
+You can find the bundles:
+<ul>
+<li>apache-jmeter-{SVN revision}.zip - Bundle in ZIP format</li>
+<li>apache-jmeter-{SVN revision}.tgz - Bundle in TAR GZIP format</li>
+<li>apache-jmeter-{SVN revision}_src.zip - Sources in ZIP format</li>
+<li>apache-jmeter-{SVN revision}_src.tgz - Sources in TAR GZIP format</li>
+</ul>
+For each file you will also find a hash (MD5, SHA) that allows you to test its integrity.
+</p>
+
+<h2>Using the nightly builds</h2>
+<p>Just unzip the bundle and use it as you would use any release.</p>
+
+<h2>Warning - please note!</h2>
+<note>
+    <span style="font-size : large">
+    <b>The nightly builds may or may not work properly - or at all.</b>
+    </span>
+</note>
+<p>
+    If there is a problem with a particular version, 
+    it is worth reporting this on the JMeter-dev mailing list and/or open a bug and/or trying again in a day or two.
+</p>
+</section> 
+</body> 
+</document>

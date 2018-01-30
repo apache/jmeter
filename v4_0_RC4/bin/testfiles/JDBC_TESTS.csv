@@ -1,0 +1,23 @@
+label,responseCode,responseMessage,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
+JDBC_DROP_PROCEDURE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+JDBC_DROP_PROCEDURE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+JDBC_DROP_TABLE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+JDBC_CREATE_TABLE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+JDBC_CREATE_PROCEDURE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+JDBC_CREATE_PROCEDURE_SELECT,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+JDBC_INSERT,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_CALL_PROCEDURE,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_CALL_PROCEDURE_SELECT,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_SELECT,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_SELECT_PREPARED,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_COMMIT,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_INSERT_VICTOR_HUGO,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_CHECK_COUNT_3,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_ROLLBACK,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_CHECK_COUNT_1,200,OK,TG-OK 1-1,text,true,1,1,1,0
+CheckTransaction,200,"Number of samples in transaction : 4, number of failing samples : 0",TG-OK 1-1,,true,1,1,1,0
+JDBC_INSERT_2,200,OK,TG-OK 1-1,text,true,1,1,1,0
+JDBC_NoConfig,000,java.lang.IllegalArgumentException: Variable Name must not be null in JDBC_NoConfig,TG-Errors 2-1,text,true,1,1,1,0
+JDBC_Wrong_Sql,42581 -5581,java.sql.SQLSyntaxErrorException: unexpected token: WHERE,TG-Errors 2-1,text,true,1,1,1,0
+JDBC_With_Failing_PreProcessor,200,OK,TG-Errors 2-1,text,true,1,1,1,0
+JDBC_With_Failing_PostProcessor,200,OK,TG-Errors 2-1,text,true,1,1,1,0

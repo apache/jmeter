@@ -1,0 +1,183 @@
+<html>
+<!--
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+*/
+-->
+    <head>
+        <title>Package Documentation for org.apache.commons.cli.avalon Package</title>
+    </head>
+    <body bgcolor="white">
+        Utility code for parsing command-line options.
+       <br></br>
+<p style="font-weight:bold">
+These classes were originally in the Avalon project in the package org.apache.avalon.excalibur.cli
+</p>
+
+        <h3>Introduction</h3>
+        <p>The utilities in <code>org.apache.commons.cli.avalon</code> assist
+        you in parsing command line options during startup time. It allows you
+        to associate a short option and a long option to the same command, and
+        then test for it in a switch statement.</p>
+        <a name="doc.Usage"></a>
+        <h3>Usage Example</h3>
+        <pre>
+import java.util.List;
+
+import org.apache.commons.cli.avalon.CLArgsParser;
+import org.apache.commons.cli.avalon.CLOption;
+import org.apache.commons.cli.avalon.CLOptionDescriptor;
+import org.apache.commons.cli.avalon.CLUtil;
+
+/**
+* Demonstrates the excalibur command-line parsing utility.
+*
+*/
+public class CLDemo {
+    // Define our short one-letter option identifiers.
+    protected static final int HELP_OPT = 'h';
+    protected static final int VERSION_OPT = 'v';
+    protected static final int MSG_OPT = 'm';
+
+    /**
+     *  Define the understood options. Each CLOptionDescriptor contains:
+     * - The "long" version of the option. Eg, "help" means that "--help" will
+     * be recognised.
+     * - The option flags, governing the option's argument(s).
+     * - The "short" version of the option. Eg, 'h' means that "-h" will be
+     * recognised.
+     * - A description of the option.
+     */
+    protected static final CLOptionDescriptor [] options = new CLOptionDescriptor [] {
+        new CLOptionDescriptor("help",
+                CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                HELP_OPT,
+                "print this message and exit"),
+        new CLOptionDescriptor("version",
+                CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                VERSION_OPT,
+                "print the version information and exit"),
+        new CLOptionDescriptor("msg",
+                CLOptionDescriptor.ARGUMENT_REQUIRED,
+                MSG_OPT,
+                "the message to print"),
+    };
+
+    public static void main(String args[]) {
+        // Parse the arguments
+        CLArgsParser parser = new CLArgsParser(args, options);
+
+        if( null != parser.getErrorString() ) {
+           System.err.println( "Error: " + parser.getErrorString() );
+           return;
+        }
+
+        // Get a list of parsed options
+        List clOptions = parser.getArguments();
+        int size = clOptions.size();
+
+        for (int i = 0; i &lt; size; i++) {
+            CLOption option = (CLOption) clOptions.get(i);
+
+            switch (option.getId()) {
+                case CLOption.TEXT_ARGUMENT:
+                    System.out.println("Unknown arg: "+option.getArgument());
+                    break;
+
+                case HELP_OPT:
+                    printUsage();
+                    break;
+
+                case VERSION_OPT:
+                    printVersion();
+                    break;
+
+
+                case MSG_OPT:
+                    System.out.println(option.getArgument());
+                    break;
+            }
+        }
+    }
+
+    private static void printVersion() {
+        System.out.println("1.0");
+        System.exit(0);
+    }
+
+    private static void printUsage() {
+        String lSep = System.getProperty("line.separator");
+        StringBuffer msg = new StringBuffer();
+        msg.append("------------------------------------------------------------------------ ").append(lSep);
+        msg.append("Excalibur command-line arg parser demo").append(lSep);
+        msg.append("Usage: java "+CLDemo.class.getName()+" [options]").append(lSep).append(lSep);
+        msg.append("Options: ").append(lSep);
+        msg.append(CLUtil.describeOptions(CLDemo.options).toString());
+        System.out.println(msg.toString());
+        System.exit(0);
+    }
+}
+</pre>
+        
+        <h3>Parsing Rules</h3>
+                <p>
+                The command line is parsed according to the following rules. There are
+                two forms of options in this package, the Long form and the Short form.
+                The long form of an option is preceded by the '--' characters while the
+                short form is preceded by a single '-'. Some example options would be;
+                "--an-option", "-a", "--day", "-s -f -a".
+                </p>
+                <p>
+                In the tradition of UNIX programs, the short form of an option can occur
+                immediately after another short form option. So if 'a', 'b' and 'c' are
+                short forms of options that take no parameters then the following
+                command lines are equivalent: "-abc", "-a -bc", "-a -b -c", "-ab -c", etc.
+                </p>
+                <p>
+                Options can also accept arguments if specified. You can specify that an
+                option requires an argument in which the text immediately following the
+                option will be considered to be an argument to the option. So if 'a' was an
+                option that required an argument then the following would be equivalent;
+                "-abc", "-a bc" (namely the option 'a' with argument 'bc').
+                </p>
+                <p>
+                Options can also specify optional arguments. In this case if there is any
+                text immediately following the option character then it is considered an
+                argument.  Otherwise, the option has no arguments. For example if 'a' was an
+                option that required an optional argument then "-abc" is an option 'a' with
+                argument "bc" while "-a bc" is an option 'a' with no argument, followed by
+                the text "bc". </p>
+                <p>It is also possible to place an '=' sign between the option
+                and its argument. So if we assume that a is an option that 
+                requires an argument then the following are equivalent; 
+                "-a=bc" and "-abc".
+                </p>
+                <p>
+                In the case of a long option with an optional argument, the '=' sign is required.
+                For example. --optarg=1, not --optarg 1.
+                </p>
+                <p>
+                In some cases it is also necessary to disable command line parsing so that you
+                can pass a text argument to the program that starts with a '-' character. To do
+                this insert the sequence '--' onto the command line with no text immediately
+                following it. This will disable processing for the rest of the command line.
+                The '--' characters will not be passed to the user program. For instance the
+                line "-- -b" would result in the program being passed the
+                text "-b" (ie. not as an option).
+                </p>
+</body>
+</html>

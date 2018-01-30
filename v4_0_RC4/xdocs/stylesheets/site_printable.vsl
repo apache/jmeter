@@ -1,0 +1,653 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+##
+##  Content Stylesheet for Printable docs
+##
+## Defined variables
+#set ($bodybg = "#ffffff")
+#set ($bodyfg = "#000000")
+#set ($bodylink = "#525D76")
+#set ($bannerbg = "#525D76")
+#set ($bannerfg = "#ffffff")
+#set ($subbannerbg = "#828DA6")
+#set ($subbannerfg = "#ffffff")
+#set ($tablethbg = "#039acc")
+#set ($tabletdbg = "#a0ddf0")
+#set ($notebackground = "#bbbb00")
+#set ($space = " ")
+#set ($space = $space.charAt(0))
+#set ($udsc = "_")
+#set ($udsc = $udsc.charAt(0))
+#set ($year = $date.getYear()+1900)
+##
+## Printable document settings
+#set ($imgdir = "$relativePath/../docs/images")
+#set ($cssdir = "$relativePath/../docs/css")
+#set ($sshotdir = "$imgdir/screenshots")
+
+<!-- start the processing -->
+#document()
+<!-- end the processing -->
+
+## This is where the macros live
+
+#macro ( sectionlink $anchor)
+#if($anchor)<a class="sectionlink" href="#$anchor.replace($space,$udsc)" title="Link to here">&para;</a>#end
+#end
+
+#macro ( table $table)
+<table>
+#foreach ( $items in $table.getChildren() )
+#if ($items.getName().equals("tr"))
+#tr ($items)
+#end
+#end
+</table>
+#end
+
+#macro ( tr $tr)
+<tr>
+#foreach ( $items in $tr.getChildren() )
+#if ($items.getName().equals("td"))
+#td ($items)
+#elseif ($items.getName().equals("th"))
+#th ($items)
+#end
+#end
+</tr>
+#end
+
+#macro ( td $value)
+#if ($value.getAttributeValue("colspan"))
+#set ($colspan = $value.getAttributeValue("colspan"))
+#end
+#if ($value.getAttributeValue("rowspan"))
+#set ($rowspan = $value.getAttributeValue("rowspan"))
+#end
+<td bgcolor="$tabletdbg" #if ($colspan)colspan="$colspan"#end #if ($rowspan)rowspan="$rowspan"#end valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+#if ($value.getText().length() != 0 || $value.getChildren().size() > 0)
+#runloop($value)
+#else
+&nbsp;
+#end
+</font>
+</td>
+#end
+
+#macro ( th $value)
+#set ($colspan = $value.getAttributeValue("colspan"))
+#set ($rowspan = $value.getAttributeValue("rowspan"))
+<td bgcolor="$tablethbg" #if ($colspan)colspan="$colspan"#end #if ($rowspan)rowspan="$rowspan"#end valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+#if ($value.getText().length() != 0 || $value.getChildren().size() > 0)
+$value.content
+#else
+&nbsp;
+#end
+</font>
+</td>
+#end
+
+#macro ( projectanchor $name $value )
+#if ($value.startsWith("http://"))
+<a href="$value">$name</a>
+#elseif ($value.startsWith("/site"))
+<a href="http://jakarta.apache.org$value">$name</a>
+#else
+<a href="$relativePath$value">$name</a>
+#end
+#end
+
+#macro ( metaauthor $author $email )
+<meta name="author" value="$author">
+<meta name="email" value="$email">
+#end
+
+#macro ( image $value )
+#if ($value.getAttributeValue("width"))
+#set ($width=$value.getAttributeValue("width"))
+#end
+#if ($value.getAttributeValue("height"))
+#set ($height=$value.getAttributeValue("height"))
+#end
+#if ($value.getAttributeValue("align"))
+#set ($align=$value.getAttributeValue("align"))
+#end
+<img src="$relativePath$value.getAttributeValue("src")" width="$!width" height="$!height" align="$!align"/>
+#end
+
+#macro ( code $value)
+<tt class="code">#runloop($value)</tt>##
+#end
+
+#macro ( source $value)
+<div align="left">
+<table cellspacing="4" cellpadding="0" border="0">
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#ffffff"><pre>#runloop($value)</pre></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+<tr>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+</tr>
+</table>
+</div>
+#end
+
+#macro (properties $properties)
+<p>
+<b>Parameters</b>
+</p>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+#foreach ($items in $properties.getChildren("property"))
+<tr>
+<td>$items.getAttributeValue("name")</td>
+<td>#runloop($items)</td>
+<td>
+#if("$!items.getAttributeValue('required')" != "")
+$items.getAttributeValue("required")
+#else
+No
+#end
+</td>
+</tr>
+#end
+</table>
+#end
+
+#macro (seeAlso $seeAlso)
+<p><b>See Also:</b></p>
+<ul>
+#foreach ($items in $seeAlso.getChildren())
+#if($items.getName() == "link")
+<li><a href="$items.getAttributeValue("href")">$xmlout.outputString($items,true)</a></li>
+#elseif($items.getName() == "complink")
+<li>#complink($items)</li>
+#elseif($items.getName() == "funclink")
+<li>#funclink($items)</li>
+#end
+#end
+</ul>
+#end
+
+#macro (figure $figure)
+#set ($width = "")
+#set ($width = $figure.getAttributeValue('width') )
+#set ($height = "")
+#set ($height = $figure.getAttributeValue('height') )
+#set ($dim= "")
+#if  ("$!width" != "")
+#set ($dim = "width='$width' height='$height'")
+#end
+<table border="0" cellspacing="0" cellpadding="0"><tr><td><img $dim src="$sshotdir/$figure.getAttributeValue("image")"/><br>
+<font size="-1">#runloop($figure)</font></td></tr></table>
+#end
+
+#macro (example $example)
+<a name="$example.getAttributeValue("anchor")"/>
+<p><b>$example.getAttributeValue("title")</b></p>
+#runloop($example)
+#end
+
+#macro (note $note)
+<p>
+<table border="1" bgcolor="$notebackground" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>#runloop($note)</td></tr>
+</table>
+</p>
+#end
+
+#macro (scope $scope)
+#if ($scope.getText() == "")
+<a href="test_plan.html#scoping_rules">scope</a>
+#else
+<a href="test_plan.html#scoping_rules">$scope.getText()</a>
+#end
+#end
+##
+#macro ( bugzilla $id)
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
+#end
+
+#macro ( pr $id)
+<a href="https://github.com/apache/jmeter/pull/$id.getText()">Pull request #$id.getText()</a>##
+#end
+
+## Shorthand - automatically adds " - " before remaining text
+#macro ( bug $id)
+#bugzilla($id) - ##
+#end
+
+#macro ( contributor $id)
+Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&gt;
+#end
+
+#macro ( ch_section $section)
+<br/><br/><table width="100%" cellpadding="3" cellspacing="2" bgcolor="$bodylink" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif"><b><big><big><a name="$section.getText()">$section.getText()</a></big></big></b></font></td></tr></table><br/>
+#end
+
+#macro ( ch_category $category)
+<br/><br/><table width="90%" cellpadding="2" cellspacing="2" bgcolor="$subbannerbg" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif"><b><big>$category.getText()</big></b></font></td></tr></table><br/>
+#end
+
+#macro ( ch_title $title)
+<br/><table width="80%" cellpadding="1" cellspacing="2" bgcolor="$subbannerbg" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif">$title.getText()</font></td></tr></table>
+#end
+
+#macro (description $node)
+<div class="description">#runloop($node)</div>
+#end
+
+#macro (unknown $node)
+#if($node.getName() == "note")
+#note($node)
+#elseif($node.getName() == "complink")
+#complink($node)
+#elseif($node.getName() == "funclink")
+#funclink($node)
+#elseif($node.getName() == "figure")
+#figure($node)
+#elseif ($node.getName() == "links")
+#seeAlso ($node)
+#elseif ($node.getName() == "properties")
+#properties ($node)
+#elseif ($node.getName() == "example")
+#example ($node)
+#elseif ($node.getName().equals("source"))
+#source ($node)
+#elseif ($node.getName().equals("code"))
+#code ($node)
+#elseif ($node.getName().equals("table"))
+#table ($node)
+#elseif ($node.getName().equals("component"))
+#component($node)
+#elseif ($node.getName().equals("subsection"))
+#subsection ($node)
+#elseif ($node.getName().equals("scope"))
+#scope ($node)
+#elseif ($node.getName().equals("bugzilla"))
+#bugzilla ($node)
+#elseif ($node.getName().equals("bug"))
+#bug ($node)
+#elseif ($node.getName().equals("pr"))
+#pr ($node)
+#elseif ($node.getName().equals("contributor"))
+#contributor ($node)
+#elseif ($node.getName().equals("ch_section"))
+#ch_section ($node)
+#elseif ($node.getName().equals("ch_category"))
+#ch_category ($node)
+#elseif ($node.getName().equals("ch_title"))
+#ch_title ($node)
+#elseif ($node.getName().equals("menuchoice"))
+#menuchoice ($node)
+#elseif ($node.getName().equals("shortcut"))
+#shortcut ($node)
+#elseif ($node.getName().equals("keycombo"))
+#keycombo ($node)
+#elseif ($node.getName().equals("keysym"))
+#keysym ($node)
+#elseif ($node.getName().equals("guimenuitem"))
+#guimenuitem ($node)
+#elseif ($node.getName().equals("description"))
+#description ($node)
+#else
+#outputTag($node)
+#runloop($node)
+#outputEndTag($node)
+#end
+#end
+
+#macro (complink $complink)
+<a href="$relativePath/usermanual/component_reference.html#$complink.getAttributeValue("name").replace($space,$udsc)">$complink.getAttributeValue("name")</a>##
+#end
+
+#macro (funclink $funclink)
+<a href="$relativePath/usermanual/functions.html#$funclink.getAttributeValue("name").replace($space,$udsc).replace("(","").replace(")","")">$funclink.getAttributeValue("name")</a>##
+#end
+
+#macro (outputTag $tag)
+<$tag.getName()#getAtts($tag)>##
+#end
+
+#macro (getAtts $tag)
+#foreach ($att in $tag.getAttributes()) $att.getName()="$att.getValue()"#end##
+#end
+
+#macro (outputEndTag $tag)
+</$tag.getName()>##
+#end
+
+#macro (menuchoice $items)
+ <span class="menuchoice">
+ #foreach ($item in $items.getChildren("guimenuitem"))#guimenuitem($item)#if ($foreach.hasNext)&nbsp;&rarr;&nbsp;#end#end
+ #foreach ($item in $items.getChildren("shortcut"))
+  #shortcut($item)
+ #end
+ </span>
+#end
+
+#macro (guimenuitem $item)<span class="guimenuitem">$item.getText()</span>#end
+
+#macro (shortcut $shortcut)
+ (#foreach ($keycombo in $shortcut.getChildren("keycombo"))#keycombo ($keycombo)#end)
+#end
+
+#macro (keycombo $combo)<span class="keycombo">#foreach ($key in $combo.getChildren("keysym"))#keysym($key)#if ($foreach.hasNext)&nbsp;+&nbsp;#end#end</span>#end
+
+#macro (keysym $keysym)<span class="keysym">$keysym.getText()</span>#end
+
+#macro (runloop $itemToLoop)
+#foreach ($node in $itemToLoop.getContent())
+#if($node.getClass().getName().indexOf("Element") > -1)
+#unknown($node)##
+#else
+$escape.getText($node.getText())##
+#end
+#end
+#end
+
+#macro ( component $component)
+#set ($width = "")
+#set ($width = $component.getAttributeValue('width') )
+#set ($height = "")
+#set ($height = $component.getAttributeValue('height') )
+#set ($dim= "")
+#if  ("$!width" != "")
+#set ($dim = "width='$width' height='$height'")
+#end
+#set ($screenshot = "")
+#set ($screenshot = $component.getAttributeValue('screenshot') )
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+#set ($was = "")
+#set ($was = $component.getAttributeValue("was"))
+#if ("$!was" != "")
+<a name="$was.replace($space,$udsc)"></a>
+#set ($was = " (was: $was)")
+#end
+<h3>
+<a name="$component.getAttributeValue("name").replace($space,$udsc)">$!component.getAttributeValue("index") $component.getAttributeValue("name")$!was</a>
+</h3>
+</font>
+</td></tr>
+#if($component.getAttribute("useinstead"))
+<tr><td bgcolor="#bbbb00"><div align="center"><b>*** This element is deprecated.  Use <a href="$relativePath/usermanual/component_reference.html#$component.getAttributeValue("useinstead").replace($space,$udsc)">$component.getAttributeValue("useinstead")</a> instead ***</b></div></td></tr>
+#end
+<tr><td>
+#foreach ( $items in $component.getChildren() )
+#if ($items.getName().equals("description"))
+#runloop($items)
+#if ("$!screenshot" != "")
+<p><b>Control Panel</b></p>
+<div align="center"><img $dim src="$sshotdir/$screenshot"/></div>
+#end
+#else
+#unknown($items)
+#end
+#end
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+#end
+
+#macro ( subsection $subsection)
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="$subbannerbg">
+<font color="$subbannerfg" face="arial,helvetica,sanserif">
+<a name="$subsection.getAttributeValue("anchor")"><strong>$subsection.getAttributeValue("name")</strong></a>
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+#foreach ( $items in $subsection.getChildren() )
+#if ($items.getName().equals("img"))
+#image ($items)
+#else
+#unknown($items)
+#end
+#end
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+#end
+
+#macro (pagelinks)
+#if (("$!next" != "") || ("$!prev" != ""))
+<table>
+<tr>
+<td bgcolor="$bannerbg">
+<div align="right"><a href="index.html"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+#if ("$!next" != "")
+<td bgcolor="$bannerbg">
+<div align="right"><a href="$next"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+#end
+#if ("$!prev" != "")
+<td bgcolor="$bannerbg">
+<div align="right"><a href="$prev"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+#end
+</tr>
+</table>
+#end
+#end
+
+#macro ( section $section)
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="$bannerbg">
+<font color="$bannerfg" face="arial,helvetica,sanserif">
+#set ($anchor = $section.getAttributeValue("anchor")) 
+#if($anchor)<a name="$anchor">#end<strong>$section.getAttributeValue("name")</strong>#if($anchor)</a>#end
+</font>
+</td></tr>
+<tr><td>
+<blockquote>
+#foreach ( $items in $section.getChildren() )
+#if ($items.getName().equals("img"))
+#image ($items)
+#else
+#unknown($items)
+#end
+#end
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+#end
+
+#macro ( makeProject )
+#set ($menus = $project.getChild("body").getChildren("menu"))
+#foreach ( $menu in $menus )
+<p><strong>$menu.getAttributeValue("name")</strong></p>
+<ul>
+#foreach ( $item in $menu.getChildren() )
+#set ($name = $item.getAttributeValue("name"))
+<li>#projectanchor($name $item.getAttributeValue("href"))</li>
+#end
+</ul>
+#end
+#end
+
+#macro (makeIndex $subsections)
+#set ($level2 = $root.getAttributeValue("index-level-2"))
+##  Should we display numbers for index level 2 ? (useful for checking numbering)
+#set ($index2 = $root.getAttributeValue("index-numbers"))
+#set ($colbreak = $root.getAttributeValue("colbreak"))
+#if  ("$!colbreak" != "")
+<table width="100%">
+<tr><td valign="top">
+#end
+<ul>
+#foreach ($sect in $subsections)
+#if (("$!colbreak" != "") && ($sect.getAttributeValue("name").startsWith("$colbreak")))
+</ul></td><td valign="top"><ul>
+#end
+<li><a href="#$sect.getAttributeValue("anchor")">$sect.getAttributeValue("name")</a></li>
+#if ("$!level2" != "no" and !$sect.getChildren().isEmpty())
+<ul>
+#foreach ($comp in $sect.getChildren("component"))
+<li>
+#if ("$!index2" == "yes")
+$comp.getAttributeValue("index")
+#end
+#set ($was = $comp.getAttributeValue("was"))
+#if ("$!was" != "")
+#set ($was = " (was: $was)")
+#end
+<a href="#$comp.getAttributeValue("name").replace($space,$udsc)">$comp.getAttributeValue("name")$!was</a></li>
+#end
+</ul>
+#end
+#end
+</ul>
+#if ("$!colbreak" != "")
+</td></tr>
+</table>
+#end
+#end
+
+#macro (getProjectImage)
+#if ($project.getChild("logo"))
+#set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
+#set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
+#set ( $logoWidth  = $project.getChild("logo").getAttributeValue("width") )
+<td align="left">
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="261" height="106" src="$imgdir/asf-logo.png" border="0"/></a>
+</td>
+<td align="right">
+#if ( $logoString.startsWith("/") )
+<a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
+#else
+<a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
+#end
+</td>
+#else
+<td colspan="2">
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="261" height="106" src="$imgdir/asf-logo.png" border="0"/></a>
+</td>
+#end
+#end
+
+#macro (document)
+## ======================================================================
+## Main Page Section -->
+## ======================================================================
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="$cssdir/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+#set ($authors = $root.getChild("properties").getChildren("author"))
+#foreach ( $au in $authors )
+#metaauthor ( $au.getText() $au.getAttributeValue("email") )
+#end
+#set ($next = "")
+#set ($next = $root.getAttributeValue("next"))
+#set ($prev = "")
+#set ($prev = $root.getAttributeValue("prev"))
+#set ($id = "")
+#set ($id = $root.getAttributeValue("id"))
+
+<title>$project.getChild("title").getText() - $root.getChild("properties").getChild("title").getText()</title>
+<style>
+  .code { font-weight: bold; }
+</style>
+</head>
+
+<body bgcolor="$bodybg" text="$bodyfg" link="$bodylink">
+<table border="0" cellspacing="0">
+##<!-- TOP IMAGE -->
+<tr>
+#getProjectImage()
+</tr>
+</table>
+<table border="0" cellspacing="4">
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td align="left" valign="top">
+#pagelinks()
+<br>
+#if ($root.getAttributeValue("index") == "yes")
+#makeIndex($root.getChild("body").getChildren("section"))
+#end
+#set ($allSections = $root.getChild("body").getChildren("section"))
+#foreach ( $section in $allSections )
+#section ($section)
+#end
+<br>
+#pagelinks()
+</td>
+</tr>
+<tr><td>
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<td>
+<table width=100%>
+<tr>
+#if ("$!id" != "")
+<td>
+#else
+<td align="center">
+#end
+<font color="$bodylink" size="-1"><em>
+Copyright &copy; 1999-$year, Apache Software Foundation
+</em></font>
+</td>
+#if ("$!id" != "")
+<td align="right">
+<font color="$bodylink" size="-1"><em>
+$id
+</em></font>
+</td>
+#end
+</tr>
+<tr><td colspan="2">
+<div align="center"><font color="$bodylink" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+#end

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document>
+<properties>
+    <title>Issues</title>
+</properties>
+<body>
+<section name="Issue tracker">
+<p>
+JMeter uses Bugzilla for issue tracking, i.e. for reporting bugs and requesting enhancements.
+</p>
+<p>
+Before creating a new issue, please check whether the issue has already been reported by searching Bugzilla.
+It's also worth checking first on the JMeter user mailing list; others may already have a solution.
+</p>
+</section>
+<section name="Support Questions">
+<p>
+Please do not use Bugzilla for asking questions. It is not a support forum.
+Instead, please <a href="mail2.html">subscribe</a> to the JMeter user mailing list and ask there.
+The user mailing list has a bigger audience and you are more likely to get an answer quickly.
+</p>
+</section>
+<section name="Known Bugs and enhancements">
+<ul>
+<li>
+<a href="http://bz.apache.org/bugzilla/buglist.cgi?query_format=specific&amp;order=relevance+desc&amp;bug_status=__open__&amp;product=JMeter&amp;content=">
+Bugzilla - All open bugs and enhancements</a>
+</li>
+<li>
+<a href="http://bz.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Blocker&amp;bug_severity=Critical&amp;bug_severity=Major&amp;bug_severity=Normal&amp;bug_severity=Regression&amp;bug_severity=Minor&amp;bug_severity=Trivial&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
+Bugzilla - Open bugs (excluding enhancements)</a></li>
+<li>
+<a href="http://bz.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Enhancement&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
+Bugzilla - Enhancements only</a>
+</li>
+</ul>
+</section>
+<section name="Requesting an enhancement">
+<p>
+In most cases it is worth starting a discussion on the mailing list first.
+Bugzilla is good for tracking progress and supplying patches, but is unwieldy for longer discussions.
+</p> 
+<p>
+If you have not already done so, you need to register an account first, using the "<code>New Account</code>" link at the top of the
+main Bugzilla page: <a href="https://bz.apache.org/bugzilla/">https://bz.apache.org/bugzilla/</a>.
+</p>
+<p>
+Make sure you read and understand the information on the account creation page before signing up.
+</p>
+<p>
+Once logged in, click "<code>File a bug</code>" and select JMeter from the list
+Please set the severity to "<code>enhancement</code>".
+</p>
+<p>
+Please make sure that you describe the enhancement in sufficient detail. If necessary provide an example use-case.
+</p>
+<p>
+If you are providing a code patch, also provide a test case, and documentation on how to use the new feature (ideally as a documentation patch).
+</p>
+</section>
+<section name="Raising an Issue">
+<p>
+First check that the issue has not already been reported.
+If reporting a bug, are you sure it really is a bug in JMeter, not just a misunderstanding of how JMeter works?
+</p>
+<p>
+If you have not already done so, you need to register an account first, using the "<code>New Account</code>" link at the top of the
+main Bugzilla page: <a href="https://bz.apache.org/bugzilla/">https://bz.apache.org/bugzilla/</a>.
+</p>
+<p>
+Make sure you read and understand the information on the account creation page before signing up.
+</p>
+<p>
+Once logged in you have 2 options:
+<ul>
+    <li>At the bottom left of the screen click '<code>File a new bug in the "JMeter" product</code>' link</li>
+    <li>At the top left of the screen, click "<code>New</code>" link and select JMeter from the list.</li>
+</ul>
+</p>
+</section>
+<section name="Required Information for bug reporting">
+<p>
+Please make sure you provide sufficient information for others to be able to make use of the report effectively.
+Use the checklist below to guide you.
+</p>
+<ul>
+<li>JMeter version</li>
+<li>Java version (output from <code>java -version</code>)</li>
+<li>OS version</li>
+<li><code>jmeter.log</code> file (unlikely to contain sensitive information, but check before uploading)</li>
+<li>JMX file if relevant (redact any sensitive information first), providing a simplified Test Plan (using <complink name="Debug Sampler"/>) will ensure BUG is fixed much more rapidly than without it</li>
+<li>JTL file if relevant (may need to redact sensitive information)</li>
+<li>For a suspected bug, describe what you did, what happened, and how this differs from what you expected to happen.
+Does it happen every time?
+</li>
+<li>Add yourself in <code>CC</code> List to be notified when JMeter Team requires more information (in this case bug will be marked as <code>NEEDINFO</code>)</li>
+<li>When a bug is market as <code>NEEDINFO</code>, please provide as soon as possible the required information so that bug can be understood and fixed. Be aware that if 
+no information is provided after team requires more information and bug is not reproducible, then bug will be closed as <code>WORKSFORME</code>. You can always reopen it later once you provide the required information.</li>
+<li>Select accurately the IMPORTANCE level, <code>ENHANCEMENT</code> means it's not a BUG while others mean it's a BUG</li>
+<li>If you are providing a patch to fix a bug, please ensure it is in unified diff format.
+If using Eclipse, please set the patch root to "<code>Project</code>", not the default "<code>Workspace</code>" which is harder to apply.</li>
+<li>New source files can be provided as is; please ensure they have the standard Apache License header (as per other JMeter files).
+Please do not use <code>@author</code> tags (credit will be given in the changes file).
+</li>
+<li>In the case of patches for new features, please also provide documentation patches if at all possible.
+Components are documented in <code>xdocs/usermanual/component_reference.xml</code>.</li>
+</ul>
+<p><b>See also the following <a href="https://bz.apache.org/bugwritinghelp.html">Bug writing guidelines</a>,
+also the terms and conditions noted on the <a href="https://bz.apache.org/bugzilla/createaccount.cgi">Bugzilla account creation page.</a></b></p>
+</section>
+</body>
+</document>

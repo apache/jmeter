@@ -1,0 +1,2 @@
+label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,grpThreads,allThreads,URL,Filename,Latency,Encoding,SampleCount,ErrorCount
+Download embedded,200,OK,Thread Group 1-1,text,true,,76146,1,1,file:testfiles/HTMLParserTestFile_2.html,,0,UTF-8,1,0
