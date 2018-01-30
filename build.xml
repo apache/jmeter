@@ -129,6 +129,8 @@
   <property name="skip.test_http" value="false" />
   <property name="skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server" value="false" />
 
+  <exec executable="hostname" outputproperty="computer.hostname"/>
+
   <target name="findbugs" description="Run the stand-alone Findbugs detector">
     <echoproperties prefix="findbugs"/>
     <mkdir dir="reports"/>
@@ -2589,7 +2591,6 @@ run JMeter unless all the JMeter jars are added.
     <property name="batchtestserver.out" location="${basedir}/bin"/>
     <property name="batchtestserver.log" value="BatchTestServer.log"/>
     <!-- rmi_force_localhost is used by the Travis build -->
-    <exec executable="hostname" outputproperty="computer.hostname"/>
     <condition property="rmi_hostname_option" value="-Ddummy=true">
       <not><isset property="rmi_force_localhost"/></not>
     </condition>
@@ -2728,6 +2729,7 @@ run JMeter unless all the JMeter jars are added.
       <jvmarg value="--add-modules" if:set="java9" />
       <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="${jacoco_params}batchtest:java(${taskname})"/>
+      <jvmarg value="-Djava.rmi.server.hostname=${computer.hostname}" if:set="rmi_force_localhost"/>
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
       <sysproperty key="user.language" value="en"/>
       <sysproperty key="user.region" value="US"/>
@@ -3069,6 +3071,7 @@ run JMeter unless all the JMeter jars are added.
       <jvmarg value="-server"/>
       <jvmarg value="${jacoco_params}_test:java"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
+      <jvmarg value="-Djava.rmi.server.hostname=${computer.hostname}" if:set="rmi_force_localhost"/>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
       <sysproperty key="gump.run" value="${gump.run}" />
