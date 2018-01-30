@@ -197,8 +197,9 @@ public class ThroughputController
     public boolean isDone() {
         return subControllersAndSamplers.isEmpty()
                 || (getStyle() == BYNUMBER
-                && getExecutions() >= getMaxThroughputAsInt()
-                && current >= getSubControllers().size());
+                && (getExecutions() >= getMaxThroughputAsInt()
+                && current >= getSubControllers().size())
+                || (getMaxThroughputAsInt() == 0));
     }
 
     @Override
