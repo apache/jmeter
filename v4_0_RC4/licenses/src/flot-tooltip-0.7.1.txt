@@ -1,5 +1,0 @@
-https://github.com/krzysu/flot.tooltip
-
-Copyright (c) 2011-2016 Krzysztof Urbas (@krzysu) & Evan Steinkerchner (@Roundaround).
-
-jquery.flot.tooltip is available under the MIT license.

@@ -29,7 +29,7 @@
   <xsl:param name="imgdir" select="concat($relative-path, '/images')" />
   <xsl:param name="sshotdir" select="concat($imgdir, '/screenshots')" />
   <xsl:param name="cssdir" select="concat($relative-path, '/css')" />
-  <xsl:param name="jakarta-site" select="'http://jakarta.apache.org'" />
+  <xsl:param name="jakarta-site" select="'https://jakarta.apache.org'" />
   <xsl:param name="year" select="'2018'" />
   <xsl:param name="max-img-width" select="'600'" />
 
@@ -59,7 +59,7 @@
         <!-- VIEWPORT -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
-          href='http://fonts.googleapis.com/css?family=Merriweather:400normal'
+          href='https://fonts.googleapis.com/css?family=Merriweather:400normal'
           rel='stylesheet' type='text/css'
         ></link>
         <link
@@ -82,7 +82,7 @@
             APACHE LOGO
           </xsl:comment>
           <div>
-            <a href="http://www.apache.org">
+            <a href="https://www.apache.org">
               <img title="Apache Software Foundation" class="asf-logo logo"
                   src="{$imgdir}/asf-logo.svg" alt="Logo ASF" />
             </a>
@@ -108,8 +108,8 @@
             </div>
           </xsl:if>
           <div class="banner">
-            <a href="http://www.apache.org/events/current-event.html">
-              <img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser" />
+            <a href="https://www.apache.org/events/current-event.html">
+              <img src="https://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser" />
             </a>
             <div class="clear"></div>
           </div>

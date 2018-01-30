@@ -16,7 +16,7 @@
    limitations under the License.
 -->
 <project name="Apache JMeter"
-          href="http://jmeter.apache.org/">
+          href="https://jmeter.apache.org/">
 
      <title>Apache JMeter</title>
      <!---->
@@ -25,7 +25,7 @@
      <body>
      <menu name="About">
        <item name="Overview"            href="/index.html"/>
-       <item name="License"             href="http://www.apache.org/licenses/"/>
+       <item name="License"             href="https://www.apache.org/licenses/"/>
      </menu>
      <menu name="Download">
         <item name="Download Releases"    href="/download_jmeter.cgi"/>
@@ -40,8 +40,8 @@
         <item name="Properties Reference"         href="/usermanual/properties_reference.html"/>
         <item name="Change History"              href="/changes_history.html"/>
         <item name="Javadocs"             href="/api/index.html"/>
-        <item name="JMeter Wiki"         href="http://wiki.apache.org/jmeter"/>
-         <item name="FAQ (Wiki)"             href="http://wiki.apache.org/jmeter/JMeterFAQ"/>
+        <item name="JMeter Wiki"         href="https://wiki.apache.org/jmeter"/>
+         <item name="FAQ (Wiki)"             href="https://wiki.apache.org/jmeter/JMeterFAQ"/>
      </menu>
      <menu name="Tutorials">
         <item name="Distributed Testing" href="/usermanual/jmeter_distributed_testing_step_by_step.html"/>
@@ -52,18 +52,18 @@
      </menu>
      <menu name="Community">
         <item name="Issue Tracking"      href="/issues.html"/>
-        <item name="Security"            href="http://www.apache.org/security/"/>
+        <item name="Security"            href="https://www.apache.org/security/"/>
         <item name="Mailing Lists"       href="/mail.html"/>
         <item name="Source Repositories"    href="/svnindex.html"/>
         <item name="Building and Contributing"    href="/building.html"/>
         <item name="Project info at Apache" href="https://projects.apache.org/project.html?jmeter"/>
-        <item name="Contributors"        href="http://wiki.apache.org/jmeter/JMeterCommitters"/>
+        <item name="Contributors"        href="https://wiki.apache.org/jmeter/JMeterCommitters"/>
      </menu>
      <menu name="Foundation">
-        <item name="The Apache Software Foundation (ASF)" href="http://www.apache.org/"/>
-        <item name="Get Involved in the ASF" href="http://www.apache.org/foundation/getinvolved.html"/>
-        <item name="Sponsorship"         href="http://www.apache.org/foundation/sponsorship.html"/>
-        <item name="Thanks"              href="http://www.apache.org/foundation/thanks.html"/>
+        <item name="The Apache Software Foundation (ASF)" href="https://www.apache.org/"/>
+        <item name="Get Involved in the ASF" href="https://www.apache.org/foundation/getinvolved.html"/>
+        <item name="Sponsorship"         href="https://www.apache.org/foundation/sponsorship.html"/>
+        <item name="Thanks"              href="https://www.apache.org/foundation/thanks.html"/>
      </menu>
      </body>
 </project>

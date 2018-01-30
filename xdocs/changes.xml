@@ -162,6 +162,7 @@ itself does not have to be edited anymore.</p>
         We'd also be very grateful if you can contribute translations in supported languages.
     </li>
     <li>SwitchController now trims by default the content of switch to avoid issue related to unwanted spaces. See <bugzilla>61771</bugzilla></li>
+    <li>JMeter JVM heap settings have changed from <code>-Xms512m -Xmx512m</code> to <code>-Xms1g -Xmx1g</code></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
