@@ -15,6 +15,8 @@
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
 
+## This is a simple wrapper for the script bin/jmeter.sh
+##
 ## Basic JMeter startup script for Un*x systems
 ## See the "jmeter" script for details of options that can be used for Sun JVMs
 
@@ -26,24 +28,6 @@
 ##   JVM_ARGS="-Xms512m -Xmx512m" jmeter.sh etc.
 ##
 ##   ==============================================
-
-# Minimal version to run JMeter
-MINIMAL_VERSION=1.8.0
-
-# Check if Java is present and the minimal version requirement
-_java=`type java | awk '{ print $ NF }'`
-CURRENT_VERSION=`"$_java" -version 2>&1 | awk -F'"' '/version/ {print $2}'`
-minimal_version=`echo $MINIMAL_VERSION | awk -F'.' '{ print $2 }'`
-current_version=`echo $CURRENT_VERSION | awk -F'.' '{ print $2 }'`
-if [ $current_version ]; then
-        if [ $current_version -lt $minimal_version ]; then
-                 echo "Error: Java version is too low to run JMeter. Needs at least Java >= ${MINIMAL_VERSION}." 
-                 exit 1
-        fi
-    else
-         echo "Not able to find Java executable or version. Please check your Java installation."
-         exit 1
-fi
 
 # resolve links - $0 may be a softlink (code as used by Tomcat)
 # N.B. readlink would be a lot simpler but is not supported on Solaris
@@ -61,13 +45,6 @@ done
 
 PRGDIR=`dirname "$PRG"`
 
-JMETER_OPTS=""
-case `uname` in
-   Darwin*)
-   # Add Mac-specific property - should be ignored elsewhere (Bug 47064)
-   JMETER_OPTS="-Xdock:name=JMeter -Xdock:icon=\"${PRGDIR}/../docs/images/jmeter_square.png\" -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"
-   ;;
-esac
+export JMETER_COMPLETE_ARGS=true
 
-
-java $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
+"${PRGDIR}/jmeter" "$@"
