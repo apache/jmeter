@@ -339,6 +339,7 @@ itself does not have to be edited anymore.</p>
     <li><bug>61556</bug>Clarify in documentation performance impacts of <code>${}</code> var usage in IfController and groovy. Contributed by Justin McCartney (be_strew at yahoo.co.uk)</li>
     <li><bug>61713</bug>Test Fragment has option to Change Controller and Insert Parent. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61965</bug>Module and Include Controller should not allow to add meaningless elements in their context.</li>
+    <li><bug>62062</bug>ThroughputController: StackOverFlowError triggered when throughput=0 (Total Executions or Percentage Executions) Partly implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 </ul>
 
 <h3>Listeners</h3>
