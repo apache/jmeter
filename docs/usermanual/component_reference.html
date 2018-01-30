@@ -6,7 +6,7 @@
           -
           User's Manual: Component Reference</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="../css/new-style.css">
 <link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png">
@@ -22,16 +22,16 @@
             APACHE LOGO
           -->
 <div>
-<a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a>
+<a href="https://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a>
 </div>
 <!--
               PROJECT LOGO
             -->
 <div>
-<a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a>
+<a href="https://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a>
 </div>
 <div class="banner">
-<a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
+<a href="https://www.apache.org/events/current-event.html"><img src="https://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
 <div class="clear"></div>
 </div>
 </div>
@@ -44,7 +44,7 @@
 <a href="../index.html">Overview</a>
 </li>
 <li>
-<a href="http://www.apache.org/licenses/">License</a>
+<a href="https://www.apache.org/licenses/">License</a>
 </li>
 </ul>
 </li>
@@ -91,10 +91,10 @@
 <a href="../api/index.html">Javadocs</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
+<a href="https://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<a href="https://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 </li>
@@ -129,7 +129,7 @@
 <a href="../issues.html">Issue Tracking</a>
 </li>
 <li>
-<a href="http://www.apache.org/security/">Security</a>
+<a href="https://www.apache.org/security/">Security</a>
 </li>
 <li>
 <a href="../mail.html">Mailing Lists</a>
@@ -144,7 +144,7 @@
 <a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
+<a href="https://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 </li>
@@ -154,16 +154,16 @@
 <div class="menu-title">Foundation</div>
 <ul>
 <li>
-<a href="http://www.apache.org/">The Apache Software Foundation (ASF)</a>
+<a href="https://www.apache.org/">The Apache Software Foundation (ASF)</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
+<a href="https://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+<a href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+<a href="https://www.apache.org/foundation/thanks.html">Thanks</a>
 </li>
 </ul>
 </li>
@@ -11610,7 +11610,7 @@ These can be used anywhere within the expression and remain in effect until over
 </div>
 <div class="screenshot">
 <figure>
-<a href="../images/screenshots/assertion/assertion.png"><img src="../images/screenshots/assertion/assertion.png" width="921" height="423" alt="Screenshot for Control-Panel of Response Assertion"></a>
+<a href="../images/screenshots/assertion/assertion.png"><img src="../images/screenshots/assertion/assertion.png" width="909" height="607" alt="Screenshot for Control-Panel of Response Assertion"></a>
 <figcaption>Screenshot of Control-Panel of Response Assertion</figcaption>
 </figure>
 </div>
@@ -11663,6 +11663,9 @@ These can be used anywhere within the expression and remain in effect until over
         
 <li>
 <span class="code">Text Response</span> - the response text from the server, i.e. the body, excluding any HTTP headers.</li>
+        
+<li>
+<span class="code">Request data</span> - the request text sent to the server, i.e. the body, excluding any HTTP headers.</li>
         
 <li>
 <span class="code">Response Code</span> - e.g. <span class="code">200</span>
@@ -11753,6 +11756,13 @@ These can be used anywhere within the expression and remain in effect until over
         
 </div>
 <div class="required req-true">Yes</div>
+</div>
+        
+<div class="property">
+<div class="name req-false">Custom failure message</div>
+<div class="description req-false">Lets you define the failure message that will replace the generated one
+        </div>
+<div class="required req-false">No</div>
 </div>
 
 </div>
@@ -12886,6 +12896,12 @@ please ensure that you select "<span class="code">Store the message using MIME (
         </p>
     
 </div>
+<div class="screenshot">
+<figure>
+<a href="../images/screenshots/assertion/json_assertion.png"><img src="../images/screenshots/assertion/json_assertion.png" width="1095" height="307" alt="Screenshot for Control-Panel of JSON Assertion"></a>
+<figcaption>Screenshot of Control-Panel of JSON Assertion</figcaption>
+</figure>
+</div>
 <div class="properties">
 <h3 id="JSON_Assertion_parms1">
         Parameters
@@ -12934,10 +12950,6 @@ please ensure that you select "<span class="code">Store the message using MIME (
 </div>
     
 </div>
-<figure>
-<a href="../images/screenshots/json_path_assertion.png"><img src="../images/screenshots/json_path_assertion.png" width="1140" height="356" alt="JSON Assertion"></a>
-<figcaption>JSON Assertion</figcaption>
-</figure>
 <div class="go-top">
 <a href="#">^</a>
 </div>
@@ -16178,7 +16190,7 @@ generate the template string, and store the result into the given variable name.
 </div>
 <div class="screenshot">
 <figure>
-<a href="../images/screenshots/boundary_extractor.png"><img src="../images/screenshots/boundary_extractor.png" width="1127" height="277" alt="Screenshot for Control-Panel of Boundary Extractor"></a>
+<a href="../images/screenshots/extractor/boundary_extractor.png"><img src="../images/screenshots/extractor/boundary_extractor.png" width="1078" height="315" alt="Screenshot for Control-Panel of Boundary Extractor"></a>
 <figcaption>Screenshot of Control-Panel of Boundary Extractor</figcaption>
 </figure>
 </div>
@@ -16488,7 +16500,7 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
 </div>
 <div class="screenshot">
 <figure>
-<a href="../images/screenshots/threadgroup.png"><img src="../images/screenshots/threadgroup.png" width="706" height="407" alt="Screenshot for Control-Panel of Thread Group"></a>
+<a href="../images/screenshots/threadgroup.png"><img src="../images/screenshots/threadgroup.png" width="911" height="390" alt="Screenshot for Control-Panel of Thread Group"></a>
 <figcaption>Screenshot of Control-Panel of Thread Group</figcaption>
 </figure>
 </div>
@@ -17772,7 +17784,7 @@ This is done by default since JMeter 2.13.
 </div>
 <div class="screenshot">
 <figure>
-<a href="../images/screenshots/setup_thread_group.png"><img src="../images/screenshots/setup_thread_group.png" width="678" height="377" alt="Screenshot for Control-Panel of setUp Thread Group"></a>
+<a href="../images/screenshots/setup_thread_group.png"><img src="../images/screenshots/setup_thread_group.png" width="908" height="364" alt="Screenshot for Control-Panel of setUp Thread Group"></a>
 <figcaption>Screenshot of Control-Panel of setUp Thread Group</figcaption>
 </figure>
 </div>
@@ -17796,7 +17808,7 @@ This is done by default since JMeter 2.13.
 </div>
 <div class="screenshot">
 <figure>
-<a href="../images/screenshots/teardown_thread_group.png"><img src="../images/screenshots/teardown_thread_group.png" width="677" height="379" alt="Screenshot for Control-Panel of tearDown Thread Group"></a>
+<a href="../images/screenshots/teardown_thread_group.png"><img src="../images/screenshots/teardown_thread_group.png" width="909" height="366" alt="Screenshot for Control-Panel of tearDown Thread Group"></a>
 <figcaption>Screenshot of Control-Panel of tearDown Thread Group</figcaption>
 </figure>
 </div>
