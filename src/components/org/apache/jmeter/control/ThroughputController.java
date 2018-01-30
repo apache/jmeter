@@ -196,9 +196,16 @@ public class ThroughputController
     @Override
     public boolean isDone() {
         return subControllersAndSamplers.isEmpty()
-                || (getStyle() == BYNUMBER
-                && getExecutions() >= getMaxThroughputAsInt()
-                && current >= getSubControllers().size());
+                || 
+                (
+                        (getStyle() == BYNUMBER
+                            && (
+                            (getExecutions() >= getMaxThroughputAsInt()
+                            && current >= getSubControllers().size())
+                            || (getMaxThroughputAsInt() == 0)))
+                        || (getStyle() == BYPERCENT
+                            && getPercentThroughputAsFloat() == 0.0f)
+                        );
     }
 
     @Override
