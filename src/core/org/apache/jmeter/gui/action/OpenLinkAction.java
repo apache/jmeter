@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.gui.action;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.HashMap;
