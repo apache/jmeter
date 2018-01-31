@@ -6540,8 +6540,9 @@ Behaviour can be modified with some properties by setting in user.properties:
   The SSL Manager is a way to select a client certificate so that you can test
   applications that use Public Key Infrastructure (PKI).
   It is only needed if you have not set up the appropriate System properties.
-</p>
 
+</p>
+<note>If you want to test client certificate authentication, see <complink name="Keystore Configuration"/></note>
 <b>Choosing a Client Certificate</b>
 <p>
   You may either use a Java Key Store (JKS) format key store, or a Public Key
