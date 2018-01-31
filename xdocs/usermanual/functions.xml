@@ -890,6 +890,7 @@ For example:
     <p>
     The BeanShell function evaluates the script passed to it, and returns the result.
 </p>
+<note>For performance it is better to use <a href="#__groovy">__groovy</a> function</note>
 <p>
 <b>For full details on using BeanShell, please see the BeanShell web-site at <a href="http://www.beanshell.org/">http://www.beanshell.org/</a>
 </b>
