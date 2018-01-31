@@ -309,6 +309,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
                 (title != null && title.length() > 0) // Will be "" for internal components
                 && (!title.toUpperCase(Locale.ENGLISH).contains("(ALPHA"))
                 && (!title.toUpperCase(Locale.ENGLISH).contains("(BETA"))
+                && (!title.toUpperCase(Locale.ENGLISH).contains("(DEPRECATED"))
                 && (!title.matches("Example\\d+")) // Skip the example samplers ...
                 && (!name.startsWith("org.apache.jmeter.examples."))) 
             {// No, not a work in progress ...
