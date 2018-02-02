@@ -142,8 +142,8 @@
           </div>
         </div>
         <script><![CDATA[(function(){
-            // fill in the current location into social links on this page.
             "use strict";
+            // enable 'go to top' button functionality
             document.addEventListener('scroll', function() {
                 if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
                     document.getElementById("topButton").style.display = "block";
@@ -151,6 +151,7 @@
                     document.getElementById("topButton").style.display = "none";
                 }
             });
+            // fill in the current location into social links on this page.
             var as = document.getElementsByTagName('a');
             var loc = document.location.href;
             if (!loc.toLowerCase().startsWith('http')) {
