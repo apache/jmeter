@@ -224,9 +224,6 @@
 <a href="#BeanShell_Sampler">BeanShell Sampler</a>
 </li>
 <li>
-<a href="#BSF_Sampler_(DEPRECATED)">BSF Sampler (DEPRECATED)</a>
-</li>
-<li>
 <a href="#JSR223_Sampler">JSR223 Sampler</a>
 </li>
 <li>
@@ -360,9 +357,6 @@
 <a href="#Save_Responses_to_a_file">Save Responses to a file</a>
 </li>
 <li>
-<a href="#BSF_Listener_(DEPRECATED)">BSF Listener (DEPRECATED)</a>
-</li>
-<li>
 <a href="#JSR223_Listener">JSR223 Listener</a>
 </li>
 <li>
@@ -472,9 +466,6 @@
 <a href="#XML_Schema_Assertion">XML Schema Assertion</a>
 </li>
 <li>
-<a href="#BSF_Assertion_(DEPRECATED)">BSF Assertion (DEPRECATED)</a>
-</li>
-<li>
 <a href="#JSR223_Assertion">JSR223 Assertion</a>
 </li>
 <li>
@@ -513,9 +504,6 @@
 <a href="#BeanShell_Timer">BeanShell Timer</a>
 </li>
 <li>
-<a href="#BSF_Timer_(DEPRECATED)">BSF Timer (DEPRECATED)</a>
-</li>
-<li>
 <a href="#JSR223_Timer">JSR223 Timer</a>
 </li>
 <li>
@@ -537,9 +525,6 @@
 </li>
 <li>
 <a href="#BeanShell_PreProcessor">BeanShell PreProcessor</a>
-</li>
-<li>
-<a href="#BSF_PreProcessor_(DEPRECATED)">BSF PreProcessor (DEPRECATED)</a>
 </li>
 <li>
 <a href="#JSR223_PreProcessor">JSR223 PreProcessor</a>
@@ -572,9 +557,6 @@
 </li>
 <li>
 <a href="#BeanShell_PostProcessor">BeanShell PostProcessor</a>
-</li>
-<li>
-<a href="#BSF_PostProcessor_(DEPRECATED)">BSF PostProcessor (DEPRECATED)</a>
 </li>
 <li>
 <a href="#JSR223_PostProcessor">JSR223 PostProcessor</a>
@@ -3020,198 +3002,6 @@ return getVariables();
 For details on the methods available for the various classes (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html"><span class="code">JMeterVariables</span></a>, <a href="../api/org/apache/jmeter/samplers/SampleResult.html"><span class="code">SampleResult</span></a> etc.) please check the Javadoc or the source code.
 Beware however that misuse of any methods can cause subtle faults that may be difficult to find.
 </p>
-<div class="go-top">
-<a href="#">^</a>
-</div>
-</div>
-
-
-
-<div class="component">
-<h2 id="BSF_Sampler_(DEPRECATED)">BSF Sampler (DEPRECATED)<a class="sectionlink" href="#BSF_Sampler_(DEPRECATED)" title="Link to here">&para;</a>
-</h2>
-<div class="description">
-<p>This sampler allows you to write a sampler using a BSF scripting language.<br>
-        See the <a href="http://commons.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
-        website for details of the languages supported.
-        You may need to download the appropriate jars for the language; they should be put in the JMeter <span class="code">lib</span> directory.
-        </p>
-        
-<div class="clear"></div>
-<div class="note">
-        The BSF API has been largely superseded by JSR-223, which is included in Java 6 onwards.
-        Most scripting languages now include support for JSR-223; please use the JSR223 Sampler instead.
-        The BSF Sampler should only be needed for supporting legacy languages/test scripts.
-        </div>
-<div class="clear"></div>
-        
-<p>By default, JMeter supports the following languages:</p>
-        
-<ul>
-        
-<li>JavaScript</li>
-        
-<li>XSLT</li>
-        
-</ul>
-        
-<div class="clear"></div>
-<div class="note">Unlike the BeanShell sampler, the interpreter is not saved between invocations.</div>
-<div class="clear"></div>
-    
-</div>
-<div class="screenshot">
-<figure>
-<a href="../images/screenshots/bsfsampler.png"><img src="../images/screenshots/bsfsampler.png" width="848" height="590" alt="Screenshot for Control-Panel of BSF Sampler (DEPRECATED)"></a>
-<figcaption>Screenshot of Control-Panel of BSF Sampler (DEPRECATED)</figcaption>
-</figure>
-</div>
-<div class="properties">
-<h3 id="BSF_Sampler_(DEPRECATED)_parms1">
-        Parameters
-        <a class="sectionlink" href="#BSF_Sampler_(DEPRECATED)_parms1" title="Link to here">&para;</a>
-</h3>
-<div class="property title">
-<div class="name title">Attribute</div>
-<div class="description title">Description</div>
-<div class="required title">Required</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Name</div>
-<div class="description req-false">Descriptive name for this sampler that is shown in the tree.</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Scripting Language</div>
-<div class="description req-true">Name of the BSF scripting language to be used.
-      <div class="clear"></div>
-<div class="note">N.B. Not all the languages in the drop-down list are supported by default.
-        The following are supported: JavaScript, XSLT.
-        Others may be available if the appropriate jar is installed in the JMeter lib directory.
-      </div>
-<div class="clear"></div>
-    
-</div>
-<div class="required req-true">Yes</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Script File</div>
-<div class="description req-false">Name of a file to be used as a BSF script, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Parameters</div>
-<div class="description req-false">List of parameters to be passed to the script file or the script.</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Script</div>
-<div class="description req-true">Script to be passed to BSF language</div>
-<div class="required req-true">Yes (unless script file is provided)</div>
-</div>
-
-</div>
-<p>
-If a script file is supplied, that will be used, otherwise the script will be used.</p>
-<div class="clear"></div>
-<div class="note">
-JMeter processes function and variable references before passing the script field to the interpreter,
-so the references will only be resolved once.
-Variable and function references in script files will be passed
-verbatim to the interpreter, which is likely to cause a syntax error.
-In order to use runtime variables, please use the appropriate props methods,
-e.g.<span class="code">props.get("START.HMS"); props.put("PROP1","1234");</span> 
-
-</div>
-<div class="clear"></div>
-<p>
-Before invoking the script, some variables are set up.
-Note that these are BSF variables - i.e. they can be used directly in the script.
-</p>
-<ul>
-
-<li>
-<span class="code">log</span> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>
-</li>
-
-<li>
-<span class="code">Label</span> - the Sampler label</li>
-
-<li>
-<span class="code">FileName</span> - the file name, if any</li>
-
-<li>
-<span class="code">Parameters</span> - text from the Parameters field</li>
-
-<li>
-<span class="code">args</span> - the parameters, split as described above</li>
-
-<li>
-<span class="code">SampleResult</span> - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>
-</li>
-
-<li>
-<span class="code">sampler</span> - <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> - pointer to current Sampler</li>
-
-<li>
-<span class="code">ctx</span> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>
-</li>
-
-<li>
-<span class="code">vars</span> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. 
-  <pre class="source">vars.get("VAR1");
-vars.put("VAR2","value");
-vars.remove("VAR3");
-vars.putObject("OBJ1",new Object());</pre>
-</li>
-
-<li>
-<span class="code">props</span> - JMeterProperties  (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g. 
-  <pre class="source">props.get("START.HMS");
-props.put("PROP1","1234");</pre>
-</li>
-
-<li>
-<span class="code">OUT</span> - System.out - e.g. <span class="code">OUT.println("message")</span>
-</li>
-
-</ul>
-<p>
-The <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> ResponseData is set from the return value of the script.
-If the script returns <span class="code">null</span>, it can set the response directly, by using the method 
-<span class="code">SampleResult.setResponseData(data)</span>, where data is either a String or a byte array.
-The data type defaults to "<span class="code">text</span>", but can be set to binary by using the method
-<span class="code">SampleResult.setDataType(SampleResult.BINARY)</span>.
-</p>
-<p>
-The SampleResult variable gives the script full access to all the fields and
-methods in the SampleResult. For example, the script has access to the methods
-<span class="code">setStopThread(boolean)</span> and <span class="code">setStopTest(boolean)</span>.
-</p>
-<p>
-Unlike the BeanShell Sampler, the BSF Sampler does not set the <span class="code">ResponseCode</span>, <span class="code">ResponseMessage</span> and sample status via script variables.
-Currently the only way to change these is via the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> methods:
-</p>
-<ul>
-
-<li>
-<span class="code">SampleResult.setSuccessful(true/false)</span>
-</li>
-
-<li>
-<span class="code">SampleResult.setResponseCode("code")</span>
-</li>
-
-<li>
-<span class="code">SampleResult.setResponseMessage("message")</span>
-</li>
-
-</ul>
 <div class="go-top">
 <a href="#">^</a>
 </div>
@@ -8380,163 +8170,6 @@ i.e. 30.0 requests/minute is saved as <span class="code">0.5</span>.
 
 
 <div class="component">
-<h2 id="BSF_Listener_(DEPRECATED)">BSF Listener (DEPRECATED)<a class="sectionlink" href="#BSF_Listener_(DEPRECATED)" title="Link to here">&para;</a>
-</h2>
-<div class="description">
-
-<p>
-The BSF Listener allows BSF script code to be applied to sample results.
-</p>
-
-</div>
-<div class="screenshot">
-<figure>
-<a href="../images/screenshots/bsf_listener.png"><img src="../images/screenshots/bsf_listener.png" width="847" height="634" alt="Screenshot for Control-Panel of BSF Listener (DEPRECATED)"></a>
-<figcaption>Screenshot of Control-Panel of BSF Listener (DEPRECATED)</figcaption>
-</figure>
-</div>
-<div class="properties">
-<h3 id="BSF_Listener_(DEPRECATED)_parms1">
-        Parameters
-        <a class="sectionlink" href="#BSF_Listener_(DEPRECATED)_parms1" title="Link to here">&para;</a>
-</h3>
-<div class="property title">
-<div class="name title">Attribute</div>
-<div class="description title">Description</div>
-<div class="required title">Required</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Name</div>
-<div class="description req-false">Descriptive name for this element that is shown in the tree.</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Language</div>
-<div class="description req-true">The BSF language to be used</div>
-<div class="required req-true">Yes</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Parameters</div>
-<div class="description req-false">Parameters to pass to the script.
-    The parameters are stored in the following variables:
-    <dl>
-        
-<dt>
-<span class="code">Parameters</span>
-</dt>
-<dd>string containing the parameters as a single variable</dd>
-        
-<dt>
-<span class="code">args</span>
-</dt>
-<dd>String array containing parameters, split on white-space</dd>
-    
-</dl>
-</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Script file</div>
-<div class="description req-false">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Script</div>
-<div class="description req-true">The script to run.</div>
-<div class="required req-true">Yes (unless script file is provided)</div>
-</div>
-
-</div>
-<p>
-The script (or file) is processed using the <span class="code">BSFEngine.exec()</span> method, which does not return a value.
-</p>
-<p>
-Before invoking the script, some variables are set up.
-Note that these are BSF variables - i.e. they can be used directly in the script.
-</p>
-<dl>
-
-<dt>
-<span class="code">log</span>
-</dt>
-<dd>(<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</dd>
-
-<dt>
-<span class="code">Label</span>
-</dt>
-<dd>the String Label</dd>
-
-<dt>
-<span class="code">FileName</span>
-</dt>
-<dd>the script file name (if any)</dd>
-
-<dt>
-<span class="code">Parameters</span>
-</dt>
-<dd>the parameters (as a String)</dd>
-
-<dt>
-<span class="code">args</span>
-</dt>
-<dd>the parameters as a String array (split on whitespace)</dd>
-
-<dt>
-<span class="code">ctx</span>
-</dt>
-<dd>(<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</dd>
-
-<dt>
-<span class="code">vars</span>
-</dt>
-<dd>(<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <pre class="source">vars.get(key);
-vars.put(key,val);
-vars.putObject("OBJ1",new Object());
-vars.getObject("OBJ2");</pre>
-</dd>
-
-<dt>
-<span class="code">props</span>
-</dt>
-<dd>(JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g. <span class="code">props.get("START.HMS");</span> <span class="code">props.put("PROP1","1234");</span>
-</dd>
-
-<dt>
-<span class="code">sampleResult</span>, <span class="code">prev</span>
-</dt>
-<dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
-
-<dt>
-<span class="code">sampleEvent</span>
-</dt>
-<dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
-
-<dt>
-<span class="code">sampler</span>
-</dt>
-<dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
-
-<dt>
-<span class="code">OUT</span>
-</dt>
-<dd>
-<span class="code">System.out</span> - e.g. <span class="code">OUT.println("message")</span>
-</dd>
-
-</dl>
-<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<div class="go-top">
-<a href="#">^</a>
-</div>
-</div>
-
-
-<div class="component">
 <h2 id="JSR223_Listener">JSR223 Listener<a class="sectionlink" href="#JSR223_Listener" title="Link to here">&para;</a>
 </h2>
 <div class="description">
@@ -12083,7 +11716,7 @@ These are strings unless otherwise noted:
 </li>
   
 <li>
-<span class="code">SampleResult</span> - the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> Object; read-write</li>
+<span class="code">SampleResult</span>, <span class="code">prev</span> - the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> Object; read-write</li>
   
 <li>
 <span class="code">Response</span> - the response Object; read-write</li>
@@ -12452,142 +12085,6 @@ You reference this file in <span class="code">jmeter.properties</span> file usin
 </div>
 
 </div>
-<div class="go-top">
-<a href="#">^</a>
-</div>
-</div>
-
-
-<div class="component">
-<h2 id="BSF_Assertion_(DEPRECATED)">BSF Assertion (DEPRECATED)<a class="sectionlink" href="#BSF_Assertion_(DEPRECATED)" title="Link to here">&para;</a>
-</h2>
-<div class="description">
-
-<p>
-The BSF Assertion allows BSF script code to be used to check the status of the previous sample.
-</p>
-
-</div>
-<div class="screenshot">
-<figure>
-<a href="../images/screenshots/bsf_assertion.png"><img src="../images/screenshots/bsf_assertion.png" width="847" height="634" alt="Screenshot for Control-Panel of BSF Assertion (DEPRECATED)"></a>
-<figcaption>Screenshot of Control-Panel of BSF Assertion (DEPRECATED)</figcaption>
-</figure>
-</div>
-<div class="properties">
-<h3 id="BSF_Assertion_(DEPRECATED)_parms1">
-        Parameters
-        <a class="sectionlink" href="#BSF_Assertion_(DEPRECATED)_parms1" title="Link to here">&para;</a>
-</h3>
-<div class="property title">
-<div class="name title">Attribute</div>
-<div class="description title">Description</div>
-<div class="required title">Required</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Name</div>
-<div class="description req-false">Descriptive name for this element that is shown in the tree.</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Language</div>
-<div class="description req-true">The BSF language to be used</div>
-<div class="required req-true">Yes</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Parameters</div>
-<div class="description req-false">Parameters to pass to the script.
-    The parameters are stored in the following variables:
-    <ul>
-        
-<li>
-<span class="code">Parameters</span> - string containing the parameters as a single variable</li>
-        
-<li>
-<span class="code">args</span> - String array containing parameters, split on white-space</li>
-    
-</ul>
-</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Script file</div>
-<div class="description req-false">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Script</div>
-<div class="description req-true">The script to run.</div>
-<div class="required req-true">Yes (unless script file is provided)</div>
-</div>
-
-</div>
-<p>
-The script (or file) is processed using the <span class="code">BSFEngine.exec()</span> method, which does not return a value.
-</p>
-<p>The following variables are set up for use by the script:</p>
-<ul>
-
-<li>
-<span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-
-<li>
-<span class="code">Label</span> - the String Label</li>
-
-<li>
-<span class="code">Filename</span> - the script file name (if any)</li>
-
-<li>
-<span class="code">Parameters</span> - the parameters (as a String)</li>
-
-<li>
-<span class="code">args</span> - the parameters as a String array (split on whitespace)</li>
-
-<li>
-<span class="code">ctx</span> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-
-<li>
-<span class="code">vars</span> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables:
-<pre class="source">
-vars.get(key);
-vars.put(key,val);
-vars.putObject("OBJ1",new Object());
-vars.getObject("OBJ2");
-</pre>
-</li>
-
-<li>
-<span class="code">props</span> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g.
-<pre class="source">
-props.get("START.HMS");
-props.put("PROP1","1234");
-</pre>
-</li>
-
-<li>
-<span class="code">SampleResult</span>, <span class="code">prev</span> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-
-<li>
-<span class="code">sampler</span> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - gives access to the current sampler</li>
-
-<li>
-<span class="code">OUT</span> - <span class="code">System.out</span> - e.g. <span class="code">OUT.println("message")</span>
-</li>
-
-<li>
-<span class="code">AssertionResult</span> - (<a href="../api/org/apache/jmeter/assertions/AssertionResult.html">AssertionResult</a>) - the assertion result</li>
-
-</ul>
-<p>
-The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
-If an error is detected, the script should use <span class="code">AssertionResult.setFailureMessage("message")</span> and <span class="code">AssertionResult.setFailure(true)</span>.
-</p>
-<p>For further details of all the methods available on each of the above variables, please check the Javadoc</p>
 <div class="go-top">
 <a href="#">^</a>
 </div>
@@ -13695,124 +13192,6 @@ vars.putObject("OBJ1",new Object());
 </div>
 
 
-
-<div class="component">
-<h2 id="BSF_Timer_(DEPRECATED)">BSF Timer (DEPRECATED)<a class="sectionlink" href="#BSF_Timer_(DEPRECATED)" title="Link to here">&para;</a>
-</h2>
-<div class="description">
-
-<p>
-The BSF Timer can be used to generate a delay using a BSF scripting language.
-</p>
-
-</div>
-<div class="screenshot">
-<figure>
-<a href="../images/screenshots/timers/bsf_timer.png"><img src="../images/screenshots/timers/bsf_timer.png" width="844" height="636" alt="Screenshot for Control-Panel of BSF Timer (DEPRECATED)"></a>
-<figcaption>Screenshot of Control-Panel of BSF Timer (DEPRECATED)</figcaption>
-</figure>
-</div>
-<div class="properties">
-<h3 id="BSF_Timer_(DEPRECATED)_parms1">
-        Parameters
-        <a class="sectionlink" href="#BSF_Timer_(DEPRECATED)_parms1" title="Link to here">&para;</a>
-</h3>
-<div class="property title">
-<div class="name title">Attribute</div>
-<div class="description title">Description</div>
-<div class="required title">Required</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Name</div>
-<div class="description req-false">Descriptive name for this element that is shown in the tree.</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">ScriptLanguage</div>
-<div class="description req-true">
-        The scripting language to be used.
-    </div>
-<div class="required req-true">Yes</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Parameters</div>
-<div class="description req-false">Parameters to pass to the script.
-    The parameters are stored in the following variables:
-    <ul>
-        
-<li>
-<span class="code">Parameters</span> - string containing the parameters as a single variable</li>
-        
-<li>
-<span class="code">args</span> - String array containing parameters, split on white-space</li>
-    
-</ul>
-    
-</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Script file</div>
-<div class="description req-false">
-    A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property
-     The return value is converted to a long integer and used as the number of milliseconds to wait.
-     </div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Script</div>
-<div class="description req-true">
-        The script. The return value is used as the number of milliseconds to wait.
-    </div>
-<div class="required req-true">Yes (unless script file is provided)</div>
-</div>
-
-</div>
-<p>Before invoking the script, some variables are set up in the script interpreter:</p>
-<ul>
-
-<li>
-<span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-
-<li>
-<span class="code">ctx</span> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-
-<li>
-<span class="code">vars</span> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <pre class="source">
-vars.get(key);
-vars.put(key,val);
-vars.putObject("OBJ1",new Object());</pre>
-</li>
-
-<li>
-<span class="code">props</span> - (JMeterProperties - class java.util.Properties) - e.g. <span class="code">props.get("START.HMS");</span> <span class="code">props.put("PROP1","1234");</span>
-</li>
-
-<li>
-<span class="code">sampler</span> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)  - the current Sampler</li>
-
-<li>
-<span class="code">Label</span> - the name of the Timer</li>
-
-<li>
-<span class="code">FileName</span> - the file name (if any)</li>
-
-<li>
-<span class="code">OUT</span> - System.out</li>
-
-</ul>
-<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<div class="go-top">
-<a href="#">^</a>
-</div>
-</div>
-
-
 <div class="component">
 <h2 id="JSR223_Timer">JSR223 Timer<a class="sectionlink" href="#JSR223_Timer" title="Link to here">&para;</a>
 </h2>
@@ -14369,125 +13748,6 @@ vars.putObject("OBJ1",new Object());</pre>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <span class="code">beanshell.preprocessor.init</span> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
-<div class="go-top">
-<a href="#">^</a>
-</div>
-</div>
-
-
-<div class="component">
-<h2 id="BSF_PreProcessor_(DEPRECATED)">BSF PreProcessor (DEPRECATED)<a class="sectionlink" href="#BSF_PreProcessor_(DEPRECATED)" title="Link to here">&para;</a>
-</h2>
-<div class="description">
-
-<p>
-The BSF PreProcessor allows BSF script code to be applied before taking a sample.
-</p>
-
-</div>
-<div class="screenshot">
-<figure>
-<a href="../images/screenshots/bsf_preprocessor.png"><img src="../images/screenshots/bsf_preprocessor.png" width="844" height="632" alt="Screenshot for Control-Panel of BSF PreProcessor (DEPRECATED)"></a>
-<figcaption>Screenshot of Control-Panel of BSF PreProcessor (DEPRECATED)</figcaption>
-</figure>
-</div>
-<div class="properties">
-<h3 id="BSF_PreProcessor_(DEPRECATED)_parms1">
-        Parameters
-        <a class="sectionlink" href="#BSF_PreProcessor_(DEPRECATED)_parms1" title="Link to here">&para;</a>
-</h3>
-<div class="property title">
-<div class="name title">Attribute</div>
-<div class="description title">Description</div>
-<div class="required title">Required</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Name</div>
-<div class="description req-false">Descriptive name for this element that is shown in the tree.</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Language</div>
-<div class="description req-true">The BSF language to be used</div>
-<div class="required req-true">Yes</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Parameters</div>
-<div class="description req-false">Parameters to pass to the script.
-    The parameters are stored in the following variables:
-    <ul>
-        
-<li>
-<span class="code">Parameters</span> - string containing the parameters as a single variable</li>
-        
-<li>
-<span class="code">args</span> - String array containing parameters, split on white-space</li>
-    
-</ul>
-</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Script file</div>
-<div class="description req-false">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Script</div>
-<div class="description req-true">The script to run.</div>
-<div class="required req-true">Yes (unless script file is provided)</div>
-</div>
-
-</div>
-<p>
-The script (or file) is processed using the <span class="code">BSFEngine.exec()</span> method, which does not return a value.
-</p>
-<p>The following BSF variables are set up for use by the script:</p>
-<ul>
-
-<li>
-<span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-
-<li>
-<span class="code">Label</span> - the String Label</li>
-
-<li>
-<span class="code">FileName</span> - the script file name (if any)</li>
-
-<li>
-<span class="code">Parameters</span> - the parameters (as a String)</li>
-
-<li>
-<span class="code">args</span> - the parameters as a String array (split on whitespace)</li>
-
-<li>
-<span class="code">ctx</span> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-
-<li>
-<span class="code">vars</span> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <pre class="source">vars.get(key);
-vars.put(key,val);
-vars.putObject("OBJ1",new Object());
-vars.getObject("OBJ2");</pre>
-</li>
-
-<li>
-<span class="code">props</span> - (JMeterProperties - class java.util.Properties) - e.g. <span class="code">props.get("START.HMS");</span> <span class="code">props.put("PROP1","1234");</span>
-</li>
-
-<li>
-<span class="code">sampler</span> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
-
-<li>
-<span class="code">OUT</span> - System.out - e.g. <span class="code">OUT.println("message")</span>
-</li>
-
-</ul>
-<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <div class="go-top">
 <a href="#">^</a>
 </div>
@@ -15811,131 +15071,6 @@ vars.putObject("OBJ1",new Object());</pre>
 
 
 <div class="component">
-<h2 id="BSF_PostProcessor_(DEPRECATED)">BSF PostProcessor (DEPRECATED)<a class="sectionlink" href="#BSF_PostProcessor_(DEPRECATED)" title="Link to here">&para;</a>
-</h2>
-<div class="description">
-
-<p>
-The BSF PostProcessor allows BSF script code to be applied after taking a sample.
-</p>
-
-</div>
-<div class="screenshot">
-<figure>
-<a href="../images/screenshots/bsf_postprocessor.png"><img src="../images/screenshots/bsf_postprocessor.png" width="844" height="633" alt="Screenshot for Control-Panel of BSF PostProcessor (DEPRECATED)"></a>
-<figcaption>Screenshot of Control-Panel of BSF PostProcessor (DEPRECATED)</figcaption>
-</figure>
-</div>
-<div class="properties">
-<h3 id="BSF_PostProcessor_(DEPRECATED)_parms1">
-        Parameters
-        <a class="sectionlink" href="#BSF_PostProcessor_(DEPRECATED)_parms1" title="Link to here">&para;</a>
-</h3>
-<div class="property title">
-<div class="name title">Attribute</div>
-<div class="description title">Description</div>
-<div class="required title">Required</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Name</div>
-<div class="description req-false">Descriptive name for this element that is shown in the tree.</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Language</div>
-<div class="description req-true">The BSF language to be used</div>
-<div class="required req-true">Yes</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Parameters</div>
-<div class="description req-false">Parameters to pass to the script.
-    The parameters are stored in the following variables:
-    <ul>
-        
-<li>
-<span class="code">Parameters</span> - string containing the parameters as a single variable</li>
-        
-<li>
-<span class="code">args</span> - String array containing parameters, split on white-space</li>
-    
-</ul>
-</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-false">Script file</div>
-<div class="description req-false">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property</div>
-<div class="required req-false">No</div>
-</div>
-    
-<div class="property">
-<div class="name req-true">Script</div>
-<div class="description req-true">The script to run.</div>
-<div class="required req-true">Yes (unless script file is provided)</div>
-</div>
-
-</div>
-<p>
-The script (or file) is processed using the <span class="code">BSFEngine.exec()</span> method, which does not return a value.
-</p>
-<p>
-Before invoking the script, some variables are set up.
-Note that these are BSF variables - i.e. they can be used directly in the script.
-</p>
-<ul>
-
-<li>
-<span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-
-<li>
-<span class="code">Label</span> - the String Label</li>
-
-<li>
-<span class="code">FileName</span> - the script file name (if any)</li>
-
-<li>
-<span class="code">Parameters</span> - the parameters (as a String)</li>
-
-<li>
-<span class="code">args</span> - the parameters as a String array (split on whitespace)</li>
-
-<li>
-<span class="code">ctx</span> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-
-<li>
-<span class="code">vars</span> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <pre class="source">vars.get(key);
-vars.put(key,val);
-vars.putObject("OBJ1",new Object());
-vars.getObject("OBJ2");</pre>
-</li>
-
-<li>
-<span class="code">props</span> - (JMeterProperties - class java.util.Properties) - e.g. <span class="code">props.get("START.HMS");</span> <span class="code">props.put("PROP1","1234");</span>
-</li>
-
-<li>
-<span class="code">prev</span> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-
-<li>
-<span class="code">sampler</span> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
-
-<li>
-<span class="code">OUT</span> - System.out - e.g. <span class="code">OUT.println("message")</span>
-</li>
-
-</ul>
-<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<div class="go-top">
-<a href="#">^</a>
-</div>
-</div>
-
-
-<div class="component">
 <h2 id="JSR223_PostProcessor">JSR223 PostProcessor<a class="sectionlink" href="#JSR223_PostProcessor" title="Link to here">&para;</a>
 </h2>
 <div class="description">
@@ -16670,7 +15805,12 @@ Behaviour can be modified with some properties by setting in user.properties:
   The SSL Manager is a way to select a client certificate so that you can test
   applications that use Public Key Infrastructure (PKI).
   It is only needed if you have not set up the appropriate System properties.
+
 </p>
+<div class="clear"></div>
+<div class="note">If you want to test client certificate authentication, see <a href="../usermanual/component_reference.html#Keystore_Configuration">Keystore Configuration</a>
+</div>
+<div class="clear"></div>
 <b>Choosing a Client Certificate</b>
 <p>
   You may either use a Java Key Store (JKS) format key store, or a Public Key
