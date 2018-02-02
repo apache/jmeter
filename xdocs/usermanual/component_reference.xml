@@ -1103,93 +1103,6 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 </p>
 </component>
 
-
-<component name="BSF Sampler (DEPRECATED)" index="&sect-num;.1.11"  width="848" height="590" screenshot="bsfsampler.png">
-    <description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
-        See the <a href="http://commons.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
-        website for details of the languages supported.
-        You may need to download the appropriate jars for the language; they should be put in the JMeter <code>lib</code> directory.
-        </p>
-        <note>
-        The BSF API has been largely superseded by JSR-223, which is included in Java 6 onwards.
-        Most scripting languages now include support for JSR-223; please use the JSR223 Sampler instead.
-        The BSF Sampler should only be needed for supporting legacy languages/test scripts.
-        </note>
-        <p>By default, JMeter supports the following languages:</p>
-        <ul>
-        <li>JavaScript</li>
-        <li>XSLT</li>
-        </ul>
-        <note>Unlike the BeanShell sampler, the interpreter is not saved between invocations.</note>
-    </description>
-<properties>
-    <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-    <property name="Scripting Language" required="Yes">Name of the BSF scripting language to be used.
-      <note>N.B. Not all the languages in the drop-down list are supported by default.
-        The following are supported: JavaScript, XSLT.
-        Others may be available if the appropriate jar is installed in the JMeter lib directory.
-      </note>
-    </property>
-    <property name="Script File" required="No">Name of a file to be used as a BSF script, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
-    <property name="Script" required="Yes (unless script file is provided)">Script to be passed to BSF language</property>
-</properties>
-<p>
-If a script file is supplied, that will be used, otherwise the script will be used.</p>
-<note>
-JMeter processes function and variable references before passing the script field to the interpreter,
-so the references will only be resolved once.
-Variable and function references in script files will be passed
-verbatim to the interpreter, which is likely to cause a syntax error.
-In order to use runtime variables, please use the appropriate props methods,
-e.g.<code>props.get("START.HMS"); props.put("PROP1","1234");</code> 
-</note>
-<p>
-Before invoking the script, some variables are set up.
-Note that these are BSF variables - i.e. they can be used directly in the script.
-</p>
-<ul>
-<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a></li>
-<li><code>Label</code> - the Sampler label</li>
-<li><code>FileName</code> - the file name, if any</li>
-<li><code>Parameters</code> - text from the Parameters field</li>
-<li><code>args</code> - the parameters, split as described above</li>
-<li><code>SampleResult</code> - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
-<li><code>sampler</code> - <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> - pointer to current Sampler</li>
-<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
-<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. 
-  <source>vars.get("VAR1");
-vars.put("VAR2","value");
-vars.remove("VAR3");
-vars.putObject("OBJ1",new Object());</source></li>
-<li><code>props</code> - JMeterProperties  (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. 
-  <source>props.get("START.HMS");
-props.put("PROP1","1234");</source></li>
-<li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
-</ul>
-<p>
-The <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> ResponseData is set from the return value of the script.
-If the script returns <code>null</code>, it can set the response directly, by using the method 
-<code>SampleResult.setResponseData(data)</code>, where data is either a String or a byte array.
-The data type defaults to "<code>text</code>", but can be set to binary by using the method
-<code>SampleResult.setDataType(SampleResult.BINARY)</code>.
-</p>
-<p>
-The SampleResult variable gives the script full access to all the fields and
-methods in the SampleResult. For example, the script has access to the methods
-<code>setStopThread(boolean)</code> and <code>setStopTest(boolean)</code>.
-</p>
-<p>
-Unlike the BeanShell Sampler, the BSF Sampler does not set the <code>ResponseCode</code>, <code>ResponseMessage</code> and sample status via script variables.
-Currently the only way to change these is via the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> methods:
-</p>
-<ul>
-<li><code>SampleResult.setSuccessful(true/false)</code></li>
-<li><code>SampleResult.setResponseCode("code")</code></li>
-<li><code>SampleResult.setResponseMessage("message")</code></li>
-</ul>
-</component>
-
 <component name="JSR223 Sampler" index="&sect-num;.1.11.1" width="861" height="502" screenshot="jsr223-sampler.png">
 <description>
 <p>
@@ -3285,51 +3198,6 @@ i.e. 30.0 requests/minute is saved as <code>0.5</code>.
  </properties>
 </component>
 
-<component name="BSF Listener (DEPRECATED)" index="&sect-num;.3.18"  width="847" height="634" screenshot="bsf_listener.png">
-<description>
-<p>
-The BSF Listener allows BSF script code to be applied to sample results.
-</p>
-</description>
-<properties>
-    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Language" required="Yes">The BSF language to be used</property>
-    <property name="Parameters" required="No">Parameters to pass to the script.
-    The parameters are stored in the following variables:
-    <dl>
-        <dt><code>Parameters</code></dt><dd>string containing the parameters as a single variable</dd>
-        <dt><code>args</code></dt><dd>String array containing parameters, split on white-space</dd>
-    </dl></property>
-    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
-</properties>
-<p>
-The script (or file) is processed using the <code>BSFEngine.exec()</code> method, which does not return a value.
-</p>
-<p>
-Before invoking the script, some variables are set up.
-Note that these are BSF variables - i.e. they can be used directly in the script.
-</p>
-<dl>
-<dt><code>log</code></dt><dd>(<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</dd>
-<dt><code>Label</code></dt><dd>the String Label</dd>
-<dt><code>FileName</code></dt><dd>the script file name (if any)</dd>
-<dt><code>Parameters</code></dt><dd>the parameters (as a String)</dd>
-<dt><code>args</code></dt><dd>the parameters as a String array (split on whitespace)</dd>
-<dt><code>ctx</code></dt><dd>(<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</dd>
-<dt><code>vars</code></dt><dd>(<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
-vars.put(key,val);
-vars.putObject("OBJ1",new Object());
-vars.getObject("OBJ2");</source></dd>
-<dt><code>props</code></dt><dd>(JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
-<dt><code>sampleResult</code>, <code>prev</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
-<dt><code>sampleEvent</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
-<dt><code>sampler</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
-<dt><code>OUT</code></dt><dd><code>System.out</code> - e.g. <code>OUT.println("message")</code></dd>
-</dl>
-<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-</component>
-
 <component name="JSR223 Listener" index="&sect-num;.3.18.1">
 <description>
 <p>
@@ -4725,7 +4593,7 @@ These are strings unless otherwise noted:
 </p>
 <ul>
   <li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> Object. (e.g.) <code>log.warn("Message"[,Throwable])</code></li>
-  <li><code>SampleResult</code> - the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> Object; read-write</li>
+  <li><code>SampleResult</code>, <code>prev</code> - the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> Object; read-write</li>
   <li><code>Response</code> - the response Object; read-write</li>
   <li><code>Failure</code> - boolean; read-write; used to set the Assertion status</li>
   <li><code>FailureMessage</code> - String; read-write; used to set the Assertion message</li>
@@ -4831,59 +4699,6 @@ You reference this file in <code>jmeter.properties</code> file using the propert
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
 <property name="File Name" required="Yes">Specify XML Schema File Name</property>
 </properties>
-</component>
-
-<component name="BSF Assertion (DEPRECATED)" index="&sect-num;.5.10"  width="847" height="634" screenshot="bsf_assertion.png">
-<description>
-<p>
-The BSF Assertion allows BSF script code to be used to check the status of the previous sample.
-</p>
-</description>
-<properties>
-    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Language" required="Yes">The BSF language to be used</property>
-    <property name="Parameters" required="No">Parameters to pass to the script.
-    The parameters are stored in the following variables:
-    <ul>
-        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
-        <li><code>args</code> - String array containing parameters, split on white-space</li>
-    </ul></property>
-    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
-</properties>
-<p>
-The script (or file) is processed using the <code>BSFEngine.exec()</code> method, which does not return a value.
-</p>
-<p>The following variables are set up for use by the script:</p>
-<ul>
-<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li><code>Label</code> - the String Label</li>
-<li><code>Filename</code> - the script file name (if any)</li>
-<li><code>Parameters</code> - the parameters (as a String)</li>
-<li><code>args</code> - the parameters as a String array (split on whitespace)</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables:
-<source>
-vars.get(key);
-vars.put(key,val);
-vars.putObject("OBJ1",new Object());
-vars.getObject("OBJ2");
-</source></li>
-<li><code>props</code> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g.
-<source>
-props.get("START.HMS");
-props.put("PROP1","1234");
-</source></li>
-<li><code>SampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - gives access to the current sampler</li>
-<li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
-<li><code>AssertionResult</code> - (<a href="../api/org/apache/jmeter/assertions/AssertionResult.html">AssertionResult</a>) - the assertion result</li>
-</ul>
-<p>
-The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
-If an error is detected, the script should use <code>AssertionResult.setFailureMessage("message")</code> and <code>AssertionResult.setFailure(true)</code>.
-</p>
-<p>For further details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
 <component name="JSR223 Assertion" index="&sect-num;.5.11">
@@ -5320,50 +5135,6 @@ vars.putObject("OBJ1",new Object());
 <p>If the property <code>beanshell.timer.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
-
-<component name="BSF Timer (DEPRECATED)" index="&sect-num;.6.8"  width="844" height="636" screenshot="timers/bsf_timer.png">
-<description>
-<p>
-The BSF Timer can be used to generate a delay using a BSF scripting language.
-</p>
-</description>
-<properties>
-    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="ScriptLanguage" required="Yes">
-        The scripting language to be used.
-    </property>
-    <property name="Parameters" required="No">Parameters to pass to the script.
-    The parameters are stored in the following variables:
-    <ul>
-        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
-        <li><code>args</code> - String array containing parameters, split on white-space</li>
-    </ul>
-    </property>
-    <property name="Script file" required="No">
-    A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property
-     The return value is converted to a long integer and used as the number of milliseconds to wait.
-     </property>
-    <property name="Script" required="Yes (unless script file is provided)">
-        The script. The return value is used as the number of milliseconds to wait.
-    </property>
-</properties>
-<p>Before invoking the script, some variables are set up in the script interpreter:</p>
-<ul>
-<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>
-vars.get(key);
-vars.put(key,val);
-vars.putObject("OBJ1",new Object());</source></li>
-<li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
-<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)  - the current Sampler</li>
-<li><code>Label</code> - the name of the Timer</li>
-<li><code>FileName</code> - the file name (if any)</li>
-<li><code>OUT</code> - System.out</li>
-</ul>
-<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-</component>
-
 <component name="JSR223 Timer" index="&sect-num;.6.9">
 <description>
 <p>
@@ -5599,46 +5370,6 @@ vars.putObject("OBJ1",new Object());</source></li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <code>beanshell.preprocessor.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
-</component>
-
-<component name="BSF PreProcessor (DEPRECATED)" index="&sect-num;.7.8"  width="844" height="632" screenshot="bsf_preprocessor.png">
-<description>
-<p>
-The BSF PreProcessor allows BSF script code to be applied before taking a sample.
-</p>
-</description>
-<properties>
-    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Language" required="Yes">The BSF language to be used</property>
-    <property name="Parameters" required="No">Parameters to pass to the script.
-    The parameters are stored in the following variables:
-    <ul>
-        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
-        <li><code>args</code> - String array containing parameters, split on white-space</li>
-    </ul></property>
-    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
-</properties>
-<p>
-The script (or file) is processed using the <code>BSFEngine.exec()</code> method, which does not return a value.
-</p>
-<p>The following BSF variables are set up for use by the script:</p>
-<ul>
-<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li><code>Label</code> - the String Label</li>
-<li><code>FileName</code> - the script file name (if any)</li>
-<li><code>Parameters</code> - the parameters (as a String)</li>
-<li><code>args</code> - the parameters as a String array (split on whitespace)</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
-vars.put(key,val);
-vars.putObject("OBJ1",new Object());
-vars.getObject("OBJ2");</source></li>
-<li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
-<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
-<li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
-</ul>
-<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
 <component name="JSR223 PreProcessor" index="&sect-num;.7.8">
@@ -6187,50 +5918,6 @@ vars.putObject("OBJ1",new Object());</source></li>
 <p>If the property <code>beanshell.postprocessor.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PostProcessor (DEPRECATED)" index="&sect-num;.8.6"  width="844" height="633" screenshot="bsf_postprocessor.png">
-<description>
-<p>
-The BSF PostProcessor allows BSF script code to be applied after taking a sample.
-</p>
-</description>
-<properties>
-    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Language" required="Yes">The BSF language to be used</property>
-    <property name="Parameters" required="No">Parameters to pass to the script.
-    The parameters are stored in the following variables:
-    <ul>
-        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
-        <li><code>args</code> - String array containing parameters, split on white-space</li>
-    </ul></property>
-    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
-</properties>
-<p>
-The script (or file) is processed using the <code>BSFEngine.exec()</code> method, which does not return a value.
-</p>
-<p>
-Before invoking the script, some variables are set up.
-Note that these are BSF variables - i.e. they can be used directly in the script.
-</p>
-<ul>
-<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li><code>Label</code> - the String Label</li>
-<li><code>FileName</code> - the script file name (if any)</li>
-<li><code>Parameters</code> - the parameters (as a String)</li>
-<li><code>args</code> - the parameters as a String array (split on whitespace)</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
-vars.put(key,val);
-vars.putObject("OBJ1",new Object());
-vars.getObject("OBJ2");</source></li>
-<li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
-<li><code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
-<li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
-</ul>
-<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-</component>
-
 <component name="JSR223 PostProcessor" index="&sect-num;.8.7">
 <description>
 <p>
@@ -6540,8 +6227,9 @@ Behaviour can be modified with some properties by setting in user.properties:
   The SSL Manager is a way to select a client certificate so that you can test
   applications that use Public Key Infrastructure (PKI).
   It is only needed if you have not set up the appropriate System properties.
-</p>
 
+</p>
+<note>If you want to test client certificate authentication, see <complink name="Keystore Configuration"/></note>
 <b>Choosing a Client Certificate</b>
 <p>
   You may either use a Java Key Store (JKS) format key store, or a Public Key

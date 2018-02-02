@@ -21,6 +21,7 @@ package org.apache.jmeter.rmi;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.BindException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.rmi.server.RMIServerSocketFactory;
@@ -130,8 +131,13 @@ public class SSLRMIServerSocketFactory implements RMIServerSocketFactory, Serial
                     "Unable to obtain SSLServerSocketFactory for provided KeyStore");
         }
 
-        SSLServerSocket socket = (SSLServerSocket) factory
-                .createServerSocket(port, 0, localAddress);
+        SSLServerSocket socket;
+        try {
+            socket = (SSLServerSocket) factory
+                    .createServerSocket(port, 0, localAddress);
+        } catch (BindException e) {
+            throw new IOException("Could not bind to " + localAddress + " using port " + port, e);
+        }
         socket.setNeedClientAuth(clientAuth);
         LOGGER.info("Created SSLSocket: {}", socket);
         return socket;

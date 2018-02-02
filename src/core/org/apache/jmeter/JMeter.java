@@ -345,11 +345,12 @@ public class JMeter implements JMeterPlugin {
      */
     private void startGui(String testFile) {
         System.out.println("================================================================================");//NOSONAR
-        System.out.println("Don't use GUI mode for load testing, only for Test creation and Test debugging !");//NOSONAR
+        System.out.println("Don't use GUI mode for load testing !, only for Test creation and Test debugging.");//NOSONAR
         System.out.println("For load testing, use NON GUI Mode:");//NOSONAR
-        System.out.println("   jmeter -n -t [jmx file] -l [results file] -e -o [Path to output folder]");//NOSONAR
-        System.out.println("& adapt Java Heap to your test requirements:");//NOSONAR
-        System.out.println("   Modify HEAP=\"-Xms512m -Xmx512m\" in the JMeter batch file");//NOSONAR
+        System.out.println("   jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]");//NOSONAR
+        System.out.println("& increase Java Heap to meet your test requirements:");//NOSONAR
+        System.out.println("   Modify current env variable JMETER_HEAP=\"-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m\" in the jmeter batch file");//NOSONAR
+        System.out.println("Check : https://jmeter.apache.org/usermanual/best-practices.html");//NOSONAR
         System.out.println("================================================================================");//NOSONAR
         
         SplashScreen splash = new SplashScreen();

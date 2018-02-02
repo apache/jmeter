@@ -116,7 +116,7 @@ if [ -z "$JAVA_HOME" ]; then
 fi
 
 #--add-modules java.activation if JAVA 9
-ADD_MODS=
+JAVA9_OPTS=
 
 # Minimal version to run JMeter
 MINIMAL_VERSION=8
@@ -126,7 +126,7 @@ CURRENT_VERSION=`"${JAVA_HOME}/bin/java" -version 2>&1 | awk -F'"' '/version/ {g
 
 # Check if Java is present and the minimal version requirement
 if [ "$CURRENT_VERSION" -gt "$MINIMAL_VERSION" ]; then
-    ADD_MODS="--add-modules java.activation"
+    JAVA9_OPTS="--add-modules java.activation --add-opens java.desktop/sun.awt=ALL-UNNAMED --add-opens java.desktop/javax.swing.text.html=ALL-UNNAMED --add-opens java.desktop/sun.swing=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED"
 fi
 
 : "${JMETER_OPTS:=""}"
@@ -183,6 +183,10 @@ DUMP="-XX:+HeapDumpOnOutOfMemoryError"
 SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom"
 SERVER="-server"
 
-ARGS="$SERVER $DUMP $JMETER_HEAP $VERBOSE_GC $JMETER_GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
+if [ -z "${JMETER_COMPLETE_ARGS}" ]; then
+    ARGS="$JAVA9_OPTS $SERVER $DUMP $JMETER_HEAP $VERBOSE_GC $JMETER_GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
+else
+    ARGS=""
+fi
 
-"$JAVA_HOME/bin/java" $ADD_MODS $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
+"$JAVA_HOME/bin/java" $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
