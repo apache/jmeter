@@ -345,7 +345,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         if (menuCategories.isEmpty()) {
             log.error("Could not assign GUI class to {}", testBeanClass);
         } else if (menuCategories.size() > 1) {
-            log.error("More than 1 GUI class found for {}", testBeanClass);
+            // A TestBean implementation might implement 
+            // different TestElement interfaces without being a problem
+            log.info("More than 1 GUI class found for {}", testBeanClass);
         }
         return menuCategories;
     }
