@@ -313,7 +313,7 @@ will override the HEAP settings in the script.
 # it will be sourced in by bin/jmeter
 
 # Use a bigger heap, but a smaller metaspace, than the default
-export JMETER_HEAP="-Xms1G -Xmx1G -XMaxMetaspaceSize=192m"
+export HEAP="-Xms1G -Xmx1G -XMaxMetaspaceSize=192m"
 
 # Try to guess the locale from the OS. The space as value is on purpose!
 export JMETER_LANGUAGE=" "
@@ -324,7 +324,7 @@ export JMETER_LANGUAGE=" "
 <dt><code>JAVA_HOME</code></dt><dd>Must point at your Java Development Kit installation. Required to run the with the "<code>debug</code>" argument. On some OSes it JMeter will try its best to guess the location of the JVM.</dd>
 <dt><code>JRE_HOME</code></dt><dd>Must point at your Java Runtime installation. Defaults to <code>JAVA_HOME</code> if empty. If <code>JRE_HOME</code> and <code>JAVA_HOME</code> are both empty, JMeter will try to guess <code>JAVA_HOME</code>. If <code>JRE_HOME</code> and <code>JAVA_HOME</code> are both set, <code>JAVA_HOME</code> is used.</dd>
 <dt><code>JMETER_GC_ALGO</code></dt><dd>Java runtime options to specify JVM garbage collection algorithm. Defaults to <code>-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20</code></dd>
-<dt><code>JMETER_HEAP</code></dt><dd>Java runtime options for memory management used when JMeter is started. Defaults to <code>-Xms512m -Xmx512m -X:MaxMetaspaceSize=256m</code></dd>
+<dt><code>HEAP</code></dt><dd>Java runtime options for memory management used when JMeter is started. Defaults to <code>-Xms512m -Xmx512m -X:MaxMetaspaceSize=256m</code></dd>
 <dt><code>JMETER_HOME</code></dt><dd>May point to your JMeter install dir. If empty it will be set relative to the <code>jmeter</code> script.</dd>
 <dt><code>JMETER_LANGUAGE</code></dt><dd>Java runtime options to specify used language. Defaults to <code>-Duser.language=en -Duser.region=EN</code></dd>
 <dt><code>JMETER_OPTS</code></dt><dd>Java runtime options used when JMeter is started. Special options for operating systems might be added by JMeter.</dd>
