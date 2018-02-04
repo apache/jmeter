@@ -37,7 +37,7 @@
 ##                    algorithm
 ##                    Defaults to "-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20"
 ##
-##   JMETER_HEAP      (Optional) Java runtime options for memory management
+##   HEAP      (Optional) Java runtime options for memory management
 ##                    used when JMeter is started.
 ##                    Defaults to "-Xms1g -Xmx1g -X:MaxMetaspaceSize=256m"
 ##
@@ -156,7 +156,7 @@ esac
 
 # This is the base heap size -- you may increase or decrease it to fit your
 # system's memory availability:
-: "${JMETER_HEAP:="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"}"
+: "${HEAP:="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"}"
 
 # Set language
 # Default to en_EN
@@ -184,7 +184,7 @@ SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom"
 SERVER="-server"
 
 if [ -z "${JMETER_COMPLETE_ARGS}" ]; then
-    ARGS="$JAVA9_OPTS $SERVER $DUMP $JMETER_HEAP $VERBOSE_GC $JMETER_GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
+    ARGS="$JAVA9_OPTS $SERVER $DUMP $HEAP $VERBOSE_GC $JMETER_GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
 else
     ARGS=""
 fi
