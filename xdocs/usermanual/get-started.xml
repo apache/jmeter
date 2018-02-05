@@ -331,7 +331,7 @@ export JMETER_LANGUAGE=" "
 <dt><code>JMETER_LANGUAGE</code></dt><dd>Java runtime options to specify used language. Defaults to <code>-Duser.language=en -Duser.region=EN</code></dd>
 <dt><code>JMETER_OPTS</code></dt><dd>Java runtime options used when JMeter is started. Special options for operating systems might be added by JMeter.</dd>
 <dt><code>JRE_HOME</code></dt><dd>Must point at your Java Runtime installation. Defaults to <code>JAVA_HOME</code> if empty. If <code>JRE_HOME</code> and <code>JAVA_HOME</code> are both empty, JMeter will try to guess <code>JAVA_HOME</code>. If <code>JRE_HOME</code> and <code>JAVA_HOME</code> are both set, <code>JAVA_HOME</code> is used.</dd>
-<dt><code>JVM_ARGS</code></dt><dd>Java options to be used when starting JMeter. These will be added before <code>JMETER_OPTS</code> and after the other JVM options. Default is empty</code></dd>
+<dt><code>JVM_ARGS</code></dt><dd>Java options to be used when starting JMeter. These will be added before <code>JMETER_OPTS</code> and after the other JVM options. Default is empty</dd>
 </dl>
 
 <subsection name="&sect-num;.4.1 JMeter's Classpath" anchor="classpath">
