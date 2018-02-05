@@ -22,6 +22,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,6 +34,11 @@ public class LocalHostTest {
 
     @Test
     public void testInterfaces() throws Exception {
+        String interfaces = Collections
+                .list(NetworkInterface.getNetworkInterfaces()).stream()
+                .map(this::ifaceWithAddresses)
+                .collect(Collectors.joining(", "));
+        perr("Interfaces: {" + interfaces + "}");
         InetAddress localHost = getLocalHost();
         boolean localHostIsBound = Collections.list(NetworkInterface.getNetworkInterfaces()).stream()
                 .flatMap(iface -> Collections.list(iface.getInetAddresses())
@@ -41,6 +47,14 @@ public class LocalHostTest {
                 .findFirst()
                 .isPresent();
         Assert.assertTrue("localHost: " + localHost + " is bound to an interface", localHostIsBound);
+    }
+
+    private String ifaceWithAddresses(NetworkInterface iface) {
+        return iface + " => ["
+                + Collections.list(iface.getInetAddresses()).stream()
+                        .map(InetAddress::toString)
+                        .collect(Collectors.joining(", "))
+                + "]";
     }
 
     @Test
