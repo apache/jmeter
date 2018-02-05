@@ -26,6 +26,9 @@ rem                 e.g. '-Dsun.java2d.ddscale=true'
 rem
 rem   JMETER_BIN  - JMeter bin directory (must end in \)
 rem
+rem   JMETER_COMPLETE_ARGS - if set indicates that JVM_ARGS is to be used exclusively instead
+rem                 of adding other options like HEAP or GC_ALGO
+rem
 rem   JMETER_HOME - installation directory. Will be guessed from location of jmeter.bat
 rem
 rem   JM_LAUNCH   - java.exe (default) or javaw.exe
@@ -65,10 +68,10 @@ goto end
 rem Get standard environment variables
 if exist "%JMETER_HOME%\bin\setenv.bat" call "%JMETER_HOME%\bin\setenv.bat"
 
-if not defined JVM_ARGS (
+if not defined JMETER_LANGUAGE (
     rem Set language
     rem Default to en_EN
-    set JVM_ARGS=-Duser.language="en" -Duser.region="EN"
+    set JMETER_LANGUAGE=-Duser.language="en" -Duser.region="EN"
 )
 
 rem Minimal version to run JMeter
@@ -177,9 +180,13 @@ if not defined DDRAW (
 )
 
 rem Collect the settings defined above
-set ARGS=%DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %RUN_IN_DOCKER%
+if not defined JMETER_COMPLETE_ARGS (
+    set ARGS=%JAVA9_OPTS% %DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %JMETER_LANGUAGE% %RUN_IN_DOCKER%
+) else (
+    set ARGS=
+)
 
-%JM_START% %JM_LAUNCH% %JAVA9_OPTS% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
+%JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
 rem If the errorlevel is not zero, then display it and pause
 

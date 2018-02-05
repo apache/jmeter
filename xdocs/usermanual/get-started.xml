@@ -277,12 +277,14 @@ jmeter -t test.jmx &hellip;
 <p>The following environment variables can be defined:</p>
 <dl>
 <dt><code>DDRAW</code></dt><dd>JVM options to influence usage of direct draw, e.g. <code>-Dsun.java2d.ddscale=true</code>. Default is empty.</dd>
-<dt><code>JMETER_BIN</code></dt><dd>JMeter bin directory (must end in <code>\</code>). Value will have been guessed, when <code>setenv.bat</code> is called.</dd>
-<dt><code>JMETER_HOME</code></dt><dd>installation directory. Will be guessed from location of <code>jmeter.bat</code></dd>
-<dt><code>JM_LAUNCH</code></dt><dd>Name of the java executable, like <code>java.exe</code> (default) or <code>javaw.exe</code></dd>
-<dt><code>JVM_ARGS</code></dt><dd>Java options to be used when starting JMeter. These will be added last to the java command. Defaults to: <code>-Duser.language="en" -Duser.region="EN"</code></dd>
 <dt><code>GC_ALGO</code></dt><dd>JVM garbage collector options. Defaults to <code>-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20</code></dd>
 <dt><code>HEAP</code></dt><dd>JVM memory settings used when starting JMeter. Defaults to <code>-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m</code></dd>
+<dt><code>JMETER_BIN</code></dt><dd>JMeter bin directory (must end in <code>\</code>). Value will have been guessed, when <code>setenv.bat</code> is called.</dd>
+<dt><code>JMETER_COMPLETE_ARGS</code></dt><dd>If set indicates, that <code>JVM_ARGS</code> and <code>JMETER_OPTS</code> are to be used, only. All other options like <code>HEAP</code> and <code>GC_ALGO</code> will be ignored. Default is empty.</dd>
+<dt><code>JMETER_HOME</code></dt><dd>installation directory. Will be guessed from location of <code>jmeter.bat</code></dd>
+<dt><code>JMETER_LANGUAGE</code></dt><dd>Java runtime options to specify used languauge. Defaults to: <code>-Duser.language="en" -Duser.region="EN"</code></dd>
+<dt><code>JM_LAUNCH</code></dt><dd>Name of the java executable, like <code>java.exe</code> (default) or <code>javaw.exe</code></dd>
+<dt><code>JVM_ARGS</code></dt><dd>Java options to be used when starting JMeter. These will be added last to the java command. Default is empty</dd>
 </dl>
 
 <p>
@@ -321,13 +323,15 @@ export JMETER_LANGUAGE=" "
 
 <p>The following environment variables can be defined:</p>
 <dl>
-<dt><code>JAVA_HOME</code></dt><dd>Must point at your Java Development Kit installation. Required to run the with the "<code>debug</code>" argument. On some OSes it JMeter will try its best to guess the location of the JVM.</dd>
-<dt><code>JRE_HOME</code></dt><dd>Must point at your Java Runtime installation. Defaults to <code>JAVA_HOME</code> if empty. If <code>JRE_HOME</code> and <code>JAVA_HOME</code> are both empty, JMeter will try to guess <code>JAVA_HOME</code>. If <code>JRE_HOME</code> and <code>JAVA_HOME</code> are both set, <code>JAVA_HOME</code> is used.</dd>
-<dt><code>JMETER_GC_ALGO</code></dt><dd>Java runtime options to specify JVM garbage collection algorithm. Defaults to <code>-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20</code></dd>
+<dt><code>GC_ALGO</code></dt><dd>Java runtime options to specify JVM garbage collection algorithm. Defaults to <code>-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20</code></dd>
 <dt><code>HEAP</code></dt><dd>Java runtime options for memory management used when JMeter is started. Defaults to <code>-Xms512m -Xmx512m -X:MaxMetaspaceSize=256m</code></dd>
+<dt><code>JAVA_HOME</code></dt><dd>Must point at your Java Development Kit installation. Required to run the with the "<code>debug</code>" argument. On some OSes it JMeter will try its best to guess the location of the JVM.</dd>
+<dt><code>JMETER_COMPLETE_ARGS</code></dt><dd>If set indicates, that <code>JVM_ARGS</code> and <code>JMETER_OPTS</code> are to be used, only. All other options like <code>HEAP</code> and <code>GC_ALGO</code> will be ignored. Default is empty.</dd>
 <dt><code>JMETER_HOME</code></dt><dd>May point to your JMeter install dir. If empty it will be set relative to the <code>jmeter</code> script.</dd>
 <dt><code>JMETER_LANGUAGE</code></dt><dd>Java runtime options to specify used language. Defaults to <code>-Duser.language=en -Duser.region=EN</code></dd>
 <dt><code>JMETER_OPTS</code></dt><dd>Java runtime options used when JMeter is started. Special options for operating systems might be added by JMeter.</dd>
+<dt><code>JRE_HOME</code></dt><dd>Must point at your Java Runtime installation. Defaults to <code>JAVA_HOME</code> if empty. If <code>JRE_HOME</code> and <code>JAVA_HOME</code> are both empty, JMeter will try to guess <code>JAVA_HOME</code>. If <code>JRE_HOME</code> and <code>JAVA_HOME</code> are both set, <code>JAVA_HOME</code> is used.</dd>
+<dt><code>JVM_ARGS</code></dt><dd>Java options to be used when starting JMeter. These will be added before <code>JMETER_OPTS</code> and after the other JVM options. Default is empty</code></dd>
 </dl>
 
 <subsection name="&sect-num;.4.1 JMeter's Classpath" anchor="classpath">
