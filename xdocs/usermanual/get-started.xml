@@ -114,11 +114,12 @@ over your Test Plans.</p>
 <p>JMeter requires that your computing environment meets some minimum requirements.</p>
 
 <subsection name="&sect-num;.1.1 Java Version" anchor="java_versions">
-<note>JMeter requires a fully compliant JVM 8, we advise that you install latest minor version of those major versions.
-Java 9 is not tested completely as of JMeter 3.2.
+<note>JMeter 4.0 is compatible with Java 8 or Java 9.
+We highly advise you to install latest minor version of those major versions for security and performance reasons. 
 </note>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
+<note>Although you can use a JRE, it is better to install a JDK as for recording of HTTPS, JMeter needs <code>keytool</code> utility from JDK</note>
 </subsection>
 
 <subsection name="&sect-num;.1.2 Operating Systems" anchor="os">
