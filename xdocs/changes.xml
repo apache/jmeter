@@ -248,6 +248,7 @@ itself does not have to be edited anymore.</p>
     <li><bug>61549</bug>Thread Group: Remove start and end date</li>
     <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61709</bug>SampleResult: Add a method <code>setIgnore()</code> to make JMeter ignore the SampleResult and not send it to listeners</li>
+    <li><bug>61806</bug>Allow to use <code>SampleResult#setIgnore()</code> in post-processors and assertions script (JSR223 elements)</li>
     <li><bug>61607</bug>Add browse button in all BeanShell elements to select BeanShell script</li>
     <li><bug>61627</bug>Don't clear LogView anymore when clicking on Warning/Errors Indicator</li>
     <li><bug>61629</bug>Add Think Times to Children menu should not consider disabled elements</li>
