@@ -349,7 +349,7 @@ public class JMeter implements JMeterPlugin {
         System.out.println("For load testing, use NON GUI Mode:");//NOSONAR
         System.out.println("   jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]");//NOSONAR
         System.out.println("& increase Java Heap to meet your test requirements:");//NOSONAR
-        System.out.println("   Modify current env variable JMETER_HEAP=\"-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m\" in the jmeter batch file");//NOSONAR
+        System.out.println("   Modify current env variable HEAP=\"-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m\" in the jmeter batch file");//NOSONAR
         System.out.println("Check : https://jmeter.apache.org/usermanual/best-practices.html");//NOSONAR
         System.out.println("================================================================================");//NOSONAR
         

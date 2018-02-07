@@ -19,7 +19,12 @@
 package org.apache.jmeter.engine;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -28,7 +33,42 @@ import org.junit.Test;
 public class LocalHostTest {
 
     @Test
+    public void testInterfaces() throws Exception {
+        String interfaces = Collections
+                .list(NetworkInterface.getNetworkInterfaces()).stream()
+                .map(this::ifaceWithAddresses)
+                .collect(Collectors.joining(", "));
+        perr("Interfaces: {" + interfaces + "}");
+        InetAddress localHost = getLocalHost();
+        boolean localHostIsBound = Collections.list(NetworkInterface.getNetworkInterfaces()).stream()
+                .flatMap(iface -> Collections.list(iface.getInetAddresses())
+                        .stream())
+                .filter(addr -> addr.equals(localHost))
+                .findFirst()
+                .isPresent();
+        Assert.assertTrue("localHost: " + localHost + " is bound to an interface", localHostIsBound);
+    }
+
+    private String ifaceWithAddresses(NetworkInterface iface) {
+        return iface + " => ["
+                + Collections.list(iface.getInetAddresses()).stream()
+                        .map(InetAddress::toString)
+                        .collect(Collectors.joining(", "))
+                + "]";
+    }
+
+    @Test
     public void testLocalHost() throws Exception {
+        InetAddress localHost = getLocalHost();
+        showAddress(localHost);
+        showAddress(InetAddress.getByName("localhost"));
+        for (InetAddress a : InetAddress.getAllByName(InetAddress.getLocalHost().getHostName())) {
+            perr("====================");
+            showAddress(a);            
+        }
+    }
+
+    private InetAddress getLocalHost() throws UnknownHostException {
         final String key = "java.rmi.server.hostname";
         String host = System.getProperties().getProperty(key); // $NON-NLS-1$
         perr(key + "=" + host);
@@ -38,12 +78,7 @@ public class LocalHostTest {
         } else {
             localHost = InetAddress.getByName(host);
         }
-        showAddress(localHost);
-        showAddress(InetAddress.getByName("localhost"));
-        for (InetAddress a : InetAddress.getAllByName(InetAddress.getLocalHost().getHostName())) {
-            perr("====================");
-            showAddress(a);            
-        }
+        return localHost;
     }
 
     private static void showAddress(InetAddress localHost) {

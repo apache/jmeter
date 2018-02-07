@@ -33,11 +33,11 @@
 ##                    are both empty, JMeter will try to guess JAVA_HOME.
 ##                    If JRE_HOME and JAVA_HOME are both set, JAVA_HOME is used.
 ##
-##   JMETER_GC_ALGO   (Optional) Java runtime options to specify JVM garbage collection
+##   GC_ALGO          (Optional) Java runtime options to specify JVM garbage collection
 ##                    algorithm
 ##                    Defaults to "-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20"
 ##
-##   JMETER_HEAP      (Optional) Java runtime options for memory management
+##   HEAP             (Optional) Java runtime options for memory management
 ##                    used when JMeter is started.
 ##                    Defaults to "-Xms1g -Xmx1g -X:MaxMetaspaceSize=256m"
 ##
@@ -126,7 +126,7 @@ CURRENT_VERSION=`"${JAVA_HOME}/bin/java" -version 2>&1 | awk -F'"' '/version/ {g
 
 # Check if Java is present and the minimal version requirement
 if [ "$CURRENT_VERSION" -gt "$MINIMAL_VERSION" ]; then
-    JAVA9_OPTS="--add-modules java.activation --add-opens java.desktop/sun.awt=ALL-UNNAMED --add-opens java.desktop/javax.swing.text.html=ALL-UNNAMED --add-opens java.desktop/sun.swing=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED"
+    JAVA9_OPTS="--add-modules java.activation --add-opens java.desktop/sun.awt=ALL-UNNAMED --add-opens java.desktop/sun.swing=ALL-UNNAMED --add-opens java.desktop/javax.swing.text.html=ALL-UNNAMED --add-opens java.desktop/java.awt=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED"
 fi
 
 : "${JMETER_OPTS:=""}"
@@ -156,7 +156,7 @@ esac
 
 # This is the base heap size -- you may increase or decrease it to fit your
 # system's memory availability:
-: "${JMETER_HEAP:="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"}"
+: "${HEAP:="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"}"
 
 # Set language
 # Default to en_EN
@@ -175,7 +175,7 @@ esac
 # Finally, some tracing to help in case things go astray:
 # You may want to add those settings:
 # -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem
-: "${JMETER_GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20"}"
+: "${GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20"}"
 
 
 # Always dump on OOM (does not cost anything unless triggered)
@@ -184,7 +184,7 @@ SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom"
 SERVER="-server"
 
 if [ -z "${JMETER_COMPLETE_ARGS}" ]; then
-    ARGS="$JAVA9_OPTS $SERVER $DUMP $JMETER_HEAP $VERBOSE_GC $JMETER_GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
+    ARGS="$JAVA9_OPTS $SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
 else
     ARGS=""
 fi
