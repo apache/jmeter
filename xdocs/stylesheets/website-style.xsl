@@ -126,6 +126,7 @@
           <xsl:apply-templates select="body/section"></xsl:apply-templates>
           <xsl:call-template name="pagelinks" />
           <xsl:call-template name="share-links" />
+          <a href="#top" id="topButton">Go to top</a>
         </div>
         <div class="footer">
           <div class="copyright">
@@ -141,8 +142,16 @@
           </div>
         </div>
         <script><![CDATA[(function(){
-            // fill in the current location into social links on this page.
             "use strict";
+            // enable 'go to top' button functionality
+            document.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                    document.getElementById("topButton").style.display = "block";
+                } else {
+                    document.getElementById("topButton").style.display = "none";
+                }
+            });
+            // fill in the current location into social links on this page.
             var as = document.getElementsByTagName('a');
             var loc = document.location.href;
             if (!loc.toLowerCase().startsWith('http')) {
