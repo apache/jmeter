@@ -580,7 +580,9 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals(mimeType, hfa.getMimeType());
     }        
 
-    private String createMultipartFormBody(String titleValue, String descriptionValue, String contentEncoding, boolean includeExtraHeaders, String boundary, String endOfLine) {
+    private String createMultipartFormBody(String titleValue, String descriptionValue,
+            String contentEncoding, boolean includeExtraHeaders,
+            String boundary, String endOfLine) {
         // Title multipart
         String postBody = "--" + boundary + endOfLine
             + "Content-Disposition: form-data; name=\"title\"" + endOfLine;
