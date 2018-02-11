@@ -180,9 +180,14 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                     log.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath());
                     truststore = new File(FileServer.getFileServer().getBaseDir(), getTrustStoreToUse());
                     log.info("load local truststore -Attempting to read truststore from:  "+truststore.getAbsolutePath());
-                    if(!truststore.exists()){
-                        log.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath() + ". Local truststore not available, aborting execution.");
-                        throw new IOException("Local truststore file not found. Also not available under : " + truststore.getAbsolutePath());
+                    if (!truststore.exists()){
+                        log.info(
+                                "load local truststore -Failed to load truststore from: "
+                                        + truststore.getAbsolutePath()
+                                        + ". Local truststore not available, aborting execution.");
+                        throw new IOException(
+                                "Local truststore file not found. Also not available under : "
+                                        + truststore.getAbsolutePath());
                     }
                 }
                 if (isUseSSL()) {

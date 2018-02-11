@@ -220,12 +220,15 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String etag = getHeader(method ,HTTPConstants.ETAG);
             String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
             String date = getHeader(method, HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date, getVaryHeader(varyHeader, asHeaders(res.getRequestHeaders()))); // TODO correct URL?
+            setCache(lastModified, cacheControl, expires, etag,
+                    res.getUrlAsString(), date, getVaryHeader(varyHeader,
+                            asHeaders(res.getRequestHeaders()))); // TODO correct URL?
         }
     }
 
     // helper method to save the cache entry
-    private void setCache(String lastModified, String cacheControl, String expires, String etag, String url, String date, Pair<String, String> varyHeader) {
+    private void setCache(String lastModified, String cacheControl, String expires,
+            String etag, String url, String date, Pair<String, String> varyHeader) {
         log.debug("setCache({}, {}, {}, {}, {}, {}, {})", lastModified,
                 cacheControl, expires, etag, url, date, varyHeader);
         Date expiresDate = null; // i.e. not using Expires
