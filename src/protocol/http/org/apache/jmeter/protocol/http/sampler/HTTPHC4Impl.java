@@ -750,9 +750,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         private int getHash(String s) {
             return s == null ? 0 : s.hashCode(); 
         }
-        
+
         @Override
-        public boolean equals (Object obj){
+        public boolean equals(Object obj) {
             if (this == obj) {
                 return true;
             }
