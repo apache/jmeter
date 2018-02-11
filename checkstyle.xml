@@ -163,6 +163,7 @@
     <!--<module name="ClassFanOutComplexity"/>-->
     <!--<module name="CyclomaticComplexity"/>-->
     <!--<module name="NPathComplexity"/>-->
+    <module name="EmptyForInitializerPad"/>
     <module name="EmptyForIteratorPad"/>
     <module name="MethodParamPad"/>
     <module name="TypecastParenPad"/>
