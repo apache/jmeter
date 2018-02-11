@@ -6049,7 +6049,7 @@ generate the template string, and store the result into the given variable name.
         </property>
         <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
         <property name="Left Boundary" required="Yes">Left boundary of value to find</property>
-        <property name="Right Boundary" required="Yes">Left boundary of value to find</property>
+        <property name="Right Boundary" required="Yes">Right boundary of value to find</property>
         <property name="Match No. (0 for Random)" required="Yes">Indicates which match to use.  The boundaries may match multiple times.  
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
