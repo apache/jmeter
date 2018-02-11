@@ -163,6 +163,14 @@
     <!--<module name="ClassFanOutComplexity"/>-->
     <!--<module name="CyclomaticComplexity"/>-->
     <!--<module name="NPathComplexity"/>-->
+
+    <!-- size -->
+    <module name="LineLength">
+      <!-- TODO: reduce this to 120 -->
+      <property name="max" value="200"/>
+    </module>
+
+    <!-- whitespace -->
     <module name="EmptyForInitializerPad"/>
     <module name="EmptyForIteratorPad"/>
     <module name="MethodParamPad"/>

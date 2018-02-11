@@ -140,7 +140,9 @@ public class ModuleController extends GenericController implements ReplaceableCo
             }
 
             if(hasReplacementOccured() && selectedNode == null) {
-                throw new JMeterStopTestException("ModuleController:"+getName()+" has no selected Controller (did you rename some element in the path to target controller?), test was shutdown as a consequence");
+                throw new JMeterStopTestException("ModuleController:"
+                        + getName()
+                        + " has no selected Controller (did you rename some element in the path to target controller?), test was shutdown as a consequence");
             }
         }
     }

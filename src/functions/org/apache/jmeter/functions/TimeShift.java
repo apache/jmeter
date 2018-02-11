@@ -170,7 +170,10 @@ public class TimeShift extends AbstractFunction {
                 Duration duration = Duration.parse(amountToShift);
                 localDateTimeToShift = localDateTimeToShift.plus(duration);
             } catch (DateTimeParseException ex) {
-                log.error("Failed to parse the amount duration '{}' to shift (see https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-) ", amountToShift, ex); // $NON-NLS-1$
+                log.error(
+                        "Failed to parse the amount duration '{}' to shift "
+                        + "(see https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-) ",
+                        amountToShift, ex); // $NON-NLS-1$
             }
         }
         String dateString;
