@@ -163,6 +163,7 @@
     <!--<module name="ClassFanOutComplexity"/>-->
     <!--<module name="CyclomaticComplexity"/>-->
     <!--<module name="NPathComplexity"/>-->
+    <module name="TypecastParenPad"/>
 
     <!--
     Allow comment to suppress checkstyle for a single line
