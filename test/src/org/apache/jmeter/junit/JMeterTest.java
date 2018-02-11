@@ -243,8 +243,6 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         assertEquals("Should not have any names left over, check name of components in EN (default) Locale, which must match name attribute of component", 0, scanprintMap(guiTitles, "GUI"));
     }
 
-    
-
     /*
      * Test GUI elements - create the suite of tests
      */

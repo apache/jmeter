@@ -91,8 +91,6 @@ public class TestTransactionController extends JMeterTestCase {
         assertEquals("Number of samples in transaction : 1, number of failing samples : 1", listener.events.get(0).getResult().getResponseMessage());
     }
 
-
-
     public class TestSampleListener extends ResultCollector implements SampleListener {
         public List<SampleEvent> events = new ArrayList<>();
 
