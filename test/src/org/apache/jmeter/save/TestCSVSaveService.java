@@ -155,7 +155,8 @@ public class TestCSVSaveService extends JMeterTestCase {
     // header text should not change unexpectedly
     // if this test fails, check whether the default was intentionally changed or not
     public void testHeader() {
-        final String HDR = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,Latency,IdleTime,Connect";
+        final String HDR = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,"
+                + "failureMessage,bytes,sentBytes,grpThreads,allThreads,Latency,IdleTime,Connect";
         assertEquals("Header text has changed", HDR, CSVSaveService.printableFieldNamesToString());
     }
 

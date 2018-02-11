@@ -80,15 +80,24 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
     }
     
     /**
-     * @param sock {@link Socket}
-     * @param remoteAddress {@link InetSocketAddress}
-     * @param localAddress {@link InetSocketAddress}
-     * @param params {@link HttpParams}
+     * @param sock
+     *            {@link Socket}
+     * @param remoteAddress
+     *            {@link InetSocketAddress}
+     * @param localAddress
+     *            {@link InetSocketAddress}
+     * @param params
+     *            {@link HttpParams}
      * @return the socket
-     * @throws IOException when the socket creation fails
-     * @throws UnknownHostException when the remote or local addresses can't be resolved
-     * @throws ConnectTimeoutException when the connection times out
-     * @see org.apache.http.conn.scheme.SchemeSocketFactory#connectSocket(java.net.Socket, java.net.InetSocketAddress, java.net.InetSocketAddress, org.apache.http.params.HttpParams)
+     * @throws IOException
+     *             when the socket creation fails
+     * @throws UnknownHostException
+     *             when the remote or local addresses can't be resolved
+     * @throws ConnectTimeoutException
+     *             when the connection times out
+     * @see org.apache.http.conn.scheme.SchemeSocketFactory#connectSocket(java.net.Socket,
+     *      java.net.InetSocketAddress, java.net.InetSocketAddress,
+     *      org.apache.http.params.HttpParams)
      */
     @Override
     public Socket connectSocket(Socket sock, InetSocketAddress remoteAddress,

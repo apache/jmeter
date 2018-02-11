@@ -370,8 +370,12 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         cacheResultWithGivenCode("200");
         CacheManager.CacheEntry cacheEntry = getThreadCacheEntry(LOCAL_HOST);
         assertNotNull("Saving SampleResult with HttpMethod & 200 response should make cache entry.", cacheEntry);
-        assertEquals("Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no etag.", EXPECTED_ETAG, cacheEntry.getEtag());
-        assertEquals("Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no last modified date.", this.currentTimeInGMT, cacheEntry.getLastModified());
+        assertEquals(
+                "Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no etag.",
+                EXPECTED_ETAG, cacheEntry.getEtag());
+        assertEquals(
+                "Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no last modified date.",
+                this.currentTimeInGMT, cacheEntry.getLastModified());
     }
 
     @Test
