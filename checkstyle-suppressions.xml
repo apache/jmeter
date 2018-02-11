@@ -23,4 +23,9 @@ limitations under the License.
 <suppressions>
     <suppress checks="NewlineAtEndOfFile" files=".*.properties"/>
     <suppress checks="FileLength" files="HTTPSamplerBase.java"/>
+    <!-- Slightly more lenient for tests -->
+    <suppress checks="(EmptyCatchBlock|AvoidEscapedUnicodeCharacters)"
+              files="test[\\/].*"/>
+    <suppress checks="NewlineAtEndOfFile" files="test[\\/].*.xml"/>
+    <suppress checks="NewlineAtEndOfFile" files="test[\\/].*.txt"/>
 </suppressions>
