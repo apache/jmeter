@@ -118,7 +118,9 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li><pr>375</pr>Updated to latest checkstyle (v8.8). Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>365</pr><pr>375</pr>Updated to latest checkstyle (v8.8). Expanded Checkstyle to files
+      in <code>src</code> and <code>test</code>; fixed newly checked files. Based on contribution
+      by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>62095</bug>Correct description for right boundary parameter in Boundary Extractor. Contributed by orimarko (orimarko at gmail.com)</li>
 </ul>
 
