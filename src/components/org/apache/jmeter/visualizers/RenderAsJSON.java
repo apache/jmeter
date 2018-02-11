@@ -83,7 +83,7 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
 
         boolean misparse = false;
 
-        for (int i = 0; i < json.length(); ) {
+        for (int i = 0; i < json.length();) {
             final char currentChar = json.charAt(i);
             if ((currentChar == '{') || (currentChar == '[')) {
                 pretty.append(nl).append(index).append(currentChar);
