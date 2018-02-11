@@ -331,8 +331,8 @@ public class AxisGraph extends JPanel {
         return max;
     }
 
-    private String squeeze (String input, int _maxLength){
-        if (input.length()>_maxLength){
+    private String squeeze(String input, int _maxLength) {
+        if (input.length() > _maxLength) {
             return input.substring(0,_maxLength-ELLIPSIS_LEN)+ELLIPSIS;
         }
         return input;

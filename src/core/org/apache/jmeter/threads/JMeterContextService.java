@@ -46,7 +46,7 @@ public final class JMeterContextService {
 
     //@GuardedBy(JMeterContextService.class)
     private static int totalThreads = 0;
-    
+
     private static UnmodifiableJMeterVariables variables;
 
 
@@ -165,7 +165,7 @@ public final class JMeterContextService {
         numberOfThreadsStarted = 0;
         numberOfThreadsFinished = 0;
     }
-    
+
     /**
      * Get all variables accessible for JMeter client in a distributed test
      * (only test plan and user defined variables)
@@ -177,14 +177,14 @@ public final class JMeterContextService {
     }
 
     public static class ThreadCounts {
-        
+
         public final int activeThreads;
-        
+
         public final int startedThreads;
-        
+
         public final int finishedThreads;
-        
-        ThreadCounts (int active, int started, int finished) {
+
+        ThreadCounts(int active, int started, int finished) {
             activeThreads = active;
             startedThreads = started;
             finishedThreads = finished;

@@ -162,7 +162,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         }
 
         // use Math.round () instead of simple (long) to provide correct value rounding
-        long target = Math.round (count * percent);
+        long target = Math.round(count * percent);
         try {
             for (Entry<T, MutableLong> val : valuesMap.entrySet()) {
                 target -= val.getValue().longValue();
