@@ -28,6 +28,7 @@ import java.util.Properties;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Before;

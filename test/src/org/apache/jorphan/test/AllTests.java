@@ -17,7 +17,6 @@
 
 package org.apache.jorphan.test;
 
-import javax.crypto.Cipher;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +33,7 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import junit.framework.TestCase;
+import javax.crypto.Cipher;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.jmeter.junit.categories.ExcludeCategoryFilter;
@@ -53,6 +52,8 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.RunListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import junit.framework.TestCase;
 import spock.lang.Specification;
 
 /**
