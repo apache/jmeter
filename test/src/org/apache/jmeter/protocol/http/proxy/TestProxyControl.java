@@ -18,15 +18,14 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
-import org.apache.jmeter.samplers.SampleResult;
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.samplers.SampleResult;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TestProxyControl {
         private HTTPSamplerBase sampler;

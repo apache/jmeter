@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.functions;
 
+import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
+import static org.junit.Assert.assertEquals;
+
 import java.util.Collection;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -27,8 +30,6 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
 
 public class EvalFunctionTest extends JMeterTestCase {
 

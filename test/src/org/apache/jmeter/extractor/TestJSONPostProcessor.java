@@ -22,9 +22,6 @@ import static org.junit.Assert.assertThat;
 
 import java.nio.charset.StandardCharsets;
 
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
-
 import org.apache.jmeter.extractor.json.jsonpath.JSONPostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
@@ -33,6 +30,9 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
+
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 
 public class TestJSONPostProcessor {
 
