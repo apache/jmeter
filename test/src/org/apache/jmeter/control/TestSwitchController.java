@@ -212,7 +212,7 @@ public class TestSwitchController extends JMeterTestCase {
          * cond  = Switch condition 
          * exp[] = expected results
          */
-        private void runTest2(String cond, String exp[]) throws Exception {
+        private void runTest2(String cond, String[] exp) throws Exception {
             int loops = 3;
             LoopController controller = new LoopController();
             controller.setLoops(loops);

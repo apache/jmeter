@@ -110,7 +110,7 @@ public class TestJorphanUtils {
     @Test
     public void testSplit3() {
         String in = "a,bc,,"; // Test ignore trailing split characters
-        String out[] = JOrphanUtils.split(in, ",",true);// Ignore adjacent delimiters
+        String[] out = JOrphanUtils.split(in, ",",true);// Ignore adjacent delimiters
         assertThat(out, CoreMatchers.equalTo(new String[] { "a", "bc" }));
         out = JOrphanUtils.split(in, ",",false);
         assertThat(out, CoreMatchers.equalTo(new String[] { "a", "bc", "", "" }));
@@ -161,7 +161,7 @@ public class TestJorphanUtils {
     // Empty string
     @Test
     public void testEmpty(){
-        String out[] = JOrphanUtils.split("", ",", false);
+        String[] out = JOrphanUtils.split("", ",", false);
         assertEquals(0, out.length);
     }
 

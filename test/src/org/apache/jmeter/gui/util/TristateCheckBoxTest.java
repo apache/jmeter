@@ -34,7 +34,7 @@ import javax.swing.WindowConstants;
 //derived from: http://www.javaspecialists.eu/archive/Issue145.html
 
 public class TristateCheckBoxTest {
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         JFrame frame = new JFrame("TristateCheckBoxTest");
         frame.setLayout(new GridLayout(0, 1, 15, 15));
         UIManager.LookAndFeelInfo[] lfs =
