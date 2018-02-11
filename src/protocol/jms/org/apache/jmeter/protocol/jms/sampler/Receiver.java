@@ -59,7 +59,8 @@ public final class Receiver implements Runnable {
      * @param jmsSelector JMS Selector
      * @throws JMSException
      */
-    private Receiver(ConnectionFactory factory, Destination receiveQueue, String principal, String credentials, boolean useResMsgIdAsCorrelId, String jmsSelector) throws JMSException {
+    private Receiver(ConnectionFactory factory, Destination receiveQueue, String principal,
+            String credentials, boolean useResMsgIdAsCorrelId, String jmsSelector) throws JMSException {
         if (null != principal && null != credentials) {
             log.info("creating receiver WITH authorisation credentials. UseResMsgId={}", useResMsgIdAsCorrelId);
             conn = factory.createConnection(principal, credentials);

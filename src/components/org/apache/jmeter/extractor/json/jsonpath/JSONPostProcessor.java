@@ -88,7 +88,9 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
 
         if (refNames.length != jsonPathExpressions.length ||
                 refNames.length != defaultValues.length) {
-            log.error("Number of JSON Path variables must match number of default values and json-path expressions, check you use separator ';' if you have many values"); // $NON-NLS-1$
+            log.error(
+                    "Number of JSON Path variables must match number of default values and json-path expressions,"
+                    + " check you use separator ';' if you have many values"); // $NON-NLS-1$
             throw new IllegalArgumentException(JMeterUtils
                     .getResString("jsonpp_error_number_arguments_mismatch_error")); // $NON-NLS-1$
         }
