@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNull;
 // Renamed from org.apache.avalon.excalibur.cli
 
 import java.util.List;
+
 import org.junit.Test;
 
 /**
