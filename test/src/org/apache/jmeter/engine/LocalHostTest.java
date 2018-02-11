@@ -19,11 +19,14 @@
 package org.apache.jmeter.engine;
 
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+import org.apache.commons.net.util.SubnetUtils;
+import org.apache.commons.net.util.SubnetUtils.SubnetInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -39,20 +42,30 @@ public class LocalHostTest {
                 .map(this::ifaceWithAddresses)
                 .collect(Collectors.joining(", "));
         perr("Interfaces: {" + interfaces + "}");
-        InetAddress localHost = getLocalHost();
-        boolean localHostIsBound = Collections.list(NetworkInterface.getNetworkInterfaces()).stream()
-                .flatMap(iface -> Collections.list(iface.getInetAddresses())
-                        .stream())
-                .filter(addr -> addr.equals(localHost))
+        String localHost = getLocalHost().getHostAddress();
+        boolean localHostIsBound = Collections
+                .list(NetworkInterface.getNetworkInterfaces()).stream()
+                .flatMap(iface -> iface.getInterfaceAddresses().stream())
+                .filter(iface -> iface.getNetworkPrefixLength() <= 32) // hack to prevent checking IPv6
+                .map(addr -> toSubnetInfo(addr))
+                .filter(subnetInfo -> subnetInfo.isInRange(localHost))
                 .findFirst()
                 .isPresent();
-        Assert.assertTrue("localHost: " + localHost + " is bound to an interface", localHostIsBound);
+        Assert.assertTrue(
+                "localHost: " + localHost + " is bound to an interface",
+                localHostIsBound);
+    }
+
+    private SubnetInfo toSubnetInfo(InterfaceAddress addr) {
+        return new SubnetUtils(
+                addr.getAddress().getHostAddress() + "/" + addr.getNetworkPrefixLength())
+                        .getInfo();
     }
 
     private String ifaceWithAddresses(NetworkInterface iface) {
         return iface + " => ["
-                + Collections.list(iface.getInetAddresses()).stream()
-                        .map(InetAddress::toString)
+                + iface.getInterfaceAddresses().stream()
+                        .map(InterfaceAddress::toString)
                         .collect(Collectors.joining(", "))
                 + "]";
     }
