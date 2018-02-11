@@ -57,7 +57,7 @@ The first step is to configure the injectors that will run JMeter, this as for a
     <li>Correct machine sizing in terms of CPU, memory and network</li>
     <li>OS Tuning</li>
     <li>Java setup: Ensure you install the latest version of Java supported by JMeter</li>
-    <li><b>Correct sizing of Java Heap</b>. By default JMeter runs with a heap of 512MB, this might not be enough for your test and depends on your test plan and number of threads you want to run</li>
+    <li><b>Increase the Java Heap size</b>. By default JMeter runs with a heap of 1 GB, this might not be enough for your test and depends on your test plan and number of threads you want to run</li>
 </ul> 
 
 Once everything is ready, you will use Command-line mode (called <a href="#non_gui">Non-GUI mode</a>) to run it for the Load Test. 
@@ -279,7 +279,7 @@ jmeter -t test.jmx &hellip;
 <dl>
 <dt><code>DDRAW</code></dt><dd>JVM options to influence usage of direct draw, e.g. <code>-Dsun.java2d.ddscale=true</code>. Default is empty.</dd>
 <dt><code>GC_ALGO</code></dt><dd>JVM garbage collector options. Defaults to <code>-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20</code></dd>
-<dt><code>HEAP</code></dt><dd>JVM memory settings used when starting JMeter. Defaults to <code>-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m</code></dd>
+<dt><code>HEAP</code></dt><dd>JVM memory settings used when starting JMeter. Defaults to <code>-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m</code></dd>
 <dt><code>JMETER_BIN</code></dt><dd>JMeter bin directory (must end in <code>\</code>). Value will have been guessed, when <code>setenv.bat</code> is called.</dd>
 <dt><code>JMETER_COMPLETE_ARGS</code></dt><dd>If set indicates, that <code>JVM_ARGS</code> and <code>JMETER_OPTS</code> are to be used, only. All other options like <code>HEAP</code> and <code>GC_ALGO</code> will be ignored. Default is empty.</dd>
 <dt><code>JMETER_HOME</code></dt><dd>installation directory. Will be guessed from location of <code>jmeter.bat</code></dd>
@@ -325,7 +325,7 @@ export JMETER_LANGUAGE=" "
 <p>The following environment variables can be defined:</p>
 <dl>
 <dt><code>GC_ALGO</code></dt><dd>Java runtime options to specify JVM garbage collection algorithm. Defaults to <code>-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20</code></dd>
-<dt><code>HEAP</code></dt><dd>Java runtime options for memory management used when JMeter is started. Defaults to <code>-Xms512m -Xmx512m -X:MaxMetaspaceSize=256m</code></dd>
+<dt><code>HEAP</code></dt><dd>Java runtime options for memory management used when JMeter is started. Defaults to <code>-Xms1g -Xmx1g -X:MaxMetaspaceSize=256m</code></dd>
 <dt><code>JAVA_HOME</code></dt><dd>Must point at your Java Development Kit installation. Required to run the with the "<code>debug</code>" argument. On some OSes it JMeter will try its best to guess the location of the JVM.</dd>
 <dt><code>JMETER_COMPLETE_ARGS</code></dt><dd>If set indicates, that <code>JVM_ARGS</code> and <code>JMETER_OPTS</code> are to be used, only. All other options like <code>HEAP</code> and <code>GC_ALGO</code> will be ignored. Default is empty.</dd>
 <dt><code>JMETER_HOME</code></dt><dd>May point to your JMeter install dir. If empty it will be set relative to the <code>jmeter</code> script.</dd>
