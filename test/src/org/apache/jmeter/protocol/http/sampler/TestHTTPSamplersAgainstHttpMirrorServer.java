@@ -1008,7 +1008,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         int indexQueryStart = uriSent.indexOf('?');
         if(expectedQueryString != null && expectedQueryString.length() > 0) {
             // We should have a query string part
-            if(indexQueryStart <= 0 || (indexQueryStart == uriSent.length() - 1)) {
+            if(indexQueryStart <= 0 || indexQueryStart == uriSent.length() - 1) {
                 fail("Could not find query string in URI");
             }
         }
