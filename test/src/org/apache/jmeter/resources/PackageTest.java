@@ -241,9 +241,9 @@ public class PackageTest extends TestCase {
         findFile(srcFileDir, set, new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.equals("messages.properties") ||
-                        (name.endsWith("Resources.properties")
-                                && !name.matches("Example\\d+Resources\\.properties")))
+                return name.equals("messages.properties") ||
+                        name.endsWith("Resources.properties")
+                                && !name.matches("Example\\d+Resources\\.properties")
                         || new File(dir, name).isDirectory();
             }
         });

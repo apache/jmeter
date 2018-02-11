@@ -306,12 +306,12 @@ public class JMeterTest extends JMeterTestCaseJUnit {
             }
             String name = guiItem.getClass().getName();
             if (// Is this a work in progress or an internal GUI component?
-                (title != null && title.length() > 0) // Will be "" for internal components
-                && (!title.toUpperCase(Locale.ENGLISH).contains("(ALPHA"))
-                && (!title.toUpperCase(Locale.ENGLISH).contains("(BETA"))
-                && (!title.toUpperCase(Locale.ENGLISH).contains("(DEPRECATED"))
-                && (!title.matches("Example\\d+")) // Skip the example samplers ...
-                && (!name.startsWith("org.apache.jmeter.examples."))) 
+                title != null && title.length() > 0 // Will be "" for internal components
+                && !title.toUpperCase(Locale.ENGLISH).contains("(ALPHA")
+                && !title.toUpperCase(Locale.ENGLISH).contains("(BETA")
+                && !title.toUpperCase(Locale.ENGLISH).contains("(DEPRECATED")
+                && !title.matches("Example\\d+") // Skip the example samplers ...
+                && !name.startsWith("org.apache.jmeter.examples.")) 
             {// No, not a work in progress ...
                 String s = "component_reference.xml needs '" + title + "' anchor for " + name;
                 if (!ct) {
