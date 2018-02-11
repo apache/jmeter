@@ -292,13 +292,6 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             default:
                 fail("Unexpected switch value: "+test);
         }
-        
-
-
-
-
-        
-
     }
 
     private void testPostRequest_FormMultipart(int samplerType, String samplerDefaultEncoding) throws Exception {
