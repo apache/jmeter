@@ -283,7 +283,7 @@ public class PackageTest extends TestCase {
     */
     public static Test suite() {
         TestSuite ts = new TestSuite("Resources PackageTest");
-        String languages[] = JMeterMenuBar.getLanguages();
+        String[] languages = JMeterMenuBar.getLanguages();
         for(String prefix : prefixList){
             TestSuite pfx = new TestSuite(prefix) ;
             pfx.addTest(new PackageTest("testLang","", prefix)); // load the default resource

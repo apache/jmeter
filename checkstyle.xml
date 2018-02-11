@@ -24,7 +24,8 @@
   <property name="localeLanguage" value="en"/>
   <property name="charset" value="UTF-8"/>
   <property name="severity" value="error"/>
-  <property name="fileExtensions" value="java, groovy, properties, xml"/>
+  <property name="fileExtensions"
+            value="java, groovy, xml, xsd, dtd, htm, html, txt, properties"/>
 
   <!-- Verify that EVERY source file has the appropriate license -->
   <module name="RegexpHeader">
@@ -34,15 +35,14 @@
   </module>
 
   <!-- Miscellaneous -->
-  <module name="FileTabCharacter">
-    <!-- No tabs allowed! -->
-    <property name="fileExtensions" value="java, groovy, xml, xsd, dtd, htm, html, txt, properties"/>
+  <module name="FileTabCharacter"/>
+  <module name="NewlineAtEndOfFile">
+    <property name="fileExtensions" value="java, groovy, xml, xsd, dtd"/>
   </module>
-  <module name="NewlineAtEndOfFile"/>
   <module name="RegexpMultiline">
     <!-- No more than 2 blank lines allowed. -->
     <property name="format" value="\r?\n[\t ]*\r?\n[\t ]*\r?\n[\t ]*\r?\n"/>
-    <property name="fileExtensions" value="java, xml, properties"/>
+    <property name="fileExtensions" value="java, groovy, xml, properties"/>
     <property name="message" value="Unnecessary consecutive lines"/>
   </module>
   <!--<module name="RegexpOnFilename">-->

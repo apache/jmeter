@@ -22,49 +22,30 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-// Renamed from org.apache.avalon.excalibur.cli
-
 import java.util.List;
+
 import org.junit.Test;
 
-/**
- * 
- */
 public final class ClutilTestCase {
     private static final String[] ARGLIST1 = new String[] { "--you", "are", "--all", "-cler", "kid" };
-
     private static final String[] ARGLIST2 = new String[] { "-Dstupid=idiot", "are", "--all", "here", "-d" };
-
     private static final String[] ARGLIST3 = new String[] {
     // duplicates
             "-Dstupid=idiot", "are", "--all", "--all", "here" };
-
     private static final String[] ARGLIST4 = new String[] {
     // incompatible (blee/all)
             "-Dstupid", "idiot", "are", "--all", "--blee", "here" };
-
     private static final String[] ARGLIST5 = new String[] { "-f", "myfile.txt" };
-
     private static final int DEFINE_OPT = 'D';
-
     private static final int CASE_CHECK_OPT = 'd';
-
     private static final int YOU_OPT = 'y';
-
     private static final int ALL_OPT = 'a';
-
     private static final int CLEAR1_OPT = 'c';
-
     private static final int CLEAR2_OPT = 'l';
-
     private static final int CLEAR3_OPT = 'e';
-
     private static final int CLEAR5_OPT = 'r';
-
     private static final int BLEE_OPT = 'b';
-
     private static final int FILE_OPT = 'f';
-
     private static final int TAINT_OPT = 'T';
 
     private static final CLOptionDescriptor DEFINE = new CLOptionDescriptor("define",
@@ -686,7 +667,7 @@ public final class ClutilTestCase {
         final ParserControl control = new AbstractParserControl() {
             @Override
             public boolean isFinished(int lastOptionCode) {
-                return (lastOptionCode == YOU_OPT);
+                return lastOptionCode == YOU_OPT;
             }
         };
 
@@ -710,7 +691,7 @@ public final class ClutilTestCase {
         final ParserControl control1 = new AbstractParserControl() {
             @Override
             public boolean isFinished(int lastOptionCode) {
-                return (lastOptionCode == YOU_OPT);
+                return lastOptionCode == YOU_OPT;
             }
         };
 
@@ -750,7 +731,7 @@ public final class ClutilTestCase {
         final ParserControl control1 = new AbstractParserControl() {
             @Override
             public boolean isFinished(final int lastOptionCode) {
-                return (lastOptionCode == CLEAR1_OPT);
+                return lastOptionCode == CLEAR1_OPT;
             }
         };
 
@@ -957,7 +938,7 @@ public final class ClutilTestCase {
                              "-?=[A] -? [B] -?");    
     }
     
-    private void check(String args[], String canon){
+    private void check(String[] args, String canon){
         final CLArgsParser parser = new CLArgsParser(args, OPTIONS);
 
         assertNull(parser.getErrorString(),parser.getErrorString());

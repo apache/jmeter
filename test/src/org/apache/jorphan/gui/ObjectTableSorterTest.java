@@ -139,8 +139,14 @@ public class ObjectTableSorterTest {
 
     @Test
     public void customKeyOrder() {
-        HashMap<String, Integer> customKeyOrder = asList("a", "c", "b", "d").stream().reduce(new HashMap<String,Integer>(), (map,key) -> { map.put(key, map.size()); return map; }, (a,b) -> a);
-        Comparator<String> customKeyComparator = (a,b) -> customKeyOrder.get(a).compareTo(customKeyOrder.get(b));
+        HashMap<String, Integer> customKeyOrder = asList("a", "c", "b", "d").stream()
+                .reduce(new HashMap<String, Integer>(),
+                        (map, key) -> {
+                            map.put(key, map.size());
+                            return map;
+                        },
+                        (a, b) -> a);
+        Comparator<String> customKeyComparator = (a, b) -> customKeyOrder.get(a).compareTo(customKeyOrder.get(b));
         sorter.setValueComparator(0, customKeyComparator).setSortKey(new SortKey(0, SortOrder.ASCENDING));
         List<SimpleImmutableEntry<String, Integer>> expected = asList(a3(), c1(), b2(), d4());
         assertRowOrderAndIndexes(expected);

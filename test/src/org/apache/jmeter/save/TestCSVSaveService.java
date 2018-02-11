@@ -34,7 +34,7 @@ import org.junit.Test;
 public class TestCSVSaveService extends JMeterTestCase {
 
     private void checkSplitString(String input, char delim, String[] expected) throws Exception {
-        String out[] = CSVSaveService.csvSplitString(input, delim);     
+        String[] out = CSVSaveService.csvSplitString(input, delim);
         checkStrings(expected, out);
     }
 

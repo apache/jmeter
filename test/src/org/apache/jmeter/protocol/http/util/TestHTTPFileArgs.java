@@ -18,11 +18,11 @@
 
 package org.apache.jmeter.protocol.http.util;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 
 import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.junit.Test;
 

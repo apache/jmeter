@@ -110,7 +110,7 @@ public class TestJorphanUtils {
     @Test
     public void testSplit3() {
         String in = "a,bc,,"; // Test ignore trailing split characters
-        String out[] = JOrphanUtils.split(in, ",",true);// Ignore adjacent delimiters
+        String[] out = JOrphanUtils.split(in, ",",true);// Ignore adjacent delimiters
         assertThat(out, CoreMatchers.equalTo(new String[] { "a", "bc" }));
         out = JOrphanUtils.split(in, ",",false);
         assertThat(out, CoreMatchers.equalTo(new String[] { "a", "bc", "", "" }));
@@ -119,7 +119,8 @@ public class TestJorphanUtils {
     @Test
     public void testSplitStringStringTrueWithLeadingComplexSplitCharacters() {
         // Test leading split characters
-        assertThat(JOrphanUtils.split(" , ,a ,bc", " ,", true), CoreMatchers.equalTo(new String[] { "a", "bc" }));
+        assertThat(JOrphanUtils.split(" , ,a ,bc", " ,", true),
+                CoreMatchers.equalTo(new String[] { "a", "bc" }));
     }
 
     @Test
@@ -130,29 +131,25 @@ public class TestJorphanUtils {
     }
     
     @Test
-    public void testSplitStringStringTrueTruncate() throws Exception
-    {
+    public void testSplitStringStringTrueTruncate() throws Exception {
         assertThat(JOrphanUtils.split("a;,b;,;,;,d;,e;,;,f", ";,", true),
                 CoreMatchers.equalTo(new String[] { "a", "b", "d", "e", "f" }));
     }
 
     @Test
-    public void testSplitStringStringFalseTruncate() throws Exception
-    {
+    public void testSplitStringStringFalseTruncate() throws Exception {
         assertThat(JOrphanUtils.split("a;,b;,;,;,d;,e;,;,f", ";,", false),
                 CoreMatchers.equalTo(new String[] { "a", "b", "", "", "d", "e", "", "f" }));
     }
 
     @Test
-    public void testSplitStringStringTrueDoubledSplitChar() throws Exception
-    {
+    public void testSplitStringStringTrueDoubledSplitChar() throws Exception {
         assertThat(JOrphanUtils.split("a;;b;;;;;;d;;e;;;;f", ";;", true),
                 CoreMatchers.equalTo(new String[] { "a", "b", "d", "e", "f" }));
     }
 
     @Test
-    public void testSplitStringStringFalseDoubledSplitChar() throws Exception
-    {
+    public void testSplitStringStringFalseDoubledSplitChar() throws Exception {
         assertThat(JOrphanUtils.split("a;;b;;;;;;d;;e;;;;f", ";;", false),
                 CoreMatchers.equalTo(new String[] { "a", "b", "", "", "d", "e", "", "f" }));
         
@@ -161,7 +158,7 @@ public class TestJorphanUtils {
     // Empty string
     @Test
     public void testEmpty(){
-        String out[] = JOrphanUtils.split("", ",", false);
+        String[] out = JOrphanUtils.split("", ",", false);
         assertEquals(0, out.length);
     }
 

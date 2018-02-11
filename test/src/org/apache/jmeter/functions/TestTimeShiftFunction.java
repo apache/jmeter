@@ -44,14 +44,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestTimeShiftFunction extends JMeterTestCase {
+
     private Function function;
-
     private SampleResult result;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx = null;
-
     private String value;
 
     @Before
@@ -155,7 +152,6 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         assertThat(value, is(equalTo("")));
     }
     
-    
     @Test
     public void testRandomPeriod() throws Exception {
         Random r = new Random();
@@ -173,10 +169,8 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         randomFutureDate = LocalDateTime.parse(value);
         checkFutureDate = LocalDateTime.now().plusMinutes(randomInt);
         assertThat(randomFutureDate, within(5, ChronoUnit.SECONDS, checkFutureDate) );
-        
     }
-    
-    
+
     @Test
     public void testNowPlusOneDayWithLocale() throws Exception {
         Collection<CompoundVariable> params = makeParams("yyyy-MMMM-dd", "2017-juillet-01", "P1D", "fr_FR", "");

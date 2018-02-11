@@ -18,15 +18,14 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.MalformedURLException;
 import java.util.Properties;
 
 /**
  * Dummy URLConnection class for use by classes that need an
  * URLConnection for junit tests.
- *
  */
 public final class NullURLConnection extends URLConnection {
 
