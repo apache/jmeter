@@ -344,7 +344,9 @@ public class PackageTest extends TestCase {
         assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
     }
 
-    private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle, Map<String, Map<String, String>> missingLabelsPerBundle2, Properties messages, String bundlePath,String language)
+    private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle,
+            Map<String, Map<String, String>> missingLabelsPerBundle2,
+            Properties messages, String bundlePath, String language)
             throws IOException {
         Properties messagesFr = new Properties();
         String languageBundle = bundlePath+"_"+language+ ".properties";
