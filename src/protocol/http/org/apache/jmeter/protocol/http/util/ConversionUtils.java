@@ -133,7 +133,9 @@ public class ConversionUtils {
     public static String escapeIllegalURLCharacters(String url) throws Exception{
         String decodeUrl = URLDecoder.decode(url,StandardCharsets.UTF_8.name());
         URL urlString = new URL(decodeUrl);
-        URI uri = new URI(urlString.getProtocol(), urlString.getUserInfo(), urlString.getHost(), urlString.getPort(), urlString.getPath(), urlString.getQuery(), urlString.getRef());
+        URI uri = new URI(urlString.getProtocol(), urlString.getUserInfo(),
+                urlString.getHost(), urlString.getPort(), urlString.getPath(),
+                urlString.getQuery(), urlString.getRef());
         return uri.toString();
     }
     

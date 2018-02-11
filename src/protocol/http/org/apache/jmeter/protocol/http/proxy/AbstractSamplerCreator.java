@@ -138,7 +138,8 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     }
 
     /**
-     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#postProcessSampler(org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase, org.apache.jmeter.samplers.SampleResult)
+     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#postProcessSampler(org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase,
+     *      org.apache.jmeter.samplers.SampleResult)
      */
     @Override
     public void postProcessSampler(HTTPSamplerBase sampler, SampleResult result) {
@@ -146,7 +147,8 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     }
 
     /**
-     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#createAndPopulateSampler(org.apache.jmeter.protocol.http.proxy.HttpRequestHdr, java.util.Map, java.util.Map)
+     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#createAndPopulateSampler(org.apache.jmeter.protocol.http.proxy.HttpRequestHdr,
+     *      java.util.Map, java.util.Map)
      */
     @Override
     public HTTPSamplerBase createAndPopulateSampler(HttpRequestHdr request,

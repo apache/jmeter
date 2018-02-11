@@ -281,7 +281,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 res = executeSampler(sampler);
                 String expectedTitleValue = "a test\u00c5mytitle7\u0153\u20a1\u0115\u00c5";
                 String expectedDescriptionValue = "mydescription7\u0153\u20a1\u0115\u00c5the_end";
-                checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, expectedTitleValue, descriptionField, expectedDescriptionValue, false);
+                checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding,
+                        contentEncoding, titleField, expectedTitleValue,
+                        descriptionField, expectedDescriptionValue, false);
                 break;
             case 8:
                 break;

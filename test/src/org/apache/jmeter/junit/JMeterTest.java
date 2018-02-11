@@ -240,7 +240,9 @@ public class JMeterTest extends JMeterTestCaseJUnit {
     public void checkGuiSet() throws Exception {
         guiTitles.remove("Example Sampler");// We don't mind if this is left over
         guiTitles.remove("Sample_Result_Save_Configuration");// Ditto, not a sampler
-        assertEquals("Should not have any names left over, check name of components in EN (default) Locale, which must match name attribute of component", 0, scanprintMap(guiTitles, "GUI"));
+        assertEquals(
+                "Should not have any names left over, check name of components in EN (default) Locale, which must match name attribute of component",
+                0, scanprintMap(guiTitles, "GUI"));
     }
 
     /*

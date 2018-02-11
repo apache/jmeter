@@ -137,8 +137,9 @@ public class RequestViewHTTPTest extends TestCase {
     
     @Test
     public void testGetQueryMapBug52491() {
-        String query = "<envelope><header><context><conversationId>119</conversationId></context></header><body><call component=\"OrderTransfer\" method=\"getSourceManifestID\" id=\"2\">\n" + 
-                "<params></params><refs></refs></call></body></envelope>";
+        String query = "<envelope><header><context><conversationId>119</conversationId></context></header>"
+                + "<body><call component=\"OrderTransfer\" method=\"getSourceManifestID\" id=\"2\">\n"
+                + "<params></params><refs></refs></call></body></envelope>";
         Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
         
         Assert.assertNotNull(params);

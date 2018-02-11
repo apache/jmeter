@@ -203,9 +203,10 @@ public class Proxy extends Thread {
                 } catch (IOException ioe) { // most likely this is because of a certificate error
                     // param.length is 2 here
                     final String url = " for '"+ param[0] +"'";
-                    log.warn("{} Problem with SSL certificate for url {}? Ensure browser is set to accept the JMeter proxy cert: {}", 
+                    log.warn("{} Problem with SSL certificate for url {}? Ensure browser is set to accept the JMeter proxy cert: {}",
                             port, url,ioe.getMessage());
-                    result = generateErrorResult(result, request, ioe, "\n**ensure browser is set to accept the JMeter proxy certificate**"); // Generate result (if nec.) and populate it
+                    // Generate result (if nec.) and populate it
+                    result = generateErrorResult(result, request, ioe, "\n**ensure browser is set to accept the JMeter proxy certificate**");
                     throw new JMeterException(); // hack to skip processing
                 }
                 if (isDebug) {
