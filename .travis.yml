@@ -1,4 +1,8 @@
 sudo: false
+addons:
+  apt:
+    packages:
+      - oracle-java9-installer
 language: java
 
 before_script:
