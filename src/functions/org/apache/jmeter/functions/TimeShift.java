@@ -145,7 +145,9 @@ public class TimeShift extends AbstractFunction {
                 LocaleFormatObject lfo = new LocaleFormatObject(format, locale);
                 formatter = dateTimeFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
             } catch (IllegalArgumentException ex) {
-                log.error("Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)", format, ex); // $NON-NLS-1$
+                log.error(
+                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
+                        format, ex); // $NON-NLS-1$
                 return "";
             }
         }
