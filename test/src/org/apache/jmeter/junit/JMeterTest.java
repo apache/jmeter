@@ -502,14 +502,14 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         if (objects.isEmpty()) {
             System.out.println("No classes found that extend " + exName + ". Check the following:");
             System.out.println("Search paths are:");
-            String ss[] = JMeterUtils.getSearchPaths();
+            String[] ss = JMeterUtils.getSearchPaths();
             for (String s : ss) {
                 System.out.println(s);
             }
             if (!classPathShown) {// Only dump it once
                 System.out.println("Class path is:");
                 String cp = System.getProperty("java.class.path");
-                String classPathElements[] = JOrphanUtils.split(cp, java.io.File.pathSeparator);
+                String[] classPathElements = JOrphanUtils.split(cp, java.io.File.pathSeparator);
                 for (String classPathElement : classPathElements) {
                     System.out.println(classPathElement);
                 }

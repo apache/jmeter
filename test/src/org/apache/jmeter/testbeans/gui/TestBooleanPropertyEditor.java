@@ -56,7 +56,7 @@ public class TestBooleanPropertyEditor {
 
     private void testBooleanEditor(PropertyEditor propertyEditor) {
         assertNotNull("Expected to find property editor", propertyEditor);
-        String tags[] = propertyEditor.getTags();
+        String[] tags = propertyEditor.getTags();
         assertEquals(2,tags.length);
         assertEquals(TRUE,tags[0]);
         assertEquals(FALSE,tags[1]);
