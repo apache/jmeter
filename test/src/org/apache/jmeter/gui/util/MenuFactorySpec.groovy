@@ -32,3 +32,4 @@ class MenuFactorySpec extends JMeterSpec {
             MenuFactory.createDefaultAddMenu().itemCount == 6 + 3 // items + seperators
     }
 }
+
