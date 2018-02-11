@@ -118,6 +118,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li><pr>375</pr>Updated to latest checkstyle (v8.8). Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
