@@ -19,6 +19,19 @@
   width: 60em;
 }
 
+#topButton {
+    position: fixed;
+    bottom: 0rem;
+    right: 0rem;
+    background: #dedede;
+    margin: 1rem;
+    padding: .5rem;
+    border-radius: 10px;
+    border-color: #a0a0a0;
+    display: none;
+    z-index: 999;
+}
+
 .social-media {
   display: inline-block;
   float: right;
