@@ -447,46 +447,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
                 if (n.endsWith("RemoteJMeterEngineImpl")) {
                     continue; // Don't try to instantiate remote server
                 }
-                Class<?> c = null;
-                try {
-                    c = Class.forName(n);
-                    try {
-                        // Try with a parameter-less constructor first
-                        objects.add(c.newInstance());
-                    } catch (InstantiationException e) {
-                        caught = e;
-                        try {
-                            // Events often have this constructor
-                            objects.add(c.getConstructor(new Class[] { Object.class }).newInstance(
-                                    new Object[] { myThis }));
-                        } catch (NoSuchMethodException f) {
-                            // no luck. Ignore this class
-                            if (!Enum.class.isAssignableFrom(c)) { // ignore enums
-                                System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": NoSuchMethodException  " + 
-                                    n + ", missing empty Constructor or Constructor with Object parameter");                                
-                            }
-                        }
-                    }
-                } catch (NoClassDefFoundError e) {
-                    // no luck. Ignore this class
-                    System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": NoClassDefFoundError " + n + ":" + e.getMessage());
-                    e.printStackTrace(System.out);
-                } catch (IllegalAccessException e) {
-                    caught = e;
-                    System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": IllegalAccessException " + n + ":" + e.getMessage());
-                    e.printStackTrace(System.out);
-                    // We won't test restricted-access classes.
-                } catch (HeadlessException|ExceptionInInitializerError e) {// EIIE can be caused by Headless
-                    caught = e;
-                    System.out.println("o.a.j.junit.JMeterTest Error creating "+n+" "+e.toString());
-                } catch (Exception e) {
-                    caught = e;
-                    if (e instanceof RemoteException) { // not thrown, so need to check here
-                        System.out.println("o.a.j.junit.JMeterTest WARN: " + "Error creating " + n + " " + e.toString());
-                    } else {
-                        throw new Exception("Error creating " + n, e);
-                    }
-                }
+                caught = instantiateClass(exName, myThis, objects, n, caught);
             }
             caughtError = false;
         } finally {
@@ -515,6 +476,51 @@ public class JMeterTest extends JMeterTestCaseJUnit {
             }
         }
         return objects;
+    }
+
+    private static Throwable instantiateClass(final String extendsClassName, final Object myThis,
+            final List<Object> objects, final String className, final Throwable oldCaught) throws Exception {
+        Throwable caught = oldCaught;
+        try {
+            Class<?> c = Class.forName(className);
+            try {
+                // Try with a parameter-less constructor first
+                objects.add(c.newInstance());
+            } catch (InstantiationException e) {
+                caught = e;
+                try {
+                    // Events often have this constructor
+                    objects.add(c.getConstructor(new Class[] { Object.class }).newInstance(
+                            new Object[] { myThis }));
+                } catch (NoSuchMethodException f) {
+                    // no luck. Ignore this class
+                    if (!Enum.class.isAssignableFrom(c)) { // ignore enums
+                        System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": NoSuchMethodException  " + 
+                            className + ", missing empty Constructor or Constructor with Object parameter");
+                    }
+                }
+            }
+        } catch (NoClassDefFoundError e) {
+            // no luck. Ignore this class
+            System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": NoClassDefFoundError " + className + ":" + e.getMessage());
+            e.printStackTrace(System.out);
+        } catch (IllegalAccessException e) {
+            caught = e;
+            System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": IllegalAccessException " + className + ":" + e.getMessage());
+            e.printStackTrace(System.out);
+            // We won't test restricted-access classes.
+        } catch (HeadlessException|ExceptionInInitializerError e) {// EIIE can be caused by Headless
+            caught = e;
+            System.out.println("o.a.j.junit.JMeterTest Error creating " + className + " " + e.toString());
+        } catch (Exception e) {
+            caught = e;
+            if (e instanceof RemoteException) { // not thrown, so need to check here
+                System.out.println("o.a.j.junit.JMeterTest WARN: " + "Error creating " + className + " " + e.toString());
+            } else {
+                throw new Exception("Error creating " + className, e);
+            }
+        }
+        return caught;
     }
     
 }
