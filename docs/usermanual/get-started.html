@@ -250,7 +250,7 @@ The first step is to configure the injectors that will run JMeter, this as for a
 <li>Java setup: Ensure you install the latest version of Java supported by JMeter</li>
     
 <li>
-<b>Correct sizing of Java Heap</b>. By default JMeter runs with a heap of 512MB, this might not be enough for your test and depends on your test plan and number of threads you want to run</li>
+<b>Increase the Java Heap size</b>. By default JMeter runs with a heap of 1 GB, this might not be enough for your test and depends on your test plan and number of threads you want to run</li>
 
 </ul> 
 
@@ -669,7 +669,7 @@ jmeter -t test.jmx &hellip;
 <dt>
 <span class="code">HEAP</span>
 </dt>
-<dd>JVM memory settings used when starting JMeter. Defaults to <span class="code">-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m</span>
+<dd>JVM memory settings used when starting JMeter. Defaults to <span class="code">-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m</span>
 </dd>
 
 <dt>
@@ -787,7 +787,7 @@ export JMETER_LANGUAGE=" "
 <dt>
 <span class="code">HEAP</span>
 </dt>
-<dd>Java runtime options for memory management used when JMeter is started. Defaults to <span class="code">-Xms512m -Xmx512m -X:MaxMetaspaceSize=256m</span>
+<dd>Java runtime options for memory management used when JMeter is started. Defaults to <span class="code">-Xms1g -Xmx1g -X:MaxMetaspaceSize=256m</span>
 </dd>
 
 <dt>
