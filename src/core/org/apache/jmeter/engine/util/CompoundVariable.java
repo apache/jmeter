@@ -179,7 +179,7 @@ public class CompoundVariable implements Function {
         }
 
         compiledComponents = functionParser.compileString(parameters);
-        if (!compiledComponents.isEmpty() || !(compiledComponents.get(0) instanceof String)) {
+        if (compiledComponents.size() > 1 || !(compiledComponents.get(0) instanceof String)) {
             hasFunction = true;
         }
         permanentResults = null; // To be calculated and cached on first execution
