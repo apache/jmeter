@@ -310,7 +310,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     }
     
     static final Object[][] getColumnsMsgParameters() { 
-        Object[][] result =  { null, 
+        return new Object[][] { null, 
             null,
             null,
             null,
@@ -323,7 +323,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             null,
             null,
             null};
-        return result;
     }
 
     private String[] keys(Map<String, ?> map) {
