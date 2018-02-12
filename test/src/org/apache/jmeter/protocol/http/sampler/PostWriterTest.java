@@ -543,8 +543,9 @@ public class PostWriterTest {
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         assertEquals(
-                URLDecoder.decode(new String(expectedUrl, "US-ASCII"), "ISO-8859-1"), // HTTPSampler uses ISO-8859-1 as default encoding
-                URLDecoder.decode(new String(connection.getOutputStreamContent(), "US-ASCII"), "ISO-8859-1")); // HTTPSampler uses ISO-8859-1 as default encoding
+                // HTTPSampler uses ISO-8859-1 as default encoding
+                URLDecoder.decode(new String(expectedUrl, "US-ASCII"), "ISO-8859-1"), 
+                URLDecoder.decode(new String(connection.getOutputStreamContent(), "US-ASCII"), "ISO-8859-1"));
         connection.disconnect();
 
         // Test sending data as ISO-8859-1
@@ -686,7 +687,9 @@ public class PostWriterTest {
             String titleValue,
             String descriptionValue,
             byte[] fileContent) throws IOException {
-        return createExpectedOutput(boundaryString, contentEncoding, "title", titleValue, "description", descriptionValue, "upload", fileContent);
+        return createExpectedOutput(boundaryString, contentEncoding, "title",
+                titleValue, "description", descriptionValue, "upload",
+                fileContent);
     }
 
     /**

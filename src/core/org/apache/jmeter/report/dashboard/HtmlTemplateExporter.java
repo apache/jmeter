@@ -253,9 +253,13 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                                             || isController
                                             || !showControllerSeriesOnly;
                                     if(log.isDebugEnabled()) {
-                                        log.debug("name:{} matches pattern:{}, supportsControllerDiscrimination:{}, isController:{}, showControllerSeriesOnly:{}", 
-                                            name, filterPattern.pattern(), 
-                                            supportsControllerDiscrimination, isController, showControllerSeriesOnly);
+                                        log.debug(
+                                                "name:{} matches pattern:{}, supportsControllerDiscrimination:{}, "
+                                                + "isController:{}, showControllerSeriesOnly:{}",
+                                                name, filterPattern.pattern(),
+                                                supportsControllerDiscrimination,
+                                                isController,
+                                                showControllerSeriesOnly);
                                     }
                                 } else {
                                     // If the name does not match the pattern,
