@@ -26,7 +26,6 @@ import org.apache.jmeter.report.processor.MeanAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractSeriesSelector;
-import org.apache.jmeter.report.processor.graph.GraphValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
@@ -77,15 +76,11 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
                             return Collections.emptyList();
                         }
                     }
-                }, new GraphValueSelector() {
-
-                    @Override
-                    public Double select(String series, Sample sample) {
-                        if(!sample.isEmptyController()) {
-                            return Double.valueOf(sample.getGroupThreads());
-                        } else {
-                            return null;
-                        }
+                }, (series, sample) -> {
+                    if (!sample.isEmptyController()) {
+                        return Double.valueOf(sample.getGroupThreads());
+                    } else {
+                        return null;
                     }
                 }, false, false));
         return groupInfos;
