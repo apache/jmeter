@@ -69,7 +69,7 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
                     public Iterable<String> select(Sample sample) {
                         if(!sample.isEmptyController()) {
                             String threadName = sample.getThreadName();
-                            int index = threadName.lastIndexOf(" ");
+                            int index = threadName.lastIndexOf(' ');
                             if (index >= 0) {
                                 threadName = threadName.substring(0, index);
                             }
