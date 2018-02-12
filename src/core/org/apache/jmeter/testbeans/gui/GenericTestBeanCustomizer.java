@@ -381,7 +381,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     private WrapperEditor createWrapperEditor(PropertyEditor typeEditor, PropertyDescriptor descriptor) {
         String[] editorTags = typeEditor.getTags();
         String[] additionalTags = (String[]) descriptor.getValue(TAGS);
-        String[] tags = null;
+        String[] tags;
         if (editorTags == null) {
             tags = additionalTags;
         } else if (additionalTags == null) {
