@@ -170,7 +170,7 @@
     </module>
     <module name="LineLength">
       <!-- TODO: reduce this to 120 -->
-      <property name="max" value="165"/>
+      <property name="max" value="160"/>
     </module>
 
     <!-- whitespace -->
