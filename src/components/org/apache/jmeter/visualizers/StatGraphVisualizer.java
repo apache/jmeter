@@ -225,31 +225,34 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private JCheckBox regexpChkBox = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), true); // $NON-NLS-1$
 
-    private JComboBox<String> titleFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> titleFontNameList = new JComboBox<>(keys(StatGraphProperties.getFontNameMap()));
 
     private JComboBox<String> titleFontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private JComboBox<String> titleFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> titleFontStyleList = new JComboBox<>(keys(StatGraphProperties.getFontStyleMap()));
 
-    private JComboBox<String> valueFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> valueFontNameList = new JComboBox<>(keys(StatGraphProperties.getFontNameMap()));
 
     private JComboBox<String> valueFontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private JComboBox<String> valueFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> valueFontStyleList = new JComboBox<>(keys(StatGraphProperties.getFontStyleMap()));
 
-    private JComboBox<String> fontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> fontNameList = new JComboBox<>(keys(StatGraphProperties.getFontNameMap()));
 
     private JComboBox<String> fontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private JComboBox<String> fontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> fontStyleList = new JComboBox<>(keys(StatGraphProperties.getFontStyleMap()));
 
-    private JComboBox<String> legendPlacementList = new JComboBox<>(StatGraphProperties.getPlacementNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> legendPlacementList = new JComboBox<>(keys(StatGraphProperties.getPlacementNameMap()));
 
-    private JCheckBox drawOutlinesBar = new JCheckBox(JMeterUtils.getResString("aggregate_graph_draw_outlines"), true); // Default checked // $NON-NLS-1$
+    // Default checked
+    private JCheckBox drawOutlinesBar = new JCheckBox(JMeterUtils.getResString("aggregate_graph_draw_outlines"), true); // $NON-NLS-1$
 
-    private JCheckBox numberShowGrouping = new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), true); // Default checked // $NON-NLS-1$
-    
-    private JCheckBox valueLabelsVertical = new JCheckBox(JMeterUtils.getResString("aggregate_graph_value_labels_vertical"), true); // Default checked // $NON-NLS-1$
+    // Default checked
+    private JCheckBox numberShowGrouping = new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), true); // $NON-NLS-1$
+
+    // Default checked
+    private JCheckBox valueLabelsVertical = new JCheckBox(JMeterUtils.getResString("aggregate_graph_value_labels_vertical"), true); // $NON-NLS-1$
 
     private Color colorBarGraph = Color.YELLOW;
 
@@ -316,7 +319,11 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             null};
         return result;
     }
-    
+
+    private String[] keys(Map<String, ?> map) {
+        return map.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+    }
+
     /**
      * @return array of String containing column names
      */
