@@ -180,7 +180,7 @@ public class ObjectTableSorterTest {
 
     @Test
     public void getDefaultComparatorForObjectClass() {
-        ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("integer", Object.class));
+        ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("object", Object.class));
 
         assertThat(sorter.getValueComparator(0), is(nullValue()));
     }
