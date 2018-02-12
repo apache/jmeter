@@ -264,6 +264,13 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
         setProperty(new BooleanProperty(ERRORS_ONLY_KEY, inErrorsOnly));
     }
 
+    private long capToZero(long value) {
+        if (value == Long.MAX_VALUE) {
+            return 0;
+        }
+        return value;
+    }
+
     /**
      * Sets the threshold on error level
      * 
@@ -276,11 +283,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
         if (inErrorThreshold < 0L) {
             throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative")); //$NON-NLS-1$
         }
-        if (inErrorThreshold == Long.MAX_VALUE) {
-            setProperty(new LongProperty(ERROR_THRESHOLD_KEY, 0));
-        } else {
-            setProperty(new LongProperty(ERROR_THRESHOLD_KEY, inErrorThreshold));
-        }
+        setProperty(new LongProperty(ERROR_THRESHOLD_KEY, capToZero(inErrorThreshold)));
     }
 
     /**
@@ -295,11 +298,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
         if (inWarningThreshold < 0L) {
             throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative")); //$NON-NLS-1$
         }
-        if (inWarningThreshold == Long.MAX_VALUE) {
-            setProperty(new LongProperty(WARNING_THRESHOLD_KEY, 0));
-        } else {
-            setProperty(new LongProperty(WARNING_THRESHOLD_KEY, inWarningThreshold));
-        }
+        setProperty(new LongProperty(WARNING_THRESHOLD_KEY, capToZero(inWarningThreshold)));
     }
 
     /**
