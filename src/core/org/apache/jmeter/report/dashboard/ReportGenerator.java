@@ -78,8 +78,11 @@ public class ReportGenerator {
 
     private static final char CSV_DEFAULT_SEPARATOR =
             // We cannot use JMeterUtils#getPropDefault as it applies a trim on value
-            JMeterUtils.getDelimiter(
-                    JMeterUtils.getJMeterProperties().getProperty(SampleSaveConfiguration.DEFAULT_DELIMITER_PROP, SampleSaveConfiguration.DEFAULT_DELIMITER)).charAt(0);
+            JMeterUtils
+                    .getDelimiter(JMeterUtils.getJMeterProperties().getProperty(
+                            SampleSaveConfiguration.DEFAULT_DELIMITER_PROP,
+                            SampleSaveConfiguration.DEFAULT_DELIMITER))
+                    .charAt(0);
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not valid.";
     private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";

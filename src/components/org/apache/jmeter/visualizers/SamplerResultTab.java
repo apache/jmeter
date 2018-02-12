@@ -332,10 +332,20 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 setupTabPaneForAssertionResult();
 
                 StringBuilder statsBuff = new StringBuilder(100);
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_error")).append(assertionResult.isError()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure")).append(assertionResult.isFailure()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure_message")).append(assertionResult.getFailureMessage()).append(NL); //$NON-NLS-1$
-                statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_assertion_error")) //$NON-NLS-1$
+                        .append(assertionResult.isError()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_assertion_failure")) //$NON-NLS-1$
+                        .append(assertionResult.isFailure()).append(NL);
+                statsBuff
+                        .append(JMeterUtils.getResString(
+                                "view_results_assertion_failure_message")) //$NON-NLS-1$
+                        .append(assertionResult.getFailureMessage()).append(NL);
+                statsDoc.insertString(statsDoc.getLength(),
+                        statsBuff.toString(), null);
             }
             stats.setCaretPosition(1);
         } catch (BadLocationException exc) {

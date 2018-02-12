@@ -329,7 +329,9 @@ public class TestJSONPathAssertion {
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
         assertEquals(true, result.isFailure());
-        assertEquals("Value expected to match regexp '{headerkey=header value}', but it did not match: '{\"headerkey\":\"header value\"}'", result.getFailureMessage());
+        assertEquals(
+                "Value expected to match regexp '{headerkey=header value}', but it did not match: '{\"headerkey\":\"header value\"}'",
+                result.getFailureMessage());
     }
 
     @Test

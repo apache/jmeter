@@ -77,7 +77,11 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
     }
 
     private static void checkProperty(Map<String, List<String>> properties, String property, String expectedPropertyValue) {
-        assertNotNull("Properties should not be null. Expected to find within it property = " + property + " with expected value = " + expectedPropertyValue, properties);
+        assertNotNull(
+                "Properties should not be null. Expected to find within it property = "
+                        + property + " with expected value = "
+                        + expectedPropertyValue,
+                properties);
         List<String> listOfPropertyValues = properties.get(property);
         assertNotNull("No property entry found for property " + property, listOfPropertyValues);
         assertEquals("Did not find single property for property " + property, 1, listOfPropertyValues.size());
