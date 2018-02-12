@@ -318,7 +318,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         try {
             @SuppressWarnings("unchecked") // empty collection
             Map<String, JMeterProperty> newColl = coll.getClass().newInstance();
-            for (Map.Entry<?,?> entry : ((Map<?,?>)coll).entrySet()) {
+            for (Map.Entry<?,?> entry : coll.entrySet()) {
                 Object key = entry.getKey();
                 Object prop = entry.getValue();
                 String item=null;
