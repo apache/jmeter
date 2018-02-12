@@ -17,7 +17,6 @@
  */
 package org.apache.jmeter.report.processor.graph.impl;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,7 +72,7 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
                             if (index >= 0) {
                                 threadName = threadName.substring(0, index);
                             }
-                            return Arrays.asList(new String[] { threadName });
+                            return Collections.singletonList(threadName);
                         } else {
                             return Collections.emptyList();
                         }
