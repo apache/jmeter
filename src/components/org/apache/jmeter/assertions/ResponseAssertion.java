@@ -311,7 +311,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             if (notTest) { // Not should always succeed against an empty result
                 return result;
             }
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 log.debug("Not checking empty response field in: {}", response.getSampleLabel());
             }
             return result.setResultForNull();
@@ -352,7 +352,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                         log.debug("Failed: {}", stringPattern);
                         result.setFailure(true);
                         String customMsg = getCustomFailureMessage();
-                        if(StringUtils.isEmpty(customMsg)) {
+                        if (StringUtils.isEmpty(customMsg)) {
                             result.setFailureMessage(getFailText(stringPattern,toCheck));
                         } else {
                             result.setFailureMessage(customMsg);
@@ -369,7 +369,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 }
                 result.setFailure(true);
                 String customMsg = getCustomFailureMessage();
-                if(StringUtils.isEmpty(customMsg)) {
+                if (StringUtils.isEmpty(customMsg)) {
                     result.setFailureMessage(errorMsg.toString());
                 } else {
                     result.setFailureMessage(customMsg);
@@ -391,7 +391,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         } else if (isTestFieldResponseData()) {
             toCheck = response.getResponseDataAsString(); // (bug25052)
         } else if (isTestFieldResponseDataAsDocument()) {
-            toCheck = Document.getTextFromDocument(response.getResponseData()); 
+            toCheck = Document.getTextFromDocument(response.getResponseData());
         } else if (isTestFieldResponseCode()) {
             toCheck = response.getResponseCode();
         } else if (isTestFieldResponseMessage()) {
@@ -545,7 +545,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         for (int i = 0; i < pad.capacity(); i++){
             pad.append(' ');
         }
-        
+
         if (recDeltaSeq.length() > compDeltaSeq.length()){
             compDeltaSeq += pad.toString();
         } else {
