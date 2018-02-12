@@ -606,7 +606,8 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         return postBody;
     }
 
-    private String createMultipartFileUploadBody(String fileField, String fileName, String fileMimeType, String fileContent, String boundary, String endOfLine) {
+    private String createMultipartFileUploadBody(String fileField, String fileName,
+            String fileMimeType, String fileContent, String boundary, String endOfLine) {
         // File upload multipart
         String postBody = "--" + boundary + endOfLine
             + "Content-Disposition: form-data; name=\"" + fileField + "\" filename=\"" + fileName + "\"" + endOfLine

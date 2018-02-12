@@ -462,7 +462,8 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         private static final long serialVersionUID = 1129098620102526299L;
         
         /**
-         * @see javax.swing.tree.DefaultTreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree, java.lang.Object, boolean, boolean, boolean, int, boolean)
+         * @see javax.swing.tree.DefaultTreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree,
+         *      java.lang.Object, boolean, boolean, boolean, int, boolean)
          */
         @Override
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,

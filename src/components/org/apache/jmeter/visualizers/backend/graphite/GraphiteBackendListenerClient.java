@@ -164,11 +164,21 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             }
         }        
         UserMetric userMetric = getUserMetrics();
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(userMetric.getMinActiveThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(userMetric.getMaxActiveThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(userMetric.getMeanActiveThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(userMetric.getStartedThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_FINISHED_THREADS, Integer.toString(userMetric.getFinishedThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME,
+                METRIC_MIN_ACTIVE_THREADS,
+                Integer.toString(userMetric.getMinActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME,
+                METRIC_MAX_ACTIVE_THREADS,
+                Integer.toString(userMetric.getMaxActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME,
+                METRIC_MEAN_ACTIVE_THREADS,
+                Integer.toString(userMetric.getMeanActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME,
+                METRIC_STARTED_THREADS,
+                Integer.toString(userMetric.getStartedThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME,
+                METRIC_FINISHED_THREADS,
+                Integer.toString(userMetric.getFinishedThreads()));
 
         graphiteMetricsManager.writeAndSendMetrics();
     }
@@ -185,14 +195,24 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
 
         // See https://bz.apache.org/bugzilla/show_bug.cgi?id=57350
         if(metric.getTotal() > 0) { 
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_OK_COUNT, Integer.toString(metric.getSuccesses()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_KO_COUNT, Integer.toString(metric.getFailures()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_ALL_COUNT, Integer.toString(metric.getTotal()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_ALL_HITS_COUNT, Integer.toString(metric.getHits()));
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    METRIC_OK_COUNT, Integer.toString(metric.getSuccesses()));
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    METRIC_KO_COUNT, Integer.toString(metric.getFailures()));
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    METRIC_ALL_COUNT, Integer.toString(metric.getTotal()));
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    METRIC_ALL_HITS_COUNT, Integer.toString(metric.getHits()));
             if(metric.getSuccesses()>0) {
-                graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_OK_MIN_RESPONSE_TIME, Double.toString(metric.getOkMinTime()));
-                graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_OK_MAX_RESPONSE_TIME, Double.toString(metric.getOkMaxTime()));
-                graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_OK_AVG_RESPONSE_TIME, Double.toString(metric.getOkMean()));
+                graphiteMetricsManager.addMetric(timestampInSeconds,
+                        contextName, METRIC_OK_MIN_RESPONSE_TIME,
+                        Double.toString(metric.getOkMinTime()));
+                graphiteMetricsManager.addMetric(timestampInSeconds,
+                        contextName, METRIC_OK_MAX_RESPONSE_TIME,
+                        Double.toString(metric.getOkMaxTime()));
+                graphiteMetricsManager.addMetric(timestampInSeconds,
+                        contextName, METRIC_OK_AVG_RESPONSE_TIME,
+                        Double.toString(metric.getOkMean()));
                 for (Map.Entry<String, Float> entry : okPercentiles.entrySet()) {
                     graphiteMetricsManager.addMetric(timestampInSeconds, contextName, 
                             entry.getKey(), 
@@ -200,18 +220,30 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                 }
             } 
             if(metric.getFailures()>0) {
-                graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_KO_MIN_RESPONSE_TIME, Double.toString(metric.getKoMinTime()));
-                graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_KO_MAX_RESPONSE_TIME, Double.toString(metric.getKoMaxTime()));
-                graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_KO_AVG_RESPONSE_TIME, Double.toString(metric.getKoMean()));
+                graphiteMetricsManager.addMetric(timestampInSeconds,
+                        contextName, METRIC_KO_MIN_RESPONSE_TIME,
+                        Double.toString(metric.getKoMinTime()));
+                graphiteMetricsManager.addMetric(timestampInSeconds,
+                        contextName, METRIC_KO_MAX_RESPONSE_TIME,
+                        Double.toString(metric.getKoMaxTime()));
+                graphiteMetricsManager.addMetric(timestampInSeconds,
+                        contextName, METRIC_KO_AVG_RESPONSE_TIME,
+                        Double.toString(metric.getKoMean()));
                 for (Map.Entry<String, Float> entry : koPercentiles.entrySet()) {
                     graphiteMetricsManager.addMetric(timestampInSeconds, contextName, 
                             entry.getKey(), 
                             Double.toString(metric.getKoPercentile(entry.getValue().floatValue())));
                 }   
             }
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_ALL_MIN_RESPONSE_TIME, Double.toString(metric.getAllMinTime()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_ALL_MAX_RESPONSE_TIME, Double.toString(metric.getAllMaxTime()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_ALL_AVG_RESPONSE_TIME, Double.toString(metric.getAllMean()));
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    METRIC_ALL_MIN_RESPONSE_TIME,
+                    Double.toString(metric.getAllMinTime()));
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    METRIC_ALL_MAX_RESPONSE_TIME,
+                    Double.toString(metric.getAllMaxTime()));
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    METRIC_ALL_AVG_RESPONSE_TIME,
+                    Double.toString(metric.getAllMean()));
             for (Map.Entry<String, Float> entry : allPercentiles.entrySet()) {
                 graphiteMetricsManager.addMetric(timestampInSeconds, contextName, 
                         entry.getKey(), 

@@ -92,9 +92,10 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
         try {
             if (log.isDebugEnabled()) {
                 log.debug(
-                        "Setting up tidy... doctype: {}, errors only: {}, error threshold: {}, warning threshold: {}, html mode: {}, xhtml mode: {}, xml mode: {}.",
-                        getDoctype(), isErrorsOnly(), getErrorThreshold(), getWarningThreshold(), isHTML(), isXHTML(),
-                        isXML());
+                        "Setting up tidy... doctype: {}, errors only: {}, error threshold: {},"
+                                + "warning threshold: {}, html mode: {}, xhtml mode: {}, xml mode: {}.",
+                        getDoctype(), isErrorsOnly(), getErrorThreshold(),
+                        getWarningThreshold(), isHTML(), isXHTML(), isXML());
             }
             tidy = new Tidy();
             tidy.setInputEncoding(StandardCharsets.UTF_8.name());
