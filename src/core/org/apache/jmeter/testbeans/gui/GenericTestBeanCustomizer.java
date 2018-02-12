@@ -365,14 +365,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @return the property details
      */
     private static String getDetails(PropertyDescriptor pd) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(pd.getReadMethod().getDeclaringClass().getName());
-        sb.append('#');
-        sb.append(pd.getName());
-        sb.append('(');
-        sb.append(pd.getPropertyType().getCanonicalName());
-        sb.append(')');
-        return sb.toString();
+        return pd.getReadMethod().getDeclaringClass().getName() + '#'
+                + pd.getName() + '(' + pd.getPropertyType().getCanonicalName()
+                + ')';
     }
 
     /**
@@ -662,7 +657,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         if (b == null) {
             return group;
         }
-        String key = new StringBuilder(group).append(".displayName").toString();
+        String key = group + ".displayName";
         if (b.containsKey(key)) {
             return b.getString(key);
         } else {
