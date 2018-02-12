@@ -78,45 +78,20 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
     public AssertionResult getResult(SampleResult inResponse) {
         log.debug("HTMLAssertions.getResult() called");
 
-        // no error as default
-        AssertionResult result = new AssertionResult(getName());
-
         if (inResponse.getResponseData().length == 0) {
-            return result.setResultForNull();
+            return new AssertionResult(getName()).setResultForNull();
         }
 
+        return runTidy(inResponse);
+    }
+
+    private AssertionResult runTidy(SampleResult inResponse) {
+        AssertionResult result = new AssertionResult(getName());
         result.setFailure(false);
 
         // create parser
-        Tidy tidy = null;
-        try {
-            if (log.isDebugEnabled()) {
-                log.debug(
-                        "Setting up tidy... doctype: {}, errors only: {}, error threshold: {},"
-                                + "warning threshold: {}, html mode: {}, xhtml mode: {}, xml mode: {}.",
-                        getDoctype(), isErrorsOnly(), getErrorThreshold(),
-                        getWarningThreshold(), isHTML(), isXHTML(), isXML());
-            }
-            tidy = new Tidy();
-            tidy.setInputEncoding(StandardCharsets.UTF_8.name());
-            tidy.setOutputEncoding(StandardCharsets.UTF_8.name());
-            tidy.setQuiet(false);
-            tidy.setShowWarnings(true);
-            tidy.setOnlyErrors(isErrorsOnly());
-            tidy.setDocType(getDoctype());
-            if (isXHTML()) {
-                tidy.setXHTML(true);
-            } else if (isXML()) {
-                tidy.setXmlTags(true);
-            }
-            tidy.setErrfile(getFilename());
-
-            if (log.isDebugEnabled()) {
-                log.debug("Tidy instance created... err file: {}, tidy parser: {}", getFilename(), tidy);
-            }
-
-        } catch (Exception e) {
-            log.error("Unable to instantiate tidy parser", e);
+        Tidy tidy = getTidy();
+        if (tidy == null) {
             result.setFailure(true);
             result.setFailureMessage("Unable to instantiate tidy parser");
             // return with an error
@@ -140,8 +115,10 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
             writeOutput(errbuf.toString());
 
             // evaluate result
-            if ((tidy.getParseErrors() > getErrorThreshold())
-                    || (!isErrorsOnly() && (tidy.getParseWarnings() > getWarningThreshold()))) {
+            final boolean errorsAboveThreshold = tidy.getParseErrors() > getErrorThreshold();
+            final boolean warningsAboveThreshold = tidy.getParseWarnings() > getWarningThreshold();
+            if (errorsAboveThreshold
+                    || (!isErrorsOnly() && warningsAboveThreshold)) {
                 log.debug("Errors/warnings detected while parsing with tidy: {}", errbuf);
                 result.setFailure(true);
                 result.setFailureMessage(MessageFormat.format("Tidy Parser errors:   " + tidy.getParseErrors()
@@ -149,7 +126,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
                         + tidy.getParseWarnings() + " (allowed " + getWarningThreshold() + ")", new Object[0]));
                 // return with an error
 
-            } else if ((tidy.getParseErrors() > 0) || (tidy.getParseWarnings() > 0)) {
+            } else if (tidy.getParseErrors() > 0 || tidy.getParseWarnings() > 0) {
                 // return with no error
                 log.debug("HTMLAssertions.getResult(): there were errors/warnings but threshold to high");
                 result.setFailure(false);
@@ -166,6 +143,42 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
             result.setFailureMessage(e.getMessage());
         }
         return result;
+    }
+
+    private Tidy getTidy() {
+        try {
+            Tidy tidy;
+            if (log.isDebugEnabled()) {
+                log.debug(
+                        "Setting up tidy... doctype: {}, errors only: {}, error threshold: {},"
+                                + "warning threshold: {}, html mode: {}, xhtml mode: {}, xml mode: {}.",
+                        getDoctype(), isErrorsOnly(), getErrorThreshold(),
+                        getWarningThreshold(), isHTML(), isXHTML(), isXML());
+            }
+            tidy = new Tidy();
+            tidy.setInputEncoding(StandardCharsets.UTF_8.name());
+            tidy.setOutputEncoding(StandardCharsets.UTF_8.name());
+            tidy.setQuiet(false);
+            tidy.setShowWarnings(true);
+            tidy.setOnlyErrors(isErrorsOnly());
+            tidy.setDocType(getDoctype());
+            if (isXHTML()) {
+                tidy.setXHTML(true);
+            } else if (isXML()) {
+                tidy.setXmlTags(true);
+            }
+            tidy.setErrfile(getFilename());
+
+            if (log.isDebugEnabled()) {
+                log.debug(
+                        "Tidy instance created... err file: {}, tidy parser: {}",
+                        getFilename(), tidy);
+            }
+            return tidy;
+        } catch (Exception e) {
+            log.error("Unable to instantiate tidy parser", e);
+            return null;
+        }
     }
 
     /**
