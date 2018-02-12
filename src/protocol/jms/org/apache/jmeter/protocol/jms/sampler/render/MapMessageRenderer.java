@@ -52,8 +52,8 @@ public class MapMessageRenderer implements MessageRenderer<Map<String,Object>> {
                 obj = value;
             } else {
                 try {
-                    Class <?> clazz = Class.forName(type);
-                    Method method = clazz.getMethod("valueOf", new Class<?>[]{String.class});
+                    Class<?> clazz = Class.forName(type);
+                    Method method = clazz.getMethod("valueOf", String.class);
                     obj = method.invoke(clazz, value);
                 } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException
                         | IllegalArgumentException | InvocationTargetException e) {
