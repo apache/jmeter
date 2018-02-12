@@ -173,14 +173,12 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
             log.debug("mouse pressed, updating currentPath");
             currentPath = tree.getPathForLocation(e.getX(), e.getY());
         }
-        if (selRow != -1) {
-            if (isRightClick(e)) {
-                if (tree.getSelectionCount() < 2) {
-                    tree.setSelectionPath(currentPath);
-                }
-                log.debug("About to display pop-up");
-                displayPopUp(e);
+        if (selRow != -1 && isRightClick(e)) {
+            if (tree.getSelectionCount() < 2) {
+                tree.setSelectionPath(currentPath);
             }
+            log.debug("About to display pop-up");
+            displayPopUp(e);
         }
     }
 
