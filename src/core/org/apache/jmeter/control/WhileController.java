@@ -98,10 +98,8 @@ public class WhileController extends GenericController implements Serializable {
      */
     @Override
     public Sampler next(){
-        if (isFirst()){
-            if (endOfLoop(false)){
-                return null;
-            }
+        if (isFirst() && endOfLoop(false)) {
+            return null;
         }
         return super.next();
     }
