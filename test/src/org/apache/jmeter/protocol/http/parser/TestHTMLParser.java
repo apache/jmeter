@@ -33,7 +33,6 @@ import java.util.Properties;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
@@ -377,13 +376,9 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
             log.debug("file   {}", file);
             File f = findTestFile(file);
             byte[] buffer = new byte[(int) f.length()];
-            InputStream is = null;
-            try {
-                is = new FileInputStream(f);
+            try (InputStream is = new FileInputStream(f)){
                 int len = is.read(buffer);
                 assertEquals(len, buffer.length);
-            } finally {
-                IOUtils.closeQuietly(is);
             }
             Iterator<URL> result;
             if (c == null) {
