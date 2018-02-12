@@ -232,14 +232,12 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
     @Override
     public void hyperlinkUpdate(HyperlinkEvent e) {
-        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-            if (java.awt.Desktop.isDesktopSupported()) {
-                try {
-                    java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
-                } catch (Exception ex) {
-                    log.error("Error opening URL in browser: {}", e.getURL());
-                } 
-            }
+        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED && java.awt.Desktop.isDesktopSupported()) {
+            try {
+                java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
+            } catch (Exception ex) {
+                log.error("Error opening URL in browser: {}", e.getURL());
+            } 
         }
     }
 
