@@ -246,20 +246,22 @@ public class ProxyControl extends GenericController implements NonTestElement {
     static {
         if (CERT_ALIAS != null) {
             KEYSTORE_MODE = KeystoreMode.USER_KEYSTORE;
-            log.info("HTTP(S) Test Script Recorder will use the keystore '"+ CERT_PATH_ABS + "' with the alias: '" + CERT_ALIAS + "'");
+            log.info(
+                    "HTTP(S) Test Script Recorder will use the keystore '{}' with the alias: '{}'",
+                    CERT_PATH_ABS, CERT_ALIAS);
         } else {
             if (!KeyToolUtils.haveKeytool()) {
                 KEYSTORE_MODE = KeystoreMode.NONE;
             } else if (USE_DYNAMIC_KEYS) {
                 KEYSTORE_MODE = KeystoreMode.DYNAMIC_KEYSTORE;
                 log.info(
-                        "HTTP(S) Test Script Recorder SSL Proxy will use keys that support embedded 3rd party resources in file "
-                                + CERT_PATH_ABS);
+                        "HTTP(S) Test Script Recorder SSL Proxy will use keys that support embedded 3rd party resources in file {}",
+                        CERT_PATH_ABS);
             } else {
                 KEYSTORE_MODE = KeystoreMode.JMETER_KEYSTORE;
                 log.warn(
-                        "HTTP(S) Test Script Recorder SSL Proxy will use keys that may not work for embedded resources in file "
-                                + CERT_PATH_ABS);
+                        "HTTP(S) Test Script Recorder SSL Proxy will use keys that may not work for embedded resources in file {}",
+                        CERT_PATH_ABS);
             }
         }
     }
@@ -653,7 +655,9 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 placeSampler(sampler, testElements, myTarget);
             } else {
                 if(log.isDebugEnabled()) {
-                    log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
+                    log.debug(
+                            "Sample excluded based on url or content-type: {} - {}",
+                            result.getUrlAsString(), result.getContentType());
                 }
                 notifySampleListeners = notifyChildSamplerListenersOfFilteredSamples;
                 result.setSampleLabel("["+result.getSampleLabel()+"]");
@@ -664,9 +668,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
             notifySampleListeners(new SampleEvent(result, "WorkBench"));
         } else {
             log.debug(
-                    "Sample not delivered to Child Sampler Listener based on url or content-type: "
-                            + result.getUrlAsString() + " - "
-                            + result.getContentType());
+                    "Sample not delivered to Child Sampler Listener based on url or content-type: {} - {}",
+                    result.getUrlAsString(), result.getContentType());
         }
     }
 
@@ -704,7 +707,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                             try {
                                 authorization.setURL(sampler.getUrl().toExternalForm());
                             } catch (MalformedURLException e) {
-                                log.error("Error filling url on authorization, message:"+e.getMessage(), e);
+                                log.error("Error filling url on authorization, message: {}", e.getMessage(), e);
                                 authorization.setURL("${AUTH_BASE_URL}");//$NON-NLS-1$
                             }
                             // if HEADER_AUTHORIZATION contains "Basic"
@@ -774,7 +777,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                         };
             } catch (GeneralSecurityException e) {
                 log.error("Problem reading root CA from keystore", e);
-                return new String[]{"Problem with root certificate", e.getMessage()};
+                return new String[] { "Problem with root certificate", e.getMessage() };
             }
         }
         return new String[0]; // should not happen
@@ -823,14 +826,14 @@ public class ProxyControl extends GenericController implements NonTestElement {
         String sampleContentType = result.getContentType();
         if(sampleContentType == null || sampleContentType.length() == 0) {
             if(log.isDebugEnabled()) {
-                log.debug("No Content-type found for : " + result.getUrlAsString());
+                log.debug("No Content-type found for : {}", result.getUrlAsString());
             }
 
             return true;
         }
 
         if(log.isDebugEnabled()) {
-            log.debug("Content-type to filter : " + sampleContentType);
+            log.debug("Content-type to filter : {}", sampleContentType);
         }
 
         // Check if the include pattern is matched
@@ -857,7 +860,9 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private boolean testPattern(String expression, String sampleContentType, boolean expectedToMatch) {
         if(expression != null && expression.length() > 0) {
             if(log.isDebugEnabled()) {
-                log.debug("Testing Expression : " + expression + " on sampleContentType:"+sampleContentType+", expected to match:"+expectedToMatch);
+                log.debug(
+                        "Testing Expression : {} on sampleContentType: {}, expected to match: {}",
+                        expression, sampleContentType, expectedToMatch);
             }
 
             Pattern pattern = null;
@@ -867,7 +872,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                     return false;
                 }
             } catch (MalformedCachePatternException e) {
-                log.warn("Skipped invalid content pattern: " + expression, e);
+                log.warn("Skipped invalid content pattern: {}", expression, e);
             }
         }
         return true;
@@ -885,11 +890,11 @@ public class ProxyControl extends GenericController implements NonTestElement {
         List<JMeterTreeNode> authManagerNodes = jmeterTreeModel.getNodesOfType(AuthManager.class);
         if (authManagerNodes.isEmpty()) {
             try {
-                log.debug("Creating HTTP Authentication manager for authorization:"+authorization);
+                log.debug("Creating HTTP Authentication manager for authorization: {}", authorization);
                 AuthManager authManager = newAuthorizationManager(authorization);
                 jmeterTreeModel.addComponent(authManager, target);
             } catch (IllegalUserActionException e) {
-                log.error("Failed to add Authorization Manager to target node:" + target.getName(), e);
+                log.error("Failed to add Authorization Manager to target node: {}", target.getName(), e);
             }
         } else{
             AuthManager authManager=(AuthManager)authManagerNodes.get(0).getTestElement();
@@ -1256,8 +1261,9 @@ public class ProxyControl extends GenericController implements NonTestElement {
             if (testElement.getProperty(TestElement.GUI_CLASS) != null) {
                 return true;
             } else {
-                log.error("Cannot add element that lacks the " + TestElement.GUI_CLASS + " property "
-                        + " as testElement:" + testElement);
+                log.error(
+                        "Cannot add element that lacks the {} property as testElement: {}",
+                        TestElement.GUI_CLASS, testElement);
                 return false;
             }
         } else {
@@ -1335,7 +1341,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                     return true;
                 }
             } catch (MalformedCachePatternException e) {
-                log.warn("Skipped invalid pattern: " + item, e);
+                log.warn("Skipped invalid pattern: {}", item, e);
             }
         }
         return false;
@@ -1372,7 +1378,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 }
             }
         } catch (InvalidVariableException e) {
-            log.warn("Invalid variables included for replacement into recorded " + "sample", e);
+            log.warn("Invalid variables included for replacement into recorded sample", e);
         }
     }
 
@@ -1481,14 +1487,16 @@ public class ProxyControl extends GenericController implements NonTestElement {
             keyStore = getKeyStore(storePassword.toCharArray());
             X509Certificate  caCert = (X509Certificate) keyStore.getCertificate(CERT_ALIAS);
             if (caCert == null) {
-                log.error("Could not find key with alias " + CERT_ALIAS);
+                log.error("Could not find key with alias {}", CERT_ALIAS);
                 keyStore = null;
             } else {
                 caCert.checkValidity(new Date(System.currentTimeMillis()+DateUtils.MILLIS_PER_DAY));
             }
         } catch (Exception e) {
             keyStore = null;
-            log.error("Could not open keystore or certificate is not valid " + CERT_PATH_ABS + " " + e.getMessage(), e);
+            log.error(
+                    "Could not open keystore or certificate is not valid {} {}",
+                    CERT_PATH_ABS, e.getMessage(), e);
         }
     }
 
@@ -1512,41 +1520,40 @@ public class ProxyControl extends GenericController implements NonTestElement {
             } catch (IOException e) { // store is faulty, we need to recreate it
                 keyStore = null; // if cert is not valid, flag up to recreate it
                 if (e.getCause() instanceof UnrecoverableKeyException) {
-                    log.warn("Could not read key store " + e.getMessage() + "; cause: " + e.getCause().getMessage()
-                            + ", a new one will be created, ensure you install it in browser", e);
+                    log.warn(
+                            "Could not read key store {}; cause: {}, a new one will be created, ensure you install it in browser",
+                            e.getMessage(), e.getCause().getMessage(), e);
                 } else {
-                    log.warn("Could not open/read key store " + e.getMessage()
-                        + ", a new one will be created, ensure you install it in browser", e); // message includes the file name
+                    log.warn(
+                            "Could not open/read key store {}, a new one will be created, ensure you install it in browser",
+                            e.getMessage(), e); // message includes the file name
                 }
             } catch (CertificateExpiredException e) {
                 keyStore = null; // if cert is not valid, flag up to recreate it
                 log.warn(
-                        "Existing ROOT Certificate has expired, a new one will be created, ensure you install it in browser, message: "
-                                + e.getMessage(),
-                        e);
+                        "Existing ROOT Certificate has expired, a new one will be created, ensure you install it in browser, message: {}",
+                        e.getMessage(), e);
             } catch (CertificateNotYetValidException e) {
                 keyStore = null; // if cert is not valid, flag up to recreate it
                 log.warn(
-                        "Existing ROOT Certificate is not yet valid, a new one will be created, ensure you install it in browser, message: "
-                                + e.getMessage(),
-                        e);
+                        "Existing ROOT Certificate is not yet valid, a new one will be created, ensure you install it in browser, message: {}",
+                        e.getMessage(), e);
             } catch (GeneralSecurityException e) {
                 keyStore = null; // if cert is not valid, flag up to recreate it
                 log.warn(
-                        "Problem reading key store, a new one will be created, ensure you install it in browser, message: "
-                                + e.getMessage(),
-                        e);
+                        "Problem reading key store, a new one will be created, ensure you install it in browser, message: {}",
+                        e.getMessage(), e);
             }
         }
         if (keyStore == null) { // no existing file or not valid
             storePassword = RandomStringUtils.randomAlphanumeric(20); // Alphanum to avoid issues with command-line quoting
             keyPassword = storePassword; // we use same password for both
             setPassword(storePassword);
-            log.info("Creating HTTP(S) Test Script Recorder Root CA in "
-                    + CERT_PATH_ABS
-                    + ", ensure you install certificate in your Browser for recording");
+            log.info(
+                    "Creating HTTP(S) Test Script Recorder Root CA in {}, ensure you install certificate in your Browser for recording",
+                    CERT_PATH_ABS);
             KeyToolUtils.generateProxyCA(CERT_PATH, storePassword, CERT_VALIDITY);
-            log.info("Created keystore in " + CERT_PATH_ABS);
+            log.info("Created keystore in {}", CERT_PATH_ABS);
             keyStore = getKeyStore(storePassword.toCharArray()); // This should now work
         }
         final String sslDomains = getSslDomains().trim();
@@ -1556,13 +1563,13 @@ public class ProxyControl extends GenericController implements NonTestElement {
             for(String subject : domains) {
                 if (isValid(subject)) {
                     if (!keyStore.containsAlias(subject)) {
-                        log.info("Creating entry " + subject + " in " + CERT_PATH_ABS);
+                        log.info("Creating entry {} in {}", subject, CERT_PATH_ABS);
                         KeyToolUtils.generateHostCert(CERT_PATH, storePassword, subject, CERT_VALIDITY);
                         keyStore = getKeyStore(storePassword.toCharArray()); // reload to pick up new aliases
                         // reloading is very quick compared with creating an entry currently
                     }
                 } else {
-                    log.warn("Attempt to create an invalid domain certificate: " + subject);
+                    log.warn("Attempt to create an invalid domain certificate: {}", subject);
                 }
             }
         }
@@ -1579,7 +1586,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     KeyStore updateKeyStore(String port, String host) throws IOException, GeneralSecurityException {
         synchronized(CERT_PATH) { // ensure Proxy threads cannot interfere with each other
             if (!keyStore.containsAlias(host)) {
-                log.info(port + "Creating entry " + host + " in " + CERT_PATH_ABS);
+                log.info("{} Creating entry {} in {}", port, host, CERT_PATH_ABS);
                 KeyToolUtils.generateHostCert(CERT_PATH, storePassword, host, CERT_VALIDITY);
             }
             keyStore = getKeyStore(storePassword.toCharArray()); // reload after adding alias
@@ -1598,17 +1605,20 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 caCert.checkValidity(new Date(System.currentTimeMillis()+DateUtils.MILLIS_PER_DAY));
             } catch (Exception e) { // store is faulty, we need to recreate it
                 keyStore = null; // if cert is not valid, flag up to recreate it
-                log.warn("Could not open expected file or certificate is not valid " + CERT_PATH_ABS  + " " + e.getMessage(), e);
+                log.warn(
+                        "Could not open expected file or certificate is not valid {} {}",
+                        CERT_PATH_ABS, e.getMessage(), e);
             }
         }
         if (keyStore == null) { // no existing file or not valid
             storePassword = RandomStringUtils.randomAlphanumeric(20); // Alphanum to avoid issues with command-line quoting
             keyPassword = storePassword; // we use same password for both
             setPassword(storePassword);
-            log.info("Generating standard keypair in " + CERT_PATH_ABS);
+            log.info("Generating standard keypair in {}", CERT_PATH_ABS);
             if(!CERT_PATH.delete()){ // safer to start afresh
-                log.warn("Could not delete " + CERT_PATH.getAbsolutePath()
-                        + ", this could create issues, stop jmeter, ensure file is deleted and restart again");
+                log.warn(
+                        "Could not delete {}, this could create issues, stop jmeter, ensure file is deleted and restart again",
+                        CERT_PATH.getAbsolutePath());
             }
             KeyToolUtils.genkeypair(CERT_PATH, JMETER_SERVER_ALIAS, storePassword, CERT_VALIDITY, null, null);
             keyStore = getKeyStore(storePassword.toCharArray()); // This should now work
@@ -1617,10 +1627,10 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     private KeyStore getKeyStore(char[] password) throws GeneralSecurityException, IOException {
         try (InputStream in = new BufferedInputStream(new FileInputStream(CERT_PATH))) {
-            log.debug("Opened Keystore file: " + CERT_PATH_ABS);
+            log.debug("Opened Keystore file: {}", CERT_PATH_ABS);
             KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
             ks.load(in, password);
-            log.debug("Loaded Keystore file: " + CERT_PATH_ABS);
+            log.debug("Loaded Keystore file: {}", CERT_PATH_ABS);
             return ks;
         }
     }
