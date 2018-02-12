@@ -188,17 +188,16 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
      * @param inOutput The String to write to file
      */
     private void writeOutput(String inOutput) {
-        String lFilename = getFilename();
+        String filename = getFilename();
 
         // check if filename defined
-        if (StringUtils.isNotBlank(lFilename)) {
-            
-            try (FileWriter lOutputWriter = new FileWriter(lFilename, false)){
+        if (StringUtils.isNotBlank(filename)) {
+            try (FileWriter writer = new FileWriter(filename, false)){
                 // write to file
-                lOutputWriter.write(inOutput);
-                log.debug("writeOutput() -> output successfully written to file: {}", lFilename);
+                writer.write(inOutput);
+                log.debug("writeOutput() -> output successfully written to file: {}", filename);
             } catch (IOException ex) {
-                log.warn("writeOutput() -> could not write output to file: {}", lFilename, ex);
+                log.warn("writeOutput() -> could not write output to file: {}", filename, ex);
             }
         }
     }
