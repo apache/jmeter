@@ -294,31 +294,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             response.setSuccessful(true);// Allow testing of failure codes
         }
 
-        String toCheck; // The string to check (Url or data)
-        // What are we testing against?
-        if (isScopeVariable()){
-            toCheck = getThreadContext().getVariables().get(getVariableName());
-        } else if (isTestFieldResponseData()) {
-            toCheck = response.getResponseDataAsString(); // (bug25052)
-        } else if (isTestFieldResponseDataAsDocument()) {
-            toCheck = Document.getTextFromDocument(response.getResponseData()); 
-        } else if (isTestFieldResponseCode()) {
-            toCheck = response.getResponseCode();
-        } else if (isTestFieldResponseMessage()) {
-            toCheck = response.getResponseMessage();
-        } else if (isTestFieldRequestHeaders()) {
-            toCheck = response.getRequestHeaders();
-        } else if (isTestFieldRequestData()) {
-            toCheck = response.getSamplerData();
-        } else if (isTestFieldResponseHeaders()) {
-            toCheck = response.getResponseHeaders();
-        } else { // Assume it is the URL
-            toCheck = "";
-            final URL url = response.getURL();
-            if (url != null){
-                toCheck = url.toString();
-            }
-        }
+        String toCheck = getStringToCheck(response);
 
         result.setFailure(false);
         result.setError(false); 
@@ -405,6 +381,35 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             result.setFailureMessage("Bad test configuration " + e);
         }
         return result;
+    }
+
+    private String getStringToCheck(SampleResult response) {
+        String toCheck; // The string to check (Url or data)
+        // What are we testing against?
+        if (isScopeVariable()){
+            toCheck = getThreadContext().getVariables().get(getVariableName());
+        } else if (isTestFieldResponseData()) {
+            toCheck = response.getResponseDataAsString(); // (bug25052)
+        } else if (isTestFieldResponseDataAsDocument()) {
+            toCheck = Document.getTextFromDocument(response.getResponseData()); 
+        } else if (isTestFieldResponseCode()) {
+            toCheck = response.getResponseCode();
+        } else if (isTestFieldResponseMessage()) {
+            toCheck = response.getResponseMessage();
+        } else if (isTestFieldRequestHeaders()) {
+            toCheck = response.getRequestHeaders();
+        } else if (isTestFieldRequestData()) {
+            toCheck = response.getSamplerData();
+        } else if (isTestFieldResponseHeaders()) {
+            toCheck = response.getResponseHeaders();
+        } else { // Assume it is the URL
+            toCheck = "";
+            final URL url = response.getURL();
+            if (url != null){
+                toCheck = url.toString();
+            }
+        }
+        return toCheck;
     }
 
     /**
