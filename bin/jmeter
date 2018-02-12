@@ -39,7 +39,7 @@
 ##
 ##   HEAP             (Optional) Java runtime options for memory management
 ##                    used when JMeter is started.
-##                    Defaults to "-Xms1g -Xmx1g -X:MaxMetaspaceSize=256m"
+##                    Defaults to "-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"
 ##
 ##   JMETER_HOME      (Optional) May point to your JMeter install dir. If empty
 ##                    it will be set relativ to this script.
