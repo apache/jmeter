@@ -28,6 +28,7 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -190,7 +191,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
         String lFilename = getFilename();
 
         // check if filename defined
-        if ((lFilename != null) && (!"".equals(lFilename.trim()))) {
+        if (StringUtils.isNotBlank(lFilename)) {
             
             try (FileWriter lOutputWriter = new FileWriter(lFilename, false)){
                 // write to file
@@ -247,7 +248,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
      *            used
      */
     public void setDoctype(String inDoctype) {
-        if ((inDoctype == null) || (inDoctype.trim().isEmpty())) {
+        if (StringUtils.isAllBlank(inDoctype)) {
             setProperty(new StringProperty(DOCTYPE_KEY, DEFAULT_DOCTYPE));
         } else {
             setProperty(new StringProperty(DOCTYPE_KEY, inDoctype));
