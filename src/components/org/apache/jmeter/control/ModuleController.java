@@ -153,12 +153,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
      * @return true if replacement occurred at the time method is called
      */
     private boolean hasReplacementOccured() {
-        if(GuiPackage.getInstance() != null) {
-            // GUI Mode
-            return isRunningVersion();
-        } else {
-            return true;
-        }
+        return GuiPackage.getInstance() == null || isRunningVersion();
     }
 
     private void traverse(JMeterTreeNode node, List<?> nodePath, int level) {
