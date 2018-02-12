@@ -21,6 +21,7 @@ package org.apache.jmeter.assertions;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.assertions.gui.AssertionGui;
@@ -317,11 +318,11 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             return result.setResultForNull();
         }
 
-        boolean hasTrue = false;
-        ArrayList<String> allCheckMessage = new ArrayList<>();
         try {
             // Get the Matcher for this thread
             Perl5Matcher localMatcher = JMeterUtils.getMatcher();
+            boolean hasTrue = false;
+            List<String> allCheckMessage = new ArrayList<>();
             for (JMeterProperty jMeterProperty : getTestStrings()) {
                 String stringPattern = jMeterProperty.getStringValue();
                 Pattern pattern = null;
