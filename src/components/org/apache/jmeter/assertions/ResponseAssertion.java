@@ -343,7 +343,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 if (orTest) {
                     if (!pass) {
                         log.debug("Failed: {}", stringPattern);
-                        allCheckMessage.add(getFailText(stringPattern,toCheck));
+                        allCheckMessage.add(getFailText(stringPattern, toCheck));
                     } else {
                         hasTrue=true;
                         break;
@@ -354,7 +354,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                         result.setFailure(true);
                         String customMsg = getCustomFailureMessage();
                         if (StringUtils.isEmpty(customMsg)) {
-                            result.setFailureMessage(getFailText(stringPattern,toCheck));
+                            result.setFailureMessage(getFailText(stringPattern, toCheck));
                         } else {
                             result.setFailureMessage(customMsg);
                         }
