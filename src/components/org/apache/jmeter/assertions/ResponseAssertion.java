@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.assertions.gui.AssertionGui;
@@ -364,14 +365,10 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 }
             }
             if (orTest && !hasTrue){
-                StringBuilder errorMsg = new StringBuilder();
-                for(String tmp : allCheckMessage){
-                    errorMsg.append(tmp).append('\t');
-                }
                 result.setFailure(true);
                 String customMsg = getCustomFailureMessage();
                 if (StringUtils.isEmpty(customMsg)) {
-                    result.setFailureMessage(errorMsg.toString());
+                    result.setFailureMessage(allCheckMessage.stream().collect(Collectors.joining("\t", "", "\t")));
                 } else {
                     result.setFailureMessage(customMsg);
                 }
