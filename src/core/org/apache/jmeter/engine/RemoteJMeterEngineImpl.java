@@ -62,7 +62,8 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     private Properties remotelySetProperties;
 
     private RemoteJMeterEngineImpl(int localPort, int rmiRegistryPort) throws RemoteException {
-        super(localPort, RmiUtils.createClientSocketFactory(), RmiUtils.createServerSocketFactory()); // Create this object using the specified port (0 means anonymous)
+        // Create this object using the specified port (0 means anonymous)
+        super(localPort, RmiUtils.createClientSocketFactory(), RmiUtils.createServerSocketFactory()); 
         this.rmiRegistryPort = rmiRegistryPort;
         System.out.println("Created remote object: "+this.getRef().remoteToString());
     }
@@ -229,7 +230,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
      * @throws IllegalStateException if the caller is not the owner.
      */
     private void checkOwner(String methodName) {
-        if (ownerThread != null && ownerThread != Thread.currentThread()){
+        if (ownerThread != null && ownerThread != Thread.currentThread()) {
             String msg = "The engine is not owned by this thread - cannot call "+methodName;
             log.warn(msg);
             throw new IllegalStateException(msg);

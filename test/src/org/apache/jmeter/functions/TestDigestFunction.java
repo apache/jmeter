@@ -38,7 +38,7 @@ import org.junit.Test;
  *
  */
 public class TestDigestFunction extends JMeterTestCase {
-    protected AbstractFunction digest;    
+    protected AbstractFunction digest;
 
     private SampleResult result;
 
@@ -74,7 +74,9 @@ public class TestDigestFunction extends JMeterTestCase {
         params.add(new CompoundVariable("salt"));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
-        assertEquals("abc8c7a1c814c74d5882e527d21fabfccf480716df9d17bae73e5e767992d8a2a47033459a9ea91aca3186f75bfbe559419109bc44c1e6dfd618101fdc0beb1b", returnValue);
+        assertEquals(
+                "abc8c7a1c814c74d5882e527d21fabfccf480716df9d17bae73e5e767992d8a2a47033459a9ea91aca3186f75bfbe559419109bc44c1e6dfd618101fdc0beb1b",
+                returnValue);
     }  
     
     @Test
@@ -84,7 +86,9 @@ public class TestDigestFunction extends JMeterTestCase {
         params.add(new CompoundVariable("salt "));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
-        assertEquals("961451eb5870ded3fa484ad49fd1481ae3c6decdcc560200e70624a1d62ad0d1793edf3c8eccd0786bffab0b3e4421f54c7fd11a9e7461580352346d039b8e16", returnValue);
+        assertEquals(
+                "961451eb5870ded3fa484ad49fd1481ae3c6decdcc560200e70624a1d62ad0d1793edf3c8eccd0786bffab0b3e4421f54c7fd11a9e7461580352346d039b8e16",
+                returnValue);
     }  
     
     @Test
@@ -94,13 +98,15 @@ public class TestDigestFunction extends JMeterTestCase {
         params.add(new CompoundVariable("salt "));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
-        assertEquals("3968fd028934466fa095f6323c527148e87d7b74601d1db5f474748dd7c643b4f508e46beb29a405ec658a64c0f581461e99eca063414099af0b63dc890b5739", returnValue);
+        assertEquals(
+                "3968fd028934466fa095f6323c527148e87d7b74601d1db5f474748dd7c643b4f508e46beb29a405ec658a64c0f581461e99eca063414099af0b63dc890b5739",
+                returnValue);
     }  
     
     @Test
     public void testSha1() throws Exception {
-        params.add(new CompoundVariable("SHA-1"));        
-        params.add(new CompoundVariable("nofile"));        
+        params.add(new CompoundVariable("SHA-1"));
+        params.add(new CompoundVariable("nofile"));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
         assertEquals("4ea2ced10057872be25371cfe638d3b096c58f2f", returnValue);
@@ -108,38 +114,40 @@ public class TestDigestFunction extends JMeterTestCase {
     
     @Test
     public void testSha1Variable() throws Exception {
-        params.add(new CompoundVariable("SHA-1"));        
-        params.add(new CompoundVariable("nofile"));  
-        params.add(new CompoundVariable(""));  
+        params.add(new CompoundVariable("SHA-1"));
+        params.add(new CompoundVariable("nofile"));
+        params.add(new CompoundVariable(""));
         params.add(new CompoundVariable("true"));
-        params.add(new CompoundVariable("newVar"));      
+        params.add(new CompoundVariable("newVar"));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
         assertEquals("4EA2CED10057872BE25371CFE638D3B096C58F2F", returnValue);
     }
 
     @Test
-    public void testSha512Variable() throws Exception {        
+    public void testSha512Variable() throws Exception {
         params.add(new CompoundVariable("SHA-512"));
-        params.add(new CompoundVariable("nofile"));  
+        params.add(new CompoundVariable("nofile"));
         params.add(new CompoundVariable(""));  
         params.add(new CompoundVariable("true"));
         params.add(new CompoundVariable("newVar"));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
-        assertEquals("58DA94D45A97B35B31D7F76D2EBAC184BC4BDA512B966CDBE43FDE1CAE1CFAF89617082CA89928FB5DC1C75D60B93ADB5631F518F970CA6DCC196E1AFC678B8C", returnValue);
+        assertEquals(
+                "58DA94D45A97B35B31D7F76D2EBAC184BC4BDA512B966CDBE43FDE1CAE1CFAF89617082CA89928FB5DC1C75D60B93ADB5631F518F970CA6DCC196E1AFC678B8C",
+                returnValue);
     }
     
     @Test(expected=InvalidVariableException.class)
     public void testSha512Error() throws Exception {
-        params.add(new CompoundVariable("nofile"));        
+        params.add(new CompoundVariable("nofile"));
         digest.setParameters(params);
         digest.execute(result, null);
     }
     
     @Test(expected=InvalidVariableException.class)
     public void testSha1Error() throws Exception {
-        params.add(new CompoundVariable("SHA-1"));        
+        params.add(new CompoundVariable("SHA-1"));
         digest.setParameters(params);
         digest.execute(result, null);
     }

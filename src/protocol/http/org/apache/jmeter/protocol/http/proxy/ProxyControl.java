@@ -252,10 +252,14 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 KEYSTORE_MODE = KeystoreMode.NONE;
             } else if (USE_DYNAMIC_KEYS) {
                 KEYSTORE_MODE = KeystoreMode.DYNAMIC_KEYSTORE;
-                log.info("HTTP(S) Test Script Recorder SSL Proxy will use keys that support embedded 3rd party resources in file " + CERT_PATH_ABS);
+                log.info(
+                        "HTTP(S) Test Script Recorder SSL Proxy will use keys that support embedded 3rd party resources in file "
+                                + CERT_PATH_ABS);
             } else {
                 KEYSTORE_MODE = KeystoreMode.JMETER_KEYSTORE;
-                log.warn("HTTP(S) Test Script Recorder SSL Proxy will use keys that may not work for embedded resources in file " + CERT_PATH_ABS);
+                log.warn(
+                        "HTTP(S) Test Script Recorder SSL Proxy will use keys that may not work for embedded resources in file "
+                                + CERT_PATH_ABS);
             }
         }
     }
@@ -630,9 +634,11 @@ public class ProxyControl extends GenericController implements NonTestElement {
             if (filterContentType(result) && filterUrl(sampler)) {
                 JMeterTreeNode myTarget = findTargetControllerNode();
                 @SuppressWarnings("unchecked") // OK, because find only returns correct element types
-                Collection<ConfigTestElement> defaultConfigurations = (Collection<ConfigTestElement>) findApplicableElements(myTarget, ConfigTestElement.class, false);
+                Collection<ConfigTestElement> defaultConfigurations = (Collection<ConfigTestElement>) findApplicableElements(
+                        myTarget, ConfigTestElement.class, false);
                 @SuppressWarnings("unchecked") // OK, because find only returns correct element types
-                Collection<Arguments> userDefinedVariables = (Collection<Arguments>) findApplicableElements(myTarget, Arguments.class, true);
+                Collection<Arguments> userDefinedVariables = (Collection<Arguments>) findApplicableElements(
+                        myTarget, Arguments.class, true);
 
                 removeValuesFromSampler(sampler, defaultConfigurations);
                 replaceValues(sampler, testElements, userDefinedVariables);
@@ -657,7 +663,10 @@ public class ProxyControl extends GenericController implements NonTestElement {
             // SampleEvent is not passed JMeterVariables, because they don't make sense for Proxy Recording
             notifySampleListeners(new SampleEvent(result, "WorkBench"));
         } else {
-            log.debug("Sample not delivered to Child Sampler Listener based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
+            log.debug(
+                    "Sample not delivered to Child Sampler Listener based on url or content-type: "
+                            + result.getUrlAsString() + " - "
+                            + result.getContentType());
         }
     }
 
@@ -1511,20 +1520,31 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 }
             } catch (CertificateExpiredException e) {
                 keyStore = null; // if cert is not valid, flag up to recreate it
-                log.warn("Existing ROOT Certificate has expired, a new one will be created, ensure you install it in browser, message: " + e.getMessage(), e);
+                log.warn(
+                        "Existing ROOT Certificate has expired, a new one will be created, ensure you install it in browser, message: "
+                                + e.getMessage(),
+                        e);
             } catch (CertificateNotYetValidException e) {
                 keyStore = null; // if cert is not valid, flag up to recreate it
-                log.warn("Existing ROOT Certificate is not yet valid, a new one will be created, ensure you install it in browser, message: " + e.getMessage(), e);
+                log.warn(
+                        "Existing ROOT Certificate is not yet valid, a new one will be created, ensure you install it in browser, message: "
+                                + e.getMessage(),
+                        e);
             } catch (GeneralSecurityException e) {
                 keyStore = null; // if cert is not valid, flag up to recreate it
-                log.warn("Problem reading key store, a new one will be created, ensure you install it in browser, message: " + e.getMessage(), e);
+                log.warn(
+                        "Problem reading key store, a new one will be created, ensure you install it in browser, message: "
+                                + e.getMessage(),
+                        e);
             }
         }
         if (keyStore == null) { // no existing file or not valid
             storePassword = RandomStringUtils.randomAlphanumeric(20); // Alphanum to avoid issues with command-line quoting
             keyPassword = storePassword; // we use same password for both
             setPassword(storePassword);
-            log.info("Creating HTTP(S) Test Script Recorder Root CA in " + CERT_PATH_ABS+", ensure you install certificate in your Browser for recording");
+            log.info("Creating HTTP(S) Test Script Recorder Root CA in "
+                    + CERT_PATH_ABS
+                    + ", ensure you install certificate in your Browser for recording");
             KeyToolUtils.generateProxyCA(CERT_PATH, storePassword, CERT_VALIDITY);
             log.info("Created keystore in " + CERT_PATH_ABS);
             keyStore = getKeyStore(storePassword.toCharArray()); // This should now work
@@ -1587,7 +1607,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
             setPassword(storePassword);
             log.info("Generating standard keypair in " + CERT_PATH_ABS);
             if(!CERT_PATH.delete()){ // safer to start afresh
-                log.warn("Could not delete "+CERT_PATH.getAbsolutePath()+", this could create issues, stop jmeter, ensure file is deleted and restart again");
+                log.warn("Could not delete " + CERT_PATH.getAbsolutePath()
+                        + ", this could create issues, stop jmeter, ensure file is deleted and restart again");
             }
             KeyToolUtils.genkeypair(CERT_PATH, JMETER_SERVER_ALIAS, storePassword, CERT_VALIDITY, null, null);
             keyStore = getKeyStore(storePassword.toCharArray()); // This should now work
