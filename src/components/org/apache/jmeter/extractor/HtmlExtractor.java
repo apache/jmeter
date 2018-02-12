@@ -76,7 +76,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         if (previousResult == null) {
             return;
         }
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("HtmlExtractor {}: processing result", getName());
         }
         // Fetch some variables
@@ -167,7 +167,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         List<String> result = new ArrayList<>();
         if (isScopeVariable()){
             String inputString=vars.get(getVariableName());
-            if(!StringUtils.isEmpty(inputString)) {
+            if (!StringUtils.isEmpty(inputString)) {
                 getExtractorImpl().extract(expression, attribute, matchNumber, inputString, result, found, "-1");
             } else {
                 if (inputString==null && log.isWarnEnabled()) {
