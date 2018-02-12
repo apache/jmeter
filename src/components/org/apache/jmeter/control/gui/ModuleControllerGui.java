@@ -346,9 +346,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         TreeNode[] filteredPath = new TreeNode[path.length-1];
         
         //ignore first element of path - WorkBench, (why WorkBench is appearing in the path ???)
-        for (int i = 1; i < path.length; i++){
-            filteredPath[i-1] = path[i];
-        }
+        System.arraycopy(path, 1, filteredPath, 0, path.length - 1);
         
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) moduleToRunTreeNodes.getModel().getRoot();
         //treepath of test plan tree and module to run tree cannot be compared directly - moduleToRunTreeModel.getPathToRoot()
