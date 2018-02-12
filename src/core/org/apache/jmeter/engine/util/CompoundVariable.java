@@ -79,11 +79,10 @@ public class CompoundVariable implements Function {
                 }
             }
             
-            final int functionCount = functions.size();
-            if (functionCount == 0) {
+            if (functions.isEmpty()) {
                 log.warn("Did not find any functions");
             } else {
-                log.debug("Function count: {}", functionCount);
+                log.debug("Function count: {}", functions.size());
             }
         } catch (Exception err) {
             log.error("Exception occurred in static initialization of CompoundVariable.", err);
@@ -126,7 +125,7 @@ public class CompoundVariable implements Function {
     /** {@inheritDoc} */
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) {
-        if (compiledComponents == null || compiledComponents.size() == 0) {
+        if (compiledComponents == null || compiledComponents.isEmpty()) {
             return ""; // $NON-NLS-1$
         }
         
@@ -180,7 +179,7 @@ public class CompoundVariable implements Function {
         }
 
         compiledComponents = functionParser.compileString(parameters);
-        if (compiledComponents.size() > 1 || !(compiledComponents.get(0) instanceof String)) {
+        if (!compiledComponents.isEmpty() || !(compiledComponents.get(0) instanceof String)) {
             hasFunction = true;
         }
         permanentResults = null; // To be calculated and cached on first execution

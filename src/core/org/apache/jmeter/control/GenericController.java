@@ -313,7 +313,7 @@ public class GenericController extends AbstractTestElement implements Controller
         if (current < subControllersAndSamplers.size()) {
             return subControllersAndSamplers.get(current);
         }
-        if (subControllersAndSamplers.size() == 0) {
+        if (subControllersAndSamplers.isEmpty()) {
             setDone(true);
             throw new NextIsNullException();
         }

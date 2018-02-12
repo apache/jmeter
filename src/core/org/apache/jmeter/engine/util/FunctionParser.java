@@ -95,7 +95,7 @@ class FunctionParser {
             result.clear();
             result.add(value);
         }
-        if (result.size() == 0) {
+        if (result.isEmpty()) {
             result.add("");
         }
         return result;

@@ -122,7 +122,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
     public void testEnded(String host) {
         log.info("Test Ended on {}", host);
         try {
-            if (sampleStore.size() != 0) {
+            if (!sampleStore.isEmpty()) {
                 sendBatch();
             }
             listener.testEnded(host);
@@ -189,7 +189,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
     }
 
     private void sendBatch() throws RemoteException {
-        if (sampleStore.size() > 0) {
+        if (!sampleStore.isEmpty()) {
             listener.processBatch(sampleStore);
             sampleStore.clear();
             sampleTable.clear();
