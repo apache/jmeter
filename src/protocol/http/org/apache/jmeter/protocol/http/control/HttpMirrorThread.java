@@ -297,7 +297,10 @@ public class HttpMirrorThread implements Runnable {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         // We use multi-line mask so can prefix the line with ^
         String expression = "^" + headerName + ":\\s+([^\\r\\n]+)"; // $NON-NLS-1$ $NON-NLS-2$
-        Pattern pattern = JMeterUtils.getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
+        Pattern pattern = JMeterUtils.getPattern(expression,
+                Perl5Compiler.READ_ONLY_MASK
+                        | Perl5Compiler.CASE_INSENSITIVE_MASK
+                        | Perl5Compiler.MULTILINE_MASK);
         if(localMatcher.contains(requestHeaders, pattern)) {
             // The value is in the first group, group 0 is the whole match
             return localMatcher.getMatch().group(1);
@@ -311,7 +314,10 @@ public class HttpMirrorThread implements Runnable {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         // The headers and body are divided by a blank line (the \r is to allow for the CR before LF)
         String regularExpression = "^\\r$"; // $NON-NLS-1$
-        Pattern pattern = JMeterUtils.getPattern(regularExpression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
+        Pattern pattern = JMeterUtils.getPattern(regularExpression,
+                Perl5Compiler.READ_ONLY_MASK
+                        | Perl5Compiler.CASE_INSENSITIVE_MASK
+                        | Perl5Compiler.MULTILINE_MASK);
 
         PatternMatcherInput input = new PatternMatcherInput(stringToCheck);
         if(localMatcher.contains(input, pattern)) {

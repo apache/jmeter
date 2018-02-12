@@ -153,7 +153,10 @@ public class MultipartUrlConfig implements Serializable {
     private String getHeaderValue(String headerName, String multiPart) {
         String regularExpression = headerName + "\\s*:\\s*(.*)$"; //$NON-NLS-1$
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
-        Pattern pattern = JMeterUtils.getPattern(regularExpression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
+        Pattern pattern = JMeterUtils.getPattern(regularExpression,
+                Perl5Compiler.READ_ONLY_MASK
+                        | Perl5Compiler.CASE_INSENSITIVE_MASK
+                        | Perl5Compiler.MULTILINE_MASK);
         if(localMatcher.contains(multiPart, pattern)) {
             return localMatcher.getMatch().group(1).trim();
         }
