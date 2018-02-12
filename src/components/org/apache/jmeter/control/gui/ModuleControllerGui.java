@@ -140,7 +140,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void setSelectionPaths(TreePath[] pPaths) {
                 DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) pPaths[pPaths.length-1].getLastPathComponent();
-                if(isSelectedPathAllowed(lastSelected)) {
+                if (isSelectedPathAllowed(lastSelected)) {
                     super.setSelectionPaths(pPaths);
                 }
             }
@@ -148,7 +148,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void addSelectionPath(TreePath path) {
                 DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) path.getLastPathComponent();
-                if(isSelectedPathAllowed(lastSelected)) {
+                if (isSelectedPathAllowed(lastSelected)) {
                     super.addSelectionPath(path);
                 }
             }
@@ -156,7 +156,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void addSelectionPaths(TreePath[] paths) {
                 DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) paths[paths.length-1].getLastPathComponent();
-                if(isSelectedPathAllowed(lastSelected)) {
+                if (isSelectedPathAllowed(lastSelected)) {
                     super.addSelectionPaths(paths);
                 }
             }
@@ -375,7 +375,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             //expand Module to run tree to selected node and set selection path to it
             this.focusSelectedOnTree(selected);
         }
-        if(!hasAtLeastOneController) {
+        if (!hasAtLeastOneController) {
             warningLabel.setText(JMeterUtils.getResString("module_controller_warning_no_controller"));
             warningLabel.setVisible(true);
         }
