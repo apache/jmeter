@@ -75,7 +75,7 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
                             }
                             return Arrays.asList(new String[] { threadName });
                         } else {
-                            return Collections.<String>emptyList();
+                            return Collections.emptyList();
                         }
                     }
                 }, new GraphValueSelector() {
