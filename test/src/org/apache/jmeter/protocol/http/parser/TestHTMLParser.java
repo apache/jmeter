@@ -26,12 +26,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.util.JMeterUtils;
@@ -423,16 +425,12 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
 
     // Get expected results as a List
     private static List<String> getFile(String file) throws Exception {
-        ArrayList<String> al = new ArrayList<>();
-        if (file != null && file.length() > 0) {
-            BufferedReader br = new BufferedReader(new FileReader(findTestFile(file)));
-            String line = br.readLine();
-            while (line != null) {
-                al.add(line);
-                line = br.readLine();
-            }
-            br.close();
+        if (file == null || file.isEmpty()) {
+            return Collections.emptyList();
         }
-        return al;
+        try (FileReader fr = new FileReader(findTestFile(file));
+                BufferedReader br = new BufferedReader(fr)) {
+            return br.lines().collect(Collectors.toList());
+        }
     }
 }
