@@ -19,9 +19,10 @@
 package org.apache.jmeter.gui;
 
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -65,7 +66,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
 
     private final UndoManager manager = new UndoManager();
 
-    private final Stack<SimpleCompoundEdit> transactions = new Stack<>();
+    private final Deque<SimpleCompoundEdit> transactions = new ArrayDeque<>();
 
     private UndoHistoryItem lastKnownState = null;
 
