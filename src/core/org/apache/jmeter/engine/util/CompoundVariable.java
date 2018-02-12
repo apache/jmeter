@@ -195,7 +195,7 @@ public class CompoundVariable implements Function {
     static Object getNamedFunction(String functionName) throws InvalidVariableException {
         if (functions.containsKey(functionName)) {
             try {
-                return ((Class<?>) functions.get(functionName)).newInstance();
+                return functions.get(functionName).newInstance();
             } catch (Exception e) {
                 log.error("Exception occurred while instantiating a function: {}", functionName, e); // $NON-NLS-1$
                 throw new InvalidVariableException(e);
