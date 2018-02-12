@@ -403,10 +403,11 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
                     DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(cur);
                     parent.add(newNode);
                     buildTreeNodeModel(cur, level + 1, newNode);
+                    final boolean isController = te instanceof Controller
+                            && !(te instanceof ModuleController
+                                    || te instanceof AbstractThreadGroup);
                     hasAtLeastOneController = 
-                            hasAtLeastOneController || (
-                                    te instanceof Controller && 
-                                    !(te instanceof ModuleController || te instanceof AbstractThreadGroup));
+                            hasAtLeastOneController || isController;
                 } else if (te instanceof TestPlan) {
                     ((DefaultMutableTreeNode) moduleToRunTreeModel.getRoot())
                             .setUserObject(cur);
