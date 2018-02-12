@@ -152,7 +152,10 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
             log.debug("Exception getting interfaces.", e);
         }
 
-        classNameLabeledChoice = new JLabeledChoice(JMeterUtils.getResString("protocol_java_classname"), possibleClasses.toArray(ArrayUtils.EMPTY_STRING_ARRAY), true, false);
+        classNameLabeledChoice = new JLabeledChoice(
+                JMeterUtils.getResString("protocol_java_classname"),
+                possibleClasses.toArray(ArrayUtils.EMPTY_STRING_ARRAY), true,
+                false);
         classNameLabeledChoice.addChangeListener(this);
 
         warningLabel.setForeground(Color.RED);

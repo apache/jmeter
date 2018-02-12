@@ -43,22 +43,24 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Example of how to use it is provided in the main method. An example is
  * provided below.
- * <pre>
+ * <pre>{@code
  * testf = new LogFilter();
- * String[] incl = { &quot;hello.html&quot;, &quot;index.html&quot;, &quot;/index.jsp&quot; };
- * String[] thefiles = { &quot;/test/hello.jsp&quot;, &quot;/test/one/hello.html&quot;, &quot;hello.jsp&quot;, &quot;hello.htm&quot;, &quot;/test/open.jsp&quot;,
- *      &quot;/test/open.html&quot;, &quot;/index.jsp&quot;, &quot;/index.jhtml&quot;, &quot;newindex.jsp&quot;, &quot;oldindex.jsp&quot;, &quot;oldindex1.jsp&quot;,
- *      &quot;oldindex2.jsp&quot;, &quot;oldindex3.jsp&quot;, &quot;oldindex4.jsp&quot;, &quot;oldindex5.jsp&quot;, &quot;oldindex6.jsp&quot;, &quot;/test/index.htm&quot; };
+ * String[] incl = { "hello.html", "index.html", "/index.jsp" };
+ * String[] theFiles = {
+ *     "/test/hello.jsp", "/test/one/hello.html", "hello.jsp", "hello.htm", "/test/open.jsp",
+ *     "/test/open.html", "/index.jsp", "/index.jhtml", "newindex.jsp", "oldindex.jsp", "oldindex1.jsp",
+ *     "oldindex2.jsp", "oldindex3.jsp", "oldindex4.jsp", "oldindex5.jsp", "oldindex6.jsp", "/test/index.htm"
+ * };
  * testf.excludeFiles(incl);
- * System.out.println(&quot; ------------ exclude test -------------&quot;);
- * for (int idx = 0; idx &lt; thefiles.length; idx++) {
- *  boolean fl = testf.isFiltered(thefiles[idx]);
- *  String line = testf.filter(thefiles[idx]);
+ * System.out.println(" ------------ exclude test -------------");
+ * for (String theFile : theFiles) {
+ *  boolean fl = testf.isFiltered(theFile);
+ *  String line = testf.filter(theFile);
  *  if (line != null) {
- *     System.out.println(&quot;the file: &quot; + line);
+ *     System.out.println("the file: " + line);
  *  }
  * }
- * </pre>
+ * }</pre>
  *
  * As a general note. Both isFiltered and filter() have to be called. Calling
  * either one will not produce the desired result. isFiltered(string) will tell

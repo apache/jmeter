@@ -264,13 +264,38 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     public StatGraphVisualizer() {
         super();
         model = createObjectTableModel();
-        eltList.add(new BarGraph(JMeterUtils.getResString("average"), true, new Color(202, 0, 0)));
-        eltList.add(new BarGraph(JMeterUtils.getResString("aggregate_report_median"), false, new Color(49, 49, 181)));
-        eltList.add(new BarGraph(MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct1_line"),new Object[]{PCT1_LABEL}), false, new Color(42, 121, 42)));
-        eltList.add(new BarGraph(MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct2_line"),new Object[]{PCT2_LABEL}), false, new Color(242, 226, 8)));
-        eltList.add(new BarGraph(MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct3_line"),new Object[]{PCT3_LABEL}), false, new Color(202, 10 , 232)));
-        eltList.add(new BarGraph(JMeterUtils.getResString("aggregate_report_min"), false, Color.LIGHT_GRAY));
-        eltList.add(new BarGraph(JMeterUtils.getResString("aggregate_report_max"), false, Color.DARK_GRAY));
+        eltList.add(new BarGraph(JMeterUtils.getResString("average"), true,
+                new Color(202, 0, 0)));
+        eltList.add(new BarGraph(
+                JMeterUtils.getResString("aggregate_report_median"), false,
+                new Color(49, 49, 181)));
+        eltList.add(
+                new BarGraph(
+                        MessageFormat.format(
+                                JMeterUtils.getResString(
+                                        "aggregate_report_xx_pct1_line"),
+                                new Object[] { PCT1_LABEL }),
+                        false, new Color(42, 121, 42)));
+        eltList.add(
+                new BarGraph(
+                        MessageFormat.format(
+                                JMeterUtils.getResString(
+                                        "aggregate_report_xx_pct2_line"),
+                                new Object[] { PCT2_LABEL }),
+                        false, new Color(242, 226, 8)));
+        eltList.add(
+                new BarGraph(
+                        MessageFormat.format(
+                                JMeterUtils.getResString(
+                                        "aggregate_report_xx_pct3_line"),
+                                new Object[] { PCT3_LABEL }),
+                        false, new Color(202, 10, 232)));
+        eltList.add(
+                new BarGraph(JMeterUtils.getResString("aggregate_report_min"),
+                        false, Color.LIGHT_GRAY));
+        eltList.add(
+                new BarGraph(JMeterUtils.getResString("aggregate_report_max"),
+                        false, Color.DARK_GRAY));
         clearData();
         init();
     }

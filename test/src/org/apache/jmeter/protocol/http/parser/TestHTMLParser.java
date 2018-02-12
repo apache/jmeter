@@ -49,7 +49,8 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
     private static final String UA_IE55     = "Mozilla/4.0 (compatible;MSIE 5.5; Windows 98)";
     private static final String UA_IE6      = "Mozilla/5.0 (Windows; U; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)";
     private static final String UA_IE7      = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
-    private static final String UA_IE8      = "Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)";
+    private static final String UA_IE8      = "Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; "
+            + "GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)";
     private static final String UA_IE9      = "Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US))";
     private static final String UA_IE10     = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)";
 
@@ -359,8 +360,11 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
         
         public void testSpecificParserList() throws Exception {
             HTMLParser p = (HTMLParser) BaseParser.getParser(parserName);
-            filetest(p, SPECIFIC_PARSER_TESTS[testNumber].fileName, SPECIFIC_PARSER_TESTS[testNumber].baseURL, SPECIFIC_PARSER_TESTS[testNumber].expectedList,
-                    new ArrayList<URLString>(), true, SPECIFIC_PARSER_TESTS[testNumber].userAgent);
+            filetest(p, SPECIFIC_PARSER_TESTS[testNumber].fileName,
+                    SPECIFIC_PARSER_TESTS[testNumber].baseURL,
+                    SPECIFIC_PARSER_TESTS[testNumber].expectedList,
+                    new ArrayList<URLString>(), true,
+                    SPECIFIC_PARSER_TESTS[testNumber].userAgent);
         }
 
 
