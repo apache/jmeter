@@ -412,6 +412,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     tr.addError(theClazz, cause);
                 } else {
                     tr.addError(theClazz, e);
+                    log.warn("caught exception", e);
                 }
             } catch (IllegalAccessException | IllegalArgumentException e) {
                 tr.addError(theClazz, e);
