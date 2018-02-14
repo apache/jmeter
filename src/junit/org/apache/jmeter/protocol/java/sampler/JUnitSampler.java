@@ -410,6 +410,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     tr.addFailure(theClazz, afe);
                 } else if (cause != null) {
                     tr.addError(theClazz, cause);
+                    log.warn("caught exception", cause);
                 } else {
                     tr.addError(theClazz, e);
                     log.warn("caught exception", e);
