@@ -3130,6 +3130,7 @@ run JMeter unless all the JMeter jars are added.
   </taskdef>
   <jacoco:coverage destfile="reports/jacoco.exec">
   <junit fork="true"
+      forkmode="once"
       dir="${basedir}/bin"
       showoutput="${test.showoutput}"
       printsummary="on">
