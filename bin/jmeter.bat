@@ -126,10 +126,14 @@ if %current_minor% LSS %minimal_minor% (
     goto pause
 )
 
-if .%JM_LAUNCH% == . set JM_LAUNCH=java.exe
+if not defined JM_LAUNCH (
+    set JM_LAUNCH=java.exe
+)
 
 if exist jmeter.bat goto winNT1
-if .%JMETER_BIN% == . set JMETER_BIN=%~dp0
+if not defined JMETER_BIN (
+    set JMETER_BIN=%~dp0
+)
 
 :winNT1
 rem On NT/2K grab all arguments at once
