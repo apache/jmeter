@@ -165,6 +165,7 @@ Summary
 <h3>General</h3>
 <ul>
   <li><bug>62107</bug>JMeter fails to start under Windows when <code>JM_LAUNCH</code> contains spaces</li>
+  <li><bug>62110</bug>A broken junit class (due to missing dependency) breaks JMeter menus. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -176,6 +177,7 @@ Summary
     <li>Graham Russell (graham at ham1.co.uk)</li>
     <li>orimarko at gmail.com</li>
     <li>Davide Angelocola (davide.angelocola at fisglobal.com)</li>
+    <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
