@@ -452,9 +452,7 @@ public final class ClassFinder {
                     String strEntry = entries.nextElement().toString();
                     if (strEntry.endsWith(DOT_CLASS)) {
                         String fixedClassName = fixClassName(strEntry);
-                        if (filter.accept(fixedClassName)) {
-                            listClasses.add(fixedClassName);
-                        }
+                        applyFiltering(listClasses, filter, fixedClassName);
                     }
                 }
             } catch (IOException e) {
@@ -481,10 +479,25 @@ public final class ClassFinder {
                 String className = path.substring(strPathElement.length() + 1,
                         path.lastIndexOf('.')) // $NON-NLS-1$
                         .replace(File.separator.charAt(0), '.');// $NON-NLS-1$
-                if (filter.accept(className)) {
-                    listClasses.add(className);
-                }
+                applyFiltering(listClasses, filter, className);
             }
+        }
+    }
+
+    /**
+     * Run {@link ClassFilter#accept(String)} on className and add to listClasses if accept returns true
+     * In case of Throwable, className will not be added 
+     * @param classesSet Set of class names
+     * @param filter {@link ClassFilter}
+     * @param className Full class name
+     */
+    private static void applyFiltering(Set<String> classesSet, ClassFilter filter, String className) {
+        try {
+            if (filter.accept(className)) {
+                classesSet.add(className);
+            }
+        } catch (Throwable e) { // NOSONAR : We need to trap also Errors
+            log.error("Error filtering class {}, it will be ignored", className, e);
         }
     }
 
