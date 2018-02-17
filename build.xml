@@ -2148,17 +2148,17 @@ run JMeter unless all the JMeter jars are added.
                It will be empty if the sigs exist; if not it will be XX which will be ignored by Maven
           -->
           <!-- If packaging == pom, this will just upload the pom twice. Simpler than trying to conditionalise. -->
-          <arg value="-D${XX}files=${maven.dir}/@{stem}.${packaging}.asc,${maven.dir}/@{stem}.pom.asc"/>
-          <arg value="-D${XX}types=${packaging}.asc,pom.asc"/>
+          <arg value="-D${XX}files=${maven.dir}/@{stem}.${packaging}.asc,${maven.dir}/@{stem}.pom.asc,${maven.dir}/@{stem}-sources.jar.asc,${maven.dir}/@{stem}-javadoc.jar.asc"/>
+          <arg value="-D${XX}types=${packaging}.asc,pom.asc,-sources.jar.asc,-javadoc.jar.asc"/>
           <arg value="-D${XX}classifiers=,"/>
-        	
+<!--
           <arg value="-D${artifact_has_source}files=${maven.dir}/@{stem}-sources.jar.asc"/>
           <arg value="-D${artifact_has_source}types=-sources.jar.asc"/>
           <arg value="-D${artifact_has_source}classifiers="/>
           <arg value="-D${artifact_has_javadoc}files=${maven.dir}/@{stem}-javadoc.jar.asc"/>
           <arg value="-D${artifact_has_javadoc}types=-javadoc.jar.asc"/>
           <arg value="-D${artifact_has_javadoc}classifiers="/>
-
+-->
           <!-- Need at least version 2.7 of the plugin to upload additional files-->
           <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy-file"/>
         </java>
