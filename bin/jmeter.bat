@@ -190,7 +190,13 @@ if not defined JMETER_COMPLETE_ARGS (
     set ARGS=
 )
 
-%JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
+if defined JM_START (
+    set "_JM_START=%JM_START% %JM_LAUNCH%"
+) else (
+    set "_JM_START=%JM_LAUNCH%"
+)
+
+%_JM_START% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
 rem If the errorlevel is not zero, then display it and pause
 
