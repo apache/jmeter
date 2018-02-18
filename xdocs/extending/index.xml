@@ -200,7 +200,7 @@ config element can provide <b>getXXX()</b> and <b>setXXX()</b> methods, but thes
 
 to <b>getProperty()</b> and <b>setProperty()</b>, probably using static Strings as keys in the Map.
 
-<br/>You can store any type of object, provided the objects are clonable and Saveable
+<br/>You can store any type of object, provided the objects are cloneable and Saveable
 
 (Strings, Integer, Long, Double, Float are all good in this regard).
 
