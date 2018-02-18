@@ -4871,7 +4871,7 @@ requests, use this timer.</p></description>
 of the time intervals occurring near a particular value.  
 The total delay is the sum of the Gaussian distributed value (with mean <code>0.0</code> and standard deviation <code>1.0</code>) times
 the deviation value you specify, and the offset value.
-Another way to explain it, in Gaussian Random Timer, the variation around constant offset has a gaussian curve distribution. 
+Another way to explain it, in Gaussian Random Timer, the variation around constant offset has a Gaussian curve distribution. 
 
 </p></description>
 
@@ -4945,18 +4945,18 @@ Note that the throughput value should not be changed too often during a test
 <component name="Precise Throughput Timer" index="&sect-num;.6.5" width="523" height="318" screenshot="timers/precise_throughput_timer.png">
 <description><p>This timer introduces variable pauses, calculated to keep the total throughput (e.g. in terms of samples per minute) as close as possible to a give figure. Of course the throughput will be lower if the server is not capable of handling it, or if other timers, or if there's not enough threads, or time-consuming test elements prevent it.</p>
 <p>Although the Timer is called Precise Throughput Timer, it does not aim to produce precisely the same number of samples over one-second intervals during the test.</p>
-<p>The timer works best for rates under 36000 requests/hour, however your milage might vary (see monitoring section below if your goals are
+<p>The timer works best for rates under 36000 requests/hour, however your mileage might vary (see monitoring section below if your goals are
     vastly different).</p>
 
 <h4>Best location of a Precise Throughput Timer in a Test Plan</h4>
 <p>As you might know, the timers are inherited by all the siblings and their child elements. That is why one of the best places for
-    <code>Precise Throughput Timer</code> is under the first element in a test loop. For instance, you might add a dummy sampler at the beginnig,
+    <code>Precise Throughput Timer</code> is under the first element in a test loop. For instance, you might add a dummy sampler at the beginning,
     and place the timer under that dummy sampler</p>
 
 <h4>Produced schedule</h4>
 <p><code>Precise Throughput Timer</code> models <a href="https://en.wikipedia.org/wiki/Poisson_point_process">Poisson arrivals</a> schedule. That schedule often happens in a real-life, so it makes sense to use that for load testing.
     For instance, it naturally might generate samples that are close together thus it might reveal concurrency issues. Even if you manage to generate Poisson arrivals
-    with <complink name="Poisson Random Timer"/>, it would be suseptible to the issues listed below. For instance, true Poisson arrivals might have indefinitely long
+    with <complink name="Poisson Random Timer"/>, it would be susceptible to the issues listed below. For instance, true Poisson arrivals might have indefinitely long
     pause, and that is not practical for load testing. For instance, "regular" Poisson arrivals with 1 per second rate might end up with 50 samples over 60 second long test.</p>
 <p><complink name="Constant Throughput Timer"/> converges to the specified rate, however it tends to produce samples at even intervals.</p>
 
@@ -4994,7 +4994,7 @@ the required load.</p>
     results in lots of time spent on the test runs. It might require to adjust threads and delays again when new application version arrives.</p>
 <p><code>Precise Throughput Timer</code> enables to set throughput goal and go for it no matter how well application performs. In order to do that, <code>Precise Throughput Timer</code>
     creates a schedule at the test startup, then it uses that schedule to release threads. The main driver for the think times and number of threads should be business
-    requirements, not the desire to match troughput somehow.</p>
+    requirements, not the desire to match throughput somehow.</p>
 <p>For instance, if you application is used by support engineers in a call center. Suppose there are 2 engineers in the call center, and the target throughput is 1 per minute.
     Suppose it takes 4 minutes for the engineer to read and review the web page. For that case you should set 2 threads in the group, use 4 minutes
     for think time delays, and specify 1 per minute in <code>Precise Throughput Timer</code>. Of course it would result in something around 2samples/4minutes=0.5 per minute
