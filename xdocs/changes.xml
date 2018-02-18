@@ -123,7 +123,7 @@ Summary
       in <code>src</code> and <code>test</code>; fixed newly checked files. Based on contribution
       by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>62095</bug>Correct description for right boundary parameter in Boundary Extractor. Contributed by orimarko (orimarko at gmail.com)</li>
-    <li><bug>62113</bug>Updated to latest Bouncycastle (v1.59). Based on contribution by Olaf Flebbe (of at apache.org)</li>
+    <li><bug>62113</bug>Updated to latest Bouncycastle (v1.59). Based on contribution by Olaf Flebbe (oflebbe at apache.org)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -179,7 +179,7 @@ Summary
     <li>orimarko at gmail.com</li>
     <li>Davide Angelocola (davide.angelocola at fisglobal.com)</li>
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
-    <li>Olaf Flebbe (of at apache.org)</li>
+    <li>Olaf Flebbe (oflebbe at apache.org)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
