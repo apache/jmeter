@@ -283,7 +283,7 @@ jmeter -t test.jmx &hellip;
 <dt><code>JMETER_BIN</code></dt><dd>JMeter bin directory (must end in <code>\</code>). Value will have been guessed, when <code>setenv.bat</code> is called.</dd>
 <dt><code>JMETER_COMPLETE_ARGS</code></dt><dd>If set indicates, that <code>JVM_ARGS</code> and <code>JMETER_OPTS</code> are to be used, only. All other options like <code>HEAP</code> and <code>GC_ALGO</code> will be ignored. Default is empty.</dd>
 <dt><code>JMETER_HOME</code></dt><dd>installation directory. Will be guessed from location of <code>jmeter.bat</code></dd>
-<dt><code>JMETER_LANGUAGE</code></dt><dd>Java runtime options to specify used languauge. Defaults to: <code>-Duser.language="en" -Duser.region="EN"</code></dd>
+<dt><code>JMETER_LANGUAGE</code></dt><dd>Java runtime options to specify used language. Defaults to: <code>-Duser.language="en" -Duser.region="EN"</code></dd>
 <dt><code>JM_LAUNCH</code></dt><dd>Name of the java executable, like <code>java.exe</code> (default) or <code>javaw.exe</code></dd>
 <dt><code>JVM_ARGS</code></dt><dd>Java options to be used when starting JMeter. These will be added last to the java command. Default is empty</dd>
 </dl>
