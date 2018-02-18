@@ -46,7 +46,7 @@ public class HC4TrustAllSSLSocketFactory extends SSLSocketFactory {
      * @throws GeneralSecurityException if there's a problem setting up the security
      */
     public HC4TrustAllSSLSocketFactory() throws GeneralSecurityException {
-        this(new HttpSSLProtocolSocketFactory((JsseSSLManager)JsseSSLManager.getInstance(), JsseSSLManager.CPS));
+        this(new HttpSSLProtocolSocketFactory(JsseSSLManager.CPS));
     }
     
     /**

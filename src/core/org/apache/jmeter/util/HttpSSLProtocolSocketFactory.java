@@ -56,17 +56,14 @@ public class HttpSSLProtocolSocketFactory
         }
     }
     
-    private final JsseSSLManager sslManager;
-
     private final int CPS; // Characters per second to emulate
 
-    public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager) {
-        this(sslManager, 0);
+    public HttpSSLProtocolSocketFactory() {
+        this(0);
     }
 
-    public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager, int cps) {
+    public HttpSSLProtocolSocketFactory(int cps) {
         super();
-        this.sslManager = sslManager;
         CPS=cps;
     }
 
@@ -112,7 +109,7 @@ public class HttpSSLProtocolSocketFactory
 
     private SSLSocketFactory getSSLSocketFactory() throws IOException {
         try {
-            SSLContext sslContext = this.sslManager.getContext();
+            SSLContext sslContext = ((JsseSSLManager)SSLManager.getInstance()).getContext();
             return sslContext.getSocketFactory();
         } catch (GeneralSecurityException ex) {
             throw new IOException("Rethrown as IOE", ex);
