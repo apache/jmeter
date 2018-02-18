@@ -110,7 +110,7 @@ public class JsseSSLManager extends SSLManager {
                 this.threadlocal = new ThreadLocal<>();
             }
 
-            HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(this, CPS));
+            HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(CPS));
             HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
 
             log.debug("SSL stuff all set");

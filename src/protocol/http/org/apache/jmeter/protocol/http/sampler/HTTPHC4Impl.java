@@ -839,8 +839,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             ((AbstractHttpClient) httpClient).clearResponseInterceptors(); 
             httpClient.getConnectionManager().closeIdleConnections(1L, TimeUnit.MICROSECONDS);
             httpClient = null;
-            JsseSSLManager sslMgr = (JsseSSLManager) SSLManager.getInstance();
-            sslMgr.resetContext();
+            ((JsseSSLManager) SSLManager.getInstance()).resetContext();
             resetSSLContext = false;
         }
 
