@@ -169,6 +169,7 @@ Summary
   <li><bug>62107</bug>JMeter fails to start under Windows when <code>JM_LAUNCH</code> contains spaces</li>
   <li><bug>62110</bug>A broken junit class (due to missing dependency) breaks JMeter menus. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
   <li><pr>377</pr>Small fix of the docs. Contributed by Peter Doornbosch (peter.doornbosch at luminis.eu)</li>
+  <li><bug>62124</bug>Recording templates : Add more exclusions and use Transaction Name by default</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
