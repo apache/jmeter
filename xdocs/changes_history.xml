@@ -85,7 +85,7 @@ Summary
  <a href="usermanual/component_reference.html#ForEach_Controller"><code>ForEach Controller</code></a>
  now expose their current iteration as a variable named <code>__jm__&lt;Name of your element&gt;__idx</code> that
  you can use like this for example for a Loop Controller named <code>MyLoopController</code>: 
- <source>${__jm__&lt;MyLoopController&gt;__idx}</source>. 
+ <source>${__jm__MyLoopController__idx}</source>. 
  See <bugzilla>61802</bugzilla></p>
 <p>Cookies are now shown in View Results Tree during recording. They were previously always shown as empty.</p>
 <p><a href="usermanual/component_reference.html#Response_Assertion"><code>Response Assertion</code></a> now allows you to customize assertion message and assert on Request Data.
