@@ -13,7 +13,7 @@
     <error>false</error>
   </assertionResult>
 </httpSample>
-<httpSample s="true" lb="HTTPS-Request-HC4" rc="Non HTTP response code: java.net.ConnectException" tn="TG-ManagedCookieHC4 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+<httpSample s="true" lb="HTTPS-Request-HC4" rc="Non HTTP response code: org.apache.http.conn.HttpHostConnectException" tn="TG-ManagedCookieHC4 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>Request Assertion</name>
     <failure>false</failure>
@@ -51,7 +51,7 @@
     <error>false</error>
   </assertionResult>
 </httpSample>
-<httpSample s="true" lb="HTTPS-NonManagedCookie-HC4" rc="Non HTTP response code: java.net.ConnectException" tn="TG-NonManagedCookieHC4 3-1" dt="text" sc="1" ec="0" ng="1" na="1">
+<httpSample s="true" lb="HTTPS-NonManagedCookie-HC4" rc="Non HTTP response code: org.apache.http.conn.HttpHostConnectException" tn="TG-NonManagedCookieHC4 3-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>Request Assertion</name>
     <failure>false</failure>
