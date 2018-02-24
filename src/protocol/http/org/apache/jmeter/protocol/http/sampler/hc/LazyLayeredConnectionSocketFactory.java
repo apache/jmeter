@@ -62,7 +62,7 @@ public final class LazyLayeredConnectionSocketFactory implements LayeredConnecti
         private static LayeredConnectionSocketFactory checkAndInit() throws SSLInitializationException {
             LOG.info("Setting up HTTPS TrustAll Socket Factory");
             return new SSLConnectionSocketFactory(
-                    new HttpSSLProtocolSocketFactory((JsseSSLManager)JsseSSLManager.getInstance(), JsseSSLManager.CPS),
+                    new HttpSSLProtocolSocketFactory(JsseSSLManager.CPS),
                     SUPPORTED_PROTOCOL_LIST,
                     SUPPORTED_CIPHER_LIST,
                     NoopHostnameVerifier.INSTANCE);
