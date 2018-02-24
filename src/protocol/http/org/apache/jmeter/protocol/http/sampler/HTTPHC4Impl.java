@@ -48,6 +48,7 @@ import javax.security.auth.Subject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.Header;
 import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpConnectionMetrics;
@@ -286,7 +287,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
          */
         private void fillAuthCache(HttpHost targetHost, Authorization authorization, AuthCache authCache,
                 AuthScope authScope) {
-            if(authorization.getMechanism() == Mechanism.BASIC_DIGEST ||
+            if(authorization.getMechanism() == Mechanism.BASIC_DIGEST || // NOSONAR
                     authorization.getMechanism() == Mechanism.BASIC) {
                 BasicScheme basicAuth = new BasicScheme();
                 authCache.put(targetHost, basicAuth);
@@ -461,7 +462,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
-    private static final ThreadLocal<Map<HttpClientKey, CloseableHttpClient>> HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
+    private static final ThreadLocal<Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>>> HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
         InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
 
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
@@ -934,7 +935,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private CloseableHttpClient setupClient(URL url, HttpClientContext clientContext) throws GeneralSecurityException {
 
-        Map<HttpClientKey, CloseableHttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
+        Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey = 
+                HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         
         final String host = url.getHost();
         String proxyHost = getProxyHost();
@@ -964,20 +966,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         if(concurrentDwn) {
             httpClient = (CloseableHttpClient) JMeterContextService.getContext().getSamplerContext().get(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN);
         }
-        
+        Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair = mapHttpClientPerHttpClientKey.get(key);
         if (httpClient == null) {
-            httpClient = mapHttpClientPerHttpClientKey.get(key);
+            httpClient = pair != null ? pair.getLeft() : null;
         }
 
-        if (httpClient != null && resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
-            // FIXME There must be a better way instead of using deprecated methods, 
-            // should we hold a reference to ConnectionManager when we build it
-            httpClient.getConnectionManager().closeExpiredConnections();
-            httpClient.getConnectionManager().closeIdleConnections(1L, TimeUnit.MICROSECONDS);
-            clientContext.removeAttribute(HttpClientContext.USER_TOKEN);
-            ((JsseSSLManager) SSLManager.getInstance()).resetContext();
-            resetSSLContext = false;
-        }
+        resetSSLStateIfNeeded(url, clientContext, pair);
 
         if (httpClient == null) { // One-time init for this client
             DnsResolver resolver = this.testElement.getDNSResolver();
@@ -1064,7 +1058,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
-            mapHttpClientPerHttpClientKey.put(key, httpClient); // save the agent for next time round
+            mapHttpClientPerHttpClientKey.put(key, Pair.of(httpClient, pHCCM)); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
@@ -1075,6 +1069,32 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             JMeterContextService.getContext().getSamplerContext().put(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN, httpClient);
         }
         return httpClient;
+    }
+
+    /**
+     * Reset SSL State. <br/>
+     * In order to do that we need to:
+     * <ul>
+     *  <li>Call resetContext() on SSLManager</li>
+     *  <li>Close current Idle or Expired connections that hold SSL State</li>
+     *  <li>Remove HttpClientContext.USER_TOKEN from {@link HttpClientContext}</li>
+     * </ul>
+     * @param url {@link URL}
+     * @param clientContext {@link HttpClientContext}
+     * @param pair {@link Pair} holding {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
+     */
+    private void resetSSLStateIfNeeded(URL url, HttpClientContext clientContext,
+            Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair) {
+        if (resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
+            if(pair != null) {
+                PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = pair.getRight();
+                poolingHttpClientConnectionManager.closeExpiredConnections();
+                poolingHttpClientConnectionManager.closeIdleConnections(1L, TimeUnit.MICROSECONDS);
+            }
+            clientContext.removeAttribute(HttpClientContext.USER_TOKEN);
+            ((JsseSSLManager) SSLManager.getInstance()).resetContext();
+            resetSSLContext = false;
+        }
     }
 
     /**
@@ -1694,10 +1714,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     private void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
-        Map<HttpClientKey, CloseableHttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
+        Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         if ( mapHttpClientPerHttpClientKey != null ) {
-            for ( CloseableHttpClient cl : mapHttpClientPerHttpClientKey.values() ) {
-                JOrphanUtils.closeQuietly(cl);
+            for ( Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair : mapHttpClientPerHttpClientKey.values() ) {
+                JOrphanUtils.closeQuietly(pair.getLeft());
+                JOrphanUtils.closeQuietly(pair.getRight());
             }
             mapHttpClientPerHttpClientKey.clear();
         }
