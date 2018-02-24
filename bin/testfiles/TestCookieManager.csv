@@ -1,11 +1,11 @@
 label,responseCode,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
 JSS_startMirror,200,setUp Thread Group 1-1,text,true,1,1,1,0
 HTTP-Request-HC4,200,TG-ManagedCookieHC4 1-1,text,true,1,1,1,0
-HTTPS-Request-HC4,Non HTTP response code: java.net.ConnectException,TG-ManagedCookieHC4 1-1,text,true,1,1,1,0
+HTTPS-Request-HC4,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,TG-ManagedCookieHC4 1-1,text,true,1,1,1,0
 HTTP-Request-Java,200,TG-ManagedCookieJava 2-1,text,true,1,1,1,0
 HTTPS-Request-Java,Non HTTP response code: java.net.ConnectException,TG-ManagedCookieJava 2-1,text,true,1,1,1,0
 HTTP-NonManagedCookie-HC4,200,TG-NonManagedCookieHC4 3-1,text,true,1,1,1,0
-HTTPS-NonManagedCookie-HC4,Non HTTP response code: java.net.ConnectException,TG-NonManagedCookieHC4 3-1,text,true,1,1,1,0
+HTTPS-NonManagedCookie-HC4,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,TG-NonManagedCookieHC4 3-1,text,true,1,1,1,0
 HTTP-NonManagedCookie-Java,200,TG-NonManagedCookieJava 4-1,text,true,1,1,1,0
 HTTPS-NonManagedCookie-Java,Non HTTP response code: java.net.ConnectException,TG-NonManagedCookieJava 4-1,text,true,1,1,1,0
 JSS_stopMirror,200,tearDown Thread Group 1-1,text,true,1,1,1,0

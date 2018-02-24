@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2-SNAPSHOT.20170219">
+<jmeterTestPlan version="1.2" properties="4.0" jmeter="4.1-SNAPSHOT.20180224">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments">Test Header Manager merge feature</stringProp>
@@ -114,6 +114,7 @@
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">2</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -164,6 +165,7 @@
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">2</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoOtherHeader" enabled="true">
@@ -174,6 +176,7 @@
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">6</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -221,6 +224,7 @@
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">2</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoOtherHeader" enabled="true">
@@ -231,6 +235,7 @@
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -242,6 +247,7 @@
         <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">16</intProp>
+        <stringProp name="Assertion.custom_message"></stringProp>
       </ResponseAssertion>
       <hashTree/>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
@@ -254,7 +260,8 @@
             <timestamp>false</timestamp>
             <success>true</success>
             <label>true</label>
-            <code>true</code>
+            <code>false</code>
+            <message>false</message>
             <threadName>true</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
@@ -284,7 +291,8 @@
             <timestamp>false</timestamp>
             <success>true</success>
             <label>true</label>
-            <code>true</code>
+            <code>false</code>
+            <message>false</message>
             <threadName>false</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
@@ -305,9 +313,5 @@
       </ResultCollector>
       <hashTree/>
     </hashTree>
-    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
-      <boolProp name="WorkBench.save">true</boolProp>
-    </WorkBench>
-    <hashTree/>
   </hashTree>
 </jmeterTestPlan>

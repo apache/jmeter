@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testResults version="1.2">
-<httpSample s="true" lb="HTTP Request" rc="Non HTTP response code: java.net.ConnectException" dt="text">
+<httpSample s="true" lb="HTTP Request" dt="text">
   <assertionResult>
     <name>Response Assertion</name>
     <failure>false</failure>
@@ -12,7 +12,7 @@
     <error>false</error>
   </assertionResult>
 </httpSample>
-<httpSample s="true" lb="HTTP Request" rc="Non HTTP response code: java.net.ConnectException" dt="text">
+<httpSample s="true" lb="HTTP Request" dt="text">
   <assertionResult>
     <name>Response Assertion</name>
     <failure>false</failure>
@@ -29,7 +29,7 @@
     <error>false</error>
   </assertionResult>
 </httpSample>
-<httpSample s="true" lb="HTTP Request" rc="Non HTTP response code: java.net.ConnectException" dt="text">
+<httpSample s="true" lb="HTTP Request" dt="text">
   <assertionResult>
     <name>Response Assertion</name>
     <failure>false</failure>
