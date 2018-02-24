@@ -970,7 +970,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         if (httpClient != null && resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
-            JOrphanUtils.closeQuietly(httpClient);
+            // FIXME There must be a better way instead of using deprecated methods, 
+            // should we hold a reference to ConnectionManager when we build it
+            httpClient.getConnectionManager().closeExpiredConnections();
+            httpClient.getConnectionManager().closeIdleConnections(1L, TimeUnit.MICROSECONDS);
+            clientContext.removeAttribute(HttpClientContext.USER_TOKEN);
             ((JsseSSLManager) SSLManager.getInstance()).resetContext();
             resetSSLContext = false;
         }
