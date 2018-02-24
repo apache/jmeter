@@ -212,67 +212,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
 
-    private static final class JMeterDefaultHttpClientConnectionOperator extends DefaultHttpClientConnectionOperator {
-
-        public JMeterDefaultHttpClientConnectionOperator(Lookup<ConnectionSocketFactory> socketFactoryRegistry, SchemePortResolver schemePortResolver,
-                DnsResolver dnsResolver) {
-            super(socketFactoryRegistry, schemePortResolver, dnsResolver);
-        }
-
-        /* (non-Javadoc)
-         * @see org.apache.http.impl.conn.DefaultHttpClientConnectionOperator#connect(org.apache.http.conn.ManagedHttpClientConnection, org.apache.http.HttpHost, java.net.InetSocketAddress, int, org.apache.http.config.SocketConfig, org.apache.http.protocol.HttpContext)
-         */
-        @Override
-        public void connect(ManagedHttpClientConnection conn, HttpHost host, InetSocketAddress localAddress,
-                int connectTimeout, SocketConfig socketConfig, HttpContext context) throws IOException {
-            try {
-                super.connect(conn, host, localAddress, connectTimeout, socketConfig, context);
-            } finally {
-                SampleResult sample = 
-                        (SampleResult)context.getAttribute(HTTPHC4Impl.CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN);
-                if (sample != null) {
-                    sample.connectEnd();
-                }
-            }
-        }    
-    }
-    
-    /** retry count to be used (default 0); 0 = disable retries */
-    private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
-    
-    /** true if it's OK to retry requests that have been sent */
-    private static final boolean REQUEST_SENT_RETRY_ENABLED = 
-            JMeterUtils.getPropDefault("httpclient4.request_sent_retry_enabled", false);
-
-    /** Idle timeout to be applied to connections if no Keep-Alive header is sent by the server (default 0 = disable) */
-    private static final int IDLE_TIMEOUT = JMeterUtils.getPropDefault("httpclient4.idletimeout", 0);
-    
-    private static final int VALIDITY_AFTER_INACTIVITY_TIMEOUT = JMeterUtils.getPropDefault("httpclient4.validate_after_inactivity", 1700);
-    
-    private static final int TIME_TO_LIVE = JMeterUtils.getPropDefault("httpclient4.time_to_live", 2000);
-
-    /** Preemptive Basic Auth */
-    private static final boolean BASIC_AUTH_PREEMPTIVE = JMeterUtils.getPropDefault("httpclient4.auth.preemptive", true);
-    
-    private static final Pattern PORT_PATTERN = Pattern.compile("\\d+"); // only used in .matches(), no need for anchors
-
-    private static final ConnectionKeepAliveStrategy IDLE_STRATEGY = new DefaultConnectionKeepAliveStrategy(){
-        @Override
-        public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
-            long duration = super.getKeepAliveDuration(response, context);
-            if (duration <= 0 && IDLE_TIMEOUT > 0) {// none found by the superclass
-                log.debug("Setting keepalive to {}", IDLE_TIMEOUT);
-                return IDLE_TIMEOUT;
-            } 
-            return duration; // return the super-class value
-        }
-        
-    };
-
-    private static final String DIGEST_PARAMETERS = DigestParameters.VARIABLE_NAME;
-
-    
-    private static final HttpRequestInterceptor PREEMPTIVE_AUTH_INTERCEPTOR = new HttpRequestInterceptor() {
+    private static final class PreemptiveAuthRequestInterceptor implements HttpRequestInterceptor {
         //@Override
         public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
             HttpClientContext localContext = HttpClientContext.adapt(context);
@@ -329,31 +269,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                                 authorization.getRealm(), targetHost.getSchemeName());
                         Credentials creds = credentialsProvider.getCredentials(authScope);
                         if (creds != null) {
-                            if(authorization.getMechanism() == Mechanism.BASIC_DIGEST ||
-                                    authorization.getMechanism() == Mechanism.BASIC) {
-                                BasicScheme basicAuth = new BasicScheme();
-                                authCache.put(targetHost, basicAuth);
-                            } else if (authorization.getMechanism() == Mechanism.DIGEST) {
-                                DigestScheme digestAuth = (DigestScheme) authCache.get(targetHost);
-                                if(digestAuth == null) {
-                                    digestAuth = new DigestScheme();
-                                }
-                                JMeterVariables vars = JMeterContextService.getContext().getVariables();
-                                DigestParameters digestParameters = (DigestParameters)
-                                        vars.getObject(DIGEST_PARAMETERS);
-                                digestAuth.overrideParamter("realm", authScope.getRealm());
-                                if(digestParameters!=null) {
-                                    digestAuth.overrideParamter("algorithm", digestParameters.getAlgorithm());
-                                    digestAuth.overrideParamter("charset", digestParameters.getCharset());
-                                    digestAuth.overrideParamter("nonce", digestParameters.getNonce());
-                                    digestAuth.overrideParamter("opaque", digestParameters.getOpaque());
-                                    digestAuth.overrideParamter("qop", digestParameters.getQop());
-                                }
-                                authCache.put(targetHost, digestAuth);
-                            } else if (authorization.getMechanism() == Mechanism.KERBEROS) {
-                                KerberosScheme kerberosScheme = new KerberosScheme();
-                                authCache.put(targetHost, kerberosScheme);
-                            }
+                            fillAuthCache(targetHost, authorization, authCache, authScope);
                         }
                     }
                 } else {
@@ -361,7 +277,107 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
             }
         }
+
+        /**
+         * @param targetHost
+         * @param authorization
+         * @param authCache
+         * @param authScope
+         */
+        private void fillAuthCache(HttpHost targetHost, Authorization authorization, AuthCache authCache,
+                AuthScope authScope) {
+            if(authorization.getMechanism() == Mechanism.BASIC_DIGEST ||
+                    authorization.getMechanism() == Mechanism.BASIC) {
+                BasicScheme basicAuth = new BasicScheme();
+                authCache.put(targetHost, basicAuth);
+            } else if (authorization.getMechanism() == Mechanism.DIGEST) {
+                DigestScheme digestAuth = (DigestScheme) authCache.get(targetHost);
+                if(digestAuth == null) {
+                    digestAuth = new DigestScheme();
+                }
+                JMeterVariables vars = JMeterContextService.getContext().getVariables();
+                DigestParameters digestParameters = (DigestParameters)
+                        vars.getObject(DIGEST_PARAMETERS);
+                digestAuth.overrideParamter("realm", authScope.getRealm());
+                if(digestParameters!=null) {
+                    digestAuth.overrideParamter("algorithm", digestParameters.getAlgorithm());
+                    digestAuth.overrideParamter("charset", digestParameters.getCharset());
+                    digestAuth.overrideParamter("nonce", digestParameters.getNonce());
+                    digestAuth.overrideParamter("opaque", digestParameters.getOpaque());
+                    digestAuth.overrideParamter("qop", digestParameters.getQop());
+                }
+                authCache.put(targetHost, digestAuth);
+            } else if (authorization.getMechanism() == Mechanism.KERBEROS) {
+                KerberosScheme kerberosScheme = new KerberosScheme();
+                authCache.put(targetHost, kerberosScheme);
+            }
+        }
+    }
+
+    private static final class JMeterDefaultHttpClientConnectionOperator extends DefaultHttpClientConnectionOperator {
+
+        public JMeterDefaultHttpClientConnectionOperator(Lookup<ConnectionSocketFactory> socketFactoryRegistry, SchemePortResolver schemePortResolver,
+                DnsResolver dnsResolver) {
+            super(socketFactoryRegistry, schemePortResolver, dnsResolver);
+        }
+
+        /* (non-Javadoc)
+         * @see org.apache.http.impl.conn.DefaultHttpClientConnectionOperator#connect(
+         *  org.apache.http.conn.ManagedHttpClientConnection, org.apache.http.HttpHost, 
+         *      java.net.InetSocketAddress, int, org.apache.http.config.SocketConfig, 
+         *      org.apache.http.protocol.HttpContext)
+         */
+        @Override
+        public void connect(ManagedHttpClientConnection conn, HttpHost host, InetSocketAddress localAddress,
+                int connectTimeout, SocketConfig socketConfig, HttpContext context) throws IOException {
+            try {
+                super.connect(conn, host, localAddress, connectTimeout, socketConfig, context);
+            } finally {
+                SampleResult sample = 
+                        (SampleResult)context.getAttribute(HTTPHC4Impl.CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN);
+                if (sample != null) {
+                    sample.connectEnd();
+                }
+            }
+        }    
+    }
+    
+    /** retry count to be used (default 0); 0 = disable retries */
+    private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
+    
+    /** true if it's OK to retry requests that have been sent */
+    private static final boolean REQUEST_SENT_RETRY_ENABLED = 
+            JMeterUtils.getPropDefault("httpclient4.request_sent_retry_enabled", false);
+
+    /** Idle timeout to be applied to connections if no Keep-Alive header is sent by the server (default 0 = disable) */
+    private static final int IDLE_TIMEOUT = JMeterUtils.getPropDefault("httpclient4.idletimeout", 0);
+    
+    private static final int VALIDITY_AFTER_INACTIVITY_TIMEOUT = JMeterUtils.getPropDefault("httpclient4.validate_after_inactivity", 1700);
+    
+    private static final int TIME_TO_LIVE = JMeterUtils.getPropDefault("httpclient4.time_to_live", 2000);
+
+    /** Preemptive Basic Auth */
+    private static final boolean BASIC_AUTH_PREEMPTIVE = JMeterUtils.getPropDefault("httpclient4.auth.preemptive", true);
+    
+    private static final Pattern PORT_PATTERN = Pattern.compile("\\d+"); // only used in .matches(), no need for anchors
+
+    private static final ConnectionKeepAliveStrategy IDLE_STRATEGY = new DefaultConnectionKeepAliveStrategy(){
+        @Override
+        public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
+            long duration = super.getKeepAliveDuration(response, context);
+            if (duration <= 0 && IDLE_TIMEOUT > 0) {// none found by the superclass
+                log.debug("Setting keepalive to {}", IDLE_TIMEOUT);
+                return IDLE_TIMEOUT;
+            } 
+            return duration; // return the super-class value
+        }
+        
     };
+
+    private static final String DIGEST_PARAMETERS = DigestParameters.VARIABLE_NAME;
+
+    
+    private static final HttpRequestInterceptor PREEMPTIVE_AUTH_INTERCEPTOR = new PreemptiveAuthRequestInterceptor();
 
     // see  https://stackoverflow.com/questions/26166469/measure-bandwidth-usage-with-apache-httpcomponents-httpclient
     private static final HttpRequestExecutor REQUEST_EXECUTOR = new HttpRequestExecutor() {
