@@ -462,8 +462,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
-    private static final ThreadLocal<Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>>> HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
-        InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
+    private static final ThreadLocal<Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>>> 
+        HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
+            InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
 
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final ConnectionSocketFactory SLOW_CONNECTION_SOCKET_FACTORY;
@@ -1714,7 +1715,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     private void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
-        Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
+        Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> 
+            mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         if ( mapHttpClientPerHttpClientKey != null ) {
             for ( Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair : mapHttpClientPerHttpClientKey.values() ) {
                 JOrphanUtils.closeQuietly(pair.getLeft());
