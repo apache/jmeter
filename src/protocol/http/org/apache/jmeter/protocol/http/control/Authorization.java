@@ -71,10 +71,11 @@ public class Authorization extends AbstractTestElement implements Serializable {
     }
 
     public Authorization() {
-        this("","","","","", Mechanism.BASIC_DIGEST);
+        this("","","","","", Mechanism.BASIC);
     }
 
     public void addConfigElement(ConfigElement config) {
+        // NOOP
     }
 
     public String getURL() {
@@ -118,11 +119,11 @@ public class Authorization extends AbstractTestElement implements Serializable {
     }
 
     public Mechanism getMechanism() {
-        return Mechanism.valueOf(getPropertyAsString(MECHANISM, Mechanism.BASIC_DIGEST.name()));
+        return Mechanism.valueOf(getPropertyAsString(MECHANISM, Mechanism.BASIC.name()));
     }
 
     public void setMechanism(Mechanism mechanism) {
-        setProperty(MECHANISM, mechanism.name(), Mechanism.BASIC_DIGEST.name());
+        setProperty(MECHANISM, mechanism.name(), Mechanism.BASIC.name());
     }
 
     // Used for saving entries to a file

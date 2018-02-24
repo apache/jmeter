@@ -25,10 +25,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.security.GeneralSecurityException;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
@@ -45,8 +48,9 @@ import javax.security.auth.Subject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.Header;
-import org.apache.http.HttpConnection;
+import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpConnectionMetrics;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
@@ -57,13 +61,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthSchemeProvider;
 import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.AuthState;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.AuthCache;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpRequestRetryHandler;
+import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.DeflateInputStream;
@@ -80,17 +85,19 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.config.Lookup;
+import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.DnsResolver;
-import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ManagedHttpClientConnection;
+import org.apache.http.conn.SchemePortResolver;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.cookie.CookieSpecProvider;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
@@ -101,39 +108,50 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.auth.BasicSchemeFactory;
+import org.apache.http.impl.auth.DigestScheme;
+import org.apache.http.impl.auth.DigestSchemeFactory;
+import org.apache.http.impl.auth.KerberosScheme;
+import org.apache.http.impl.auth.NTLMSchemeFactory;
+import org.apache.http.impl.auth.SPNegoSchemeFactory;
 import org.apache.http.impl.client.BasicAuthCache;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultClientConnectionReuseStrategy;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
+import org.apache.http.impl.conn.DefaultHttpClientConnectionOperator;
+import org.apache.http.impl.conn.DefaultSchemePortResolver;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
+import org.apache.http.impl.cookie.DefaultCookieSpecProvider;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.message.BufferedHeader;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.CoreConnectionPNames;
-import org.apache.http.params.CoreProtocolPNames;
-import org.apache.http.params.DefaultedHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
+import org.apache.http.protocol.HttpRequestExecutor;
 import org.apache.http.util.CharArrayBuffer;
+import org.apache.http.util.EntityUtils;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.http.api.auth.DigestParameters;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
+import org.apache.jmeter.protocol.http.control.DynamicKerberosSchemeFactory;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.sampler.hc.LazyLayeredConnectionSocketFactory;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
-import org.apache.jmeter.protocol.http.util.SlowHC4SocketFactory;
+import org.apache.jmeter.protocol.http.util.SlowHCPlainConnectionSocketFactory;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -154,6 +172,20 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class HTTPHC4Impl extends HTTPHCAbstractImpl {
+
+    private static final String CONTEXT_ATTRIBUTE_AUTH_MANAGER = "__jmeter.A_M__";
+
+    private static final String CONTEXT_ATTRIBUTE_USER_TOKEN = "__jmeter.U_T__"; //$NON-NLS-1$
+    
+    static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN = "__jmeter.S_R__"; //$NON-NLS-1$
+    
+    private static final String CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN = "__jmeter.H_T__";
+
+    private static final String CONTEXT_ATTRIBUTE_CLIENT_KEY = "__jmeter.C_K__";
+
+    private static final String CONTEXT_ATTRIBUTE_SENT_BYTES = "__jmeter.S_B__";
+    
+    private static final String CONTEXT_ATTRIBUTE_RECEIVED_BYTES = "__jmeter.R_B__";
 
     private static final int MAX_BODY_RETAIN_SIZE = JMeterUtils.getPropDefault("httpclient4.max_body_retain_size", 32 * 1024);
 
@@ -181,6 +213,136 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
 
+    private static final class PreemptiveAuthRequestInterceptor implements HttpRequestInterceptor {
+        //@Override
+        public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+            HttpClientContext localContext = HttpClientContext.adapt(context);
+            AuthManager authManager = (AuthManager) localContext.getAttribute(CONTEXT_ATTRIBUTE_AUTH_MANAGER);
+            if (authManager == null) {
+                Credentials credentials = null;
+                HttpClientKey key = (HttpClientKey) localContext.getAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY);
+                AuthScope authScope = null;
+                CredentialsProvider credentialsProvider = 
+                        (CredentialsProvider) context.getAttribute(HttpClientContext.CREDS_PROVIDER);
+                if (key.hasProxy && !StringUtils.isEmpty(key.proxyUser)) {
+                    authScope = new AuthScope(key.proxyHost, key.proxyPort);
+                    credentials = credentialsProvider.getCredentials(authScope);
+                }
+                credentialsProvider.clear();
+                if (credentials != null) {
+                    credentialsProvider.setCredentials(authScope, credentials);
+                }
+                return;
+            }
+            URI requestURI = null;
+            if (request instanceof HttpUriRequest) {
+                requestURI = ((HttpUriRequest) request).getURI();
+            } else {
+                try {
+                    requestURI = new URI(request.getRequestLine().getUri());
+                } catch (final URISyntaxException ignore) {
+                    // NOOP
+                }
+            }
+            if(requestURI != null) {
+                HttpHost targetHost = (HttpHost) context.getAttribute(HttpCoreContext.HTTP_TARGET_HOST);
+                URL url = null;
+                if(requestURI.isAbsolute()) {
+                    url = requestURI.toURL();
+                } else {
+                    url = new URL(targetHost.getSchemeName(), targetHost.getHostName(), targetHost.getPort(), 
+                            requestURI.getPath());
+                }
+                Authorization authorization = 
+                        authManager.getAuthForURL(url);
+                CredentialsProvider credentialsProvider = 
+                        (CredentialsProvider) context.getAttribute(HttpClientContext.CREDS_PROVIDER);
+                if(authorization != null) {
+                    AuthCache authCache = localContext.getAuthCache();
+                    if(authCache == null) {
+                        authCache = new BasicAuthCache();
+                        localContext.setAuthCache(authCache);
+                    }
+                    authManager.setupCredentials(authorization, url, localContext, credentialsProvider, LOCALHOST);
+                    AuthState authState = (AuthState) context.getAttribute(HttpClientContext.TARGET_AUTH_STATE);
+                    if (authState.getAuthScheme() == null) {
+                        AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort(),
+                                authorization.getRealm(), targetHost.getSchemeName());
+                        Credentials creds = credentialsProvider.getCredentials(authScope);
+                        if (creds != null) {
+                            fillAuthCache(targetHost, authorization, authCache, authScope);
+                        }
+                    }
+                } else {
+                    credentialsProvider.clear();
+                }
+            }
+        }
+
+        /**
+         * @param targetHost
+         * @param authorization
+         * @param authCache
+         * @param authScope
+         */
+        private void fillAuthCache(HttpHost targetHost, Authorization authorization, AuthCache authCache,
+                AuthScope authScope) {
+            if(authorization.getMechanism() == Mechanism.BASIC_DIGEST || // NOSONAR
+                    authorization.getMechanism() == Mechanism.BASIC) {
+                BasicScheme basicAuth = new BasicScheme();
+                authCache.put(targetHost, basicAuth);
+            } else if (authorization.getMechanism() == Mechanism.DIGEST) {
+                DigestScheme digestAuth = (DigestScheme) authCache.get(targetHost);
+                if(digestAuth == null) {
+                    digestAuth = new DigestScheme();
+                }
+                JMeterVariables vars = JMeterContextService.getContext().getVariables();
+                DigestParameters digestParameters = (DigestParameters)
+                        vars.getObject(DIGEST_PARAMETERS);
+                digestAuth.overrideParamter("realm", authScope.getRealm());
+                if(digestParameters!=null) {
+                    digestAuth.overrideParamter("algorithm", digestParameters.getAlgorithm());
+                    digestAuth.overrideParamter("charset", digestParameters.getCharset());
+                    digestAuth.overrideParamter("nonce", digestParameters.getNonce());
+                    digestAuth.overrideParamter("opaque", digestParameters.getOpaque());
+                    digestAuth.overrideParamter("qop", digestParameters.getQop());
+                }
+                authCache.put(targetHost, digestAuth);
+            } else if (authorization.getMechanism() == Mechanism.KERBEROS) {
+                KerberosScheme kerberosScheme = new KerberosScheme();
+                authCache.put(targetHost, kerberosScheme);
+            }
+        }
+    }
+
+    private static final class JMeterDefaultHttpClientConnectionOperator extends DefaultHttpClientConnectionOperator {
+
+        public JMeterDefaultHttpClientConnectionOperator(Lookup<ConnectionSocketFactory> socketFactoryRegistry, SchemePortResolver schemePortResolver,
+                DnsResolver dnsResolver) {
+            super(socketFactoryRegistry, schemePortResolver, dnsResolver);
+        }
+
+        /* (non-Javadoc)
+         * @see org.apache.http.impl.conn.DefaultHttpClientConnectionOperator#connect(
+         *  org.apache.http.conn.ManagedHttpClientConnection, org.apache.http.HttpHost, 
+         *      java.net.InetSocketAddress, int, org.apache.http.config.SocketConfig, 
+         *      org.apache.http.protocol.HttpContext)
+         */
+        @Override
+        public void connect(ManagedHttpClientConnection conn, HttpHost host, InetSocketAddress localAddress,
+                int connectTimeout, SocketConfig socketConfig, HttpContext context) throws IOException {
+            try {
+                super.connect(conn, host, localAddress, connectTimeout, socketConfig, context);
+            } finally {
+                SampleResult sample = 
+                        (SampleResult)context.getAttribute(HTTPHC4Impl.CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN);
+                if (sample != null) {
+                    sample.connectEnd();
+                }
+            }
+        }    
+    }
+    
     /** retry count to be used (default 0); 0 = disable retries */
     private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
     
@@ -197,8 +359,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /** Preemptive Basic Auth */
     private static final boolean BASIC_AUTH_PREEMPTIVE = JMeterUtils.getPropDefault("httpclient4.auth.preemptive", true);
-
-    private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack for metrics related to HTTPCLIENT-1081, to be removed later
     
     private static final Pattern PORT_PATTERN = Pattern.compile("\\d+"); // only used in .matches(), no need for anchors
 
@@ -215,22 +375,39 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         
     };
 
-    /**
-     * Special interceptor made to keep metrics when connection is released for some method like HEAD
-     * Otherwise calling directly ((HttpConnection) localContext.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getMetrics();
-     * would throw org.apache.http.impl.conn.ConnectionShutdownException
-     * See <a href="https://bz.apache.org/jira/browse/HTTPCLIENT-1081">HTTPCLIENT-1081</a>
-     */
-    private static final HttpResponseInterceptor METRICS_SAVER = (HttpResponse response, HttpContext context) -> {
-        HttpConnectionMetrics metrics = ((HttpConnection) context.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getMetrics();
-        context.setAttribute(CONTEXT_METRICS, metrics);
-    };
-    private static final HttpRequestInterceptor METRICS_RESETTER = (HttpRequest request, HttpContext context) -> {
-        HttpConnectionMetrics metrics = ((HttpConnection) context.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getMetrics();
-        metrics.reset();
-    };
+    private static final String DIGEST_PARAMETERS = DigestParameters.VARIABLE_NAME;
 
+    
+    private static final HttpRequestInterceptor PREEMPTIVE_AUTH_INTERCEPTOR = new PreemptiveAuthRequestInterceptor();
 
+    // see  https://stackoverflow.com/questions/26166469/measure-bandwidth-usage-with-apache-httpcomponents-httpclient
+    private static final HttpRequestExecutor REQUEST_EXECUTOR = new HttpRequestExecutor() {
+
+        @Override
+        protected HttpResponse doSendRequest(
+                final HttpRequest request,
+                final HttpClientConnection conn,
+                final HttpContext context) throws IOException, HttpException {
+            HttpResponse response = super.doSendRequest(request, conn, context);
+            HttpConnectionMetrics metrics = conn.getMetrics();
+            context.setAttribute(CONTEXT_ATTRIBUTE_SENT_BYTES, metrics.getSentBytesCount());
+            metrics.reset();
+            return response;
+        }
+
+        @Override
+        protected HttpResponse doReceiveResponse(
+                final HttpRequest request,
+                final HttpClientConnection conn,
+                final HttpContext context) throws HttpException, IOException {
+            HttpResponse response = super.doReceiveResponse(request, conn, context);
+            HttpConnectionMetrics metrics = conn.getMetrics();
+            context.setAttribute(CONTEXT_ATTRIBUTE_RECEIVED_BYTES, metrics.getReceivedBytesCount());
+            metrics.reset();
+            return response;
+        }
+    };
+    
     /**
      * Headers to save
      */
@@ -285,50 +462,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
-    private static final ThreadLocal<Map<HttpClientKey, CloseableHttpClient>> HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
+    private static final ThreadLocal<Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>>> HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
         InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
 
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
-    private static final Scheme SLOW_HTTP;
-    
-    /*
-     * Create a set of default parameters from the ones initially created.
-     * This allows the defaults to be overridden if necessary from the properties file.
-     */
-    private static final HttpParams DEFAULT_HTTP_PARAMS;
-
-    private static final String USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
-    
-    static final String SAMPLER_RESULT_TOKEN = "__jmeter.SAMPLER_RESULT__"; //$NON-NLS-1$
-    
-    private static final String HTTPCLIENT_TOKEN = "__jmeter.HTTPCLIENT_TOKEN__";
+    private static final ConnectionSocketFactory SLOW_CONNECTION_SOCKET_FACTORY;
 
     static {
         log.info("HTTP request retry count = {}", RETRY_COUNT);
 
-        DEFAULT_HTTP_PARAMS = new SyncBasicHttpParams(); // Could we drop the Sync here?
-        DEFAULT_HTTP_PARAMS.setBooleanParameter(CoreConnectionPNames.STALE_CONNECTION_CHECK, false);
-        DEFAULT_HTTP_PARAMS.setIntParameter(ClientPNames.MAX_REDIRECTS, HTTPSamplerBase.MAX_REDIRECTS);
-        DefaultHttpClient.setDefaultHttpParams(DEFAULT_HTTP_PARAMS);
-        
-        // Process Apache HttpClient parameters file
-        String file=JMeterUtils.getProperty("hc.parameters.file"); // $NON-NLS-1$
-        if (file != null) {
-            HttpClientDefaultParameters.load(file, DEFAULT_HTTP_PARAMS);
-        }
-
         // Set up HTTP scheme override if necessary
         if (CPS_HTTP > 0) {
             log.info("Setting up HTTP SlowProtocol, cps={}", CPS_HTTP);
-            SLOW_HTTP = new Scheme(HTTPConstants.PROTOCOL_HTTP, HTTPConstants.DEFAULT_HTTP_PORT, new SlowHC4SocketFactory(CPS_HTTP));
+            SLOW_CONNECTION_SOCKET_FACTORY = new SlowHCPlainConnectionSocketFactory(CPS_HTTP);
         } else {
-            SLOW_HTTP = null;
-        }
-        
-        if (localAddress != null){
-            DEFAULT_HTTP_PARAMS.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
-        }
-        
+            SLOW_CONNECTION_SOCKET_FACTORY = PlainConnectionSocketFactory.getSocketFactory();
+        }        
     }
 
     private volatile HttpUriRequest currentRequest; // Accessed from multiple threads
@@ -346,8 +495,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static Lookup<InputStreamFactory> createLookupRegistry() {
         return
                 RegistryBuilder.<InputStreamFactory>create()
-                .register("gzip", GZIP)
                 .register("br", BROTLI)
+                .register("gzip", GZIP)
                 .register("x-gzip", GZIP)
                 .register("deflate", DEFLATE).build();
     }
@@ -392,10 +541,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         HTTPSampleResult res = createSampleResult(url, method);
 
-        CloseableHttpClient httpClient = setupClient(url);
-
+        CloseableHttpClient httpClient = null;
         HttpRequestBase httpRequest = null;
+        HttpContext localContext = new BasicHttpContext();
+        HttpClientContext clientContext = HttpClientContext.adapt(localContext);
+        clientContext.setAttribute(CONTEXT_ATTRIBUTE_AUTH_MANAGER, getAuthManager());
+
         try {
+            httpClient = setupClient(url, clientContext);
             URI uri = url.toURI();
             if (method.equals(HTTPConstants.POST)) {
                 httpRequest = new HttpPost(uri);
@@ -435,7 +588,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return res;
         }
 
-        HttpContext localContext = new BasicHttpContext();
         setupClientContextBeforeSample(localContext);
         
         res.sampleStart();
@@ -449,7 +601,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             currentRequest = httpRequest;
             handleMethod(method, res, httpRequest, localContext);
             // store the SampleResult in LocalContext to compute connect time
-            localContext.setAttribute(SAMPLER_RESULT_TOKEN, res);
+            localContext.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN, res);
             // perform the sample
             httpResponse = 
                     executeRequest(httpClient, httpRequest, localContext, url);
@@ -458,9 +610,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             final HttpRequest request = (HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
             extractClientContextAfterSample(localContext);
             // We've finished with the request, so we can add the LocalAddress to it for display
-            final InetAddress localAddr = (InetAddress) httpRequest.getParams().getParameter(ConnRoutePNames.LOCAL_ADDRESS);
-            if (localAddr != null) {
-                request.addHeader(HEADER_LOCAL_ADDRESS, localAddr.toString());
+            if (localAddress != null) {
+                request.addHeader(HEADER_LOCAL_ADDRESS, localAddress.toString());
             }
             res.setRequestHeaders(getAllHeadersExceptCookie(request));
 
@@ -484,8 +635,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             res.setResponseCode(Integer.toString(statusCode));
             res.setResponseMessage(statusLine.getReasonPhrase());
             res.setSuccessful(isSuccessCode(statusCode));
-
-            res.setResponseHeaders(getResponseHeaders(httpResponse, localContext));
+            res.setResponseHeaders(getResponseHeaders(httpResponse));
             if (res.isRedirect()) {
                 final Header headerLocation = httpResponse.getLastHeader(HTTPConstants.HEADER_LOCATION);
                 if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
@@ -496,16 +646,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
-            HttpConnectionMetrics  metrics = (HttpConnectionMetrics) localContext.getAttribute(CONTEXT_METRICS);
             long headerBytes = 
                 (long)res.getResponseHeaders().length()   // condensed length (without \r)
               + (long) httpResponse.getAllHeaders().length // Add \r for each header
               + 1L // Add \r for initial header
               + 2L; // final \r\n before data
-            long totalBytes = metrics.getReceivedBytesCount();
+            long totalBytes = (Long) localContext.getAttribute(CONTEXT_ATTRIBUTE_RECEIVED_BYTES);
             res.setHeadersSize((int)headerBytes);
             res.setBodySize(totalBytes - headerBytes);
-            res.setSentBytes(metrics.getSentBytesCount());
+            res.setSentBytes((Long) localContext.getAttribute(CONTEXT_ATTRIBUTE_SENT_BYTES));
             if (log.isDebugEnabled()) {
                 long total = res.getHeadersSize() + res.getBodySizeAsLong();
                 log.debug("ResponseHeadersSize={} Content-Length={} Total={}",
@@ -534,6 +683,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // Follow redirects and download page resources if appropriate:
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
+            if(!isSuccessCode(statusCode)) {
+                EntityUtils.consumeQuietly(httpResponse.getEntity());
+            }
 
         } catch (IOException e) {
             log.debug("IOException", e);
@@ -557,7 +709,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         } finally {
             JOrphanUtils.closeQuietly(httpResponse);
             currentRequest = null;
-            JMeterContextService.getContext().getSamplerContext().remove(HTTPCLIENT_TOKEN);
+            JMeterContextService.getContext().getSamplerContext().remove(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN);
         }
         return res;
     }
@@ -570,11 +722,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private void extractClientContextAfterSample(HttpContext localContext) {
         Object userToken = localContext.getAttribute(HttpClientContext.USER_TOKEN);
         if(userToken != null) {
-            log.debug("Extracted from HttpContext user token:{} storing it as JMeter variable:{}", userToken, USER_TOKEN);
+            log.debug("Extracted from HttpContext user token:{} storing it as JMeter variable:{}", userToken, CONTEXT_ATTRIBUTE_USER_TOKEN);
             // During recording JMeterContextService.getContext().getVariables() is null
             JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
             if (jMeterVariables != null) {
-                jMeterVariables.putObject(USER_TOKEN, userToken); 
+                jMeterVariables.putObject(CONTEXT_ATTRIBUTE_USER_TOKEN, userToken); 
             }
         }
     }
@@ -589,10 +741,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // During recording JMeterContextService.getContext().getVariables() is null
         JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
         if(jMeterVariables != null) {
-            userToken = jMeterVariables.getObject(USER_TOKEN);            
+            userToken = jMeterVariables.getObject(CONTEXT_ATTRIBUTE_USER_TOKEN);            
         }
         if(userToken != null) {
-            log.debug("Found user token:{} as JMeter variable:{}, storing it in HttpContext", userToken, USER_TOKEN);
+            log.debug("Found user token:{} as JMeter variable:{}, storing it in HttpContext", userToken, CONTEXT_ATTRIBUTE_USER_TOKEN);
             localContext.setAttribute(HttpClientContext.USER_TOKEN, userToken);
         } else {
             // It would be better to create a ClientSessionManager that would compute this value
@@ -660,11 +812,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param url the target url (will be used to look up a possible subject for the execution)
      * @return the result of the execution of the httpRequest
      * @throws IOException
-     * @throws ClientProtocolException
      */
     private CloseableHttpResponse executeRequest(final CloseableHttpClient httpClient,
             final HttpRequestBase httpRequest, final HttpContext localContext, final URL url)
-            throws IOException, ClientProtocolException {
+            throws IOException {
         AuthManager authManager = getAuthManager();
         if (authManager != null) {
             Subject subject = authManager.getSubjectForUrl(url);
@@ -676,21 +827,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 } catch (PrivilegedActionException e) {
                     log.error("Can't execute httpRequest with subject: {}", subject, e);
                     throw new RuntimeException("Can't execute httpRequest with subject:" + subject, e);
-                }
-            }
-
-            if(BASIC_AUTH_PREEMPTIVE) {
-                Authorization authorization = authManager.getAuthForURL(url);
-                if(authorization != null && Mechanism.BASIC_DIGEST.equals(authorization.getMechanism())) {
-                    HttpHost target = new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
-                    // Create AuthCache instance
-                    AuthCache authCache = new BasicAuthCache();
-                    // Generate BASIC scheme object and 
-                    // add it to the local auth cache
-                    BasicScheme basicAuth = new BasicScheme();
-                    authCache.put(target, basicAuth);
-                    // Add AuthCache to the execution context
-                    localContext.setAttribute(HttpClientContext.AUTH_CACHE, authCache);
                 }
             }
         }
@@ -797,9 +933,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private CloseableHttpClient setupClient(URL url) {
+    private CloseableHttpClient setupClient(URL url, HttpClientContext clientContext) throws GeneralSecurityException {
 
-        Map<HttpClientKey, CloseableHttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
+        Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey = 
+                HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         
         final String host = url.getHost();
         String proxyHost = getProxyHost();
@@ -823,97 +960,105 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         // Lookup key - must agree with all the values used to create the HttpClient.
         HttpClientKey key = new HttpClientKey(url, useProxy, proxyHost, proxyPort, proxyUser, proxyPass);
-        
+        clientContext.setAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY, key);
         CloseableHttpClient httpClient = null;
         boolean concurrentDwn = this.testElement.isConcurrentDwn();
         if(concurrentDwn) {
-            httpClient = (CloseableHttpClient) JMeterContextService.getContext().getSamplerContext().get(HTTPCLIENT_TOKEN);
+            httpClient = (CloseableHttpClient) JMeterContextService.getContext().getSamplerContext().get(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN);
         }
-        
+        Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair = mapHttpClientPerHttpClientKey.get(key);
         if (httpClient == null) {
-            httpClient = mapHttpClientPerHttpClientKey.get(key);
+            httpClient = pair != null ? pair.getLeft() : null;
         }
 
-        if (httpClient != null && resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
-            ((AbstractHttpClient) httpClient).clearRequestInterceptors(); 
-            ((AbstractHttpClient) httpClient).clearResponseInterceptors(); 
-            httpClient.getConnectionManager().closeIdleConnections(1L, TimeUnit.MICROSECONDS);
-            httpClient = null;
-            ((JsseSSLManager) SSLManager.getInstance()).resetContext();
-            resetSSLContext = false;
-        }
+        resetSSLStateIfNeeded(url, clientContext, pair);
 
         if (httpClient == null) { // One-time init for this client
-
-            HttpParams clientParams = new DefaultedHttpParams(new BasicHttpParams(), DEFAULT_HTTP_PARAMS);
-
             DnsResolver resolver = this.testElement.getDNSResolver();
             if (resolver == null) {
                 resolver = SystemDefaultDnsResolver.INSTANCE;
             }
-            MeasuringConnectionManager connManager = new MeasuringConnectionManager(
-                    createSchemeRegistry(), 
-                    resolver, 
-                    TIME_TO_LIVE,
-                    VALIDITY_AFTER_INACTIVITY_TIMEOUT);
+            Registry<ConnectionSocketFactory> registry;
+            registry = RegistryBuilder.<ConnectionSocketFactory> create().
+                    register("https", new LazyLayeredConnectionSocketFactory()).
+                    register("http", SLOW_CONNECTION_SOCKET_FACTORY).
+                    build();
             
             // Modern browsers use more connections per host than the current httpclient default (2)
             // when using parallel download the httpclient and connection manager are shared by the downloads threads
             // to be realistic JMeter must set an higher value to DefaultMaxPerRoute
+            PoolingHttpClientConnectionManager pHCCM = 
+                    new PoolingHttpClientConnectionManager(
+                            new JMeterDefaultHttpClientConnectionOperator(registry, null, resolver), 
+                            null, TIME_TO_LIVE, TimeUnit.MILLISECONDS);
+            pHCCM.setValidateAfterInactivity(VALIDITY_AFTER_INACTIVITY_TIMEOUT);
+
             if(concurrentDwn) {
                 try {
                     int maxConcurrentDownloads = Integer.parseInt(this.testElement.getConcurrentPool());
-                    connManager.setDefaultMaxPerRoute(Math.max(maxConcurrentDownloads, connManager.getDefaultMaxPerRoute()));                
+                    pHCCM.setDefaultMaxPerRoute(Math.max(maxConcurrentDownloads, pHCCM.getDefaultMaxPerRoute()));
                 } catch (NumberFormatException nfe) {
                    // no need to log -> will be done by the sampler
                 }
             }
             
-            httpClient = new DefaultHttpClient(connManager, clientParams) {
-                @Override
-                protected HttpRequestRetryHandler createHttpRequestRetryHandler() {
-                    return new StandardHttpRequestRetryHandler(RETRY_COUNT, 
-                            REQUEST_SENT_RETRY_ENABLED);
-                }
-            };
+            DefaultCookieSpecProvider cookieSpecProvider = new DefaultCookieSpecProvider();
+            Lookup<CookieSpecProvider> cookieSpecRegistry = RegistryBuilder.<CookieSpecProvider>create()
+                    .register(CookieSpecs.IGNORE_COOKIES, cookieSpecProvider)
+                    .build();
+            
+            HttpClientBuilder builder = HttpClients.custom().setConnectionManager(pHCCM).
+                    setSchemePortResolver(new DefaultSchemePortResolver()).
+                    setDnsResolver(resolver).
+                    setRequestExecutor(REQUEST_EXECUTOR).
+                    setSSLContext(((JsseSSLManager)JsseSSLManager.getInstance()).getContext()).
+                    setDefaultCookieSpecRegistry(cookieSpecRegistry).
+                    setDefaultSocketConfig(SocketConfig.DEFAULT).
+                    setRedirectStrategy(new LaxRedirectStrategy()).
+                    setConnectionTimeToLive(TIME_TO_LIVE, TimeUnit.MILLISECONDS).
+                    setRetryHandler(new StandardHttpRequestRetryHandler(RETRY_COUNT, REQUEST_SENT_RETRY_ENABLED)).
+                    setConnectionReuseStrategy(DefaultClientConnectionReuseStrategy.INSTANCE);
+            
+            Lookup<AuthSchemeProvider> authSchemeRegistry =
+                    RegistryBuilder.<AuthSchemeProvider>create()
+                        .register(AuthSchemes.BASIC, new BasicSchemeFactory())
+                        .register(AuthSchemes.DIGEST, new DigestSchemeFactory())
+                        .register(AuthSchemes.NTLM, new NTLMSchemeFactory())
+                        .register(AuthSchemes.SPNEGO, new SPNegoSchemeFactory())
+                        .register(AuthSchemes.KERBEROS, new DynamicKerberosSchemeFactory(
+                                AuthManager.STRIP_PORT, AuthManager.USE_CANONICAL_HOST_NAME))
+                        .build();
+            builder.setDefaultAuthSchemeRegistry(authSchemeRegistry);
             
             if (IDLE_TIMEOUT > 0) {
-                ((AbstractHttpClient) httpClient).setKeepAliveStrategy(IDLE_STRATEGY );
-            }
-            // see https://issues.apache.org/jira/browse/HTTPCORE-397
-            ((AbstractHttpClient) httpClient).setReuseStrategy(DefaultClientConnectionReuseStrategy.INSTANCE);
-            ((AbstractHttpClient) httpClient).addResponseInterceptor(RESPONSE_CONTENT_ENCODING);
-            ((AbstractHttpClient) httpClient).addResponseInterceptor(METRICS_SAVER); // HACK
-            ((AbstractHttpClient) httpClient).addRequestInterceptor(METRICS_RESETTER); 
-            
-            // Override the default schemes as necessary
-            SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
-
-            if (SLOW_HTTP != null){
-                schemeRegistry.register(SLOW_HTTP);
+                builder.setKeepAliveStrategy(IDLE_STRATEGY);
             }
 
             // Set up proxy details
             if(useProxy) {
-
                 HttpHost proxy = new HttpHost(proxyHost, proxyPort);
-                clientParams.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+                builder.setProxy(proxy);
                 
-                if (proxyUser.length() > 0) {                   
-                    ((AbstractHttpClient) httpClient).getCredentialsProvider().setCredentials(
-                            new AuthScope(proxyHost, proxyPort),
-                            new NTCredentials(proxyUser, proxyPass, LOCALHOST, PROXY_DOMAIN));
+                CredentialsProvider credsProvider = new BasicCredentialsProvider();
+                if (proxyUser.length() > 0) {
+                    credsProvider.setCredentials(
+                        new AuthScope(proxyHost, proxyPort),
+                        new NTCredentials(proxyUser, proxyPass, LOCALHOST, PROXY_DOMAIN));
                 }
+                builder.setDefaultCredentialsProvider(credsProvider);
             }
-
-            // Bug 52126 - we do our own cookie handling
-            clientParams.setParameter(ClientPNames.COOKIE_POLICY, CookieSpecs.IGNORE_COOKIES);
-
+            if(getAutoRedirects()) {
+                builder.disableRedirectHandling();
+            }
+            builder.disableContentCompression().addInterceptorLast(RESPONSE_CONTENT_ENCODING);
+            if(BASIC_AUTH_PREEMPTIVE) {
+                builder.addInterceptorFirst(PREEMPTIVE_AUTH_INTERCEPTOR);
+            }
+            httpClient = builder.build();
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
-
-            mapHttpClientPerHttpClientKey.put(key, httpClient); // save the agent for next time round
+            mapHttpClientPerHttpClientKey.put(key, Pair.of(httpClient, pHCCM)); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
@@ -921,27 +1066,35 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         if(concurrentDwn) {
-            JMeterContextService.getContext().getSamplerContext().put(HTTPCLIENT_TOKEN, httpClient);
+            JMeterContextService.getContext().getSamplerContext().put(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN, httpClient);
         }
-
-        // TODO - should this be done when the client is created?
-        // If so, then the details need to be added as part of HttpClientKey
-        setConnectionAuthorization(httpClient, url, getAuthManager(), key);
-
         return httpClient;
     }
 
     /**
-     * Setup LazySchemeSocketFactory
-     * @see "https://bz.apache.org/bugzilla/show_bug.cgi?id=58099"
+     * Reset SSL State. <br/>
+     * In order to do that we need to:
+     * <ul>
+     *  <li>Call resetContext() on SSLManager</li>
+     *  <li>Close current Idle or Expired connections that hold SSL State</li>
+     *  <li>Remove HttpClientContext.USER_TOKEN from {@link HttpClientContext}</li>
+     * </ul>
+     * @param url {@link URL}
+     * @param clientContext {@link HttpClientContext}
+     * @param pair {@link Pair} holding {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
      */
-    private static SchemeRegistry createSchemeRegistry() {
-        final SchemeRegistry registry = new SchemeRegistry();
-        registry.register(
-                new Scheme("http", 80, PlainSocketFactory.getSocketFactory())); //$NON-NLS-1$
-        registry.register(
-                new Scheme("https", 443, new LazySchemeSocketFactory())); //$NON-NLS-1$
-        return registry;
+    private void resetSSLStateIfNeeded(URL url, HttpClientContext clientContext,
+            Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair) {
+        if (resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
+            if(pair != null) {
+                PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = pair.getRight();
+                poolingHttpClientConnectionManager.closeExpiredConnections();
+                poolingHttpClientConnectionManager.closeIdleConnections(1L, TimeUnit.MICROSECONDS);
+            }
+            clientContext.removeAttribute(HttpClientContext.USER_TOKEN);
+            ((JsseSSLManager) SSLManager.getInstance()).resetContext();
+            resetSSLContext = false;
+        }
     }
 
     /**
@@ -966,30 +1119,28 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     protected void setupRequest(URL url, HttpRequestBase httpRequest, HTTPSampleResult res)
         throws IOException {
-    
-        HttpParams requestParams = httpRequest.getParams();
+        RequestConfig.Builder rCB = RequestConfig.custom();
         // Set up the local address if one exists
         final InetAddress inetAddr = getIpSourceAddress();
         if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
-            requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, inetAddr);
+            rCB.setLocalAddress(inetAddr);
         } else if (localAddress != null){
-            requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
-        } else { // reset in case was set previously
-            requestParams.removeParameter(ConnRoutePNames.LOCAL_ADDRESS);
-        }
+            rCB.setLocalAddress(localAddress);
+        } 
     
         int rto = getResponseTimeout();
         if (rto > 0){
-            requestParams.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, rto);
+            rCB.setSocketTimeout(rto);
         }
     
         int cto = getConnectTimeout();
         if (cto > 0){
-            requestParams.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, cto);
+            rCB.setConnectTimeout(cto);
         }
     
-        requestParams.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, getAutoRedirects());
-        
+        rCB.setMaxRedirects(HTTPSamplerBase.MAX_REDIRECTS);
+        rCB.setRedirectsEnabled(getAutoRedirects());
+        httpRequest.setConfig(rCB.build());
         // a well-behaved browser is supposed to send 'Connection: close'
         // with the last request to an HTTP server. Instead, most browsers
         // leave it to the server to close the connection after their
@@ -1001,6 +1152,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     
         setConnectionHeaders(httpRequest, url, getHeaderManager(), getCacheManager());
+    
         String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
     
         if (res != null) {
@@ -1011,6 +1163,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 res.setCookies(getOnlyCookieFromHeaders(httpRequest));
             }
         }
+    
     }
     
     /**
@@ -1027,10 +1180,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      *
      * @param response
      *            containing the headers
-     * @param localContext {@link HttpContext}
      * @return string containing the headers, one per line
      */
-    private String getResponseHeaders(HttpResponse response, HttpContext localContext) {
+    private String getResponseHeaders(HttpResponse response) {
         Header[] rh = response.getAllHeaders();
 
         StringBuilder headerBuf = new StringBuilder(40 * (rh.length+1));
@@ -1105,7 +1257,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                             jMeterProperty.getObjectValue();
                     String headerName = header.getName();
                     // Don't allow override of Content-Length
-                    // TODO - what other headers are not allowed?
                     if (!HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(headerName)) {
                         String headerValue = header.getValue();
                         if (HTTPConstants.HEADER_HOST.equalsIgnoreCase(headerName)) {
@@ -1115,7 +1266,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                             if (port != -1 && port == url.getDefaultPort()) {
                                 port = -1; // no need to specify the port if it is the default
                             }
-                            request.getParams().setParameter(ClientPNames.VIRTUAL_HOST, new HttpHost(headerValue, port));
+                            if(port == -1) {
+                                request.addHeader(HEADER_HOST, headerValue);
+                            } else {
+                                request.addHeader(HEADER_HOST, headerValue+":"+port);
+                            }
                         } else {
                             request.addHeader(headerName, headerValue);
                         }
@@ -1201,42 +1356,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         return ""; ////$NON-NLS-1$
     }
 
-    /**
-     * Setup credentials for url AuthScope but keeps Proxy AuthScope credentials
-     * @param client HttpClient
-     * @param url URL
-     * @param authManager {@link AuthManager}
-     * @param key key
-     */
-    private void setConnectionAuthorization(CloseableHttpClient client, URL url, AuthManager authManager, HttpClientKey key) {
-        CredentialsProvider credentialsProvider = 
-            ((AbstractHttpClient) client).getCredentialsProvider();
-        if (authManager != null) {
-            if(authManager.hasAuthForURL(url)) {
-                authManager.setupCredentials(client, url, credentialsProvider, LOCALHOST);
-            } else {
-                credentialsProvider.clear();
-            }
-        } else {
-            Credentials credentials = null;
-            AuthScope authScope = null;
-            if(key.hasProxy && !StringUtils.isEmpty(key.proxyUser)) {
-                authScope = new AuthScope(key.proxyHost, key.proxyPort);
-                credentials = credentialsProvider.getCredentials(authScope);
-            }
-            credentialsProvider.clear(); 
-            if(credentials != null) {
-                credentialsProvider.setCredentials(authScope, credentials);
-            }
-        }
-    }
-
     // Helper class so we can generate request data without dumping entire file contents
     private static class ViewableFileBody extends FileBody {
         private boolean hideFileData;
         
-        public ViewableFileBody(File file, String mimeType) {
-            super(file, mimeType);
+        public ViewableFileBody(File file, ContentType contentType) {
+            super(file, contentType);
             hideFileData = false;
         }
 
@@ -1250,7 +1375,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    // TODO needs cleaning up
     /**
      * 
      * @param post {@link HttpPost}
@@ -1309,7 +1433,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 HTTPFileArg file = files[i];
                 
                 File reservedFile = FileServer.getFileServer().getResolvedFile(file.getPath());
-                fileBodies[i] = new ViewableFileBody(reservedFile, file.getMimeType());
+                fileBodies[i] = new ViewableFileBody(reservedFile, ContentType.create(file.getMimeType()));
                 multipartEntityBuilder.addPart(file.getParamName(), fileBodies[i] );
             }
 
@@ -1354,7 +1478,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     }
                 }
 
-                FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),(ContentType) null);// TODO is null correct?
+                FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),(ContentType) null);
                 post.setEntity(fileRequestEntity);
 
                 // We just add placeholder text for file content
@@ -1362,12 +1486,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             } else {
                 // In a post request which is not multipart, we only support
                 // parameters, no file upload is allowed
-
-                // If a content encoding is specified, we set it as http parameter, so that
-                // the post body will be encoded in the specified content encoding
-                if(haveContentEncoding) {
-                    post.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, contentEncoding);
-                }
 
                 // If none of the arguments have a name specified, we
                 // just send all the values as the post body
@@ -1382,7 +1500,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                             post.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                         }
                         else {
-                             // TODO - is this the correct default?
+                             // TODO - is this the correct default? no
                             post.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                         }
                     }
@@ -1456,10 +1574,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
         return postedBody.toString();
     }
-
-    // TODO merge put and post methods as far as possible.
-    // e.g. post checks for multipart form/files, and if not, invokes sendData(HttpEntityEnclosingRequestBase)
-
 
     /**
      * Creates the entity data to be sent.
@@ -1535,10 +1649,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             StringBuilder entityBody = null;
             if(entityEntry.isRepeatable()) {
                 entityBody = new StringBuilder(1000);
-                // FIXME Charset
                 try (InputStream in = entityEntry.getContent();
                         InputStream bounded = new BoundedInputStream(in, MAX_BODY_RETAIN_SIZE)) {
-                    entityBody.append(IOUtils.toString(bounded));
+                    entityBody.append(IOUtils.toString(bounded, charset));
                 }
                 if (entityEntry.getContentLength() > MAX_BODY_RETAIN_SIZE) {
                     entityBody.append("<actual file content shortened>");
@@ -1601,13 +1714,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     private void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
-        Map<HttpClientKey, CloseableHttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
+        Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         if ( mapHttpClientPerHttpClientKey != null ) {
-            for ( CloseableHttpClient cl : mapHttpClientPerHttpClientKey.values() ) {
-                ((AbstractHttpClient) cl).clearRequestInterceptors(); 
-                ((AbstractHttpClient) cl).clearResponseInterceptors();
-                JOrphanUtils.closeQuietly(cl);
-                cl.getConnectionManager().shutdown();
+            for ( Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair : mapHttpClientPerHttpClientKey.values() ) {
+                JOrphanUtils.closeQuietly(pair.getLeft());
+                JOrphanUtils.closeQuietly(pair.getRight());
             }
             mapHttpClientPerHttpClientKey.clear();
         }
