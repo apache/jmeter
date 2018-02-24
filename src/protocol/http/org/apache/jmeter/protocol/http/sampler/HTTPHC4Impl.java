@@ -175,7 +175,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final String CONTEXT_ATTRIBUTE_AUTH_MANAGER = "__jmeter.A_M__";
 
-    private static final String CONTEXT_ATTRIBUTE_USER_TOKEN = "__jmeter.U_T__"; //$NON-NLS-1$
+    private static final String JMETER_VARIABLE_USER_TOKEN = "__jmeter.U_T__"; //$NON-NLS-1$
     
     static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN = "__jmeter.S_R__"; //$NON-NLS-1$
     
@@ -723,11 +723,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private void extractClientContextAfterSample(HttpContext localContext) {
         Object userToken = localContext.getAttribute(HttpClientContext.USER_TOKEN);
         if(userToken != null) {
-            log.debug("Extracted from HttpContext user token:{} storing it as JMeter variable:{}", userToken, CONTEXT_ATTRIBUTE_USER_TOKEN);
+            log.debug("Extracted from HttpContext user token:{} storing it as JMeter variable:{}", userToken, JMETER_VARIABLE_USER_TOKEN);
             // During recording JMeterContextService.getContext().getVariables() is null
             JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
             if (jMeterVariables != null) {
-                jMeterVariables.putObject(CONTEXT_ATTRIBUTE_USER_TOKEN, userToken); 
+                jMeterVariables.putObject(JMETER_VARIABLE_USER_TOKEN, userToken); 
             }
         }
     }
@@ -742,10 +742,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // During recording JMeterContextService.getContext().getVariables() is null
         JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
         if(jMeterVariables != null) {
-            userToken = jMeterVariables.getObject(CONTEXT_ATTRIBUTE_USER_TOKEN);            
+            userToken = jMeterVariables.getObject(JMETER_VARIABLE_USER_TOKEN);            
         }
         if(userToken != null) {
-            log.debug("Found user token:{} as JMeter variable:{}, storing it in HttpContext", userToken, CONTEXT_ATTRIBUTE_USER_TOKEN);
+            log.debug("Found user token:{} as JMeter variable:{}, storing it in HttpContext", userToken, JMETER_VARIABLE_USER_TOKEN);
             localContext.setAttribute(HttpClientContext.USER_TOKEN, userToken);
         } else {
             // It would be better to create a ClientSessionManager that would compute this value
