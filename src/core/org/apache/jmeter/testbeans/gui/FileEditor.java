@@ -33,6 +33,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -92,7 +93,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
         boolean notOther = GenericTestBeanCustomizer.notOther(descriptor);
         Object defaultValue = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
         FieldStringEditor cse = new FieldStringEditor();
-        editor = new WrapperEditor(this, new SimpleFileEditor(), cse,
+        editor = new WrapperEditor(this, new PropertyEditorSupport(), cse,
                 !notNull, // acceptsNull
                 !notExpression, // acceptsExpressions
                 !notOther, // acceptsOther
@@ -115,7 +116,14 @@ public class FileEditor implements PropertyEditor, ActionListener {
             return;
         }
 
-        setValue(chooser.getSelectedFile().getPath());
+        setValue(toUnix(chooser.getSelectedFile()));
+    }
+
+    private String toUnix(final File selectedFile) {
+        if (File.separatorChar == '\\') {
+            return FilenameUtils.separatorsToUnix(selectedFile.getPath());
+        }
+        return selectedFile.getPath();
     }
 
     /**
@@ -194,7 +202,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
      * {@inheritDoc}
      */
     @Override
-    public void setAsText(String text) throws IllegalArgumentException {
+    public void setAsText(String text) {
         editor.setAsText(text);
     }
 
@@ -214,20 +222,4 @@ public class FileEditor implements PropertyEditor, ActionListener {
         return editor.supportsCustomEditor();
     }
 
-    private static class SimpleFileEditor extends PropertyEditorSupport {
-
-        @Override
-        public String getAsText() {
-            Object value = super.getValue();
-            if (value instanceof File) {
-                return ((File) value).getPath();
-            }
-            return (String) value; // assume it's string
-        }
-
-        @Override
-        public void setAsText(String text) throws IllegalArgumentException {
-            super.setValue(new File(text));
-        }
-    }
 }
