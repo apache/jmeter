@@ -115,6 +115,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+  <li><bug>62128</bug>Try to guess <code>JMETER_HOME</code> correctly, when <code>jmeter.bat</code> is called from a batch file in another directory. Contributed by logox01 (logox01 at gmx.at)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -184,6 +185,7 @@ Summary
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Olaf Flebbe (oflebbe at apache.org)</li>
     <li>Peter Doornbosch (peter.doornbosch at luminis.eu)</li>
+    <li>logox01 (logox01 at gmx.at)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
