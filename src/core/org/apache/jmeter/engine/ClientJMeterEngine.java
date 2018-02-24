@@ -19,14 +19,15 @@
 package org.apache.jmeter.engine;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.RemoteObject;
 import java.util.Properties;
 
+import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
@@ -46,26 +47,41 @@ public class ClientJMeterEngine implements JMeterEngine {
 
     private HashTree test;
 
-    private final String host;
+    /**
+     * Maybe only host or host:port
+     */
+    private final String hostAndPort;
 
-    private static RemoteJMeterEngine getEngine(String h) throws MalformedURLException, RemoteException,
-            NotBoundException {
-       final String name = "//" + h + "/" + RemoteJMeterEngineImpl.JMETER_ENGINE_RMI_NAME; // $NON-NLS-1$ $NON-NLS-2$
-       Remote remobj = Naming.lookup(name);
-       if (remobj instanceof RemoteJMeterEngine){
-           final RemoteJMeterEngine rje = (RemoteJMeterEngine) remobj;
-           if (remobj instanceof RemoteObject){
-               RemoteObject robj = (RemoteObject) remobj;
-               System.out.println("Using remote object: "+robj.getRef().remoteToString());
-           }
-           return rje;
-       }
-       throw new RemoteException("Could not find "+name);
+    private static RemoteJMeterEngine getEngine(String hostAndPort) 
+            throws RemoteException, NotBoundException {
+        final String name = RemoteJMeterEngineImpl.JMETER_ENGINE_RMI_NAME; // $NON-NLS-1$ $NON-NLS-2$
+        String host = hostAndPort;
+        int port = RmiUtils.DEFAULT_RMI_PORT;
+        int indexOfSeparator = hostAndPort.indexOf(':');
+        if (indexOfSeparator >= 0) {
+            host = hostAndPort.substring(0, indexOfSeparator);
+            String portAsString = hostAndPort.substring(indexOfSeparator+1);
+            port = Integer.parseInt(portAsString);
+        }
+        Registry registry = LocateRegistry.getRegistry(
+               host, 
+               port,
+               RmiUtils.createClientSocketFactory());
+        Remote remobj = registry.lookup(name);
+        if (remobj instanceof RemoteJMeterEngine){
+            final RemoteJMeterEngine rje = (RemoteJMeterEngine) remobj;
+            if (remobj instanceof RemoteObject){
+                RemoteObject robj = (RemoteObject) remobj;
+                System.out.println("Using remote object: "+robj.getRef().remoteToString()); // NOSONAR
+            }
+            return rje;
+        }
+        throw new RemoteException("Could not find "+name);
     }
 
-    public ClientJMeterEngine(String host) throws MalformedURLException, NotBoundException, RemoteException {
-        this.remote = getEngine(host);
-        this.host = host;
+    public ClientJMeterEngine(String hostAndPort) throws NotBoundException, RemoteException {
+        this.remote = getEngine(hostAndPort);
+        this.hostAndPort = hostAndPort;
     }
 
     /** {@inheritDoc} */
@@ -79,7 +95,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     /** {@inheritDoc} */
     @Override
     public void stopTest(boolean now) {
-        log.info("about to "+(now ? "stop" : "shutdown")+" remote test on "+host);
+        log.info("about to {} remote test on {}", now ? "stop" : "shutdown", hostAndPort);
         try {
             remote.rstopTest(now);
         } catch (Exception ex) {
@@ -95,7 +111,7 @@ public class ClientJMeterEngine implements JMeterEngine {
                 remote.rreset();
             } catch (java.rmi.ConnectException e) {
                 log.info("Retry reset after: "+e);
-                remote = getEngine(host);
+                remote = getEngine(hostAndPort);
                 remote.rreset();
             }
         } catch (Exception ex) {
@@ -132,13 +148,13 @@ public class ClientJMeterEngine implements JMeterEngine {
             synchronized(LOCK)
             {
                 methodName="rconfigure()"; // NOSONAR Used for tracing
-                remote.rconfigure(testTree, host, baseDirRelative, scriptName);
+                remote.rconfigure(testTree, hostAndPort, baseDirRelative, scriptName);
             }
-            log.info("sent test to " + host + " basedir='"+baseDirRelative+"'"); // $NON-NLS-1$
+            log.info("sent test to {} basedir='{}'", hostAndPort, baseDirRelative); // $NON-NLS-1$
             if(savep == null) {
                 savep = new Properties();
             }
-            log.info("Sending properties "+savep);
+            log.info("Sending properties {}", savep);
             try {
                 methodName="rsetProperties()";// NOSONAR Used for tracing
                 remote.rsetProperties(savep);
@@ -147,9 +163,9 @@ public class ClientJMeterEngine implements JMeterEngine {
             }
             methodName="rrunTest()";
             remote.rrunTest();
-            log.info("sent run command to "+ host);
+            log.info("sent run command to {}", hostAndPort);
         } catch (IllegalStateException ex) {
-            log.error("Error in "+methodName+" method "+ex); // $NON-NLS-1$ $NON-NLS-2$
+            log.error("Error in {} method ", methodName, ex); // $NON-NLS-1$ $NON-NLS-2$
             tidyRMI(log);
             throw ex; // Don't wrap this error - display it as is
         } catch (Exception ex) {
@@ -179,7 +195,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     // Called by JMeter ListenToTest if remoteStop is true
     @Override
     public void exit() {
-        log.info("about to exit remote server on {}", host);
+        log.info("about to exit remote server on {}", hostAndPort);
         try {
             remote.rexit();
         } catch (RemoteException e) {
@@ -201,7 +217,10 @@ public class ClientJMeterEngine implements JMeterEngine {
         return true;
     }
 
+    /**
+     * @return host or host:port
+     */
     public String getHost() {
-        return host;
+        return hostAndPort;
     }
 }

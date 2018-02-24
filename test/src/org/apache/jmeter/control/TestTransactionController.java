@@ -18,6 +18,11 @@
 
 package org.apache.jmeter.control;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.reporters.ResultCollector;
@@ -33,16 +38,12 @@ import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-
 
 public class TestTransactionController extends JMeterTestCase {
 
     /**
      * @see "http://bz.apache.org/bugzilla/show_bug.cgi?id=57958"
+     * @throws Exception when something breaks
      */
     @Test
     public void testIssue57958() throws Exception {
@@ -89,8 +90,6 @@ public class TestTransactionController extends JMeterTestCase {
         assertEquals("Must one transaction samples with parent debug sample", 1, listener.events.size());
         assertEquals("Number of samples in transaction : 1, number of failing samples : 1", listener.events.get(0).getResult().getResponseMessage());
     }
-
-
 
     public class TestSampleListener extends ResultCollector implements SampleListener {
         public List<SampleEvent> events = new ArrayList<>();

@@ -70,6 +70,7 @@ Make sure that all the nodes (client and servers) :
 <ul>
     <li>are running exactly the same version of JMeter.</li>
     <li>are using the same version of Java on all systems. Using different versions of Java may work but is discouraged.</li>
+    <li>have a <a href="#setup_ssl">valid keystore for RMI over SSL</a>, or you have disabled the use of SSL.</li>
 </ul>
 </p>
 <p>
@@ -137,7 +138,39 @@ The second example will define <code>remote_hosts</code> from the list of server
 <br/>
 The command-line client will exit when all the remote servers have stopped.
 </p>
-<subsection name="&sect-num;.1 Doing it Manually" anchor="detail_instructions">
+<subsection name="&sect-num;.1 Setting up SSL" anchor="setup_ssl">
+<note>Since JMeter 4.0 the default transport mechanism for RMI will use SSL. SSL needs keys and certificates to work. You will have to create those keys yourself.</note>
+<p>
+The simplest setup is to use one key/cert pair for all JMeter servers and clients you want to connect. JMeter comes with a script to generate a keystore that
+contains one key (and its corresponding certificate) named <code>rmi</code>. The script is located in the <code>bin</code> directory and is available for Windows systems (called <code>bin/create-rmi-keystore.bat</code>) and Unix like systems (called <code>bin/create-rmi-keystore.sh</code>). It will generate a key-pair, that is valid for seven days, with a default passphrase of value '<code>changeit</code>'. It is advised to call it from inside the <code>bin</code> directory.
+</p>
+<p>
+When you run the script, it will ask you some questions about some names it will embed in the certificate. You can type in whatever you want, as long the keystore tool accepts it. That value has to match the property <code>server.rmi.ssl.keystore.alias</code>, which defaults to <code>rmi</code>. A sample session to create the keystore is shown below.
+</p>
+<source>$ cd jmeter/bin
+$ ./create-rmi-keystore.sh
+What is your first and last name?
+  [Unknown]:  rmi
+What is the name of your organizational unit?
+  [Unknown]:  My unit name
+What is the name of your organization?
+  [Unknown]:  My organisation name
+What is the name of your City or Locality?
+  [Unknown]:  Your City
+What is the name of your State or Province?
+  [Unknown]:  Your State
+What is the two-letter country code for this unit?
+  [Unknown]:  XY
+Is CN=rmi, OU=My unit name, O=My organisation name, L=Your City, ST=Your State, C=XY correct?
+  [no]:  yes
+
+Copy the generated rmi_keystore.jks to jmeter/bin folder or reference it in property 'server.rmi.ssl.keystore.file'
+</source>
+<p>
+The <a href="properties_reference.html#remote">defaults settings for RMI</a> should work with this setup. Copy the file <code>bin/rmi_keystore.jks</code> to every JMeter server and client you want to use for your distributed testing setup.
+</p>
+</subsection>
+<subsection name="&sect-num;.2 Doing it Manually" anchor="detail_instructions">
 <p>In some cases, the jmeter-server script may not work for you (if you are using an OS platform not anticipated by the JMeter developers).
 Here is how to start the JMeter servers (step 1 above) with a more manual process:</p>
 <p><b>Step 1a: Start the RMI Registry</b></p>
@@ -164,7 +197,7 @@ Use the "<code>-s</code>" option with the jmeter startup script ("<code>jmeter -
 
 <p>Steps 2 and 3 remain the same.</p>
 </subsection>
-<subsection name="&sect-num;.2 Tips" anchor="tips">
+<subsection name="&sect-num;.3 Tips" anchor="tips">
 <p>
 JMeter/RMI requires a connection from the client to the server. This will use the port you chose, default <code>1099</code>.<br/>
 JMeter/RMI also requires a reverse connection in order to return sample results from the server to the client.<br/>
@@ -211,7 +244,7 @@ in remote testing, since JMeter 2.6:</p>
  "<code>java.rmi.server.hostname</code>" parameter.</li>
 </ul>
 </subsection>
-<subsection name="&sect-num;.3 Using a different port" anchor="portchange">
+<subsection name="&sect-num;.4 Using a different port" anchor="portchange">
 <p>By default, JMeter uses the standard RMI port <code>1099</code>. It is possible to change this. For this to work successfully,
 all the following need to agree:</p>
 <ul>
@@ -241,7 +274,7 @@ The chosen port will be logged in the server <code>jmeter.log</code> file (<code
 </p>
 </subsection>
 
-<subsection name="&sect-num;.4 Using a different sample sender" anchor="sendermode">
+<subsection name="&sect-num;.5 Using a different sample sender" anchor="sendermode">
 <p>
 Listeners in the test plan send their results back to the client JMeter which writes the results to the specified files
 By default, samples are sent back synchronously as they are generated.
@@ -308,7 +341,7 @@ This is not really a problem as there is always a more efficient way to implemen
 </subsection>
 
 
-<subsection name="&sect-num;.5 Dealing with nodes that failed starting" anchor="retries">
+<subsection name="&sect-num;.6 Dealing with nodes that failed starting" anchor="retries">
   <p>
     For large-scale tests there is a chance that some part of remote servers will be unavailable or down. 
     For example, when you use automation script to allocate many cloud machines and use them as generators,

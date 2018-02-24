@@ -978,7 +978,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /**
      * Adds a test plan listener.
-     * @param listener
+     * @param listener to add
      */
     public void addTestPlanListener(TestPlanListener listener) {
         testPlanListeners.add(listener);
@@ -986,7 +986,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /**
      * Removes a test plan listener.
-     * @param listener
+     * @param listener to remove
      */
     public void removeTestPlanListener(TestPlanListener listener) {
         testPlanListeners.remove(listener);

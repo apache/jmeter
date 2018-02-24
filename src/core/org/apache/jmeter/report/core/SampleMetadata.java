@@ -38,7 +38,8 @@ import org.apache.jmeter.save.CSVSaveService;
  */
 public class SampleMetadata {
 
-    private static final String METADATA_EXCEPTION_MSG_FMT = "No column <%s> found in sample metadata <%s>, check #jmeter.save.saveservice.* properties to add the missing column";
+    private static final String METADATA_EXCEPTION_MSG_FMT = "No column <%s> found in sample metadata <%s>,"
+            + " check #jmeter.save.saveservice.* properties to add the missing column";
 
     /** The column list : accessed by CSVSampleWriter */
     List<String> columns;

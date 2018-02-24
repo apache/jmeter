@@ -45,6 +45,7 @@ import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.Function;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Help;
 import org.apache.jmeter.gui.action.KeyStrokes;
@@ -209,8 +210,9 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         @Override
         public void actionPerformed(ActionEvent e) {
             String[] source = new String[] { Help.HELP_FUNCTIONS, functionList.getText() };
-            ActionEvent helpEvent = new ActionEvent(source, e.getID(), "help"); //$NON-NLS-1$
-            ActionRouter.getInstance().actionPerformed(helpEvent);
+            ActionRouter.getInstance().doActionNow(
+                    new ActionEvent(source, e.getID(), ActionNames.HELP));
+
         }
     }
 

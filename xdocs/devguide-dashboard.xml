@@ -238,7 +238,7 @@
                     <li>
                         <p>
                             The chain building is dispatched between the
-                            <code>org.apache.jmeter.report.dashboard.ReporGenerator.generate</code>
+                            <code>org.apache.jmeter.report.dashboard.ReportGenerator.generate</code>
                             method
                             and the implementation of the consumers. So the code in
                             charge of

@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.URL;
@@ -45,6 +46,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -54,7 +56,6 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.reflect.ClassFinder;
@@ -156,7 +157,7 @@ public class JMeterUtils implements UnitTestManager {
 
     /**
      * Initialise JMeter logging
-     * @deprecated
+     * @deprecated does not do anything anymore
      */
     @Deprecated
     public static void initLogging() {
@@ -175,7 +176,6 @@ public class JMeterUtils implements UnitTestManager {
             } else {
                 setLocale(new Locale(loc, "")); // $NON-NLS-1$
             }
-
         } else {
             setLocale(Locale.getDefault());
         }
@@ -664,26 +664,20 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     public static String getResourceFileAsText(String name) {
-        BufferedReader fileReader = null;
         try {
             String lineEnd = System.getProperty("line.separator"); // $NON-NLS-1$
             InputStream is = JMeterUtils.class.getClassLoader().getResourceAsStream(name);
             if(is != null) {
-                fileReader = new BufferedReader(new InputStreamReader(is));
-                StringBuilder text = new StringBuilder();
-                String line;
-                while ((line = fileReader.readLine()) != null) {
-                    text.append(line);
-                    text.append(lineEnd);
+                try (Reader in = new InputStreamReader(is);
+                        BufferedReader fileReader = new BufferedReader(in)) {
+                    return fileReader.lines()
+                            .collect(Collectors.joining(lineEnd, "", lineEnd));
                 }
-                return text.toString();
             } else {
                 return ""; // $NON-NLS-1$                
             }
         } catch (IOException e) {
             return ""; // $NON-NLS-1$
-        } finally {
-            IOUtils.closeQuietly(fileReader);
         }
     }
 

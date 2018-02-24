@@ -24,7 +24,8 @@
   <property name="localeLanguage" value="en"/>
   <property name="charset" value="UTF-8"/>
   <property name="severity" value="error"/>
-  <property name="fileExtensions" value="java, groovy, properties, xml"/>
+  <property name="fileExtensions"
+            value="java, groovy, xml, xsd, dtd, htm, html, txt, properties"/>
 
   <!-- Verify that EVERY source file has the appropriate license -->
   <module name="RegexpHeader">
@@ -42,7 +43,7 @@
   <module name="RegexpMultiline">
     <!-- No more than 2 blank lines allowed. -->
     <property name="format" value="\r?\n[\t ]*\r?\n[\t ]*\r?\n[\t ]*\r?\n"/>
-    <property name="fileExtensions" value="java, xml, properties"/>
+    <property name="fileExtensions" value="java, groovy, xml, properties"/>
     <property name="message" value="Unnecessary consecutive lines"/>
   </module>
   <!--<module name="RegexpOnFilename">-->
@@ -162,6 +163,22 @@
     <!--<module name="ClassFanOutComplexity"/>-->
     <!--<module name="CyclomaticComplexity"/>-->
     <!--<module name="NPathComplexity"/>-->
+
+    <!-- size -->
+    <module name="AnonInnerLength">
+      <property name="max" value="45"/>
+    </module>
+    <module name="LineLength">
+      <!-- TODO: reduce this to 120 -->
+      <property name="max" value="160"/>
+    </module>
+
+    <!-- whitespace -->
+    <module name="EmptyForInitializerPad"/>
+    <module name="EmptyForIteratorPad"/>
+    <module name="MethodParamPad"/>
+    <module name="NoLineWrap"/>
+    <module name="TypecastParenPad"/>
 
     <!--
     Allow comment to suppress checkstyle for a single line

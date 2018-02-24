@@ -78,6 +78,7 @@ import org.apache.jmeter.report.dashboard.GenerationException;
 import org.apache.jmeter.report.dashboard.ReportGenerator;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
+import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.save.SaveService;
@@ -344,11 +345,12 @@ public class JMeter implements JMeterPlugin {
      */
     private void startGui(String testFile) {
         System.out.println("================================================================================");//NOSONAR
-        System.out.println("Don't use GUI mode for load testing, only for Test creation and Test debugging !");//NOSONAR
+        System.out.println("Don't use GUI mode for load testing !, only for Test creation and Test debugging.");//NOSONAR
         System.out.println("For load testing, use NON GUI Mode:");//NOSONAR
-        System.out.println("   jmeter -n -t [jmx file] -l [results file] -e -o [Path to output folder]");//NOSONAR
-        System.out.println("& adapt Java Heap to your test requirements:");//NOSONAR
-        System.out.println("   Modify HEAP=\"-Xms512m -Xmx512m\" in the JMeter batch file");//NOSONAR
+        System.out.println("   jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]");//NOSONAR
+        System.out.println("& increase Java Heap to meet your test requirements:");//NOSONAR
+        System.out.println("   Modify current env variable HEAP=\"-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m\" in the jmeter batch file");//NOSONAR
+        System.out.println("Check : https://jmeter.apache.org/usermanual/best-practices.html");//NOSONAR
         System.out.println("================================================================================");//NOSONAR
         
         SplashScreen splash = new SplashScreen();
@@ -496,7 +498,7 @@ public class JMeter implements JMeterPlugin {
             } else if (parser.getArgumentById(SERVER_OPT) != null) {
                 // Start the server
                 try {
-                    RemoteJMeterEngineImpl.startServer(JMeterUtils.getPropDefault("server_port", 0)); // $NON-NLS-1$
+                    RemoteJMeterEngineImpl.startServer(RmiUtils.getRmiRegistryPort()); // $NON-NLS-1$
                     startOptionalServers();
                 } catch (Exception ex) {
                     System.err.println("Server failed to start: "+ex);//NOSONAR

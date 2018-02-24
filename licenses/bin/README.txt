@@ -5,16 +5,16 @@ The following files are ASF products, and are licensed under the Apache License 
 avalon-framework-4.1.4.jar
 bsf-2.4.0.jar
 bshclient.jar (part of JMeter)
-commons-codec-1.10.jar
+commons-codec-1.11.jar
 commons-collections-3.2.2.jar
 commons-dbcp2-2.2.0.jar
-commons-io-2.5.jar
+commons-io-2.6.jar
 commons-jexl-2.1.1.jar
 commons-jexl3-3.1.jar
-commons-lang3-3.6.jar
+commons-lang3-3.7.jar
 commons-math3-3.5.jar
 commons-net-3.6.jar
-commons-pool2-2.4.2.jar
+commons-pool2-2.5.0.jar
 excalibur-logger-1.1.jar
 geronimo-jms_1.1_spec-1.1.1.jar
 groovy-all-2.4.13.jar

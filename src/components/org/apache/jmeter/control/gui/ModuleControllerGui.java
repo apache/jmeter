@@ -48,9 +48,11 @@ import javax.swing.tree.TreeSelectionModel;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.ModuleController;
 import org.apache.jmeter.control.TestFragmentController;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.apache.jmeter.gui.util.MenuInfo;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.AbstractThreadGroup;
@@ -68,6 +70,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * - TestFragmentController
  *
  */
+@GUIMenuSortOrder(MenuInfo.SORT_ORDER_DEFAULT+2)
 public class ModuleControllerGui extends AbstractControllerGui implements ActionListener {
     private static final long serialVersionUID = -4195441608252523573L;
 
@@ -137,7 +140,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void setSelectionPaths(TreePath[] pPaths) {
                 DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) pPaths[pPaths.length-1].getLastPathComponent();
-                if(isSelectedPathAllowed(lastSelected)) {
+                if (isSelectedPathAllowed(lastSelected)) {
                     super.setSelectionPaths(pPaths);
                 }
             }
@@ -145,7 +148,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void addSelectionPath(TreePath path) {
                 DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) path.getLastPathComponent();
-                if(isSelectedPathAllowed(lastSelected)) {
+                if (isSelectedPathAllowed(lastSelected)) {
                     super.addSelectionPath(path);
                 }
             }
@@ -153,7 +156,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void addSelectionPaths(TreePath[] paths) {
                 DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) paths[paths.length-1].getLastPathComponent();
-                if(isSelectedPathAllowed(lastSelected)) {
+                if (isSelectedPathAllowed(lastSelected)) {
                     super.addSelectionPaths(paths);
                 }
             }
@@ -343,9 +346,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         TreeNode[] filteredPath = new TreeNode[path.length-1];
         
         //ignore first element of path - WorkBench, (why WorkBench is appearing in the path ???)
-        for (int i = 1; i < path.length; i++){
-            filteredPath[i-1] = path[i];
-        }
+        System.arraycopy(path, 1, filteredPath, 0, path.length - 1);
         
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) moduleToRunTreeNodes.getModel().getRoot();
         //treepath of test plan tree and module to run tree cannot be compared directly - moduleToRunTreeModel.getPathToRoot()
@@ -372,7 +373,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             //expand Module to run tree to selected node and set selection path to it
             this.focusSelectedOnTree(selected);
         }
-        if(!hasAtLeastOneController) {
+        if (!hasAtLeastOneController) {
             warningLabel.setText(JMeterUtils.getResString("module_controller_warning_no_controller"));
             warningLabel.setVisible(true);
         }
@@ -402,10 +403,11 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
                     DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(cur);
                     parent.add(newNode);
                     buildTreeNodeModel(cur, level + 1, newNode);
+                    final boolean isController = te instanceof Controller
+                            && !(te instanceof ModuleController
+                                    || te instanceof AbstractThreadGroup);
                     hasAtLeastOneController = 
-                            hasAtLeastOneController || (
-                                    te instanceof Controller && 
-                                    !(te instanceof ModuleController || te instanceof AbstractThreadGroup));
+                            hasAtLeastOneController || isController;
                 } else if (te instanceof TestPlan) {
                     ((DefaultMutableTreeNode) moduleToRunTreeModel.getRoot())
                             .setUserObject(cur);
@@ -459,7 +461,8 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         private static final long serialVersionUID = 1129098620102526299L;
         
         /**
-         * @see javax.swing.tree.DefaultTreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree, java.lang.Object, boolean, boolean, boolean, int, boolean)
+         * @see javax.swing.tree.DefaultTreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree,
+         *      java.lang.Object, boolean, boolean, boolean, int, boolean)
          */
         @Override
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,

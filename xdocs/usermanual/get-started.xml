@@ -57,7 +57,7 @@ The first step is to configure the injectors that will run JMeter, this as for a
     <li>Correct machine sizing in terms of CPU, memory and network</li>
     <li>OS Tuning</li>
     <li>Java setup: Ensure you install the latest version of Java supported by JMeter</li>
-    <li><b>Correct sizing of Java Heap</b>. By default JMeter runs with a heap of 512MB, this might not be enough for your test and depends on your test plan and number of threads you want to run</li>
+    <li><b>Increase the Java Heap size</b>. By default JMeter runs with a heap of 1 GB, this might not be enough for your test and depends on your test plan and number of threads you want to run</li>
 </ul> 
 
 Once everything is ready, you will use Command-line mode (called <a href="#non_gui">Non-GUI mode</a>) to run it for the Load Test. 
@@ -114,11 +114,12 @@ over your Test Plans.</p>
 <p>JMeter requires that your computing environment meets some minimum requirements.</p>
 
 <subsection name="&sect-num;.1.1 Java Version" anchor="java_versions">
-<note>JMeter requires a fully compliant JVM 8, we advise that you install latest minor version of those major versions.
-Java 9 is not tested completely as of JMeter 3.2.
+<note>JMeter 4.0 is compatible with Java 8 or Java 9.
+We highly advise you to install latest minor version of those major versions for security and performance reasons. 
 </note>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
+<note>Although you can use a JRE, it is better to install a JDK as for recording of HTTPS, JMeter needs <code>keytool</code> utility from JDK</note>
 </subsection>
 
 <subsection name="&sect-num;.1.2 Operating Systems" anchor="os">
@@ -232,13 +233,13 @@ You can rename the parent directory (i.e. <code>apache-jmeter-X.Y</code>) if you
 <section name="&sect-num;.4 Running JMeter" anchor="running">
 <br/>
 <p>To run JMeter, run the <code>jmeter.bat</code> (for Windows) or <code>jmeter</code> (for Unix) file.
-These files are found in the bin directory.
+These files are found in the <code>bin</code> directory.
 After a short time, the JMeter GUI should appear.
 <note>GUI mode should only be used for creating the test script, NON GUI mode must be used for load testing</note>
 </p>
 
 <p>
-There are some additional scripts in the bin directory that you may find useful.
+There are some additional scripts in the <code>bin</code> directory that you may find useful.
 Windows script files (the .CMD files require Win2K or later):
 </p>
 <dl>
@@ -256,13 +257,36 @@ Windows script files (the .CMD files require Win2K or later):
 and means the last test plan that was run interactively.</note>
 
 <p>
-The environment variable <code>JVM_ARGS</code> can be used to override JVM settings in the <code>jmeter.bat</code> script.
-For example:
+There are a few environment variables, that can be used to customize the JVM settings for JMeter. An easy way to set those is by creating a file named <code>setenv.bat</code> in the <code>bin</code> directory. Such a file could look like:
 </p>
+
 <source>
-set JVM_ARGS="-Xms1024m -Xmx1024m -Dpropname=propvalue"
+rem This is the content of bin\setenv.bat,
+rem it will be called by bin\jmeter.bat
+
+set JVM_ARGS="-Xms1024m -Xmx1024m -Dpropname=value"
+</source>
+
+<p>
+The <code>JVM_ARGS</code> can be used to override JVM settings in the <code>jmeter.bat</code> script and will get set when starting JMeter, e.g.:
+</p>
+
+<source>
 jmeter -t test.jmx &hellip;
 </source>
+
+<p>The following environment variables can be defined:</p>
+<dl>
+<dt><code>DDRAW</code></dt><dd>JVM options to influence usage of direct draw, e.g. <code>-Dsun.java2d.ddscale=true</code>. Default is empty.</dd>
+<dt><code>GC_ALGO</code></dt><dd>JVM garbage collector options. Defaults to <code>-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20</code></dd>
+<dt><code>HEAP</code></dt><dd>JVM memory settings used when starting JMeter. Defaults to <code>-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m</code></dd>
+<dt><code>JMETER_BIN</code></dt><dd>JMeter bin directory (must end in <code>\</code>). Value will have been guessed, when <code>setenv.bat</code> is called.</dd>
+<dt><code>JMETER_COMPLETE_ARGS</code></dt><dd>If set indicates, that <code>JVM_ARGS</code> and <code>JMETER_OPTS</code> are to be used, only. All other options like <code>HEAP</code> and <code>GC_ALGO</code> will be ignored. Default is empty.</dd>
+<dt><code>JMETER_HOME</code></dt><dd>installation directory. Will be guessed from location of <code>jmeter.bat</code></dd>
+<dt><code>JMETER_LANGUAGE</code></dt><dd>Java runtime options to specify used language. Defaults to: <code>-Duser.language="en" -Duser.region="EN"</code></dd>
+<dt><code>JM_LAUNCH</code></dt><dd>Name of the java executable, like <code>java.exe</code> (default) or <code>javaw.exe</code></dd>
+<dt><code>JVM_ARGS</code></dt><dd>Java options to be used when starting JMeter. These will be added last to the java command. Default is empty</dd>
+</dl>
 
 <p>
 Un*x script files; should work on most Linux/Unix systems:
@@ -276,9 +300,7 @@ Un*x script files; should work on most Linux/Unix systems:
 <dt><code>stoptest.sh</code></dt><dd>Run the Shutdown client to stop a non-GUI instance abruptly</dd>
 </dl>
 <p>
-It may be necessary to edit the jmeter shell script if some of the JVM options are not supported
-by the JVM you are using.
-The <code>JVM_ARGS</code> environment variable can be used to override or set additional JVM options, for example:
+It may be necessary to set a few environment variables to configure the JVM used by JMeter. Those variables can be either set directly in the shell starting the <code>jmeter</code> script. For example setting the variable <code>JVM_ARGS</code> will override most pre-defined settings, for example
 </p>
 <source>
 JVM_ARGS="-Xms1024m -Xmx1024m" jmeter -t test.jmx [etc.]
@@ -286,6 +308,33 @@ JVM_ARGS="-Xms1024m -Xmx1024m" jmeter -t test.jmx [etc.]
 <p>
 will override the HEAP settings in the script.
 </p>
+<p>To set those variables permanently, you can place them in a file called <code>setenv.sh</code> in the <code>bin</code> directory. This file will be sourced when running JMeter by calling the <code>jmeter</code> script. An example for <code>bin/setenv.sh</code> could look like:
+</p>
+
+<source>
+# This is the file bin/setenv.sh,
+# it will be sourced in by bin/jmeter
+
+# Use a bigger heap, but a smaller metaspace, than the default
+export HEAP="-Xms1G -Xmx1G -XMaxMetaspaceSize=192m"
+
+# Try to guess the locale from the OS. The space as value is on purpose!
+export JMETER_LANGUAGE=" "
+</source>
+
+<p>The following environment variables can be defined:</p>
+<dl>
+<dt><code>GC_ALGO</code></dt><dd>Java runtime options to specify JVM garbage collection algorithm. Defaults to <code>-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20</code></dd>
+<dt><code>HEAP</code></dt><dd>Java runtime options for memory management used when JMeter is started. Defaults to <code>-Xms1g -Xmx1g -X:MaxMetaspaceSize=256m</code></dd>
+<dt><code>JAVA_HOME</code></dt><dd>Must point at your Java Development Kit installation. Required to run the with the "<code>debug</code>" argument. On some OSes it JMeter will try its best to guess the location of the JVM.</dd>
+<dt><code>JMETER_COMPLETE_ARGS</code></dt><dd>If set indicates, that <code>JVM_ARGS</code> and <code>JMETER_OPTS</code> are to be used, only. All other options like <code>HEAP</code> and <code>GC_ALGO</code> will be ignored. Default is empty.</dd>
+<dt><code>JMETER_HOME</code></dt><dd>May point to your JMeter install dir. If empty it will be set relative to the <code>jmeter</code> script.</dd>
+<dt><code>JMETER_LANGUAGE</code></dt><dd>Java runtime options to specify used language. Defaults to <code>-Duser.language=en -Duser.region=EN</code></dd>
+<dt><code>JMETER_OPTS</code></dt><dd>Java runtime options used when JMeter is started. Special options for operating systems might be added by JMeter.</dd>
+<dt><code>JRE_HOME</code></dt><dd>Must point at your Java Runtime installation. Defaults to <code>JAVA_HOME</code> if empty. If <code>JRE_HOME</code> and <code>JAVA_HOME</code> are both empty, JMeter will try to guess <code>JAVA_HOME</code>. If <code>JRE_HOME</code> and <code>JAVA_HOME</code> are both set, <code>JAVA_HOME</code> is used.</dd>
+<dt><code>JVM_ARGS</code></dt><dd>Java options to be used when starting JMeter. These will be added before <code>JMETER_OPTS</code> and after the other JVM options. Default is empty</dd>
+</dl>
+
 <subsection name="&sect-num;.4.1 JMeter's Classpath" anchor="classpath">
 <p>JMeter automatically finds classes from jars in the following directories:</p>
 <dl>

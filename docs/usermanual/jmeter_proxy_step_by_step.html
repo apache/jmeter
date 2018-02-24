@@ -8,7 +8,7 @@
 <meta name="author" value="JMeter developers">
 <meta name="email" value="dev@jmeter.apache.org">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="../css/new-style.css">
 <link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png">
@@ -24,16 +24,16 @@
             APACHE LOGO
           -->
 <div>
-<a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a>
+<a href="https://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a>
 </div>
 <!--
               PROJECT LOGO
             -->
 <div>
-<a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a>
+<a href="https://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a>
 </div>
 <div class="banner">
-<a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
+<a href="https://www.apache.org/events/current-event.html"><img src="https://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
 <div class="clear"></div>
 </div>
 </div>
@@ -46,7 +46,7 @@
 <a href="../index.html">Overview</a>
 </li>
 <li>
-<a href="http://www.apache.org/licenses/">License</a>
+<a href="https://www.apache.org/licenses/">License</a>
 </li>
 </ul>
 </li>
@@ -93,10 +93,10 @@
 <a href="../api/index.html">Javadocs</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
+<a href="https://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<a href="https://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 </li>
@@ -131,7 +131,7 @@
 <a href="../issues.html">Issue Tracking</a>
 </li>
 <li>
-<a href="http://www.apache.org/security/">Security</a>
+<a href="https://www.apache.org/security/">Security</a>
 </li>
 <li>
 <a href="../mail.html">Mailing Lists</a>
@@ -146,7 +146,7 @@
 <a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
+<a href="https://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 </li>
@@ -156,16 +156,16 @@
 <div class="menu-title">Foundation</div>
 <ul>
 <li>
-<a href="http://www.apache.org/">The Apache Software Foundation (ASF)</a>
+<a href="https://www.apache.org/">The Apache Software Foundation (ASF)</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
+<a href="https://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+<a href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+<a href="https://www.apache.org/foundation/thanks.html">Thanks</a>
 </li>
 </ul>
 </li>
@@ -226,10 +226,11 @@ configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecor
 
 <ol>
   
-<li>Go to <span class="code">JMETER_HOME/bin</span> and start JMeter with <span class="code">jmeterw.cmd</span> on Windows
-      and <span class="code">jmeter</span> on Linux/Unix</li>
+<li>Go to <span class="code">JMETER_HOME/bin</span> and start JMeter with <span class="code">jmeterw.bat</span> on Windows
+      and <span class="code">jmeter.sh
+      </span> on Linux/Unix</li>
   
-<li>Select <span class="code">Templates...</span> on the menu bar</li>
+<li>Select <span class="code">Templates&hellip;</span> on the menu bar</li>
   
 <figure>
 <a href="../images/screenshots/Select-Templates-Icon.png"><img src="../images/screenshots/Select-Templates-Icon.png" width="" height="" alt=""></a>
@@ -254,7 +255,7 @@ configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecor
     <dl>
       
 <dt>
-<span class="code">Server name</span>
+<span class="code">Server name or IP</span>
 </dt>
 <dd>enter <span class="code">example.com</span>
 </dd>
@@ -285,7 +286,7 @@ configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecor
 
 <p>
 This will start the JMeter proxy server which is used to intercept the browser requests.
-A file called <span class="code">ApacheJMeterTemporaryRootCA.crt</span> will be generated in <span class="code">jmeter/bin</span>
+A file called <span class="code">ApacheJMeterTemporaryRootCA.crt</span> will be generated in <span class="code">JMETER_HOME/bin</span>
 folder. Install this certificate in your browser, if you don't know how to do it,
 read <a href="component_reference.html#HTTP%28S%29_Test_Script_Recorder">Installing the JMeter CA certificate for HTTPS recording</a>
 
@@ -404,13 +405,13 @@ is required by all pages, the request defaults is where one would add the entrie
     <dl>
       
 <dt>
-<span class="code">Number of Threads</span>
+<span class="code">Number of Threads (users)</span>
 </dt>
 <dd>enter <span class="code">5</span>
 </dd>
       
 <dt>
-<span class="code">Ramp-Up Period</span>
+<span class="code">Ramp-Up Period (in seconds)</span>
 </dt>
 <dd>do not change</dd>
       
@@ -470,23 +471,23 @@ Check with <span class="code">View Results Tree</span> element if all is ok.
 In some scripts, we will need to:
 <ul>
   
-<li>Variabilize some input (login, password, search words...)</li>
+<li>Variabilize some input (login, password, search words, &hellip;)</li>
   
-<li>Correlate some data (session variable...) between two requests</li>
+<li>Correlate some data (session variable, &hellip;) between two requests</li>
 
-</ul>  
+</ul>
 
 </p>
 
 <p>
 To variabilize, we can use:
 <ul>
-	
+  
 <li>
 <span class="code">CSV Data Set Config</span> to get input data from csv file</li>
-	
-<li>JMeter functions like <span class="code">__counter</span>, <span class="code">__time</span>...</li>
-	
+  
+<li>JMeter functions like <span class="code">__counter</span>, <span class="code">__time</span>, &hellip;</li>
+  
 <li>etc.</li>
 
 </ul>
@@ -494,7 +495,7 @@ To variabilize, we can use:
 </p>
 
 <p>
-To correlate, we can get data from a request with <span class="code">Post Processors</span> like <span class="code">JSON Extractor</span>, <span class="code">Regular Expression Extractor</span>... and inject it in another request.
+To correlate, we can get data from a request with <span class="code">Post Processors</span> like <span class="code">JSON Extractor</span>, <span class="code">Regular Expression Extractor</span>, &hellip; and inject it in another request.
 </p>
 
 <p>
@@ -607,7 +608,7 @@ At the end of the test, an HTML report will be generated and available in [Path 
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2017
+            2018
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache

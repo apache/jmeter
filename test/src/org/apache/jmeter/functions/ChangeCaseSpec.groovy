@@ -67,3 +67,4 @@ class ChangeCaseSpec extends Specification {
     }
 
 }
+

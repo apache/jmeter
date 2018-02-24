@@ -370,8 +370,12 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         cacheResultWithGivenCode("200");
         CacheManager.CacheEntry cacheEntry = getThreadCacheEntry(LOCAL_HOST);
         assertNotNull("Saving SampleResult with HttpMethod & 200 response should make cache entry.", cacheEntry);
-        assertEquals("Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no etag.", EXPECTED_ETAG, cacheEntry.getEtag());
-        assertEquals("Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no last modified date.", this.currentTimeInGMT, cacheEntry.getLastModified());
+        assertEquals(
+                "Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no etag.",
+                EXPECTED_ETAG, cacheEntry.getEtag());
+        assertEquals(
+                "Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no last modified date.",
+                this.currentTimeInGMT, cacheEntry.getLastModified());
     }
 
     @Test
@@ -401,7 +405,9 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
     public void testClearCache() throws Exception {
         assertTrue("ThreadCache should be empty initially.", getThreadCache().isEmpty());
         cacheResultWithGivenCode("200");
-        assertFalse("ThreadCache should be populated after saving details for HttpMethod with SampleResult with response code 200.", getThreadCache().isEmpty());
+        assertFalse(
+                "ThreadCache should be populated after saving details for HttpMethod with SampleResult with response code 200.",
+                getThreadCache().isEmpty());
         this.cacheManager.clear();
         assertTrue("ThreadCache should be emptied by call to clear.", getThreadCache().isEmpty());
     }
@@ -418,7 +424,8 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         Field threadLocalfield = CacheManager.class.getDeclaredField("threadCache");
         threadLocalfield.setAccessible(true);
         @SuppressWarnings("unchecked")
-        ThreadLocal<Map<String, CacheManager.CacheEntry>> threadLocal = (ThreadLocal<Map<String, CacheManager.CacheEntry>>) threadLocalfield.get(this.cacheManager);
+        ThreadLocal<Map<String, CacheManager.CacheEntry>> threadLocal = (ThreadLocal<Map<String, CacheManager.CacheEntry>>) threadLocalfield
+                .get(this.cacheManager);
         return threadLocal.get();
     }
 

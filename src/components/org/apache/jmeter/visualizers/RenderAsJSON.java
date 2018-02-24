@@ -37,7 +37,9 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
     // This 'other value' regex is deliberately weak, even accepting an empty string, to be useful when reporting malformed data.
     private static final String OTHER_VALUE_REGEX = "[^\\{\\[\\]\\}\\,]*"; // $NON-NLS-1$
 
-    private static final String VALUE_OR_PAIR_REGEX = "((" + STRING_REGEX + "\\s*:)?\\s*(" + STRING_REGEX + "|" + OTHER_VALUE_REGEX + ")\\s*,?\\s*)"; // $NON-NLS-1$
+    private static final String VALUE_OR_PAIR_REGEX = "((" + STRING_REGEX
+            + "\\s*:)?\\s*(" + STRING_REGEX + "|" + OTHER_VALUE_REGEX
+            + ")\\s*,?\\s*)"; // $NON-NLS-1$
 
     private static final Pattern VALUE_OR_PAIR_PATTERN = Pattern.compile(VALUE_OR_PAIR_REGEX);
 
@@ -83,7 +85,7 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
 
         boolean misparse = false;
 
-        for (int i = 0; i < json.length(); ) {
+        for (int i = 0; i < json.length();) {
             final char currentChar = json.charAt(i);
             if ((currentChar == '{') || (currentChar == '[')) {
                 pretty.append(nl).append(index).append(currentChar);

@@ -6,7 +6,7 @@
           -
           User's Manual: Remote (Distributed) Testing</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="../css/new-style.css">
 <link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png">
@@ -22,16 +22,16 @@
             APACHE LOGO
           -->
 <div>
-<a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a>
+<a href="https://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a>
 </div>
 <!--
               PROJECT LOGO
             -->
 <div>
-<a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a>
+<a href="https://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a>
 </div>
 <div class="banner">
-<a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
+<a href="https://www.apache.org/events/current-event.html"><img src="https://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
 <div class="clear"></div>
 </div>
 </div>
@@ -44,7 +44,7 @@
 <a href="../index.html">Overview</a>
 </li>
 <li>
-<a href="http://www.apache.org/licenses/">License</a>
+<a href="https://www.apache.org/licenses/">License</a>
 </li>
 </ul>
 </li>
@@ -91,10 +91,10 @@
 <a href="../api/index.html">Javadocs</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
+<a href="https://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<a href="https://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 </li>
@@ -129,7 +129,7 @@
 <a href="../issues.html">Issue Tracking</a>
 </li>
 <li>
-<a href="http://www.apache.org/security/">Security</a>
+<a href="https://www.apache.org/security/">Security</a>
 </li>
 <li>
 <a href="../mail.html">Mailing Lists</a>
@@ -144,7 +144,7 @@
 <a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
+<a href="https://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 </li>
@@ -154,16 +154,16 @@
 <div class="menu-title">Foundation</div>
 <ul>
 <li>
-<a href="http://www.apache.org/">The Apache Software Foundation (ASF)</a>
+<a href="https://www.apache.org/">The Apache Software Foundation (ASF)</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
+<a href="https://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+<a href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+<a href="https://www.apache.org/foundation/thanks.html">Thanks</a>
 </li>
 </ul>
 </li>
@@ -250,6 +250,8 @@ Make sure that all the nodes (client and servers) :
 <li>are running exactly the same version of JMeter.</li>
     
 <li>are using the same version of Java on all systems. Using different versions of Java may work but is discouraged.</li>
+    
+<li>have a <a href="#setup_ssl">valid keystore for RMI over SSL</a>, or you have disabled the use of SSL.</li>
 
 </ul>
 
@@ -363,7 +365,50 @@ The command-line client will exit when all the remote servers have stopped.
 </p>
 
 <div class="subsection">
-<h2 id="detail_instructions">13.1 Doing it Manually<a class="sectionlink" href="#detail_instructions" title="Link to here">&para;</a>
+<h2 id="setup_ssl">13.1 Setting up SSL<a class="sectionlink" href="#setup_ssl" title="Link to here">&para;</a>
+</h2>
+
+<div class="clear"></div>
+<div class="note">Since JMeter 4.0 the default transport mechanism for RMI will use SSL. SSL needs keys and certificates to work. You will have to create those keys yourself.</div>
+<div class="clear"></div>
+
+<p>
+The simplest setup is to use one key/cert pair for all JMeter servers and clients you want to connect. JMeter comes with a script to generate a keystore that
+contains one key (and its corresponding certificate) named <span class="code">rmi</span>. The script is located in the <span class="code">bin</span> directory and is available for Windows systems (called <span class="code">bin/create-rmi-keystore.bat</span>) and Unix like systems (called <span class="code">bin/create-rmi-keystore.sh</span>). It will generate a key-pair, that is valid for seven days, with a default passphrase of value '<span class="code">changeit</span>'. It is advised to call it from inside the <span class="code">bin</span> directory.
+</p>
+
+<p>
+When you run the script, it will ask you some questions about some names it will embed in the certificate. You can type in whatever you want, as long the keystore tool accepts it. That value has to match the property <span class="code">server.rmi.ssl.keystore.alias</span>, which defaults to <span class="code">rmi</span>. A sample session to create the keystore is shown below.
+</p>
+
+<pre class="source">$ cd jmeter/bin
+$ ./create-rmi-keystore.sh
+What is your first and last name?
+  [Unknown]:  rmi
+What is the name of your organizational unit?
+  [Unknown]:  My unit name
+What is the name of your organization?
+  [Unknown]:  My organisation name
+What is the name of your City or Locality?
+  [Unknown]:  Your City
+What is the name of your State or Province?
+  [Unknown]:  Your State
+What is the two-letter country code for this unit?
+  [Unknown]:  XY
+Is CN=rmi, OU=My unit name, O=My organisation name, L=Your City, ST=Your State, C=XY correct?
+  [no]:  yes
+
+Copy the generated rmi_keystore.jks to jmeter/bin folder or reference it in property 'server.rmi.ssl.keystore.file'
+</pre>
+
+<p>
+The <a href="properties_reference.html#remote">defaults settings for RMI</a> should work with this setup. Copy the file <span class="code">bin/rmi_keystore.jks</span> to every JMeter server and client you want to use for your distributed testing setup.
+</p>
+
+</div>
+
+<div class="subsection">
+<h2 id="detail_instructions">13.2 Doing it Manually<a class="sectionlink" href="#detail_instructions" title="Link to here">&para;</a>
 </h2>
 
 <p>In some cases, the jmeter-server script may not work for you (if you are using an OS platform not anticipated by the JMeter developers).
@@ -415,7 +460,7 @@ Use the "<span class="code">-s</span>" option with the jmeter startup script ("<
 </div>
 
 <div class="subsection">
-<h2 id="tips">13.2 Tips<a class="sectionlink" href="#tips" title="Link to here">&para;</a>
+<h2 id="tips">13.3 Tips<a class="sectionlink" href="#tips" title="Link to here">&para;</a>
 </h2>
 
 <p>
@@ -482,7 +527,7 @@ in remote testing, since JMeter 2.6:</p>
 </div>
 
 <div class="subsection">
-<h2 id="portchange">13.3 Using a different port<a class="sectionlink" href="#portchange" title="Link to here">&para;</a>
+<h2 id="portchange">13.4 Using a different port<a class="sectionlink" href="#portchange" title="Link to here">&para;</a>
 </h2>
 
 <p>By default, JMeter uses the standard RMI port <span class="code">1099</span>. It is possible to change this. For this to work successfully,
@@ -524,7 +569,7 @@ The chosen port will be logged in the server <span class="code">jmeter.log</span
 
 
 <div class="subsection">
-<h2 id="sendermode">13.4 Using a different sample sender<a class="sectionlink" href="#sendermode" title="Link to here">&para;</a>
+<h2 id="sendermode">13.5 Using a different sample sender<a class="sectionlink" href="#sendermode" title="Link to here">&para;</a>
 </h2>
 
 <p>
@@ -689,7 +734,7 @@ This is not really a problem as there is always a more efficient way to implemen
 
 
 <div class="subsection">
-<h2 id="retries">13.5 Dealing with nodes that failed starting<a class="sectionlink" href="#retries" title="Link to here">&para;</a>
+<h2 id="retries">13.6 Dealing with nodes that failed starting<a class="sectionlink" href="#retries" title="Link to here">&para;</a>
 </h2>
   
 <p>
@@ -745,7 +790,7 @@ This is not really a problem as there is always a more efficient way to implemen
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2017
+            2018
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache

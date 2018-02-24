@@ -97,8 +97,6 @@ public class TestHC4CookieManager extends JMeterTestCase {
             sampler.setMethod(HTTPConstants.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
-        
-
 
         /**
          * Test that the cookie domain field is actually handled as browsers do
@@ -294,7 +292,10 @@ public class TestHC4CookieManager extends JMeterTestCase {
         @Test
         public void testHttpOnlyCookie() throws Exception {
             URL url = new URL("http://a.b.c/");
-            man.addCookieFromHeader("mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI; Path=/; Expires=Tue, 07 Feb 2990 09:13:14 GMT; HttpOnly", url);
+            man.addCookieFromHeader(
+                    "mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI; Path=/;"
+                    + " Expires=Tue, 07 Feb 2990 09:13:14 GMT; HttpOnly",
+                    url);
             assertEquals(1,man.getCookieCount());
             String s = man.getCookieHeaderForURL(url);
             assertNotNull(s);
@@ -305,7 +306,10 @@ public class TestHC4CookieManager extends JMeterTestCase {
         @Test
         public void testSecureCookieWithHttp() throws Exception {
             URL url = new URL("http://a.b.c/");
-            man.addCookieFromHeader("mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI; Path=/; Expires=Tue, 07 Feb 2990 09:13:14 GMT; HttpOnly; secure", url);
+            man.addCookieFromHeader(
+                    "mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI; Path=/;"
+                    + " Expires=Tue, 07 Feb 2990 09:13:14 GMT; HttpOnly; secure",
+                    url);
             assertEquals(1,man.getCookieCount());
             String s = man.getCookieHeaderForURL(url);
             assertNull(s);
@@ -315,7 +319,10 @@ public class TestHC4CookieManager extends JMeterTestCase {
         @Test
         public void testSecureCookieWithHttps() throws Exception {
             URL url = new URL("https://a.b.c/");
-            man.addCookieFromHeader("mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI; Path=/; Expires=Tue, 07 Feb 2990 09:13:14 GMT; HttpOnly; secure", url);
+            man.addCookieFromHeader(
+                    "mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI; Path=/;"
+                    + " Expires=Tue, 07 Feb 2990 09:13:14 GMT; HttpOnly; secure",
+                    url);
             assertEquals(1,man.getCookieCount());
             String s = man.getCookieHeaderForURL(url);
             assertNotNull(s);

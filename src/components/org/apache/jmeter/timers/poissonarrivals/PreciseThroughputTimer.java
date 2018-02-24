@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
@@ -32,10 +33,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This timer generates poisson arrivals with constant throughput.
- * On top of that, it tries to maintain the exact amount of arrivals for a given timeframe ({@link #throughputPeriod}.
+ * This timer generates Poisson arrivals with constant throughput.
+ * On top of that, it tries to maintain the exact amount of arrivals for a given timeframe ({@link #throughputPeriod}).
  * @since 4.0
  */
+@GUIMenuSortOrder(3)
 public class PreciseThroughputTimer extends AbstractTestElement implements Cloneable, Timer, TestStateListener, TestBean, ThroughputProvider, DurationProvider {
     private static final Logger log = LoggerFactory.getLogger(PreciseThroughputTimer.class);
 
@@ -155,7 +157,7 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
     /**
      * Allows to use business values for throughput configuration.
      * For instance, 100 samples per hour vs 100 samples per minute.
-     * @return
+     * @return the length of the throughput period in seconds
      */
     public int getThroughputPeriod() {
         return throughputPeriod;

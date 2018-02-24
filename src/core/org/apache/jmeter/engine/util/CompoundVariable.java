@@ -79,11 +79,10 @@ public class CompoundVariable implements Function {
                 }
             }
             
-            final int functionCount = functions.size();
-            if (functionCount == 0) {
+            if (functions.isEmpty()) {
                 log.warn("Did not find any functions");
             } else {
-                log.debug("Function count: {}", functionCount);
+                log.debug("Function count: {}", functions.size());
             }
         } catch (Exception err) {
             log.error("Exception occurred in static initialization of CompoundVariable.", err);
@@ -126,7 +125,7 @@ public class CompoundVariable implements Function {
     /** {@inheritDoc} */
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) {
-        if (compiledComponents == null || compiledComponents.size() == 0) {
+        if (compiledComponents == null || compiledComponents.isEmpty()) {
             return ""; // $NON-NLS-1$
         }
         
@@ -196,7 +195,7 @@ public class CompoundVariable implements Function {
     static Object getNamedFunction(String functionName) throws InvalidVariableException {
         if (functions.containsKey(functionName)) {
             try {
-                return ((Class<?>) functions.get(functionName)).newInstance();
+                return functions.get(functionName).newInstance();
             } catch (Exception e) {
                 log.error("Exception occurred while instantiating a function: {}", functionName, e); // $NON-NLS-1$
                 throw new InvalidVariableException(e);

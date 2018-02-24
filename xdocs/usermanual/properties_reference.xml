@@ -353,6 +353,38 @@ JMETER-SERVER</source>
     From JMeter version 2.3.1, define this property to cause JMeter to exit after the first test.<br/>
     Defaults to: <code>true</code>
 </property>
+<property name="server.rmi.ssl.keystore.type">
+    Type of keystore for RMI connection security. Possible values are dependent on the JVM in use, but commonly supported are <code>JKS</code> and <code>PKCS12</code>.
+    Defaults to: <code>JKS</code>
+</property>
+<property name="server.rmi.ssl.keystore.file">
+    Keystore file that contains private key
+    Defaults to: <code>rmi_keystore.jks</code>
+</property>
+<property name="server.rmi.ssl.keystore.password">
+    Password of Keystore
+    Defaults to: <code>changeit</code>
+</property>
+<property name="server.rmi.ssl.keystore.alias">
+    Key alias
+    Defaults to: <code>rmi</code>
+</property>
+<property name="server.rmi.ssl.truststore.type">
+    Type of truststore for RMI connection security
+    Defaults to: the value of <code>server.rmi.ssl.keystore.type</code>, which is <code>JKS</code>
+</property>
+<property name="server.rmi.ssl.truststore.file">
+    Keystore file that contains certificate
+    Defaults to: the value of <code>server.rmi.ssl.keystore.file</code>, which is <code>rmi_keystore.jks</code>
+</property>
+<property name="server.rmi.ssl.truststore.password">
+    Password of Trust store
+    Defaults to: the value of <code>server.rmi.ssl.keystore.password</code>, which is <code>changeit</code>
+</property>
+<property name="server.rmi.ssl.disable">
+    Set this to <code>true</code> if you don't want to use SSL for RMI
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.8 Include Controller" anchor="include_controller">
@@ -949,11 +981,11 @@ JMETER-SERVER</source>
 </property>
 <property name="jdbc.config.check.query">
     List of queries used to determine if the database is still responding.<br/>
-    Defaults to: <code>select 1 from INFORMATION_SCHEMA.SYSTEM_USERS|select 1 from dual|select 1 from sysibm.sysdummy1|select 1|select 1 from rdb$database</code>
+    Defaults to: <source>select 1 from INFORMATION_SCHEMA.SYSTEM_USERS|select 1 from dual|select 1 from sysibm.sysdummy1|select 1|select 1 from rdb$database</source>
 </property>
 <property name="jdbc.config.jdbc.driver.class">
     List of JDBC driver class name<br/>
-    Defaults to: <code>com.mysql.jdbc.Driver|org.postgresql.Driver|oracle.jdbc.OracleDriver|com.ingres.jdbc.IngresDriver|com.microsoft.sqlserver.jdbc.SQLServerDriver|com.microsoft.jdbc.sqlserver.SQLServerDriver|org.apache.derby.jdbc.ClientDriver|org.hsqldb.jdbc.JDBCDriver|com.ibm.db2.jcc.DB2Driver|org.apache.derby.jdbc.ClientDriver|org.h2.Driver|org.firebirdsql.jdbc.FBDrivery|org.mariadb.jdbc.Driver|org.sqlite.JDBC|net.sourceforge.jtds.jdbc.Driver</code>
+    Defaults to: <source>com.mysql.jdbc.Driver|org.postgresql.Driver|oracle.jdbc.OracleDriver|com.ingres.jdbc.IngresDriver|com.microsoft.sqlserver.jdbc.SQLServerDriver|com.microsoft.jdbc.sqlserver.SQLServerDriver|org.apache.derby.jdbc.ClientDriver|org.hsqldb.jdbc.JDBCDriver|com.ibm.db2.jcc.DB2Driver|org.apache.derby.jdbc.ClientDriver|org.h2.Driver|org.firebirdsql.jdbc.FBDrivery|org.mariadb.jdbc.Driver|org.sqlite.JDBC|net.sourceforge.jtds.jdbc.Driver</source>
 </property>
 </properties>
 </section>
@@ -1807,6 +1839,16 @@ JMETER-SERVER</source>
 <a href="#">^</a>
 </section>
 
+<section name="&sect-num;.42 Help" anchor="help">
+<description>Controls how documentation in JMeter is displayed</description>
+<properties>
+    <property name="help.local">
+    Switch that allows using Local documentation opened in JMeter GUI.<br/>
+    By default we use Online documentation opened in Browser.
+    Defaults to <code>false</code>
+    </property>
+</properties>
+</section>
 <!-- 
 <section name="&sect-num;.10 Reports" anchor="Reports">
 <description>

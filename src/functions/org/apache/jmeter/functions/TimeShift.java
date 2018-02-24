@@ -51,7 +51,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  *
  * Parameters: - format date @see
  * https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
- * (optional - defaults to epoch time in millisecond) - date to shift formated
+ * (optional - defaults to epoch time in millisecond) - date to shift formatted
  * as first param (optional - defaults now) - amount of (seconds, minutes,
  * hours, days ) to add (optional - default nothing is add ) - a string of the locale for the format
  * ( optional ) - variable name ( optional )
@@ -143,9 +143,11 @@ public class TimeShift extends AbstractFunction {
         if (!StringUtils.isEmpty(format)) {
             try {
                 LocaleFormatObject lfo = new LocaleFormatObject(format, locale);
-                formatter = dateTimeFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
+                formatter = dateTimeFormatterCache.get(lfo, this::createFormatter);
             } catch (IllegalArgumentException ex) {
-                log.error("Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)", format, ex); // $NON-NLS-1$
+                log.error("Format date pattern '{}' is invalid "
+                        + "(see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
+                        format, ex); // $NON-NLS-1$
                 return "";
             }
         }
@@ -170,7 +172,10 @@ public class TimeShift extends AbstractFunction {
                 Duration duration = Duration.parse(amountToShift);
                 localDateTimeToShift = localDateTimeToShift.plus(duration);
             } catch (DateTimeParseException ex) {
-                log.error("Failed to parse the amount duration '{}' to shift (see https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-) ", amountToShift, ex); // $NON-NLS-1$
+                log.error(
+                        "Failed to parse the amount duration '{}' to shift "
+                        + "(see https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-) ",
+                        amountToShift, ex); // $NON-NLS-1$
             }
         }
         String dateString;

@@ -241,9 +241,9 @@ public class PackageTest extends TestCase {
         findFile(srcFileDir, set, new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.equals("messages.properties") ||
-                        (name.endsWith("Resources.properties")
-                                && !name.matches("Example\\d+Resources\\.properties")))
+                return name.equals("messages.properties") ||
+                        name.endsWith("Resources.properties")
+                                && !name.matches("Example\\d+Resources\\.properties")
                         || new File(dir, name).isDirectory();
             }
         });
@@ -283,7 +283,7 @@ public class PackageTest extends TestCase {
     */
     public static Test suite() {
         TestSuite ts = new TestSuite("Resources PackageTest");
-        String languages[] = JMeterMenuBar.getLanguages();
+        String[] languages = JMeterMenuBar.getLanguages();
         for(String prefix : prefixList){
             TestSuite pfx = new TestSuite(prefix) ;
             pfx.addTest(new PackageTest("testLang","", prefix)); // load the default resource
@@ -344,7 +344,9 @@ public class PackageTest extends TestCase {
         assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
     }
 
-    private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle, Map<String, Map<String, String>> missingLabelsPerBundle2, Properties messages, String bundlePath,String language)
+    private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle,
+            Map<String, Map<String, String>> missingLabelsPerBundle2,
+            Properties messages, String bundlePath, String language)
             throws IOException {
         Properties messagesFr = new Properties();
         String languageBundle = bundlePath+"_"+language+ ".properties";

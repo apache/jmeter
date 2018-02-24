@@ -90,6 +90,8 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
     private Deque<SamplingStatCalculator> newRows = new ConcurrentLinkedDeque<>();
 
+    private volatile boolean dataChanged;
+
     public StatVisualizer() {
         super();
         model = StatGraphVisualizer.createObjectTableModel();
@@ -131,6 +133,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         synchronized(lock) {
             tot.addSample(res);
         }
+        dataChanged = true;
     }
 
     /**
@@ -179,6 +182,10 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         this.add(opts,BorderLayout.SOUTH);
 
         new Timer(REFRESH_PERIOD, e -> {
+            if (!dataChanged) {
+                return;
+            }
+            dataChanged = false;
             synchronized (lock) {
                 while (!newRows.isEmpty()) {
                     model.insertRow(newRows.pop(), model.getRowCount() - 1);

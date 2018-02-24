@@ -29,7 +29,7 @@
   <xsl:param name="imgdir" select="concat($relative-path, '/images')" />
   <xsl:param name="sshotdir" select="concat($imgdir, '/screenshots')" />
   <xsl:param name="cssdir" select="concat($relative-path, '/css')" />
-  <xsl:param name="jakarta-site" select="'http://jakarta.apache.org'" />
+  <xsl:param name="jakarta-site" select="'https://jakarta.apache.org'" />
   <xsl:param name="year" select="'2018'" />
   <xsl:param name="max-img-width" select="'600'" />
 
@@ -59,7 +59,7 @@
         <!-- VIEWPORT -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
-          href='http://fonts.googleapis.com/css?family=Merriweather:400normal'
+          href='https://fonts.googleapis.com/css?family=Merriweather:400normal'
           rel='stylesheet' type='text/css'
         ></link>
         <link
@@ -82,7 +82,7 @@
             APACHE LOGO
           </xsl:comment>
           <div>
-            <a href="http://www.apache.org">
+            <a href="https://www.apache.org">
               <img title="Apache Software Foundation" class="asf-logo logo"
                   src="{$imgdir}/asf-logo.svg" alt="Logo ASF" />
             </a>
@@ -108,8 +108,8 @@
             </div>
           </xsl:if>
           <div class="banner">
-            <a href="http://www.apache.org/events/current-event.html">
-              <img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser" />
+            <a href="https://www.apache.org/events/current-event.html">
+              <img src="https://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser" />
             </a>
             <div class="clear"></div>
           </div>
@@ -126,6 +126,7 @@
           <xsl:apply-templates select="body/section"></xsl:apply-templates>
           <xsl:call-template name="pagelinks" />
           <xsl:call-template name="share-links" />
+          <a href="#top" id="topButton">Go to top</a>
         </div>
         <div class="footer">
           <div class="copyright">
@@ -141,8 +142,16 @@
           </div>
         </div>
         <script><![CDATA[(function(){
-            // fill in the current location into social links on this page.
             "use strict";
+            // enable 'go to top' button functionality
+            document.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                    document.getElementById("topButton").style.display = "block";
+                } else {
+                    document.getElementById("topButton").style.display = "none";
+                }
+            });
+            // fill in the current location into social links on this page.
             var as = document.getElementsByTagName('a');
             var loc = document.location.href;
             if (!loc.toLowerCase().startsWith('http')) {
@@ -520,6 +529,19 @@
     <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id={./text()}">
       Bug
       <xsl:value-of select="./text()" />
+    </a>
+    -
+  </xsl:template>
+
+  <xsl:template match="pr[following-sibling::pr or following-sibling::bug]">
+    <a href="https://github.com/apache/jmeter/pull/{./text()}">
+      Pull request #<xsl:value-of select="./text()" />
+    </a>,
+  </xsl:template>
+
+  <xsl:template match="pr[not(following-sibling::pr) and (not(preceding-sibling::*) or preceding-sibling::bug)]">
+    <a href="https://github.com/apache/jmeter/pull/{./text()}">
+      Pull request #<xsl:value-of select="./text()" />
     </a>
     -
   </xsl:template>

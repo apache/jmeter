@@ -203,9 +203,10 @@ public class Proxy extends Thread {
                 } catch (IOException ioe) { // most likely this is because of a certificate error
                     // param.length is 2 here
                     final String url = " for '"+ param[0] +"'";
-                    log.warn("{} Problem with SSL certificate for url {}? Ensure browser is set to accept the JMeter proxy cert: {}", 
+                    log.warn("{} Problem with SSL certificate for url {}? Ensure browser is set to accept the JMeter proxy cert: {}",
                             port, url,ioe.getMessage());
-                    result = generateErrorResult(result, request, ioe, "\n**ensure browser is set to accept the JMeter proxy certificate**"); // Generate result (if nec.) and populate it
+                    // Generate result (if nec.) and populate it
+                    result = generateErrorResult(result, request, ioe, "\n**ensure browser is set to accept the JMeter proxy certificate**");
                     throw new JMeterException(); // hack to skip processing
                 }
                 if (isDebug) {
@@ -249,9 +250,10 @@ public class Proxy extends Thread {
             result = generateErrorResult(result, request, uhe); // Generate result (if nec.) and populate it
         } catch (IllegalArgumentException e) {
             log.error("{} Not implemented (probably used https)", port, e);
-            writeErrorToClient(HttpReplyHdr.formNotImplemented("Probably used https instead of http. " +
-                    "To record https requests, see " +
-                    "<a href=\"http://jmeter.apache.org/usermanual/component_reference.html#HTTP(S)_Test_Script_Recorder\">HTTP(S) Test Script Recorder documentation</a>"));
+            writeErrorToClient(HttpReplyHdr.formNotImplemented("Probably used https instead of http. "
+                    + "To record https requests, see "
+                    + "<a href=\"http://jmeter.apache.org/usermanual/component_reference.html#HTTP(S)_Test_Script_Recorder\">"
+                    + "HTTP(S) Test Script Recorder documentation</a>"));
             result = generateErrorResult(result, request, e); // Generate result (if nec.) and populate it
         } catch (Exception e) {
             log.error("{} Exception when processing sample", port, e);

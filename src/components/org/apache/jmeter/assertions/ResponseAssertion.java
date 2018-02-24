@@ -21,8 +21,11 @@ package org.apache.jmeter.assertions;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.assertions.gui.AssertionGui;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -63,6 +66,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     private static final String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
     private static final String TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
     private static final String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
+    private static final String CUSTOM_MESSAGE = "Assertion.custom_message"; // $NON-NLS-1$
 
     /**
      * Mask values for TEST_TYPE 
@@ -137,6 +141,14 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         setTestField(REQUEST_DATA);
     }
 
+    public void setCustomFailureMessage(String customFailureMessage) {
+        setProperty(CUSTOM_MESSAGE, customFailureMessage);
+    }
+    
+    public String getCustomFailureMessage() {
+        return getPropertyAsString(CUSTOM_MESSAGE);
+    }
+    
     public boolean isTestFieldURL(){
         return SAMPLE_URL.equals(getTestField());
     }
@@ -284,31 +296,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             response.setSuccessful(true);// Allow testing of failure codes
         }
 
-        String toCheck; // The string to check (Url or data)
-        // What are we testing against?
-        if (isScopeVariable()){
-            toCheck = getThreadContext().getVariables().get(getVariableName());
-        } else if (isTestFieldResponseData()) {
-            toCheck = response.getResponseDataAsString(); // (bug25052)
-        } else if (isTestFieldResponseDataAsDocument()) {
-            toCheck = Document.getTextFromDocument(response.getResponseData()); 
-        } else if (isTestFieldResponseCode()) {
-            toCheck = response.getResponseCode();
-        } else if (isTestFieldResponseMessage()) {
-            toCheck = response.getResponseMessage();
-        } else if (isTestFieldRequestHeaders()) {
-            toCheck = response.getRequestHeaders();
-        } else if (isTestFieldRequestData()) {
-            toCheck = response.getSamplerData();
-        } else if (isTestFieldResponseHeaders()) {
-            toCheck = response.getResponseHeaders();
-        } else { // Assume it is the URL
-            toCheck = "";
-            final URL url = response.getURL();
-            if (url != null){
-                toCheck = url.toString();
-            }
-        }
+        String toCheck = getStringToCheck(response);
 
         result.setFailure(false);
         result.setError(false); 
@@ -325,17 +313,17 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             if (notTest) { // Not should always succeed against an empty result
                 return result;
             }
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 log.debug("Not checking empty response field in: {}", response.getSampleLabel());
             }
             return result.setResultForNull();
         }
 
-        boolean hasTrue = false;
-        ArrayList<String> allCheckMessage = new ArrayList<>();
         try {
             // Get the Matcher for this thread
             Perl5Matcher localMatcher = JMeterUtils.getMatcher();
+            boolean hasTrue = false;
+            List<String> allCheckMessage = new ArrayList<>();
             for (JMeterProperty jMeterProperty : getTestStrings()) {
                 String stringPattern = jMeterProperty.getStringValue();
                 Pattern pattern = null;
@@ -356,7 +344,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 if (orTest) {
                     if (!pass) {
                         log.debug("Failed: {}", stringPattern);
-                        allCheckMessage.add(getFailText(stringPattern,toCheck));
+                        allCheckMessage.add(getFailText(stringPattern, toCheck));
                     } else {
                         hasTrue=true;
                         break;
@@ -365,19 +353,25 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                     if (!pass) {
                         log.debug("Failed: {}", stringPattern);
                         result.setFailure(true);
-                        result.setFailureMessage(getFailText(stringPattern,toCheck));
+                        String customMsg = getCustomFailureMessage();
+                        if (StringUtils.isEmpty(customMsg)) {
+                            result.setFailureMessage(getFailText(stringPattern, toCheck));
+                        } else {
+                            result.setFailureMessage(customMsg);
+                        }
                         break;
                     }
                     log.debug("Passed: {}", stringPattern);
                 }
             }
             if (orTest && !hasTrue){
-                StringBuilder errorMsg = new StringBuilder();
-                for(String tmp : allCheckMessage){
-                    errorMsg.append(tmp).append('\t');
-                }
                 result.setFailure(true);
-                result.setFailureMessage(errorMsg.toString());   
+                String customMsg = getCustomFailureMessage();
+                if (StringUtils.isEmpty(customMsg)) {
+                    result.setFailureMessage(allCheckMessage.stream().collect(Collectors.joining("\t", "", "\t")));
+                } else {
+                    result.setFailureMessage(customMsg);
+                }
             }
         } catch (MalformedCachePatternException e) {
             result.setError(true);
@@ -385,6 +379,35 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             result.setFailureMessage("Bad test configuration " + e);
         }
         return result;
+    }
+
+    private String getStringToCheck(SampleResult response) {
+        String toCheck; // The string to check (Url or data)
+        // What are we testing against?
+        if (isScopeVariable()){
+            toCheck = getThreadContext().getVariables().get(getVariableName());
+        } else if (isTestFieldResponseData()) {
+            toCheck = response.getResponseDataAsString(); // (bug25052)
+        } else if (isTestFieldResponseDataAsDocument()) {
+            toCheck = Document.getTextFromDocument(response.getResponseData());
+        } else if (isTestFieldResponseCode()) {
+            toCheck = response.getResponseCode();
+        } else if (isTestFieldResponseMessage()) {
+            toCheck = response.getResponseMessage();
+        } else if (isTestFieldRequestHeaders()) {
+            toCheck = response.getRequestHeaders();
+        } else if (isTestFieldRequestData()) {
+            toCheck = response.getSamplerData();
+        } else if (isTestFieldResponseHeaders()) {
+            toCheck = response.getResponseHeaders();
+        } else { // Assume it is the URL
+            toCheck = "";
+            final URL url = response.getURL();
+            if (url != null){
+                toCheck = url.toString();
+            }
+        }
+        return toCheck;
     }
 
     /**
@@ -520,7 +543,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         for (int i = 0; i < pad.capacity(); i++){
             pad.append(' ');
         }
-        
+
         if (recDeltaSeq.length() > compDeltaSeq.length()){
             compDeltaSeq += pad.toString();
         } else {

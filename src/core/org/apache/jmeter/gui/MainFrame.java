@@ -468,7 +468,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     @Override
     public void testEnded(String host) {
         hosts.remove(host);
-        if (hosts.size() == 0) {
+        if (hosts.isEmpty()) {
             runningIndicator.setIcon(stoppedIcon);
             JMeterContextService.endTest();
             computeTestDurationTimer.stop();

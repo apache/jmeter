@@ -129,6 +129,8 @@
   <property name="skip.test_http" value="false" />
   <property name="skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server" value="false" />
 
+  <exec executable="hostname" outputproperty="computer.hostname"/>
+
   <target name="findbugs" description="Run the stand-alone Findbugs detector">
     <echoproperties prefix="findbugs"/>
     <mkdir dir="reports"/>
@@ -575,7 +577,7 @@
       JMeter version
       This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="4.0-SNAPSHOT"/>
+    <property name="jmeter.version" value="4.1-SNAPSHOT"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version"
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}.${DSTAMP}">
@@ -1292,6 +1294,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/user.properties"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
+    <exclude name="${dest.jar.jmeter}/rmi_keystore.jks"/>
     <include name="${dest.jar.jmeter}/examples/**"/>
     <include name="${dest.jar.jmeter}/templates/*.dtd"/>
     <!-- report-templates files which need to have native eol -->
@@ -1336,10 +1339,12 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/mirror-server*"/>
     <include name="${dest.jar.jmeter}/shutdown.*"/>
     <include name="${dest.jar.jmeter}/stoptest.*"/>
+    <include name="${dest.jar.jmeter}/create-rmi-keystore.*"/>
     <!-- Fake SSL cert for JMeter proxy recorder in https -->
     <include name="${dest.jar.jmeter}/proxyserver.jks"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
+    <exclude name="${dest.jar.jmeter}/rmi_keystore.jks"/>
     <!-- report-template files non native -->
     <include name="${dest.jar.jmeter}/report-template/content/pages/*.png"/>
     <include name="${dest.jar.jmeter}/report-template/sbadmin2*/**"/>
@@ -1849,9 +1854,11 @@ run JMeter unless all the JMeter jars are added.
       }
     }
       type = attributes.get("type");
+      RCdir = "";
+      RC="";
+      version = "";
       if (type.equals("delete")) {
         version = project.getProperty("jmeter.old.version");
-        RC="";
       } else {
         version = project.getProperty("jmeter.version");
         RC = project.getProperty("RC");
@@ -2141,9 +2148,17 @@ run JMeter unless all the JMeter jars are added.
                It will be empty if the sigs exist; if not it will be XX which will be ignored by Maven
           -->
           <!-- If packaging == pom, this will just upload the pom twice. Simpler than trying to conditionalise. -->
-          <arg value="-D${XX}files=${maven.dir}/@{stem}.${packaging}.asc,${maven.dir}/@{stem}.pom.asc"/>
-          <arg value="-D${XX}types=${packaging}.asc,pom.asc"/>
+          <arg value="-D${XX}files=${maven.dir}/@{stem}.${packaging}.asc,${maven.dir}/@{stem}.pom.asc,${maven.dir}/@{stem}-sources.jar.asc,${maven.dir}/@{stem}-javadoc.jar.asc"/>
+          <arg value="-D${XX}types=${packaging}.asc,pom.asc,-sources.jar.asc,-javadoc.jar.asc"/>
           <arg value="-D${XX}classifiers=,"/>
+<!--
+          <arg value="-D${artifact_has_source}files=${maven.dir}/@{stem}-sources.jar.asc"/>
+          <arg value="-D${artifact_has_source}types=-sources.jar.asc"/>
+          <arg value="-D${artifact_has_source}classifiers="/>
+          <arg value="-D${artifact_has_javadoc}files=${maven.dir}/@{stem}-javadoc.jar.asc"/>
+          <arg value="-D${artifact_has_javadoc}types=-javadoc.jar.asc"/>
+          <arg value="-D${artifact_has_javadoc}classifiers="/>
+-->
           <!-- Need at least version 2.7 of the plugin to upload additional files-->
           <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy-file"/>
         </java>
@@ -2580,7 +2595,7 @@ run JMeter unless all the JMeter jars are added.
     <condition property="rmi_hostname_option" value="-Ddummy=true">
       <not><isset property="rmi_force_localhost"/></not>
     </condition>
-    <condition property="rmi_hostname_option" value="-Djava.rmi.server.hostname=localhost">
+    <condition property="rmi_hostname_option" value="-Djava.rmi.server.hostname=${computer.hostname}">
       <isset property="rmi_force_localhost"/>
     </condition>
     <condition property="jacoco_params" value="${jacocoagent}" else="-Djacoco_dummy=">
@@ -2622,7 +2637,7 @@ run JMeter unless all the JMeter jars are added.
         <!-- Increase as necessary to ensure server has time to start -->
         <sleep seconds="2"/>
         <antcall target="batchtest">
-          <param name="remote" value="-Rlocalhost:${rmi_port}"/>
+          <param name="remote" value="-R${computer.hostname}:${rmi_port}"/>
           <param name="taskname" value="client"/>
           <!-- Default the test name so we can override with a parameter -->
         </antcall>
@@ -2715,6 +2730,7 @@ run JMeter unless all the JMeter jars are added.
       <jvmarg value="--add-modules" if:set="java9" />
       <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="${jacoco_params}batchtest:java(${taskname})"/>
+      <jvmarg value="-Djava.rmi.server.hostname=${computer.hostname}" if:set="rmi_force_localhost"/>
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
       <sysproperty key="user.language" value="en"/>
       <sysproperty key="user.region" value="US"/>
@@ -3057,6 +3073,7 @@ run JMeter unless all the JMeter jars are added.
       <jvmarg value="-server"/>
       <jvmarg value="${jacoco_params}_test:java"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
+      <jvmarg value="-Djava.rmi.server.hostname=${computer.hostname}" if:set="rmi_force_localhost"/>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
       <sysproperty key="gump.run" value="${gump.run}" />
@@ -3114,6 +3131,7 @@ run JMeter unless all the JMeter jars are added.
   </taskdef>
   <jacoco:coverage destfile="reports/jacoco.exec">
   <junit fork="true"
+      forkmode="once"
       dir="${basedir}/bin"
       showoutput="${test.showoutput}"
       printsummary="on">
@@ -3558,7 +3576,7 @@ run JMeter unless all the JMeter jars are added.
     <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
              classpath="${lib.opt}/${checkstyle-all.jar}"/>
     <checkstyle config="checkstyle.xml">
-      <fileset dir="src" includes="**/*"/>
+      <fileset dir="." includes="test/**/*,src/**/*"/>
       <formatter type="plain"/>
       <formatter type="xml" toFile="build/checkstyle_errors.xml"/>
     </checkstyle>

@@ -365,14 +365,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @return the property details
      */
     private static String getDetails(PropertyDescriptor pd) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(pd.getReadMethod().getDeclaringClass().getName());
-        sb.append('#');
-        sb.append(pd.getName());
-        sb.append('(');
-        sb.append(pd.getPropertyType().getCanonicalName());
-        sb.append(')');
-        return sb.toString();
+        return pd.getReadMethod().getDeclaringClass().getName() + '#'
+                + pd.getName() + '(' + pd.getPropertyType().getCanonicalName()
+                + ')';
     }
 
     /**
@@ -386,7 +381,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     private WrapperEditor createWrapperEditor(PropertyEditor typeEditor, PropertyDescriptor descriptor) {
         String[] editorTags = typeEditor.getTags();
         String[] additionalTags = (String[]) descriptor.getValue(TAGS);
-        String[] tags = null;
+        String[] tags;
         if (editorTags == null) {
             tags = additionalTags;
         } else if (additionalTags == null) {
@@ -414,13 +409,11 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                     (ResourceBundle) descriptor.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE));
         }
 
-        WrapperEditor wrapper = new WrapperEditor(typeEditor, guiEditor,
+        return new WrapperEditor(typeEditor, guiEditor,
                 !notNull, // acceptsNull
                 !notExpression, // acceptsExpressions
                 !notOther, // acceptsOther
                 descriptor.getValue(DEFAULT));
-
-        return wrapper;
     }
 
     /**
@@ -431,8 +424,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      *  otherwise the default is false
      */
     static boolean notOther(PropertyDescriptor descriptor) {
-        boolean notOther = Boolean.TRUE.equals(descriptor.getValue(NOT_OTHER));
-        return notOther;
+        return Boolean.TRUE.equals(descriptor.getValue(NOT_OTHER));
     }
 
     /**
@@ -443,8 +435,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      *  otherwise the default is false
      */
     static boolean notExpression(PropertyDescriptor descriptor) {
-        boolean notExpression = Boolean.TRUE.equals(descriptor.getValue(NOT_EXPRESSION));
-        return notExpression;
+        return Boolean.TRUE.equals(descriptor.getValue(NOT_EXPRESSION));
     }
 
     /**
@@ -455,8 +446,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      *  otherwise the default is false
      */
     static boolean notNull(PropertyDescriptor descriptor) {
-        boolean notNull = Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
-        return notNull;
+        return Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
     }
 
     /**
@@ -662,7 +652,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         if (b == null) {
             return group;
         }
-        String key = new StringBuilder(group).append(".displayName").toString();
+        String key = group + ".displayName";
         if (b.containsKey(key)) {
             return b.getString(key);
         } else {

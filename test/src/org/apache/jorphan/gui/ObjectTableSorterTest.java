@@ -139,41 +139,48 @@ public class ObjectTableSorterTest {
 
     @Test
     public void customKeyOrder() {
-        HashMap<String, Integer> customKeyOrder = asList("a", "c", "b", "d").stream().reduce(new HashMap<String,Integer>(), (map,key) -> { map.put(key, map.size()); return map; }, (a,b) -> a);
+        HashMap<String, Integer> customKeyOrder = asList("a", "c", "b", "d")
+                .stream().reduce(new HashMap<String, Integer>(), (map, key) -> {
+                    map.put(key, map.size());
+                    return map;
+                }, (a, b) -> a);
         Comparator<String> customKeyComparator = (a,b) -> customKeyOrder.get(a).compareTo(customKeyOrder.get(b));
         sorter.setValueComparator(0, customKeyComparator).setSortKey(new SortKey(0, SortOrder.ASCENDING));
         List<SimpleImmutableEntry<String, Integer>> expected = asList(a3(), c1(), b2(), d4());
         assertRowOrderAndIndexes(expected);
     }
 
+    private ObjectTableModel createTableModel(final String name,
+            final Class<?> klass) {
+        return new ObjectTableModel(new String[] { name },
+                new Functor[] { null }, new Functor[] { null },
+                new Class<?>[] { klass });
+    }
+
     @Test
     public void getDefaultComparatorForNullClass() {
-        ObjectTableModel model = new ObjectTableModel(new String[] { "null" }, new Functor[] { null }, new Functor[] { null }, new Class<?>[] { null });
-        ObjectTableSorter sorter = new ObjectTableSorter(model);
+        ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("null", null));
 
         assertThat(sorter.getValueComparator(0), is(nullValue()));
     }
 
     @Test
     public void getDefaultComparatorForStringClass() {
-        ObjectTableModel model = new ObjectTableModel(new String[] { "string" }, new Functor[] { null }, new Functor[] { null }, new Class<?>[] { String.class });
-        ObjectTableSorter sorter = new ObjectTableSorter(model);
+        ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("string", String.class));
 
         assertThat(sorter.getValueComparator(0), is(CoreMatchers.notNullValue()));
     }
 
     @Test
     public void getDefaultComparatorForIntegerClass() {
-        ObjectTableModel model = new ObjectTableModel(new String[] { "integer" }, new Functor[] { null }, new Functor[] { null }, new Class<?>[] { Integer.class });
-        ObjectTableSorter sorter = new ObjectTableSorter(model);
+        ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("integer", Integer.class));
 
         assertThat(sorter.getValueComparator(0), is(CoreMatchers.notNullValue()));
     }
 
     @Test
     public void getDefaultComparatorForObjectClass() {
-        ObjectTableModel model = new ObjectTableModel(new String[] { "integer" }, new Functor[] { null }, new Functor[] { null }, new Class<?>[] { Object.class });
-        ObjectTableSorter sorter = new ObjectTableSorter(model);
+        ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("object", Object.class));
 
         assertThat(sorter.getValueComparator(0), is(nullValue()));
     }

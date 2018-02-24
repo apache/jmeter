@@ -515,12 +515,14 @@ public class JMeterThread implements Runnable, Interruptible {
             threadContext.setPreviousResult(result);
             runPostProcessors(pack.getPostProcessors());
             checkAssertions(pack.getAssertions(), result, threadContext);
-            // Do not send subsamples to listeners which receive the transaction sample
-            List<SampleListener> sampleListeners = getSampleListeners(pack, transactionPack, transactionSampler);
-            notifyListeners(sampleListeners, result);
+            if (!result.isIgnore()) {
+                // Do not send subsamples to listeners which receive the transaction sample
+                List<SampleListener> sampleListeners = getSampleListeners(pack, transactionPack, transactionSampler);
+                notifyListeners(sampleListeners, result);
+            }
             compiler.done(pack);
             // Add the result as subsample of transaction if we are in a transaction
-            if (transactionSampler != null) {
+            if (transactionSampler != null && !result.isIgnore()) {
                 transactionSampler.addSubSamplerResult(result);
             }
 
@@ -811,8 +813,11 @@ public class JMeterThread implements Runnable, Interruptible {
         AssertionResult assertionResult;
         try {
             assertionResult = assertion.getResult(result);
-        } catch (ThreadDeath e) {
-            throw e;
+        } catch (AssertionError e) {
+            log.debug("Error processing Assertion.", e);
+            assertionResult = new AssertionResult("Assertion failed! See log file (debug level, only).");
+            assertionResult.setFailure(true);
+            assertionResult.setFailureMessage(e.toString());
         } catch (JMeterError e) {
             log.error("Error processing Assertion.", e);
             assertionResult = new AssertionResult("Assertion failed! See log file.");

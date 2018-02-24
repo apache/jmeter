@@ -34,4 +34,16 @@ public class JMeterStopTestNowException extends RuntimeException {
     public JMeterStopTestNowException(String s) {
         super(s);
     }
+    
+    public JMeterStopTestNowException(String s, Throwable ex) {
+        super(s, ex);
+    }
+    
+    public JMeterStopTestNowException(String s, Throwable ex, boolean enableSuppression, boolean writableStackTrace) {
+        super(s, ex, enableSuppression, writableStackTrace);
+    }
+    
+    public JMeterStopTestNowException(Throwable ex) {
+        super(ex);
+    }
 }

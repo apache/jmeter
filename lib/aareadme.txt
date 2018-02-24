@@ -13,7 +13,7 @@ Which jars are used by which modules?
 ====================================
 [not exhaustive]
 
-asm-5.2 (org.ow2.asm)
+asm-6.0 (org.ow2.asm)
 ----------------------
 - JSON Path extractor
 
@@ -35,13 +35,13 @@ dec-0.1.2 (org.brotli.dec)
 https://github.com/google/brotli/tree/master/java/org/brotli
 - Used by HTTP4 HC Impl for brotli decoding
 
-caffeine 2.5.5
+caffeine 2.6.1
 -----------------
 https://github.com/ben-manes/caffeine/
 - Used by CssParser
 - Used by JMS Publisher Sampler
 
-commons-codec-1.10
+commons-codec-1.11
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
 - Used by ProxyControl and JSR223Test Element for Base64 and md5 
@@ -52,7 +52,7 @@ http://commons.apache.org/downloads/download_collections.cgi
 - ListenerNotifier
 - Anakia
 
-commons-io-2.5
+commons-io-2.6
 --------------
 http://commons.apache.org/downloads/download_io.cgi
 - FTPSampler
@@ -67,7 +67,7 @@ commons-lang-2.6
 http://commons.apache.org/downloads/download_lang.cgi
 - velocity (Anakia)
 
-commons-lang3-3.6
+commons-lang3-3.7
 ----------------
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
@@ -82,7 +82,7 @@ commons-net-3.6
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler
 
-commons-pool2-2.4.2
+commons-pool2-2.5.0
 -----------------
 http://commons.apache.org/proper/commons-pool/download_pool.cgi
 - BackendListener
@@ -125,22 +125,22 @@ jdom-1.1.3
 http://www.jdom.org/downloads/index.html
 - Anakia
 
-jodd-core-3.8.6
+jodd-core-4.1.4
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-3.8.6
+jodd-lagarto-4.1.4
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
 
-jodd-log-3.8.6
+jodd-log-4.1.4
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-props-3.8.6
+jodd-props-4.1.4
 --------
 http://www.jodd.org/
 - used by Report/Dashboard feature properties management
@@ -157,22 +157,22 @@ https://github.com/netplex/json-smart-v2
 - JSON Path Extractor
 - JSON Path Renderer
 
-jsoup-1.10.3
+jsoup-1.11.2
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
-log4j2-2.8.2
+log4j2-2.10.0
 --------
 https://logging.apache.org/log4j/2.x/
 - Logging framework
 
-ph-css-5.0.4
+ph-css-6.0.0
 --------
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-8.6.6
+ph-commons-9.0.0
 --------
 https://github.com/phax/ph-commons
 - CssParser
@@ -196,10 +196,10 @@ junit 4.12
 - unit tests, JUnit sampler
 
 HttpComponents
-- HttpComponents Core 4.4.6 
-- HttpComponents Client 4.5.3
+- HttpComponents Core 4.4.9 
+- HttpComponents Client 4.5.5
 - HttpComponents AsyncClient 4.1.3
-- HttpComponents Core NIO 4.4.6
+- HttpComponents Core NIO 4.4.9
 -----------
 http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler

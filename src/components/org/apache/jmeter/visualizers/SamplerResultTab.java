@@ -232,20 +232,58 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 String typeResult = samplerClass.substring(1 + samplerClass.lastIndexOf('.'));
                 
                 StringBuilder statsBuff = new StringBuilder(200);
-                statsBuff.append(JMeterUtils.getResString("view_results_thread_name")).append(sampleResult.getThreadName()).append(NL); //$NON-NLS-1$
-                String startTime = dateFormat.format(new Date(sampleResult.getStartTime()));
-                statsBuff.append(JMeterUtils.getResString("view_results_sample_start")).append(startTime).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_load_time")).append(sampleResult.getTime()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_connect_time")).append(sampleResult.getConnectTime()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_latency")).append(sampleResult.getLatency()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_size_in_bytes")).append(sampleResult.getBytesAsLong()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_sent_bytes")).append(sampleResult.getSentBytes()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_size_headers_in_bytes")).append(sampleResult.getHeadersSize()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_size_body_in_bytes")).append(sampleResult.getBodySizeAsLong()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_sample_count")).append(sampleResult.getSampleCount()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_error_count")).append(sampleResult.getErrorCount()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_datatype")).append(sampleResult.getDataType()).append(NL); //$NON-NLS-1$
-                statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_thread_name")) //$NON-NLS-1$
+                        .append(sampleResult.getThreadName()).append(NL);
+                String startTime = dateFormat
+                        .format(new Date(sampleResult.getStartTime()));
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_sample_start")) //$NON-NLS-1$
+                        .append(startTime).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_load_time")) //$NON-NLS-1$
+                        .append(sampleResult.getTime()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_connect_time")) //$NON-NLS-1$
+                        .append(sampleResult.getConnectTime()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_latency")) //$NON-NLS-1$
+                        .append(sampleResult.getLatency()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_size_in_bytes")) //$NON-NLS-1$
+                        .append(sampleResult.getBytesAsLong()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_sent_bytes")) //$NON-NLS-1$
+                        .append(sampleResult.getSentBytes()).append(NL);
+                statsBuff
+                        .append(JMeterUtils.getResString(
+                                "view_results_size_headers_in_bytes")) //$NON-NLS-1$
+                        .append(sampleResult.getHeadersSize()).append(NL);
+                statsBuff
+                        .append(JMeterUtils.getResString(
+                                "view_results_size_body_in_bytes")) //$NON-NLS-1$
+                        .append(sampleResult.getBodySizeAsLong()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_sample_count")) //$NON-NLS-1$
+                        .append(sampleResult.getSampleCount()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_error_count")) //$NON-NLS-1$
+                        .append(sampleResult.getErrorCount()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_datatype")) //$NON-NLS-1$
+                        .append(sampleResult.getDataType()).append(NL);
+                statsDoc.insertString(statsDoc.getLength(),
+                        statsBuff.toString(), null);
                 statsBuff.setLength(0); // reset for reuse
 
                 String responseCode = sampleResult.getResponseCode();
@@ -281,31 +319,76 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 // response message label
                 String responseMsgStr = sampleResult.getResponseMessage();
 
-                statsBuff.append(JMeterUtils.getResString("view_results_response_message")).append(responseMsgStr).append(NL); //$NON-NLS-1$
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_response_message")) //$NON-NLS-1$
+                        .append(responseMsgStr).append(NL);
                 statsBuff.append(NL);
-                statsBuff.append(JMeterUtils.getResString("view_results_response_headers")).append(NL); //$NON-NLS-1$
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_response_headers")) //$NON-NLS-1$
+                        .append(NL);
                 statsBuff.append(sampleResult.getResponseHeaders()).append(NL);
                 statsBuff.append(NL);
-                statsBuff.append(typeResult + " "+ JMeterUtils.getResString("view_results_fields")).append(NL); //$NON-NLS-1$ $NON-NLS-2$
-                statsBuff.append("ContentType: ").append(sampleResult.getContentType()).append(NL); //$NON-NLS-1$
-                statsBuff.append("DataEncoding: ").append(sampleResult.getDataEncodingNoDefault()).append(NL); //$NON-NLS-1$
+                statsBuff
+                        .append(typeResult + " " //$NON-NLS-1$
+                                + JMeterUtils
+                                        .getResString("view_results_fields"))
+                        .append(NL); // $NON-NLS-2$
+                statsBuff.append("ContentType: ") //$NON-NLS-1$
+                        .append(sampleResult.getContentType()).append(NL);
+                statsBuff.append("DataEncoding: ") //$NON-NLS-1$
+                        .append(sampleResult.getDataEncodingNoDefault())
+                        .append(NL);
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
                 statsBuff = null; // NOSONAR Help gc
                 
                 // Tabbed results: fill table
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_thread_name"), sampleResult.getThreadName())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_start"), startTime)); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_load_time"), sampleResult.getTime())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_connect_time"), sampleResult.getConnectTime())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_latency"), sampleResult.getLatency())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_in_bytes"), sampleResult.getBytesAsLong())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sent_bytes"),sampleResult.getSentBytes())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_headers_in_bytes"), sampleResult.getHeadersSize())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_body_in_bytes"), sampleResult.getBodySizeAsLong())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_count"), sampleResult.getSampleCount())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_error_count"), sampleResult.getErrorCount())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_code"), responseCode)); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_message"), responseMsgStr)); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_thread_name"), //$NON-NLS-1$
+                        sampleResult.getThreadName()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_sample_start"), //$NON-NLS-1$
+                        startTime));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_load_time"), //$NON-NLS-1$
+                        sampleResult.getTime()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_connect_time"), //$NON-NLS-1$
+                        sampleResult.getConnectTime()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_latency"), //$NON-NLS-1$
+                        sampleResult.getLatency()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils
+                                .getParsedLabel("view_results_size_in_bytes"), //$NON-NLS-1$
+                        sampleResult.getBytesAsLong()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_sent_bytes"), //$NON-NLS-1$
+                        sampleResult.getSentBytes()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel(
+                                "view_results_size_headers_in_bytes"), //$NON-NLS-1$
+                        sampleResult.getHeadersSize()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel(
+                                "view_results_size_body_in_bytes"), //$NON-NLS-1$
+                        sampleResult.getBodySizeAsLong()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_sample_count"), //$NON-NLS-1$
+                        sampleResult.getSampleCount()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_error_count"), //$NON-NLS-1$
+                        sampleResult.getErrorCount()));
+                resultModel
+                        .addRow(new RowResult(
+                                JMeterUtils.getParsedLabel(
+                                        "view_results_response_code"), //$NON-NLS-1$
+                                responseCode));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel(
+                                "view_results_response_message"), //$NON-NLS-1$
+                        responseMsgStr));
                 
                 // Parsed response headers
                 LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getResponseHeaders());
@@ -332,10 +415,20 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 setupTabPaneForAssertionResult();
 
                 StringBuilder statsBuff = new StringBuilder(100);
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_error")).append(assertionResult.isError()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure")).append(assertionResult.isFailure()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure_message")).append(assertionResult.getFailureMessage()).append(NL); //$NON-NLS-1$
-                statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_assertion_error")) //$NON-NLS-1$
+                        .append(assertionResult.isError()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_assertion_failure")) //$NON-NLS-1$
+                        .append(assertionResult.isFailure()).append(NL);
+                statsBuff
+                        .append(JMeterUtils.getResString(
+                                "view_results_assertion_failure_message")) //$NON-NLS-1$
+                        .append(assertionResult.getFailureMessage()).append(NL);
+                statsDoc.insertString(statsDoc.getLength(),
+                        statsBuff.toString(), null);
             }
             stats.setCaretPosition(1);
         } catch (BadLocationException exc) {

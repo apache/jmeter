@@ -6,7 +6,7 @@
           -
           User's Manual: Functions and Variables</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="../css/new-style.css">
 <link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png">
@@ -22,16 +22,16 @@
             APACHE LOGO
           -->
 <div>
-<a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a>
+<a href="https://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a>
 </div>
 <!--
               PROJECT LOGO
             -->
 <div>
-<a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a>
+<a href="https://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a>
 </div>
 <div class="banner">
-<a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
+<a href="https://www.apache.org/events/current-event.html"><img src="https://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
 <div class="clear"></div>
 </div>
 </div>
@@ -44,7 +44,7 @@
 <a href="../index.html">Overview</a>
 </li>
 <li>
-<a href="http://www.apache.org/licenses/">License</a>
+<a href="https://www.apache.org/licenses/">License</a>
 </li>
 </ul>
 </li>
@@ -91,10 +91,10 @@
 <a href="../api/index.html">Javadocs</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
+<a href="https://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<a href="https://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 </li>
@@ -129,7 +129,7 @@
 <a href="../issues.html">Issue Tracking</a>
 </li>
 <li>
-<a href="http://www.apache.org/security/">Security</a>
+<a href="https://www.apache.org/security/">Security</a>
 </li>
 <li>
 <a href="../mail.html">Mailing Lists</a>
@@ -144,7 +144,7 @@
 <a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
+<a href="https://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 </li>
@@ -154,16 +154,16 @@
 <div class="menu-title">Foundation</div>
 <ul>
 <li>
-<a href="http://www.apache.org/">The Apache Software Foundation (ASF)</a>
+<a href="https://www.apache.org/">The Apache Software Foundation (ASF)</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
+<a href="https://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+<a href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+<a href="https://www.apache.org/foundation/thanks.html">Thanks</a>
 </li>
 </ul>
 </li>
@@ -334,6 +334,14 @@ Alternatively, just use <span class="code">/</span> instead for the path separat
 </tr>
         
 <tr>
+<td>Formatting</td><td> <a href="#__dateTimeConvert">dateTimeConvert</a></td><td>Convert a date or time from source to target format</td><td>4.0</td>
+</tr>
+        
+<tr>
+<td>Calculation</td><td> <a href="#__digest">digest</a></td><td>Generate a digest (SHA-1, SHA-256, MD5...)</td><td>4.0</td>
+</tr>
+        
+<tr>
 <td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td><td>1.8.1</td>
 </tr>
         
@@ -382,6 +390,10 @@ Alternatively, just use <span class="code">/</span> instead for the path separat
 </tr>
         
 <tr>
+<td>Properties</td><td> <a href="#__isPropDefined">isPropDefined</a> </td><td>Test if a property exists</td><td>4.0</td>
+</tr>
+        
+<tr>
 <td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td><td>2.0</td>
 </tr>
         
@@ -398,10 +410,6 @@ Alternatively, just use <span class="code">/</span> instead for the path separat
 </tr>
         
 <tr>
-<td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td><td>2.3RC3</td>
-</tr>
-        
-<tr>
 <td>Variables</td><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td><td>2.3.1</td>
 </tr>
         
@@ -410,7 +418,23 @@ Alternatively, just use <span class="code">/</span> instead for the path separat
 </tr>
         
 <tr>
-<td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td>
+<td>Properties</td><td> <a href="#__isVarDefined">isVarDefined</a> </td><td>Test if a variable exists</td><td>4.0</td>
+</tr>
+        
+<tr>
+<td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td><td>2.3RC3</td>
+</tr>
+        
+<tr>
+<td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td><td>2.3.3</td>
+</tr>
+        
+<tr>
+<td>String</td><td> <a href="#__changeCase">changeCase</a></td><td>Change case following different modes</td><td>4.0</td>
+</tr>
+        
+<tr>
+<td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td>
 </tr>
         
 <tr>
@@ -418,7 +442,11 @@ Alternatively, just use <span class="code">/</span> instead for the path separat
 </tr>
         
 <tr>
-<td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td><td>2.3.3</td>
+<td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td>
+</tr>
+        
+<tr>
+<td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td>
 </tr>
         
 <tr>
@@ -427,14 +455,6 @@ Alternatively, just use <span class="code">/</span> instead for the path separat
         
 <tr>
 <td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td><td>2.3.3</td>
-</tr>
-        
-<tr>
-<td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td>
-</tr>
-        
-<tr>
-<td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td>
 </tr>
         
 <tr>
@@ -2065,6 +2085,10 @@ the second would return <span class="code">1</span> and the last would return <s
     The BeanShell function evaluates the script passed to it, and returns the result.
 </p>
 
+<div class="clear"></div>
+<div class="note">For performance it is better to use <a href="#__groovy">__groovy</a> function</div>
+<div class="clear"></div>
+
 <p>
 
 <b>For full details on using BeanShell, please see the BeanShell web-site at <a href="http://www.beanshell.org/">http://www.beanshell.org/</a>
@@ -2230,6 +2254,28 @@ The following variables are set before the script is executed:
 Other variables vary from invocation to invocation.
 </p>
 
+<div class="clear"></div>
+<div class="note">
+When using this function please use the variables defined above rather than using string replacement to access a variable in your script.  Following this pattern will ensure that your tests are performant by ensuring that the Groovy can be cached.
+</div>
+<div class="clear"></div>
+
+<p>
+For instance <strong>don't</strong> do the following:
+</p>
+
+
+<p>
+<pre class="source">${__groovy("${myVar}".substring(0\,2))}</pre>
+</p>
+
+
+<p>Imagine that the variable myVar changes with each transaction, the Groovy above cannot be cached as the script changes each time.<br>
+<br>
+Instead do the following, which can be cached: <pre class="source">${__groovy(vars.get("myVar").substring(0\,2))}</pre>
+
+</p>
+
 </div>
 <div class="properties">
 <h3 id="__groovy_parms1">
@@ -2268,13 +2314,13 @@ Example:
 <dl>
 
 <dt>
-<span class="code">${__groovy(123*456)}</span>
+<pre class="source">${__groovy(123*456)}</pre>
 </dt>
 <dd>returns <span class="code">56088</span>
 </dd>
 
 <dt>
-<span class="code">${__groovy("${var}".substring(0\,2))}</span>
+<pre class="source">${__groovy(vars.get("myVar").substring(0\,2))}</pre>
 </dt>
 <dd>If var's value is <span class="code">JMeter</span>, it will return <span class="code">JM</span> as it runs <span class="code">String.substring(0,2)</span>. Note
 that <span class="code">,</span> has been escaped to <span class="code">\,</span> 
@@ -2316,7 +2362,7 @@ Remember to include any necessary quotes for text strings and JMeter variables t
     Define <span class="code">VAR</span>="<span class="code">a||c|</span>" in the test plan.
     <br>
     
-<span class="code">${__split(${VAR},VAR,|)}</span>
+<pre class="source">${__split(${VAR},VAR,|)}</pre>
     
 <br>
     This will return the contents of <span class="code">VAR</span>, i.e. "<span class="code">a||c|</span>" and set the following variables:
@@ -2510,7 +2556,7 @@ If omitted, <span class="code">,</span> is used. Note that <span class="code">,<
 <div class="property">
 <div class="name req-false">Format</div>
 <div class="description req-false">
-        The format to be passed to SimpleDateFormat.
+        The format to be passed to <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a>.
         The function supports various shorthand aliases, see below.
         If omitted, the function returns the current time in milliseconds since the epoch.
         </div>
@@ -2557,6 +2603,13 @@ The following shorthand aliases are provided:
 <p>The defaults can be changed by setting the appropriate JMeter property, e.g.
 <span class="code">time.YMD=yyMMdd</span>
 
+</p>
+<p>
+<pre class="source">${__time(dd/MM/yyyy,)}</pre>  will return <span class="code">21/01/2018</span> if ran on 21 january 2018</p>
+<p>
+<pre class="source">${__time(YMD,)}</pre>  will return <span class="code">20180121</span> if ran on 21 january 2018</p>
+<p>
+<pre class="source">${__time()}</pre>  will return time in millis <span class="code">1516540541624</span>
 </p>
 <div class="go-top">
 <a href="#">^</a>
@@ -3055,13 +3108,13 @@ Supports HTML 4.0 entities.
 </p>
 
 <p>
-For example, the string <span class="code">"&amp;lt;Fran&amp;ccedil;ais&amp;gt;"</span>
-will become <span class="code">"&lt;Fran&ccedil;ais&gt;"</span>.
+For example, the string <pre class="source">${__unescapeHtml(&amp;lt;Fran&amp;ccedil;ais&amp;gt;)}</pre>
+will return <span class="code">&lt;Fran&ccedil;ais&gt;</span>.
 </p>
 
 <p>
 If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
-e.g. <span class="code">"&amp;gt;&amp;zzzz;x"</span> will become <span class="code">"&gt;&amp;zzzz;x"</span>.
+e.g. <span class="code">${__unescapeHtml(&amp;gt;&amp;zzzz;x)}</span> will return <span class="code">&gt;&amp;zzzz;x</span>.
 </p>
     
 <p>
@@ -3106,8 +3159,8 @@ Supports HTML 4.0 entities.
 </p>
 
 <p>
-For example,<span class="code">"bread" &amp; "butter"</span>
-becomes:
+For example,<pre class="source">${__escapeHtml("bread" &amp; "butter")}</pre>
+return:
 <span class="code">&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</span>.
 </p>
     
@@ -3153,7 +3206,7 @@ Note: use UTF-8 as the encoding scheme.
 </p>
 
 <p>
-For example, the string <span class="code">Word+%22school%22+is+%22%C3%A9cole%22+in+french</span> would get converted to
+For example, the string <pre class="source">${__urldecode(Word+%22school%22+is+%22%C3%A9cole%22+in+french)}</pre> returns
  <span class="code">Word "school" is "&eacute;cole" in french</span>.
 </p>
     
@@ -3198,7 +3251,7 @@ Function to encode a string to a <span class="code">application/x-www-form-urlen
 </p>
 
 <p>
-For example, the string <span class="code">Word "school" is "&eacute;cole" in french</span> would get converted to
+For example, the string <pre class="source">${__urldecode(Word "school" is "&eacute;cole" in french)}</pre> returns
  <span class="code">Word+%22school%22+is+%22%C3%A9cole%22+in+french</span>.
 </p>
     
@@ -3306,6 +3359,9 @@ A reference name - <span class="code">refName</span> - for reusing the value cre
     and Http Cookie Manager, and in this case the functions are resolved in the context of the Http Sampler.
     Pre-Processors, Post-Processors and Assertions always have an associated Sampler.
     </p>
+    
+<p>Example: <pre class="source">${__samplerName()}</pre>
+</p>
 
 </div>
 <div class="properties">
@@ -3365,8 +3421,8 @@ Function which escapes the ORO Regexp meta characters, it is the equivalent of <
 </p>
 
 <p>
-For example,<span class="code">[^"].+?</span>
-becomes:
+For example,<pre class="source">${__escapeOroRegexpChars([^"].+?,)}</pre>
+returns:
 <span class="code">\[\^\"\]\.\+\?</span>.
 </p>
     
@@ -3419,8 +3475,8 @@ Function which escapes the characters in a String using XML 1.0 entities.
 </p>
 
 <p>
-For example,<span class="code">"bread" &amp; 'butter'</span>
-becomes:
+For example,<pre class="source">${__escapeXml("bread" &amp; 'butter')}</pre>
+returns:
 <span class="code">&amp;quot;bread&amp;quot; &amp;amp; &amp;apos;butter&amp;apos;</span>.
 </p>
     
@@ -3479,7 +3535,7 @@ becomes:
 <div class="name req-false">Format</div>
 <div class="description req-false">
         The format to be passed to DateTimeFormatter.
-        See https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+        See <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
         If omitted, the function uses milliseconds since epoch format.
         </div>
 <div class="required req-false">No</div>
@@ -3538,6 +3594,311 @@ becomes:
 </div>
 
 </div>
+<p>Examples:
+<pre class="source">${__timeShift(dd/MM/yyyy,21/01/2018,P2D,,)}</pre> returns <span class="code">23/01/2018</span>
+
+<pre class="source">${__timeShift(dd MMMM yyyy,21 f&eacute;vrier 2018,P2D,fr_FR,)}</pre> returns <span class="code">23 f&eacute;vrier 2018</span>
+
+</p>
+<div class="go-top">
+<a href="#">^</a>
+</div>
+</div>
+
+<div class="component">
+<h2 id="__digest">__digest<a class="sectionlink" href="#__digest" title="Link to here">&para;</a>
+</h2>
+<div class="description">
+        
+<p>The digest function returns an encrypted value in the
+            specific hash algorithm with the optional salt, upper case
+            and variable name.</p>
+    
+</div>
+<div class="properties">
+<h3 id="__digest_parms1">
+        Parameters
+        <a class="sectionlink" href="#__digest_parms1" title="Link to here">&para;</a>
+</h3>
+<div class="property title">
+<div class="name title">Attribute</div>
+<div class="description title">Description</div>
+<div class="required title">Required</div>
+</div>
+        
+<div class="property">
+<div class="name req-true">Algorithm</div>
+<div class="description req-true">
+            The algorithm to be used to encrypt
+            For possible algorithms See MessageDigest in
+            <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html">StandardNames</a>
+            
+<ul>
+                
+<li>MD2</li>
+                
+<li>MD5</li>
+                
+<li>SHA-1</li>
+                
+<li>SHA-224</li>
+                
+<li>SHA-256</li>
+                
+<li>SHA-384</li>
+                
+<li>SHA-512</li>
+            
+</ul>
+            
+<div class="clear"></div>
+<div class="note">Spaces are taken into account for <span class="code">Salt to add</span> and <span class="code">String to encode</span>
+</div>
+<div class="clear"></div>
+        
+</div>
+<div class="required req-true">Yes</div>
+</div>
+        
+<div class="property">
+<div class="name req-true">String to encode</div>
+<div class="description req-true"> The String
+            that will be encrypted </div>
+<div class="required req-true">Yes</div>
+</div>
+        
+<div class="property">
+<div class="name req-false">Salt to add</div>
+<div class="description req-false"> Salt to be added
+            to string (after it)</div>
+<div class="required req-false">No</div>
+</div>
+        
+<div class="property">
+<div class="name req-false">Upper Case value</div>
+<div class="description req-false"> Result will
+            be in lower case by default. Choose true to upper case
+            results. </div>
+<div class="required req-false">No</div>
+</div>
+        
+<div class="property">
+<div class="name req-false">Name of variable</div>
+<div class="description req-false">The name of
+            the variable to set.</div>
+<div class="required req-false">No</div>
+</div>
+    
+</div>
+<p>Examples:
+        <pre class="source">${__digest(MD5,Errare humanum est,,,)}</pre> returns <span class="code">c49f00b92667a35c63708933384dad52</span>
+<br>
+        
+<pre class="source">${__digest(SHA-256,Felix qui potuit rerum cognoscere causas,mysalt,,)}</pre> returns <span class="code">a3bc6900fe2b2fc5fa8a601a4a84e27a079bf2c581d485009bc5c00516729ac7</span>
+<br>
+        
+    
+</p>
+<div class="go-top">
+<a href="#">^</a>
+</div>
+</div>
+
+<div class="component">
+<h2 id="__dateTimeConvert">__dateTimeConvert<a class="sectionlink" href="#__dateTimeConvert" title="Link to here">&para;</a>
+</h2>
+<div class="description">
+        
+<p>The <span class="code">__dateTimeConvert</span> function converts a date that is in source format
+        to a target format storing the result optionally in the variable name.</p>
+    
+</div>
+<div class="properties">
+<h3 id="__dateTimeConvert_parms1">
+        Parameters
+        <a class="sectionlink" href="#__dateTimeConvert_parms1" title="Link to here">&para;</a>
+</h3>
+<div class="property title">
+<div class="name title">Attribute</div>
+<div class="description title">Description</div>
+<div class="required title">Required</div>
+</div>
+        
+<div class="property">
+<div class="name req-true">Date String</div>
+<div class="description req-true">
+            The date string to convert from Source Date Format to Target Date Format.
+        </div>
+<div class="required req-true">Yes</div>
+</div>
+        
+<div class="property">
+<div class="name req-true">Source Date Format</div>
+<div class="description req-true">The original date format</div>
+<div class="required req-true">Yes</div>
+</div>
+        
+<div class="property">
+<div class="name req-true">Target Date Format</div>
+<div class="description req-true">The new date format</div>
+<div class="required req-true">Yes</div>
+</div>
+        
+<div class="property">
+<div class="name req-false">Name of variable</div>
+<div class="description req-false">The name of the variable to set.</div>
+<div class="required req-false">No</div>
+</div>
+    
+</div>
+<p>Example:
+    <pre class="source">${__dateTimeConvert(01212018,MMddyyyy,dd/MM/yyyy,)}</pre> returns <span class="code">21/01/2018</span>
+    
+</p>
+<div class="go-top">
+<a href="#">^</a>
+</div>
+</div>
+
+<div class="component">
+<h2 id="__isPropDefined">__isPropDefined<a class="sectionlink" href="#__isPropDefined" title="Link to here">&para;</a>
+</h2>
+<div class="description">
+        
+<p>The <span class="code">__isPropDefined</span> function returns true if property exists or false if not.</p>
+    
+</div>
+<div class="properties">
+<h3 id="__isPropDefined_parms1">
+        Parameters
+        <a class="sectionlink" href="#__isPropDefined_parms1" title="Link to here">&para;</a>
+</h3>
+<div class="property title">
+<div class="name title">Attribute</div>
+<div class="description title">Description</div>
+<div class="required title">Required</div>
+</div>
+        
+<div class="property">
+<div class="name req-true">Property Name</div>
+<div class="description req-true">
+            The Property Name to be used to check if defined
+        </div>
+<div class="required req-true">Yes</div>
+</div>
+    
+</div>
+<p>Example: <pre class="source">${__isPropDefined(START.HMS)}</pre> will return <span class="code">true</span>
+</p>
+<div class="go-top">
+<a href="#">^</a>
+</div>
+</div>
+
+<div class="component">
+<h2 id="__isVarDefined">__isVarDefined<a class="sectionlink" href="#__isVarDefined" title="Link to here">&para;</a>
+</h2>
+<div class="description">
+        
+<p>The <span class="code">__isVarDefined</span> function returns true if variable exists or false if not.</p>
+    
+</div>
+<div class="properties">
+<h3 id="__isVarDefined_parms1">
+        Parameters
+        <a class="sectionlink" href="#__isVarDefined_parms1" title="Link to here">&para;</a>
+</h3>
+<div class="property title">
+<div class="name title">Attribute</div>
+<div class="description title">Description</div>
+<div class="required title">Required</div>
+</div>
+        
+<div class="property">
+<div class="name req-true">Variable Name</div>
+<div class="description req-true">
+            The Variable Name to be used to check if defined
+        </div>
+<div class="required req-true">Yes</div>
+</div>
+    
+</div>
+<p>Example: <pre class="source">${__isVarDefined(JMeterThread.last_sample_ok)}</pre> will return <span class="code">true</span>
+</p>
+<div class="go-top">
+<a href="#">^</a>
+</div>
+</div>
+
+<div class="component">
+<h2 id="__changeCase">__changeCase<a class="sectionlink" href="#__changeCase" title="Link to here">&para;</a>
+</h2>
+<div class="description">
+        
+<p>The change case function returns a string value which 
+        case has been changed following a specific mode.
+        Result can optionally be saved in a JMeter variable.</p>
+    
+</div>
+<div class="properties">
+<h3 id="__changeCase_parms1">
+        Parameters
+        <a class="sectionlink" href="#__changeCase_parms1" title="Link to here">&para;</a>
+</h3>
+<div class="property title">
+<div class="name title">Attribute</div>
+<div class="description title">Description</div>
+<div class="required title">Required</div>
+</div>
+    
+<div class="property">
+<div class="name req-true">String to change case</div>
+<div class="description req-true">The String
+            which case will be changed</div>
+<div class="required req-true">Yes</div>
+</div>
+        
+<div class="property">
+<div class="name req-true">change case mode</div>
+<div class="description req-true">
+            The mode to be used to change case, for example for <span class="code">ab-CD eF</span>:
+            <ul>
+                
+<li>
+<span class="code">UPPER</span> result as AB-CD EF</li>
+                
+<li>
+<span class="code">LOWER</span> result as ab-cd ed</li>
+                
+<li>
+<span class="code">CAPITALIZE</span> result as Ab-CD eF</li>
+            
+</ul>
+            
+<div class="clear"></div>
+<div class="note">
+<span class="code">change case mode</span> is case insensitive</div>
+<div class="clear"></div>
+        
+</div>
+<div class="required req-true">Yes</div>
+</div>
+        
+<div class="property">
+<div class="name req-false">Name of variable</div>
+<div class="description req-false">The name of the variable to set.</div>
+<div class="required req-false">No</div>
+</div>
+    
+</div>
+<p>Examples:
+    <pre class="source">${__changeCase(Avaro omnia desunt\, inopi pauca\, sapienti nihil,UPPER,)}</pre> will return <span class="code">AVARO OMNIA DESUNT, INOPI PAUCA, SAPIENTI NIHIL</span>
+    
+<pre class="source">${__changeCase(LABOR OMNIA VINCIT IMPROBUS,LOWER,)}</pre> will return <span class="code">labor omnia vincit improbus</span>
+    
+<pre class="source">${__changeCase(omnibus viis romam pervenitur,CAPITALIZE,)}</pre> will return <span class="code">Omnibus viis romam pervenitur</span>
+    
+</p>
 <div class="go-top">
 <a href="#">^</a>
 </div>
@@ -3644,7 +4005,7 @@ They are mainly intended for use in file names etc.
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2017
+            2018
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache

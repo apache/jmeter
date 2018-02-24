@@ -29,9 +29,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Pickle Graphite format 
- * Partly based on https://github.com/BrightcoveOS/metrics-graphite-pickle/blob/master/src/main/java/com/brightcove/metrics/reporting/GraphitePickleReporter.java 
- * as per license https://github.com/BrightcoveOS/metrics-graphite-pickle/blob/master/LICENSE.txt
+ * Pickle Graphite format Partly based on
+ * https://github.com/BrightcoveOS/metrics-graphite-pickle/blob/master/src/main/java/com/brightcove/metrics/reporting/GraphitePickleReporter.java
+ * as per license
+ * https://github.com/BrightcoveOS/metrics-graphite-pickle/blob/master/LICENSE.txt
+ * 
  * @since 2.13
  */
 class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
@@ -81,8 +83,12 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
                 prefix);
     }
     
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#addMetric(long, java.lang.String, java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
+     * addMetric(long, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
     public void addMetric(long timestamp, String contextName, String metricName, String metricValue) {

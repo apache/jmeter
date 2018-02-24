@@ -90,9 +90,32 @@
       <ProxyControl guiclass="ProxyControlGui" testclass="ProxyControl" testname="HTTP(S) Test Script Recorder" enabled="true">
         <stringProp name="ProxyControlGui.port">8888</stringProp>
         <collectionProp name="ProxyControlGui.exclude_list">
-          <stringProp name="305776760">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|eot|otf|ttf|mp4|woff|woff2)[\?;].*</stringProp>
+          <stringProp name="1301401588">.*toolbar\.live\.com.*</stringProp>
           <stringProp name="1179605444">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|eot|otf|ttf|mp4|woff|woff2)</stringProp>
-          <stringProp name="1799639941">.*detectportal.firefox.com.*</stringProp>
+          <stringProp name="1276958334">update\.microsoft\.com.*</stringProp>
+          <stringProp name="195066122">toolbarqueries\.google\..*</stringProp>
+          <stringProp name="-1570593883">clients.*\.google.*</stringProp>
+          <stringProp name="339269285">api\.bing\.com.*</stringProp>
+          <stringProp name="305776760">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|eot|otf|ttf|mp4|woff|woff2)[\?;].*</stringProp>
+          <stringProp name="-1927115225">us\.update\.toolbar\.yahoo\.com.*</stringProp>
+          <stringProp name="-939433526">safebrowsing.*\.google\.com.*</stringProp>
+          <stringProp name="2114619729">g\.msn.*</stringProp>
+          <stringProp name="1205246556">.*msg\.yahoo\.com.*</stringProp>
+          <stringProp name="-1284196184">tiles.*\.mozilla\.com.*</stringProp>
+          <stringProp name="-1464494344">sqm\.microsoft\.com.*</stringProp>
+          <stringProp name="-1896539416">geo\.yahoo\.com.*</stringProp>
+          <stringProp name="-2044016004">www\.download\.windowsupdate\.com.*</stringProp>
+          <stringProp name="2037242655">.*yimg\.com.*</stringProp>
+          <stringProp name="-48692778">www\.google-analytics\.com.*</stringProp>
+          <stringProp name="1739087931">http?://self-repair\.mozilla\.org.*</stringProp>
+          <stringProp name="-673404811">windowsupdate\.microsoft\.com.*</stringProp>
+          <stringProp name="-918174667">.*detectportal\.firefox\.com.*</stringProp>
+          <stringProp name="1814888918">.*toolbar\.yahoo\.com.*</stringProp>
+          <stringProp name="397298662">.*\.google\.com.*/safebrowsing/.*</stringProp>
+          <stringProp name="-1315567221">toolbar\.google\.com.*</stringProp>
+          <stringProp name="-607618767">pgq\.yahoo\.com.*</stringProp>
+          <stringProp name="-1855735577">toolbar\.avg\.com/.*</stringProp>
+          <stringProp name="517993994">toolbar\.msn\.com.*</stringProp>
         </collectionProp>
         <collectionProp name="ProxyControlGui.include_list"/>
         <boolProp name="ProxyControlGui.capture_http_headers">true</boolProp>
@@ -108,7 +131,7 @@
         <stringProp name="ProxyControlGui.content_type_exclude"></stringProp>
         <boolProp name="ProxyControlGui.notify_child_sl_filtered">false</boolProp>
         <stringProp name="ProxyControlGui.proxy_prefix_http_sampler_name"></stringProp>
-        <intProp name="ProxyControlGui.proxy_http_sampler_naming_mode">0</intProp>
+        <intProp name="ProxyControlGui.proxy_http_sampler_naming_mode">1</intProp>
         <stringProp name="ProxyControlGui.proxy_pause_http_sampler"></stringProp>
       </ProxyControl>
       <hashTree>

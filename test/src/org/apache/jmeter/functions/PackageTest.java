@@ -203,7 +203,8 @@ public class PackageTest extends JMeterTestCaseJUnit {
     }
 
     // Function objects to be tested
-    private static CSVRead cr1, cr4;
+    private static CSVRead cr1;
+    private static CSVRead cr4;
 
     // Helper class used to implement co-routine between two threads
     private static class Baton {
@@ -386,7 +387,8 @@ public class PackageTest extends JMeterTestCaseJUnit {
 
     }
     
-    private static XPath sxp1,sxp2;
+    private static XPath sxp1;
+    private static XPath sxp2;
     // Use same XPath for both threads
     public void XPathSetup1() throws Exception{
         sxp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");

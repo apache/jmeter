@@ -41,7 +41,6 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestTimeShiftFunction extends JMeterTestCase {

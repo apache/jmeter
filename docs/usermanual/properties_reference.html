@@ -6,7 +6,7 @@
           -
           User's Manual: Properties Reference</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="../css/new-style.css">
 <link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png">
@@ -22,16 +22,16 @@
             APACHE LOGO
           -->
 <div>
-<a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a>
+<a href="https://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a>
 </div>
 <!--
               PROJECT LOGO
             -->
 <div>
-<a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a>
+<a href="https://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a>
 </div>
 <div class="banner">
-<a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
+<a href="https://www.apache.org/events/current-event.html"><img src="https://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
 <div class="clear"></div>
 </div>
 </div>
@@ -44,7 +44,7 @@
 <a href="../index.html">Overview</a>
 </li>
 <li>
-<a href="http://www.apache.org/licenses/">License</a>
+<a href="https://www.apache.org/licenses/">License</a>
 </li>
 </ul>
 </li>
@@ -91,10 +91,10 @@
 <a href="../api/index.html">Javadocs</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
+<a href="https://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<a href="https://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 </li>
@@ -129,7 +129,7 @@
 <a href="../issues.html">Issue Tracking</a>
 </li>
 <li>
-<a href="http://www.apache.org/security/">Security</a>
+<a href="https://www.apache.org/security/">Security</a>
 </li>
 <li>
 <a href="../mail.html">Mailing Lists</a>
@@ -144,7 +144,7 @@
 <a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a>
 </li>
 <li>
-<a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
+<a href="https://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 </li>
@@ -154,16 +154,16 @@
 <div class="menu-title">Foundation</div>
 <ul>
 <li>
-<a href="http://www.apache.org/">The Apache Software Foundation (ASF)</a>
+<a href="https://www.apache.org/">The Apache Software Foundation (ASF)</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
+<a href="https://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+<a href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
 <li>
-<a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+<a href="https://www.apache.org/foundation/thanks.html">Thanks</a>
 </li>
 </ul>
 </li>
@@ -360,6 +360,10 @@
 <a href="#naming_policy">19.41 Naming Policy</a>
 <ul></ul>
 </li>
+<li>
+<a href="#help">19.42 Help</a>
+<ul></ul>
+</li>
 </ul>
 <div class="section">
 <h1 id="introduction">19 Introduction<a class="sectionlink" href="#introduction" title="Link to here">&para;</a>
@@ -470,9 +474,10 @@ These properties are only taken into account after restarting JMeter as they are
 <div class="clear"></div>
 <div class="note">SSL (Java) System properties are now in <span class="code">system.properties</span>
 <br> 
-JMeter no longer converts <span class="code">javax.<em>xxx</em></span> property entries in this file into System properties.<br>
-These must now be defined in the <span class="code">system.properties</span> file or on the command-line.<br>
-The <span class="code">system.properties</span> file gives more flexibility.</div>
+JMeter no longer converts <span class="code">javax.<em>xxx</em></span> property entries in
+<span class="code">jmeter.properties</span> into System properties. These must now be
+defined in the <span class="code">system.properties</span> file or on the command-line. The
+<span class="code">system.properties</span> file gives more flexibility.</div>
 <div class="clear"></div>
 
 <div class="properties">
@@ -525,6 +530,27 @@ The <span class="code">system.properties</span> file gives more flexibility.</di
       Bug
       54759</a>, example: <pre class="source">https.socket.protocols=SSLv2Hello SSLv3 TLSv1</pre>
 
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">https.cipherSuites</div>
+<div class="description req-true">
+    Comma-separated list of SSL cipher suites that may be used in HTTPS
+    connections.  It may be desirable to use a subset of cipher suites in order
+    to match expected client behavior or to reduce encryption overhead in
+    JMeter when running with large numbers of users. Errors may occur if the
+    JVM does not support the specified cipher suites, or if the cipher suites
+    supported by the HTTPS server do not overlap this list.  See the
+    <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#Customization">JSSE
+	    Reference Guide.</a>
+<br>
+    For example: <pre class="source">https.cipherSuites=TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256</pre>
+    If not specified, JMeter will use the default list of cipher suites
+    supported by the JVM.
 </div>
 <div class="required req-true">
             No
@@ -932,6 +958,19 @@ gui.quick_9=ViewResultsFullVisualizer
           </div>
 </div>
 
+<div class="property">
+<div class="name req-true">save_automatically_before_run</div>
+<div class="description req-true">
+Enable auto saving of the .jmx file before start run a test plan<br>
+When enabled, before the run, the .jmx will be saved and also backed up to the directory pointed.<br>
+Defaults to: <span class="code">true</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
 </div>
 
 </div>
@@ -1090,6 +1129,102 @@ JMETER-SERVER</pre>
 <div class="description req-true">
     From JMeter version 2.3.1, define this property to cause JMeter to exit after the first test.<br>
     Defaults to: <span class="code">true</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">server.rmi.ssl.keystore.type</div>
+<div class="description req-true">
+    Type of keystore for RMI connection security. Possible values are dependent on the JVM in use, but commonly supported are <span class="code">JKS</span> and <span class="code">PKCS12</span>.
+    Defaults to: <span class="code">JKS</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">server.rmi.ssl.keystore.file</div>
+<div class="description req-true">
+    Keystore file that contains private key
+    Defaults to: <span class="code">rmi_keystore.jks</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">server.rmi.ssl.keystore.password</div>
+<div class="description req-true">
+    Password of Keystore
+    Defaults to: <span class="code">changeit</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">server.rmi.ssl.keystore.alias</div>
+<div class="description req-true">
+    Key alias
+    Defaults to: <span class="code">rmi</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">server.rmi.ssl.truststore.type</div>
+<div class="description req-true">
+    Type of truststore for RMI connection security
+    Defaults to: the value of <span class="code">server.rmi.ssl.keystore.type</span>, which is <span class="code">JKS</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">server.rmi.ssl.truststore.file</div>
+<div class="description req-true">
+    Keystore file that contains certificate
+    Defaults to: the value of <span class="code">server.rmi.ssl.keystore.file</span>, which is <span class="code">rmi_keystore.jks</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">server.rmi.ssl.truststore.password</div>
+<div class="description req-true">
+    Password of Trust store
+    Defaults to: the value of <span class="code">server.rmi.ssl.keystore.password</span>, which is <span class="code">changeit</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">server.rmi.ssl.disable</div>
+<div class="description req-true">
+    Set this to <span class="code">true</span> if you don't want to use SSL for RMI
+    Defaults to: <span class="code">false</span>
 
 </div>
 <div class="required req-true">
@@ -1296,13 +1431,13 @@ JMETER-SERVER</pre>
 
 <div class="description">
     Enable header wire and context logging - Best for Debugging
-	In log4j2.xml, set:
+    In log4j2.xml, set:
 <pre class="source">
 &lt;Logger name="org.apache.http" level="debug" /&gt;
 &lt;Logger name="org.apache.http.wire" level="error" /&gt;
 </pre>
     Enable full wire and context logging
-	In log4j2.xml, set:
+    In log4j2.xml, set:
     <pre class="source">&lt;Logger name="org.apache.http" level="debug" /&gt;</pre>
     Enable context logging for connection management
     <pre class="source">&lt;Logger name="org.apache.http.impl.conn" level="debug" /&gt;</pre>
@@ -1889,12 +2024,12 @@ JMETER-SERVER</pre>
 <div class="description req-true">
     For use with Comma-separated value (CSV) files or other formats where the fields' values
     are separated by specified delimiters.<br>
+    Defaults to: <span class="code">,</span>
     
 <div class="clear"></div>
-<div class="note">For TAB, since JMeter version 2.3 one can use <span class="code">\t</span>
+<div class="note">For TAB, one can use <span class="code">\t</span>
 </div>
 <div class="clear"></div>
-    Defaults to: <span class="code">,</span>
 
 </div>
 <div class="required req-true">
@@ -2624,17 +2759,6 @@ JMETER-SERVER</pre>
 </dd>
         
 <dt>
-<span class="code">Hold</span>
-</dt>
-        
-<dd>retains samples until end of test (may need lots of memory)
-        <div class="clear"></div>
-<div class="note">The related <span class="code">hold_samples</span> was originally defined as a separate property, but is deprecated now.</div>
-<div class="clear"></div>
-        
-</dd>
-        
-<dt>
 <span class="code">Statistical</span>
 </dt>
         
@@ -2852,7 +2976,7 @@ JMETER-SERVER</pre>
 <div class="name req-true">jdbc.config.check.query</div>
 <div class="description req-true">
     List of queries used to determine if the database is still responding.<br>
-    Defaults to: <span class="code">select 1 from INFORMATION_SCHEMA.SYSTEM_USERS|select 1 from dual|select 1 from sysibm.sysdummy1|select 1|select 1 from rdb$database</span>
+    Defaults to: <pre class="source">select 1 from INFORMATION_SCHEMA.SYSTEM_USERS|select 1 from dual|select 1 from sysibm.sysdummy1|select 1|select 1 from rdb$database</pre>
 
 </div>
 <div class="required req-true">
@@ -2864,7 +2988,7 @@ JMETER-SERVER</pre>
 <div class="name req-true">jdbc.config.jdbc.driver.class</div>
 <div class="description req-true">
     List of JDBC driver class name<br>
-    Defaults to: <span class="code">com.mysql.jdbc.Driver|org.postgresql.Driver|oracle.jdbc.OracleDriver|com.ingres.jdbc.IngresDriver|com.microsoft.sqlserver.jdbc.SQLServerDriver|com.microsoft.jdbc.sqlserver.SQLServerDriver|org.apache.derby.jdbc.ClientDriver|org.hsqldb.jdbc.JDBCDriver|com.ibm.db2.jcc.DB2Driver|org.apache.derby.jdbc.ClientDriver|org.h2.Driver|org.firebirdsql.jdbc.FBDrivery|org.mariadb.jdbc.Driver|org.sqlite.JDBC|net.sourceforge.jtds.jdbc.Driver</span>
+    Defaults to: <pre class="source">com.mysql.jdbc.Driver|org.postgresql.Driver|oracle.jdbc.OracleDriver|com.ingres.jdbc.IngresDriver|com.microsoft.sqlserver.jdbc.SQLServerDriver|com.microsoft.jdbc.sqlserver.SQLServerDriver|org.apache.derby.jdbc.ClientDriver|org.hsqldb.jdbc.JDBCDriver|com.ibm.db2.jcc.DB2Driver|org.apache.derby.jdbc.ClientDriver|org.h2.Driver|org.firebirdsql.jdbc.FBDrivery|org.mariadb.jdbc.Driver|org.sqlite.JDBC|net.sourceforge.jtds.jdbc.Driver</pre>
 
 </div>
 <div class="required req-true">
@@ -3886,33 +4010,6 @@ JMETER-SERVER</pre>
 </div>
 
 <div class="property">
-<div class="name req-true">sampleresult.getbytes.body_real_size</div>
-<div class="description req-true">
-    Network response size calculation method<br>
-    Use real size: number of bytes for response body returned by webserver
-    (i.e. the network bytes received for response). If set to <span class="code">false</span>,
-    the (uncompressed) response data size will used (default before version 2.5).<br>
-    Defaults to: <span class="code">true</span>
-
-</div>
-<div class="required req-true">
-            No
-          </div>
-</div>
-
-<div class="property">
-<div class="name req-true">sampleresult.getbytes.headers_size</div>
-<div class="description req-true">
-    Include headers: add the headers size in real size.<br>
-    Defaults to: <span class="code">true</span>
-
-</div>
-<div class="required req-true">
-            No
-          </div>
-</div>
-
-<div class="property">
 <div class="name req-true">CookieManager.delete_null_cookies</div>
 <div class="description req-true">
     CookieManager behaviour - should cookies with null/empty values be deleted?<br>
@@ -4557,7 +4654,7 @@ JMETER-SERVER</pre>
 <div class="property">
 <div class="name req-true">jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity</div>
 <div class="description req-true">
-    Defaults to: <span class="code">500</span>
+    Defaults to: <span class="code">100</span>
 
 </div>
 <div class="required req-true">
@@ -5358,6 +5455,38 @@ JMETER-SERVER</pre>
 <a href="#">^</a>
 
 </div>
+<div class="section">
+<h1 id="help">19.42 Help<a class="sectionlink" href="#help" title="Link to here">&para;</a>
+</h1>
+
+<div class="description">Controls how documentation in JMeter is displayed</div>
+
+<div class="properties">
+<h3>
+        Parameters
+        </h3>
+<div class="property title">
+<div class="name title">Attribute</div>
+<div class="description title">Description</div>
+<div class="required title">Required</div>
+</div>
+    
+<div class="property">
+<div class="name req-true">help.local</div>
+<div class="description req-true">
+    Switch that allows using Local documentation opened in JMeter GUI.<br>
+    By default we use Online documentation opened in Browser.
+    Defaults to <span class="code">false</span>
+    
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+</div>
+
+</div>
 <ul class="pagelinks">
 <li>
 <a href="component_reference.html">&lt; Prev</a>
@@ -5388,7 +5517,7 @@ JMETER-SERVER</pre>
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2017
+            2018
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
