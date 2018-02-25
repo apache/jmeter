@@ -245,7 +245,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             if(requestURI != null) {
                 HttpHost targetHost = (HttpHost) context.getAttribute(HttpCoreContext.HTTP_TARGET_HOST);
-                URL url = null;
+                URL url;
                 if(requestURI.isAbsolute()) {
                     url = requestURI.toURL();
                 } else {
@@ -481,8 +481,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private volatile HttpUriRequest currentRequest; // Accessed from multiple threads
 
-    private volatile boolean resetSSLContext;
-
     protected HTTPHC4Impl(HTTPSamplerBase testElement) {
         super(testElement);
     }
@@ -537,6 +535,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             log.debug("Start : sample {} method {} followingRedirect {} depth {}", 
                     url, method, areFollowingRedirect, frameDepth);            
         }
+        JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
 
         HTTPSampleResult res = createSampleResult(url, method);
 
@@ -547,7 +546,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_AUTH_MANAGER, getAuthManager());
 
         try {
-            httpClient = setupClient(url, clientContext);
+            httpClient = setupClient(jMeterVariables, url, clientContext);
             URI uri = url.toURI();
             if (method.equals(HTTPConstants.POST)) {
                 httpRequest = new HttpPost(uri);
@@ -587,7 +586,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return res;
         }
 
-        setupClientContextBeforeSample(localContext);
+        setupClientContextBeforeSample(jMeterVariables, localContext);
         
         res.sampleStart();
 
@@ -607,7 +606,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // Needs to be done after execute to pick up all the headers
             final HttpRequest request = (HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
-            extractClientContextAfterSample(localContext);
+            extractClientContextAfterSample(jMeterVariables, localContext);
             // We've finished with the request, so we can add the LocalAddress to it for display
             if (localAddress != null) {
                 request.addHeader(HEADER_LOCAL_ADDRESS, localAddress.toString());
@@ -716,14 +715,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * Store in JMeter Variables the UserToken so that the SSL context is reused
      * See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=57804">Bug 57804</a>
+     * @param jMeterVariables {@link JMeterVariables}
      * @param localContext {@link HttpContext}
      */
-    private void extractClientContextAfterSample(HttpContext localContext) {
+    private void extractClientContextAfterSample(JMeterVariables jMeterVariables, HttpContext localContext) {
         Object userToken = localContext.getAttribute(HttpClientContext.USER_TOKEN);
         if(userToken != null) {
             log.debug("Extracted from HttpContext user token:{} storing it as JMeter variable:{}", userToken, JMETER_VARIABLE_USER_TOKEN);
             // During recording JMeterContextService.getContext().getVariables() is null
-            JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
             if (jMeterVariables != null) {
                 jMeterVariables.putObject(JMETER_VARIABLE_USER_TOKEN, userToken); 
             }
@@ -733,12 +732,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * Configure the UserToken so that the SSL context is reused
      * See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=57804">Bug 57804</a>
+     * @param jMeterVariables {@link JMeterVariables}
      * @param localContext {@link HttpContext}
      */
-    private void setupClientContextBeforeSample(HttpContext localContext) {
+    private void setupClientContextBeforeSample(JMeterVariables jMeterVariables, HttpContext localContext) {
         Object userToken = null;
         // During recording JMeterContextService.getContext().getVariables() is null
-        JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
         if(jMeterVariables != null) {
             userToken = jMeterVariables.getObject(JMETER_VARIABLE_USER_TOKEN);            
         }
@@ -932,7 +931,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private CloseableHttpClient setupClient(URL url, HttpClientContext clientContext) throws GeneralSecurityException {
+    private CloseableHttpClient setupClient(JMeterVariables jMeterVariables, URL url, HttpClientContext clientContext) throws GeneralSecurityException {
 
         Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey = 
                 HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
@@ -970,7 +969,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             httpClient = pair != null ? pair.getLeft() : null;
         }
 
-        resetSSLStateIfNeeded(url, clientContext, pair);
+        resetStateIfNeeded(jMeterVariables, clientContext, mapHttpClientPerHttpClientKey);
 
         if (httpClient == null) { // One-time init for this client
             DnsResolver resolver = this.testElement.getDNSResolver();
@@ -1078,21 +1077,31 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      *  <li>Close current Idle or Expired connections that hold SSL State</li>
      *  <li>Remove HttpClientContext.USER_TOKEN from {@link HttpClientContext}</li>
      * </ul>
-     * @param url {@link URL}
+     * @param jMeterVariables {@link JMeterVariables}
      * @param clientContext {@link HttpClientContext}
-     * @param pair {@link Pair} holding {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
+     * @param mapHttpClientPerHttpClientKey Map of {@link Pair} holding {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
      */
-    private void resetSSLStateIfNeeded(URL url, HttpClientContext clientContext,
-            Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair) {
-        if (resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
-            if(pair != null) {
-                PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = pair.getRight();
-                poolingHttpClientConnectionManager.closeExpiredConnections();
-                poolingHttpClientConnectionManager.closeIdleConnections(1L, TimeUnit.MICROSECONDS);
-            }
+    private void resetStateIfNeeded(JMeterVariables jMeterVariables, 
+            HttpClientContext clientContext,
+            Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
+        if (resetStateOnThreadGroupIteration.get()) {
+            closeCurrentConnections(mapHttpClientPerHttpClientKey);
             clientContext.removeAttribute(HttpClientContext.USER_TOKEN);
             ((JsseSSLManager) SSLManager.getInstance()).resetContext();
-            resetSSLContext = false;
+            resetStateOnThreadGroupIteration.set(false);
+        }
+    }
+
+    /**
+     * @param mapHttpClientPerHttpClientKey
+     */
+    private void closeCurrentConnections(
+            Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
+        for (Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair :
+                mapHttpClientPerHttpClientKey.values()) {
+            PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = pair.getRight();
+            poolingHttpClientConnectionManager.closeExpiredConnections();
+            poolingHttpClientConnectionManager.closeIdleConnections(1L, TimeUnit.MICROSECONDS);
         }
     }
 
@@ -1698,8 +1707,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     @Override
     protected void notifyFirstSampleAfterLoopRestart() {
-        log.debug("notifyFirstSampleAfterLoopRestart");
-        resetSSLContext = !USE_CACHED_SSL_CONTEXT;
+        log.debug("notifyFirstSampleAfterLoopRestart called "
+                + "with config(httpclient.reset_state_on_thread_group_iteration={})",
+                RESET_STATE_ON_THREAD_GROUP_ITERATION);
+        resetStateOnThreadGroupIteration.set(RESET_STATE_ON_THREAD_GROUP_ITERATION);
     }
 
     @Override

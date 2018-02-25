@@ -36,8 +36,6 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
 
     private transient HTTPAbstractImpl impl;
     
-    private transient volatile boolean notifyFirstSampleAfterLoopRestart;
-
     public HTTPSamplerProxy(){
         super();
     }
@@ -66,11 +64,6 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
                 return errorResult(ex, new HTTPSampleResult());
             }
         }
-        // see https://bz.apache.org/bugzilla/show_bug.cgi?id=51380
-        if(notifyFirstSampleAfterLoopRestart) {
-            impl.notifyFirstSampleAfterLoopRestart();
-            notifyFirstSampleAfterLoopRestart = false;
-        }
         return impl.sample(u, method, areFollowingRedirect, depth);
     }
 
@@ -97,6 +90,8 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
      */
     @Override
     public void testIterationStart(LoopIterationEvent event) {
-        notifyFirstSampleAfterLoopRestart = true;
+        if (impl != null) {
+            impl.notifyFirstSampleAfterLoopRestart();
+        }
     }
 }
