@@ -3010,6 +3010,10 @@ run JMeter unless all the JMeter jars are added.
         <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
         <param name="skip.batchtest" value="${skip.batchtest_Http4ImplPreemptiveBasicAuth}" />
       </antcall>
+      <antcall target="batchtest">
+        <param name="batchtest.name" value="Http4ImplDigestAuth"/>
+        <param name="batchtest.jmx" value="Http4ImplDigestAuth.jmx"/>
+      </antcall>
   </target>
 
   <!-- Run all batch tests; used by test target -->
