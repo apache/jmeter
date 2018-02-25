@@ -713,7 +713,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                             }
                             // if HEADER_AUTHORIZATION contains "Basic"
                             // then set Mechanism.BASIC_DIGEST, otherwise Mechanism.KERBEROS
-                            Mechanism mechanism = null;
+                            Mechanism mechanism;
                             switch (authType) {
                             case DIGEST_AUTH:
                                 mechanism = Mechanism.DIGEST;
