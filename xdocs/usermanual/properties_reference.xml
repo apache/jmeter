@@ -119,6 +119,16 @@ defined in the <code>system.properties</code> file or on the command-line. The
     If not specified, JMeter will use the default list of cipher suites
     supported by the JVM.
 </property>
+<property name="httpclient.reset_state_on_thread_group_iteration">
+Reset HTTP State when starting a new Thread Group iteration.
+In summary<code>true</code> means next iteration is associated to a new user.
+<code>false</code> means next iteration is associated to same user.
+<code>true</code> involves:
+ <ul> 
+    <li>Closing opened connection</li>
+    <li>resetting SSL State</li>
+</ul>
+</property>
 <property name="https.use.cached.ssl.context">
     Control if we allow reuse of cached SSL context between iterations.<br/>
     Set the value to <code>false</code> to reset the SSL context each iteration.<br/>

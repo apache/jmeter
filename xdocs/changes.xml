@@ -75,6 +75,8 @@ Summary
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
+<li>Since JMeter 4.1, when using default HC4 Implementation, JMeter will reset HTTP state (SSL State + Connections) on each thread group iteration. If you don't want
+this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false</code></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -139,6 +141,7 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
+    <li><bug>58807</bug><code>https.use.cached.ssl.context=false</code> is broken</li>
 </ul>
 
 <h3>Controllers</h3>
