@@ -222,8 +222,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 Credentials credentials = null;
                 HttpClientKey key = (HttpClientKey) localContext.getAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY);
                 AuthScope authScope = null;
-                CredentialsProvider credentialsProvider = 
-                        (CredentialsProvider) context.getAttribute(HttpClientContext.CREDS_PROVIDER);
+                CredentialsProvider credentialsProvider = localContext.getCredentialsProvider();
                 if (key.hasProxy && !StringUtils.isEmpty(key.proxyUser)) {
                     authScope = new AuthScope(key.proxyHost, key.proxyPort);
                     credentials = credentialsProvider.getCredentials(authScope);
@@ -255,8 +254,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
                 Authorization authorization = 
                         authManager.getAuthForURL(url);
-                CredentialsProvider credentialsProvider = 
-                        (CredentialsProvider) context.getAttribute(HttpClientContext.CREDS_PROVIDER);
+                CredentialsProvider credentialsProvider = localContext.getCredentialsProvider();
                 if(authorization != null) {
                     AuthCache authCache = localContext.getAuthCache();
                     if(authCache == null) {
@@ -292,22 +290,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 BasicScheme basicAuth = new BasicScheme();
                 authCache.put(targetHost, basicAuth);
             } else if (authorization.getMechanism() == Mechanism.DIGEST) {
-                DigestScheme digestAuth = (DigestScheme) authCache.get(targetHost);
-                if(digestAuth == null) {
-                    digestAuth = new DigestScheme();
-                }
                 JMeterVariables vars = JMeterContextService.getContext().getVariables();
                 DigestParameters digestParameters = (DigestParameters)
                         vars.getObject(DIGEST_PARAMETERS);
-                digestAuth.overrideParamter("realm", authScope.getRealm());
                 if(digestParameters!=null) {
+                    DigestScheme digestAuth = (DigestScheme) authCache.get(targetHost);
+                    if(digestAuth == null) {
+                        digestAuth = new DigestScheme();
+                    }
+                    digestAuth.overrideParamter("realm", authScope.getRealm());
                     digestAuth.overrideParamter("algorithm", digestParameters.getAlgorithm());
                     digestAuth.overrideParamter("charset", digestParameters.getCharset());
                     digestAuth.overrideParamter("nonce", digestParameters.getNonce());
                     digestAuth.overrideParamter("opaque", digestParameters.getOpaque());
                     digestAuth.overrideParamter("qop", digestParameters.getQop());
+                    authCache.put(targetHost, digestAuth);
                 }
-                authCache.put(targetHost, digestAuth);
             } else if (authorization.getMechanism() == Mechanism.KERBEROS) {
                 KerberosScheme kerberosScheme = new KerberosScheme();
                 authCache.put(targetHost, kerberosScheme);
