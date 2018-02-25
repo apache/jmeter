@@ -1,0 +1,3 @@
+label,responseCode,responseMessage,threadName,dataType,success
+HTTPS-Request-WithMatchingDigestAuthRFC2069,200,OK,Thread Group 1-1,text,true
+HTTPS-Request-WithMatchingDigestAuthRFC2617,200,OK,Thread Group 1-1,text,true
