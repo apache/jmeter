@@ -58,7 +58,7 @@ cd ..
 set "JMETER_HOME=%cd%"
 cd "%CURRENT_DIR%"
 if exist "%JMETER_HOME%\bin\jmeter.bat" goto okHome
-set "%JMETER_HOME%=%~dp0\.."
+set "JMETER_HOME=%~dp0\.."
 :gotHome
 
 if exist "%JMETER_HOME%\bin\jmeter.bat" goto okHome
