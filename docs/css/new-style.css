@@ -486,7 +486,7 @@ table {
   .header>div {
     display: inline-block;
     vertical-align: middle;
-    width: 50%
+    width: 32%
   }
   .header>div+.header>div {
     text-align: center;
@@ -568,7 +568,7 @@ table {
   .header>div {
     display: inline-block;
     vertical-align: middle;
-    width: 50%
+    width: 47%
   }
   .header>div+.header>div {
     text-align: center;
