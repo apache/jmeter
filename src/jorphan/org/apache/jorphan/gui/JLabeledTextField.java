@@ -269,4 +269,9 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
             mChangeListener.stateChanged(ce);
         }
     }
+    
+    @Override
+    public boolean requestFocusInWindow() {
+        return mTextField.requestFocusInWindow();
+    }
 }
