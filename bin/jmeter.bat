@@ -33,7 +33,7 @@ rem   JMETER_HOME - installation directory. Will be guessed from location of jme
 rem
 rem   JM_LAUNCH   - java.exe (default) or javaw.exe
 rem
-rem   JM_START    - set this to "start" to launch JMeter in a separate window
+rem   JM_START    - set this to 'start ""' to launch JMeter in a separate window
 rem                 this is used by the jmeterw.cmd script.
 rem
 rem   JVM_ARGS    - (Optional) Java options used when starting JMeter, e.g. -Dprop=val
@@ -190,6 +190,10 @@ if not defined JMETER_COMPLETE_ARGS (
     set ARGS=%JAVA9_OPTS% %DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %JMETER_LANGUAGE% %RUN_IN_DOCKER%
 ) else (
     set ARGS=
+)
+
+if "%JM_START%" == "start" (
+    set JM_START=start "Apache JMeter"
 )
 
 %JM_START% "%JM_LAUNCH%" %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
