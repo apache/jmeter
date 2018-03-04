@@ -63,9 +63,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * FIXME Why is searchTF not getting focus correctly after having been setVisible(false) once
+ * Dialog to search in tree of element
  */
-public class SearchTreeDialog extends JDialog implements ActionListener {
+public class SearchTreeDialog extends JDialog implements ActionListener { // NOSONAR
 
     private static final long serialVersionUID = -4436834972710248247L;
 
@@ -261,7 +261,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         searchTF.requestFocusInWindow();
         statusLabel.setText(
                 MessageFormat.format(
-                        JMeterUtils.getResString("search_tree_matches"),new Object[]{numberOfMatches}));
+                        JMeterUtils.getResString("search_tree_matches"), numberOfMatches));
     }
     
     /**
