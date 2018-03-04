@@ -51,7 +51,10 @@ public class ResetSearchCommand extends AbstractAction {
                     .filter(node -> node.getUserObject() instanceof Searchable)
                     .map(JMeterTreeNode::getPathToThreadGroup)
                     .flatMap(Collection::stream)
-                    .forEach(matchingNode ->  matchingNode.setMarkedBySearch(false));
+                    .forEach(matchingNode ->  {
+                        matchingNode.setMarkedBySearch(false);
+                        matchingNode.setChildrenNodesHaveMatched(false);
+                    });
         } finally {
             guiPackage.endUndoTransaction();
         }
