@@ -41,7 +41,7 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
     private static final String BLANK = StringUtils.repeat(' ', DEFAULT_LENGTH);
 
     private static final Border RED_BORDER = BorderFactory.createLineBorder(Color.red);
-
+    private static final Border BLUE_BORDER = BorderFactory.createLineBorder(Color.blue);
     public JMeterCellRenderer() {
     }
 
@@ -74,8 +74,9 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
         this.setEnabled(enabled);
         if(node.isMarkedBySearch()) {
             setBorder(RED_BORDER);
-        }
-        else {
+        } else if (node.isChildrenMarkedBySearch()) {
+            setBorder(BLUE_BORDER);
+        } else {
             setBorder(null);
         }
         return this;

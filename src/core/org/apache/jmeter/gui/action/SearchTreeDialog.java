@@ -234,12 +234,11 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
             for (JMeterTreeNode jMeterTreeNode : jMeterTreeModel.getNodesOfType(Searchable.class)) {
                 try {
                     Searchable searchable = (Searchable) jMeterTreeNode.getUserObject();
-                    List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
                     List<String> searchableTokens = searchable.getSearchableTokens();
                     boolean result = searcher.search(searchableTokens);
                     if (result) {
                         numberOfMatches++;
-                        nodes.addAll(matchingNodes);
+                        nodes.add(jMeterTreeNode);
                     }
                 } catch (Exception ex) {
                     logger.error("Error occurred searching for word:"+ wordToSearch+ " in node:"+jMeterTreeNode.getName(), ex);
@@ -247,7 +246,6 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
             }
             GuiPackage guiInstance = GuiPackage.getInstance();
             JTree jTree = guiInstance.getMainFrame().getTree();
-    
             for (JMeterTreeNode jMeterTreeNode : nodes) {
                 jMeterTreeNode.setMarkedBySearch(true);
                 if (expand) {
@@ -307,8 +305,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
                     }
                     totalReplaced += numberOfReplacements;
                     if (numberOfReplacements > 0) {
-                        List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
-                        nodes.addAll(matchingNodes);
+                        nodes.add(jMeterTreeNode);
                     }
                 }
             } catch (Exception ex) {
