@@ -51,6 +51,8 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 
     private boolean markedBySearch;
 
+    private boolean childrenMarkedBySearch;
+
     public JMeterTreeNode() {// Allow serializable test to work
         // TODO: is the serializable test necessary now that JMeterTreeNode is
         // no longer a GUI component?
@@ -87,6 +89,16 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     }
     
     /**
+     * One of the children of this node have matched a search
+     */
+    public void setChildrenNodesHaveMatched(boolean tagged) {
+        if (childrenMarkedBySearch == tagged) {
+            return;
+        }
+        this.childrenMarkedBySearch = tagged;
+        treeModel.nodeChanged(this);
+    }
+    /**
      * Tag Node as result of a search
      * @param tagged The flag to be used for tagging
      */
@@ -95,6 +107,14 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
             return;
         }
         this.markedBySearch = tagged;
+        List<JMeterTreeNode> nodesToParent = getPathToThreadGroup();
+        for (JMeterTreeNode jMeterTreeNode : nodesToParent) {
+            // Ignore me
+            if(jMeterTreeNode != this) {
+                jMeterTreeNode.setChildrenNodesHaveMatched(true);
+            }
+        }
+
         treeModel.nodeChanged(this);
     }
     
@@ -104,6 +124,13 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
      */
     public boolean isMarkedBySearch() {
         return this.markedBySearch;
+    }
+    
+    /**
+     * Node has children marked by search
+     */
+    public boolean isChildrenMarkedBySearch() {
+        return this.childrenMarkedBySearch;
     }
 
     public ImageIcon getIcon() {
