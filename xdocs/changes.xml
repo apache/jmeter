@@ -178,6 +178,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><pr>377</pr>Small fix of the docs. Contributed by Peter Doornbosch (peter.doornbosch at luminis.eu)</li>
   <li><bug>62124</bug>Recording templates : Add more exclusions and use Transaction Name by default</li>
   <li><bug>62127</bug>Store filename as String instead of File in FileEditor. This will prevent conversion of filenames from unix style path separators to Windows style when used for example in CSV Data Set Config.</li>
+  <li><bug>62155</bug>Search Feature: Make Search text field get focus</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
