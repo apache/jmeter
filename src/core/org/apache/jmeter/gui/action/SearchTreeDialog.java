@@ -54,7 +54,6 @@ import org.apache.jmeter.gui.Replaceable;
 import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
