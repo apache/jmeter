@@ -71,7 +71,6 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.DeflateInputStream;
 import org.apache.http.client.entity.InputStreamFactory;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -146,6 +145,7 @@ import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.DynamicKerberosSchemeFactory;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.sampler.hc.LaxDeflateInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LazyLayeredConnectionSocketFactory;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -189,6 +189,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final int MAX_BODY_RETAIN_SIZE = JMeterUtils.getPropDefault("httpclient4.max_body_retain_size", 32 * 1024);
 
+    private static final boolean DEFLATE_RELAX_MODE = JMeterUtils.getPropDefault("httpclient4.deflate_relax_mode", false);
+
     private static final Logger log = LoggerFactory.getLogger(HTTPHC4Impl.class);
     
     private static final InputStreamFactory GZIP = new InputStreamFactory() {
@@ -201,7 +203,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final InputStreamFactory DEFLATE = new InputStreamFactory() {
         @Override
         public InputStream create(final InputStream instream) throws IOException {
-            return new DeflateInputStream(instream);
+            return new LaxDeflateInputStream(instream, DEFLATE_RELAX_MODE);
         }
 
     };
