@@ -83,6 +83,7 @@ under the License.
       <httpmime.version>4.5.5</httpmime.version>
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <javax.activation-api.version>1.2.0</javax.activation-api.version>
+      <javax.activation.version>1.2.0</javax.activation.version>
       <jcharts.version>0.7.5</jcharts.version>
       <jcl-over-slf4j.version>1.7.25</jcl-over-slf4j.version>
       <jodd-core.version>4.1.4</jodd-core.version>
@@ -350,6 +351,11 @@ under the License.
         <groupId>javax.activation</groupId>
         <artifactId>javax.activation-api</artifactId>
         <version>${javax.activation-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.activation</groupId>
+        <artifactId>javax.activation</artifactId>
+        <version>${javax.activation.version}</version>
       </dependency>
       <dependency>
         <groupId>javax.mail</groupId>
