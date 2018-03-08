@@ -73,6 +73,7 @@
 	<classpathentry kind="lib" path="lib/httpcore-nio-4.4.9.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.4.9.jar"/>
 	<classpathentry kind="lib" path="lib/httpmime-4.5.5.jar"/>
+	<classpathentry kind="lib" path="lib/javax.activation-api-1.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/jcharts-0.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-core-4.1.4.jar"/>

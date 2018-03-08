@@ -121,6 +121,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>62128</bug>Try to guess <code>JMETER_HOME</code> correctly, when <code>jmeter.bat</code> is called from a batch file in another directory. Contributed by logox01 (logox01 at gmx.at)</li>
   <li><bug>62155</bug>Search Feature: Make Search text field get focus</li>
   <li><bug>62156</bug>Search Feature : Distinguish between node that matches search and node that contains a child that matches search</li>
+  <li><bug>62065</bug>Use Maven artifact for JAF Module instead of embedded module</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
