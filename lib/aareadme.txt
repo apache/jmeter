@@ -119,6 +119,11 @@ javax.activation-api-1.2.0.jar
 ----------------------
 - used by SMTP Sampler
 
+javax.activation-1.2.0.jar
+----------------------
+- used by SMTP Sampler
+
+
 jCharts-0.7.5 (org.jCharts)
 -------------
 http://jcharts.sourceforge.net/downloads.html
