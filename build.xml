@@ -421,6 +421,7 @@
     <include name="${lib.dir}/${jcl-over-slf4j.jar}"/>
     <include name="${lib.dir}/${jms.jar}"/>
     <include name="${lib.dir}/${rhino.jar}"/>
+    <include name="${lib.dir}/${javax.activation.jar}"/>
     <include name="${lib.dir}/${javax.activation-api.jar}"/>
     <include name="${lib.dir}/${jodd-core.jar}"/>
     <include name="${lib.dir}/${jodd-lagarto.jar}"/>
@@ -504,6 +505,7 @@
     <pathelement location="${lib.dir}/${jcharts.jar}"/>
     <pathelement location="${lib.dir}/${jms.jar}"/>
     <pathelement location="${lib.dir}/${rhino.jar}"/>
+    <pathelement location="${lib.dir}/${javax.activation.jar}"/>
     <pathelement location="${lib.dir}/${javax.activation-api.jar}"/>
     <pathelement location="${lib.dir}/${jodd-core.jar}"/>
     <pathelement location="${lib.dir}/${jodd-lagarto.jar}"/>
@@ -3358,6 +3360,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="jdom" dest.dir="${lib.doc}"/>
     <process_jarfile jarname="jms"/>
     <process_jarfile jarname="rhino"/>
+    <process_jarfile jarname="javax.activation"/>
     <process_jarfile jarname="javax.activation-api"/>
     <process_jarfile jarname="jodd-core"/>
     <process_jarfile jarname="jodd-lagarto"/>
