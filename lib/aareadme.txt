@@ -115,6 +115,10 @@ freemarker-2.3.23.jar
 ----------------------
 - used by Report/Dashboard feature
 
+javax.activation-api-1.2.0.jar
+----------------------
+- used by SMTP Sampler
+
 jCharts-0.7.5 (org.jCharts)
 -------------
 http://jcharts.sourceforge.net/downloads.html
