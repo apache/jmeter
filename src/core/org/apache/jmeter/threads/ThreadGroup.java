@@ -372,16 +372,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         allThreads.remove(thread);
     }
 
-    /**
-     * For each thread, invoke:
-     * <ul> 
-     * <li>{@link JMeterThread#stop()} - set stop flag</li>
-     * <li>{@link JMeterThread#interrupt()} - interrupt sampler</li>
-     * <li>{@link Thread#interrupt()} - interrupt JVM thread</li>
-     * </ul> 
-     */
-    @Override
-    public void tellThreadsToStop() {
+    public void tellThreadsToStop(boolean now) {
         running = false;
         if (delayedStartup) {
             try {
@@ -391,11 +382,29 @@ public class ThreadGroup extends AbstractThreadGroup {
             }
         }
 
-        allThreads.forEach((key, value) -> stopThread(key, value, true));
+        allThreads.forEach((key, value) -> stopThread(key, value, now));
     }
 
+    /**
+     * This is an immediate stop interrupting:
+     * <ul>
+     *  <li>current running threads</li>
+     *  <li>current running samplers</li>
+     * </ul>
+     * For each thread, invoke:
+     * <ul> 
+     * <li>{@link JMeterThread#stop()} - set stop flag</li>
+     * <li>{@link JMeterThread#interrupt()} - interrupt sampler</li>
+     * <li>{@link Thread#interrupt()} - interrupt JVM thread</li>
+     * </ul> 
+     */
+    @Override
+    public void tellThreadsToStop() {
+        tellThreadsToStop(true);
+    }
 
     /**
+     * This is a clean shutdown.
      * For each thread, invoke:
      * <ul> 
      * <li>{@link JMeterThread#stop()} - set stop flag</li>
