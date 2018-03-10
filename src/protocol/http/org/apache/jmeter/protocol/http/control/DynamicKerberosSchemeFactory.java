@@ -32,6 +32,9 @@ public class DynamicKerberosSchemeFactory extends KerberosSchemeFactory {
     static final String CONTEXT_ATTRIBUTE_STRIP_PORT = "__jmeter.K_SP__";
 
     /**
+     * Constructor for DynamicKerberosSchemeFactory
+     * @param stripPort flag, whether port should be stripped from SPN
+     * @param useCanonicalHostname flag, whether SPN should use the canonical hostname
      * @since 4.0
      */
     public DynamicKerberosSchemeFactory(final boolean stripPort, final boolean useCanonicalHostname) {
