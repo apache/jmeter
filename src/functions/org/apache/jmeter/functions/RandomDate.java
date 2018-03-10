@@ -48,7 +48,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  *
  * Parameters: 
  * <ul>
- *  <li>Time format @see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html (optional - defaults to yyyy-MM-dd)</li>
+ *  <li>Time format @see <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a> (optional - defaults to yyyy-MM-dd)</li>
  *  <li>Start date formated as first param (optional - defaults to now)</li>
  *  <li>End date</li>
  *  <li>Locale for the format (optional)</li> 
