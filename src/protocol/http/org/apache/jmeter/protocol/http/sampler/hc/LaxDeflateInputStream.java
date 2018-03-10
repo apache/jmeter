@@ -30,7 +30,7 @@ import org.apache.http.client.entity.DeflateInputStreamFactory;
  * "edgy streams" that signal end of stream with {@link EOFException} 
  * which seems to be rather frequent
  * 
- * @see https://bz.apache.org/bugzilla/show_bug.cgi?id=61058
+ * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61058">Bugzilla 61058</a>
  * @since 4.1
  */
 public class LaxDeflateInputStream extends DeflateInputStream {
