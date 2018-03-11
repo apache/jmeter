@@ -131,6 +131,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
       by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>62095</bug>Correct description for right boundary parameter in Boundary Extractor. Contributed by orimarko (orimarko at gmail.com)</li>
     <li><bug>62113</bug>Updated to latest Bouncycastle (v1.59). Based on contribution by Olaf Flebbe (oflebbe at apache.org)</li>
+    <li><bug>62171</bug>Remove .md5 checksums and keep only .sha512 checksums for source and binary archives</li>
     <li>Updated to groovy-all-2.4.14 (from groovy-all-2.4.13)</li>
 </ul>
 
