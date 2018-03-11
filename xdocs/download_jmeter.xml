@@ -67,7 +67,6 @@
       <p>
         The <code>KEYS</code> link links to the code signing keys used to sign the product.
         The <code>PGP</code> link downloads the OpenPGP compatible signature from our main site. 
-        The <code>MD5</code> link downloads the md5 checksum from the main site.
         The <code>SHA-512</code> link downloads the sha512 checksum from the main site.
         Please <a href="http://www.apache.org/info/verification.html">verify the integrity</a>
         of the downloaded file.
@@ -84,13 +83,11 @@
         <table>
           <tr>
               <td><a href="[preferred]/jmeter/binaries/apache-jmeter-&release;.tgz">apache-jmeter-&release;.tgz</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tgz.md5">md5</a></td>
               <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tgz.sha512">sha512</a></td>
               <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tgz.asc">pgp</a></td>
           </tr>
           <tr>
               <td><a href="[preferred]/jmeter/binaries/apache-jmeter-&release;.zip">apache-jmeter-&release;.zip</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.md5">md5</a></td>
               <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.sha512">sha512</a></td>
               <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.asc">pgp</a></td>
           </tr>
@@ -100,13 +97,11 @@
         <table>
           <tr>
               <td><a href="[preferred]/jmeter/source/apache-jmeter-&release;_src.tgz">apache-jmeter-&release;_src.tgz</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tgz.md5">md5</a></td>
               <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tgz.sha512">sha512</a></td>
               <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tgz.asc">pgp</a></td>
           </tr>
           <tr>
               <td><a href="[preferred]/jmeter/source/apache-jmeter-&release;_src.zip">apache-jmeter-&release;_src.zip</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.md5">md5</a></td>
               <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.sha512">sha512</a></td>
               <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.asc">pgp</a></td>
           </tr>
