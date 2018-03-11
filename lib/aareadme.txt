@@ -13,7 +13,7 @@ Which jars are used by which modules?
 ====================================
 [not exhaustive]
 
-asm-6.0 (org.ow2.asm)
+asm-6.1 (org.ow2.asm)
 ----------------------
 - JSON Path extractor
 
