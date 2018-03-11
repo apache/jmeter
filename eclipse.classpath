@@ -46,7 +46,7 @@
 	<classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
 	<classpathentry kind="src" output="build/test" path="test/src"/>
 	<classpathentry kind="lib" path="lib/accessors-smart-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/asm-6.0.jar"/>
+	<classpathentry kind="lib" path="lib/asm-6.1.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/bsh-2.0b6.jar"/>
 	<classpathentry kind="lib" path="lib/caffeine-2.6.1.jar"/>

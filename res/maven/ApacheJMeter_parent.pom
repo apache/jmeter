@@ -54,7 +54,7 @@ under the License.
       <!-- these must agree with the definitions in build.properties -->
       <accessors-smart.version>1.2</accessors-smart.version>
       <apache-bsf.version>2.4.0</apache-bsf.version>
-      <asm.version>6.0</asm.version>
+      <asm.version>6.1</asm.version>
       <beanshell.version>2.0b6</beanshell.version>
       <bcmail.version>1.59</bcmail.version>
       <bcprov.version>1.59</bcprov.version>
