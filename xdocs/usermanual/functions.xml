@@ -1244,6 +1244,9 @@ i.intValue(); // or use i.longValue()
         <property name="Variable name" required="Yes">
         The variable to be evaluated. 
         </property>
+        <property name="Default value" required="No">
+        The default value in case no variable found, if it's empty and no variable found function returns the variable name 
+        </property>
 </properties>
 </component>
 
