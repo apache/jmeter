@@ -57,7 +57,17 @@ public class VariableTest extends JMeterTestCase {
         parms = makeParams("V",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("A",s);
+        assertEquals("A",s);        
+        
+        parms = makeParams("V","DEFAULT",null);
+        r.setParameters(parms);
+        s = r.execute(null,null);
+        assertEquals("A",s);        
+        
+        parms = makeParams("EMPTY","DEFAULT",null);
+        r.setParameters(parms);
+        s = r.execute(null,null);
+        assertEquals("DEFAULT",s);
         
         parms = makeParams("X",null,null);
         r.setParameters(parms);
