@@ -144,6 +144,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <ul>
     <li><bug>62114</bug>HTTP(S) Test Script Recorder : Client certificate authentication uses the first SSLManager created. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61058</bug>HTTP Request : Deflate triggers "Unexpected end of ZLIB input stream". Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>43612</bug>HTTP PUT does not honor request parameters. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 </ul>
 
 <h3>Other Samplers</h3>
