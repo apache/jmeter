@@ -175,7 +175,36 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
 
     public void itemised_testGetRequest_Parameters3() throws Exception {
         testGetRequest_Parameters(HTTP_SAMPLER3, item);
-    }   
+    }
+
+    public void testPutRequest_BodyFromParameterValues() throws Exception {
+        testPutRequest_BodyFromParameterValues(HTTP_SAMPLER, ISO_8859_1);
+    }
+
+    public void testPutRequest_BodyFromParameterValues3() throws Exception {
+        testPutRequest_BodyFromParameterValues(HTTP_SAMPLER3, US_ASCII);
+    }
+
+    private void testPutRequest_BodyFromParameterValues(int samplerType, String samplerDefaultEncoding) throws Exception {
+
+        final String titleField = "titleKey"; // ensure only values are used
+        String titleValue = "mytitle";
+        final String descriptionField = "descriptionKey"; // ensure only values are used
+        String descriptionValue = "mydescription";
+
+        // Test sending data with default encoding
+        HTTPSamplerBase sampler = createHttpSampler(samplerType);
+        String contentEncoding = "";
+        setupUrl(sampler, contentEncoding);
+        sampler.setMethod(HTTPConstants.PUT);
+
+        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
+        ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
+        HTTPSampleResult res = executeSampler(sampler);
+        String expectedPostBody = titleField + "=" + titleValue + "&" + descriptionField + "=" + descriptionValue;
+        checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
+    }
 
     private void testPostRequest_UrlEncoded(int samplerType, String samplerDefaultEncoding, int test) throws Exception {
         String titleField = "title";
