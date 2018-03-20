@@ -244,14 +244,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
                     logger.error("Error occurred searching for word:"+ wordToSearch+ " in node:"+jMeterTreeNode.getName(), ex);
                 }
             }
-            GuiPackage guiInstance = GuiPackage.getInstance();
-            JTree jTree = guiInstance.getMainFrame().getTree();
-            for (JMeterTreeNode jMeterTreeNode : nodes) {
-                jMeterTreeNode.setMarkedBySearch(true);
-                if (expand) {
-                    jTree.expandPath(new TreePath(jMeterTreeNode.getPath()));
-                }
-            }
+            markConcernedNodes(expand, nodes);
         } finally {
             guiPackage.endUndoTransaction();
         }
@@ -261,12 +254,32 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
                 MessageFormat.format(
                         JMeterUtils.getResString("search_tree_matches"), numberOfMatches));
     }
+
+    /**
+     * @param expand true if we want to expand
+     * @param nodes Set of {@link JMeterTreeNode} to mark
+     */
+    private void markConcernedNodes(boolean expand, Set<JMeterTreeNode> nodes) {
+        GuiPackage guiInstance = GuiPackage.getInstance();
+        JTree jTree = guiInstance.getMainFrame().getTree();
+        for (JMeterTreeNode jMeterTreeNode : nodes) {
+            jMeterTreeNode.setMarkedBySearch(true);
+            if (expand) {
+                if(jMeterTreeNode.isLeaf()) {
+                    jTree.expandPath(new TreePath(((JMeterTreeNode)jMeterTreeNode.getParent()).getPath()));
+                } else {
+                    jTree.expandPath(new TreePath(jMeterTreeNode.getPath()));
+                }
+            }
+        }
+    }
     
     /**
      * Replace all occurrences in nodes that contain {@link Replaceable} Test Elements
      * @param e {@link ActionEvent}
      */
     private void doReplaceAll(ActionEvent e) {
+        boolean expand = e.getSource()==searchAndExpandButton;
         String wordToSearch = searchTF.getText();
         String wordToReplace = replaceTF.getText();
 
@@ -313,13 +326,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
             }
         }
         statusLabel.setText(MessageFormat.format("Replaced {0} occurrences", totalReplaced));
-        GuiPackage guiInstance = GuiPackage.getInstance();
-        JTree jTree = guiInstance.getMainFrame().getTree();
-
-        for (JMeterTreeNode jMeterTreeNode : nodes) {
-            jMeterTreeNode.setMarkedBySearch(true);
-            jTree.expandPath(new TreePath(jMeterTreeNode.getPath()));
-        }
+        markConcernedNodes(expand, nodes);
         // Update GUI as current node may be concerned by changes
         if (totalReplaced > 0) {
             GuiPackage.getInstance().refreshCurrentGui();
