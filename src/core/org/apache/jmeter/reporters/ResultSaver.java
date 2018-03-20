@@ -227,6 +227,9 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
      * @param parentFile
      */
     private void createFoldersIfNeeded(File parentFile) {
+        if(parentFile == null) {
+            return;
+        }
         if (!parentFile.exists()) {
             log.debug("Creating path hierarchy for folder {}", parentFile.getAbsolutePath());
             if(!parentFile.mkdirs()) {
