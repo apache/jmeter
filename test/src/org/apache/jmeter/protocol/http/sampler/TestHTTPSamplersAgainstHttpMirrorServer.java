@@ -177,10 +177,6 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         testGetRequest_Parameters(HTTP_SAMPLER3, item);
     }
 
-    public void testPutRequest_BodyFromParameterValues() throws Exception {
-        testPutRequest_BodyFromParameterValues(HTTP_SAMPLER, ISO_8859_1);
-    }
-
     public void testPutRequest_BodyFromParameterValues3() throws Exception {
         testPutRequest_BodyFromParameterValues(HTTP_SAMPLER3, US_ASCII);
     }
