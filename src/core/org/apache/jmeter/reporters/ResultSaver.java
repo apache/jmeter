@@ -218,8 +218,8 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
             return true;
         }
         // Should we save the sample?
-        return ((s.isSuccessful() && getErrorsOnly()) ||
-                (!s.isSuccessful() && getSuccessOnly()));
+        return (s.isSuccessful() && getErrorsOnly()) ||
+                (!s.isSuccessful() && getSuccessOnly());
     }
 
     /**
