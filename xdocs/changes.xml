@@ -179,6 +179,11 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <ul>
 </ul>
 
+<h3>Documentation</h3>
+<ul>
+    <li><bug>62211</bug>Fix HTTP Request Server Documentation. Contributed by orimarko at gmail.com</li>
+</ul>
+
 <h3>General</h3>
 <ul>
   <li><bug>62107</bug>JMeter fails to start under Windows when <code>JM_LAUNCH</code> contains spaces</li>
