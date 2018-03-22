@@ -24,6 +24,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
@@ -214,7 +215,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private JButton start;
     private JButton restart;
 
-    private RecorderDialog recorderDialog;
+    private transient RecorderDialog recorderDialog;
 
     //+ action names
     private static final String ACTION_STOP = "stop"; // $NON-NLS-1$
@@ -259,7 +260,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         super();
         log.debug("Creating ProxyControlGui");
         init();
-        this.recorderDialog = new RecorderDialog(this);
+        try {
+            this.recorderDialog = new RecorderDialog(this);
+        } catch (HeadlessException ex) {
+            // Ignore as due to Headless tests
+        }
     }
 
     /** {@inheritDoc} */

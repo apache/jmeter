@@ -72,6 +72,13 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
 
     private ProxyControlGui recorderGui;
 
+    /**
+     * For tests Only
+     */
+    public RecorderDialog() {
+        super();
+        // 
+    }
     public RecorderDialog(ProxyControlGui controlGui) {
         super((JFrame) null, JMeterUtils.getResString("proxy_recorder_dialog"), false); //$NON-NLS-1$
         this.recorderGui = controlGui;
