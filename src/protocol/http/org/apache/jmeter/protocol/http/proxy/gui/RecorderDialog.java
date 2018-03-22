@@ -48,6 +48,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Dialog for Recorder
+ * @since 4.1
  */
 public class RecorderDialog extends JDialog implements ItemListener, KeyListener { // NOSONAR
 
@@ -154,8 +155,6 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         this.setLocation(5, 10);
         prefixHTTPSampleName.requestFocusInWindow();
     }
-
-    
 
     /* (non-Javadoc)
      * @see java.awt.Dialog#setVisible(boolean)
