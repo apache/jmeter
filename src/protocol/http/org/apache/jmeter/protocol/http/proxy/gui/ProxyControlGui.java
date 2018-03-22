@@ -214,6 +214,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private JButton start;
     private JButton restart;
 
+    private RecorderDialog recorderDialog;
+
     //+ action names
     private static final String ACTION_STOP = "stop"; // $NON-NLS-1$
 
@@ -222,7 +224,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static final String ACTION_RESTART = "restart"; // $NON-NLS-1$
 
     // This is applied to fields that should cause a restart when changed
-    private static final String ENABLE_RESTART = "enable_restart"; // $NON-NLS-1$
+    static final String ENABLE_RESTART = "enable_restart"; // $NON-NLS-1$
 
     private static final String ADD_INCLUDE = "add_include"; // $NON-NLS-1$
 
@@ -238,11 +240,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private static final String ADD_SUGGESTED_EXCLUDES = "exclude_suggested";
     
-    private static final String HTTP_SAMPLER_NAMING_MODE = "proxy_http_sampler_naming_mode"; // $NON-NLS-1$
+    static final String HTTP_SAMPLER_NAMING_MODE = "proxy_http_sampler_naming_mode"; // $NON-NLS-1$
 
-    private static final String PREFIX_HTTP_SAMPLER_NAME = "proxy_prefix_http_sampler_name"; // $NON-NLS-1$
+    static final String PREFIX_HTTP_SAMPLER_NAME = "proxy_prefix_http_sampler_name"; // $NON-NLS-1$
 
-    private static final String PROXY_PAUSE_HTTP_SAMPLER = "proxy_pause_http_sampler"; // $NON-NLS-1$
+    static final String PROXY_PAUSE_HTTP_SAMPLER = "proxy_pause_http_sampler"; // $NON-NLS-1$
     //- action names
 
     // Resource names for column headers
@@ -257,6 +259,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         super();
         log.debug("Creating ProxyControlGui");
         init();
+        this.recorderDialog = new RecorderDialog(this);
     }
 
     /** {@inheritDoc} */
@@ -420,11 +423,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             stop.setEnabled(false);
             start.setEnabled(true);
             restart.setEnabled(false);
+            recorderDialog.setVisible(false);
         } else if (command.equals(ACTION_START)) {
             startProxy();
+            recorderDialog.setVisible(true);
         } else if (command.equals(ACTION_RESTART)) {
             model.stopProxy();
             startProxy();
+            recorderDialog.setVisible(true);
         } else if (command.equals(ENABLE_RESTART)){
             enableRestart();
         } else if (command.equals(ADD_EXCLUDE)) {
@@ -616,7 +622,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         }
     }
 
-    private void enableRestart() {
+    void enableRestart() {
         if (stop.isEnabled()) {
             restart.setEnabled(true);
         }
@@ -1164,5 +1170,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;
+    }
+    
+    ProxyControl getRecorderModel() {
+        return model;
     }
 }
