@@ -163,8 +163,9 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
     public void setVisible(boolean b) {
         super.setVisible(b);
         prefixHTTPSampleName.requestFocusInWindow();
-        httpSampleNamingMode.setSelectedIndex(recorderGui.getRecorderModel().getHTTPSampleNamingMode());
-        proxyPauseHTTPSample.setText(recorderGui.getRecorderModel().getProxyPauseHTTPSample());
+        prefixHTTPSampleName.setText(recorderGui.getPrefixHTTPSampleName());
+        httpSampleNamingMode.setSelectedIndex(recorderGui.getHTTPSampleNamingMode());
+        proxyPauseHTTPSample.setText(recorderGui.getProxyPauseHTTPSample());
         setAlwaysOnTop(b);
     }
 
@@ -173,7 +174,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         if (e.getSource() instanceof JComboBox) {
             JComboBox combo = (JComboBox) e.getSource();
             if(ProxyControlGui.HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())){
-                recorderGui.getRecorderModel().setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
+                recorderGui.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
             }
         }
         else {
@@ -198,7 +199,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
     public void keyReleased(KeyEvent e) {
         String fieldName = e.getComponent().getName();
         if(fieldName.equals(ProxyControlGui.PREFIX_HTTP_SAMPLER_NAME)) {
-            recorderGui.getRecorderModel().setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
+            recorderGui.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
         } else if(fieldName.equals(ProxyControlGui.PROXY_PAUSE_HTTP_SAMPLER)) {
             try {
                 Long.parseLong(proxyPauseHTTPSample.getText());
@@ -212,7 +213,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
                     proxyPauseHTTPSample.setText(proxyPauseHTTPSample.getText().substring(0, length - 1));
                 }
             }
-            recorderGui.getRecorderModel().setProxyPauseHTTPSample(proxyPauseHTTPSample.getText());
+            recorderGui.setProxyPauseHTTPSample(proxyPauseHTTPSample.getText());
             recorderGui.enableRestart();
         }
     }
