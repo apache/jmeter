@@ -205,10 +205,16 @@ https.default.protocol=SSLv3
 
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-        <property name="Server" required="Yes, unless provided by HTTP Request Defaults">
-            Domain name or IP address of the web server, e.g. <code>www.example.com</code>. [Do not include the <code>http://</code> prefix.]
-            Note: If the "<code>Host</code>" header is defined in a Header Manager, then this will be used
-            as the virtual host name.
+        <property name="Server" required="No">
+             Domain name or IP address of the web server, e.g. <code>www.example.com</code>. [Do not include the <code>http://</code> prefix.]
+             Note: If the "<code>Host</code>" header is defined in a Header Manager, then this will be used
+             as the virtual host name.
+             <note>Server is required, unless:
+              <ul>
+                <li>it is provided by <complink name="HTTP Request Defaults"/></li>
+                <li>or a full URL including scheme, host and port (<code>scheme://host:port</code>) is set in <b>Path</b> field</li>
+              </ul>
+             </note>
         </property>
         <property name="Port" required="No">Port the web server is listening to. Default: <code>80</code></property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
