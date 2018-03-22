@@ -425,12 +425,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             restart.setEnabled(false);
             recorderDialog.setVisible(false);
         } else if (command.equals(ACTION_START)) {
-            startProxy();
-            recorderDialog.setVisible(true);
+            if(startProxy()) {
+                recorderDialog.setVisible(true);
+            }
         } else if (command.equals(ACTION_RESTART)) {
             model.stopProxy();
-            startProxy();
-            recorderDialog.setVisible(true);
+            if(startProxy()) {
+                recorderDialog.setVisible(true);
+            }
         } else if (command.equals(ENABLE_RESTART)){
             enableRestart();
         } else if (command.equals(ADD_EXCLUDE)) {
@@ -553,7 +555,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         }
     }
 
-    private void startProxy() {
+    private boolean startProxy() {
         ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
         modifyTestElement(model);
         TreeNodeWrapper treeNodeWrapper = (TreeNodeWrapper)targetNodesModel.getSelectedItem();
@@ -564,7 +566,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                         JMeterUtils.getResString("proxy_cl_wrong_target_cl"), // $NON-NLS-1$
                         JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                         JOptionPane.ERROR_MESSAGE);
-                return;
+                return false;
             }
         }
         // Proxy can take some while to start up; show a waiting cursor
@@ -602,21 +604,25 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                     + JMeterUtils.getResString("proxy_daemon_msg_created_in_bin"), // $NON-NLS-1$
                     JOptionPane.INFORMATION_MESSAGE);
             }
+            return true;
         } catch (InvalidVariableException e) {
             JOptionPane.showMessageDialog(this,
                     JMeterUtils.getResString("invalid_variables")+": "+e.getMessage(), // $NON-NLS-1$ $NON-NLS-2$
                     JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                     JOptionPane.ERROR_MESSAGE);
+            return false;
         } catch (BindException e) {
             JOptionPane.showMessageDialog(this,
                     JMeterUtils.getResString("proxy_daemon_bind_error")+": "+e.getMessage(), // $NON-NLS-1$ $NON-NLS-2$
                     JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                     JOptionPane.ERROR_MESSAGE);
+            return false;
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
                     JMeterUtils.getResString("proxy_daemon_error")+": "+e.getMessage(), // $NON-NLS-1$ $NON-NLS-2$
                     JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                     JOptionPane.ERROR_MESSAGE);
+            return false;
         } finally {
             setCursor(cursor);
         }
@@ -1171,8 +1177,31 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         MenuFactory.addFileMenu(pop);
         return pop;
     }
-    
-    ProxyControl getRecorderModel() {
-        return model;
+
+    int getHTTPSampleNamingMode() {
+        return httpSampleNamingMode.getSelectedIndex();
+    }
+
+    String getProxyPauseHTTPSample() {
+        return proxyPauseHTTPSample.getText();
+    }
+
+    public String getPrefixHTTPSampleName() {
+        return prefixHTTPSampleName.getText();
+    }
+
+    void setHTTPSampleNamingMode(int selectedIndex) {
+        httpSampleNamingMode.setSelectedIndex(selectedIndex);
+        model.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
+    }
+
+    void setProxyPauseHTTPSample(String text) {
+        proxyPauseHTTPSample.setText(text);
+        model.setProxyPauseHTTPSample(text);
+    }
+
+    void setPrefixHTTPSampleName(String text) {
+        prefixHTTPSampleName.setText(text);
+        model.setPrefixHTTPSampleName(text);
     }
 }
