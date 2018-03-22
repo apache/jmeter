@@ -85,6 +85,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>58757</bug>Fix deprecated methods of HTTPCLIENT after migration to httpclient-4.5.X. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62212</bug>Recorder : Improve UX by providing a popup above all windows to be able to change Transaction names and pauses while using Browser. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
