@@ -241,7 +241,9 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         guiTitles.remove("Example Sampler");// We don't mind if this is left over
         guiTitles.remove("Sample_Result_Save_Configuration");// Ditto, not a sampler
         assertEquals(
-                "Should not have any names left over, check name of components in EN (default) Locale, which must match name attribute of component",
+                "Should not have any names left over, check name of components in EN (default) Locale, "
+                + "which must match name attribute of component, check java.awt.HeadlessException errors before, we are running with '-Djava.awt.headless="
+                + System.getProperty("java.awt.headless")+"'",
                 0, scanprintMap(guiTitles, "GUI"));
     }
 
