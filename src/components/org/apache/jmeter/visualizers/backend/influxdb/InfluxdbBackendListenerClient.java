@@ -152,9 +152,10 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
         UserMetric userMetrics = getUserMetrics();
         // For JMETER context
-        StringBuilder tag = new StringBuilder(60);
+        StringBuilder tag = new StringBuilder(80);
         tag.append(TAG_APPLICATION).append(application);
         tag.append(TAG_TRANSACTION).append("internal");
+        tag.append(userTag);
         StringBuilder field = new StringBuilder(80);
         field.append(METRIC_MIN_ACTIVE_THREADS).append(userMetrics.getMinActiveThreads()).append(',');
         field.append(METRIC_MAX_ACTIVE_THREADS).append(userMetrics.getMaxActiveThreads()).append(',');
@@ -414,7 +415,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
      */
     private void addAnnotation(boolean startOrEnd) {
         influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, 
-                TAG_APPLICATION + application + ",title=ApacheJMeter"+
+                TAG_APPLICATION + application + ",title=ApacheJMeter"+ userTag +
                 (StringUtils.isNotEmpty(testTags) ? TAGS+ testTags : ""), 
                 TEXT +  
                         AbstractInfluxdbMetricsSender.fieldToStringValue(testTitle +
