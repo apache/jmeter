@@ -19,6 +19,7 @@ package org.apache.jmeter.report.processor;
 
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleMetadata;
+import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.save.CSVSaveService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class ErrorsSummaryConsumerTest {
                 ErrorsSummaryConsumer.getErrorKey(sample));
         
         sample = new Sample(0, metadata, new String[] { "true", "200", "", "" });
-        Assert.assertEquals(ErrorsSummaryConsumer.ASSERTION_FAILED, ErrorsSummaryConsumer.getErrorKey(sample));
+        Assert.assertEquals(MetricUtils.ASSERTION_FAILED, ErrorsSummaryConsumer.getErrorKey(sample));
 
         sample = new Sample(0, metadata, new String[] { "false", "500", "Server Error", "FailureMessage" });
         Assert.assertEquals("500/Server Error", ErrorsSummaryConsumer.getErrorKey(sample));

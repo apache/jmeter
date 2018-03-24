@@ -41,7 +41,6 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
@@ -837,19 +836,7 @@ public final class CSVSaveService {
         }
 
         if (saveConfig.saveAssertionResultsFailureMessage()) {
-            String message = null;
-            AssertionResult[] results = sample.getAssertionResults();
-
-            if (results != null) {
-                // Find the first non-null message
-                for (AssertionResult result : results) {
-                    message = result.getFailureMessage();
-                    if (message != null) {
-                        break;
-                    }
-                }
-            }
-
+            String message = sample.getFirstAssertionFailureMessage();
             if (message != null) {
                 text.append(message);
             } else {

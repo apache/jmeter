@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.visualizers.backend;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
@@ -40,8 +42,15 @@ public class ErrorMetric {
     }
 
     public ErrorMetric(SampleResult result) {
-        responseCode = result.getResponseCode();
-        responseMessage = result.getResponseMessage();
+        if (MetricUtils.isSuccessCode(responseCode) || 
+                (StringUtils.isEmpty(responseCode) && 
+                        !StringUtils.isEmpty(result.getFirstAssertionFailureMessage()))) {
+            responseCode = MetricUtils.ASSERTION_FAILED;
+            responseMessage = result.getFirstAssertionFailureMessage();
+        } else {
+            responseCode = result.getResponseCode();
+            responseMessage = result.getResponseMessage();
+        }
     }
 
     /**

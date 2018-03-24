@@ -65,6 +65,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
+import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -1669,7 +1670,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return whether in range 200-399 or not
      */
     protected boolean isSuccessCode(int code) {
-        return code >= 200 && code <= 399;
+        return MetricUtils.isSuccessCode(code);
     }
 
     protected static String encodeBackSlashes(String value) {
