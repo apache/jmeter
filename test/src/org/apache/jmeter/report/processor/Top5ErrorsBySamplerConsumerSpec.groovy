@@ -19,6 +19,7 @@ package org.apache.jmeter.report.processor
 
 import org.apache.jmeter.junit.spock.JMeterSpec
 import org.apache.jmeter.report.core.Sample
+import org.apache.jmeter.report.utils.MetricUtils
 
 class Top5ErrorsBySamplerConsumerSpec extends JMeterSpec {
 
@@ -49,11 +50,11 @@ class Top5ErrorsBySamplerConsumerSpec extends JMeterSpec {
             def data = (Top5ErrorsSummaryData) mockSummaryInfo.getData()
             data.getTotal() == 1
             data.getErrors() == 1
-            data.top5ErrorsMetrics[0][0] == ErrorsSummaryConsumer.ASSERTION_FAILED
+            data.top5ErrorsMetrics[0][0] == MetricUtils.ASSERTION_FAILED
             def overallData = (Top5ErrorsSummaryData) sut.getOverallInfo().getData()
             overallData.getTotal() == 1
             overallData.getErrors() == 1
-            overallData.top5ErrorsMetrics[0][0] == ErrorsSummaryConsumer.ASSERTION_FAILED
+            overallData.top5ErrorsMetrics[0][0] == MetricUtils.ASSERTION_FAILED
     }
 
     def "key from sample is name"() {
