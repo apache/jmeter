@@ -1517,4 +1517,23 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public void setIgnore() {
         this.ignore = true;
     }
+
+    /**
+     * @return String first non null assertion failure message
+     */
+    public String getFirstAssertionFailureMessage() {
+        String message = null;
+        AssertionResult[] results = getAssertionResults();
+
+        if (results != null) {
+            // Find the first non-null message
+            for (AssertionResult result : results) {
+                message = result.getFailureMessage();
+                if (message != null) {
+                    break;
+                }
+            }
+        }
+        return message;
+    }
 }
