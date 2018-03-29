@@ -55,15 +55,4 @@ public class RawTextSearcher implements Searcher {
                 .map(token -> caseSensitive ? token : token.toLowerCase())
                 .anyMatch(token -> token.contains(textToSearch));
     }
-
-    /**
-     * Returns true if searchedTextLowerCase is in value
-     * @param value string in which the search will be done
-     * @param searchedTextLowerCase string which will be searched for
-     * @return true if searchedTextLowerCase is in value
-     */
-    protected boolean testField(String value, String searchedTextLowerCase) {
-        return !StringUtils.isEmpty(value)
-                && value.toLowerCase().contains(searchedTextLowerCase);
-    }
 }
