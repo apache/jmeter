@@ -123,16 +123,16 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
                     newRows.add(newRow);
                     return newRow;
                 });
-        synchronized (row) {
+//        synchronized (row) {
             /*
              * Synch is needed because multiple threads can update the counts.
              */
             row.addSample(res);
-        }
+//        }
         SamplingStatCalculator tot = tableRows.get(TOTAL_ROW_LABEL);
-        synchronized(lock) {
+//        synchronized(lock) {
             tot.addSample(res);
-        }
+//        }
         dataChanged = true;
     }
 

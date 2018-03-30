@@ -55,4 +55,5 @@ public class StatCalculatorLong extends StatCalculator<Long> {
     protected Long divide(Long val, long n) {
         return Long.valueOf(val.longValue() / n);
     }
+
 }
