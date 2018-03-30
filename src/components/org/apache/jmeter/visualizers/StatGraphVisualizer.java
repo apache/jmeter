@@ -66,6 +66,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
+import org.HdrHistogram.Histogram;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -109,6 +110,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private static final Float PCT3_VALUE =  new Float(Float.parseFloat(PCT3_LABEL)/100);
 
     private static final Logger log = LoggerFactory.getLogger(StatGraphVisualizer.class);
+    
+    private final Histogram histogram = new Histogram(3);
 
     private static final String[] COLUMNS = { 
             "sampler_label",                  //$NON-NLS-1$

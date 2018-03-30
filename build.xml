@@ -410,6 +410,7 @@
     <include name="${lib.dir}/${groovy-all.jar}"/>
     <include name="${lib.dir}/${hamcrest-core.jar}"/>
     <include name="${lib.dir}/${hamcrest-date.jar}"/>
+    <include name="${lib.dir}/${hdrhistogram.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
     <include name="${lib.dir}/${httpasyncclient.jar}"/>
     <include name="${lib.dir}/${httpcore.jar}"/>
@@ -495,6 +496,7 @@
     <pathelement location="${lib.dir}/${groovy-all.jar}"/>
     <pathelement location="${lib.dir}/${hamcrest-core.jar}"/>
     <pathelement location="${lib.dir}/${hamcrest-date.jar}"/>
+    <pathelement location="${lib.dir}/${hdrhistogram.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
     <pathelement location="${lib.dir}/${httpasyncclient.jar}"/>
     <pathelement location="${lib.dir}/${httpcore.jar}"/>
@@ -3346,6 +3348,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="groovy-all"/>
     <process_jarfile jarname="hamcrest-core"/>
     <process_jarfile jarname="hamcrest-date"/>
+    <process_jarfile jarname="hdrhistogram"/>
     <process_jarfile jarname="httpclient"/>
     <process_jarfile jarname="httpasyncclient"/>
     <process_jarfile jarname="httpcore"/>

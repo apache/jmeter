@@ -33,7 +33,7 @@ import org.apache.commons.lang3.mutable.MutableLong;
  * @param <T> type parameter for the calculator
  *
  */
-public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
+public abstract class StatCalculator<T extends Number & Comparable<? super T>> implements IStatCalculator<T> {
 
     // key is the type to collect (usually long), value = count of entries
     private final Map<T, MutableLong> valuesMap = new TreeMap<>();
@@ -80,6 +80,10 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         this.max = MIN_VALUE;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#clear()
+     */
+    @Override
     public void clear() {
         valuesMap.clear();
         sum = 0;
@@ -93,66 +97,71 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         min = MAX_VALUE;
     }
 
-    /**
-     * Add to received bytes
-     * @param newValue number of newly received bytes
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#addBytes(long)
      */
+    @Override
     public void addBytes(long newValue) {
         bytes += newValue;
     }
 
-    /**
-     * Add to sent bytes
-     * @param newValue number of newly sent bytes
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#addSentBytes(long)
      */
+    @Override
     public void addSentBytes(long newValue) {
         sentBytes += newValue;
     }
 
-    public void addAll(StatCalculator<T> calc) {
-        for(Entry<T, MutableLong> ent : calc.valuesMap.entrySet()) {
-            addEachValue(ent.getKey(), ent.getValue().longValue());
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#addAll(org.apache.jorphan.math.StatCalculator)
+     */
+    public void addAll(IStatCalculator<T> calc) {
+        if (this.getClass().isAssignableFrom(calc.getClass())) {
+            for(Entry<T, MutableLong> ent : ((StatCalculator<T>) calc).valuesMap.entrySet()) {
+                addEachValue(ent.getKey(), ent.getValue().longValue());
+            }
+        } else {
+            throw new RuntimeException("Incompatible StatCalculator was given.");
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getMedian()
+     */
+    @Override
     public T getMedian() {
         return getPercentPoint(0.5);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getTotalBytes()
+     */
+    @Override
     public long getTotalBytes() {
         return bytes;
     }
     
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getTotalSentBytes()
+     */
+    @Override
     public long getTotalSentBytes() {
         return sentBytes;
     }
 
-    /**
-     * Get the value which %percent% of the values are less than. This works
-     * just like median (where median represents the 50% point). A typical
-     * desire is to see the 90% point - the value that 90% of the data points
-     * are below, the remaining 10% are above.
-     *
-     * @param percent
-     *            number representing the wished percent (between <code>0</code>
-     *            and <code>1.0</code>)
-     * @return number of values less than the percentage
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getPercentPoint(float)
      */
+    @Override
     public T getPercentPoint(float percent) {
         return getPercentPoint((double) percent);
     }
 
-    /**
-     * Get the value which %percent% of the values are less than. This works
-     * just like median (where median represents the 50% point). A typical
-     * desire is to see the 90% point - the value that 90% of the data points
-     * are below, the remaining 10% are above.
-     *
-     * @param percent
-     *            number representing the wished percent (between <code>0</code>
-     *            and <code>1.0</code>)
-     * @return the value which %percent% of the values are less than
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getPercentPoint(double)
      */
+    @Override
     public T getPercentPoint(double percent) {
         if (count <= 0) {
                 return ZERO;
@@ -176,12 +185,10 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         return ZERO; // TODO should this be getMin()?
     }
 
-    /**
-     * Returns the distribution of the values in the list.
-     *
-     * @return map containing either Integer or Long keys; entries are a Number array containing the key and the [Integer] count.
-     * TODO - why is the key value also stored in the entry array? See Bug 53825
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getDistribution()
      */
+    @Override
     public Map<Number, Number[]> getDistribution() {
         Map<Number, Number[]> items = new HashMap<>();
 
@@ -194,26 +201,50 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         return items;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getMean()
+     */
+    @Override
     public double getMean() {
         return mean;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getStandardDeviation()
+     */
+    @Override
     public double getStandardDeviation() {
         return deviation;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getMin()
+     */
+    @Override
     public T getMin() {
         return min;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getMax()
+     */
+    @Override
     public T getMax() {
         return max;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getCount()
+     */
+    @Override
     public long getCount() {
         return count;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#getSum()
+     */
+    @Override
     public double getSum() {
         return sum;
     }
@@ -238,12 +269,10 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         calculateDerivedValues(val);
     }
 
-    /**
-     * Update the calculator with the value for an aggregated sample.
-     * 
-     * @param val the aggregate value, normally the elapsed time
-     * @param sampleCount the number of samples contributing to the aggregate value
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#addValue(T, long)
      */
+    @Override
     public void addValue(T val, long sampleCount) {
         count += sampleCount;
         double currentVal = val.doubleValue();
@@ -272,12 +301,10 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         }
     }
 
-    /**
-     * Add a single value (normally elapsed time)
-     * 
-     * @param val the value to add, which should correspond with a single sample
-     * @see #addValue(Number, long)
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.math.IStatCalculator#addValue(T)
      */
+    @Override
     public void addValue(T val) {
         addValue(val, 1L);
     }
