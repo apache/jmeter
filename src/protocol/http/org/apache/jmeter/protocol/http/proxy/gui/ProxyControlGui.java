@@ -854,6 +854,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         samplerTypeName.setSelectedItem(USE_DEFAULT_HTTP_IMPL);
         samplerTypeName.addItemListener(this);
 
+        JLabel labelSamplerType = new JLabel(JMeterUtils.getResString("proxy_sampler_type")); // $NON-NLS-1$
+        labelSamplerType.setLabelFor(samplerTypeName);
+
         samplerRedirectAutomatically = new JCheckBox(JMeterUtils.getResString("follow_redirects_auto")); // $NON-NLS-1$
         samplerRedirectAutomatically.setSelected(false);
         samplerRedirectAutomatically.addActionListener(this);
@@ -881,19 +884,16 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         httpSampleNamingMode.setName(HTTP_SAMPLER_NAMING_MODE);
         httpSampleNamingMode.addItemListener(this);
         
-        prefixHTTPSampleName = new JTextField(4);
+        prefixHTTPSampleName = new JTextField(20);
         prefixHTTPSampleName.addKeyListener(this);
         prefixHTTPSampleName.setName(PREFIX_HTTP_SAMPLER_NAME);
 
-        proxyPauseHTTPSample = new JTextField(6);
+        proxyPauseHTTPSample = new JTextField(10);
         proxyPauseHTTPSample.addKeyListener(this);
         proxyPauseHTTPSample.setName(PROXY_PAUSE_HTTP_SAMPLER);
         proxyPauseHTTPSample.setActionCommand(ENABLE_RESTART);
         JLabel labelProxyPause = new JLabel(JMeterUtils.getResString("proxy_pause_http_sampler")); // $NON-NLS-1$
         labelProxyPause.setLabelFor(proxyPauseHTTPSample);
-
-        JLabel labelSamplerType = new JLabel(JMeterUtils.getResString("proxy_sampler_type")); // $NON-NLS-1$
-        labelSamplerType.setLabelFor(samplerTypeName);
               
         GridBagLayout gridBagLayout = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
