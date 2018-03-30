@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
@@ -446,17 +447,13 @@ public class SaveService {
                 return null;
             }
             return wrapper.testPlan;
-        } catch (CannotResolveClassException e) {
+        } catch (CannotResolveClassException | ConversionException | NoClassDefFoundError e) {
             if(file != null) {
-                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', cannot determine class for element: " + e, e);
+                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"'. \nCause:\n"+
+                        ExceptionUtils.getRootCauseMessage(e) +"\n\n Detail:"+e, e);
             } else {
-                throw new IllegalArgumentException("Problem loading XML, cannot determine class for element: " + e, e);
-            }
-        } catch (ConversionException | NoClassDefFoundError e) {
-            if(file != null) {
-                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', missing class "+e , e);
-            } else {
-                throw new IllegalArgumentException("Problem loading XML, missing class "+e , e);
+                throw new IllegalArgumentException("Problem loading XML. \nCause:\n"+
+                        ExceptionUtils.getRootCauseMessage(e) +"\n\n Detail:"+e, e);
             }
         }
 
