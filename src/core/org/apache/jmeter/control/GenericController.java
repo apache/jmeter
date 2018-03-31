@@ -53,6 +53,8 @@ public class GenericController extends AbstractTestElement implements Controller
 
     private static final Logger log = LoggerFactory.getLogger(GenericController.class);
 
+    static final String INDEX_VAR_NAME_SUFFIX = "__idx";
+
     private transient LinkedList<LoopIterationListener> iterationListeners = new LinkedList<>();
 
     // Only create the map if it is required

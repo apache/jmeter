@@ -27,7 +27,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 4.1
  */
 public interface IteratingController {
-    final String INDEX_VAR_NAME_SUFFIX = "__idx";
     
     /**
      * Start next iteration ("continue" keyword equivalent in loops)
@@ -47,7 +46,7 @@ public interface IteratingController {
         JMeterVariables variables = JMeterContextService.getContext().getVariables();
         if(variables != null) {
             variables.putObject(
-                    JMeterUtils.formatJMeterExportedVariableName(elementName+INDEX_VAR_NAME_SUFFIX), iterCount);
+                    JMeterUtils.formatJMeterExportedVariableName(elementName+GenericController.INDEX_VAR_NAME_SUFFIX), iterCount);
         }
     }
     
