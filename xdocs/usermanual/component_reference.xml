@@ -2248,6 +2248,9 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
     <description>
 <p>
 The While Controller runs its children until the condition is "<code>false</code>".
+<note>JMeter will expose the looping index as a variable named <code>__jm__&lt;Name of your element&gt;__idx</code>. So for
+example, if your While Controller is named WC, then you can access the looping index through <code>${__jm__WC__idx}</code>.
+Index starts at 0</note>
 </p>
 
 <p>Possible condition values:</p>
