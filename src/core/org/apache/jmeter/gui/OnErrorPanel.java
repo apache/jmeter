@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -34,7 +35,11 @@ public class OnErrorPanel extends JPanel {
     // Sampler error action buttons
     private JRadioButton continueBox;
 
+    private JRadioButton breakLoopBox;
+
     private JRadioButton startNextThreadLoopBox;
+
+    private JRadioButton startNextIterationOfCurrentLoopBox;
 
     private JRadioButton stopThrdBox;
 
@@ -42,34 +47,30 @@ public class OnErrorPanel extends JPanel {
 
     private JRadioButton stopTestNowBox;
 
+
     private JPanel createOnErrorPanel() {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new GridLayout(4, 2));
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action"))); //$NON-NLS-1$
 
         ButtonGroup group = new ButtonGroup();
 
-        continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue")); //$NON-NLS-1$
-        group.add(continueBox);
+        continueBox = addRadioButton("sampler_on_error_continue", group, panel); //$NON-NLS-1$
+        breakLoopBox = addRadioButton("sampler_on_error_break_loop", group, panel); //$NON-NLS-1$
+        startNextThreadLoopBox = addRadioButton("sampler_on_error_start_next_loop", group, panel); //$NON-NLS-1$
+        startNextIterationOfCurrentLoopBox = addRadioButton("sampler_on_error_start_next_iteration_current_loop", group, panel); //$NON-NLS-1$
+        stopTestBox = addRadioButton("sampler_on_error_stop_test", group, panel); //$NON-NLS-1$
+        stopTestNowBox = addRadioButton("sampler_on_error_stop_test_now", group, panel); //$NON-NLS-1$
+        stopThrdBox = addRadioButton("sampler_on_error_stop_thread", group, panel); //$NON-NLS-1$
+        
         continueBox.setSelected(true);
-        panel.add(continueBox);
-
-        startNextThreadLoopBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_start_next_loop")); //$NON-NLS-1$
-        group.add(startNextThreadLoopBox);
-        panel.add(startNextThreadLoopBox);
-
-        stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread")); //$NON-NLS-1$
-        group.add(stopThrdBox);
-        panel.add(stopThrdBox);
-
-        stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test")); //$NON-NLS-1$
-        group.add(stopTestBox);
-        panel.add(stopTestBox);
-
-        stopTestNowBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test_now")); //$NON-NLS-1$
-        group.add(stopTestNowBox);
-        panel.add(stopTestNowBox);
-
         return panel;
+    }
+
+    private JRadioButton addRadioButton(String labelKey, ButtonGroup group, JPanel panel) {
+        JRadioButton radioButton = new JRadioButton(JMeterUtils.getResString(labelKey)); 
+        group.add(radioButton);
+        panel.add(radioButton);
+        return radioButton;
     }
 
     /**
@@ -90,9 +91,11 @@ public class OnErrorPanel extends JPanel {
     public void configure(int errorAction) {
         stopTestNowBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTEST_NOW);
         startNextThreadLoopBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_START_NEXT_THREAD_LOOP);
+        startNextIterationOfCurrentLoopBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_START_NEXT_ITERATION_OF_CURRENT_LOOP);
         stopTestBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTEST);
         stopThrdBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTHREAD);
         continueBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_CONTINUE);
+        breakLoopBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_BREAK_CURRENT_LOOP);
     }
 
     public int getOnErrorSetting() {
@@ -107,6 +110,12 @@ public class OnErrorPanel extends JPanel {
         }
         if (startNextThreadLoopBox.isSelected()) {
             return OnErrorTestElement.ON_ERROR_START_NEXT_THREAD_LOOP;
+        }
+        if (startNextIterationOfCurrentLoopBox.isSelected()) {
+            return OnErrorTestElement.ON_ERROR_START_NEXT_ITERATION_OF_CURRENT_LOOP;
+        }
+        if(breakLoopBox.isSelected()) {
+            return OnErrorTestElement.ON_ERROR_BREAK_CURRENT_LOOP;
         }
 
         // Defaults to continue
