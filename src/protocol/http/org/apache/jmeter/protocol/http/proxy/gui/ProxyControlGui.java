@@ -262,7 +262,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         init();
         try {
             this.recorderDialog = new RecorderDialog(this);
-        } catch (HeadlessException ex) {
+        } catch (HeadlessException ex) { // NOSONAR Needed for Headless tests
             // Ignore as due to Headless tests
         }
     }
