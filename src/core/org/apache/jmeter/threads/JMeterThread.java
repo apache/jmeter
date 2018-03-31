@@ -253,28 +253,32 @@ public class JMeterThread implements Runnable, Interruptible {
                     processSampler(sam, null, threadContext);
                     threadContext.cleanAfterSample();
 
+                    boolean lastSampleInError = TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK));
                     // restart of the next loop 
                     // - was requested through threadContext
                     // - or the last sample failed AND the onErrorStartNextLoop option is enabled
                     if (threadContext.getTestLogicalAction() != TestLogicalAction.CONTINUE
-                            || (onErrorStartNextLoop
-                            && !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK)))) {
+                            || (onErrorStartNextLoop && !lastSampleInError)) {
                         if (log.isDebugEnabled() && onErrorStartNextLoop
                                 && threadContext.getTestLogicalAction() != TestLogicalAction.CONTINUE) {
                             log.debug("Start Next Thread Loop option is on, Last sample failed, starting next thread loop");
                         }
-                        switch (threadContext.getTestLogicalAction()) {
-                            case BREAK_CURRENT_LOOP:
-                                triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::breakOnCurrentLoop);
-                                break;
-                            case START_NEXT_ITERATION_OF_THREAD:
-                                triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnThreadLoop);
-                                break;
-                            case START_NEXT_ITERATION_OF_CURRENT_LOOP:
-                                triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnCurrentLoop);
-                                break;
-                            default:
-                                break;
+                        if(onErrorStartNextLoop && !lastSampleInError){
+                            triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnThreadLoop);
+                        } else {
+                            switch (threadContext.getTestLogicalAction()) {
+                                case BREAK_CURRENT_LOOP:
+                                    triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::breakOnCurrentLoop);
+                                    break;
+                                case START_NEXT_ITERATION_OF_THREAD:
+                                    triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnThreadLoop);
+                                    break;
+                                case START_NEXT_ITERATION_OF_CURRENT_LOOP:
+                                    triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnCurrentLoop);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                         threadContext.setTestLogicalAction(TestLogicalAction.CONTINUE);
                         sam = null;
