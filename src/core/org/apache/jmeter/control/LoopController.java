@@ -37,7 +37,7 @@ public class LoopController extends GenericController implements Serializable, I
 
     private static final long serialVersionUID = 7833960784370272300L;
 
-    /*
+    /**
      * In spite of the name, this is actually used to determine if the loop controller is repeatable.
      *
      * The value is only used in nextIsNull() when the loop end condition has been detected:
@@ -53,7 +53,10 @@ public class LoopController extends GenericController implements Serializable, I
 
     private transient int loopCount = 0;
 
-    // Cache loop value, see Bug 54467
+    /**
+     * Cached loop value 
+     * see Bug 54467
+     */
     private transient Integer nbLoops;
 
     private boolean breakLoop;
