@@ -25,15 +25,11 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Class that implements the Loop Controller, ie iterate infinitely or a configured number of times
  */
-public class LoopController extends GenericController implements Serializable {
-    static final String INDEX_VAR_NAME_SUFFIX = "__idx";
+public class LoopController extends GenericController implements Serializable, IteratingController {
     
     public static final int INFINITE_LOOP_COUNT = -1; // $NON-NLS-1$
     
@@ -59,6 +55,8 @@ public class LoopController extends GenericController implements Serializable {
 
     // Cache loop value, see Bug 54467
     private transient Integer nbLoops;
+
+    private boolean breakLoop;
 
     public LoopController() {
         setContinueForeverPrivate(true);
@@ -127,11 +125,7 @@ public class LoopController extends GenericController implements Serializable {
             }
             return super.next();
         } finally {
-            JMeterVariables variables = JMeterContextService.getContext().getVariables();
-            if(variables != null) {
-                variables.putObject(
-                        JMeterUtils.formatJMeterExportedVariableName(getName()+INDEX_VAR_NAME_SUFFIX), loopCount);
-            }
+            updateIterationIndex(getName(), loopCount);
         }
     }
     
@@ -205,5 +199,10 @@ public class LoopController extends GenericController implements Serializable {
      */
     public void startNextLoop() {
         reInitialize();
+    }
+
+    @Override
+    public void breakLoop() {
+        this.breakLoop = true;
     }
 }
