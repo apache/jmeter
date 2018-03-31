@@ -34,6 +34,13 @@ import org.apache.jmeter.util.JMeterUtils;
  * The class is not thread-safe - it is only intended for use within a single thread.
  */
 public class JMeterContext {
+    
+    public enum TestLogicalAction {
+        CONTINUE,
+        START_NEXT_ITERATION_OF_THREAD,
+        START_NEXT_ITERATION_OF_CURRENT_LOOP,
+        BREAK_CURRENT_LOOP
+    }
 
     private JMeterVariables variables;
     private SampleResult previousResult;
@@ -44,7 +51,7 @@ public class JMeterContext {
     private JMeterThread thread;
     private AbstractThreadGroup threadGroup;
     private int threadNum;
-    private boolean restartNextLoop = false;
+    private TestLogicalAction testLogicalAction = TestLogicalAction.CONTINUE;
     private ConcurrentHashMap<String, Object> samplerContext = new ConcurrentHashMap<>(5);
     private boolean recording;
 
@@ -199,19 +206,43 @@ public class JMeterContext {
     public void setSamplingStarted(boolean b) {
         samplingStarted = b;
     }
+    
 
     /**
-     * @param restartNextLoop if set to <code>true</code> a restart of the loop will occur
+     * @param startNextIterationOfCurrentLoop start next iteration of current loop in which this component is present
      */
-    public void setStartNextThreadLoop(boolean restartNextLoop) {
-        this.restartNextLoop = restartNextLoop;
+    public void setTestLogicalAction(TestLogicalAction actionOnExecution) {
+        this.testLogicalAction = actionOnExecution;
+    }
+
+    /**
+     * @return TestLogicalAction to start next iteration of current loop in which this component is present
+     */
+    public TestLogicalAction getTestLogicalAction() {
+        return testLogicalAction;
     }
     
     /**
-     * @return {@code true} when current loop iteration will be interrupted and JMeter will go to next iteration
+     * @deprecated
+     * @param restartNextLoop if set to <code>true</code> a restart of the loop will occur
+     * @deprecated use {@link JMeterContext#setTestLogicalAction(TestLogicalAction)}
      */
+    @Deprecated
+    public void setStartNextThreadLoop(boolean restartNextLoop) {
+        if(restartNextLoop) {
+            this.testLogicalAction = TestLogicalAction.START_NEXT_ITERATION_OF_THREAD;
+        } else {
+            this.testLogicalAction = TestLogicalAction.CONTINUE;
+        }
+    }
+    
+    /**
+     * @return {@code true} when current loop iteration of Thread Group will be interrupted and JMeter will go to next iteration of the Thread Group loop
+     * @deprecated use {@link JMeterContext#isTestLogicalAction()}
+     */
+    @Deprecated
     public boolean isStartNextThreadLoop() {
-        return restartNextLoop;
+        return this.testLogicalAction == TestLogicalAction.START_NEXT_ITERATION_OF_THREAD;
     }
     
     /**

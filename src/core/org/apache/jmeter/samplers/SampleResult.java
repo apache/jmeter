@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.Searchable;
+import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -228,9 +229,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /** time to end connecting */
     private long connectTime = 0;
 
-    /** Should thread start next iteration ? */
-    private boolean startNextThreadLoop = false;
-
+    /** Way to signal what to do on Test */
+    private TestLogicalAction testLogicalAction = TestLogicalAction.CONTINUE;
+    
     /** Should thread terminate? */
     private boolean stopThread = false;
 
@@ -331,7 +332,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         stopTest = res.stopTest;
         stopTestNow = res.stopTestNow;
         stopThread = res.stopThread;
-        startNextThreadLoop = res.startNextThreadLoop;
+        testLogicalAction = res.testLogicalAction;
         subResults = res.subResults; 
         success = res.success;//OK
         threadName = res.threadName;//OK
@@ -1466,16 +1467,24 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     /**
      * @return the startNextThreadLoop
+     * @deprecated use {@link SampleResult#getTestLogicalAction()}
      */
+    @Deprecated
     public boolean isStartNextThreadLoop() {
-        return startNextThreadLoop;
+        return testLogicalAction == TestLogicalAction.START_NEXT_ITERATION_OF_THREAD;
     }
 
     /**
+     * @deprecated use {@link SampleResult#setTestLogicalAction(TestLogicalAction)}
      * @param startNextThreadLoop the startNextLoop to set
      */
+    @Deprecated
     public void setStartNextThreadLoop(boolean startNextThreadLoop) {
-        this.startNextThreadLoop = startNextThreadLoop;
+        if(startNextThreadLoop) {
+            testLogicalAction = TestLogicalAction.START_NEXT_ITERATION_OF_THREAD;
+        } else {
+            testLogicalAction = TestLogicalAction.CONTINUE;
+        }
     }
 
     /**
@@ -1535,5 +1544,19 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             }
         }
         return message;
+    }
+
+    /**
+     * @return the testLogicalAction
+     */
+    public TestLogicalAction getTestLogicalAction() {
+        return testLogicalAction;
+    }
+
+    /**
+     * @param testLogicalAction the testLogicalAction to set
+     */
+    public void setTestLogicalAction(TestLogicalAction testLogicalAction) {
+        this.testLogicalAction = testLogicalAction;
     }
 }

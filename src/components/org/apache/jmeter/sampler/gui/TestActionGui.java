@@ -18,23 +18,26 @@
 
 package org.apache.jmeter.sampler.gui;
 
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
-import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.sampler.TestAction;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 @GUIMenuSortOrder(1)
-public class TestActionGui extends AbstractSamplerGui {
+public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierarchy error
     private static final long serialVersionUID = 240L;
 
     // Gui components
@@ -46,9 +49,13 @@ public class TestActionGui extends AbstractSamplerGui {
 
     private JRadioButton stopNowButton;
 
-    private JRadioButton restartNextLoopButton;
+    private JRadioButton breakLoopButton;
     
-    private JTextField durationField;
+    private JRadioButton restartNextThreadLoopButton;
+    
+    private JRadioButton startNextIterationOfCurrentLoopButton;
+    
+    private JLabeledTextField durationField;
 
     // State variables
     private int target;
@@ -57,23 +64,29 @@ public class TestActionGui extends AbstractSamplerGui {
 
     // String in the panel
     // Do not make these static, otherwise language changes don't work
-    private final String targetLabel = JMeterUtils.getResString("test_action_target"); // $NON-NLS-1$
+    private static final String TARGET_LABEL = JMeterUtils.getResString("test_action_target"); // $NON-NLS-1$
 
-    private final String threadTarget = JMeterUtils.getResString("test_action_target_thread"); // $NON-NLS-1$
+    private static final String THREAD_TARGET_LABEL = JMeterUtils.getResString("test_action_target_thread"); // $NON-NLS-1$
 
-    private final String testTarget = JMeterUtils.getResString("test_action_target_test"); // $NON-NLS-1$
+    private static final String TEST_TARGET_LABEL = JMeterUtils.getResString("test_action_target_test"); // $NON-NLS-1$
 
-    private final String actionLabel = JMeterUtils.getResString("test_action_action"); // $NON-NLS-1$
+    private static final String ACTION_ON_THREAD_LABEL = JMeterUtils.getResString("test_action_action_thread"); // $NON-NLS-1$
+    
+    private static final String ACTION_ON_THREAD_TEST_LABEL = JMeterUtils.getResString("test_action_action_test_thread"); // $NON-NLS-1$
 
-    private final String pauseAction = JMeterUtils.getResString("test_action_pause"); // $NON-NLS-1$
+    private static final String PAUSE_ACTION_LABEL = JMeterUtils.getResString("test_action_pause"); // $NON-NLS-1$
 
-    private final String stopAction = JMeterUtils.getResString("test_action_stop"); // $NON-NLS-1$
+    private static final String STOP_ACTION_LABEL = JMeterUtils.getResString("test_action_stop"); // $NON-NLS-1$
 
-    private final String stopNowAction = JMeterUtils.getResString("test_action_stop_now"); // $NON-NLS-1$
+    private static final String STOP_NOW_ACTION_LABEL = JMeterUtils.getResString("test_action_stop_now"); // $NON-NLS-1$
 
-    private final String restartNextLoopAction = JMeterUtils.getResString("test_action_restart_next_loop"); // $NON-NLS-1$
+    private static final String RESTART_NEXT_THREAD_LOOP_LABEL = JMeterUtils.getResString("test_action_restart_next_loop"); // $NON-NLS-1$
+    
+    private static final String START_NEXT_ITERATION_CURRENT_LOOP_ACTION = JMeterUtils.getResString("test_action_continue_current_loop"); // $NON-NLS-1$
 
-    private final String durationLabel = JMeterUtils.getResString("test_action_duration"); // $NON-NLS-1$
+    private static final String BREAK_CURRENT_LOOP_ACTION = JMeterUtils.getResString("test_action_break_current_loop"); // $NON-NLS-1$
+
+    private static final String DURATION_LABEL = JMeterUtils.getResString("test_action_duration"); // $NON-NLS-1$
 
     public TestActionGui() {
         super();
@@ -94,19 +107,32 @@ public class TestActionGui extends AbstractSamplerGui {
 
         target = ta.getTarget();
         if (target == TestAction.THREAD) {
-            targetBox.setSelectedItem(threadTarget);
+            targetBox.setSelectedItem(THREAD_TARGET_LABEL);
         } else {
-            targetBox.setSelectedItem(testTarget);
+            targetBox.setSelectedItem(TEST_TARGET_LABEL);
         }
         action = ta.getAction();
-        if (action == TestAction.PAUSE) {
-            pauseButton.setSelected(true);
-        } else if (action == TestAction.STOP_NOW) {
-            stopNowButton.setSelected(true);
-        } else if(action == TestAction.STOP ){
-            stopButton.setSelected(true);
-        } else {
-            restartNextLoopButton.setSelected(true);
+        switch (action) {
+            case TestAction.PAUSE:
+                pauseButton.setSelected(true);
+                break;
+            case TestAction.STOP_NOW:
+                stopNowButton.setSelected(true);
+                break;
+            case TestAction.STOP:
+                stopButton.setSelected(true);
+                break;
+            case TestAction.RESTART_NEXT_LOOP:
+                restartNextThreadLoopButton.setSelected(true);
+                break;
+            case TestAction.START_NEXT_ITERATION_CURRENT_LOOP:
+                startNextIterationOfCurrentLoopButton.setSelected(true);
+                break;
+            case TestAction.BREAK_CURRENT_LOOP:
+                breakLoopButton.setSelected(true);
+                break;
+            default:
+                break;
         }
 
         durationField.setText(ta.getDurationAsString());
@@ -156,27 +182,8 @@ public class TestActionGui extends AbstractSamplerGui {
         setBorder(makeBorder());
         add(makeTitlePanel());
 
-        // Target
-        HorizontalPanel targetPanel = new HorizontalPanel();
-        targetPanel.add(new JLabel(targetLabel));
-        DefaultComboBoxModel<String> targetModel = new DefaultComboBoxModel<>();
-        targetModel.addElement(threadTarget);
-        targetModel.addElement(testTarget);
-        targetBox = new JComboBox<>(targetModel);
-        targetBox.addActionListener(evt -> {
-            if (((String) targetBox.getSelectedItem()).equals(threadTarget)) {
-                target = TestAction.THREAD;
-            } else {
-                target = TestAction.TEST;
-            }
-        });
-        targetPanel.add(targetBox);
-        add(targetPanel);
-
-        // Action
-        HorizontalPanel actionPanel = new HorizontalPanel();
         ButtonGroup actionButtons = new ButtonGroup();
-        pauseButton = new JRadioButton(pauseAction, true);
+        pauseButton = new JRadioButton(PAUSE_ACTION_LABEL, true);
         pauseButton.addChangeListener(evt -> {
             if (pauseButton.isSelected()) {
                 action = TestAction.PAUSE;
@@ -184,7 +191,7 @@ public class TestActionGui extends AbstractSamplerGui {
                 targetBox.setEnabled(false);
             }
         });
-        stopButton = new JRadioButton(stopAction, false);
+        stopButton = new JRadioButton(STOP_ACTION_LABEL, false);
         stopButton.addChangeListener(evt -> {
             if (stopButton.isSelected()) {
                 action = TestAction.STOP;
@@ -192,7 +199,7 @@ public class TestActionGui extends AbstractSamplerGui {
                 targetBox.setEnabled(true);
             }
         });
-        stopNowButton = new JRadioButton(stopNowAction, false);
+        stopNowButton = new JRadioButton(STOP_NOW_ACTION_LABEL, false);
         stopNowButton.addChangeListener(evt -> {
             if (stopNowButton.isSelected()) {
                 action = TestAction.STOP_NOW;
@@ -201,9 +208,9 @@ public class TestActionGui extends AbstractSamplerGui {
             }
         });
         
-        restartNextLoopButton = new JRadioButton(restartNextLoopAction, false);
-        restartNextLoopButton.addChangeListener(evt -> {
-            if (restartNextLoopButton.isSelected()) {
+        restartNextThreadLoopButton = new JRadioButton(RESTART_NEXT_THREAD_LOOP_LABEL, false);
+        restartNextThreadLoopButton.addChangeListener(evt -> {
+            if (restartNextThreadLoopButton.isSelected()) {
                 action = TestAction.RESTART_NEXT_LOOP;
                 durationField.setEnabled(false);
                 targetBox.setSelectedIndex(TestAction.THREAD);
@@ -211,25 +218,69 @@ public class TestActionGui extends AbstractSamplerGui {
             }
         });
         
+        startNextIterationOfCurrentLoopButton = new JRadioButton(START_NEXT_ITERATION_CURRENT_LOOP_ACTION, false);
+        startNextIterationOfCurrentLoopButton.addChangeListener(evt -> {
+            if (startNextIterationOfCurrentLoopButton.isSelected()) {
+                action = TestAction.START_NEXT_ITERATION_CURRENT_LOOP;
+                durationField.setEnabled(false);
+                targetBox.setSelectedIndex(TestAction.THREAD);
+                targetBox.setEnabled(false);
+            }
+        });
+        
+        breakLoopButton = new JRadioButton(BREAK_CURRENT_LOOP_ACTION, false);
+        breakLoopButton.addChangeListener(evt -> {
+            if (breakLoopButton.isSelected()) {
+                action = TestAction.BREAK_CURRENT_LOOP;
+                durationField.setEnabled(false);
+                targetBox.setSelectedIndex(TestAction.THREAD);
+                targetBox.setEnabled(false);
+            }
+        });
+
+        // Duration
+        durationField = new JLabeledTextField(DURATION_LABEL, 15);
+        durationField.setText(""); // $NON-NLS-1$
+
+        
         actionButtons.add(pauseButton);
         actionButtons.add(stopButton);
         actionButtons.add(stopNowButton);
-        actionButtons.add(restartNextLoopButton);
+        actionButtons.add(restartNextThreadLoopButton);
+        actionButtons.add(startNextIterationOfCurrentLoopButton);
+        actionButtons.add(breakLoopButton);
 
-        actionPanel.add(new JLabel(actionLabel));
-        actionPanel.add(pauseButton);
-        actionPanel.add(stopButton);
-        actionPanel.add(stopNowButton);
-        actionPanel.add(restartNextLoopButton);
-        add(actionPanel);
+        // Action
+        JPanel actionOnThreadPanel = new JPanel(new GridLayout(3, 2));
+        actionOnThreadPanel.setBorder(BorderFactory.createTitledBorder(ACTION_ON_THREAD_LABEL)); //$NON-NLS-1$
+        actionOnThreadPanel.add(pauseButton);
+        actionOnThreadPanel.add(durationField);
+        actionOnThreadPanel.add(restartNextThreadLoopButton);
+        actionOnThreadPanel.add(startNextIterationOfCurrentLoopButton);
+        actionOnThreadPanel.add(breakLoopButton);
+        
+        
+        // Action
+        JPanel actionOnTestOrThreadPanel = new JPanel(new GridLayout(2, 2));
+        actionOnTestOrThreadPanel.setBorder(BorderFactory.createTitledBorder(ACTION_ON_THREAD_TEST_LABEL)); //$NON-NLS-1$
+        actionOnTestOrThreadPanel.add(stopButton);
+        actionOnTestOrThreadPanel.add(stopNowButton);
+        actionOnTestOrThreadPanel.add(new JLabel(TARGET_LABEL));
+        DefaultComboBoxModel<String> targetModel = new DefaultComboBoxModel<>();
+        targetModel.addElement(THREAD_TARGET_LABEL);
+        targetModel.addElement(TEST_TARGET_LABEL);
+        targetBox = new JComboBox<>(targetModel);
+        targetBox.addActionListener(evt -> {
+            if (((String) targetBox.getSelectedItem()).equals(THREAD_TARGET_LABEL)) {
+                target = TestAction.THREAD;
+            } else {
+                target = TestAction.TEST;
+            }
+        });
+        actionOnTestOrThreadPanel.add(targetBox);
 
-        // Duration
-        HorizontalPanel durationPanel = new HorizontalPanel();
-        durationField = new JTextField(15);
-        durationField.setText(""); // $NON-NLS-1$
-        durationPanel.add(new JLabel(durationLabel));
-        durationPanel.add(durationField);
-        add(durationPanel);
+        add(actionOnThreadPanel);
+        add(actionOnTestOrThreadPanel);
     }
 
 }

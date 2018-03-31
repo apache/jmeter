@@ -295,4 +295,8 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * This gracefully stops threads of Group
      */
     public abstract void stop();
+
+    public void breakThreadLoop() {
+        ((LoopController) getSamplerController()).breakLoop();
+    }
 }
