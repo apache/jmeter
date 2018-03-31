@@ -20,7 +20,6 @@ package org.apache.jmeter.threads;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -76,7 +75,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     private transient Thread threadStarter;
 
     // List of active threads
-    private final Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<JMeterThread, Thread> allThreads = new ConcurrentHashMap<>();
     
     private transient Object addThreadLock = new Object();
 
@@ -515,18 +514,6 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     /**
-     * Pause ms milliseconds
-     * @param ms long milliseconds
-     */
-    private void pause(long ms){
-        try {
-            TimeUnit.MILLISECONDS.sleep(ms);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    /**
      * Starts Threads using ramp up
      */
     class ThreadStarter implements Runnable {
@@ -544,7 +531,19 @@ public class ThreadGroup extends AbstractThreadGroup {
             // Store context from Root Thread to pass it to created threads
             this.context = JMeterContextService.getContext();
         }
-        
+
+        /**
+         * Pause ms milliseconds
+         * @param ms long milliseconds
+         */
+        private void pause(long ms){
+            try {
+                TimeUnit.MILLISECONDS.sleep(ms);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
         /**
          * Wait for delay with RAMPUP_GRANULARITY
          * @param delay delay in ms
