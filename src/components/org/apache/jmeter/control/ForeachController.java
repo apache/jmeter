@@ -25,9 +25,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +37,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 @GUIMenuSortOrder(5)
-public class ForeachController extends GenericController implements Serializable {
+public class ForeachController extends GenericController implements Serializable, IteratingController {
 
     private static final Logger log = LoggerFactory.getLogger(ForeachController.class);
 
@@ -58,6 +56,8 @@ public class ForeachController extends GenericController implements Serializable
     private static final String INDEX_DEFAULT_VALUE = ""; // start/end index default value for string getters and setters
 
     private int loopCount = 0;
+
+    private boolean breakLoop;
 
     private static final String DEFAULT_SEPARATOR = "_";// $NON-NLS-1$
 
@@ -208,12 +208,7 @@ public class ForeachController extends GenericController implements Serializable
             }
             return super.next();
         } finally {
-            JMeterVariables variables = JMeterContextService.getContext().getVariables();
-            if(variables != null) {
-                variables.putObject(
-                    JMeterUtils.formatJMeterExportedVariableName(
-                            getName()+LoopController.INDEX_VAR_NAME_SUFFIX), loopCount);
-            }
+            updateIterationIndex(getName(), loopCount);
         }
     }
 
@@ -302,5 +297,16 @@ public class ForeachController extends GenericController implements Serializable
     public void initialize() {
         super.initialize();
         loopCount = getStartIndex();
+    }
+    
+    @Override
+    public void startNextLoop() {
+        reInitialize();
+    }
+    
+    @Override
+    public void breakLoop() {
+        // FIXME TO BE COMPLETED
+        this.breakLoop = true;
     }
 }
