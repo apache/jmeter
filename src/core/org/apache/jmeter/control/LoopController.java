@@ -197,6 +197,7 @@ public class LoopController extends GenericController implements Serializable, I
     /**
      * Start next iteration
      */
+    @Override
     public void startNextLoop() {
         reInitialize();
     }
