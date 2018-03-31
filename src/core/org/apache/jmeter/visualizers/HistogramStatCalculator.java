@@ -13,7 +13,10 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
     private long bytes = 0;
     private long sentBytes = 0;
     private long sum = 0;
-    
+    private double m2 = 0.0;
+    private double mean = 0.0;
+    private long count = 0;
+
     public HistogramStatCalculator() {
         LoggerFactory.getLogger(this.getClass()).info("HistogramStatCalculator used.");
     }
@@ -24,6 +27,9 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
         bytes = 0;
         sentBytes = 0;
         sum = 0;
+        m2 = 0.0;
+        mean = 0.0;
+        count = 0;
     }
 
     @Override
@@ -87,12 +93,14 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
 
     @Override
     public double getMean() {
-        return histogram.getMean();
+        return mean;
+//        return histogram.getMean();
     }
 
     @Override
     public double getStandardDeviation() {
-        return histogram.getStdDeviation();
+        return Math.sqrt(m2);
+//        return histogram.getStdDeviation();
     }
 
     @Override
@@ -107,7 +115,8 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
 
     @Override
     public long getCount() {
-        return histogram.getTotalCount();
+        return count;
+//        return histogram.getTotalCount();
     }
 
     @Override
@@ -119,13 +128,22 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
     public void addValue(Long val, long sampleCount) {
         sum += val * sampleCount;
         histogram.recordValueWithCount(val, sampleCount);
+        count += sampleCount;
+        double delta = val - mean;
+        mean = mean + delta / count;
+        double delta2 = val - mean;
+        m2 = m2 + delta * delta2;
     }
 
     @Override
     public void addValue(Long val) {
         sum += val;
         histogram.recordValue(val);
-
+        count++;
+        double delta = val - mean;
+        mean = mean + delta / count;
+        double delta2 = val - mean;
+        m2 = m2 + delta * delta2;
     }
 
 }
