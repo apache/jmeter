@@ -143,6 +143,7 @@ public class WhileController extends GenericController implements Serializable, 
 
     @Override
     public void breakLoop() {
+        // FIXME TO BE COMPLETED
         this.breakLoop = true;
     }
 }

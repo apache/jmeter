@@ -203,6 +203,7 @@ public class LoopController extends GenericController implements Serializable, I
 
     @Override
     public void breakLoop() {
+        // FIXME TO BE COMPLETED
         this.breakLoop = true;
     }
 }
