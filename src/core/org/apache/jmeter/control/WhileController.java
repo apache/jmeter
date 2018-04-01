@@ -53,9 +53,12 @@ public class WhileController extends GenericController implements Serializable, 
      * Must only be called at start and end of loop
      *
      * @param loopEnd - are we at loop end?
-     * @return true means OK to continue
+     * @return true means end of loop has been reached
      */
     private boolean endOfLoop(boolean loopEnd) {
+        if(breakLoop) {
+            return true;
+        }
         String cnd = getCondition().trim();
         log.debug("Condition string: '{}'", cnd);
         boolean res;
@@ -80,6 +83,7 @@ public class WhileController extends GenericController implements Serializable, 
     protected Sampler nextIsNull() throws NextIsNullException {
         reInitialize();
         if (endOfLoop(true)){
+            resetBreakLoop();
             resetLoopCount();
             return null;
         }
@@ -104,7 +108,8 @@ public class WhileController extends GenericController implements Serializable, 
     @Override
     public Sampler next(){
         try {
-            if ( isFirst() && endOfLoop(false)) {
+            if (isFirst() && endOfLoop(false)) {
+                resetBreakLoop();
                 resetLoopCount();
                 return null;
             }
@@ -141,9 +146,18 @@ public class WhileController extends GenericController implements Serializable, 
         reInitialize();
     }
 
+    private void resetBreakLoop() {
+        if(breakLoop) {
+            breakLoop = false;
+        }
+    }
+
     @Override
     public void breakLoop() {
-        // FIXME TO BE COMPLETED
-        this.breakLoop = true;
+        breakLoop = true;
+        setFirst(true);
+        resetCurrent();
+        resetLoopCount();
+        recoverRunningVersion();
     }
 }
