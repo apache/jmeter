@@ -1747,7 +1747,7 @@ The current implementation is quite basic, and is mainly intended for debugging 
 </p>
 </component>
 
-<component name="Test Action" index="&sect-num;.1.18" width="467" height="184" screenshot="test_action.png">
+<component name="Flow Control Action" was="Test Action" index="&sect-num;.1.18" width="467" height="184" screenshot="test_action.png">
 <description>
 The Test Action sampler is a sampler that is intended for use in a conditional controller.
 Rather than generate a sample, the test element either pauses or stops the selected target.
