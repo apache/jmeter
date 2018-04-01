@@ -2837,6 +2837,13 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="Bug52310.jmx"/>
       <param name="skip.batchtest" value="${skip.bug52310}" />
     </antcall>
+
+    <antcall target="batchtest">
+      <!-- Flow Control Action: Break Loop and Start Next Iteration of Loop -->
+      <param name="batchtest.name" value="Bug62239"/>
+      <param name="batchtest.jmx" value="Bug62239.jmx"/>
+    </antcall>
+
     <antcall target="batchtest">
       <!-- Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs -->
       <param name="batchtest.name" value="Bug52968"/>
