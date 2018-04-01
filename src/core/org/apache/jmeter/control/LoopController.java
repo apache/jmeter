@@ -124,6 +124,7 @@ public class LoopController extends GenericController implements Serializable, I
                 if (!getContinueForever()) {
                     setDone(true);
                 }
+                resetBreakLoop();
                 return null;
             }
             return super.next();
@@ -134,11 +135,12 @@ public class LoopController extends GenericController implements Serializable, I
     
     private boolean endOfLoop() {
         final int loops = getLoops();
-        return (loops > INFINITE_LOOP_COUNT) && (loopCount >= loops);
+        return breakLoop || (loops > INFINITE_LOOP_COUNT) && (loopCount >= loops);
     }
 
     @Override
     protected void setDone(boolean done) {
+        resetBreakLoop();
         nbLoops = null;
         super.setDone(done);
     }
@@ -205,9 +207,18 @@ public class LoopController extends GenericController implements Serializable, I
         reInitialize();
     }
 
+    private void resetBreakLoop() {
+        if(breakLoop) {
+            breakLoop = false;
+        }
+    }
+
     @Override
     public void breakLoop() {
-        // FIXME TO BE COMPLETED
-        this.breakLoop = true;
+        breakLoop = true;
+        setFirst(true);
+        resetCurrent();
+        resetLoopCount();
+        recoverRunningVersion();
     }
 }
