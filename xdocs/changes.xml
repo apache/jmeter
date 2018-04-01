@@ -91,6 +91,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <h3>Other samplers</h3>
 <ul>
   <li><pr>376</pr>JUnitSampler logs exceptions except assertion-failures from test cases as warnings. Contributed by Davide Angelocola (davide.angelocola at fisglobal.com)</li>
+  <li><bug>62244</bug>Rename <code>Test Action</code> to <code>Flow Control Action</code></li>
 </ul>
 
 <h3>Controllers</h3>
