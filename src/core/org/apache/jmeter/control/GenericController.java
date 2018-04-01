@@ -71,7 +71,7 @@ public class GenericController extends AbstractTestElement implements Controller
     protected transient int current;
 
     /**
-     * TODO document this
+     * Current iteration
      */
     private transient int iterCount;
     
@@ -217,7 +217,8 @@ public class GenericController extends AbstractTestElement implements Controller
      * @return the next sampler
      * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
+    protected Sampler nextIsAController(Controller controller) 
+            throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses 
         Sampler sampler = controller.next();
         if (sampler == null) {
             currentReturnedNull(controller);
@@ -236,7 +237,8 @@ public class GenericController extends AbstractTestElement implements Controller
      * @return input element
      * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
+    protected Sampler nextIsASampler(Sampler element) 
+            throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses
         incrementCurrent();
         return element;
     }
@@ -248,7 +250,8 @@ public class GenericController extends AbstractTestElement implements Controller
      * @return null (always, for this class)
      * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsNull() throws NextIsNullException {
+    protected Sampler nextIsNull() 
+            throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses
         reInitialize();
         return null;
     }
@@ -297,6 +300,7 @@ public class GenericController extends AbstractTestElement implements Controller
      *             when the list has been completed already
      */
     protected void setCurrentElement(TestElement currentElement) throws NextIsNullException {
+        // NOOP
     }
 
     /**
