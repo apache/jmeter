@@ -764,7 +764,7 @@ These are shown below.</p>
     -S, --systemPropertyFile &lt;argument&gt;
         additional system property file(s)
     -f, --forceDeleteResultFile
-        force delete existing results files before start the test
+        force delete existing results files and web report folder if present before starting the test
     -L, --loglevel &lt;argument&gt;=&lt;value&gt;
         [category=]level e.g. jorphan=INFO, jmeter.util=DEBUG or com.example.foo=WARN
     -r, --runremote
