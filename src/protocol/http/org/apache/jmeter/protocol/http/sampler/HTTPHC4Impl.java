@@ -1532,41 +1532,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     postedBody.append(postBody.toString());
                 } else {
                     // It is a normal post request, with parameter names and values
-
                     // Set the content type
                     if(!hasContentTypeHeader) {
                         post.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
-                    // Add the parameters
-                    PropertyIterator args = getArguments().iterator();
-                    List <NameValuePair> nvps = new ArrayList<>();
                     String urlContentEncoding = contentEncoding;
-                    if(urlContentEncoding == null || urlContentEncoding.length() == 0) {
-                        // Use the default encoding for urls
-                        urlContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
-                    }
-                    while (args.hasNext()) {
-                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-                        // The HTTPClient always urlencodes both name and value,
-                        // so if the argument is already encoded, we have to decode
-                        // it before adding it to the post request
-                        String parameterName = arg.getName();
-                        if (arg.isSkippable(parameterName)){
-                            continue;
-                        }
-                        String parameterValue = arg.getValue();
-                        if(!arg.isAlwaysEncoded()) {
-                            // The value is already encoded by the user
-                            // Must decode the value now, so that when the
-                            // httpclient encodes it, we end up with the same value
-                            // as the user had entered.
-                            parameterName = URLDecoder.decode(parameterName, urlContentEncoding);
-                            parameterValue = URLDecoder.decode(parameterValue, urlContentEncoding);
-                        }
-                        // Add the parameter, httpclient will urlencode it
-                        nvps.add(new BasicNameValuePair(parameterName, parameterValue));
-                    }
-                    UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nvps, urlContentEncoding);
+                    UrlEncodedFormEntity entity = createUrlEncodedFormEntity(urlContentEncoding);
                     post.setEntity(entity);
                     if (entity.isRepeatable()){
                         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -1621,7 +1592,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         // Only create this if we are overriding whatever default there may be
         // If there are no arguments, we can send a file as the body of the request
-
         if(!hasArguments() && getSendFileAsPostBody()) {
             hasEntityBody = true;
 
@@ -1649,6 +1619,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             StringEntity requestEntity = new StringEntity(entityBodyContent.toString(), charset);
             entity.setEntity(requestEntity);
+        } else if (hasArguments()) {
+            hasEntityBody = true;
+            entity.setEntity(createUrlEncodedFormEntity(getContentEncodingOrNull()));
         }
         // Check if we have any content to send for body
         if(hasEntityBody) {
@@ -1676,6 +1649,47 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
         return ""; // may be the empty string
     }
+
+    /**
+     * Create UrlEncodedFormEntity from parameters
+     * @param contentEncoding Content encoding may be null or empty
+     * @return {@link UrlEncodedFormEntity}
+     * @throws UnsupportedEncodingException
+     */
+    private UrlEncodedFormEntity createUrlEncodedFormEntity(final String contentEncoding) throws UnsupportedEncodingException {
+        // It is a normal request, with parameter names and values
+        // Add the parameters
+        PropertyIterator args = getArguments().iterator();
+        List<NameValuePair> nvps = new ArrayList<>();
+        String urlContentEncoding = contentEncoding;
+        if (urlContentEncoding == null || urlContentEncoding.length() == 0) {
+            // Use the default encoding for urls
+            urlContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
+        }
+        while (args.hasNext()) {
+            HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+            // The HTTPClient always urlencodes both name and value,
+            // so if the argument is already encoded, we have to decode
+            // it before adding it to the post request
+            String parameterName = arg.getName();
+            if (arg.isSkippable(parameterName)) {
+                continue;
+            }
+            String parameterValue = arg.getValue();
+            if (!arg.isAlwaysEncoded()) {
+                // The value is already encoded by the user
+                // Must decode the value now, so that when the
+                // httpclient encodes it, we end up with the same value
+                // as the user had entered.
+                parameterName = URLDecoder.decode(parameterName, urlContentEncoding);
+                parameterValue = URLDecoder.decode(parameterValue, urlContentEncoding);
+            }
+            // Add the parameter, httpclient will urlencode it
+            nvps.add(new BasicNameValuePair(parameterName, parameterValue));
+        }
+        return new UrlEncodedFormEntity(nvps, urlContentEncoding);
+    }
+
 
     /**
      * 
