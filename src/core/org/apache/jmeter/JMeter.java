@@ -278,7 +278,7 @@ public class JMeter implements JMeterPlugin {
      private static final CLOptionDescriptor D_FORCE_DELETE_RESULT_FILE =
             new CLOptionDescriptor("forceDeleteResultFile",
                     CLOptionDescriptor.ARGUMENT_DISALLOWED, FORCE_DELETE_RESULT_FILE,
-                    "force delete existing results files before start the test");
+                    "force delete existing results files and web report folder if present before starting the test");
 
     private static final String[][] DEFAULT_ICONS = {
             { "org.apache.jmeter.control.gui.TestPlanGui",               "org/apache/jmeter/images/beaker.gif" },     //$NON-NLS-1$ $NON-NLS-2$
@@ -517,14 +517,14 @@ public class JMeter implements JMeterPlugin {
                 CLOption testReportOpt = parser.getArgumentById(REPORT_GENERATING_OPT);
                 if (testReportOpt != null) { // generate report from existing file
                     String reportFile = testReportOpt.getArgument();
-                    extractAndSetReportOutputFolder(parser);
+                    extractAndSetReportOutputFolder(parser, false);
                     ReportGenerator generator = new ReportGenerator(reportFile, null);
                     generator.generate();
                 } else if (parser.getArgumentById(NONGUI_OPT) == null) { // not non-GUI => GUI
                     startGui(testFile);
                     startOptionalServers();
                 } else { // NON-GUI must be true
-                    extractAndSetReportOutputFolder(parser);
+                    extractAndSetReportOutputFolder(parser, deleteResultFile);
                     
                     CLOption rem = parser.getArgumentById(REMOTE_OPT_PARAM);
                     if (rem == null) {
@@ -562,14 +562,14 @@ public class JMeter implements JMeterPlugin {
      * @param parser {@link CLArgsParser}
      * @throws IllegalArgumentException
      */
-    private void extractAndSetReportOutputFolder(CLArgsParser parser) {
+    private void extractAndSetReportOutputFolder(CLArgsParser parser, boolean deleteResultFile) {
         CLOption reportOutputFolderOpt = parser
                 .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
         if(reportOutputFolderOpt != null) {
             String reportOutputFolder = parser.getArgumentById(REPORT_OUTPUT_FOLDER_OPT).getArgument();
             File reportOutputFolderAsFile = new File(reportOutputFolder);
 
-            JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile);
+            JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile, deleteResultFile);
             final String reportOutputFolderAbsPath = reportOutputFolderAsFile.getAbsolutePath();
             log.info("Setting property '{}' to:'{}'", JMETER_REPORT_OUTPUT_DIR_PROPERTY, reportOutputFolderAbsPath);
             JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, reportOutputFolderAbsPath);
