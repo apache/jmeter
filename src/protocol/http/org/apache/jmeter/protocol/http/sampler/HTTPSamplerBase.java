@@ -409,9 +409,32 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         // and the files should not be send as the post body
         HTTPFileArg[] files = getHTTPFiles();
         return HTTPConstants.POST.equals(getMethod())
-                && (getDoMultipartPost() || (files.length > 0 && !getSendFileAsPostBody()));
+                && (getDoMultipart() || (files.length > 0 && hasNoMissingFile(files) && !getSendFileAsPostBody()));
+    }
+    
+    /**
+     * Determine if we should use multipart/form-data or
+     * application/x-www-form-urlencoded for the post
+     *
+     * @return true if multipart/form-data should be used and method is POST
+     */
+    public boolean getUseMultipart() {
+        // We use multipart if we have been told so, or files are present
+        // and the files should not be send as the post body
+        HTTPFileArg[] files = getHTTPFiles();
+        return (getDoMultipart() || (files.length>0 && hasNoMissingFile(files) && !getSendFileAsPostBody()));
     }
 
+    private boolean hasNoMissingFile(HTTPFileArg[] files) {
+        for (HTTPFileArg httpFileArg : files) {
+            if(StringUtils.isEmpty(httpFileArg.getPath())) {
+                log.warn("File {} is invalid as no path is defined", httpFileArg);
+                return false;
+            }
+        }
+        return true;
+    }
+    
     public void setProtocol(String value) {
         setProperty(PROTOCOL, value.toLowerCase(java.util.Locale.ENGLISH));
     }
@@ -523,11 +546,29 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return getPropertyAsBoolean(USE_KEEPALIVE);
     }
 
+    /**
+     * @deprecated use {@link HTTPSamplerBase#setDoMultipartPost(boolean)}
+     * @param value
+     */
+    @Deprecated
     public void setDoMultipartPost(boolean value) {
+        setDoMultipart(value);
+    }
+
+    /**
+     * @deprecated use {@link HTTPSamplerBase#getDoMultipartPost()}
+     * @param value
+     */
+    @Deprecated
+    public boolean getDoMultipartPost() {
+        return getDoMultipart();
+    }
+
+    public void setDoMultipart(boolean value) {
         setProperty(new BooleanProperty(DO_MULTIPART_POST, value));
     }
 
-    public boolean getDoMultipartPost() {
+    public boolean getDoMultipart() {
         return getPropertyAsBoolean(DO_MULTIPART_POST, false);
     }
 

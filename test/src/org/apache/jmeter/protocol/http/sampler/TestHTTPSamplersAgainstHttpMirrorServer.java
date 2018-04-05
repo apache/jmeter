@@ -347,7 +347,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         String contentEncoding = "";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipart(true);
         HTTPSampleResult res = executeSampler(sampler);
         checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
                 contentEncoding, titleField, titleValue, descriptionField,
@@ -358,7 +358,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         contentEncoding = ISO_8859_1;
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipart(true);
         res = executeSampler(sampler);
         checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
                 contentEncoding, titleField, titleValue, descriptionField,
@@ -371,7 +371,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipart(true);
         res = executeSampler(sampler);
         checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
                 contentEncoding, titleField, titleValue, descriptionField,
@@ -385,7 +385,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         descriptionValue = "mydescription   /\\";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipart(true);
         res = executeSampler(sampler);
         checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
                 contentEncoding, titleField, titleValue, descriptionField,
@@ -398,7 +398,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         descriptionValue = "mydescription+++%2F%5C";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, true, titleField, titleValue, descriptionField, descriptionValue);
-        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipart(true);
         res = executeSampler(sampler);
         String expectedTitleValue = "mytitle/=";
         String expectedDescriptionValue = "mydescription   /\\";
@@ -413,7 +413,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         descriptionValue = "mydescription";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipart(true);
         res = executeSampler(sampler);
         checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
                 contentEncoding, titleField, titleValue, descriptionField,
@@ -437,7 +437,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5${description_suffix}";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipart(true);
         // Replace the variables in the sampler
         replacer.replaceValues(sampler);
         res = executeSampler(sampler);
@@ -869,7 +869,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue, true, true);
         // Check request headers
-        checkHeaderTypeLength(res.getRequestHeaders(), "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
+        checkHeaderContentType(res.getRequestHeaders(), "multipart/form-data" + "; boundary=" + boundaryString);
         // Check post body from the result query string
         checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding), contentEncoding, res);
 
@@ -887,7 +887,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             fail("No header and body section found");
         }
          // Check response headers
-        checkHeaderTypeLength(headersSent, "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
+        checkHeaderContentType(headersSent, "multipart/form-data" + "; boundary=" + boundaryString);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding), contentEncoding, res);
@@ -920,7 +920,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 descriptionField, descriptionValue, fileField, fileValue,
                 fileMimeType, fileContent);
         // Check request headers
-        checkHeaderTypeLength(res.getRequestHeaders(), "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
+        checkHeaderContentType(res.getRequestHeaders(), "multipart/form-data" + "; boundary=" + boundaryString);
         // We cannot check post body from the result query string, since that will not contain
         // the actual file content, but placeholder text for file content
         //checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding));
@@ -931,7 +931,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             fail("No header and body section found");
         }
         // Check response headers
-        checkHeaderTypeLength(headersSent, "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
+        checkHeaderContentType(headersSent, "multipart/form-data" + "; boundary=" + boundaryString);
         byte[] bodySent = getBodySent(res.getResponseData());
         assertNotNull("Sent body should not be null", bodySent);
         // Check post body which was sent to the mirror server, and
@@ -953,9 +953,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         // Check URL
         assertEquals(sampler.getUrl(), res.getURL());
         // Check request headers
-        checkHeaderTypeLength(res.getRequestHeaders(),
-                HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED,
-                expectedPostBody.getBytes(contentEncoding).length);
+        checkHeaderContentType(res.getRequestHeaders(), null);
          // Check post body from the result query string
         checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding),
                 res.getQueryString().getBytes(contentEncoding), contentEncoding,
@@ -975,9 +973,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             fail("No header and body section found");
         }
         // Check response headers
-        checkHeaderTypeLength(headersSent,
-                HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED,
-                expectedPostBody.getBytes(contentEncoding).length);
+        checkHeaderContentType(headersSent, null);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding),
@@ -1161,11 +1157,13 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
   
     // Java 1.6.0_22+ no longer allows Content-Length to be set, so don't check it.
     // See: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6996110
-    // TODO any point in checking the other headers?
-    private void checkHeaderTypeLength(String requestHeaders, String contentType, int contentLen) {
-        boolean typeOK = isInRequestHeaders(requestHeaders, HTTPConstants.HEADER_CONTENT_TYPE, contentType);
-        if (!typeOK){
-            fail("Expected type:" + contentType + " in:\n"+ requestHeaders);
+    private void checkHeaderContentType(String requestHeaders, String contentType) {
+        if(contentType == null) {
+            boolean isPresent = checkRegularExpression(requestHeaders, HTTPConstants.HEADER_CONTENT_TYPE+": .*");
+            assertTrue("Expected no Content-Type in request headers:\n"+ requestHeaders, isPresent);
+        } else {
+            boolean typeOK = isInRequestHeaders(requestHeaders, HTTPConstants.HEADER_CONTENT_TYPE, contentType);
+            assertTrue("Expected type:" + contentType + " in request headers:\n"+ requestHeaders, typeOK);
         }
     }
    
