@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="4.0" jmeter="4.1-SNAPSHOT.20180402">
+<jmeterTestPlan version="1.2" properties="4.0" jmeter="4.1-SNAPSHOT.20180405">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -242,7 +242,7 @@ mirrorServer.start();</stringProp>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_ContentLength" enabled="true">
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="224767426">Content-Length: 13</stringProp>
-                <stringProp name="1012959042">Content-Type: text/plain; charset=ISO-8859-1</stringProp>
+                <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
                 <stringProp name="-644619860">Content-Type:</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
@@ -983,7 +983,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
               <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
-              <stringProp name="-1704395926">Content-Type: application/x-www-form-urlencoded</stringProp>
+              <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
               <stringProp name="224767427">Content-Length: 14</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
               <stringProp name="1052466409">User-Agent: </stringProp>
