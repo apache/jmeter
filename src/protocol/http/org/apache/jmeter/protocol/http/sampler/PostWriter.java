@@ -284,7 +284,7 @@ public class PostWriter {
                 String postBody = null;
                 if(!sampler.getSendParameterValuesAsPostBody()) {
                     // Set the content type
-                    if(!hasContentTypeHeader) {
+                    if(!hasContentTypeHeader && HTTPAbstractImpl.ADD_CONTENT_TYPE_TO_POST_IF_MISSING) {
                         connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
 
@@ -302,8 +302,9 @@ public class PostWriter {
                             connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                         }
                         else {
-                            // TODO: is this the correct default?
-                            connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
+                            if(HTTPAbstractImpl.ADD_CONTENT_TYPE_TO_POST_IF_MISSING) {
+                                connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
+                            }
                         }
                     }
 
