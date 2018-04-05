@@ -120,7 +120,7 @@ public abstract class SSLManager {
                 log.info("KeyStore created OK");
             } catch (Exception e) {
                 this.keyStore = null;
-                throw new RuntimeException("Could not create keystore: "+e.getMessage(), e);
+                throw new IllegalArgumentException("Could not create keystore: "+e.getMessage(), e);
             }
 
             try {
