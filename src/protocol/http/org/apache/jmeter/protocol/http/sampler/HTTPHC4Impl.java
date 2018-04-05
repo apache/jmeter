@@ -1158,7 +1158,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // with the last request to an HTTP server. Instead, most browsers
         // leave it to the server to close the connection after their
         // timeout period. Leave it to the JMeter user to decide.
-        if (!getUseKeepAlive()) {
+        if (getUseKeepAlive()) {
+            httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
+        } else {
             httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
         }
     

@@ -1,4 +1,5 @@
 JSPP_SetProperties,200,OK,setUp Thread Group 1-1,text,true
+HTTP_Request_CLOSE,200,OK,Thread Group 1-1,text,true
 HTTP-Warmup,200,OK,Thread Group 1-1,text,true
 HTTP_Request_REUSE,200,OK,Thread Group 1-1,text,true
 HTTP_Request_REUSE_2,200,OK,Thread Group 1-1,text,true
