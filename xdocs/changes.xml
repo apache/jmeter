@@ -169,6 +169,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>62265</bug>ModuleController behaves strangely</li>
 </ul>
 
 <h3>Listeners</h3>
