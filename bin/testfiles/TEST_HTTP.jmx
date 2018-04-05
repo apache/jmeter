@@ -776,7 +776,6 @@ mirrorServer.start();</stringProp>
               <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
-              <stringProp name="-1704395926">Content-Type: application/x-www-form-urlencoded</stringProp>
               <stringProp name="224767425">Content-Length: 12</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
               <stringProp name="1052466409">User-Agent: </stringProp>
@@ -978,12 +977,20 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             </collectionProp>
           </HeaderManager>
           <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="REE_contentType" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">request_headers</stringProp>
+            <stringProp name="RegexExtractor.refname">contentType</stringProp>
+            <stringProp name="RegexExtractor.regex">Content-Type: (.*)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default">nv_contentType</stringProp>
+            <stringProp name="RegexExtractor.match_number">1</stringProp>
+          </RegexExtractor>
+          <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
-              <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
               <stringProp name="224767427">Content-Length: 14</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
               <stringProp name="1052466409">User-Agent: </stringProp>
@@ -993,6 +1000,19 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
             <stringProp name="Assertion.custom_message"></stringProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1049865380">nv_contentType</stringProp>
+              <stringProp name="817335912">text/plain</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">40</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.scope">variable</stringProp>
+            <stringProp name="Scope.variable">contentType</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
