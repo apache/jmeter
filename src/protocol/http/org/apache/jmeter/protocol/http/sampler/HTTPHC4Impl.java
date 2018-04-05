@@ -45,8 +45,6 @@ import java.util.zip.GZIPInputStream;
 
 import javax.security.auth.Subject;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.Header;
@@ -469,6 +467,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final ConnectionSocketFactory SLOW_CONNECTION_SOCKET_FACTORY;
 
+    private static final ViewableFileBody[] EMPTY_FILE_BODIES = new ViewableFileBody[0];
+
     static {
         log.info("HTTP request retry count = {}", RETRY_COUNT);
 
@@ -546,40 +546,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         HttpContext localContext = new BasicHttpContext();
         HttpClientContext clientContext = HttpClientContext.adapt(localContext);
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_AUTH_MANAGER, getAuthManager());
-
         try {
             httpClient = setupClient(jMeterVariables, url, clientContext);
             URI uri = url.toURI();
-            if (method.equals(HTTPConstants.POST)) {
-                httpRequest = new HttpPost(uri);
-            } else if (method.equals(HTTPConstants.GET)) {
-                // Some servers fail if Content-Length is equal to 0
-                // so to avoid this we use HttpGet when there is no body (Content-Length will not be set)
-                // otherwise we use HttpGetWithEntity
-                if ( !areFollowingRedirect 
-                        && ((!hasArguments() && getSendFileAsPostBody()) 
-                        || getSendParameterValuesAsPostBody()) ) {
-                    httpRequest = new HttpGetWithEntity(uri);
-                } else {
-                    httpRequest = new HttpGet(uri);
-                }
-            } else if (method.equals(HTTPConstants.PUT)) {
-                httpRequest = new HttpPut(uri);
-            } else if (method.equals(HTTPConstants.HEAD)) {
-                httpRequest = new HttpHead(uri);
-            } else if (method.equals(HTTPConstants.TRACE)) {
-                httpRequest = new HttpTrace(uri);
-            } else if (method.equals(HTTPConstants.OPTIONS)) {
-                httpRequest = new HttpOptions(uri);
-            } else if (method.equals(HTTPConstants.DELETE)) {
-                httpRequest = new HttpDelete(uri);
-            } else if (method.equals(HTTPConstants.PATCH)) {
-                httpRequest = new HttpPatch(uri);
-            } else if (HttpWebdav.isWebdavMethod(method)) {
-                httpRequest = new HttpWebdav(method, uri);
-            } else {
-                throw new IllegalArgumentException("Unexpected method: '"+method+"'");
-            }
+            httpRequest = createHttpRequest(uri, method, areFollowingRedirect);
             setupRequest(url, httpRequest, res); // can throw IOException
         } catch (Exception e) {
             res.sampleStart();
@@ -619,7 +589,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (contentType != null){
                 String ct = contentType.getValue();
                 res.setContentType(ct);
-                res.setEncodingAndType(ct);                    
+                res.setEncodingAndType(ct);
             }
             HttpEntity entity = httpResponse.getEntity();
             if (entity != null) {
@@ -715,6 +685,45 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     /**
+     * @param uri {@link URI}
+     * @param method HTTP Method
+     * @param areFollowingRedirect Are we following redirects
+     * @return {@link HttpRequestBase}
+     */
+    private HttpRequestBase createHttpRequest(URI uri, String method, boolean areFollowingRedirect) {
+        if (method.equals(HTTPConstants.POST)) {
+            return new HttpPost(uri);
+        } else if (method.equals(HTTPConstants.GET)) {
+            // Some servers fail if Content-Length is equal to 0
+            // so to avoid this we use HttpGet when there is no body (Content-Length will not be set)
+            // otherwise we use HttpGetWithEntity
+            if ( !areFollowingRedirect 
+                    && ((!hasArguments() && getSendFileAsPostBody()) 
+                    || getSendParameterValuesAsPostBody()) ) {
+                return new HttpGetWithEntity(uri);
+            } else {
+                return new HttpGet(uri);
+            }
+        } else if (method.equals(HTTPConstants.PUT)) {
+            return new HttpPut(uri);
+        } else if (method.equals(HTTPConstants.HEAD)) {
+            return new HttpHead(uri);
+        } else if (method.equals(HTTPConstants.TRACE)) {
+            return new HttpTrace(uri);
+        } else if (method.equals(HTTPConstants.OPTIONS)) {
+            return new HttpOptions(uri);
+        } else if (method.equals(HTTPConstants.DELETE)) {
+            return new HttpDelete(uri);
+        } else if (method.equals(HTTPConstants.PATCH)) {
+            return new HttpPatch(uri);
+        } else if (HttpWebdav.isWebdavMethod(method)) {
+            return new HttpWebdav(method, uri);
+        } else {
+            throw new IllegalArgumentException("Unexpected method: '"+method+"'");
+        }
+    }
+
+    /**
      * Store in JMeter Variables the UserToken so that the SSL context is reused
      * See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=57804">Bug 57804</a>
      * @param jMeterVariables {@link JMeterVariables}
@@ -757,10 +766,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * Calls {@link #sendPostData(HttpPost)} if method is <code>POST</code> and
-     * {@link #sendEntityData(HttpEntityEnclosingRequestBase)} if method is
-     * <code>PUT</code> or <code>PATCH</code>
-     * <p>
+     * Setup Body of request if different from GET.
      * Field HTTPSampleResult#queryString of result is modified in the 2 cases
      * 
      * @param method
@@ -777,11 +783,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected void handleMethod(String method, HTTPSampleResult result,
             HttpRequestBase httpRequest, HttpContext localContext) throws IOException {
         // Handle the various methods
-        if (httpRequest instanceof HttpPost) {
-            String postBody = sendPostData((HttpPost)httpRequest);
-            result.setQueryString(postBody);
-        } else if (httpRequest instanceof HttpEntityEnclosingRequestBase) {
-            String entityBody = sendEntityData((HttpEntityEnclosingRequestBase) httpRequest);
+        if (httpRequest instanceof HttpEntityEnclosingRequestBase) {
+            String entityBody = setupHttpEntityEnclosingRequestData((HttpEntityEnclosingRequestBase)httpRequest);
             result.setQueryString(entityBody);
         }
     }
@@ -1155,9 +1158,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // with the last request to an HTTP server. Instead, most browsers
         // leave it to the server to close the connection after their
         // timeout period. Leave it to the JMeter user to decide.
-        if (getUseKeepAlive()) {
-            httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
-        } else {
+        if (!getUseKeepAlive()) {
             httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
         }
     
@@ -1386,12 +1387,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * 
-     * @param post {@link HttpPost}
-     * @return String posted body if computable
+     * @param entityEnclosingRequest {@link HttpEntityEnclosingRequestBase}
+     * @return String body sent if computable
      * @throws IOException if sending the data fails due to I/O
      */
-    protected String sendPostData(HttpPost post)  throws IOException {
+    protected String setupHttpEntityEnclosingRequestData(HttpEntityEnclosingRequestBase entityEnclosingRequest)  throws IOException {
         // Buffer to hold the post body, except file content
         StringBuilder postedBody = new StringBuilder(1000);
         HTTPFileArg[] files = getHTTPFiles();
@@ -1401,7 +1401,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
-        if(getUseMultipartForPost()) {
+        if(getUseMultipart()) {
             // If a content encoding is specified, we use that as the
             // encoding of any parameter values
             Charset charset;
@@ -1430,7 +1430,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (arg.isSkippable(parameterName)) {
                     continue;
                 }
-                StringBody stringBody = new StringBody(arg.getValue(), ContentType.create("text/plain", charset));
+                StringBody stringBody = new StringBody(arg.getValue(), ContentType.create(arg.getContentType(), charset));
                 FormBodyPart formPart = FormBodyPartBuilder.create(
                         parameterName, stringBody).build();
                 multipartEntityBuilder.addPart(formPart);
@@ -1448,30 +1448,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
 
             HttpEntity entity = multipartEntityBuilder.build();
-            post.setEntity(entity);
-
-            if (entity.isRepeatable()){
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                for(ViewableFileBody fileBody : fileBodies){
-                    fileBody.hideFileData = true;
-                }
-                entity.writeTo(bos);
-                for(ViewableFileBody fileBody : fileBodies){
-                    fileBody.hideFileData = false;
-                }
-                bos.flush();
-                // We get the posted bytes using the encoding used to create it
-                postedBody.append(bos.toString(
-                        contentEncoding == null ? "US-ASCII" // $NON-NLS-1$ this is the default used by HttpClient
-                        : contentEncoding));
-                bos.close();
-            } else {
-                postedBody.append("<Multipart was not repeatable, cannot view what was sent>"); // $NON-NLS-1$
-            }
+            entityEnclosingRequest.setEntity(entity);
+            writeEntityToSB(postedBody, entity, fileBodies, contentEncoding);
         } else { // not multipart
             // Check if the header manager had a content type header
             // This allows the user to specify his own content-type for a POST request
-            Header contentTypeHeader = post.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
+            Header contentTypeHeader = entityEnclosingRequest.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
             boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
             // If there are no arguments, we can send a file as the body of the request
             // TODO: needs a multiple file upload scenerio
@@ -1481,15 +1463,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if(!hasContentTypeHeader) {
                     // Allow the mimetype of the file to control the content type
                     if(file.getMimeType() != null && file.getMimeType().length() > 0) {
-                        post.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
+                        entityEnclosingRequest.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                     }
-                    else {
-                        post.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
+                    else if(ADD_CONTENT_TYPE_TO_POST_IF_MISSING) {
+                        entityEnclosingRequest.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
                 }
 
                 FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),(ContentType) null);
-                post.setEntity(fileRequestEntity);
+                entityEnclosingRequest.setEntity(fileRequestEntity);
 
                 // We just add placeholder text for file content
                 postedBody.append("<actual file content, not shown here>");
@@ -1507,11 +1489,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     if(!hasContentTypeHeader) {
                         HTTPFileArg file = files.length > 0? files[0] : null;
                         if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
-                            post.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
+                            entityEnclosingRequest.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                         }
-                        else {
-                             // TODO - is this the correct default? no
-                            post.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
+                        else if(ADD_CONTENT_TYPE_TO_POST_IF_MISSING) {
+                            entityEnclosingRequest.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                         }
                     }
 
@@ -1528,32 +1509,53 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     }
                     // Let StringEntity perform the encoding
                     StringEntity requestEntity = new StringEntity(postBody.toString(), contentEncoding);
-                    post.setEntity(requestEntity);
+                    entityEnclosingRequest.setEntity(requestEntity);
                     postedBody.append(postBody.toString());
                 } else {
                     // It is a normal post request, with parameter names and values
                     // Set the content type
-                    if(!hasContentTypeHeader) {
-                        post.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
+                    if(!hasContentTypeHeader && ADD_CONTENT_TYPE_TO_POST_IF_MISSING) {
+                        entityEnclosingRequest.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
                     String urlContentEncoding = contentEncoding;
                     UrlEncodedFormEntity entity = createUrlEncodedFormEntity(urlContentEncoding);
-                    post.setEntity(entity);
-                    if (entity.isRepeatable()){
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        post.getEntity().writeTo(bos);
-                        bos.flush();
-                        // We get the posted bytes using the encoding used to create it
-                        postedBody.append(bos.toString(contentEncoding != null?contentEncoding:SampleResult.DEFAULT_HTTP_ENCODING));
-                        
-                        bos.close();
-                    }  else {
-                        postedBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
-                    }
+                    entityEnclosingRequest.setEntity(entity);
+                    writeEntityToSB(postedBody, entity, EMPTY_FILE_BODIES, contentEncoding);
                 }
             }
         }
         return postedBody.toString();
+    }
+
+    /**
+     * @param postedBody
+     * @param entity
+     * @param fileBodies Array of {@link ViewableFileBody}
+     * @param contentEncoding
+     * @throws IOException
+     * @throws UnsupportedEncodingException
+     */
+    private void writeEntityToSB(final StringBuilder postedBody, final HttpEntity entity, 
+            final ViewableFileBody[] fileBodies, final String contentEncoding) 
+                    throws IOException {
+        if (entity.isRepeatable()){
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            for(ViewableFileBody fileBody : fileBodies){
+                fileBody.hideFileData = true;
+            }
+            entity.writeTo(bos);
+            for(ViewableFileBody fileBody : fileBodies){
+                fileBody.hideFileData = false;
+            }
+            bos.flush();
+            // We get the posted bytes using the encoding used to create it
+            postedBody.append(bos.toString(
+                    contentEncoding == null ? SampleResult.DEFAULT_HTTP_ENCODING
+                    : contentEncoding));
+            bos.close();
+        } else {
+            postedBody.append("<Entity was not repeatable, cannot view what was sent>"); // $NON-NLS-1$
+        }
     }
 
     /**
@@ -1629,22 +1631,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // our own stream, so we can return it
             final HttpEntity entityEntry = entity.getEntity();
             // Buffer to hold the entity body
-            StringBuilder entityBody = null;
-            if(entityEntry.isRepeatable()) {
-                entityBody = new StringBuilder(1000);
-                try (InputStream in = entityEntry.getContent();
-                        InputStream bounded = new BoundedInputStream(in, MAX_BODY_RETAIN_SIZE)) {
-                    entityBody.append(IOUtils.toString(bounded, charset));
-                }
-                if (entityEntry.getContentLength() > MAX_BODY_RETAIN_SIZE) {
-                    entityBody.append("<actual file content shortened>");
-                }
-            }
-            else { 
-                entityBody = new StringBuilder(65);
-                // this probably cannot happen
-                entityBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
-            }
+            StringBuilder entityBody = new StringBuilder(65);
+            writeEntityToSB(entityBody, entityEntry, EMPTY_FILE_BODIES, charset);
             return entityBody.toString();
         }
         return ""; // may be the empty string

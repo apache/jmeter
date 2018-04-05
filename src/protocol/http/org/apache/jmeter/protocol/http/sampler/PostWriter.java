@@ -101,7 +101,7 @@ public class PostWriter {
 
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
-        if(sampler.getUseMultipartForPost()) {
+        if(sampler.getUseMultipart()) {
             OutputStream out = connection.getOutputStream();
 
             // Write the form data post body, which we have constructed
@@ -180,7 +180,7 @@ public class PostWriter {
 
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
-        if(sampler.getUseMultipartForPost()) {
+        if(sampler.getUseMultipart()) {
             // Set the content type
             connection.setRequestProperty(
                     HTTPConstants.HEADER_CONTENT_TYPE,
@@ -266,7 +266,9 @@ public class PostWriter {
                         connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                     }
                     else {
-                        connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
+                        if(HTTPAbstractImpl.ADD_CONTENT_TYPE_TO_POST_IF_MISSING) {
+                            connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
+                        }
                     }
                 }
                 // Create the content length we are going to write
