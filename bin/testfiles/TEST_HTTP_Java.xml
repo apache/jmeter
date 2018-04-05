@@ -161,6 +161,11 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HR-POST_WITH_FILE" rc="200" dt="text">
   <assertionResult>
