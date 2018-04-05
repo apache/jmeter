@@ -422,7 +422,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         // We use multipart if we have been told so, or files are present
         // and the files should not be send as the post body
         HTTPFileArg[] files = getHTTPFiles();
-        return (getDoMultipart() || (files.length>0 && hasNoMissingFile(files) && !getSendFileAsPostBody()));
+        return getDoMultipart() || (files.length>0 && hasNoMissingFile(files) && !getSendFileAsPostBody());
     }
 
     private boolean hasNoMissingFile(HTTPFileArg[] files) {
