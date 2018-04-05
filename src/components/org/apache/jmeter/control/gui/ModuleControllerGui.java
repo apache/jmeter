@@ -71,7 +71,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *
  */
 @GUIMenuSortOrder(MenuInfo.SORT_ORDER_DEFAULT+2)
-public class ModuleControllerGui extends AbstractControllerGui implements ActionListener {
+public class ModuleControllerGui extends AbstractControllerGui implements ActionListener { // NOSONAR Ignore parent warning
     private static final long serialVersionUID = -4195441608252523573L;
 
     private static final String SEPARATOR = " > ";
@@ -176,7 +176,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         moduleToRunTreeNodes.addTreeSelectionListener(
                 evt -> {
                     warningLabel.setVisible(false);
-                    expandButton.setEnabled(true);    
+                    expandButton.setEnabled(true);
                 });
     }
 
@@ -190,6 +190,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     @Override
     public void configure(TestElement el) {
         super.configure(el);
+        hasAtLeastOneController = false;
         ModuleController controller = (ModuleController) el;
         this.selected = controller.getSelectedNode();
         if (selected == null && controller.getNodePath() != null) {
@@ -266,6 +267,12 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         super.clearGui();
         selected = null;
         hasAtLeastOneController = false;
+        if(moduleToRunTreeModel != null) {
+            ((DefaultMutableTreeNode) moduleToRunTreeModel.getRoot()).removeAllChildren();
+        }
+        if(moduleToRunTreeNodes != null) {
+            moduleToRunTreeNodes.clearSelection();
+        }
     }
 
     /** {@inheritDoc}} */
@@ -359,6 +366,14 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         }
     }
 
+    /**
+     * Reinitializes the visual representation of JMeter Tree keeping only the Controllers, Test Fragment, Thread Groups, Test Plan
+     * <ol>
+     *  <li>Rebuilds moduleToRunTreeModel</li> 
+     *  <li>selects the node referenced by ModuleController</li>
+     *  <li>Updates warning label</li>
+     * </ol>
+     */
     private void reinitialize() {
         ((DefaultMutableTreeNode) moduleToRunTreeModel.getRoot()).removeAllChildren();
 
@@ -380,12 +395,14 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     }
 
     /**
-     * Recursively build module to run tree. Only 4 types of elements are allowed to be added:
-     * - All controllers except ModuleController
-     * - TestPlan
-     * - TestFragmentController
-     * - AbstractThreadGroup
-     * 
+     * Recursively build module to run tree. <br/>
+     * Only 4 types of elements are allowed to be added:
+     * <ul>
+     *  <li>All controllers except ModuleController</li>
+     *  <li>TestPlan</li>
+     *  <li>TestFragmentController</li>
+     *  <li>AbstractThreadGroup</li>
+     * </ul>
      * @param node - element of test plan tree
      * @param level - level of element in a tree
      * @param parent
@@ -419,20 +436,20 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     }
 
     /**
-     * Implementation of Expand button - moves focus to a test plan tree element referenced by 
-     * selected element in Module to run tree
+     * Implementation of Expand button: <br/>
+     * moves focus to a test plan tree element referenced by selected element in Module to run tree
      */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == expandButton) {
-            JMeterTreeNode tn = null;
-            DefaultMutableTreeNode selected = (DefaultMutableTreeNode) 
+            DefaultMutableTreeNode currentSelectedNodeInMC = (DefaultMutableTreeNode) 
                     this.moduleToRunTreeNodes.getLastSelectedPathComponent(); 
-            if (selected != null && selected.getUserObject() instanceof JMeterTreeNode){
-                tn = (JMeterTreeNode) selected.getUserObject();
+            JMeterTreeNode nodeToExpandInTestPlanTree = null;
+            if (currentSelectedNodeInMC != null && currentSelectedNodeInMC.getUserObject() instanceof JMeterTreeNode){
+                nodeToExpandInTestPlanTree = (JMeterTreeNode) currentSelectedNodeInMC.getUserObject();
             }
-            if (tn != null){
-                TreePath treePath = new TreePath(tn.getPath());
+            if (nodeToExpandInTestPlanTree != null){
+                TreePath treePath = new TreePath(nodeToExpandInTestPlanTree.getPath());
                 //changing selection in a test plan tree
                 GuiPackage.getInstance().getTreeListener().getJTree()
                         .setSelectionPath(treePath);
@@ -456,7 +473,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     /**
      * Renderer class for printing "module to run" tree 
      */
-    private static class ModuleControllerCellRenderer extends DefaultTreeCellRenderer {
+    private static class ModuleControllerCellRenderer extends DefaultTreeCellRenderer { // NOSONAR Ignore parent warning
 
         private static final long serialVersionUID = 1129098620102526299L;
         
