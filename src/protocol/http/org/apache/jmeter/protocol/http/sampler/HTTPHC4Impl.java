@@ -691,8 +691,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return {@link HttpRequestBase}
      */
     private HttpRequestBase createHttpRequest(URI uri, String method, boolean areFollowingRedirect) {
+        HttpRequestBase result = null;
         if (method.equals(HTTPConstants.POST)) {
-            return new HttpPost(uri);
+            result = new HttpPost(uri);
         } else if (method.equals(HTTPConstants.GET)) {
             // Some servers fail if Content-Length is equal to 0
             // so to avoid this we use HttpGet when there is no body (Content-Length will not be set)
@@ -700,27 +701,28 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if ( !areFollowingRedirect 
                     && ((!hasArguments() && getSendFileAsPostBody()) 
                     || getSendParameterValuesAsPostBody()) ) {
-                return new HttpGetWithEntity(uri);
+                result = new HttpGetWithEntity(uri);
             } else {
-                return new HttpGet(uri);
+                result = new HttpGet(uri);
             }
         } else if (method.equals(HTTPConstants.PUT)) {
-            return new HttpPut(uri);
+            result =  new HttpPut(uri);
         } else if (method.equals(HTTPConstants.HEAD)) {
-            return new HttpHead(uri);
+            result = new HttpHead(uri);
         } else if (method.equals(HTTPConstants.TRACE)) {
-            return new HttpTrace(uri);
+            result = new HttpTrace(uri);
         } else if (method.equals(HTTPConstants.OPTIONS)) {
-            return new HttpOptions(uri);
+            result = new HttpOptions(uri);
         } else if (method.equals(HTTPConstants.DELETE)) {
-            return new HttpDelete(uri);
+            result = new HttpDelete(uri);
         } else if (method.equals(HTTPConstants.PATCH)) {
-            return new HttpPatch(uri);
+            result = new HttpPatch(uri);
         } else if (HttpWebdav.isWebdavMethod(method)) {
-            return new HttpWebdav(method, uri);
+            result = new HttpWebdav(method, uri);
         } else {
             throw new IllegalArgumentException("Unexpected method: '"+method+"'");
         }
+        return result;
     }
 
     /**
@@ -1584,7 +1586,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // This is not obvious in GUI if you are not uploading any files,
         // but just sending the content of nameless parameters
         final HTTPFileArg file = files.length > 0? files[0] : null;
-        String contentTypeValue = null;
+        String contentTypeValue;
         if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
             contentTypeValue = file.getMimeType();
             entity.setHeader(HEADER_CONTENT_TYPE, contentTypeValue); // we provide the MIME type here
