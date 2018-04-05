@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -175,7 +176,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         byte[] expectedUrl = "title=mytitle&description=mydescription".getBytes(); // TODO - charset?
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
@@ -191,7 +192,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         expectedUrl = "title=mytitle&description=mydescription".getBytes(contentEncoding);
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
@@ -248,7 +249,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         byte[] expectedUrl = "title=mytitle&description=mydescription".getBytes(); // TODO - charset?
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
@@ -426,7 +427,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         byte[] expectedUrl = ("title=" + titleValue + "&description=" + descriptionValue).getBytes("US-ASCII");        
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
@@ -442,7 +443,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         expectedUrl = new StringBuilder("title=").append(titleValue).append("&description=")
                 .append(descriptionValue).toString().getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
@@ -462,7 +463,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         String expectedString = "title="
                 + URLEncoder.encode(titleValue, contentEncoding)
                 + "&description="
@@ -488,7 +489,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         expectedString = "title="
                 + URLEncoder.encode(titleValue, contentEncoding)
                 + "&description="
@@ -511,7 +512,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
 
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         expectedString = "title=" + URLEncoder.encode(titleValue, UTF_8) + "&description=" + URLEncoder.encode(descriptionValue, UTF_8);
         expectedUrl = expectedString.getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
@@ -539,7 +540,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         StringBuilder sb = new StringBuilder();
         expectedUrl = sb.append("title=").append(titleValue.replaceAll("%20", "+").replaceAll("%C3%85", "%C5"))
                 .append("&description=").append(descriptionValue.replaceAll("%C3%85", "%C5")).toString().getBytes("US-ASCII");
@@ -558,7 +559,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         sb = new StringBuilder();
         expectedUrl = sb.append("title=").append(titleValue.replaceAll("%20", "+").replaceAll("%C3%85", "%C5"))
                 .append("&description=").append(descriptionValue.replaceAll("%C3%85", "%C5")).toString().getBytes("US-ASCII");
@@ -576,7 +577,7 @@ public class PostWriterTest {
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         sb = new StringBuilder();
         expectedUrl = sb.append("title=")
                 .append(titleValue.replaceAll("%20", "+"))
@@ -613,7 +614,7 @@ public class PostWriterTest {
         setupFormData(sampler);
         
         postWriter.setHeaders(connection, sampler);
-        checkContentTypeUrlEncoded(connection);
+        checkNoContentType(connection);
         checkContentLength(connection, "title=mytitle&description=mydescription".length());
     }
 
@@ -920,6 +921,9 @@ public class PostWriterTest {
         assertEquals("multipart/form-data; boundary=" + boundaryString, conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
     }
 
+    private void checkNoContentType(HttpURLConnection conn) {
+        assertNull(conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
+    }
     private void checkContentTypeUrlEncoded(HttpURLConnection conn) {
         assertEquals(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED, conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
     }
