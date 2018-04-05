@@ -164,6 +164,7 @@ public class PostWriterTest {
     @Test
     public void testSendPostData_NoFilename() throws IOException {
         setupNoFilename(sampler);
+        sampler.setMethod(HTTPConstants.POST);
         String titleValue = "mytitle";
         String descriptionValue = "mydescription";
         setupFormData(sampler, titleValue, descriptionValue);
@@ -206,6 +207,7 @@ public class PostWriterTest {
      */
     @Test
     public void testSendPostData_FileAsBody() throws IOException {
+        sampler.setMethod(HTTPConstants.POST);
         setupFilepart(sampler, "", temporaryFile, "");
         
         // Check using default encoding
@@ -419,7 +421,8 @@ public class PostWriterTest {
 
         // Test sending data with default encoding
         String contentEncoding = "";
-        sampler.setContentEncoding(contentEncoding);        
+        sampler.setContentEncoding(contentEncoding);
+        sampler.setMethod(HTTPConstants.POST);
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
@@ -605,6 +608,7 @@ public class PostWriterTest {
      */
     @Test
     public void testSetHeaders_NoFilename() throws IOException {
+        sampler.setMethod(HTTPConstants.POST);
         setupNoFilename(sampler);
         setupFormData(sampler);
         
