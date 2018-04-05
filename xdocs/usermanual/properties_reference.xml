@@ -416,6 +416,11 @@ JMETER-SERVER</source>
 </section>
 <section name="&sect-num;.10 Apache HttpClient common properties" anchor="httpclient_common_properties">
 <properties>
+<property name="http.post_add_content_type_if_missing">
+    Should JMeter add to POST request a Header <code>Content-type: application/x-www-form-urlencoded</code> if missing? <br/>
+    Was true before version 4.1.<br/>
+    Defaults to: <code>false</code>
+</property>
 <property name="httpclient.timeout">
     Set the socket timeout (or use the parameter <code>http.socket.timeout</code>) for
     AJP Sampler.<br/>
@@ -1500,7 +1505,7 @@ JMETER-SERVER</source>
 </property>
 <property name="user.classpath">
     List of directories that JMeter will search for utility and plugin dependency classes.<br/>
-    Use your platform path separator to separate multiple paths.<br/>
+    Use your platform path separator (<code>java.io.File.pathSeparatorChar</code> in Java) to separate multiple paths.<br/>
     Any jar file in such a directory will be automatically included; jar files in sub directories are ignored.<br/>
     The given value is in addition to any jars found in the <code>lib</code> directory.<br/>
     All entries will be added to the class path of the system class loader and also to the path

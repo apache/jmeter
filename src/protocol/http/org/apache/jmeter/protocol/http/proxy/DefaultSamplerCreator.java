@@ -184,7 +184,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             if (urlConfig != null) {
                 urlConfig.parseArguments(postData);
                 // Tell the sampler to do a multipart post
-                sampler.setDoMultipartPost(true);
+                sampler.setDoMultipart(true);
                 // Remove the header for content-type and content-length, since
                 // those values will most likely be incorrect when the sampler
                 // performs the multipart request, because the boundary string

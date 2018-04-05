@@ -55,6 +55,14 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     /**
+     * Should we add to POST request content-type header if missing:
+     * Content-Type: application/x-www-form-urlencoded
+     */
+    protected static final boolean ADD_CONTENT_TYPE_TO_POST_IF_MISSING = 
+            JMeterUtils.getPropDefault("http.post_add_content_type_if_missing", //$NON-NLS-1$
+                    false);
+
+    /**
      * If true create a SampleResult with empty content and 204 response code 
      */
     private static final CachedResourceMode CACHED_RESOURCE_MODE = 
@@ -345,9 +353,23 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      *
      * @return <code>true</code> if <code>multipart/form-data</code> should be
      *         used and method is POST
+     * @deprecated Use {@link HTTPAbstractImpl#getUseMultipart()}
      */
+    @Deprecated
     protected boolean getUseMultipartForPost() {
         return testElement.getUseMultipartForPost();
+    }
+    
+    /**
+     * Determine if we should use <code>multipart/form-data</code> or
+     * <code>application/x-www-form-urlencoded</code> for the method
+     * <p>
+     * Invokes {@link HTTPSamplerBase#getUseMultipart()}
+     *
+     * @return <code>true</code> if <code>multipart/form-data</code> should be used 
+     */
+    protected boolean getUseMultipart() {
+        return testElement.getUseMultipart();
     }
 
     /**

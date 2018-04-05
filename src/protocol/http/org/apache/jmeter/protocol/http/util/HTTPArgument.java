@@ -38,6 +38,8 @@ import org.slf4j.LoggerFactory;
  * Represents an Argument for HTTP requests.
  */
 public class HTTPArgument extends Argument implements Serializable {
+    private static final String DEFAULT_CONTENT_TYPE = "text/plain";
+
     private static final Logger log = LoggerFactory.getLogger(HTTPArgument.class);
 
     private static final long serialVersionUID = 241L;
@@ -45,6 +47,8 @@ public class HTTPArgument extends Argument implements Serializable {
     private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
 
     private static final String USE_EQUALS = "HTTPArgument.use_equals";
+    
+    private static final String CONTENT_TYPE = "HTTPArgument.content_type";
 
     private static final EncoderCache cache = new EncoderCache(1000);
 
@@ -84,6 +88,14 @@ public class HTTPArgument extends Argument implements Serializable {
 
     }
 
+    public void setContentType(String ct) {
+        setProperty(CONTENT_TYPE, ct, HTTPArgument.DEFAULT_CONTENT_TYPE);
+    }
+
+    public String getContentType() {
+        return getPropertyAsString(CONTENT_TYPE, HTTPArgument.DEFAULT_CONTENT_TYPE);
+    }
+    
     public void setAlwaysEncoded(boolean ae) {
         setProperty(new BooleanProperty(ALWAYS_ENCODE, ae));
     }

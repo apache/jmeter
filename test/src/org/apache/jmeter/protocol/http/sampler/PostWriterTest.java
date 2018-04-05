@@ -322,7 +322,7 @@ public class PostWriterTest {
         String descriptionValue = "mydescription";
         setupFormData(sampler, titleValue, descriptionValue);
         // Tell sampler to do multipart, even if we have no files to upload
-        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipart(true);
 
         // Test sending data with default encoding
         String contentEncoding = "";

@@ -185,8 +185,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // such as "Host" and "Connection" to be passed through.
         // See http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6996110
         if (getUseKeepAlive()) {
-            conn.setRequestProperty(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
-        } else {
             conn.setRequestProperty(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
         }
 
