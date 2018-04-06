@@ -691,7 +691,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return {@link HttpRequestBase}
      */
     private HttpRequestBase createHttpRequest(URI uri, String method, boolean areFollowingRedirect) {
-        HttpRequestBase result = null;
+        HttpRequestBase result;
         if (method.equals(HTTPConstants.POST)) {
             result = new HttpPost(uri);
         } else if (method.equals(HTTPConstants.GET)) {
