@@ -150,14 +150,9 @@ public class RequestViewHTTP implements RequestView {
     @Override
     public void init() {
         paneParsed = new JPanel(new BorderLayout(0, 5));
-        paneParsed.add(createRequestPane());
-        this.searchTextExtension = new SearchTextExtension();
-        this.searchTextExtension.init(paneParsed);
-        JPanel searchPanel = this.searchTextExtension.createSearchTextExtensionPane();
-        searchPanel.setBorder(null);
-        this.searchTextExtension.setSearchProvider(new RequestViewHttpSearchProvider());
-        searchPanel.setVisible(true);
-        paneParsed.add(searchPanel, BorderLayout.PAGE_END);
+        paneParsed.add(createRequestPane(), BorderLayout.CENTER);
+        this.searchTextExtension = new SearchTextExtension(new RequestViewHttpSearchProvider());
+        paneParsed.add(searchTextExtension.getSearchToolBar(), BorderLayout.NORTH);
     }
 
     /* (non-Javadoc)
