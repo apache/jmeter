@@ -21,8 +21,12 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
+import org.apache.jmeter.gui.util.JSyntaxSearchToolBar;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
@@ -36,7 +40,8 @@ public class RequestViewRaw implements RequestView {
     // Used by Request Panel
     static final String KEY_LABEL = "view_results_table_request_tab_raw"; //$NON-NLS-1$
 
-    private JTextArea sampleDataField;
+    private JSyntaxTextArea headerData;
+    private JSyntaxTextArea sampleDataField;
 
     private JPanel paneRaw; /** request pane content */
 
@@ -46,12 +51,27 @@ public class RequestViewRaw implements RequestView {
     @Override
     public void init() {
         paneRaw = new JPanel(new BorderLayout(0, 5));
-        sampleDataField = new JTextArea();
+        
+        sampleDataField = JSyntaxTextArea.getInstance(20, 80, true);
         sampleDataField.setEditable(false);
         sampleDataField.setLineWrap(true);
         sampleDataField.setWrapStyleWord(true);
+        JPanel requestAndSearchPanel = new JPanel(new BorderLayout());
+        requestAndSearchPanel.add(new JSyntaxSearchToolBar(sampleDataField).getToolBar(), BorderLayout.NORTH);
+        requestAndSearchPanel.add(JTextScrollPane.getInstance(sampleDataField), BorderLayout.CENTER);
+        
+        headerData = JSyntaxTextArea.getInstance(20, 80, true);
+        headerData.setEditable(false);
+        headerData.setLineWrap(true);
+        headerData.setWrapStyleWord(true);
+        JPanel headerAndSearchPanel = new JPanel(new BorderLayout());
+        headerAndSearchPanel.add(new JSyntaxSearchToolBar(headerData).getToolBar(), BorderLayout.NORTH);
+        headerAndSearchPanel.add(JTextScrollPane.getInstance(headerData), BorderLayout.CENTER);
 
-        paneRaw.add(GuiUtils.makeScrollPane(sampleDataField));
+        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane.addTab(JMeterUtils.getResString("view_results_request_body"), new JScrollPane(requestAndSearchPanel));
+        tabbedPane.addTab(JMeterUtils.getResString("view_results_request_headers"), new JScrollPane(headerAndSearchPanel));
+        paneRaw.add(GuiUtils.makeScrollPane(tabbedPane));
 
     }
 
@@ -60,7 +80,8 @@ public class RequestViewRaw implements RequestView {
      */
     @Override
     public void clearData() {
-        sampleDataField.setText(""); //$NON-NLS-1$
+        sampleDataField.setInitialText(""); //$NON-NLS-1$
+        headerData.setInitialText(""); //$NON-NLS-1$
     }
 
     /* (non-Javadoc)
@@ -68,26 +89,18 @@ public class RequestViewRaw implements RequestView {
      */
     @Override
     public void setSamplerResult(Object objectResult) {
-
         if (objectResult instanceof SampleResult) {
             SampleResult sampleResult = (SampleResult) objectResult;
-            String rh = sampleResult.getRequestHeaders();
-            StringBuilder sb = new StringBuilder();
-            String sd = sampleResult.getSamplerData();
-            if (sd != null) {
-                sb.append(sd);
-                sb.append("\n"); //$NON-NLS-1$
-            } 
             // Don't display Request headers label if rh is null or empty
-            if (rh != null && rh.length() > 0) {
-                sb.append(JMeterUtils.getResString("view_results_request_headers")); //$NON-NLS-1$
-                sb.append("\n"); //$NON-NLS-1$
-                sb.append(rh);
-                sb.append("\n"); //$NON-NLS-1$
+            String rh = sampleResult.getRequestHeaders();
+            if (rh != null && !rh.isEmpty()) {
+                headerData.setInitialText(rh);
+                sampleDataField.setCaretPosition(0);
             }
-            if (sb.length() > 0) {
-                sampleDataField.setText(sb.toString());
-                sampleDataField.setCaretPosition(1);
+            String data = sampleResult.getSamplerData();
+            if (data != null && !data.isEmpty()) {
+                sampleDataField.setText(data);
+                sampleDataField.setCaretPosition(0);
             } else {
                 // add a message when no request data (ex. Java request)
                 sampleDataField.setText(JMeterUtils
