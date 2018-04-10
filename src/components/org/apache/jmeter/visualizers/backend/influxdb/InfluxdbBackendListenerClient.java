@@ -76,6 +76,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private static final String METRIC_AVG = "avg=";
 
     private static final String METRIC_HIT = "hit=";
+    private static final String METRIC_SENT_BYTES = "sb=";
+    private static final String METRIC_RECEIVED_BYTES = "rb=";
     private static final String METRIC_PCT_PREFIX = "pct";
 
     private static final String METRIC_MAX_ACTIVE_THREADS = "maxAT=";
@@ -180,13 +182,13 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
      */
     private void addMetrics(String transaction, SamplerMetric metric) {
         // FOR ALL STATUS
-        addMetric(transaction, metric.getTotal(), TAG_ALL, metric.getAllMean(), metric.getAllMinTime(),
+        addMetric(transaction, metric.getTotal(), metric.getSentBytes(), metric.getReceivedBytes(), TAG_ALL, metric.getAllMean(), metric.getAllMinTime(),
                 metric.getAllMaxTime(), allPercentiles.values(), metric::getAllPercentile);
         // FOR OK STATUS
-        addMetric(transaction, metric.getSuccesses(), TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
+        addMetric(transaction, metric.getSuccesses(), null, null, TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
                 metric.getOkMaxTime(), okPercentiles.values(), metric::getOkPercentile);
         // FOR KO STATUS
-        addMetric(transaction, metric.getFailures(), TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
+        addMetric(transaction, metric.getFailures(), null, null, TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
                 metric.getKoMaxTime(), koPercentiles.values(), metric::getKoPercentile);
 
         metric.getErrors().forEach((error, count) -> addErrorMetric(transaction, error.getResponseCode(),
@@ -209,10 +211,11 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     }
 
     private void addMetric(String transaction, int count, 
+            Long sentBytes, Long receivedBytes,
             String statut, double mean, double minTime, double maxTime, 
             Collection<Float> pcts, PercentileProvider percentileProvider) {
         if (count > 0) {
-            StringBuilder tag = new StringBuilder(70);
+            StringBuilder tag = new StringBuilder(95);
             tag.append(TAG_APPLICATION).append(application);
             tag.append(TAG_STATUS).append(statut);
             tag.append(TAG_TRANSACTION).append(transaction);
@@ -228,6 +231,12 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             }
             if (!Double.isNaN(maxTime)) {
                 field.append(',').append(METRIC_MAX).append(maxTime);
+            }
+            if(sentBytes != null) {
+                field.append(',').append(METRIC_SENT_BYTES).append(sentBytes);
+            }
+            if(receivedBytes != null) {
+                field.append(',').append(METRIC_RECEIVED_BYTES).append(receivedBytes);
             }
             for (Float pct : pcts) {
                 field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(
@@ -262,10 +271,11 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             }
 
             field.append(',').append(METRIC_HIT).append(metric.getHits());
+            field.append(',').append(METRIC_SENT_BYTES).append(metric.getSentBytes());
+            field.append(',').append(METRIC_RECEIVED_BYTES).append(metric.getReceivedBytes());
             for (Float pct : pcts) {
                 field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(Double.toString(metric.getAllPercentile(pct)));
             }
-            field.append(',').append(METRIC_HIT).append(metric.getHits());
             influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
         }
     }
