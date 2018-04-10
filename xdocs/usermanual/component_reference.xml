@@ -3861,9 +3861,9 @@ but if the button is on, a later element cannot set it off.
 <p>The Header Manager lets you add or override HTTP request headers.</p>
 <p>
 <b>JMeter now supports multiple Header Managers</b>. The header entries are merged to form the list for the sampler.
-If an entry to be merged matches an existing header name, it replaces the previous entry,
-unless the entry value is empty, in which case any existing entry is removed.
-This allows one to set up a default set of headers, and apply adjustments to particular samplers. 
+If an entry to be merged matches an existing header name, it replaces the previous entry.
+This allows one to set up a default set of headers, and apply adjustments to particular samplers.
+Note that an empty value for a header does not remove an existing header, it justs replace its value.
 </p>
 </description>
 
