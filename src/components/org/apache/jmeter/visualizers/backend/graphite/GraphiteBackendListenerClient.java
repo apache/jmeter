@@ -83,7 +83,10 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final String METRIC_KO_PREFIX = "ko"; //$NON-NLS-1$
     private static final String METRIC_ALL_PREFIX = "a"; //$NON-NLS-1$
     private static final String METRIC_HITS_PREFIX = "h"; //$NON-NLS-1$
+    private static final String METRIC_SENT_BYTES_PREFIX = "sb"; //$NON-NLS-1$
+    private static final String METRIC_RECEIVED_BYTES_PREFIX = "rb"; //$NON-NLS-1$
     
+    private static final String METRIC_BYTES = "bytes"; //$NON-NLS-1$
     private static final String METRIC_COUNT = "count"; //$NON-NLS-1$
     private static final String METRIC_MIN_RESPONSE_TIME = "min"; //$NON-NLS-1$
     private static final String METRIC_MAX_RESPONSE_TIME = "max"; //$NON-NLS-1$
@@ -109,6 +112,8 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final String METRIC_ALL_PERCENTILE_PREFIX = METRIC_ALL_PREFIX+METRIC_SEPARATOR+METRIC_PERCENTILE;
 
     private static final String METRIC_ALL_HITS_COUNT        = METRIC_HITS_PREFIX+METRIC_SEPARATOR+METRIC_COUNT;
+    private static final String METRIC_ALL_SENT_BYTES        = METRIC_SENT_BYTES_PREFIX+METRIC_SEPARATOR+METRIC_BYTES;
+    private static final String METRIC_ALL_RECEIVED_BYTES        = METRIC_RECEIVED_BYTES_PREFIX+METRIC_SEPARATOR+METRIC_BYTES;
 
     private static final long SEND_INTERVAL = JMeterUtils.getPropDefault("backend_graphite.send_interval", 1);
     private static final int MAX_POOL_SIZE = 1;
@@ -203,6 +208,10 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                     METRIC_ALL_COUNT, Integer.toString(metric.getTotal()));
             graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
                     METRIC_ALL_HITS_COUNT, Integer.toString(metric.getHits()));
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    METRIC_ALL_SENT_BYTES, Long.toString(metric.getSentBytes()));
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    METRIC_ALL_RECEIVED_BYTES, Long.toString(metric.getReceivedBytes()));
             if(metric.getSuccesses()>0) {
                 graphiteMetricsManager.addMetric(timestampInSeconds,
                         contextName, METRIC_OK_MIN_RESPONSE_TIME,
@@ -288,7 +297,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                     }
                 }
                 SamplerMetric cumulatedMetrics = getSamplerMetric(CUMULATED_METRICS);
-                cumulatedMetrics.add(sampleResult);                    
+                cumulatedMetrics.add(sampleResult);
             }
         }
     }
