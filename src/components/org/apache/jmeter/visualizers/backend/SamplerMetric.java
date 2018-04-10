@@ -62,6 +62,8 @@ public class SamplerMetric {
     private int failures;
     private int hits;
     private Map<ErrorMetric, Integer> errors = new HashMap<>();
+    private long sentBytes;
+    private long receivedBytes;
 
     
     /**
@@ -106,6 +108,18 @@ public class SamplerMetric {
             koResponsesStats.addValue(time);
         }
         addHits(result);
+        addNetworkData(result);
+    }
+
+    /**
+     * Increment traffic metrics. A Parent sampler cumulates its children metrics.
+     * @param result SampleResult
+     */
+    private void addNetworkData(SampleResult result) {
+        if (!TransactionController.isFromTransactionController(result)) {
+            sentBytes += result.getSentBytes();
+            receivedBytes += result.getBytesAsLong();
+        }
     }
 
     /**
@@ -115,7 +129,7 @@ public class SamplerMetric {
     private void addHits(SampleResult res) {     
         SampleResult[] subResults = res.getSubResults();
         if (!TransactionController.isFromTransactionController(res)) {
-            hits += 1;                 
+            hits += 1;
         }
         for (SampleResult subResult : subResults) {
             addHits(subResult);
@@ -143,6 +157,8 @@ public class SamplerMetric {
         successes = 0;
         failures = 0;
         hits = 0;
+        sentBytes = 0;
+        receivedBytes = 0;
     }
 
     /**
@@ -309,5 +325,19 @@ public class SamplerMetric {
      */
     public Map<ErrorMetric, Integer> getErrors() {
         return errors;
+    }
+
+    /**
+     * @return the sentBytes
+     */
+    public long getSentBytes() {
+        return sentBytes;
+    }
+
+    /**
+     * @return the receivedBytes
+     */
+    public long getReceivedBytes() {
+        return receivedBytes;
     }
 }

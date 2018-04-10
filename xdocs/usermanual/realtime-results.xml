@@ -106,6 +106,10 @@ In this document we will present the configuration setup to graph and historize 
       <dd>Percentile computed for failed responses of sampler name. There will be one metric for each calculated value.</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.count</code></dt>
       <dd>Number of responses for sampler name (sum of ok.count and ko.count)</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.sb.bytes</code></dt>
+      <dd>Sent Bytes</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.rb.bytes</code></dt>
+      <dd>Received Bytes</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.min</code></dt>
       <dd>Min response time for responses of sampler name (min of ok.count and ko.count)</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.max</code></dt>
