@@ -215,6 +215,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>62127</bug>Store filename as String instead of File in FileEditor. This will prevent conversion of filenames from unix style path separators to Windows style when used for example in CSV Data Set Config.</li>
   <li><bug>56150</bug>Keep the index right, when scrolling through the menu items.</li>
   <li><bug>62240</bug>If SampleMonitor implementation is a TestBean if will not be initialized correctly</li>
+  <li><bug>62295</bug>Correct order of elements when duplicating a selection of multiple elements.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

@@ -59,7 +59,8 @@ public class Duplicate extends AbstractAction {
         JMeterTreeNode currentNode = treeListener.getCurrentNode();
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
         JMeterTreeModel treeModel = instance.getTreeModel();
-        for (JMeterTreeNode copiedNode : copiedNodes) {
+        for (int nodeIndex = copiedNodes.length - 1; nodeIndex >= 0; nodeIndex--) {
+            JMeterTreeNode copiedNode = copiedNodes[nodeIndex];
             int index = parentNode.getIndex(currentNode) + 1;
             treeModel.insertNodeInto(copiedNode, parentNode, index);
         }
