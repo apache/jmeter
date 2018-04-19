@@ -195,6 +195,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>I18N</h3>
 <ul>
+    <li><bug>62310</bug>French translation of Precise Throughput Timer label</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -233,6 +234,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>logox01 (logox01 at gmx.at)</li>
     <li>Sergey Batalin (sergey_batalin at mail.ru)</li>
     <li><a href="https://www.xmeter.net">XMeter</a></li>
+    <li>Imane Ankhila (iankhila at ahlane.net)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
