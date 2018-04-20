@@ -308,7 +308,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private Set<Class<?>> addableInterfaces = new HashSet<>(
             Arrays.asList(Visualizer.class, ConfigElement.class,
                     Assertion.class, Timer.class, PreProcessor.class,
-                    PostProcessor.class));
+                    PostProcessor.class, SampleListener.class));
 
     /**
      * Tree node where the samples should be stored.
