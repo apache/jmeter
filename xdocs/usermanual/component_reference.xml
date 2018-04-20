@@ -4244,8 +4244,9 @@ with the start, continuing on like that until the test is ended.  </p>
         If there is a problem interpreting the format, then it is ignored.
     [The default format is generated using <code>Long.toString()</code>]
         </property>
-        <property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
-        as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
+        <property name="Exported Variable Name" required="Yes">This will be the variable name under which the counter value is available.  
+        If you name it <code>counterA</code>, you can then access it using <code>${counterA}</code> 
+        as explained in <a href="functions.html">user-defined values</a></property>
         <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
         own counter?  If unchecked, the counter is global (i.e., user #1 will get value "<code>1</code>", and user #2 will get value "<code>2</code>" on
         the first iteration).  If checked, each user has an independent counter.</property>
