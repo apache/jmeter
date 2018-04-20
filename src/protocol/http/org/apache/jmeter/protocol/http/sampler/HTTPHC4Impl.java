@@ -124,7 +124,7 @@ import org.apache.http.impl.conn.DefaultHttpClientConnectionOperator;
 import org.apache.http.impl.conn.DefaultSchemePortResolver;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
-import org.apache.http.impl.cookie.DefaultCookieSpecProvider;
+import org.apache.http.impl.cookie.IgnoreSpecProvider;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.message.BufferedHeader;
 import org.apache.http.protocol.BasicHttpContext;
@@ -175,7 +175,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final String JMETER_VARIABLE_USER_TOKEN = "__jmeter.U_T__"; //$NON-NLS-1$
     
-    static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN = "__jmeter.S_R__"; //$NON-NLS-1$
+    static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT = "__jmeter.S_R__"; //$NON-NLS-1$
     
     private static final String CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN = "__jmeter.H_T__";
 
@@ -333,7 +333,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 super.connect(conn, host, localAddress, connectTimeout, socketConfig, context);
             } finally {
                 SampleResult sample = 
-                        (SampleResult)context.getAttribute(HTTPHC4Impl.CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN);
+                        (SampleResult)context.getAttribute(HTTPHC4Impl.CONTEXT_ATTRIBUTE_SAMPLER_RESULT);
                 if (sample != null) {
                     sample.connectEnd();
                 }
@@ -400,7 +400,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 final HttpContext context) throws HttpException, IOException {
             HttpResponse response = super.doReceiveResponse(request, conn, context);
             HttpConnectionMetrics metrics = conn.getMetrics();
-            context.setAttribute(CONTEXT_ATTRIBUTE_RECEIVED_BYTES, metrics.getReceivedBytesCount());
+            context.setAttribute(CONTEXT_ATTRIBUTE_RECEIVED_BYTES, metrics.getReceivedBytesCount()); 
             metrics.reset();
             return response;
         }
@@ -571,7 +571,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             currentRequest = httpRequest;
             handleMethod(method, res, httpRequest, localContext);
             // store the SampleResult in LocalContext to compute connect time
-            localContext.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT_TOKEN, res);
+            localContext.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT, res);
             // perform the sample
             httpResponse = 
                     executeRequest(httpClient, httpRequest, localContext, url);
@@ -983,8 +983,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (resolver == null) {
                 resolver = SystemDefaultDnsResolver.INSTANCE;
             }
-            Registry<ConnectionSocketFactory> registry;
-            registry = RegistryBuilder.<ConnectionSocketFactory> create().
+            Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory> create().
                     register("https", new LazyLayeredConnectionSocketFactory()).
                     register("http", SLOW_CONNECTION_SOCKET_FACTORY).
                     build();
@@ -1007,7 +1006,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
             }
             
-            DefaultCookieSpecProvider cookieSpecProvider = new DefaultCookieSpecProvider();
+            CookieSpecProvider cookieSpecProvider = new IgnoreSpecProvider();
             Lookup<CookieSpecProvider> cookieSpecRegistry = RegistryBuilder.<CookieSpecProvider>create()
                     .register(CookieSpecs.IGNORE_COOKIES, cookieSpecProvider)
                     .build();
