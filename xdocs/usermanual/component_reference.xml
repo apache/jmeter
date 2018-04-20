@@ -3193,6 +3193,7 @@ i.e. 30.0 requests/minute is saved as <code>0.5</code>.
         If the path name begins with "<code>~/</code>" (or whatever is in the <code>jmeter.save.saveservice.base_prefix</code> JMeter property),
         then the path is assumed to be relative to the JMX file location. <br/>
         If parent folders in prefix do not exists, JMeter will create them and stop test if it fails.
+        <note>Please note that Filename Prefix must not contain Thread related data, so don't use any Variable (<code>${varName}</code>) or functions like <code>${__threadNum}</code> in this field</note>
  </property>
  <property name="Variable Name containing saved file name" required="No">
  Name of a variable in which to save the generated file name (so it can be used later in the test plan).
