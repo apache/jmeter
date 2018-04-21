@@ -2817,7 +2817,12 @@ run JMeter unless all the JMeter jars are added.
 
   <!-- Additional test scripts -->
   <target name="batch_scripts">
-    <antcall target="batchtest">
+      <antcall target="batchtest">
+        <param name="batchtest.name" value="TestRedirectionPolicies"/>
+        <param name="batchtest.jmx" value="TestRedirectionPolicies.jmx"/>
+      </antcall>
+      
+      <antcall target="batchtest">
       <param name="batchtest.name" value="HTMLParserTestFile_2"/>
       <param name="batchtest.jmx" value="HTMLParserTestFile_2.jmx"/>
     </antcall>
