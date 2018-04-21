@@ -89,6 +89,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>62212</bug>Recorder : Improve UX by providing a popup above all windows to be able to change Transaction names and pauses while using Browser. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62248</bug>HTTP Request : Parameters entered in Parameters Tab should be used in body instead of being ignored. Partly based on a patch by Artem Fedorov contributed by Blazemeter.</li>
     <li><bug>60015</bug>Multipart/form-data works only for POST using HTTPClient4 while it should for PUT, DELETE... Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62317</bug>HTTP(S) Test Script Recorder: allow to add ResultSaver to created sampler</li>
 </ul>
 
 <h3>Other samplers</h3>
