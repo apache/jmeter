@@ -1051,9 +1051,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
                 builder.setDefaultCredentialsProvider(credsProvider);
             }
-            if(getAutoRedirects()) {
-                builder.disableRedirectHandling();
-            }
             builder.disableContentCompression().addInterceptorLast(RESPONSE_CONTENT_ENCODING);
             if(BASIC_AUTH_PREEMPTIVE) {
                 builder.addInterceptorFirst(PREEMPTIVE_AUTH_INTERCEPTOR);
@@ -1152,6 +1149,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             rCB.setConnectTimeout(cto);
         }
     
+        rCB.setRedirectsEnabled(getAutoRedirects());
         rCB.setMaxRedirects(HTTPSamplerBase.MAX_REDIRECTS);
         rCB.setRedirectsEnabled(getAutoRedirects());
         httpRequest.setConfig(rCB.build());
