@@ -237,8 +237,8 @@ The following software is provided under the Apache License V 2.0 (as above):
 * log4j-slf4j-impl-2.10.0.jar
 * serializer-2.7.2.jar
 * startbootstrap-sb-admin-2-1.0.7
-* tika-core-1.17.jar
-* tika-parsers-1.17.jar
+* tika-core-1.18.jar
+* tika-parsers-1.18.jar
 * xalan-2.7.2.jar
 * xerces-2.11.0.jar
 * xml-apis-1.4.01.jar
