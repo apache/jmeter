@@ -84,7 +84,7 @@ seconds.  This property tells JMeter how long to delay between starting each
 user. For example, if you enter a Ramp-Up Period of 10 seconds, JMeter will
 finish starting all of your users by the end of the 10 seconds.  So, if we have
 50 users and a 10 second Ramp-Up Period, then the delay between starting users
-would be 200 milliseconds (10 seconds / 50 users = 0.2 user per second).  If you set the
+would be 200 milliseconds (10 seconds / 50 users = 0.2 second per user).  If you set the
 value to 0, then JMeter will immediately start all of your users.</p>
 
 <p>Finally, enter a value of 100 in
