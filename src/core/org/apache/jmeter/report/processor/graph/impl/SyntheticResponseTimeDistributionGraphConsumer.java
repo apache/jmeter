@@ -32,6 +32,7 @@ import org.apache.jmeter.report.processor.graph.AbstractSeriesSelector;
 import org.apache.jmeter.report.processor.graph.CountValueSelector;
 import org.apache.jmeter.report.processor.graph.GraphKeysSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
+import org.apache.jmeter.report.processor.graph.SeriesData;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -46,6 +47,11 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     private static final MessageFormat SATISFIED_LABEL = new MessageFormat(JMeterUtils.getResString("response_time_distribution_satisfied_label"));
     private static final MessageFormat TOLERATED_LABEL = new MessageFormat(JMeterUtils.getResString("response_time_distribution_tolerated_label"));
     private static final MessageFormat UNTOLERATED_LABEL = new MessageFormat(JMeterUtils.getResString("response_time_distribution_untolerated_label"));
+    private static final String SERIE_COLOR_PROPERTY = "color";
+    private static final String SATISFIED_COLOR = "#9ACD32";
+    private static final String TOLERATED_COLOR = "yellow";
+    private static final String UNTOLERATED_COLOR = "orange";
+    private static final String FAILED_COLOR = "#FF6347";
 
     private long satisfiedThreshold;
     private long toleratedThreshold;
@@ -116,19 +122,40 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         ListResultData listResultData = new ListResultData();
-        String[] messages = new String[]{
+        String[] seriesLabels = new String[]{
                 SATISFIED_LABEL.format(new Object[] {Long.valueOf(getSatisfiedThreshold())}),
                 TOLERATED_LABEL.format(new Object[] {Long.valueOf(getSatisfiedThreshold()), Long.valueOf(getToleratedThreshold())}),
                 UNTOLERATED_LABEL.format(new Object[] {Long.valueOf(getToleratedThreshold())}),
                 FAILED_LABEL
         };
-        for (int i = 0; i < messages.length; i++) {
+        String[] colors = new String[]{
+                SATISFIED_COLOR, TOLERATED_COLOR, UNTOLERATED_COLOR, FAILED_COLOR 
+        };
+        for (int i = 0; i < seriesLabels.length; i++) {
             ListResultData array = new ListResultData();
             array.addResult(new ValueResultData(Integer.valueOf(i)));
-            array.addResult(new ValueResultData(messages[i]));   
+            array.addResult(new ValueResultData(seriesLabels[i]));
             listResultData.addResult(array);
-        }        
+        }
         parentResult.setResult("ticks", listResultData);
+        initializeSeries(parentResult, seriesLabels, colors);
+    }
+
+    private void initializeSeries(MapResultData parentResult, String[] series, String[] colors) {
+        ListResultData listResultData = (ListResultData) parentResult.getResult("series");
+        for (int i = 0; i < series.length; i++) {
+            listResultData.addResult(create(series[i], colors[i]));
+        }
+    }
+    
+    private MapResultData create(String serie, String color) {
+        GroupInfo groupInfo = getGroupInfos().get(AbstractGraphConsumer.DEFAULT_GROUP);
+        SeriesData seriesData = new SeriesData(groupInfo.getAggregatorFactory(), 
+                groupInfo.enablesAggregatedKeysSeries(), false,
+                groupInfo.enablesOverallSeries()); 
+        MapResultData seriesResult = createSerieResult(serie, seriesData);
+        seriesResult.setResult(SERIE_COLOR_PROPERTY, new ValueResultData(color));
+        return seriesResult;
     }
 
     /**
