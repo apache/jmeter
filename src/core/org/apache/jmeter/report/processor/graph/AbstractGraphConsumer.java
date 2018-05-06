@@ -286,16 +286,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
         // Create series result if not found
         if (seriesResult == null) {
-            seriesResult = new MapResultData();
-            seriesResult.setResult(RESULT_SERIES_NAME,
-                    new ValueResultData(series));
-            seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
-                    new ValueResultData(
-                            Boolean.valueOf(seriesData.isControllersSeries())));
-            seriesResult.setResult(RESULT_SERIES_IS_OVERALL,
-                    new ValueResultData(
-                            Boolean.valueOf(seriesData.isOverallSeries())));
-            seriesResult.setResult(RESULT_SERIES_DATA, new ListResultData());
+            seriesResult = createSerieResult(series, seriesData);
             seriesList.addResult(seriesResult);
         }
 
@@ -383,6 +374,25 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 setMaxResult(result, RESULT_MAX_Y, Double.valueOf(100d));
             }
         }
+    }
+
+    /**
+     * @param serie String serie name
+     * @param seriesData 
+     * @return MapResultData metadata for serie
+     */
+    protected MapResultData createSerieResult(String serie, SeriesData seriesData) {
+        MapResultData seriesResult = new MapResultData();
+        seriesResult.setResult(RESULT_SERIES_NAME,
+                new ValueResultData(serie));
+        seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
+                new ValueResultData(
+                        Boolean.valueOf(seriesData.isControllersSeries())));
+        seriesResult.setResult(RESULT_SERIES_IS_OVERALL,
+                new ValueResultData(
+                        Boolean.valueOf(seriesData.isOverallSeries())));
+        seriesResult.setResult(RESULT_SERIES_DATA, new ListResultData());
+        return seriesResult;
     }
 
     /**
