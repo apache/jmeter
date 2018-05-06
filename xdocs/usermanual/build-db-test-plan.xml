@@ -39,8 +39,8 @@ To construct the Test Plan, you will use the following elements:
 <complink name="JDBC Request"/>, <complink name="Summary Report"/>.</p>
 
 <note>This example uses the MySQL database driver.
-To use this driver, its containing .jar file (ex. mysql-connector-java-X.X.X-bin.jar) must be copied to the JMeter
-<b>./lib</b> directory (see <a href="get-started.html#classpath">JMeter's Classpath</a>
+To use this driver, its containing <code>.jar</code> file (ex. <code>mysql-connector-java-X.X.X-bin.jar</code>) must be copied to the JMeter
+<code>./lib</code> directory (see <a href="get-started.html#classpath">JMeter's Classpath</a>
 for more details).</note>
 
 </section>
@@ -49,7 +49,7 @@ for more details).</note>
 <p>The first step you want to do with every JMeter Test Plan is to add a
 <a href="test_plan.html#thread_group">Thread Group</a> element. The Thread Group
 tells JMeter the number of users you want to simulate, how often the users should
-send requests, and the how many requests they should send.</p>
+send requests, and how many requests they should send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
 clicking your right mouse button to get the <code>Add</code> menu, and then select
@@ -59,7 +59,7 @@ clicking your right mouse button to get the <code>Add</code> menu, and then sele
 </menuchoice>.</p>
 
 <p>You should now see the Thread Group element under Test Plan. If you do not
-see the element, then "expand" the Test Plan tree by clicking on the
+see the element, then <em>expand</em> the Test Plan tree by clicking on the
 Test Plan element.</p>
 
 <p>Next, you need to modify the default properties. Select the Thread Group element
@@ -71,15 +71,15 @@ below)</p>
 Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
-field, enter JDBC Users.</p>
+field, enter <code>JDBC Users</code>.</p>
 
 <note>You will need a valid database, database table, and user-level access to that
-table. In the example shown here, the database is 'cloud' and the table name is
-'vm_instance'.</note>
+table. In the example shown here, the database is '<code>cloud</code>' and the table name is
+'<code>vm_instance</code>'.</note>
 
-<p>Next, increase the number of users to 50.</p>
+<p>Next, increase the number of users to <code>50</code>.</p>
 
-<p>In the next field, the Ramp-Up Period, leave the value of 10
+<p>In the next field, the Ramp-Up Period, leave the value of <code>10</code>
 seconds.  This property tells JMeter how long to delay between starting each
 user. For example, if you enter a Ramp-Up Period of 10 seconds, JMeter will
 finish starting all of your users by the end of the 10 seconds.  So, if we have
@@ -87,7 +87,7 @@ finish starting all of your users by the end of the 10 seconds.  So, if we have
 would be 200 milliseconds (10 seconds / 50 users = 0.2 second per user).  If you set the
 value to 0, then JMeter will immediately start all of your users.</p>
 
-<p>Finally, enter a value of 100 in
+<p>Finally, enter a value of <code>100</code> in
 the Loop Count field.  This property tells JMeter how many times to repeat your
 test. To have JMeter repeatedly run your Test Plan, select the Forever
 checkbox.</p>
@@ -110,7 +110,7 @@ Figure &sect-num;.2. JDBC Users Thread Group</figure>
 will be performing.  In this section, you will specify the JDBC requests to
 perform.</p>
 
-<p>Begin by selecting the JDBC Users element. Click your right mouse button
+<p>Begin by selecting the <code>JDBC Users</code> element. Click your right mouse button
 to get the <b>Add</b> menu, and then select <menuchoice>
   <guimenuitem>Add</guimenuitem>
   <guimenuitem>Config Element</guimenuitem>
@@ -118,17 +118,17 @@ to get the <b>Add</b> menu, and then select <menuchoice>
 </menuchoice>.
 Then, select this new element to view its Control Panel (see Figure &sect-num;.3).</p>
 
-<p>Set up the following fields (these assume we will be using a MySQL database called 'cloud'):</p>
+<p>Set up the following fields (these assume we will be using a MySQL database called '<code>cloud</code>'):</p>
 <ul>
-<li>Variable name (here: myDatabase) bound to pool. This needs to uniquely identify the configuration. It is used by the JDBC Sampler to identify the configuration to be used.</li>
-<li>Database URL: jdbc:mysql://ipOfTheServer:3306/cloud</li>
-<li>JDBC Driver class: com.mysql.jdbc.Driver</li>
-<li>Username: the username of database</li>
-<li>Password: password for the username</li>
+<li>Variable name (here: <code>myDatabase</code>) bound to pool. This needs to uniquely identify the configuration. It is used by the JDBC Sampler to identify the configuration to be used.</li>
+<li>Database URL: <code>jdbc:mysql://ipOfTheServer:3306/cloud</code></li>
+<li>JDBC Driver class: <code>com.mysql.jdbc.Driver</code></li>
+<li>Username: <em>the username of database</em></li>
+<li>Password: <em>password for the username</em></li>
 </ul>
 <p>The other fields on the screen can be left as the defaults.</p>
 <p>JMeter creates a database connection pool with the configuration settings as specified in the Control Panel.
-The pool is referred to in JDBC Requests in the 'Variable Name' field.
+The pool is referred to in JDBC Requests in the '<code>Variable Name</code>' field.
 Several different JDBC Configuration elements can be used, but they must have unique names.
 Every JDBC Request must refer to a JDBC Configuration pool.
 More than one JDBC Request can refer to the same pool.
@@ -156,11 +156,11 @@ are illustrated below.</p>
 
 <p>Start by editing the following properties (see Figure &sect-num;.5):
 <ul>
-<li>Change the Name to 'VM Running'.</li>
-<li>Enter the Pool Name: 'myDatabase' (same as in the configuration element)</li>
+<li>Change the Name to '<code>VM Running</code>'.</li>
+<li>Enter the Pool Name: '<code>myDatabase</code>' (same as in the configuration element)</li>
 <li>Enter the SQL Query String field.</li>
-<li>Enter the Parameter values field with 'Running' value.</li>
-<li>Enter the Parameter types with 'VARCHAR'.</li>
+<li>Enter the Parameter values field with '<code>Running</code>' value.</li>
+<li>Enter the Parameter types with '<code>VARCHAR</code>'.</li>
 </ul>
 </p>
 
@@ -170,8 +170,8 @@ Figure &sect-num;.5. JDBC Request for the first SQL request</figure>
 <p>Next, add the second JDBC Request and edit the following properties (see
 Figure &sect-num;.6):
 <ul>
-<li>Change the Name to 'VM Expunging'.</li>
-<li>Change the value of Parameter values to 'Expunging'.</li>
+<li>Change the Name to '<code>VM Expunging</code>'.</li>
+<li>Change the value of Parameter values to '<code>Expunging</code>'.</li>
 </ul>
 </p>
 
