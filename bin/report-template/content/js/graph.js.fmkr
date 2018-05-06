@@ -396,8 +396,7 @@ var syntheticResponseTimeDistributionInfos = {
                     content: function(label, xval, yval, flotItem){
                         return yval + " " + label;
                     }
-                },
-                colors: ["#9ACD32", "yellow", "orange", "#FF6347"]                
+                }
             };
         },
         createGraph: function() {
