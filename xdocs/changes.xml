@@ -107,7 +107,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <h3>Listeners</h3>
 <ul>
     <li><bug>62195</bug>Save Responses to a file : Improve component and UI. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>62209</bug>InfluxBackendListenerClient: First Assertion Failure Message must be sent if error code and response code are empty or ok</li>
+    <li><bug>62209</bug>InfluxBackendListenerClient: First Assertion Failure Message must be sent if error code and response code are empty or OK</li>
     <li><bug>62269</bug>Bug 62269 - View Results Tree : Response and Request Tabs should contains Header and Body tabs. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62270</bug>View Results Tree : Allow searching in Request headers, Response Headers, and Request body. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62276</bug>InfluxDBBackendListenerClient / GraphiteBackendListenerClient : Add sent and received bytes to metrics. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
@@ -154,7 +154,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
       by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>62095</bug>Correct description for right boundary parameter in Boundary Extractor. Contributed by orimarko (orimarko at gmail.com)</li>
     <li><bug>62113</bug>Updated to latest Bouncycastle (v1.59). Based on contribution by Olaf Flebbe (oflebbe at apache.org)</li>
-    <li><bug>62171</bug>Remove .md5 checksums and keep only .sha512 checksums for source and binary archives</li>
+    <li><bug>62171</bug>Remove <code>.md5</code> checksums and keep only <code>.sha512</code> checksums for source and binary archives</li>
     <li>Updated to groovy-all-2.4.14 (from groovy-all-2.4.13)</li>
     <li>Updated to asm-6.1 (from 6.1)</li>
     <li>Updated to tika-core and tika-parsers 1.18 (from 1.17)</li>
@@ -207,7 +207,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>62333</bug>Report Dashboard - When 1 serie contains no value, the graph colors logic is wrong. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62333</bug>Report Dashboard - When one series contains no value, the graph colors logic is wrong. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Documentation</h3>
@@ -218,10 +218,10 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <h3>General</h3>
 <ul>
   <li><bug>62107</bug>JMeter fails to start under Windows when <code>JM_LAUNCH</code> contains spaces</li>
-  <li><bug>62110</bug>A broken junit class (due to missing dependency) breaks JMeter menus. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  <li><bug>62110</bug>A broken JUnit class (due to missing dependency) breaks JMeter menus. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
   <li><pr>377</pr>Small fix of the docs. Contributed by Peter Doornbosch (peter.doornbosch at luminis.eu)</li>
   <li><bug>62124</bug>Recording templates : Add more exclusions and use Transaction Name by default</li>
-  <li><bug>62127</bug>Store filename as String instead of File in FileEditor. This will prevent conversion of filenames from unix style path separators to Windows style when used for example in CSV Data Set Config.</li>
+  <li><bug>62127</bug>Store filename as String instead of File in FileEditor. This will prevent conversion of filenames from Unix style path separators to Windows style when used for example in CSV Data Set Config.</li>
   <li><bug>56150</bug>Keep the index right, when scrolling through the menu items.</li>
   <li><bug>62240</bug>If SampleMonitor implementation is a TestBean if will not be initialized correctly</li>
   <li><bug>62295</bug>Correct order of elements when duplicating a selection of multiple elements.</li>
