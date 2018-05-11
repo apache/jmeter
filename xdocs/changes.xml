@@ -130,6 +130,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>62243</bug>Dashboard : make option "<code>--forceDeleteResultFile</code>"/"<code>-f</code>" option delete folder referenced by "<code>-o</code>" option</li>
+    <li><bug>62367</bug>HTML Report Generator: Add Graph Total Transactions per Second. Contributed mainly by Martha Laks (laks.martha at gmail.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -245,6 +246,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>Imane Ankhila (iankhila at ahlane.net)</li>
     <li>jffagot05 (jffagot05 at gmail.com)</li>
     <li>Perze Ababa (perze.ababa at gmail.com)</li>
+    <li>Martha Laks (laks.martha at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
