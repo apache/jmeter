@@ -81,6 +81,9 @@
                                             <a href="Throughput.html#transactionsPerSecond" onclick="$('#bodyTransactionsPerSecond').collapse('show');">Transactions Per Second</a>
                                         </li>
                                         <li>
+                                            <a href="Throughput.html#totalTPS" onclick="$('#bodyTotalTPS').collapse('show');">Total Transactions Per Second</a>
+                                        </li>
+                                        <li>
                                             <a href="Throughput.html#responseTimeVsRequest" onclick="$('#bodyResponseTimeVsRequest').collapse('show');">Response Time Vs Request</a>
                                         </li>
                                         <li>
@@ -274,6 +277,52 @@
                             <div class="panel-footer" id="footerTransactionsPerSecond">
                                 <p id="legendTransactionsPerSecond" hidden></p>
                                 <ul id="choicesTransactionsPerSecond" class="legend"></ul>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+
+                <div class="col-lg-12 portlet" id="totalTPS">
+                    <div class="panel panel-default">
+                        <div class="panel-heading portlet-header">
+                          <i class="fa fa-bar-chart-o fa-fw"> </i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyTotalTPS" aria-expanded="true" aria-controls="bodyTotalTPS">Total Transactions Per Second</span>
+                          <div class="pull-right">
+                                <div class="btn-group">
+                                    <a class="btn btn-link btn-xs">
+                                        <i class="glyphicon glyphicon-resize-vertical"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-wrench"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-user">
+                                        <li><a href="#totalTPS" onClick="checkAll('choicesTotalTPS');">Display all samples</a>
+                                        </li>
+                                        <li><a href="#totalTPS" onClick="uncheckAll('choicesTotalTPS');">Hide all samples</a>
+                                        </li>
+                                        <li><a href="#totalTPS" onclick="exportToPNG('flotTotalTPS', this);">Save as PNG</a></li>
+                                    </ul>
+                                    <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyTotalTPS" aria-expanded="true" aria-controls="bodyTotalTPS">
+                                        <i class="fa fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="collapse out portlet-content" id="bodyTotalTPS">
+                            <div class="panel-body" id="collapseTotalTPS">
+                                <div class="flot-chart">
+                                    <div class="flot-chart-content" id="flotTotalTPS" style="float: left; width:80%;"></div>
+                                    <div style="float:left;margin-left:5px">
+                                        <p>Zoom :</p>
+                                        <div id="overviewTotalTPS" style="width:190px;height:100px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer" id="footerTotalTPS">
+                                <p id="legendTotalTPS" hidden></p>
+                                <ul id="choicesTotalTPS" class="legend"></ul>
                             </div>
                         </div>
                         <!-- /.panel-body -->
