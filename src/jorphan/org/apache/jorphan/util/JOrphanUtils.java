@@ -601,16 +601,17 @@ public final class JOrphanUtils {
         canSafelyWriteToFolder(folder, false);
     }
     /**
-     * Throw {@link IllegalArgumentException} if folder cannot be written to either:
+     * Check whether we can write to a folder.
+     *
+     * @param folder which should be checked for writability and emptyness
+     * @param deleteFolderIfExists flag whether the folder should be emptied or a file with the same name deleted
+     *
+     * @throws IllegalArgumentException when folder can't be written to. That could have the following reasons:
      * <ul>
-     *  <li>Because it exists but is not a folder</li>
-     *  <li>Because it exists but is not empty</li>
-     *  <li>Because it does not exist but cannot be created</li>
+     *  <li>it exists but is not a folder</li>
+     *  <li>it exists but is not empty</li>
+     *  <li>it does not exist but cannot be created</li>
      * </ul>
-     * @param folder {@link File}
-     * @param deleteFolderIfExists 
-     * 
-     * @throws IllegalArgumentException when folder can't be written to
      */
     public static void canSafelyWriteToFolder(File folder, boolean deleteFolderIfExists) {
         if(folder.exists()) {
