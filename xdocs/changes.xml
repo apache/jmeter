@@ -121,7 +121,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <h3>Functions</h3>
 <ul>
     <li><bug>62178</bug>Add default value to <code>__V</code> function. Contributed by orimarko at gmail.com</li>
-    <li><bug>62178</bug>Add function <code>__ThreadGroupName</code> function to obtain ThreadGroup name. Mainly contributed by orimarko at gmail.com</li>
+    <li><bug>62178</bug>Add function <code>__threadGroupName</code> function to obtain ThreadGroup name. Mainly contributed by orimarko at gmail.com</li>
 </ul>
 <h3>I18N</h3>
 <ul>
