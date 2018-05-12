@@ -32,7 +32,7 @@ import org.apache.jmeter.threads.JMeterContextService;
  * @since 4.1
  */
 public class ThreadGroupName extends AbstractFunctionByKey {
-    private static final String KEY = "__ThreadGroupName"; //$NON-NLS-1$
+    private static final String KEY = "__threadGroupName"; //$NON-NLS-1$
     
     private static final List<String> DESC = new LinkedList<>();
 
