@@ -45,7 +45,7 @@ public class TestSimpleFunctions extends JMeterTestCase {
 
     @Before
     public void setUp() {
-        result = new SampleResult();        
+        result = new SampleResult();
         jmctx = JMeterContextService.getContext();
         String data = "The quick brown fox";
         result.setResponseData(data, null);
@@ -174,21 +174,21 @@ public class TestSimpleFunctions extends JMeterTestCase {
     }
 
     @Test
-	public void testThreadGroupName() throws Exception {
-		AbstractFunctionByKey function = new ThreadGroupName();
-		try {
-			HTTPSamplerProxy httpRequest = new HTTPSamplerProxy();
-			ThreadGroup threadGroup = new ThreadGroup();
-			threadGroup.setName("ThreadGroup-1");
-			JMeterContext context = JMeterContextService.getContext();
-			context.setCurrentSampler(httpRequest);
-			context.setThreadGroup(threadGroup);
-			String ret = function.execute(result, httpRequest);
-			assertEquals("ThreadGroup-1", ret);
-		} finally {
-			FileServer.getFileServer().setScriptName(null);
-		}
-	}
+    public void testThreadGroupName() throws Exception {
+        AbstractFunctionByKey function = new ThreadGroupName();
+        try {
+            HTTPSamplerProxy httpRequest = new HTTPSamplerProxy();
+            ThreadGroup threadGroup = new ThreadGroup();
+            threadGroup.setName("ThreadGroup-1");
+            JMeterContext context = JMeterContextService.getContext();
+            context.setCurrentSampler(httpRequest);
+            context.setThreadGroup(threadGroup);
+            String ret = function.execute(result, httpRequest);
+            assertEquals("ThreadGroup-1", ret);
+        } finally {
+            FileServer.getFileServer().setScriptName(null);
+        }
+    }
 
     @Test
     public void testThreadGroupNameParameterCount() throws Exception {
