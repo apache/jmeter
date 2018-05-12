@@ -260,6 +260,13 @@ public class PackageTest {
         }
 
     }
+    
+    @Test
+    public void testMapPropertyEmptyConstructor() throws Exception {
+        MapProperty mapProperty = new MapProperty();
+        mapProperty.addProperty(new BooleanProperty("test", true));
+    }
+    
 
     @Test
     public void testNullEquality() throws Exception {

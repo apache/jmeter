@@ -108,6 +108,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><th>Type of function</th><th>Name</th><th>Comment</th><th>Since</th></tr>
         <!-- N.B. the leading space is needed to ensure the content is processed -->
         <tr><td>Information</td><td> <a href="#__threadNum">threadNum</a></td><td>get thread number</td><td>1.X</td></tr>
+        <tr><td>Information</td><td> <a href="#__threadGroupName">threadGroupName</a></td><td>get thread group name</td><td>4.1</td></tr>
         <tr><td>Information</td><td> <a href="#__samplerName">samplerName</a></td><td>get the sampler name (label)</td><td>2.5</td></tr>
         <tr><td>Information</td><td> <a href="#__machineIP">machineIP</a></td><td>get the local machine IP address</td><td>2.6</td></tr>
         <tr><td>Information</td><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td><td>1.X</td></tr>
@@ -373,7 +374,7 @@ If you want to have a count that increments for each sample, use the function in
 </properties>
 </component>
 
-<component index="&sect-num;.5.3" name="__threadNum">
+<component index="&sect-num;.5.3a" name="__threadNum">
 <description><p>The thread number function simply returns the number of the thread currently
 being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
@@ -381,6 +382,21 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 <p>There are no arguments for this function.</p>
 <p>Usage Example:
 <source>${__threadNum}</source> returns a number between 1 and the max number of running threads configured in the containing Thread Group
+</p>
+</description>
+<note>
+This function does not work in any Configuration elements (e.g. User Defined Variables) as these are run from a separate thread.
+Nor does it make sense to use it on the Test Plan.
+</note>
+</component>
+
+<component index="&sect-num;.5.3b" name="__threadGroupName">
+<description><p>The thread group name function simply returns the name of the thread group
+being executed.</p>
+
+<p>There are no arguments for this function.</p>
+<p>Usage Example:
+<source>${__threadGroupName}</source> 
 </p>
 </description>
 <note>
