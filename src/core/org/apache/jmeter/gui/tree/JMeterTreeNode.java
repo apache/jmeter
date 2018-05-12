@@ -129,6 +129,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     
     /**
      * Node has children marked by search
+     * @return boolean are children marked by search
      */
     public boolean isChildrenMarkedBySearch() {
         return this.childrenMarkedBySearch;
