@@ -548,7 +548,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     /**
      * @deprecated use {@link HTTPSamplerBase#setDoMultipartPost(boolean)}
-     * @param value
+     * @param value flag whether multiparts should be used
      */
     @Deprecated
     public void setDoMultipartPost(boolean value) {
@@ -557,7 +557,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     /**
      * @deprecated use {@link HTTPSamplerBase#getDoMultipartPost()}
-     * @param value
+     * @return flag whether multiparts should be used
      */
     @Deprecated
     public boolean getDoMultipartPost() {
