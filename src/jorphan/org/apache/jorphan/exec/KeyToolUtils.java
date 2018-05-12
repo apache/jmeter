@@ -404,7 +404,7 @@ public class KeyToolUtils {
     }
 
     /**
-     * @return flag whether {@link KeyToolUtils#KEYTOOL_PATH KEYTOOL_PATH} is
+     * @return flag whether KeyToolUtils#KEYTOOL_PATH is
      *         configured (is not <code>null</code>)
      */
     public static boolean haveKeytool() {
