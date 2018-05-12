@@ -378,7 +378,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * @param serie String serie name
-     * @param seriesData 
+     * @param seriesData {@link SeriesData}
      * @return MapResultData metadata for serie
      */
     protected MapResultData createSerieResult(String serie, SeriesData seriesData) {

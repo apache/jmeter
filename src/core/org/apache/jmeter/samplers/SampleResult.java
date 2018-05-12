@@ -1475,7 +1475,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     }
 
     /**
-     * @deprecated use {@link SampleResult#setTestLogicalAction(TestLogicalAction)}
+     * @deprecated use SampleResult#setTestLogicalAction(TestLogicalAction)
      * @param startNextThreadLoop the startNextLoop to set
      */
     @Deprecated
