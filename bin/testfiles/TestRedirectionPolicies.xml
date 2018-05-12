@@ -2,17 +2,17 @@
 <testResults version="1.2">
 <httpSample s="true" lb="HR_AutoRedirect" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA_Redirected</name>
-    <failure>false</failure>
-    <error>false</error>
-  </assertionResult>
-  <assertionResult>
     <name>RA_200</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
     <name>JSA_0SR</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_Redirected</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
@@ -31,17 +31,17 @@
 </httpSample>
 <httpSample s="true" lb="HR_FollowRedirect" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA_Redirected</name>
-    <failure>false</failure>
-    <error>false</error>
-  </assertionResult>
-  <assertionResult>
     <name>RA_200</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
     <name>JSA_2SR</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_Redirected</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
@@ -62,17 +62,17 @@
 </httpSample>
 <httpSample s="true" lb="HR_FollowRedirect" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA_Redirected</name>
-    <failure>false</failure>
-    <error>false</error>
-  </assertionResult>
-  <assertionResult>
     <name>RA_200</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
     <name>JSA_2SR</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_Redirected</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
@@ -81,17 +81,17 @@
 </httpSample>
 <httpSample s="true" lb="HR_AutoRedirect" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA_Redirected</name>
-    <failure>false</failure>
-    <error>false</error>
-  </assertionResult>
-  <assertionResult>
     <name>RA_200</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
   <assertionResult>
     <name>JSA_0SR</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_Redirected</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
