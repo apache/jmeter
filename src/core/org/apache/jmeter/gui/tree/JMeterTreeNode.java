@@ -90,6 +90,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     
     /**
      * One of the children of this node have matched a search
+     * @param tagged true if we must tag
      */
     public void setChildrenNodesHaveMatched(boolean tagged) {
         if (childrenMarkedBySearch == tagged) {
