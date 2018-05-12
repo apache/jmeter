@@ -462,11 +462,11 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     
     /**
      * Configure credentials and auth scheme on client if an authorization is
-     * @param auth
-     * @param url
-     * @param localContext 
-     * @param credentialsProvider
-     * @param localhost
+     * @param auth information about the authorization to use
+     * @param url the URL for which the authorization info should be used
+     * @param localContext http client context which should be set up
+     * @param credentialsProvider provider which should be set up
+     * @param localhost name of the workstation to be used for {@link NTCredentials}
      */
     public void setupCredentials(Authorization auth, URL url, 
             HttpClientContext localContext, 
