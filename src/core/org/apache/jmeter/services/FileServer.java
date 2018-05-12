@@ -94,7 +94,7 @@ public class FileServer {
     }
 
     /**
-     * Resets the current base to {@link #DEFAULT_BASE}.
+     * Resets the current base to DEFAULT_BASE.
      */
     public synchronized void resetBase() {
         checkForOpenFiles();
@@ -180,7 +180,7 @@ public class FileServer {
     }
 
     /**
-     * Calculates the relative path from {@link #DEFAULT_BASE} to the current base,
+     * Calculates the relative path from DEFAULT_BASE to the current base,
      * which must be the same as or a child of the default.
      * 
      * @return the relative path, or {@code "."} if the path cannot be determined
