@@ -37,9 +37,9 @@ public class LaxDeflateInputStream extends DeflateInputStream {
     private final boolean relax;
     
     /**
-     * @param wrapped
-     * @param relax
-     * @throws IOException
+     * @param wrapped the InputStream that should be wrapped
+     * @param relax flag to enable relaxed mode
+     * @throws IOException when super class throws an IOException
      */
     public LaxDeflateInputStream(InputStream wrapped, boolean relax) throws IOException {
         super(wrapped);
