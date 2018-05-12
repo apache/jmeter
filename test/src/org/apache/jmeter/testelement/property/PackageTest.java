@@ -258,15 +258,7 @@ public class PackageTest {
             fail("Should have generated an Illegal Argument Exception");
         } catch (IllegalArgumentException e) {
         }
-
     }
-    
-    @Test
-    public void testMapPropertyEmptyConstructor() throws Exception {
-        MapProperty mapProperty = new MapProperty();
-        mapProperty.addProperty(new BooleanProperty("test", true));
-    }
-    
 
     @Test
     public void testNullEquality() throws Exception {
