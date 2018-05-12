@@ -214,7 +214,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     };
 
     private static final class PreemptiveAuthRequestInterceptor implements HttpRequestInterceptor {
-        //@Override
+        @Override
         public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
             HttpClientContext localContext = HttpClientContext.adapt(context);
             AuthManager authManager = (AuthManager) localContext.getAttribute(CONTEXT_ATTRIBUTE_AUTH_MANAGER);
@@ -1015,7 +1015,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     setSchemePortResolver(new DefaultSchemePortResolver()).
                     setDnsResolver(resolver).
                     setRequestExecutor(REQUEST_EXECUTOR).
-                    setSSLContext(((JsseSSLManager)JsseSSLManager.getInstance()).getContext()).
+                    setSSLSocketFactory(new LazyLayeredConnectionSocketFactory()).
                     setDefaultCookieSpecRegistry(cookieSpecRegistry).
                     setDefaultSocketConfig(SocketConfig.DEFAULT).
                     setRedirectStrategy(new LaxRedirectStrategy()).
