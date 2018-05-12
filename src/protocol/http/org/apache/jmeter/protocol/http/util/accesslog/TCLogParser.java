@@ -407,7 +407,7 @@ public class TCLogParser implements LogParser {
     /**
      * Tokenize the URL into two tokens. If the URL has more than one "?", the
      * parse may fail. Only the first two tokens are used. The first token is
-     * automatically parsed and set at {@link TCLogParser#URL_PATH URL_PATH}.
+     * automatically parsed and set at TCLogParser#URL_PATH.
      *
      * @param url url which should be stripped from parameters
      * @param el {@link TestElement} to parse url into
