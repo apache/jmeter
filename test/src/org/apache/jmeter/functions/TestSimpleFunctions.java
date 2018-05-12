@@ -33,10 +33,11 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestSimpleFunctions extends JMeterTestCase {
+public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialTest {
     private SampleResult result;
 
     private Collection<CompoundVariable> params;
