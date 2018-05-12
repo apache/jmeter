@@ -436,7 +436,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     }
 
     /**
-     * Implementation of Expand button: <br/>
+     * Implementation of Expand button: <br>
      * moves focus to a test plan tree element referenced by selected element in Module to run tree
      */
     @Override
