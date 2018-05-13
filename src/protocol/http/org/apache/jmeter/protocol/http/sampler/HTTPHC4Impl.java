@@ -1151,7 +1151,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     
         rCB.setRedirectsEnabled(getAutoRedirects());
         rCB.setMaxRedirects(HTTPSamplerBase.MAX_REDIRECTS);
-        rCB.setRedirectsEnabled(getAutoRedirects());
         httpRequest.setConfig(rCB.build());
         // a well-behaved browser is supposed to send 'Connection: close'
         // with the last request to an HTTP server. Instead, most browsers
