@@ -102,7 +102,7 @@ dnsjava-2.1.8
 http://www.dnsjava.org/download/
 - DNSCacheManager
 
-groovy-all-2.4.13
+groovy-all-2.4.15
 ----------------------
 Advised scripting language for JSR223 Test Elements
 
