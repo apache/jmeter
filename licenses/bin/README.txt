@@ -17,7 +17,7 @@ commons-net-3.6.jar
 commons-pool2-2.5.0.jar
 excalibur-logger-1.1.jar
 geronimo-jms_1.1_spec-1.1.1.jar
-groovy-all-2.4.13.jar
+groovy-all-2.4.15.jar
 httpclient-4.5.3.jar
 httpcore-4.4.7.jar
 httpcore-nio-4.4.7.jar
