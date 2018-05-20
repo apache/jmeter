@@ -25,6 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.JMeter;
@@ -103,6 +105,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
     public StandardJMeterEngine() {
         this(null);
+
     }
 
     public StandardJMeterEngine(String host) {
@@ -185,13 +188,10 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             long now=System.currentTimeMillis();
             System.out.println("Starting the test on host " + host + " @ "+new Date(now)+" ("+now+")"); // NOSONAR Intentional
         }
-        try {
-            Thread runningThread = new Thread(this, "StandardJMeterEngine");
-            runningThread.start();
-        } catch (Exception err) {
-            stopTest();
-            throw new JMeterEngineException(err);
-        }
+        
+        ExecutorService execService = Executors.newCachedThreadPool(); //using newCachedThreadPool to implement multi-threading in jMeter
+        execService.execute(this);
+        
     }
 
     private void removeThreadGroups(List<?> elements) {
