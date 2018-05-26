@@ -146,6 +146,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>61714</bug>Update Real-time results documentation</li>
   <li><bug>62354</bug>Correct calculation and usage of units for second per user (reported by jffagot05 at gmail.com)</li>
   <li><pr>382</pr>Correct typo in documentation. Reported by Perze Ababa (perze.ababa at gmail.com>)</li>
+  <li><pr>386</pr>Add parameter support for RMI keystore creation scripts. Contributed by Logan Mauzaize (t524467 at airfrance.fr)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -247,6 +248,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>jffagot05 (jffagot05 at gmail.com)</li>
     <li>Perze Ababa (perze.ababa at gmail.com)</li>
     <li>Martha Laks (laks.martha at gmail.com)</li>
+    <li>Logan Mauzaize (t524467 at airfrance.fr)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
