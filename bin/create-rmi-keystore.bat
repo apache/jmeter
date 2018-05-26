@@ -15,6 +15,6 @@ rem   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
 rem
-keytool -genkey -keyalg RSA -alias rmi -keystore rmi_keystore.jks -storepass changeit -validity 7 -keysize 2048
+keytool -genkey -keyalg RSA -alias rmi -keystore rmi_keystore.jks -storepass changeit -validity 7 -keysize 2048 %*
 
 echo "Copy the generated rmi_keystore.jks to jmeter/bin folder or reference it in property 'server.rmi.ssl.keystore.file'"
