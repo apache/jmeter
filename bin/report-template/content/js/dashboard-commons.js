@@ -14,6 +14,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+var DAY_MS   = 86400000;
+var HOUR_MS  =  3600000;
+var MINUTE_MS  =    60000;
 
 /**
  * From https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Math/round
@@ -126,6 +129,22 @@ function formatDuration(duration, spaced) {
 function getElapsedTimeLabel(granularity) {
     return "Elapsed Time (granularity: " + formatDuration(granularity) + ")";
 }
+
+/*
+ * Gets time format based on granularity
+ */
+function getTimeFormat(granularity) {
+    if (granularity >= DAY_MS) {
+        return "%y/%m/%d"; 
+    } else if (granularity >= HOUR_MS) {
+        return "%m/%d %H"; 
+    } else if (granularity >= MINUTE_MS) {
+        return "%d %H:%M";
+    } else {
+        return "%H:%M:%S";
+    }
+}
+
 
 /*
  * Gets axis label for the specified granularity
