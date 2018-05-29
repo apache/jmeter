@@ -228,6 +228,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>56150</bug>Keep the index right, when scrolling through the menu items.</li>
   <li><bug>62240</bug>If SampleMonitor implementation is a TestBean if will not be initialized correctly</li>
   <li><bug>62295</bug>Correct order of elements when duplicating a selection of multiple elements.</li>
+  <li><bug>62397</bug>Don't break lines at commata when using JSON Path Tester</li> 
 </ul>
 
  <!--  =================== Thanks =================== -->
