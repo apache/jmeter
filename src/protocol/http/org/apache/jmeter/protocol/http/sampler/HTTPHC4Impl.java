@@ -400,10 +400,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 final HttpContext context) throws HttpException, IOException {
             HttpResponse response = super.doReceiveResponse(request, conn, context);
             HttpConnectionMetrics metrics = conn.getMetrics();
-            HttpEntity entity = response.getEntity();
             context.setAttribute(CONTEXT_ATTRIBUTE_RECEIVED_BYTES, 
-                    metrics.getReceivedBytesCount()+
-                    (entity != null ? entity.getContentLength(): 0L));
+                    metrics.getReceivedBytesCount());
 
             metrics.reset();
             return response;
