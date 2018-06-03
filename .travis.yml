@@ -3,7 +3,6 @@ addons:
     apt:
         packages:
             - oracle-java9-installer
-            - oracle-java10-installer
 
 language: java
 
@@ -26,11 +25,11 @@ matrix:
     - jdk: oraclejdk8
       env: RUN_CHECKSTYLE=true
       script: ant -Djava.awt.headless=true checkstyle
-    - jdk: oraclejdk8
+    - jdk: oraclejdk9
       script: 
           - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
-          - jdk_switcher use oraclejdk10
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
+#          - jdk_switcher use oraclejdk10
+#          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
 #          - jdk_switcher use oraclejdk11
 #          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
