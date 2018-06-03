@@ -129,7 +129,8 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     private String process(String textToParse, XPath2Extractor extractor) {
         try {
             List<String> matchStrings = new ArrayList<>();
-            XPathUtil.putValuesForXPathInListUsingSaxon(textToParse, xpathExpressionField.getText(), matchStrings, extractor.getFragment(), -1, getDocumentNamespaces(textToParse));
+            XPathUtil.putValuesForXPathInListUsingSaxon(textToParse, xpathExpressionField.getText(),
+                    matchStrings, extractor.getFragment(), -1, getDocumentNamespaces(textToParse));
             StringBuilder builder = new StringBuilder();
             int nbFound = matchStrings.size();
             builder.append("Match count: ").append(nbFound).append("\n");

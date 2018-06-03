@@ -24,11 +24,11 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.benmanes.caffeine.cache.CacheLoader;
-
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XPathCompiler;
 import net.sf.saxon.s9api.XPathExecutable;
+
+import com.github.benmanes.caffeine.cache.CacheLoader;
 
 /**
  * load method is called when the key composed of
