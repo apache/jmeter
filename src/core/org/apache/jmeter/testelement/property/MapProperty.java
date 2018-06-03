@@ -89,7 +89,7 @@ public class MapProperty extends MultiProperty {
      */
     @Override
     protected Class<? extends JMeterProperty> getPropertyType() {
-        if (value.size() > 0) {
+        if (!value.isEmpty()) {
             return valueIterator().next().getClass();
         }
         return NullProperty.class;
