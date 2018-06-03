@@ -51,10 +51,11 @@ public class XMLConfPanel extends JPanel {
         init();
     }
 
-    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        quiet = new JCheckBox(JMeterUtils.getResString("xpath_tidy_quiet"),true);//$NON-NLS-1$
-        reportErrors = new JCheckBox(JMeterUtils.getResString("xpath_tidy_report_errors"),true);//$NON-NLS-1$
-        showWarnings = new JCheckBox(JMeterUtils.getResString("xpath_tidy_show_warnings"),true);//$NON-NLS-1$
+    private void init() { // WARNING: called from ctor so must not be overridden
+                          // (i.e. must be private or final)
+        quiet = new JCheckBox(JMeterUtils.getResString("xpath_tidy_quiet"), true);//$NON-NLS-1$
+        reportErrors = new JCheckBox(JMeterUtils.getResString("xpath_tidy_report_errors"), true);//$NON-NLS-1$
+        showWarnings = new JCheckBox(JMeterUtils.getResString("xpath_tidy_show_warnings"), true);//$NON-NLS-1$
         namespace = new JCheckBox(JMeterUtils.getResString("xml_namespace_button")); //$NON-NLS-1$
         whitespace = new JCheckBox(JMeterUtils.getResString("xml_whitespace_button")); //$NON-NLS-1$
         validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button")); //$NON-NLS-1$
@@ -121,15 +122,15 @@ public class XMLConfPanel extends JPanel {
     }
 
     // Called by XPathExtractorGui
-    public void modifyTestElement(XPathExtractor assertion) {
-        assertion.setValidating(validate.isSelected());
-        assertion.setWhitespace(whitespace.isSelected());
-        assertion.setTolerant(tolerant.isSelected());
-        assertion.setNameSpace(namespace.isSelected());
-        assertion.setShowWarnings(showWarnings.isSelected());
-        assertion.setReportErrors(reportErrors.isSelected());
-        assertion.setQuiet(quiet.isSelected());
-        assertion.setDownloadDTDs(downloadDTDs.isSelected());
+    public void modifyTestElement(XPathExtractor extractor) {
+        extractor.setValidating(validate.isSelected());
+        extractor.setWhitespace(whitespace.isSelected());
+        extractor.setTolerant(tolerant.isSelected());
+        extractor.setNameSpace(namespace.isSelected());
+        extractor.setShowWarnings(showWarnings.isSelected());
+        extractor.setReportErrors(reportErrors.isSelected());
+        extractor.setQuiet(quiet.isSelected());
+        extractor.setDownloadDTDs(downloadDTDs.isSelected());
     }
 
     // Called by XPathAssertionGui
@@ -146,15 +147,15 @@ public class XMLConfPanel extends JPanel {
     }
 
     // Called by XPathExtractorGui
-    public void configure(XPathExtractor assertion) {
-        whitespace.setSelected(assertion.isWhitespace());
-        validate.setSelected(assertion.isValidating());
-        tolerant.setSelected(assertion.isTolerant());
-        namespace.setSelected(assertion.useNameSpace());
-        quiet.setSelected(assertion.isQuiet());
-        showWarnings.setSelected(assertion.showWarnings());
-        reportErrors.setSelected(assertion.reportErrors());
-        downloadDTDs.setSelected(assertion.isDownloadDTDs());
+    public void configure(XPathExtractor extractor) {
+        whitespace.setSelected(extractor.isWhitespace());
+        validate.setSelected(extractor.isValidating());
+        tolerant.setSelected(extractor.isTolerant());
+        namespace.setSelected(extractor.useNameSpace());
+        quiet.setSelected(extractor.isQuiet());
+        showWarnings.setSelected(extractor.showWarnings());
+        reportErrors.setSelected(extractor.reportErrors());
+        downloadDTDs.setSelected(extractor.isDownloadDTDs());
         tolerant();
     }
 }
