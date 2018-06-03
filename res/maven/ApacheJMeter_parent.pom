@@ -99,6 +99,7 @@ under the License.
       <ph-css.version>6.0.0</ph-css.version>
       <ph-commons.version>9.0.0</ph-commons.version>
       <rsyntaxtextarea.version>2.6.1</rsyntaxtextarea.version>
+      <saxon-HE.version>9.8.0-12</saxon-HE.version>
       <slf4j-api.version>1.7.25</slf4j-api.version>
       <slf4j-ext.version>1.7.25</slf4j-ext.version>
       <log4j-api.version>2.10.0</log4j-api.version>
@@ -331,6 +332,11 @@ under the License.
         <groupId>xalan</groupId>
         <artifactId>serializer</artifactId>
         <version>${serializer.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.saxon</groupId>
+        <artifactId>Saxon-HE</artifactId>
+        <version>${saxon-HE.version}</version>
       </dependency>
       <dependency>
         <groupId>xerces</groupId>

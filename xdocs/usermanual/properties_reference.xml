@@ -79,6 +79,9 @@ These properties are only taken into account after restarting JMeter as they are
 <property name="xpath.namespace.config">
     Path to a Properties file containing Namespace mapping in the form <code>prefix=Namespace</code>.
     Example: <source>ns=http://biz.aol.com/schema/2006-12-18</source></property>
+<property name="xpath2query.parser.cache.size">XPath2 query cache for storing compiled XPath queries
+    Defaults to <code>400</code>
+    </property>
 </properties>
 </section>
 <section name="&sect-num;.3 SSL configuration" anchor="ssl_config">
