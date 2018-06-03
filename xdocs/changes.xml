@@ -229,6 +229,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>62240</bug>If SampleMonitor implementation is a TestBean if will not be initialized correctly</li>
   <li><bug>62295</bug>Correct order of elements when duplicating a selection of multiple elements.</li>
   <li><bug>62397</bug>Don't break lines at commata when using JSON Path Tester</li> 
+  <li><bug>62281</bug>Prevent NPE in MapProperty. Patch by belugabehr (dam6923 at gmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -251,6 +252,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>Perze Ababa (perze.ababa at gmail.com)</li>
     <li>Martha Laks (laks.martha at gmail.com)</li>
     <li>Logan Mauzaize (t524467 at airfrance.fr)</li>
+    <li>belugabehr (dam6923 at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>

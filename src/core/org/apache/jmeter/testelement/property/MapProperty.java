@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.testelement.property;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
@@ -39,6 +40,7 @@ public class MapProperty extends MultiProperty {
 
     public MapProperty() {
         super();
+        value = new HashMap<>();
     }
 
     /** {@inheritDoc} */
