@@ -446,6 +446,7 @@
     <include name="${lib.dir}/${tika-core.jar}"/>
     <include name="${lib.dir}/${tika-parsers.jar}"/>
     <include name="${lib.dir}/${xalan.jar}"/>
+    <include name="${lib.dir}/${saxon-HE.jar}"/>
     <include name="${lib.dir}/${xerces.jar}"/>
     <include name="${lib.dir}/${xml-apis.jar}"/>
     <include name="${lib.dir}/${xmlgraphics-commons.jar}"/>
@@ -532,6 +533,7 @@
     <pathelement location="${lib.dir}/${tika-core.jar}"/>
     <pathelement location="${lib.dir}/${tika-parsers.jar}"/>
     <pathelement location="${lib.dir}/${xalan.jar}"/>
+    <pathelement location="${lib.dir}/${saxon-HE.jar}"/>
     <pathelement location="${lib.dir}/${xerces.jar}"/>
     <pathelement location="${lib.dir}/${xml-apis.jar}"/>
     <pathelement location="${lib.dir}/${xmlgraphics-commons.jar}"/>
@@ -3400,6 +3402,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
     <process_jarfile jarname="commons-lang" dest.dir="${lib.doc}"/>
     <process_jarfile jarname="xalan"/>
+    <process_jarfile jarname="saxon-HE"/>
     <process_jarfile jarname="xerces"/>
     <process_jarfile jarname="xml-apis"/>
     <process_jarfile jarname="xmlgraphics-commons"/>

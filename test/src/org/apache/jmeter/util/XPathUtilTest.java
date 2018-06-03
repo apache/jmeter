@@ -18,16 +18,109 @@
 
 package org.apache.jmeter.util;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.stream.FactoryConfigurationError;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.sf.saxon.s9api.SaxonApiException;
 
 public class XPathUtilTest {
-
+    private static final Logger log = LoggerFactory.getLogger(XPathUtil.class);
     final String lineSeparator = System.getProperty("line.separator");
+
+    final String xmlDoc = JMeterUtils.getResourceFileAsText("XPathUtilTestXml.xml");
+    
+    @Test
+    public void testputValuesForXPathInListUsingSaxon(){
+        
+        String xPathQuery="//Employees/Employee/role";
+        ArrayList<String> matchStrings = new ArrayList<String>();
+        boolean fragment = false;
+        String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
+        int matchNumber = 3;
+        
+        try {
+            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+            assertEquals("Manager",matchStrings.get(0));
+            
+            matchNumber = 0;
+            xPathQuery="//Employees/Employee[1]/age:ag";
+            fragment = true;
+            matchStrings.clear();
+            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+            assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",matchStrings.get(0));
+            assertEquals(1,matchStrings.size());
+            
+            matchNumber = -1;
+            xPathQuery="//Employees/Employee/age:ag";
+            matchStrings.clear();
+            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+            assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",matchStrings.get(0));
+            assertEquals(4,matchStrings.size());
+            
+            fragment = false;
+            matchStrings.clear();
+            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+            assertEquals("29",matchStrings.get(0));
+            assertEquals(4,matchStrings.size());
+            
+            matchStrings.clear();
+            xPathQuery="regtsgwsdfstgsdf";
+            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+            assertEquals(new ArrayList<String>(),matchStrings);
+            assertEquals(0,matchStrings.size());
+            
+            matchStrings.clear();
+            xPathQuery="//Employees/Employee[1]/age:ag";
+            matchNumber = 555;
+            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+            assertEquals(new ArrayList<String>(),matchStrings);
+            assertEquals(0,matchStrings.size());
+
+        } catch (SaxonApiException e) {
+            if (log.isWarnEnabled()) {
+                log.warn("SaxonApiException while processing ({}). {}", xPathQuery, e.getLocalizedMessage());
+            }
+        }catch(FactoryConfigurationError e) {
+            log.error("FactoryConfigurationError on {}", e);
+            log.warn("FactoryConfigurationError while processing {}", e.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    public void testnamespacesParse() {
+        String namespaces = "donald=duck";
+        List<String[]> test = XPathUtil.namespacesParse(namespaces);
+        assertEquals("donald",test.get(0)[0]);
+        assertEquals("duck",test.get(0)[1]);
+        
+        namespaces = "donald=duck\nmickey=mouse";
+        test = XPathUtil.namespacesParse(namespaces);
+        assertEquals("donald",test.get(0)[0]);
+        assertEquals("duck",test.get(0)[1]);
+        assertEquals("mickey",test.get(1)[0]);
+        assertEquals("mouse",test.get(1)[1]);
+        
+        namespaces = "donald=duck\n\n\nmickey=mouse";
+        test = XPathUtil.namespacesParse(namespaces);
+        assertEquals("mickey",test.get(1)[0]);
+        assertEquals("mouse",test.get(1)[1]);
+        
+        namespaces = "geo=patate\n       \n   \n\nmickey=mouse\n\n      \n";
+        test = XPathUtil.namespacesParse(namespaces);
+        assertEquals("mickey",test.get(1)[0]);
+        assertEquals("mouse",test.get(1)[1]);
+    }
 
     @Test
     public void testFormatXmlSimple() {
@@ -48,6 +141,7 @@ public class XPathUtilTest {
                         "  </three>...</one>",
                         "")));
     }
+    
 
     @Test()
     public void testFormatXmlInvalid() {
