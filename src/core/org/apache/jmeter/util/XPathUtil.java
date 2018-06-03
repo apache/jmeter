@@ -47,6 +47,7 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.xml.utils.PrefixResolver;
@@ -65,9 +66,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XPathExecutable;
@@ -75,6 +73,9 @@ import net.sf.saxon.s9api.XPathSelector;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmValue;
+
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 /**
  * This class provides a few utility methods for dealing with XML/XPath.
@@ -366,8 +367,6 @@ public class XPathUtil {
         putValuesForXPathInList(document, xPathQuery, matchStrings, fragment, -1);
     }
 
-
-
     /**
      * Put in matchStrings results of evaluation
      * @param document XML document
@@ -428,7 +427,7 @@ public class XPathUtil {
 
         //check the cache
         XPathExecutable xPathExecutable;
-        if(!xPathQuery.equals("")) {
+        if(StringUtils.isNotEmpty(xPathQuery)) {
             xPathExecutable = XPATH_CACHE.get(key);
         }
         else {
@@ -445,31 +444,42 @@ public class XPathUtil {
             XdmNode xdmNode = builder.build(new StreamSource(reader));
             
             if(xPathExecutable!=null) {
-                XPathSelector selector = xPathExecutable.load();
-                selector.setContextItem(xdmNode);
-                XdmValue nodes = selector.evaluate();
-                int length = nodes.size();
-                int indexToMatch = matchNumber;
-                // In case we need to extract everything
-                if(matchNumber < 0) {
-                    for(XdmItem item : nodes) {
-                        if(fragment) {
-                            matchStrings.add(item.toString());
+                XPathSelector selector = null;
+                try {
+                    selector = xPathExecutable.load();
+                    selector.setContextItem(xdmNode);
+                    XdmValue nodes = selector.evaluate();
+                    int length = nodes.size();
+                    int indexToMatch = matchNumber;
+                    // In case we need to extract everything
+                    if(matchNumber < 0) {
+                        for(XdmItem item : nodes) {
+                            if(fragment) {
+                                matchStrings.add(item.toString());
+                            }
+                            else {
+                                matchStrings.add(item.getStringValue());
+                            }
                         }
-                        else {
-                            matchStrings.add(item.getStringValue());
+                    } else {
+                        if(indexToMatch <= length) {
+                            if(matchNumber == 0 && length>0) {
+                                indexToMatch = JMeterUtils.getRandomInt(length)+1;
+                            } 
+                            XdmItem item = nodes.itemAt(indexToMatch-1);
+                            matchStrings.add(fragment ? item.toString() : item.getStringValue());
+                        } else {
+                            if(log.isWarnEnabled()) {
+                                log.warn("Error : {}{}", JMeterUtils.getResString("xpath2_extractor_match_number_failure"),indexToMatch);
+                            }
                         }
                     }
-                } else {
-                    if(indexToMatch <= length) {
-                        if(matchNumber == 0 && length>0) {
-                            indexToMatch = JMeterUtils.getRandomInt(length)+1;
-                        } 
-                        XdmItem item = nodes.itemAt(indexToMatch-1);
-                        matchStrings.add(fragment ? item.toString() : item.getStringValue());
-                    } else {
-                        if(log.isWarnEnabled()) {
-                            log.warn("Error : {}{}", JMeterUtils.getResString("xpath2_extractor_match_number_failure"),indexToMatch);
+                } finally {
+                    if(selector != null) {
+                        try {
+                            selector.getUnderlyingXPathContext().setContextItem(null);
+                        } catch (Exception e) {
+                            // NOOP
                         }
                     }
                 }
@@ -552,8 +562,6 @@ public class XPathUtil {
             }
         }
     }
-
-
 
     /**
      * 
