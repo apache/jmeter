@@ -45,7 +45,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -441,7 +440,7 @@ public class XPathUtil {
             // However, in the current implementation sharing a DocumentBuilder (once initialized) 
             // will only cause problems if a SchemaValidator is used.
             net.sf.saxon.s9api.DocumentBuilder builder = PROCESSOR.newDocumentBuilder();
-            XdmNode xdmNode = builder.build(new StreamSource(reader));
+            XdmNode xdmNode = builder.build(new SAXSource(new InputSource(reader)));
             
             if(xPathExecutable!=null) {
                 XPathSelector selector = null;
