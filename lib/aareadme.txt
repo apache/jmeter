@@ -249,6 +249,10 @@ commons-dbcp2-2.2.0 (org.apache.commons.dbcp2)
 --------------------------
 - DataSourceElement (JDBC)
 
+Saxon-HE-9.8.0-12 (net.sf.saxon)
+--------------------------
+- XPath2Extractor (XML)
+
 velocity-1.7
 --------------
 http://velocity.apache.org/download.cgi
