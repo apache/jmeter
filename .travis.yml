@@ -26,10 +26,10 @@ matrix:
           - jdk_switcher use oraclejdk9
           - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
-# No building with jdk9 as it has a bug and will not compile JMeter
+# No building with JDK9 nor JDK10 as it has a bug and will not compile JMeter
 # see https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8193802
 #
-    - jdk: oraclejdk10
+    - jdk: oraclejdk11
       script: ant -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
 
