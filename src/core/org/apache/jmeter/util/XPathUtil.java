@@ -477,7 +477,7 @@ public class XPathUtil {
                     if(selector != null) {
                         try {
                             selector.getUnderlyingXPathContext().setContextItem(null);
-                        } catch (Exception e) {
+                        } catch (Exception e) { // NOSONAR Ignored on purpose
                             // NOOP
                         }
                     }
@@ -518,18 +518,23 @@ public class XPathUtil {
         return res;
     }
 
+    /**
+     * Compute namespaces for XML
+     * @param xml XML content
+     * @return List of Namespaces
+     * @throws XMLStreamException
+     * @throws FactoryConfigurationError
+     */
     public static List<String[]> getNamespaces(String xml)
             throws XMLStreamException, FactoryConfigurationError{
         List<String[]> res= new ArrayList<>();
         XMLStreamReader reader;
-        if(!xml.equals("")) {
+        if(StringUtils.isNoneEmpty(xml)) {
             reader = XMLInputFactory.newFactory().createXMLStreamReader(new StringReader(xml));
             while (reader.hasNext()) {
                 int event = reader.next();
-                if (XMLStreamConstants.START_ELEMENT == event) {
-                    addToList(reader, res);
-                } else if(XMLStreamConstants.NAMESPACE == event) {
-                    // This almost never happens
+                if (XMLStreamConstants.START_ELEMENT == event ||
+                        XMLStreamConstants.NAMESPACE == event) {
                     addToList(reader, res);
                 }
             }
@@ -542,7 +547,6 @@ public class XPathUtil {
         int namespaceCount = reader.getNamespaceCount(); 
         if (namespaceCount > 0) {
             for (int nsIndex = 0; nsIndex < namespaceCount; nsIndex++) {
-                String[] tmp = {"",""};
                 String nsPrefix = reader.getNamespacePrefix(nsIndex);
                 for(int i = 0;i<res.size();i++) {
                     String prefix = res.get(i)[0];
@@ -553,9 +557,7 @@ public class XPathUtil {
                 }
                 if(!isInList) {
                     String nsId = reader.getNamespaceURI(nsIndex);
-                    tmp[0] = nsPrefix;
-                    tmp[1] = nsId;
-                    res.add(tmp);
+                    res.add(new String[] {nsPrefix, nsId});
                 }
                 isInList=false;
             }
