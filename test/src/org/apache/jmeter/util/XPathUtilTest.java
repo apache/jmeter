@@ -41,60 +41,50 @@ public class XPathUtilTest {
     final String xmlDoc = JMeterUtils.getResourceFileAsText("XPathUtilTestXml.xml");
     
     @Test
-    public void testputValuesForXPathInListUsingSaxon(){
-        
+    public void testputValuesForXPathInListUsingSaxon() throws SaxonApiException, FactoryConfigurationError{
+
         String xPathQuery="//Employees/Employee/role";
         ArrayList<String> matchStrings = new ArrayList<String>();
         boolean fragment = false;
         String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
         int matchNumber = 3;
-        
-        try {
-            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-            assertEquals("Manager",matchStrings.get(0));
-            
-            matchNumber = 0;
-            xPathQuery="//Employees/Employee[1]/age:ag";
-            fragment = true;
-            matchStrings.clear();
-            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-            assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",matchStrings.get(0));
-            assertEquals(1,matchStrings.size());
-            
-            matchNumber = -1;
-            xPathQuery="//Employees/Employee/age:ag";
-            matchStrings.clear();
-            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-            assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",matchStrings.get(0));
-            assertEquals(4,matchStrings.size());
-            
-            fragment = false;
-            matchStrings.clear();
-            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-            assertEquals("29",matchStrings.get(0));
-            assertEquals(4,matchStrings.size());
-            
-            matchStrings.clear();
-            xPathQuery="regtsgwsdfstgsdf";
-            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-            assertEquals(new ArrayList<String>(),matchStrings);
-            assertEquals(0,matchStrings.size());
-            
-            matchStrings.clear();
-            xPathQuery="//Employees/Employee[1]/age:ag";
-            matchNumber = 555;
-            XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-            assertEquals(new ArrayList<String>(),matchStrings);
-            assertEquals(0,matchStrings.size());
 
-        } catch (SaxonApiException e) {
-            if (log.isWarnEnabled()) {
-                log.warn("SaxonApiException while processing ({}). {}", xPathQuery, e.getLocalizedMessage());
-            }
-        }catch(FactoryConfigurationError e) {
-            log.error("FactoryConfigurationError on {}", e);
-            log.warn("FactoryConfigurationError while processing {}", e.getLocalizedMessage());
-        }
+        XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+        assertEquals("Manager",matchStrings.get(0));
+
+        matchNumber = 0;
+        xPathQuery="//Employees/Employee[1]/age:ag";
+        fragment = true;
+        matchStrings.clear();
+        XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+        assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",matchStrings.get(0));
+        assertEquals(1,matchStrings.size());
+
+        matchNumber = -1;
+        xPathQuery="//Employees/Employee/age:ag";
+        matchStrings.clear();
+        XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+        assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",matchStrings.get(0));
+        assertEquals(4,matchStrings.size());
+
+        fragment = false;
+        matchStrings.clear();
+        XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+        assertEquals("29",matchStrings.get(0));
+        assertEquals(4,matchStrings.size());
+
+        matchStrings.clear();
+        xPathQuery="regtsgwsdfstgsdf";
+        XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+        assertEquals(new ArrayList<String>(),matchStrings);
+        assertEquals(0,matchStrings.size());
+
+        matchStrings.clear();
+        xPathQuery="//Employees/Employee[1]/age:ag";
+        matchNumber = 555;
+        XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+        assertEquals(new ArrayList<String>(),matchStrings);
+        assertEquals(0,matchStrings.size());
     }
 
     @Test
