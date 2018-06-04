@@ -529,7 +529,7 @@ public class XPathUtil {
             throws XMLStreamException, FactoryConfigurationError{
         List<String[]> res= new ArrayList<>();
         XMLStreamReader reader;
-        if(StringUtils.isNoneEmpty(xml)) {
+        if(StringUtils.isNotEmpty(xml)) {
             reader = XMLInputFactory.newFactory().createXMLStreamReader(new StringReader(xml));
             while (reader.hasNext()) {
                 int event = reader.next();
