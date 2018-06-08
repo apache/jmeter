@@ -19,7 +19,6 @@
 package org.apache.jmeter.protocol.http.control;
 
 import org.apache.http.auth.AuthScheme;
-import org.apache.http.impl.auth.DelegatingSPNegoScheme;
 import org.apache.http.impl.auth.SPNegoScheme;
 import org.apache.http.impl.auth.SPNegoSchemeFactory;
 import org.apache.http.protocol.HttpContext;

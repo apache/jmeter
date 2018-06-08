@@ -16,7 +16,7 @@
  *
  */
 
-package org.apache.http.impl.auth;
+package org.apache.jmeter.protocol.http.control;
 
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.KerberosCredentials;
@@ -28,11 +28,12 @@ import org.ietf.jgss.GSSManager;
 import org.ietf.jgss.GSSName;
 import org.ietf.jgss.Oid;
 
-public class DelegatingSPNegoScheme extends SPNegoScheme {
-    public DelegatingSPNegoScheme(final boolean stripPort, final boolean useCanonicalHostName) {
+public class DelegatingKerberosScheme extends KerberosScheme {
+    public DelegatingKerberosScheme(final boolean stripPort, final boolean useCanonicalHostName) {
         super(stripPort, useCanonicalHostName);
     }
 
+    @Override
     protected byte[] generateGSSToken(
             final byte[] input, final Oid oid, final String authServer,
             final Credentials credentials) throws GSSException {
@@ -46,7 +47,7 @@ public class DelegatingSPNegoScheme extends SPNegoScheme {
             gssCredential = null;
         }
 
-        final GSSContext gssContext = createGSSContext(manager, oid, serverName, gssCredential);
+        final GSSContext gssContext = createDelegatingGSSContext(manager, oid, serverName, gssCredential);
         if (input != null) {
             return gssContext.initSecContext(input, 0, input.length);
         } else {
@@ -54,7 +55,7 @@ public class DelegatingSPNegoScheme extends SPNegoScheme {
         }
     }
 
-    GSSContext createGSSContext(final GSSManager manager, final Oid oid, final GSSName serverName,
+    GSSContext createDelegatingGSSContext(final GSSManager manager, final Oid oid, final GSSName serverName,
             final GSSCredential gssCredential) throws GSSException {
         final GSSContext gssContext = manager.createContext(serverName.canonicalize(oid), oid, gssCredential,
                 GSSContext.DEFAULT_LIFETIME);

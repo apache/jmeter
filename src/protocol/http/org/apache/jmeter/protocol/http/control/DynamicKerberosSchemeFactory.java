@@ -19,7 +19,6 @@
 package org.apache.jmeter.protocol.http.control;
 
 import org.apache.http.auth.AuthScheme;
-import org.apache.http.impl.auth.DelegatingKerberosScheme;
 import org.apache.http.impl.auth.KerberosScheme;
 import org.apache.http.impl.auth.KerberosSchemeFactory;
 import org.apache.http.protocol.HttpContext;
