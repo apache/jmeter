@@ -93,7 +93,7 @@ To revert to the previous behaviour, define the JMeter property <source>server.r
 </p>
 <p>
 By default, RMI uses a dynamic port for the JMeter server engine. This can cause problems for firewalls,
-so with you can define the JMeter property <code>server.rmi.localport</code> 
+so you can define the JMeter property <code>server.rmi.localport</code> 
 to control this port number.
 If this is non-zero, it will be used as the local port number for the server engine.
 </p>
