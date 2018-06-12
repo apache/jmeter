@@ -167,6 +167,7 @@ public class XPath2ExtractorGui extends AbstractPostProcessorGui{ // NOSONAR Ign
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.weightx = 0;
+        gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
     }
 
