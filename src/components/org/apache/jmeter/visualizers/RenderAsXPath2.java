@@ -21,6 +21,9 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -29,13 +32,11 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.extractor.XPath2Extractor;
@@ -44,7 +45,6 @@ import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.XPathUtil;
-import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.slf4j.Logger;
@@ -68,7 +68,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
 
     private JLabeledTextField xpathExpressionField;
 
-    private JTextArea xpathResultField;
+    private JSyntaxTextArea xpathResultField;
 
     private JTabbedPane rightSide;
 
@@ -78,6 +78,8 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     private final JCheckBox getFragment =
         new JCheckBox(JMeterUtils.getResString("xpath_tester_fragment"));//$NON-NLS-1$
     
+    private JSyntaxTextArea namespacesTA;
+
     /** {@inheritDoc} */
     @Override
     public void clearData() {
@@ -130,7 +132,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
         try {
             List<String> matchStrings = new ArrayList<>();
             XPathUtil.putValuesForXPathInListUsingSaxon(textToParse, xpathExpressionField.getText(),
-                    matchStrings, extractor.getFragment(), -1, getDocumentNamespaces(textToParse));
+                    matchStrings, extractor.getFragment(), -1, namespacesTA.getText());
             StringBuilder builder = new StringBuilder();
             int nbFound = matchStrings.size();
             builder.append("Match count: ").append(nbFound).append("\n");
@@ -206,13 +208,14 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
         xmlDataField.setWrapStyleWord(true);
 
         JScrollPane xmlDataPane = JTextScrollPane.getInstance(xmlDataField, true);
+        xmlDataPane.setMinimumSize(new Dimension(0, 100));
         xmlDataPane.setPreferredSize(new Dimension(0, 200));
 
-        JPanel pane = new JPanel(new BorderLayout(0, 5));
+        JPanel pane = new JPanel(new GridLayout(1, 1));
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 xmlDataPane, createXpathExtractorTasksPanel());
-        mainSplit.setDividerLocation(0.6d);
+        mainSplit.setDividerLocation(0.5d);
         mainSplit.setOneTouchExpandable(true);
         pane.add(mainSplit, BorderLayout.CENTER);
         return pane;
@@ -224,41 +227,70 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
      * @return XPath task pane
      */
     private JPanel createXpathExtractorTasksPanel() {
-        Box xpathActionPanel = Box.createVerticalBox();
-        
         Box selectorAndButton = Box.createHorizontalBox();
-
-        Border margin = new EmptyBorder(5, 5, 0, 5);
-        xpathActionPanel.setBorder(margin);
         xpathExpressionField = new JLabeledTextField(JMeterUtils.getResString("xpath_tester_field")); // $NON-NLS-1$
-        
+
         JButton xpathTester = new JButton(JMeterUtils.getResString("xpath_tester_button_test")); // $NON-NLS-1$
         xpathTester.setActionCommand(XPATH_TESTER_COMMAND);
         xpathTester.addActionListener(this);
-        
+
         JButton xpathTesterNamespaces = new JButton(JMeterUtils.getResString("xpath_namespaces")); // $NON-NLS-1$
         xpathTesterNamespaces.setActionCommand(XPATH_NAMESPACES_COMMAND);
         xpathTesterNamespaces.addActionListener(this);
-        
+
         selectorAndButton.add(xpathExpressionField);
         selectorAndButton.add(xpathTester);
         selectorAndButton.add(xpathTesterNamespaces);
-        
-        xpathActionPanel.add(selectorAndButton);
-        xpathActionPanel.add(getFragment);
-        
-        xpathResultField = new JTextArea();
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        initConstraints(gbc);
+        gbc.gridwidth = 2;
+        panel.add(selectorAndButton, gbc.clone());
+
+        resetContraints(gbc);
+        panel.add(new JLabel(JMeterUtils.getResString("xpath_extractor_user_namespaces")), gbc.clone());
+        gbc.gridx++;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        namespacesTA = JSyntaxTextArea.getInstance(5, 80);
+        panel.add(JTextScrollPane.getInstance(namespacesTA, true), gbc.clone());
+
+        resetContraints(gbc);
+        gbc.gridwidth = 2;
+        panel.add(getFragment, gbc.clone());
+
+        resetContraints(gbc);
+        xpathResultField = JSyntaxTextArea.getInstance(10, 80, true);
         xpathResultField.setEditable(false);
         xpathResultField.setLineWrap(true);
         xpathResultField.setWrapStyleWord(true);
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(JTextScrollPane.getInstance(xpathResultField, true), gbc.clone());
 
-        JPanel xpathTasksPanel = new JPanel(new BorderLayout(0, 5));
-        xpathTasksPanel.add(xpathActionPanel, BorderLayout.NORTH);
-        xpathTasksPanel.add(GuiUtils.makeScrollPane(xpathResultField), BorderLayout.CENTER);
-
-        return xpathTasksPanel;
+        return panel;
     }
 
+    private void resetContraints(GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0;
+        gbc.fill = GridBagConstraints.NONE;
+    }
+
+    private void initConstraints(GridBagConstraints gbc) {
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+    }
+    
     /** {@inheritDoc} */
     @Override
     public synchronized void setRightSide(JTabbedPane side) {
