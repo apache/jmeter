@@ -73,7 +73,7 @@
         <li>Data analysis and <b>visualization plugins</b> allow great extensibility
         as well as personalization.</li>
         <li>Functions can be used to provide dynamic input to a test or provide data manipulation.</li>
-        <li>Easy Continuous Integration through 3<sup>rd</sup> party Open Source libraries for Maven, Graddle and Jenkins</li>
+        <li>Easy Continuous Integration through 3<sup>rd</sup> party Open Source libraries for Maven, Gradle and Jenkins.</li>
       </ul>
     </li>
 </ul>
