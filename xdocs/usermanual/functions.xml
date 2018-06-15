@@ -733,7 +733,7 @@ This leads to creation of match number variable called <code>varName_matchNr</co
 <properties>
 </properties>
 <p>Examples:
-<source>${UUID()}</source> will return UUIDs with this format : <code>c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd</code> <br/>
+<source>${__UUID()}</source> will return UUIDs with this format : <code>c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd</code> <br/>
 </p>
 </component>
 
