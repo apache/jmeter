@@ -143,8 +143,7 @@ public class Save extends AbstractAction {
         }
         else if (e.getActionCommand().equals(ActionNames.SAVE_AS_TEST_FRAGMENT)) {
             JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
-            if(checkAcceptableForTestFragment(nodes)) {
-                subTree = GuiPackage.getInstance().getCurrentSubTree();
+            if (checkAcceptableForTestFragment(nodes)) {
                 // Create Test Fragment node
                 TestElement element = GuiPackage.getInstance().createTestElement(TestFragmentControllerGui.class.getName());
                 HashTree hashTree = new ListedHashTree();
