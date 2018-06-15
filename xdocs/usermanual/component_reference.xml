@@ -3644,6 +3644,9 @@ Look at the two sample configuration files (<code>krb5.conf</code> and <code>jaa
 for references to more documentation, and tweak them to match your Kerberos configuration.
 </p>
 <p>
+Delegation of credentials is disabled by default for SPNEGO. If you want to enable it, you can do so by setting the property <code>kerberos.spnego.delegate_cred</code> to <code>true</code>.
+</p>
+<p>
 When generating a SPN for Kerberos SPNEGO authentication IE and Firefox will omit the port number
 from the URL. Chrome has an option (<code>--enable-auth-negotiate-port</code>) to include the port
 number if it differs from the standard ones (<code>80</code> and <code>443</code>). That behavior

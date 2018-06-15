@@ -463,6 +463,10 @@ JMETER-SERVER</source>
     Should port be stripped from urls before constructing SPNs for SPNEGO authentication.
     Defaults to: <code>true</code>
 </property>
+<property name="kerberos.spnego.delegate_cred">
+    Should SPNEGO authentication should use delegation of credentials.
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.12 Apache HttpClient logging examples" anchor="httpclient_logging_examples">

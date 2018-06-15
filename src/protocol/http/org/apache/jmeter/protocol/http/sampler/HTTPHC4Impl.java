@@ -110,7 +110,6 @@ import org.apache.http.impl.auth.DigestScheme;
 import org.apache.http.impl.auth.DigestSchemeFactory;
 import org.apache.http.impl.auth.KerberosScheme;
 import org.apache.http.impl.auth.NTLMSchemeFactory;
-import org.apache.http.impl.auth.SPNegoSchemeFactory;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -142,6 +141,7 @@ import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.DynamicKerberosSchemeFactory;
+import org.apache.jmeter.protocol.http.control.DynamicSPNegoSchemeFactory;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.hc.LaxDeflateInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LazyLayeredConnectionSocketFactory;
@@ -1030,7 +1030,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         .register(AuthSchemes.BASIC, new BasicSchemeFactory())
                         .register(AuthSchemes.DIGEST, new DigestSchemeFactory())
                         .register(AuthSchemes.NTLM, new NTLMSchemeFactory())
-                        .register(AuthSchemes.SPNEGO, new SPNegoSchemeFactory())
+                        .register(AuthSchemes.SPNEGO, new DynamicSPNegoSchemeFactory(
+                                AuthManager.STRIP_PORT, AuthManager.USE_CANONICAL_HOST_NAME))
                         .register(AuthSchemes.KERBEROS, new DynamicKerberosSchemeFactory(
                                 AuthManager.STRIP_PORT, AuthManager.USE_CANONICAL_HOST_NAME))
                         .build();
