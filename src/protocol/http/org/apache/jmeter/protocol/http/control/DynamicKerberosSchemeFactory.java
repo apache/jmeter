@@ -23,7 +23,6 @@ import org.apache.http.impl.auth.KerberosScheme;
 import org.apache.http.impl.auth.KerberosSchemeFactory;
 import org.apache.http.protocol.HttpContext;
 import org.apache.jmeter.util.JMeterUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
