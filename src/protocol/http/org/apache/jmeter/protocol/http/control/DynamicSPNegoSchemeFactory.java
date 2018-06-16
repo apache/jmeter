@@ -19,8 +19,8 @@
 package org.apache.jmeter.protocol.http.control;
 
 import org.apache.http.auth.AuthScheme;
-import org.apache.http.impl.auth.KerberosScheme;
-import org.apache.http.impl.auth.KerberosSchemeFactory;
+import org.apache.http.impl.auth.SPNegoScheme;
+import org.apache.http.impl.auth.SPNegoSchemeFactory;
 import org.apache.http.protocol.HttpContext;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -28,23 +28,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Extends {@link KerberosSchemeFactory} to provide ability to customize stripPort
- * setting in {@link KerberosScheme} based on {@link HttpContext}
+ * Extends {@link SPNegoSchemeFactory} to provide ability to customize stripPort
+ * setting in {@link SPNegoScheme} based on {@link HttpContext}
  * @since 4.1
  */
-public class DynamicKerberosSchemeFactory extends KerberosSchemeFactory {
+public class DynamicSPNegoSchemeFactory extends SPNegoSchemeFactory {
     static final String CONTEXT_ATTRIBUTE_STRIP_PORT = "__jmeter.K_SP__";
     static final String CONTEXT_ATTRIBUTE_DELEGATE_CRED = "__jmeter.K_DT__";
     static final boolean DELEGATE_CRED = JMeterUtils.getPropDefault("kerberos.spnego.delegate_cred", false);
-    private static final Logger log = LoggerFactory.getLogger(DynamicKerberosSchemeFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(DynamicSPNegoSchemeFactory.class);
 
     /**
-     * Constructor for DynamicKerberosSchemeFactory
+     * Constructor for DynamicSPNegoSchemeFactory
      * @param stripPort flag, whether port should be stripped from SPN
      * @param useCanonicalHostname flag, whether SPN should use the canonical hostname
      * @since 4.0
      */
-    public DynamicKerberosSchemeFactory(final boolean stripPort, final boolean useCanonicalHostname) {
+    public DynamicSPNegoSchemeFactory(final boolean stripPort, final boolean useCanonicalHostname) {
         super(stripPort, useCanonicalHostname);
     }
 
@@ -52,11 +52,11 @@ public class DynamicKerberosSchemeFactory extends KerberosSchemeFactory {
     public AuthScheme create(final HttpContext context) {
         boolean stripPort = isEnabled(context.getAttribute(CONTEXT_ATTRIBUTE_STRIP_PORT), isStripPort());
         if (isEnabled(context.getAttribute(CONTEXT_ATTRIBUTE_DELEGATE_CRED), DELEGATE_CRED)) {
-            log.debug("Use DelegatingKerberosScheme");
-            return new DelegatingKerberosScheme(stripPort, isStripPort());
+            log.debug("Use DelegatingSPNegoScheme");
+            return new DelegatingSPNegoScheme(stripPort, isStripPort());
         }
-        log.debug("Use KerberosScheme");
-        return new KerberosScheme(stripPort, isUseCanonicalHostname());
+        log.debug("Use SPNegoScheme");
+        return new SPNegoScheme(stripPort, isUseCanonicalHostname());
     }
 
     private boolean isEnabled(Object contextAttribute, boolean defaultValue) {

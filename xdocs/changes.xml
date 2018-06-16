@@ -173,6 +173,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>61058</bug>HTTP Request : Add option <code>httpclient4.deflate_relax_mode</code> to avoid "Unexpected end of ZLIB input stream" when deflating what seems to be invalid streams. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>43612</bug>HTTP PUT does not honor request parameters. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>60190</bug>Content-Type is added for POST unconditionally. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62462</bug><pr>387</pr>Make delegation of credentials in SPNEGO possible again.</li>
 </ul>
 
 <h3>Other Samplers</h3>
