@@ -23,7 +23,6 @@ import org.apache.http.impl.auth.SPNegoScheme;
 import org.apache.http.impl.auth.SPNegoSchemeFactory;
 import org.apache.http.protocol.HttpContext;
 import org.apache.jmeter.util.JMeterUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
