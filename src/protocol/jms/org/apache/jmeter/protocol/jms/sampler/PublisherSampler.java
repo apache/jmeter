@@ -208,6 +208,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
             try {
                 initClient();
             } catch (JMSException | NamingException e) {
+                result.sampleStart();
+                result.sampleEnd();
                 handleError(result, e, false);
                 return result;
             }
