@@ -25,6 +25,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
@@ -779,7 +780,7 @@ public final class CSVSaveService {
             return sb.toString();
         }
     }
-
+    
     /**
      * Convert a result into a string, where the fields of the result are
      * separated by a specified String.
@@ -792,11 +793,26 @@ public final class CSVSaveService {
      */
     public static String resultToDelimitedString(SampleEvent event,
             final String delimiter) {
+        return resultToDelimitedString(event, event.getResult(), event.getResult().getSaveConfig(), delimiter);
+    }
+    
+    /**
+     * Convert a result into a string, where the fields of the result are
+     * separated by a specified String.
+     * 
+     * @param event
+     *            the sample event to be converted
+     * @param sample {@link SampleResult} to log
+     * @param saveConfig {@link SampleSaveConfiguration} to use for logging
+     * @param delimiter
+     *            the separation string
+     * @return the separated value representation of the result
+     */
+    public static String resultToDelimitedString(SampleEvent event,
+            SampleResult sample,
+            SampleSaveConfiguration saveConfig,
+            final String delimiter) {
         StringQuoter text = new StringQuoter(delimiter.charAt(0));
-
-        SampleResult sample = event.getResult();
-        SampleSaveConfiguration saveConfig = sample.getSaveConfig();
-
         if (saveConfig.saveTimestamp()) {
             if (saveConfig.printMilliseconds()) {
                 text.append(sample.getTimeStamp());
@@ -884,7 +900,7 @@ public final class CSVSaveService {
         }
 
         if (saveConfig.saveIdleTime()) {
-            text.append(event.getResult().getIdleTime());
+            text.append(sample.getIdleTime());
         }
 
         if (saveConfig.saveConnectTime()) {
@@ -1079,5 +1095,24 @@ public final class CSVSaveService {
     public static String[] csvSplitString(String line, char delim)
             throws IOException {
         return csvReadFile(new BufferedReader(new StringReader(line)), delim);
+    }
+
+    /**
+     * @param event {@link SampleEvent}
+     * @param out {@link PrintWriter} to which samples will be written
+     */
+    public static void saveSampleResult(SampleEvent event, PrintWriter out) {
+        SampleSaveConfiguration saveConfiguration = event.getResult().getSaveConfig();
+        String delimiter = saveConfiguration.getDelimiter();
+        String savee = resultToDelimitedString(event, event.getResult(), saveConfiguration, delimiter);
+        out.println(savee);
+        
+        if(saveConfiguration.saveSubresults()) {
+            SampleResult result = event.getResult();
+            for (SampleResult subResult : result.getSubResults()) {
+                savee = resultToDelimitedString(event, subResult, saveConfiguration, delimiter);
+                out.println(savee);
+            }
+        }
     }
 }
