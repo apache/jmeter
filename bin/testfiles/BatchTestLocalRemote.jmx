@@ -297,8 +297,8 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -369,8 +369,8 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>false</samplerData>
               <xml>false</xml>
@@ -832,8 +832,8 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -1184,8 +1184,8 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -1220,8 +1220,8 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>false</samplerData>
               <xml>false</xml>
@@ -1528,8 +1528,8 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -1751,8 +1751,8 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -1887,8 +1887,8 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -2034,8 +2034,8 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -2167,8 +2167,8 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -2302,8 +2302,8 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
