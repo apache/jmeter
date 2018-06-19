@@ -123,11 +123,11 @@ public class SaveService {
     private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"<ph>\"?>"; // $NON-NLS-1$
 
     // Default file name
-    private static final String SAVESERVICE_PROPERTIES_FILE = "/bin/saveservice.properties"; // $NON-NLS-1$
+    private static final String SAVESERVICE_PROPERTIES_FILE = "saveservice.properties"; // $NON-NLS-1$
 
     // Property name used to define file name
     private static final String SAVESERVICE_PROPERTIES = "saveservice_properties"; // $NON-NLS-1$
-
+    
     // Define file format versions
     private static final String VERSION_2_2 = "2.2";  // $NON-NLS-1$
 
@@ -182,11 +182,21 @@ public class SaveService {
         }
     }
 
+    private static File getSaveServiceFile() {
+        String saveServiceProps = JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,SAVESERVICE_PROPERTIES_FILE); //$NON-NLS-1$
+        if (saveServiceProps.length() > 0){ //$NON-NLS-1$
+            return JMeterUtils.findFile(saveServiceProps);
+        }
+        throw new IllegalStateException("Could not find file configured in saveservice_properties property set to:"+saveServiceProps);
+    }
+    
     public static Properties loadProperties() throws IOException{
         Properties nameMap = new Properties();
-        try (FileInputStream fis = new FileInputStream(JMeterUtils.getJMeterHome()
-                + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE))){
-            nameMap.load(fis);
+        File saveServiceFile = getSaveServiceFile();
+        if (saveServiceFile.canRead()){
+            try (FileInputStream fis = new FileInputStream(saveServiceFile)){
+                nameMap.load(fis);
+            }
         }
         return nameMap;
     }
@@ -194,10 +204,9 @@ public class SaveService {
     private static String getChecksumForPropertiesFile()
             throws NoSuchAlgorithmException, IOException {
         MessageDigest md = MessageDigest.getInstance("SHA1");
+        File saveServiceFile = getSaveServiceFile();
         try (BufferedReader reader = 
-                Files.newBufferedReader(new File(JMeterUtils.getJMeterHome()
-                    + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,
-                    SAVESERVICE_PROPERTIES_FILE)).toPath(), Charset.defaultCharset())) {
+                Files.newBufferedReader(saveServiceFile.toPath(), Charset.defaultCharset())) {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 md.update(line.getBytes());

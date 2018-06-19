@@ -143,6 +143,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>62238</bug>Add ability to Switch to next iteration of Current Loop. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
   <li><bug>62239</bug>Add ability to Break Current Loop</li>
   <li><bug>62470</bug>CSV Output : Enable logging of sub results when <code>jmeter.save.saveservice.subresults=true</code>. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  <li><bug>62473</bug>Setting "saveservice_properties" has counter intuitive behaviour</li>
   <li><bug>62065</bug>Use Maven artifact for JAF Module instead of embedded module</li>
   <li><pr>379</pr> Improve chinese translations. Contributed by XmeterNet</li>
   <li><bug>61714</bug>Update Real-time results documentation</li>
