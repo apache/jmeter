@@ -49,3 +49,4 @@ class FunctionHelperSpec extends JMeterSpec {
           "fname"      | ["a,b", "c"]  | "\${fname(a\\,b,c)}"
     }
 }
+
