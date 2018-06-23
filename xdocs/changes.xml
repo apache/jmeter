@@ -237,6 +237,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>62397</bug>Don't break lines at commata when using JSON Path Tester</li> 
   <li><bug>62281</bug>Prevent NPE in MapProperty. Patch by belugabehr (dam6923 at gmail.com)</li>
   <li><bug>62457</bug>In usermanual, the UUID Function's example is wrong. Contributed by helppass (onegaicimasu at hotmail.com)</li>
+  <li><bug>62478</bug>Escape commata in parameters when constructing function strings in the GUI function helper. Reported by blue414 (blue414 at 163.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -262,6 +263,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>belugabehr (dam6923 at gmail.com)</li>
     <li>Giancarlo Romeo (giancarloromeo at gmail.com)</li>
     <li>helppass (onegaicimasu at hotmail.com)</li>
+    <li>blue414 (blue414 at 163.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
