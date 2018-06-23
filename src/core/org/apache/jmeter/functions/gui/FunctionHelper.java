@@ -175,9 +175,25 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        StringBuilder functionCall = new StringBuilder("${");
-        functionCall.append(functionList.getText());
+        String functionName = functionList.getText();
         Arguments args = (Arguments) parameterPanel.createTestElement();
+        String functionCall = buildFunctionCallString(functionName, args);
+        cutPasteFunction.setText(functionCall);
+        GuiUtils.copyTextToClipboard(cutPasteFunction.getText());
+        CompoundVariable function = new CompoundVariable(functionCall);
+        try {
+            resultTextArea.setText(function.execute().trim());
+        } catch(Exception ex) {
+            log.error("Error calling function {}", functionCall, ex);
+            resultTextArea.setText(ex.getMessage() + ", \nstacktrace:\n "+
+                    ExceptionUtils.getStackTrace(ex));
+            resultTextArea.setCaretPosition(0);
+        }
+    }
+
+    private String buildFunctionCallString(String functionName, Arguments args) {
+        StringBuilder functionCall = new StringBuilder("${");
+        functionCall.append(functionName);
         if (args.getArguments().size() > 0) {
             functionCall.append("(");
             PropertyIterator iter = args.iterator();
@@ -187,23 +203,13 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
                 if (!first) {
                     functionCall.append(",");
                 }
-                functionCall.append(arg.getValue());
+                functionCall.append(arg.getValue().replaceAll(",", "\\\\,"));
                 first = false;
             }
             functionCall.append(")");
         }
         functionCall.append("}");
-        cutPasteFunction.setText(functionCall.toString());
-        GuiUtils.copyTextToClipboard(cutPasteFunction.getText());
-        CompoundVariable function = new CompoundVariable(functionCall.toString());
-        try {
-            resultTextArea.setText(function.execute().trim());
-        } catch(Exception ex) {
-            log.error("Error calling function {}", functionCall.toString(), ex);
-            resultTextArea.setText(ex.getMessage() + ", \nstacktrace:\n "+
-                    ExceptionUtils.getStackTrace(ex));
-            resultTextArea.setCaretPosition(0);
-        }
+        return functionCall.toString();
     }
 
     private class HelpListener implements ActionListener {
