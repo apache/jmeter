@@ -20,6 +20,7 @@ package org.apache.jmeter.report.dashboard;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
@@ -444,23 +445,31 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         EmptyGraphChecker checker = new EmptyGraphChecker(
                 filtersOnlySampleSeries, showControllerSeriesOnly,
                 filterPattern);
+        DataContext customGraphs = new DataContext();
+        Map<String, GraphConfiguration> mapConfiguration = new HashMap<>();
         for (Map.Entry<String, GraphConfiguration> graphEntry : configuration
                 .getGraphConfigurations().entrySet()) {
             final String graphId = graphEntry.getKey();
             final GraphConfiguration graphConfiguration = graphEntry.getValue();
-            final SubConfiguration extraOptions = exportCfg
-                    .getGraphExtraConfigurations().get(graphId);
+            final SubConfiguration extraOptions = exportCfg.getGraphExtraConfigurations().get(graphId);
 
             // Initialize customizer and checker
             customizer.setExtraOptions(extraOptions);
             checker.setExcludesControllers(
                     graphConfiguration.excludesControllers());
             checker.setGraphId(graphId);
-
-            // Export graph data
-            addResultToContext(graphId, storedData, dataContext, jsonizer,
+            mapConfiguration.put(graphId, graphConfiguration);
+            if(graphId.substring(0,7).equals("custom_")) {
+                addResultToContext(graphId, storedData, customGraphs, jsonizer,
+                        customizer, checker);
+            } else {
+                // Export graph data
+                addResultToContext(graphId, storedData, dataContext, jsonizer,
                     customizer, checker);
+            }
         }
+        dataContext.put("graphConfigurations", mapConfiguration);
+        dataContext.put("customsGraphsData", customGraphs);
 
         // Replace the begin date with its formatted string and store the old
         // timestamp

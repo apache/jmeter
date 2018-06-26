@@ -132,6 +132,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <ul>
     <li><bug>62243</bug>Dashboard : make option "<code>--forceDeleteResultFile</code>"/"<code>-f</code>" option delete folder referenced by "<code>-o</code>" option</li>
     <li><bug>62367</bug>HTML Report Generator: Add Graph Total Transactions per Second. Contributed mainly by Martha Laks (laks.martha at gmail.com)</li>
+    <li><bug>62166</bug>Report/Dashboard: Provide ability to register custom graphs and metrics in the JMeter Dashboard. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>General</h3>

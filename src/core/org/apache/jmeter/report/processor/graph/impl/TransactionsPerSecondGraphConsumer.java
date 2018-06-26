@@ -84,6 +84,15 @@ public class TransactionsPerSecondGraphConsumer extends
         return groupInfos;
     }
 
+    @Override
+    public void initialize() {
+        super.initialize();
+        // Override the granularity of the aggregators factory
+        ((TimeRateAggregatorFactory) getGroupInfos().get(
+                AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
+                .setGranularity(getGranularity());
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -94,10 +103,6 @@ public class TransactionsPerSecondGraphConsumer extends
     @Override
     public void setGranularity(long granularity) {
         super.setGranularity(granularity);
-        // Override the granularity of the aggregators factory
-        ((TimeRateAggregatorFactory) getGroupInfos().get(
-                AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
-                .setGranularity(granularity);
     }
 
 }

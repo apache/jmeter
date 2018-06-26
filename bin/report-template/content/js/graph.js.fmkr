@@ -34,194 +34,8 @@ $(document).ready(function() {
     try{
         refreshResponseTimePercentiles();
     } catch(e){}
-    $(".portlet-header").css("cursor", "auto");
 });
 
-var showControllersOnly = ${showControllersOnly?c!"false"};
-var seriesFilter = ${seriesFilter!"undefined"};
-var filtersOnlySampleSeries = ${filtersOnlySampleSeries?c!"false"};
-
-// Fixes time stamps
-function fixTimeStamps(series, offset){
-    $.each(series, function(index, item) {
-        $.each(item.data, function(index, coord) {
-            coord[0] += offset;
-        });
-    });
-}
-
-// Check if the specified jquery object is a graph
-function isGraph(object){
-    return object.data('plot') !== undefined;
-}
-
-/**
- * Export graph to a PNG
- */
-function exportToPNG(graphName, target) {
-    var plot = $("#"+graphName).data('plot');
-    var flotCanvas = plot.getCanvas();
-    var image = flotCanvas.toDataURL();
-    image = image.replace("image/png", "image/octet-stream");
-    
-    var downloadAttrSupported = ("download" in document.createElement("a"));
-    if(downloadAttrSupported === true) {
-        target.download = graphName + ".png";
-        target.href = image;
-    }
-    else {
-        document.location.href = image;
-    }
-    
-}
-
-// Override the specified graph options to fit the requirements of an overview
-function prepareOverviewOptions(graphOptions){
-    var overviewOptions = {
-        series: {
-            shadowSize: 0,
-            lines: {
-                lineWidth: 1
-            },
-            points: {
-                // Show points on overview only when linked graph does not show
-                // lines
-                show: getProperty('series.lines.show', graphOptions) == false,
-                radius : 1
-            }
-        },
-        xaxis: {
-            ticks: 2,
-            axisLabel: null
-        },
-        yaxis: {
-            ticks: 2,
-            axisLabel: null
-        },
-        legend: {
-            show: false,
-            container: null
-        },
-        grid: {
-            hoverable: false
-        },
-        tooltip: false
-    };
-    return $.extend(true, {}, graphOptions, overviewOptions);
-}
-
-// Force axes boundaries using graph extra options
-function prepareOptions(options, data) {
-    options.canvas = true;
-    var extraOptions = data.extraOptions;
-    if(extraOptions !== undefined){
-        var xOffset = options.xaxis.mode === "time" ? ${(timeZoneOffset?c)!0} : 0;
-        var yOffset = options.yaxis.mode === "time" ? ${(timeZoneOffset?c)!0} : 0;
-
-        if(!isNaN(extraOptions.minX))
-        	options.xaxis.min = parseFloat(extraOptions.minX) + xOffset;
-        
-        if(!isNaN(extraOptions.maxX))
-        	options.xaxis.max = parseFloat(extraOptions.maxX) + xOffset;
-        
-        if(!isNaN(extraOptions.minY))
-        	options.yaxis.min = parseFloat(extraOptions.minY) + yOffset;
-        
-        if(!isNaN(extraOptions.maxY))
-        	options.yaxis.max = parseFloat(extraOptions.maxY) + yOffset;
-    }
-}
-
-// Filter, mark series and sort data
-/**
- * @param data
- * @param noMatchColor if defined and true, series.color are not matched with index
- */
-function prepareSeries(data, noMatchColor){
-    var result = data.result;
-
-    // Keep only series when needed
-    if(seriesFilter && (!filtersOnlySampleSeries || result.supportsControllersDiscrimination)){
-        // Insensitive case matching
-        var regexp = new RegExp(seriesFilter, 'i');
-        result.series = $.grep(result.series, function(series, index){
-            return regexp.test(series.label);
-        });
-    }
-
-    // Keep only controllers series when supported and needed
-    if(result.supportsControllersDiscrimination && showControllersOnly){
-        result.series = $.grep(result.series, function(series, index){
-            return series.isController;
-        });
-    }
-
-    // Sort data and mark series
-    $.each(result.series, function(index, series) {
-        series.data.sort(compareByXCoordinate);
-        if(!(noMatchColor && noMatchColor===true)) {
-	        series.color = index;
-	    }
-    });
-}
-
-// Set the zoom on the specified plot object
-function zoomPlot(plot, xmin, xmax, ymin, ymax){
-    var axes = plot.getAxes();
-    // Override axes min and max options
-    $.extend(true, axes, {
-        xaxis: {
-            options : { min: xmin, max: xmax }
-        },
-        yaxis: {
-            options : { min: ymin, max: ymax }
-        }
-    });
-
-    // Redraw the plot
-    plot.setupGrid();
-    plot.draw();
-}
-
-// Prepares DOM items to add zoom function on the specified graph
-function setGraphZoomable(graphSelector, overviewSelector){
-    var graph = $(graphSelector);
-    var overview = $(overviewSelector);
-
-    // Ignore mouse down event
-    graph.bind("mousedown", function() { return false; });
-    overview.bind("mousedown", function() { return false; });
-
-    // Zoom on selection
-    graph.bind("plotselected", function (event, ranges) {
-        // clamp the zooming to prevent infinite zoom
-        if (ranges.xaxis.to - ranges.xaxis.from < 0.00001) {
-            ranges.xaxis.to = ranges.xaxis.from + 0.00001;
-        }
-        if (ranges.yaxis.to - ranges.yaxis.from < 0.00001) {
-            ranges.yaxis.to = ranges.yaxis.from + 0.00001;
-        }
-
-        // Do the zooming
-        var plot = graph.data('plot');
-        zoomPlot(plot, ranges.xaxis.from, ranges.xaxis.to, ranges.yaxis.from, ranges.yaxis.to);
-        plot.clearSelection();
-
-        // Synchronize overview selection
-        overview.data('plot').setSelection(ranges, true);
-    });
-
-    // Zoom linked graph on overview selection
-    overview.bind("plotselected", function (event, ranges) {
-        graph.data('plot').setSelection(ranges);
-    });
-
-    // Reset linked graph zoom when reseting overview selection
-    overview.bind("plotunselected", function () {
-        var overviewAxes = overview.data('plot').getAxes();
-        zoomPlot(graph.data('plot'), overviewAxes.xaxis.min, overviewAxes.xaxis.max, overviewAxes.yaxis.min, overviewAxes.yaxis.max);
-    });
-}
 
 var responseTimePercentilesInfos = {
         data: ${responseTimePercentiles!"{}"},
@@ -1426,6 +1240,11 @@ function collapse(elem, collapsed){
                 refreshLatenciesOverTime(true);
             }
             document.location.href="#latenciesOverTime";
+        } else if (elem.id == "bodyCustomGraph") {
+            if (isGraph($(elem).find('.flot-chart-content')) == false) {
+                refreshCustomGraph(true);
+            }
+            document.location.href="#responseCustomGraph";
         } else if (elem.id == "bodyConnectTimeOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
                 refreshConnectTimeOverTime(true);
@@ -1485,24 +1304,6 @@ function collapse(elem, collapsed){
     }
 }
 
-// Collapse
-$(function() {
-        $('.collapse').on('shown.bs.collapse', function(){
-            collapse(this, false);
-        }).on('hidden.bs.collapse', function(){
-            collapse(this, true);
-        });
-});
-
-$(function() {
-    $(".glyphicon").mousedown( function(event){
-        var tmp = $('.in:not(ul)');
-        tmp.parent().parent().parent().find(".fa-chevron-up").removeClass("fa-chevron-down").addClass("fa-chevron-down");
-        tmp.removeClass("in");
-        tmp.addClass("out");
-    });
-});
-
 /*
  * Activates or deactivates all series of the specified graph (represented by id parameter)
  * depending on checked argument.
@@ -1521,6 +1322,9 @@ function toggleAll(id, checked){
     } else if(id == "choicesResponseTimesOverTime"){
         choiceContainer = $("#choicesResponseTimesOverTime");
         refreshResponseTimeOverTime(false);
+    }else if(id == "choicesResponseCustomGraph"){
+        choiceContainer = $("#choicesResponseCustomGraph");
+        refreshCustomGraph(false);
     } else if ( id == "choicesLatenciesOverTime"){
         choiceContainer = $("#choicesLatenciesOverTime");
         refreshLatenciesOverTime(false);
@@ -1570,80 +1374,3 @@ function toggleAll(id, checked){
     });
 }
 
-// Unchecks all boxes for "Hide all samples" functionality
-function uncheckAll(id){
-    toggleAll(id, false);
-}
-
-// Checks all boxes for "Show all samples" functionality
-function checkAll(id){
-    toggleAll(id, true);
-}
-
-// Prepares data to be consumed by plot plugins
-function prepareData(series, choiceContainer, customizeSeries){
-    var datasets = [];
-
-    // Add only selected series to the data set
-    choiceContainer.find("input:checked").each(function (index, item) {
-        var key = $(item).attr("name");
-        var i = 0;
-        var size = series.length;
-        while(i < size && series[i].label != key)
-            i++;
-        if(i < size){
-            var currentSeries = series[i];
-            datasets.push(currentSeries);
-            if(customizeSeries)
-                customizeSeries(currentSeries);
-        }
-    });
-    return datasets;
-}
-
-/*
- * Ignore case comparator
- */
-function sortAlphaCaseless(a,b){
-    return a.toLowerCase() > b.toLowerCase() ? 1 : -1;
-};
-
-/*
- * Creates a legend in the specified element with graph information
- */
-function createLegend(choiceContainer, infos) {
-    // Sort series by name
-    var keys = [];
-    $.each(infos.data.result.series, function(index, series){
-        keys.push(series.label);
-    });
-    keys.sort(sortAlphaCaseless);
-
-    // Create list of series with support of activation/deactivation
-    $.each(keys, function(index, key) {
-        var id = choiceContainer.attr('id') + index;
-        $('<li />')
-            .append($('<input id="' + id + '" name="' + key + '" type="checkbox" checked="checked" hidden />'))
-            .append($('<label />', { 'text': key , 'for': id }))
-            .appendTo(choiceContainer);
-    });
-    choiceContainer.find("label").click( function(){
-        if (this.style.color !== "rgb(129, 129, 129)" ){
-            this.style.color="#818181";
-        }else {
-            this.style.color="black";
-        }
-        $(this).parent().children().children().toggleClass("legend-disabled");
-    });
-    choiceContainer.find("label").mousedown( function(event){
-        event.preventDefault();
-    });
-    choiceContainer.find("label").mouseenter(function(){
-        this.style.cursor="pointer";
-    });
-
-    // Recreate graphe on series activation toggle
-    choiceContainer.find("input").click(function(){
-        infos.createGraph();
-    });
-}

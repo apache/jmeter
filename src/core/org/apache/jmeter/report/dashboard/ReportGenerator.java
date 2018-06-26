@@ -235,10 +235,8 @@ public class ReportGenerator {
                 .getGraphConfigurations();
 
         // Process configuration to build graph consumers
-        for (Map.Entry<String, GraphConfiguration> entryGraphCfg : graphConfigurations
-                .entrySet()) {
-            addGraphConsumer(nameFilter, excludeControllerFilter,
-                    entryGraphCfg);
+        for (Map.Entry<String, GraphConfiguration> entryGraphCfg : graphConfigurations.entrySet()) {
+            addGraphConsumer(nameFilter, excludeControllerFilter, entryGraphCfg);
         }
 
         // Generate data
@@ -353,6 +351,7 @@ public class ReportGenerator {
                 setProperty(className, obj, methods, propertyName,
                         propertyValue, setterName);
             }
+            graph.initialize(); 
 
             // Choose which entry point to use to plug the graph
             AbstractSampleConsumer entryPoint = graphConfiguration
@@ -383,11 +382,9 @@ public class ReportGenerator {
         } catch (ClassNotFoundException | IllegalAccessException
                 | InstantiationException | ClassCastException ex) {
             String error = String.format(INVALID_CLASS_FMT, className);
-            log.error(error, ex);
             throw new GenerationException(error, ex);
         } catch (ExportException ex) {
             String error = String.format(INVALID_EXPORT_FMT, exporterName);
-            log.error(error, ex);
             throw new GenerationException(error, ex);
         }
     }
@@ -554,8 +551,7 @@ public class ReportGenerator {
                                                 parameterType
                                                         .getName()));
                             }
-                            method.invoke(obj, converter
-                                    .convert(propertyValue));
+                            method.invoke(obj, converter.convert(propertyValue));
                         }
                         return;
                     }

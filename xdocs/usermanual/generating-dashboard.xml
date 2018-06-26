@@ -705,7 +705,36 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                     </tbody>
                 </table>
             </subsection>
-            <subsection name="&sect-num;.5  Want to improve Report Dashboard ?" anchor="development">
+            <subsection name="&sect-num;.5 Generating customs graphs over time" anchor="customs_graphs">
+                <p>
+                            You can graph any sample_variable in CSV over time, you can customize your graphs
+                            by settings their properties in the user.properties file.
+                            <br />
+                            They must use the id prefix <code>custom_</code>:
+                            <source>jmeter.reportgenerator.graph.custom_&lt;your_graph_name_id&gt;.property.&lt;your_option_name&gt;</source>
+                            To specify that this graph is a customized one :
+                            <source>jmeter.reportgenerator.graph.custom_&lt;your_graph_name_id&gt;.classname=org.apache.jmeter.report.processor.graph.impl.CustomGraphConsumer</source>
+                        </p>
+                        <properties>
+                            <property name="set_X_Axis" required="Yes">Sets the X axis name of the graph.</property>
+                            <property name="set_Y_Axis" required="Yes">Sets the Y axis name of the graph.</property>
+                            <property name="set_Content_Message" required="Yes">Sets the displayed message when the cursor is on a point of the graph.</property>
+                            <property name="set_Sample_Variable_Name" required="Yes">Name of the column you want to graph in the csv.</property>
+                        </properties>
+                        
+                        <p>Here is an example of a custom graph configuration that graphs the variable <code>ts-hit</code>: </p>
+                        <source>
+jmeter.reportgenerator.graph.custom_testGraph.classname=org.apache.jmeter.report.processor.graph.impl.CustomGraphConsumer
+jmeter.reportgenerator.graph.custom_testGraph.title=Chunk Hit
+jmeter.reportgenerator.graph.custom_testGraph.property.set_Y_Axis=Number of Hits
+jmeter.reportgenerator.graph.custom_testGraph.set_X_Axis=Over Time
+jmeter.reportgenerator.graph.custom_testGraph.property.set_granularity=60000
+jmeter.reportgenerator.graph.custom_testGraph.property.set_Sample_Variable_Name=ts-hit
+jmeter.reportgenerator.graph.custom_testGraph.property.set_Content_Message=Number of Hits :
+                        </source>
+            </subsection>
+            
+            <subsection name="&sect-num;.6  Want to improve Report Dashboard ?" anchor="development">
             If you want to contribute new graphs or improve current ones, you
             can read this <a href="../devguide-dashboard.html" >developer documentation</a>.<br/>
             Read this <a href="../building.html" >documentation</a> on contributing.

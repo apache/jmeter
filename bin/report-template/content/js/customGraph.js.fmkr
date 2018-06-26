@@ -1,0 +1,160 @@
+/*
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+
+    
+$(document).ready(function() {
+    $(".click-title").mouseenter( function(    e){
+        e.preventDefault();
+        this.style.cursor="pointer";
+    });
+    $(".click-title").mousedown( function(event){
+        event.preventDefault();
+    });
+    
+    <#list customsGraphsData?keys as key> 
+    try{
+        refresh${key}(true);
+    } catch(e){
+        console.log(e);
+    }<#break> <#-- Stop after the first iteration in purpose to show the first graph only -->
+    </#list>
+    
+    $(".portlet-header").css("cursor", "auto");
+});
+
+<#list customsGraphsData?keys as key>
+var response${key}Infos = {
+    data: ${customsGraphsData[key]},
+    getOptions: function(){
+        return {
+            series: {
+                lines: {
+                    show: true
+                },
+                points: {
+                    show: true
+                }
+            },
+            xaxis: {
+                mode: "time",
+                timeformat: getTimeFormat(this.data.result.granularity),
+                axisLabel: '${graphConfigurations[key].getProperties()["set_X_Axis"]!"Default X Axis Title"}',
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 20,
+            },
+            yaxis: {
+                axisLabel: '${graphConfigurations[key].getProperties()["set_Y_Axis"]!"Default Y Axis Title"}',
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 20,
+            },
+            legend: {
+                noColumns: 2,
+                show: true,
+                container: '#legendResponse${key}'
+            },
+            selection: {
+                mode: 'xy'
+            },
+            grid: {
+                hoverable: true // IMPORTANT! this is needed for tooltip to
+                                // work
+            },
+            tooltip: true,
+            tooltipOpts: {
+                content: "%s : at %x ${graphConfigurations[key].getProperties()["setContentMessage"]!"Default content message"} %y"
+            }
+        };
+    },
+    createGraph: function() {
+        var data = this.data;
+        var dataset = prepareData(data.result.series, $("#choicesResponse${key}"));
+        var options = this.getOptions();
+        prepareOptions(options, data);
+        $.plot($("#flotResponse${key}"), dataset, options);
+        // setup overview
+        $.plot($("#overviewResponse${key}"), dataset, prepareOverviewOptions(options));
+    }
+};
+
+// Response Custom Graph
+function refresh${key}(fixTimestamps) {
+    var infos = response${key}Infos;
+    prepareSeries(infos.data);
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
+    if(isGraph($("#flotResponse${key}"))){
+        infos.createGraph();
+    }else{
+        var choiceContainer = $("#choicesResponse${key}");
+        createLegend(choiceContainer, infos);
+        infos.createGraph();
+        setGraphZoomable("#flotResponse${key}", "#overviewResponse${key}");
+        $('#footerResponse${key} .legendColorBox > div').each(function(i){
+            $(this).clone().prependTo(choiceContainer.find("li").eq(i));
+        });
+    }
+};
+    </#list>
+
+function collapse(elem, collapsed){
+    if(collapsed){
+        $(elem).parent().find(".fa-chevron-up").removeClass("fa-chevron-up").addClass("fa-chevron-down");
+    }else{
+        $(elem).parent().find(".fa-chevron-down").removeClass("fa-chevron-down").addClass("fa-chevron-up");
+    
+    <#assign loopCount = 0>
+    <#list customsGraphsData?keys as key>
+    <#if loopCount == 0>
+    if(elem.id == "bodyResponse${key}"){
+    <#else>
+    else if(elem.id == "bodyResponse${key}"){
+    </#if>
+        if (isGraph($(elem).find('.flot-chart-content')) == false) {
+            refresh${key}(true);
+        }
+            document.location.href="#${key}";
+        }
+    </#list>
+    }
+}
+
+function toggleAll(id, checked){
+    var placeholder = document.getElementById(id);
+    var cases = $(placeholder).find(':checkbox');
+    cases.prop('checked', checked);
+    $(cases).parent().children().children().toggleClass("legend-disabled", !checked);
+    var choiceContainer;
+    
+    <#assign loopCount = 0>
+    <#list customsGraphsData?keys as key>
+    <#if loopCount == 0>
+    if(id == "choicesResponse${key}"){
+    <#else>
+    else if(id == "choicesResponse${key}"){
+    </#if>
+        choiceContainer = $("#choicesResponse${key}");
+        refresh${key}(false);
+    }
+    <#assign loopCount++>    
+    </#list>
+}
