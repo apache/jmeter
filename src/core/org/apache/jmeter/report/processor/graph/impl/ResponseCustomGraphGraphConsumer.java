@@ -20,21 +20,22 @@ package org.apache.jmeter.report.processor.graph.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.processor.TimeRateAggregatorFactory;
+import org.apache.jmeter.report.processor.MeanAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
-import org.apache.jmeter.report.processor.graph.CountValueSelector;
+import org.apache.jmeter.report.processor.graph.ElapsedTimeValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
-import org.apache.jmeter.report.processor.graph.StaticSeriesSelector;
+import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
- * The class HitsPerSecondGraphConsumer provides a graph to visualize hits rate
- * per second.
+ * The class ResponseCustomGraphGraphConsumer provides a graph to visualize mean 
+ * custom value per time period (defined by granularity)
  *
- * @since 3.0
+ * @since 4.1
  */
-public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
+public class ResponseCustomGraphGraphConsumer extends
+        AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
@@ -46,7 +47,7 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
         TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
-        keysSelector.setSelectBeginTime(true);
+        keysSelector.setSelectBeginTime(false);
         return keysSelector;
     }
 
@@ -60,47 +61,9 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
     protected Map<String, GroupInfo> createGroupInfos() {
         HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new TimeRateAggregatorFactory(), new StaticSeriesSelector(),
-                // We ignore Transaction Controller results
-                new CountValueSelector(true), false, false));
+                new MeanAggregatorFactory(), new NameSeriesSelector(),
+                // We include Transaction Controller results
+                new ElapsedTimeValueSelector(false), false, false));
         return groupInfos;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #setGranularity(long)
-     */
-    @Override
-    public void setGranularity(long granularity) {
-        super.setGranularity(granularity);
-        
-    }
-
-    @Override
-    public void initialize() {
-        super.initialize();
-        // Override the granularity of the aggregators factory
-        ((TimeRateAggregatorFactory) getGroupInfos().get(
-                AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
-                .setGranularity(getGranularity());
-        // Override the series name with the name of the graph
-        ((StaticSeriesSelector) getGroupInfos().get(
-                AbstractGraphConsumer.DEFAULT_GROUP).getSeriesSelector())
-                .setSeriesName(getName());
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.report.csv.processor.AbstractSampleConsumer#setName
-     * (java.lang.String)
-     */
-    @Override
-    public void setName(String name) {
-        super.setName(name);
     }
 }
