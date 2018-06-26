@@ -53,7 +53,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
      * The embedded time count consumer is used to buffer (disk storage) and tag
      * samples with the number of samples in the same interval.
      */
-    private final TimeCountConsumer embeddedConsumer;
+    private TimeCountConsumer embeddedConsumer;
 
     /**
      * Gets the granularity.
@@ -79,8 +79,6 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
      * Instantiates a new abstract over time graph consumer.
      */
     protected AbstractVersusRequestsGraphConsumer() {
-        embeddedConsumer = new TimeCountConsumer(this);
-        setGranularity(1L);
     }
 
     /*
@@ -93,6 +91,13 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
     @Override
     public void startConsuming() {
         embeddedConsumer.startConsuming();
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        embeddedConsumer = new TimeCountConsumer(this);
+        setGranularity(1L);
     }
 
     private void startConsumingBase() {

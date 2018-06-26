@@ -90,10 +90,10 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     public static final String DEFAULT_AGGREGATED_KEYS_SERIES_FORMAT = "%s-Aggregated";
 
     /** The map used to store group information. */
-    private final HashMap<String, GroupInfo> groupInfos;
+    private HashMap<String, GroupInfo> groupInfos;
 
     /** The keys selector. */
-    private final GraphKeysSelector keysSelector;
+    private GraphKeysSelector keysSelector;
 
     /** The overall seriesData name. */
     private String overallSeriesFormat = DEFAULT_OVERALL_SERIES_FORMAT;
@@ -228,8 +228,6 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * Instantiates a new abstract graph consumer.
      */
     protected AbstractGraphConsumer() {
-        keysSelector = createKeysSelector();
-        groupInfos = new HashMap<>(createGroupInfos());
     }
 
     protected abstract GraphKeysSelector createKeysSelector();
@@ -591,4 +589,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         }
     }
 
+    public void initialize() {
+        keysSelector = createKeysSelector();
+        groupInfos = new HashMap<>(createGroupInfos());
+    }
 }
