@@ -282,14 +282,14 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                         MessageFormat.format(
                                 JMeterUtils.getResString(
                                         "aggregate_report_xx_pct1_line"),
-                                new Object[] { PCT1_LABEL }),
+                                PCT1_LABEL),
                         false, green));
         eltList.add(
                 new BarGraph(
                         MessageFormat.format(
                                 JMeterUtils.getResString(
                                         "aggregate_report_xx_pct2_line"),
-                                new Object[] { PCT2_LABEL }),
+                                PCT2_LABEL),
                         false, yellow));
         
         eltList.add(
@@ -297,7 +297,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                         MessageFormat.format(
                                 JMeterUtils.getResString(
                                         "aggregate_report_xx_pct3_line"),
-                                new Object[] { PCT3_LABEL }),
+                                PCT3_LABEL),
                         false, purple));
         eltList.add(
                 new BarGraph(JMeterUtils.getResString("aggregate_report_min"),
