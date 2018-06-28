@@ -343,7 +343,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      * @return ObjectTableModel
      */
     static ObjectTableModel createObjectTableModel() {
-        return new ObjectTableModel(COLUMNS,
+        return new ObjectTableModel(getLabels(COLUMNS),
                 SamplingStatCalculator.class,
                 new Functor[] {
                 new Functor("getLabel"),                    //$NON-NLS-1$
@@ -513,7 +513,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         myJTable.setRowSorter(new ObjectTableSorter(model).fixLastRow());
         JMeterUtils.applyHiDPI(myJTable);
         // Fix centering of titles
-        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable, getColumnsMsgParameters());
+        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable);
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, getRenderers());
         myScrollPane = new JScrollPane(myJTable);
