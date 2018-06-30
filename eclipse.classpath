@@ -91,7 +91,7 @@
 	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.10.0.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.10.0.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.5.0-b01.jar"/>
-	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.3.jar"/>
+	<classpathentry kind="lib" path="lib/mongo-java-driver-3.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/ph-css-6.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/ph-commons-9.0.0.jar"/>

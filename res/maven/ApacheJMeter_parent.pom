@@ -95,7 +95,7 @@ under the License.
       <jsoup.version>1.11.2</jsoup.version>
       <rhino.version>1.7.7.2</rhino.version>
       <junit.version>4.12</junit.version>
-      <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
+      <mongo-java-driver.version>3.8.0</mongo-java-driver.version>
       <ph-css.version>6.0.0</ph-css.version>
       <ph-commons.version>9.0.0</ph-commons.version>
       <rsyntaxtextarea.version>2.6.1</rsyntaxtextarea.version>
