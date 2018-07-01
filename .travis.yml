@@ -1,8 +1,5 @@
 sudo: false
 language: java
-jdk:
-  - oraclejdk8
-  - oraclejdk11
 
 before_script:
   - test "x$RUN_CHECKSTYLE" != 'x' || ant -Djava.awt.headless=true download_jars install
