@@ -1,9 +1,9 @@
 sudo: false
-addons:
-  apt:
-    packages:
-      - oracle-java9-installer
 language: java
+jdk:
+  - oraclejdk8
+  - oraclejdk10
+  - oraclejdk11
 
 before_script:
   - test "x$RUN_CHECKSTYLE" != 'x' || ant -Djava.awt.headless=true download_jars install
