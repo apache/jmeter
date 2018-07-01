@@ -2,7 +2,6 @@ sudo: false
 language: java
 jdk:
   - oraclejdk8
-  - oraclejdk10
   - oraclejdk11
 
 before_script:
@@ -25,8 +24,6 @@ matrix:
       script: ant -Djava.awt.headless=true checkstyle
     - jdk: oraclejdk8
       script: 
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
-          - jdk_switcher use oraclejdk10
           - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
           - jdk_switcher use oraclejdk11
           - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
