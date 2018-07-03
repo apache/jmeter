@@ -57,7 +57,7 @@ public class CustomGraphConsumerTest {
         customGraphConsumer.setXAxis("X axis name");
         customGraphConsumer.setYAxis("Y axis name");
         customGraphConsumer.setContentMessage("content message");
-        customGraphConsumer.setSampleVariableName("responseMessage");
+        customGraphConsumer.setSampleVariableName("ulp_lag_ratio");
         
         map = customGraphConsumer.createGroupInfos();
         
@@ -70,11 +70,11 @@ public class CustomGraphConsumerTest {
         assertThat(customGraphConsumer.getXAxis(), equalTo("X axis name"));
         assertThat(customGraphConsumer.getYAxis(), equalTo("Y axis name"));
         assertThat(customGraphConsumer.getContentMessage(), equalTo("content message"));
-        assertThat(customGraphConsumer.getSampleVariableName(), equalTo(CSVSaveService.RESPONSE_MESSAGE));
+        assertThat(customGraphConsumer.getSampleVariableName(), equalTo("ulp_lag_ratio"));
         assertThat(customGraphConsumer.getIsNativeSampleVariableName(), equalTo(false));
         
         // bytes is one of the native sample variables names
-        customGraphConsumer.setSampleVariableName("bytes");
+        customGraphConsumer.setSampleVariableName(CSVSaveService.CSV_BYTES);
         assertThat(customGraphConsumer.getIsNativeSampleVariableName(), equalTo(true));
     }
     
@@ -95,7 +95,7 @@ public class CustomGraphConsumerTest {
             }else if(key.equals("Y_Axis")) {
                 assertThat(testedValue, equalTo("\"Y axis name\""));
             }else if(key.equals("sample_Metric_Name")) {
-                assertThat(testedValue, equalTo("\"responseMessage\""));
+                assertThat(testedValue, equalTo("\"ulp_lag_ratio\""));
             }else if(key.equals("content_Message")) {
                 assertThat(testedValue, equalTo("\"content message\""));
             }
@@ -155,7 +155,7 @@ public class CustomGraphConsumerTest {
     public void testSelectMetric() {
         Sample sample = new Sample(0, sampleMetaData, data);
         String testString = map.get("Generic group").getSeriesSelector().select(sample).toString();
-        assertThat(testString, equalTo("[responseMessage]"));
+        assertThat(testString, equalTo("[ulp_lag_ratio]"));
     }
     
     // Create a static SampleMetadatObject
