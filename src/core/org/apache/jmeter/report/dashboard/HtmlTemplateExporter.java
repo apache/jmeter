@@ -61,6 +61,8 @@ import freemarker.template.TemplateExceptionHandler;
  */
 public class HtmlTemplateExporter extends AbstractDataExporter {
 
+    private static final String CUSTOM_GRAPH_PREFIX = "custom_";
+
     /** Format used for non null check of parameters. */
     private static final String MUST_NOT_BE_NULL = "%s must not be null";
 
@@ -459,7 +461,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                     graphConfiguration.excludesControllers());
             checker.setGraphId(graphId);
             mapConfiguration.put(graphId, graphConfiguration);
-            if(graphId.substring(0,7).equals("custom_")) {
+            if(graphId.startsWith(CUSTOM_GRAPH_PREFIX)) {
                 addResultToContext(graphId, storedData, customGraphs, jsonizer,
                         customizer, checker);
             } else {
