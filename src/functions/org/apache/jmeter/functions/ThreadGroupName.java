@@ -45,7 +45,7 @@ public class ThreadGroupName extends AbstractFunctionByKey {
      * Get current thread group using sampler's context
      */
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
-        JMeterContext context = null;
+        JMeterContext context;
         if (currentSampler != null) {
             context = currentSampler.getThreadContext();
         } else {
