@@ -19,7 +19,9 @@ package org.apache.jmeter.report.processor.graph.impl;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.report.core.ConvertException;
@@ -35,6 +37,7 @@ import org.apache.jmeter.report.processor.graph.AbstractSeriesSelector;
 import org.apache.jmeter.report.processor.graph.GraphValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
+import org.apache.jmeter.save.CSVSaveService;
 
 /**
  * The class CustomGraphConsumer is added by the custom Graphs plugin.
@@ -51,6 +54,20 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
     public static final String RESULT_CONTENT_MESSAGE = "content_Message"; //$NON-NLS-1$
     public static final String REPORT_GENERATOR_PROPERTIES = "jmeter.reportgenerator.graph.customGraph.property"; //$NON-NLS-1$
 
+    private static final Set<String> NATIVE_VARIABLES = 
+            new HashSet<>(Arrays.asList(CSVSaveService.DATA_TYPE, 
+                    CSVSaveService.FAILURE_MESSAGE, CSVSaveService.LABEL, 
+                    CSVSaveService.RESPONSE_CODE, CSVSaveService.RESPONSE_MESSAGE,
+                    CSVSaveService.SUCCESSFUL, CSVSaveService.THREAD_NAME, 
+                    CSVSaveService.TIME_STAMP, CSVSaveService.CSV_ELAPSED, 
+                    CSVSaveService.CSV_BYTES, CSVSaveService.CSV_SENT_BYTES,
+                    CSVSaveService.CSV_THREAD_COUNT1, CSVSaveService.CSV_THREAD_COUNT2, 
+                    CSVSaveService.CSV_SAMPLE_COUNT, CSVSaveService.CSV_ERROR_COUNT,
+                    CSVSaveService.CSV_URL, CSVSaveService.CSV_FILENAME,
+                    CSVSaveService.CSV_LATENCY, CSVSaveService.CSV_CONNECT_TIME,
+                    CSVSaveService.CSV_ENCODING, CSVSaveService.CSV_HOSTNAME,
+                    CSVSaveService.CSV_IDLETIME));
+    
     private String yAxis;
     private String xAxis;
     private String contentMessage;
@@ -143,19 +160,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
      */
     public void setSampleVariableName(String sampleVarName) {
         sampleVariableName = sampleVarName;
-        // this if contains every native sample variables names
-        if(sampleVarName.equals("timeStamp") || sampleVarName.equals("elapsed") 
-                || sampleVarName.equals("label") || sampleVarName.equals("responseCode") 
-                || sampleVarName.equals("threadName") || sampleVarName.equals("success") 
-                || sampleVarName.equals("failureMessage") || sampleVarName.equals("bytes") 
-                || sampleVarName.equals("sentBytes") || sampleVarName.equals("grpThreads") 
-                || sampleVarName.equals("allThreads") || sampleVarName.equals("URL") 
-                || sampleVarName.equals("Latency") || sampleVarName.equals("IdleTime") 
-                || sampleVarName.equals("Connect")) {
-            isNativeSampleVariableName = true;
-        }else {
-            isNativeSampleVariableName = false;
-        }
+        isNativeSampleVariableName = NATIVE_VARIABLES.contains(sampleVarName); 
     }
     
         
@@ -207,13 +212,15 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
                 new GraphValueSelector() {
                   @Override
                   public Double select(String series, Sample sample) {
-                      String value="";
+                      String value;
                       if(isNativeSampleVariableName) {
                           value = sample.getData(sampleVariableName);
                       }else {
-                          value = sample.getData("\""+sampleVariableName+"\"");
+                          value = sample.getData(CSVSaveService.VARIABLE_NAME_QUOTE_CHAR
+                                  + sampleVariableName
+                                  + CSVSaveService.VARIABLE_NAME_QUOTE_CHAR);
                       }
-                      if(StringUtils.isEmpty(value) || value.equals("null")) {
+                      if(StringUtils.isEmpty(value) || "null".equals(value)) {
                           return null;
                       }
                       else {
