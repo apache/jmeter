@@ -1,8 +1,4 @@
 sudo: false
-addons:
-  apt:
-    packages:
-      - oracle-java9-installer
 language: java
 
 before_script:
@@ -10,9 +6,9 @@ before_script:
   - test "x$RUN_CHECKSTYLE" != 'xtrue' || ant -Djava.awt.headless=true download_checkstyle
 
 before_install:
-    - wget --no-check-certificate https://www.apache.org/dist/ant/binaries/apache-ant-1.10.3-bin.tar.gz
-    - tar -xzvf apache-ant-1.10.3-bin.tar.gz
-    - export PATH="$(pwd)/apache-ant-1.10.3/bin:$PATH"
+    - wget --no-check-certificate https://www.apache.org/dist/ant/binaries/apache-ant-1.10.4-bin.tar.gz
+    - tar -xzvf apache-ant-1.10.4-bin.tar.gz
+    - export PATH="$(pwd)/apache-ant-1.10.4/bin:$PATH"
     - echo $(ant -version)
 
 # skip default "install" command
@@ -26,10 +22,12 @@ matrix:
     - jdk: oraclejdk8
       script: 
           - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
-          - jdk_switcher use oraclejdk10
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
-          - jdk_switcher use oraclejdk11
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
+      after_success:
+          - bash <(curl -s https://codecov.io/bash)
+      sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
+    - jdk: oraclejdk11
+      script: 
+          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
 # disable building with jdk9 as it has a bug and will not compile JMeter
 # see https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8193802
@@ -37,5 +35,3 @@ matrix:
 #      script: ant -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true test
 #      sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
 
-after_success:
-    - bash <(curl -s https://codecov.io/bash)

@@ -20,6 +20,7 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -317,5 +318,11 @@ public class ForeachController extends GenericController implements Serializable
         resetCurrent();
         resetLoopCount();
         recoverRunningVersion();
+    }
+
+    @Override
+    public void iterationStart(LoopIterationEvent iterEvent) {
+        reInitialize();
+        resetLoopCount();
     }
 }

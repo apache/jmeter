@@ -87,6 +87,9 @@
   <!-- Minimal version of Apache Ant required by this Ant script -->
   <property name="ant.version.required" value="1.9.1" />
 
+  <!-- check if JavaFX is available -->
+  <available classname="javafx.application.Platform" property="javafx.present" />
+
   <!-- Are we running under Gump? -->
   <property name="gump.run" value="false"/>
 
@@ -672,6 +675,7 @@
     <javac srcdir="${src.components}" destdir="${build.components}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
            includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
+      <exclude name="**/visualizers/RenderInBrowser.java" unless="javafx.present"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
@@ -2820,6 +2824,11 @@ run JMeter unless all the JMeter jars are added.
   <!-- Additional test scripts -->
   <target name="batch_scripts">
       <antcall target="batchtest">
+        <param name="batchtest.name" value="TestResultStatusAction"/>
+        <param name="batchtest.jmx" value="TestResultStatusAction.jmx"/>
+      </antcall>
+
+      <antcall target="batchtest">
         <param name="batchtest.name" value="TestRedirectionPolicies"/>
         <param name="batchtest.jmx" value="TestRedirectionPolicies.jmx"/>
       </antcall>
@@ -3464,7 +3473,7 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${lib.dir}" includes="htmllexer-2.1.jar htmlparser-2.1.jar"/>
       <!-- tidy up unused logkit jars -->
       <fileset dir="${lib.dir}" includes="logkit-2.0.jar"/>
-      <fileset dir="${lib.opt}" includes="org.jacoco.ant-0.7.8-nodeps.jar"/>
+      <fileset dir="${lib.opt}" includes="org.jacoco.ant-*-nodeps.jar" excludes="${jacocoant.jar}"/>
     </delete>
     <antcall target="_process_all_jars">
         <param name="_get_file" value="true"/>

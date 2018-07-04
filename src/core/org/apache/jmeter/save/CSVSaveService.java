@@ -99,7 +99,7 @@ public final class CSVSaveService {
 
     // Used to enclose variable name labels, to distinguish from any of the
     // above labels
-    private static final String VARIABLE_NAME_QUOTE_CHAR = "\""; // $NON-NLS-1$
+    public static final String VARIABLE_NAME_QUOTE_CHAR = "\""; // $NON-NLS-1$
 
     // Initial config from properties
     private static final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration

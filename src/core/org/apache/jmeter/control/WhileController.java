@@ -20,6 +20,7 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -159,5 +160,11 @@ public class WhileController extends GenericController implements Serializable, 
         resetCurrent();
         resetLoopCount();
         recoverRunningVersion();
+    }
+
+    @Override
+    public void iterationStart(LoopIterationEvent iterEvent) {
+        reInitialize();
+        resetLoopCount();
     }
 }
