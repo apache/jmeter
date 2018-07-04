@@ -1,0 +1,190 @@
+label,responseCode,responseMessage,threadName,success
+DS-1,200,OK,TG-CONTINUE 1-1,true
+DS-__jm__LC__idx=0,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,true
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-CONTINUE 1-1,true
+DS-__jm__LC__idx=1,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,true
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-CONTINUE 1-1,true
+DS-__jm__LC__idx=2,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,false
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,,"Number of samples in transaction : 3, number of failing samples : 1",TG-CONTINUE 1-1,false
+DS-__jm__LC__idx=3,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,false
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,,"Number of samples in transaction : 3, number of failing samples : 1",TG-CONTINUE 1-1,false
+DS-After-LC-0,200,OK,TG-CONTINUE 1-1,true
+TC,,"Number of samples in transaction : 15, number of failing samples : 2",TG-CONTINUE 1-1,false
+DS-1,200,OK,TG-CONTINUE 1-1,true
+DS-__jm__LC__idx=0,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,true
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-CONTINUE 1-1,true
+DS-__jm__LC__idx=1,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,true
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-CONTINUE 1-1,true
+DS-__jm__LC__idx=2,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,false
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,,"Number of samples in transaction : 3, number of failing samples : 1",TG-CONTINUE 1-1,false
+DS-__jm__LC__idx=3,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,false
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,,"Number of samples in transaction : 3, number of failing samples : 1",TG-CONTINUE 1-1,false
+DS-After-LC-0,200,OK,TG-CONTINUE 1-1,true
+TC,,"Number of samples in transaction : 15, number of failing samples : 2",TG-CONTINUE 1-1,false
+DS-1,200,OK,TG-CONTINUE 1-1,true
+DS-__jm__LC__idx=0,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,true
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-CONTINUE 1-1,true
+DS-__jm__LC__idx=1,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,true
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-CONTINUE 1-1,true
+DS-__jm__LC__idx=2,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,false
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,,"Number of samples in transaction : 3, number of failing samples : 1",TG-CONTINUE 1-1,false
+DS-__jm__LC__idx=3,200,OK,TG-CONTINUE 1-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-CONTINUE 1-1,false
+Debug Sampler,200,OK,TG-CONTINUE 1-1,true
+sc2,,"Number of samples in transaction : 3, number of failing samples : 1",TG-CONTINUE 1-1,false
+DS-After-LC-0,200,OK,TG-CONTINUE 1-1,true
+TC,,"Number of samples in transaction : 15, number of failing samples : 2",TG-CONTINUE 1-1,false
+DS-1,200,OK,TG-GOTONEXT_IT 2-1,true
+DS-__jm__LC__idx=0,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,true
+Debug Sampler,200,OK,TG-GOTONEXT_IT 2-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-GOTONEXT_IT 2-1,true
+DS-__jm__LC__idx=1,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,true
+Debug Sampler,200,OK,TG-GOTONEXT_IT 2-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-GOTONEXT_IT 2-1,true
+DS-__jm__LC__idx=2,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-GOTONEXT_IT 2-1,false
+DS-__jm__LC__idx=3,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-GOTONEXT_IT 2-1,false
+DS-After-LC-4,200,OK,TG-GOTONEXT_IT 2-1,true
+TC,,"Number of samples in transaction : 13, number of failing samples : 2",TG-GOTONEXT_IT 2-1,false
+DS-1,200,OK,TG-GOTONEXT_IT 2-1,true
+DS-__jm__LC__idx=0,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,true
+Debug Sampler,200,OK,TG-GOTONEXT_IT 2-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-GOTONEXT_IT 2-1,true
+DS-__jm__LC__idx=1,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,true
+Debug Sampler,200,OK,TG-GOTONEXT_IT 2-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-GOTONEXT_IT 2-1,true
+DS-__jm__LC__idx=2,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-GOTONEXT_IT 2-1,false
+DS-__jm__LC__idx=3,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-GOTONEXT_IT 2-1,false
+DS-After-LC-4,200,OK,TG-GOTONEXT_IT 2-1,true
+TC,,"Number of samples in transaction : 13, number of failing samples : 2",TG-GOTONEXT_IT 2-1,false
+DS-1,200,OK,TG-GOTONEXT_IT 2-1,true
+DS-__jm__LC__idx=0,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,true
+Debug Sampler,200,OK,TG-GOTONEXT_IT 2-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-GOTONEXT_IT 2-1,true
+DS-__jm__LC__idx=1,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,true
+Debug Sampler,200,OK,TG-GOTONEXT_IT 2-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-GOTONEXT_IT 2-1,true
+DS-__jm__LC__idx=2,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-GOTONEXT_IT 2-1,false
+DS-__jm__LC__idx=3,200,OK,TG-GOTONEXT_IT 2-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-GOTONEXT_IT 2-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-GOTONEXT_IT 2-1,false
+DS-After-LC-4,200,OK,TG-GOTONEXT_IT 2-1,true
+TC,,"Number of samples in transaction : 13, number of failing samples : 2",TG-GOTONEXT_IT 2-1,false
+DS-1,200,OK,TG-BREAK 3-1,true
+DS-__jm__LC__idx=0,200,OK,TG-BREAK 3-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-BREAK 3-1,true
+Debug Sampler,200,OK,TG-BREAK 3-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-BREAK 3-1,true
+DS-__jm__LC__idx=1,200,OK,TG-BREAK 3-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-BREAK 3-1,true
+Debug Sampler,200,OK,TG-BREAK 3-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-BREAK 3-1,true
+DS-__jm__LC__idx=2,200,OK,TG-BREAK 3-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-BREAK 3-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-BREAK 3-1,false
+DS-After-LC-0,200,OK,TG-BREAK 3-1,true
+TC,,"Number of samples in transaction : 11, number of failing samples : 1",TG-BREAK 3-1,false
+DS-1,200,OK,TG-BREAK 3-1,true
+DS-__jm__LC__idx=0,200,OK,TG-BREAK 3-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-BREAK 3-1,true
+Debug Sampler,200,OK,TG-BREAK 3-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-BREAK 3-1,true
+DS-__jm__LC__idx=1,200,OK,TG-BREAK 3-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-BREAK 3-1,true
+Debug Sampler,200,OK,TG-BREAK 3-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-BREAK 3-1,true
+DS-__jm__LC__idx=2,200,OK,TG-BREAK 3-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-BREAK 3-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-BREAK 3-1,false
+DS-After-LC-0,200,OK,TG-BREAK 3-1,true
+TC,,"Number of samples in transaction : 11, number of failing samples : 1",TG-BREAK 3-1,false
+DS-1,200,OK,TG-BREAK 3-1,true
+DS-__jm__LC__idx=0,200,OK,TG-BREAK 3-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-BREAK 3-1,true
+Debug Sampler,200,OK,TG-BREAK 3-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-BREAK 3-1,true
+DS-__jm__LC__idx=1,200,OK,TG-BREAK 3-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-BREAK 3-1,true
+Debug Sampler,200,OK,TG-BREAK 3-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-BREAK 3-1,true
+DS-__jm__LC__idx=2,200,OK,TG-BREAK 3-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-BREAK 3-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-BREAK 3-1,false
+DS-After-LC-0,200,OK,TG-BREAK 3-1,true
+TC,,"Number of samples in transaction : 11, number of failing samples : 1",TG-BREAK 3-1,false
+DS-1,200,OK,TG-STARTNEXTLOOP 4-1,true
+DS-__jm__LC__idx=0,200,OK,TG-STARTNEXTLOOP 4-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-STARTNEXTLOOP 4-1,true
+Debug Sampler,200,OK,TG-STARTNEXTLOOP 4-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-STARTNEXTLOOP 4-1,true
+DS-__jm__LC__idx=1,200,OK,TG-STARTNEXTLOOP 4-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-STARTNEXTLOOP 4-1,true
+Debug Sampler,200,OK,TG-STARTNEXTLOOP 4-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-STARTNEXTLOOP 4-1,true
+DS-__jm__LC__idx=2,200,OK,TG-STARTNEXTLOOP 4-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-STARTNEXTLOOP 4-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-STARTNEXTLOOP 4-1,false
+TC,,"Number of samples in transaction : 9, number of failing samples : 1",TG-STARTNEXTLOOP 4-1,false
+DS-1,200,OK,TG-STARTNEXTLOOP 4-1,true
+DS-__jm__LC__idx=0,200,OK,TG-STARTNEXTLOOP 4-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-STARTNEXTLOOP 4-1,true
+Debug Sampler,200,OK,TG-STARTNEXTLOOP 4-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-STARTNEXTLOOP 4-1,true
+DS-__jm__LC__idx=1,200,OK,TG-STARTNEXTLOOP 4-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-STARTNEXTLOOP 4-1,true
+Debug Sampler,200,OK,TG-STARTNEXTLOOP 4-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-STARTNEXTLOOP 4-1,true
+DS-__jm__LC__idx=2,200,OK,TG-STARTNEXTLOOP 4-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-STARTNEXTLOOP 4-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-STARTNEXTLOOP 4-1,false
+TC,,"Number of samples in transaction : 9, number of failing samples : 1",TG-STARTNEXTLOOP 4-1,false
+DS-1,200,OK,TG-STARTNEXTLOOP 4-1,true
+DS-__jm__LC__idx=0,200,OK,TG-STARTNEXTLOOP 4-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-STARTNEXTLOOP 4-1,true
+Debug Sampler,200,OK,TG-STARTNEXTLOOP 4-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-STARTNEXTLOOP 4-1,true
+DS-__jm__LC__idx=1,200,OK,TG-STARTNEXTLOOP 4-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-STARTNEXTLOOP 4-1,true
+Debug Sampler,200,OK,TG-STARTNEXTLOOP 4-1,true
+sc2,200,"Number of samples in transaction : 3, number of failing samples : 0",TG-STARTNEXTLOOP 4-1,true
+DS-__jm__LC__idx=2,200,OK,TG-STARTNEXTLOOP 4-1,true
+JSS_FailsIfCptHigherThan1,200,OK,TG-STARTNEXTLOOP 4-1,false
+sc2,,"Number of samples in transaction : 2, number of failing samples : 1",TG-STARTNEXTLOOP 4-1,false
+TC,,"Number of samples in transaction : 9, number of failing samples : 1",TG-STARTNEXTLOOP 4-1,false
