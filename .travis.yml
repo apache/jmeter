@@ -27,7 +27,7 @@ matrix:
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
     - jdk: oraclejdk11
       script: 
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true
+          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
 # disable building with jdk9 as it has a bug and will not compile JMeter
 # see https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8193802
