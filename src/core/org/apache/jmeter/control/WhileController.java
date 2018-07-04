@@ -165,7 +165,6 @@ public class WhileController extends GenericController implements Serializable, 
     @Override
     public void iterationStart(LoopIterationEvent iterEvent) {
         reInitialize();
-        endOfLoop(true);
         resetLoopCount();
     }
 }
