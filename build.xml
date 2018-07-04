@@ -2824,6 +2824,11 @@ run JMeter unless all the JMeter jars are added.
   <!-- Additional test scripts -->
   <target name="batch_scripts">
       <antcall target="batchtest">
+        <param name="batchtest.name" value="TestResultStatusAction"/>
+        <param name="batchtest.jmx" value="TestResultStatusAction.jmx"/>
+      </antcall>
+
+      <antcall target="batchtest">
         <param name="batchtest.name" value="TestRedirectionPolicies"/>
         <param name="batchtest.jmx" value="TestRedirectionPolicies.jmx"/>
       </antcall>
