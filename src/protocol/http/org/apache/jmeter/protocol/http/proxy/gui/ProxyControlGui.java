@@ -58,6 +58,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.gui.LogicControllerGui;
@@ -424,11 +426,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         }
 
         if (command.equals(ACTION_STOP)) {
-            model.stopProxy();
-            stop.setEnabled(false);
-            start.setEnabled(true);
-            restart.setEnabled(false);
-            recorderDialog.setVisible(false);
+            stopRecorder();
         } else if (command.equals(ACTION_START)) {
             if(startProxy()) {
                 recorderDialog.setVisible(true);
@@ -470,6 +468,17 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             excludeModel.fireTableDataChanged();
             enableRestart();
         }
+    }
+
+    /**
+     * 
+     */
+    void stopRecorder() {
+        model.stopProxy();
+        stop.setEnabled(false);
+        start.setEnabled(true);
+        restart.setEnabled(false);
+        recorderDialog.setVisible(false);
     }
 
     /**
@@ -601,9 +610,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                     sb.append("<li>").append(detail).append("</li>");
                 }
                 sb.append("</ul>").append("</html>");
-                
+
+                // Make dialog disappear after 7 seconds
+                JLabel messageLabel = new JLabel(sb.toString());
+                Timer timer = new Timer(7000, evt -> SwingUtilities.getWindowAncestor(messageLabel).dispose());
+                timer.setRepeats(false);
+                timer.start();
                 JOptionPane.showMessageDialog(this,
-                    sb.toString(),
+                        messageLabel,
                     JMeterUtils.getResString("proxy_daemon_msg_rootca_cert") + SPACE // $NON-NLS-1$
                     + KeyToolUtils.ROOT_CACERT_CRT_PFX + SPACE
                     + JMeterUtils.getResString("proxy_daemon_msg_created_in_bin"), // $NON-NLS-1$
@@ -741,12 +755,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         start.setActionCommand(ACTION_START);
         start.setEnabled(true);
         
-        stop = new JButton(JMeterUtils.getResString("stop")); // $NON-NLS-1$
-        ImageIcon stopImage = JMeterUtils.getImage("toolbar/" + iconSize + "/process-stop-4.png");
-        stop.setIcon(stopImage);
+        stop = createStopButton(iconSize);
         stop.addActionListener(this);
-        stop.setActionCommand(ACTION_STOP);
-        stop.setEnabled(false);
 
         ImageIcon restartImage = JMeterUtils.getImage("toolbar/" + iconSize + "/edit-redo-7.png");
         restart = new JButton(JMeterUtils.getResString("restart")); // $NON-NLS-1$
@@ -764,6 +774,18 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         panel.add(Box.createHorizontalStrut(10));
         panel.add(restart);
         return panel;
+    }
+
+    /**
+     * @param iconSize
+     */
+    JButton createStopButton(String iconSize) {
+        JButton stop = new JButton(JMeterUtils.getResString("stop")); // $NON-NLS-1$
+        ImageIcon stopImage = JMeterUtils.getImage("toolbar/" + iconSize + "/process-stop-4.png");
+        stop.setIcon(stopImage);
+        stop.setActionCommand(ACTION_STOP);
+        stop.setEnabled(false);
+        return stop;
     }
 
     private JPanel createPortPanel() {
