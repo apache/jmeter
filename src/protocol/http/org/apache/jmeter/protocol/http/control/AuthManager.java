@@ -480,7 +480,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         }
         if(Mechanism.KERBEROS.equals(auth.getMechanism())) {
             localContext.setAttribute(DynamicKerberosSchemeFactory.CONTEXT_ATTRIBUTE_STRIP_PORT, 
-                    isStripPort(url));
+                    Boolean.valueOf(isStripPort(url)));
             credentialsProvider.setCredentials(new AuthScope(null, -1, null), USE_JAAS_CREDENTIALS);
         } else {
             credentialsProvider.setCredentials(
