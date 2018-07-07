@@ -88,7 +88,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>58757</bug>HTTP Request : Updated deprecated methods of HttpComponents to last APIs of httpclient-4.5.X. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62212</bug>Recorder : Improve UX by providing a popup above all windows to be able to change Transaction names and pauses while using Browser. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62248</bug>HTTP Request : Parameters entered in Parameters Tab should be used in body instead of being ignored. Partly based on a patch by Artem Fedorov contributed by Blazemeter.</li>
-    <li><bug>60015</bug>Multipart/form-data works only for POST using HTTPClient4 while it should for PUT, DELETE... Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60015</bug>Multipart/form-data works only for <code>POST</code> using HTTPClient4 while it should for <code>PUT</code>, <code>DELETE</code>, &hellip; Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62317</bug>HTTP(S) Test Script Recorder: allow to add ResultSaver to created sampler</li>
 </ul>
 
@@ -144,7 +144,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>62238</bug>Add ability to Switch to next iteration of Current Loop. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
   <li><bug>62239</bug>Add ability to Break Current Loop</li>
   <li><bug>62470</bug>CSV Output : Enable logging of sub results when <code>jmeter.save.saveservice.subresults=true</code>. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-  <li><bug>62473</bug>Setting "saveservice_properties" has counter intuitive behaviour</li>
+  <li><bug>62473</bug>Setting "<code>saveservice_properties</code>" has counter intuitive behaviour</li>
   <li><bug>62065</bug>Use Maven artifact for JAF Module instead of embedded module</li>
   <li><pr>379</pr> Improve chinese translations. Contributed by XmeterNet</li>
   <li><bug>61714</bug>Update Real-time results documentation</li>
@@ -176,7 +176,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>62114</bug>HTTP(S) Test Script Recorder : Client certificate authentication uses the first SSLManager created. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61058</bug>HTTP Request : Add option <code>httpclient4.deflate_relax_mode</code> to avoid "Unexpected end of ZLIB input stream" when deflating what seems to be invalid streams. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>43612</bug>HTTP PUT does not honor request parameters. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
-    <li><bug>60190</bug>Content-Type is added for POST unconditionally. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60190</bug>Content-Type is added for <code>POST</code> unconditionally. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62462</bug><pr>387</pr>Make delegation of credentials in SPNEGO possible again.</li>
 </ul>
 
@@ -202,7 +202,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>61664</bug>HTTP Authorization Manager : Digest works only with legacy RFC 2069 , RFC 2617 is not implemented. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61664</bug>HTTP Authorization Manager : Digest works only with legacy RFC 2069, RFC 2617 is not implemented. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62252</bug>HTTP header merging logic does not correspond to the documentation</li>
 </ul>
 
