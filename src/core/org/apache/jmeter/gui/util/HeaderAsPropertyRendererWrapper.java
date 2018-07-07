@@ -84,7 +84,7 @@ public class HeaderAsPropertyRendererWrapper implements TableCellRenderer {
     /**
      * @param table  {@link JTable}
      * @param columnsMsgParameters ignored
-     * @deprecated don't use {@columnsMsgParameters} as they are not moved when the columns
+     * @deprecated don't use {@code columnsMsgParameters} as they are not moved when the columns
      * of the corresponding tables object model are moved
      */
     @Deprecated

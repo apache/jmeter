@@ -522,8 +522,8 @@ public class XPathUtil {
      * Compute namespaces for XML
      * @param xml XML content
      * @return List of Namespaces
-     * @throws XMLStreamException
-     * @throws FactoryConfigurationError
+     * @throws XMLStreamException on problematic xml
+     * @throws FactoryConfigurationError when no xml input factory can be established
      */
     public static List<String[]> getNamespaces(String xml)
             throws XMLStreamException, FactoryConfigurationError{
