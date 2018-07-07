@@ -49,8 +49,8 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
     /**
      * 
      */
-    private static final int DEFAULT_LOCAL_PORT = 
-            JMeterUtils.getPropDefault("client.rmi.localport", 0); // $NON-NLS-1$
+    private static final int DEFAULT_LOCAL_PORT = addOffset(
+            JMeterUtils.getPropDefault("client.rmi.localport", 0), 1); // $NON-NLS-1$
 
     /**
      * @throws RemoteException if failed to export object
@@ -78,6 +78,13 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         } catch (IOException e) {
             log.error("Exception finding implementations of {}", RemoteThreadsLifeCycleListener.class, e);
         }
+    }
+
+    private static int addOffset(int port, int offset) {
+        if (port == 0) {
+            return 0;
+        }
+        return port + offset;
     }
 
     /**
