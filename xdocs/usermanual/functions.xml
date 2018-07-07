@@ -1438,7 +1438,7 @@ For example, the string <source>${__urldecode(Word+%22school%22+is+%22%C3%A9cole
 Function to encode a string to a <code>application/x-www-form-urlencoded</code> string.
 </p>
 <p>
-For example, the string <source>${__urldecode(Word "school" is "école" in french)}</source> returns
+For example, the string <source>${__urlencode(Word "school" is "école" in french)}</source> returns
  <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code>.
 </p>
     <p>
