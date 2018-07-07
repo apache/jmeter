@@ -533,6 +533,17 @@
     -
   </xsl:template>
 
+  <xsl:template match="rfc">
+    <xsl:choose>
+      <xsl:when test="./text()">
+        <a href="https://tools.ietf.org/html/{@link}"><xsl:value-of select="./text()" /></a>
+      </xsl:when>
+      <xsl:otherwise>
+        <a href="https://tools.ietf.org/html/{@link}">RFC <xsl:value-of select="@link" /></a>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="pr[following-sibling::pr or following-sibling::bug]">
     <a href="https://github.com/apache/jmeter/pull/{./text()}">
       Pull request #<xsl:value-of select="./text()" />
