@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
+import java.awt.Window;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
@@ -613,7 +614,13 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
                 // Make dialog disappear after 7 seconds
                 JLabel messageLabel = new JLabel(sb.toString());
-                Timer timer = new Timer(7000, evt -> SwingUtilities.getWindowAncestor(messageLabel).dispose());
+                Timer timer = new Timer(7000, evt -> {
+                    Window window = SwingUtilities.getWindowAncestor(messageLabel);
+                    // Window may be closed by user
+                    if(window != null) {
+                        window.dispose();
+                    }
+                });
                 timer.setRepeats(false);
                 timer.start();
                 JOptionPane.showMessageDialog(this,
