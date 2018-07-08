@@ -19,7 +19,9 @@ package org.apache.jmeter.report.processor.graph.impl;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.report.core.Sample;
@@ -44,9 +46,12 @@ import org.apache.jmeter.util.JMeterUtils;
 public class SyntheticResponseTimeDistributionGraphConsumer extends
         AbstractGraphConsumer {
     private static final String FAILED_LABEL = JMeterUtils.getResString("response_time_distribution_failed_label");
-    private static final MessageFormat SATISFIED_LABEL = new MessageFormat(JMeterUtils.getResString("response_time_distribution_satisfied_label"));
-    private static final MessageFormat TOLERATED_LABEL = new MessageFormat(JMeterUtils.getResString("response_time_distribution_tolerated_label"));
-    private static final MessageFormat UNTOLERATED_LABEL = new MessageFormat(JMeterUtils.getResString("response_time_distribution_untolerated_label"));
+    private static final MessageFormat SATISFIED_LABEL = new MessageFormat(
+            JMeterUtils.getResString("response_time_distribution_satisfied_label"));
+    private static final MessageFormat TOLERATED_LABEL = new MessageFormat(
+            JMeterUtils.getResString("response_time_distribution_tolerated_label"));
+    private static final MessageFormat UNTOLERATED_LABEL = new MessageFormat(
+            JMeterUtils.getResString("response_time_distribution_untolerated_label"));
     private static final String SERIE_COLOR_PROPERTY = "color";
     private static final String SATISFIED_COLOR = "#9ACD32";
     private static final String TOLERATED_COLOR = "yellow";
@@ -55,6 +60,9 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
 
     private long satisfiedThreshold;
     private long toleratedThreshold;
+    List<String> satisfiedLabels = Collections.emptyList();
+    List<String> toleratedLabels = Collections.emptyList();
+    List<String> untoleratedLabels = Collections.emptyList();
 
     private class SyntheticSeriesSelector extends AbstractSeriesSelector {
         @Override
@@ -64,11 +72,11 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
             } else {
                 long elapsedTime = sample.getElapsedTime();
                 if(elapsedTime<=getSatisfiedThreshold()) {
-                    return Arrays.asList(SATISFIED_LABEL.format(new Object[] {Long.valueOf(getSatisfiedThreshold())}));
+                    return satisfiedLabels;
                 } else if(elapsedTime <= getToleratedThreshold()) {
-                    return Arrays.asList(TOLERATED_LABEL.format(new Object[] {Long.valueOf(getSatisfiedThreshold()), Long.valueOf(getToleratedThreshold())}));
+                    return toleratedLabels;
                 } else {
-                    return Arrays.asList(UNTOLERATED_LABEL.format(new Object[] {Long.valueOf(getToleratedThreshold())}));
+                    return untoleratedLabels;
                 }
             }
         }
@@ -170,6 +178,7 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
      */
     public void setSatisfiedThreshold(long satisfiedThreshold) {
         this.satisfiedThreshold = satisfiedThreshold;
+        formatLabels();
     }
 
     /**
@@ -184,5 +193,15 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
      */
     public void setToleratedThreshold(long toleratedThreshold) {
         this.toleratedThreshold = toleratedThreshold;
+        formatLabels();
+    }
+
+    private void formatLabels() {
+        this.satisfiedLabels = Collections
+                .singletonList(SATISFIED_LABEL.format(new Object[] { Long.valueOf(this.satisfiedThreshold) }));
+        this.toleratedLabels = Collections.singletonList(TOLERATED_LABEL
+                .format(new Object[] { Long.valueOf(this.satisfiedThreshold), Long.valueOf(this.toleratedThreshold) }));
+        this.untoleratedLabels = Collections
+                .singletonList(UNTOLERATED_LABEL.format(new Object[] { Long.valueOf(this.toleratedThreshold) }));
     }
 }
