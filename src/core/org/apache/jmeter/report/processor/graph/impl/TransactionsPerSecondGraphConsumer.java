@@ -93,16 +93,4 @@ public class TransactionsPerSecondGraphConsumer extends
                 .setGranularity(getGranularity());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #setGranularity(long)
-     */
-    @Override
-    public void setGranularity(long granularity) {
-        super.setGranularity(granularity);
-    }
-
 }
