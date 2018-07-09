@@ -5794,7 +5794,7 @@ extracting the node as text or attribute value and store the result into the giv
     </property>
     <property name="Default Value" required="yes">Default value returned when no match found. 
     It is also returned if the node has no value and the fragment option is not selected.</property>
-    <property name="Namespaces list" required="No">List of namespaces aliases you want to use to parse the document, one line per declaration.
+    <property name="Namespaces aliases list" required="No">List of namespaces aliases you want to use to parse the document, one line per declaration.
     You must specify them as follow : <code>prefix=namespace</code>. This implementation makes it easier to
     use namespaces than with the old XPathExtractor version.</property>
    </properties>

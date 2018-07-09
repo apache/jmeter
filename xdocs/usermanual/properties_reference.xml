@@ -767,7 +767,7 @@ JMETER-SERVER</source>
     redirects and allows relative paths.<br/>
     If you want to test strict conformance, set this value to <code>true</code>.<br/>
     When the property is <code>true</code>, JMeter follows
-    <a href="http://tools.ietf.org/html/rfc3986#section-5.2">RFC 3986 section 5.2</a>.<br/>
+    <rfc link="3986#section-5.2">RFC 3986 section 5.2</rfc>.<br/>
     Defaults to: <code>false</code>
 </property>
 <property name="proxy.content_type_include">

@@ -35,13 +35,21 @@ public class Sample {
     private static final String ERROR_ON_SAMPLE = "Error in sample at line:";
 
     private static final String CONTROLLER_PATTERN = "Number of samples in transaction";
-    
+
     private static final String EMPTY_CONTROLLER_PATTERN = "Number of samples in transaction : 0";
 
     private final boolean storesStartTimeStamp;
     private final SampleMetadata metadata;
     private final String[] data;
     private final long row;
+    private final long elapsedTime;
+    private final long timestamp;
+    private final long latency;
+    private final long connectTime;
+    private final long receivedBytes;
+    private final long sentBytes;
+    private final int groupThreads;
+    private final boolean success;
 
     /**
      * Build a sample from a string array
@@ -59,6 +67,14 @@ public class Sample {
         this.metadata = metadata;
         this.data = data;
         this.storesStartTimeStamp = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);
+        this.elapsedTime = getData(long.class, CSVSaveService.CSV_ELAPSED).longValue();
+        this.timestamp = getData(long.class, CSVSaveService.TIME_STAMP).longValue();
+        this.latency = getData(long.class, CSVSaveService.CSV_LATENCY).longValue();
+        this.connectTime = metadata.indexOf(CSVSaveService.CSV_CONNECT_TIME) >= 0 ? getData(long.class, CSVSaveService.CSV_CONNECT_TIME).longValue() : 0L;
+        this.success = getData(boolean.class, CSVSaveService.SUCCESSFUL).booleanValue();
+        this.receivedBytes = getData(long.class, CSVSaveService.CSV_BYTES).longValue();
+        this.sentBytes = metadata.indexOf(CSVSaveService.CSV_SENT_BYTES) >= 0 ? getData(long.class, CSVSaveService.CSV_SENT_BYTES).longValue() : 0L;
+        this.groupThreads = getData(int.class, CSVSaveService.CSV_THREAD_COUNT1).intValue();
     }
 
     /**
@@ -148,7 +164,7 @@ public class Sample {
      * @return the time stamp
      */
     public long getTimestamp() {
-        return getData(long.class, CSVSaveService.TIME_STAMP).longValue();
+        return this.timestamp;
     }
 
     /**
@@ -157,7 +173,7 @@ public class Sample {
      * @return the elapsed time stored in the sample
      */
     public long getElapsedTime() {
-        return getData(long.class, CSVSaveService.CSV_ELAPSED).longValue();
+        return this.elapsedTime;
     }
 
     /**
@@ -242,20 +258,16 @@ public class Sample {
      * @return the latency stored in the sample
      */
     public long getLatency() {
-        return getData(long.class, CSVSaveService.CSV_LATENCY).longValue();
+        return this.latency;
     }
-    
+
     /**
      * Gets the connect time stored in the sample.
      *
      * @return the connect time stored in the sample or 0 is column is not in results
      */
     public long getConnectTime() {
-        if(metadata.indexOf(CSVSaveService.CSV_CONNECT_TIME) >= 0) {
-            return getData(long.class, CSVSaveService.CSV_CONNECT_TIME).longValue();
-        } else {
-            return 0L;
-        }
+        return this.connectTime;
     }
 
     /**
@@ -264,7 +276,7 @@ public class Sample {
      * @return the success status stored in the sample
      */
     public boolean getSuccess() {
-        return getData(boolean.class, CSVSaveService.SUCCESSFUL).booleanValue();
+        return this.success;
     }
 
     /**
@@ -273,7 +285,7 @@ public class Sample {
      * @return the number of received bytes stored in the sample
      */
     public long getReceivedBytes() {
-        return getData(long.class, CSVSaveService.CSV_BYTES).longValue();
+        return this.receivedBytes;
     }
 
     /**
@@ -282,11 +294,7 @@ public class Sample {
      * @return the number of sent bytes stored in the sample
      */
     public long getSentBytes() {
-        if(metadata.indexOf(CSVSaveService.CSV_SENT_BYTES) >= 0) {
-            return getData(long.class, CSVSaveService.CSV_SENT_BYTES).longValue();
-        } else {
-            return 0L;
-        }
+        return this.sentBytes;
     }
 
     /**
@@ -295,7 +303,7 @@ public class Sample {
      * @return the number of threads in the group of this sample
      */
     public int getGroupThreads() {
-        return getData(int.class, CSVSaveService.CSV_THREAD_COUNT1).intValue();
+        return this.groupThreads;
     }
 
     /**

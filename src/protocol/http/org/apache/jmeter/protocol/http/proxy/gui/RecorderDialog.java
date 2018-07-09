@@ -21,7 +21,9 @@ package org.apache.jmeter.protocol.http.proxy.gui;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -33,6 +35,7 @@ import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.InputMap;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -44,13 +47,14 @@ import javax.swing.JRootPane;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.action.KeyStrokes;
+import org.apache.jmeter.gui.util.JMeterToolBar;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Dialog for Recorder
  * @since 4.1
  */
-public class RecorderDialog extends JDialog implements ItemListener, KeyListener { // NOSONAR
+public class RecorderDialog extends JDialog implements ItemListener, KeyListener, ActionListener { // NOSONAR
 
 
     /**
@@ -71,6 +75,8 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
     private JComboBox<String> httpSampleNamingMode;
 
     private ProxyControlGui recorderGui;
+
+    private JButton stop;
 
     /**
      * For tests Only
@@ -157,7 +163,16 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(proxyPauseHTTPSample, gbc.clone());
 
-        this.getContentPane().add(panel, BorderLayout.NORTH);
+        this.getContentPane().add(panel, BorderLayout.CENTER);
+        
+        String iconSize = JMeterUtils.getPropDefault(JMeterToolBar.TOOLBAR_ICON_SIZE, JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE); 
+        stop = recorderGui.createStopButton(iconSize);
+        stop.addActionListener(this);
+
+        GridLayout gridLayout = new GridLayout(1, 1);
+        JPanel panelStop = new JPanel(gridLayout);
+        panelStop.add(stop);
+        this.getContentPane().add(panelStop, BorderLayout.WEST);
         this.pack();
         this.setLocation(5, 10);
         prefixHTTPSampleName.requestFocusInWindow();
@@ -169,6 +184,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
+        stop.setEnabled(true);
         prefixHTTPSampleName.requestFocusInWindow();
         prefixHTTPSampleName.setText(recorderGui.getPrefixHTTPSampleName());
         httpSampleNamingMode.setSelectedIndex(recorderGui.getHTTPSampleNamingMode());
@@ -223,5 +239,9 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
             recorderGui.setProxyPauseHTTPSample(proxyPauseHTTPSample.getText());
             recorderGui.enableRestart();
         }
+    }
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        recorderGui.stopRecorder();
     }
 }
