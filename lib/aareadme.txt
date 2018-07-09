@@ -214,7 +214,7 @@ http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler
 - httpasyncclient implementation for InfluxDB Backend Listener Client
 
-mongo-java-driver 2.11.3
+mongo-java-driver 3.8.0
 ------------------------
 http://www.mongodb.org/
 - MongoDB sampler

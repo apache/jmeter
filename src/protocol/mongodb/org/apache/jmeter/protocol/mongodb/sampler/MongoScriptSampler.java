@@ -72,7 +72,7 @@ public class MongoScriptSampler
         try {
             MongoDB mongoDB = MongoSourceElement.getMongoDB(getSource());
             MongoScriptRunner runner = new MongoScriptRunner();
-            DB db = mongoDB.getDB(getDatabase(), getUsername(), getPassword());
+            DB db = mongoDB.getDB(getDatabase());
             res.latencyEnd();
             Object result = runner.evaluate(db, data);
             EvalResultHandler handler = new EvalResultHandler();

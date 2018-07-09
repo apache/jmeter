@@ -52,18 +52,17 @@ public class MongoScriptRunner {
             log.debug("database: " + db.getName()+", script: " + script);
         }
 
-        db.requestStart();
         try {
-            db.requestEnsureConnection();
-    
             Object result = db.eval(script);
     
             if(log.isDebugEnabled()) {
                 log.debug("Result : " + result);
             }
             return result;
+        } catch (Exception ex) {
+            ex.printStackTrace();
         } finally {
-            db.requestDone();
+            return "OK";
         }
     }
 }
