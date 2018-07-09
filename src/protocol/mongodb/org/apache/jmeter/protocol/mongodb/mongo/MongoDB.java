@@ -44,22 +44,13 @@ public class MongoDB {
         mongo = new MongoClient(serverAddresses, mongoOptions);   
     }
 
-    public DB getDB(String database, String username, String password) {
+    public DB getDB(String database) {
 
         if(log.isDebugEnabled()) {
-            log.debug("username: " + username+", password: " + password+", database: " + database);
+            log.debug("database: " + database);
         }
         DB db = mongo.getDB(database);
-        boolean authenticated = db.isAuthenticated();
-
-        if(!authenticated) {
-            if(username != null && password != null && username.length() > 0 && password.length() > 0) {
-                authenticated = db.authenticate(username, password.toCharArray());
-            }
-        }
-        if(log.isDebugEnabled()) {
-            log.debug("authenticated: " + authenticated);
-        }
+    
         return db;
     }
 

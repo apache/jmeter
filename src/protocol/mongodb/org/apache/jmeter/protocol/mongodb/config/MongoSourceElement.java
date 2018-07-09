@@ -48,20 +48,15 @@ public class MongoSourceElement
 
     private String connection;
     private String source;
-    private boolean autoConnectRetry;
     private int connectionsPerHost;
     private int connectTimeout;
-    private long maxAutoConnectRetryTime;
     private int maxWaitTime;
     private int socketTimeout;
     private boolean socketKeepAlive;
     private int threadsAllowedToBlockForConnectionMultiplier;
-    private boolean fsync;
     private boolean safe;
-    private boolean waitForJournaling;
     private int writeOperationNumberOfServers;
     private int writeOperationTimeout;
-    private boolean continueOnInsertError;
     
     public String getTitle() {
         return this.getName();
@@ -114,10 +109,8 @@ public class MongoSourceElement
         }
 
         MongoClientOptions.Builder builder = MongoClientOptions.builder()
-                .autoConnectRetry(getAutoConnectRetry())
                 .connectTimeout(getConnectTimeout())
                 .connectionsPerHost(getConnectionsPerHost())
-                .maxAutoConnectRetryTime(getMaxAutoConnectRetryTime())
                 .maxWaitTime(getMaxWaitTime())
                 .socketKeepAlive(getSocketKeepAlive())
                 .socketTimeout(getSocketTimeout())
@@ -129,10 +122,7 @@ public class MongoSourceElement
         } else {
             builder.writeConcern(new WriteConcern(
                     getWriteOperationNumberOfServers(),
-                    getWriteOperationTimeout(),
-                    getFsync(),
-                    getWaitForJournaling(),
-                    getContinueOnInsertError()
+                    getWriteOperationTimeout()
                     ));
         }
         MongoClientOptions mongoOptions = builder.build();
@@ -178,20 +168,6 @@ public class MongoSourceElement
     }
 
     /**
-     * @return the autoConnectRetry
-     */
-    public boolean getAutoConnectRetry() {
-        return autoConnectRetry;
-    }
-
-    /**
-     * @param autoConnectRetry the autoConnectRetry to set
-     */
-    public void setAutoConnectRetry(boolean autoConnectRetry) {
-        this.autoConnectRetry = autoConnectRetry;
-    }
-
-    /**
      * @return the connectionsPerHost
      */
     public int getConnectionsPerHost() {
@@ -217,20 +193,6 @@ public class MongoSourceElement
      */
     public void setConnectTimeout(int connectTimeout) {
         this.connectTimeout = connectTimeout;
-    }
-
-    /**
-     * @return the maxAutoConnectRetryTime
-     */
-    public long getMaxAutoConnectRetryTime() {
-        return maxAutoConnectRetryTime;
-    }
-
-    /**
-     * @param maxAutoConnectRetryTime the maxAutoConnectRetryTime to set
-     */
-    public void setMaxAutoConnectRetryTime(long maxAutoConnectRetryTime) {
-        this.maxAutoConnectRetryTime = maxAutoConnectRetryTime;
     }
 
     /**
@@ -291,20 +253,6 @@ public class MongoSourceElement
     }
 
     /**
-     * @return the fsync
-     */
-    public boolean getFsync() {
-        return fsync;
-    }
-
-    /**
-     * @param fsync the fsync to set
-     */
-    public void setFsync(boolean fsync) {
-        this.fsync = fsync;
-    }
-
-    /**
      * @return the safe
      */
     public boolean getSafe() {
@@ -316,20 +264,6 @@ public class MongoSourceElement
      */
     public void setSafe(boolean safe) {
         this.safe = safe;
-    }
-
-    /**
-     * @return the waitForJournaling
-     */
-    public boolean getWaitForJournaling() {
-        return waitForJournaling;
-    }
-
-    /**
-     * @param waitForJournaling the waitForJournaling to set
-     */
-    public void setWaitForJournaling(boolean waitForJournaling) {
-        this.waitForJournaling = waitForJournaling;
     }
 
     /**
@@ -358,19 +292,5 @@ public class MongoSourceElement
      */
     public void setWriteOperationTimeout(int writeOperationTimeout) {
         this.writeOperationTimeout = writeOperationTimeout;
-    }
-
-    /**
-     * @return the continueOnInsertError
-     */
-    public boolean getContinueOnInsertError() {
-        return continueOnInsertError;
-    }
-
-    /**
-     * @param continueOnInsertError the continueOnInsertError to set
-     */
-    public void setContinueOnInsertError(boolean continueOnInsertError) {
-        this.continueOnInsertError = continueOnInsertError;
     }
 }
