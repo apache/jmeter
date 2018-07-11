@@ -67,14 +67,21 @@ public class Sample {
         this.metadata = metadata;
         this.data = data;
         this.storesStartTimeStamp = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);
-        this.elapsedTime = getData(long.class, CSVSaveService.CSV_ELAPSED).longValue();
-        this.timestamp = getData(long.class, CSVSaveService.TIME_STAMP).longValue();
-        this.latency = getData(long.class, CSVSaveService.CSV_LATENCY).longValue();
-        this.connectTime = metadata.indexOf(CSVSaveService.CSV_CONNECT_TIME) >= 0 ? getData(long.class, CSVSaveService.CSV_CONNECT_TIME).longValue() : 0L;
-        this.success = getData(boolean.class, CSVSaveService.SUCCESSFUL).booleanValue();
-        this.receivedBytes = getData(long.class, CSVSaveService.CSV_BYTES).longValue();
-        this.sentBytes = metadata.indexOf(CSVSaveService.CSV_SENT_BYTES) >= 0 ? getData(long.class, CSVSaveService.CSV_SENT_BYTES).longValue() : 0L;
-        this.groupThreads = getData(int.class, CSVSaveService.CSV_THREAD_COUNT1).intValue();
+        this.elapsedTime = getPossibleValue(metadata, CSVSaveService.CSV_ELAPSED, long.class, Long.valueOf(0L)).longValue();
+        this.timestamp = getPossibleValue(metadata, CSVSaveService.TIME_STAMP, long.class, Long.valueOf(0L)).longValue();
+        this.latency = getPossibleValue(metadata, CSVSaveService.CSV_LATENCY, long.class, Long.valueOf(0L)).longValue();
+        this.connectTime = getPossibleValue(metadata, CSVSaveService.CSV_CONNECT_TIME, long.class, Long.valueOf(0L)).longValue();
+        this.success = getPossibleValue(metadata, CSVSaveService.SUCCESSFUL, boolean.class, Boolean.TRUE).booleanValue();
+        this.receivedBytes = getPossibleValue(metadata, CSVSaveService.CSV_BYTES, long.class, Long.valueOf(0L)).longValue();
+        this.sentBytes = getPossibleValue(metadata, CSVSaveService.CSV_SENT_BYTES, long.class, Long.valueOf(0L)).longValue();
+        this.groupThreads = getPossibleValue(metadata, CSVSaveService.CSV_THREAD_COUNT1, int.class, Integer.valueOf(0)).intValue();
+    }
+
+    private <T> T getPossibleValue(SampleMetadata metadata, String key, Class<T> type, T defaultValue) {
+        if (metadata.indexOf(key) >= 0) {
+            return (T) getData(type, key);
+        }
+        return defaultValue;
     }
 
     /**
