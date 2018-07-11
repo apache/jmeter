@@ -18,6 +18,7 @@
 package org.apache.jmeter.report.core;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -67,19 +68,19 @@ public class Sample {
         this.metadata = metadata;
         this.data = data;
         this.storesStartTimeStamp = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);
-        this.elapsedTime = getPossibleValue(metadata, CSVSaveService.CSV_ELAPSED, long.class, Long.valueOf(0L)).longValue();
-        this.timestamp = getPossibleValue(metadata, CSVSaveService.TIME_STAMP, long.class, Long.valueOf(0L)).longValue();
-        this.latency = getPossibleValue(metadata, CSVSaveService.CSV_LATENCY, long.class, Long.valueOf(0L)).longValue();
-        this.connectTime = getPossibleValue(metadata, CSVSaveService.CSV_CONNECT_TIME, long.class, Long.valueOf(0L)).longValue();
+        this.elapsedTime = getPossibleValue(metadata, CSVSaveService.CSV_ELAPSED, long.class, NumberUtils.LONG_ZERO).longValue();
+        this.timestamp = getPossibleValue(metadata, CSVSaveService.TIME_STAMP, long.class, NumberUtils.LONG_ZERO).longValue();
+        this.latency = getPossibleValue(metadata, CSVSaveService.CSV_LATENCY, long.class, NumberUtils.LONG_ZERO).longValue();
+        this.connectTime = getPossibleValue(metadata, CSVSaveService.CSV_CONNECT_TIME, long.class, NumberUtils.LONG_ZERO).longValue();
         this.success = getPossibleValue(metadata, CSVSaveService.SUCCESSFUL, boolean.class, Boolean.TRUE).booleanValue();
-        this.receivedBytes = getPossibleValue(metadata, CSVSaveService.CSV_BYTES, long.class, Long.valueOf(0L)).longValue();
-        this.sentBytes = getPossibleValue(metadata, CSVSaveService.CSV_SENT_BYTES, long.class, Long.valueOf(0L)).longValue();
-        this.groupThreads = getPossibleValue(metadata, CSVSaveService.CSV_THREAD_COUNT1, int.class, Integer.valueOf(0)).intValue();
+        this.receivedBytes = getPossibleValue(metadata, CSVSaveService.CSV_BYTES, long.class, NumberUtils.LONG_ZERO).longValue();
+        this.sentBytes = getPossibleValue(metadata, CSVSaveService.CSV_SENT_BYTES, long.class, NumberUtils.LONG_ZERO).longValue();
+        this.groupThreads = getPossibleValue(metadata, CSVSaveService.CSV_THREAD_COUNT1, int.class, NumberUtils.INTEGER_ZERO).intValue();
     }
 
     private <T> T getPossibleValue(SampleMetadata metadata, String key, Class<T> type, T defaultValue) {
         if (metadata.indexOf(key) >= 0) {
-            return (T) getData(type, key);
+            return getData(type, key);
         }
         return defaultValue;
     }
