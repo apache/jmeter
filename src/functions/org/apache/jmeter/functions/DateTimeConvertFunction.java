@@ -20,6 +20,7 @@ package org.apache.jmeter.functions;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,9 +68,15 @@ public class DateTimeConvertFunction extends AbstractFunction {
         String sourceDateFormat = values[1].execute();
         String targetDateFormat = values[2].execute();
         try {
-            SimpleDateFormat sourceDateFormatter = new SimpleDateFormat(sourceDateFormat);
             SimpleDateFormat targetDateFormatter = new SimpleDateFormat(targetDateFormat);
-            String newDate = targetDateFormatter.format(sourceDateFormatter.parse(dateString));
+            String newDate;
+            if (sourceDateFormat != null && sourceDateFormat.length() > 0) {
+                SimpleDateFormat sourceDateFormatter = new SimpleDateFormat(sourceDateFormat);
+                newDate = targetDateFormatter.format(sourceDateFormatter.parse(dateString));
+            } else {
+                // dateString will be an epoch time
+                newDate = targetDateFormatter.format(new Date(Long.parseLong(dateString)));
+            }
             addVariableValue(newDate, values, 3);
             return newDate;
         } catch (Exception e) {
