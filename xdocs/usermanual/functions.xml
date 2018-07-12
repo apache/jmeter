@@ -1643,14 +1643,17 @@ returns:
     </description>
     <properties>
         <property name="Date String" required="Yes">
-            The date string to convert from Source Date Format to Target Date Format.
+            The date string to convert from Source Date Format to Target Date Format. A date as a epoch time could be use here if Source Date Format is empty.
         </property>
-        <property name="Source Date Format" required="Yes">The original date format</property>
+        <property name="Source Date Format" required="No">The original date format. If empty, the Date String field must be a epoch time.</property>
         <property name="Target Date Format" required="Yes">The new date format</property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
     </properties>
     <p>Example:
     <source>${__dateTimeConvert(01212018,MMddyyyy,dd/MM/yyyy,)}</source> returns <code>21/01/2018</code>
+    </p>
+    <p>
+    With epoch time value: 1526574881000, <source>${__dateTimeConvert(1526574881000,,dd/MM/yyyy HH:mm,)}</source> returns <code>17/05/2018 16:34</code>
     </p>
 </component>
 <component index="&sect-num;.5.36" name="__isPropDefined">
