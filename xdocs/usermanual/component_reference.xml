@@ -2344,11 +2344,11 @@ This would be the case if the Regular Expression returned no matches.</note>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Input variable prefix" required="Yes">Prefix for the variable names to be used as input.</property>
+        <property name="Input variable prefix" required="No">Prefix for the variable names to be used as input. Defaults to an empty string as prefix.</property>
         <property name="Start index for loop" required="No">Start index (exclusive) for loop over variables (first element is at start index + 1)</property>
         <property name="End index for loop" required="No">End index (inclusive) for loop over variables</property>
-        <property name="Output variable" required="Yes">
-                The name of the variable which can be used in the loop for replacement in the samplers</property>
+        <property name="Output variable" required="No">
+                The name of the variable which can be used in the loop for replacement in the samplers. Defaults to an empty variable name, which is most probably not wanted.</property>
         <property required="Yes" name="Use Separator">If not checked, the "<code>_</code>" separator is omitted.</property>
 </properties>
 
