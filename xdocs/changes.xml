@@ -167,6 +167,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>Updated to groovy-all-2.4.15 (from groovy-all-2.4.13)</li>
     <li>Updated to asm-6.1 (from 6.1)</li>
     <li>Updated to tika-core and tika-parsers 1.18 (from 1.17)</li>
+    <li><bug>62482</bug>Sync documentation to the implementation of the ForEachController. Based on contribution by orimarko (orimarko at gmail.com)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
