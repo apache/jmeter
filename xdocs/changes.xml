@@ -176,6 +176,10 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>Updated to commons-pool2-2.6.0 (from commons-pool2-2.5.0)</li>
     <li>Updated to httpcore-4.4.10 (from httpcore-4.4.9)</li>
     <li>Updated to httpcore-nio-4.4.10 (from httpcore-nio-4.4.9)</li>
+    <li>Updated to jodd-core-5.0.3 (from jodd-core-4.1.4)</li>
+    <li>Updated to jodd-lagarto-5.0.3 (from jodd-lagarto-4.1.4)</li>
+    <li>Updated to jodd-log-5.0.3 (from jodd-log-4.1.4)</li>
+    <li>Updated to jodd-props-5.0.3 (from jodd-props-4.1.4)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
