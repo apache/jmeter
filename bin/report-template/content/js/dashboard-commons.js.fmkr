@@ -298,12 +298,13 @@ function prepareOptions(options, data) {
 /**
  * @param data
  * @param noMatchColor if defined and true, series.color are not matched with index
+ * @param ignoreFilterParam If true we don't apply seriesFilter
  */
-function prepareSeries(data, noMatchColor){
+function prepareSeries(data, noMatchColor, ignoreFilterParam){
     var result = data.result;
-
+    var ignoreFilter = ignoreFilterParam === true;
     // Keep only series when needed
-    if(seriesFilter && (!filtersOnlySampleSeries || result.supportsControllersDiscrimination)){
+    if(!ignoreFilter && seriesFilter && (!filtersOnlySampleSeries || result.supportsControllersDiscrimination)){
         // Insensitive case matching
         var regexp = new RegExp(seriesFilter, 'i');
         result.series = $.grep(result.series, function(series, index){
