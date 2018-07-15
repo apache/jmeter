@@ -228,7 +228,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * httpclient-4.5.6.jar
 * httpcore-4.4.9.jar
 * httpcore-nio-4.4.9.jar
-* httpmime-4.5.5.jar
+* httpmime-4.5.6.jar
 * jakarta-oro-2.0.8.jar
 * jms-1.1.1.jar
 * log4j-1.2-api-2.10.0.jar
