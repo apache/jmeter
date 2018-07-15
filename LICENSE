@@ -247,7 +247,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 - Software produced outside the ASF which is available under AL 2.0:
 
 * accessors-smart-1.2.jar
-* caffeine-2.6.1.jar
+* caffeine-2.6.2.jar
 * darcula.jar
 * freemarker-2.3.28.jar (AL2.0, see licenses/bin for additional info)
 * json-path-2.4.0.jar
