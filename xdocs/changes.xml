@@ -169,6 +169,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>Updated to tika-core and tika-parsers 1.18 (from 1.17)</li>
     <li><bug>62482</bug>Sync documentation to the implementation of the ForEachController. Based on contribution by orimarko (orimarko at gmail.com)</li>
     <li><bug>62529</bug>Updated to httpclient-4.5.6 (from httpclient 4.5.5) and updated to freemarker-2.3.28 (from freemarker-2.3.23). Based on patch by orimarko (orimarko at gmail.com)</li>
+    <li>Updated to httpmime-4.5.6 (from httpmime 4.5.5)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
