@@ -225,7 +225,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * dec-0.1.2.jar
 * groovy-all-2.4.15.jar
 * httpasyncclient-4.1.3.jar
-* httpclient-4.5.5.jar
+* httpclient-4.5.6.jar
 * httpcore-4.4.9.jar
 * httpcore-nio-4.4.9.jar
 * httpmime-4.5.5.jar
@@ -249,7 +249,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * accessors-smart-1.2.jar
 * caffeine-2.6.1.jar
 * darcula.jar
-* freemarker-2.3.23.jar (AL2.0, see licenses/bin for additional info)
+* freemarker-2.3.28.jar (AL2.0, see licenses/bin for additional info)
 * json-path-2.4.0.jar
 * json-smart-2.3.jar
 * mongo-java-driver-2.11.3.jar
