@@ -30,15 +30,16 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test {@link DateTimeConvertFunction}
- * 
+ * We implement JMeterSerialTest as we change TimeZone
  * @since 4.0
  */
-public class TestDateTimeConvertFunction extends JMeterTestCase  {
+public class TestDateTimeConvertFunction extends JMeterTestCase implements JMeterSerialTest {
 
     protected AbstractFunction dateConvert;
 
