@@ -37,7 +37,7 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
  * The class TotalTPSGraphConsumer provides a graph to visualize transactions
  * rate per second.
  *
- * @since 4.1
+ * @since 5.0
  */
 public class TotalTPSGraphConsumer extends AbstractOverTimeGraphConsumer {
 

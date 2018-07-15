@@ -29,7 +29,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 /**
  * Returns Thread Group Name
  * 
- * @since 4.1
+ * @since 5.0
  */
 public class ThreadGroupName extends AbstractFunctionByKey {
     private static final String KEY = "__threadGroupName"; //$NON-NLS-1$

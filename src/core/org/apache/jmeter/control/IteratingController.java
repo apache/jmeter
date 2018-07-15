@@ -25,7 +25,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Identify controller that does iterations
- * @since 4.1
+ * @since 5.0
  */
 public interface IteratingController extends LoopIterationListener {
     

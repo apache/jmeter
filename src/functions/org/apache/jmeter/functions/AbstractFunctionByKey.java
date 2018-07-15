@@ -26,7 +26,7 @@ import org.apache.jmeter.engine.util.CompoundVariable;
  * 
  * Abstract Function initialized by key and parameters count
  * 
- * @since 4.1
+ * @since 5.0
  *
  */
 abstract class AbstractFunctionByKey extends AbstractFunction {

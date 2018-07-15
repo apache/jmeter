@@ -43,7 +43,7 @@ import org.apache.jmeter.save.CSVSaveService;
  * The class CustomGraphConsumer is added by the custom Graphs plugin.
  * It provides all the graphs the user defined in user.properties.
  *
- * @since 4.1
+ * @since 5.0
  */
 
 public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implements SampleConsumer{

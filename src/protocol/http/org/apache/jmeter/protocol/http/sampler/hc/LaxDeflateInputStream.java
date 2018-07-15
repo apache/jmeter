@@ -31,7 +31,7 @@ import org.apache.http.client.entity.DeflateInputStreamFactory;
  * which seems to be rather frequent
  * 
  * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61058">Bugzilla 61058</a>
- * @since 4.1
+ * @since 5.0
  */
 public class LaxDeflateInputStream extends DeflateInputStream {
     private final boolean relax;
