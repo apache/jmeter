@@ -93,7 +93,7 @@ under the License.
       <json-path.version>2.4.0</json-path.version>
       <json-smart.version>2.3</json-smart.version>
       <jsoup.version>1.11.2</jsoup.version>
-      <rhino.version>1.7.7.2</rhino.version>
+      <rhino.version>1.7.10</rhino.version>
       <junit.version>4.12</junit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
       <ph-css.version>6.1.1</ph-css.version>
