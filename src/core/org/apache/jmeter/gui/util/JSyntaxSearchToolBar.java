@@ -36,7 +36,7 @@ import org.fife.ui.rtextarea.SearchEngine;
 
 /**
  * Search toolbar associated to {@link JSyntaxTextArea}
- * @since 4.1
+ * @since 5.0
  */
 public final class JSyntaxSearchToolBar implements ActionListener {
     public static final Color LIGHT_RED = new Color(0xFF, 0x80, 0x80);

@@ -52,7 +52,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Dialog for Recorder
- * @since 4.1
+ * @since 5.0
  */
 public class RecorderDialog extends JDialog implements ItemListener, KeyListener, ActionListener { // NOSONAR
 

@@ -22,7 +22,7 @@ package org.apache.jmeter.protocol.http.api.auth;
  * Allows digest customization as per:
  * https://en.wikipedia.org/wiki/Digest_access_authentication
  * 
- * @since 4.1
+ * @since 5.0
  */
 public class DigestParameters {
     public static final String VARIABLE_NAME = "__jmeter_DP__";

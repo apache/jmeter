@@ -32,7 +32,7 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
  * The class ResponseCustomGraphGraphConsumer provides a graph to visualize mean 
  * custom value per time period (defined by granularity)
  *
- * @since 4.1
+ * @since 5.0
  */
 public class ResponseCustomGraphGraphConsumer extends
         AbstractOverTimeGraphConsumer {

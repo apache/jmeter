@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Extends {@link SPNegoSchemeFactory} to provide ability to customize stripPort
  * setting in {@link SPNegoScheme} based on {@link HttpContext}
- * @since 4.1
+ * @since 5.0
  */
 public class DynamicSPNegoSchemeFactory extends SPNegoSchemeFactory {
     static final String CONTEXT_ATTRIBUTE_STRIP_PORT = "__jmeter.K_SP__";
