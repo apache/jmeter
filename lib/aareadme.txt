@@ -111,7 +111,7 @@ hamcrest-core-1.3
 - unit tests, JUnit sampler
 https://github.com/hamcrest/JavaHamcrest
 
-freemarker-2.3.23.jar
+freemarker-2.3.28.jar
 ----------------------
 - used by Report/Dashboard feature
 
@@ -206,7 +206,7 @@ junit 4.12
 
 HttpComponents
 - HttpComponents Core 4.4.9 
-- HttpComponents Client 4.5.5
+- HttpComponents Client 4.5.6
 - HttpComponents AsyncClient 4.1.3
 - HttpComponents Core NIO 4.4.9
 -----------
