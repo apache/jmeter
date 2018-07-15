@@ -35,7 +35,7 @@ dec-0.1.2 (org.brotli.dec)
 https://github.com/google/brotli/tree/master/java/org/brotli
 - Used by HTTP4 HC Impl for brotli decoding
 
-caffeine 2.6.1
+caffeine 2.6.2
 -----------------
 https://github.com/ben-manes/caffeine/
 - Used by CssParser
@@ -82,7 +82,7 @@ commons-net-3.6
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler
 
-commons-pool2-2.5.0
+commons-pool2-2.6.0
 -----------------
 http://commons.apache.org/proper/commons-pool/download_pool.cgi
 - BackendListener
@@ -134,22 +134,22 @@ jdom-1.1.3
 http://www.jdom.org/downloads/index.html
 - Anakia
 
-jodd-core-4.1.4
+jodd-core-5.0.3
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-4.1.4
+jodd-lagarto-5.0.3
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
 
-jodd-log-4.1.4
+jodd-log-5.0.3
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-props-4.1.4
+jodd-props-5.0.3
 --------
 http://www.jodd.org/
 - used by Report/Dashboard feature properties management
@@ -171,22 +171,22 @@ jsoup-1.11.2
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
-log4j2-2.10.0
+log4j2-2.11.0
 --------
 https://logging.apache.org/log4j/2.x/
 - Logging framework
 
-ph-css-6.0.0
+ph-css-6.1.1
 --------
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-9.0.0
+ph-commons-9.1.2
 --------
 https://github.com/phax/ph-commons
 - CssParser
 
-rhino-1.7.7.2
+rhino-1.7.10
 --------
 https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino/Download_Rhino
 - javascript function
@@ -205,10 +205,10 @@ junit 4.12
 - unit tests, JUnit sampler
 
 HttpComponents
-- HttpComponents Core 4.4.9 
+- HttpComponents Core 4.4.10
 - HttpComponents Client 4.5.6
 - HttpComponents AsyncClient 4.1.3
-- HttpComponents Core NIO 4.4.9
+- HttpComponents Core NIO 4.4.10
 -----------
 http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler
@@ -245,7 +245,7 @@ tika-1.18
 http://tika.apache.org/
 - Regular Expression Extractor
 
-commons-dbcp2-2.2.0 (org.apache.commons.dbcp2)
+commons-dbcp2-2.4.0 (org.apache.commons.dbcp2)
 --------------------------
 - DataSourceElement (JDBC)
 
