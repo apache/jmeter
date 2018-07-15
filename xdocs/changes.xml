@@ -173,6 +173,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>Updated to caffeine-2.6.2 (from caffeine-2.6.1)</li>
     <li>Updated to cglib-nodep-3.2.7 (from cglib-nodep-3.2.6)</li>
     <li>Updated to commons-dbcp2-2.4.0 (from commons-dbcp2-2.2.0)</li>
+    <li>Updated to commons-pool2-2.6.0 (from commons-pool2-2.5.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
