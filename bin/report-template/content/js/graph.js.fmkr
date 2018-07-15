@@ -881,7 +881,7 @@ var latenciesVsRequestInfos = {
             },
             tooltip: true,
             tooltipOpts: {
-                content: "%s : Median response time at %x req/s was %y ms"
+                content: "%s : Median Latency time at %x req/s was %y ms"
             },
             colors: ["#9ACD32", "#FF6347"]
         };
