@@ -1653,7 +1653,7 @@ returns:
     <source>${__dateTimeConvert(01212018,MMddyyyy,dd/MM/yyyy,)}</source> returns <code>21/01/2018</code>
     </p>
     <p>
-    With epoch time value: 1526574881000, <source>${__dateTimeConvert(1526574881000,,dd/MM/yyyy HH:mm,)}</source> returns <code>17/05/2018 16:34</code>
+    With epoch time value: 1526574881000, <source>${__dateTimeConvert(1526574881000,,dd/MM/yyyy HH:mm,)}</source> returns <code>17/05/2018 16:34</code> in UTC time(-Duser.timezone=GMT)
     </p>
 </component>
 <component index="&sect-num;.5.36" name="__isPropDefined">
