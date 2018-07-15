@@ -27,7 +27,7 @@ import org.apache.jmeter.util.SlowSocket;
 
 /**
  * Apache HttpClient protocol factory to generate "slow" sockets for emulating dial-up modems
- * @since 4.1
+ * @since 5.0
  */
 public class SlowHCPlainConnectionSocketFactory extends PlainConnectionSocketFactory {
 

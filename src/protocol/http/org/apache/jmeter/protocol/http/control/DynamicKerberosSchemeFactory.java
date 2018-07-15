@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Extends {@link KerberosSchemeFactory} to provide ability to customize stripPort
  * setting in {@link KerberosScheme} based on {@link HttpContext}
- * @since 4.1
+ * @since 5.0
  */
 public class DynamicKerberosSchemeFactory extends KerberosSchemeFactory {
     static final String CONTEXT_ATTRIBUTE_STRIP_PORT = "__jmeter.K_SP__";

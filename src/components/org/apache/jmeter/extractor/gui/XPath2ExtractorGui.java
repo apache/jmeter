@@ -38,7 +38,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * GUI for XPath2Extractor class.
- * @since 4.1
+ * @since 5.0
  */
 public class XPath2ExtractorGui extends AbstractPostProcessorGui{ // NOSONAR Ignore parents warning
 
