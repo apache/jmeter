@@ -1206,7 +1206,8 @@ var totalTPSInfos = {
 // Total Transactions per second
 function refreshTotalTPS(fixTimestamps) {
     var infos = totalTPSInfos;
-    prepareSeries(infos.data);
+    // We want to ignore seriesFilter
+    prepareSeries(infos.data, false, true);
     if(fixTimestamps) {
         fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
     }
