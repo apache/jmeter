@@ -181,6 +181,8 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>Updated to jodd-log-5.0.3 (from jodd-log-4.1.4)</li>
     <li>Updated to jodd-props-5.0.3 (from jodd-props-4.1.4)</li>
     <li>Updated to log4j-2.11.0 (from log4j-2.10.0)</li>
+    <li>Updated to ph-css-6.1.1 (from ph-css-6.0.0)</li>
+    <li>Updated to ph-commons-9.1.2 (from ph-commons-9.0.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
