@@ -171,6 +171,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>62529</bug>Updated to httpclient-4.5.6 (from httpclient 4.5.5) and updated to freemarker-2.3.28 (from freemarker-2.3.23). Based on patch by orimarko (orimarko at gmail.com)</li>
     <li>Updated to httpmime-4.5.6 (from httpmime-4.5.5)</li>
     <li>Updated to caffeine-2.6.2 (from caffeine-2.6.1)</li>
+    <li>Updated to cglib-nodep-3.2.7 (from cglib-nodep-3.2.6)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

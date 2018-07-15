@@ -107,7 +107,7 @@ under the License.
       <log4j-slf4j-impl.version>2.10.0</log4j-slf4j-impl.version>
       <log4j-1.2-api.version>2.10.0</log4j-1.2-api.version>
       <spock-core.version>1.0-groovy-2.4</spock-core.version>
-      <cglib-nodep.version>3.2.6</cglib-nodep.version>
+      <cglib-nodep.version>3.2.7</cglib-nodep.version>
       <objenesis.version>2.6</objenesis.version>
       <jtidy.version>r938</jtidy.version>
       <tika-core.version>1.18</tika-core.version>
