@@ -18,7 +18,6 @@
 package org.apache.jmeter.report.core;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -36,21 +35,13 @@ public class Sample {
     private static final String ERROR_ON_SAMPLE = "Error in sample at line:";
 
     private static final String CONTROLLER_PATTERN = "Number of samples in transaction";
-
+    
     private static final String EMPTY_CONTROLLER_PATTERN = "Number of samples in transaction : 0";
 
     private final boolean storesStartTimeStamp;
     private final SampleMetadata metadata;
     private final String[] data;
     private final long row;
-    private final long elapsedTime;
-    private final long timestamp;
-    private final long latency;
-    private final long connectTime;
-    private final long receivedBytes;
-    private final long sentBytes;
-    private final int groupThreads;
-    private final boolean success;
 
     /**
      * Build a sample from a string array
@@ -68,21 +59,6 @@ public class Sample {
         this.metadata = metadata;
         this.data = data;
         this.storesStartTimeStamp = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);
-        this.elapsedTime = getPossibleValue(metadata, CSVSaveService.CSV_ELAPSED, long.class, NumberUtils.LONG_ZERO).longValue();
-        this.timestamp = getPossibleValue(metadata, CSVSaveService.TIME_STAMP, long.class, NumberUtils.LONG_ZERO).longValue();
-        this.latency = getPossibleValue(metadata, CSVSaveService.CSV_LATENCY, long.class, NumberUtils.LONG_ZERO).longValue();
-        this.connectTime = getPossibleValue(metadata, CSVSaveService.CSV_CONNECT_TIME, long.class, NumberUtils.LONG_ZERO).longValue();
-        this.success = getPossibleValue(metadata, CSVSaveService.SUCCESSFUL, boolean.class, Boolean.TRUE).booleanValue();
-        this.receivedBytes = getPossibleValue(metadata, CSVSaveService.CSV_BYTES, long.class, NumberUtils.LONG_ZERO).longValue();
-        this.sentBytes = getPossibleValue(metadata, CSVSaveService.CSV_SENT_BYTES, long.class, NumberUtils.LONG_ZERO).longValue();
-        this.groupThreads = getPossibleValue(metadata, CSVSaveService.CSV_THREAD_COUNT1, int.class, NumberUtils.INTEGER_ZERO).intValue();
-    }
-
-    private <T> T getPossibleValue(SampleMetadata metadata, String key, Class<T> type, T defaultValue) {
-        if (metadata.indexOf(key) >= 0) {
-            return getData(type, key);
-        }
-        return defaultValue;
     }
 
     /**
@@ -172,7 +148,7 @@ public class Sample {
      * @return the time stamp
      */
     public long getTimestamp() {
-        return this.timestamp;
+        return getData(long.class, CSVSaveService.TIME_STAMP).longValue();
     }
 
     /**
@@ -181,7 +157,7 @@ public class Sample {
      * @return the elapsed time stored in the sample
      */
     public long getElapsedTime() {
-        return this.elapsedTime;
+        return getData(long.class, CSVSaveService.CSV_ELAPSED).longValue();
     }
 
     /**
@@ -266,16 +242,20 @@ public class Sample {
      * @return the latency stored in the sample
      */
     public long getLatency() {
-        return this.latency;
+        return getData(long.class, CSVSaveService.CSV_LATENCY).longValue();
     }
-
+    
     /**
      * Gets the connect time stored in the sample.
      *
      * @return the connect time stored in the sample or 0 is column is not in results
      */
     public long getConnectTime() {
-        return this.connectTime;
+        if(metadata.indexOf(CSVSaveService.CSV_CONNECT_TIME) >= 0) {
+            return getData(long.class, CSVSaveService.CSV_CONNECT_TIME).longValue();
+        } else {
+            return 0L;
+        }
     }
 
     /**
@@ -284,7 +264,7 @@ public class Sample {
      * @return the success status stored in the sample
      */
     public boolean getSuccess() {
-        return this.success;
+        return getData(boolean.class, CSVSaveService.SUCCESSFUL).booleanValue();
     }
 
     /**
@@ -293,7 +273,7 @@ public class Sample {
      * @return the number of received bytes stored in the sample
      */
     public long getReceivedBytes() {
-        return this.receivedBytes;
+        return getData(long.class, CSVSaveService.CSV_BYTES).longValue();
     }
 
     /**
@@ -302,7 +282,11 @@ public class Sample {
      * @return the number of sent bytes stored in the sample
      */
     public long getSentBytes() {
-        return this.sentBytes;
+        if(metadata.indexOf(CSVSaveService.CSV_SENT_BYTES) >= 0) {
+            return getData(long.class, CSVSaveService.CSV_SENT_BYTES).longValue();
+        } else {
+            return 0L;
+        }
     }
 
     /**
@@ -311,7 +295,7 @@ public class Sample {
      * @return the number of threads in the group of this sample
      */
     public int getGroupThreads() {
-        return this.groupThreads;
+        return getData(int.class, CSVSaveService.CSV_THREAD_COUNT1).intValue();
     }
 
     /**
