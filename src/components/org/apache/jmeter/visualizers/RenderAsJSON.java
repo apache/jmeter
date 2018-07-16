@@ -31,7 +31,7 @@ import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 
 public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
-    private static final String TAB_SEPARATOR = ":   "; //$NON-NLS-1$
+    private static final String TAB_SEPARATOR = "    "; //$NON-NLS-1$
 
     /** {@inheritDoc} */
     @Override
