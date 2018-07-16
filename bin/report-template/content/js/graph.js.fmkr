@@ -86,10 +86,23 @@ var responseTimePercentilesInfos = {
         }
 };
 
+/**
+ * @param elementId Id of element where we display message
+ */
+function setEmptyGraph(elementId) {
+    $(function() {
+        $(elementId).text("No graph series with filter="+seriesFilter);
+    });
+}
+
 // Response times percentiles
 function refreshResponseTimePercentiles() {
     var infos = responseTimePercentilesInfos;
     prepareSeries(infos.data);
+    if(infos.data.result.series.length == 0) {
+        setEmptyGraph("#bodyResponseTimePercentiles");
+        return;
+    }
     if (isGraph($("#flotResponseTimesPercentiles"))){
         infos.createGraph();
     } else {
@@ -156,6 +169,10 @@ var responseTimeDistributionInfos = {
 function refreshResponseTimeDistribution() {
     var infos = responseTimeDistributionInfos;
     prepareSeries(infos.data);
+    if(infos.data.result.series.length == 0) {
+        setEmptyGraph("#bodyResponseTimeDistribution");
+        return;
+    }
     if (isGraph($("#flotResponseTimeDistribution"))){
         infos.createGraph();
     }else{
@@ -372,6 +389,10 @@ var timeVsThreadsInfos = {
 function refreshTimeVsThreads(){
     var infos = timeVsThreadsInfos;
     prepareSeries(infos.data);
+    if(infos.data.result.series.length == 0) {
+        setEmptyGraph("#bodyTimeVsThreads");
+        return;
+    }
     if(isGraph($("#flotTimesVsThreads"))){
         infos.createGraph();
     }else{
@@ -523,6 +544,10 @@ var responseTimesOverTimeInfos = {
 function refreshResponseTimeOverTime(fixTimestamps) {
     var infos = responseTimesOverTimeInfos;
     prepareSeries(infos.data);
+    if(infos.data.result.series.length == 0) {
+        setEmptyGraph("#bodyResponseTimeOverTime");
+        return;
+    }
     if(fixTimestamps) {
         fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
     }
@@ -600,6 +625,10 @@ var latenciesOverTimeInfos = {
 function refreshLatenciesOverTime(fixTimestamps) {
     var infos = latenciesOverTimeInfos;
     prepareSeries(infos.data);
+    if(infos.data.result.series.length == 0) {
+        setEmptyGraph("#bodyLatenciesOverTime");
+        return;
+    }
     if(fixTimestamps) {
         fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
     }
@@ -677,6 +706,10 @@ var connectTimeOverTimeInfos = {
 function refreshConnectTimeOverTime(fixTimestamps) {
     var infos = connectTimeOverTimeInfos;
     prepareSeries(infos.data);
+    if(infos.data.result.series.length == 0) {
+        setEmptyGraph("#bodyConnectTimeOverTime");
+        return;
+    }
     if(fixTimestamps) {
         fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
     }
@@ -1129,6 +1162,10 @@ var transactionsPerSecondInfos = {
 function refreshTransactionsPerSecond(fixTimestamps) {
     var infos = transactionsPerSecondInfos;
     prepareSeries(infos.data);
+    if(infos.data.result.series.length == 0) {
+        setEmptyGraph("#bodyTransactionsPerSecond");
+        return;
+    }
     if(fixTimestamps) {
         fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
     }
