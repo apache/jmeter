@@ -28,7 +28,7 @@ import org.junit.Test;
 public class TestRenderAsJson {
 
     private Method prettyJSON;
-    private final String TAB = ":   ";
+    private final String TAB = "    ";
 
     private String prettyJSON(String prettify) throws Exception {
         return (String) prettyJSON.invoke(null, prettify);
