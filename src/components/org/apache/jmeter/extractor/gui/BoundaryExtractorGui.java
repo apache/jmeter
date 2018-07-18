@@ -148,6 +148,9 @@ public class BoundaryExtractorGui extends AbstractPostProcessorGui {
     @Override
     public void clearGui() {
         super.clearGui();
+        
+        useBody.setSelected(true);
+        
         leftBoundaryField.setText(""); //$NON-NLS-1$        
         rightBoundaryField.setText(""); //$NON-NLS-1$
         defaultField.setText(""); //$NON-NLS-1$
