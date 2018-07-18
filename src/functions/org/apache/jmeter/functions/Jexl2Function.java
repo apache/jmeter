@@ -20,10 +20,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.MapContext;
+import org.apache.commons.jexl2.Script;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -90,8 +90,8 @@ public class Jexl2Function extends AbstractFunction implements ThreadListener {
             jc.set("OUT", System.out);//$NON-NLS-1$
 
             // Now evaluate the script, getting the result
-            Expression e = getJexlEngine().createExpression( exp );
-            Object o = e.evaluate(jc);
+            Script e = getJexlEngine().createScript( exp );
+            Object o = e.execute(jc);
             if (o != null)
             {
                 str = o.toString();
