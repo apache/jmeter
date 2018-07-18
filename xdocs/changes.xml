@@ -224,6 +224,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <ul>
     <li><bug>61664</bug>HTTP Authorization Manager : Digest works only with legacy <rfc link="2069" />, <rfc link="2617" /> is not implemented. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62252</bug>HTTP header merging logic does not correspond to the documentation</li>
+    <li><bug>62554</bug>BoundaryExtractor : Field to check is not reset</li>
 </ul>
 
 <h3>Functions</h3>
