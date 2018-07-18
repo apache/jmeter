@@ -124,6 +124,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>62178</bug>Add default value to <code>__V</code> function. Contributed by orimarko at gmail.com</li>
     <li><bug>62178</bug>Add function <code>__threadGroupName</code> function to obtain ThreadGroup name. Mainly contributed by orimarko at gmail.com</li>
     <li><bug>62533</bug>Allow use epoch time as Date String value in function <code>__dateTimeConvert</code> </li>
+    <li><bug>62541</bug>Allow <code>__jexl3</code>,<code>__jexl2</code> functions to support new syntax as <code>var x;</code>. Contributed by orimarko at gmail.com</li>
 </ul>
 <h3>I18N</h3>
 <ul>
