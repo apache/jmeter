@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * @since 5.0
  */
 public class Restart extends AbstractAction implements MenuCreator {
-    private static final Logger log = LoggerFactory.getLogger(CompileJSR223TestElements.class);
+    private static final Logger log = LoggerFactory.getLogger(Restart.class);
 
     private static final String RESTART = "restart";
     /** 
