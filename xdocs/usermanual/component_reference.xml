@@ -4219,7 +4219,7 @@ to use a variable other than a property as a value for the minimum or maximum. I
   <property name="Random Seed" required="No">The seed for the random number generator. 
   If you use the same seed value with Per Thread set to <code>true</code>, you will get the same value for each Thread as per 
   <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html" >Random</a> class.
-  If no see is set, Default constructor of Random will be used.
+  If no seed is set, Default constructor of Random will be used.
   </property>
   <property name="Per Thread(User)?" required="Yes">If <code>False</code>, the generator is shared between all threads in the thread group.
   If <code>True</code>, then each thread has its own random generator.</property>
