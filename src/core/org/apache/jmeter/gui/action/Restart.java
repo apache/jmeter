@@ -107,7 +107,7 @@ public class Restart extends AbstractAction implements MenuCreator {
         final StringBuilder cmd = new StringBuilder(java + " " + vmArgsOneLine);
 
         // program main and program arguments
-        String[] mainCommand = System.getProperty(SUN_JAVA_COMMAND).split(" ");
+        String[] mainCommand = javaCommand.split(" ");
         // program main is a jar
         if (mainCommand[0].endsWith(".jar")) {
             // if it's a jar, add -jar mainJar
