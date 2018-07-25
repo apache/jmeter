@@ -833,7 +833,7 @@ JMETER-SERVER</source>
 </property>
 <property name="proxy.cert.validity">
     The default validity (in days) for certificates created by JMeter.<br/>
-    Defaults to: <code>7</code>
+    Defaults to: <code>90</code>
 </property>
 <property name="proxy.cert.dynamic_keys">
     Use dynamic key generation (if supported by JMeter/JVM).<br/>
