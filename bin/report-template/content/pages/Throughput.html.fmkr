@@ -159,7 +159,7 @@
                 <div class="col-lg-12 portlet" id="hitsPerSecond">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"> </i>  <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyHitsPerSecond" aria-expanded="true" aria-controls="bodyHitsPerSecond">Hits Per Second (excluding embedded resources)</span>
+                           <i class="fa fa-bar-chart-o fa-fw"> </i>  <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyHitsPerSecond" aria-expanded="true" aria-controls="bodyHitsPerSecond">Hits Per Second</span>
                            <div class="pull-right">
                                 <div class="btn-group">
                                     <a class="btn btn-link btn-xs">
@@ -206,7 +206,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
                             <i class="fa fa-bar-chart-o fa-fw"></i>
-                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyCodesPerSecond" aria-expanded="true" aria-controls="bodyCodesPerSecond">Codes Per Second (excluding embedded resources)</span>
+                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyCodesPerSecond" aria-expanded="true" aria-controls="bodyCodesPerSecond">Codes Per Second</span>
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <a class="btn btn-link btn-xs">
