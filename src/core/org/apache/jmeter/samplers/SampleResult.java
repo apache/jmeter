@@ -267,6 +267,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private URL location;
 
     private transient boolean ignore;
+    
+    private transient int subResultIndex;
 
     /**
      * Cache for responseData as string to avoid multiple computations
@@ -657,6 +659,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         if (subResults == null) {
             subResults = new ArrayList<>();
         }
+        subResult.setSampleLabel(getSampleLabel()+"-"+subResultIndex++);
         subResults.add(subResult);
         subResult.setParent(this);
     }
