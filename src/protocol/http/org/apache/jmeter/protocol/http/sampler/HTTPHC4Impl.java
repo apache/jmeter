@@ -239,7 +239,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             } else {
                 try {
                     requestURI = new URI(request.getRequestLine().getUri());
-                } catch (final URISyntaxException ignore) {
+                } catch (final URISyntaxException ignore) { // NOSONAR
                     // NOOP
                 }
             }
