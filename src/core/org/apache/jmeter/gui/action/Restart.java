@@ -79,9 +79,8 @@ public class Restart extends AbstractAction implements MenuCreator {
      * 
      * @param runBeforeRestart
      *            some custom code to be run before restarting
-     * @throws Exception
      */
-    public static void restartApplication(Runnable runBeforeRestart) throws Exception {
+    public static void restartApplication(Runnable runBeforeRestart) {
         // java binary
         String java = System.getProperty("java.home") + "/bin/java";
         // vm arguments
