@@ -332,7 +332,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         
         SENT_BYTES = TRUE.equalsIgnoreCase(props.getProperty(SAVE_SENT_BYTES_PROP, TRUE));
 
-        URL = TRUE.equalsIgnoreCase(props.getProperty(SAVE_URL_PROP, FALSE));
+        URL = TRUE.equalsIgnoreCase(props.getProperty(SAVE_URL_PROP, TRUE));
 
         FILE_NAME = TRUE.equalsIgnoreCase(props.getProperty(SAVE_FILENAME_PROP, FALSE));
 

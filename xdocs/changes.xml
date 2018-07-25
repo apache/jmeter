@@ -137,6 +137,8 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>62166</bug>Report/Dashboard: Provide ability to register custom graphs and metrics in the JMeter Dashboard. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62542</bug>Report/Dashboard : Display more information on filters when graph is empty. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62426</bug>Optimize performance of report generation. Based on feedback by Allen (444104595 at qq.com)</li>
+    <li><bug>62550</bug>Modify SubResult Naming Policy</li>
+    <li><bug>60917</bug>Load Test with embedded resources download : Hits per seconds does not take into account the downloaded resources</li>
 </ul>
 
 <h3>General</h3>
