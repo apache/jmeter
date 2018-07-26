@@ -6382,7 +6382,7 @@ the browser. Effectively JMeter has to pretend to be the target server.
 </p>
 <p>
 JMeter will generate its own certificate(s).
-These are generated with a validity period defined by the property <code>proxy.cert.validity</code>, default 90 days, and random passwords.
+These are generated with a validity period defined by the property <code>proxy.cert.validity</code>, default 7 days, and random passwords.
 If JMeter detects that it is running under Java 8 or later, it will generate certificates for each target server as necessary (dynamic mode)
 unless the following property is defined: <code>proxy.cert.dynamic_keys=false</code>.
 When using dynamic mode, the certificate will be for the correct host name, and will be signed by a JMeter-generated CA certificate.

@@ -230,7 +230,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     // The alias to be used if dynamic host names are not possible
     static final String JMETER_SERVER_ALIAS = ":jmeter:"; // $NON-NLS-1$
 
-    public static final int CERT_VALIDITY = JMeterUtils.getPropDefault("proxy.cert.validity", 90); // $NON-NLS-1$
+    public static final int CERT_VALIDITY = JMeterUtils.getPropDefault("proxy.cert.validity", 7); // $NON-NLS-1$
 
     // If this is defined, it is assumed to be the alias of a user-supplied certificate; overrides dynamic mode
     static final String CERT_ALIAS = JMeterUtils.getProperty("proxy.cert.alias"); // $NON-NLS-1$
