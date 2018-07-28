@@ -512,7 +512,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         HTTPSampleResult res = new HTTPSampleResult();
 
-        res.setSampleLabel(urlStr);
+        res.setSampleLabel(this.testElement.getName());
         res.setURL(url);
         res.setHTTPMethod(method);
 
