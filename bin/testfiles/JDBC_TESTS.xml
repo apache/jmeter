@@ -228,7 +228,7 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
-  <sample s="true" lb="Debug PostProcessor" rc="200" rm="OK" tn="TG-Errors 2-1" dt="text" sc="1" ec="0" ng="0" na="0"/>
+  <sample s="true" lb="JDBC_With_Failing_PreProcessor-0" rc="200" rm="OK" tn="TG-Errors 2-1" dt="text" sc="1" ec="0" ng="0" na="0"/>
 </sample>
 <sample s="true" lb="JDBC_With_Failing_PostProcessor" rc="200" rm="OK" tn="TG-Errors 2-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
@@ -236,7 +236,7 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
-  <sample s="true" lb="Debug PostProcessor" rc="200" rm="OK" tn="TG-Errors 2-1" dt="text" sc="1" ec="0" ng="0" na="0"/>
+  <sample s="true" lb="JDBC_With_Failing_PostProcessor-0" rc="200" rm="OK" tn="TG-Errors 2-1" dt="text" sc="1" ec="0" ng="0" na="0"/>
 </sample>
 
 </testResults>
