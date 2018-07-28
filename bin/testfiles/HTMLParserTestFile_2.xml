@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testResults version="1.2">
 <httpSample s="true" lb="Download embedded" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="UTF-8" by="76146" sc="1" ec="0" ng="1" na="1">
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="UTF-8" by="40176" sc="1" ec="0" ng="1" na="1">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html-0" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="UTF-8" by="40176" sc="1" ec="0" ng="1" na="1">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
@@ -10,7 +10,7 @@
     <queryString class="java.lang.String"></queryString>
     <java.net.URL>file:testfiles/HTMLParserTestFile_2.html</java.net.URL>
   </httpSample>
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/style.css" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="1321" sc="1" ec="0" ng="1" na="1">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html-1" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="1321" sc="1" ec="0" ng="1" na="1">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
@@ -19,8 +19,8 @@
     <queryString class="java.lang.String"></queryString>
     <java.net.URL>file:testfiles/HTMLParserTestFile_2_files/style.css</java.net.URL>
   </httpSample>
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/halfbanner.htm" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="UTF-8" by="5819" sc="1" ec="0" ng="1" na="1">
-    <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/halfbanner.htm" rc="200" rm="OK" tn="" dt="text" de="UTF-8" by="398" sc="1" ec="0" ng="0" na="0">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html-2" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="UTF-8" by="5819" sc="1" ec="0" ng="1" na="1">
+    <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/halfbanner.htm-0" rc="200" rm="OK" tn="" dt="text" de="UTF-8" by="398" sc="1" ec="0" ng="0" na="0">
       <responseHeader class="java.lang.String"></responseHeader>
       <requestHeader class="java.lang.String"></requestHeader>
       <responseFile class="java.lang.String"></responseFile>
@@ -29,7 +29,7 @@
       <queryString class="java.lang.String"></queryString>
       <java.net.URL>file:testfiles/HTMLParserTestFile_2_files/halfbanner.htm</java.net.URL>
     </httpSample>
-    <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/halfbanner_data/2011-na-234x60.png" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="5421" sc="1" ec="0" ng="0" na="0">
+    <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/halfbanner.htm-1" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="5421" sc="1" ec="0" ng="0" na="0">
       <responseHeader class="java.lang.String"></responseHeader>
       <requestHeader class="java.lang.String"></requestHeader>
       <responseFile class="java.lang.String"></responseFile>
@@ -46,7 +46,7 @@
     <queryString class="java.lang.String"></queryString>
     <java.net.URL>file:testfiles/HTMLParserTestFile_2_files/halfbanner.htm</java.net.URL>
   </httpSample>
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/jakarta-logo.gif" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="8584" sc="1" ec="0" ng="1" na="1">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html-3" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="8584" sc="1" ec="0" ng="1" na="1">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
@@ -55,7 +55,7 @@
     <queryString class="java.lang.String"></queryString>
     <java.net.URL>file:testfiles/HTMLParserTestFile_2_files/jakarta-logo.gif</java.net.URL>
   </httpSample>
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/logo.jpg" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="8886" sc="1" ec="0" ng="1" na="1">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html-4" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="8886" sc="1" ec="0" ng="1" na="1">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
@@ -64,7 +64,7 @@
     <queryString class="java.lang.String"></queryString>
     <java.net.URL>file:testfiles/HTMLParserTestFile_2_files/logo.jpg</java.net.URL>
   </httpSample>
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/http-config-example.png" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="3064" sc="1" ec="0" ng="1" na="1">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html-5" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="3064" sc="1" ec="0" ng="1" na="1">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
@@ -73,7 +73,7 @@
     <queryString class="java.lang.String"></queryString>
     <java.net.URL>file:testfiles/HTMLParserTestFile_2_files/http-config-example.png</java.net.URL>
   </httpSample>
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/scoping1.png" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="2395" sc="1" ec="0" ng="1" na="1">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html-6" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="2395" sc="1" ec="0" ng="1" na="1">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
@@ -82,7 +82,7 @@
     <queryString class="java.lang.String"></queryString>
     <java.net.URL>file:testfiles/HTMLParserTestFile_2_files/scoping1.png</java.net.URL>
   </httpSample>
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/scoping2.png" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="2641" sc="1" ec="0" ng="1" na="1">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html-7" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="2641" sc="1" ec="0" ng="1" na="1">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
@@ -91,7 +91,7 @@
     <queryString class="java.lang.String"></queryString>
     <java.net.URL>file:testfiles/HTMLParserTestFile_2_files/scoping2.png</java.net.URL>
   </httpSample>
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/scoping3.png" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="3260" sc="1" ec="0" ng="1" na="1">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html-8" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="3260" sc="1" ec="0" ng="1" na="1">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
