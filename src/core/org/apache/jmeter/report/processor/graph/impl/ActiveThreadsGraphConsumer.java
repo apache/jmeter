@@ -30,7 +30,7 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
- * The class ActiveThreadsGraphConsumer provides a graph to visualize active threads 
+ * The class ActiveThreadsGraphConsumer provides a graph to visualize active threads
  * per time period (defined by granularity)
  *
  * @since 3.0
@@ -39,7 +39,7 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #createTimeStampKeysSelector()
@@ -53,7 +53,7 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */

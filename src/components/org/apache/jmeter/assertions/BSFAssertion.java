@@ -26,8 +26,8 @@ import org.apache.jmeter.util.BSFTestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion, TestBean
-{
+public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion, TestBean {
+
     private static final Logger log = LoggerFactory.getLogger(BSFAssertion.class);
 
     private static final long serialVersionUID = 235L;
@@ -35,7 +35,7 @@ public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion
     @Override
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
-        BSFManager mgr =null;
+        BSFManager mgr = null;
         try {
             mgr = getManager();
             mgr.declareBean("SampleResult", response, SampleResult.class);
@@ -44,21 +44,17 @@ public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion
             result.setError(false);
         } catch (BSFException e) {
             if (log.isWarnEnabled()) {
-                log.warn("Problem in BSF script {}", e.toString());
+                log.warn("Problem in BSF script", e);
             }
             result.setFailure(true);
             result.setError(true);
             result.setFailureMessage(e.toString());
         } finally {
-            if(mgr != null) {
+            if (mgr != null) {
                 mgr.terminate();
             }
         }
         return result;
     }
     
-    @Override
-    public Object clone() {
-        return super.clone();
-    }
 }

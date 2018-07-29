@@ -54,9 +54,4 @@ public class BSFTimer extends BSFTestElement implements Cloneable, Timer, TestBe
         }
         return delay;
     }
-    
-    @Override
-    public Object clone() {
-        return super.clone();
-    }
 }

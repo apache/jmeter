@@ -35,58 +35,43 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Transaction Controller to measure transaction times
- *
+ * Transaction Controller to measure transaction times.
+ * <p>
  * There are two different modes for the controller:
  * - generate additional total sample after nested samples (as in JMeter 2.2)
  * - generate parent sampler containing the nested samples
- *
  */
 public class TransactionController extends GenericController implements SampleListener, Controller, Serializable {
+    private static final long serialVersionUID = 234L;
+    private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
+
     /**
      * Used to identify Transaction Controller Parent Sampler
      */
     static final String NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX = "Number of samples in transaction : ";
 
-    private static final long serialVersionUID = 234L;
-    
     private static final String TRUE = Boolean.toString(true); // i.e. "true"
-
     private static final String GENERATE_PARENT_SAMPLE = "TransactionController.parent";// $NON-NLS-1$
-
     private static final String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
-    
-    private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
-
     private static final boolean DEFAULT_VALUE_FOR_INCLUDE_TIMERS = true; // default true for compatibility
 
-    /**
-     * Only used in parent Mode
-     */
+    /** Only used in parent Mode */
     private transient TransactionSampler transactionSampler;
     
-    /**
-     * Only used in NON parent Mode
-     */
+    /** Only used in NON parent Mode */
     private transient ListenerNotifier lnf;
 
-    /**
-     * Only used in NON parent Mode
-     */
+    /** Only used in NON parent Mode */
     private transient SampleResult res;
     
-    /**
-     * Only used in NON parent Mode
-     */
+    /** Only used in NON parent Mode */
     private transient int calls;
     
-    /**
-     * Only used in NON parent Mode
-     */
+    /** Only used in NON parent Mode */
     private transient int noFailingSamples;
 
     /**
-     * Cumulated pause time to excluse timer and post/pre processor times
+     * Accumulated pause time, exclude timer and post/pre processor times
      * Only used in NON parent Mode
      */
     private transient long pauseTime;
@@ -97,9 +82,6 @@ public class TransactionController extends GenericController implements SampleLi
      */
     private transient long prevEndTime;
 
-    /**
-     * Creates a Transaction Controller
-     */
     public TransactionController() {
         lnf = new ListenerNotifier();
     }
@@ -300,26 +282,26 @@ public class TransactionController extends GenericController implements SampleLi
 
     @Override
     public void sampleOccurred(SampleEvent se) {
-        if (!isGenerateParentSample()) {
-            // Check if we are still sampling our children
-            if(res != null && !se.isTransactionSampleEvent()) {
-                SampleResult sampleResult = se.getResult();
-                res.setThreadName(sampleResult.getThreadName());
-                res.setBytes(res.getBytesAsLong() + sampleResult.getBytesAsLong());
-                res.setSentBytes(res.getSentBytes() + sampleResult.getSentBytes());
-                if (!isIncludeTimers()) {// Accumulate waiting time for later
-                    pauseTime += sampleResult.getEndTime() - sampleResult.getTime() - prevEndTime;
-                    prevEndTime = sampleResult.getEndTime();
-                }
-                if(!sampleResult.isSuccessful()) {
-                    res.setSuccessful(false);
-                    noFailingSamples++;
-                }
-                res.setAllThreads(sampleResult.getAllThreads());
-                res.setGroupThreads(sampleResult.getGroupThreads());
-                res.setLatency(res.getLatency() + sampleResult.getLatency());
-                res.setConnectTime(res.getConnectTime() + sampleResult.getConnectTime());
+        // Check if we are still sampling our children
+        if (!isGenerateParentSample()
+                && res != null
+                && !se.isTransactionSampleEvent()) {
+            SampleResult sampleResult = se.getResult();
+            res.setThreadName(sampleResult.getThreadName());
+            res.setBytes(res.getBytesAsLong() + sampleResult.getBytesAsLong());
+            res.setSentBytes(res.getSentBytes() + sampleResult.getSentBytes());
+            if (!isIncludeTimers()) {// Accumulate waiting time for later
+                pauseTime += sampleResult.getEndTime() - sampleResult.getTime() - prevEndTime;
+                prevEndTime = sampleResult.getEndTime();
             }
+            if (!sampleResult.isSuccessful()) {
+                res.setSuccessful(false);
+                noFailingSamples++;
+            }
+            res.setAllThreads(sampleResult.getAllThreads());
+            res.setGroupThreads(sampleResult.getGroupThreads());
+            res.setLatency(res.getLatency() + sampleResult.getLatency());
+            res.setConnectTime(res.getConnectTime() + sampleResult.getConnectTime());
         }
     }
 

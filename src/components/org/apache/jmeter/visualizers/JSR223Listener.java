@@ -75,9 +75,4 @@ public class JSR223Listener extends JSR223TestElement
     public boolean isStats() {
         return false;
     }
-    
-    @Override
-    public Object clone() {
-        return super.clone();
-    }
 }

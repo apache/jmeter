@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implements batch reporting for remote testing.
- *
  */
 public class StatisticalSampleSender extends AbstractSampleSender implements Serializable {
     private static final long serialVersionUID = 241L;
