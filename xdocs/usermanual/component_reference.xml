@@ -1810,6 +1810,7 @@ Defaults are: SMTP=25, SSL=465, StartTLS=587
 Relative paths are resolved against the current directory.
 <br />Failing that, against the directory containing the test script (JMX file).
 </property>
+<property name="Override System SSL/TLS Protocols" required="No">Specify a custom SSL/TLS protocol as space separated list to use on handshake example <code>TLSv1 TLSv1.1 TLSv1.2</code>. Defaults to all supported protocols.</property>
 <property name="Subject" required="">The e-mail message subject.</property>
 <property name="Suppress Subject Header" required="">If selected, the "<code>Subject:</code>" header is omitted from the mail that is sent. 
 This is different from sending an empty "<code>Subject:</code>" header, though some e-mail clients may display it identically.</property>
