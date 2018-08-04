@@ -138,7 +138,7 @@ public class Restart extends AbstractAction implements MenuCreator {
             runBeforeRestart.run();
         }
         // exit
-        System.exit(0);
+        System.exit(0); // NOSONAR Required
 
     }
 
