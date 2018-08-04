@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.smtp.sampler.protocol;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -36,6 +37,7 @@ import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -60,7 +62,8 @@ public class SendMailCommand {
 
     // local vars
     private static final Logger logger = LoggerFactory.getLogger(SendMailCommand.class);
- 
+    private static final String MAIL_PROPERTY_PREFIX = "mail.";
+    
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
     private static final String FALSE = Boolean.FALSE.toString();
@@ -74,6 +77,7 @@ public class SendMailCommand {
     private String smtpServer;
     private String smtpPort;
     private String sender;
+    private String tlsProtocols;
     private List<InternetAddress> replyTo;
     private String emlMessage;
     private List<InternetAddress> receiverTo;
@@ -130,24 +134,15 @@ public class SendMailCommand {
         String protocol = getProtocol();
 
         // set properties using JAF
-        props.setProperty("mail." + protocol + ".host", smtpServer);
-        props.setProperty("mail." + protocol + ".port", getPort());
-        props.setProperty("mail." + protocol + ".auth", Boolean.toString(useAuthentication));
+        props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".host", smtpServer);
+        props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".port", getPort());
+        props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".auth", Boolean.toString(useAuthentication));
         
         // set timeout
-        props.setProperty("mail." + protocol + ".timeout", getTimeout());
-        props.setProperty("mail." + protocol + ".connectiontimeout", getConnectionTimeout());
+        props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".timeout", getTimeout());
+        props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".connectiontimeout", getConnectionTimeout());
 
-        if (useStartTLS || useSSL) {
-            try {
-                String allProtocols = StringUtils.join(
-                    SSLContext.getDefault().getSupportedSSLParameters().getProtocols(), " ");
-                logger.info("Use ssl/tls protocols for mail: {}", allProtocols);
-                props.setProperty("mail." + protocol + ".ssl.protocols", allProtocols);
-            } catch (Exception e) {
-                logger.error("Problem setting ssl/tls protocols for mail", e);
-            }
-        }
+        configureTLSProtocols(props, protocol);
 
         if (enableDebug) {
             props.setProperty("mail.debug","true");
@@ -161,40 +156,23 @@ public class SendMailCommand {
             }
         }
 
-        if (trustAllCerts) {
-            if (useSSL) {
-                props.setProperty("mail.smtps.ssl.socketFactory.class", TRUST_ALL_SOCKET_FACTORY);
-                props.setProperty("mail.smtps.ssl.socketFactory.fallback", FALSE);
-            } else if (useStartTLS) {
-                props.setProperty("mail.smtp.ssl.socketFactory.class", TRUST_ALL_SOCKET_FACTORY);
-                props.setProperty("mail.smtp.ssl.socketFactory.fallback", FALSE);
-            }
-        } else if (useLocalTrustStore){
-            File truststore = new File(trustStoreToUse);
-            logger.info("load local truststore - try to load truststore from: {}", truststore.getAbsolutePath());
-            if(!truststore.exists()){
-                logger.info("load local truststore -Failed to load truststore from: {}", truststore.getAbsolutePath());
-                truststore = new File(FileServer.getFileServer().getBaseDir(), trustStoreToUse);
-                logger.info("load local truststore -Attempting to read truststore from: {}", truststore.getAbsolutePath());
-                if(!truststore.exists()){
-                    logger.info("load local truststore -Failed to load truststore from: {}. Local truststore not available, aborting execution.",
-                            truststore.getAbsolutePath());
-                    throw new IOException("Local truststore file not found. Also not available under : " + truststore.getAbsolutePath());
-                }
-            }
-            if (useSSL) {
-                // Requires JavaMail 1.4.2+
-                props.put("mail.smtps.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
-                props.put("mail.smtps.ssl.socketFactory.fallback", FALSE);
-            } else if (useStartTLS) {
-                // Requires JavaMail 1.4.2+
-                props.put("mail.smtp.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
-                props.put("mail.smtp.ssl.socketFactory.fallback", FALSE);
-            }
-        }
+        configureCertificateTrust(props);
 
         session = Session.getInstance(props, null);
         
+        Message message = buildMessage();
+        message.saveChanges();
+        return message;
+    }
+
+    /**
+     * @return
+     * @throws MessagingException
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws AddressException
+     */
+    private Message buildMessage() throws MessagingException, IOException {
         Message message;
         if (sendEmlMessage) {
             message = new MimeMessage(session, new BufferedInputStream(new FileInputStream(emlMessage)));
@@ -264,9 +242,57 @@ public class SendMailCommand {
             Argument argument = (Argument) headerFields.get(i).getObjectValue();
             message.setHeader(argument.getName(), argument.getValue());
         }
-
-        message.saveChanges();
         return message;
+    }
+
+    private void configureCertificateTrust(Properties props) throws IOException {
+        if (trustAllCerts) {
+            if (useSSL) {
+                props.setProperty("mail.smtps.ssl.socketFactory.class", TRUST_ALL_SOCKET_FACTORY);
+                props.setProperty("mail.smtps.ssl.socketFactory.fallback", FALSE);
+            } else if (useStartTLS) {
+                props.setProperty("mail.smtp.ssl.socketFactory.class", TRUST_ALL_SOCKET_FACTORY);
+                props.setProperty("mail.smtp.ssl.socketFactory.fallback", FALSE);
+            }
+        } else if (useLocalTrustStore){
+            File truststore = new File(trustStoreToUse);
+            logger.info("load local truststore - try to load truststore from: {}", truststore.getAbsolutePath());
+            if(!truststore.exists()){
+                logger.info("load local truststore -Failed to load truststore from: {}", truststore.getAbsolutePath());
+                truststore = new File(FileServer.getFileServer().getBaseDir(), trustStoreToUse);
+                logger.info("load local truststore -Attempting to read truststore from: {}", truststore.getAbsolutePath());
+                if(!truststore.exists()){
+                    logger.info("load local truststore -Failed to load truststore from: {}. Local truststore not available, aborting execution.",
+                            truststore.getAbsolutePath());
+                    throw new IOException("Local truststore file not found. Also not available under : " + truststore.getAbsolutePath());
+                }
+            }
+            if (useSSL) {
+                // Requires JavaMail 1.4.2+
+                props.put("mail.smtps.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
+                props.put("mail.smtps.ssl.socketFactory.fallback", FALSE);
+            } else if (useStartTLS) {
+                // Requires JavaMail 1.4.2+
+                props.put("mail.smtp.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
+                props.put("mail.smtp.ssl.socketFactory.fallback", FALSE);
+            }
+        }
+    }
+
+    void configureTLSProtocols(Properties props, String protocol) {
+        String tlsProtocolsToUse = getTlsProtocolsToUse();
+        if (useStartTLS || useSSL) {
+            if (StringUtils.isEmpty(tlsProtocolsToUse)) {
+                try {
+                    tlsProtocolsToUse = StringUtils.join(
+                        SSLContext.getDefault().getSupportedSSLParameters().getProtocols(), " ");
+                } catch (Exception e) {
+                    logger.error("Problem setting ssl/tls protocols for mail", e);
+                }
+            }
+            logger.info("Using ssl/tls protocols for mail: {}", tlsProtocolsToUse);
+            props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".ssl.protocols", tlsProtocolsToUse);
+        }
     }
 
     /**
@@ -848,5 +874,19 @@ public class SendMailCommand {
 
     public void setReplyTo(List<InternetAddress> replyTo) {
         this.replyTo = replyTo;
+    }
+
+    /**
+     * Sets the list of protocols to be used on TLS handshake
+     *
+     * @param tlsProtocols
+     *          Space separated list
+     */
+    public void setTlsProtocolsToUse(String tlsProtocols) {
+        this.tlsProtocols = tlsProtocols;
+    }
+
+    public String getTlsProtocolsToUse() {
+        return this.tlsProtocols;
     }
 }
