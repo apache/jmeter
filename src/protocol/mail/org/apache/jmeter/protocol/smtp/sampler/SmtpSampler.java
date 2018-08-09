@@ -252,6 +252,7 @@ public class SmtpSampler extends AbstractSampler {
         sendMailCmd.setUseStartTLS(getPropertyAsBoolean(SecuritySettingsPanel.USE_STARTTLS));
         sendMailCmd.setTrustAllCerts(getPropertyAsBoolean(SecuritySettingsPanel.SSL_TRUST_ALL_CERTS));
         sendMailCmd.setEnforceStartTLS(getPropertyAsBoolean(SecuritySettingsPanel.ENFORCE_STARTTLS));
+        sendMailCmd.setTlsProtocolsToUse(getPropertyAsString(SecuritySettingsPanel.TLS_PROTOCOLS));
 
         sendMailCmd.setUseAuthentication(getPropertyAsBoolean(USE_AUTH));
         sendMailCmd.setUsername(getPropertyAsString(USERNAME));
