@@ -3714,7 +3714,7 @@ Note that if <code>Cache-Control</code> header is "<code>no-cache</code>", the r
 so will generate a conditional <code>GET</code> request.
 If <code>Cache-Control</code> has any other value, 
 the "<code>max-age</code>" expiry option is processed to compute entry lifetime, if missing then expire header will be used, if also missing entry will be cached 
-as specified in <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616</a> section 13.2.4. using <code>Last-Modified</code> time and response Date.
+as specified in <rfc link="2616#section-13.2.4">RFC 2616 section 13.2.4</rfc> using <code>Last-Modified</code> time and response Date.
 </p>
 <note>
 If the requested document has not changed since it was cached, then the response body will be empty.
