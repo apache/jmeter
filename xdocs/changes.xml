@@ -300,6 +300,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>Aaron Levin</li>
     <li>Allen (444104595 at qq.com)</li>
     <li>Felipe Cuozzo (felipe.cuozzo at gmail.com)</li>
+    <li>bangnab (ambrosetti.nicola at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
