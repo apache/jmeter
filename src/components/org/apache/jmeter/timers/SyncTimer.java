@@ -171,14 +171,17 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         if(getGroupSize()>=0) {
             int arrival = 0;
             try {
-                if(timeoutInMs==0) {
-                    arrival = this.barrier.await();                    
-                } else if(timeoutInMs > 0){
-                    arrival = this.barrier.await(timeoutInMs, TimeUnit.MILLISECONDS);
+                if (timeoutInMs == 0) {
+                    arrival = this.barrier.await(TimerService.getInstance().adjustDelay(Long.MAX_VALUE), TimeUnit.MILLISECONDS);
+                } else if (timeoutInMs > 0) {
+                    arrival = this.barrier.await(TimerService.getInstance().adjustDelay(timeoutInMs), TimeUnit.MILLISECONDS);
                 } else {
                     throw new IllegalArgumentException("Negative value for timeout:"+timeoutInMs+" in Synchronizing Timer "+getName());
                 }
-            } catch (InterruptedException | BrokenBarrierException e) {
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return 0;
+            } catch (BrokenBarrierException e) {
                 return 0;
             } catch (TimeoutException e) {
                 if (log.isWarnEnabled()) {
