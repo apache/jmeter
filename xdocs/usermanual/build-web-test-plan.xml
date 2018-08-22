@@ -148,7 +148,7 @@ specifically doesn't use cookies.  To add cookie support, simply add an
 Group</a> in your test plan.  This will ensure that each thread gets its own
 cookies, but shared across all <complink name="HTTP Request"/> objects.</p>
 
-<figure image="webtest/http-cookie.png">
+<figure image="webtest/http-cookie-manager.png">
 Figure &sect-num;.5. HTTP Cookie Manager</figure>
 
 <p>To add the <complink name="HTTP Cookie Manager"/>, simply select the
