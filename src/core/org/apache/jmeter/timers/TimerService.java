@@ -65,7 +65,7 @@ public class TimerService {
     public long adjustDelay(final long initialDelay, long endTime) {
         if (endTime > 0) {
             long now = System.currentTimeMillis();
-            if(now + initialDelay > endTime) {
+            if (initialDelay > endTime - now) {
                 return endTime - now;
             }
         }
