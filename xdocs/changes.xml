@@ -186,6 +186,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>Updated to ph-css-6.1.1 (from ph-css-6.0.0)</li>
     <li>Updated to ph-commons-9.1.2 (from ph-commons-9.0.0)</li>
     <li>Updated to rhino-1.7.10 (from +rhino-1.7.7.2)</li>
+    <li>Updated to commons-lang3-3.8 (from commons-lang3-3.7)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
