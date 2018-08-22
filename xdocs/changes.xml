@@ -227,6 +227,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>62252</bug>HTTP header merging logic does not correspond to the documentation</li>
     <li><bug>62554</bug>BoundaryExtractor : Field to check is not reset</li>
     <li><bug>62553</bug>Random element might return same value even if property "Per thread user (User)" is set to TRUE</li>
+    <li><bug>62637</bug>Take scheduler into account when calcuting delay for Synchronizing Timer</li>
 </ul>
 
 <h3>Functions</h3>
