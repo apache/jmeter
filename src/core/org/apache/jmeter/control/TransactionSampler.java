@@ -116,7 +116,7 @@ public class TransactionSampler extends AbstractSampler {
             noFailingSamples++;
         }
         // Add the sub result to the transaction result
-        transactionSampleResult.addSubResult(res);
+        transactionSampleResult.addSubResult(res, false);
         // Add current time to total for later use (exclude pause time)
         totalTime += res.getTime();
     }
