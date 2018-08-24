@@ -28,8 +28,8 @@ import org.apache.jmeter.report.core.ConvertException;
 import org.apache.jmeter.report.core.Converters;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.MapResultData;
+import org.apache.jmeter.report.processor.MeanAggregatorFactory;
 import org.apache.jmeter.report.processor.SampleConsumer;
-import org.apache.jmeter.report.processor.TimeRateAggregatorFactory;
 import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
@@ -199,7 +199,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
         HashMap<String, GroupInfo> groupInfos = new HashMap<>(); 
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP,
                 new GroupInfo(
-                new TimeRateAggregatorFactory(), 
+                new MeanAggregatorFactory(), 
                 new AbstractSeriesSelector() {
                     private final Iterable<String> values = Arrays.asList(sampleVariableName);
 
@@ -232,14 +232,5 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
                       }
               }}, false, false));
         return groupInfos;
-    }
-    
-    @Override
-    public void initialize() {
-        super.initialize();
-        // Override the granularity of the aggregators factory
-        ((TimeRateAggregatorFactory) getGroupInfos().get(
-                AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
-                .setGranularity(getGranularity());
     }
 }
