@@ -114,8 +114,8 @@ public class CustomGraphConsumerTest {
         // Testing defaults values
         assertThat(map.containsKey("Generic group"), equalTo(true));
         assertThat(map.containsKey("foo"), equalTo(false));
-        assertThat(map.get("Generic group").getAggregatorFactory().getClass().toString(), 
-                equalTo("class org.apache.jmeter.report.processor.TimeRateAggregatorFactory"));
+        assertThat(map.get("Generic group").getAggregatorFactory().getClass(), 
+                equalTo(org.apache.jmeter.report.processor.MeanAggregatorFactory.class));
         GroupData groupData = map.get("Generic group").getGroupData();
         assertThat(groupData.getOverallSeries(), equalTo(null));
         assertThat(groupData.getSeriesInfo(), equalTo(new HashMap<String, SeriesData>()));
