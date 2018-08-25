@@ -208,6 +208,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>58807</bug><code>https.use.cached.ssl.context=false</code> is broken</li>
     <li><bug>62235</bug>Java 9 - illegal reflective access by org.apache.jmeter.util.HostNameSetter</li>
     <li><bug>62464</bug>Set start- and end-time on JMS publisher sampler, even if initialization fails.</li>
+    <li><bug>62616</bug>FTPSampler: Upload file-size is not counted in sentBytes</li>
 </ul>
 
 <h3>Controllers</h3>
