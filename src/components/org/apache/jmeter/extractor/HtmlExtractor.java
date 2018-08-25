@@ -171,7 +171,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 getExtractorImpl().extract(expression, attribute, matchNumber, inputString, result, found, "-1");
             } else {
                 if (inputString==null && log.isWarnEnabled()) {
-                    log.warn("No variable '{}' found to process by CSS/JQuery Extractor '{}', skipping processing",
+                    log.warn("No variable '{}' found to process by CSS Selector Extractor '{}', skipping processing",
                             getVariableName(), getName());
                 }
                 return Collections.emptyList();

@@ -5662,8 +5662,8 @@ generate the template string, and store the result into the given variable name.
     and <a href="regular_expressions.html"> for further information on JMeter regular expressions.</a></p>
 </component>
 
-<component name="CSS/JQuery Extractor" index="&sect-num;.8.2"  width="826" height="276" screenshot="css_extractor_attr.png">
-<description><p>Allows the user to extract values from a server response using a CSS/JQuery selector like syntax.  As a post-processor,
+<component name="CSS Selector Extractor" was="CSS/JQuery Extractor" index="&sect-num;.8.2"  width="826" height="276" screenshot="css_extractor_attr.png">
+<description><p>Allows the user to extract values from a server HTML response using a CSS Selector syntax.  As a post-processor,
 this element will execute after each Sample request in its scope, applying the CSS/JQuery expression, extracting the requested nodes,
 extracting the node as text or attribute value and store the result into the given variable name.</p></description>
 <properties>
@@ -5685,7 +5685,7 @@ extracting the node as text or attribute value and store the result into the giv
         For match number = <code>0</code> or negative, all qualifying samples will be processed.
         For match number > <code>0</code>, matching will stop as soon as enough matches have been found.
         </property>
-        <property name="CSS/JQuery extractor Implementation" required="False">
+        <property name="CSS Selector Implementation" required="False">
         2 Implementations for CSS/JQuery based syntax are supported:
         <ul>
                 <li><a href="http://jsoup.org/" >JSoup</a></li>
@@ -5837,7 +5837,7 @@ extracting the node as text or attribute value and store the result into the giv
            <li>"<code>Use Tidy</code>" should be checked on for HTML response. Such response is converted to valid XHTML (XML compatible HTML) using Tidy</li>
            <li>"<code>Use Tidy</code>" should be unchecked for both XHTML or XML response (for example RSS)</li>
        </ul>
-       <note>For HTML, CSS/JQuery Extractor is the correct and performing solution. Don't use XPath for HTML extractions.</note>
+       <note>For HTML, CSS Selector Extractor is the correct and performing solution. Don't use XPath for HTML extractions.</note>
        </property>
 <property name="Quiet"  required="If Tidy is selected">Sets the Tidy Quiet flag</property>
 <property name="Report Errors"  required="If Tidy is selected">If a Tidy error occurs, then set the Assertion accordingly</property>
