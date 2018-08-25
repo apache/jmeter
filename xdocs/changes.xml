@@ -39,9 +39,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 4.1 =================== -->
+<!--  =================== 5.0 =================== -->
 
-<h1>Version 4.1</h1>
+<h1>Version 5.0</h1>
 <p>
 Summary
 </p>
@@ -75,8 +75,10 @@ Summary
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
-<li>Since JMeter 4.1, when using default HC4 Implementation, JMeter will reset HTTP state (SSL State + Connections) on each thread group iteration. If you don't want
+<li>Since JMeter 5.0, when using default HC4 Implementation, JMeter will reset HTTP state (SSL State + Connections) on each thread group iteration. If you don't want
 this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false</code></li>
+<li>Since JMeter 5.0, when using CSV output, sub results will now be also output to CSV file. To revert to previous behaviour set <code>jmeter.save.saveservice.subresults=false</code></li>
+<li>Since JMeter 5.0, <code>CSS/JQuery Extractor</code> has been renamed to <code>CSS Selector Extractor</code></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
