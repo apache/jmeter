@@ -684,14 +684,14 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 //Bug 62336
-                AWTEvent current_event = EventQueue.getCurrentEvent();
-                String key_text = "";
-                if(current_event instanceof KeyEvent) {
-                    KeyEvent key_event = (KeyEvent)current_event;
-                    key_text = KeyEvent.getKeyText( key_event.getKeyCode() );
+                AWTEvent currentEvent = EventQueue.getCurrentEvent();
+                String keyText = "";
+                if( currentEvent instanceof KeyEvent ) {
+                    KeyEvent keyEvent = (KeyEvent) currentEvent;
+                    keyText = KeyEvent.getKeyText(keyEvent.getKeyCode());
                 }
                 
-                String propname = "gui.quick_" + key_text;
+                String propname = "gui.quick_" + keyText;
                 String comp = JMeterUtils.getProperty(propname);
                 log.debug("Event {}: {}", propname, comp);
 
