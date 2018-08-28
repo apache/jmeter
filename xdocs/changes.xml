@@ -77,8 +77,10 @@ Summary
 <ul>
 <li>Since JMeter 5.0, when using default HC4 Implementation, JMeter will reset HTTP state (SSL State + Connections) on each thread group iteration. If you don't want
 this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false</code></li>
+<li>Since JMeter 5.0, in relation to above remark, <code>https.use.cached.ssl.context</code> is deprecated and not used anymore.</li>
 <li>Since JMeter 5.0, when using CSV output, sub results will now be also output to CSV file. To revert to previous behaviour set <code>jmeter.save.saveservice.subresults=false</code></li>
 <li>Since JMeter 5.0, <code>CSS/JQuery Extractor</code> has been renamed to <code>CSS Selector Extractor</code></li>
+
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -203,11 +205,11 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>43612</bug>HTTP PUT does not honor request parameters. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>60190</bug>Content-Type is added for <code>POST</code> unconditionally. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62462</bug><pr>387</pr>Make delegation of credentials in SPNEGO possible again.</li>
+    <li><bug>58807</bug><code>Reset SSL State on Thread Group iteration only (was https.use.cached.ssl.context=false</code> is broken)</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
-    <li><bug>58807</bug><code>https.use.cached.ssl.context=false</code> is broken</li>
     <li><bug>62235</bug>Java 9 - illegal reflective access by org.apache.jmeter.util.HostNameSetter</li>
     <li><bug>62464</bug>Set start- and end-time on JMS publisher sampler, even if initialization fails.</li>
     <li><bug>62616</bug>FTPSampler: Upload file-size is not counted in sentBytes</li>
