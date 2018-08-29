@@ -574,12 +574,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             handleMethod(method, res, httpRequest, localContext);
             // store the SampleResult in LocalContext to compute connect time
             localContext.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT, res);
-            Object proxy = jMeterVariables.getObject("http.auth.proxy-scope" + this);
-            localContext.setAttribute("http.auth.proxy-scope", proxy);
+            Object proxy = jMeterVariables.getObject(HttpClientContext.PROXY_AUTH_STATE + this);
+            localContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, proxy);
             // perform the sample
             httpResponse = 
                     executeRequest(httpClient, httpRequest, localContext, url);
-            jMeterVariables.putObject("http.auth.proxy-scope" + this, localContext.getAttribute("http.auth.proxy-scope"));
+            jMeterVariables.putObject(HttpClientContext.PROXY_AUTH_STATE + this, localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
             // Needs to be done after execute to pick up all the headers
             final HttpRequest request = (HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
             extractClientContextAfterSample(jMeterVariables, localContext);
