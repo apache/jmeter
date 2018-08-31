@@ -574,12 +574,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             handleMethod(method, res, httpRequest, localContext);
             // store the SampleResult in LocalContext to compute connect time
             localContext.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT, res);
-            Object proxy = jMeterVariables.getObject(HttpClientContext.PROXY_AUTH_STATE + this);
-            localContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, proxy);
+            setUpProxyAuth(jMeterVariables, localContext);
             // perform the sample
             httpResponse = 
                     executeRequest(httpClient, httpRequest, localContext, url);
-            jMeterVariables.putObject(HttpClientContext.PROXY_AUTH_STATE + this, localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
+            saveProxyAuth(jMeterVariables, localContext);
             // Needs to be done after execute to pick up all the headers
             final HttpRequest request = (HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
             extractClientContextAfterSample(jMeterVariables, localContext);
@@ -686,6 +685,19 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             JMeterContextService.getContext().getSamplerContext().remove(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN);
         }
         return res;
+    }
+
+    private void saveProxyAuth(JMeterVariables jMeterVariables, HttpContext localContext) {
+        if (jMeterVariables != null) {
+            jMeterVariables.putObject(HttpClientContext.PROXY_AUTH_STATE + this, localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
+        }
+    }
+
+    private void setUpProxyAuth(JMeterVariables jMeterVariables, HttpContext localContext) {
+        if (jMeterVariables != null && !isDynamicProxy(getProxyHost(), getProxyPortInt())) {
+            Object proxy = jMeterVariables.getObject(HttpClientContext.PROXY_AUTH_STATE + this);
+            localContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, proxy);
+        }
     }
 
     /**
