@@ -137,6 +137,7 @@ public class HC4CookieHandler implements CookieHandler {
                         } catch (MalformedCookieException e) { // This means the cookie was wrong for the URL
                             log.info("Not storing invalid cookie: <{}> for URL {} ({})",
                                 cookieHeader, url, e.getLocalizedMessage());
+                            continue;
                         }
                     }
                     Date expiryDate = cookie.getExpiryDate();
