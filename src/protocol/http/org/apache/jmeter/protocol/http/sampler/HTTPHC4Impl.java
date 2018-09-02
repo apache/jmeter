@@ -388,7 +388,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 final HttpContext context) throws IOException, HttpException {
             HttpResponse response = super.doSendRequest(request, conn, context);
             HttpConnectionMetrics metrics = conn.getMetrics();
+            long sentBytesCount = metrics.getSentBytesCount();
             context.setAttribute(CONTEXT_ATTRIBUTE_SENT_BYTES, metrics.getSentBytesCount());
+            log.debug("Sent {} bytes", sentBytesCount);
             metrics.reset();
             return response;
         }
@@ -400,9 +402,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 final HttpContext context) throws HttpException, IOException {
             HttpResponse response = super.doReceiveResponse(request, conn, context);
             HttpConnectionMetrics metrics = conn.getMetrics();
+            long receivedBytesCount = metrics.getReceivedBytesCount();
             context.setAttribute(CONTEXT_ATTRIBUTE_RECEIVED_BYTES, 
                     metrics.getReceivedBytesCount());
-
+            log.debug("Received {} bytes", receivedBytesCount);
             metrics.reset();
             return response;
         }
@@ -466,8 +469,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
             InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
 
-    // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
-    private static final ConnectionSocketFactory SLOW_CONNECTION_SOCKET_FACTORY;
+    /**
+     * CONNECTION_SOCKET_FACTORY changes if we want to simulate Slow connection
+     */
+    private static final ConnectionSocketFactory CONNECTION_SOCKET_FACTORY;
 
     private static final ViewableFileBody[] EMPTY_FILE_BODIES = new ViewableFileBody[0];
 
@@ -477,9 +482,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // Set up HTTP scheme override if necessary
         if (CPS_HTTP > 0) {
             log.info("Setting up HTTP SlowProtocol, cps={}", CPS_HTTP);
-            SLOW_CONNECTION_SOCKET_FACTORY = new SlowHCPlainConnectionSocketFactory(CPS_HTTP);
+            CONNECTION_SOCKET_FACTORY = new SlowHCPlainConnectionSocketFactory(CPS_HTTP);
         } else {
-            SLOW_CONNECTION_SOCKET_FACTORY = PlainConnectionSocketFactory.getSocketFactory();
+            CONNECTION_SOCKET_FACTORY = PlainConnectionSocketFactory.getSocketFactory();
         }        
     }
 
@@ -987,7 +992,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory> create().
                     register("https", new LazyLayeredConnectionSocketFactory()).
-                    register("http", SLOW_CONNECTION_SOCKET_FACTORY).
+                    register("http", CONNECTION_SOCKET_FACTORY).
                     build();
             
             // Modern browsers use more connections per host than the current httpclient default (2)
