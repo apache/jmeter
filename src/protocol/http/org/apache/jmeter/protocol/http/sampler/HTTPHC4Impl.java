@@ -695,7 +695,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private void setUpProxyAuth(JMeterVariables jMeterVariables, HttpContext localContext) {
         if (jMeterVariables != null && !isDynamicProxy(getProxyHost(), getProxyPortInt())) {
-            Object proxy = jMeterVariables.getObject(HttpClientContext.PROXY_AUTH_STATE + this);
+            AuthState proxy = (AuthState) jMeterVariables.getObject(HttpClientContext.PROXY_AUTH_STATE + this);
             localContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, proxy);
         }
     }
