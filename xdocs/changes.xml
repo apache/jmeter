@@ -199,6 +199,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>43612</bug>HTTP PUT does not honor request parameters. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>60190</bug>Content-Type is added for <code>POST</code> unconditionally. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62462</bug><pr>387</pr>Make delegation of credentials in SPNEGO possible again.</li>
+    <li><bug>62672</bug>HTTP Request send double requests when configure proxy with authentication. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 </ul>
 
 <h3>Other Samplers</h3>
