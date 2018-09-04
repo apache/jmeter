@@ -39,9 +39,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 4.1 =================== -->
+<!--  =================== 5.0 =================== -->
 
-<h1>Version 4.1</h1>
+<h1>Version 5.0</h1>
 <p>
 Summary
 </p>
@@ -75,8 +75,12 @@ Summary
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
-<li>Since JMeter 4.1, when using default HC4 Implementation, JMeter will reset HTTP state (SSL State + Connections) on each thread group iteration. If you don't want
+<li>Since JMeter 5.0, when using default HC4 Implementation, JMeter will reset HTTP state (SSL State + Connections) on each thread group iteration. If you don't want
 this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false</code></li>
+<li>Since JMeter 5.0, in relation to above remark, <code>https.use.cached.ssl.context</code> is deprecated and not used anymore.</li>
+<li>Since JMeter 5.0, when using CSV output, sub results will now be also output to CSV file. To revert to previous behaviour set <code>jmeter.save.saveservice.subresults=false</code></li>
+<li>Since JMeter 5.0, <code>CSS/JQuery Extractor</code> has been renamed to <code>CSS Selector Extractor</code></li>
+
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -118,6 +122,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <ul>
     <li><bug>62320</bug>Counter : Reference Name property is not clear</li>
     <li><bug>60991</bug>XPath Extractor : Implement XPath 2.0. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62593</bug>Rename CSS/JQuery Extractor to CSS Selector Extractor. Contributed by orimarko at gmail.com</li>
 </ul>
 
 <h3>Functions</h3>
@@ -186,6 +191,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li>Updated to ph-css-6.1.1 (from ph-css-6.0.0)</li>
     <li>Updated to ph-commons-9.1.2 (from ph-commons-9.0.0)</li>
     <li>Updated to rhino-1.7.10 (from +rhino-1.7.7.2)</li>
+    <li>Updated to commons-lang3-3.8 (from commons-lang3-3.7)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -199,14 +205,15 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>43612</bug>HTTP PUT does not honor request parameters. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>60190</bug>Content-Type is added for <code>POST</code> unconditionally. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62462</bug><pr>387</pr>Make delegation of credentials in SPNEGO possible again.</li>
+    <li><bug>58807</bug><code>Reset SSL State on Thread Group iteration only (was https.use.cached.ssl.context=false</code> is broken)</li>
     <li><bug>62672</bug>HTTP Request send double requests when configure proxy with authentication. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
-    <li><bug>58807</bug><code>https.use.cached.ssl.context=false</code> is broken</li>
     <li><bug>62235</bug>Java 9 - illegal reflective access by org.apache.jmeter.util.HostNameSetter</li>
     <li><bug>62464</bug>Set start- and end-time on JMS publisher sampler, even if initialization fails.</li>
+    <li><bug>62616</bug>FTPSampler: Upload file-size is not counted in sentBytes</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -228,6 +235,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>62252</bug>HTTP header merging logic does not correspond to the documentation</li>
     <li><bug>62554</bug>BoundaryExtractor : Field to check is not reset</li>
     <li><bug>62553</bug>Random element might return same value even if property "Per thread user (User)" is set to TRUE</li>
+    <li><bug>62637</bug>Take scheduler into account when calcuting delay for Synchronizing Timer</li>
 </ul>
 
 <h3>Functions</h3>
@@ -268,6 +276,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>62478</bug>Escape commata in parameters when constructing function strings in the GUI function helper. Reported by blue414 (blue414 at 163.com)</li>
   <li><bug>62463</bug>Fix usage of ports, when <code>client.rmi.localport</code> is set for distributed runs.</li>
   <li><bug>62545</bug>Don't use a colon as part of the "tab" string when indenting JSON in RenderAsJSON.</li>
+  <li>Part of <bug>62637</bug> Avoid Integer overrun when dealing with very large values in <code>TimerService#adjustDelay</code></li>
 </ul>
 
  <!--  =================== Thanks =================== -->

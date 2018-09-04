@@ -131,11 +131,13 @@ In summary<code>true</code> means next iteration is associated to a new user.
     <li>Closing opened connection</li>
     <li>resetting SSL State</li>
 </ul>
+Defaults to: <code>true</code>
 </property>
 <property name="https.use.cached.ssl.context">
     Control if we allow reuse of cached SSL context between iterations.<br/>
     Set the value to <code>false</code> to reset the SSL context each iteration.<br/>
     Defaults to: <code>true</code>
+    <note>DEPRECATED, you should use <code>httpclient.reset_state_on_thread_group_iteration</code> with correct value</note>
 </property>
 <property name="https.keyStoreStartIndex">
     Start index to be used with keystores with many entries.<br/>

@@ -88,6 +88,7 @@ public class SSLManagerCommand extends AbstractAction {
         SSLManager.reset();
 
         JFileChooser keyStoreChooser = new JFileChooser(System.getProperty("user.dir")); //$NON-NLS-1$
+        keyStoreChooser.setDialogTitle(JMeterUtils.getResString("sslmanager.title"));
         keyStoreChooser.addChoosableFileFilter(new AcceptPKCS12OrJKSFileFilter());
         keyStoreChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int retVal = keyStoreChooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
@@ -130,7 +131,8 @@ public class SSLManagerCommand extends AbstractAction {
             String lowerCaseName = testFile.getName().toLowerCase();
             return testFile.isDirectory()
             || lowerCaseName.endsWith(".p12")  //$NON-NLS-1$
-            || lowerCaseName.endsWith(".jks");
+            || lowerCaseName.endsWith(".jks")
+            || lowerCaseName.endsWith(".pfx");
         }
     }
 }
