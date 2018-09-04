@@ -46,7 +46,7 @@ import java.util.zip.GZIPInputStream;
 import javax.security.auth.Subject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.http.Header;
 import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpConnectionMetrics;
@@ -462,7 +462,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
-    private static final ThreadLocal<Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>>> 
+    private static final ThreadLocal<Map<HttpClientKey, Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>>
         HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
             InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
 
@@ -574,11 +574,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             handleMethod(method, res, httpRequest, localContext);
             // store the SampleResult in LocalContext to compute connect time
             localContext.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT, res);
-            setUpProxyAuth(jMeterVariables, localContext);
             // perform the sample
             httpResponse = 
                     executeRequest(httpClient, httpRequest, localContext, url);
-            saveProxyAuth(jMeterVariables, localContext);
+            saveProxyAuth(url, localContext);
             // Needs to be done after execute to pick up all the headers
             final HttpRequest request = (HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
             extractClientContextAfterSample(jMeterVariables, localContext);
@@ -687,15 +686,21 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         return res;
     }
 
-    private void saveProxyAuth(JMeterVariables jMeterVariables, HttpContext localContext) {
-        if (jMeterVariables != null) {
-            jMeterVariables.putObject(HttpClientContext.PROXY_AUTH_STATE + this, localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
-        }
+    private void saveProxyAuth(URL url, HttpContext localContext) {
+        Map<HttpClientKey, Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey =
+                HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
+        HttpClientKey key = createHttpClientKey(url);
+        Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple = mapHttpClientPerHttpClientKey.get(key);
+
+        Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> newTriple =
+                Triple.of(triple.getLeft(), (AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE), triple.getRight());
+        mapHttpClientPerHttpClientKey.put(key, newTriple);
     }
 
-    private void setUpProxyAuth(JMeterVariables jMeterVariables, HttpContext localContext) {
-        if (jMeterVariables != null && !isDynamicProxy(getProxyHost(), getProxyPortInt())) {
-            AuthState proxy = (AuthState) jMeterVariables.getObject(HttpClientContext.PROXY_AUTH_STATE + this);
+    private void setUpProxyAuth(Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
+                                HttpContext localContext) {
+        if (triple != null && !isDynamicProxy(getProxyHost(), getProxyPortInt())) {
+            AuthState proxy = triple.getMiddle();
             localContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, proxy);
         }
     }
@@ -956,42 +961,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private CloseableHttpClient setupClient(JMeterVariables jMeterVariables, URL url, HttpClientContext clientContext) throws GeneralSecurityException {
 
-        Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey = 
+        Map<HttpClientKey, Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey =
                 HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
-        
-        final String host = url.getHost();
-        String proxyHost = getProxyHost();
-        int proxyPort = getProxyPortInt();
-        String proxyPass = getProxyPass();
-        String proxyUser = getProxyUser();
 
-        // static proxy is the globally define proxy eg command line or properties
-        boolean useStaticProxy = isStaticProxy(host);
-        // dynamic proxy is the proxy defined for this sampler
-        boolean useDynamicProxy = isDynamicProxy(proxyHost, proxyPort);
-        boolean useProxy = useStaticProxy || useDynamicProxy;
-        
-        // if both dynamic and static are used, the dynamic proxy has priority over static
-        if(!useDynamicProxy) {
-            proxyHost = PROXY_HOST;
-            proxyPort = PROXY_PORT;
-            proxyUser = PROXY_USER;
-            proxyPass = PROXY_PASS;
-        }
-
-        // Lookup key - must agree with all the values used to create the HttpClient.
-        HttpClientKey key = new HttpClientKey(url, useProxy, proxyHost, proxyPort, proxyUser, proxyPass);
+        HttpClientKey key = createHttpClientKey(url);
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY, key);
         CloseableHttpClient httpClient = null;
         boolean concurrentDwn = this.testElement.isConcurrentDwn();
         if(concurrentDwn) {
             httpClient = (CloseableHttpClient) JMeterContextService.getContext().getSamplerContext().get(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN);
         }
-        Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair = mapHttpClientPerHttpClientKey.get(key);
+        Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple = mapHttpClientPerHttpClientKey.get(key);
         if (httpClient == null) {
-            httpClient = pair != null ? pair.getLeft() : null;
+            httpClient = triple != null ? triple.getLeft() : null;
         }
 
+        setUpProxyAuth(triple, clientContext);
         resetStateIfNeeded(jMeterVariables, clientContext, mapHttpClientPerHttpClientKey);
 
         if (httpClient == null) { // One-time init for this client
@@ -1056,15 +1041,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
 
             // Set up proxy details
-            if(useProxy) {
-                HttpHost proxy = new HttpHost(proxyHost, proxyPort);
+            if (key.hasProxy) {
+                HttpHost proxy = new HttpHost(key.proxyHost, key.proxyPort);
                 builder.setProxy(proxy);
                 
                 CredentialsProvider credsProvider = new BasicCredentialsProvider();
-                if (proxyUser.length() > 0) {
+                if (key.proxyUser.length() > 0) {
                     credsProvider.setCredentials(
-                        new AuthScope(proxyHost, proxyPort),
-                        new NTCredentials(proxyUser, proxyPass, LOCALHOST, PROXY_DOMAIN));
+                        new AuthScope(key.proxyHost, key.proxyPort),
+                        new NTCredentials(key.proxyUser, key.proxyPass, LOCALHOST, PROXY_DOMAIN));
                 }
                 builder.setDefaultCredentialsProvider(credsProvider);
             }
@@ -1076,7 +1061,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
-            mapHttpClientPerHttpClientKey.put(key, Pair.of(httpClient, pHCCM)); // save the agent for next time round
+            mapHttpClientPerHttpClientKey.put(key, Triple.of(httpClient, null, pHCCM)); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
@@ -1089,6 +1074,31 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         return httpClient;
     }
 
+    private HttpClientKey createHttpClientKey(URL url) {
+        final String host = url.getHost();
+        String proxyHost = getProxyHost();
+        int proxyPort = getProxyPortInt();
+        String proxyPass = getProxyPass();
+        String proxyUser = getProxyUser();
+
+        // static proxy is the globally define proxy eg command line or properties
+        boolean useStaticProxy = isStaticProxy(host);
+        // dynamic proxy is the proxy defined for this sampler
+        boolean useDynamicProxy = isDynamicProxy(proxyHost, proxyPort);
+        boolean useProxy = useStaticProxy || useDynamicProxy;
+
+        // if both dynamic and static are used, the dynamic proxy has priority over static
+        if(!useDynamicProxy) {
+            proxyHost = PROXY_HOST;
+            proxyPort = PROXY_PORT;
+            proxyUser = PROXY_USER;
+            proxyPass = PROXY_PASS;
+        }
+
+        // Lookup key - must agree with all the values used to create the HttpClient.
+        return new HttpClientKey(url, useProxy, proxyHost, proxyPort, proxyUser, proxyPass);
+    }
+
     /**
      * Reset SSL State. <br/>
      * In order to do that we need to:
@@ -1099,11 +1109,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * </ul>
      * @param jMeterVariables {@link JMeterVariables}
      * @param clientContext {@link HttpClientContext}
-     * @param mapHttpClientPerHttpClientKey Map of {@link Pair} holding {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
+     * @param mapHttpClientPerHttpClientKey Map of {@link Triple} holding {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
      */
     private void resetStateIfNeeded(JMeterVariables jMeterVariables, 
             HttpClientContext clientContext,
-            Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
+            Map<HttpClientKey, Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
         if (resetStateOnThreadGroupIteration.get()) {
             closeCurrentConnections(mapHttpClientPerHttpClientKey);
             clientContext.removeAttribute(HttpClientContext.USER_TOKEN);
@@ -1116,10 +1126,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param mapHttpClientPerHttpClientKey
      */
     private void closeCurrentConnections(
-            Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
-        for (Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair :
+            Map<HttpClientKey, Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
+        for (Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple :
                 mapHttpClientPerHttpClientKey.values()) {
-            PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = pair.getRight();
+            PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = triple.getRight();
             poolingHttpClientConnectionManager.closeExpiredConnections();
             poolingHttpClientConnectionManager.closeIdleConnections(1L, TimeUnit.MICROSECONDS);
         }
@@ -1745,12 +1755,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     private void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
-        Map<HttpClientKey, Pair<CloseableHttpClient, PoolingHttpClientConnectionManager>> 
+        Map<HttpClientKey, Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>
             mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
-        if ( mapHttpClientPerHttpClientKey != null ) {
-            for ( Pair<CloseableHttpClient, PoolingHttpClientConnectionManager> pair : mapHttpClientPerHttpClientKey.values() ) {
-                JOrphanUtils.closeQuietly(pair.getLeft());
-                JOrphanUtils.closeQuietly(pair.getRight());
+        if (mapHttpClientPerHttpClientKey != null ) {
+            for (Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple : mapHttpClientPerHttpClientKey.values() ) {
+                JOrphanUtils.closeQuietly(triple.getLeft());
+                JOrphanUtils.closeQuietly(triple.getRight());
             }
             mapHttpClientPerHttpClientKey.clear();
         }
