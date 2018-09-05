@@ -117,16 +117,6 @@ jmeter.save.saveservice.timestamp_format = ms
                         </ul>
                     </p>
                     </subsection>
-                    <subsection name="&sect-num;.2.1.4 Distributed Testing configuration" anchor="distributed_requirements">
-                    <p>
-                        If your are using JMeter distributed mode with multiple jmeter-server instances, ensure you add in your Thread Groups something that uniquely identifies ThreadGroup for every JVM, example:
-                        <source>TG_${__P(JVM_ID)}</source>
-                        <figure image="thread_group_distributed.png"></figure>
-                        where you pass a different JVM_ID property for each jmeter-server through <code><funclink name="__P()"/></code> function:
-                        <source>-JJVM_ID=i</source> where <code>i</code> varies between 1 and the number of jmeter-server you are using. 
-                      
-                    </p>
-                    </subsection>
                 </subsection>
 
                 <subsection name="&sect-num;.2.2 General settings" anchor="configuration_general">

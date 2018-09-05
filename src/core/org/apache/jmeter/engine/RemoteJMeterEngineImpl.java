@@ -124,10 +124,11 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
      *
      * @param testTree
      *            the feature to be added to the ThreadGroup attribute
+     * @param host Host and Port
      */
     @Override
-    public void rconfigure(HashTree testTree, String host, File jmxBase, String scriptName) throws RemoteException {
-        log.info("Creating JMeter engine on host {} base '{}'", host, jmxBase);
+    public void rconfigure(HashTree testTree, String hostAndPort, File jmxBase, String scriptName) throws RemoteException {
+        log.info("Creating JMeter engine on host {} base '{}'", hostAndPort, jmxBase);
         try {
             if (log.isInfoEnabled()) {
                 log.info("Remote client host: {}", getClientHost());
@@ -141,7 +142,8 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
                 throw new IllegalStateException("Engine is busy - please try later");
             }
             ownerThread = Thread.currentThread();
-            backingEngine = new StandardJMeterEngine(host);
+            JMeterUtils.setProperty(JMeterUtils.THREAD_GROUP_DISTRIBUTED_PREFIX_PROPERTY_NAME, hostAndPort);
+            backingEngine = new StandardJMeterEngine(hostAndPort);
             backingEngine.configure(testTree); // sets active = true
         }
         FileServer.getFileServer().setScriptName(scriptName);
