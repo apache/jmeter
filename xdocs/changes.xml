@@ -149,7 +149,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>General</h3>
 <ul>
-  <li><bug>62684</bug>Distributed Testing : Add automatically to thread name a prefix to identify engine</li>
+  <li><bug>62684</bug>Distributed Testing : Add automatically to thread name a prefix to identify engine. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
   <li><bug>62155</bug>Search Feature: Make Search text field get focus</li>
   <li><bug>62156</bug>Search Feature : Distinguish between node that matches search and node that contains a child that matches search</li>
   <li><bug>62234</bug>Search/Replace Feature : Enhance UX and add Replace/Next/Previous/Replace &amp; Find features. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
