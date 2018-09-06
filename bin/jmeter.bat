@@ -193,7 +193,7 @@ if not defined JMETER_COMPLETE_ARGS (
 )
 
 if "%JM_START%" == "start" (
-    set JM_START=start "Apache JMeter"
+    set JM_START=start "Apache_JMeter"
 )
 
 %JM_START% "%JM_LAUNCH%" %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
