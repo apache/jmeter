@@ -277,6 +277,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>62463</bug>Fix usage of ports, when <code>client.rmi.localport</code> is set for distributed runs.</li>
   <li><bug>62545</bug>Don't use a colon as part of the "tab" string when indenting JSON in RenderAsJSON.</li>
   <li>Part of <bug>62637</bug> Avoid Integer overrun when dealing with very large values in <code>TimerService#adjustDelay</code></li>
+  <li><bug>62683</bug>Error dialog has no text when user opens completely invalid test plan.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
