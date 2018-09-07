@@ -650,7 +650,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * 
      * @param subResult
      *            the {@link SampleResult} to be added
-     * @param renameSubResults boolean do we rename subResults based on position
      */
     public void addRawSubResult(SampleResult subResult){
         storeSubResult(subResult, true);
