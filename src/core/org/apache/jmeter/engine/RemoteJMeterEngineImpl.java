@@ -124,7 +124,9 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
      *
      * @param testTree
      *            the feature to be added to the ThreadGroup attribute
-     * @param host Host and Port
+     * @param hostAndPort Host and Port
+     * @param jmxBase JMX base
+     * @param scriptName Name of script
      */
     @Override
     public void rconfigure(HashTree testTree, String hostAndPort, File jmxBase, String scriptName) throws RemoteException {
