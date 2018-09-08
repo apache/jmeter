@@ -131,6 +131,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>62178</bug>Add function <code>__threadGroupName</code> function to obtain ThreadGroup name. Mainly contributed by orimarko at gmail.com</li>
     <li><bug>62533</bug>Allow use epoch time as Date String value in function <code>__dateTimeConvert</code> </li>
     <li><bug>62541</bug>Allow <code>__jexl3</code>,<code>__jexl2</code> functions to support new syntax as <code>var x;</code>. Contributed by orimarko at gmail.com</li>
+    <li><bug>61834</bug>Function Helper Dialog : Improve tests by showing variables and keeping them available between evaluations</li>
 </ul>
 <h3>I18N</h3>
 <ul>
