@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -50,8 +51,13 @@ public class IsVarDefined extends AbstractFunction {
     public String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
         String variableName = values[0].execute();
-        String variableValue = getVariables().get(variableName);
-        return Boolean.toString(variableValue != null);
+        JMeterVariables jMeterVariables = getVariables();
+        if(jMeterVariables != null) {
+            String variableValue = jMeterVariables.get(variableName);
+            return Boolean.toString(variableValue != null);
+        } else {
+            return Boolean.FALSE.toString();
+        }
     }
 
     @Override
