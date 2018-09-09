@@ -5817,6 +5817,7 @@ extracting the node as text or attribute value and store the result into the giv
     <description>This test element allows the user to extract value(s) from 
         structured response - XML or (X)HTML - using XPath
         query language.
+        <note>Since JMeter 5.0, you should use <complink name="XPath2 Extractor"/> as it provides better and easier namespace management, better performances and support for XPath 2.0</note>
    </description>
    <properties>
        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
