@@ -68,7 +68,7 @@ Summary
 </p>
 <p>XPath 2.0 is supported in a new element called <code>XPath2 extractor</code> providing easier XML namespaces handling, up to date XPath syntax and better performances</p>
 <p>Upgrade to HTTP Components 4.6 last APIs has been completed and JMeter does not rely anymore on deprecated APIs of this library</p>
-<p>It is now possible to control in an easier way Loop breaking and Loop switching to next iteration. This is available in <code>Flow Control Action</code> element</p>
+<p>It is now possible to control in an easier way Loop breaking and Loop switching to next iteration. This is available in <code>Flow Control Action</code> and <code>Result Status Action Handler</code> elements</p>
 <p>While Controller now exports a variable containing its current index named <code>__jm__&lt;Name of your element&gt;__idx</code>. So for
 example, if your While Controller is named WC, then you can access the looping index through <code>${__jm__WC__idx}</code></p>
 
