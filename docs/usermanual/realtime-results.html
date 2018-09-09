@@ -381,6 +381,18 @@ In this document we will present the configuration setup to graph and historize 
 <dd>Number of responses for sampler name (sum of ok.count and ko.count)</dd>
       
 <dt>
+<span class="code">&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.sb.bytes</span>
+</dt>
+      
+<dd>Sent Bytes</dd>
+      
+<dt>
+<span class="code">&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.rb.bytes</span>
+</dt>
+      
+<dd>Received Bytes</dd>
+      
+<dt>
 <span class="code">&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.min</span>
 </dt>
       
@@ -434,12 +446,12 @@ In this document we will present the configuration setup to graph and historize 
 </h2>
     
 <p>
-    To make JMeter send metrics to backend add a <a href="./component_reference.html#Backend_Listener">BackendListener</a> using the GraphiteBackendListenerClient.
+    To make JMeter send metrics to backend add a <a href="./component_reference.html#Backend_Listener">BackendListener</a> using the InfluxDBBackendListenerClient.
     </p>
     
 <figure>
-<a href="../images/screenshots/backend_listener.png"><img src="../images/screenshots/backend_listener.png" width="902" height="341" alt="Graphite configuration"></a>
-<figcaption>Graphite configuration</figcaption>
+<a href="../images/screenshots/backend_listener.png"><img src="../images/screenshots/backend_listener.png" width="902" height="341" alt="InfluxDB configuration"></a>
+<figcaption>InfluxDB configuration</figcaption>
 </figure>
 
 </div>
@@ -449,18 +461,14 @@ In this document we will present the configuration setup to graph and historize 
 <h2 id="influxdb_db_configuration">15.3 InfluxDB database configuration<a class="sectionlink" href="#influxdb_db_configuration" title="Link to here">&para;</a>
 </h2>
     
-<p>Connect to InfluxDB using <a href="https://docs.influxdata.com/influxdb/v1.1/introduction/getting_started/">influx shell</a> and <a href="https://docs.influxdata.com/influxdb/v1.1/query_language/database_management/">create two databases</a>:
+<p>Connect to InfluxDB using <a href="https://docs.influxdata.com/influxdb/latest/introduction/getting_started/">InfluxDB&rsquo;s Command Line Interface (CLI).</a> and <a href="https://docs.influxdata.com/influxdb/latest/query_language/database_management/">create JMeter database</a>:
     <ul>
         
-<li>grafana : Used by Grafana to store the dashboards we will create</li>
-        
-<li>jmeter : Used by InfluxDB to store the data sent to Graphite Listener as per database="jmeter" config
-        element in <span class="code">influxdb.conf</span> or <span class="code">config.toml</span>
-</li>
+<li>jmeter : Used by InfluxDB to store the data sent by the Backend Listener</li>
     
 </ul>
-    
-</p>
+    You can do it too by using the HTTP API.
+    </p>
 
 
 <div class="subsection">
@@ -469,31 +477,9 @@ In this document we will present the configuration setup to graph and historize 
 
 <p>InfluxDB is an open-source, distributed, time-series database that allows to 
 easily store metrics.
-Installation and configuration is very easy, read this for more details <a href="https://docs.influxdata.com/influxdb/v1.1/introduction/installation/" target="_blank">InfluxDB documentation</a>.<br>
-InfluxDB data can be easily viewed in a browser through either <a href="https://github.com/hakobera/influga" target="_blank">Influga</a> or <a href="http://grafana.org/" target="_blank">Grafana</a>.
-We will use Grafana in this case.
-<b>There is no particular configuration to setup when using <span class="code">InfluxDBBackendListenerClient</span></b>
-
+Installation and configuration is very easy, read this for more details <a href="https://docs.influxdata.com/influxdb/latest/introduction/installation/" target="_blank">InfluxDB documentation</a>.<br>
+InfluxDB data can be easily viewed in a browser through <a href="http://grafana.org/" target="_blank">Grafana</a>.
 </p>
-
-</div>
-
-
-<div class="subsection">
-<h2 id="influxdb_through_graphite_configuration">15.3.2 InfluxDB setup for GraphiteBackendListenerClient<a class="sectionlink" href="#influxdb_through_graphite_configuration" title="Link to here">&para;</a>
-</h2>
-    
-<p>To enable Graphite listener in InfluxDB for <span class="code">GraphiteBackendListenerClient</span>, edit files <span class="code">/opt/influxdb/shared/config.toml</span> or <span class="code">/usr/local/etc/influxdb.conf</span>,
-    find "<span class="code">[[graphite]]</span>" and set this:
-    </p>
-    
-<pre class="source">
-# Configure the graphite api
-[[graphite]]
-enabled = true
-bind-address = ":2003" # If not set, is actually set to bind-address.
-database = "jmeter"  # store graphite data in this database
-    </pre>
 
 </div>
 
@@ -505,36 +491,12 @@ database = "jmeter"  # store graphite data in this database
 </h2>
     
 <p>
-    Installing grafana is just a matter of putting the unzipped bundle behind an Apache HTTP server.<br>
-    Read <a href="http://grafana.org/docs/" target="_blank">documentation</a> for more details.
-    Open <span class="code">config.js</span> file and find <span class="code">datasources</span> element, and edit it like this:<br>
+    Installing grafana<br>
+    Read <a href="http://docs.grafana.org/" target="_blank">documentation</a> for more details.
+    Add the <a href="http://docs.grafana.org/features/datasources/influxdb/" target="_blank">datasource</a>
+<br>
     
 </p>
-    
-<pre class="source">
-datasources: {
-  influxdb: {
-    type: 'influxdb',
-    url: "http://influx_db_host:8086/db/jmeter",
-    username: 'root',
-    password: 'root',
-  },
-  grafana: {
-    type: 'influxdb',
-    url: "http://influx_db_host:8086/db/grafana",
-    username: 'root',
-    password: 'root',
-    grafanaDB: true
-  },
-},
-    </pre>
-    
-<div class="clear"></div>
-<div class="note">
-    Note that grafana has "<span class="code">grafanaDB:true</span>". Also note that here we use <span class="code">root</span> user for simplicity
-    It is better to dedicate a special user with restricted rights.
-    </div>
-<div class="clear"></div>
     Here is the kind of dashboard that you could obtain:
     <figure>
 <a href="../images/screenshots/grafana_dashboard.png"><img src="../images/screenshots/grafana_dashboard.png" width="1265" height="581" alt="Grafana dashboard"></a>
@@ -581,6 +543,7 @@ datasources: {
 </li>
 </ul>
 </div>
+<a href="#top" id="topButton">Go to top</a>
 </div>
 <div class="footer">
 <div class="copyright">
@@ -596,8 +559,16 @@ datasources: {
           </div>
 </div>
 <script>(function(){
-            // fill in the current location into social links on this page.
             "use strict";
+            // enable 'go to top' button functionality
+            document.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                    document.getElementById("topButton").style.display = "block";
+                } else {
+                    document.getElementById("topButton").style.display = "none";
+                }
+            });
+            // fill in the current location into social links on this page.
             var as = document.getElementsByTagName('a');
             var loc = document.location.href;
             if (!loc.toLowerCase().startsWith('http')) {

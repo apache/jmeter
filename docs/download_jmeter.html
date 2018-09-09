@@ -228,7 +228,6 @@
 <p>
         The <span class="code">KEYS</span> link links to the code signing keys used to sign the product.
         The <span class="code">PGP</span> link downloads the OpenPGP compatible signature from our main site. 
-        The <span class="code">MD5</span> link downloads the md5 checksum from the main site.
         The <span class="code">SHA-512</span> link downloads the sha512 checksum from the main site.
         Please <a href="http://www.apache.org/info/verification.html">verify the integrity</a>
         of the downloaded file.
@@ -246,7 +245,7 @@
     
 </div>
 <div class="section">
-<h1>Apache JMeter 4.0 (Requires Java 8. JMeter 4.0 does not yet support Java 9.)</h1>
+<h1>Apache JMeter 5.0 (Requires Java 8 or 9.)</h1>
       
 <div class="subsection">
 <h2 id="binaries">Binaries<a class="sectionlink" href="#binaries" title="Link to here">&para;</a>
@@ -256,19 +255,17 @@
           
 <tr>
               
-<td><a href="[preferred]/jmeter/binaries/apache-jmeter-4.0.tgz">apache-jmeter-4.0.tgz</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-4.0.tgz.md5">md5</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-4.0.tgz.sha512">sha512</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-4.0.tgz.asc">pgp</a></td>
+<td><a href="[preferred]/jmeter/binaries/apache-jmeter-5.0.tgz">apache-jmeter-5.0.tgz</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-5.0.tgz.sha512">sha512</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-5.0.tgz.asc">pgp</a></td>
           
 </tr>
           
 <tr>
               
-<td><a href="[preferred]/jmeter/binaries/apache-jmeter-4.0.zip">apache-jmeter-4.0.zip</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-4.0.zip.md5">md5</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-4.0.zip.sha512">sha512</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-4.0.zip.asc">pgp</a></td>
+<td><a href="[preferred]/jmeter/binaries/apache-jmeter-5.0.zip">apache-jmeter-5.0.zip</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-5.0.zip.sha512">sha512</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-5.0.zip.asc">pgp</a></td>
           
 </tr>
         
@@ -284,19 +281,17 @@
           
 <tr>
               
-<td><a href="[preferred]/jmeter/source/apache-jmeter-4.0_src.tgz">apache-jmeter-4.0_src.tgz</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-4.0_src.tgz.md5">md5</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-4.0_src.tgz.sha512">sha512</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-4.0_src.tgz.asc">pgp</a></td>
+<td><a href="[preferred]/jmeter/source/apache-jmeter-5.0_src.tgz">apache-jmeter-5.0_src.tgz</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-5.0_src.tgz.sha512">sha512</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-5.0_src.tgz.asc">pgp</a></td>
           
 </tr>
           
 <tr>
               
-<td><a href="[preferred]/jmeter/source/apache-jmeter-4.0_src.zip">apache-jmeter-4.0_src.zip</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-4.0_src.zip.md5">md5</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-4.0_src.zip.sha512">sha512</a></td>
-              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-4.0_src.zip.asc">pgp</a></td>
+<td><a href="[preferred]/jmeter/source/apache-jmeter-5.0_src.zip">apache-jmeter-5.0_src.zip</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-5.0_src.zip.sha512">sha512</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-5.0_src.zip.asc">pgp</a></td>
           
 </tr>
         
@@ -352,6 +347,7 @@
 </li>
 </ul>
 </div>
+<a href="#top" id="topButton">Go to top</a>
 </div>
 <div class="footer">
 <div class="copyright">
@@ -367,8 +363,16 @@
           </div>
 </div>
 <script>(function(){
-            // fill in the current location into social links on this page.
             "use strict";
+            // enable 'go to top' button functionality
+            document.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                    document.getElementById("topButton").style.display = "block";
+                } else {
+                    document.getElementById("topButton").style.display = "none";
+                }
+            });
+            // fill in the current location into social links on this page.
             var as = document.getElementsByTagName('a');
             var loc = document.location.href;
             if (!loc.toLowerCase().startsWith('http')) {
