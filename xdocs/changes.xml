@@ -64,26 +64,52 @@ Summary
     <li>It is now also possible to send a JSON Body with attached file</li>
     <li>Parameters entered in Parameters Tab are now used in body instead of being ignored</li>
 </ul>
-<p>In distributed testing, JMeter now automatically prefixes thread names with engine host and port, this makes the counting of threads correct in the HTML report without any other configuration as it was required before</p>
+<figure width="1216" height="340" image="changes/5.0/jmeter_5_rest1.png" />
+<figure width="1223" height="314" image="changes/5.0/jmeter_5_rest2.png" />
 </p>
-<p>XPath 2.0 is supported in a new element called <code>XPath2 extractor</code> providing easier XML namespaces handling, up to date XPath syntax and better performances</p>
+<p>In distributed testing, JMeter now automatically prefixes thread names with engine host and port, this makes the counting of threads correct in the HTML report without any other configuration as it was required before
+<figure width="1156" height="543" image="changes/5.0/jmeter_5_distributed.png" />
+</p>
+<p>XPath 2.0 is supported in a new element called <code>XPath2 extractor</code> providing easier XML namespaces handling, up to date XPath syntax and better performances
+<figure width="879" height="340" image="changes/5.0/jmeter_5_xpath2_extractor.png" />
+<figure width="1213" height="730" image="changes/5.0/jmeter_5_xpath2_tester.png" />
+</p>
 <p>Upgrade to HTTP Components 4.6 last APIs has been completed and JMeter does not rely anymore on deprecated APIs of this library</p>
-<p>It is now possible to control in an easier way Loop breaking and Loop switching to next iteration. This is available in <code>Flow Control Action</code> and <code>Result Status Action Handler</code> elements</p>
+<p>It is now possible to control in an easier way Loop breaking and Loop switching to next iteration. This is available in <code>Flow Control Action</code> and <code>Result Status Action Handler</code> elements
+<figure width="772" height="270" image="changes/5.0/jmeter_5_flow_control_action.png" />
+<figure width="615" height="212" image="changes/5.0/jmeter_5_result_status_handler.png" />
+
+</p>
 <p>While Controller now exports a variable containing its current index named <code>__jm__&lt;Name of your element&gt;__idx</code>. So for
 example, if your While Controller is named WC, then you can access the looping index through <code>${__jm__WC__idx}</code></p>
 
 <ch_title>Scripting / Debugging enhancements</ch_title>
-<p>Search feature has been improved to allow you to iterate in the tree over search results and do necessary replacements through <code>Next</code>/<code>Previous</code>/<code>Replace</code>/<code>Replace/Find</code> buttons</p>
-<p>In View Results Tree, the request and response headers/body are clearly separated to allow you to better inspect requests and responses. You can also search in all those tabs for a particular value</p>
-<p>Recording feature has been improved to provide a popup that is always on top when you navigate in browser allowing you to name transactions while you navigate in your application.</p>
-<p>You can now restart JMeter from menu <menuchoice><guimenuitem>File</guimenuitem><guimenuitem>Restart</guimenuitem></menuchoice></p>
+<p>Search feature has been improved to allow you to iterate in the tree over search results and do necessary replacements through <code>Next</code>/<code>Previous</code>/<code>Replace</code>/<code>Replace/Find</code> buttons
+<figure width="829" height="524" image="changes/5.0/jmeter_5_search_feature.png" />
+</p>
+<p>In View Results Tree, the request and response headers/body are clearly separated to allow you to better inspect requests and responses. You can also search in all those tabs for a particular value
+<figure width="737" height="366" image="changes/5.0/jmeter_5_vrt_request_body.png" />
+<figure width="771" height="552" image="changes/5.0/jmeter_5_vrt_response_body.png" />
+</p>
+<p>Recording feature has been improved to provide a popup that is always on top when you navigate in browser allowing you to name transactions while you navigate in your application.
+<figure width="1425" height="796" image="changes/5.0/jmeter_5_recording.png" />
+</p>
+<p>You can now restart JMeter from menu <menuchoice><guimenuitem>File</guimenuitem><guimenuitem>Restart</guimenuitem></menuchoice>
+<figure width="199" height="318" image="changes/5.0/jmeter_5_restart.png" />
+</p>
 
 <ch_title>Live Reporting and Web Report</ch_title>
 Reporting feature has been enhanced 
-<p>A new Graph Total Transactions per second has been added to the HTML Web Report</p> 
+<p>A new Graph Total Transactions per second has been added to the HTML Web Report
+<figure width="1156" height="536" image="changes/5.0/jmeter_5_total_trans_per_sec.png" />
+</p> 
 <p>It is now possible to graph over time custom metrics available as JMeter Variables through <code>sample_variables</code>. Those custom metrics graphs will be 
-available in the HTML Report in <code>Custom Graphs section</code></p>
-<p>Hits per second graph now takes into account the embedded resources</p>
+available in the HTML Report in <code>Custom Graphs section</code>
+<figure width="1426" height="755" image="changes/5.0/jmeter_5_custom_graphs.png" />
+</p>
+<p>Hits per second graph now takes into account the embedded resources
+<figure width="1153" height="537" image="changes/5.0/jmeter_5_hits_per_sec.png" />
+</p>
 
 <p>In Live reporting, the sent and received bytes are now sent to Backends (InfluxDB or Graphite)</p>
 
