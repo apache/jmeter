@@ -999,7 +999,7 @@ public class JMeterUtils implements UnitTestManager {
      * Determine whether we are in 'expert' mode. Certain features may be hidden
      * from user's view unless in expert mode.
      *
-     * @return true iif we're in expert mode
+     * @return true if we're in expert mode
      */
     public static boolean isExpertMode() {
         return JMeterUtils.getPropDefault(EXPERT_MODE_PROPERTY, false);
