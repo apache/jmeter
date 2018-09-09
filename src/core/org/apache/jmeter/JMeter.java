@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Authenticator;
@@ -44,6 +45,10 @@ import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.tree.TreePath;
@@ -634,23 +639,7 @@ public class JMeter implements JMeterPlugin {
             t.run(); // NOSONAR we just evaluate some code here
         }
 
-        // Should we run a beanshell script on startup?
-        String bshinit = JMeterUtils.getProperty("beanshell.init.file");// $NON-NLS-1$
-        if (bshinit != null){
-            log.info("Run Beanshell on file: {}", bshinit);
-            try {
-                BeanShellInterpreter bsi = new BeanShellInterpreter();
-                bsi.source(bshinit);
-            } catch (ClassNotFoundException e) {
-                if (log.isWarnEnabled()) {
-                    log.warn("Could not start Beanshell: {}", e.getLocalizedMessage());
-                }
-            } catch (JMeterException e) {
-                if (log.isWarnEnabled()) {
-                    log.warn("Could not process Beanshell file: {}", e.getLocalizedMessage());
-                }
-            }
-        }
+        runInitScripts();
 
         int mirrorPort=JMeterUtils.getPropDefault("mirror.server.port", 0);// $NON-NLS-1$
         if (mirrorPort > 0){
@@ -662,6 +651,51 @@ public class JMeter implements JMeterPlugin {
                 ClassTools.invoke(instance,"startHttpMirror");
             } catch (JMeterException e) {
                 log.warn("Could not start Mirror server",e);
+            }
+        }
+    }
+
+
+    /**
+     * Runs user configured init scripts
+     */
+    void runInitScripts() {
+        // Should we run a beanshell script on startup?
+        String bshinit = JMeterUtils.getProperty("beanshell.init.file");// $NON-NLS-1$
+        if (bshinit != null){
+            log.info("Running Beanshell on file: {}", bshinit);
+            try {
+                BeanShellInterpreter bsi = new BeanShellInterpreter();
+                bsi.source(bshinit);
+            } catch (ClassNotFoundException|JMeterException e) {
+                if (log.isWarnEnabled()) {
+                    log.warn("Could not process Beanshell file: {}", e.getMessage());
+                }
+            }
+        }
+        
+        // Should we run a Groovy script on startup?
+        String jsr223Init = JMeterUtils.getProperty("groovy.init.file");// $NON-NLS-1$
+        if (jsr223Init != null){
+            log.info("Running Groovy init script in file: {}", jsr223Init);
+            File file = new File(jsr223Init);
+            if(file.exists() && file.canRead()) {
+                try (FileReader reader = new FileReader(file)) {
+                    ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+                    ScriptEngine engine = scriptEngineManager.getEngineByName("Groovy");
+                    Bindings bindings = engine.createBindings();
+                    final Logger logger = LoggerFactory.getLogger("groovy.init.file");
+                    bindings.put("log", logger); // $NON-NLS-1$ (this name is fixed)
+                    Properties props = JMeterUtils.getJMeterProperties();
+                    bindings.put("props", props); // $NON-NLS-1$ (this name is fixed)
+                    // For use in debugging:
+                    bindings.put("OUT", System.out); // NOSONAR $NON-NLS-1$ (this name is fixed)
+                    engine.eval(reader, bindings);
+                } catch (IOException | ScriptException ex) {
+                    log.error("Error running init script referenced by property {}", jsr223Init, ex);
+                }
+            } else {
+                log.error("Script {} referenced by property {} is not readable or does not exists", file.getAbsolutePath(), jsr223Init);
             }
         }
     }

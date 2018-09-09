@@ -1873,6 +1873,26 @@ JMETER-SERVER</source>
     </property>
 </properties>
 </section>
+
+<section name="&sect-num;.43 Advanced Groovy Scripting configuration" anchor="groovy">
+<description>Advanced properties for configuration of scripting in Grooyv</description>
+<properties>
+    <property name="groovy.init.file">
+    Path to Groovy file containing script to call on JMeter startup. <br/>
+    This script can use pre-defined variables:
+    <ul>
+        <li><code>log</code>: Logger to log any message, uses SLF4J library</li>
+        <li><code>props</code>: JMeter Properties</li>
+        <li><code>OUT</code>: System.OUT, useful to write in the console</li>
+    </ul>
+    No script is defined by default. 
+    </property>
+    <property name="groovy.utilities">
+    Path to Groovy file containing utility functions to make available to __groovy function. <br/>
+    Defaults to <code>bin/utility.groovy</code> 
+    </property>
+</properties>
+</section>
 <!-- 
 <section name="&sect-num;.10 Reports" anchor="Reports">
 <description>
