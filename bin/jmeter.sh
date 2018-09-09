@@ -85,7 +85,7 @@ if [ -z "$JAVA_HOME" ]; then
   JAVA_HOME="$JRE_HOME"
 fi
 
-#--add-modules java.activation if JAVA 9
+#--add-opens if JAVA 9
 JAVA9_OPTS=
 
 # Minimal version to run JMeter
@@ -96,7 +96,7 @@ CURRENT_VERSION=`"${JAVA_HOME}/bin/java" -version 2>&1 | awk -F'"' '/version/ {g
 
 # Check if Java is present and the minimal version requirement
 if [ "$CURRENT_VERSION" -gt "$MINIMAL_VERSION" ]; then
-    JAVA9_OPTS="--add-modules java.activation --add-opens java.desktop/sun.awt=ALL-UNNAMED --add-opens java.desktop/javax.swing.text.html=ALL-UNNAMED --add-opens java.desktop/sun.swing=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED"
+    JAVA9_OPTS="--add-opens java.desktop/sun.awt=ALL-UNNAMED --add-opens java.desktop/javax.swing.text.html=ALL-UNNAMED --add-opens java.desktop/sun.swing=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED"
 fi
 
 # Don't add additional arguments to the JVM start, except those needed for Java 9
