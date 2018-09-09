@@ -234,7 +234,7 @@ No
 <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
 #end
 
-#macro ( pr $id)
+#macro ( pullrequest $id)
 <a href="https://github.com/apache/jmeter/pull/$id.getText()">Pull request #$id.getText()</a>##
 #end
 
@@ -249,6 +249,11 @@ No
 ## Shorthand - automatically adds " - " before remaining text
 #macro ( bug $id)
 #bugzilla($id) - ##
+#end
+
+## Shorthand - automatically adds " - " before remaining text
+#macro ( pr $id)
+#pullrequest($id) - ##
 #end
 
 #macro ( contributor $id)
