@@ -880,7 +880,7 @@ JMETER-SERVER</source>
     Define the HTML parser to be used.<br/>
     Do not comment this property.<br/>
     <dl>
-        <dt>org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</dt>
+        <dt><code>org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</code></dt>
         <dd>This new parser (since 2.10) should perform better than all others. See <bugzilla>55632</bugzilla>.</dd>
         <dt><code>org.apache.jmeter.protocol.http.parser.JTidyHTMLParser</code></dt>
         <dd>Default parser before JMeter version 2.10</dd>
