@@ -1875,7 +1875,7 @@ JMETER-SERVER</source>
 </section>
 
 <section name="&sect-num;.43 Advanced Groovy Scripting configuration" anchor="groovy">
-<description>Advanced properties for configuration of scripting in Grooyv</description>
+<description>Advanced properties for configuration of scripting in Groovy</description>
 <properties>
     <property name="groovy.init.file">
     Path to Groovy file containing script to call on JMeter startup. <br/>
