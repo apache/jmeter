@@ -675,10 +675,10 @@ public class JMeter implements JMeterPlugin {
         }
         
         // Should we run a Groovy script on startup?
-        String jsr223Init = JMeterUtils.getProperty("groovy.init.file");// $NON-NLS-1$
-        if (jsr223Init != null){
-            log.info("Running Groovy init script in file: {}", jsr223Init);
-            File file = new File(jsr223Init);
+        String groovyInit = JMeterUtils.getProperty("groovy.init.file");// $NON-NLS-1$
+        if (groovyInit != null){
+            log.info("Running Groovy init script in file: {}", groovyInit);
+            File file = new File(groovyInit);
             if(file.exists() && file.canRead()) {
                 try (FileReader reader = new FileReader(file)) {
                     ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
@@ -692,10 +692,10 @@ public class JMeter implements JMeterPlugin {
                     bindings.put("OUT", System.out); // NOSONAR $NON-NLS-1$ (this name is fixed)
                     engine.eval(reader, bindings);
                 } catch (IOException | ScriptException ex) {
-                    log.error("Error running init script referenced by property {}", jsr223Init, ex);
+                    log.error("Error running init script {}: {}", groovyInit, ex);
                 }
             } else {
-                log.error("Script {} referenced by property {} is not readable or does not exists", file.getAbsolutePath(), jsr223Init);
+                log.error("Script {} referenced by property {} is not readable or does not exist", file.getAbsolutePath(), "groovy.init.file");
             }
         }
     }
