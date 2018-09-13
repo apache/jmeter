@@ -1381,7 +1381,7 @@ JMETER-SERVER</source>
 </property>
 <property name="javascript.use_rhino">
     Ability to switch to Rhino as default Javascript Engine used by <code>IfController</code>
-    and <code>__javaScript</code> function.<br/>
+    and <code><funclink name="__javaScript"/></code> function.<br/>
     <note>JMeter uses Nashorn since 3.2 version.
     If you want to use Rhino, set this value to <code>true</code></note>
     Defaults to: <code>false</code>
@@ -1874,7 +1874,7 @@ JMETER-SERVER</source>
 <description>Advanced properties for configuration of scripting in Groovy</description>
 <properties>
     <property name="groovy.utilities">
-    Path to Groovy file containing utility functions to make available to <funclink name="__groovy"/> function.<br/>
+    Path to Groovy file containing utility functions to make available to <code><funclink name="__groovy"/></code> function.<br/>
     Defaults to <code>bin/utility.groovy</code> 
     </property>
 </properties>
