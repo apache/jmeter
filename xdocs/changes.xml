@@ -255,6 +255,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><bug>60190</bug>Content-Type is added for <code>POST</code> unconditionally. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62462</bug><pr>387</pr>Make delegation of credentials in SPNEGO possible again.</li>
     <li><bug>58807</bug><code>Reset SSL State on Thread Group iteration only (was https.use.cached.ssl.context=false</code> is broken)</li>
+    <li><bug>62716</bug>When Recording, JMeter removes Authorization from generated Header Manager when using Bearer Token</li>
 </ul>
 
 <h3>Other Samplers</h3>
