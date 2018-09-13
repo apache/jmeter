@@ -1496,10 +1496,6 @@ JMETER-SERVER</source>
     confirmation dialogue.<br/>
     Defaults to: <code>false</code>
 </property>
-<property name="jsr223.compiled_scripts_cache_size">
-    Used by JSR223 elements.<br/>
-    Size of compiled scripts cache.<br/>
-    Defaults to: <code>100</code></property>
 </properties>
 </section>
 <section name="&sect-num;.36 Classpath configuration" anchor="classpath">
@@ -1877,20 +1873,33 @@ JMETER-SERVER</source>
 <section name="&sect-num;.43 Advanced Groovy Scripting configuration" anchor="groovy">
 <description>Advanced properties for configuration of scripting in Groovy</description>
 <properties>
-    <property name="groovy.init.file">
-    Path to Groovy file containing script to call on JMeter startup. <br/>
-    This script can use pre-defined variables:
+    <property name="groovy.utilities">
+    Path to Groovy file containing utility functions to make available to <funclink name="__groovy"/> function.<br/>
+    Defaults to <code>bin/utility.groovy</code> 
+    </property>
+</properties>
+</section>
+
+<section name="&sect-num;.44 Advanced JSR-223 Scripting configuration" anchor="jsr223">
+<description>Advanced properties for configuration of scripting in JSR-223</description>
+<properties>
+    <property name="jsr223.init.file">
+    <p>Path to JSR-223 file containing script to call on JMeter startup.</p>
+    <p>The actual scripting engine to use will be determined by the extension
+    of the init file name. If the file name has no extension, or no scripting
+    engine could be found for that extension, Groovy will be used.</p>
+    <p>This script can use pre-defined variables:</p>
     <ul>
         <li><code>log</code>: Logger to log any message, uses SLF4J library</li>
         <li><code>props</code>: JMeter Properties</li>
         <li><code>OUT</code>: System.OUT, useful to write in the console</li>
     </ul>
-    No script is defined by default. 
+    No script is defined by default.
     </property>
-    <property name="groovy.utilities">
-    Path to Groovy file containing utility functions to make available to __groovy function. <br/>
-    Defaults to <code>bin/utility.groovy</code> 
-    </property>
+    <property name="jsr223.compiled_scripts_cache_size">
+    Used by JSR-223 elements.<br/>
+    Size of compiled scripts cache.<br/>
+    Defaults to: <code>100</code></property>
 </properties>
 </section>
 <!-- 

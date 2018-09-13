@@ -40,13 +40,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.swing.JTree;
@@ -57,7 +60,9 @@ import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.control.ReplaceableController;
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.DistributedRunner;
@@ -112,6 +117,8 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * Main JMeter class; processes options and starts the GUI, non-GUI or server as appropriate.
  */
 public class JMeter implements JMeterPlugin {
+    private static final String JSR223_INIT_FILE = "jsr223.init.file";
+
     private static final Logger log = LoggerFactory.getLogger(JMeter.class);
     
     public static final int UDP_PORT_DEFAULT = 4445; // needed for ShutdownClient
@@ -674,17 +681,25 @@ public class JMeter implements JMeterPlugin {
             }
         }
         
-        // Should we run a Groovy script on startup?
-        String groovyInit = JMeterUtils.getProperty("groovy.init.file");// $NON-NLS-1$
-        if (groovyInit != null){
-            log.info("Running Groovy init script in file: {}", groovyInit);
-            File file = new File(groovyInit);
+        // Should we run a JSR223 script on startup?
+        String jsr223Init = JMeterUtils.getProperty(JSR223_INIT_FILE);// $NON-NLS-1$
+        if (jsr223Init != null){
+            log.info("Running JSR-223 init script in file: {}", jsr223Init);
+            File file = new File(jsr223Init);
             if(file.exists() && file.canRead()) {
+                String extension = StringUtils.defaultIfBlank(FilenameUtils.getExtension(jsr223Init), "Groovy");
                 try (FileReader reader = new FileReader(file)) {
                     ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-                    ScriptEngine engine = scriptEngineManager.getEngineByName("Groovy");
+                    ScriptEngine engine = scriptEngineManager.getEngineByExtension(extension);
+                    if (engine == null) {
+                        log.warn(
+                                "No script engine found for [{}]. Will try to use Groovy. Possible engines and their extensions are: {}",
+                                extension, getEnginesAndExtensions(scriptEngineManager));
+                        extension = "Groovy";
+                        engine = scriptEngineManager.getEngineByName(extension);
+                    }
                     Bindings bindings = engine.createBindings();
-                    final Logger logger = LoggerFactory.getLogger("groovy.init.file");
+                    final Logger logger = LoggerFactory.getLogger(JSR223_INIT_FILE);
                     bindings.put("log", logger); // $NON-NLS-1$ (this name is fixed)
                     Properties props = JMeterUtils.getJMeterProperties();
                     bindings.put("props", props); // $NON-NLS-1$ (this name is fixed)
@@ -692,12 +707,20 @@ public class JMeter implements JMeterPlugin {
                     bindings.put("OUT", System.out); // NOSONAR $NON-NLS-1$ (this name is fixed)
                     engine.eval(reader, bindings);
                 } catch (IOException | ScriptException ex) {
-                    log.error("Error running init script {}: {}", groovyInit, ex);
+                    log.error("Error running init script {} with engine for {}: {}", jsr223Init, extension, ex);
                 }
             } else {
-                log.error("Script {} referenced by property {} is not readable or does not exist", file.getAbsolutePath(), "groovy.init.file");
+                log.error("Script {} referenced by property {} is not readable or does not exist", file.getAbsolutePath(), JSR223_INIT_FILE);
             }
         }
+    }
+
+
+    private Map<String, List<String>> getEnginesAndExtensions(ScriptEngineManager scriptEngineManager) {
+        return scriptEngineManager.getEngineFactories().stream()
+                .collect(Collectors.toMap(
+                        f -> f.getLanguageName() + " (" + f.getLanguageVersion() + ")",
+                        ScriptEngineFactory::getExtensions));
     }
 
     /**
