@@ -236,7 +236,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
                 throw new JMeterStopTestNowException("Cannot create path hierarchy for folder "+ parentFile.getAbsolutePath());
             }
         } else {
-            log.debug("Folder {} already exists", parentFile.getAbsolutePath());
+            log.debug("Folder {} already exists", parentFile.getAbsolutePath());
         }
     }
 

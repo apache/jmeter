@@ -341,9 +341,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 res.setResponseMessage("No message received");
             }
         } catch (Exception ex) {
-            res.setResponseMessage("Error browsing queue '"+queueName+"' with selector '"
+            res.setResponseMessage("Error browsing queue '"+queueName+"' with selector '"
                     + jmsSelector+ "', timeout '"+getTimeout()+"', message:"+ex.getMessage());
-            LOGGER.error("Error browsing queue {} with selector {} and configured timeout {}", queueName, jmsSelector,
+            LOGGER.error("Error browsing queue {} with selector {} and configured timeout {}", queueName, jmsSelector,
                     getTimeout(), ex);
         } finally {
             Utils.close(consumer, LOGGER);
