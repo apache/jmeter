@@ -206,7 +206,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>62470</bug>CSV Output : Enable logging of sub results when <code>jmeter.save.saveservice.subresults=true</code>. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
   <li><bug>62473</bug>Setting "<code>saveservice_properties</code>" has counter intuitive behaviour</li>
   <li><bug>62354</bug>Correct calculation and usage of units for second per user (reported by jffagot05 at gmail.com)</li>
-  <li><bug>62700</bug>Introduce groovy.init.file to allow calling a groovy script on JMeter startup</li>
+  <li><bug>62700</bug>Introduce <code>jsr223.init.file</code> to allow calling a JSR-223 script on JMeter startup</li>
   <li><bug>62128</bug>Try to guess <code>JMETER_HOME</code> correctly, when <code>jmeter.bat</code> is called from a batch file in another directory. Contributed by logox01 (logox01 at gmx.at)</li>
   <li><pr>386</pr>Add parameter support for RMI keystore creation scripts. Contributed by Logan Mauzaize (t524467 at airfrance.fr)</li>
   <li><bug>62065</bug>Use Maven artifact for JAF Module instead of embedded module</li>
