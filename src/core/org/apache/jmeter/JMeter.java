@@ -695,7 +695,7 @@ public class JMeter implements JMeterPlugin {
                     log.error("Error running init script {}: {}", groovyInit, ex);
                 }
             } else {
-                log.error("Script {} referenced by property {} is not readable or does not exist", file.getAbsolutePath(), "groovy.init.file");
+                log.error("Script {} referenced by property {} is not readable or does not exist", file.getAbsolutePath(), "groovy.init.file");
             }
         }
     }
