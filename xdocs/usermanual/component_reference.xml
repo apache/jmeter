@@ -2262,7 +2262,7 @@ If the last sample just before the loop failed, don't enter loop.</li>
 </ul>
 <note>
 The condition can be any variable or function that eventually evaluates to the string "<code>false</code>".
-This allows the use of <code>__jexl3</code>, <code>__groovy</code> function, properties or variables as needed.
+This allows the use of <code><funclink name="__jexl3"/></code>, <code><funclink name="__groovy"/></code> function, properties or variables as needed.
 </note>
 <br></br>
 <note>
