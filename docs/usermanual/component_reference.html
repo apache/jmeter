@@ -6112,7 +6112,7 @@ If the last sample just before the loop failed, don't enter loop.</li>
 <div class="clear"></div>
 <div class="note">
 The condition can be any variable or function that eventually evaluates to the string "<span class="code">false</span>".
-This allows the use of <span class="code">__jexl3</span>, <span class="code">__groovy</span> function, properties or variables as needed.
+This allows the use of <span class="code"><a href="../usermanual/functions.html#__jexl3">__jexl3</a></span>, <span class="code"><a href="../usermanual/functions.html#__groovy">__groovy</a></span> function, properties or variables as needed.
 </div>
 <div class="clear"></div>
 
@@ -12095,16 +12095,24 @@ The non-tolerant parser can be quite slow, as it may need to download the DTD et
 <div class="note">
 
 <b>NAMESPACES</b>
-As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
-you can provide a Properties file which contains mappings for the namespace prefixes: 
+<br>
+As a work-round for namespace limitations of the Xalan XPath parser (implementation on which JMeter is based) you need to:
+<ul>
+
+<li>provide a Properties file (if for example your file is named namespaces.properties) which contains mappings for the namespace prefixes: 
 <pre class="source">
-prefix1=Full Namespace 1
-prefix2=Full Namespace 2
+prefix1=http\://foo.apache.org
+prefix2=http\://toto.apache.org
 &hellip;
 </pre>
+</li>
 
-You reference this file in <span class="code">jmeter.properties</span> file using the property:
-    <pre class="source">xpath.namespace.config</pre>
+
+<li>reference this file in <span class="code">user.properties</span> file using the property:
+    <pre class="source">xpath.namespace.config=namespaces.properties</pre>
+</li>
+
+</ul>
 
 </div>
 <div class="clear"></div>
@@ -15073,16 +15081,24 @@ extracting the node as text or attribute value and store the result into the giv
 <div class="note">
 
 <b>NAMESPACES</b>
-As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
-you can provide a Properties file which contains mappings for the namespace prefixes: 
+<br>
+As a work-round for namespace limitations of the Xalan XPath parser (implementation on which JMeter is based) you need to:
+<ul>
+
+<li>provide a Properties file (if for example your file is named namespaces.properties) which contains mappings for the namespace prefixes: 
 <pre class="source">
-prefix1=Full Namespace 1
-prefix2=Full Namespace 2
+prefix1=http\://foo.apache.org
+prefix2=http\://toto.apache.org
 &hellip;
 </pre>
+</li>
 
-You reference this file in <span class="code">jmeter.properties</span> file using the property:
-    <pre class="source">xpath.namespace.config</pre>
+
+<li>reference this file in <span class="code">user.properties</span> file using the property:
+    <pre class="source">xpath.namespace.config=namespaces.properties</pre>
+</li>
+
+</ul>
 
 </div>
 <div class="clear"></div>

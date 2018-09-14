@@ -368,6 +368,10 @@
 <a href="#groovy">19.43 Advanced Groovy Scripting configuration</a>
 <ul></ul>
 </li>
+<li>
+<a href="#jsr223">19.44 Advanced JSR-223 Scripting configuration</a>
+<ul></ul>
+</li>
 </ul>
 <div class="section">
 <h1 id="introduction">19 Introduction<a class="sectionlink" href="#introduction" title="Link to here">&para;</a>
@@ -2704,7 +2708,9 @@ JMETER-SERVER</pre>
     
 <dl>
         
-<dt>org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</dt>
+<dt>
+<span class="code">org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</span>
+</dt>
         
 <dd>This new parser (since 2.10) should perform better than all others. See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=55632">
       Bug
@@ -4154,7 +4160,7 @@ JMETER-SERVER</pre>
 <div class="name req-true">javascript.use_rhino</div>
 <div class="description req-true">
     Ability to switch to Rhino as default Javascript Engine used by <span class="code">IfController</span>
-    and <span class="code">__javaScript</span> function.<br>
+    and <span class="code"><a href="../usermanual/functions.html#__javaScript">__javaScript</a></span> function.<br>
     
 <div class="clear"></div>
 <div class="note">JMeter uses Nashorn since 3.2 version.
@@ -4452,18 +4458,6 @@ JMETER-SERVER</pre>
     confirmation dialogue.<br>
     Defaults to: <span class="code">false</span>
 
-</div>
-<div class="required req-true">
-            No
-          </div>
-</div>
-
-<div class="property">
-<div class="name req-true">jsr223.compiled_scripts_cache_size</div>
-<div class="description req-true">
-    Used by JSR223 elements.<br>
-    Size of compiled scripts cache.<br>
-    Defaults to: <span class="code">100</span>
 </div>
 <div class="required req-true">
             No
@@ -5557,7 +5551,7 @@ JMETER-SERVER</pre>
 <h1 id="groovy">19.43 Advanced Groovy Scripting configuration<a class="sectionlink" href="#groovy" title="Link to here">&para;</a>
 </h1>
 
-<div class="description">Advanced properties for configuration of scripting in Grooyv</div>
+<div class="description">Advanced properties for configuration of scripting in Groovy</div>
 
 <div class="properties">
 <h3>
@@ -5570,11 +5564,49 @@ JMETER-SERVER</pre>
 </div>
     
 <div class="property">
-<div class="name req-true">groovy.init.file</div>
+<div class="name req-true">groovy.utilities</div>
 <div class="description req-true">
-    Path to Groovy file containing script to call on JMeter startup. <br>
-    This script can use pre-defined variables:
-    <ul>
+    Path to Groovy file containing utility functions to make available to <span class="code"><a href="../usermanual/functions.html#__groovy">__groovy</a></span> function.<br>
+    Defaults to <span class="code">bin/utility.groovy</span> 
+    
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+</div>
+
+</div>
+<div class="section">
+<h1 id="jsr223">19.44 Advanced JSR-223 Scripting configuration<a class="sectionlink" href="#jsr223" title="Link to here">&para;</a>
+</h1>
+
+<div class="description">Advanced properties for configuration of scripting in JSR-223</div>
+
+<div class="properties">
+<h3>
+        Parameters
+        </h3>
+<div class="property title">
+<div class="name title">Attribute</div>
+<div class="description title">Description</div>
+<div class="required title">Required</div>
+</div>
+    
+<div class="property">
+<div class="name req-true">jsr223.init.file</div>
+<div class="description req-true">
+    
+<p>Path to JSR-223 file containing script to call on JMeter startup.</p>
+    
+<p>The actual scripting engine to use will be determined by the extension
+    of the init file name. If the file name has no extension, or no scripting
+    engine could be found for that extension, Groovy will be used.</p>
+    
+<p>This script can use pre-defined variables:</p>
+    
+<ul>
         
 <li>
 <span class="code">log</span>: Logger to log any message, uses SLF4J library</li>
@@ -5586,7 +5618,7 @@ JMETER-SERVER</pre>
 <span class="code">OUT</span>: System.OUT, useful to write in the console</li>
     
 </ul>
-    No script is defined by default. 
+    No script is defined by default.
     </div>
 <div class="required req-true">
             No
@@ -5594,11 +5626,11 @@ JMETER-SERVER</pre>
 </div>
     
 <div class="property">
-<div class="name req-true">groovy.utilities</div>
+<div class="name req-true">jsr223.compiled_scripts_cache_size</div>
 <div class="description req-true">
-    Path to Groovy file containing utility functions to make available to __groovy function. <br>
-    Defaults to <span class="code">bin/utility.groovy</span> 
-    
+    Used by JSR-223 elements.<br>
+    Size of compiled scripts cache.<br>
+    Defaults to: <span class="code">100</span>
 </div>
 <div class="required req-true">
             No
