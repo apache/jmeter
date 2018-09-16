@@ -67,7 +67,7 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
                 // icon
                 ic = node.getIcon();
                 if (ic != null) {
-                    setIcon(ic);
+                    setDisabledIcon(ic);
                 }
             }
         }
