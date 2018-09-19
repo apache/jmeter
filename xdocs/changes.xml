@@ -156,6 +156,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>62745</bug>Fix undefined disabled icon. Contributed by Till Neunast (https://github.com/tilln)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -164,6 +165,7 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
+    <li>Till Neunast (https://github.com/tilln)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
