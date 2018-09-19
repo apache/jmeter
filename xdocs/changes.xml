@@ -157,6 +157,7 @@ Summary
 <h3>General</h3>
 <ul>
     <li><bug>62745</bug>Fix undefined disabled icon. Contributed by Till Neunast (https://github.com/tilln)</li>
+    <li><bug>62743</bug>Client auth must be enabled on distributed testing</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
