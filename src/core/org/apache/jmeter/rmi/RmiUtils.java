@@ -112,6 +112,7 @@ public final class RmiUtils {
         }
         SSLRMIServerSocketFactory factory = new SSLRMIServerSocketFactory(getRmiHost());
         factory.setAlias(KEYSTORE_ALIAS);
+        factory.setNeedClientAuth(true);
         factory.setKeystore(KEYSTORE_FILE, KEYSTORE_TYPE, KEYSTORE_PASSWORD);
         factory.setTruststore(TRUSTSTORE_FILE, TRUSTSTORE_TYPE, TRUSTSTORE_PASSWORD);
         return factory;
