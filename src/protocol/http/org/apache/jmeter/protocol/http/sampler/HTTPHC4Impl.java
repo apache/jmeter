@@ -691,7 +691,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private void setUpProxyAuth(Triple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
                                 HttpContext localContext) {
-        if (triple != null && !isDynamicProxy(getProxyHost(), getProxyPortInt())) {
+        if (triple != null) {
             AuthState proxy = triple.getMiddle();
             localContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, proxy);
         }
