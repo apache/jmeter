@@ -112,6 +112,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Updated to tika-core and tika-parsers 1.19 (from 1.18)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
