@@ -108,6 +108,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+  <li><pr>394</pr>Allow <code>null</code> values in <code>FieldStringEditor</code>. Based on patch by Mingun (alexander_sergey at mail.ru)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -168,6 +169,7 @@ Summary
 </p>
 <ul>
     <li>Till Neunast (https://github.com/tilln)</li>
+    <li>Mingun (alexander_sergey at mail.ru)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
