@@ -18,6 +18,7 @@
 <!DOCTYPE document [
   <!ENTITY vellip   "&#x022EE;" >
   <!ENTITY hellip "&#x02026;">
+  <!ENTITY le     "&#x02264;">
   <!ENTITY nbsp   "&#x000A0;">
   <!ENTITY oacute "&#x000F3;">
   <!ENTITY THORN  "&#x000DE;">
@@ -299,7 +300,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>62333</bug>Report Dashboard - When one series contains no value, the graph colors logic is wrong. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>62283</bug>Report Dashboard - Date is not correctly displayed on chart when granularity is &lt;= 1 day</li>
+    <li><bug>62283</bug>Report Dashboard - Date is not correctly displayed on chart when granularity is &le;&nbsp;1 day</li>
     <li><bug>62520</bug>The tool-tip text when we hover on the point in 'Latency Vs Request' graph should be 'Median Latency'</li>
 </ul>
 
