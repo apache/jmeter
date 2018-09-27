@@ -160,6 +160,7 @@ Summary
 <ul>
     <li><bug>62745</bug>Fix undefined disabled icon. Contributed by Till Neunast (https://github.com/tilln)</li>
     <li><bug>62743</bug>Client auth must be enabled on distributed testing</li>
+    <li><bug>62767</bug>NPE when searching under certain conditions. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -170,6 +171,7 @@ Summary
 <ul>
     <li>Till Neunast (https://github.com/tilln)</li>
     <li>Mingun (alexander_sergey at mail.ru)</li>
+    <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <p>
