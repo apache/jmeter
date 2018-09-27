@@ -452,7 +452,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public long currentTimeInMillis() {
         if (useNanoTime){
             if (nanoTimeOffset == Long.MIN_VALUE){
-                throw new RuntimeException("Invalid call; nanoTimeOffset as not been set");
+                throw new RuntimeException("Invalid call; nanoTimeOffset has not been set");
             }
             return sampleNsClockInMs() + nanoTimeOffset;            
         }
