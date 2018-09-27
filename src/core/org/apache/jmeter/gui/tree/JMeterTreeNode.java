@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
@@ -47,7 +48,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     private static final int TEST_PLAN_LEVEL = 1;
 
     // See Bug 54648
-    private transient JMeterTreeModel treeModel;
+    private transient Optional<JMeterTreeModel> treeModel;
 
     private boolean markedBySearch;
 
@@ -61,7 +62,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 
     public JMeterTreeNode(TestElement userObj, JMeterTreeModel treeModel) {
         super(userObj);
-        this.treeModel = treeModel;
+        this.treeModel = Optional.ofNullable(treeModel);
     }
 
     public boolean isEnabled() {
@@ -70,7 +71,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 
     public void setEnabled(boolean enabled) {
         getTestElement().setEnabled(enabled);
-        treeModel.nodeChanged(this);
+        treeModel.ifPresent(tm -> tm.nodeChanged(this));
     }
     
     /**
@@ -78,11 +79,11 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
      * @return {@link List} of {@link JMeterTreeNode}s
      */
     public List<JMeterTreeNode> getPathToThreadGroup() {
-        if (treeModel == null) {
+        if (!treeModel.isPresent()) {
             return new ArrayList<>();
         }
 
-        return Arrays.stream(treeModel.getPathToRoot(this))
+        return Arrays.stream(treeModel.get().getPathToRoot(this))
                 .map(node -> (JMeterTreeNode) node)
                 .filter(node -> node.getLevel() >= TEST_PLAN_LEVEL)
                 .collect(Collectors.toList());
@@ -97,7 +98,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
             return;
         }
         this.childrenMarkedBySearch = tagged;
-        treeModel.nodeChanged(this);
+        treeModel.ifPresent(tm -> tm.nodeChanged(this));
     }
     /**
      * Tag Node as result of a search
@@ -116,7 +117,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
             }
         }
 
-        treeModel.nodeChanged(this);
+        treeModel.ifPresent(tm -> tm.nodeChanged(this));
     }
     
     /**
@@ -215,9 +216,6 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     /** {@inheritDoc} */
     @Override
     public void nameChanged() {
-        if (treeModel != null) { // may be null during startup
-            treeModel.nodeChanged(this);
-        }
+        treeModel.ifPresent(tm -> tm.nodeChanged(this));
     }
-
 }
