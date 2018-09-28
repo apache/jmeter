@@ -21,6 +21,7 @@ package org.apache.jmeter.config;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
+import org.apache.jmeter.util.keystore.JmeterKeyStore;
 
 /**
  * Keystore Configuration BeanInfo
@@ -51,14 +52,14 @@ public class KeystoreConfigBeanInfo extends BeanInfoSupport {
 
         p = property(CLIENT_CERT_ALIAS_VAR_NAME);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        p.setValue(DEFAULT, JmeterKeyStore.DEFAULT_ALIAS_VAR_NAME); // $NON-NLS-1$
 
         p = property(ALIAS_START_INDEX);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        p.setValue(DEFAULT, "0"); // $NON-NLS-1$
 
         p = property(ALIAS_END_INDEX);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, ""); // $NON-NLS-1$       
+        p.setValue(DEFAULT, "-1"); // $NON-NLS-1$
     }
 }
