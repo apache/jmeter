@@ -18,6 +18,14 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -35,21 +43,8 @@ import org.littleshoot.proxy.HttpProxyServer;
 import org.littleshoot.proxy.ProxyAuthenticator;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 
-import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.PROXYHOST;
-import static org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.PROXYPASS;
-import static org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.PROXYPORT;
-import static org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.PROXYUSER;
 
 public class TestProxyHttpSamplers {
 
@@ -78,10 +73,10 @@ public class TestProxyHttpSamplers {
         HTTPSamplerForProxyTest sampler = new HTTPSamplerForProxyTest();
         sampler.setPath("http://httpbin.org/get");
         sampler.setMethod("GET");
-        sampler.setProperty(PROXYHOST, listenAddress.getHostName());
-        sampler.setProperty(PROXYPORT, listenAddress.getPort());
-        sampler.setProperty(PROXYUSER, userName);
-        sampler.setProperty(PROXYPASS, userPass);
+        sampler.setProperty(HTTPSamplerBase.PROXYHOST, listenAddress.getHostName());
+        sampler.setProperty(HTTPSamplerBase.PROXYPORT, listenAddress.getPort());
+        sampler.setProperty(HTTPSamplerBase.PROXYUSER, userName);
+        sampler.setProperty(HTTPSamplerBase.PROXYPASS, userPass);
 
 
         RequestExecutor executor = new RequestExecutor(sampler, 3);
