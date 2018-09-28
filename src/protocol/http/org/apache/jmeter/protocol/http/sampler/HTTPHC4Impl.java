@@ -65,6 +65,7 @@ import org.apache.http.auth.AuthState;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.AuthCache;
+import org.apache.http.client.AuthenticationStrategy;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.config.CookieSpecs;
@@ -118,6 +119,7 @@ import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
+import org.apache.http.impl.client.ProxyAuthenticationStrategy;
 import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
 import org.apache.http.impl.conn.DefaultHttpClientConnectionOperator;
 import org.apache.http.impl.conn.DefaultSchemePortResolver;
@@ -1014,7 +1016,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     setRedirectStrategy(new LaxRedirectStrategy()).
                     setConnectionTimeToLive(TIME_TO_LIVE, TimeUnit.MILLISECONDS).
                     setRetryHandler(new StandardHttpRequestRetryHandler(RETRY_COUNT, REQUEST_SENT_RETRY_ENABLED)).
-                    setConnectionReuseStrategy(DefaultClientConnectionReuseStrategy.INSTANCE);
+                    setConnectionReuseStrategy(DefaultClientConnectionReuseStrategy.INSTANCE).
+                    setProxyAuthenticationStrategy(getProxyAuthStrategy());
             
             Lookup<AuthSchemeProvider> authSchemeRegistry =
                     RegistryBuilder.<AuthSchemeProvider>create()
@@ -1064,6 +1067,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             JMeterContextService.getContext().getSamplerContext().put(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN, httpClient);
         }
         return httpClient;
+    }
+
+    protected AuthenticationStrategy getProxyAuthStrategy() {
+        return ProxyAuthenticationStrategy.INSTANCE;
     }
 
     private HttpClientKey createHttpClientKey(URL url) {
