@@ -737,8 +737,8 @@
         <pathelement location="${build.tcp}"/>
 
         <pathelement location="${lib.dir}/${littleproxy.jar}"/>
-        <pathelement location="${lib.dir}/${barchart.jar}"/>
-        <pathelement location="${lib.dir}/${nettyAll.jar}"/>
+        <pathelement location="${lib.dir}/${barchart-udt-bundle.jar}"/>
+        <pathelement location="${lib.dir}/${netty-all.jar}"/>
         <pathelement location="${lib.dir}/${guava.jar}"/>
         <!-- Also include compiled jars to allow running tests without rebuilding source -->
         <fileset dir="${dest.jar}" includes="*.jar"/>
@@ -3352,7 +3352,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="accessors-smart"/>
     <process_jarfile jarname="apache-bsf"/>
     <process_jarfile jarname="asm"/>
-    <process_jarfile jarname="barchart"/>
+    <process_jarfile jarname="barchart-udt-bundle"/>
     <process_jarfile jarname="bcmail" dest.dir="${lib.api}"/>
     <process_jarfile jarname="bcprov" dest.dir="${lib.api}"/>
     <process_jarfile jarname="bcpkix" dest.dir="${lib.api}"/>
@@ -3398,7 +3398,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="jsoup"/>
     <process_jarfile jarname="junit"/>
     <process_jarfile jarname="mongo-java-driver"/>
-    <process_jarfile jarname="nettyAll"/>
+    <process_jarfile jarname="netty-all"/>
     <process_jarfile jarname="ph-css" />
     <process_jarfile jarname="ph-commons" />
     <process_jarfile jarname="rsyntaxtextarea"/>
