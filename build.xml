@@ -735,6 +735,11 @@
         <pathelement location="${build.mongodb}"/>
         <pathelement location="${build.native}"/>
         <pathelement location="${build.tcp}"/>
+
+        <pathelement location="${lib.dir}/${littleproxy.jar}"/>
+        <pathelement location="${lib.dir}/${barchart.jar}"/>
+        <pathelement location="${lib.dir}/${nettyAll.jar}"/>
+        <pathelement location="${lib.dir}/${guava.jar}"/>
         <!-- Also include compiled jars to allow running tests without rebuilding source -->
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <path refid="classpath"/>
@@ -3347,6 +3352,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="accessors-smart"/>
     <process_jarfile jarname="apache-bsf"/>
     <process_jarfile jarname="asm"/>
+    <process_jarfile jarname="barchart"/>
     <process_jarfile jarname="bcmail" dest.dir="${lib.api}"/>
     <process_jarfile jarname="bcprov" dest.dir="${lib.api}"/>
     <process_jarfile jarname="bcpkix" dest.dir="${lib.api}"/>
@@ -3367,6 +3373,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="dnsjava"/>
     <process_jarfile jarname="freemarker"/>
     <process_jarfile jarname="groovy-all"/>
+    <process_jarfile jarname="guava"/>
     <process_jarfile jarname="hamcrest-core"/>
     <process_jarfile jarname="hamcrest-date"/>
     <process_jarfile jarname="httpclient"/>
@@ -3391,6 +3398,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="jsoup"/>
     <process_jarfile jarname="junit"/>
     <process_jarfile jarname="mongo-java-driver"/>
+    <process_jarfile jarname="nettyAll"/>
     <process_jarfile jarname="ph-css" />
     <process_jarfile jarname="ph-commons" />
     <process_jarfile jarname="rsyntaxtextarea"/>
@@ -3398,6 +3406,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="slf4j-api"/>
     <process_jarfile jarname="slf4j-ext"/>
     <process_jarfile jarname="jcl-over-slf4j"/>
+    <process_jarfile jarname="littleproxy"/>
     <process_jarfile jarname="log4j-api"/>
     <process_jarfile jarname="log4j-1.2-api"/>
     <process_jarfile jarname="log4j-core"/>
