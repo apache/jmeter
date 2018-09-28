@@ -70,7 +70,7 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
             log.warn("https.use.cached.ssl.context property must be set to false to ensure Multiple Certificates are used");
         }
         int startIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_START_INDEX, 0);
-        int endIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, 0);
+        int endIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, -1);
         
         if(!StringUtils.isEmpty(this.startIndex)) {
             try {
@@ -89,7 +89,7 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
                         endIndexAsInt, e, e);
             }
         } 
-        if(startIndexAsInt>endIndexAsInt) {
+        if(endIndexAsInt != -1 && startIndexAsInt>endIndexAsInt) {
             throw new JMeterStopTestException("Keystore Config error : Alias start index must be lower than Alias end index");
         }
         log.info(
