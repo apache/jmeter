@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -71,6 +72,7 @@ implements ChangeListener, ActionListener, ItemListener
     private static final String ONETIMETEARDOWN = "oneTimeTearDown"; //$NON-NLS-1$
     private static final String SUITE = "suite"; //$NON-NLS-1$
 
+    private static final AtomicBoolean IS_INITILIAZED = new AtomicBoolean(Boolean.FALSE);
     private static final String[] SPATHS;
 
     static {
@@ -138,6 +140,9 @@ implements ChangeListener, ActionListener, ItemListener
     private final transient ClassLoader contextClassLoader =
         Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
 
+    private static List<String> annotatedTestClasses;
+    private static List<String> junitTestClasses;
+
     /**
      * Constructor for JUnitTestSamplerGui
      */
@@ -168,19 +173,28 @@ implements ChangeListener, ActionListener, ItemListener
     }
 
     @SuppressWarnings("unchecked")
-    private void setupClasslist(){
+    private void setupClasslist(boolean initialize){
         classnameCombo.removeAllItems();
         methodName.removeAllItems();
         try
         {
-            List<String> classList;
-            if (junit4.isSelected()){
-                classList = ClassFinder.findAnnotatedClasses(SPATHS,
-                    new Class[] {Test.class}, false);
-            } else {
-                classList = ClassFinder.findClassesThatExtend(SPATHS,
-                     new Class[] { TestCase.class });
+            List<String> classList = new ArrayList<>();
+            if(initialize) {
+                synchronized (IS_INITILIAZED) {
+                    if(IS_INITILIAZED.compareAndSet(false, true)) {
+                        annotatedTestClasses = ClassFinder.findAnnotatedClasses(SPATHS,
+                            new Class[] {Test.class}, false);
+                        junitTestClasses = ClassFinder.findClassesThatExtend(SPATHS,
+                             new Class[] { TestCase.class });
+                    }
+                    if (junit4.isSelected()){
+                        classList = annotatedTestClasses;
+                    } else {
+                        classList = junitTestClasses;
+                    }
+                }
             }
+            
             ClassFilter filter = new ClassFilter();
             filter.setPackges(JOrphanUtils.split(filterpkg.getText(),",")); //$NON-NLS-1$
             // change the classname drop down
@@ -209,7 +223,7 @@ implements ChangeListener, ActionListener, ItemListener
         methodName.addActionListener(this);
         methodLabel.setLabelFor(methodName);
 
-        setupClasslist();
+        setupClasslist(false);
 
         VerticalPanel panel = new VerticalPanel();
         panel.add(junit4);
@@ -252,6 +266,7 @@ implements ChangeListener, ActionListener, ItemListener
         failureMsg.setText(JMeterUtils.getResString("junit_failure_default_msg")); //$NON-NLS-1$
         errorMsg.setText(JMeterUtils.getResString("junit_error_default_msg")); //$NON-NLS-1$
         errorCode.setText(JMeterUtils.getResString("junit_error_default_code")); //$NON-NLS-1$
+        setupClasslist(true);
     }
 
     /** {@inheritDoc} */
@@ -364,7 +379,7 @@ implements ChangeListener, ActionListener, ItemListener
                 }
                 methodName.repaint();
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+                throw new IllegalStateException(e);
             }
         }
     }
@@ -390,7 +405,7 @@ implements ChangeListener, ActionListener, ItemListener
                 }
             }
         }
-        if (list.size() > 0){
+        if (!list.isEmpty()){
             return list.toArray(new String[list.size()]);
         }
         return new String[0];
@@ -418,7 +433,7 @@ implements ChangeListener, ActionListener, ItemListener
     @Override
     public void itemStateChanged(ItemEvent event) {
         if (event.getItem() == junit4){
-            setupClasslist();
+            setupClasslist(true);
         }
     }
 
@@ -429,7 +444,7 @@ implements ChangeListener, ActionListener, ItemListener
     @Override
     public void stateChanged(ChangeEvent event) {
         if ( event.getSource() == filterpkg) {
-            setupClasslist();
+            setupClasslist(true);
         }
     }
 }

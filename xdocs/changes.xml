@@ -127,6 +127,7 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
+    <li><bug>62775</bug>If many jars are in a folder referenced by user.classpath, startup can be extremely slow due to JUnit</li>
 </ul>
 
 <h3>Controllers</h3>
