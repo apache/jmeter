@@ -37,18 +37,19 @@ import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
-import java.net.ServerSocket;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.PROXYHOST;
 import static org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.PROXYPASS;
 import static org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.PROXYPORT;
 import static org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.PROXYUSER;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class TestProxyHttpSamplers {
 
