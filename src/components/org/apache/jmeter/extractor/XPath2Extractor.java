@@ -116,7 +116,7 @@ PostProcessor, Serializable {
                 String inputString=vars.get(getVariableName());
                 if(inputString != null) {
                     if(inputString.length()>0) {
-                        getValuesForXPath(getXPathQuery(), matches, matchNumber,previousResult.getResponseDataAsString());
+                        getValuesForXPath(getXPathQuery(), matches, matchNumber, inputString);
                     }
                 } else {
                     if (log.isWarnEnabled()) {
@@ -152,7 +152,7 @@ PostProcessor, Serializable {
             }
         }catch (Exception e) {// Saxon exception
             if (log.isWarnEnabled()) {
-                log.warn("Exception while processing '{})', message:{}", getXPathQuery(), e.getMessage());
+                log.warn("Exception while processing '{}', message:{}", getXPathQuery(), e.getMessage());
             }
             addAssertionFailure(previousResult, e, false);
         }
