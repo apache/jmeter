@@ -136,7 +136,8 @@ public class TestProxyHttpSamplers {
                 protected AuthenticationStrategy getProxyAuthStrategy() {
                     return new ProxyAuthenticationStrategy() {
                         @Override
-                        public Map<String, Header> getChallenges(HttpHost authhost, HttpResponse response, HttpContext context) throws MalformedChallengeException {
+                        public Map<String, Header> getChallenges(HttpHost authhost, HttpResponse response, HttpContext context)
+                                throws MalformedChallengeException {
                             responses.add(response);
                             return super.getChallenges(authhost, response, context);
                         }
