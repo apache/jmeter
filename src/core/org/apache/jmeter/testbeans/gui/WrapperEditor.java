@@ -183,7 +183,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      *
      * @param text
      *            the value to be checked
-     * @return true iif text is a valid value
+     * @return true if text is a valid value
      */
     private boolean isValidValue(String text) {
         if (text == null) {

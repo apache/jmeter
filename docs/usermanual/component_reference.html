@@ -245,7 +245,11 @@
 <a href="#Mail_Reader_Sampler">Mail Reader Sampler</a>
 </li>
 <li>
-<a href="#Test_Action">Test Action</a>
+<a href="#Flow_Control_Action">Flow Control Action
+                    (was:
+                    Test Action
+                    )
+                  </a>
 </li>
 <li>
 <a href="#SMTP_Sampler">SMTP Sampler</a>
@@ -547,7 +551,14 @@
 <a href="#Regular_Expression_Extractor">Regular Expression Extractor</a>
 </li>
 <li>
-<a href="#CSS/JQuery_Extractor">CSS/JQuery Extractor</a>
+<a href="#CSS_Selector_Extractor">CSS Selector Extractor
+                    (was:
+                    CSS/JQuery Extractor
+                    )
+                  </a>
+</li>
+<li>
+<a href="#XPath2_Extractor">XPath2 Extractor</a>
 </li>
 <li>
 <a href="#XPath_Extractor">XPath Extractor</a>
@@ -904,11 +915,10 @@ Latency is set to the time it takes to login.
 <pre class="source">
 https.sessioncontext.shared=true
 </pre>
-        By default, the SSL context is retained for the duration of the test.
-        The SSL session can be optionally reset for each test iteration.
-        To enable this, set the JMeter property:
+        By default, since version 5.0, the SSL context is retained during a Thread Group iteration and reset for each test iteration.
+        If in your test plan the same user iterates multiple times, then you should set this to false.
 <pre class="source">
-https.use.cached.ssl.context=false
+httpclient.reset_state_on_thread_group_iteration=true
 </pre>
         
 <div class="clear"></div>
@@ -968,13 +978,27 @@ https.default.protocol=SSLv3
 </div>
         
 <div class="property">
-<div class="name req-true">Server</div>
-<div class="description req-true">
-            Domain name or IP address of the web server, e.g. <span class="code">www.example.com</span>. [Do not include the <span class="code">http://</span> prefix.]
-            Note: If the "<span class="code">Host</span>" header is defined in a Header Manager, then this will be used
-            as the virtual host name.
-        </div>
-<div class="required req-true">Yes, unless provided by HTTP Request Defaults</div>
+<div class="name req-false">Server</div>
+<div class="description req-false">
+             Domain name or IP address of the web server, e.g. <span class="code">www.example.com</span>. [Do not include the <span class="code">http://</span> prefix.]
+             Note: If the "<span class="code">Host</span>" header is defined in a Header Manager, then this will be used
+             as the virtual host name.
+             <div class="clear"></div>
+<div class="note">Server is required, unless:
+              <ul>
+                
+<li>it is provided by <a href="../usermanual/component_reference.html#HTTP_Request_Defaults">HTTP Request Defaults</a>
+</li>
+                
+<li>or a full URL including scheme, host and port (<span class="code">scheme://host:port</span>) is set in <b>Path</b> field</li>
+              
+</ul>
+             
+</div>
+<div class="clear"></div>
+        
+</div>
+<div class="required req-false">No</div>
 </div>
         
 <div class="property">
@@ -4660,7 +4684,11 @@ The current implementation is quite basic, and is mainly intended for debugging 
 
 
 <div class="component">
-<h2 id="Test_Action">Test Action<a class="sectionlink" href="#Test_Action" title="Link to here">&para;</a>
+<h2 id="Flow_Control_Action">Flow Control Action<a name="Test_Action">
+            (was:
+            Test Action
+            )
+          </a><a class="sectionlink" href="#Flow_Control_Action" title="Link to here">&para;</a>
 </h2>
 <div class="description">
 The Test Action sampler is a sampler that is intended for use in a conditional controller.
@@ -4684,14 +4712,14 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 </div>
 <div class="screenshot">
 <figure>
-<a href="../images/screenshots/test_action.png"><img src="../images/screenshots/test_action.png" width="467" height="184" alt="Screenshot for Control-Panel of Test Action"></a>
-<figcaption>Screenshot of Control-Panel of Test Action</figcaption>
+<a href="../images/screenshots/test_action.png"><img src="../images/screenshots/test_action.png" width="467" height="184" alt="Screenshot for Control-Panel of Flow Control Action"></a>
+<figcaption>Screenshot of Control-Panel of Flow Control Action</figcaption>
 </figure>
 </div>
 <div class="properties">
-<h3 id="Test_Action_parms1">
+<h3 id="Flow_Control_Action_parms1">
         Parameters
-        <a class="sectionlink" href="#Test_Action_parms1" title="Link to here">&para;</a>
+        <a class="sectionlink" href="#Flow_Control_Action_parms1" title="Link to here">&para;</a>
 </h3>
 <div class="property title">
 <div class="name title">Attribute</div>
@@ -4896,6 +4924,12 @@ Relative paths are resolved against the current directory.
 <br>Failing that, against the directory containing the test script (JMX file).
 </div>
 <div class="required req-true"></div>
+</div>
+
+<div class="property">
+<div class="name req-false">Override System SSL/TLS Protocols</div>
+<div class="description req-false">Specify a custom SSL/TLS protocol as space separated list to use on handshake example <span class="code">TLSv1 TLSv1.1 TLSv1.2</span>. Defaults to all supported protocols.</div>
+<div class="required req-false">No</div>
 </div>
 
 <div class="property">
@@ -6052,6 +6086,12 @@ Please refer to the <a href="../usermanual/component_reference.html#Constant_Thr
 
 <p>
 The While Controller runs its children until the condition is "<span class="code">false</span>".
+<div class="clear"></div>
+<div class="note">JMeter will expose the looping index as a variable named <span class="code">__jm__&lt;Name of your element&gt;__idx</span>. So for
+example, if your While Controller is named WC, then you can access the looping index through <span class="code">${__jm__WC__idx}</span>.
+Index starts at 0</div>
+<div class="clear"></div>
+
 </p>
 
 
@@ -6072,7 +6112,7 @@ If the last sample just before the loop failed, don't enter loop.</li>
 <div class="clear"></div>
 <div class="note">
 The condition can be any variable or function that eventually evaluates to the string "<span class="code">false</span>".
-This allows the use of <span class="code">__jexl3</span>, <span class="code">__groovy</span> function, properties or variables as needed.
+This allows the use of <span class="code"><a href="../usermanual/functions.html#__jexl3">__jexl3</a></span>, <span class="code"><a href="../usermanual/functions.html#__groovy">__groovy</a></span> function, properties or variables as needed.
 </div>
 <div class="clear"></div>
 
@@ -6291,9 +6331,9 @@ This would be the case if the Regular Expression returned no matches.</div>
 </div>
         
 <div class="property">
-<div class="name req-true">Input variable prefix</div>
-<div class="description req-true">Prefix for the variable names to be used as input.</div>
-<div class="required req-true">Yes</div>
+<div class="name req-false">Input variable prefix</div>
+<div class="description req-false">Prefix for the variable names to be used as input. Defaults to an empty string as prefix.</div>
+<div class="required req-false">No</div>
 </div>
         
 <div class="property">
@@ -6309,10 +6349,10 @@ This would be the case if the Regular Expression returned no matches.</div>
 </div>
         
 <div class="property">
-<div class="name req-true">Output variable</div>
-<div class="description req-true">
-                The name of the variable which can be used in the loop for replacement in the samplers</div>
-<div class="required req-true">Yes</div>
+<div class="name req-false">Output variable</div>
+<div class="description req-false">
+                The name of the variable which can be used in the loop for replacement in the samplers. Defaults to an empty variable name, which is most probably not wanted.</div>
+<div class="required req-false">No</div>
 </div>
         
 <div class="property">
@@ -8111,24 +8151,35 @@ i.e. 30.0 requests/minute is saved as <span class="code">0.5</span>.
 </div>
  
 <div class="property">
-<div class="name req-true">Filename Prefix</div>
+<div class="name req-true">Filename Prefix (can include folders)</div>
 <div class="description req-true">Prefix for the generated file names; this can include a directory name.
         Relative paths are resolved relative to the current working directory (which defaults to the <span class="code">bin/</span> directory).
         JMeter also supports paths relative to the directory containing the current test plan (JMX file).
         If the path name begins with "<span class="code">~/</span>" (or whatever is in the <span class="code">jmeter.save.saveservice.base_prefix</span> JMeter property),
-        then the path is assumed to be relative to the JMX file location. 
- </div>
+        then the path is assumed to be relative to the JMX file location. <br>
+        If parent folders in prefix do not exists, JMeter will create them and stop test if it fails.
+        <div class="clear"></div>
+<div class="note">Please note that Filename Prefix must not contain Thread related data, so don't use any Variable (<span class="code">${varName}</span>) or functions like <span class="code">${__threadNum}</span> in this field</div>
+<div class="clear"></div>
+ 
+</div>
 <div class="required req-true">Yes</div>
 </div>
  
 <div class="property">
-<div class="name req-false">Variable Name</div>
+<div class="name req-false">Variable Name containing saved file name</div>
 <div class="description req-false">
  Name of a variable in which to save the generated file name (so it can be used later in the test plan).
  If there are sub-samples then a numeric suffix is added to the variable name.
  E.g. if the variable name is <span class="code">FILENAME</span>, then the parent sample file name is saved in the variable <span class="code">FILENAME</span>, 
  and the filenames for the child samplers are saved in <span class="code">FILENAME1</span>, <span class="code">FILENAME2</span> etc.
  </div>
+<div class="required req-false">No</div>
+</div>
+ 
+<div class="property">
+<div class="name req-false">Minimum Length of sequence number</div>
+<div class="description req-false">If "<span class="code">Don't add number to prefix</span>" is not checked, then numbers added to prefix will be padded by <span class="code">0</span> so that prefix is has size of this value. Defaults to <span class="code">0</span>.</div>
 <div class="required req-false">No</div>
 </div>
  
@@ -8151,15 +8202,22 @@ i.e. 30.0 requests/minute is saved as <span class="code">0.5</span>.
 </div>
  
 <div class="property">
-<div class="name req-true">Don't add suffix</div>
+<div class="name req-true">Don't add content type suffix</div>
 <div class="description req-true">If selected, then no suffix is added. If you select this option, make sure that the prefix is unique or the file may be overwritten.</div>
 <div class="required req-true">Yes</div>
 </div>
  
 <div class="property">
-<div class="name req-false">Minimum Length of sequence number</div>
-<div class="description req-false">If "<span class="code">Don't add number to prefix</span>" is not checked, then numbers added to prefix will be padded by <span class="code">0</span> so that prefix is has size of this value. Defaults to <span class="code">0</span>.</div>
-<div class="required req-false">No</div>
+<div class="name req-true">Add timestamp</div>
+<div class="description req-true">If selected, then date will be included in file suffix following format <span class="code">yyyyMMdd-HHmm_</span>
+</div>
+<div class="required req-true">Yes</div>
+</div>
+ 
+<div class="property">
+<div class="name req-true">Don't Save Transaction Controller SampleResult</div>
+<div class="description req-true">If selected, then SamplerResult generated by Transaction Controller will be ignored</div>
+<div class="required req-true">Yes</div>
 </div>
  
 </div>
@@ -9222,6 +9280,9 @@ Look at the two sample configuration files (<span class="code">krb5.conf</span> 
 for references to more documentation, and tweak them to match your Kerberos configuration.
 </p>
 <p>
+Delegation of credentials is disabled by default for SPNEGO. If you want to enable it, you can do so by setting the property <span class="code">kerberos.spnego.delegate_cred</span> to <span class="code">true</span>.
+</p>
+<p>
 When generating a SPN for Kerberos SPNEGO authentication IE and Firefox will omit the port number
 from the URL. Chrome has an option (<span class="code">--enable-auth-negotiate-port</span>) to include the port
 number if it differs from the standard ones (<span class="code">80</span> and <span class="code">443</span>). That behavior
@@ -9326,7 +9387,7 @@ Note that if <span class="code">Cache-Control</span> header is "<span class="cod
 so will generate a conditional <span class="code">GET</span> request.
 If <span class="code">Cache-Control</span> has any other value, 
 the "<span class="code">max-age</span>" expiry option is processed to compute entry lifetime, if missing then expire header will be used, if also missing entry will be cached 
-as specified in <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616</a> section 13.2.4. using <span class="code">Last-Modified</span> time and response Date.
+as specified in <a href="https://tools.ietf.org/html/2616#section-13.2.4">RFC 2616 section 13.2.4</a> using <span class="code">Last-Modified</span> time and response Date.
 </p>
 
 <div class="clear"></div>
@@ -9726,9 +9787,9 @@ but if the button is on, a later element cannot set it off.
 <p>
 
 <b>JMeter now supports multiple Header Managers</b>. The header entries are merged to form the list for the sampler.
-If an entry to be merged matches an existing header name, it replaces the previous entry,
-unless the entry value is empty, in which case any existing entry is removed.
-This allows one to set up a default set of headers, and apply adjustments to particular samplers. 
+If an entry to be merged matches an existing header name, it replaces the previous entry.
+This allows one to set up a default set of headers, and apply adjustments to particular samplers.
+Note that an empty value for a header does not remove an existing header, it justs replace its value.
 </p>
 
 </div>
@@ -10726,9 +10787,10 @@ to use a variable other than a property as a value for the minimum or maximum. I
   
 <div class="property">
 <div class="name req-false">Random Seed</div>
-<div class="description req-false">The seed for the random number generator. Default is the current time in milliseconds. 
+<div class="description req-false">The seed for the random number generator. 
   If you use the same seed value with Per Thread set to <span class="code">true</span>, you will get the same value for each Thread as per 
   <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html">Random</a> class.
+  If no seed is set, Default constructor of Random will be used.
   </div>
 <div class="required req-false">No</div>
 </div>
@@ -10816,9 +10878,11 @@ with the start, continuing on like that until the test is ended.  </p>
 </div>
         
 <div class="property">
-<div class="name req-true">Reference Name</div>
-<div class="description req-true">This controls how you refer to this value in other elements.  Syntax is
-        as in <a href="functions.html">user-defined values</a>: <span class="code">$(reference_name}</span>.</div>
+<div class="name req-true">Exported Variable Name</div>
+<div class="description req-true">This will be the variable name under which the counter value is available.  
+        If you name it <span class="code">counterA</span>, you can then access it using <span class="code">${counterA}</span> 
+        as explained in <a href="functions.html">user-defined values</a>
+</div>
 <div class="required req-true">Yes</div>
 </div>
         
@@ -12031,16 +12095,24 @@ The non-tolerant parser can be quite slow, as it may need to download the DTD et
 <div class="note">
 
 <b>NAMESPACES</b>
-As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
-you can provide a Properties file which contains mappings for the namespace prefixes: 
+<br>
+As a work-round for namespace limitations of the Xalan XPath parser (implementation on which JMeter is based) you need to:
+<ul>
+
+<li>provide a Properties file (if for example your file is named namespaces.properties) which contains mappings for the namespace prefixes: 
 <pre class="source">
-prefix1=Full Namespace 1
-prefix2=Full Namespace 2
+prefix1=http\://foo.apache.org
+prefix2=http\://toto.apache.org
 &hellip;
 </pre>
+</li>
 
-You reference this file in <span class="code">jmeter.properties</span> file using the property:
-    <pre class="source">xpath.namespace.config</pre>
+
+<li>reference this file in <span class="code">user.properties</span> file using the property:
+    <pre class="source">xpath.namespace.config=namespaces.properties</pre>
+</li>
+
+</ul>
 
 </div>
 <div class="clear"></div>
@@ -12557,7 +12629,7 @@ requests, use this timer.</p>
 of the time intervals occurring near a particular value.  
 The total delay is the sum of the Gaussian distributed value (with mean <span class="code">0.0</span> and standard deviation <span class="code">1.0</span>) times
 the deviation value you specify, and the offset value.
-Another way to explain it, in Gaussian Random Timer, the variation around constant offset has a gaussian curve distribution. 
+Another way to explain it, in Gaussian Random Timer, the variation around constant offset has a Gaussian curve distribution. 
 
 </p>
 </div>
@@ -12767,14 +12839,14 @@ Note that the throughput value should not be changed too often during a test
 
 <p>Although the Timer is called Precise Throughput Timer, it does not aim to produce precisely the same number of samples over one-second intervals during the test.</p>
 
-<p>The timer works best for rates under 36000 requests/hour, however your milage might vary (see monitoring section below if your goals are
+<p>The timer works best for rates under 36000 requests/hour, however your mileage might vary (see monitoring section below if your goals are
     vastly different).</p>
 
 
 <h4>Best location of a Precise Throughput Timer in a Test Plan</h4>
 
 <p>As you might know, the timers are inherited by all the siblings and their child elements. That is why one of the best places for
-    <span class="code">Precise Throughput Timer</span> is under the first element in a test loop. For instance, you might add a dummy sampler at the beginnig,
+    <span class="code">Precise Throughput Timer</span> is under the first element in a test loop. For instance, you might add a dummy sampler at the beginning,
     and place the timer under that dummy sampler</p>
 
 
@@ -12783,7 +12855,7 @@ Note that the throughput value should not be changed too often during a test
 <p>
 <span class="code">Precise Throughput Timer</span> models <a href="https://en.wikipedia.org/wiki/Poisson_point_process">Poisson arrivals</a> schedule. That schedule often happens in a real-life, so it makes sense to use that for load testing.
     For instance, it naturally might generate samples that are close together thus it might reveal concurrency issues. Even if you manage to generate Poisson arrivals
-    with <a href="../usermanual/component_reference.html#Poisson_Random_Timer">Poisson Random Timer</a>, it would be suseptible to the issues listed below. For instance, true Poisson arrivals might have indefinitely long
+    with <a href="../usermanual/component_reference.html#Poisson_Random_Timer">Poisson Random Timer</a>, it would be susceptible to the issues listed below. For instance, true Poisson arrivals might have indefinitely long
     pause, and that is not practical for load testing. For instance, "regular" Poisson arrivals with 1 per second rate might end up with 50 samples over 60 second long test.</p>
 
 <p>
@@ -12848,7 +12920,7 @@ the required load.</p>
 <p>
 <span class="code">Precise Throughput Timer</span> enables to set throughput goal and go for it no matter how well application performs. In order to do that, <span class="code">Precise Throughput Timer</span>
     creates a schedule at the test startup, then it uses that schedule to release threads. The main driver for the think times and number of threads should be business
-    requirements, not the desire to match troughput somehow.</p>
+    requirements, not the desire to match throughput somehow.</p>
 
 <p>For instance, if you application is used by support engineers in a call center. Suppose there are 2 engineers in the call center, and the target throughput is 1 per minute.
     Suppose it takes 4 minutes for the engineer to read and review the web page. For that case you should set 2 threads in the group, use 4 minutes
@@ -14388,23 +14460,27 @@ generate the template string, and store the result into the given variable name.
 
 
 <div class="component">
-<h2 id="CSS/JQuery_Extractor">CSS/JQuery Extractor<a class="sectionlink" href="#CSS/JQuery_Extractor" title="Link to here">&para;</a>
+<h2 id="CSS_Selector_Extractor">CSS Selector Extractor<a name="CSS/JQuery_Extractor">
+            (was:
+            CSS/JQuery Extractor
+            )
+          </a><a class="sectionlink" href="#CSS_Selector_Extractor" title="Link to here">&para;</a>
 </h2>
 <div class="description">
-<p>Allows the user to extract values from a server response using a CSS/JQuery selector like syntax.  As a post-processor,
+<p>Allows the user to extract values from a server HTML response using a CSS Selector syntax.  As a post-processor,
 this element will execute after each Sample request in its scope, applying the CSS/JQuery expression, extracting the requested nodes,
 extracting the node as text or attribute value and store the result into the given variable name.</p>
 </div>
 <div class="screenshot">
 <figure>
-<a href="../images/screenshots/css_extractor_attr.png"><img src="../images/screenshots/css_extractor_attr.png" width="826" height="276" alt="Screenshot for Control-Panel of CSS/JQuery Extractor"></a>
-<figcaption>Screenshot of Control-Panel of CSS/JQuery Extractor</figcaption>
+<a href="../images/screenshots/css_extractor_attr.png"><img src="../images/screenshots/css_extractor_attr.png" width="826" height="276" alt="Screenshot for Control-Panel of CSS Selector Extractor"></a>
+<figcaption>Screenshot of Control-Panel of CSS Selector Extractor</figcaption>
 </figure>
 </div>
 <div class="properties">
-<h3 id="CSS/JQuery_Extractor_parms1">
+<h3 id="CSS_Selector_Extractor_parms1">
         Parameters
-        <a class="sectionlink" href="#CSS/JQuery_Extractor_parms1" title="Link to here">&para;</a>
+        <a class="sectionlink" href="#CSS_Selector_Extractor_parms1" title="Link to here">&para;</a>
 </h3>
 <div class="property title">
 <div class="name title">Attribute</div>
@@ -14450,7 +14526,7 @@ extracting the node as text or attribute value and store the result into the giv
 </div>
         
 <div class="property">
-<div class="name req-false">CSS/JQuery extractor Implementation</div>
+<div class="name req-false">CSS Selector Implementation</div>
 <div class="description req-false">
         2 Implementations for CSS/JQuery based syntax are supported:
         <ul>
@@ -14620,12 +14696,160 @@ extracting the node as text or attribute value and store the result into the giv
 
 
 <div class="component">
+<h2 id="XPath2_Extractor">XPath2 Extractor<a class="sectionlink" href="#XPath2_Extractor" title="Link to here">&para;</a>
+</h2>
+<div class="description">This test element allows the user to extract value(s) from structured response - XML or (X)HTML - 
+    using XPath2 query language.
+   </div>
+<div class="screenshot">
+<figure>
+<a href="../images/screenshots/xpath2_extractor.png"><img src="../images/screenshots/xpath2_extractor.png" width="926" height="333" alt="Screenshot for Control-Panel of XPath2 Extractor"></a>
+<figcaption>Screenshot of Control-Panel of XPath2 Extractor</figcaption>
+</figure>
+</div>
+<div class="properties">
+<h3 id="XPath2_Extractor_parms1">
+        Parameters
+        <a class="sectionlink" href="#XPath2_Extractor_parms1" title="Link to here">&para;</a>
+</h3>
+<div class="property title">
+<div class="name title">Attribute</div>
+<div class="description title">Description</div>
+<div class="required title">Required</div>
+</div>
+       
+<div class="property">
+<div class="name req-false">Name</div>
+<div class="description req-false">Descriptive name for this element that is shown in the tree.</div>
+<div class="required req-false">No</div>
+</div>
+       
+<div class="property">
+<div class="name req-true">Apply to:</div>
+<div class="description req-true">
+        This is for use with samplers that can generate sub-samples, 
+        e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
+        <ul>
+        
+<li>
+<span class="code">Main sample only</span> - only applies to the main sample</li>
+        
+<li>
+<span class="code">Sub-samples only</span> - only applies to the sub-samples</li>
+        
+<li>
+<span class="code">Main sample and sub-samples</span> - applies to both.</li>
+        
+<li>
+<span class="code">JMeter Variable Name to use</span> - extraction is to be applied to the contents of the named variable</li>
+        
+</ul>
+        XPath matching is applied to all qualifying samples in turn, and all the matching results will be returned.
+       </div>
+<div class="required req-true">Yes</div>
+</div>
+    
+<div class="property">
+<div class="name req-true">Return entire XPath fragment instead of text content?</div>
+<div class="description req-true">
+    If selected, the fragment will be returned rather than the text content.<br>
+    For example <span class="code">//title</span> would return "<span class="code">&lt;title&gt;Apache JMeter&lt;/title&gt;</span>" rather than "<span class="code">Apache JMeter</span>".<br>
+    In this case, <span class="code">//title/text()</span> would return "<span class="code">Apache JMeter</span>".
+    </div>
+<div class="required req-true">Yes</div>
+</div>
+    
+<div class="property">
+<div class="name req-true">Name of created variable</div>
+<div class="description req-true">The name of the JMeter variable in which to store the result.</div>
+<div class="required req-true">Yes</div>
+</div>
+    
+<div class="property">
+<div class="name req-true">XPath Query</div>
+<div class="description req-true">Element query in XPath 2.0 language. Can return more than one match.</div>
+<div class="required req-true">Yes</div>
+</div>
+    
+<div class="property">
+<div class="name req-false">Match No. (0 for Random)</div>
+<div class="description req-false">If the XPath Path query leads to many results, you can choose which one(s) to extract as Variables:
+    <ul>
+        
+<li>
+<span class="code">0</span> : means random (default value)</li>
+        
+<li>
+<span class="code">-1</span> means extract all results, they will be named as <span class="code"><em>&lt;variable name&gt;</em>_N</span> (where <span class="code">N</span> goes from 1 to Number of results)</li>
+        
+<li>
+<span class="code">X</span> : means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
+    
+</ul>
+    
+</div>
+<div class="required req-false">No</div>
+</div>
+    
+<div class="property">
+<div class="name req-true">Default Value</div>
+<div class="description req-true">Default value returned when no match found. 
+    It is also returned if the node has no value and the fragment option is not selected.</div>
+<div class="required req-true">yes</div>
+</div>
+    
+<div class="property">
+<div class="name req-false">Namespaces aliases list</div>
+<div class="description req-false">List of namespaces aliases you want to use to parse the document, one line per declaration.
+    You must specify them as follow : <span class="code">prefix=namespace</span>. This implementation makes it easier to
+    use namespaces than with the old XPathExtractor version.</div>
+<div class="required req-false">No</div>
+</div>
+   
+</div>
+<p>To allow for use in a <a href="../usermanual/component_reference.html#ForEach_Controller">ForEach Controller</a>, it works exactly the same as the above XPath Extractor</p>
+<p>XPath2 Extractor provides some interestings tools such as an improved syntax and much more functions than in it's first version.</p>
+<p>Here are some exemples : </p>
+<dl> 
+   
+<dt>
+<span class="code">abs(/book/page[2])</span>
+</dt>
+     
+<dd>extracts 2<sup>nd</sup> absolute value of the page from a book</dd>
+   
+<dt>
+<span class="code">avg(/librarie/book/page)</span>
+</dt>
+     
+<dd>extracts the average number of page from all the books in the libraries</dd>
+     
+<dt>
+<span class="code">compare(/book[1]/page[2],/book[2]/page[2])</span>
+</dt>
+    
+<dd>return Integer value equal 0 to if the 2<sup>nd</sup> page of the first book is equal to the 2<sup>nd</sup> page of the 2<sup>nd</sup> book, else return -1.</dd>
+ 
+</dl>
+<p>To see more informations about thoses fuctions, please check <a href="http://saxon.sourceforge.net/saxon7.9.1/functions.html">xPath2 functions</a>
+</p>
+<div class="go-top">
+<a href="#">^</a>
+</div>
+</div>
+
+
+<div class="component">
 <h2 id="XPath_Extractor">XPath Extractor<a class="sectionlink" href="#XPath_Extractor" title="Link to here">&para;</a>
 </h2>
 <div class="description">This test element allows the user to extract value(s) from 
         structured response - XML or (X)HTML - using XPath
         query language.
-   </div>
+        <div class="clear"></div>
+<div class="note">Since JMeter 5.0, you should use <a href="../usermanual/component_reference.html#XPath2_Extractor">XPath2 Extractor</a> as it provides better and easier namespace management, better performances and support for XPath 2.0</div>
+<div class="clear"></div>
+   
+</div>
 <div class="screenshot">
 <figure>
 <a href="../images/screenshots/xpath_extractor.png"><img src="../images/screenshots/xpath_extractor.png" width="729" height="317" alt="Screenshot for Control-Panel of XPath Extractor"></a>
@@ -14686,7 +14910,7 @@ extracting the node as text or attribute value and store the result into the giv
 </ul>
        
 <div class="clear"></div>
-<div class="note">For HTML, CSS/JQuery Extractor is the correct and performing solution. Don't use XPath for HTML extractions.</div>
+<div class="note">For HTML, CSS Selector Extractor is the correct and performing solution. Don't use XPath for HTML extractions.</div>
 <div class="clear"></div>
        
 </div>
@@ -14857,16 +15081,24 @@ extracting the node as text or attribute value and store the result into the giv
 <div class="note">
 
 <b>NAMESPACES</b>
-As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
-you can provide a Properties file which contains mappings for the namespace prefixes: 
+<br>
+As a work-round for namespace limitations of the Xalan XPath parser (implementation on which JMeter is based) you need to:
+<ul>
+
+<li>provide a Properties file (if for example your file is named namespaces.properties) which contains mappings for the namespace prefixes: 
 <pre class="source">
-prefix1=Full Namespace 1
-prefix2=Full Namespace 2
+prefix1=http\://foo.apache.org
+prefix2=http\://toto.apache.org
 &hellip;
 </pre>
+</li>
 
-You reference this file in <span class="code">jmeter.properties</span> file using the property:
-    <pre class="source">xpath.namespace.config</pre>
+
+<li>reference this file in <span class="code">user.properties</span> file using the property:
+    <pre class="source">xpath.namespace.config=namespaces.properties</pre>
+</li>
+
+</ul>
 
 </div>
 <div class="clear"></div>
@@ -15442,7 +15674,7 @@ generate the template string, and store the result into the given variable name.
         
 <div class="property">
 <div class="name req-true">Right Boundary</div>
-<div class="description req-true">Left boundary of value to find</div>
+<div class="description req-true">Right boundary of value to find</div>
 <div class="required req-true">Yes</div>
 </div>
         
@@ -16234,7 +16466,7 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         
 <div class="property">
 <div class="name req-false">Prefix/Transaction name</div>
-<div class="description req-false">Add a prefix to sampler name during recording (Prefix mode). Or replace sampler name by user choosen name (Transaction name)</div>
+<div class="description req-false">Add a prefix to sampler name during recording (Prefix mode). Or replace sampler name by user chosen name (Transaction name)</div>
 <div class="required req-false">No</div>
 </div>
         
@@ -16998,6 +17230,7 @@ If Test Plan is stopped, tearDown will not run even if option is checked.
 </li>
 </ul>
 </div>
+<a href="#top" id="topButton">Go to top</a>
 </div>
 <div class="footer">
 <div class="copyright">
@@ -17013,8 +17246,16 @@ If Test Plan is stopped, tearDown will not run even if option is checked.
           </div>
 </div>
 <script>(function(){
-            // fill in the current location into social links on this page.
             "use strict";
+            // enable 'go to top' button functionality
+            document.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                    document.getElementById("topButton").style.display = "block";
+                } else {
+                    document.getElementById("topButton").style.display = "none";
+                }
+            });
+            // fill in the current location into social links on this page.
             var as = document.getElementsByTagName('a');
             var loc = document.location.href;
             if (!loc.toLowerCase().startsWith('http')) {

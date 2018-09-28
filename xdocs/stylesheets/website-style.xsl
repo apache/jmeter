@@ -550,7 +550,7 @@
     </a>,
   </xsl:template>
 
-  <xsl:template match="pr[not(following-sibling::pr) and (not(preceding-sibling::*) or preceding-sibling::bug)]">
+  <xsl:template match="pr[not(following-sibling::pr) and (not(preceding-sibling::*) or preceding-sibling::bug or preceding-sibling::pr)]">
     <a href="https://github.com/apache/jmeter/pull/{./text()}">
       Pull request #<xsl:value-of select="./text()" />
     </a>

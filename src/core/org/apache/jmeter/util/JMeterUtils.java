@@ -80,7 +80,10 @@ import com.thoughtworks.xstream.security.NoTypePermission;
  */
 public class JMeterUtils implements UnitTestManager {
     private static final Logger log = LoggerFactory.getLogger(JMeterUtils.class);
+
     private static final String JMETER_VARS_PREFIX = "__jm__";
+    public static final String THREAD_GROUP_DISTRIBUTED_PREFIX_PROPERTY_NAME = "__jm.D_TG";
+
     // Note: cannot use a static variable here, because that would be processed before the JMeter properties
     // have been defined (Bug 52783)
     private static class LazyPatternCacheHolder {
@@ -996,7 +999,7 @@ public class JMeterUtils implements UnitTestManager {
      * Determine whether we are in 'expert' mode. Certain features may be hidden
      * from user's view unless in expert mode.
      *
-     * @return true iif we're in expert mode
+     * @return true if we're in expert mode
      */
     public static boolean isExpertMode() {
         return JMeterUtils.getPropDefault(EXPERT_MODE_PROPERTY, false);

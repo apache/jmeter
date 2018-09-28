@@ -413,7 +413,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 AbstractThreadGroup group = setupIter.next();
                 groupCount++;
                 String groupName = group.getName();
-                log.info("Starting setUp ThreadGroup: {} : {} ", groupCount, groupName);
+                log.info("Starting setUp ThreadGroup: {} : {} ", groupCount, groupName);
                 startThreadGroup(group, groupCount, setupSearcher, testLevelElements, notifier);
                 if (serialized && setupIter.hasNext()) {
                     log.info("Waiting for setup thread group: {} to finish before starting next setup group", 

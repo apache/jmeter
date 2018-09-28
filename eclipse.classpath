@@ -101,8 +101,8 @@
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-ext-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/tika-core-1.18.jar"/>
-	<classpathentry kind="lib" path="lib/tika-parsers-1.18.jar"/>
+	<classpathentry kind="lib" path="lib/tika-core-1.19.jar"/>
+	<classpathentry kind="lib" path="lib/tika-parsers-1.19.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-1.4.01.jar"/>
@@ -114,9 +114,9 @@
 	<classpathentry kind="lib" path="lib/spock-core-1.0-groovy-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/cglib-nodep-3.2.7.jar"/>
 	<classpathentry kind="lib" path="lib/objenesis-2.6.jar"/>
-	<classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.59.jar"/>
-	<classpathentry kind="lib" path="lib/api/bcpkix-jdk15on-1.59.jar"/>
-	<classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.59.jar"/>
+	<classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.60.jar"/>
+	<classpathentry kind="lib" path="lib/api/bcpkix-jdk15on-1.60.jar"/>
+	<classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.60.jar"/>
 	<classpathentry kind="src" path="test/resources" output="build/test"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

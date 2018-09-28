@@ -2262,7 +2262,7 @@ If the last sample just before the loop failed, don't enter loop.</li>
 </ul>
 <note>
 The condition can be any variable or function that eventually evaluates to the string "<code>false</code>".
-This allows the use of <code>__jexl3</code>, <code>__groovy</code> function, properties or variables as needed.
+This allows the use of <code><funclink name="__jexl3"/></code>, <code><funclink name="__groovy"/></code> function, properties or variables as needed.
 </note>
 <br></br>
 <note>
@@ -4697,17 +4697,19 @@ Some sample expressions:
 The non-tolerant parser can be quite slow, as it may need to download the DTD etc.
 </note>
 <note>
-<b>NAMESPACES</b>
-As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
-you can provide a Properties file which contains mappings for the namespace prefixes: 
+<b>NAMESPACES</b><br/>
+As a work-round for namespace limitations of the Xalan XPath parser (implementation on which JMeter is based) you need to:
+<ul>
+<li>provide a Properties file (if for example your file is named namespaces.properties) which contains mappings for the namespace prefixes: 
 <source>
-prefix1=Full Namespace 1
-prefix2=Full Namespace 2
+prefix1=http\://foo.apache.org
+prefix2=http\://toto.apache.org
 &hellip;
-</source>
+</source></li>
 
-You reference this file in <code>jmeter.properties</code> file using the property:
-    <source>xpath.namespace.config</source>
+<li>reference this file in <code>user.properties</code> file using the property:
+    <source>xpath.namespace.config=namespaces.properties</source></li>
+</ul>
 </note>
 </component>
 <component name="XML Schema Assertion" index="&sect-num;.5.9"  width="472" height="132" screenshot="assertion/XMLSchemaAssertion.png">
@@ -5817,6 +5819,7 @@ extracting the node as text or attribute value and store the result into the giv
     <description>This test element allows the user to extract value(s) from 
         structured response - XML or (X)HTML - using XPath
         query language.
+        <note>Since JMeter 5.0, you should use <complink name="XPath2 Extractor"/> as it provides better and easier namespace management, better performances and support for XPath 2.0</note>
    </description>
    <properties>
        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
@@ -5900,17 +5903,19 @@ extracting the node as text or attribute value and store the result into the giv
  </note>
  
  <note>
-<b>NAMESPACES</b>
-As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
-you can provide a Properties file which contains mappings for the namespace prefixes: 
+<b>NAMESPACES</b><br/>
+As a work-round for namespace limitations of the Xalan XPath parser (implementation on which JMeter is based) you need to:
+<ul>
+<li>provide a Properties file (if for example your file is named namespaces.properties) which contains mappings for the namespace prefixes: 
 <source>
-prefix1=Full Namespace 1
-prefix2=Full Namespace 2
+prefix1=http\://foo.apache.org
+prefix2=http\://toto.apache.org
 &hellip;
-</source>
+</source></li>
 
-You reference this file in <code>jmeter.properties</code> file using the property:
-    <source>xpath.namespace.config</source>
+<li>reference this file in <code>user.properties</code> file using the property:
+    <source>xpath.namespace.config=namespaces.properties</source></li>
+</ul>
 </note>
 <p></p>
 Another option is to use the following code:

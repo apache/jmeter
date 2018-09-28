@@ -60,7 +60,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
     }
 
     /**
-     * @see Command#doActionAfterCheck(ActionEvent)
+     * @see Command#doAction(ActionEvent)
      */
     @Override
     public void doActionAfterCheck(ActionEvent e) {

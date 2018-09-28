@@ -934,6 +934,7 @@ jmeter &hellip; -Jhost=www3.example.org -Jloops=13
 </li>
 </ul>
 </div>
+<a href="#top" id="topButton">Go to top</a>
 </div>
 <div class="footer">
 <div class="copyright">
@@ -949,8 +950,16 @@ jmeter &hellip; -Jhost=www3.example.org -Jloops=13
           </div>
 </div>
 <script>(function(){
-            // fill in the current location into social links on this page.
             "use strict";
+            // enable 'go to top' button functionality
+            document.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                    document.getElementById("topButton").style.display = "block";
+                } else {
+                    document.getElementById("topButton").style.display = "none";
+                }
+            });
+            // fill in the current location into social links on this page.
             var as = document.getElementsByTagName('a');
             var loc = document.location.href;
             if (!loc.toLowerCase().startsWith('http')) {

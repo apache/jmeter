@@ -21,7 +21,6 @@ package org.apache.jmeter.engine;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -45,6 +44,8 @@ import org.slf4j.LoggerFactory;
  * @see org.apache.jmeter.gui.action.RemoteStart
  */
 public class DistributedRunner {
+    private static final String HOST_NOT_FOUND_MESSAGE = "Host not found in list of active engines: {}";
+
     private static final Logger log = LoggerFactory.getLogger(DistributedRunner.class);
 
     public static final String RETRIES_NUMBER = "client.tries"; // $NON-NLS-1$
@@ -77,12 +78,11 @@ public class DistributedRunner {
 
         for (int tryNo = 0; tryNo < retriesNumber; tryNo++) {
             if (tryNo > 0) {
-                println("Following remote engines will retry configuring: " + addrs);
-                println("Pausing before retry for " + retriesDelay + "ms");
+                println("Following remote engines will retry configuring: " + addrs+", pausing before retry for " + retriesDelay + "ms");
                 try {
                     Thread.sleep(retriesDelay);
                 } catch (InterruptedException e) {  // NOSONAR
-                    throw new RuntimeException("Interrupted while initializing remote", e);
+                    throw new IllegalStateException("Interrupted while initializing remote engines:"+addrs, e);
                 }
             }
 
@@ -131,7 +131,7 @@ public class DistributedRunner {
                 if (engines.containsKey(address)) {
                     engines.get(address).runTest();
                 } else {
-                    log.warn("Host not found in list of active engines: {}", address);
+                    log.warn(HOST_NOT_FOUND_MESSAGE, address);
                 }
             } catch (IllegalStateException | JMeterEngineException e) { // NOSONAR already reported to user
                 JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$  
@@ -156,7 +156,7 @@ public class DistributedRunner {
                 if (engines.containsKey(address)) {
                     engines.get(address).stopTest(true);
                 } else {
-                    log.warn("Host not found in list of active engines: {}", address);
+                    log.warn(HOST_NOT_FOUND_MESSAGE, address);
                 }
             } catch (RuntimeException e) {
                 errln("Failed to stop test on " + address, e);
@@ -181,7 +181,7 @@ public class DistributedRunner {
                 if (engines.containsKey(address)) {
                     engines.get(address).stopTest(false);
                 } else {
-                    log.warn("Host not found in list of active engines: {}", address);
+                    log.warn(HOST_NOT_FOUND_MESSAGE, address);
                 }
 
             } catch (RuntimeException e) {
@@ -198,7 +198,7 @@ public class DistributedRunner {
                 if (engines.containsKey(address)) {
                     engines.get(address).exit();
                 } else {
-                    log.warn("Host not found in list of active engines: {}", address);
+                    log.warn(HOST_NOT_FOUND_MESSAGE, address);
                 }
             } catch (RuntimeException e) {
                 errln("Failed to exit on " + address, e);
@@ -231,9 +231,8 @@ public class DistributedRunner {
      * @return engine instance
      * @throws RemoteException if registry can't be contacted
      * @throws NotBoundException when name for address can't be found
-     * @throws MalformedURLException when address can't be converted to valid URL
      */
-    protected JMeterEngine createEngine(String address) throws RemoteException, NotBoundException, MalformedURLException {
+    protected JMeterEngine createEngine(String address) throws RemoteException, NotBoundException {
         return new ClientJMeterEngine(address);
     }
 

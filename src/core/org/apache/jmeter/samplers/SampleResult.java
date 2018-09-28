@@ -452,7 +452,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public long currentTimeInMillis() {
         if (useNanoTime){
             if (nanoTimeOffset == Long.MIN_VALUE){
-                throw new RuntimeException("Invalid call; nanoTimeOffset as not been set");
+                throw new RuntimeException("Invalid call; nanoTimeOffset has not been set");
             }
             return sampleNsClockInMs() + nanoTimeOffset;            
         }
@@ -650,7 +650,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * 
      * @param subResult
      *            the {@link SampleResult} to be added
-     * @param renameSubResults boolean do we rename subResults based on position
      */
     public void addRawSubResult(SampleResult subResult){
         storeSubResult(subResult, true);

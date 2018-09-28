@@ -64,10 +64,10 @@ class UdpMetricsSender extends AbstractInfluxdbMetricsSender {
                 hostAddress = InetAddress.getByName(urlComponents[0]);
                 udpPort = Integer.parseInt(urlComponents[1]);
             } else {
-                throw new IllegalArgumentException("Influxdb url '"+influxdbUrl+"' is wrong. The format shoule be <host/ip>:<port>");
+                throw new IllegalArgumentException("Influxdb url '"+influxdbUrl+"' is wrong. The format shoule be <host/ip>:<port>");
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException("Influxdb url '"+influxdbUrl+"' is wrong. The format shoule be <host/ip>:<port>", e);
+            throw new IllegalArgumentException("Influxdb url '"+influxdbUrl+"' is wrong. The format shoule be <host/ip>:<port>", e);
         }
     }
 

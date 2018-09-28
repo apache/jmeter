@@ -251,7 +251,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             s2 = url2.toString();
         }
 
-        log.debug("Target URL strings to match against: {} and {}", s1, s2);
+        log.debug("Target URL strings to match against: {} and {}", s1, s2);
         // TODO should really return most specific (i.e. longest) match.
         for (JMeterProperty jMeterProperty : getAuthObjects()) {
             Authorization auth = (Authorization) jMeterProperty.getObjectValue();
