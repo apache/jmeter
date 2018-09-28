@@ -79,7 +79,7 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
         if (value instanceof String) {
             setAsText((String) value);
         } else if (value == null) {
-            setAsText("");
+            setAsText(null);
         } else {
             throw new IllegalArgumentException("Expected String but got " + value.getClass() + ", value=" + value);
         }
