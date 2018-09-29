@@ -1369,7 +1369,7 @@ function toggleAll(id, checked){
     } else if ( id == "choicesConnectTimeOverTime"){
         choiceContainer = $("#choicesConnectTimeOverTime");
         refreshConnectTimeOverTime(false);
-    } else if ( id == "responseTimePercentilesOverTime"){
+    } else if ( id == "choicesResponseTimePercentilesOverTime"){
         choiceContainer = $("#choicesResponseTimePercentilesOverTime");
         refreshResponseTimePercentilesOverTime(false);
     } else if ( id == "choicesResponseTimePercentiles"){
@@ -1407,8 +1407,10 @@ function toggleAll(id, checked){
         refreshLatenciesVsRequest();
     }
     var color = checked ? "black" : "#818181";
-    choiceContainer.find("label").each(function(){
-        this.style.color = color;
-    });
+    if(choiceContainer != null) {
+        choiceContainer.find("label").each(function(){
+            this.style.color = color;
+        });
+    }
 }
 
