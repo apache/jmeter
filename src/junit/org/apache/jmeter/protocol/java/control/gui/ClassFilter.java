@@ -51,7 +51,7 @@ class ClassFilter {
                 newlist.add(item);
             }
         }
-        if (newlist.size() > 0) {
+        if (!newlist.isEmpty()) {
             return newlist.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
         } else {
             return ArrayUtils.EMPTY_STRING_ARRAY;
