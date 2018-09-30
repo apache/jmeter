@@ -154,7 +154,8 @@ Summary
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>62777</bug>Web Report / Dashboard : Hide All in <code>Response Time Percentiles Over Time (successful responses)</code> fails.</li>
-    <li><bug>62780</bug>Web Report / Dashboard : Display All in <code>RResponse Time Vs Request</code> fails.</li>
+    <li><bug>62780</bug>Web Report / Dashboard : Display All in <code>Response Time Vs Request</code> fails.</li>
+    <li><bug>62781</bug>Web Report / Dashboard : Display All in <code>Response Time Overview</code> fails.</li>
 </ul>
 
 <h3>Documentation</h3>
