@@ -102,6 +102,7 @@ public class ConvertListeners implements HashTreeTraverser {
      */
     @Override
     public void subtractNode() {
+        // NOOP
     }
 
     /**
@@ -109,6 +110,7 @@ public class ConvertListeners implements HashTreeTraverser {
      */
     @Override
     public void processPath() {
+        // NOOP
     }
 
 }
