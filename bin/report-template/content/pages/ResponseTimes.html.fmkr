@@ -215,7 +215,7 @@
                                     <ul class="dropdown-menu dropdown-user">
                                         <li><a href="#syntheticResponseTimeDistribution" onClick="checkAll('choicesSyntheticResponseTimeDistribution');">Display all samples</a>
                                         </li>
-                                        <li><a href="#syntheticResponseTimeDistribution" onClick="uncheckAll('choicesSyntheticRResponseTimeDistribution');">Hide all samples</a>
+                                        <li><a href="#syntheticResponseTimeDistribution" onClick="uncheckAll('choicesSyntheticResponseTimeDistribution');">Hide all samples</a>
                                         </li>
                                         <li><a href="#syntheticResponseTimeDistribution" onclick="exportToPNG('flotSyntheticResponseTimesDistribution', this);">Save as PNG</a></li>
                                     </ul>
