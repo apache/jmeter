@@ -866,7 +866,7 @@ function refreshResponseTimeVsRequest() {
     var infos = responseTimeVsRequestInfos;
     prepareSeries(infos.data);
     if (isGraph($("#flotResponseTimeVsRequest"))){
-        infos.create();
+        infos.createGraph();
     }else{
         var choiceContainer = $("#choicesResponseTimeVsRequest");
         createLegend(choiceContainer, infos);
