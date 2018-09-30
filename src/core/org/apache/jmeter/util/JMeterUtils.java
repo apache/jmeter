@@ -523,8 +523,12 @@ public class JMeterUtils implements UnitTestManager {
             if (bundle.containsKey(resKey)) {
                 resString = bundle.getString(resKey);
             } else {
-                log.warn("ERROR! Resource string not found: [{}]", resKey);
-                resString = defaultValue;                
+                if(defaultValue == null) {
+                    log.warn("ERROR! Resource string not found: [{}]", resKey);
+                } else {
+                    log.debug("Resource string not found: [{}], using default value {}", resKey, defaultValue);
+                }
+                resString = defaultValue;
             }
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "["+key+"]";
@@ -533,7 +537,11 @@ public class JMeterUtils implements UnitTestManager {
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "[?"+key+"?]";
             }
-            log.warn("ERROR! Resource string not found: [{}]", resKey, mre);
+            if(defaultValue == null) {
+                log.warn("ERROR! Resource string not found: [{}]", resKey);
+            } else {
+                log.debug("Resource string not found: [{}], using default value {}", resKey, defaultValue);
+            }
             resString = defaultValue;
         }
         return resString;
