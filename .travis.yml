@@ -25,7 +25,10 @@ matrix:
       after_success:
           - bash <(curl -s https://codecov.io/bash)
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
-    - jdk: oraclejdk11
+    - jdk: openjdk8
+      script: 
+          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
+    - jdk: openjdk11
       script: 
           - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
