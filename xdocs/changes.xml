@@ -110,6 +110,7 @@ Summary
 <h3>General</h3>
 <ul>
   <li><pr>394</pr>Allow <code>null</code> values in <code>FieldStringEditor</code>. Based on patch by Mingun (alexander_sergey at mail.ru)</li>
+  <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
