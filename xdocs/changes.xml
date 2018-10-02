@@ -170,6 +170,7 @@ Summary
     <li><bug>62745</bug>Fix undefined disabled icon. Contributed by Till Neunast (https://github.com/tilln)</li>
     <li><bug>62743</bug>Client auth must be enabled on distributed testing</li>
     <li><bug>62767</bug>NPE when searching under certain conditions. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62790</bug>ArrayIndexOutOfBoundsException when calling replace without selecting the first match</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -183,6 +184,9 @@ Summary
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
+<ul>
+    <li>Orimarko (orimarko at gmail.com>)</li>
+</ul>
 <p>
 Apologies if we have omitted anyone else.
 </p>
