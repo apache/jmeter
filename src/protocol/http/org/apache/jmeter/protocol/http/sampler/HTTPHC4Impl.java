@@ -1464,8 +1464,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         entityEnclosingRequest.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
                 }
-
-                FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),(ContentType) null);
+                FileEntity fileRequestEntity = new FileEntity(FileServer.getFileServer().getResolvedFile(file.getPath()), (ContentType) null);
                 entityEnclosingRequest.setEntity(fileRequestEntity);
 
                 // We just add placeholder text for file content
