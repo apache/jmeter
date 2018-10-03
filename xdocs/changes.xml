@@ -124,6 +124,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><bug>62785</bug><pr>400</pr>Incomplete search path applied to the filenames used in the upload functionality of the HTTP sampler. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -182,6 +183,7 @@ Summary
     <li>Till Neunast (https://github.com/tilln)</li>
     <li>Mingun (alexander_sergey at mail.ru)</li>
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
+    <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
