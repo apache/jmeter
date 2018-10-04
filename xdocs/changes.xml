@@ -111,6 +111,7 @@ Summary
 <ul>
   <li><pr>394</pr>Allow <code>null</code> values in <code>FieldStringEditor</code>. Based on patch by Mingun (alexander_sergey at mail.ru)</li>
   <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
+   <li><bug>62257</bug> Expand/Collapse short key doesn't work with numpad -. Contributed by orimarko at gmail.com</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -184,10 +185,11 @@ Summary
     <li>Mingun (alexander_sergey at mail.ru)</li>
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
+    <li>Ori Marko (orimarko at gmail.com>)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
-    <li>Orimarko (orimarko at gmail.com>)</li>
+    <li>Ori Marko (orimarko at gmail.com>)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
