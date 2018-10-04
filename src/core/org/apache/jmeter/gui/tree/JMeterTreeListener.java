@@ -207,10 +207,10 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         } else if (KeyStrokes.matches(e, KeyStrokes.ALT_RIGHT_ARROW)) {
             actionName = ActionNames.MOVE_RIGHT;
         } else if (KeyStrokes.matches(e, KeyStrokes.SHIFT_LEFT_ARROW)
-        		|| KeyStrokes.matches(e, KeyStrokes.COLLAPSE_ALL_SUBTRACT)) {
+                || KeyStrokes.matches(e, KeyStrokes.COLLAPSE_ALL_SUBTRACT)) {
             actionName = ActionNames.COLLAPSE;
         } else if (KeyStrokes.matches(e, KeyStrokes.SHIFT_RIGHT_ARROW) 
-        		|| KeyStrokes.matches(e, KeyStrokes.EXPAND_ALL_SUBTRACT)) {
+                || KeyStrokes.matches(e, KeyStrokes.EXPAND_ALL_SUBTRACT)) {
             actionName = ActionNames.EXPAND;
         } 
         
