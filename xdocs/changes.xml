@@ -134,6 +134,7 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>62806</bug>ModuleController cloning by Run behaves differently wether in GUI or Non GUI mode. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
