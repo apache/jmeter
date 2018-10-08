@@ -73,12 +73,13 @@ public class TreeCloner implements HashTreeTraverser {
            // Don't clone NoThreadClone unless honourNoThreadClone == false
           && (!(honourNoThreadClone && (node instanceof NoThreadClone)))
         ) {
-            Object clonedNode = ((TestElement) node).clone();
-            newTree.add(objects, clonedNode);
+            Object newNode = ((TestElement) node).clone();
+            newTree.add(objects, newNode);
+            return newNode;
         } else {
             newTree.add(objects, node);
+            return node;
         }
-        return node;
     }
     
     /**
