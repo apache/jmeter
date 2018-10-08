@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -62,6 +63,11 @@ public class Start extends AbstractAction {
     
     private static final Logger log = LoggerFactory.getLogger(Start.class);
 
+    private enum RunMode {
+        AS_IS,
+        IGNORING_TIMERS,
+        VALIDATION
+    }
     private static final Set<String> commands = new HashSet<>();
 
     private static final String VALIDATION_CLONER_CLASS_PROPERTY_NAME = 
@@ -105,10 +111,10 @@ public class Start extends AbstractAction {
     public void doAction(ActionEvent e) {
         if (e.getActionCommand().equals(ActionNames.ACTION_START)) {
             popupShouldSave(e);
-            startEngine(false);
+            startEngine(null, RunMode.AS_IS);
         } else if (e.getActionCommand().equals(ActionNames.ACTION_START_NO_TIMERS)) {
             popupShouldSave(e);
-            startEngine(true);
+            startEngine(null, RunMode.IGNORING_TIMERS);
         } else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
             if (engine != null) {
                 log.info("Stopping test");
@@ -127,13 +133,20 @@ public class Start extends AbstractAction {
             popupShouldSave(e);
             boolean noTimers = e.getActionCommand().equals(ActionNames.RUN_TG_NO_TIMERS);
             boolean isValidation = e.getActionCommand().equals(ActionNames.VALIDATE_TG);
-            
+            RunMode runMode = null;
+            if(isValidation) {
+                runMode = RunMode.VALIDATION;
+            } else if (noTimers) {
+                runMode = RunMode.IGNORING_TIMERS;
+            } else {
+                runMode = RunMode.AS_IS;
+            }
             JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
             JMeterTreeNode[] nodes = treeListener.getSelectedNodes();
             nodes = Copy.keepOnlyAncestors(nodes);
             AbstractThreadGroup[] tg = keepOnlyThreadGroups(nodes);
             if(nodes.length > 0) {
-                startEngine(noTimers, isValidation, tg);
+                startEngine(tg, runMode);
             }
             else {
                 log.warn("No thread group selected the test will not be started");
@@ -158,54 +171,28 @@ public class Start extends AbstractAction {
 
     /**
      * Start JMeter engine
-     * @param ignoreTimer flag to ignore timers
-     */
-    private void startEngine(boolean ignoreTimer) {
-        startEngine(ignoreTimer, null);
-    }
-    
-    /**
-     * Start JMeter engine
-     * @param ignoreTimer flag to ignore timers
      * @param threadGroupsToRun Array of AbstractThreadGroup to run
+     * @param runMode {@link RunMode} How to run engine
      */
-    private void startEngine(boolean ignoreTimer, 
-            AbstractThreadGroup[] threadGroupsToRun) {
-        startEngine(ignoreTimer, false, threadGroupsToRun);
-    }
-    
-    /**
-     * Start JMeter engine
-     * @param ignoreTimer flag to ignore timers
-     * @param isValidationShot 
-     * @param threadGroupsToRun Array of AbstractThreadGroup to run
-     */
-    private void startEngine(boolean ignoreTimer, 
-            boolean isValidationShot,
-            AbstractThreadGroup[] threadGroupsToRun) {
+    private void startEngine(AbstractThreadGroup[] threadGroupsToRun, RunMode runMode) {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
         
-        JMeter.convertSubTree(testTree);
+        // We need to make this conversion before removing any Thread Group as 1 thread Group running may 
+        // reference another one (not running) using ModuleController
+        // We don't clone as we'll be doing it later AND we cannot clone before we have removed the unselected ThreadGroups
+        HashTree treeToUse = JMeter.convertSubTree(testTree, false);
         if(threadGroupsToRun != null && threadGroupsToRun.length>0) {
-            removeThreadGroupsFromHashTree(testTree, threadGroupsToRun);
+            keepOnlySelectedThreadGroupsInHashTree(treeToUse, threadGroupsToRun);
         }
-        testTree.add(testTree.getArray()[0], gui.getMainFrame());
+        treeToUse.add(treeToUse.getArray()[0], gui.getMainFrame());
         if (log.isDebugEnabled()) {
             log.debug("test plan before cloning is running version: {}",
-                    ((TestPlan) testTree.getArray()[0]).isRunningVersion());
+                    ((TestPlan) treeToUse.getArray()[0]).isRunningVersion());
         }
 
-        ListedHashTree clonedTree = null;
-        if(isValidationShot) {
-            TreeCloner cloner = createTreeClonerForValidation();
-            testTree.traverse(cloner);
-            clonedTree = cloner.getClonedTree();
-        } else {
-            TreeCloner cloner = cloneTree(testTree, ignoreTimer);      
-            clonedTree = cloner.getClonedTree();
-        }
-        if ( popupCheckExistingFileListener(testTree) ) {
+        ListedHashTree clonedTree = cloneTree(treeToUse, runMode);
+        if ( popupCheckExistingFileListener(clonedTree) ) {
             engine = new StandardJMeterEngine();
             engine.configure(clonedTree);
             try {
@@ -216,7 +203,7 @@ public class Start extends AbstractAction {
             }
             if (log.isDebugEnabled()) {
                 log.debug("test plan after cloning and running test is running version: {}",
-                        ((TestPlan) testTree.getArray()[0]).isRunningVersion());
+                        ((TestPlan) treeToUse.getArray()[0]).isRunningVersion());
             }
         }
     }
@@ -225,24 +212,26 @@ public class Start extends AbstractAction {
      * 
      * @return {@link TreeCloner}
      */
-    private static TreeCloner createTreeClonerForValidation() {
+    private static TreeCloner createTreeClonerForValidation(boolean honorThreadClone) {
         Class<?> clazz;
         try {
             clazz = Class.forName(CLONER_FOR_VALIDATION_CLASS_NAME, true, Thread.currentThread().getContextClassLoader());
-            return (TreeCloner) clazz.newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
+            return (TreeCloner) clazz.getConstructor(boolean.class).newInstance(honorThreadClone);
+        } catch (InstantiationException | IllegalAccessException 
+                | ClassNotFoundException | NoSuchMethodException
+                | InvocationTargetException ex) {
             log.error("Error instantiating class:'{}' defined in property:'{}'", CLONER_FOR_VALIDATION_CLASS_NAME,
                     VALIDATION_CLONER_CLASS_PROPERTY_NAME, ex);
-            return new TreeClonerForValidation();
+            return new TreeClonerForValidation(honorThreadClone);
         }
     }
 
     /**
-     * Remove thread groups from testTree that are not in threadGroupsToKeep
+     * Keep only thread groups in testTree that are in threadGroupsToKeep
      * @param testTree {@link HashTree}
      * @param threadGroupsToKeep Array of {@link AbstractThreadGroup} to keep
      */
-    private void removeThreadGroupsFromHashTree(HashTree testTree, AbstractThreadGroup[] threadGroupsToKeep) {
+    private void keepOnlySelectedThreadGroupsInHashTree(HashTree testTree, AbstractThreadGroup[] threadGroupsToKeep) {
         LinkedList<Object> copyList = new LinkedList<>(testTree.list());
         for (Object o  : copyList) {
             TestElement item = (TestElement) o;
@@ -259,11 +248,11 @@ public class Start extends AbstractAction {
                     }
                 }
                 else {
-                    removeThreadGroupsFromHashTree(testTree.getTree(item), threadGroupsToKeep);
+                    keepOnlySelectedThreadGroupsInHashTree(testTree.getTree(item), threadGroupsToKeep);
                 }
             }
             else {
-                removeThreadGroupsFromHashTree(testTree.getTree(item), threadGroupsToKeep);
+                keepOnlySelectedThreadGroupsInHashTree(testTree.getTree(item), threadGroupsToKeep);
             }
         }
     }
@@ -286,17 +275,24 @@ public class Start extends AbstractAction {
     /**
      * Create a Cloner that ignores {@link Timer} if removeTimers is true
      * @param testTree {@link HashTree}
-     * @param removeTimers boolean remove timers 
+     * @param runMode {@link RunMode} how plan will be run 
      * @return {@link TreeCloner}
      */
-    private TreeCloner cloneTree(HashTree testTree, boolean removeTimers) {
+    private ListedHashTree cloneTree(HashTree testTree, RunMode runMode) {
         TreeCloner cloner = null;
-        if(removeTimers) {
-            cloner = new TreeClonerNoTimer(false);
-        } else {
-            cloner = new TreeCloner(false);     
+        switch (runMode) {
+            case VALIDATION:
+                cloner = createTreeClonerForValidation(false);
+                break;
+            case IGNORING_TIMERS:
+                cloner = new TreeClonerNoTimer(false);
+                break;
+            case AS_IS: 
+            default:
+                cloner = new TreeCloner(false);
+                break;
         }
         testTree.traverse(cloner);
-        return cloner;
+        return cloner.getClonedTree();
     }
 }
