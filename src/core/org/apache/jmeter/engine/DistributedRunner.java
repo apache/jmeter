@@ -107,7 +107,7 @@ public class DistributedRunner {
 
         if (!addrs.isEmpty()) {
             String msg = "Following remote engines could not be configured:" + addrs;
-            if (!continueOnFail || engines.size() == 0) {
+            if (!continueOnFail || engines.isEmpty()) {
                 stop();
                 throw new RuntimeException(msg); // NOSONAR
             } else {

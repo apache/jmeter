@@ -487,7 +487,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     public void setObject(Object map) {
         propertyMap = (Map<String, Object>) map;
 
-        if (propertyMap.size() == 0) {
+        if (propertyMap.isEmpty()) {
             // Uninitialized -- set it to the defaults:
             for (PropertyDescriptor descriptor : descriptors) {
                 Object value = descriptor.getValue(DEFAULT);
