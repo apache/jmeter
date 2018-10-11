@@ -240,7 +240,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * tika-core-1.19.1.jar
 * tika-parsers-1.19.1.jar
 * xalan-2.7.2.jar
-* xerces-2.11.0.jar
+* xerces-2.12.0.jar
 * xml-apis-1.4.01.jar
 * xmlgraphics-commons-2.2.jar
 
