@@ -31,9 +31,9 @@
     <link href="../../sbadmin2-1.0.7/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
    <!-- JQuery UI style -->
-    <link href="../css/jquery-ui.css" rel="stylesheet">
-    <link href="../css/jquery-ui.structure.css" rel="stylesheet">
-    <link href="../css/jquery-ui.theme.css" rel="stylesheet">
+    <link href="../css/jquery-ui.min.css" rel="stylesheet">
+    <link href="../css/jquery-ui.structure.min.css" rel="stylesheet">
+    <link href="../css/jquery-ui.theme.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -215,7 +215,7 @@
                                     <ul class="dropdown-menu dropdown-user">
                                         <li><a href="#syntheticResponseTimeDistribution" onClick="checkAll('choicesSyntheticResponseTimeDistribution');">Display all samples</a>
                                         </li>
-                                        <li><a href="#syntheticResponseTimeDistribution" onClick="uncheckAll('choicesSyntheticRResponseTimeDistribution');">Hide all samples</a>
+                                        <li><a href="#syntheticResponseTimeDistribution" onClick="uncheckAll('choicesSyntheticResponseTimeDistribution');">Hide all samples</a>
                                         </li>
                                         <li><a href="#syntheticResponseTimeDistribution" onclick="exportToPNG('flotSyntheticResponseTimesDistribution', this);">Save as PNG</a></li>
                                     </ul>
@@ -368,7 +368,7 @@
     <script src="../js/curvedLines.js"></script>
     <script src="../js/dashboard-commons.js"></script>
     <script src="../js/graph.js"></script>
-    <script src="../js/jquery-ui.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.threshold.js"></script>
     <!-- Custom Theme JavaScript -->
     <script src="../../sbadmin2-1.0.7/dist/js/sb-admin-2.js"></script>

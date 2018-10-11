@@ -48,6 +48,8 @@ public final class JmeterKeyStore {
 
     private static final Logger log = LoggerFactory.getLogger(JmeterKeyStore.class);
 
+    public static final String DEFAULT_ALIAS_VAR_NAME = "certAlias";
+
     private final KeyStore store;
 
     /** first index to consider for a key */
@@ -78,7 +80,7 @@ public final class JmeterKeyStore {
      *             &lt; 0 or <code>endIndex</code> &lt; </code>startIndex</code>
      */
     private JmeterKeyStore(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws KeyStoreException {
-        if (startIndex < 0 || endIndex < 0 || endIndex < startIndex) {
+        if (startIndex < 0 || (endIndex != -1 && endIndex < startIndex)) {
             throw new IllegalArgumentException("Invalid index(es). Start="+startIndex+", end="+endIndex);
         }
         this.store = KeyStore.getInstance(type);
@@ -125,7 +127,7 @@ public final class JmeterKeyStore {
             while (aliases.hasMoreElements()) {
                 String alias = aliases.nextElement();
                 if (store.isKeyEntry(alias)) {
-                    if (index >= startIndex && index <= endIndex) {
+                    if (index >= startIndex && (endIndex== -1 || index <= endIndex)) {
                         privateKey = (PrivateKey) store.getKey(alias, pw);
                         if (null == privateKey) {
                             throw new IOException("No key found for alias: " + alias); // Should not happen
@@ -150,8 +152,8 @@ public final class JmeterKeyStore {
             if (null == privateKey) {
                 throw new IOException("No key(s) found");
             }
-            if (index <= endIndex-startIndex && log.isWarnEnabled()) {
-                log.warn("Did not find all requested aliases. Start={}, end={}, found={}",
+            if (endIndex != -1 && index <= endIndex-startIndex && log.isWarnEnabled()) {
+                log.warn("Did not find as much aliases as configured in indexes Start={}, end={}, found={}",
                         startIndex, endIndex, certsByAlias.size());
             }
         }
@@ -272,7 +274,7 @@ public final class JmeterKeyStore {
      *             when the type of the store is not supported
      */
     public static JmeterKeyStore getInstance(String type) throws KeyStoreException {
-        return getInstance(type, 0, 0, null);
+        return getInstance(type, 0, -1, DEFAULT_ALIAS_VAR_NAME);
     }
 
     /**

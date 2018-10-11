@@ -92,6 +92,7 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>62766</bug>Keystore Config : We should load all aliases by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -109,11 +110,12 @@ Summary
 <h3>General</h3>
 <ul>
   <li><pr>394</pr>Allow <code>null</code> values in <code>FieldStringEditor</code>. Based on patch by Mingun (alexander_sergey at mail.ru)</li>
+  <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li>Updated to tika-core and tika-parsers 1.19 (from 1.18)</li>
+    <li>Updated to tika-core and tika-parsers 1.19.1 (from 1.18)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -123,22 +125,27 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>62672</bug>HTTP Request send double requests when configure proxy with authentication. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
+    <li><bug>62785</bug><pr>400</pr>Incomplete search path applied to the filenames used in the upload functionality of the HTTP sampler. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
+    <li><bug>62775</bug>If many jars are in a folder referenced by user.classpath, startup can be extremely slow due to JUnit</li>
 </ul>
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>62806</bug>ModuleController cloning by Run behaves differently wether in GUI or Non GUI mode. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
+    <li><bug>62770</bug>Aggregate Graph throws ArrayIndexOutOfBoundsException</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>62774</bug>XPath2Extractor : Scope variable is broken. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -151,6 +158,10 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
+    <li><bug>62777</bug>Web Report / Dashboard : Hide All in <code>Response Time Percentiles Over Time (successful responses)</code> fails.</li>
+    <li><bug>62780</bug>Web Report / Dashboard : Display All in <code>Response Time Vs Request</code> fails.</li>
+    <li><bug>62781</bug>Web Report / Dashboard : Display All in <code>Response Time Overview</code> fails.</li>
+    <li><bug>62782</bug>Web Report / Dashboard : Remove duplicate/unused dependencies</li>
 </ul>
 
 <h3>Documentation</h3>
@@ -162,6 +173,7 @@ Summary
     <li><bug>62745</bug>Fix undefined disabled icon. Contributed by Till Neunast (https://github.com/tilln)</li>
     <li><bug>62743</bug>Client auth must be enabled on distributed testing</li>
     <li><bug>62767</bug>NPE when searching under certain conditions. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62790</bug>ArrayIndexOutOfBoundsException when calling replace without selecting the first match</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -173,8 +185,12 @@ Summary
     <li>Till Neunast (https://github.com/tilln)</li>
     <li>Mingun (alexander_sergey at mail.ru)</li>
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
+    <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
+<ul>
+    <li>Orimarko (orimarko at gmail.com>)</li>
+</ul>
 <p>
 Apologies if we have omitted anyone else.
 </p>

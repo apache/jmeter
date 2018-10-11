@@ -111,28 +111,29 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private static final Logger log = LoggerFactory.getLogger(StatGraphVisualizer.class);
 
     private static final String[] COLUMNS = { 
-            "sampler_label",                  //$NON-NLS-1$
-            "aggregate_report_count",         //$NON-NLS-1$
-            "average",                        //$NON-NLS-1$
-            "aggregate_report_median",        //$NON-NLS-1$
-            "aggregate_report_xx_pct1_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct2_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct3_line",      //$NON-NLS-1$
-            "aggregate_report_min",           //$NON-NLS-1$
-            "aggregate_report_max",           //$NON-NLS-1$
-            "aggregate_report_error%",        //$NON-NLS-1$
-            "aggregate_report_rate",          //$NON-NLS-1$
-            "aggregate_report_bandwidth",     //$NON-NLS-1$
-            "aggregate_report_sent_bytes_per_sec"  //$NON-NLS-1$
+            "sampler_label",                        //$NON-NLS-1$
+            "aggregate_report_count",               //$NON-NLS-1$
+            "average",                              //$NON-NLS-1$
+            "aggregate_report_median",              //$NON-NLS-1$
+            "aggregate_report_xx_pct1_line",        //$NON-NLS-1$
+            "aggregate_report_xx_pct2_line",        //$NON-NLS-1$
+            "aggregate_report_xx_pct3_line",        //$NON-NLS-1$
+            "aggregate_report_min",                 //$NON-NLS-1$
+            "aggregate_report_max",                 //$NON-NLS-1$
+            "aggregate_report_error%",              //$NON-NLS-1$
+            "aggregate_report_rate",                //$NON-NLS-1$
+            "aggregate_report_bandwidth",           //$NON-NLS-1$
+            "aggregate_report_sent_bytes_per_sec"   //$NON-NLS-1$
     };
 
-    private static final String[] GRAPH_COLUMNS = {"average",//$NON-NLS-1$
-            "aggregate_report_median",        //$NON-NLS-1$
-            "aggregate_report_xx_pct1_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct2_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct3_line",      //$NON-NLS-1$
-            "aggregate_report_min",           //$NON-NLS-1$
-            "aggregate_report_max"};          //$NON-NLS-1$
+    private static final String[] GRAPH_COLUMNS = {
+            "average",                          //$NON-NLS-1$
+            "aggregate_report_median",          //$NON-NLS-1$
+            "aggregate_report_xx_pct1_line",    //$NON-NLS-1$
+            "aggregate_report_xx_pct2_line",    //$NON-NLS-1$
+            "aggregate_report_xx_pct3_line",    //$NON-NLS-1$
+            "aggregate_report_min",             //$NON-NLS-1$
+            "aggregate_report_max"};            //$NON-NLS-1$
 
     private static final String TOTAL_ROW_LABEL =
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
@@ -211,7 +212,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private int defaultHeight = 300;
 
-    private JComboBox<String> columnsList = new JComboBox<>(GRAPH_COLUMNS);
+    private JComboBox<String> columnsList = new JComboBox<>(getLabels(GRAPH_COLUMNS));
 
     private List<BarGraph> eltList = new ArrayList<>();
 
@@ -716,7 +717,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             }
             try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile()); 
                     OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){ 
-                CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),writer,saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
+                CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),
+                        writer,
+                        saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
             } catch (IOException e) { // NOSONAR Error is reported in GUI
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } 
