@@ -2368,7 +2368,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
 <!--
-    Utility target to create MD5 checksums in standard format (with *filename)
+    Utility target to create SHA-512 checksums in standard format (with *filename)
     Usage:
     <antcall target="_hash">
         <param name="path" value="archive.jar|zip|gz"/>
@@ -3234,15 +3234,15 @@ run JMeter unless all the JMeter jars are added.
         <param name="loc" value="${@{jarname}.loc}"/>
         <param name="jar" value="${@{jarname}.jar}"/>
         <param name="path" value="@{dest.dir}"/>
-        <param name="md5"  value="${@{jarname}.md5}"/>
-        <param name="_checkMD5" value="true"/>
+        <param name="sha512"  value="${@{jarname}.sha512}"/>
+        <param name="_checkSHA512" value="true"/>
       </antcall>
       <antcall target="_check_jarfile">
         <param name="loc" value="${@{jarname}.loc}"/>
         <param name="jar" value="${@{jarname}.jar}"/>
         <param name="path" value="@{dest.dir}"/>
-        <param name="md5"  value="${@{jarname}.md5}"/>
-        <param name="_checkMD5" value="true"/>
+        <param name="sha512"  value="${@{jarname}.sha512}"/>
+        <param name="_checkSHA512" value="true"/>
         <param name="zip" value="${@{jarname}.zip}"/>
         <param name="ent" value="${@{jarname}.ent}"/>
         <param name="zipprop" value="@{jarname}.zip"/>
@@ -3297,10 +3297,10 @@ run JMeter unless all the JMeter jars are added.
       <!-- This requires Ant 1.7.0 or later -->
       <mapper type="flatten"/>
     </unzip>
-    <antcall target="_checkMD5">
+    <antcall target="_checkSHA512">
       <param name="file" value="${ent}"/>
       <param name="path" value="${build.dir}"/>
-      <param name="md5"  value="${md5}"/>
+      <param name="sha512"  value="${sha512}"/>
     </antcall>
     <move preservelastmodified="true" overwrite="true"
           file="${build.dir}/${ent}" tofile="${path}/${jar}" verbose="true"/>
@@ -3312,28 +3312,28 @@ run JMeter unless all the JMeter jars are added.
     <get src="${loc}/${jar}"
          dest="${build.dir}/${jar}"
          usetimestamp="false" ignoreerrors="false"/>
-    <antcall target="_checkMD5">
+    <antcall target="_checkSHA512">
       <param name="file" value="${jar}"/>
       <param name="path" value="${build.dir}"/>
-      <param name="md5"  value="${md5}"/>
+      <param name="sha512"  value="${sha512}"/>
     </antcall>
     <move preservelastmodified="true" overwrite="true"
           file="${build.dir}/${jar}" tofile="${path}/${jar}" verbose="true"/>
   </target>
 
-  <!-- Ant subroutine, required to localise MD5OK property -->
-  <target name="_checkMD5" if="_checkMD5">
+  <!-- Ant subroutine, required to localise SHA512OK property -->
+  <target name="_checkSHA512" if="_checkSHA512">
     <!--
     @param path - location of file
     @param file - file name
     -->
-    <checksum algorithm="MD5" file="${path}/${file}" property="MD5"/>
-    <condition property="MD5OK">
-      <equals arg1="${MD5}" arg2="${md5}" casesensitive="false"/>
+    <checksum algorithm="SHA-512" file="${path}/${file}" property="SHA512"/>
+    <condition property="SHA512OK">
+      <equals arg1="${SHA512}" arg2="${sha512}" casesensitive="false"/>
     </condition>
-    <fail unless="MD5OK">Bad Checksum: for ${file}
-        expected ${md5}
-        actual   ${MD5}</fail>
+    <fail unless="SHA512OK">Bad Checksum: for ${file}
+        expected ${sha512}
+        actual   ${SHA512}</fail>
     <echo level="info" message="Checksum OK: ${file}"/>
   </target>
 
@@ -3574,10 +3574,10 @@ run JMeter unless all the JMeter jars are added.
     <fail message="Invalid call sequence - file.exists should not be defined" if="file.exists"/>
     <available file="${file}" property="file.exists"/>
     <fail message="Could not find file ${file}" unless="file.exists"/>
-    <antcall target="_checkMD5">
+    <antcall target="_checkSHA512">
       <param name="file" value="${jar}"/>
       <param name="path" value="${path}"/>
-      <param name="md5"  value="${md5}"/>
+      <param name="sha512"  value="${sha512}"/>
     </antcall>
     <!--echo level="info" message="Found ${file}"/-->
   </target>
