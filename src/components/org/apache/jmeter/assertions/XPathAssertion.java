@@ -104,18 +104,17 @@ public class XPathAssertion extends AbstractScopedAssertion implements Serializa
         } catch (SAXException e) {
             log.debug("Caught sax exception.", e);
             result.setError(true);
-            result.setFailureMessage(new StringBuilder("SAXException: ").append(e.getMessage()).toString());
+            result.setFailureMessage("SAXException: " + e.getMessage());
             return result;
         } catch (IOException e) {
             log.warn("Cannot parse result content.", e);
             result.setError(true);
-            result.setFailureMessage(new StringBuilder("IOException: ").append(e.getMessage()).toString());
+            result.setFailureMessage("IOException: " + e.getMessage());
             return result;
         } catch (ParserConfigurationException e) {
             log.warn("Cannot parse result content.", e);
             result.setError(true);
-            result.setFailureMessage(new StringBuilder("ParserConfigurationException: ").append(e.getMessage())
-                    .toString());
+            result.setFailureMessage("ParserConfigurationException: " + e.getMessage());
             return result;
         } catch (TidyException e) {
             result.setError(true);
