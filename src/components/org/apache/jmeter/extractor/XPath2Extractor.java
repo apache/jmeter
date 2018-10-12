@@ -75,11 +75,11 @@ PostProcessor, Serializable {
     //- JMX file attributes
 
     private String concat(String s1,String s2){
-        return new StringBuilder(s1).append("_").append(s2).toString(); // $NON-NLS-1$
+        return s1 + "_" + s2; // $NON-NLS-1$
     }
 
     private String concat(String s1, int i){
-        return new StringBuilder(s1).append("_").append(i).toString(); // $NON-NLS-1$
+        return s1 + "_" + i; // $NON-NLS-1$
     }
 
 
