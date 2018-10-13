@@ -360,6 +360,93 @@ This is not really a problem as there is always a more efficient way to implemen
   </p>
 </subsection>
 
+<subsection name="&sect-num;.7 Using a security-manager" anchor="security-manager">
+  <p>When running JMeter in a distributed environment you have to be aware, that JMeter is basically a remote execution agent on both the server and client side. This could be used by a malicious party to gain further access, once it has compromised one of the JMeter clients or servers. To mitigate this Java has the concept of a security manager that gets asked by the JVM before potential dangerous actions are executed. Those actions could be resolving host names, creating or reading files or executing commands in the OS.</p>
+  <p>The security manager can be enabled by setting the Java system properties <code>java.security.manager</code> and <code>java.security.policy</code>. Be sure to have a look at the <a href="https://docs.oracle.com/javase/tutorial/security/tour2/index.html">Quick Tour of Controlling Applications</a>.</p>
+  <p>Using the new mechansism of <code>setenv.sh</code> (or <code>setenv.bat</code> under Windows) you can enable the security manager by adding the following code snippet to <code>${JMETER_HOME}/bin/setenv.sh</code>:</p>
+  <source>JVM_ARGS=" \
+   -Djava.security.manager \
+   -Djava.security.policy=${JMETER_HOME}/bin/java.policy \
+   -Djmeter.home=${JMETER_HOME} \
+"</source>
+  <p>The JVM will now add the policies defined in the file <code>${JMETER_HOME}/bin/java.policy</code> to the possibly globally defined policies. If you want your definition to be the only source for policies, use two equal signs instead of one when setting the property <code>java.security.policy</code>.</p>
+  <p>The policies will be dependent upon your use case and it might take a while to find the correct restricted and allowed actions. Java can help you find the needed policies with the property <code>java.security.debug</code>. Set it to <code>access</code> and it will log all permissions, that it gets asked to allow. Simply add the following line to your <code>setenv.sh</code>:</p>
+  <source>JVM_ARGS="${JVM_ARGS} -Djava.security.debug=access"</source>
+  <p>It might look a bit strange, that we define a Java system property <code>jmeter.home</code> with the value of <code>${JMETER_HOME}</code>. This variable will be used in the example <code>java.policy</code> to limit the file system access and allow it only to read JMeters configuration and libraries and restrict write access to specific locations, only.</p>
+  <p>The following policy definition file has been used for a simple remote test. You will probably have to tweak the policies, when you run more complex scenarios. The test plans are somewhere placed inside the users home directory under a directory called <code>jmeter-testplans</code>. The sample <code>java.policy</code> looks like:</p>
+  <source>
+grant codeBase "file:${jmeter.home}/bin/*" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/jorphan.jar" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/log4j-api-2.11.0.jar" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/log4j-slf4j-impl-2.11.0.jar" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/slf4j-api-1.7.25.jar" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/log4j-core-2.11.0.jar" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/ext/*" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/httpclient-4.5.6.jar" {
+  permission java.net.SocketPermission "*", "connect,resolve";
+};
+
+grant codeBase "file:${jmeter.home}/lib/darcula.jar" {
+  permission java.lang.RuntimePermission "modifyThreadGroup";
+};
+
+grant codeBase "file:${jmeter.home}/lib/xercesImpl-2.12.0.jar" {
+  permission java.io.FilePermission "${java.home}/lib/xerces.properties", "read";
+};
+
+grant codeBase "file:${jmeter.home}/lib/groovy-all-2.4.15.jar" {
+  permission groovy.security.GroovyCodeSourcePermission "/groovy/script";
+  permission java.lang.RuntimePermission "accessClassInPackage.sun.reflect";
+  permission java.lang.RuntimePermission "getProtectionDomain";
+};
+
+grant {
+  permission java.io.FilePermission "${jmeter.home}/backups", "read,write";
+  permission java.io.FilePermission "${jmeter.home}/backups/*", "read,write,delete";
+  permission java.io.FilePermission "${jmeter.home}/bin/upgrade.properties", "read";
+  permission java.io.FilePermission "${jmeter.home}/lib/ext/-", "read";
+  permission java.io.FilePermission "${jmeter.home}/lib/ext", "read";
+  permission java.io.FilePermission "${jmeter.home}/lib/-", "read";
+  permission java.io.FilePermission "${user.home}/jmeter-testplans/-", "read,write";
+  permission java.io.SerializablePermission "enableSubclassImplementation";
+  permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+  permission java.lang.RuntimePermission "accessClassInPackage.jdk.internal.dynalink.support";
+  permission java.lang.RuntimePermission "accessClassInPackage.sun.awt";
+  permission java.lang.RuntimePermission "accessClassInPackage.sun.misc";
+  permission java.lang.RuntimePermission "accessClassInPackage.sun.swing";
+  permission java.lang.RuntimePermission "accessDeclaredMembers";
+  permission java.lang.RuntimePermission "createClassLoader";
+  permission java.lang.RuntimePermission "createSecurityManager";
+  permission java.lang.RuntimePermission "getClassLoader";
+  permission java.lang.RuntimePermission "getenv.*";
+  permission java.lang.RuntimePermission "nashorn.createGlobal";
+  permission java.util.PropertyPermission "*", "read";
+};
+  </source>
+  <note>The usage of <code>java.security.AllPermission</code> is an easy way to make your test plans work, but it might be a dangerous shortcut on your path to security.</note>
+</subsection>
+
 </section>
 
 </body>
