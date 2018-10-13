@@ -99,7 +99,7 @@ If this is non-zero, it will be used as the base for local port numbers for the 
 </p>
 <p><b>Step 2: Add the server IP to your client's Properties File</b></p>
 <p>Edit the properties file <i>on the controlling JMeter machine</i>.  In <code>JMETER_HOME/bin/jmeter.properties</code>,
-find the property named, "<code>remote_hosts</code>", and
+find the property named "<code>remote_hosts</code>" and
 add the value of your running JMeter server's IP address.  Multiple such servers can be added, comma-delimited.</p>
 <p>Note that you can use the <code>-R</code> <a href="get-started.html#override">command line option</a>
 instead to specify the remote host(s) to use. This has the same effect as using <code>-r</code> and <code>-Jremote_hosts={serverlist}</code>.
@@ -180,7 +180,7 @@ To revert to the previous behaviour, define the JMeter property <code>server.rmi
 and follow the instructions below.
 </p>
 <p>JMeter uses Remote Method Invocation (RMI) as the remote communication mechanism.  Therefore, you need
-to run the RMI Registry application (which is named, "<code>rmiregistry</code>") that comes with the JDK and is located in the "<code>bin</code>"
+to run the RMI Registry application (which is named "<code>rmiregistry</code>") that comes with the JDK and is located in the "<code>bin</code>"
 directory.  Before running <code>rmiregistry</code>, make sure that the following jars are in your system classpath:
 <ul>
     <li><code>JMETER_HOME/lib/ext/ApacheJMeter_core.jar</code></li>
