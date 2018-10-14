@@ -465,7 +465,13 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 }
                 renderer.setBackgroundColor(getBackground());
                 map.put(renderer.getClass().getName(), renderer);
-            } catch (Exception | NoClassDefFoundError e) { // NOSONAR See bug 60583
+            } catch (NoClassDefFoundError e) { // NOSONAR See bug 60583
+                if (e.getMessage() != null && e.getMessage().contains("javafx")) {
+                    log.info("Add JavaFX to your Java installation if you want to use renderer: {}", clazz);
+                } else {
+                    log.warn("Error loading result renderer: {}", clazz, e);
+                }
+            } catch (Exception e) {
                 log.warn("Error loading result renderer: {}", clazz, e);
             }
         }
