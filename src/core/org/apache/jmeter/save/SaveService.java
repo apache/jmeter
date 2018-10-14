@@ -533,11 +533,8 @@ public class SaveService {
      * @return string with details of error
      */
     public static String CEtoString(ConversionException ce){
-        String msg =
-            "XStream ConversionException at line: " + ce.get("line number")
-            + "\n" + ce.get("message")
-            + "\nPerhaps a missing jar? See log file.";
-        return msg;
+        return "XStream ConversionException at line: " + ce.get("line number") + "\n" + ce.get("message")
+                + "\nPerhaps a missing jar? See log file.";
     }
 
     public static String getPropertiesVersion() {
