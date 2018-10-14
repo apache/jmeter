@@ -341,7 +341,7 @@ public class SaveService {
      * @throws IOException when writing data to output fails
      */
     // Used by ResultCollector.sampleOccurred(SampleEvent event)
-    public synchronized static void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
+    public static synchronized void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
         DataHolder dh = JTLSAVER.newDataHolder();
         dh.put(SAMPLE_EVENT_OBJECT, evt);
         // This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
