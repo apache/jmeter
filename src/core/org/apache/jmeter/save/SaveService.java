@@ -243,26 +243,30 @@ public class SaveService {
                         log.info("Using SaveService properties file encoding {}", fileEncoding);
                     } else {
                         key = key.substring(1);// Remove the leading "_"
-                        try {
-                            final String trimmedValue = val.trim();
-                            if (trimmedValue.equals("collection") // $NON-NLS-1$
-                             || trimmedValue.equals("mapping")) { // $NON-NLS-1$
-                                registerConverter(key, JMXSAVER, true);
-                                registerConverter(key, JTLSAVER, true);
-                            } else {
-                                registerConverter(key, JMXSAVER, false);
-                                registerConverter(key, JTLSAVER, false);
-                            }
-                        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | IllegalArgumentException|
-                                SecurityException | InvocationTargetException | NoSuchMethodException e1) {
-                            log.warn("Can't register a converter: {}", key, e1);
-                        }
+                        registerConverter(key, val);
                     }
                 }
             }
         } catch (IOException e) {
             log.error("Bad saveservice properties file", e);
             throw new JMeterError("JMeter requires the saveservice properties file to continue");
+        }
+    }
+
+    private static void registerConverter(String key, String val) {
+        try {
+            final String trimmedValue = val.trim();
+            if (trimmedValue.equals("collection") // $NON-NLS-1$
+             || trimmedValue.equals("mapping")) { // $NON-NLS-1$
+                registerConverter(key, JMXSAVER, true);
+                registerConverter(key, JTLSAVER, true);
+            } else {
+                registerConverter(key, JMXSAVER, false);
+                registerConverter(key, JTLSAVER, false);
+            }
+        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | IllegalArgumentException|
+                SecurityException | InvocationTargetException | NoSuchMethodException e1) {
+            log.warn("Can't register a converter: {}", key, e1);
         }
     }
 
