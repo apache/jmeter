@@ -256,14 +256,9 @@ public class SaveService {
     private static void registerConverter(String key, String val) {
         try {
             final String trimmedValue = val.trim();
-            if (trimmedValue.equals("collection") // $NON-NLS-1$
-             || trimmedValue.equals("mapping")) { // $NON-NLS-1$
-                registerConverter(key, JMXSAVER, true);
-                registerConverter(key, JTLSAVER, true);
-            } else {
-                registerConverter(key, JMXSAVER, false);
-                registerConverter(key, JTLSAVER, false);
-            }
+            boolean useMapper = trimmedValue.equals("collection") || trimmedValue.equals("mapping"); // $NON-NLS-1$ $NON-NLS-2$
+            registerConverter(key, JMXSAVER, useMapper);
+            registerConverter(key, JTLSAVER, useMapper);
         } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | IllegalArgumentException|
                 SecurityException | InvocationTargetException | NoSuchMethodException e1) {
             log.warn("Can't register a converter: {}", key, e1);
