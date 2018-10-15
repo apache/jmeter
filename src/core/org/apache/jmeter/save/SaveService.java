@@ -283,9 +283,7 @@ public class SaveService {
             InvocationTargetException, NoSuchMethodException,
             ClassNotFoundException {
         if (useMapper){
-            jmxsaver.registerConverter((Converter) Class.forName(key).getConstructor(
-                    new Class[] { Mapper.class }).newInstance(
-                            new Object[] { jmxsaver.getMapper() }));
+            jmxsaver.registerConverter((Converter) Class.forName(key).getConstructor(Mapper.class).newInstance(jmxsaver.getMapper()));
         } else {
             jmxsaver.registerConverter((Converter) Class.forName(key).newInstance());
         }
