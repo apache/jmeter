@@ -256,7 +256,7 @@ public class SaveService {
     private static void registerConverter(String key, String val) {
         try {
             final String trimmedValue = val.trim();
-            boolean useMapper = trimmedValue.equals("collection") || trimmedValue.equals("mapping"); // $NON-NLS-1$ $NON-NLS-2$
+            boolean useMapper = "collection".equals(trimmedValue) || "mapping".equals(trimmedValue); // $NON-NLS-1$ $NON-NLS-2$
             registerConverter(key, JMXSAVER, useMapper);
             registerConverter(key, JTLSAVER, useMapper);
         } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | IllegalArgumentException|
