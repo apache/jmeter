@@ -52,7 +52,7 @@ public class KeyToolUtils {
     /** Name of property that can be used to override the default keytool location */
     private static final String KEYTOOL_DIRECTORY = "keytool.directory"; // $NON-NLS-1$
     
-    private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=DO NOT INSTALL THIS CERTIFICATE (JMeter Intermediate CA)"; // $NON-NLS-1$
+    private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=JMeter Intermediate CA for recording (INSTALL ONLY IF IT S YOURS)"; // $NON-NLS-1$
 
     public static final String ROOT_CACERT_CRT_PFX = "ApacheJMeterTemporaryRootCA"; // $NON-NLS-1$ (do not change)
     private static final String ROOT_CACERT_CRT = ROOT_CACERT_CRT_PFX + ".crt"; // $NON-NLS-1$ (Firefox and Windows)
@@ -71,7 +71,8 @@ public class KeyToolUtils {
 
     static {
         StringBuilder sb = new StringBuilder();
-        sb.append("CN=_ DO NOT INSTALL unless this is your certificate (JMeter root CA)"); // $NON-NLS-1$
+        
+        sb.append("CN=_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)"); // $NON-NLS-1$
         String userName = System.getProperty("user.name"); // $NON-NLS-1$
         userName = userName.replace('\\','/'); // Backslash is special (Bugzilla 56178)
         addElement(sb, "OU=Username: ", userName); // $NON-NLS-1$
@@ -281,18 +282,19 @@ public class KeyToolUtils {
     private static void generateSignedCert(File keystore, String password,
             int validity, String alias, String subject) throws IOException {
         String dname = "cn=" + subject + ", o=JMeter Proxy (TEMPORARY TRUST ONLY)";
-        KeyToolUtils.genkeypair(keystore, alias, password, validity, dname, null);
+        String ext = "san=dns:" + subject;
+        KeyToolUtils.genkeypair(keystore, alias, password, validity, dname, ext);
         //rem generate cert for DOMAIN using CA and import it
 
         // get the certificate request
         ByteArrayOutputStream certReqOut = new ByteArrayOutputStream();
-        KeyToolUtils.keytool("-certreq", keystore, password, alias, null, certReqOut);
+        KeyToolUtils.keytool("-certreq", keystore, password, alias, null, certReqOut, "-ext", ext);
 
         // create the certificate
         //rem ku:c=dig,keyE means KeyUsage:critical=digitalSignature,keyEncipherment
         InputStream certReqIn = new ByteArrayInputStream(certReqOut.toByteArray());
         ByteArrayOutputStream certOut = new ByteArrayOutputStream();
-        KeyToolUtils.keytool("-gencert", keystore, password, INTERMEDIATE_CA_ALIAS, certReqIn, certOut, "-ext", "ku:c=dig,keyE");
+        KeyToolUtils.keytool("-gencert", keystore, password, INTERMEDIATE_CA_ALIAS, certReqIn, certOut, "-ext", "ku:c=dig,keyE", "-ext ", ext);
 
         // import the certificate
         InputStream certIn = new ByteArrayInputStream(certOut.toByteArray());
@@ -403,7 +405,7 @@ public class KeyToolUtils {
     }
 
     /**
-     * @return flag whether {@link KeyToolUtils#KEYTOOL_PATH KEYTOOL_PATH} is
+     * @return flag whether KeyToolUtils#KEYTOOL_PATH is
      *         configured (is not <code>null</code>)
      */
     public static boolean haveKeytool() {

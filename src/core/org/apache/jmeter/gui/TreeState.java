@@ -38,6 +38,7 @@ public interface TreeState {
      * Save tree expanded and selected state
      *
      * @param guiPackage {@link GuiPackage} to be used
+     * @return {@link TreeState}
      */
     public static TreeState from(GuiPackage guiPackage) {
         if (guiPackage == null) {
@@ -86,9 +87,7 @@ public interface TreeState {
             final JTree tree = mainframe.getTree();
 
             if (!savedExpanded.isEmpty()) {
-                for (int rowN : savedExpanded) {
-                    tree.expandRow(rowN);
-                }
+                savedExpanded.forEach(tree::expandRow);
             } else {
                 tree.expandRow(0);
             }

@@ -142,8 +142,6 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             context.setPreviousResult(response);
             mod.process();
             Arguments args = sampler.getArguments();
-            // System.out.println(((Argument) args.getArguments().get(0).getObjectValue()).getValue());
-            // System.out.println(sampler.toString());
             assertEquals("bonjour+monsieur", ((Argument) args.getArguments().get(0).getObjectValue())
                     .getValue());
             assertEquals("http://server.com/index.html?" + "session_id=bonjour%2Bmonsieur", sampler.toString());

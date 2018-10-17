@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3-SNAPSHOT.20170902">
+<jmeterTestPlan version="1.2" properties="4.0" jmeter="4.1-SNAPSHOT.20180405">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -28,7 +28,7 @@
       </SetupThreadGroup>
       <hashTree>
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSS_startMirror" enabled="true">
-          <stringProp name="cacheKey">877b8f57-5272-402c-bc11-cddbd4e69d71</stringProp>
+          <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="script">import org.apache.jmeter.protocol.http.control.HttpMirrorServer;
@@ -85,6 +85,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
@@ -95,6 +96,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -134,6 +136,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
@@ -147,6 +150,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -185,6 +189,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
@@ -198,6 +203,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -236,12 +242,13 @@ mirrorServer.start();</stringProp>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_ContentLength" enabled="true">
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="224767426">Content-Length: 13</stringProp>
-                <stringProp name="1012959042">Content-Type: text/plain; charset=ISO-8859-1</stringProp>
+                <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
                 <stringProp name="-644619860">Content-Type:</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">16</intProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
@@ -255,6 +262,7 @@ mirrorServer.start();</stringProp>
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">16</intProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
@@ -338,6 +346,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
@@ -348,6 +357,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
@@ -357,6 +367,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -386,6 +397,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
@@ -396,6 +408,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoGzip_IN_REQUEST" enabled="true">
@@ -405,6 +418,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
@@ -414,6 +428,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -490,6 +505,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
@@ -500,6 +516,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -560,6 +577,7 @@ mirrorServer.start();</stringProp>
               <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">16</intProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
@@ -570,6 +588,7 @@ mirrorServer.start();</stringProp>
               <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">16</intProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
@@ -624,6 +643,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
             <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
@@ -634,6 +654,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -680,6 +701,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
             <boolProp name="Assertion.assume_success">true</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -754,7 +776,6 @@ mirrorServer.start();</stringProp>
               <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
-              <stringProp name="-1704395926">Content-Type: application/x-www-form-urlencoded</stringProp>
               <stringProp name="224767425">Content-Length: 12</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
               <stringProp name="1052466409">User-Agent: </stringProp>
@@ -762,6 +783,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -828,6 +850,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -901,11 +924,12 @@ mirrorServer.start();</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
             <stringProp name="TestPlan.comments">Content-Type: multipart/form-data; boundary=</stringProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223-Assertion-CheckCorrectEncodingForParam" enabled="true">
             <stringProp name="TestPlan.comments">Workaround as Mirror Server corrupts encoding</stringProp>
-            <stringProp name="cacheKey">9e8a05ef-13b4-408f-a030-2702cfff8a88</stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script">String textToCheck =  &apos;Content-Disposition: form-data; name=&quot;?_param&quot;&apos;;
@@ -953,12 +977,20 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             </collectionProp>
           </HeaderManager>
           <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="REE_contentType" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">request_headers</stringProp>
+            <stringProp name="RegexExtractor.refname">contentType</stringProp>
+            <stringProp name="RegexExtractor.regex">Content-Type: (.*)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default">nv_contentType</stringProp>
+            <stringProp name="RegexExtractor.match_number">1</stringProp>
+          </RegexExtractor>
+          <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
-              <stringProp name="-1704395926">Content-Type: application/x-www-form-urlencoded</stringProp>
               <stringProp name="224767427">Content-Length: 14</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
               <stringProp name="1052466409">User-Agent: </stringProp>
@@ -967,6 +999,20 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1049865380">nv_contentType</stringProp>
+              <stringProp name="817335912">text/plain</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">40</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.scope">variable</stringProp>
+            <stringProp name="Scope.variable">contentType</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -1033,6 +1079,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -1083,6 +1130,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
@@ -1094,6 +1142,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
@@ -1106,6 +1155,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -1161,6 +1211,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
@@ -1172,6 +1223,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
@@ -1184,6 +1236,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -1238,6 +1291,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
@@ -1250,6 +1304,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
@@ -1262,6 +1317,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -1314,6 +1370,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">20</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
@@ -1325,6 +1382,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
@@ -1337,6 +1395,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -1393,6 +1452,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">20</intProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
@@ -1404,6 +1464,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">16</intProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
@@ -1414,6 +1475,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
               <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">16</intProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
@@ -1471,6 +1533,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">20</intProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
@@ -1478,21 +1541,23 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
                 <stringProp name="1737626343">PUT /test?name0=value0 HTTP/1.1</stringProp>
                 <stringProp name="2117109222">Host: localhost:8081</stringProp>
                 <stringProp name="-1351522793">User-Agent:</stringProp>
+                <stringProp name="-2028138089">name1=value1</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">16</intProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="894172713">Connection: keep-alive</stringProp>
                 <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
-                <stringProp name="561439888">Content-Length: 0</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">16</intProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
@@ -1517,7 +1582,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="filename"></stringProp>
-          <stringProp name="cacheKey">6e41dc10-a2fc-4d6b-a7a2-e76a1ceb22c5</stringProp>
+          <stringProp name="cacheKey">true</stringProp>
           <stringProp name="script">import org.apache.jmeter.protocol.http.control.HttpMirrorServer;
 
 HttpMirrorServer mirrorServer = (HttpMirrorServer) props.get(&quot;MIRROR_SERVER&quot;);
@@ -1588,9 +1653,5 @@ mirrorServer.stopServer();</stringProp>
       </ResultCollector>
       <hashTree/>
     </hashTree>
-    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
-      <boolProp name="WorkBench.save">true</boolProp>
-    </WorkBench>
-    <hashTree/>
   </hashTree>
 </jmeterTestPlan>

@@ -18,10 +18,10 @@
 
 package org.apache.jmeter.gui;
 
-import org.apache.jorphan.collections.HashTree;
-
 import java.io.Serializable;
+
 import org.apache.jmeter.engine.TreeCloner;
+import org.apache.jorphan.collections.HashTree;
 
 /**
  * Undo history item
@@ -29,9 +29,6 @@ import org.apache.jmeter.engine.TreeCloner;
  */
 public class UndoHistoryItem implements Serializable {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -8683007040160205040L;
     private final HashTree tree;
     // TODO: find a way to show this comment in menu item and toolbar tooltip
@@ -49,8 +46,10 @@ public class UndoHistoryItem implements Serializable {
     }
 
     /**
-     * @param copy HashTree
-     * @param acomment String
+     * @param copy {@link HashTree}
+     * @param acomment String 
+     * @param treeState {@link TreeState}
+     * @param dirty boolean
      */
     public UndoHistoryItem(HashTree copy, String acomment, TreeState treeState, boolean dirty) {
         tree = copy;

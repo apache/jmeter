@@ -108,6 +108,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><th>Type of function</th><th>Name</th><th>Comment</th><th>Since</th></tr>
         <!-- N.B. the leading space is needed to ensure the content is processed -->
         <tr><td>Information</td><td> <a href="#__threadNum">threadNum</a></td><td>get thread number</td><td>1.X</td></tr>
+        <tr><td>Information</td><td> <a href="#__threadGroupName">threadGroupName</a></td><td>get thread group name</td><td>4.1</td></tr>
         <tr><td>Information</td><td> <a href="#__samplerName">samplerName</a></td><td>get the sampler name (label)</td><td>2.5</td></tr>
         <tr><td>Information</td><td> <a href="#__machineIP">machineIP</a></td><td>get the local machine IP address</td><td>2.6</td></tr>
         <tr><td>Information</td><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td><td>1.X</td></tr>
@@ -120,6 +121,8 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Input</td><td> <a href="#__CSVRead">CSVRead</a></td><td>read from CSV delimited file</td><td>1.9</td></tr>
         <tr><td>Input</td><td> <a href="#__XPath">XPath</a></td><td>Use an XPath expression to read from a file</td><td>2.0.3</td></tr>
         <tr><td>Calculation</td><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td><td>1.X</td></tr>
+        <tr><td>Formatting</td><td> <a href="#__dateTimeConvert">dateTimeConvert</a></td><td>Convert a date or time from source to target format</td><td>4.0</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__digest">digest</a></td><td>Generate a digest (SHA-1, SHA-256, MD5...)</td><td>4.0</td></tr>
         <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td><td>1.8.1</td></tr>
         <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td><td>2.3.2</td></tr>
         <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td><td>1.9</td></tr>
@@ -132,20 +135,23 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Nashorn)</td><td>1.9</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl2">jexl2</a></td><td>evaluate a Commons Jexl2 expression</td><td>jexl2(2.1.1)</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl3">jexl3</a></td><td>evaluate a Commons Jexl3 expression</td><td>jexl3 (3.0)</td></tr>
+        <tr><td>Properties</td><td> <a href="#__isPropDefined">isPropDefined</a> </td><td>Test if a property exists</td><td>4.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td><td>2.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__P">P</a></td><td>read a property (shorthand method)</td><td>2.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__setProperty">setProperty</a></td><td>set a JMeter property</td><td>2.1</td></tr>
         <tr><td>Variables</td><td> <a href="#__split">split</a></td><td>Split a string into variables</td><td>2.0.2</td></tr>
-        <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td><td>2.3RC3</td></tr>
         <tr><td>Variables</td><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td><td>2.3.1</td></tr>
         <tr><td>Variables</td><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td><td>2.3.1</td></tr>
-        <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td></tr>
-        <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by ORO regular expression</td><td>2.9</td></tr>
+        <tr><td>Properties</td><td> <a href="#__isVarDefined">isVarDefined</a> </td><td>Test if a variable exists</td><td>4.0</td></tr>
+        <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td><td>2.3RC3</td></tr>
         <tr><td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__changeCase">changeCase</a></td><td>Change case following different modes</td><td>4.0</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by ORO regular expression</td><td>2.9</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td></tr>
+        <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td></tr>
         <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td><td>2.3.3</td></tr>
-        <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
-        <tr><td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td></tr>
         <tr><td>String</td><td> <a href="#__urldecode">urldecode</a></td><td>Decode a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__urlencode">urlencode</a></td><td>Encode a string to a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__TestPlanName">TestPlanName</a></td><td>Return name of current test plan</td><td>2.6</td></tr>
@@ -368,7 +374,7 @@ If you want to have a count that increments for each sample, use the function in
 </properties>
 </component>
 
-<component index="&sect-num;.5.3" name="__threadNum">
+<component index="&sect-num;.5.3a" name="__threadNum">
 <description><p>The thread number function simply returns the number of the thread currently
 being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
@@ -376,6 +382,21 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 <p>There are no arguments for this function.</p>
 <p>Usage Example:
 <source>${__threadNum}</source> returns a number between 1 and the max number of running threads configured in the containing Thread Group
+</p>
+</description>
+<note>
+This function does not work in any Configuration elements (e.g. User Defined Variables) as these are run from a separate thread.
+Nor does it make sense to use it on the Test Plan.
+</note>
+</component>
+
+<component index="&sect-num;.5.3b" name="__threadGroupName">
+<description><p>The thread group name function simply returns the name of the thread group
+being executed.</p>
+
+<p>There are no arguments for this function.</p>
+<p>Usage Example:
+<source>${__threadGroupName}</source> 
 </p>
 </description>
 <note>
@@ -681,10 +702,12 @@ string like <code>2z22ak</code> or <code>z11kce</code>, &hellip;<br/>
 <description><p>The RandomFromMultipleVars function returns a random value based on the variable values provided by <code>Source Variables</code>.</p>
 The variables can be simple or multi-valued as they can be generated by the following extractors:
 <ul>
+    <li><a href="component_reference.html#Boundary_Extractor">Boundary Extractor</a></li>
     <li><a href="component_reference.html#Regular_Expression_Extractor">Regular Expression Extractor</a></li>
-    <li><a href="component_reference.html#CSS/JQuery_Extractor">CSS/JQuery Extractor</a></li>
+    <li><a href="component_reference.html#CSS_Selector_Extractor">CSS Selector Extractor</a></li>
     <li><a href="component_reference.html#JSON_Extractor">JSON Extractor</a></li>
-    <li><a href="component_reference.html#XPath_Assertion">XPath Assertion</a></li>
+    <li><a href="component_reference.html#XPath_Extractor">XPath Extractor</a></li>
+    <li><a href="component_reference.html#XPath2_Extractor">XPath2 Extractor</a></li>
 </ul>
 
 Multi-value vars are the ones that are extracted when you set <code>-1</code> for <code>Match Numbers</code>. 
@@ -712,7 +735,7 @@ This leads to creation of match number variable called <code>varName_matchNr</co
 <properties>
 </properties>
 <p>Examples:
-<source>${UUID()}</source> will return UUIDs with this format : <code>c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd</code> <br/>
+<source>${__UUID()}</source> will return UUIDs with this format : <code>c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd</code> <br/>
 </p>
 </component>
 
@@ -885,6 +908,7 @@ For example:
     <p>
     The BeanShell function evaluates the script passed to it, and returns the result.
 </p>
+<note>For performance it is better to use <a href="#__groovy">__groovy</a> function</note>
 <p>
 <b>For full details on using BeanShell, please see the BeanShell web-site at <a href="http://www.beanshell.org/">http://www.beanshell.org/</a>
 </b>
@@ -971,10 +995,10 @@ When using this function please use the variables defined above rather than usin
 For instance <strong>don't</strong> do the following:
 </p>
 
-<p><code>${__groovy("${myVar}".substring(0\,2))}</code></p>
+<p><source>${__groovy("${myVar}".substring(0\,2))}</source></p>
 
 <p>Imagine that the variable myVar changes with each transaction, the Groovy above cannot be cached as the script changes each time.<br /><br />
-Instead do the following, which can be cached: <br /><br /><code>${__groovy(vars.get("myVar").substring(0\,2))}</code>
+Instead do the following, which can be cached: <source>${__groovy(vars.get("myVar").substring(0\,2))}</source>
 </p>
 </description>
 
@@ -990,8 +1014,8 @@ Instead do the following, which can be cached: <br /><br /><code>${__groovy(vars
 <p>
 Example:
 <dl>
-<dt><code>${__groovy(123*456)}</code></dt><dd>returns <code>56088</code></dd>
-<dt><code>${__groovy(vars.get("myVar").substring(0\,2))}</code></dt><dd>If var's value is <code>JMeter</code>, it will return <code>JM</code> as it runs <code>String.substring(0,2)</code>. Note
+<dt><source>${__groovy(123*456)}</source></dt><dd>returns <code>56088</code></dd>
+<dt><source>${__groovy(vars.get("myVar").substring(0\,2))}</source></dt><dd>If var's value is <code>JMeter</code>, it will return <code>JM</code> as it runs <code>String.substring(0,2)</code>. Note
 that <code>,</code> has been escaped to <code>\,</code> </dd>
 </dl>
 </p>
@@ -1017,7 +1041,7 @@ Remember to include any necessary quotes for text strings and JMeter variables t
     <br></br>
     Define <code>VAR</code>="<code>a||c|</code>" in the test plan.
     <br></br>
-    <code>${__split(${VAR},VAR,|)}</code>
+    <source>${__split(${VAR},VAR,|)}</source>
     <br></br>
     This will return the contents of <code>VAR</code>, i.e. "<code>a||c|</code>" and set the following variables:
     <br></br>
@@ -1091,7 +1115,7 @@ If omitted, <code>,</code> is used. Note that <code>,</code> would need to be sp
 
 <properties>
         <property name="Format" required="No">
-        The format to be passed to SimpleDateFormat.
+        The format to be passed to <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a>.
         The function supports various shorthand aliases, see below.
         If omitted, the function returns the current time in milliseconds since the epoch.
         </property>
@@ -1114,6 +1138,9 @@ The following shorthand aliases are provided:
 <p>The defaults can be changed by setting the appropriate JMeter property, e.g.
 <code>time.YMD=yyMMdd</code>
 </p>
+<p><source>${__time(dd/MM/yyyy,)}</source>  will return <code>21/01/2018</code> if ran on 21 january 2018</p>
+<p><source>${__time(YMD,)}</source>  will return <code>20180121</code> if ran on 21 january 2018</p>
+<p><source>${__time()}</source>  will return time in millis <code>1516540541624</code></p>
 </component>
 
 <component index="&sect-num;.5.18" name="__jexl2">
@@ -1235,6 +1262,9 @@ i.intValue(); // or use i.longValue()
         <property name="Variable name" required="Yes">
         The variable to be evaluated. 
         </property>
+        <property name="Default value" required="No">
+        The default value in case no variable found, if it's empty and no variable found function returns the variable name 
+        </property>
 </properties>
 </component>
 
@@ -1340,12 +1370,12 @@ to a string containing the actual Unicode characters corresponding to the escape
 Supports HTML 4.0 entities.
 </p>
 <p>
-For example, the string <code>"&#38;lt;Fran&#38;ccedil;ais&#38;gt;"</code>
-will become <code>"&lt;Fran&ccedil;ais&gt;"</code>.
+For example, the string <source>${__unescapeHtml(&#38;lt;Fran&#38;ccedil;ais&#38;gt;)}</source>
+will return <code>&lt;Fran&ccedil;ais&gt;</code>.
 </p>
 <p>
 If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
-e.g. <code>"&amp;gt;&amp;zzzz;x"</code> will become <code>"&gt;&amp;zzzz;x"</code>.
+e.g. <code>${__unescapeHtml(&amp;gt;&amp;zzzz;x)}</code> will return <code>&gt;&amp;zzzz;x</code>.
 </p>
     <p>
     Uses <code>StringEscapeUtils#unescapeHtml(String)</code> from Commons Lang.
@@ -1366,8 +1396,8 @@ Function which escapes the characters in a String using HTML entities.
 Supports HTML 4.0 entities.
 </p>
 <p>
-For example,<code>&quot;bread&quot; &amp; &quot;butter&quot;</code>
-becomes:
+For example,<source>${__escapeHtml(&quot;bread&quot; &amp; &quot;butter&quot;)}</source>
+return:
 <code>&#38;quot;bread&#38;quot; &#38;amp; &#38;quot;butter&#38;quot;</code>.
 </p>
     <p>
@@ -1389,7 +1419,7 @@ Function to decode a <code>application/x-www-form-urlencoded</code> string.
 Note: use UTF-8 as the encoding scheme.
 </p>
 <p>
-For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code> would get converted to
+For example, the string <source>${__urldecode(Word+%22school%22+is+%22%C3%A9cole%22+in+french)}</source> returns
  <code>Word &quot;school&quot; is &quot;&eacute;cole&quot; in french</code>.
 </p>
     <p>
@@ -1410,7 +1440,7 @@ For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</c
 Function to encode a string to a <code>application/x-www-form-urlencoded</code> string.
 </p>
 <p>
-For example, the string <code>Word &quot;school&quot; is &quot;&eacute;cole&quot; in french</code> would get converted to
+For example, the string <source>${__urlencode(Word "school" is "école" in french)}</source> returns
  <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code>.
 </p>
     <p>
@@ -1463,6 +1493,7 @@ A reference name - <code>refName</code> - for reusing the value created by this 
     and Http Cookie Manager, and in this case the functions are resolved in the context of the Http Sampler.
     Pre-Processors, Post-Processors and Assertions always have an associated Sampler.
     </p>
+    <p>Example: <source>${__samplerName()}</source></p>
 </description>
 
 <properties>
@@ -1491,8 +1522,8 @@ A reference name - <code>refName</code> - for reusing the value created by this 
 Function which escapes the ORO Regexp meta characters, it is the equivalent of <code>\Q</code> <code>\E</code> in Java Regexp Engine.
 </p>
 <p>
-For example,<code>[^&quot;].+?</code>
-becomes:
+For example,<source>${__escapeOroRegexpChars([^&quot;].+?,)}</source>
+returns:
 <code>\[\^\&quot;\]\.\+\?</code>.
 </p>
     <p>
@@ -1516,8 +1547,8 @@ A reference name - <code>refName</code> - for reusing the value created by this 
 Function which escapes the characters in a String using XML 1.0 entities.
 </p>
 <p>
-For example,<code>&quot;bread&quot; &amp; &apos;butter&apos;</code>
-becomes:
+For example,<source>${__escapeXml("bread" &amp; 'butter')}</source>
+returns:
 <code>&#38;quot;bread&#38;quot; &#38;amp; &#38;apos;butter&#38;apos;</code>.
 </p>
     <p>
@@ -1540,7 +1571,7 @@ becomes:
 <properties>
         <property name="Format" required="No">
         The format to be passed to DateTimeFormatter.
-        See https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+        See <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
         If omitted, the function uses milliseconds since epoch format.
         </property>
         <property name="Date to shift" required="No">
@@ -1564,6 +1595,116 @@ becomes:
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
+<p>Examples:
+<source>${__timeShift(dd/MM/yyyy,21/01/2018,P2D,,)}</source> returns <code>23/01/2018</code>
+<source>${__timeShift(dd MMMM yyyy,21 février 2018,P2D,fr_FR,)}</source> returns <code>23 février 2018</code>
+</p>
+</component>
+<component index="&sect-num;.5.34" name="__digest">
+    <description>
+        <p>The digest function returns an encrypted value in the
+            specific hash algorithm with the optional salt, upper case
+            and variable name.</p>
+    </description>
+    <properties>
+        <property name="Algorithm" required="Yes">
+            The algorithm to be used to encrypt
+            For possible algorithms See MessageDigest in
+            <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html">StandardNames</a>
+            <ul>
+                <li>MD2</li>
+                <li>MD5</li>
+                <li>SHA-1</li>
+                <li>SHA-224</li>
+                <li>SHA-256</li>
+                <li>SHA-384</li>
+                <li>SHA-512</li>
+            </ul>
+            <note>Spaces are taken into account for <code>Salt to add</code> and <code>String to encode</code></note>
+        </property>
+        <property name="String to encode" required="Yes"> The String
+            that will be encrypted </property>
+        <property name="Salt to add" required="No"> Salt to be added
+            to string (after it)</property>
+        <property name="Upper Case value" required="No"> Result will
+            be in lower case by default. Choose true to upper case
+            results. </property>
+        <property name="Name of variable" required="No">The name of
+            the variable to set.</property>
+    </properties>
+    <p>Examples:
+        <source>${__digest(MD5,Errare humanum est,,,)}</source> returns <code>c49f00b92667a35c63708933384dad52</code><br/>
+        <source>${__digest(SHA-256,Felix qui potuit rerum cognoscere causas,mysalt,,)}</source> returns <code>a3bc6900fe2b2fc5fa8a601a4a84e27a079bf2c581d485009bc5c00516729ac7</code><br/>
+        
+    </p>
+</component>
+<component index="&sect-num;.5.35" name="__dateTimeConvert">
+    <description>
+        <p>The <code>__dateTimeConvert</code> function converts a date that is in source format
+        to a target format storing the result optionally in the variable name.</p>
+    </description>
+    <properties>
+        <property name="Date String" required="Yes">
+            The date string to convert from Source Date Format to Target Date Format. A date as a epoch time could be use here if Source Date Format is empty.
+        </property>
+        <property name="Source Date Format" required="No">The original date format. If empty, the Date String field must be a epoch time.</property>
+        <property name="Target Date Format" required="Yes">The new date format</property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
+    </properties>
+    <p>Example:
+    <source>${__dateTimeConvert(01212018,MMddyyyy,dd/MM/yyyy,)}</source> returns <code>21/01/2018</code>
+    </p>
+    <p>
+    With epoch time value: 1526574881000, <source>${__dateTimeConvert(1526574881000,,dd/MM/yyyy HH:mm,)}</source> returns <code>17/05/2018 16:34</code> in UTC time(-Duser.timezone=GMT)
+    </p>
+</component>
+<component index="&sect-num;.5.36" name="__isPropDefined">
+    <description>
+        <p>The <code>__isPropDefined</code> function returns true if property exists or false if not.</p>
+    </description>
+    <properties>
+        <property name="Property Name" required="Yes">
+            The Property Name to be used to check if defined
+        </property>
+    </properties>
+    <p>Example: <source>${__isPropDefined(START.HMS)}</source> will return <code>true</code></p>
+</component>
+<component index="&sect-num;.5.37" name="__isVarDefined">
+    <description>
+        <p>The <code>__isVarDefined</code> function returns true if variable exists or false if not.</p>
+    </description>
+    <properties>
+        <property name="Variable Name" required="Yes">
+            The Variable Name to be used to check if defined
+        </property>
+    </properties>
+    <p>Example: <source>${__isVarDefined(JMeterThread.last_sample_ok)}</source> will return <code>true</code></p>
+</component>
+<component index="&sect-num;.5.38" name="__changeCase">
+    <description>
+        <p>The change case function returns a string value which 
+        case has been changed following a specific mode.
+        Result can optionally be saved in a JMeter variable.</p>
+    </description>
+    <properties>
+    <property name="String to change case" required="Yes">The String
+            which case will be changed</property>
+        <property name="change case mode" required="Yes">
+            The mode to be used to change case, for example for <code>ab-CD eF</code>:
+            <ul>
+                <li><code>UPPER</code> result as AB-CD EF</li>
+                <li><code>LOWER</code> result as ab-cd ed</li>
+                <li><code>CAPITALIZE</code> result as Ab-CD eF</li>
+            </ul>
+            <note><code>change case mode</code> is case insensitive</note>
+        </property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
+    </properties>
+    <p>Examples:
+    <source>${__changeCase(Avaro omnia desunt\, inopi pauca\, sapienti nihil,UPPER,)}</source> will return <code>AVARO OMNIA DESUNT, INOPI PAUCA, SAPIENTI NIHIL</code>
+    <source>${__changeCase(LABOR OMNIA VINCIT IMPROBUS,LOWER,)}</source> will return <code>labor omnia vincit improbus</code>
+    <source>${__changeCase(omnibus viis romam pervenitur,CAPITALIZE,)}</source> will return <code>Omnibus viis romam pervenitur</code>
+    </p>
 </component>
 
 </subsection>

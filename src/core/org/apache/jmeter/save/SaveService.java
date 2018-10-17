@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
@@ -122,11 +123,11 @@ public class SaveService {
     private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"<ph>\"?>"; // $NON-NLS-1$
 
     // Default file name
-    private static final String SAVESERVICE_PROPERTIES_FILE = "/bin/saveservice.properties"; // $NON-NLS-1$
+    private static final String SAVESERVICE_PROPERTIES_FILE = "saveservice.properties"; // $NON-NLS-1$
 
     // Property name used to define file name
     private static final String SAVESERVICE_PROPERTIES = "saveservice_properties"; // $NON-NLS-1$
-
+    
     // Define file format versions
     private static final String VERSION_2_2 = "2.2";  // $NON-NLS-1$
 
@@ -149,13 +150,13 @@ public class SaveService {
     
     // Must match _version property value in saveservice.properties
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String PROPVERSION = "3.2";// Expected version $NON-NLS-1$
+    static final String PROPVERSION = "5.0";// Expected version $NON-NLS-1$
 
     // Internal information only
     private static String fileVersion = ""; // computed from saveservice.properties file// $NON-NLS-1$
     // Must match the sha1 checksum of the file saveservice.properties (without newline character),
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String FILEVERSION = "4336c68d43562b80a1d1b5feba226aa36f52597b"; // Expected value $NON-NLS-1$
+    static final String FILEVERSION = "e922e4aa06ed9f253d68c13f445d5bfedaccd876"; // Expected value $NON-NLS-1$
 
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
@@ -181,11 +182,21 @@ public class SaveService {
         }
     }
 
+    private static File getSaveServiceFile() {
+        String saveServiceProps = JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,SAVESERVICE_PROPERTIES_FILE); //$NON-NLS-1$
+        if (saveServiceProps.length() > 0){ //$NON-NLS-1$
+            return JMeterUtils.findFile(saveServiceProps);
+        }
+        throw new IllegalStateException("Could not find file configured in saveservice_properties property set to:"+saveServiceProps);
+    }
+    
     public static Properties loadProperties() throws IOException{
         Properties nameMap = new Properties();
-        try (FileInputStream fis = new FileInputStream(JMeterUtils.getJMeterHome()
-                + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE))){
-            nameMap.load(fis);
+        File saveServiceFile = getSaveServiceFile();
+        if (saveServiceFile.canRead()){
+            try (FileInputStream fis = new FileInputStream(saveServiceFile)){
+                nameMap.load(fis);
+            }
         }
         return nameMap;
     }
@@ -193,10 +204,9 @@ public class SaveService {
     private static String getChecksumForPropertiesFile()
             throws NoSuchAlgorithmException, IOException {
         MessageDigest md = MessageDigest.getInstance("SHA1");
+        File saveServiceFile = getSaveServiceFile();
         try (BufferedReader reader = 
-                Files.newBufferedReader(new File(JMeterUtils.getJMeterHome()
-                    + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,
-                    SAVESERVICE_PROPERTIES_FILE)).toPath(), Charset.defaultCharset())) {
+                Files.newBufferedReader(saveServiceFile.toPath(), Charset.defaultCharset())) {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 md.update(line.getBytes());
@@ -233,26 +243,25 @@ public class SaveService {
                         log.info("Using SaveService properties file encoding {}", fileEncoding);
                     } else {
                         key = key.substring(1);// Remove the leading "_"
-                        try {
-                            final String trimmedValue = val.trim();
-                            if (trimmedValue.equals("collection") // $NON-NLS-1$
-                             || trimmedValue.equals("mapping")) { // $NON-NLS-1$
-                                registerConverter(key, JMXSAVER, true);
-                                registerConverter(key, JTLSAVER, true);
-                            } else {
-                                registerConverter(key, JMXSAVER, false);
-                                registerConverter(key, JTLSAVER, false);
-                            }
-                        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | IllegalArgumentException|
-                                SecurityException | InvocationTargetException | NoSuchMethodException e1) {
-                            log.warn("Can't register a converter: {}", key, e1);
-                        }
+                        registerConverter(key, val);
                     }
                 }
             }
         } catch (IOException e) {
             log.error("Bad saveservice properties file", e);
             throw new JMeterError("JMeter requires the saveservice properties file to continue");
+        }
+    }
+
+    private static void registerConverter(String key, String val) {
+        try {
+            final String trimmedValue = val.trim();
+            boolean useMapper = "collection".equals(trimmedValue) || "mapping".equals(trimmedValue); // $NON-NLS-1$ $NON-NLS-2$
+            registerConverter(key, JMXSAVER, useMapper);
+            registerConverter(key, JTLSAVER, useMapper);
+        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | IllegalArgumentException|
+                SecurityException | InvocationTargetException | NoSuchMethodException e1) {
+            log.warn("Can't register a converter: {}", key, e1);
         }
     }
 
@@ -273,9 +282,7 @@ public class SaveService {
             InvocationTargetException, NoSuchMethodException,
             ClassNotFoundException {
         if (useMapper){
-            jmxsaver.registerConverter((Converter) Class.forName(key).getConstructor(
-                    new Class[] { Mapper.class }).newInstance(
-                            new Object[] { jmxsaver.getMapper() }));
+            jmxsaver.registerConverter((Converter) Class.forName(key).getConstructor(Mapper.class).newInstance(jmxsaver.getMapper()));
         } else {
             jmxsaver.registerConverter((Converter) Class.forName(key).newInstance());
         }
@@ -334,7 +341,7 @@ public class SaveService {
      * @throws IOException when writing data to output fails
      */
     // Used by ResultCollector.sampleOccurred(SampleEvent event)
-    public synchronized static void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
+    public static synchronized void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
         DataHolder dh = JTLSAVER.newDataHolder();
         dh.put(SAMPLE_EVENT_OBJECT, evt);
         // This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
@@ -373,7 +380,6 @@ public class SaveService {
     static List<String> checkClasses(){
         final ClassLoader classLoader = SaveService.class.getClassLoader();
         List<String> missingClasses = new ArrayList<>();
-        //boolean OK = true;
         for (Object clazz : classToAlias.keySet()) {
             String name = (String) clazz;
             if (!NameUpdater.isMapped(name)) {// don't bother checking class is present if it is to be updated
@@ -447,17 +453,13 @@ public class SaveService {
                 return null;
             }
             return wrapper.testPlan;
-        } catch (CannotResolveClassException e) {
+        } catch (CannotResolveClassException | ConversionException | NoClassDefFoundError e) {
             if(file != null) {
-                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', cannot determine class for element: " + e, e);
+                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"'. \nCause:\n"+
+                        ExceptionUtils.getRootCauseMessage(e) +"\n\n Detail:"+e, e);
             } else {
-                throw new IllegalArgumentException("Problem loading XML, cannot determine class for element: " + e, e);
-            }
-        } catch (ConversionException | NoClassDefFoundError e) {
-            if(file != null) {
-                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', missing class "+e , e);
-            } else {
-                throw new IllegalArgumentException("Problem loading XML, missing class "+e , e);
+                throw new IllegalArgumentException("Problem loading XML. \nCause:\n"+
+                        ExceptionUtils.getRootCauseMessage(e) +"\n\n Detail:"+e, e);
             }
         }
 
@@ -531,11 +533,8 @@ public class SaveService {
      * @return string with details of error
      */
     public static String CEtoString(ConversionException ce){
-        String msg =
-            "XStream ConversionException at line: " + ce.get("line number")
-            + "\n" + ce.get("message")
-            + "\nPerhaps a missing jar? See log file.";
-        return msg;
+        return "XStream ConversionException at line: " + ce.get("line number") + "\n" + ce.get("message")
+                + "\nPerhaps a missing jar? See log file.";
     }
 
     public static String getPropertiesVersion() {

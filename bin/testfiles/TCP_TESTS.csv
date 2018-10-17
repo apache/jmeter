@@ -1,0 +1,12 @@
+label,responseCode,responseMessage,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
+MinaTcpServerInitializer,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+TCP Sampler-Hello,200,OK,TG-TCPClientImpl 1-1,text,true,1,1,1,0
+TCP Sampler-Timeout,500,"org.apache.jmeter.protocol.tcp.sampler.ReadException: Error reading from server, bytes read: 0",TG-TCPClientImpl 1-1,text,true,1,1,1,0
+TCP Sampler-Quit,200,OK,TG-TCPClientImpl 1-1,text,true,1,1,1,0
+TCP Sampler-Binary-Hello,200,OK,TG-BinaryTCPClientImpl 2-1,text,true,1,1,1,0
+TCP Sampler-Binary-Timeout,500,org.apache.jmeter.protocol.tcp.sampler.ReadException: ,TG-BinaryTCPClientImpl 2-1,text,true,1,1,1,0
+TCP Sampler-Binary-Quit,200,OK,TG-BinaryTCPClientImpl 2-1,text,true,1,1,1,0
+TCP Sampler-ConnectError,500,java.net.ConnectException: Connection refused,TG-TCPClientImpl-Errors 3-1,,true,1,1,1,0
+TCP Sampler-HostUnknown,500,java.net.UnknownHostException: localhostXXXX,TG-TCPClientImpl-Errors 3-1,,true,1,1,1,0
+TCP Sampler-ClassNotFoundException,500,Protocol handler not found,TG-TCPClientImpl-Errors 3-1,,true,1,1,1,0
+JSR223S_stopTcpServer,200,OK,tearDown Thread Group 1-1,text,true,1,1,1,0

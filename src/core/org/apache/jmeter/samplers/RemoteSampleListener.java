@@ -36,11 +36,6 @@ public interface RemoteSampleListener extends java.rmi.Remote {
 
     void testEnded(String host) throws RemoteException;
 
-    // Not currently needed by any Remoteable classes
-    // Anyway, would probably be too expensive in terms of network traffic
-    // 
-    // void testIterationStart(LoopIterationEvent event);
-    
     /**
      * This method is called remotely and fires a list of samples events
      * received locally. The function is to reduce network load when using

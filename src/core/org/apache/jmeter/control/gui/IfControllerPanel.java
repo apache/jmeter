@@ -19,13 +19,19 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 
-import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.control.IfController;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.testelement.TestElement;
@@ -37,11 +43,17 @@ import org.apache.jmeter.util.JMeterUtils;
  * standalone or embedded into some other component.
  *
  */
-
-public class IfControllerPanel extends AbstractControllerGui {
+@GUIMenuSortOrder(1)
+public class IfControllerPanel extends AbstractControllerGui implements ChangeListener {
 
     private static final long serialVersionUID = 240L;
 
+    /**
+     * Used to warn about performance penalty
+     */
+    private JLabel warningLabel;
+
+    private JLabel conditionLabel;
     /**
      * A field allowing the user to specify the number of times the controller
      * should loop.
@@ -132,6 +144,7 @@ public class IfControllerPanel extends AbstractControllerGui {
     @Override
     public void clearGui() {
         super.clearGui();
+        useExpression.setSelected(true);
         theCondition.setText(""); // $NON-NLS-1$
         evaluateAll.setSelected(false);
     }
@@ -171,22 +184,27 @@ public class IfControllerPanel extends AbstractControllerGui {
         JPanel conditionPanel = new JPanel(new BorderLayout(5, 0));
 
         // Condition LABEL
-        JLabel conditionLabel = new JLabel(JMeterUtils.getResString("if_controller_label")); // $NON-NLS-1$
+        conditionLabel = new JLabel(JMeterUtils.getResString("if_controller_label")); // $NON-NLS-1$
         conditionPanel.add(conditionLabel, BorderLayout.WEST);
+        ImageIcon image = JMeterUtils.getImage("warning.png");
+        warningLabel = new JLabel(JMeterUtils.getResString("if_controller_warning"), image, SwingConstants.CENTER); // $NON-NLS-1$
+        warningLabel.setForeground(Color.RED);
+        Font font = warningLabel.getFont();
+        warningLabel.setFont(new Font(font.getFontName(), Font.BOLD, (int)(font.getSize()*1.1)));
 
         // Condition
         theCondition = JSyntaxTextArea.getInstance(5, 50); // $NON-NLS-1$
-        theCondition.setToolTipText(JMeterUtils.getResString("if_controller_performance")); // $NON-NLS-1$
         conditionLabel.setLabelFor(theCondition);
         conditionPanel.add(JTextScrollPane.getInstance(theCondition), BorderLayout.CENTER);
        
-        conditionPanel.add(Box.createHorizontalGlue(), BorderLayout.NORTH);
+        conditionPanel.add(warningLabel, BorderLayout.NORTH);
+
 
         JPanel optionPanel = new JPanel();
 
         // Use expression instead of Javascript
         useExpression = new JCheckBox(JMeterUtils.getResString("if_controller_expression")); // $NON-NLS-1$
-        useExpression.setToolTipText(JMeterUtils.getResString("if_controller_performance")); // $NON-NLS-1$
+        useExpression.addChangeListener(this);
         optionPanel.add(useExpression);
 
         // Evaluate All checkbox
@@ -195,5 +213,18 @@ public class IfControllerPanel extends AbstractControllerGui {
 
         conditionPanel.add(optionPanel,BorderLayout.SOUTH);
         return conditionPanel;
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if(e.getSource() == useExpression) {
+            if(useExpression.isSelected()) {
+                warningLabel.setForeground(Color.BLACK);
+                conditionLabel.setText(JMeterUtils.getResString("if_controller_expression_label"));
+            } else {
+                warningLabel.setForeground(Color.RED);
+                conditionLabel.setText(JMeterUtils.getResString("if_controller_label"));
+            }
+        }
     }
 }

@@ -54,22 +54,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Handles HTTP Caching
+ * Handles HTTP Caching.
  */
 public class CacheManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
-
-    private static final Date EXPIRED_DATE = new Date(0L);
 
     private static final long serialVersionUID = 235L;
 
     private static final Logger log = LoggerFactory.getLogger(CacheManager.class);
 
+    private static final Date EXPIRED_DATE = new Date(0L);
+    private static final int DEFAULT_MAX_SIZE = 5000;
+    private static final long ONE_YEAR_MS = 365*24*60*60*1000L;
     private static final String[] CACHEABLE_METHODS = JMeterUtils.getPropDefault("cacheable_methods", "GET").split("[ ,]");
 
     static {
-        log.info("Will only cache the following methods: "+Arrays.toString(CACHEABLE_METHODS));
+        if (log.isInfoEnabled()) {
+            log.info("Will only cache the following methods: " + Arrays.toString(CACHEABLE_METHODS));
+        }
     }
-
     //+ JMX attributes, do not change values
     public static final String CLEAR = "clearEachIteration"; // $NON-NLS-1$
     public static final String USE_EXPIRES = "useExpires"; // $NON-NLS-1$
@@ -80,11 +82,8 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private transient boolean useExpires; // Cached value
 
-    private static final int DEFAULT_MAX_SIZE = 5000;
-
-    private static final long ONE_YEAR_MS = 365*24*60*60*1000L;
-    
-    /** used to share the cache between 2 cache managers
+    /**
+     * used to share the cache between 2 cache managers
      * @see CacheManager#createCacheManagerProxy() 
      * @since 3.0 */
     private transient Map<String, CacheEntry> localCache;
@@ -117,7 +116,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
          * @param lastModified formatted string containing the last modification time of the http response
          * @param expires formatted string containing the expiration time of the http response
          * @param etag of the http response
-         * @deprecated use {@link CacheEntry(String lastModified, Date expires, String etag, String varyHeader)} instead
+         * @deprecated use {@link CacheEntry#CacheEntry(String lastModified, Date expires, String etag, String varyHeader)} instead
          */
         @Deprecated
         public CacheEntry(String lastModified, Date expires, String etag) {
@@ -221,12 +220,15 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String etag = getHeader(method ,HTTPConstants.ETAG);
             String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
             String date = getHeader(method, HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date, getVaryHeader(varyHeader, asHeaders(res.getRequestHeaders()))); // TODO correct URL?
+            setCache(lastModified, cacheControl, expires, etag,
+                    res.getUrlAsString(), date, getVaryHeader(varyHeader,
+                            asHeaders(res.getRequestHeaders()))); // TODO correct URL?
         }
     }
 
     // helper method to save the cache entry
-    private void setCache(String lastModified, String cacheControl, String expires, String etag, String url, String date, Pair<String, String> varyHeader) {
+    private void setCache(String lastModified, String cacheControl, String expires,
+            String etag, String url, String date, Pair<String, String> varyHeader) {
         log.debug("setCache({}, {}, {}, {}, {}, {}, {})", lastModified,
                 cacheControl, expires, etag, url, date, varyHeader);
         Date expiresDate = null; // i.e. not using Expires

@@ -20,6 +20,7 @@ package org.apache.jmeter.report.dashboard;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
@@ -59,6 +60,8 @@ import freemarker.template.TemplateExceptionHandler;
  * @since 3.0
  */
 public class HtmlTemplateExporter extends AbstractDataExporter {
+
+    private static final String CUSTOM_GRAPH_PREFIX = "custom_";
 
     /** Format used for non null check of parameters. */
     private static final String MUST_NOT_BE_NULL = "%s must not be null";
@@ -122,7 +125,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         /**
          * Sets the extra options to inject in the result data
          * 
-         * @param extraOptions
+         * @param extraOptions to inject
          */
         public final void setExtraOptions(SubConfiguration extraOptions) {
             this.extraOptions = extraOptions;
@@ -185,9 +188,9 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         /**
          * Instantiates a new EmptyGraphChecker.
          * 
-         * @param filtersOnlySampleSeries
-         * @param showControllerSeriesOnly
-         * @param filterPattern
+         * @param filtersOnlySampleSeries flag to control filter for samples
+         * @param showControllerSeriesOnly flag to control visibility of controller
+         * @param filterPattern to use
          */
         public EmptyGraphChecker(boolean filtersOnlySampleSeries,
                 boolean showControllerSeriesOnly, Pattern filterPattern) {
@@ -253,9 +256,13 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                                             || isController
                                             || !showControllerSeriesOnly;
                                     if(log.isDebugEnabled()) {
-                                        log.debug("name:{} matches pattern:{}, supportsControllerDiscrimination:{}, isController:{}, showControllerSeriesOnly:{}", 
-                                            name, filterPattern.pattern(), 
-                                            supportsControllerDiscrimination, isController, showControllerSeriesOnly);
+                                        log.debug(
+                                                "name:{} matches pattern:{}, supportsControllerDiscrimination:{}, "
+                                                + "isController:{}, showControllerSeriesOnly:{}",
+                                                name, filterPattern.pattern(),
+                                                supportsControllerDiscrimination,
+                                                isController,
+                                                showControllerSeriesOnly);
                                     }
                                 } else {
                                     // If the name does not match the pattern,
@@ -440,23 +447,31 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         EmptyGraphChecker checker = new EmptyGraphChecker(
                 filtersOnlySampleSeries, showControllerSeriesOnly,
                 filterPattern);
+        DataContext customGraphs = new DataContext();
+        Map<String, GraphConfiguration> mapConfiguration = new HashMap<>();
         for (Map.Entry<String, GraphConfiguration> graphEntry : configuration
                 .getGraphConfigurations().entrySet()) {
             final String graphId = graphEntry.getKey();
             final GraphConfiguration graphConfiguration = graphEntry.getValue();
-            final SubConfiguration extraOptions = exportCfg
-                    .getGraphExtraConfigurations().get(graphId);
+            final SubConfiguration extraOptions = exportCfg.getGraphExtraConfigurations().get(graphId);
 
             // Initialize customizer and checker
             customizer.setExtraOptions(extraOptions);
             checker.setExcludesControllers(
                     graphConfiguration.excludesControllers());
             checker.setGraphId(graphId);
-
-            // Export graph data
-            addResultToContext(graphId, storedData, dataContext, jsonizer,
+            mapConfiguration.put(graphId, graphConfiguration);
+            if(graphId.startsWith(CUSTOM_GRAPH_PREFIX)) {
+                addResultToContext(graphId, storedData, customGraphs, jsonizer,
+                        customizer, checker);
+            } else {
+                // Export graph data
+                addResultToContext(graphId, storedData, dataContext, jsonizer,
                     customizer, checker);
+            }
         }
+        dataContext.put("graphConfigurations", mapConfiguration);
+        dataContext.put("customsGraphsData", customGraphs);
 
         // Replace the begin date with its formatted string and store the old
         // timestamp

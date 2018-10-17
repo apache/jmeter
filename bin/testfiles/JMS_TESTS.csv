@@ -1,0 +1,31 @@
+label,responseCode,responseMessage,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
+BSS_startActiveMQ,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+JMS-P2P-DefaultCorrelationId,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JSS-ConsumeUpcomingMessage,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-DefaultCorrelationId-TempQueue,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-CustomCorrelationId,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-DifferentSelector,,No reply message received,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-SameSelector,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-RequestOnly,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JSS-ConsumePreviousMessage,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-RequestOnly,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-Browse,200,1 messages available on the queue,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-Read,200,1 message(s) received successfully,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-RequestOnlyForClear,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-Clear,200,1 message(s) removed using receive timeout:100ms,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-BrowseAfterClear,200,0 messages available on the queue,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-Timeout,,No reply message received,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS Publisher-NonDurable,200,1 messages published,TG-JMS-PS 2-1,,true,1,1,1,0
+JMS Subscriber-NonDurable,200,1 message(s) received successfully of 1 expected,TG-JMS-PS 2-1,text,true,1,1,1,0
+JMS Publisher-Persistent,200,1 messages published,TG-JMS-PS-Selector-receive 3-1,,true,1,1,1,0
+JMS Subscriber-NonMatchingSelector,404,0 message(s) received successfully of 1 expected,TG-JMS-PS-Selector-receive 3-1,text,true,1,1,0,0
+JMS Subscriber-at-startup-onMessage,200,1 message(s) received successfully of 1 expected,TG-JMS-PS-Selector-receive 3-1,text,true,1,1,1,0
+JMS Publisher-Persistent,200,1 messages published,TG-JMS-PS-Selector-onMessage 4-1,,true,1,1,1,0
+JMS Subscriber-NonMatchingSelector-receive,404,0 message(s) received successfully of 1 expected,TG-JMS-PS-Selector-onMessage 4-1,text,true,1,1,0,0
+JMS Subscriber-MatchingSelector-receive,200,1 message(s) received successfully of 1 expected,TG-JMS-PS-Selector-onMessage 4-1,text,true,1,1,1,0
+JMS Publisher-Persistent,200,1 messages published,TG-JMS-PS-Durable 5-1,,true,1,1,1,0
+JMS Subscriber-Durable,200,1 message(s) received successfully of 1 expected,TG-JMS-PS-Durable 5-1,text,true,1,1,1,0
+JMS Publisher-NonPersistent,200,1 messages published,TG-JMS-PS-Selector-Non-Persistent 6-1,,true,1,1,1,0
+JMS Subscriber-NP-EachSample,404,0 message(s) received successfully of 1 expected,TG-JMS-PS-Selector-Non-Persistent 6-1,text,true,1,1,0,0
+JMS Subscriber-NP-OnStartup,200,1 message(s) received successfully of 1 expected,TG-JMS-PS-Selector-Non-Persistent 6-1,text,true,1,1,1,0
+BSS_stopActiveMQ,200,OK,tearDown Thread Group 1-1,text,true,1,1,1,0

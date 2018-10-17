@@ -145,7 +145,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      * @throws IOException when I/O error occurs
      * @throws UnsupportedOperationException if the user provided incorrect query type 
      */
-    protected byte[] execute(Connection conn) throws SQLException, IOException, UnsupportedOperationException {
+    protected byte[] execute(Connection conn) throws SQLException, IOException, UnsupportedOperationException { // NOSONAR
         return execute(conn,  new SampleResult());
     }
 
@@ -163,8 +163,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     protected byte[] execute(Connection conn, SampleResult sample) throws SQLException, IOException, UnsupportedOperationException {
         log.debug("executing jdbc:{}", getQuery());
         // Based on query return value, get results
-        String _queryType = getQueryType();
-        if (SELECT.equals(_queryType)) {
+        String currentQueryType = getQueryType();
+        if (SELECT.equals(currentQueryType)) {
             try (Statement stmt = conn.createStatement()) {
                 stmt.setQueryTimeout(getIntegerQueryTimeout());
                 ResultSet rs = null;
@@ -176,7 +176,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     close(rs);
                 }
             }
-        } else if (CALLABLE.equals(_queryType)) {
+        } else if (CALLABLE.equals(currentQueryType)) {
             try (CallableStatement cstmt = getCallableStatement(conn)) {
                 int[] out = setArguments(cstmt);
                 // A CallableStatement can return more than 1 ResultSets
@@ -186,7 +186,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 String sb = resultSetsToString(cstmt,hasResultSet, out);
                 return sb.getBytes(ENCODING);
             }
-        } else if (UPDATE.equals(_queryType)) {
+        } else if (UPDATE.equals(currentQueryType)) {
             try (Statement stmt = conn.createStatement()) {
                 stmt.setQueryTimeout(getIntegerQueryTimeout());
                 stmt.executeUpdate(getQuery());
@@ -195,7 +195,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 String results = updateCount + " updates";
                 return results.getBytes(ENCODING);
             }
-        } else if (PREPARED_SELECT.equals(_queryType)) {
+        } else if (PREPARED_SELECT.equals(currentQueryType)) {
             try (PreparedStatement pstmt = getPreparedStatement(conn)) {
                 setArguments(pstmt);
                 ResultSet rs = null;
@@ -207,7 +207,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     close(rs);
                 }
             }
-        } else if (PREPARED_UPDATE.equals(_queryType)) {
+        } else if (PREPARED_UPDATE.equals(currentQueryType)) {
             try (PreparedStatement pstmt = getPreparedStatement(conn)) {
                 setArguments(pstmt);
                 pstmt.executeUpdate();
@@ -215,35 +215,36 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 String sb = resultSetsToString(pstmt,false,null);
                 return sb.getBytes(ENCODING);
             }
-        } else if (ROLLBACK.equals(_queryType)){
+        } else if (ROLLBACK.equals(currentQueryType)){
             conn.rollback();
             sample.latencyEnd();
             return ROLLBACK.getBytes(ENCODING);
-        } else if (COMMIT.equals(_queryType)){
+        } else if (COMMIT.equals(currentQueryType)){
             conn.commit();
             sample.latencyEnd();
             return COMMIT.getBytes(ENCODING);
-        } else if (AUTOCOMMIT_FALSE.equals(_queryType)){
+        } else if (AUTOCOMMIT_FALSE.equals(currentQueryType)){
             conn.setAutoCommit(false);
             sample.latencyEnd();
             return AUTOCOMMIT_FALSE.getBytes(ENCODING);
-        } else if (AUTOCOMMIT_TRUE.equals(_queryType)){
+        } else if (AUTOCOMMIT_TRUE.equals(currentQueryType)){
             conn.setAutoCommit(true);
             sample.latencyEnd();
             return AUTOCOMMIT_TRUE.getBytes(ENCODING);
         } else { // User provided incorrect query type
-            throw new UnsupportedOperationException("Unexpected query type: "+_queryType);
+            throw new UnsupportedOperationException("Unexpected query type: "+currentQueryType);
         }
     }
 
     private String resultSetsToString(PreparedStatement pstmt, boolean result, int[] out) throws SQLException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         int updateCount = 0;
-        if (!result) {
+        boolean currentResult = result;
+        if (!currentResult) {
             updateCount = pstmt.getUpdateCount();
         }
         do {
-            if (result) {
+            if (currentResult) {
                 ResultSet rs = null;
                 try {
                     rs = pstmt.getResultSet();
@@ -254,11 +255,11 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             } else {
                 sb.append(updateCount).append(" updates.\n");
             }
-            result = pstmt.getMoreResults();
-            if (!result) {
+            currentResult = pstmt.getMoreResults();
+            if (!currentResult) {
                 updateCount = pstmt.getUpdateCount();
             }
-        } while (result || (updateCount != -1));
+        } while (currentResult || (updateCount != -1));
         if (out!=null && pstmt instanceof CallableStatement){
             List<Object> outputValues = new ArrayList<>();
             CallableStatement cs = (CallableStatement) pstmt;
@@ -475,7 +476,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 throw new SQLException("Invalid data type: "+jdbcType, e);
             }
         }
-        return (entry).intValue();
+        return entry.intValue();
     }
 
 
@@ -525,11 +526,11 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 
         JMeterVariables jmvars = getThreadContext().getVariables();
         String[] varNames = getVariableNames().split(COMMA);
-        String resultVariable = getResultVariable().trim();
+        String currentResultVariable = getResultVariable().trim();
         List<Map<String, Object> > results = null;
-        if(resultVariable.length() > 0) {
+        if(!currentResultVariable.isEmpty()) {
             results = new ArrayList<>();
-            jmvars.putObject(resultVariable, results);
+            jmvars.putObject(currentResultVariable, results);
         }
         int j = 0;
         while (rs.next()) {

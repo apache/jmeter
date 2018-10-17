@@ -33,10 +33,11 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  * Parameters:
  * - variable name
+ * - default value
  *
  * Returns:
  * - the variable value, but if not found
- * - the variable name itself
+ * - the default value if set, and if not the variable name itself
  * @since 2.3RC3
  */
 public class Variable extends AbstractFunction {
@@ -47,25 +48,29 @@ public class Variable extends AbstractFunction {
 
     // Number of parameters expected - used to reject invalid calls
     private static final int MIN_PARAMETER_COUNT = 1;
-    private static final int MAX_PARAMETER_COUNT = 1;
+    private static final int MAX_PARAMETER_COUNT = 2;
 
     static {
         desc.add(JMeterUtils.getResString("variable_name_param")); //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("property_default_param")); //$NON-NLS-1$
     }
 
     private Object[] values;
 
-    public Variable() {
+    public Variable() { 
+        //used for test
     }
 
     /** {@inheritDoc} */
     @Override
-    public String execute(SampleResult previousResult, Sampler currentSampler)
-            throws InvalidVariableException {
+    public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String variableName = ((CompoundVariable) values[0]).execute();
+        String variableDefault = variableName;
+        if (values.length > 1) {
+            variableDefault = ((CompoundVariable) values[1]).execute();
+        }
         String variableValue = getVariables().get(variableName);
-        return variableValue == null? variableName : variableValue;
-
+        return variableValue == null ? variableDefault : variableValue;
     }
 
     /** {@inheritDoc} */

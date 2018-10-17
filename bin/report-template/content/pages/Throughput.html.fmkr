@@ -31,9 +31,9 @@
     <link href="../../sbadmin2-1.0.7/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
    <!-- JQuery UI style -->
-    <link href="../css/jquery-ui.css" rel="stylesheet">
-    <link href="../css/jquery-ui.structure.css" rel="stylesheet">
-    <link href="../css/jquery-ui.theme.css" rel="stylesheet">
+    <link href="../css/jquery-ui.min.css" rel="stylesheet">
+    <link href="../css/jquery-ui.structure.min.css" rel="stylesheet">
+    <link href="../css/jquery-ui.theme.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -81,6 +81,9 @@
                                             <a href="Throughput.html#transactionsPerSecond" onclick="$('#bodyTransactionsPerSecond').collapse('show');">Transactions Per Second</a>
                                         </li>
                                         <li>
+                                            <a href="Throughput.html#totalTPS" onclick="$('#bodyTotalTPS').collapse('show');">Total Transactions Per Second</a>
+                                        </li>
+                                        <li>
                                             <a href="Throughput.html#responseTimeVsRequest" onclick="$('#bodyResponseTimeVsRequest').collapse('show');">Response Time Vs Request</a>
                                         </li>
                                         <li>
@@ -93,6 +96,15 @@
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
+                        </li>
+
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Customs Graphs<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="CustomsGraphs.html">Over Time</a>
+                                </li>
+                            </ul>
                         </li>
 
                     </ul>
@@ -147,7 +159,7 @@
                 <div class="col-lg-12 portlet" id="hitsPerSecond">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"> </i>  <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyHitsPerSecond" aria-expanded="true" aria-controls="bodyHitsPerSecond">Hits Per Second (excluding embedded resources)</span>
+                           <i class="fa fa-bar-chart-o fa-fw"> </i>  <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyHitsPerSecond" aria-expanded="true" aria-controls="bodyHitsPerSecond">Hits Per Second</span>
                            <div class="pull-right">
                                 <div class="btn-group">
                                     <a class="btn btn-link btn-xs">
@@ -194,7 +206,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
                             <i class="fa fa-bar-chart-o fa-fw"></i>
-                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyCodesPerSecond" aria-expanded="true" aria-controls="bodyCodesPerSecond">Codes Per Second (excluding embedded resources)</span>
+                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyCodesPerSecond" aria-expanded="true" aria-controls="bodyCodesPerSecond">Codes Per Second</span>
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <a class="btn btn-link btn-xs">
@@ -274,6 +286,52 @@
                             <div class="panel-footer" id="footerTransactionsPerSecond">
                                 <p id="legendTransactionsPerSecond" hidden></p>
                                 <ul id="choicesTransactionsPerSecond" class="legend"></ul>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+
+                <div class="col-lg-12 portlet" id="totalTPS">
+                    <div class="panel panel-default">
+                        <div class="panel-heading portlet-header">
+                          <i class="fa fa-bar-chart-o fa-fw"> </i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyTotalTPS" aria-expanded="true" aria-controls="bodyTotalTPS">Total Transactions Per Second</span>
+                          <div class="pull-right">
+                                <div class="btn-group">
+                                    <a class="btn btn-link btn-xs">
+                                        <i class="glyphicon glyphicon-resize-vertical"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-wrench"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-user">
+                                        <li><a href="#totalTPS" onClick="checkAll('choicesTotalTPS');">Display all samples</a>
+                                        </li>
+                                        <li><a href="#totalTPS" onClick="uncheckAll('choicesTotalTPS');">Hide all samples</a>
+                                        </li>
+                                        <li><a href="#totalTPS" onclick="exportToPNG('flotTotalTPS', this);">Save as PNG</a></li>
+                                    </ul>
+                                    <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyTotalTPS" aria-expanded="true" aria-controls="bodyTotalTPS">
+                                        <i class="fa fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="collapse out portlet-content" id="bodyTotalTPS">
+                            <div class="panel-body" id="collapseTotalTPS">
+                                <div class="flot-chart">
+                                    <div class="flot-chart-content" id="flotTotalTPS" style="float: left; width:80%;"></div>
+                                    <div style="float:left;margin-left:5px">
+                                        <p>Zoom :</p>
+                                        <div id="overviewTotalTPS" style="width:190px;height:100px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer" id="footerTotalTPS">
+                                <p id="legendTotalTPS" hidden></p>
+                                <ul id="choicesTotalTPS" class="legend"></ul>
                             </div>
                         </div>
                         <!-- /.panel-body -->
@@ -404,7 +462,7 @@
     <script src="../js/curvedLines.js"></script>
     <script src="../js/dashboard-commons.js"></script>
     <script src="../js/graph.js"></script>
-    <script src="../js/jquery-ui.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
     <!-- Custom Theme JavaScript -->
     <script src="../../sbadmin2-1.0.7/dist/js/sb-admin-2.js"></script>
     <script src="../js/jquery.cookie.js"></script>

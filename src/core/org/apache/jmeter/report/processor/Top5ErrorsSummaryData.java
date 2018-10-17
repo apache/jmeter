@@ -19,12 +19,11 @@ package org.apache.jmeter.report.processor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * Summary data for TOP 5 of errors.
  * Compute a map of Sample / Number of errors
+ *
  * @since 3.1
  */
 public class Top5ErrorsSummaryData {
@@ -34,72 +33,52 @@ public class Top5ErrorsSummaryData {
     private long total;
     private long errors;
 
-    /**
-     */
     public Top5ErrorsSummaryData() {
         countPerError = new HashMap<>();
     }
 
     /**
-     * 
-     * @param errorMessage String error message to add
+     * Stores the provided error message and counts the number of times it is
+     * registered.
+     *
+     * @param errorMessage String error message to register
      */
     public void registerError(String errorMessage) {
         Long value = countPerError.get(errorMessage);
-        if(value == null) {
+        if (value == null) {
             countPerError.put(errorMessage, ONE);
         } else {
-            countPerError.put(errorMessage, Long.valueOf(value.longValue()+1));
+            countPerError.put(errorMessage, Long.valueOf(value.longValue() + 1));
         }
     }
-    
-    /**
-     * Increment errors
-     */
+
     public void incErrors() {
         errors++;
     }
-    
-    /**
-     * Increment total
-     */
+
     public void incTotal() {
         total++;
     }
 
-    /**
-     * @return the total
-     */
     public long getTotal() {
         return total;
     }
 
-    /**
-     * @return the errors
-     */
     public long getErrors() {
         return errors;
     }
 
     /**
-     * Return Top 5 errors
+     * Return Top 5 errors and associated frequency.
+     *
      * @return array of [String, Long]
      */
     public Object[][] getTop5ErrorsMetrics() {
-        SortedSet<Map.Entry<String, Long>> reverseSortedSet = new TreeSet<>(
-                (Map.Entry<String, Long> e1,Map.Entry<String, Long> e2) 
-                    -> e2.getValue().compareTo(e1.getValue()));
-        
-        reverseSortedSet.addAll(countPerError.entrySet());
-        Object[][] result = new Object[Top5ErrorsBySamplerConsumer.MAX_NUMBER_OF_ERRORS_IN_TOP][2];
-        int size = 0;
-        for (Map.Entry<String, Long> entry : reverseSortedSet) {
-            if(size == Top5ErrorsBySamplerConsumer.MAX_NUMBER_OF_ERRORS_IN_TOP) {
-                break;
-            }
-            result[size] = new Object[] {entry.getKey(), entry.getValue()};
-            size++;
-        }
-        return result;
+        int maxSize = Top5ErrorsBySamplerConsumer.MAX_NUMBER_OF_ERRORS_IN_TOP;
+        return countPerError.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(maxSize)
+                .map(e -> new Object[]{e.getKey(), e.getValue()})
+                .toArray(e -> new Object[maxSize][2]);
     }
 }

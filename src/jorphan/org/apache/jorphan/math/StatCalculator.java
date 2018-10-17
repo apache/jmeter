@@ -21,8 +21,8 @@ package org.apache.jorphan.math;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.mutable.MutableLong;
 
@@ -162,7 +162,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         }
 
         // use Math.round () instead of simple (long) to provide correct value rounding
-        long target = Math.round (count * percent);
+        long target = Math.round(count * percent);
         try {
             for (Entry<T, MutableLong> val : valuesMap.entrySet()) {
                 target -= val.getValue().longValue();

@@ -22,9 +22,14 @@ import java.awt.BorderLayout;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
+
 import org.apache.jmeter.control.TestFragmentController;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * This defines a simple Test Fragment GUI that can be used instead of a Thread Group
@@ -81,5 +86,32 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
         return Arrays.asList(MenuFactory.FRAGMENTS);
     }
 
+    /**
+     * Redefined to remove change parent and inserrt parent menu
+     * @see org.apache.jmeter.control.gui.AbstractControllerGui#createPopupMenu()
+     */
+    @Override
+    public JPopupMenu createPopupMenu() {
+        JPopupMenu pop = new JPopupMenu();        
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONTROLLERS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.SAMPLERS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, ActionNames.ADD));
 
+        pop.add(addMenu);
+        pop.add(MenuFactory.makeMenuItemRes("add_think_times",// $NON-NLS-1$
+                ActionNames.ADD_THINK_TIME_BETWEEN_EACH_STEP));
+
+        pop.add(MenuFactory.makeMenuItemRes("apply_naming",// $NON-NLS-1$
+                ActionNames.APPLY_NAMING_CONVENTION));
+        
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
+    }
 }

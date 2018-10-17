@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!DOCTYPE RSyntaxTheme SYSTEM "theme.dtd">
+<!--
+   Theme that mimics IntelliJ IDEA's defaults.
+   See theme.dtd and org.fife.ui.rsyntaxtextarea.Theme for more information.
+-->
+<RSyntaxTheme version="1.0">
+
+  <!-- Omitting baseFont will use a system-appropriate monospaced. -->
+  <!--<baseFont family="..." size="13"/>-->
+
+  <!--  General editor colors. -->
+  <background color="2B2B2B"/>
+  <caret color="bbbbbb"/>
+  <selection fg="D0D0D0" bg="214283"/>
+  <currentLineHighlight color="323232" fade="false"/>
+  <marginLine fg="b0b4b9"/>
+  <markAllHighlight color="ccccff"/>
+  <markOccurrencesHighlight color="ccccff" border="false"/>
+  <matchedBracket fg="babcd2" bg="2c6fff" highlightBoth="true" animate="true"/>
+  <hyperlinks fg="6897BB"/>
+  <secondaryLanguages>
+    <language index="1" bg="fff0cc"/>
+    <language index="2" bg="dafeda"/>
+    <language index="3" bg="ffe0f0"/>
+  </secondaryLanguages>
+
+  <!-- Gutter styling. -->
+  <gutterBorder color="dddddd"/>
+  <lineNumbers fg="D0D0D0"/>
+  <foldIndicator fg="808080" iconBg="ffffff"/>
+  <iconRowHeader activeLineRange="3399ff"/>
+
+  <!-- Syntax tokens. -->
+  <tokenStyles>
+    <style token="IDENTIFIER" fg="BED6FF"/>
+    <style token="RESERVED_WORD" fg="CC7832" bold="true"/>
+    <style token="RESERVED_WORD_2" fg="A9B7C6" bold="true"/>
+    <style token="ANNOTATION" fg="808000"/>
+    <style token="COMMENT_DOCUMENTATION" fg="84B977" italic="true"/>
+    <style token="COMMENT_EOL" fg="808080" italic="true"/>
+    <style token="COMMENT_MULTILINE" fg="629755" italic="true"/>
+    <style token="COMMENT_KEYWORD" fg="84B977" bold="true" underline="true" italic="true"/>
+    <style token="COMMENT_MARKUP" fg="84B977" bg="e2ffe2" italic="true"/>
+    <style token="DATA_TYPE" fg="BFA4A4" bold="true" italic="true"/>
+    <style token="FUNCTION" fg="FFC66D"/>
+    <style token="LITERAL_BOOLEAN" fg="CC7832" bold="true"/>
+    <style token="LITERAL_NUMBER_DECIMAL_INT" fg="6897BB"/>
+    <style token="LITERAL_NUMBER_FLOAT" fg="6897BB"/>
+    <style token="LITERAL_NUMBER_HEXADECIMAL" fg="6897BB"/>
+    <style token="LITERAL_STRING_DOUBLE_QUOTE" fg="008000" bold="false"/>
+    <style token="LITERAL_CHAR" fg="008000" bold="false"/>
+    <style token="LITERAL_BACKQUOTE" fg="008000" bold="true"/>
+    <style token="MARKUP_TAG_DELIMITER" fg="D8D8D8" bold="true"/>
+    <style token="MARKUP_TAG_NAME" fg="CC7832" bold="true"/>
+    <style token="MARKUP_TAG_ATTRIBUTE" fg="6897BB" bold="true"/>
+    <style token="MARKUP_TAG_ATTRIBUTE_VALUE" fg="008000" bold="true"/>
+    <style token="MARKUP_COMMENT" fg="808080" italic="true"/>
+    <style token="MARKUP_DTD" fg="808080"/>
+    <style token="MARKUP_PROCESSING_INSTRUCTION" fg="808080"/>
+    <style token="MARKUP_CDATA" fg="cc6600"/>
+    <style token="MARKUP_CDATA_DELIMITER" fg="008080"/>
+    <style token="MARKUP_ENTITY_REFERENCE" fg="008000"/>
+    <style token="OPERATOR" fg="D8D8D8"/>
+    <style token="PREPROCESSOR" fg="808080"/>
+    <style token="REGEX" fg="008040"/>
+    <style token="SEPARATOR" fg="D8D8D8"/>
+    <style token="VARIABLE" fg="810ca8" bold="true"/>
+    <style token="WHITESPACE" fg="000000"/>
+
+    <style token="ERROR_IDENTIFIER" fg="ff0000"/>
+    <style token="ERROR_NUMBER_FORMAT" fg="ff0000"/>
+    <style token="ERROR_STRING_DOUBLE" fg="ff0000"/>
+    <style token="ERROR_CHAR" fg="ff0000"/>
+  </tokenStyles>
+
+</RSyntaxTheme>

@@ -28,10 +28,11 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorSupport;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.swing.CellEditor;
 import javax.swing.JButton;
@@ -43,6 +44,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
@@ -215,28 +217,22 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     {
         Object hdrs = descriptor.getValue(HEADERS);
         if (!(hdrs instanceof String[])) {
-            throw new RuntimeException("attribute HEADERS must be a String array");            
+            throw new RuntimeException("attribute HEADERS must be a String array");
         }
-        if(clazz == String.class) {
-            model = new ObjectTableModel((String[])hdrs,new Functor[0],new Functor[0],new Class[]{String.class});
+        if (clazz == String.class) {
+            model = new ObjectTableModel((String[]) hdrs, new Functor[0], new Functor[0], new Class[]{String.class});
         } else {
             Object value = descriptor.getValue(OBJECT_PROPERTIES);
             if (!(value instanceof String[])) {
                 throw new RuntimeException("attribute OBJECT_PROPERTIES must be a String array");
             }
-            String[] props = (String[])value;
-            Functor[] writers = new Functor[props.length];
-            Functor[] readers = new Functor[props.length];
-            Class<?>[] editors = new Class[props.length];
-            int count = 0;
-            for(String propName : props) {
-                propName = propName.substring(0,1).toUpperCase(Locale.ENGLISH) + propName.substring(1);
-                writers[count] = createWriter(clazz,propName);
-                readers[count] = createReader(clazz,propName);
-                editors[count] = getArgForWriter(clazz,propName);
-                count++;
-            }
-            model = new ObjectTableModel((String[])hdrs,readers,writers,editors);
+            List<String> props = Arrays.stream((String[]) value)
+                    .map(StringUtils::capitalize)
+                    .collect(Collectors.toList());
+            Functor[] writers = createWriters(props);
+            Functor[] readers = createReaders(clazz, props);
+            Class<?>[] editors = getArgsForWriter(clazz, props);
+            model = new ObjectTableModel((String[]) hdrs, readers, writers, editors);
         }
         model.addTableModelListener(this);
         table = new JTable(model);
@@ -245,29 +241,31 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         table.addFocusListener(this);
     }
 
-    Functor createWriter(Class<?> c,String propName) {
-        String setter = "set" + propName; // $NON-NLS-1$
-        return new Functor(setter);
+    private Functor[] createWriters(List<String> propNames) {
+        return propNames.stream()
+                .map(propName -> "set" + propName) // $NON-NLS-1$
+                .map(Functor::new)
+                .toArray(Functor[]::new);
     }
 
-    Functor createReader(Class<?> c,String propName) {
-        String getter = "get" + propName; // $NON-NLS-1$
-        try {
-            c.getMethod(getter,new Class[0]);
-            return new Functor(getter);
-        } catch(Exception e) {
-            return new Functor("is" + propName);
-        }
+    private Functor[] createReaders(Class<?> c, List<String> propNames) {
+        List<String> methodNames = Arrays.stream(c.getMethods())
+                .map(Method::getName)
+                .collect(Collectors.toList());
+        return propNames.stream()
+                .map(name -> methodNames.contains("get" + name) ? "get" + name : "is" + name)
+                .map(Functor::new)
+                .toArray(Functor[]::new);
     }
 
-    Class<?> getArgForWriter(Class<?> c,String propName) {
-        String setter = "set" + propName; // $NON-NLS-1$
-        for(Method m : c.getMethods()) {
-            if(m.getName().equals(setter)) {
-                return m.getParameterTypes()[0];
-            }
-        }
-        return null;
+    private Class<?>[] getArgsForWriter(Class<?> c, List<String> propNames) {
+        return propNames.stream()
+                .map(propName -> Arrays.stream(c.getMethods())
+                        .filter(m -> m.getName().equals("set" + propName)) // $NON-NLS-1$
+                        .map(m -> m.getParameterTypes()[0])
+                        .findFirst()
+                        .orElse(null))
+                .toArray(Class<?>[]::new);
     }
 
     @Override
@@ -277,7 +275,6 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 
     @Override
     public void focusGained(FocusEvent e) {
-
     }
 
     @Override

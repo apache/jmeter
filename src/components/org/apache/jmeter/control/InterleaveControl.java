@@ -52,6 +52,7 @@ public class InterleaveControl extends GenericController implements Serializable
      * Constructor for the InterleaveControl object
      **************************************************************************/
     public InterleaveControl() {
+        super();
     }
 
     /**

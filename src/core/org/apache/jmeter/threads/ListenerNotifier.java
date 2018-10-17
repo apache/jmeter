@@ -29,6 +29,7 @@
 
 package org.apache.jmeter.threads;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.jmeter.samplers.SampleEvent;
@@ -44,7 +45,11 @@ import org.slf4j.LoggerFactory;
  * using {@link #notifyListeners(SampleEvent, List)} <br>
  * Thread safe class 
  */
-public class ListenerNotifier {
+public class ListenerNotifier implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4861457279068497917L;
     private static final Logger log = LoggerFactory.getLogger(ListenerNotifier.class);
 
 

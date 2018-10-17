@@ -34,6 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.extractor.HtmlExtractor;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -45,6 +46,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * CSS/JQuery Expression Extractor Post-Processor GUI
  * @since 2.9
  */
+@GUIMenuSortOrder(1)
 public class HtmlExtractorGui extends AbstractPostProcessorGui {
     private static final long serialVersionUID = 240L;
 
@@ -54,17 +56,11 @@ public class HtmlExtractorGui extends AbstractPostProcessorGui {
     private static final String USE_DEFAULT_EXTRACTOR_IMPL = ""; // $NON-NLS-1$
 
     private JLabeledTextField expressionField;
-
     private JLabeledTextField attributeField;
-    
     private JLabeledTextField defaultField;
-
     private JLabeledTextField matchNumberField;
-
     private JLabeledTextField refNameField;
-
     private JComboBox<String> extractorImplName;
-
     private JCheckBox emptyDefaultValue;
     
     public HtmlExtractorGui() {
@@ -125,7 +121,6 @@ public class HtmlExtractorGui extends AbstractPostProcessorGui {
             } else {
                 htmlExtractor.setExtractor(USE_DEFAULT_EXTRACTOR_IMPL);               
             }
-
         }
     }
 
@@ -155,8 +150,6 @@ public class HtmlExtractorGui extends AbstractPostProcessorGui {
         add(box, BorderLayout.NORTH);
         add(makeParameterPanel(), BorderLayout.CENTER);
     }
-
-    
 
     private Component makeExtractorPanel() {
         JPanel panel = new HorizontalPanel();

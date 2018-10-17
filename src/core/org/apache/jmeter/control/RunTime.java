@@ -38,6 +38,7 @@ public class RunTime extends GenericController implements Serializable {
     private int loopCount = 0; // for getIterCount
 
     public RunTime() {
+        super();
     }
 
     public void setRuntime(long seconds) {
@@ -65,7 +66,7 @@ public class RunTime extends GenericController implements Serializable {
      */
     @Override
     public boolean isDone() {
-        if (getRuntime() > 0 && getSubControllers().size() > 0) {
+        if (getRuntime() > 0 && !getSubControllers().isEmpty()) {
             return super.isDone();
         }
         return true; // Runtime is zero - no point staying around

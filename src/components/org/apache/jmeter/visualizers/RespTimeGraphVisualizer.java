@@ -211,21 +211,21 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final JCheckBox regexpChkBox = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), true); // $NON-NLS-1$
 
-    private final JComboBox<String> titleFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> titleFontNameList = new JComboBox<>(keys(StatGraphProperties.getFontNameMap()));
 
     private final JComboBox<String> titleFontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private final JComboBox<String> titleFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> titleFontStyleList = new JComboBox<>(keys(StatGraphProperties.getFontStyleMap()));
 
-    private final JComboBox<String> fontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> fontNameList = new JComboBox<>(keys(StatGraphProperties.getFontNameMap()));
 
     private final JComboBox<String> fontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private final JComboBox<String> fontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> fontStyleList = new JComboBox<>(keys(StatGraphProperties.getFontStyleMap()));
 
-    private final JComboBox<String> legendPlacementList = new JComboBox<>(StatGraphProperties.getPlacementNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> legendPlacementList = new JComboBox<>(keys(StatGraphProperties.getPlacementNameMap()));
     
-    private final JComboBox<String> pointShapeLine = new JComboBox<>(StatGraphProperties.getPointShapeMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private final JComboBox<String> pointShapeLine = new JComboBox<>(keys(StatGraphProperties.getPointShapeMap()));
 
     private final JComboBox<String> strokeWidthList = new JComboBox<>(StatGraphProperties.getStrokeWidth());
 
@@ -283,6 +283,10 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     public RespTimeGraphVisualizer() {
         init();
+    }
+
+    private String[] keys(Map<String, ?> map) {
+        return map.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
     @Override
@@ -422,7 +426,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                         double valPrev = nanBegin;
                         for (int cnt = 0; cnt < nlsize; cnt++) {
                             int pos = idx - (nlsize - cnt);
-                            if (pos < 0) { pos = 0; }
+                            if (pos < 0) {
+                                pos = 0;
+                            }
                             valPrev = valPrev + ((nanLast - nanBegin) / (nlsize + 2));
                             data[s][pos] = valPrev;
                         }

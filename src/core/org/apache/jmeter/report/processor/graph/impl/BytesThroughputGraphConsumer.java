@@ -101,9 +101,14 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
     @Override
     public void setGranularity(long granularity) {
         super.setGranularity(granularity);
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
         // Override the granularity of the aggregators factory
         ((TimeRateAggregatorFactory) getGroupInfos().get(
                 AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
-                .setGranularity(granularity);
+                .setGranularity(getGranularity());
     }
 }

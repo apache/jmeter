@@ -86,8 +86,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
      * @deprecated only for use by test code
      */
     @Deprecated
-    public SearchTreePanel(){
-//        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    public SearchTreePanel() {
     }
 
     private class EnterAction extends AbstractAction {

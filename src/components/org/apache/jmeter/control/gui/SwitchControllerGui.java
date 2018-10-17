@@ -25,9 +25,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.SwitchController;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.util.MenuInfo;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+@GUIMenuSortOrder(MenuInfo.SORT_ORDER_DEFAULT+2)
 public class SwitchControllerGui extends AbstractControllerGui {
     private static final long serialVersionUID = 240L;
 

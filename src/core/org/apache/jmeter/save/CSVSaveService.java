@@ -25,6 +25,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
@@ -41,7 +42,6 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
@@ -99,7 +99,7 @@ public final class CSVSaveService {
 
     // Used to enclose variable name labels, to distinguish from any of the
     // above labels
-    private static final String VARIABLE_NAME_QUOTE_CHAR = "\""; // $NON-NLS-1$
+    public static final String VARIABLE_NAME_QUOTE_CHAR = "\""; // $NON-NLS-1$
 
     // Initial config from properties
     private static final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration
@@ -572,7 +572,7 @@ public final class CSVSaveService {
                 return null; // unknown column name
             }
             if (current <= previous) {
-                log.warn("Column header number {} name {} is out of order.", (i + 1), label);
+                log.warn("Column header number {} name {} is out of order.", i + 1, label);
                 return null; // out of order
             }
             previous = current;
@@ -751,7 +751,6 @@ public final class CSVSaveService {
         // quotes:
         public void append(String s) {
             addDelim();
-            // if (s == null) return;
             sb.append(quoteDelimiters(s, specials));
         }
 
@@ -781,7 +780,7 @@ public final class CSVSaveService {
             return sb.toString();
         }
     }
-
+    
     /**
      * Convert a result into a string, where the fields of the result are
      * separated by a specified String.
@@ -794,11 +793,26 @@ public final class CSVSaveService {
      */
     public static String resultToDelimitedString(SampleEvent event,
             final String delimiter) {
+        return resultToDelimitedString(event, event.getResult(), event.getResult().getSaveConfig(), delimiter);
+    }
+    
+    /**
+     * Convert a result into a string, where the fields of the result are
+     * separated by a specified String.
+     * 
+     * @param event
+     *            the sample event to be converted
+     * @param sample {@link SampleResult} to log
+     * @param saveConfig {@link SampleSaveConfiguration} to use for logging
+     * @param delimiter
+     *            the separation string
+     * @return the separated value representation of the result
+     */
+    public static String resultToDelimitedString(SampleEvent event,
+            SampleResult sample,
+            SampleSaveConfiguration saveConfig,
+            final String delimiter) {
         StringQuoter text = new StringQuoter(delimiter.charAt(0));
-
-        SampleResult sample = event.getResult();
-        SampleSaveConfiguration saveConfig = sample.getSaveConfig();
-
         if (saveConfig.saveTimestamp()) {
             if (saveConfig.printMilliseconds()) {
                 text.append(sample.getTimeStamp());
@@ -838,19 +852,7 @@ public final class CSVSaveService {
         }
 
         if (saveConfig.saveAssertionResultsFailureMessage()) {
-            String message = null;
-            AssertionResult[] results = sample.getAssertionResults();
-
-            if (results != null) {
-                // Find the first non-null message
-                for (AssertionResult result : results) {
-                    message = result.getFailureMessage();
-                    if (message != null) {
-                        break;
-                    }
-                }
-            }
-
+            String message = sample.getFirstAssertionFailureMessage();
             if (message != null) {
                 text.append(message);
             } else {
@@ -898,7 +900,7 @@ public final class CSVSaveService {
         }
 
         if (saveConfig.saveIdleTime()) {
-            text.append(event.getResult().getIdleTime());
+            text.append(sample.getIdleTime());
         }
 
         if (saveConfig.saveConnectTime()) {
@@ -1093,5 +1095,24 @@ public final class CSVSaveService {
     public static String[] csvSplitString(String line, char delim)
             throws IOException {
         return csvReadFile(new BufferedReader(new StringReader(line)), delim);
+    }
+
+    /**
+     * @param event {@link SampleEvent}
+     * @param out {@link PrintWriter} to which samples will be written
+     */
+    public static void saveSampleResult(SampleEvent event, PrintWriter out) {
+        SampleSaveConfiguration saveConfiguration = event.getResult().getSaveConfig();
+        String delimiter = saveConfiguration.getDelimiter();
+        String savee = resultToDelimitedString(event, event.getResult(), saveConfiguration, delimiter);
+        out.println(savee);
+        
+        if(saveConfiguration.saveSubresults()) {
+            SampleResult result = event.getResult();
+            for (SampleResult subResult : result.getSubResults()) {
+                savee = resultToDelimitedString(event, subResult, saveConfiguration, delimiter);
+                out.println(savee);
+            }
+        }
     }
 }

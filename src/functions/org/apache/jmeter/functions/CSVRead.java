@@ -36,19 +36,22 @@ import org.slf4j.LoggerFactory;
  * the following in the test scripts :
  *
  * <pre>{@code
- * ${__CSVRead(c:/BOF/abcd.csv,0)} // read (first) line of 'c:/BOF/abcd.csv' ,
- * return the 1<sup>st</sup> column ( represented by the '0'),
- * ${__CSVRead(c:/BOF/abcd.csv,1)} // read (first) line of 'c:/BOF/abcd.csv' ,
- * return the 2<sup>nd</sup> column ( represented by the '1'),
+ * ${__CSVRead(c:/BOF/abcd.csv,0)} // read (first) line of 'c:/BOF/abcd.csv'
+ *     // and return the 1st column (represented by the '0')
+ * ${__CSVRead(c:/BOF/abcd.csv,1)} // read (first) line of 'c:/BOF/abcd.csv'
+ *     // and return the 2nd column (represented by the '1')
  * ${__CSVRead(c:/BOF/abcd.csv,next())} // Go to next line of 'c:/BOF/abcd.csv'
  * }</pre>
  * NOTE: A single instance of each different file is opened and used for all
- * threads.<br><br>
- *
- * To open the same file twice, use the alias function: {@code __CSVRead(abc.csv,*ONE);
+ * threads.
+ *<p>
+ * To open the same file twice, use the alias function: <br>
+ * <pre>
+ * {@code __CSVRead(abc.csv,*ONE);
  * __CSVRead(abc.csv,*TWO);}
- *<br>
- * {@code __CSVRead(*ONE,1);} etc
+ * </pre>
+ * and later use the references to read from the files: <br>
+ * {@code __CSVRead(*ONE,1);}, etc.
  * @since 1.9
  */
 public class CSVRead extends AbstractFunction {
@@ -77,9 +80,7 @@ public class CSVRead extends AbstractFunction {
         String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
         String columnOrNext = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
 
-        if (log.isDebugEnabled()) {
-            log.debug("execute (" + fileName + " , " + columnOrNext + ")   ");
-        }
+        log.debug("execute ({}, {})   ", fileName, columnOrNext);
 
         // Process __CSVRead(filename,*ALIAS)
         if (columnOrNext.startsWith("*")) { //$NON-NLS-1$
@@ -111,16 +112,16 @@ public class CSVRead extends AbstractFunction {
                                                                 // is wanted?
             myValue = FileWrapper.getColumn(fileName, columnIndex);
         } catch (NumberFormatException e) {
-            log.warn(Thread.currentThread().getName() + " - can't parse column number: " + columnOrNext + " "
-                    + e.toString());
+            log.warn("{} - can't parse column number: {} {}",
+                    Thread.currentThread().getName(), columnOrNext,
+                    e.toString());
         } catch (IndexOutOfBoundsException e) {
-            log.warn(Thread.currentThread().getName() + " - invalid column number: " + columnOrNext + " at row "
-                    + FileWrapper.getCurrentRow(fileName) + " " + e.toString());
+            log.warn("{} - invalid column number: {} at row {} {}",
+                    Thread.currentThread().getName(), columnOrNext,
+                    FileWrapper.getCurrentRow(fileName), e.toString());
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("execute value: " + myValue);
-        }
+        log.debug("execute value: {}");
 
         return myValue;
     }
@@ -140,13 +141,15 @@ public class CSVRead extends AbstractFunction {
     /** {@inheritDoc} */
     @Override
     public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
-        log.debug("setParameter - Collection.size=" + parameters.size());
+        if (log.isDebugEnabled()) {
+            log.debug("setParameter - Collection.size={}", parameters.size());
+        }
 
         values = parameters.toArray();
 
         if (log.isDebugEnabled()) {
             for (int i = 0; i < parameters.size(); i++) {
-                log.debug("i:" + ((CompoundVariable) values[i]).execute());
+                log.debug("i: {}", ((CompoundVariable) values[i]).execute());
             }
         }
 

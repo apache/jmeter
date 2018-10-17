@@ -34,10 +34,8 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-
-// For JUnit tests, @see TestTCLogParser
+import org.slf4j.LoggerFactory;
 
 /**
  * Description:<br>
@@ -95,9 +93,7 @@ public class TCLogParser implements LogParser {
     /** protected members * */
     protected String RMETHOD = null;
 
-    /**
-     * The path to the access log file
-     */
+    /** The path to the access log file */
     protected String URL_PATH = null;
 
     protected boolean useFILE = true;
@@ -108,21 +104,14 @@ public class TCLogParser implements LogParser {
 
     protected BufferedReader READER = null;
 
-    /**
-     * Handles to supporting classes
-     */
+    /** Handles to supporting classes */
     protected Filter FILTER = null;
 
-    /**
-     * by default, we probably should decode the parameter values
-     */
+    /** by default, we probably should decode the parameter values */
     protected boolean decode = true;
 
     // TODO downcase UPPER case non-final variables
 
-    /**
-     *
-     */
     public TCLogParser() {
         super();
     }
@@ -270,9 +259,6 @@ public class TCLogParser implements LogParser {
             if (line == null) {
                 breader.close();
                 this.READER = null;
-                // this.READER = new BufferedReader(new
-                // FileReader(this.SOURCE));
-                // parse(this.READER,el);
             }
         } catch (IOException ioe) {
             log.error("Error reading log file", ioe);
@@ -421,7 +407,7 @@ public class TCLogParser implements LogParser {
     /**
      * Tokenize the URL into two tokens. If the URL has more than one "?", the
      * parse may fail. Only the first two tokens are used. The first token is
-     * automatically parsed and set at {@link TCLogParser#URL_PATH URL_PATH}.
+     * automatically parsed and set at TCLogParser#URL_PATH.
      *
      * @param url url which should be stripped from parameters
      * @param el {@link TestElement} to parse url into

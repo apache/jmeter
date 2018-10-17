@@ -150,24 +150,22 @@ public class LoadRecentProject extends Load {
      */
     private static void updateMenuItems(List<JComponent> menuItems) {
         // Update the menu items
-        for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
+        for (int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
             // Get the menu item
-            JMenuItem recentFile = (JMenuItem)menuItems.get(i);
+            JMenuItem recentFile = (JMenuItem) menuItems.get(i);
 
             // Find and set the file for this recent file command
             String recentFilePath = getRecentFile(i);
-            if(recentFilePath != null) {
+            if (recentFilePath != null) {
                 File file = new File(recentFilePath);
-                StringBuilder sb = new StringBuilder(60);
+                String sb = String.valueOf(i + 1) + " " + //$NON-NLS-1$
+                        getMenuItemDisplayName(file);
                 // Index before file name
-                sb.append(i+1).append(" "); //$NON-NLS-1$
-                sb.append(getMenuItemDisplayName(file));
-                recentFile.setText(sb.toString());
+                recentFile.setText(sb);
                 recentFile.setToolTipText(recentFilePath);
                 recentFile.setEnabled(true);
                 recentFile.setVisible(true);
-            }
-            else {
+            } else {
                 recentFile.setEnabled(false);
                 recentFile.setVisible(false);
             }
@@ -182,7 +180,7 @@ public class LoadRecentProject extends Load {
         // Limit the length of the menu text if needed
         final int maxLength = 40;
         String menuText = file.getName();
-        if(menuText.length() > maxLength) {
+        if (menuText.length() > maxLength) {
             menuText = "..." + menuText.substring(menuText.length() - maxLength, menuText.length()); //$NON-NLS-1$
         }
         return menuText;
@@ -248,11 +246,7 @@ public class LoadRecentProject extends Load {
      * @return true if at least on JMenuItem is visible
      */
     public static boolean hasVisibleMenuItem(List<JComponent> fileLoadRecentFiles) {
-        for (JComponent menuItem : fileLoadRecentFiles) {
-            if(menuItem.isVisible()) {
-                return true;
-            }
-        }
-        return false;
+        return fileLoadRecentFiles.stream()
+                .anyMatch(JComponent::isVisible);
     }
 }

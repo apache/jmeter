@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.resources;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Enumeration;
@@ -25,12 +28,10 @@ import java.util.Properties;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 
 public class TestPropertiesFiles extends JMeterTestCase {
-    
+
 
     @Test
     public void testUserProperties() throws Exception {
@@ -43,26 +44,22 @@ public class TestPropertiesFiles extends JMeterTestCase {
     public void testDefaultProperties() throws Exception {
         Properties jmeter = loadProps(new File(JMeterUtils.getJMeterBinDir(), "jmeter.properties"));
         Properties report = loadProps(new File(JMeterUtils.getJMeterBinDir(), "reportgenerator.properties"));
-        {
-            Enumeration<?> names = jmeter.propertyNames();
-            while(names.hasMoreElements()) {
-                final Object key = names.nextElement();
-                assertFalse("reportgenerator should not contain the jmeter key " + key, report.containsKey(key));
-            }
+        Enumeration<?> jmeterNames = jmeter.propertyNames();
+        while (jmeterNames.hasMoreElements()) {
+            final Object key = jmeterNames.nextElement();
+            assertFalse("reportgenerator should not contain the jmeter key " + key, report.containsKey(key));
         }
-        {
-            Enumeration<?> names = report.propertyNames();
-            while(names.hasMoreElements()) {
-                final Object key = names.nextElement();
-                assertFalse("jmeter should not contain the reportgenerator key " + key, jmeter.containsKey(key));
-            }
+        Enumeration<?> reportNames = report.propertyNames();
+        while (reportNames.hasMoreElements()) {
+            final Object key = reportNames.nextElement();
+            assertFalse("jmeter should not contain the reportgenerator key " + key, jmeter.containsKey(key));
         }
     }
 
-    private static Properties loadProps(File file) throws Exception{
+    private static Properties loadProps(File file) throws Exception {
         Properties props = new Properties();
-        try (FileInputStream inStream = new FileInputStream(file)){
-            props.load(inStream);            
+        try (FileInputStream inStream = new FileInputStream(file)) {
+            props.load(inStream);
         }
         return props;
     }

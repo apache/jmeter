@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -43,7 +44,6 @@ import org.apache.commons.lang3.StringUtils;
 public final class JOrphanUtils {
 
     private static final int DEFAULT_CHUNK_SIZE = 4096;
-
     /**
      * Private constructor to prevent instantiation.
      */
@@ -593,20 +593,53 @@ public final class JOrphanUtils {
      *  <li>Because it exists but is not empty</li>
      *  <li>Because it does not exist but cannot be created</li>
      * </ul>
-     * @param folder {@link File}
+     * @param folder {@link File} 
+     * 
      * @throws IllegalArgumentException when folder can't be written to
      */
-    public static void canSafelyWriteToFolder(File folder)
-            throws IllegalArgumentException {
+    public static void canSafelyWriteToFolder(File folder) {
+        canSafelyWriteToFolder(folder, false);
+    }
+    /**
+     * Check whether we can write to a folder.
+     *
+     * @param folder which should be checked for writability and emptyness
+     * @param deleteFolderIfExists flag whether the folder should be emptied or a file with the same name deleted
+     *
+     * @throws IllegalArgumentException when folder can't be written to. That could have the following reasons:
+     * <ul>
+     *  <li>it exists but is not a folder</li>
+     *  <li>it exists but is not empty</li>
+     *  <li>it does not exist but cannot be created</li>
+     * </ul>
+     */
+    public static void canSafelyWriteToFolder(File folder, boolean deleteFolderIfExists) {
         if(folder.exists()) {
             if (folder.isFile()) {
-                throw new IllegalArgumentException("Cannot write to '"
+                if(deleteFolderIfExists) {
+                    if(!folder.delete()) {
+                        throw new IllegalArgumentException("Cannot write to '"
+                                +folder.getAbsolutePath()+"' as it is an existing file and delete failed");
+                    }
+                } else {
+                    throw new IllegalArgumentException("Cannot write to '"
                         +folder.getAbsolutePath()+"' as it is an existing file");
+                }
             } else {
                 File[] listedFiles = folder.listFiles();
                 if(listedFiles != null && listedFiles.length > 0) {
-                    throw new IllegalArgumentException("Cannot write to '"
+                    if(deleteFolderIfExists) {
+                        try {
+                            FileUtils.deleteDirectory(folder);
+                            folder.mkdir();
+                        } catch(IOException ex) {
+                            throw new IllegalArgumentException("Cannot write to '"
+                                    +folder.getAbsolutePath()+"' as folder is not empty and cleanup failed with error:"+ex.getMessage(), ex);
+                        }
+                    } else {
+                        throw new IllegalArgumentException("Cannot write to '"
                             +folder.getAbsolutePath()+"' as folder is not empty");
+                    }
                 }
             }
         } else {

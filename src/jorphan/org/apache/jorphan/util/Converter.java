@@ -24,7 +24,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Optional;
 import java.util.StringTokenizer;
+import java.util.stream.Stream;
 
 /**
  * Converter utilities for TestBeans
@@ -34,46 +36,43 @@ public class Converter {
     /**
      * Convert the given value object to an object of the given type
      *
-     * @param value
-     *            object to convert
-     * @param toType
-     *            type to convert object to
-     * @return converted object or original value if no conversion could be
-     *         applied
+     * @param value  object to convert
+     * @param toType type to convert object to
+     * @return converted object or original value if no conversion could be applied
      */
     public static Object convert(Object value, Class<?> toType) {
-        if (value == null) {
-            value = ""; // TODO should we allow null for non-primitive types?
+        Object convertedValue = value;
+        if (value == null || toType == null) {
+            convertedValue = ""; // TODO should we allow null for non-primitive types?
         } else if (toType.isAssignableFrom(value.getClass())) {
-            return value;
+            convertedValue = value;
         } else if (toType.equals(float.class) || toType.equals(Float.class)) {
-            return Float.valueOf(getFloat(value));
+            convertedValue = Float.valueOf(getFloat(value));
         } else if (toType.equals(double.class) || toType.equals(Double.class)) {
-            return Double.valueOf(getDouble(value));
+            convertedValue = Double.valueOf(getDouble(value));
         } else if (toType.equals(String.class)) {
-            return getString(value);
+            convertedValue = getString(value);
         } else if (toType.equals(int.class) || toType.equals(Integer.class)) {
-            return Integer.valueOf(getInt(value));
+            convertedValue = Integer.valueOf(getInt(value));
         } else if (toType.equals(char.class) || toType.equals(Character.class)) {
-            return Character.valueOf(getChar(value));
+            convertedValue = Character.valueOf(getChar(value));
         } else if (toType.equals(long.class) || toType.equals(Long.class)) {
-            return Long.valueOf(getLong(value));
+            convertedValue = Long.valueOf(getLong(value));
         } else if (toType.equals(boolean.class) || toType.equals(Boolean.class)) {
-            return  Boolean.valueOf(getBoolean(value));
+            convertedValue = Boolean.valueOf(getBoolean(value));
         } else if (toType.equals(java.util.Date.class)) {
-            return getDate(value);
+            convertedValue = getDate(value);
         } else if (toType.equals(Calendar.class)) {
-            return getCalendar(value);
+            convertedValue = getCalendar(value);
         } else if (toType.equals(File.class)) {
-            return getFile(value);
+            convertedValue = getFile(value);
         } else if (toType.equals(Class.class)) {
             try {
-                return Class.forName(value.toString());
-            } catch (Exception e) {
-                // don't do anything
+                convertedValue = Class.forName(value.toString());
+            } catch (Exception ignored) {
             }
         }
-        return value;
+        return convertedValue;
     }
 
     /**
@@ -94,29 +93,11 @@ public class Converter {
             cal.setTime((java.util.Date) date);
             return cal;
         } else if (date != null) {
-            DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT);
-            java.util.Date d = null;
-            try {
-                d = formatter.parse(date.toString());
-            } catch (ParseException e) {
-                formatter = DateFormat.getDateInstance(DateFormat.MEDIUM);
-                try {
-                    d = formatter.parse((String) date);
-                } catch (ParseException e1) {
-                    formatter = DateFormat.getDateInstance(DateFormat.LONG);
-                    try {
-                        d = formatter.parse((String) date);
-                    } catch (ParseException e2) {
-                        formatter = DateFormat.getDateInstance(DateFormat.FULL);
-                        try {
-                            d = formatter.parse((String) date);
-                        } catch (ParseException e3) {
-                            return defaultValue;
-                        }
-                    }
-                }
+            Optional<Date> d = tryToParseDate(date);
+            if (!d.isPresent()) {
+                return defaultValue;
             }
-            cal.setTime(d);
+            cal.setTime(d.get());
         } else {
             cal = defaultValue;
         }
@@ -163,57 +144,47 @@ public class Converter {
      *         <code>defaultValue</code> if conversion failed
      */
     public static Date getDate(Object date, Date defaultValue) {
-        Date val = null;
         if (date instanceof java.util.Date) {
             return (Date) date;
         } else if (date != null) {
-            DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT);
-            // java.util.Date d = null;
-            try {
-                val = formatter.parse(date.toString());
-            } catch (ParseException e) {
-                formatter = DateFormat.getDateInstance(DateFormat.MEDIUM);
-                try {
-                    val = formatter.parse((String) date);
-                } catch (ParseException e1) {
-                    formatter = DateFormat.getDateInstance(DateFormat.LONG);
-                    try {
-                        val = formatter.parse((String) date);
-                    } catch (ParseException e2) {
-                        formatter = DateFormat.getDateInstance(DateFormat.FULL);
-                        try {
-                            val = formatter.parse((String) date);
-                        } catch (ParseException e3) {
-                            return defaultValue;
-                        }
-                    }
-                }
-            }
+            return tryToParseDate(date).orElse(defaultValue);
         } else {
             return defaultValue;
         }
-        return val;
+    }
+
+    private static Optional<Date> tryToParseDate(Object date) {
+        return Stream.of(DateFormat.SHORT, DateFormat.MEDIUM, DateFormat.LONG, DateFormat.FULL)
+                .map(DateFormat::getDateInstance)
+                .map(formatter -> tryToParseDate(formatter, date.toString()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
+    }
+
+    private static Optional<Date> tryToParseDate(DateFormat formatter, String dateString) {
+        try {
+            return Optional.of(formatter.parse(dateString));
+        } catch (ParseException e) {
+            return Optional.empty();
+        }
     }
 
     /**
-     * Convert object to float, or <code>defaultValue</code> if conversion
-     * failed
-     * 
-     * @param o
-     *            object to convert
-     * @param defaultValue
-     *            default value to use, when conversion failed
-     * @return converted float or <code>defaultValue</code> if conversion
-     *         failed
+     * Convert object to float, or <code>defaultValue</code> if conversion failed
+     *
+     * @param o object to convert
+     * @param defaultValue default value to use, when conversion failed
+     * @return converted float or <code>defaultValue</code> if conversion failed
      */
     public static float getFloat(Object o, float defaultValue) {
+        if (o == null) {
+            return defaultValue;
+        }
+        if (o instanceof Number) {
+            return ((Number) o).floatValue();
+        }
         try {
-            if (o == null) {
-                return defaultValue;
-            }
-            if (o instanceof Number) {
-                return ((Number) o).floatValue();
-            }
             return Float.parseFloat(o.toString());
         } catch (NumberFormatException e) {
             return defaultValue;
@@ -223,7 +194,7 @@ public class Converter {
     /**
      * Convert object to float, or <code>0</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @return converted float or <code>0</code> if conversion
@@ -236,7 +207,7 @@ public class Converter {
     /**
      * Convert object to double, or <code>defaultValue</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @param defaultValue
@@ -261,7 +232,7 @@ public class Converter {
     /**
      * Convert object to double, or <code>0</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @return converted double or <code>0</code> if conversion
@@ -274,7 +245,7 @@ public class Converter {
     /**
      * Convert object to boolean, or <code>false</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @return converted boolean or <code>false</code> if conversion
@@ -287,7 +258,7 @@ public class Converter {
     /**
      * Convert object to boolean, or <code>defaultValue</code> if conversion
      * failed
-     * 
+     *
      * @param o
      *            object to convert
      * @param defaultValue
@@ -331,7 +302,7 @@ public class Converter {
     /**
      * Convert object to char, or ' ' if no conversion can
      * be applied
-     * 
+     *
      * @param o
      *            object to convert
      * @return converted char or ' ' if conversion failed
@@ -343,7 +314,7 @@ public class Converter {
     /**
      * Convert object to char, or <code>defaultValue</code> if no conversion can
      * be applied
-     * 
+     *
      * @param o
      *            object to convert
      * @param defaultValue
@@ -529,7 +500,7 @@ public class Converter {
 
     /**
      * Replace newlines "\n" with <code>insertion</code>
-     * 
+     *
      * @param v
      *            String in which the newlines should be replaced
      * @param insertion
@@ -563,10 +534,10 @@ public class Converter {
     public static String getString(Object o) {
         return getString(o, "");
     }
-    
+
     /**
      * Converts an object to a {@link File}
-     * 
+     *
      * @param o
      *            object to convert (must be a {@link String} or a {@link File})
      * @return converted file

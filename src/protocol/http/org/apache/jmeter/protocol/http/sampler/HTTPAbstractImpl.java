@@ -29,6 +29,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.function.Predicate;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -36,6 +37,7 @@ import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.SourceType;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.Interruptible;
@@ -51,6 +53,14 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
         RETURN_NO_SAMPLE(),
         RETURN_CUSTOM_STATUS()
     }
+
+    /**
+     * Should we add to POST request content-type header if missing:
+     * Content-Type: application/x-www-form-urlencoded
+     */
+    protected static final boolean ADD_CONTENT_TYPE_TO_POST_IF_MISSING = 
+            JMeterUtils.getPropDefault("http.post_add_content_type_if_missing", //$NON-NLS-1$
+                    false);
 
     /**
      * If true create a SampleResult with empty content and 204 response code 
@@ -71,6 +81,10 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      */
     private static final String RETURN_CUSTOM_STATUS_CODE = 
             JMeterUtils.getProperty("RETURN_CUSTOM_STATUS.code");//$NON-NLS-1$
+
+    protected static final Predicate<String> ALL_EXCEPT_COOKIE = s -> !HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(s);
+    
+    protected static final Predicate<String> ONLY_COOKIE = s -> HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(s);
 
     /**
      * Custom response message for cached resource
@@ -339,9 +353,23 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      *
      * @return <code>true</code> if <code>multipart/form-data</code> should be
      *         used and method is POST
+     * @deprecated Use {@link HTTPAbstractImpl#getUseMultipart()}
      */
+    @Deprecated
     protected boolean getUseMultipartForPost() {
         return testElement.getUseMultipartForPost();
+    }
+    
+    /**
+     * Determine if we should use <code>multipart/form-data</code> or
+     * <code>application/x-www-form-urlencoded</code> for the method
+     * <p>
+     * Invokes {@link HTTPSamplerBase#getUseMultipart()}
+     *
+     * @return <code>true</code> if <code>multipart/form-data</code> should be used 
+     */
+    protected boolean getUseMultipart() {
+        return testElement.getUseMultipart();
     }
 
     /**

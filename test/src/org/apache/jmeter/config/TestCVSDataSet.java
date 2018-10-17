@@ -13,13 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
-/**
- * Package to test FileServer methods 
- */
-     
 package org.apache.jmeter.config;
 
 import static org.junit.Assert.assertEquals;
@@ -33,29 +29,33 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestCVSDataSet extends JMeterTestCase {
+/**
+ * Package to test FileServer methods
+ */
+public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
 
     private JMeterVariables threadVars;
-    
 
     @Before
     public void setUp(){
         JMeterContext jmcx = JMeterContextService.getContext();
         jmcx.setVariables(new JMeterVariables());
-        threadVars = jmcx.getVariables();        
+        threadVars = jmcx.getVariables();
         threadVars.put("b", "value");
     }
 
     @After
-    public void tearDown() throws IOException{
+    public void tearDown() throws IOException {
+        // Use of singleton requires this test run in serial
         FileServer.getFileServer().closeFiles();
     }
-    
+
     @Test
     public void testopen() throws Exception {
         CSVDataSet csv = new CSVDataSet();
@@ -76,7 +76,7 @@ public class TestCVSDataSet extends JMeterTestCase {
         csv.setFilename(findTestPath("testfiles/testempty.csv"));
         csv.setVariableNames("a,b,c");
         csv.setDelimiter(",");
-        
+
         csv.iterationStart(null);
         assertEquals("",threadVars.get("a"));
         assertEquals("b1",threadVars.get("b"));
@@ -97,13 +97,13 @@ public class TestCVSDataSet extends JMeterTestCase {
         assertEquals("a4",threadVars.get("a"));
         assertEquals("b4",threadVars.get("b"));
         assertEquals("c4",threadVars.get("c"));
-        
+
         csv.iterationStart(null); // Restart file
         assertEquals("",threadVars.get("a"));
         assertEquals("b1",threadVars.get("b"));
         assertEquals("c1",threadVars.get("c"));
     }
-    
+
     @Test
     public void testutf8() throws Exception {
 
@@ -113,7 +113,7 @@ public class TestCVSDataSet extends JMeterTestCase {
         csv.setDelimiter(",");
         csv.setQuotedData( true );
         csv.setFileEncoding( "UTF-8" );
-        
+
         csv.iterationStart(null);
         assertEquals("a1",threadVars.get("a"));
         assertEquals("b1",threadVars.get("b"));
@@ -159,7 +159,7 @@ public class TestCVSDataSet extends JMeterTestCase {
         assertEquals("c2",threadVars.get("C"));
         assertEquals("d2",threadVars.get("D|1"));
     }
-    
+
     // Test CSV file with a header line and recycle is true
     @Test
     public void testHeaderOpenAndRecycle(){
@@ -179,7 +179,7 @@ public class TestCVSDataSet extends JMeterTestCase {
         assertEquals("c1",threadVars.get("C"));
         assertEquals("d1",threadVars.get("D|1"));
     }
-    
+
     // Test CSV file with a header line
     @Test
     public void testHeaderQuotes(){
@@ -212,13 +212,13 @@ public class TestCVSDataSet extends JMeterTestCase {
             csv.iterationStart(null);
             fail("Expected JMeterStopThreadException");
         } catch (JMeterStopThreadException expected) {
-            
+
         }
     }
-    
+
     private CSVDataSet initCSV(){
         CSVDataSet csv = new CSVDataSet();
-        csv.setFilename(findTestPath("testfiles/test.csv"));
+        csv.setFilename(findTestPath("testfiles/unit/TestCVSDataSet.csv"));
         csv.setVariableNames("a,b,c");
         csv.setDelimiter(",");
         return csv;
@@ -226,7 +226,7 @@ public class TestCVSDataSet extends JMeterTestCase {
 
     @Test
     public void testShareMode(){
-        
+
         new CSVDataSetBeanInfo(); // needs to be initialised
         CSVDataSet csv0 = initCSV();
         CSVDataSet csv1 = initCSV();
@@ -241,9 +241,9 @@ public class TestCVSDataSet extends JMeterTestCase {
         csv2.setShareMode("abc");
         assertEquals("abc",csv2.getShareMode());
         csv2.iterationStart(null);
-        assertEquals("a3",threadVars.get("a"));        
+        assertEquals("a3",threadVars.get("a"));
         csv0.iterationStart(null);
-        assertEquals("a1",threadVars.get("a"));        
+        assertEquals("a1",threadVars.get("a"));
         csv1.iterationStart(null);
         assertEquals("a4",threadVars.get("a"));
     }

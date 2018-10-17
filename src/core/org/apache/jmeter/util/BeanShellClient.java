@@ -91,7 +91,6 @@ public class BeanShellClient {
 
         public SockRead(InputStream _is) {
             this.is=_is;
-            //this.setDaemon(true);
         }
 
         @Override

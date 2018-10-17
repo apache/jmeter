@@ -28,11 +28,12 @@ import static org.junit.Assert.fail;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.LogRecordingDelegatingLogger;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Test;
 
 // TODO need more tests - particularly for the new functions
 
-public class TestSampleResult {
+public class TestSampleResult implements JMeterSerialTest {
 
         @Test
         public void testElapsedTrue() throws Exception {
@@ -70,7 +71,7 @@ public class TestSampleResult {
             long totalSampleTime = sleep(100); // accumulate the time spent 'sampling'
             res.samplePause();
 
-            Thread.sleep(200); // This should be ignored 
+            Thread.sleep(200); // This should be ignored
 
             // Re-increment
             res.sampleResume();
@@ -131,11 +132,11 @@ public class TestSampleResult {
             res.samplePause();
             assertNotEquals(0, recordLogger.getLogRecordCount());
         }
-        
+
         @Test
         public void testByteCount() throws Exception {
             SampleResult res = new SampleResult();
-            
+
             res.sampleStart();
             res.setBytes(100L);
             res.setSampleLabel("sample of size 100 bytes");
@@ -201,8 +202,8 @@ public class TestSampleResult {
             // subsamples, representing images that are downloaded for the
             // page representing the first sample.
 
-            // Sample that will get two sub results, simulates a web page load 
-            SampleResult parent = new SampleResult(nanoTime, nanoThreadSleep);            
+            // Sample that will get two sub results, simulates a web page load
+            SampleResult parent = new SampleResult(nanoTime, nanoThreadSleep);
 
             JMeterTestCase.assertPrimitiveEquals(nanoTime, parent.useNanoTime);
             assertEquals(nanoThreadSleep, parent.nanoThreadSleep);
@@ -218,7 +219,7 @@ public class TestSampleResult {
             long parentElapsed = parent.getTime();
 
             // Sample with no sub results, simulates an image download
-            SampleResult child1 = new SampleResult(nanoTime);            
+            SampleResult child1 = new SampleResult(nanoTime);
             child1.sampleStart();
             Thread.sleep(100);
             child1.setBytes(100L);
@@ -240,8 +241,8 @@ public class TestSampleResult {
                 actualPause = parent.currentTimeInMillis() - t1;
             }
 
-            // Sample with no sub results, simulates an image download 
-            SampleResult child2 = new SampleResult(nanoTime);            
+            // Sample with no sub results, simulates an image download
+            SampleResult child2 = new SampleResult(nanoTime);
             child2.sampleStart();
             Thread.sleep(100);
             child2.setBytes(200L);
@@ -255,7 +256,7 @@ public class TestSampleResult {
             assertEquals("Child2 Sample", child2.getSampleLabel());
             assertEquals(1, child2.getSampleCount());
             assertEquals(0, child2.getSubResults().length);
-            
+
             // Now add the subsamples to the sample
             parent.addSubResult(child1);
             parent.addSubResult(child2);
@@ -265,7 +266,7 @@ public class TestSampleResult {
             assertEquals(1, parent.getSampleCount());
             assertEquals(2, parent.getSubResults().length);
             long parentElapsedTotal = parent.getTime();
-            
+
             long overallTime = parent.currentTimeInMillis() - beginTest;
 
             long sumSamplesTimes = parentElapsed + child1Elapsed + actualPause + child2Elapsed;
@@ -274,7 +275,7 @@ public class TestSampleResult {
              * Parent elapsed total should be no smaller than the sum of the individual samples.
              * It may be greater by the timer granularity.
              */
-            
+
             long diff = parentElapsedTotal - sumSamplesTimes;
             long maxDiff = nanoTime ? 3 : 16; // TimeMillis has granularity of 10-20
             if (diff < 0 || diff > maxDiff) {
@@ -282,17 +283,15 @@ public class TestSampleResult {
                         + " = " + diff + " not in [0," + maxDiff + "]; nanotime=" + nanoTime);
             }
 
-            /**
-             * The overall time to run the test must be no less than, 
-             * and may be greater (but not much greater) than the parent elapsed time
-             */
-            
+             // The overall time to run the test must be no less than,
+             // and may be greater (but not much greater) than the parent elapsed time
+
             diff = overallTime - parentElapsedTotal;
             if (diff < 0 || diff > maxDiff) {
                 fail("TestElapsed: " + overallTime + " - " + " ParentElapsed: " + parentElapsedTotal
                         + " = " + diff + " not in [0," + maxDiff + "]; nanotime="+nanoTime);
             }
-            
+
             // Check that calculator gets the correct statistics from the sample
             Calculator calculator = new Calculator();
             calculator.addSample(parent);
@@ -304,7 +303,7 @@ public class TestSampleResult {
         }
 
         // TODO some more invalid sequence tests needed
-        
+
         @Test
         public void testEncodingAndType() throws Exception {
             // check default
@@ -312,7 +311,7 @@ public class TestSampleResult {
             assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
             assertEquals("DataType should be blank","",res.getDataType());
             assertNull(res.getDataEncodingNoDefault());
-            
+
             // check null changes nothing
             res.setEncodingAndType(null);
             assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
@@ -335,7 +334,7 @@ public class TestSampleResult {
             res.setEncodingAndType("text/html; charset=\"aBCd\"");
             assertEquals("aBCd",res.getDataEncodingWithDefault());
             assertEquals("aBCd",res.getDataEncodingNoDefault());
-            assertEquals("text",res.getDataType());         
+            assertEquals("text",res.getDataType());
         }
 
         // sleep and return how long we actually slept

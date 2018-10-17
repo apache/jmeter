@@ -46,6 +46,7 @@ public class SecuritySettingsPanel extends JPanel{
     public static final String ENFORCE_STARTTLS     = "SMTPSampler.enforceStartTLS"; // $NON-NLS-1$
     public static final String USE_LOCAL_TRUSTSTORE = "SMTPSampler.useLocalTrustStore"; // $NON-NLS-1$
     public static final String TRUSTSTORE_TO_USE    = "SMTPSampler.trustStoreToUse"; // $NON-NLS-1$
+    public static final String TLS_PROTOCOLS        = "SMTPSampler.tlsProtocols"; // $NON-NLS-1$
     //--JMX attribute names
 
     private ButtonGroup bgSecuritySettings;
@@ -66,6 +67,10 @@ public class SecuritySettingsPanel extends JPanel{
 
     private JTextField tfTrustStoreToUse;
 
+    private JTextField tfTlsProtocolsToUse;
+
+    private JLabel jlTlsProtocolsToUse;
+
 
     public SecuritySettingsPanel() {
         super();
@@ -79,7 +84,7 @@ public class SecuritySettingsPanel extends JPanel{
                 JMeterUtils.getResString("smtp_security_settings"))); // $NON-NLS-1$
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 3, 3);
         gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 0.5;
@@ -93,8 +98,10 @@ public class SecuritySettingsPanel extends JPanel{
         cbUseLocalTrustStore = new JCheckBox(JMeterUtils.getResString("smtp_usetruststore")); // $NON-NLS-1$
 
         jlTrustStoreToUse = new JLabel(JMeterUtils.getResString("smtp_truststore")); // $NON-NLS-1$
+        jlTlsProtocolsToUse = new JLabel(JMeterUtils.getResString("smtp_tlsprotocols")); // $NON-NLS-1$
 
         tfTrustStoreToUse = new JTextField(20);
+        tfTlsProtocolsToUse = new JTextField(20);
 
         rbUseNone.setSelected(true);
         bgSecuritySettings = new ButtonGroup();
@@ -160,6 +167,17 @@ public class SecuritySettingsPanel extends JPanel{
         gridBagConstraints.gridy = 2;
         tfTrustStoreToUse.setToolTipText(JMeterUtils.getResString("smtp_truststore_tooltip")); // $NON-NLS-1$
         this.add(tfTrustStoreToUse, gridBagConstraints);
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 1;
+        jlTlsProtocolsToUse.setToolTipText(JMeterUtils.getResString("smtp_tlsprotocols_tooltip")); // $NON-NLS-1$
+        this.add(jlTlsProtocolsToUse, gridBagConstraints);
+
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        tfTrustStoreToUse.setToolTipText(JMeterUtils.getResString("smtp_tlsprotocols_tooltip")); // $NON-NLS-1$
+        this.add(tfTlsProtocolsToUse, gridBagConstraints);
     }
 
     /**
@@ -218,12 +236,14 @@ public class SecuritySettingsPanel extends JPanel{
             cbUseLocalTrustStore.setSelected(false);
             cbUseLocalTrustStore.setEnabled(false);
             tfTrustStoreToUse.setEditable(false);
+            tfTlsProtocolsToUse.setEditable(false);
         } else if (source == rbUseSSL) {
             cbTrustAllCerts.setEnabled(true);
             cbEnforceStartTLS.setEnabled(false);
             cbEnforceStartTLS.setSelected(false);
             cbUseLocalTrustStore.setEnabled(true);
             tfTrustStoreToUse.setEditable(false);
+            tfTlsProtocolsToUse.setEditable(true);
         } else if (source == rbUseStartTLS) {
             cbTrustAllCerts.setEnabled(true);
             cbTrustAllCerts.setSelected(false);
@@ -231,6 +251,7 @@ public class SecuritySettingsPanel extends JPanel{
             cbUseLocalTrustStore.setEnabled(true);
             cbUseLocalTrustStore.setSelected(false);
             tfTrustStoreToUse.setEditable(false);
+            tfTlsProtocolsToUse.setEditable(true);
         }
     }
     /**
@@ -334,6 +355,26 @@ public class SecuritySettingsPanel extends JPanel{
     public void setTrustStoreToUse(String trustStoreToUse) {
         tfTrustStoreToUse.setText(trustStoreToUse);
     }
+
+    /**
+     * Returns the TLS protocols to use for handshake
+     *
+     * @return Space separated list of protocols
+     */
+    public String getTlsProtocolsToUse() {
+        return tfTlsProtocolsToUse.getText();
+    }
+
+    /**
+     * Set the TLS protocols to use for handshake
+     *
+     * @param tlsProtocols
+     *              Space separated list of protocols to use
+     */
+    public void setTlsProtocolsToUse(String tlsProtocols) {
+        tfTlsProtocolsToUse.setText(tlsProtocols);
+    }
+
     public void setUseNoSecurity(boolean selected) {
         rbUseNone.setSelected(selected);
     }
@@ -361,6 +402,7 @@ public class SecuritySettingsPanel extends JPanel{
 
     public void clear() {
         tfTrustStoreToUse.setText("");
+        tfTlsProtocolsToUse.setText("");
         rbUseNone.setSelected(true);
     }
 
@@ -374,6 +416,7 @@ public class SecuritySettingsPanel extends JPanel{
         setEnforceStartTLS(element.getPropertyAsBoolean(ENFORCE_STARTTLS));
         setUseLocalTrustStore(element.getPropertyAsBoolean(USE_LOCAL_TRUSTSTORE));
         setTrustStoreToUse(element.getPropertyAsString(TRUSTSTORE_TO_USE));
+        setTlsProtocolsToUse(element.getPropertyAsString(TLS_PROTOCOLS));
     }
 
     public void modifyTestElement(TestElement te) {
@@ -383,6 +426,6 @@ public class SecuritySettingsPanel extends JPanel{
         te.setProperty(ENFORCE_STARTTLS, Boolean.toString(isEnforceStartTLS()));
         te.setProperty(USE_LOCAL_TRUSTSTORE, Boolean.toString(isUseLocalTrustStore()));
         te.setProperty(TRUSTSTORE_TO_USE, getTrustStoreToUse());
+        te.setProperty(TLS_PROTOCOLS, getTlsProtocolsToUse());
     }
-
 }

@@ -28,6 +28,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -36,6 +37,7 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jorphan.util.JMeterStopTestNowException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +75,8 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     public static final String ADD_TIMESTAMP = "FileSaver.addTimstamp"; // $NON-NLS-1$
 
     public static final String NUMBER_PAD_LENGTH = "FileSaver.numberPadLen"; // $NON-NLS-1$
+    
+    public static final String IGNORE_TC = "FileSaver.ignoreTC"; // $NON-NLS-1$
 
     //- JMX property names
 
@@ -150,7 +154,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
      */
     @Override
     public void sampleOccurred(SampleEvent e) {
-      processSample(e.getResult(), new Counter());
+        processSample(e.getResult(), new Counter());
    }
 
    /**
@@ -172,15 +176,11 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
      * @param num number to append to variable (if >0)
      */
     private void saveSample(SampleResult s, int num) {
-        // Should we save the sample?
-        if (s.isSuccessful()){
-            if (getErrorsOnly()){
-                return;
+        if(ignoreSampler(s)) {
+            if (log.isDebugEnabled()) {
+                log.debug("Ignoring SampleResult from Sampler {}", s.getSampleLabel());
             }
-        } else {
-            if (getSuccessOnly()){
-                return;
-            }
+            return;
         }
 
         String fileName = makeFileName(s.getContentType(), getSkipAutoNumber(), getSkipSuffix());
@@ -198,6 +198,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
             JMeterContextService.getContext().getVariables().put(variable, fileName);
         }
         File out = new File(fileName);
+        createFoldersIfNeeded(out.getParentFile());
         try (FileOutputStream fos = new FileOutputStream(out);
                 BufferedOutputStream bos = new BufferedOutputStream(fos)){
             JOrphanUtils.write(s.getResponseData(), bos); // chunk the output if necessary
@@ -205,6 +206,37 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
             log.error("Error creating sample file for {}", s.getSampleLabel(), e);
         } catch (IOException e) {
             log.error("Error saving sample {}", s.getSampleLabel(), e);
+        }
+    }
+
+    /**
+     * @param s {@link SamplerResult}
+     * @return true if we should ignore SampleResult
+     */
+    private boolean ignoreSampler(SampleResult s) {
+        if(getIgnoreTC() && TransactionController.isFromTransactionController(s)) {
+            return true;
+        }
+        // Should we save the sample?
+        return (s.isSuccessful() && getErrorsOnly()) ||
+                (!s.isSuccessful() && getSuccessOnly());
+    }
+
+    /**
+     * Create path hierarchy to parentFile 
+     * @param parentFile
+     */
+    private void createFoldersIfNeeded(File parentFile) {
+        if(parentFile == null) {
+            return;
+        }
+        if (!parentFile.exists()) {
+            log.debug("Creating path hierarchy for folder {}", parentFile.getAbsolutePath());
+            if(!parentFile.mkdirs()) {
+                throw new JMeterStopTestNowException("Cannot create path hierarchy for folder "+ parentFile.getAbsolutePath());
+            }
+        } else {
+            log.debug("Folder {} already exists", parentFile.getAbsolutePath());
         }
     }
 
@@ -263,36 +295,48 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
         // not used
     }
 
-    private String getFilename() {
+    public String getFilename() {
         return getPropertyAsString(FILENAME);
     }
 
-    private String getVariableName() {
+    public String getVariableName() {
         return getPropertyAsString(VARIABLE_NAME,""); // $NON-NLS-1$
     }
 
-    private boolean getErrorsOnly() {
+    public boolean getErrorsOnly() {
         return getPropertyAsBoolean(ERRORS_ONLY);
     }
 
-    private boolean getSkipAutoNumber() {
+    public boolean getSkipAutoNumber() {
         return getPropertyAsBoolean(SKIP_AUTO_NUMBER);
     }
 
-    private boolean getSkipSuffix() {
+    public boolean getSkipSuffix() {
         return getPropertyAsBoolean(SKIP_SUFFIX);
     }
 
-    private boolean getSuccessOnly() {
+    public boolean getSuccessOnly() {
         return getPropertyAsBoolean(SUCCESS_ONLY);
     }
 
-    private boolean getAddTimeStamp() {
+    public boolean getAddTimeStamp() {
         return getPropertyAsBoolean(ADD_TIMESTAMP);
     }
 
-    private int getNumberPadLen() {
+    public int getNumberPadLen() {
         return getPropertyAsInt(NUMBER_PAD_LENGTH, 0);
+    }
+    
+    public boolean getIgnoreTC() {
+        return getPropertyAsBoolean(IGNORE_TC, true);
+    }
+    
+    public void setIgnoreTC(boolean value) {
+        setProperty(IGNORE_TC, value, true);
+    }
+    
+    public void setFilename(String value) {
+        setProperty(FILENAME, value);
     }
 
     // Mutable int to keep track of sample count
@@ -314,5 +358,33 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
+    }
+
+    public void setAddTimestamp(boolean selected) {
+        setProperty(ADD_TIMESTAMP, selected, false);
+    }
+
+    public void setVariableName(String value) {
+        setProperty(VARIABLE_NAME, value,""); //$NON-NLS-1$
+    }
+
+    public void setNumberPadLength(String text) {
+        setProperty(ResultSaver.NUMBER_PAD_LENGTH, text,""); //$NON-NLS-1$
+    }
+
+    public void setErrorsOnly(boolean selected) {
+        setProperty(ResultSaver.ERRORS_ONLY, selected);
+    }
+
+    public void setSuccessOnly(boolean selected) {
+        setProperty(ResultSaver.SUCCESS_ONLY, selected);
+    }
+
+    public void setSkipSuffix(boolean selected) {
+        setProperty(ResultSaver.SKIP_SUFFIX, selected);
+    }
+
+    public void setSkipAutoNumber(boolean selected) {
+        setProperty(ResultSaver.SKIP_AUTO_NUMBER, selected);
     }
 }

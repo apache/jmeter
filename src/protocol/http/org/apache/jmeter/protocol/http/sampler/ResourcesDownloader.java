@@ -145,7 +145,8 @@ public class ResourcesDownloader {
      * @return list tasks that have been scheduled
      * @throws InterruptedException when interrupted while waiting
      */
-    public List<Future<AsynSamplerResultHolder>> invokeAllAndAwaitTermination(int maxConcurrentDownloads, List<Callable<AsynSamplerResultHolder>> list) throws InterruptedException {
+    public List<Future<AsynSamplerResultHolder>> invokeAllAndAwaitTermination(int maxConcurrentDownloads,
+            List<Callable<AsynSamplerResultHolder>> list) throws InterruptedException {
         List<Future<AsynSamplerResultHolder>> submittedTasks = new ArrayList<>();
         
         // paranoid fast path

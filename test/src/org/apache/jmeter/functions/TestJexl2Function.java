@@ -98,4 +98,12 @@ public class TestJexl2Function extends JMeterTestCase {
         assertEquals("/query.cgi?s1=1&s2=2&s3=3", ret);
         assertEquals(ret,vars.getObject("URL"));
     }
+
+    @Test
+    public void testSumWithVar() throws Exception {
+        params.add(new CompoundVariable("var a = 1+2+3"));
+        function.setParameters(params);
+        String ret = function.execute(result, null);
+        assertEquals("6", ret);
+    }
 }

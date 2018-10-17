@@ -96,7 +96,7 @@ public class Calculator {
             maximum=Math.max(newValue/sampleCount, maximum);
             // For n values in an aggregate sample the average value = (val/n)
             // So need to add n * (val/n) * (val/n) = val * val / n
-            sumOfSquares += (currentVal * currentVal) / (sampleCount);
+            sumOfSquares += (currentVal * currentVal) / sampleCount;
         } else { // no point dividing by 1
             minimum=Math.min(newValue, minimum);
             maximum=Math.max(newValue, maximum);

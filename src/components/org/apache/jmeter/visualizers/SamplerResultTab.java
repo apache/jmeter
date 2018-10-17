@@ -22,6 +22,7 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,9 +51,13 @@ import javax.swing.text.StyledDocument;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.gui.util.JSyntaxSearchToolBar;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.TextBoxDialoger.TextBoxDoubleClick;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.SearchTextExtension.JEditorPaneSearchProvider;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
@@ -64,6 +69,7 @@ import org.apache.jorphan.reflect.Functor;
  */
 public abstract class SamplerResultTab implements ResultRenderer {
 
+    
     // N.B. these are not multi-threaded, so don't make it static
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
 
@@ -93,6 +99,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
     /** Contains results; contained in resultsPane */
     protected JScrollPane resultsScrollPane;
     
+    private JSyntaxTextArea headerData;
     /** Response Data shown here */
     protected JEditorPane results;
 
@@ -113,8 +120,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
     private AssertionResult assertionResult = null;
 
     protected SearchTextExtension searchTextExtension;
-
-    private JPanel searchPanel = null;
 
     protected boolean activateSearchExtension = true; // most current subclasses can process text
 
@@ -200,6 +205,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
     @Override
     public void clearData() {
         results.setText("");// Response Data // $NON-NLS-1$
+        headerData.setInitialText(""); // $NON-NLS-1$
         requestPanel.clearData();// Request Data // $NON-NLS-1$
         stats.setText(""); // Sampler result // $NON-NLS-1$
         resultModel.clearData();
@@ -232,20 +238,58 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 String typeResult = samplerClass.substring(1 + samplerClass.lastIndexOf('.'));
                 
                 StringBuilder statsBuff = new StringBuilder(200);
-                statsBuff.append(JMeterUtils.getResString("view_results_thread_name")).append(sampleResult.getThreadName()).append(NL); //$NON-NLS-1$
-                String startTime = dateFormat.format(new Date(sampleResult.getStartTime()));
-                statsBuff.append(JMeterUtils.getResString("view_results_sample_start")).append(startTime).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_load_time")).append(sampleResult.getTime()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_connect_time")).append(sampleResult.getConnectTime()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_latency")).append(sampleResult.getLatency()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_size_in_bytes")).append(sampleResult.getBytesAsLong()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_sent_bytes")).append(sampleResult.getSentBytes()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_size_headers_in_bytes")).append(sampleResult.getHeadersSize()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_size_body_in_bytes")).append(sampleResult.getBodySizeAsLong()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_sample_count")).append(sampleResult.getSampleCount()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_error_count")).append(sampleResult.getErrorCount()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_datatype")).append(sampleResult.getDataType()).append(NL); //$NON-NLS-1$
-                statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_thread_name")) //$NON-NLS-1$
+                        .append(sampleResult.getThreadName()).append(NL);
+                String startTime = dateFormat
+                        .format(new Date(sampleResult.getStartTime()));
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_sample_start")) //$NON-NLS-1$
+                        .append(startTime).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_load_time")) //$NON-NLS-1$
+                        .append(sampleResult.getTime()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_connect_time")) //$NON-NLS-1$
+                        .append(sampleResult.getConnectTime()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_latency")) //$NON-NLS-1$
+                        .append(sampleResult.getLatency()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_size_in_bytes")) //$NON-NLS-1$
+                        .append(sampleResult.getBytesAsLong()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_sent_bytes")) //$NON-NLS-1$
+                        .append(sampleResult.getSentBytes()).append(NL);
+                statsBuff
+                        .append(JMeterUtils.getResString(
+                                "view_results_size_headers_in_bytes")) //$NON-NLS-1$
+                        .append(sampleResult.getHeadersSize()).append(NL);
+                statsBuff
+                        .append(JMeterUtils.getResString(
+                                "view_results_size_body_in_bytes")) //$NON-NLS-1$
+                        .append(sampleResult.getBodySizeAsLong()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_sample_count")) //$NON-NLS-1$
+                        .append(sampleResult.getSampleCount()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_error_count")) //$NON-NLS-1$
+                        .append(sampleResult.getErrorCount()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_datatype")) //$NON-NLS-1$
+                        .append(sampleResult.getDataType()).append(NL);
+                statsDoc.insertString(statsDoc.getLength(),
+                        statsBuff.toString(), null);
                 statsBuff.setLength(0); // reset for reuse
 
                 String responseCode = sampleResult.getResponseCode();
@@ -281,31 +325,71 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 // response message label
                 String responseMsgStr = sampleResult.getResponseMessage();
 
-                statsBuff.append(JMeterUtils.getResString("view_results_response_message")).append(responseMsgStr).append(NL); //$NON-NLS-1$
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_response_message")) //$NON-NLS-1$
+                        .append(responseMsgStr).append(NL);
                 statsBuff.append(NL);
-                statsBuff.append(JMeterUtils.getResString("view_results_response_headers")).append(NL); //$NON-NLS-1$
-                statsBuff.append(sampleResult.getResponseHeaders()).append(NL);
                 statsBuff.append(NL);
-                statsBuff.append(typeResult + " "+ JMeterUtils.getResString("view_results_fields")).append(NL); //$NON-NLS-1$ $NON-NLS-2$
-                statsBuff.append("ContentType: ").append(sampleResult.getContentType()).append(NL); //$NON-NLS-1$
-                statsBuff.append("DataEncoding: ").append(sampleResult.getDataEncodingNoDefault()).append(NL); //$NON-NLS-1$
+                statsBuff
+                        .append(typeResult + " " //$NON-NLS-1$
+                                + JMeterUtils
+                                        .getResString("view_results_fields"))
+                        .append(NL); // $NON-NLS-2$
+                statsBuff.append("ContentType: ") //$NON-NLS-1$
+                        .append(sampleResult.getContentType()).append(NL);
+                statsBuff.append("DataEncoding: ") //$NON-NLS-1$
+                        .append(sampleResult.getDataEncodingNoDefault())
+                        .append(NL);
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
                 statsBuff = null; // NOSONAR Help gc
                 
                 // Tabbed results: fill table
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_thread_name"), sampleResult.getThreadName())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_start"), startTime)); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_load_time"), sampleResult.getTime())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_connect_time"), sampleResult.getConnectTime())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_latency"), sampleResult.getLatency())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_in_bytes"), sampleResult.getBytesAsLong())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sent_bytes"),sampleResult.getSentBytes())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_headers_in_bytes"), sampleResult.getHeadersSize())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_body_in_bytes"), sampleResult.getBodySizeAsLong())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_count"), sampleResult.getSampleCount())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_error_count"), sampleResult.getErrorCount())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_code"), responseCode)); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_message"), responseMsgStr)); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_thread_name"), //$NON-NLS-1$
+                        sampleResult.getThreadName()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_sample_start"), //$NON-NLS-1$
+                        startTime));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_load_time"), //$NON-NLS-1$
+                        sampleResult.getTime()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_connect_time"), //$NON-NLS-1$
+                        sampleResult.getConnectTime()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_latency"), //$NON-NLS-1$
+                        sampleResult.getLatency()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils
+                                .getParsedLabel("view_results_size_in_bytes"), //$NON-NLS-1$
+                        sampleResult.getBytesAsLong()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_sent_bytes"), //$NON-NLS-1$
+                        sampleResult.getSentBytes()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel(
+                                "view_results_size_headers_in_bytes"), //$NON-NLS-1$
+                        sampleResult.getHeadersSize()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel(
+                                "view_results_size_body_in_bytes"), //$NON-NLS-1$
+                        sampleResult.getBodySizeAsLong()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_sample_count"), //$NON-NLS-1$
+                        sampleResult.getSampleCount()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel("view_results_error_count"), //$NON-NLS-1$
+                        sampleResult.getErrorCount()));
+                resultModel
+                        .addRow(new RowResult(
+                                JMeterUtils.getParsedLabel(
+                                        "view_results_response_code"), //$NON-NLS-1$
+                                responseCode));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel(
+                                "view_results_response_message"), //$NON-NLS-1$
+                        responseMsgStr));
                 
                 // Parsed response headers
                 LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getResponseHeaders());
@@ -313,7 +397,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 for (Entry<String, String> entry : keySet) {
                     resHeadersModel.addRow(new RowResult(entry.getKey(), entry.getValue()));
                 }
-                
+
+                headerData.setInitialText(sampleResult.getResponseHeaders());
+
                 // Fields table
                 resFieldsModel.addRow(new RowResult("Type Result ", typeResult)); //$NON-NLS-1$
                 //not sure needs I18N?
@@ -332,10 +418,20 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 setupTabPaneForAssertionResult();
 
                 StringBuilder statsBuff = new StringBuilder(100);
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_error")).append(assertionResult.isError()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure")).append(assertionResult.isFailure()).append(NL); //$NON-NLS-1$
-                statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure_message")).append(assertionResult.getFailureMessage()).append(NL); //$NON-NLS-1$
-                statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_assertion_error")) //$NON-NLS-1$
+                        .append(assertionResult.isError()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_assertion_failure")) //$NON-NLS-1$
+                        .append(assertionResult.isFailure()).append(NL);
+                statsBuff
+                        .append(JMeterUtils.getResString(
+                                "view_results_assertion_failure_message")) //$NON-NLS-1$
+                        .append(assertionResult.getFailureMessage()).append(NL);
+                statsDoc.insertString(statsDoc.getLength(),
+                        statsBuff.toString(), null);
             }
             stats.setCaretPosition(1);
         } catch (BadLocationException exc) {
@@ -465,23 +561,35 @@ public abstract class SamplerResultTab implements ResultRenderer {
         results = new JEditorPane();
         results.setEditable(false);
 
+        headerData = JSyntaxTextArea.getInstance(20, 80, true);
+        headerData.setEditable(false);
+        headerData.setLineWrap(true);
+        headerData.setWrapStyleWord(true);
+
+        JPanel headersAndSearchPanel = new JPanel(new BorderLayout());
+        headersAndSearchPanel.add(new JSyntaxSearchToolBar(headerData).getToolBar(), BorderLayout.NORTH);
+        headersAndSearchPanel.add(JTextScrollPane.getInstance(headerData), BorderLayout.CENTER);
+
         resultsScrollPane = GuiUtils.makeScrollPane(results);
         imageLabel = new JLabel();
 
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(resultsScrollPane, BorderLayout.CENTER);
+        JPanel resultAndSearchPanel = new JPanel(new BorderLayout());
+        resultAndSearchPanel.add(resultsScrollPane, BorderLayout.CENTER);
+
 
         if (activateSearchExtension) {
             // Add search text extension
-            searchTextExtension = new SearchTextExtension();
-            searchTextExtension.init(panel);
-            searchPanel = searchTextExtension.createSearchTextExtensionPane();
-            searchTextExtension.setResults(results);
-            searchPanel.setVisible(true);
-            panel.add(searchPanel, BorderLayout.PAGE_END);
+            searchTextExtension = new SearchTextExtension(new JEditorPaneSearchProvider(results));
+            resultAndSearchPanel.add(searchTextExtension.getSearchToolBar(), BorderLayout.NORTH);
         }
 
-        return panel;
+        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane.addTab(JMeterUtils.getResString("view_results_response_body"), new JScrollPane(resultAndSearchPanel));
+        tabbedPane.addTab(JMeterUtils.getResString("view_results_response_headers"), new JScrollPane(headersAndSearchPanel));
+
+        JPanel gPanel = new JPanel(new GridLayout(1,1));
+        gPanel.add(tabbedPane);
+        return gPanel;
     }
 
     private void showImage(Icon image) {

@@ -23,9 +23,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import org.apache.jmeter.report.core.Sample;
-import org.apache.jmeter.report.core.SampleMetadata;
-
 /**
  * This class is meant to simplify the building of samples.
  * <p>

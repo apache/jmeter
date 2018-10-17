@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -61,6 +62,17 @@ public class ResponseAssertionTest {
     }
 
     @Test
+    public void testResponseAssertionNoText() throws Exception{
+        assertion.clearTestStrings();
+        assertion.unsetNotType();
+        assertion.setToSubstringType();
+        assertion.setTestFieldResponseData();
+        //assertion.addTestString("response Data");
+        result = assertion.getResult(sample);
+        assertPassed();
+    }
+    
+    @Test
     public void testResponseAssertionEquals() throws Exception{
         assertion.unsetNotType();
         assertion.setToEqualsType();
@@ -76,6 +88,43 @@ public class ResponseAssertionTest {
         assertion.addTestString("Sampler Labelx");      
         result = assertion.getResult(sample);
         assertPassed();
+    }
+    
+    @Test
+    public void testCustomFailureMessage() throws Exception {
+        assertion.unsetNotType();
+        assertion.setToEqualsType();
+        assertion.setTestFieldURL();
+        assertion.addTestString("Sampler Label");
+        assertion.addTestString("Sampler labelx");
+        assertion.setCustomFailureMessage("Custom failure message");
+        result = assertion.getResult(sample);
+        assertFailed();
+        assertEquals("Custom failure message", result.getFailureMessage());
+        
+        assertion.setToOrType();
+        result = assertion.getResult(sample);
+        assertFailed();
+        assertEquals("Custom failure message", result.getFailureMessage());
+    }
+    
+    @Test
+    public void testMalformedCachePatternException() throws Exception{
+        assertion.unsetNotType();
+        assertion.setToMatchType();
+        assertion.setTestFieldResponseHeaders();
+        assertion.addTestString("[]");
+        result = assertion.getResult(sample);
+        assertNotNull(result.getFailureMessage());
+        assertFalse("Should not be: Response was null","Response was null".equals(result.getFailureMessage()));
+        assertTrue("Not expecting error: "+result.getFailureMessage(),result.isError());
+        
+        assertion.setCustomFailureMessage("Custom failure message");
+        result = assertion.getResult(sample);
+        assertTrue("Did not get expected error: "+result.getFailureMessage(),result.isError());
+        assertFalse("Failure message must not be custom failure message for error", 
+                "Custom failure message".equals(result.getFailureMessage()));
+
     }
     
     @Test

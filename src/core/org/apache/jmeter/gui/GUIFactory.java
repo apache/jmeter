@@ -57,7 +57,6 @@ public final class GUIFactory {
      */
     public static ImageIcon getIcon(Class<?> elementClass) {
         return getIcon(elementClass, true);
-
     }
 
     /**

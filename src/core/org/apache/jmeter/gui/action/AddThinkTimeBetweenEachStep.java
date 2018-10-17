@@ -86,20 +86,17 @@ public class AddThinkTimeBetweenEachStep extends AbstractAction {
     private void addThinkTimeToChildren(GuiPackage guiPackage, 
             JMeterTreeNode parentNode) throws IllegalUserActionException {
         guiPackage.updateCurrentNode();
-        boolean insertThinkTime = false;
+        boolean insertThinkTime;
         try {
             int index = 0;
             while(true) {
                 if(index == parentNode.getChildCount()) {
-                    index++;
                     break;
                 }
                 JMeterTreeNode childNode = (JMeterTreeNode) parentNode.getChildAt(index);
                 Object userObject = childNode.getUserObject();
-                if(userObject instanceof Sampler ||
-                        userObject instanceof Controller) {
-                    insertThinkTime = true;                
-                }
+                insertThinkTime = childNode.isEnabled() 
+                        && (userObject instanceof Sampler || userObject instanceof Controller);
                 if(insertThinkTime) {
                     JMeterTreeNode[] nodes = createThinkTime(guiPackage, parentNode);
                     if(nodes.length != 2) {
@@ -107,7 +104,6 @@ public class AddThinkTimeBetweenEachStep extends AbstractAction {
                     }
                     index++;
                     addNodesToTreeHierachically(guiPackage, parentNode, nodes, index);
-                    insertThinkTime = false;
                 }
                 index++;
             }

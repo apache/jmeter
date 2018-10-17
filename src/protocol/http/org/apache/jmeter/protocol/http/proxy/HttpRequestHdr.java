@@ -39,14 +39,11 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-
-//For unit tests, @see TestHttpRequestHdr
+import org.slf4j.LoggerFactory;
 
 /**
  * The headers of the client HTTP request.
- *
  */
 public class HttpRequestHdr {
     private static final Logger log = LoggerFactory.getLogger(HttpRequestHdr.class);
@@ -87,16 +84,39 @@ public class HttpRequestHdr {
 
     private String firstLine; // saved copy of first line for error reports
 
+    private String prefix;
+    
+    private int httpSampleNameMode;
+
     public HttpRequestHdr() {
-        this.httpSamplerName = ""; // $NON-NLS-1$
-        this.firstLine = "" ; // $NON-NLS-1$
+        this("", "");
     }
 
     /**
      * @param httpSamplerName the http sampler name
      */
     public HttpRequestHdr(String httpSamplerName) {
+        this("", httpSamplerName);
+    }
+    
+    /**
+     * @param prefix Sampler prefix
+     * @param httpSamplerName the http sampler name
+     */
+    public HttpRequestHdr(String prefix, String httpSamplerName) {
+        this(prefix, httpSamplerName,0);
+    }
+
+    /**
+     * @param prefix Sampler prefix
+     * @param httpSamplerName the http sampler name
+     * @param httpSampleNameMode the naming mode of sampler name
+     */
+    public HttpRequestHdr(String prefix, String httpSamplerName, int httpSampleNameMode) {
+        this.prefix = prefix;
         this.httpSamplerName = httpSamplerName;
+        this.firstLine = "" ; // $NON-NLS-1$
+        this.httpSampleNameMode = httpSampleNameMode;
     }
 
     /**
@@ -318,7 +338,7 @@ public class HttpRequestHdr {
      */
     public int serverPort() {
         String str = url;
-        // chop to "server.name:x/thing"
+        // chop to "server.name:xhing"
         int i = str.indexOf("//");
         if (i > 0) {
             str = str.substring(i + 2);
@@ -438,5 +458,19 @@ public class HttpRequestHdr {
             }
             return HTTP;
         }
+    }
+
+    /**
+     * @return the prefix
+     */
+    public String getPrefix() {
+        return prefix;
+    }
+    
+    /**
+     * @return the httpSampleNameMode
+     */
+    public int getHttpSampleNameMode() {
+        return httpSampleNameMode;
     }
 }

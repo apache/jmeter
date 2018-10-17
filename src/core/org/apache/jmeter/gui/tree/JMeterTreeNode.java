@@ -23,14 +23,15 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.gui.GuiPackage;
@@ -47,9 +48,11 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     private static final int TEST_PLAN_LEVEL = 1;
 
     // See Bug 54648
-    private transient JMeterTreeModel treeModel;
+    private transient Optional<JMeterTreeModel> treeModel;
 
     private boolean markedBySearch;
+
+    private boolean childrenMarkedBySearch;
 
     public JMeterTreeNode() {// Allow serializable test to work
         // TODO: is the serializable test necessary now that JMeterTreeNode is
@@ -59,7 +62,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 
     public JMeterTreeNode(TestElement userObj, JMeterTreeModel treeModel) {
         super(userObj);
-        this.treeModel = treeModel;
+        this.treeModel = Optional.ofNullable(treeModel);
     }
 
     public boolean isEnabled() {
@@ -68,7 +71,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 
     public void setEnabled(boolean enabled) {
         getTestElement().setEnabled(enabled);
-        treeModel.nodeChanged(this);
+        treeModel.ifPresent(tm -> tm.nodeChanged(this));
     }
     
     /**
@@ -76,30 +79,45 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
      * @return {@link List} of {@link JMeterTreeNode}s
      */
     public List<JMeterTreeNode> getPathToThreadGroup() {
-        List<JMeterTreeNode> nodes = new ArrayList<>();
-        if (treeModel != null) {
-            TreeNode[] nodesToRoot = treeModel.getPathToRoot(this);
-            for (TreeNode node : nodesToRoot) {
-                JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) node;
-                int level = jMeterTreeNode.getLevel();
-                if (level >= TEST_PLAN_LEVEL) {
-                    nodes.add(jMeterTreeNode);
-                }
-            }
+        if (!treeModel.isPresent()) {
+            return new ArrayList<>();
         }
-        return nodes;
+
+        return Arrays.stream(treeModel.get().getPathToRoot(this))
+                .map(node -> (JMeterTreeNode) node)
+                .filter(node -> node.getLevel() >= TEST_PLAN_LEVEL)
+                .collect(Collectors.toList());
     }
     
+    /**
+     * One of the children of this node have matched a search
+     * @param tagged true if we must tag
+     */
+    public void setChildrenNodesHaveMatched(boolean tagged) {
+        if (childrenMarkedBySearch == tagged) {
+            return;
+        }
+        this.childrenMarkedBySearch = tagged;
+        treeModel.ifPresent(tm -> tm.nodeChanged(this));
+    }
     /**
      * Tag Node as result of a search
      * @param tagged The flag to be used for tagging
      */
     public void setMarkedBySearch(boolean tagged) {
-        if(this.markedBySearch == tagged) {
+        if (this.markedBySearch == tagged) {
             return;
         }
         this.markedBySearch = tagged;
-        treeModel.nodeChanged(this);
+        List<JMeterTreeNode> nodesToParent = getPathToThreadGroup();
+        for (JMeterTreeNode jMeterTreeNode : nodesToParent) {
+            // Ignore me
+            if(jMeterTreeNode != this) {
+                jMeterTreeNode.setChildrenNodesHaveMatched(true);
+            }
+        }
+
+        treeModel.ifPresent(tm -> tm.nodeChanged(this));
     }
     
     /**
@@ -108,6 +126,14 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
      */
     public boolean isMarkedBySearch() {
         return this.markedBySearch;
+    }
+    
+    /**
+     * Node has children marked by search
+     * @return boolean are children marked by search
+     */
+    public boolean isChildrenMarkedBySearch() {
+        return this.childrenMarkedBySearch;
     }
 
     public ImageIcon getIcon() {
@@ -190,9 +216,6 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     /** {@inheritDoc} */
     @Override
     public void nameChanged() {
-        if (treeModel != null) { // may be null during startup
-            treeModel.nodeChanged(this);
-        }
+        treeModel.ifPresent(tm -> tm.nodeChanged(this));
     }
-
 }

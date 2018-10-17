@@ -40,7 +40,7 @@ public class TestStatCalculator {
 
     @Test
     public void testPercentagePoint() throws Exception {
-        long values[] = new long[] {
+        long[] values = new long[] {
             10L,9L,5L,6L,1L,3L,8L,2L,7L,4L
         };
         for (long l : values) {
@@ -54,7 +54,7 @@ public class TestStatCalculator {
     @Ignore
     // Disabled due to in progress Bug 61071
     public void testPercentagePointBug() throws Exception {
-        long values[] = new long[] {
+        long[] values = new long[] {
             10L,9L,5L,6L,1L,3L,8L,2L,7L,4L
         };
         DescriptiveStatistics statistics = new DescriptiveStatistics();

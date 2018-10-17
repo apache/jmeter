@@ -47,11 +47,7 @@ public abstract class AbstractProperty implements JMeterProperty {
     }
 
     protected boolean isEqualType(JMeterProperty prop) {
-        if (this.getClass().equals(prop.getClass())) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.getClass().equals(prop.getClass());
     }
 
     /** {@inheritDoc} */
@@ -322,7 +318,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         try {
             @SuppressWarnings("unchecked") // empty collection
             Map<String, JMeterProperty> newColl = coll.getClass().newInstance();
-            for (Map.Entry<?,?> entry : ((Map<?,?>)coll).entrySet()) {
+            for (Map.Entry<?,?> entry : coll.entrySet()) {
                 Object key = entry.getKey();
                 Object prop = entry.getValue();
                 String item=null;

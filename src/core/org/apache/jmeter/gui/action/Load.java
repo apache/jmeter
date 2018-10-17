@@ -38,13 +38,13 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * Handles the Open (load a new file) and Merge commands.
@@ -145,6 +145,12 @@ public class Load extends AbstractActionWithNoRunningTest {
                 JMeterUtils.reportErrorToUser(SaveService.CEtoString(ex));
             } catch (IOException ex) {
                 reportError("Error reading file. {}", ex, false);
+            } catch (StreamException ex) {
+                Throwable exceptionToDisplay = ex;
+                if ("".equals(ex.getMessage()) && ex.getCause() != null) {
+                    exceptionToDisplay = ex.getCause();
+                }
+                reportError("Error in XML format. {}", exceptionToDisplay, false);
             } catch (Exception ex) {
                 reportError("Unexpected error. {}", ex, true);
             }
@@ -181,7 +187,7 @@ public class Load extends AbstractActionWithNoRunningTest {
 
         if (merging){ // Check if target of merge is reasonable
             final TestElement te = (TestElement)tree.getArray()[0];
-            if (!(te instanceof WorkBench || te instanceof TestPlan)){// These are handled specially by addToTree
+            if (!(te instanceof TestPlan)) {// These are handled specially by addToTree
                 final boolean ok = MenuFactory.canAddTo(guiInstance.getCurrentNode(), te);
                 if (!ok){
                     String name = te.getName();

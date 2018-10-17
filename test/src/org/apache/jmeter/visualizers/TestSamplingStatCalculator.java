@@ -36,26 +36,6 @@ public class TestSamplingStatCalculator {
         Assert.assertNotNull(ssc.getCurrentSample()); // probably needed to avoid NPEs with GUIs
     }
 
-//    @Test
-//    public void testGetElapsed() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetRate() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetBytesPerSecond() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetKBPerSecond() {
-//        fail("Not yet implemented");
-//    }
-
     @Test
     public void testGetAvgPageBytes() {
         SampleResult res = new SampleResult();
@@ -68,85 +48,4 @@ public class TestSamplingStatCalculator {
         ssc.addSample(res);
         Assert.assertEquals(5,ssc.getAvgPageBytes(),0);
     }
-
-//    @Test
-//    public void testGetLabel() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testAddSample() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetErrorPercentage() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testToString() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetErrorCount() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetMaxThroughput() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetDistribution() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetPercentPointDouble() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetCount() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetMax() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetMean() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetMeanAsNumber() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetMedian() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetMin() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetPercentPointFloat() {
-//        fail("Not yet implemented");
-//    }
-//
-//    @Test
-//    public void testGetStandardDeviation() {
-//        fail("Not yet implemented");
-//    }
-
 }

@@ -132,7 +132,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
             // Is this a work in progress ?
             if (!title.contains("(ALPHA") && !title.contains("(EXPERIMENTAL")) {
                 // No, not a work in progress ...
-                String s = "function.xml needs '" + title + "' entry for " + funcItem.getClass().getName();
+                String s = "functions.xml needs '" + title + "' entry for " + funcItem.getClass().getName();
                 if (!ct) {
                     log.warn(s); // Record in log as well
                 }

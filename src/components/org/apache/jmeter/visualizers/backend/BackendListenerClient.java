@@ -73,7 +73,7 @@ public interface BackendListenerClient {
      *            Context is readonly
      * @throws Exception when setup fails
      */
-    void setupTest(BackendListenerContext context) throws Exception;
+    void setupTest(BackendListenerContext context) throws Exception; // NOSONAR
 
     /**
      * Handle sampleResults, this can be done in many ways:
@@ -98,7 +98,7 @@ public interface BackendListenerClient {
      *            initialization parameters.
      * @throws Exception when tear down fails
      */
-    void teardownTest(BackendListenerContext context) throws Exception;
+    void teardownTest(BackendListenerContext context) throws Exception; // NOSONAR
 
     /**
      * Provide a list of parameters which this test supports. Any parameter

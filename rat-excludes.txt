@@ -1,7 +1,10 @@
 rat-excludes.txt
 .*
 .*/**
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
 eclipse.md
+PULL_REQUEST_TEMPLATE.md
 README.md
 **/*.jmx
 bin/*.csv
@@ -13,8 +16,11 @@ bin/report-template/**
 bin/testfiles/**
 build/**
 build-local.properties
+dist/*.md5
+dist/*.sha512
 docs/**
 extras/*.txt
+extras/*.json
 **/images/**
 lib/aareadme.txt
 lib/opt/**

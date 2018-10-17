@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNull;
 // Renamed from org.apache.avalon.excalibur.cli
 
 import java.util.List;
+
 import org.junit.Test;
 
 /**
@@ -686,7 +687,7 @@ public final class ClutilTestCase {
         final ParserControl control = new AbstractParserControl() {
             @Override
             public boolean isFinished(int lastOptionCode) {
-                return (lastOptionCode == YOU_OPT);
+                return lastOptionCode == YOU_OPT;
             }
         };
 
@@ -710,7 +711,7 @@ public final class ClutilTestCase {
         final ParserControl control1 = new AbstractParserControl() {
             @Override
             public boolean isFinished(int lastOptionCode) {
-                return (lastOptionCode == YOU_OPT);
+                return lastOptionCode == YOU_OPT;
             }
         };
 
@@ -750,7 +751,7 @@ public final class ClutilTestCase {
         final ParserControl control1 = new AbstractParserControl() {
             @Override
             public boolean isFinished(final int lastOptionCode) {
-                return (lastOptionCode == CLEAR1_OPT);
+                return lastOptionCode == CLEAR1_OPT;
             }
         };
 
@@ -957,7 +958,7 @@ public final class ClutilTestCase {
                              "-?=[A] -? [B] -?");    
     }
     
-    private void check(String args[], String canon){
+    private void check(String[] args, String canon){
         final CLArgsParser parser = new CLArgsParser(args, OPTIONS);
 
         assertNull(parser.getErrorString(),parser.getErrorString());

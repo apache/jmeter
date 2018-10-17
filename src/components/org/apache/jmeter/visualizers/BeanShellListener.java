@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.visualizers;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
  * We must implement Visualizer so that TestBeanGUI can find the correct GUI class
  *
  */
+@GUIMenuSortOrder(Integer.MAX_VALUE)
 public class BeanShellListener extends BeanShellTestElement
     implements Cloneable, SampleListener, TestBean, Visualizer, UnsharedComponent  {
     

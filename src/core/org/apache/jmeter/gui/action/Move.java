@@ -33,7 +33,6 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
 
 /**
  * Move a node up/down/left/right 
@@ -96,21 +95,6 @@ public class Move extends AbstractAction {
                     // move as a child of the next sibling
                     moveAndSelectNode(currentNode, after, 0);
                 }
-                // Commented as per sebb 
-                // http://mail-archives.apache.org/mod_mbox/jmeter-dev/201307.mbox/%3CCAOGo0VZ0z3GMbfsq_gSB%2Bp7nTUqLng6Gy2ecvYbD8_AKb-Dt5w%40mail.gmail.com%3E
-                /*
-                else {
-                    // move as a sibling of the parent
-                    JMeterTreeNode parentParentNode = getParentNode(parentNode);
-                    after = (JMeterTreeNode) parentParentNode
-                            .getChildAfter(parentNode);
-                    if (after != null
-                            && canAddTo(parentParentNode, currentNode)) {
-                        moveAndSelectNode(currentNode, parentParentNode,
-                                parentParentNode.getIndex(after));
-                    }
-                }
-                */
             }
         }
 
@@ -120,24 +104,23 @@ public class Move extends AbstractAction {
     private JMeterTreeNode getParentNode(JMeterTreeNode currentNode) {
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
         TestElement te = currentNode.getTestElement();
-        if (te instanceof TestPlan || te instanceof WorkBench) {
+        if (te instanceof TestPlan) {
             parentNode = null; // So elements can only be added as children
         }
         return parentNode;
     }
 
-    private static boolean canAddTo(JMeterTreeNode parentNode,
-            JMeterTreeNode node) {
+    private static boolean canAddTo(JMeterTreeNode parentNode, JMeterTreeNode node) {
         boolean ok = MenuFactory.canAddTo(parentNode,
-                new JMeterTreeNode[] { node });
+                new JMeterTreeNode[]{node});
         if (!ok) {
             Toolkit.getDefaultToolkit().beep();
         }
         return ok;
     }
 
-    private static void moveAndSelectNode(JMeterTreeNode currentNode,
-            JMeterTreeNode parentNode, int newIndx) {
+    private static void moveAndSelectNode(
+            JMeterTreeNode currentNode, JMeterTreeNode parentNode, int newIndx) {
         GuiPackage guiInstance = GuiPackage.getInstance();
         guiInstance.getTreeModel().removeNodeFromParent(currentNode);
         guiInstance.getTreeModel().insertNodeInto(currentNode, parentNode,

@@ -28,10 +28,11 @@ import static org.junit.Assert.assertThat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.TimeZone;
 import java.util.Random;
+import java.util.TimeZone;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -100,7 +101,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
 
     @Test
     public void testNowPlusOneDay() throws Exception {
-        Collection<CompoundVariable> params = makeParams("YYYY-MM-dd", "", "P1d", "");
+        Collection<CompoundVariable> params = makeParams("yyyy-MM-dd", "", "P1d", "");
         function.setParameters(params);
         value = function.execute(result, null);
         LocalDate tomorrow = LocalDate.now().plusDays(1);
@@ -110,14 +111,30 @@ public class TestTimeShiftFunction extends JMeterTestCase {
     
     @Test
     public void testNowWithComplexPeriod() throws Exception {
-        Collection<CompoundVariable> params = makeParams("YYYY-MM-dd'T'HH:mm:ss", "", "P10DT-1H-5M5S", "");
+        Collection<CompoundVariable> params = makeParams("yyyy-MM-dd'T'HH:mm:ss", "", "P10DT-1H-5M5S", "");
         function.setParameters(params);
         value = function.execute(result, null);
         LocalDateTime futureDate = LocalDateTime.now().plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
         LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
         assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
     }
+    
+    @Test
+    public void testPotentialBugWithComplexPeriod() throws Exception {
+        Collection<CompoundVariable> params = makeParams("yyyy-MM-dd'T'HH:mm:ss", "2017-12-21T12:00:00", "P10DT-1H-5M5S", "");
+        function.setParameters(params);
+        value = function.execute(result, null);
+        LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
+        
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm:ss");
+        LocalDateTime baseDate = LocalDateTime.parse("2017-12-21 12:00:00", dateFormat);
+        LocalDateTime futureDate = baseDate.plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
+        assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
+    }
 
+    public static void main(String[] args) {
+        System.out.println(java.time.Duration.parse("P10DT-1H-5M5S").toMillis());
+    }
     @Test
     public void testWrongAmountToAdd() throws Exception {
         // Nothing is add with wrong value, so check if return is now
@@ -144,7 +161,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         Random r = new Random();
         int randomInt = r.ints(1, 60).limit(1).findFirst().getAsInt();
         vars.put("random", String.valueOf( randomInt ) );
-        Collection<CompoundVariable> params = makeParams("YYYY-MM-dd'T'HH:mm:ss", "", "PT${random}M", "");
+        Collection<CompoundVariable> params = makeParams("yyyy-MM-dd'T'HH:mm:ss", "", "PT${random}M", "");
         function.setParameters(params);
         value = function.execute(result, null);
         LocalDateTime randomFutureDate = LocalDateTime.parse(value);
@@ -162,19 +179,19 @@ public class TestTimeShiftFunction extends JMeterTestCase {
     
     @Test
     public void testNowPlusOneDayWithLocale() throws Exception {
-        Collection<CompoundVariable> params = makeParams("YYYY-MMMM-dd", "2017-juillet-01", "P1D", "fr_FR", "");
+        Collection<CompoundVariable> params = makeParams("yyyy-MMMM-dd", "2017-juillet-01", "P1D", "fr_FR", "");
         function.setParameters(params);
         value = function.execute(result, null);
         assertThat(value, is(equalTo("2017-juillet-02")));
-        params = makeParams("YYYY-MMMM-dd", "2017-July-01", "P1D", "en_EN", "");
+        params = makeParams("yyyy-MMMM-dd", "2017-July-01", "P1D", "en_EN", "");
         function.setParameters(params);
         value = function.execute(result, null);
         assertThat(value, is(equalTo("2017-July-02")));
-        params = makeParams("YYYY-MMMM-dd", "2017-julio-01", "P1D", "es_ES", "");
+        params = makeParams("yyyy-MMMM-dd", "2017-julio-01", "P1D", "es_ES", "");
         function.setParameters(params);
         value = function.execute(result, null);
         assertThat(value, is(equalTo("2017-julio-02")));
-        params = makeParams("YYYY-MMMM-dd", "2017-Juli-01", "P1D", "de_DE", "");
+        params = makeParams("yyyy-MMMM-dd", "2017-Juli-01", "P1D", "de_DE", "");
         function.setParameters(params);
         value = function.execute(result, null);
         assertThat(value, is(equalTo("2017-Juli-02")));

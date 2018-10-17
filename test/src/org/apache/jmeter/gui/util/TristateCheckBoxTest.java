@@ -34,7 +34,7 @@ import javax.swing.WindowConstants;
 //derived from: http://www.javaspecialists.eu/archive/Issue145.html
 
 public class TristateCheckBoxTest {
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         JFrame frame = new JFrame("TristateCheckBoxTest");
         frame.setLayout(new GridLayout(0, 1, 15, 15));
         UIManager.LookAndFeelInfo[] lfs =
@@ -101,13 +101,17 @@ public class TristateCheckBoxTest {
     private static void switchOnAction(TristateCheckBox tristateBox) {
         switch(tristateBox.getState()) {
         case SELECTED:
-            System.out.println("Selected"); break;
+            System.out.println("Selected");
+            break;
         case DESELECTED:
-            System.out.println("Not Selected"); break;
+            System.out.println("Not Selected");
+            break;
         case INDETERMINATE:
-            System.out.println("Tristate Selected"); break;
+            System.out.println("Tristate Selected");
+            break;
         default:
-            System.err.println("Unexpected state: " + tristateBox.getState()); break;
+            System.err.println("Unexpected state: " + tristateBox.getState());
+            break;
         }
     }
 }

@@ -284,9 +284,6 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
         checkIfModifiedSinceHeader(httpMethod);
     }
 
-    /**
-     * 
-     */
     protected void checkIfModifiedSinceHeader(HttpRequestBase httpMethod) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         try {

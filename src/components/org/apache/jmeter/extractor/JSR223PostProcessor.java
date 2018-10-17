@@ -23,12 +23,14 @@ import java.io.IOException;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.JSR223TestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@GUIMenuSortOrder(5)
 public class JSR223PostProcessor extends JSR223TestElement implements Cloneable, PostProcessor, TestBean
 {
     private static final Logger log = LoggerFactory.getLogger(JSR223PostProcessor.class);

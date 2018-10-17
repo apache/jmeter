@@ -24,11 +24,9 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorSupport;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 import javax.swing.JCheckBox;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
@@ -39,6 +37,9 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
  * Parent class to define common GUI parameters for BSF and JSR223 test elements
  */
 public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
+
+    static final String FALSE_AS_STRING = Boolean.FALSE.toString();
+    static final String TRUE_AS_STRING = Boolean.TRUE.toString();
 
     public ScriptingBeanInfoSupport(Class<? extends TestBean> beanClass, String[] languageTags) {
         this(beanClass, languageTags, null);
@@ -105,9 +106,10 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         if (JSR223TestElement.class.isAssignableFrom(beanClass) ) {
             p = property("cacheKey"); // $NON-NLS-1$
             p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-            p.setValue(DEFAULT, ""); // $NON-NLS-1$
+            p.setValue(NOT_OTHER, Boolean.TRUE);
+            p.setValue(DEFAULT, TRUE_AS_STRING); // $NON-NLS-1$
             p.setPropertyEditorClass(JSR223ScriptCacheCheckboxEditor.class);
-            
+            p.setValue(TAGS, new String[]{TRUE_AS_STRING,FALSE_AS_STRING});
             createPropertyGroup("cacheKey_group", // $NON-NLS-1$
                 new String[] { "cacheKey" }); // $NON-NLS-1$
         }
@@ -133,35 +135,23 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
         public JSR223ScriptCacheCheckboxEditor() {
             super();
-
             checkbox = new JCheckBox();
             checkbox.addActionListener(this);
         }
 
         @Override
         public String getAsText() {
-            String value = null;
             if(checkbox.isSelected()) {
-                if(initialValue != null) {
-                    value = initialValue;
-                }
-                else {
-                    // the value is unique -> if the script is opened with a previous version of jmeter
-                    // where the cache key is used as the key for the cache
-                    // in the current version the key is automatically generated from the script content
-                    value = UUID.randomUUID().toString();
-                }
+                return TRUE_AS_STRING;
+            } else {
+                return FALSE_AS_STRING;
             }
-            
-            return value;
         }
 
         @Override
         public void setAsText(String value) {
-            if(StringUtils.isNotBlank(value)) {
-                initialValue = value;                
-            }
-            checkbox.setSelected(initialValue!= null);
+            initialValue = getBooleanValueAsString(value);            
+            checkbox.setSelected(Boolean.parseBoolean(initialValue));
         }
 
         @Override
@@ -171,13 +161,27 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
         @Override
         public void setValue(Object value) {
-            if (value instanceof String) {
-                setAsText((String) value);
+            if (value == null || value instanceof String) {
+                setAsText(getBooleanValueAsString((String)value));
             } else {
                 throw new IllegalArgumentException();
             }
         }
-
+        
+        /**
+         * "false" leads to false
+         * "true" or any other non "false" value leads to true
+         * @param value boolean or UUID
+         * @return String true/false
+         */
+        private static String getBooleanValueAsString(String value) {
+            return value == null ? FALSE_AS_STRING : 
+                // We must use this form as:
+                // - "false" leads to false
+                // - "true" or any other non "false" value leads to true
+                Boolean.toString(!FALSE_AS_STRING.equals(value));
+        }
+       
         @Override
         public Component getCustomEditor() {
             return checkbox;
@@ -207,8 +211,8 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
         @Override
         public void clearGui() {
-            initialValue = null;
-            checkbox.setSelected(false);
+            initialValue = TRUE_AS_STRING;
+            checkbox.setSelected(true);
         }
     }
 }

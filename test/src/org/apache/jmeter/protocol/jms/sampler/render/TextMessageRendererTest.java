@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.jms.sampler.render;
 
-import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -25,9 +24,6 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-/**
- *
- */
 public class TextMessageRendererTest extends MessageRendererTest<String> {
 
     private TextMessageRenderer render = RendererFactory.getInstance().getText();
@@ -49,36 +45,35 @@ public class TextMessageRendererTest extends MessageRendererTest<String> {
     private void assertContent(String resource, String encoding) {
         String filename = getResourceFile(resource);
         String actual = render.getContent(new FileKey(filename, encoding));
-        assertEquals(format("éè€%n"), actual);
+        assertEquals("éè€", actual);
     }
-
 
     @Test
     public void getValueFromFileWithNoVar() {
-        assertValueFromFile(format("noVar%n"), "noVar.txt", true);
+        assertValueFromFile("noVar", "noVar.txt", true);
     }
 
     @Test
     public void getValueFromFileWithOneVar() {
         jmeterCtxService.get().getVariables().put("oneVar", "foobar");
-        assertValueFromFile(format("foobar%n"), "oneVar.txt", true);
+        assertValueFromFile("foobar", "oneVar.txt", true);
     }
 
     @Test
     public void checkCache() {
         jmeterCtxService.get().getVariables().put("oneVar", "foo");
-        assertValueFromFile(format("foo%n"), "oneVar.txt", true);
-        assertEquals(format("${oneVar}%n"), getFirstCachedValue());
+        assertValueFromFile("foo", "oneVar.txt", true);
+        assertEquals("${oneVar}", getFirstCachedValue());
 
         jmeterCtxService.get().getVariables().put("oneVar", "bar");
-        assertValueFromFile(format("bar%n"), "oneVar.txt", true);
-        assertEquals(format("${oneVar}%n"), getFirstCachedValue());
+        assertValueFromFile("bar", "oneVar.txt", true);
+        assertEquals("${oneVar}", getFirstCachedValue());
     }
 
     @Test
     public void checkNoVariable() {
         jmeterCtxService.get().getVariables().put("oneVar", "RAW");
-        assertValueFromFile(format("${oneVar}%n"), "oneVar.txt", false);
+        assertValueFromFile("${oneVar}", "oneVar.txt", false);
     }
 
     @Test

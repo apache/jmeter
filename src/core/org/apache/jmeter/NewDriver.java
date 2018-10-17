@@ -20,7 +20,6 @@ package org.apache.jmeter;
 
 // N.B. this must only use standard Java packages
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -28,6 +27,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +63,7 @@ public final class NewDriver {
         final String initial_classpath = System.getProperty(JAVA_CLASS_PATH);
 
         // Find JMeter home dir from the initial classpath
-        String tmpDir=null;
+        String tmpDir;
         StringTokenizer tok = new StringTokenizer(initial_classpath, File.pathSeparator);
         if (tok.countTokens() == 1
                 || (tok.countTokens()  == 2 // Java on Mac OS can add a second entry to the initial classpath
@@ -74,6 +74,7 @@ public final class NewDriver {
             try {
                 tmpDir = jar.getCanonicalFile().getParentFile().getParent();
             } catch (IOException e) {
+                tmpDir = null;
             }
         } else {// e.g. started from IDE with full classpath
             tmpDir = System.getProperty("jmeter.home","");// Allow override $NON-NLS-1$ $NON-NLS-2$
@@ -96,7 +97,7 @@ public final class NewDriver {
                 new File(JMETER_INSTALLATION_DIRECTORY + File.separator + "lib" + File.separator + "ext"),// $NON-NLS-1$ $NON-NLS-2$
                 new File(JMETER_INSTALLATION_DIRECTORY + File.separator + "lib" + File.separator + "junit")};// $NON-NLS-1$ $NON-NLS-2$
         for (File libDir : libDirs) {
-            File[] libJars = libDir.listFiles((FilenameFilter) (dir, name) -> name.endsWith(".jar"));
+            File[] libJars = libDir.listFiles((dir, name) -> name.endsWith(".jar"));
             if (libJars == null) {
                 new Throwable("Could not access " + libDir).printStackTrace(); // NOSONAR No logging here
                 continue;
@@ -127,12 +128,8 @@ public final class NewDriver {
         // ClassFinder needs the classpath
         System.setProperty(JAVA_CLASS_PATH, initial_classpath + classpath.toString());
         loader = AccessController.doPrivileged(
-                new java.security.PrivilegedAction<DynamicClassLoader>() {
-                    @Override
-                    public DynamicClassLoader run() {
-                        return new DynamicClassLoader(jars.toArray(new URL[jars.size()]));
-                    }
-                }
+                (PrivilegedAction<DynamicClassLoader>) () ->
+                        new DynamicClassLoader(jars.toArray(new URL[jars.size()]))
         );
     }
 

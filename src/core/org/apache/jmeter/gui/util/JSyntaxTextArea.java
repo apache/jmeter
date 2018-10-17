@@ -20,11 +20,14 @@ package org.apache.jmeter.gui.util;
 
 import java.awt.Font;
 import java.awt.HeadlessException;
+import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.util.JMeterUtils;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RUndoManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +40,9 @@ import org.slf4j.LoggerFactory;
 public class JSyntaxTextArea extends RSyntaxTextArea {
 
     private static final long serialVersionUID = 211L;
+    private static final Logger log              = LoggerFactory.getLogger(JSyntaxTextArea.class);
+
+    private static final Theme DARCULA_THEME = initTheme(); 
 
     private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$
 
@@ -47,7 +53,6 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final int MAX_UNDOS           = JMeterUtils.getPropDefault("jsyntaxtextarea.maxundos", 50);
     private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", null);
     private static final int USER_FONT_SIZE      = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", -1);
-    private static final Logger log              = LoggerFactory.getLogger(JSyntaxTextArea.class);
 
     /**
      * Creates the default syntax highlighting text area. The following are set:
@@ -69,7 +74,9 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      */
     public static JSyntaxTextArea getInstance(int rows, int cols, boolean disableUndo) {
         try {
-            return new JSyntaxTextArea(rows, cols, disableUndo);
+            JSyntaxTextArea jSyntaxTextArea = new JSyntaxTextArea(rows, cols, disableUndo);
+            applyTheme(jSyntaxTextArea);
+            return jSyntaxTextArea;
         } catch (HeadlessException e) {
             // Allow override for unit testing only
             if ("true".equals(System.getProperty("java.awt.headless"))) { // $NON-NLS-1$ $NON-NLS-2$
@@ -98,6 +105,17 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
             } else {
                 throw e;
             }
+        }
+    }
+
+    /**
+     * Apply XML Theme to syntax text area
+     * @param jSyntaxTextArea
+     */
+    private static void applyTheme(JSyntaxTextArea jSyntaxTextArea) {
+        String laf = LookAndFeelCommand.getJMeterLaf();
+        if(JMeterMenuBar.DARCULA_LAF_CLASS.equals(laf)) {
+            DARCULA_THEME.apply(jSyntaxTextArea);
         }
     }
 
@@ -240,5 +258,16 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     public void setInitialText(String string) {
         setText(string);
         discardAllEdits();
+    }
+    
+
+    private static final Theme initTheme() {
+        try {
+            return Theme.load(JSyntaxTextArea.class.getClassLoader().getResourceAsStream(
+                    "org/apache/jmeter/gui/util/theme/darcula_theme.xml"));
+        } catch (IOException e) {
+            log.error("Error reading darcula_theme for JSyntaxTextArea", e);
+            return null;
+        }
     }
 }

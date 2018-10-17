@@ -19,7 +19,7 @@ package org.apache.jmeter.protocol.jms.sampler.render;
 
 import java.util.Objects;
 
-/** File specification for {@link TextMessageRenderer} **/
+/** File specification for TextMessageRenderer **/
 class FileKey {
 
     private final String filename;

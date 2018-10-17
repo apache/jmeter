@@ -40,7 +40,6 @@ public final class HTTPNullSampler extends HTTPSamplerBase {
         res.setURL(u);
         res.sampleEnd();
         return res;
-//        throw new UnsupportedOperationException("For test purposes only");
     }
 
 }

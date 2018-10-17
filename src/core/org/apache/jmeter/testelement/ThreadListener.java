@@ -28,7 +28,7 @@ public interface ThreadListener {
      * WARNING: this is called before any Config test elements are processed,
      * so any properties they define will not have been merged in yet.
      * 
-     * @see org.apache.jmeter.threads.JMeterThread#threadStarted()
+     * See org.apache.jmeter.threads.JMeterThread#threadStarted()
      *
      */
     void threadStarted();
@@ -36,7 +36,7 @@ public interface ThreadListener {
     /**
      * Called for each thread after all samples have been processed.
      *
-     * @see org.apache.jmeter.threads.JMeterThread#threadFinished(org.apache.jmeter.engine.event.LoopIterationListener)
+     * See org.apache.jmeter.threads.JMeterThread#threadFinished(org.apache.jmeter.engine.event.LoopIterationListener)
      *
      */
     void threadFinished();

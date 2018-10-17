@@ -21,6 +21,7 @@ package org.apache.jmeter.visualizers.backend.influxdb;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -75,6 +76,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private static final String METRIC_AVG = "avg=";
 
     private static final String METRIC_HIT = "hit=";
+    private static final String METRIC_SENT_BYTES = "sb=";
+    private static final String METRIC_RECEIVED_BYTES = "rb=";
     private static final String METRIC_PCT_PREFIX = "pct";
 
     private static final String METRIC_MAX_ACTIVE_THREADS = "maxAT=";
@@ -92,10 +95,21 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private static final int MAX_POOL_SIZE = 1;
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
     private static final Object LOCK = new Object();
+    private static final Map<String, String> DEFAULT_ARGS = new LinkedHashMap<>();
+    static {
+        DEFAULT_ARGS.put("influxdbMetricsSender", HttpMetricsSender.class.getName());
+        DEFAULT_ARGS.put("influxdbUrl", "http://host_to_change:8086/write?db=jmeter");
+        DEFAULT_ARGS.put("application", "application name");
+        DEFAULT_ARGS.put("measurement", DEFAULT_MEASUREMENT);
+        DEFAULT_ARGS.put("summaryOnly", "false");
+        DEFAULT_ARGS.put("samplersRegex", ".*");
+        DEFAULT_ARGS.put("percentiles", "99;95;90");
+        DEFAULT_ARGS.put("testTitle", "Test name");
+        DEFAULT_ARGS.put("eventTags", "");
+    }
 
     private boolean summaryOnly;
     private String measurement = "DEFAULT_MEASUREMENT";
-    private String influxdbUrl = "";
     private String samplersRegex = "";
     private Pattern samplersToFilter;
     private Map<String, Float> okPercentiles;
@@ -105,7 +119,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private String testTags;
     // Name of the application tested
     private String application = "";
-
+    private String userTag = "";
     private InfluxdbMetricsSender influxdbMetricsManager;
 
     private ScheduledExecutorService scheduler;
@@ -140,14 +154,15 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
         UserMetric userMetrics = getUserMetrics();
         // For JMETER context
-        StringBuilder tag = new StringBuilder(60);
+        StringBuilder tag = new StringBuilder(80);
         tag.append(TAG_APPLICATION).append(application);
         tag.append(TAG_TRANSACTION).append("internal");
+        tag.append(userTag);
         StringBuilder field = new StringBuilder(80);
-        field.append(METRIC_MIN_ACTIVE_THREADS).append(userMetrics.getMinActiveThreads()).append(",");
-        field.append(METRIC_MAX_ACTIVE_THREADS).append(userMetrics.getMaxActiveThreads()).append(",");
-        field.append(METRIC_MEAN_ACTIVE_THREADS).append(userMetrics.getMeanActiveThreads()).append(",");
-        field.append(METRIC_STARTED_THREADS).append(userMetrics.getStartedThreads()).append(",");
+        field.append(METRIC_MIN_ACTIVE_THREADS).append(userMetrics.getMinActiveThreads()).append(',');
+        field.append(METRIC_MAX_ACTIVE_THREADS).append(userMetrics.getMaxActiveThreads()).append(',');
+        field.append(METRIC_MEAN_ACTIVE_THREADS).append(userMetrics.getMeanActiveThreads()).append(',');
+        field.append(METRIC_STARTED_THREADS).append(userMetrics.getStartedThreads()).append(',');
         field.append(METRIC_ENDED_THREADS).append(userMetrics.getFinishedThreads());
 
         influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
@@ -167,13 +182,13 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
      */
     private void addMetrics(String transaction, SamplerMetric metric) {
         // FOR ALL STATUS
-        addMetric(transaction, metric.getTotal(), false, TAG_ALL, metric.getAllMean(), metric.getAllMinTime(),
+        addMetric(transaction, metric.getTotal(), metric.getSentBytes(), metric.getReceivedBytes(), TAG_ALL, metric.getAllMean(), metric.getAllMinTime(),
                 metric.getAllMaxTime(), allPercentiles.values(), metric::getAllPercentile);
         // FOR OK STATUS
-        addMetric(transaction, metric.getSuccesses(), false, TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
+        addMetric(transaction, metric.getSuccesses(), null, null, TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
                 metric.getOkMaxTime(), okPercentiles.values(), metric::getOkPercentile);
         // FOR KO STATUS
-        addMetric(transaction, metric.getFailures(), true, TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
+        addMetric(transaction, metric.getFailures(), null, null, TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
                 metric.getKoMaxTime(), koPercentiles.values(), metric::getKoPercentile);
 
         metric.getErrors().forEach((error, count) -> addErrorMetric(transaction, error.getResponseCode(),
@@ -187,6 +202,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             tag.append(TAG_TRANSACTION).append(transaction);
             tag.append(TAG_RESPONSE_CODE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseCode));
             tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage));
+            tag.append(userTag);
 
             StringBuilder field = new StringBuilder(30);
             field.append(METRIC_COUNT).append(count);
@@ -194,27 +210,36 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         }
     }
 
-    private void addMetric(String transaction, int count, boolean includeResponseCode,
+    private void addMetric(String transaction, int count, 
+            Long sentBytes, Long receivedBytes,
             String statut, double mean, double minTime, double maxTime, 
             Collection<Float> pcts, PercentileProvider percentileProvider) {
         if (count > 0) {
-            StringBuilder tag = new StringBuilder(70);
+            StringBuilder tag = new StringBuilder(95);
             tag.append(TAG_APPLICATION).append(application);
             tag.append(TAG_STATUS).append(statut);
             tag.append(TAG_TRANSACTION).append(transaction);
+            tag.append(userTag);
+
             StringBuilder field = new StringBuilder(80);
             field.append(METRIC_COUNT).append(count);
             if (!Double.isNaN(mean)) {
-                field.append(",").append(METRIC_AVG).append(mean);
+                field.append(',').append(METRIC_AVG).append(mean);
             }
             if (!Double.isNaN(minTime)) {
-                field.append(",").append(METRIC_MIN).append(minTime);
+                field.append(',').append(METRIC_MIN).append(minTime);
             }
             if (!Double.isNaN(maxTime)) {
-                field.append(",").append(METRIC_MAX).append(maxTime);
+                field.append(',').append(METRIC_MAX).append(maxTime);
+            }
+            if(sentBytes != null) {
+                field.append(',').append(METRIC_SENT_BYTES).append(sentBytes);
+            }
+            if(receivedBytes != null) {
+                field.append(',').append(METRIC_RECEIVED_BYTES).append(receivedBytes);
             }
             for (Float pct : pcts) {
-                field.append(",").append(METRIC_PCT_PREFIX).append(pct).append("=").append(
+                field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(
                         percentileProvider.getPercentileValue(pct));
             }
             influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
@@ -230,25 +255,27 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             tag.append(TAG_APPLICATION).append(application);
             tag.append(TAG_TRANSACTION).append(CUMULATED_METRICS);
             tag.append(TAG_STATUS).append(CUMULATED_METRICS);
-            
+            tag.append(userTag);
+
             field.append(METRIC_COUNT).append(total);
-            field.append(",").append(METRIC_COUNT_ERROR).append(metric.getFailures());
+            field.append(',').append(METRIC_COUNT_ERROR).append(metric.getFailures());
 
             if (!Double.isNaN(metric.getOkMean())) {
-                field.append(",").append(METRIC_AVG).append(Double.toString(metric.getOkMean()));
+                field.append(',').append(METRIC_AVG).append(Double.toString(metric.getOkMean()));
             }
             if (!Double.isNaN(metric.getOkMinTime())) {
-                field.append(",").append(METRIC_MIN).append(Double.toString(metric.getOkMinTime()));
+                field.append(',').append(METRIC_MIN).append(Double.toString(metric.getOkMinTime()));
             }
             if (!Double.isNaN(metric.getOkMaxTime())) {
-                field.append(",").append(METRIC_MAX).append(Double.toString(metric.getOkMaxTime()));
+                field.append(',').append(METRIC_MAX).append(Double.toString(metric.getOkMaxTime()));
             }
 
-            field.append(",").append(METRIC_HIT).append(metric.getHits());
+            field.append(',').append(METRIC_HIT).append(metric.getHits());
+            field.append(',').append(METRIC_SENT_BYTES).append(metric.getSentBytes());
+            field.append(',').append(METRIC_RECEIVED_BYTES).append(metric.getReceivedBytes());
             for (Float pct : pcts) {
-                field.append(",").append(METRIC_PCT_PREFIX).append(pct).append("=").append(Double.toString(metric.getAllPercentile(pct)));
+                field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(Double.toString(metric.getAllPercentile(pct)));
             }
-            field.append(",").append(METRIC_HIT).append(metric.getHits());
             influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
         }
     }
@@ -288,7 +315,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public void setupTest(BackendListenerContext context) throws Exception {
         String influxdbMetricsSender = context.getParameter("influxdbMetricsSender");
-        influxdbUrl = context.getParameter("influxdbUrl");
+        String influxdbUrl = context.getParameter("influxdbUrl");
         summaryOnly = context.getBooleanParameter("summaryOnly", false);
         samplersRegex = context.getParameter("samplersRegex", "");
         application = AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter("application", ""));
@@ -318,6 +345,25 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
                 }
             }
         }
+        // Check if more row which started with 'TAG_' are filled ( corresponding to user tag )
+        StringBuilder userTagBuilder = new StringBuilder();
+        context.getParameterNamesIterator().forEachRemaining(name -> {
+            if (StringUtils.isNotBlank(name) && !DEFAULT_ARGS.containsKey(name.trim())
+                    && name.startsWith("TAG_")
+                    && StringUtils.isNotBlank(context.getParameter(name))) {
+                final String tagName = name.trim().substring(4);
+                final String tagValue = context.getParameter(name).trim();
+                userTagBuilder.append(',')
+                        .append(AbstractInfluxdbMetricsSender
+                                .tagToStringValue(tagName))
+                        .append('=')
+                        .append(AbstractInfluxdbMetricsSender.tagToStringValue(
+                                tagValue));
+                log.debug("Adding '{}' tag with '{}' value ", tagName, tagValue);
+            }
+        });
+        userTag = userTagBuilder.toString();
+
         Class<?> clazz = Class.forName(influxdbMetricsSender);
         this.influxdbMetricsManager = (InfluxdbMetricsSender) clazz.newInstance();
         influxdbMetricsManager.setup(influxdbUrl);
@@ -379,7 +425,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
      */
     private void addAnnotation(boolean startOrEnd) {
         influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, 
-                TAG_APPLICATION + application + ",title=ApacheJMeter"+
+                TAG_APPLICATION + application + ",title=ApacheJMeter"+ userTag +
                 (StringUtils.isNotEmpty(testTags) ? TAGS+ testTags : ""), 
                 TEXT +  
                         AbstractInfluxdbMetricsSender.fieldToStringValue(testTitle +
@@ -389,15 +435,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public Arguments getDefaultParameters() {
         Arguments arguments = new Arguments();
-        arguments.addArgument("influxdbMetricsSender", HttpMetricsSender.class.getName());
-        arguments.addArgument("influxdbUrl", "");
-        arguments.addArgument("application", "application name");
-        arguments.addArgument("measurement", DEFAULT_MEASUREMENT);
-        arguments.addArgument("summaryOnly", "false");
-        arguments.addArgument("samplersRegex", ".*");
-        arguments.addArgument("percentiles", "99,95,90");
-        arguments.addArgument("testTitle", "Test name");
-        arguments.addArgument("eventTags", "");
+        DEFAULT_ARGS.forEach(arguments::addArgument);
         return arguments;
     }
 }

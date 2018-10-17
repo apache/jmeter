@@ -67,8 +67,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
      */
     public LoggerPanel() {
         if (LOGGER_PANEL_MAX_LINES > 0) {
-            events =
-                    new CircularFifoBuffer(LOGGER_PANEL_MAX_LINES);
+            events = new CircularFifoBuffer(LOGGER_PANEL_MAX_LINES);
         } else {
             events = new UnboundedFifoBuffer();
         }

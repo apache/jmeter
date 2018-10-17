@@ -30,8 +30,6 @@ import org.slf4j.LoggerFactory;
  * The standard remote sample reporting should be more friendly to the main purpose of
  * remote testing - which is scalability.  To increase scalability, this class strips out the
  * response data before sending.
- *
- *
  */
 public class DataStrippingSampleSender extends AbstractSampleSender implements Serializable {
 

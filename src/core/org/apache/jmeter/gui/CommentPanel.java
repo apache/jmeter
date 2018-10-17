@@ -28,7 +28,6 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Generic comment panel for Test Elements
- *
  */
 public class CommentPanel extends JPanel {
     private static final long serialVersionUID = 240L;

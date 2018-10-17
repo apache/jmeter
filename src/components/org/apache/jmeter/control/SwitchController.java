@@ -130,6 +130,6 @@ public class SwitchController extends GenericController implements Serializable 
     }
 
     public String getSelection() {
-        return getPropertyAsString(SWITCH_VALUE);
+        return getPropertyAsString(SWITCH_VALUE).trim();
     }
 }

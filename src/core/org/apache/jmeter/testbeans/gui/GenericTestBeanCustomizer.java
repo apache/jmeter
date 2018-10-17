@@ -202,9 +202,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     }
     /**
      * Create a customizer for a given test bean type.
-     *
-     * @param testBeanClass
-     *            a subclass of TestBean
+     * @param beanInfo {@link BeanInfo}
      * @see org.apache.jmeter.testbeans.TestBean
      */
     GenericTestBeanCustomizer(BeanInfo beanInfo) {
@@ -367,14 +365,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @return the property details
      */
     private static String getDetails(PropertyDescriptor pd) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(pd.getReadMethod().getDeclaringClass().getName());
-        sb.append('#');
-        sb.append(pd.getName());
-        sb.append('(');
-        sb.append(pd.getPropertyType().getCanonicalName());
-        sb.append(')');
-        return sb.toString();
+        return pd.getReadMethod().getDeclaringClass().getName() + '#'
+                + pd.getName() + '(' + pd.getPropertyType().getCanonicalName()
+                + ')';
     }
 
     /**
@@ -388,7 +381,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     private WrapperEditor createWrapperEditor(PropertyEditor typeEditor, PropertyDescriptor descriptor) {
         String[] editorTags = typeEditor.getTags();
         String[] additionalTags = (String[]) descriptor.getValue(TAGS);
-        String[] tags = null;
+        String[] tags;
         if (editorTags == null) {
             tags = additionalTags;
         } else if (additionalTags == null) {
@@ -416,13 +409,11 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                     (ResourceBundle) descriptor.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE));
         }
 
-        WrapperEditor wrapper = new WrapperEditor(typeEditor, guiEditor,
+        return new WrapperEditor(typeEditor, guiEditor,
                 !notNull, // acceptsNull
                 !notExpression, // acceptsExpressions
                 !notOther, // acceptsOther
                 descriptor.getValue(DEFAULT));
-
-        return wrapper;
     }
 
     /**
@@ -433,8 +424,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      *  otherwise the default is false
      */
     static boolean notOther(PropertyDescriptor descriptor) {
-        boolean notOther = Boolean.TRUE.equals(descriptor.getValue(NOT_OTHER));
-        return notOther;
+        return Boolean.TRUE.equals(descriptor.getValue(NOT_OTHER));
     }
 
     /**
@@ -445,8 +435,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      *  otherwise the default is false
      */
     static boolean notExpression(PropertyDescriptor descriptor) {
-        boolean notExpression = Boolean.TRUE.equals(descriptor.getValue(NOT_EXPRESSION));
-        return notExpression;
+        return Boolean.TRUE.equals(descriptor.getValue(NOT_EXPRESSION));
     }
 
     /**
@@ -457,8 +446,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      *  otherwise the default is false
      */
     static boolean notNull(PropertyDescriptor descriptor) {
-        boolean notNull = Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
-        return notNull;
+        return Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
     }
 
     /**
@@ -499,7 +487,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     public void setObject(Object map) {
         propertyMap = (Map<String, Object>) map;
 
-        if (propertyMap.size() == 0) {
+        if (propertyMap.isEmpty()) {
             // Uninitialized -- set it to the defaults:
             for (PropertyDescriptor descriptor : descriptors) {
                 Object value = descriptor.getValue(DEFAULT);
@@ -537,24 +525,6 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             }
         }
     }
-
-//  /**
-//   * Find the index of the property of the given name.
-//   *
-//   * @param name
-//   *            the name of the property
-//   * @return the index of that property in the descriptors array, or -1 if
-//   *         there's no property of this name.
-//   */
-//  private int descriptorIndex(String name) // NOTUSED
-//  {
-//      for (int i = 0; i < descriptors.length; i++) {
-//          if (descriptors[i].getName().equals(name)) {
-//              return i;
-//          }
-//      }
-//      return -1;
-//  }
 
     /**
      * Initialize the GUI.
@@ -682,7 +652,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         if (b == null) {
             return group;
         }
-        String key = new StringBuilder(group).append(".displayName").toString();
+        String key = group + ".displayName";
         if (b.containsKey(key)) {
             return b.getString(key);
         } else {
@@ -705,7 +675,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         public int compare(PropertyDescriptor d1, PropertyDescriptor d2) {
             String g1 = group(d1);
             String g2 = group(d2);
-            Integer go1 = groupOrder(g1), go2 = groupOrder(g2);
+            Integer go1 = groupOrder(g1);
+            Integer go2 = groupOrder(g2);
 
             int result = go1.compareTo(go2);
             if (result != 0) {

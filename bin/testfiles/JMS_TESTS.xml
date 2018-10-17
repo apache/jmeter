@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="BSS_startActiveMQ" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="JMS-P2P-DefaultCorrelationId" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JSS-ConsumeUpcomingMessage" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-DefaultCorrelationId-TempQueue" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-CustomCorrelationId" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-DifferentSelector" rc="" rm="No reply message received" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-SameSelector" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-RequestOnly" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JSS-ConsumePreviousMessage" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-RequestOnly" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-Browse" rc="200" rm="1 messages available on the queue" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-Read" rc="200" rm="1 message(s) received successfully" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-RequestOnlyForClear" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-Clear" rc="200" rm="1 message(s) removed using receive timeout:100ms" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-BrowseAfterClear" rc="200" rm="0 messages available on the queue" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-Timeout" rc="" rm="No reply message received" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>RA_noMessage</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Publisher-NonDurable" rc="200" rm="1 messages published" tn="TG-JMS-PS 2-1" dt="" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Subscriber-NonDurable" rc="200" rm="1 message(s) received successfully of 1 expected" tn="TG-JMS-PS 2-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Publisher-Persistent" rc="200" rm="1 messages published" tn="TG-JMS-PS-Selector-receive 3-1" dt="" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Subscriber-NonMatchingSelector" rc="404" rm="0 message(s) received successfully of 1 expected" tn="TG-JMS-PS-Selector-receive 3-1" dt="text" sc="0" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Subscriber-at-startup-onMessage" rc="200" rm="1 message(s) received successfully of 1 expected" tn="TG-JMS-PS-Selector-receive 3-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Publisher-Persistent" rc="200" rm="1 messages published" tn="TG-JMS-PS-Selector-onMessage 4-1" dt="" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Subscriber-NonMatchingSelector-receive" rc="404" rm="0 message(s) received successfully of 1 expected" tn="TG-JMS-PS-Selector-onMessage 4-1" dt="text" sc="0" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Subscriber-MatchingSelector-receive" rc="200" rm="1 message(s) received successfully of 1 expected" tn="TG-JMS-PS-Selector-onMessage 4-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Publisher-Persistent" rc="200" rm="1 messages published" tn="TG-JMS-PS-Durable 5-1" dt="" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Subscriber-Durable" rc="200" rm="1 message(s) received successfully of 1 expected" tn="TG-JMS-PS-Durable 5-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Publisher-NonPersistent" rc="200" rm="1 messages published" tn="TG-JMS-PS-Selector-Non-Persistent 6-1" dt="" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Subscriber-NP-EachSample" rc="404" rm="0 message(s) received successfully of 1 expected" tn="TG-JMS-PS-Selector-Non-Persistent 6-1" dt="text" sc="0" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS Subscriber-NP-OnStartup" rc="200" rm="1 message(s) received successfully of 1 expected" tn="TG-JMS-PS-Selector-Non-Persistent 6-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="BSS_stopActiveMQ" rc="200" rm="OK" tn="tearDown Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+
+</testResults>

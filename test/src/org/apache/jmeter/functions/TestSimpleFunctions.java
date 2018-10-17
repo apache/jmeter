@@ -26,15 +26,18 @@ import java.util.UUID;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestSimpleFunctions extends JMeterTestCase {
+public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialTest {
     private SampleResult result;
 
     private Collection<CompoundVariable> params;
@@ -169,5 +172,28 @@ public class TestSimpleFunctions extends JMeterTestCase {
         } finally {
             FileServer.getFileServer().setScriptName(null);
         }
+    }
+
+    @Test
+    public void testThreadGroupName() throws Exception {
+        AbstractFunctionByKey function = new ThreadGroupName();
+        try {
+            HTTPSamplerProxy httpRequest = new HTTPSamplerProxy();
+            ThreadGroup threadGroup = new ThreadGroup();
+            threadGroup.setName("ThreadGroup-1");
+            JMeterContext context = JMeterContextService.getContext();
+            context.setCurrentSampler(httpRequest);
+            context.setThreadGroup(threadGroup);
+            String ret = function.execute(result, httpRequest);
+            assertEquals("ThreadGroup-1", ret);
+        } finally {
+            FileServer.getFileServer().setScriptName(null);
+        }
+    }
+
+    @Test
+    public void testThreadGroupNameParameterCount() throws Exception {
+        AbstractFunctionByKey function = new ThreadGroupName();
+        checkInvalidParameterCounts(function, 0, 0);
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="BSS_startFtpServer" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="FTP Request-get-binary" rc="200" rm="OK" tn="TG-FTP 1-1" dt="" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="FTP Request-get-text" rc="200" rm="OK" tn="TG-FTP 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="FTP Request-put-text" rc="200" rm="OK" tn="TG-FTP 1-1" dt="" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="FTP Request-check-upload" rc="200" rm="OK" tn="TG-FTP 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="BSS_stopFtpServer" rc="200" rm="OK" tn="tearDown Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+
+</testResults>

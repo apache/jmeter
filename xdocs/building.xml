@@ -29,7 +29,7 @@
 Before you can compile JMeter, you will need a few things:
 <ul>
 <li>a Java 8 compatible JDK (Java Development Kit)</li>
-<li>a working installation of <a href="http://ant.apache.org">Ant</a> (at least version 1.8.2)</li>
+<li>a working installation of <a href="http://ant.apache.org">Ant</a> (at least version 1.9.1)</li>
 <li>the JMeter sources as shown in the next section</li>
 </ul>
 

@@ -42,6 +42,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -70,7 +71,6 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -105,7 +105,6 @@ import org.slf4j.LoggerFactory;
 /**
  * The main JMeter frame, containing the menu bar, test tree, and an area for
  * JMeter component GUIs.
- *
  */
 public class MainFrame extends JFrame implements TestStateListener, Remoteable, DropTargetListener, Clearable, ActionListener {
 
@@ -163,27 +162,17 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /** A message dialog shown while JMeter threads are stopping. */
     private JDialog stoppingMessage;
 
-    private JLabel totalThreads;
-    private JLabel activeThreads;
+    private JLabel activeAndTotalThreads;
 
     private JMeterToolBar toolbar;
 
-    /**
-     * Label at top right showing test duration
-     */
+    /** Label at top right showing test duration */
     private JLabel testTimeDuration;
 
-    /**
-     * Indicator for Log errors and Fatals
-     */
+    /** Indicator for Log errors and Fatals */
     private JButton warnIndicator;
-    /**
-     * Counter
-     */
-    private JLabel errorsOrFatalsLabel;
-    /**
-     * LogTarget that receives ERROR or FATAL
-     */
+
+    /** LogTarget that receives ERROR or FATAL */
     private transient ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
     
     private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000, 
@@ -203,8 +192,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      *            the listener for the test tree
      */
     public MainFrame(TreeModel treeModel, JMeterTreeListener treeListener) {
-
-        // TODO: Make the running indicator its own class instead of a JButton
         runningIndicator = new JButton(stoppedIcon);
         runningIndicator.setFocusable(false);
         runningIndicator.setBorderPainted(false);
@@ -215,11 +202,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         testTimeDuration.setToolTipText(JMeterUtils.getResString("duration_tooltip")); //$NON-NLS-1$
         testTimeDuration.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        totalThreads = new JLabel("0"); // $NON-NLS-1$
-        totalThreads.setToolTipText(JMeterUtils.getResString("total_threads_tooltip")); // $NON-NLS-1$
-
-        activeThreads = new JLabel("0"); // $NON-NLS-1$
-        activeThreads.setToolTipText(JMeterUtils.getResString("active_threads_tooltip")); // $NON-NLS-1$
+        activeAndTotalThreads = new JLabel("0/0"); // $NON-NLS-1$
+        activeAndTotalThreads.setToolTipText(JMeterUtils.getResString("active_total_threads_tooltip")); // $NON-NLS-1$
 
         warnIndicator = new JButton(warningIcon);
         warnIndicator.setMargin(new Insets(0, 0, 0, 0));
@@ -231,22 +215,19 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         warnIndicator.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
         warnIndicator.addActionListener(this);
 
-        errorsOrFatalsLabel = new JLabel("0"); // $NON-NLS-1$
-        errorsOrFatalsLabel.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
-
         tree = makeTree(treeModel, treeListener);
 
         GuiPackage.getInstance().setMainFrame(this);
         init();
         initTopLevelDndHandler();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        
+
         addMouseWheelListener(e -> {
             if (e.isControlDown()) {
                 final float scale = 1.1f;
                 int rotation = e.getWheelRotation();
                 if (rotation > 0) { // DOWN
-                    JMeterUtils.applyScaleOnFonts(1.0f/scale);
+                    JMeterUtils.applyScaleOnFonts(1.0f / scale);
                 } else if (rotation < 0) { // UP
                     JMeterUtils.applyScaleOnFonts(scale);
                 }
@@ -260,16 +241,16 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @param evt {@link ActionEvent}
      */
     private void refreshErrors(ActionEvent evt) {
-        if(errorOrFatal.get()>0) {
-            errorsOrFatalsLabel.setForeground(Color.RED);
-            errorsOrFatalsLabel.setText(Long.toString(errorOrFatal.get()));
+        if (errorOrFatal.get() > 0) {
+            warnIndicator.setForeground(Color.RED);
+            warnIndicator.setText(Integer.toString(errorOrFatal.get()));
         }
     }
     
     protected void computeTestDuration(ActionEvent evt) {
         long startTime = JMeterContextService.getTestStartTime();
         if (startTime > 0) {
-            long elapsedSec = (System.currentTimeMillis()-startTime + 500) / 1000; // rounded seconds
+            long elapsedSec = (System.currentTimeMillis() - startTime + 500) / 1000; // rounded seconds
             testTimeDuration.setText(JOrphanUtils.formatDuration(elapsedSec));
         }
     }
@@ -371,16 +352,17 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * Close the currently selected menu.
      */
     public void closeMenu() {
-        if (menuBar.isSelected()) {
-            MenuElement[] menuElement = menuBar.getSubElements();
-            if (menuElement != null) {
-                for (MenuElement element : menuElement) {
-                    JMenu menu = (JMenu) element;
-                    if (menu.isSelected()) {
-                        menu.setPopupMenuVisible(false);
-                        menu.setSelected(false);
-                        break;
-                    }
+        if (!menuBar.isSelected()) {
+            return;
+        }
+        MenuElement[] menuElement = menuBar.getSubElements();
+        if (menuElement != null) {
+            for (MenuElement element : menuElement) {
+                JMenu menu = (JMenu) element;
+                if (menu.isSelected()) {
+                    menu.setPopupMenuVisible(false);
+                    menu.setSelected(false);
+                    break;
                 }
             }
         }
@@ -408,17 +390,18 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         stoppingMessage.pack();
         ComponentUtil.centerComponentInComponent(this, stoppingMessage);
         SwingUtilities.invokeLater(() -> {
-                if (stoppingMessage != null) { // TODO - how can this be null?
+                if (stoppingMessage != null) {
                     stoppingMessage.setVisible(true);
                 }
         });
     }
 
     public void updateCounts() {
-        SwingUtilities.invokeLater(() -> {
-                activeThreads.setText(Integer.toString(JMeterContextService.getNumberOfThreads()));
-                totalThreads.setText(Integer.toString(JMeterContextService.getTotalThreads()));
-        });
+        SwingUtilities.invokeLater(() ->
+                activeAndTotalThreads.setText(
+                        String.format("%d/%d",
+                                JMeterContextService.getNumberOfThreads(),
+                                JMeterContextService.getTotalThreads())));
     }
 
     public void setMainPanel(JComponent comp) {
@@ -455,8 +438,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         hosts.add(host);
         computeTestDurationTimer.start();
         runningIndicator.setIcon(runningIcon);
-        activeThreads.setText("0"); // $NON-NLS-1$
-        totalThreads.setText("0"); // $NON-NLS-1$
+        activeAndTotalThreads.setText("0/0"); // $NON-NLS-1$
         menuBar.setRunning(true, host);
         if (LOCAL.equals(host)) {
             toolbar.setLocalTestStarted(true);
@@ -486,7 +468,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     @Override
     public void testEnded(String host) {
         hosts.remove(host);
-        if (hosts.size() == 0) {
+        if (hosts.isEmpty()) {
             runningIndicator.setIcon(stoppedIcon);
             JMeterContextService.endTest();
             computeTestDurationTimer.stop();
@@ -554,7 +536,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         refreshErrorsTimer.start();
     }
 
-
     /**
      * Support for Test Plan Dnd
      * see BUG 52281 (when JDK6 will be minimum JDK target)
@@ -589,20 +570,18 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         guiInstance.setMainToolbar(toolbar);
         toolPanel.add(toolbar);
 
-        toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
+        toolPanel.add(Box.createRigidArea(new Dimension(5, 15)));
         toolPanel.add(Box.createGlue());
 
         toolPanel.add(testTimeDuration);
-        toolPanel.add(Box.createRigidArea(new Dimension(20, 15)));
+        toolPanel.add(Box.createRigidArea(new Dimension(5, 15)));
 
-        toolPanel.add(errorsOrFatalsLabel);
         toolPanel.add(warnIndicator);
-        toolPanel.add(Box.createRigidArea(new Dimension(20, 15)));
+        warnIndicator.setText("0");
+        toolPanel.add(Box.createRigidArea(new Dimension(5, 15)));
 
-        toolPanel.add(activeThreads);
-        toolPanel.add(new JLabel(" / "));
-        toolPanel.add(totalThreads);
-        toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
+        toolPanel.add(activeAndTotalThreads);
+        toolPanel.add(Box.createRigidArea(new Dimension(5, 15)));
         toolPanel.add(runningIndicator);
         return toolPanel;
     }
@@ -668,13 +647,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                             String comment = ((TestElement) testElement).getComment();
                             if (comment != null && comment.length() > 0) {
                                 return comment;
-                                }
                             }
                         }
                     }
-                return null;
                 }
-            };
+                return null;
+            }
+        };
         treevar.setToolTipText("");
         treevar.setCellRenderer(getCellRenderer());
         treevar.setRootVisible(false);
@@ -747,8 +726,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @return a renderer to draw the test tree nodes
      */
     private TreeCellRenderer getCellRenderer() {
-        DefaultTreeCellRenderer rend = new JMeterCellRenderer();
-        return rend;
+        return new JMeterCellRenderer();
     }
 
     /**
@@ -789,25 +767,20 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     @Override
     public void drop(DropTargetDropEvent dtde) {
-        try {
-            Transferable tr = dtde.getTransferable();
-            DataFlavor[] flavors = tr.getTransferDataFlavors();
-            for (DataFlavor flavor : flavors) {
-                // Check for file lists specifically
-                if (flavor.isFlavorJavaFileListType()) {
-                    dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                    try {
-                        openJmxFilesFromDragAndDrop(tr);
-                    } finally {
-                        dtde.dropComplete(true);
-                    }
-                    return;
-                }
+        Transferable tr = dtde.getTransferable();
+        boolean anyFlavourIsJavaFileList =
+                Arrays.stream(tr.getTransferDataFlavors())
+                        .anyMatch(DataFlavor::isFlavorJavaFileListType);
+        if (anyFlavourIsJavaFileList) {
+            dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+            try {
+                openJmxFilesFromDragAndDrop(tr);
+            } catch (UnsupportedFlavorException | IOException e) {
+                log.warn("Dnd failed", e);
+            } finally {
+                dtde.dropComplete(true);
             }
-        } catch (UnsupportedFlavorException | IOException e) {
-            log.warn("Dnd failed", e);
         }
-
     }
 
     public boolean openJmxFilesFromDragAndDrop(Transferable tr) throws UnsupportedFlavorException, IOException {
@@ -852,13 +825,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         public void clearData() {
             errorOrFatal.set(0);
             SwingUtilities.invokeLater(() -> {
-                    errorsOrFatalsLabel.setForeground(Color.BLACK);
-                    errorsOrFatalsLabel.setText(Integer.toString(errorOrFatal.get()));
-                });
+                warnIndicator.setForeground(null);
+                warnIndicator.setText(Integer.toString(errorOrFatal.get()));
+            });
         }
-
     }
-
 
     @Override
     public void clearData() {
@@ -872,7 +843,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == warnIndicator) {
-            ActionRouter.getInstance().doActionNow(new ActionEvent(event.getSource(), event.getID(), ActionNames.LOGGER_PANEL_ENABLE_DISABLE));
+            ActionRouter.getInstance().doActionNow(
+                    new ActionEvent(event.getSource(), event.getID(), ActionNames.LOGGER_PANEL_ENABLE_DISABLE));
         }
     }
 
@@ -891,16 +863,14 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                     log.warn("Error awt title: {}", nsfe.toString()); // $NON-NLS-1$
                 }
             }
-       }
+        }
     }
 
     /**
      * Update Undo/Redo icons state
-     * 
-     * @param canUndo
-     *            Flag whether the undo button should be enabled
-     * @param canRedo
-     *            Flag whether the redo button should be enabled
+     *
+     * @param canUndo Flag whether the undo button should be enabled
+     * @param canRedo Flag whether the redo button should be enabled
      */
     public void updateUndoRedoIcons(boolean canUndo, boolean canRedo) {
         toolbar.updateUndoRedoIcons(canUndo, canRedo);

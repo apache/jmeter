@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -129,13 +129,20 @@ public class JMeterVariables {
     }
 
     /**
-     * Gets the value of a variable, coerced to a String.
+     * Gets the value of a variable, converted to a String.
      * 
      * @param key the name of the variable
-     * @return the value of the variable, or {@code null} if it does not exist
+     * @return the value of the variable or a toString called on it if it's non String, or {@code null} if it does not exist
      */
     public String get(String key) {
-        return (String) variables.get(key);
+        Object o = variables.get(key);
+        if(o instanceof String) {
+            return (String) o;
+        } else if (o != null) {
+            return o.toString();
+        } else {
+            return null;
+        }
     }
 
     /**

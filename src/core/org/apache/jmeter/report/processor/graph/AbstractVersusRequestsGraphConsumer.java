@@ -53,7 +53,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
      * The embedded time count consumer is used to buffer (disk storage) and tag
      * samples with the number of samples in the same interval.
      */
-    private final TimeCountConsumer embeddedConsumer;
+    private TimeCountConsumer embeddedConsumer;
 
     /**
      * Gets the granularity.
@@ -79,8 +79,6 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
      * Instantiates a new abstract over time graph consumer.
      */
     protected AbstractVersusRequestsGraphConsumer() {
-        embeddedConsumer = new TimeCountConsumer(this);
-        setGranularity(1L);
     }
 
     /*
@@ -93,6 +91,13 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
     @Override
     public void startConsuming() {
         embeddedConsumer.startConsuming();
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        embeddedConsumer = new TimeCountConsumer(this);
+        setGranularity(1L);
     }
 
     private void startConsumingBase() {
@@ -278,7 +283,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             for (int i = 0; i < channelsCount; i++) {
                 try {
                     File tmpFile = File.createTempFile(parent.getName(), "-"
-                            + String.valueOf(i), workDir);
+                            + i, workDir);
                     tmpFile.deleteOnExit();
                     fileInfos.add(new FileInfo(tmpFile, getConsumedMetadata(i)));
                 } catch (IOException ex) {
@@ -335,14 +340,15 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                     while (reader.hasNext()) {
                         Sample sample = reader.readSample();
                         // Ask parent to consume the altered sample
-                        Long requestsPerGranularity = counts.get(getTimeInterval(sample)).longValue()
-                                % parent.getGranularity();
+                        Long requestsPerGranularity = counts.get(getTimeInterval(sample));
                         Long requestsPerSecond = requestsPerGranularity * 1000 / parent.getGranularity();
                         parent.consumeBase(
                                 createIndexedSample(sample, i, requestsPerSecond), i);
                     }
                 } finally {
-                    file.delete();
+                    if(!file.delete()) {
+                        log.warn("Could not delete intermediate file {}", file.getAbsolutePath());
+                    }
                 }
             }
 

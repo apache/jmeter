@@ -19,6 +19,7 @@
 package org.apache.jmeter.testelement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -157,9 +158,7 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
             sampleList.add(result);
         }
         if (isScopeChildren(scope) || isScopeAll(scope)) {
-            for (SampleResult subResult : result.getSubResults()) {
-                sampleList.add(subResult);
-            }
+            Collections.addAll(sampleList, result.getSubResults());
         }
         return sampleList;
     }

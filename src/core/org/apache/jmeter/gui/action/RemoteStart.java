@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.engine.DistributedRunner;
 import org.apache.jmeter.gui.GuiPackage;
@@ -115,10 +116,10 @@ public class RemoteStart extends AbstractAction {
     private HashTree getTestTree() {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
-        JMeter.convertSubTree(testTree);
-        testTree.add(testTree.getArray()[0], gui.getMainFrame());
+        HashTree tree = JMeter.convertSubTree(testTree, true);
+        tree.add(tree.getArray()[0], gui.getMainFrame());
         // Used for remote notification of threads start/stop,see BUG 54152
-        testTree.add(testTree.getArray()[0], new RemoteThreadsListenerTestElement());
-        return testTree;
+        tree.add(tree.getArray()[0], new RemoteThreadsListenerTestElement());
+        return tree;
     }
 }

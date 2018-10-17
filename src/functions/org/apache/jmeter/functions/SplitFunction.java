@@ -28,9 +28,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // @see org.apache.jmeter.functions.PackageTest for unit tests
 
@@ -74,6 +74,7 @@ public class SplitFunction extends AbstractFunction {
     private Object[] values;
 
     public SplitFunction() {
+        super();
     }
 
     /** {@inheritDoc} */
@@ -87,7 +88,8 @@ public class SplitFunction extends AbstractFunction {
         String splitString = ",";
 
         if (values.length > 2) { // Split string provided
-            splitString = ((CompoundVariable) values[2]).execute();
+            String newSplitString = ((CompoundVariable) values[2]).execute();
+            splitString = newSplitString.length() > 0 ? newSplitString : splitString;
         }
         if (log.isDebugEnabled()){
             log.debug("Split "+stringToSplit+ " using "+ splitString+ " into "+varNamePrefix);

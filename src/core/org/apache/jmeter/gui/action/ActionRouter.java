@@ -217,9 +217,10 @@ public final class ActionRouter implements ActionListener {
     }
 
     /**
+     * Remove listener from actionsListeners associated to action
      * @param action {@link Class}
-     * @param e {@link ActionListener}
-     * @param actionListeners {@link Set}
+     * @param listener {@link ActionListener}
+     * @param actionListeners {@link Set} of {@link ActionListener}
      */
     private void removeActionListener(Class<?> action, ActionListener listener, Map<String, Set<ActionListener>> actionListeners) {
         if (action != null) {
@@ -248,7 +249,7 @@ public final class ActionRouter implements ActionListener {
 
     /**
      * @param action {@link Class}
-     * @param list {@link ActionListener}
+     * @param listener {@link ActionListener}
      * @param actionListeners {@link Set}
      */
     private void addActionListener(Class<?> action, ActionListener listener, Map<String, Set<ActionListener>> actionListeners) {
@@ -310,16 +311,15 @@ public final class ActionRouter implements ActionListener {
     }
 
     private static List<String> findClassesThatExtend(String className, String excluding, String[] searchPath) throws IOException, ClassNotFoundException {
-            List<String> listClasses = ClassFinder.findClassesThatExtend(
-                    searchPath, // strPathsOrJars - pathNames or jarfiles to search for classes
-                    new Class[] { Class.forName(className) },
-                    false, // innerClasses - should we include inner classes?
-                    null, // contains - className should contain this string
-                    // Ignore the classes which are specific to the reporting tool
-                    excluding, // notContains - className should not contain this string
-                    false); // annotations - true if classNames are annotations
 
-            return listClasses;
+        return ClassFinder.findClassesThatExtend(
+                searchPath, // strPathsOrJars - pathNames or jar files to search for classes
+                new Class[] { Class.forName(className) },
+                false, // innerClasses - should we include inner classes?
+                null, // contains - className should contain this string
+                // Ignore the classes which are specific to the reporting tool
+                excluding, // notContains - className should not contain this string
+                false); // annotations - true if classNames are annotations
     }
 
     private static Optional<String[]> getCodeSourceSearchPath() {
@@ -371,11 +371,7 @@ public final class ActionRouter implements ActionListener {
                 Class<?> commandClass = Class.forName(strClassName);
                 Command command = (Command) commandClass.newInstance();
                 for (String commandName : command.getActionNames()) {
-                    Set<Command> commandObjects = commands.get(commandName);
-                    if (commandObjects == null) {
-                        commandObjects = new HashSet<>();
-                        commands.put(commandName, commandObjects);
-                    }
+                    Set<Command> commandObjects = commands.computeIfAbsent(commandName, k -> new HashSet<>());
                     commandObjects.add(command);
                 }
             }

@@ -111,8 +111,8 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     }
 
     /**
-     * @param influxdbUrl
-     * @return 
+     * @param url {@link URL} Influxdb Url
+     * @return {@link HttpPost}
      * @throws URISyntaxException 
      */
     private HttpPost createRequest(URL url) throws URISyntaxException {
@@ -122,10 +122,10 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                 .setConnectionRequestTimeout(JMeterUtils.getPropDefault("backend_influxdb.connection_request_timeout", 100))
                 .build();
         
-        HttpPost httpRequest = new HttpPost(url.toURI());
-        httpRequest.setConfig(defaultRequestConfig);
+        HttpPost currentHttpRequest = new HttpPost(url.toURI());
+        currentHttpRequest.setConfig(defaultRequestConfig);
         log.debug("Created InfluxDBMetricsSender with url: {}", url);
-        return httpRequest;
+        return currentHttpRequest;
     }
 
     @Override
@@ -180,14 +180,12 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                          * could not understand the request. 5xx: The system is
                          * overloaded or significantly impaired.
                          */
-                        switch (code) {
-                        case 204:
-                            if (log.isDebugEnabled()) {
+                        if(log.isDebugEnabled()) {
+                            if(code == 204) {
                                 log.debug("Success, number of metrics written: {}", copyMetrics.size());
+                            } else {
+                                log.debug("Error writing metrics to influxDB Url: {}, responseCode: {}", url, code);
                             }
-                            break;
-                        default:
-                            log.debug("Error writing metrics to influxDB Url: {}, responseCode: {}", url, code);
                         }
                     }
                     @Override

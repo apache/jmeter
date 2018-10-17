@@ -27,14 +27,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.jmeter.gui.util.FilePanelEntry;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.protocol.java.sampler.BeanShellSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.gui.util.JSyntaxTextArea;
-import org.apache.jmeter.gui.util.JTextScrollPane;
-import org.apache.jmeter.gui.util.FilePanelEntry;
 
 public class BeanShellSamplerGui extends AbstractSamplerGui {
 

@@ -53,7 +53,7 @@ public class LengthPrefixedBinaryTCPClientImplTest {
         lp.write(os, DATA);
         os.close();
         final byte[] byteArray = os.toByteArray();
-        assertEquals(2+(DATA.length()/2), byteArray.length);
+        assertEquals(2+DATA.length()/2, byteArray.length);
         ByteArrayInputStream is = new ByteArrayInputStream(byteArray);
         assertEquals(DATA, lp.read(is, new SampleResult()));
     }

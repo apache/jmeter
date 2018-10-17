@@ -70,7 +70,6 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
 
     private final List<SampleEvent> sampleStore = new ArrayList<>();
 
-    //@GuardedBy("sampleStore") TODO perhaps use ConcurrentHashMap ?
     private final Map<String, StatisticalSampleResult> sampleTable = new HashMap<>();
 
     // Settings; readResolve sets these from the server/client values as appropriate
@@ -81,9 +80,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
 
     private transient volatile boolean keyOnThreadName;
 
-
     // variables maintained by server code
-    // @GuardedBy("sampleStore")
     private transient int sampleCount; // maintain separate count of samples for speed
 
     private transient long batchSendTime = -1; // @GuardedBy("sampleStore")
@@ -125,7 +122,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
     public void testEnded(String host) {
         log.info("Test Ended on {}", host);
         try {
-            if (sampleStore.size() != 0) {
+            if (!sampleStore.isEmpty()) {
                 sendBatch();
             }
             listener.testEnded(host);
@@ -192,7 +189,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
     }
 
     private void sendBatch() throws RemoteException {
-        if (sampleStore.size() > 0) {
+        if (!sampleStore.isEmpty()) {
             listener.processBatch(sampleStore);
             sampleStore.clear();
             sampleTable.clear();
@@ -218,7 +215,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
         if (log.isInfoEnabled()) {
             log.info(
                     "Using StatisticalSampleSender for this run. {} config: Thresholds: num={}, time={}. Key uses ThreadName: {}",
-                    (isClientConfigured() ? "Client" : "Server"), numSamplesThreshold, timeThresholdMs,
+                    isClientConfigured() ? "Client" : "Server", numSamplesThreshold, timeThresholdMs,
                     keyOnThreadName);
         }
         return this;

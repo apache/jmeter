@@ -1,18 +1,18 @@
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.apache.jmeter.util;
@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
  *
  * Used by JsseSSLManager to set up the Java https socket handling
  */
-
 public class HttpSSLProtocolSocketFactory
     extends SSLSocketFactory {// for java sockets
 
@@ -46,28 +45,30 @@ public class HttpSSLProtocolSocketFactory
 
     private static final String[] protocols = PROTOCOL_LIST.split(" "); // $NON-NLS-1$
 
+    private static final String CIPHER_LIST =
+            JMeterUtils.getPropDefault("https.cipherSuites", ""); // $NON-NLS-1$ $NON-NLS-2$
+    
+    private static final String[] ciphers = CIPHER_LIST.split(", *"); // $NON-NLS-1$
+    
     static {
         if (!PROTOCOL_LIST.isEmpty()) {
-            log.info("Using protocol list: {}", PROTOCOL_LIST);
+            log.info("Using protocol list:{} and cipher list: {}", PROTOCOL_LIST, CIPHER_LIST);
         }
     }
-
-    private final JsseSSLManager sslManager;
-
+    
     private final int CPS; // Characters per second to emulate
 
-    public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager) {
-        this(sslManager, 0);
+    public HttpSSLProtocolSocketFactory() {
+        this(0);
     }
 
-    public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager, int cps) {
+    public HttpSSLProtocolSocketFactory(int cps) {
         super();
-        this.sslManager = sslManager;
         CPS=cps;
     }
 
 
-    private void setSocket(Socket socket){
+    private void configureSocket(Socket socket){
         if (!(socket instanceof SSLSocket)) {
             throw new IllegalArgumentException("Expected SSLSocket");
         }
@@ -75,10 +76,21 @@ public class HttpSSLProtocolSocketFactory
         if (!PROTOCOL_LIST.isEmpty()) {
             try {
                 sock.setEnabledProtocols(protocols);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) { // NOSONAR
                 if (log.isWarnEnabled()) {
                     log.warn("Could not set protocol list: {}.", PROTOCOL_LIST);
                     log.warn("Valid protocols are: {}", join(sock.getSupportedProtocols()));
+                }
+            }
+        }
+
+        if (!CIPHER_LIST.isEmpty()) {
+            try {
+                sock.setEnabledCipherSuites(ciphers);
+            } catch (IllegalArgumentException e) { // NOSONAR
+                if (log.isWarnEnabled()) {
+                    log.warn("Could not set cipher list: {}.", CIPHER_LIST);
+                    log.warn("Valid ciphers are: {}", join(sock.getSupportedCipherSuites()));
                 }
             }
         }
@@ -97,7 +109,7 @@ public class HttpSSLProtocolSocketFactory
 
     private SSLSocketFactory getSSLSocketFactory() throws IOException {
         try {
-            SSLContext sslContext = this.sslManager.getContext();
+            SSLContext sslContext = ((JsseSSLManager)SSLManager.getInstance()).getContext();
             return sslContext.getSocketFactory();
         } catch (GeneralSecurityException ex) {
             throw new IOException("Rethrown as IOE", ex);
@@ -121,7 +133,7 @@ public class HttpSSLProtocolSocketFactory
     public Socket createSocket() throws IOException, UnknownHostException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock = sslfac.createSocket();
-        setSocket(sock);
+        configureSocket(sock);
         return wrapSocket(sock);
     }
 
@@ -130,7 +142,7 @@ public class HttpSSLProtocolSocketFactory
     public Socket createSocket(InetAddress host, int port) throws IOException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock=sslfac.createSocket(host,port);
-        setSocket(sock);
+        configureSocket(sock);
         return wrapSocket(sock);
     }
 
@@ -138,7 +150,7 @@ public class HttpSSLProtocolSocketFactory
     public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock=sslfac.createSocket(address, port, localAddress, localPort);
-        setSocket(sock);
+        configureSocket(sock);
         return wrapSocket(sock);
     }
 
@@ -166,7 +178,7 @@ public class HttpSSLProtocolSocketFactory
     public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock=sslfac.createSocket(s, host,port, autoClose);
-        setSocket(sock);
+        configureSocket(sock);
         return wrapSocket(sock);
     }
 
@@ -174,7 +186,7 @@ public class HttpSSLProtocolSocketFactory
     public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock=sslfac.createSocket(host,port);
-        setSocket(sock);
+        configureSocket(sock);
         return wrapSocket(sock);
     }
 
@@ -183,7 +195,7 @@ public class HttpSSLProtocolSocketFactory
             throws IOException, UnknownHostException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock=sslfac.createSocket(host, port, inetAddress, localPort);
-        setSocket(sock);
+        configureSocket(sock);
         return wrapSocket(sock);
 
     }

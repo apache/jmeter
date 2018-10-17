@@ -82,7 +82,10 @@ public class Summariser extends AbstractTestElement
     private static final boolean TOOUT = JMeterUtils.getPropDefault("summariser.out", true); //$NON-NLS-1$
 
     /** Ignore TC generated SampleResult in summary */
-    private static final boolean IGNORE_TC_GENERATED_SAMPLERESULT = JMeterUtils.getPropDefault("summariser.ignore_transaction_controller_sample_result", true); //$NON-NLS-1$
+    private static final boolean IGNORE_TC_GENERATED_SAMPLERESULT = JMeterUtils
+            .getPropDefault(
+                    "summariser.ignore_transaction_controller_sample_result", //$NON-NLS-1$
+                    true);
 
     /*
      * Ensure that a report is not skipped if we are slightly late in checking
@@ -98,10 +101,8 @@ public class Summariser extends AbstractTestElement
     /*
      * This map allows summarisers with the same name to contribute to the same totals.
      */
-    //@GuardedBy("LOCK") - needed to ensure consistency between this and INSTANCE_COUNT
     private static final Map<String, Totals> ACCUMULATORS = new ConcurrentHashMap<>();
 
-    //@GuardedBy("LOCK")
     private static int INSTANCE_COUNT; // number of active tests
 
     /*
@@ -110,7 +111,6 @@ public class Summariser extends AbstractTestElement
      * as they are not shared between threads
      * However the contents do need to be synchronized.
      */
-    //@GuardedBy("myTotals")
     private transient Totals myTotals = null;
 
     // Name of the accumulator. Set up by testStarted().

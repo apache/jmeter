@@ -39,9 +39,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 3.4 =================== -->
+<!--  =================== 5.1 =================== -->
 
-<h1>Version 3.4</h1>
+<h1>Version 5.1</h1>
 <p>
 Summary
 </p>
@@ -57,30 +57,25 @@ Summary
 </ul>
 
 <ch_section>New and Noteworthy</ch_section>
-<!-- <ch_category>Sample category</ch_category> -->
-<!-- <ch_title>Sample title</ch_title> -->
-<!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
 <ch_title>Core improvements</ch_title>
 
-<ch_title>Report/Dashboard improvements</ch_title>
+<ch_title>Scripting / Debugging enhancements</ch_title>
 
-<ch_title>Documentation improvements</ch_title>
+<ch_title>Live Reporting and Web Report</ch_title>
 
 <ch_title>Functions</ch_title>
 
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
-<ul>
-    <li><code>Start time</code> and <code>End date</code> of Thread Group have been removed, see <bugzilla>61549</bugzilla></li>
-</ul>
+
+
 <!-- =================== Improvements =================== -->
 
 <ch_section>Improvements</ch_section>
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><pr>316</pr>Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -93,22 +88,20 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
+  <li><bug>62822</bug><pr>407</pr>Render uninitialized min and max values in Summary Report as <code>#N/A</code></li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>62766</bug>Keystore Config : We should load all aliases by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
 <ul>
-    <li><bug>61561</bug>Function helper dialog should display exception in result</li>
-    <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
 </ul>
 
 <h3>I18N</h3>
 <ul>
-    <li><bug>61559</bug>Better label/translation/documentation for label ignoreFirstLine.displayName for CSV Data Set Config</li>
-    <li><bug>61606</bug>Translate button <code>Browse...</code> in some elements (which use FileEditor class)</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -117,14 +110,17 @@ Summary
 
 <h3>General</h3>
 <ul>
-    <li><bug>61549</bug>Thread Group : Remove start and end date</li>
-    <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>61607</bug>Add browse button in all beanshell elements to select beanshell script</li>
+  <li><pr>394</pr>Allow <code>null</code> values in <code>FieldStringEditor</code>. Based on patch by Mingun (alexander_sergey at mail.ru)</li>
+  <li><bug>62826</bug>When changing LAF, make JMeter restart if user clicks yes to popup</li>
+  <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li>Updated to bsh-2.0b6 (from bsh-2.0b5)</li>
+    <li>Updated to tika-core and tika-parsers 1.19.1 (from 1.18)</li>
+    <li><bug>62818</bug>Updated to xercesImpl to 2.12.0 (from 2.11.0). Reported by Stefan Seide (stefan at trilobyte-se.de)</li>
+    <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
+    <li><pr>408</pr>Log an informational message instead of an stack trace, when JavaFX is not found for the <code>RenderInBrowser</code> component.</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -133,30 +129,31 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>61569</bug>JMS Point-to-Point Test Plan: Synchronization issue when putting reply. Contributed by Igor Panainte (panainte.i at gmail.com)</li>
+    <li><bug>62785</bug><pr>400</pr>Incomplete search path applied to the filenames used in the upload functionality of the HTTP sampler. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
+    <li><bug>62775</bug>If many jars are in a folder referenced by user.classpath, startup can be extremely slow due to JUnit</li>
 </ul>
 
 <h3>Controllers</h3>
 <ul>
-    <li><bug>61556</bug>Clarify in documentation performance impacts of ${} var usage in IfController and groovy. Contributed by Justin McCartney (be_strew at yahoo.co.uk)</li>
+    <li><bug>62806</bug>ModuleController cloning by Run behaves differently wether in GUI or Non GUI mode. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
+    <li><bug>62770</bug>Aggregate Graph throws ArrayIndexOutOfBoundsException</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>62774</bug>XPath2Extractor : Scope variable is broken. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
 <ul>
-    <li><bug>61588</bug>Better log message for RandomDate function</li>
-    <li><bug>61619</bug>In Function Helper Dialog, the 1st function doesn't display default parameters</li>
 </ul>
 
 <h3>I18N</h3>
@@ -165,10 +162,22 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
+    <li><bug>62777</bug>Web Report / Dashboard : Hide All in <code>Response Time Percentiles Over Time (successful responses)</code> fails.</li>
+    <li><bug>62780</bug>Web Report / Dashboard : Display All in <code>Response Time Vs Request</code> fails.</li>
+    <li><bug>62781</bug>Web Report / Dashboard : Display All in <code>Response Time Overview</code> fails.</li>
+    <li><bug>62782</bug>Web Report / Dashboard : Remove duplicate/unused dependencies</li>
+</ul>
+
+<h3>Documentation</h3>
+<ul>
 </ul>
 
 <h3>General</h3>
 <ul>
+    <li><bug>62745</bug>Fix undefined disabled icon. Contributed by Till Neunast (https://github.com/tilln)</li>
+    <li><bug>62743</bug>Client auth must be enabled on distributed testing</li>
+    <li><bug>62767</bug>NPE when searching under certain conditions. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62790</bug>ArrayIndexOutOfBoundsException when calling replace without selecting the first match</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -177,19 +186,19 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-    <li>Igor Panainte (panainte.i at gmail.com)</li>
-    <li>Emilian Bold (emi at apache.org)</li>
-    <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
-    <li>Justin McCartney (be_strew at yahoo.co.uk)</li>
-    <li>Vincent Herilier (https://github.com/vherilier)</li>
+    <li>Till Neunast (https://github.com/tilln)</li>
+    <li>Mingun (alexander_sergey at mail.ru)</li>
+    <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
+    <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
+    <li>Stefan Seide (stefan at trilobyte-se.de)</li>
 </ul>
-<p>We also thank bug reporters who helped us improve JMeter. <br/>
-For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
+<p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
+    <li>Ori Marko (orimarko at gmail.com>)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
- </p>
+</p>
  <!--  =================== Known bugs or issues related to JAVA Bugs =================== -->
 
 <ch_section>Known problems and workarounds</ch_section>

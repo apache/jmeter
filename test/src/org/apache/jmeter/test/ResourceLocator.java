@@ -39,7 +39,9 @@ public interface ResourceLocator {
 
     public static Path getResourcePath(Class<?> basetype, String path) {
         URL url = basetype.getResource(path);
-        if (url == null) return null;
+        if (url == null) {
+            return null;
+        }
         Path nioPath;
         try {
             nioPath = Paths.get(url.toURI());

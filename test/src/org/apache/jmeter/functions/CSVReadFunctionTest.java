@@ -26,11 +26,12 @@ import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CSVReadFunctionTest extends JMeterTestCase {
+public class CSVReadFunctionTest extends JMeterTestCase implements JMeterSerialTest {
 
     private static final Logger log = LoggerFactory.getLogger(CSVReadFunctionTest.class);
     
@@ -69,64 +70,43 @@ public class CSVReadFunctionTest extends JMeterTestCase {
     
     @Test
     public void testCSVNoFile() throws Exception {
-        String s;
 
-        CSVRead cr1 = setCSVReadParams("xtestfiles/test.csv", "1");
+        CSVRead cr1 = setCSVReadParams("does/not-exist.csv", "1");
         log.info("Expecting file not found");
-        s = cr1.execute(null, null);
-        assertEquals("", s);
+        assertEquals("", cr1.execute(null, null));
 
-        CSVRead cr2 = setCSVReadParams("xtestfiles/test.csv", "next");
+        CSVRead cr2 = setCSVReadParams("does/not-exist.csv", "next");
         log.info("Expecting no entry for file");
-        s = cr2.execute(null, null);
-        assertEquals("", s);
+        assertEquals("", cr2.execute(null, null));
 
-        CSVRead cr3 = setCSVReadParams("xtestfiles/test.csv", "*ABC");
+        CSVRead cr3 = setCSVReadParams("does/not-exist.csv", "*ABC");
         log.info("Expecting file not found");
-        s = cr3.execute(null, null);
-        assertEquals("", s);
+        assertEquals("", cr3.execute(null, null));
 
         CSVRead cr4 = setCSVReadParams("*ABC", "1");
         log.info("Expecting cannot open file");
-        s = cr4.execute(null, null);
-        assertEquals("", s);
+        assertEquals("", cr4.execute(null, null));
     }
     
     @Test
     public void testCSValias() throws Exception {
-        CSVRead cr1 = setCSVReadParams("testfiles/test.csv", "*A");
+        CSVRead cr1 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "*A");
         CSVRead cr2 = setCSVReadParams("*A", "1");
         CSVRead cr3 = setCSVReadParams("*A", "next");
 
-        CSVRead cr4 = setCSVReadParams("testfiles/test.csv", "*B");
+        CSVRead cr4 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "*B");
         CSVRead cr5 = setCSVReadParams("*B", "2");
         CSVRead cr6 = setCSVReadParams("*B", "next");
 
-        String s;
-
-        s = cr1.execute(null, null); // open as *A
-        assertEquals("", s);
-        s = cr2.execute(null, null); // col 1, line 1, *A
-        assertEquals("b1", s);
-
-        s = cr4.execute(null, null);// open as *B
-        assertEquals("", s);
-        s = cr5.execute(null, null);// col2 line 1
-        assertEquals("c1", s);
-
-        s = cr3.execute(null, null);// *A next
-        assertEquals("", s);
-        s = cr2.execute(null, null);// col 1, line 2, *A
-        assertEquals("b2", s);
-
-        s = cr5.execute(null, null);// col2, line 1, *B
-        assertEquals("c1", s);
-
-        s = cr6.execute(null, null);// *B next
-        assertEquals("", s);
-
-        s = cr5.execute(null, null);// col2, line 2, *B
-        assertEquals("c2", s);
+        assertEquals("", cr1.execute(null, null)); // open as *A
+        assertEquals("b1", cr2.execute(null, null)); // col 1, line 1, *A
+        assertEquals("", cr4.execute(null, null)); // open as *B
+        assertEquals("c1", cr5.execute(null, null)); // col2 line 1
+        assertEquals("", cr3.execute(null, null)); // *A next
+        assertEquals("b2", cr2.execute(null, null)); // col 1, line 2, *A
+        assertEquals("c1", cr5.execute(null, null)); // col2, line 1, *B
+        assertEquals("", cr6.execute(null, null)); // *B next
+        assertEquals("c2", cr5.execute(null, null)); // col2, line 2, *B
     }
     
     // Check blank lines are treated as EOF
@@ -135,29 +115,20 @@ public class CSVReadFunctionTest extends JMeterTestCase {
         CSVRead csv1 = setCSVReadParams("testfiles/testblank.csv", "1");
         CSVRead csv2 = setCSVReadParams("testfiles/testblank.csv", "next");
 
-        String s;
-
         for (int i = 1; i <= 2; i++) {
-            s = csv1.execute(null, null);
-            assertEquals("b1", s);
-
-            s = csv2.execute(null, null);
-            assertEquals("", s);
-
-            s = csv1.execute(null, null);
-            assertEquals("b2", s);
-
-            s = csv2.execute(null, null);
-            assertEquals("", s);
+            assertEquals("b1", csv1.execute(null, null));
+            assertEquals("", csv2.execute(null, null));
+            assertEquals("b2", csv1.execute(null, null));
+            assertEquals("", csv2.execute(null, null));
         }
     }
     
     @Test
     public void CSVRun() throws Exception {
-        CSVRead cr1 = setCSVReadParams("testfiles/test.csv", "1");
-        CSVRead cr2 = setCSVReadParams("testfiles/test.csv", "2");
-        CSVRead cr3 = setCSVReadParams("testfiles/test.csv", "3");
-        CSVRead cr4 = setCSVReadParams("testfiles/test.csv", "next");
+        CSVRead cr1 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "1");
+        CSVRead cr2 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "2");
+        CSVRead cr3 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "3");
+        CSVRead cr4 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "next");
         CSVRead cr5 = setCSVReadParams("", "0");
         CSVRead cr6 = setCSVReadParams("", "next");
         
@@ -188,6 +159,5 @@ public class CSVReadFunctionTest extends JMeterTestCase {
         assertEquals("a1", cr5.execute(null, null));
         assertEquals("", cr6.execute(null, null));
         assertEquals("a2", cr5.execute(null, null));
-
     }
 }

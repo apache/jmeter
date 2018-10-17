@@ -38,10 +38,7 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.AuthSchemes;
-import org.apache.http.impl.auth.SPNegoSchemeFactory;
-import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -97,10 +94,29 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     private static final boolean DEFAULT_CLEAR_VALUE = false;
 
     /** Decides whether port should be omitted from SPN for kerberos spnego authentication */
-    private static final boolean STRIP_PORT = JMeterUtils.getPropDefault("kerberos.spnego.strip_port", true);
+    public static final boolean STRIP_PORT = JMeterUtils.getPropDefault("kerberos.spnego.strip_port", true);
+
+    /** Decides whether port should be omitted from SPN for kerberos spnego authentication */
+    public static final boolean USE_CANONICAL_HOST_NAME = JMeterUtils.getPropDefault("kerberos.spnego.use_canonical_host_name", true);
 
     public enum Mechanism {
-        BASIC_DIGEST, KERBEROS
+        /**
+         * @deprecated (use {@link Mechanism#BASIC})
+         */
+        @Deprecated 
+        BASIC_DIGEST,
+        /**
+         * Basic Auth
+         */
+        BASIC, 
+        /**
+         * Digest Auth
+         */
+        DIGEST, 
+        /**
+         * Kerberos Auth
+         */
+        KERBEROS
     }
 
     private static final class NullCredentials implements Credentials {
@@ -217,11 +233,11 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         try {
             if (url.getPort() == -1) {
                 // Obtain another URL with an explicit port:
-                int port = url.getProtocol().equalsIgnoreCase("http") ? HTTPConstants.DEFAULT_HTTP_PORT : HTTPConstants.DEFAULT_HTTPS_PORT;
+                int port = url.getProtocol().equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTP) ? HTTPConstants.DEFAULT_HTTP_PORT : HTTPConstants.DEFAULT_HTTPS_PORT;
                 // only http and https are supported
                 url2 = new URL(url.getProtocol(), url.getHost(), port, url.getPath());
-            } else if ((url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT && url.getProtocol().equalsIgnoreCase("http"))
-                    || (url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT && url.getProtocol().equalsIgnoreCase("https"))) {
+            } else if ((url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT && url.getProtocol().equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTP))
+                    || (url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT && url.getProtocol().equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTPS))) {
                 url2 = new URL(url.getProtocol(), url.getHost(), url.getPath());
             }
         } catch (MalformedURLException e) {
@@ -235,7 +251,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             s2 = url2.toString();
         }
 
-        log.debug("Target URL strings to match against: {} and {}", s1, s2);
+        log.debug("Target URL strings to match against: {} and {}", s1, s2);
         // TODO should really return most specific (i.e. longest) match.
         for (JMeterProperty jMeterProperty : getAuthObjects()) {
             Authorization auth = (Authorization) jMeterProperty.getObjectValue();
@@ -243,10 +259,10 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             String uRL = auth.getURL();
             log.debug("Checking match against auth'n entry: {}", uRL);
             if (s1.startsWith(uRL) || s2 != null && s2.startsWith(uRL)) {
-                log.debug("Matched");
+                log.debug("Matched against auth'n entry: {}", uRL);
                 return auth;
             }
-            log.debug("Did not match");
+            log.debug("Did not match against auth'n entry: {}", uRL);
         }
         return null;
     }
@@ -284,6 +300,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     /** {@inheritDoc} */
     @Override
     public void addConfigElement(ConfigElement config) {
+        // NOOP
     }
 
     /**
@@ -300,7 +317,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             }
             if (match(authorization,newAuthorization)) {
                 if (log.isDebugEnabled()) {
-                    log.debug("Found the same Authorization object:" + newAuthorization.toString());
+                    log.debug("Found the same Authorization object:{}", newAuthorization.toString());
                 }
                 //set true, if found the same one
                 alreadyExists=true;
@@ -390,13 +407,13 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                         if (tokens.length > 5) { // Allow for old format file without mechanism support
                             mechanism = Mechanism.valueOf(tokens[5]);
                         } else {
-                            mechanism = Mechanism.BASIC_DIGEST;
+                            mechanism = Mechanism.BASIC;
                         }
                         Authorization auth = new Authorization(url, user, pass, domain, realm, mechanism);
                         getAuthObjects().addItem(auth);
                     }
                 } catch (NoSuchElementException e) {
-                    log.error("Error parsing auth line: '" + line + "'", e);
+                    log.error("Error parsing auth line: '{}'", line, e);
                     ok = false;
                 }
             }
@@ -442,35 +459,33 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         String protocol = url.getProtocol().toLowerCase(java.util.Locale.ENGLISH);
         return protocol.equals(HTTPConstants.PROTOCOL_HTTP) || protocol.equals(HTTPConstants.PROTOCOL_HTTPS);
     }    
-
+    
     /**
-     * Configure credentials and auth scheme on client if an authorization is 
-     * available for url
-     * @param client {@link HttpClient}
-     * @param url URL to test 
-     * @param credentialsProvider {@link CredentialsProvider}
-     * @param localHost host running JMeter
+     * Configure credentials and auth scheme on client if an authorization is
+     * @param auth information about the authorization to use
+     * @param url the URL for which the authorization info should be used
+     * @param localContext http client context which should be set up
+     * @param credentialsProvider provider which should be set up
+     * @param localhost name of the workstation to be used for {@link NTCredentials}
      */
-    public void setupCredentials(HttpClient client, URL url,
-            CredentialsProvider credentialsProvider, String localHost) {
-        Authorization auth = getAuthForURL(url);
-        if (auth != null) {
-            String username = auth.getUser();
-            String realm = auth.getRealm();
-            String domain = auth.getDomain();
-            if (log.isDebugEnabled()){
-                log.debug(username + " > D="+domain+" R="+realm + " M="+auth.getMechanism());
-            }
-            if (Mechanism.KERBEROS.equals(auth.getMechanism())) {
-                ((AbstractHttpClient) client).getAuthSchemes().register(
-                        AuthSchemes.SPNEGO,
-                        new SPNegoSchemeFactory(isStripPort(url)));
-                credentialsProvider.setCredentials(new AuthScope(null, -1, null), USE_JAAS_CREDENTIALS);
-            } else {
-                credentialsProvider.setCredentials(
-                        new AuthScope(url.getHost(), url.getPort(), realm.length()==0 ? null : realm),
-                        new NTCredentials(username, auth.getPass(), localHost, domain));
-            }
+    public void setupCredentials(Authorization auth, URL url, 
+            HttpClientContext localContext, 
+            CredentialsProvider credentialsProvider,
+            String localhost) {
+        String username = auth.getUser();
+        String realm = auth.getRealm();
+        String domain = auth.getDomain();
+        if (log.isDebugEnabled()){
+            log.debug("{} > D={} R={} M={}", username, domain, realm, auth.getMechanism());
+        }
+        if(Mechanism.KERBEROS.equals(auth.getMechanism())) {
+            localContext.setAttribute(DynamicKerberosSchemeFactory.CONTEXT_ATTRIBUTE_STRIP_PORT, 
+                    Boolean.valueOf(isStripPort(url)));
+            credentialsProvider.setCredentials(new AuthScope(null, -1, null), USE_JAAS_CREDENTIALS);
+        } else {
+            credentialsProvider.setCredentials(
+                new AuthScope(url.getHost(), url.getPort(), realm.isEmpty() ? null : realm),
+                new NTCredentials(username, auth.getPass(), localhost, domain));
         }
     }
 
@@ -488,8 +503,9 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         if (STRIP_PORT) {
             return true;
         }
-        return url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT ||
-                url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT;
+        int port = url.getPort();
+        return port == HTTPConstants.DEFAULT_HTTP_PORT ||
+                port == HTTPConstants.DEFAULT_HTTPS_PORT;
     }
 
     /**
@@ -515,6 +531,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     /** {@inheritDoc} */
     @Override
     public void testEnded() {
+        // NOOP
     }
 
     /** {@inheritDoc} */
@@ -526,6 +543,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     /** {@inheritDoc} */
     @Override
     public void testEnded(String host) {
+        // NOOP
     }
 
     /** {@inheritDoc} */

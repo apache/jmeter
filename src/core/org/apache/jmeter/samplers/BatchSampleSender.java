@@ -120,7 +120,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     public void testEnded(String host) {
         log.info("Test Ended on {}", host);
         try {
-            if (sampleStore.size() != 0) {
+            if (!sampleStore.isEmpty()) {
                 listener.processBatch(sampleStore);
                 sampleStore.clear();
             }

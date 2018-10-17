@@ -79,13 +79,17 @@ These properties are only taken into account after restarting JMeter as they are
 <property name="xpath.namespace.config">
     Path to a Properties file containing Namespace mapping in the form <code>prefix=Namespace</code>.
     Example: <source>ns=http://biz.aol.com/schema/2006-12-18</source></property>
+<property name="xpath2query.parser.cache.size">XPath2 query cache for storing compiled XPath queries
+    Defaults to <code>400</code>
+    </property>
 </properties>
 </section>
 <section name="&sect-num;.3 SSL configuration" anchor="ssl_config">
 <note>SSL (Java) System properties are now in <code>system.properties</code><br/> 
-JMeter no longer converts <code>javax.<em>xxx</em></code> property entries in this file into System properties.<br/>
-These must now be defined in the <code>system.properties</code> file or on the command-line.<br/>
-The <code>system.properties</code> file gives more flexibility.</note>
+JMeter no longer converts <code>javax.<em>xxx</em></code> property entries in
+<code>jmeter.properties</code> into System properties. These must now be
+defined in the <code>system.properties</code> file or on the command-line. The
+<code>system.properties</code> file gives more flexibility.</note>
 <properties>
 <property name="https.sessioncontext.shared">
     By default, SSL session contexts are now created per-thread, rather than being shared.<br/>
@@ -105,10 +109,35 @@ The <code>system.properties</code> file gives more flexibility.</note>
     or <code>java.net.SocketException: Connection reset</code>.<br/>
     See <bugzilla>54759</bugzilla>, example: <source>https.socket.protocols=SSLv2Hello SSLv3 TLSv1</source>
 </property>
+<property name="https.cipherSuites">
+    Comma-separated list of SSL cipher suites that may be used in HTTPS
+    connections.  It may be desirable to use a subset of cipher suites in order
+    to match expected client behavior or to reduce encryption overhead in
+    JMeter when running with large numbers of users. Errors may occur if the
+    JVM does not support the specified cipher suites, or if the cipher suites
+    supported by the HTTPS server do not overlap this list.  See the
+    <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#Customization">JSSE
+	    Reference Guide.</a><br/>
+    For example: <source>https.cipherSuites=TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256</source>
+    If not specified, JMeter will use the default list of cipher suites
+    supported by the JVM.
+</property>
+<property name="httpclient.reset_state_on_thread_group_iteration">
+Reset HTTP State when starting a new Thread Group iteration.
+In summary<code>true</code> means next iteration is associated to a new user.
+<code>false</code> means next iteration is associated to same user.
+<code>true</code> involves:
+ <ul> 
+    <li>Closing opened connection</li>
+    <li>resetting SSL State</li>
+</ul>
+Defaults to: <code>true</code>
+</property>
 <property name="https.use.cached.ssl.context">
     Control if we allow reuse of cached SSL context between iterations.<br/>
     Set the value to <code>false</code> to reset the SSL context each iteration.<br/>
     Defaults to: <code>true</code>
+    <note>DEPRECATED, you should use <code>httpclient.reset_state_on_thread_group_iteration</code> with correct value</note>
 </property>
 <property name="https.keyStoreStartIndex">
     Start index to be used with keystores with many entries.<br/>
@@ -270,6 +299,11 @@ gui.quick_9=ViewResultsFullVisualizer
     is set to a non zero value).<br/>
     Defaults to: <code>10</code>
 </property>
+<property name="save_automatically_before_run">
+Enable auto saving of the .jmx file before start run a test plan<br/>
+When enabled, before the run, the .jmx will be saved and also backed up to the directory pointed.<br/>
+Defaults to: <code>true</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.7 Remote hosts and RMI configuration" anchor="remote">
@@ -334,6 +368,38 @@ JMETER-SERVER</source>
     From JMeter version 2.3.1, define this property to cause JMeter to exit after the first test.<br/>
     Defaults to: <code>true</code>
 </property>
+<property name="server.rmi.ssl.keystore.type">
+    Type of keystore for RMI connection security. Possible values are dependent on the JVM in use, but commonly supported are <code>JKS</code> and <code>PKCS12</code>.
+    Defaults to: <code>JKS</code>
+</property>
+<property name="server.rmi.ssl.keystore.file">
+    Keystore file that contains private key
+    Defaults to: <code>rmi_keystore.jks</code>
+</property>
+<property name="server.rmi.ssl.keystore.password">
+    Password of Keystore
+    Defaults to: <code>changeit</code>
+</property>
+<property name="server.rmi.ssl.keystore.alias">
+    Key alias
+    Defaults to: <code>rmi</code>
+</property>
+<property name="server.rmi.ssl.truststore.type">
+    Type of truststore for RMI connection security
+    Defaults to: the value of <code>server.rmi.ssl.keystore.type</code>, which is <code>JKS</code>
+</property>
+<property name="server.rmi.ssl.truststore.file">
+    Keystore file that contains certificate
+    Defaults to: the value of <code>server.rmi.ssl.keystore.file</code>, which is <code>rmi_keystore.jks</code>
+</property>
+<property name="server.rmi.ssl.truststore.password">
+    Password of Trust store
+    Defaults to: the value of <code>server.rmi.ssl.keystore.password</code>, which is <code>changeit</code>
+</property>
+<property name="server.rmi.ssl.disable">
+    Set this to <code>true</code> if you don't want to use SSL for RMI
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.8 Include Controller" anchor="include_controller">
@@ -355,6 +421,11 @@ JMETER-SERVER</source>
 </section>
 <section name="&sect-num;.10 Apache HttpClient common properties" anchor="httpclient_common_properties">
 <properties>
+<property name="http.post_add_content_type_if_missing">
+    Should JMeter add to POST request a Header <code>Content-type: application/x-www-form-urlencoded</code> if missing? <br/>
+    Was true before version 4.1.<br/>
+    Defaults to: <code>false</code>
+</property>
 <property name="httpclient.timeout">
     Set the socket timeout (or use the parameter <code>http.socket.timeout</code>) for
     AJP Sampler.<br/>
@@ -394,18 +465,22 @@ JMETER-SERVER</source>
     Should port be stripped from urls before constructing SPNs for SPNEGO authentication.
     Defaults to: <code>true</code>
 </property>
+<property name="kerberos.spnego.delegate_cred">
+    Should SPNEGO authentication should use delegation of credentials.
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.12 Apache HttpClient logging examples" anchor="httpclient_logging_examples">
 <description>
     Enable header wire and context logging - Best for Debugging
-	In log4j2.xml, set:
+    In log4j2.xml, set:
 <source>
 &lt;Logger name="org.apache.http" level="debug" /&gt;
 &lt;Logger name="org.apache.http.wire" level="error" /&gt;
 </source>
     Enable full wire and context logging
-	In log4j2.xml, set:
+    In log4j2.xml, set:
     <source>&lt;Logger name="org.apache.http" level="debug" /&gt;</source>
     Enable context logging for connection management
     <source>&lt;Logger name="org.apache.http.impl.conn" level="debug" /&gt;</source>
@@ -601,8 +676,8 @@ JMETER-SERVER</source>
 <property name="jmeter.save.saveservice.default_delimiter">
     For use with Comma-separated value (CSV) files or other formats where the fields' values
     are separated by specified delimiters.<br/>
-    <note>For TAB, since JMeter version 2.3 one can use <code>\t</code></note>
     Defaults to: <code>,</code>
+    <note>For TAB, one can use <code>\t</code></note>
 </property>
 <property name="jmeter.save.saveservice.print_field_names">
     Only applies to CSV format files:<br/>
@@ -694,7 +769,7 @@ JMETER-SERVER</source>
     redirects and allows relative paths.<br/>
     If you want to test strict conformance, set this value to <code>true</code>.<br/>
     When the property is <code>true</code>, JMeter follows
-    <a href="http://tools.ietf.org/html/rfc3986#section-5.2">RFC 3986 section 5.2</a>.<br/>
+    <rfc link="3986#section-5.2">RFC 3986 section 5.2</rfc>.<br/>
     Defaults to: <code>false</code>
 </property>
 <property name="proxy.content_type_include">
@@ -805,7 +880,7 @@ JMETER-SERVER</source>
     Define the HTML parser to be used.<br/>
     Do not comment this property.<br/>
     <dl>
-        <dt>org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</dt>
+        <dt><code>org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</code></dt>
         <dd>This new parser (since 2.10) should perform better than all others. See <bugzilla>55632</bugzilla>.</dd>
         <dt><code>org.apache.jmeter.protocol.http.parser.JTidyHTMLParser</code></dt>
         <dd>Default parser before JMeter version 2.10</dd>
@@ -853,10 +928,6 @@ JMETER-SERVER</source>
         <dt><code>Batch</code></dt>
         <dd>Accumulates SampleResults before sending them. Configured by
         properties <code>num_sample_threshold</code> and <code>time_threshold</code></dd>
-        <dt><code>Hold</code></dt>
-        <dd>retains samples until end of test (may need lots of memory)
-        <note>The related <code>hold_samples</code> was originally defined as a separate property, but is deprecated now.</note>
-        </dd>
         <dt><code>Statistical</code></dt>
         <dd>returns sample summary statistics. Configured by
         properties <code>key_on_threadname</code> and <code>time_threshold</code></dd>
@@ -934,11 +1005,11 @@ JMETER-SERVER</source>
 </property>
 <property name="jdbc.config.check.query">
     List of queries used to determine if the database is still responding.<br/>
-    Defaults to: <code>select 1 from INFORMATION_SCHEMA.SYSTEM_USERS|select 1 from dual|select 1 from sysibm.sysdummy1|select 1|select 1 from rdb$database</code>
+    Defaults to: <source>select 1 from INFORMATION_SCHEMA.SYSTEM_USERS|select 1 from dual|select 1 from sysibm.sysdummy1|select 1|select 1 from rdb$database</source>
 </property>
 <property name="jdbc.config.jdbc.driver.class">
     List of JDBC driver class name<br/>
-    Defaults to: <code>com.mysql.jdbc.Driver|org.postgresql.Driver|oracle.jdbc.OracleDriver|com.ingres.jdbc.IngresDriver|com.microsoft.sqlserver.jdbc.SQLServerDriver|com.microsoft.jdbc.sqlserver.SQLServerDriver|org.apache.derby.jdbc.ClientDriver|org.hsqldb.jdbc.JDBCDriver|com.ibm.db2.jcc.DB2Driver|org.apache.derby.jdbc.ClientDriver|org.h2.Driver|org.firebirdsql.jdbc.FBDrivery|org.mariadb.jdbc.Driver|org.sqlite.JDBC|net.sourceforge.jtds.jdbc.Driver</code>
+    Defaults to: <source>com.mysql.jdbc.Driver|org.postgresql.Driver|oracle.jdbc.OracleDriver|com.ingres.jdbc.IngresDriver|com.microsoft.sqlserver.jdbc.SQLServerDriver|com.microsoft.jdbc.sqlserver.SQLServerDriver|org.apache.derby.jdbc.ClientDriver|org.hsqldb.jdbc.JDBCDriver|com.ibm.db2.jcc.DB2Driver|org.apache.derby.jdbc.ClientDriver|org.h2.Driver|org.firebirdsql.jdbc.FBDrivery|org.mariadb.jdbc.Driver|org.sqlite.JDBC|net.sourceforge.jtds.jdbc.Driver</source>
 </property>
 </properties>
 </section>
@@ -1281,17 +1352,6 @@ JMETER-SERVER</source>
     The encoding to be used if none is provided.<br/>
     Defaults to: <code>ISO-8859-1</code>
 </property>
-<property name="sampleresult.getbytes.body_real_size">
-    Network response size calculation method<br/>
-    Use real size: number of bytes for response body returned by webserver
-    (i.e. the network bytes received for response). If set to <code>false</code>,
-    the (uncompressed) response data size will used (default before version 2.5).<br/>
-    Defaults to: <code>true</code>
-</property>
-<property name="sampleresult.getbytes.headers_size">
-    Include headers: add the headers size in real size.<br/>
-    Defaults to: <code>true</code>
-</property>
 <property name="CookieManager.delete_null_cookies">
     CookieManager behaviour - should cookies with null/empty values be deleted?<br/>
     Use <code>false</code> to revert to original behaviour.<br/>
@@ -1321,7 +1381,7 @@ JMETER-SERVER</source>
 </property>
 <property name="javascript.use_rhino">
     Ability to switch to Rhino as default Javascript Engine used by <code>IfController</code>
-    and <code>__javaScript</code> function.<br/>
+    and <code><funclink name="__javaScript"/></code> function.<br/>
     <note>JMeter uses Nashorn since 3.2 version.
     If you want to use Rhino, set this value to <code>true</code></note>
     Defaults to: <code>false</code>
@@ -1436,10 +1496,6 @@ JMETER-SERVER</source>
     confirmation dialogue.<br/>
     Defaults to: <code>false</code>
 </property>
-<property name="jsr223.compiled_scripts_cache_size">
-    Used by JSR223 elements.<br/>
-    Size of compiled scripts cache.<br/>
-    Defaults to: <code>100</code></property>
 </properties>
 </section>
 <section name="&sect-num;.36 Classpath configuration" anchor="classpath">
@@ -1454,7 +1510,7 @@ JMETER-SERVER</source>
 </property>
 <property name="user.classpath">
     List of directories that JMeter will search for utility and plugin dependency classes.<br/>
-    Use your platform path separator to separate multiple paths.<br/>
+    Use your platform path separator (<code>java.io.File.pathSeparatorChar</code> in Java) to separate multiple paths.<br/>
     Any jar file in such a directory will be automatically included; jar files in sub directories are ignored.<br/>
     The given value is in addition to any jars found in the <code>lib</code> directory.<br/>
     All entries will be added to the class path of the system class loader and also to the path
@@ -1535,7 +1591,7 @@ JMETER-SERVER</source>
     Defaults to: <code>Response Time Distribution</code>
 </property>
 <property name="jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity">
-    Defaults to: <code>500</code>
+    Defaults to: <code>100</code>
 </property>
 <property name="jmeter.reportgenerator.graph.activeThreadsOverTime.classname">
     Active Threads Over Time graph definition<br/>
@@ -1803,6 +1859,49 @@ JMETER-SERVER</source>
 <a href="#">^</a>
 </section>
 
+<section name="&sect-num;.42 Help" anchor="help">
+<description>Controls how documentation in JMeter is displayed</description>
+<properties>
+    <property name="help.local">
+    Switch that allows using Local documentation opened in JMeter GUI.<br/>
+    By default we use Online documentation opened in Browser.
+    Defaults to <code>false</code>
+    </property>
+</properties>
+</section>
+
+<section name="&sect-num;.43 Advanced Groovy Scripting configuration" anchor="groovy">
+<description>Advanced properties for configuration of scripting in Groovy</description>
+<properties>
+    <property name="groovy.utilities">
+    Path to Groovy file containing utility functions to make available to <code><funclink name="__groovy"/></code> function.<br/>
+    Defaults to <code>bin/utility.groovy</code> 
+    </property>
+</properties>
+</section>
+
+<section name="&sect-num;.44 Advanced JSR-223 Scripting configuration" anchor="jsr223">
+<description>Advanced properties for configuration of scripting in JSR-223</description>
+<properties>
+    <property name="jsr223.init.file">
+    <p>Path to JSR-223 file containing script to call on JMeter startup.</p>
+    <p>The actual scripting engine to use will be determined by the extension
+    of the init file name. If the file name has no extension, or no scripting
+    engine could be found for that extension, Groovy will be used.</p>
+    <p>This script can use pre-defined variables:</p>
+    <ul>
+        <li><code>log</code>: Logger to log any message, uses SLF4J library</li>
+        <li><code>props</code>: JMeter Properties</li>
+        <li><code>OUT</code>: System.OUT, useful to write in the console</li>
+    </ul>
+    No script is defined by default.
+    </property>
+    <property name="jsr223.compiled_scripts_cache_size">
+    Used by JSR-223 elements.<br/>
+    Size of compiled scripts cache.<br/>
+    Defaults to: <code>100</code></property>
+</properties>
+</section>
 <!-- 
 <section name="&sect-num;.10 Reports" anchor="Reports">
 <description>

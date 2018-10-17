@@ -23,17 +23,16 @@ import java.util.List;
 
 /**
  * The class ListResultData provides a list of results from sample processing.
- * 
+ *
  * @since 3.0
  */
 public class ListResultData implements ResultData, Iterable<ResultData> {
 
-    /** The items. */
     private List<ResultData> items = new ArrayList<>();
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.ResultData#accept(org.apache.jmeter
      * .report.processor.ResultDataVisitor)
@@ -46,8 +45,7 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
     /**
      * Adds the result at the end of the list.
      *
-     * @param result
-     *            the result
+     * @param result the result
      * @return true, if the result is added
      */
     public boolean addResult(ResultData result) {
@@ -57,8 +55,7 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
     /**
      * Removes the result at the specified index.
      *
-     * @param index
-     *            the index of the result in the list
+     * @param index the index of the result in the list
      * @return the removed result data
      */
     public ResultData removeResult(int index) {
@@ -68,8 +65,7 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
     /**
      * Gets the stored item at the specified index.
      *
-     * @param index
-     *            the index
+     * @param index the index
      * @return the result data
      */
     public ResultData get(int index) {
@@ -87,7 +83,7 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Iterable#iterator()
      */
     @Override

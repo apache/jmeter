@@ -161,21 +161,23 @@ public class LogFunction extends AbstractFunction {
             final String separator = (comment.isEmpty()) ? DEFAULT_SEPARATOR : comment;
 
             switch (prioLevel) {
-            case ERROR:
-                logger.error("{} {} {}", threadName, separator, stringToLog, throwable);
-                break;
-            case WARN:
-                logger.warn("{} {} {}", threadName, separator, stringToLog, throwable);
-                break;
-            case INFO:
-                logger.info("{} {} {}", threadName, separator, stringToLog, throwable);
-                break;
-            case DEBUG:
-                logger.debug("{} {} {}", threadName, separator, stringToLog, throwable);
-                break;
-            case TRACE:
-                logger.trace("{} {} {}", threadName, separator, stringToLog, throwable);
-                break;
+                case ERROR:
+                    logger.error("{} {} {}", threadName, separator, stringToLog, throwable);
+                    break;
+                case WARN:
+                    logger.warn("{} {} {}", threadName, separator, stringToLog, throwable);
+                    break;
+                case INFO:
+                    logger.info("{} {} {}", threadName, separator, stringToLog, throwable);
+                    break;
+                case DEBUG:
+                    logger.debug("{} {} {}", threadName, separator, stringToLog, throwable);
+                    break;
+                case TRACE:
+                    logger.trace("{} {} {}", threadName, separator, stringToLog, throwable);
+                    break;
+                default:
+                    throw new IllegalStateException("Invalid log level");
             }
         }
     }

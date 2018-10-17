@@ -22,8 +22,8 @@ import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 import org.apache.jmeter.testbeans.gui.FileEditor;
+import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
 /**
  * Parent class to handle common GUI design
@@ -51,13 +51,14 @@ public abstract class BeanShellBeanInfoSupport extends BeanInfoSupport {
         p = property("filename");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
+        p.setPropertyEditorClass(FileEditor.class);
 
         createPropertyGroup("filenameGroup", new String[] { "filename" });
 
         p = property("script");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        p.setPropertyEditorClass(FileEditor.class);
+        p.setPropertyEditorClass(TextAreaEditor.class);
 
         createPropertyGroup("scripting", new String[] { "script" });
     }

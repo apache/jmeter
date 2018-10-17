@@ -17,7 +17,6 @@
  */
 package org.apache.jmeter.report.processor.graph.impl;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +26,6 @@ import org.apache.jmeter.report.processor.MeanAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractSeriesSelector;
-import org.apache.jmeter.report.processor.graph.GraphValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
@@ -67,26 +65,22 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
 
                     @Override
                     public Iterable<String> select(Sample sample) {
-                        if(!sample.isEmptyController()) {
+                        if (!sample.isEmptyController()) {
                             String threadName = sample.getThreadName();
-                            int index = threadName.lastIndexOf(" ");
+                            int index = threadName.lastIndexOf(' ');
                             if (index >= 0) {
                                 threadName = threadName.substring(0, index);
                             }
-                            return Arrays.asList(new String[] { threadName });
+                            return Collections.singletonList(threadName);
                         } else {
-                            return Collections.<String>emptyList();
+                            return Collections.emptyList();
                         }
                     }
-                }, new GraphValueSelector() {
-
-                    @Override
-                    public Double select(String series, Sample sample) {
-                        if(!sample.isEmptyController()) {
-                            return Double.valueOf(sample.getGroupThreads());
-                        } else {
-                            return null;
-                        }
+                }, (series, sample) -> {
+                    if (!sample.isEmptyController()) {
+                        return Double.valueOf(sample.getGroupThreads());
+                    } else {
+                        return null;
                     }
                 }, false, false));
         return groupInfos;

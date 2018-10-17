@@ -26,7 +26,6 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -52,15 +51,15 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Workbench test element to create a test plan containing samples of each test element
  * (apart from Threads and Test Fragment).
- *<p>
+ * <p>
  * The user creates a Thread Group, and the elements are created as child elements of
  * Simple Controllers.
- *<p>
+ * <p>
  * Note: the code currently runs on all versions of JMeter back to 2.2.
  * Beware of making changes that rely on more recent APIs.
  */
-public class GenerateTreeGui extends AbstractConfigGui implements
-        ActionListener, UnsharedComponent {
+public class GenerateTreeGui extends AbstractConfigGui
+        implements ActionListener, UnsharedComponent {
 
     private static final long serialVersionUID = 1L;
 
@@ -88,40 +87,42 @@ public class GenerateTreeGui extends AbstractConfigGui implements
 
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
+        return Arrays.asList(MenuFactory.NON_TEST_ELEMENTS);
     }
 
     @Override
     public void actionPerformed(ActionEvent action) {
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeModel treeModel = guiPackage.getTreeModel();
-        JMeterTreeNode myTarget = findFirstNodeOfType(org.apache.jmeter.threads.ThreadGroup.class, treeModel);
+        JMeterTreeNode myTarget = findFirstNodeOfType(ThreadGroup.class, treeModel);
         if (myTarget == null) {
             JMeterUtils.reportErrorToUser("Cannot find Thread Group");
             return;
         }
 
         addElements(MenuFactory.CONTROLLERS,     "Controllers",     guiPackage, treeModel, myTarget);
-        addElements(MenuFactory.CONFIG_ELEMENTS, "Config Elements", guiPackage, treeModel, myTarget);
-        addElements(MenuFactory.TIMERS,          "Timers",          guiPackage, treeModel, myTarget);
-        addElements(MenuFactory.PRE_PROCESSORS,  "Pre Processors",  guiPackage, treeModel, myTarget);
         addElements(MenuFactory.SAMPLERS,        "Samplers",        guiPackage, treeModel, myTarget);
-        addElements(MenuFactory.POST_PROCESSORS, "Post Processors", guiPackage, treeModel, myTarget);
+        addElements(MenuFactory.TIMERS,          "Timers",          guiPackage, treeModel, myTarget);
         addElements(MenuFactory.ASSERTIONS,      "Assertions",      guiPackage, treeModel, myTarget);
+        addElements(MenuFactory.PRE_PROCESSORS,  "Pre Processors",  guiPackage, treeModel, myTarget);
+        addElements(MenuFactory.POST_PROCESSORS, "Post Processors", guiPackage, treeModel, myTarget);
+        addElements(MenuFactory.CONFIG_ELEMENTS, "Config Elements", guiPackage, treeModel, myTarget);
         addElements(MenuFactory.LISTENERS,       "Listeners",       guiPackage, treeModel, myTarget);
     }
 
-    private void addElements(String menuKey, String title, GuiPackage guiPackage, JMeterTreeModel treeModel,
-            JMeterTreeNode myTarget) {
+    private void addElements(
+            String menuKey, String title, GuiPackage guiPackage,
+            JMeterTreeModel treeModel, JMeterTreeNode myTarget) {
+
         myTarget = addSimpleController(treeModel, myTarget, title);
         JPopupMenu jp = MenuFactory.makeMenu(menuKey, "").getPopupMenu();
         for (Component comp : jp.getComponents()) {
-            JMenuItem jmi = (JMenuItem) comp;
+            JMenuItem item = (JMenuItem) comp;
             try {
-                TestElement testElement = guiPackage.createTestElement(jmi.getName());
+                TestElement testElement = guiPackage.createTestElement(item.getName());
                 addToTree(treeModel, myTarget, testElement);
             } catch (Exception e) {
-                addSimpleController(treeModel, myTarget, jmi.getName()+" "+e.getMessage());
+                addSimpleController(treeModel, myTarget, item.getName()+" "+e.getMessage());
             }
         }
     }
@@ -167,15 +168,14 @@ public class GenerateTreeGui extends AbstractConfigGui implements
         p.add(Box.createVerticalStrut(70), BorderLayout.WEST);
         add(p, BorderLayout.CENTER);
     }
+
     /**
      * Helper method to add a Simple Controller to contain the elements.
      * Called from Application Thread that needs to update GUI (JMeterTreeModel)
-     * @param model
-     *            Test component tree model
-     * @param node
-     *            Node in the tree where we will add the Controller
-     * @param name
-     *            A name for the Controller
+     *
+     * @param model Test component tree model
+     * @param node  Node in the tree where we will add the Controller
+     * @param name  A name for the Controller
      * @return the new node
      */
     private JMeterTreeNode addSimpleController(JMeterTreeModel model, JMeterTreeNode node, String name) {
@@ -228,20 +228,15 @@ public class GenerateTreeGui extends AbstractConfigGui implements
     /**
      * Finds the first enabled node of a given type in the tree.
      *
-     * @param type
-     *            class of the node to be found
+     * @param type      class of the node to be found
      * @param treeModel the tree to search in
-     *
      * @return the first node of the given type in the test component tree, or
-     *         <code>null</code> if none was found.
+     * <code>null</code> if none was found.
      */
     private JMeterTreeNode findFirstNodeOfType(Class<?> type, JMeterTreeModel treeModel) {
-        List<JMeterTreeNode> nodes = treeModel.getNodesOfType(type);
-        for (JMeterTreeNode node : nodes) {
-            if (node.isEnabled()) {
-                return node;
-            }
-        }
-        return null;
+        return treeModel.getNodesOfType(type).stream()
+                .filter(JMeterTreeNode::isEnabled)
+                .findFirst()
+                .orElse(null);
     }
 }

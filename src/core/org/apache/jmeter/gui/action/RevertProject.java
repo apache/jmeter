@@ -53,7 +53,7 @@ public class RevertProject extends AbstractActionWithNoRunningTest {
         // Get the file name of the current project
         String projectFile = GuiPackage.getInstance().getTestPlanFile();
         // Check if the user has loaded any file
-        if(projectFile == null) {
+        if (projectFile == null) {
             return;
         }
 
@@ -67,7 +67,7 @@ public class RevertProject extends AbstractActionWithNoRunningTest {
                     JMeterUtils.getResString("revert_project?"),  // $NON-NLS-1$
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
-            if(response == JOptionPane.YES_OPTION) {
+            if (response == JOptionPane.YES_OPTION) {
                 // Close the current project
                 Close.closeProject(e);
                 // Reload the project

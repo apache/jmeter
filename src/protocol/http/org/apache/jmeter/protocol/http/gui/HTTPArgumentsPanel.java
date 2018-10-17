@@ -49,23 +49,33 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     private static final String ENCODE_OR_NOT = "encode?"; //$NON-NLS-1$
 
     private static final String INCLUDE_EQUALS = "include_equals"; //$NON-NLS-1$
+    
+    private static final String CONTENT_TYPE = "content_type"; 
+
+    /** When pasting from the clipboard, split lines on linebreak or '&' */
+    private static final String CLIPBOARD_LINE_DELIMITERS = "\n|&"; //$NON-NLS-1$
+
+    /** When pasting from the clipboard, split parameters on tab or '=' */
+    private static final String CLIPBOARD_ARG_DELIMITERS = "\t|="; //$NON-NLS-1$
 
     @Override
     protected void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] {
-                ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS },
+                ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, CONTENT_TYPE, INCLUDE_EQUALS },
                 HTTPArgument.class,
                 new Functor[] {
                 new Functor("getName"), //$NON-NLS-1$
                 new Functor("getValue"), //$NON-NLS-1$
                 new Functor("isAlwaysEncoded"), //$NON-NLS-1$
+                new Functor("getContentType"), //$NON-NLS-1$
                 new Functor("isUseEquals") }, //$NON-NLS-1$
                 new Functor[] {
                 new Functor("setName"), //$NON-NLS-1$
                 new Functor("setValue"), //$NON-NLS-1$
                 new Functor("setAlwaysEncoded"), //$NON-NLS-1$
-                new Functor("setUseEquals") }, //$NON-NLS-1$
-                new Class[] {String.class, String.class, Boolean.class, Boolean.class });
+                new Functor("setContentType"),
+                new Functor("setUseEquals")}, //$NON-NLS-1$
+                new Class[] {String.class, String.class, Boolean.class, String.class, Boolean.class });
     }
 
     public static boolean testFunctors(){
@@ -142,6 +152,11 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     }
 
     @Override
+    protected void addFromClipboard() {
+        addFromClipboard(CLIPBOARD_LINE_DELIMITERS, CLIPBOARD_ARG_DELIMITERS);
+    }
+
+    @Override
     protected Argument createArgumentFromClipboard(String[] clipboardCols) {
         HTTPArgument argument = makeNewArgument();
         argument.setName(clipboardCols[0]);
@@ -151,10 +166,10 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
             if (clipboardCols.length > 2) {
                 
                 // default to false if the string is not a boolean
-                argument.setAlwaysEncoded(Boolean.parseBoolean(clipboardCols[2]));
+                argument.setAlwaysEncoded(Boolean.parseBoolean(clipboardCols[2].trim()));
                 
                 if (clipboardCols.length > 3) {
-                    Boolean useEqual = BooleanUtils.toBooleanObject(clipboardCols[3]);
+                    Boolean useEqual = BooleanUtils.toBooleanObject(clipboardCols[3].trim());
                     // default to true if the string is not a boolean
                     argument.setUseEquals(useEqual!=null?useEqual.booleanValue():true);
                 }

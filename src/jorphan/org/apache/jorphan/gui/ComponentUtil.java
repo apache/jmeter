@@ -19,7 +19,8 @@
 package org.apache.jorphan.gui;
 
 import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 
 /**
  * This class is a Util for awt Component and could be used to place them in
@@ -49,8 +50,8 @@ public final class ComponentUtil {
             return;
         }
         double percent = percentOfScreen / 100.d;
-        Dimension dimension = component.getToolkit().getScreenSize();
-        component.setSize((int) (dimension.getWidth() * percent), (int) (dimension.getHeight() * percent));
+        Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
+        component.setSize((int) (bounds.getWidth() * percent), (int) (bounds.getHeight() * percent));
         centerComponentInWindow(component);
     }
 
@@ -61,10 +62,9 @@ public final class ComponentUtil {
      *            the component you want to center in window
      */
     public static void centerComponentInWindow(Component component) {
-        Dimension dimension = component.getToolkit().getScreenSize();
-
-        component.setLocation((int) ((dimension.getWidth() - component.getWidth()) / 2),
-                (int) ((dimension.getHeight() - component.getHeight()) / 2));
+        Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
+        component.setLocation((int) ((bounds.getWidth() - component.getWidth()) / 2),
+                (int) ((bounds.getHeight() - component.getHeight()) / 2));
         component.validate();
         component.repaint();
     }

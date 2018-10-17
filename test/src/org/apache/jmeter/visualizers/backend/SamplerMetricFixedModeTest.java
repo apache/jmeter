@@ -33,10 +33,6 @@ public class SamplerMetricFixedModeTest {
 
     /**
      * Method to change a static final field
-     * 
-     * @param field
-     * @param newValue
-     * @throws Exception
      */
     static void setFinalStatic(Field field, Object newValue) throws Exception {
         field.setAccessible(true);
@@ -47,18 +43,20 @@ public class SamplerMetricFixedModeTest {
     }
 
     @Before
-    public void initMode() throws NoSuchFieldException, SecurityException, Exception {
+    public void initMode() throws Exception {
         setFinalStatic(SamplerMetric.class.getDeclaredField("WINDOW_MODE"), WindowMode.FIXED);
     }
 
     @Test
-    public void checkResetOkAndAllStats() throws NoSuchFieldException, SecurityException, Exception {
+    public void checkResetOkAndAllStats() throws Exception {
 
         SamplerMetric metric = new SamplerMetric();
         metric.add(createSampleResult(true));
         assertEquals("Before reset  ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 0.001);
         assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.001);
         assertEquals("Before reset failure", 1, metric.getHits(), 0.0);
+        assertEquals("Before reset sent bytes", 1000, metric.getSentBytes(), 0.0);
+        assertEquals("Before reset received bytes", 2000, metric.getReceivedBytes(), 0.0);
 
         // In fixed mode DescriptiveStatistics are not reset, just sliding on a
         // window
@@ -67,17 +65,20 @@ public class SamplerMetricFixedModeTest {
         assertEquals("After reset in FIXED mode ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 0.001);
         assertEquals("After reset in FIXED mode all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.0);
         assertEquals("After reset failure", 0, metric.getHits(), 0.0);
-        metric = null;
+        assertEquals("After reset sent bytes", 0, metric.getSentBytes(), 0.0);
+        assertEquals("After reset received bytes", 0, metric.getReceivedBytes(), 0.0);
     }
 
     @Test
-    public void checkResetKoAndAllStats() throws NoSuchFieldException, SecurityException, Exception {
+    public void checkResetKoAndAllStats() throws Exception {
 
         SamplerMetric metric = new SamplerMetric();
         metric.add(createSampleResult(false));
         assertEquals("Before reset  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 0.001);
         assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.001);
         assertEquals("Before reset failure", 1, metric.getFailures(), 0.0);
+        assertEquals("Before reset sent bytes", 1000, metric.getSentBytes(), 0.0);
+        assertEquals("Before reset received bytes", 2000, metric.getReceivedBytes(), 0.0);
 
         // In fixed mode DescriptiveStatistics are not reset, just sliding on a
         // window
@@ -86,7 +87,8 @@ public class SamplerMetricFixedModeTest {
         assertEquals("After reset in FIXED mode  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 0.0);
         assertEquals("After reset in FIXED mode all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.0);
         assertEquals("After reset failure", 0, metric.getFailures(), 0.001);
-        metric = null;
+        assertEquals("After reset sent bytes", 0, metric.getSentBytes(), 0.0);
+        assertEquals("After reset received bytes", 0, metric.getReceivedBytes(), 0.0);
     }
 
     @Test
@@ -100,7 +102,6 @@ public class SamplerMetricFixedModeTest {
         assertEquals("Count for '400 - bad request' error ", 2, metric.getErrors().get(error), 0.0);
         error = new ErrorMetric(createSampleResult("500", "Internal Server Error"));
         assertEquals("Count for '500 - Internal Server Error' error ", 1, metric.getErrors().get(error), 0.0);
-        metric = null;
     }
 
     private SampleResult createSampleResult(boolean success) {
@@ -110,6 +111,8 @@ public class SamplerMetricFixedModeTest {
         result.setErrorCount(success ? 0 : 1);
         result.sampleStart();
         result.setEndTime(result.getStartTime() + DEFAULT_ELAPSED_TIME);
+        result.setSentBytes(1000);
+        result.setBytes(2000L);
         return result;
     }
 

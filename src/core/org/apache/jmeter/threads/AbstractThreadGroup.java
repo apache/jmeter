@@ -286,13 +286,17 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     public abstract void waitThreadsStopped();
 
     /**
-     * Ask threads to stop gracefully
+     * This immediately stop threads of Group by interrupting them.
+     * It differs from {@link AbstractThreadGroup#stop()} by being a hard stop
      */
     public abstract void tellThreadsToStop();
 
     /**
-     * This immediately stop threads of Group by interrupting them
-     * It differs from {@link AbstractThreadGroup#tellThreadsToStop()} by being a hard stop
+     * This gracefully stops threads of Group
      */
     public abstract void stop();
+
+    public void breakThreadLoop() {
+        ((LoopController) getSamplerController()).breakLoop();
+    }
 }

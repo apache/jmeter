@@ -34,6 +34,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
@@ -45,51 +46,34 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-//For unit tests, @see TestHttpTestSampleGui
-
 /**
  * HTTP Sampler GUI
- *
  */
+@GUIMenuSortOrder(1)
 public class HttpTestSampleGui extends AbstractSamplerGui {
     
     private static final long serialVersionUID = 241L;
     
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
-    
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
     
     private UrlConfigGui urlConfigGui;
-
     private JCheckBox retrieveEmbeddedResources;
-    
     private JCheckBox concurrentDwn;
-    
-    private JTextField concurrentPool; 
-
+    private JTextField concurrentPool;
     private JCheckBox useMD5;
-
     private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
-
     private JTextField sourceIpAddr; // does not apply to Java implementation
-    
     private JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
+    private JTextField proxyHost;
+    private JTextField proxyPort;
+    private JTextField proxyUser;
+    private JPasswordField proxyPass;
+    private JComboBox<String> httpImplementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
+    private JTextField connectTimeOut;
+    private JTextField responseTimeOut;
 
     private final boolean isAJP;
-    
-    private JTextField proxyHost;
-
-    private JTextField proxyPort;
-
-    private JTextField proxyUser;
-
-    private JPasswordField proxyPass;
-    
-    private JComboBox<String> httpImplementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
-
-    private JTextField connectTimeOut;
-
-    private JTextField responseTimeOut;
 
     public HttpTestSampleGui() {
         isAJP = false;

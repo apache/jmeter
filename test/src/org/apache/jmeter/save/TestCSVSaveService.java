@@ -24,6 +24,8 @@ import static org.junit.Assert.fail;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -34,7 +36,7 @@ import org.junit.Test;
 public class TestCSVSaveService extends JMeterTestCase {
 
     private void checkSplitString(String input, char delim, String[] expected) throws Exception {
-        String out[] = CSVSaveService.csvSplitString(input, delim);     
+        String[] out = CSVSaveService.csvSplitString(input, delim);     
         checkStrings(expected, out);
     }
 
@@ -155,15 +157,16 @@ public class TestCSVSaveService extends JMeterTestCase {
     // header text should not change unexpectedly
     // if this test fails, check whether the default was intentionally changed or not
     public void testHeader() {
-        final String HDR = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,Latency,IdleTime,Connect";
+        final String HDR = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,"
+                + "failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect";
         assertEquals("Header text has changed", HDR, CSVSaveService.printableFieldNamesToString());
     }
 
     @Test
     // sample format should not change unexpectedly
     // if this test fails, check whether the default was intentionally changed or not
-    public void testSample() {
-        final String RESULT = "1,2,3,4,5,6,7,true,,8,9,10,11,12,13,14";
+    public void testSample() throws MalformedURLException {
+        final String RESULT = "1,2,3,4,5,6,7,true,,8,9,10,11,https://jmeter.apache.org,12,13,14";
         SampleResult result = new SampleResult();
         result.setSaveConfig(new SampleSaveConfiguration());
         result.setStampAndTime(1, 2);
@@ -174,6 +177,7 @@ public class TestCSVSaveService extends JMeterTestCase {
         result.setDataType("7");
         result.setSuccessful(true);
         result.setBytes(8L);
+        result.setURL(new URL("https://jmeter.apache.org"));
         result.setSentBytes(9);
         result.setGroupThreads(10);
         result.setAllThreads(11);

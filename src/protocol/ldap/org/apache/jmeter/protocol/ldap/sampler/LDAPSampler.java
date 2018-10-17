@@ -467,9 +467,6 @@ public class LDAPSampler extends AbstractSampler {
             isSuccessful = true;
         } catch (Exception ex) {
             log.error("Ldap client - ", ex);
-            // Could time this
-            // res.sampleEnd();
-            // if sampleEnd() is not called, elapsed time will remain zero
             res.setResponseCode("500");// TODO distinguish errors better //$NON-NLS-1$
             res.setResponseMessage(ex.toString());
             isSuccessful = false;

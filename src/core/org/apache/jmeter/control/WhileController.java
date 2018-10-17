@@ -20,6 +20,7 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -31,17 +32,20 @@ import org.slf4j.LoggerFactory;
 
 // @see TestWhileController for unit tests
 
-public class WhileController extends GenericController implements Serializable {
+public class WhileController extends GenericController implements Serializable, IteratingController {
     private static final Logger log = LoggerFactory.getLogger(WhileController.class);
 
     private static final long serialVersionUID = 233L;
 
     private static final String CONDITION = "WhileController.condition"; // $NON-NLS-1$
 
+    private boolean breakLoop;
+
     public WhileController() {
+        super();
     }
 
-    /*
+    /**
      * Evaluate the condition, which can be:
      * blank or LAST = was the last sampler OK?
      * otherwise, evaluate the condition to see if it is not "false"
@@ -50,14 +54,17 @@ public class WhileController extends GenericController implements Serializable {
      * Must only be called at start and end of loop
      *
      * @param loopEnd - are we at loop end?
-     * @return true means OK to continue
+     * @return true means end of loop has been reached
      */
     private boolean endOfLoop(boolean loopEnd) {
+        if(breakLoop) {
+            return true;
+        }
         String cnd = getCondition().trim();
         log.debug("Condition string: '{}'", cnd);
         boolean res;
         // If blank, only check previous sample when at end of loop
-        if ((loopEnd && cnd.length() == 0) || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
+        if ((loopEnd && cnd.isEmpty()) || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
             JMeterVariables threadVars = JMeterContextService.getContext().getVariables();
             res = "false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
         } else {
@@ -77,6 +84,8 @@ public class WhileController extends GenericController implements Serializable {
     protected Sampler nextIsNull() throws NextIsNullException {
         reInitialize();
         if (endOfLoop(true)){
+            resetBreakLoop();
+            resetLoopCount();
             return null;
         }
         return next();
@@ -89,6 +98,7 @@ public class WhileController extends GenericController implements Serializable {
     public void triggerEndOfLoop() {
         super.triggerEndOfLoop();
         endOfLoop(true);
+        resetLoopCount();
     }
 
     /**
@@ -98,14 +108,22 @@ public class WhileController extends GenericController implements Serializable {
      */
     @Override
     public Sampler next(){
-        if (isFirst()){
-            if (endOfLoop(false)){
+        try {
+            if (isFirst() && endOfLoop(false)) {
+                resetBreakLoop();
+                resetLoopCount();
                 return null;
             }
+            return super.next();
+        } finally {
+            updateIterationIndex(getName(), getIterCount());
         }
-        return super.next();
     }
 
+    protected void resetLoopCount() {
+        resetIterCount();
+    }
+    
     /**
      * @param string
      *            the condition to save
@@ -122,5 +140,31 @@ public class WhileController extends GenericController implements Serializable {
         JMeterProperty prop=getProperty(CONDITION);
         prop.recoverRunningVersion(this);
         return prop.getStringValue();
+    }
+
+    @Override
+    public void startNextLoop() {
+        reInitialize();
+    }
+
+    private void resetBreakLoop() {
+        if(breakLoop) {
+            breakLoop = false;
+        }
+    }
+
+    @Override
+    public void breakLoop() {
+        breakLoop = true;
+        setFirst(true);
+        resetCurrent();
+        resetLoopCount();
+        recoverRunningVersion();
+    }
+
+    @Override
+    public void iterationStart(LoopIterationEvent iterEvent) {
+        reInitialize();
+        resetLoopCount();
     }
 }

@@ -193,10 +193,10 @@ public final class PackageTest extends JMeterTestCaseJUnit {
             String[] languages = JMeterMenuBar.getLanguages();
             for (String lang : languages) {
                 final String[] language = lang.split("_");
-                if (language.length == 1){
-                    suite.addTest(new PackageTest(testBeanClass, new Locale(language[0]), defaultBundle));                                    
-                } else if (language.length == 2){
-                    suite.addTest(new PackageTest(testBeanClass, new Locale(language[0], language[1]), defaultBundle));                                                        
+                if (language.length == 1) {
+                    suite.addTest(new PackageTest(testBeanClass, new Locale(language[0]), defaultBundle));
+                } else if (language.length == 2) {
+                    suite.addTest(new PackageTest(testBeanClass, new Locale(language[0], language[1]), defaultBundle));
                 }
             }
         }

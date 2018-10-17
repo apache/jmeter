@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.extractor.json.jsonpath.JSONPostProcessor;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -39,6 +40,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * GUI for {@link JSONPostProcessor}
  * @since 3.0
  */
+@GUIMenuSortOrder(2)
 public class JSONPostProcessorGui extends AbstractPostProcessorGui {
 
     private static final long serialVersionUID = -2845056031828291476L;

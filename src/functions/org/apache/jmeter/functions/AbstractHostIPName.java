@@ -33,7 +33,6 @@ abstract class AbstractHostIPName extends AbstractFunction {
     private static final List<String> desc = new LinkedList<>();
 
     static {
-        // desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
         desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
     }
 

@@ -85,9 +85,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     /** Flag to show whether test is running. Set to false to stop creating more threads. */
     private volatile boolean running = false;
 
-    /** Flag to show whether test was shutdown gracefully. */
-    private volatile boolean shutdown = false;
-
     /** Flag to show whether engine is active. Set to false at end of test. */
     private volatile boolean active = false;
 
@@ -236,7 +233,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             }
         }
         if (host != null) {
-            log.info("Test has ended on host "+host);
+            log.info("Test has ended on host {} ", host);
             long now=System.currentTimeMillis();
             System.out.println("Finished the test on host " + host + " @ "+new Date(now)+" ("+now+")" // NOSONAR Intentional
                     +(EXIT_AFTER_TEST ? " - exit requested." : ""));
@@ -264,7 +261,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
     @Override
     public synchronized void stopTest(boolean now) {
-        shutdown = !now;
         Thread stopThread = new Thread(new StopTest(now));
         stopThread.start();
     }
@@ -417,10 +413,11 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 AbstractThreadGroup group = setupIter.next();
                 groupCount++;
                 String groupName = group.getName();
-                log.info("Starting setUp ThreadGroup: " + groupCount + " : " + groupName);
+                log.info("Starting setUp ThreadGroup: {} : {} ", groupCount, groupName);
                 startThreadGroup(group, groupCount, setupSearcher, testLevelElements, notifier);
                 if (serialized && setupIter.hasNext()) {
-                    log.info("Waiting for setup thread group: "+groupName+" to finish before starting next setup group");
+                    log.info("Waiting for setup thread group: {} to finish before starting next setup group", 
+                            groupName);
                     group.waitThreadsStopped();
                 }
             }    
@@ -453,10 +450,10 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             }
             groupCount++;
             String groupName = group.getName();
-            log.info("Starting ThreadGroup: " + groupCount + " : " + groupName);
+            log.info("Starting ThreadGroup: {} : {}", groupCount, groupName);
             startThreadGroup(group, groupCount, searcher, testLevelElements, notifier);
             if (serialized && iter.hasNext()) {
-                log.info("Waiting for thread group: "+groupName+" to finish before starting next group");
+                log.info("Waiting for thread group: {} to finish before starting next group", groupName);
                 group.waitThreadsStopped();
             }
         } // end of thread groups
@@ -479,16 +476,16 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             JMeterContextService.clearTotalThreads();
             log.info("Starting tearDown thread groups");
             if (mainGroups && !running) { // i.e. shutdown/stopped during main thread groups
-                running = shutdown && tearDownOnShutdown; // re-enable for tearDown if necessary
+                running = tearDownOnShutdown; // re-enable for tearDown if necessary
             }
             while (running && postIter.hasNext()) {//for each setup thread group
                 AbstractThreadGroup group = postIter.next();
                 groupCount++;
                 String groupName = group.getName();
-                log.info("Starting tearDown ThreadGroup: " + groupCount + " : " + groupName);
+                log.info("Starting tearDown ThreadGroup: {} : {}", groupCount, groupName);
                 startThreadGroup(group, groupCount, postSearcher, testLevelElements, notifier);
                 if (serialized && postIter.hasNext()) {
-                    log.info("Waiting for post thread group: "+groupName+" to finish before starting next post group");
+                    log.info("Waiting for post thread group: {} to finish before starting next post group", groupName);
                     group.waitThreadsStopped();
                 }
             }
@@ -513,8 +510,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             boolean onErrorStopThread = group.getOnErrorStopThread();
             boolean onErrorStartNextLoop = group.getOnErrorStartNextLoop();
             String groupName = group.getName();
-            log.info("Starting " + numThreads + " threads for group " + groupName + ".");
-    
+            log.info("Starting {} threads for group {}.", numThreads, groupName);
             if (onErrorStopTest) {
                 log.info("Test will stop on error");
             } else if (onErrorStopTestNow) {
@@ -568,13 +564,13 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     public void exit() {
         ClientJMeterEngine.tidyRMI(log); // This should be enough to allow server to exit.
         if (REMOTE_SYSTEM_EXIT) { // default is false
-            log.warn("About to run System.exit(0) on "+host);
+            log.warn("About to run System.exit(0) on {}", host);
             // Needs to be run in a separate thread to allow RMI call to return OK
             Thread t = new Thread() {
                 @Override
                 public void run() {
                     pause(1000); // Allow RMI to complete
-                    log.info("Bye from "+host);
+                    log.info("Bye from {}", host);
                     System.out.println("Bye from "+host); // NOSONAR Intentional
                     System.exit(0); // NOSONAR Intentional
                 }
@@ -593,7 +589,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
     @Override
     public void setProperties(Properties p) {
-        log.info("Applying properties "+p);
+        log.info("Applying properties {}", p);
         JMeterUtils.getJMeterProperties().putAll(p);
     }
     

@@ -28,15 +28,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.gui.Stoppable;
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Web daemon thread. Creates main socket on port 8080 and listens on it
- * forever. For each client request, creates a Proxy thread to handle the
- * request.
- *
+ * Web daemon thread. Creates main socket on port configured port (8888 by default) and listens on it
+ * forever. For each client request, creates a Proxy thread to handle the request.
  */
 public class Daemon extends Thread implements Stoppable {
 

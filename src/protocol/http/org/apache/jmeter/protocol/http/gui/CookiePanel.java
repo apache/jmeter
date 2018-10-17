@@ -35,6 +35,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
@@ -51,12 +52,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This is the GUI for Cookie Manager
+ * This is the GUI for Cookie Manager {@link CookieManager}
  *
  * Allows the user to specify if she needs cookie services, and give parameters
  * for this service.
- *
  */
+@GUIMenuSortOrder(3)
 public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     private static final long serialVersionUID = 241L;
@@ -65,53 +66,36 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     //++ Action command names
     private static final String ADD_COMMAND = "Add"; //$NON-NLS-1$
-
     private static final String DELETE_COMMAND = "Delete"; //$NON-NLS-1$
-
     private static final String LOAD_COMMAND = "Load"; //$NON-NLS-1$
-
     private static final String SAVE_COMMAND = "Save"; //$NON-NLS-1$
     //--
-    /**
-     * The default policy that is used when creating a new CookieManager
-     */
+
     private static final String DEFAULT_POLICY = HC4CookieHandler.DEFAULT_POLICY_NAME;
+    private static final String[] COLUMN_RESOURCE_NAMES = {
+            "name",   //$NON-NLS-1$
+            "value",  //$NON-NLS-1$
+            "domain", //$NON-NLS-1$
+            "path",   //$NON-NLS-1$
+            "secure", //$NON-NLS-1$
+            // removed expiration because it's just an annoyance for static cookies
+    };
+    private static final Class<?>[] columnClasses = {
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            Boolean.class, };
 
     private JTable cookieTable;
-
     private PowerTableModel tableModel;
-
     private JCheckBox clearEachIteration;
-
-    private static final String[] COLUMN_RESOURCE_NAMES = {
-        "name",   //$NON-NLS-1$
-        "value",  //$NON-NLS-1$
-        "domain", //$NON-NLS-1$
-        "path",   //$NON-NLS-1$
-        "secure", //$NON-NLS-1$
-        // removed expiration because it's just an annoyance for static cookies
-    };
-
-    private static final Class<?>[] columnClasses = {
-        String.class,
-        String.class,
-        String.class,
-        String.class,
-        Boolean.class, };
-
     private JButton addButton;
-
     private JButton deleteButton;
-
     private JButton loadButton;
-
     private JButton saveButton;
-
     private JLabeledChoice policy;
 
-    /**
-     * Default constructor.
-     */
     public CookiePanel() {
         init();
     }
@@ -278,7 +262,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
         CookieManager cookieManager = (CookieManager) el;
         populateTable(cookieManager);
-        clearEachIteration.setSelected((cookieManager).getClearEachIteration());
+        clearEachIteration.setSelected(cookieManager.getClearEachIteration());
         // must set policy after setting handler (which may change the policy)
         policy.setText(cookieManager.getPolicy());
     }

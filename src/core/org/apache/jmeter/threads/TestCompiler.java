@@ -205,6 +205,7 @@ public class TestCompiler implements HashTreeTraverser {
             addDirectParentControllers(controllers, stack.get(i - 1));
             List<PreProcessor>  tempPre = new LinkedList<>();
             List<PostProcessor> tempPost = new LinkedList<>();
+            List<Assertion> tempAssertions = new LinkedList<>();
             for (Object item : testTree.list(stack.subList(0, i))) {
                 if (item instanceof ConfigTestElement) {
                     configs.add((ConfigTestElement) item);
@@ -216,7 +217,7 @@ public class TestCompiler implements HashTreeTraverser {
                     timers.add((Timer) item);
                 }
                 if (item instanceof Assertion) {
-                    assertions.add((Assertion) item);
+                    tempAssertions.add((Assertion) item);
                 }
                 if (item instanceof PostProcessor) {
                     tempPost.add((PostProcessor) item);
@@ -225,6 +226,7 @@ public class TestCompiler implements HashTreeTraverser {
                     tempPre.add((PreProcessor) item);
                 }
             }
+            assertions.addAll(0, tempAssertions);
             pres.addAll(0, tempPre);
             posts.addAll(0, tempPost);
         }

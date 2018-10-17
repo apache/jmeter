@@ -32,6 +32,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.timers.TimerService;
 import org.slf4j.Logger;
@@ -45,10 +46,12 @@ import org.slf4j.LoggerFactory;
 public class TestAction extends AbstractSampler implements Interruptible {
 
     private static final Logger log = LoggerFactory.getLogger(TestAction.class);
+    
+    private static final String MSG_STOP_CURRENT_THREAD = "Stopping current thread from element {}";
 
     private static final TimerService TIMER_SERVICE = TimerService.getInstance(); 
 
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
@@ -57,7 +60,18 @@ public class TestAction extends AbstractSampler implements Interruptible {
     public static final int STOP = 0;
     public static final int PAUSE = 1;
     public static final int STOP_NOW = 2;
+    /**
+     * Start next iteration of Thread Loop
+     */
     public static final int RESTART_NEXT_LOOP = 3;
+    /**
+     * Start next iteration of Current Looop
+     */
+    public static final int START_NEXT_ITERATION_CURRENT_LOOP = 4;
+    /**
+     * Break Current Looop
+     */
+    public static final int BREAK_CURRENT_LOOP = 5;
 
     // Action targets
     public static final int THREAD = 0;
@@ -85,24 +99,42 @@ public class TestAction extends AbstractSampler implements Interruptible {
         int action = getAction();
         if (action == PAUSE) {
             pause(getDurationAsString());
-        } else if (action == STOP || action == STOP_NOW || action == RESTART_NEXT_LOOP) {
+        } else if (action == STOP || action == STOP_NOW) {
             if (target == THREAD) {
-                if(action == STOP || action == STOP_NOW) {
-                    log.info("Stopping current thread from element {}", getName());
-                    context.getThread().stop();
-                } else {
-                    log.info("Restarting next loop from element {}", getName());
-                    context.setRestartNextLoop(true);
+                if(log.isInfoEnabled()) {
+                    log.info(MSG_STOP_CURRENT_THREAD, getName());
                 }
+                context.getThread().stop();
             } else if (target == TEST) {
                 if (action == STOP_NOW) {
-                    log.info("Stopping all threads now from element {}", getName());
+                    if(log.isInfoEnabled()) {
+                        log.info(MSG_STOP_CURRENT_THREAD, getName());
+                    }
+                    context.getThread().stop();
+                    if(log.isInfoEnabled()) {
+                        log.info("Stopping all threads now from element {}", getName());
+                    } 
                     context.getEngine().stopTest();
                 } else {
-                    log.info("Stopping all threads from element {}", getName());
+                    if(log.isInfoEnabled()) {
+                        log.info(MSG_STOP_CURRENT_THREAD, getName());
+                    }
+                    context.getThread().stop();
+                    if(log.isInfoEnabled()) {
+                        log.info("Stopping all threads from element {}", getName());
+                    }
                     context.getEngine().askThreadsToStop();
                 }
             }
+        } else if (action == RESTART_NEXT_LOOP) {
+            log.info("Restarting next thread loop from element {}", getName());
+            context.setTestLogicalAction(TestLogicalAction.START_NEXT_ITERATION_OF_THREAD);
+        } else if (action == START_NEXT_ITERATION_CURRENT_LOOP) {
+            log.info("Switching to next loop iteration from element {}", getName());
+            context.setTestLogicalAction(TestLogicalAction.START_NEXT_ITERATION_OF_CURRENT_LOOP);
+        } else if (action == BREAK_CURRENT_LOOP) {
+            log.info("Breaking current loop from element {}", getName());
+            context.setTestLogicalAction(TestLogicalAction.BREAK_CURRENT_LOOP);
         }
 
         return null; // This means no sample is saved

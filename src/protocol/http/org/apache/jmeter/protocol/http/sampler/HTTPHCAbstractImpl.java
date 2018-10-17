@@ -69,6 +69,10 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     protected static final int CPS_HTTP = JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0);
     
+    /**
+     * @deprecated Not used
+     */
+    @Deprecated
     protected static final int CPS_HTTPS = JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0);
 
     protected static final boolean USE_LOOPBACK = JMeterUtils.getPropDefault("httpclient.loopback", false);
@@ -78,10 +82,27 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     // -1 means not defined
     protected static final int SO_TIMEOUT = JMeterUtils.getPropDefault("httpclient.timeout", -1);
     
-    // Control reuse of cached SSL Context in subsequent iterations
-    protected static final boolean USE_CACHED_SSL_CONTEXT = 
-            JMeterUtils.getPropDefault("https.use.cached.ssl.context", true);//$NON-NLS-1$
+    /**
+     * Reset HTTP State when starting a new Thread Group iteration
+     */
+    protected static final boolean RESET_STATE_ON_THREAD_GROUP_ITERATION = 
+            JMeterUtils.getPropDefault("httpclient.reset_state_on_thread_group_iteration", true);//$NON-NLS-1$
 
+    /**
+     * Control reuse of cached SSL Context in subsequent iterations
+     * @deprecated use httpclient.reset_state_on_thread_group_iteration instead
+     */
+    @Deprecated
+    protected static final boolean USE_CACHED_SSL_CONTEXT = 
+            JMeterUtils.getPropDefault("https.use.cached.ssl.context", false);//$NON-NLS-1$
+
+    /**
+     *  Whether SSL State/Context should be reset
+     *  Shared state for any HC based implementation, because SSL contexts are the same 
+     */
+    protected static final ThreadLocal<Boolean> resetStateOnThreadGroupIteration =
+            ThreadLocal.withInitial(() -> Boolean.FALSE);
+    
     static {
         if(!StringUtils.isEmpty(JMeterUtils.getProperty("httpclient.timeout"))) { //$NON-NLS-1$
             log.warn("You're using property 'httpclient.timeout' that will soon be deprecated for HttpClient3.1, you should either set "

@@ -26,8 +26,8 @@ import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -37,7 +37,6 @@ import org.xml.sax.SAXException;
 
 /**
  * HtmlParser implementation using JTidy.
- *
  */
 class JTidyHTMLParser extends HTMLParser {
     private static final Logger log = LoggerFactory.getLogger(JTidyHTMLParser.class);
@@ -51,7 +50,7 @@ class JTidyHTMLParser extends HTMLParser {
      */
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
-        Document dom = null;
+        Document dom;
         try {
             dom = (Document) getDOM(html, encoding);
         } catch (SAXException se) {
@@ -177,9 +176,6 @@ class JTidyHTMLParser extends HTMLParser {
             }
 
             break;
-
-        // case Node.TEXT_NODE:
-        // break;
 
         default:
             // ignored

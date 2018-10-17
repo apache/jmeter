@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.gui.tree;
 
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,14 +26,16 @@ import java.util.List;
 import javax.swing.tree.DefaultTreeModel;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.control.TestFragmentController;
+import org.apache.jmeter.control.gui.TestFragmentControllerGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
-import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
+import org.apache.jmeter.testelement.WorkBench; // NOSONAR We need this for backward compatibility
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
@@ -40,13 +43,24 @@ public class JMeterTreeModel extends DefaultTreeModel {
 
     private static final long serialVersionUID = 240L;
 
+    /**
+     * Deprecated after remove WorkBench
+     * @param tp - Test Plan
+     * @param wb - WorkBench
+     * @deprecated since 4.0
+     */
+    @Deprecated
     public JMeterTreeModel(TestElement tp, TestElement wb) {
-        super(new JMeterTreeNode(wb, null));
-        initTree(tp,wb);
+        this(tp);
+    }
+
+    public JMeterTreeModel(TestElement tp) {
+        super(new JMeterTreeNode(tp, null));
+        initTree(tp);
     }
 
     public JMeterTreeModel() {
-        this(new TestPlanGui().createTestElement(),new WorkBenchGui().createTestElement());
+        this(new TestPlanGui().createTestElement());
     }
 
     /**
@@ -57,7 +71,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
      */
     @Deprecated
     public JMeterTreeModel(Object o) {
-        this(new TestPlan(),new WorkBench());
+        this(new TestPlan());
     }
 
     /**
@@ -90,13 +104,11 @@ public class JMeterTreeModel extends DefaultTreeModel {
      *            <code>current</code>
      * @param current
      *            The node in which the <code>subTree</code> is to be inserted.
-     *            Will be overridden, when an instance of {@link TestPlan} or
-     *            {@link WorkBench} is found in the subtree.
+     *            Will be overridden, when an instance of {@link TestPlan}
      * @return newly created sub tree now found at <code>current</code>
      * @throws IllegalUserActionException
      *             when <code>current</code> is not an instance of
      *             {@link AbstractConfigGui} and no instance of {@link TestPlan}
-     *             or {@link WorkBench} could be found in the
      *             <code>subTree</code>
      */
     public HashTree addSubTree(HashTree subTree, JMeterTreeNode current) throws IllegalUserActionException {
@@ -112,11 +124,11 @@ public class JMeterTreeModel extends DefaultTreeModel {
                 userObject.setSerialized(tp.isSerialized());
                 addSubTree(subTree.getTree(item), current);
             } else if (item instanceof WorkBench) {
-                current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(1);
-                final TestElement testElement = (TestElement) current.getUserObject();
-                testElement.addTestElement(item);
-                testElement.setName(item.getName());
-                addSubTree(subTree.getTree(item), current);
+                //Move item from WorkBench to TestPlan
+                HashTree workbenchTree = subTree.getTree(item);
+                if (!workbenchTree.isEmpty()) {
+                    moveWorkBenchToTestPlan(current, workbenchTree);
+                }
             } else {
                 addSubTree(subTree.getTree(item), addComponent(item, current));
             }
@@ -164,7 +176,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
     }
 
     public void removeNodeFromParent(JMeterTreeNode node) {
-        if (!(node.getUserObject() instanceof TestPlan) && !(node.getUserObject() instanceof WorkBench)) {
+        if (!(node.getUserObject() instanceof TestPlan)) {
             super.removeNodeFromParent(node);
         }
     }
@@ -218,16 +230,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
         return getCurrentSubTree((JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(0));
     }
 
-    /**
-     * Get the {@link WorkBench} from the root of this tree
-     * @return The {@link WorkBench} found at the root of this tree
-     */
-    public HashTree getWorkBench() {
-        return getCurrentSubTree((JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(1));
-    }
 
     /**
-     * Clear the test plan, and use default node for test plan and workbench.
+     * Clear the test plan, and use default node for test plan.
      *
      * N.B. Should only be called by {@link GuiPackage#clearTestPlan()}
      */
@@ -237,14 +242,14 @@ public class JMeterTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Clear the test plan, and use specified node for test plan and default node for workbench
+     * Clear the test plan, and use specified node for test plan
      *
      * N.B. Should only be called by {@link GuiPackage#clearTestPlan(TestElement)}
      *
      * @param testPlan the node to use as the testplan top node
      */
     public void clearTestPlan(TestElement testPlan) {
-        // Remove the workbench and testplan nodes
+        // Remove testplan nodes
         int children = getChildCount(getRoot());
         while (children > 0) {
             JMeterTreeNode child = (JMeterTreeNode)getChild(getRoot(), 0);
@@ -252,23 +257,77 @@ public class JMeterTreeModel extends DefaultTreeModel {
             children = getChildCount(getRoot());
         }
         // Init the tree
-        initTree(testPlan,new WorkBenchGui().createTestElement()); // Assumes this is only called from GUI mode
+        initTree(testPlan); // Assumes this is only called from GUI mode
     }
 
     /**
-     * Initialize the model with nodes for testplan and workbench.
+     * Initialize the model with nodes for testplan.
      *
      * @param tp the element to use as testplan
-     * @param wb the element to use as workbench
      */
-    private void initTree(TestElement tp, TestElement wb) {
+    private void initTree(TestElement tp) {
         // Insert the test plan node
         insertNodeInto(new JMeterTreeNode(tp, this), (JMeterTreeNode) getRoot(), 0);
-        // Insert the workbench node
-        insertNodeInto(new JMeterTreeNode(wb, this), (JMeterTreeNode) getRoot(), 1);
         // Let others know that the tree content has changed.
         // This should not be necessary, but without it, nodes are not shown when the user
         // uses the Close menu item
         nodeStructureChanged((JMeterTreeNode)getRoot());
+    }
+
+
+    /**
+     * Move all Non-Test Elements from WorkBench to TestPlan root.
+     * Other Test Elements will be move to WorkBench Test Fragment in TestPlan
+     * @param current - TestPlan root
+     * @param workbenchTree - WorkBench hash tree
+     */
+    private void moveWorkBenchToTestPlan(JMeterTreeNode current, HashTree workbenchTree) throws IllegalUserActionException {
+        Object[] workbenchTreeArray = workbenchTree.getArray();
+        if (GuiPackage.getInstance() != null) {
+            for (Object node : workbenchTreeArray) {
+                if (isNonTestElement(node)) {
+                    HashTree subtree = workbenchTree.getTree(node);
+                    workbenchTree.remove(node);
+                    HashTree tree = new HashTree();
+                    tree.add(node);
+                    tree.add(node, subtree);
+                    ((TestElement) node).setProperty(TestElement.ENABLED, false);
+                    addSubTree(tree, current);
+                }
+            }
+        }
+
+        if (!workbenchTree.isEmpty()) {
+            HashTree testFragmentTree = new HashTree();
+            TestFragmentController testFragmentController = new TestFragmentController();
+            testFragmentController.setProperty(TestElement.NAME, "WorkBench Test Fragment");
+            testFragmentController.setProperty(TestElement.GUI_CLASS, TestFragmentControllerGui.class.getName());
+            testFragmentController.setProperty(TestElement.ENABLED, false);
+            testFragmentTree.add(testFragmentController);
+            testFragmentTree.add(testFragmentController, workbenchTree);
+            addSubTree(testFragmentTree, current);
+        }
+    }
+
+    /**
+     * Is element :
+     * <ul>
+     *  <li>HTTP(S) Test Script Recorder</li>
+     *  <li>Mirror Server</li>
+     *  <li>Property Display</li>
+     * </ul>
+     * @param node 
+     */
+    private boolean isNonTestElement(Object node) {
+        JMeterTreeNode treeNode = new JMeterTreeNode((TestElement) node, null);
+        Collection<String> categories = treeNode.getMenuCategories();
+        if (categories != null) {
+            for (String category : categories) {
+                if (MenuFactory.NON_TEST_ELEMENTS.equals(category)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

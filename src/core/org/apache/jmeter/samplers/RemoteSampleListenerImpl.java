@@ -21,6 +21,7 @@ package org.apache.jmeter.samplers;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -36,11 +37,11 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
 
     private final SampleListener sampleListener;
     
-    private static final int DEFAULT_LOCAL_PORT = 
-        JMeterUtils.getPropDefault("client.rmi.localport", 0); // $NON-NLS-1$
+    private static final int DEFAULT_LOCAL_PORT = addOffset(
+        JMeterUtils.getPropDefault("client.rmi.localport", 0), 2); // $NON-NLS-1$
 
     public RemoteSampleListenerImpl(Object listener) throws RemoteException {
-        super(DEFAULT_LOCAL_PORT);
+        super(DEFAULT_LOCAL_PORT, RmiUtils.createClientSocketFactory(),  RmiUtils.createServerSocketFactory());
         if (listener instanceof TestStateListener) {
             testListener = (TestStateListener) listener;
         } else {
@@ -51,6 +52,13 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
         } else {
             sampleListener = null;
         }
+    }
+
+    private static int addOffset(int port, int offset) {
+        if (port == 0) {
+            return 0;
+        }
+        return port + offset;
     }
 
     @Override

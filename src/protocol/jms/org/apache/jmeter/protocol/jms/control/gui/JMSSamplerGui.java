@@ -23,7 +23,6 @@ import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -36,14 +35,15 @@ import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
 import org.apache.jmeter.protocol.jms.sampler.JMSSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * Configuration screen for Java Messaging Point-to-Point requests. <br>
- * Created on: October 28, 2004
- *
+ * Configuration screen for Java Messaging Point-to-Point requests.
  */
 public class JMSSamplerGui extends AbstractSamplerGui {
 
@@ -56,25 +56,34 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField receiveQueue = new JLabeledTextField(JMeterUtils.getResString("jms_receive_queue")); //$NON-NLS-1$
 
-    private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout"),10); //$NON-NLS-1$
+    private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout"), 10); //$NON-NLS-1$
 
-    private JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"),10); //$NON-NLS-1$
+    private JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"), 10); //$NON-NLS-1$
 
-    private JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"),1); //$NON-NLS-1$
+    private JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"), 1); //$NON-NLS-1$
 
     private JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
 
-    private JSyntaxTextArea messageContent = JSyntaxTextArea.getInstance(10, 50); //$NON-NLS-1$
+    private JLabeledTextField numberOfSamplesToAggregate = new JLabeledTextField("Number of samples to aggregate"); //$NON-NLS-1$
+
+    private JSyntaxTextArea messageContent = JSyntaxTextArea.getInstance(10, 50); // $NON-NLS-1$
 
     private JLabeledTextField initialContextFactory = new JLabeledTextField(
             JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
 
     private JLabeledTextField providerUrl = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
 
-    private String[] labels = new String[] { JMeterUtils.getResString("jms_request"), //$NON-NLS-1$
-            JMeterUtils.getResString("jms_requestreply") }; //$NON-NLS-1$
+    private static final String[] JMS_COMMUNICATION_STYLE_LABELS = new String[] { 
+            "request_only", // $NON-NLS-1$
+            "request_reply", // $NON-NLS-1$
+            "read", // $NON-NLS-1$
+            "browse", // $NON-NLS-1$
+            "clear" // $NON-NLS-1$
+    };
 
-    private JLabeledChoice oneWay = new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), labels); //$NON-NLS-1$
+    private JLabeledChoice jmsCommunicationStyle = new JLabeledChoice(
+            JMeterUtils.getResString("jms_communication_style"), // $NON-NLS-1$
+            JMS_COMMUNICATION_STYLE_LABELS);
 
     private JMSPropertiesPanel jmsPropertiesPanel;
 
@@ -99,11 +108,12 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         queueConnectionFactory.setText(""); // $NON-NLS-1$
         sendQueue.setText(""); // $NON-NLS-1$
         receiveQueue.setText(""); // $NON-NLS-1$
-        ((JComboBox<?>) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
-        timeout.setText("");  // $NON-NLS-1$
-        expiration.setText("");  // $NON-NLS-1$
-        priority.setText("");  // $NON-NLS-1$
+        jmsCommunicationStyle.setSelectedIndex(0);
+        timeout.setText(""); // $NON-NLS-1$
+        expiration.setText(""); // $NON-NLS-1$
+        priority.setText(""); // $NON-NLS-1$
         jmsSelector.setText(""); // $NON-NLS-1$
+        numberOfSamplesToAggregate.setText(""); // $NON-NLS-1$
         messageContent.setInitialText(""); // $NON-NLS-1$
         initialContextFactory.setText(""); // $NON-NLS-1$
         providerUrl.setText(""); // $NON-NLS-1$
@@ -124,9 +134,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setSendQueue(sendQueue.getText());
         element.setReceiveQueue(receiveQueue.getText());
 
-        boolean isOneway = oneWay.getText().equals(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
-        element.setIsOneway(isOneway);
-
+        element.setProperty(JMSSampler.JMS_COMMUNICATION_STYLE, jmsCommunicationStyle.getSelectedIndex());
+        element.removeProperty(JMSSampler.IS_ONE_WAY);
         element.setNonPersistent(useNonPersistentDelivery.isSelected());
         element.setUseReqMsgIdAsCorrelId(useReqMsgIdAsCorrelId.isSelected());
         element.setUseResMsgIdAsCorrelId(useResMsgIdAsCorrelId.isSelected());
@@ -134,6 +143,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setExpiration(expiration.getText());
         element.setPriority(priority.getText());
         element.setJMSSelector(jmsSelector.getText());
+        element.setNumberOfSamplesToAggregate(numberOfSamplesToAggregate.getText());
         element.setContent(messageContent.getText());
 
         element.setInitialContextFactory(initialContextFactory.getText());
@@ -148,12 +158,15 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     /**
      *
-     * @param element the test element being created
+     * @param element
+     *            the test element being created
      */
     @Override
     public void modifyTestElement(TestElement element) {
         super.configureTestElement(element);
-        if (!(element instanceof JMSSampler)) { return; }
+        if (!(element instanceof JMSSampler)) {
+            return;
+        }
         JMSSampler sampler = (JMSSampler) element;
         transfer(sampler);
     }
@@ -161,20 +174,22 @@ public class JMSSamplerGui extends AbstractSamplerGui {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        if (!(el instanceof JMSSampler)) { return; }
+        if (!(el instanceof JMSSampler)) {
+            return;
+        }
         JMSSampler sampler = (JMSSampler) el;
         queueConnectionFactory.setText(sampler.getQueueConnectionFactory());
         sendQueue.setText(sampler.getSendQueue());
         receiveQueue.setText(sampler.getReceiveQueue());
-
-        JComboBox<?> box = (JComboBox<?>) oneWay.getComponentList().get(1);
-        String selected = null;
-        if (sampler.isOneway()) {
-            selected = JMeterUtils.getResString("jms_request"); //$NON-NLS-1$
+        JMeterProperty oneWay = el.getProperty(JMSSampler.IS_ONE_WAY); // NOSONAR
+        if(oneWay instanceof NullProperty) {
+            jmsCommunicationStyle.setSelectedIndex(el.getPropertyAsInt(JMSSampler.JMS_COMMUNICATION_STYLE));
         } else {
-            selected = JMeterUtils.getResString("jms_requestreply"); //$NON-NLS-1$
+            jmsCommunicationStyle.setSelectedIndex(
+                    ((BooleanProperty)oneWay).getBooleanValue() ? 
+                            JMSSampler.COMMUNICATION_STYLE.ONE_WAY.getValue() 
+                            : JMSSampler.COMMUNICATION_STYLE.REQUEST_REPLY.getValue());
         }
-        box.setSelectedItem(selected);
 
         useNonPersistentDelivery.setSelected(sampler.isNonPersistent());
         useReqMsgIdAsCorrelId.setSelected(sampler.isUseReqMsgIdAsCorrelId());
@@ -184,24 +199,21 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         expiration.setText(sampler.getExpiration());
         priority.setText(sampler.getPriority());
         jmsSelector.setText(sampler.getJMSSelector());
+        numberOfSamplesToAggregate.setText(sampler.getNumberOfSamplesToAggregate());
         messageContent.setInitialText(sampler.getContent());
         initialContextFactory.setText(sampler.getInitialContextFactory());
         providerUrl.setText(sampler.getContextProvider());
 
         jmsPropertiesPanel.configure(sampler.getJMSProperties());
-        // (TestElement)
-        // el.getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue());
-
         jndiPropertiesPanel.configure(sampler.getJNDIProperties());
-        // (TestElement)
-        // el.getProperty(JMSSampler.JNDI_PROPERTIES).getObjectValue());
     }
 
     /**
      * Initializes the configuration screen.
      *
      */
-    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+    private void init() { // WARNING: called from ctor so must not be overridden
+                          // (i.e. must be private or final)
         setLayout(new BorderLayout());
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);
@@ -219,8 +231,9 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         jmsQueueingPanel.add(sendQueuePanel, BorderLayout.CENTER);
 
         JPanel receiveQueuePanel = new JPanel(new BorderLayout(5, 0));
-        receiveQueuePanel.add(jmsSelector,BorderLayout.SOUTH);
-        receiveQueuePanel.add(receiveQueue,BorderLayout.NORTH);
+        receiveQueuePanel.add(jmsSelector, BorderLayout.SOUTH);
+        receiveQueuePanel.add(numberOfSamplesToAggregate, BorderLayout.CENTER);
+        receiveQueuePanel.add(receiveQueue, BorderLayout.NORTH);
         jmsQueueingPanel.add(receiveQueuePanel, BorderLayout.SOUTH);
 
         JPanel messagePanel = new JPanel(new BorderLayout());
@@ -231,20 +244,20 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         correlationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("jms_correlation_title"))); //$NON-NLS-1$
 
-        useReqMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_req_msgid_as_correlid"),false); //$NON-NLS-1$
+        useReqMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_req_msgid_as_correlid"), false); //$NON-NLS-1$
 
-        useResMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_res_msgid_as_correlid"),false); //$NON-NLS-1$
+        useResMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_res_msgid_as_correlid"), false); //$NON-NLS-1$
 
         correlationPanel.add(useReqMsgIdAsCorrelId);
         correlationPanel.add(useResMsgIdAsCorrelId);
 
         JPanel messageNorthPanel = new JPanel(new BorderLayout());
         JPanel onewayPanel = new HorizontalPanel();
-        onewayPanel.add(oneWay);
+        onewayPanel.add(jmsCommunicationStyle);
         onewayPanel.add(correlationPanel);
         messageNorthPanel.add(onewayPanel, BorderLayout.NORTH);
 
-        useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
+        useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"), false); //$NON-NLS-1$
 
         JPanel timeoutPanel = new HorizontalPanel();
         timeoutPanel.add(timeout);
@@ -260,7 +273,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         messageContentPanel.add(JTextScrollPane.getInstance(messageContent), BorderLayout.CENTER);
         messagePanel.add(messageContentPanel, BorderLayout.CENTER);
 
-        jmsPropertiesPanel = new JMSPropertiesPanel(); //$NON-NLS-1$
+        jmsPropertiesPanel = new JMSPropertiesPanel(); // $NON-NLS-1$
         messagePanel.add(jmsPropertiesPanel, BorderLayout.SOUTH);
 
         Box mainPanel = Box.createVerticalBox();
@@ -297,7 +310,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     @Override
     public String getLabelResource() {
-        return "jms_point_to_point"; //$NON-NLS-1$ // TODO - probably wrong
+        return "jms_point_to_point"; //$NON-NLS-1$ 
     }
 
 }

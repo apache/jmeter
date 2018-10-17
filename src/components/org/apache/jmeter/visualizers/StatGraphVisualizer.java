@@ -111,28 +111,29 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private static final Logger log = LoggerFactory.getLogger(StatGraphVisualizer.class);
 
     private static final String[] COLUMNS = { 
-            "sampler_label",                  //$NON-NLS-1$
-            "aggregate_report_count",         //$NON-NLS-1$
-            "average",                        //$NON-NLS-1$
-            "aggregate_report_median",        //$NON-NLS-1$
-            "aggregate_report_xx_pct1_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct2_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct3_line",      //$NON-NLS-1$
-            "aggregate_report_min",           //$NON-NLS-1$
-            "aggregate_report_max",           //$NON-NLS-1$
-            "aggregate_report_error%",        //$NON-NLS-1$
-            "aggregate_report_rate",          //$NON-NLS-1$
-            "aggregate_report_bandwidth",     //$NON-NLS-1$
-            "aggregate_report_sent_bytes_per_sec"  //$NON-NLS-1$
+            "sampler_label",                        //$NON-NLS-1$
+            "aggregate_report_count",               //$NON-NLS-1$
+            "average",                              //$NON-NLS-1$
+            "aggregate_report_median",              //$NON-NLS-1$
+            "aggregate_report_xx_pct1_line",        //$NON-NLS-1$
+            "aggregate_report_xx_pct2_line",        //$NON-NLS-1$
+            "aggregate_report_xx_pct3_line",        //$NON-NLS-1$
+            "aggregate_report_min",                 //$NON-NLS-1$
+            "aggregate_report_max",                 //$NON-NLS-1$
+            "aggregate_report_error%",              //$NON-NLS-1$
+            "aggregate_report_rate",                //$NON-NLS-1$
+            "aggregate_report_bandwidth",           //$NON-NLS-1$
+            "aggregate_report_sent_bytes_per_sec"   //$NON-NLS-1$
     };
 
-    private static final String[] GRAPH_COLUMNS = {"average",//$NON-NLS-1$
-            "aggregate_report_median",        //$NON-NLS-1$
-            "aggregate_report_xx_pct1_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct2_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct3_line",      //$NON-NLS-1$
-            "aggregate_report_min",           //$NON-NLS-1$
-            "aggregate_report_max"};          //$NON-NLS-1$
+    private static final String[] GRAPH_COLUMNS = {
+            "average",                          //$NON-NLS-1$
+            "aggregate_report_median",          //$NON-NLS-1$
+            "aggregate_report_xx_pct1_line",    //$NON-NLS-1$
+            "aggregate_report_xx_pct2_line",    //$NON-NLS-1$
+            "aggregate_report_xx_pct3_line",    //$NON-NLS-1$
+            "aggregate_report_min",             //$NON-NLS-1$
+            "aggregate_report_max"};            //$NON-NLS-1$
 
     private static final String TOTAL_ROW_LABEL =
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
@@ -211,7 +212,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private int defaultHeight = 300;
 
-    private JComboBox<String> columnsList = new JComboBox<>(GRAPH_COLUMNS);
+    private JComboBox<String> columnsList = new JComboBox<>(getLabels(GRAPH_COLUMNS));
 
     private List<BarGraph> eltList = new ArrayList<>();
 
@@ -225,31 +226,34 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private JCheckBox regexpChkBox = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), true); // $NON-NLS-1$
 
-    private JComboBox<String> titleFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> titleFontNameList = new JComboBox<>(keys(StatGraphProperties.getFontNameMap()));
 
     private JComboBox<String> titleFontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private JComboBox<String> titleFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> titleFontStyleList = new JComboBox<>(keys(StatGraphProperties.getFontStyleMap()));
 
-    private JComboBox<String> valueFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> valueFontNameList = new JComboBox<>(keys(StatGraphProperties.getFontNameMap()));
 
     private JComboBox<String> valueFontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private JComboBox<String> valueFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> valueFontStyleList = new JComboBox<>(keys(StatGraphProperties.getFontStyleMap()));
 
-    private JComboBox<String> fontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> fontNameList = new JComboBox<>(keys(StatGraphProperties.getFontNameMap()));
 
     private JComboBox<String> fontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
-    private JComboBox<String> fontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> fontStyleList = new JComboBox<>(keys(StatGraphProperties.getFontStyleMap()));
 
-    private JComboBox<String> legendPlacementList = new JComboBox<>(StatGraphProperties.getPlacementNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+    private JComboBox<String> legendPlacementList = new JComboBox<>(keys(StatGraphProperties.getPlacementNameMap()));
 
-    private JCheckBox drawOutlinesBar = new JCheckBox(JMeterUtils.getResString("aggregate_graph_draw_outlines"), true); // Default checked // $NON-NLS-1$
+    // Default checked
+    private JCheckBox drawOutlinesBar = new JCheckBox(JMeterUtils.getResString("aggregate_graph_draw_outlines"), true); // $NON-NLS-1$
 
-    private JCheckBox numberShowGrouping = new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), true); // Default checked // $NON-NLS-1$
-    
-    private JCheckBox valueLabelsVertical = new JCheckBox(JMeterUtils.getResString("aggregate_graph_value_labels_vertical"), true); // Default checked // $NON-NLS-1$
+    // Default checked
+    private JCheckBox numberShowGrouping = new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), true); // $NON-NLS-1$
+
+    // Default checked
+    private JCheckBox valueLabelsVertical = new JCheckBox(JMeterUtils.getResString("aggregate_graph_value_labels_vertical"), true); // $NON-NLS-1$
 
     private Color colorBarGraph = Color.YELLOW;
 
@@ -264,19 +268,50 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     public StatGraphVisualizer() {
         super();
         model = createObjectTableModel();
-        eltList.add(new BarGraph(JMeterUtils.getResString("average"), true, new Color(202, 0, 0)));
-        eltList.add(new BarGraph(JMeterUtils.getResString("aggregate_report_median"), false, new Color(49, 49, 181)));
-        eltList.add(new BarGraph(MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct1_line"),new Object[]{PCT1_LABEL}), false, new Color(42, 121, 42)));
-        eltList.add(new BarGraph(MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct2_line"),new Object[]{PCT2_LABEL}), false, new Color(242, 226, 8)));
-        eltList.add(new BarGraph(MessageFormat.format(JMeterUtils.getResString("aggregate_report_xx_pct3_line"),new Object[]{PCT3_LABEL}), false, new Color(202, 10 , 232)));
-        eltList.add(new BarGraph(JMeterUtils.getResString("aggregate_report_min"), false, Color.LIGHT_GRAY));
-        eltList.add(new BarGraph(JMeterUtils.getResString("aggregate_report_max"), false, Color.DARK_GRAY));
+        final Color red = new Color(202, 0, 0);
+        final Color blue = new Color(49, 49, 181);
+        final Color green = new Color(42, 121, 42);
+        final Color yellow = new Color(242, 226, 8);
+        final Color purple = new Color(202, 10, 232);
+        eltList.add(new BarGraph(JMeterUtils.getResString("average"), true,
+                red));
+        eltList.add(new BarGraph(
+                JMeterUtils.getResString("aggregate_report_median"), false,
+                blue));
+        eltList.add(
+                new BarGraph(
+                        MessageFormat.format(
+                                JMeterUtils.getResString(
+                                        "aggregate_report_xx_pct1_line"),
+                                PCT1_LABEL),
+                        false, green));
+        eltList.add(
+                new BarGraph(
+                        MessageFormat.format(
+                                JMeterUtils.getResString(
+                                        "aggregate_report_xx_pct2_line"),
+                                PCT2_LABEL),
+                        false, yellow));
+        
+        eltList.add(
+                new BarGraph(
+                        MessageFormat.format(
+                                JMeterUtils.getResString(
+                                        "aggregate_report_xx_pct3_line"),
+                                PCT3_LABEL),
+                        false, purple));
+        eltList.add(
+                new BarGraph(JMeterUtils.getResString("aggregate_report_min"),
+                        false, Color.LIGHT_GRAY));
+        eltList.add(
+                new BarGraph(JMeterUtils.getResString("aggregate_report_max"),
+                        false, Color.DARK_GRAY));
         clearData();
         init();
     }
     
     static final Object[][] getColumnsMsgParameters() { 
-        Object[][] result =  { null, 
+        return new Object[][] { null, 
             null,
             null,
             null,
@@ -289,9 +324,12 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             null,
             null,
             null};
-        return result;
     }
-    
+
+    private String[] keys(Map<String, ?> map) {
+        return map.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+    }
+
     /**
      * @return array of String containing column names
      */
@@ -306,7 +344,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      * @return ObjectTableModel
      */
     static ObjectTableModel createObjectTableModel() {
-        return new ObjectTableModel(COLUMNS,
+        return new ObjectTableModel(getLabels(COLUMNS),
                 SamplingStatCalculator.class,
                 new Functor[] {
                 new Functor("getLabel"),                    //$NON-NLS-1$
@@ -476,7 +514,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         myJTable.setRowSorter(new ObjectTableSorter(model).fixLastRow());
         JMeterUtils.applyHiDPI(myJTable);
         // Fix centering of titles
-        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable, getColumnsMsgParameters());
+        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable);
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, getRenderers());
         myScrollPane = new JScrollPane(myJTable);
@@ -679,7 +717,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             }
             try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile()); 
                     OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){ 
-                CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),writer,saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
+                CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),
+                        writer,
+                        saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
             } catch (IOException e) { // NOSONAR Error is reported in GUI
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } 

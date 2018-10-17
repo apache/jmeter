@@ -19,27 +19,19 @@
 
 package org.apache.jmeter.visualizers;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.IOException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
+import net.minidev.json.JSONObject;
+import net.minidev.json.JSONStyle;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
+
 public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
-    private static final String TAB_SEPARATOR = ":   "; //$NON-NLS-1$
-
-    private static final String ESC_CHAR_REGEX = "\\\\[\"\\\\/bfnrt]|\\\\u[0-9A-Fa-f]{4}"; // $NON-NLS-1$
-
-    private static final String NORMAL_CHARACTER_REGEX = "[^\"\\\\]";  // $NON-NLS-1$
-
-    private static final String STRING_REGEX = "\"(" + ESC_CHAR_REGEX + "|" + NORMAL_CHARACTER_REGEX + ")*+\""; // $NON-NLS-1$
-
-    // This 'other value' regex is deliberately weak, even accepting an empty string, to be useful when reporting malformed data.
-    private static final String OTHER_VALUE_REGEX = "[^\\{\\[\\]\\}\\,]*"; // $NON-NLS-1$
-
-    private static final String VALUE_OR_PAIR_REGEX = "((" + STRING_REGEX + "\\s*:)?\\s*(" + STRING_REGEX + "|" + OTHER_VALUE_REGEX + ")\\s*,?\\s*)"; // $NON-NLS-1$
-
-    private static final Pattern VALUE_OR_PAIR_PATTERN = Pattern.compile(VALUE_OR_PAIR_REGEX);
+    private static final String TAB_SEPARATOR = "    "; //$NON-NLS-1$
 
     /** {@inheritDoc} */
     @Override
@@ -60,69 +52,30 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
     /**
      * Pretty-print JSON text
      * @param json input text
-     * @return prettyfied json
+     * @return prettied json string
      */
     public static String prettyJSON(String json) {
-        return prettyJSON(json, RenderAsJSON.TAB_SEPARATOR);
+        return prettyJSON(json, TAB_SEPARATOR);
     }
     
     /**
      * Pretty-print JSON text
      * @param json input text
      * @param tabSeparator String tab separator
-     * @return prettyfied json
+     * @return prettied json string
      */
     public static String prettyJSON(String json, String tabSeparator) {
-        StringBuilder pretty = new StringBuilder(json.length() * 2); // Educated guess
-
-        final String tab = tabSeparator; // $NON-NLS-1$
-        StringBuilder index = new StringBuilder();
-        String nl = ""; // $NON-NLS-1$
-
-        Matcher valueOrPair = VALUE_OR_PAIR_PATTERN.matcher(json);
-
-        boolean misparse = false;
-
-        for (int i = 0; i < json.length(); ) {
-            final char currentChar = json.charAt(i);
-            if ((currentChar == '{') || (currentChar == '[')) {
-                pretty.append(nl).append(index).append(currentChar);
-                i++;
-                index.append(tab);
-                misparse = false;
+        try {
+            Object o = new JSONParser(JSONParser.DEFAULT_PERMISSIVE_MODE)
+                    .parse(json);
+            if (o instanceof JSONObject) {
+                return ((JSONObject) o)
+                        .toJSONString(new PrettyJSONStyle(tabSeparator));
             }
-            else if ((currentChar == '}') || (currentChar == ']')) {
-                if (index.length() > 0) {
-                    index.delete(0, tab.length());
-                }
-                pretty.append(nl).append(index).append(currentChar);
-                i++;
-                int j = i;
-                while ((j < json.length()) && Character.isWhitespace(json.charAt(j))) {
-                    j++;
-                }
-                if ((j < json.length()) && (json.charAt(j) == ',')) {
-                    pretty.append(","); // $NON-NLS-1$
-                    i=j+1;
-                }
-                misparse = false;
-            }
-            else if (valueOrPair.find(i) && valueOrPair.group().length() > 0) {
-                pretty.append(nl).append(index).append(valueOrPair.group());
-                i=valueOrPair.end();
-                misparse = false;
-            }
-            else {
-                if (!misparse) {
-                    pretty.append(nl).append("- Parse failed from:");
-                }
-                pretty.append(currentChar);
-                i++;
-                misparse = true;
-            }
-            nl = "\n"; // $NON-NLS-1$
+        } catch (ParseException e) {
+            return json;
         }
-        return pretty.toString();
+        return json;
     }
 
     /** {@inheritDoc} */
@@ -131,4 +84,74 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
         return JMeterUtils.getResString("view_results_render_json"); // $NON-NLS-1$
     }
 
+    private static class PrettyJSONStyle extends JSONStyle {
+        private int level = 0;
+        private String indentString = TAB_SEPARATOR;
+
+        public PrettyJSONStyle(String indentString) {
+            this.indentString = indentString;
+        }
+
+        private void indent(Appendable out) throws IOException {
+            out.append('\n');
+            out.append(StringUtils.repeat(indentString, level));
+        }
+
+        @Override
+        public void objectStart(Appendable out) throws IOException {
+            super.objectStart(out);
+            level++;
+        }
+
+        @Override
+        public void objectStop(Appendable out) throws IOException {
+            level--;
+            indent(out);
+            super.objectStop(out);
+        }
+
+        @Override
+        public void objectNext(Appendable out) throws IOException {
+            super.objectNext(out);
+            indent(out);
+        }
+
+        @Override
+        public void objectEndOfKey(Appendable out) throws IOException {
+            super.objectEndOfKey(out);
+            out.append(' ');
+        }
+
+        @Override
+        public void objectFirstStart(Appendable out) throws IOException {
+            indent(out);
+            super.objectFirstStart(out);
+        }
+
+        @Override
+        public void arrayfirstObject(Appendable out) throws IOException {
+            indent(out);
+            super.arrayfirstObject(out);
+        }
+
+        @Override
+        public void arrayNextElm(Appendable out) throws IOException {
+            super.arrayNextElm(out);
+            indent(out);
+        }
+
+        @Override
+        public void arrayStart(Appendable out) throws IOException {
+            super.arrayStart(out);
+            level++;
+        }
+
+        @Override
+        public void arrayStop(Appendable out) throws IOException {
+            level--;
+            indent(out);
+            super.arrayStop(out);
+        }
+
+    }
 }

@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.config;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
@@ -35,6 +36,12 @@ import org.apache.oro.text.regex.Perl5Matcher;
 public class MultipartUrlConfig implements Serializable {
 
     private static final long serialVersionUID = 240L;
+
+    private static final String CRLF = "\r\n";
+    private static final String CRLFCRLF = "\r\n\r\n";
+    // Code also allows for LF only (not sure why - perhaps because the test code uses it?)
+    private static final String LF = "\n";
+    private static final String LFLF = "\n\n";
 
     private final String boundary;
 
@@ -89,11 +96,20 @@ public class MultipartUrlConfig implements Serializable {
      *
      * @param name
      * @param value
+     * @param contentType can include charset or not, for example:  "application/json; charset=UTF-8" or  "application/json"
      */
-    private void addNonEncodedArgument(String name, String value) {
+    private void addNonEncodedArgument(String name, String value, String contentType) {
         Arguments myArgs = getArguments();
         // The value is not encoded
         HTTPArgument arg = new HTTPArgument(name, value, false);
+        if(!StringUtils.isEmpty(contentType)) {
+            int indexOfSemiColon = contentType.indexOf(';');
+            if(indexOfSemiColon > 0) {
+                arg.setContentType(contentType.substring(0, indexOfSemiColon));
+            } else {
+                arg.setContentType(contentType);
+            }
+        }
         // Let the GUI show that it will not be encoded
         arg.setAlwaysEncoded(false);
         myArgs.addArgument(arg);
@@ -131,11 +147,6 @@ public class MultipartUrlConfig implements Serializable {
                 } else {
                     // Find the first empty line of the multipart, it signals end of headers for multipart
                     // Agents are supposed to terminate lines in CRLF:
-                    final String CRLF = "\r\n";
-                    final String CRLFCRLF = "\r\n\r\n";
-                    // Code also allows for LF only (not sure why - perhaps because the test code uses it?)
-                    final String LF = "\n";
-                    final String LFLF = "\n\n";
                     int indexEmptyCrLfCrLfLinePos = part.indexOf(CRLFCRLF); //$NON-NLS-1$
                     int indexEmptyLfLfLinePos = part.indexOf(LFLF); //$NON-NLS-1$
                     String value = null;
@@ -144,16 +155,19 @@ public class MultipartUrlConfig implements Serializable {
                     } else if (indexEmptyLfLfLinePos > -1) { // LF blank line found
                         value = part.substring(indexEmptyLfLfLinePos + LFLF.length(), part.lastIndexOf(LF));
                     }
-                    this.addNonEncodedArgument(name, value);
+                    this.addNonEncodedArgument(name, value, contentType);
                 }
             }
         }
     }
-
-    private String getHeaderValue(String headerName, String multiPart) {
+    
+    private static String getHeaderValue(String headerName, String multiPart) {
         String regularExpression = headerName + "\\s*:\\s*(.*)$"; //$NON-NLS-1$
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
-        Pattern pattern = JMeterUtils.getPattern(regularExpression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
+        Pattern pattern = JMeterUtils.getPattern(regularExpression,
+                Perl5Compiler.READ_ONLY_MASK
+                        | Perl5Compiler.CASE_INSENSITIVE_MASK
+                        | Perl5Compiler.MULTILINE_MASK);
         if(localMatcher.contains(multiPart, pattern)) {
             return localMatcher.getMatch().group(1).trim();
         }

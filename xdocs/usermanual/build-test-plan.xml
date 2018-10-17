@@ -53,7 +53,6 @@ your elements are saved.  JMeter will merge the elements into the tree.</p>
 JMeter will save the element selected, plus all child elements beneath it.  In this way,
 you can save test tree fragments and individual elements for later use.</p>
 
-<note>By default, the workbench is not automatically saved with the test plan, but it can be saved by checking "<code>Save Workbench</code>" option on Workbench element.</note>
 </subsection>
 
 <subsection name="&sect-num;.3 Configuring Tree Elements" anchor="config_element">

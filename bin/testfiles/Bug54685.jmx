@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.5" jmeter="2.9-SNAPSHOT.20130327">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.0-SNAPSHOT.20180905">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Bug54685" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -98,11 +98,11 @@
             <label>true</label>
             <code>true</code>
             <message>true</message>
-            <threadName>true</threadName>
+            <threadName>false</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
-            <assertions>true</assertions>
-            <subresults>true</subresults>
+            <assertions>false</assertions>
+            <subresults>false</subresults>
             <responseData>false</responseData>
             <samplerData>false</samplerData>
             <xml>false</xml>
@@ -130,7 +130,7 @@
             <label>true</label>
             <code>true</code>
             <message>true</message>
-            <threadName>true</threadName>
+            <threadName>false</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
             <assertions>true</assertions>

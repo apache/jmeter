@@ -21,16 +21,27 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
+import java.util.Enumeration;
+import java.util.function.Consumer;
 
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -49,9 +60,9 @@ public class RenderAsXML extends SamplerResultTab
 
     private static final Logger log = LoggerFactory.getLogger(RenderAsXML.class);
 
-    private static final byte[] XML_PFX = {'<','?','x','m','l',' '};//"<?xml "
+    private static final byte[] XML_PFX = {'<', '?', 'x', 'm', 'l', ' '};//"<?xml "
 
-    public RenderAsXML(){
+    public RenderAsXML() {
         activateSearchExtension = false; // TODO work out how to search the XML pane
     }
 
@@ -66,8 +77,8 @@ public class RenderAsXML extends SamplerResultTab
         results.setCaretPosition(0);
         byte[] source = res.getResponseData();
         final ByteArrayInputStream baIS = new ByteArrayInputStream(source);
-        for(int i=0; i<source.length-XML_PFX.length; i++){
-            if (JOrphanUtils.startsWith(source, XML_PFX, i)){
+        for (int i = 0; i < source.length - XML_PFX.length; i++) {
+            if (JOrphanUtils.startsWith(source, XML_PFX, i)) {
                 baIS.skip(i);// NOSONAR Skip the leading bytes (if any)
                 break;
             }
@@ -78,12 +89,14 @@ public class RenderAsXML extends SamplerResultTab
         org.w3c.dom.Document document = tidy.parseDOM(baIS, null);
         document.normalize();
         if (tidy.getParseErrors() > 0) {
-            showErrorMessageDialog(sw.toString(),
+            showErrorMessageDialog(
+                    sw.toString(),
                     "Tidy: " + tidy.getParseErrors() + " errors, " + tidy.getParseWarnings() + " warnings",
                     JOptionPane.WARNING_MESSAGE);
         }
 
         JPanel domTreePanel = new DOMTreePanel(document);
+        new ExpandPopupMenu().add(domTreePanel);
         resultsScrollPane.setViewportView(domTreePanel);
     }
 
@@ -96,18 +109,70 @@ public class RenderAsXML extends SamplerResultTab
         resultsScrollPane.setViewportView(null); // clear result tab on Ctrl-E
     }
 
+    private static class ExpandPopupMenu extends JPopupMenu implements ActionListener {
+
+        private static final long serialVersionUID = 1L;
+        private JMenuItem expand;
+        private JMenuItem collapse;
+        private JTree tree;
+
+        ExpandPopupMenu() {
+            expand = new JMenuItem(JMeterUtils.getResString("menu_expand_all"));
+            expand.addActionListener(this);
+            add(expand);
+            collapse = new JMenuItem(JMeterUtils.getResString("menu_collapse_all"));
+            collapse.addActionListener(this);
+            add(collapse);
+        }
+
+        void setTree(JTree tree) {
+            this.tree = tree;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == expand) {
+                expandAll(tree.getSelectionPath());
+            }
+            if (e.getSource() == collapse) {
+                collapseAll(tree.getSelectionPath());
+            }
+        }
+
+        private void collapseAll(TreePath parent) {
+            applyToChildren(parent, this::collapseAll);
+            tree.collapsePath(parent);
+        }
+
+        private void expandAll(TreePath parent) {
+            applyToChildren(parent, this::expandAll);
+            tree.expandPath(parent);
+        }
+
+        private void applyToChildren(TreePath parent, Consumer<TreePath> method) {
+            TreeNode node = (TreeNode) parent.getLastPathComponent();
+            Enumeration<?> e = node.children();
+            while (e.hasMoreElements()) {
+                TreeNode n = (TreeNode) e.nextElement();
+                TreePath path = parent.pathByAddingChild(n);
+                method.accept(path);
+            }
+        }
+    }
+
     /*
      *
      * A Dom tree panel for to display response as tree view author <a
-     * href="mailto:d.maung@mdl.com">Dave Maung</a> 
+     * href="mailto:d.maung@mdl.com">Dave Maung</a>
      * TODO implement to find any nodes in the tree using TreePath.
      *
      */
-    private static class DOMTreePanel extends JPanel {
+    private static class DOMTreePanel extends JPanel implements MouseListener {
 
         private static final long serialVersionUID = 6871690021183779153L;
 
         private JTree domJTree;
+        private ExpandPopupMenu popupMenu;
 
         public DOMTreePanel(org.w3c.dom.Document document) {
             super(new GridLayout(1, 0));
@@ -115,9 +180,11 @@ public class RenderAsXML extends SamplerResultTab
                 Node firstElement = getFirstElement(document);
                 DefaultMutableTreeNode top = new XMLDefaultMutableTreeNode(firstElement);
                 domJTree = new JTree(top);
-
                 domJTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
                 domJTree.setShowsRootHandles(true);
+                domJTree.addMouseListener(this);
+                popupMenu = new ExpandPopupMenu();
+                popupMenu.setTree(domJTree);
                 JScrollPane domJScrollPane = new JScrollPane(domJTree);
                 domJTree.setAutoscrolls(true);
                 this.add(domJScrollPane);
@@ -126,7 +193,6 @@ public class RenderAsXML extends SamplerResultTab
             } catch (SAXException e) {
                 log.warn("Error trying to parse document", e);
             }
-
         }
 
         /**
@@ -134,7 +200,6 @@ public class RenderAsXML extends SamplerResultTab
          * We let user insert them however in DOMTreeView, we don't display them.
          *
          * @param parent {@link Node}
-         * @return
          */
         private Node getFirstElement(Node parent) {
             NodeList childNodes = parent.getChildNodes();
@@ -142,7 +207,7 @@ public class RenderAsXML extends SamplerResultTab
             for (int i = 0; i < childNodes.getLength(); i++) {
                 Node childNode = childNodes.item(i);
                 toReturn = childNode;
-                if (childNode.getNodeType() == Node.ELEMENT_NODE){
+                if (childNode.getNodeType() == Node.ELEMENT_NODE) {
                     break;
                 }
 
@@ -154,16 +219,19 @@ public class RenderAsXML extends SamplerResultTab
          * This class is to view as tooltext. This is very useful, when the
          * contents has long string and does not fit in the view. it will also
          * automatically wrap line for each 100 characters since tool tip
-         * support html. 
+         * support html.
          */
         private static class DomTreeRenderer extends DefaultTreeCellRenderer {
 
             private static final long serialVersionUID = 240210061375790195L;
 
             @Override
-            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
+            public Component getTreeCellRendererComponent(
+                    JTree tree, Object value, boolean sel, boolean expanded,
                     boolean leaf, int row, boolean phasFocus) {
-                super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, phasFocus);
+
+                super.getTreeCellRendererComponent(
+                        tree, value, sel, expanded, leaf, row, phasFocus);
 
                 DefaultMutableTreeNode valueTreeNode = (DefaultMutableTreeNode) value;
                 setToolTipText(getHTML(valueTreeNode.toString(), "<br>", 100)); // $NON-NLS-1$
@@ -172,11 +240,6 @@ public class RenderAsXML extends SamplerResultTab
 
             /**
              * get the html
-             *
-             * @param str
-             * @param separator
-             * @param maxChar
-             * @return
              */
             private String getHTML(String str, String separator, int maxChar) {
                 StringBuilder strBuf = new StringBuilder("<html><body bgcolor=\"yellow\"><b>"); // $NON-NLS-1$
@@ -197,26 +260,58 @@ public class RenderAsXML extends SamplerResultTab
             private String encode(char c) {
                 String toReturn = String.valueOf(c);
                 switch (c) {
-                case '<': // $NON-NLS-1$
-                    toReturn = "&lt;"; // $NON-NLS-1$
-                    break;
-                case '>': // $NON-NLS-1$
-                    toReturn = "&gt;"; // $NON-NLS-1$
-                    break;
-                case '\'': // $NON-NLS-1$
-                    toReturn = "&apos;"; // $NON-NLS-1$
-                    break;
-                case '\"': // $NON-NLS-1$
-                    toReturn = "&quot;"; // $NON-NLS-1$
-                    break;
-                default:
-                    // ignored
-                    break;
+                    case '<': // $NON-NLS-1$
+                        toReturn = "&lt;"; // $NON-NLS-1$
+                        break;
+                    case '>': // $NON-NLS-1$
+                        toReturn = "&gt;"; // $NON-NLS-1$
+                        break;
+                    case '\'': // $NON-NLS-1$
+                        toReturn = "&apos;"; // $NON-NLS-1$
+                        break;
+                    case '\"': // $NON-NLS-1$
+                        toReturn = "&quot;"; // $NON-NLS-1$
+                        break;
+                    default:
+                        // ignored
+                        break;
 
                 }
                 return toReturn;
             }
         }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (SwingUtilities.isRightMouseButton(e)) {
+                int x = e.getX();
+                int y = e.getY();
+                JTree tree = (JTree) e.getSource();
+
+                int rowIndex = tree.getClosestRowForLocation(x, y);
+                if (rowIndex > -1) {
+                    tree.setSelectionRow(rowIndex);
+                    popupMenu.show(tree, x, y);
+                }
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+
     }
 
     private static void showErrorMessageDialog(String message, String title, int messageType) {

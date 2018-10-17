@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.Searchable;
+import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -106,6 +107,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     // List of types that are known to be ascii, although they may appear to be binary
     private static final String[] NON_BINARY_TYPES = {
         "audio/x-mpegurl",  //$NON-NLS-1$ (HLS Media Manifest)
+        "audio/mpegurl",    //$NON-NLS-1$ (HLS Media Manifest)
         "video/f4m"         //$NON-NLS-1$ (Flash Media Manifest)
         };
 
@@ -116,16 +118,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private static final SampleResult[] EMPTY_SR = new SampleResult[0];
 
     private static final AssertionResult[] EMPTY_AR = new AssertionResult[0];
-    
-    private static final boolean GETBYTES_BODY_REALSIZE = 
-        JMeterUtils.getPropDefault("sampleresult.getbytes.body_real_size", true); // $NON-NLS-1$
-
-    private static final boolean GETBYTES_HEADERS_SIZE = 
-        JMeterUtils.getPropDefault("sampleresult.getbytes.headers_size", true); // $NON-NLS-1$
-    
-    private static final boolean GETBYTES_NETWORK_SIZE =
-            GETBYTES_HEADERS_SIZE && GETBYTES_BODY_REALSIZE;
-
+        
     private static final boolean START_TIMESTAMP = 
             JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);  // $NON-NLS-1$
 
@@ -216,10 +209,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private boolean success;
 
-    //@GuardedBy("this"")
-    /** files that this sample has been saved in */
-    /** In Non GUI mode and when best config is used, size never exceeds 1, 
-     * but as a compromise set it to 3 
+    /**
+     * Files that this sample has been saved in.
+     * In Non GUI mode and when best config is used, size never exceeds 1,
+     * but as a compromise set it to 3
      */
     private final Set<String> files = new HashSet<>(3);
 
@@ -235,14 +228,12 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /** time to first response */
     private long latency = 0;
 
-    /**
-     * time to end connecting
-     */
+    /** time to end connecting */
     private long connectTime = 0;
 
-    /** Should thread start next iteration ? */
-    private boolean startNextThreadLoop = false;
-
+    /** Way to signal what to do on Test */
+    private TestLogicalAction testLogicalAction = TestLogicalAction.CONTINUE;
+    
     /** Should thread terminate? */
     private boolean stopThread = false;
 
@@ -276,6 +267,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private long sentBytes;
     
     private URL location;
+
+    private transient boolean ignore;
+    
+    private transient int subResultIndex;
 
     /**
      * Cache for responseData as string to avoid multiple computations
@@ -331,9 +326,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         responseDataAsString = null;
         responseHeaders = res.responseHeaders;//OK
         responseMessage = res.responseMessage;//OK
-        /** 
-         * Don't copy this; it is per instance resultFileName = res.resultFileName;
-         */
+
+        // Don't copy this; it is per instance resultFileName = res.resultFileName;
+
         sampleCount = res.sampleCount;
         samplerData = res.samplerData;
         saveConfig = res.saveConfig;
@@ -342,7 +337,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         stopTest = res.stopTest;
         stopTestNow = res.stopTestNow;
         stopThread = res.stopThread;
-        startNextThreadLoop = res.startNextThreadLoop;
+        testLogicalAction = res.testLogicalAction;
         subResults = res.subResults; 
         success = res.success;//OK
         threadName = res.threadName;//OK
@@ -460,7 +455,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public long currentTimeInMillis() {
         if (useNanoTime){
             if (nanoTimeOffset == Long.MIN_VALUE){
-                throw new RuntimeException("Invalid call; nanoTimeOffset as not been set");
+                throw new RuntimeException("Invalid call; nanoTimeOffset has not been set");
             }
             return sampleNsClockInMs() + nanoTimeOffset;            
         }
@@ -630,6 +625,16 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void addSubResult(SampleResult subResult) {
+        addSubResult(subResult, true);
+    }
+    /**
+     * Add a subresult and adjust the parent byte count and end-time.
+     * 
+     * @param subResult
+     *            the {@link SampleResult} to be added
+     * @param renameSubResults boolean do we rename subResults based on position
+     */
+    public void addSubResult(SampleResult subResult, boolean renameSubResults) {
         if(subResult == null) {
             // see https://bz.apache.org/bugzilla/show_bug.cgi?id=54778
             return;
@@ -648,7 +653,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         setSentBytes(getSentBytes() + subResult.getSentBytes());
         setHeadersSize(getHeadersSize() + subResult.getHeadersSize());
         setBodySize(getBodySizeAsLong() + subResult.getBodySizeAsLong());
-        addRawSubResult(subResult);
+        addRawSubResult(subResult, renameSubResults);
     }
     
     /**
@@ -658,7 +663,17 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void addRawSubResult(SampleResult subResult){
-        storeSubResult(subResult);
+        storeSubResult(subResult, true);
+    }
+    
+    /**
+     * Add a subresult to the collection without updating any parent fields.
+     * 
+     * @param subResult
+     *            the {@link SampleResult} to be added
+     */
+    private void addRawSubResult(SampleResult subResult, boolean renameSubResults){
+        storeSubResult(subResult, renameSubResults);
     }
 
     /**
@@ -672,8 +687,26 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void storeSubResult(SampleResult subResult) {
+        storeSubResult(subResult, true);
+    }
+    
+    /**
+     * Add a subresult read from a results file.
+     * <p>
+     * As for {@link SampleResult#addSubResult(SampleResult)
+     * addSubResult(SampleResult)}, except that the fields don't need to be
+     * accumulated
+     *
+     * @param subResult
+     *            the {@link SampleResult} to be added
+     * @param renameSubResults boolean do we rename subResults based on position
+     */
+    private void storeSubResult(SampleResult subResult, boolean renameSubResults) {
         if (subResults == null) {
             subResults = new ArrayList<>();
+        }
+        if(renameSubResults) {
+            subResult.setSampleLabel(getSampleLabel()+"-"+subResultIndex++);
         }
         subResults.add(subResult);
         subResult.setParent(this);
@@ -1268,15 +1301,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return byte count
      */
     public long getBytesAsLong() {
-        if (GETBYTES_NETWORK_SIZE) {
-            long tmpSum = this.getHeadersSize() + this.getBodySizeAsLong();
-            return tmpSum == 0 ? bytes : tmpSum;
-        } else if (GETBYTES_HEADERS_SIZE) {
-            return this.getHeadersSize();
-        } else if (GETBYTES_BODY_REALSIZE) {
-            return this.getBodySizeAsLong();
-        }
-        return bytes == 0 ? responseData.length : bytes;
+        long tmpSum = this.getHeadersSize() + this.getBodySizeAsLong();
+        return tmpSum == 0 ? bytes : tmpSum;
     }
 
     /**
@@ -1475,7 +1501,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             while(true) {
                 getOffset(NANOTHREAD_SLEEP); // Can now afford to wait a bit longer between checks
             }
-            
         }
 
         private static void getOffset(long wait) {
@@ -1489,21 +1514,28 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
                 Thread.currentThread().interrupt();
             }
         }
-        
     }
 
     /**
      * @return the startNextThreadLoop
+     * @deprecated use {@link SampleResult#getTestLogicalAction()}
      */
+    @Deprecated
     public boolean isStartNextThreadLoop() {
-        return startNextThreadLoop;
+        return testLogicalAction == TestLogicalAction.START_NEXT_ITERATION_OF_THREAD;
     }
 
     /**
+     * @deprecated use SampleResult#setTestLogicalAction(TestLogicalAction)
      * @param startNextThreadLoop the startNextLoop to set
      */
+    @Deprecated
     public void setStartNextThreadLoop(boolean startNextThreadLoop) {
-        this.startNextThreadLoop = startNextThreadLoop;
+        if(startNextThreadLoop) {
+            testLogicalAction = TestLogicalAction.START_NEXT_ITERATION_OF_THREAD;
+        } else {
+            testLogicalAction = TestLogicalAction.CONTINUE;
+        }
     }
 
     /**
@@ -1530,5 +1562,52 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         datasToSearch.add(getRequestHeaders());
         datasToSearch.add(getResponseHeaders());
         return datasToSearch;
+    }
+
+    /**
+     * @return boolean true if this SampleResult should not be sent to Listeners
+     */
+    public boolean isIgnore() {
+        return ignore;
+    }
+
+    /**
+     * Call this method to tell JMeter to ignore this SampleResult by Listeners
+     */
+    public void setIgnore() {
+        this.ignore = true;
+    }
+
+    /**
+     * @return String first non null assertion failure message
+     */
+    public String getFirstAssertionFailureMessage() {
+        String message = null;
+        AssertionResult[] results = getAssertionResults();
+
+        if (results != null) {
+            // Find the first non-null message
+            for (AssertionResult result : results) {
+                message = result.getFailureMessage();
+                if (message != null) {
+                    break;
+                }
+            }
+        }
+        return message;
+    }
+
+    /**
+     * @return the testLogicalAction
+     */
+    public TestLogicalAction getTestLogicalAction() {
+        return testLogicalAction;
+    }
+
+    /**
+     * @param testLogicalAction the testLogicalAction to set
+     */
+    public void setTestLogicalAction(TestLogicalAction testLogicalAction) {
+        this.testLogicalAction = testLogicalAction;
     }
 }

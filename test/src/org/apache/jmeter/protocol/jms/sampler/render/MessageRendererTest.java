@@ -28,9 +28,6 @@ import org.junit.Rule;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-/**
- *
- */
 public abstract class MessageRendererTest<T> {
 
     protected Cache<Object,Object> cache = Caffeine.newBuilder().build();

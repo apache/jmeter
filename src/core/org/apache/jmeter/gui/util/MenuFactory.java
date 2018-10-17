@@ -21,26 +21,27 @@ package org.apache.jmeter.gui.util;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.IOException;
-import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.control.TestFragmentController;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UndoHistory;
@@ -51,14 +52,14 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
+import org.apache.jmeter.testelement.NonTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.reflect.ClassFinder;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,112 +68,144 @@ public final class MenuFactory {
 
     /*
      *  Predefined strings for makeMenu().
-     *  These are used as menu categories in the menuMap Hashmap,
+     *  These are used as menu categories in the menuMap HashMap,
      *  and also for resource lookup in messages.properties
+     *  TODO: why isn't this an enum?
     */
     public static final String THREADS = "menu_threads"; //$NON-NLS-1$
-    
     public static final String FRAGMENTS = "menu_fragments"; //$NON-NLS-1$
-
     public static final String TIMERS = "menu_timer"; //$NON-NLS-1$
-
     public static final String CONTROLLERS = "menu_logic_controller"; //$NON-NLS-1$
-
     public static final String SAMPLERS = "menu_generative_controller"; //$NON-NLS-1$
-
     public static final String CONFIG_ELEMENTS = "menu_config_element"; //$NON-NLS-1$
-
     public static final String POST_PROCESSORS = "menu_post_processors"; //$NON-NLS-1$
-
     public static final String PRE_PROCESSORS = "menu_pre_processors"; //$NON-NLS-1$
-
     public static final String ASSERTIONS = "menu_assertions"; //$NON-NLS-1$
-
     public static final String NON_TEST_ELEMENTS = "menu_non_test_elements"; //$NON-NLS-1$
-
     public static final String LISTENERS = "menu_listener"; //$NON-NLS-1$
+    public static final String SEPARATOR = "menu_separator"; //$NON-NLS-1$
 
-    private static final Map<String, List<MenuInfo>> menuMap = new HashMap<>();
-
-    private static final Set<String> elementsToSkip = new HashSet<>();
-
-    // MENU_ADD_xxx - controls which items are in the ADD menu
-    // MENU_PARENT_xxx - controls which items are in the Insert Parent menu
-    private static final String[] MENU_ADD_CONTROLLER = new String[] {
-        MenuFactory.CONTROLLERS,
-        MenuFactory.CONFIG_ELEMENTS,
-        MenuFactory.TIMERS,
-        MenuFactory.PRE_PROCESSORS,
-        MenuFactory.SAMPLERS,
-        MenuFactory.POST_PROCESSORS,
-        MenuFactory.ASSERTIONS,
-        MenuFactory.LISTENERS,
-        };
-
-    private static final String[] MENU_PARENT_CONTROLLER = new String[] {
-        MenuFactory.CONTROLLERS };
-
-    private static final String[] MENU_ADD_SAMPLER = new String[] {
-        MenuFactory.CONFIG_ELEMENTS,
-        MenuFactory.TIMERS,
-        MenuFactory.PRE_PROCESSORS,
-        MenuFactory.POST_PROCESSORS,
-        MenuFactory.ASSERTIONS,
-        MenuFactory.LISTENERS,
-        };
-
-    private static final String[] MENU_PARENT_SAMPLER = new String[] {
-        MenuFactory.CONTROLLERS };
-
-    private static final List<MenuInfo> timers;
-    private static final List<MenuInfo> controllers;
-    private static final List<MenuInfo> samplers;
-    private static final List<MenuInfo> threads;
-    private static final List<MenuInfo> fragments;
-    private static final List<MenuInfo> configElements;
-    private static final List<MenuInfo> assertions;
-    private static final List<MenuInfo> listeners;
-    private static final List<MenuInfo> nonTestElements;
-    private static final List<MenuInfo> postProcessors;
-    private static final List<MenuInfo> preProcessors;
+    private static final Map<String, List<MenuInfo>> menuMap;
 
     static {
-        threads = new LinkedList<>();
-        fragments = new LinkedList<>();
-        timers = new LinkedList<>();
-        controllers = new LinkedList<>();
-        samplers = new LinkedList<>();
-        configElements = new LinkedList<>();
-        assertions = new LinkedList<>();
-        listeners = new LinkedList<>();
-        postProcessors = new LinkedList<>();
-        preProcessors = new LinkedList<>();
-        nonTestElements = new LinkedList<>();
-        menuMap.put(THREADS, threads);
-        menuMap.put(FRAGMENTS, fragments);
-        menuMap.put(TIMERS, timers);
-        menuMap.put(ASSERTIONS, assertions);
-        menuMap.put(CONFIG_ELEMENTS, configElements);
-        menuMap.put(CONTROLLERS, controllers);
-        menuMap.put(LISTENERS, listeners);
-        menuMap.put(NON_TEST_ELEMENTS, nonTestElements);
-        menuMap.put(SAMPLERS, samplers);
-        menuMap.put(POST_PROCESSORS, postProcessors);
-        menuMap.put(PRE_PROCESSORS, preProcessors);
-        try {
-            String[] classesToSkip =
-                JOrphanUtils.split(JMeterUtils.getPropDefault("not_in_menu", ""), ","); //$NON-NLS-1$
-            for (String aClassesToSkip : classesToSkip) {
-                elementsToSkip.add(aClassesToSkip.trim());
-            }
+        menuMap = new HashMap<>();
+        menuMap.put(THREADS, new LinkedList<>());
+        menuMap.put(TIMERS, new LinkedList<>());
+        menuMap.put(ASSERTIONS, new LinkedList<>());
+        menuMap.put(CONFIG_ELEMENTS, new LinkedList<>());
+        menuMap.put(CONTROLLERS, new LinkedList<>());
+        menuMap.put(LISTENERS, new LinkedList<>());
+        menuMap.put(NON_TEST_ELEMENTS, new LinkedList<>());
+        menuMap.put(SAMPLERS, new LinkedList<>());
+        menuMap.put(POST_PROCESSORS, new LinkedList<>());
+        menuMap.put(PRE_PROCESSORS, new LinkedList<>());
+        menuMap.put(FRAGMENTS, new LinkedList<>());
+        menuMap.put(SEPARATOR, Collections.singletonList(new MenuSeparatorInfo()));
 
-            initializeMenus();
-            sortPluginMenus();
-        } catch (Error | RuntimeException ex) { // NOSONAR We want to log Errors in jmeter.log 
-            log.error("Error initializing menus in static bloc, check configuration if using 3rd party libraries", ex);
+        try {
+            initializeMenus(menuMap, classesToSkip());
+            sortMenus(menuMap.values());
+            separateItemsWithExplicitOrder(menuMap.values());
+        } catch (Error | RuntimeException ex) { // NOSONAR We want to log Errors in jmeter.log
+            log.error("Error initializing menus, check configuration if using 3rd party libraries", ex);
             throw ex;
         } catch (Exception ex) {
-            log.error("Error initializing menus in static bloc, check configuration if using 3rd party libraries", ex);
+            log.error("Error initializing menus, check configuration if using 3rd party libraries", ex);
+        }
+    }
+
+    private static Set<String> classesToSkip() {
+        return Arrays.stream(JMeterUtils.getPropDefault("not_in_menu", "").split(","))
+                .map(String::trim)
+                .collect(Collectors.toSet());
+    }
+
+    private static void initializeMenus(
+            Map<String, List<MenuInfo>> menus, Set<String> elementsToSkip) {
+        try {
+            List<String> guiClasses = ClassFinder
+                    .findClassesThatExtend(
+                            JMeterUtils.getSearchPaths(),
+                            new Class[] {JMeterGUIComponent.class, TestBean.class})
+                    .stream()
+                    // JMeterTreeNode and TestBeanGUI are special GUI classes,
+                    // and aren't intended to be added to menus
+                    .filter(name -> !name.endsWith("JMeterTreeNode"))
+                    .filter(name -> !name.endsWith("TestBeanGUI"))
+                    .filter(name -> !elementsToSkip.contains(name))
+                    .distinct()
+                    .map(String::trim)
+                    .collect(Collectors.toList());
+
+            for (String className : guiClasses) {
+                JMeterGUIComponent item = getGUIComponent(className, elementsToSkip);
+                if (item == null) {
+                    continue;
+                }
+
+                Collection<String> categories = item.getMenuCategories();
+                if (categories == null) {
+                    log.debug("{} participates in no menus.", className);
+                    continue;
+                }
+                for (Map.Entry<String, List<MenuInfo>> entry: menus.entrySet()) {
+                    if (categories.contains(entry.getKey())) {
+                        entry.getValue().add(new MenuInfo(item, className));
+                    }
+                }
+            }
+        } catch (IOException e) {
+            log.error("IO Exception while initializing menus.", e);
+        }
+    }
+
+    private static JMeterGUIComponent getGUIComponent(
+            String name, Set<String> elementsToSkip) {
+        JMeterGUIComponent item = null;
+        boolean hideBean = false; // Should the TestBean be hidden?
+        try {
+            Class<?> c = Class.forName(name);
+            if (TestBean.class.isAssignableFrom(c)) {
+                TestBeanGUI testBeanGUI = new TestBeanGUI(c);
+                hideBean = testBeanGUI.isHidden()
+                        || (testBeanGUI.isExpert() && !JMeterUtils.isExpertMode());
+                item = testBeanGUI;
+            } else {
+                item = (JMeterGUIComponent) c.newInstance();
+            }
+        } catch (NoClassDefFoundError e) {
+            log.warn("Configuration error, probably corrupt or missing third party library(jar)? Could not create class: {}.",
+                    name, e);
+        } catch (HeadlessException e) {
+            log.warn("Could not instantiate class: {}", name, e);
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            log.warn("Could not instantiate class: {}", name, e);
+        }
+        if (hideBean || (item != null && elementsToSkip.contains(item.getStaticLabel()))) {
+            log.info("Skipping {}", name);
+            item = null;
+        }
+        return item;
+    }
+
+    private static void sortMenus(Collection<List<MenuInfo>> menus) {
+        for (List<MenuInfo> menu : menus) {
+            menu.sort(Comparator.comparing(MenuInfo::getLabel));
+            menu.sort(Comparator.comparingInt(MenuInfo::getSortOrder));
+        }
+    }
+
+    private static void separateItemsWithExplicitOrder(Collection<List<MenuInfo>> menus) {
+        for (List<MenuInfo> menu : menus) {
+            Optional<MenuInfo> firstDefaultSortItem = menu.stream()
+                    .filter(info -> info.getSortOrder() == MenuInfo.SORT_ORDER_DEFAULT)
+                    .findFirst();
+            int index = menu.indexOf(firstDefaultSortItem.orElseThrow(IllegalStateException::new));
+            if (index > 0) {
+                menu.add(index, new MenuSeparatorInfo());
+            }
         }
     }
 
@@ -210,7 +243,6 @@ public final class MenuFactory {
      */
     public static void addFileMenu(JPopupMenu menu, boolean addSaveTestFragmentMenu) {
         // the undo/redo as a standard goes first in Edit menus
-        // maybe there's better place for them in JMeter?
         if(UndoHistory.isEnabled()) {
             addUndoItems(menu);
         }
@@ -220,7 +252,8 @@ public final class MenuFactory {
         menu.add(makeMenuItemRes("menu_merge", ActionNames.MERGE));// $NON-NLS-1$
         menu.add(makeMenuItemRes("save_as", ActionNames.SAVE_AS));// $NON-NLS-1$
         if(addSaveTestFragmentMenu) {
-            menu.add(makeMenuItemRes("save_as_test_fragment", ActionNames.SAVE_AS_TEST_FRAGMENT));// $NON-NLS-1$
+            menu.add(makeMenuItemRes("save_as_test_fragment", // $NON-NLS-1$
+                    ActionNames.SAVE_AS_TEST_FRAGMENT));
         }
         addSeparator(menu);
         JMenuItem savePicture = makeMenuItemRes("save_as_image",// $NON-NLS-1$
@@ -241,13 +274,8 @@ public final class MenuFactory {
         JMenuItem disabled = makeMenuItemRes("disable", ActionNames.DISABLE);// $NON-NLS-1$
         JMenuItem enabled = makeMenuItemRes("enable", ActionNames.ENABLE);// $NON-NLS-1$
         boolean isEnabled = GuiPackage.getInstance().getTreeListener().getCurrentNode().isEnabled();
-        if (isEnabled) {
-            disabled.setEnabled(true);
-            enabled.setEnabled(false);
-        } else {
-            disabled.setEnabled(false);
-            enabled.setEnabled(true);
-        }
+        disabled.setEnabled(isEnabled);
+        enabled.setEnabled(!isEnabled);
         menu.add(enabled);
         menu.add(disabled);
         JMenuItem toggle = makeMenuItemRes("toggle", ActionNames.TOGGLE, KeyStrokes.TOGGLE);// $NON-NLS-1$
@@ -257,7 +285,8 @@ public final class MenuFactory {
     }
 
     /**
-     * Add undo / redo
+     * Add undo / redo to the provided menu
+     *
      * @param menu JPopupMenu
      */
     private static void addUndoItems(JPopupMenu menu) {
@@ -268,7 +297,8 @@ public final class MenuFactory {
         menu.add(undo);
 
         JMenuItem redo = makeMenuItemRes("redo", ActionNames.REDO); //$NON-NLS-1$
-        // TODO: we could even show some hints on action being undone here if this will be required (by passing those hints into history  records)
+        // TODO: we could even show some hints on action being undone here
+        // if required (by passing those hints into history records)
         redo.setEnabled(GuiPackage.getInstance().canRedo());
         menu.add(redo);
     }
@@ -276,29 +306,33 @@ public final class MenuFactory {
 
     public static JMenu makeMenus(String[] categories, String label, String actionCommand) {
         JMenu addMenu = new JMenu(label);
-        for (String category : categories) {
-            addMenu.add(makeMenu(category, actionCommand));
-        }
+        Arrays.stream(categories)
+                .map(category -> makeMenu(category, actionCommand))
+                .forEach(addMenu::add);
         GuiUtils.makeScrollableMenu(addMenu);
         return addMenu;
     }
 
     public static JPopupMenu getDefaultControllerMenu() {
         JPopupMenu pop = new JPopupMenu();
-        pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER,
-                JMeterUtils.getResString("add"),// $NON-NLS-1$
-                ActionNames.ADD));
+        String addAction = ActionNames.ADD;
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.SAMPLERS, addAction));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONTROLLERS, addAction));
+        addMenu.addSeparator();
+        pop.add(addDefaultAddMenuToMenu(addMenu, addAction));
         pop.add(MenuFactory.makeMenuItemRes("add_think_times",// $NON-NLS-1$
                 ActionNames.ADD_THINK_TIME_BETWEEN_EACH_STEP));
 
         pop.add(MenuFactory.makeMenuItemRes("apply_naming",// $NON-NLS-1$
                 ActionNames.APPLY_NAMING_CONVENTION));
         
-        pop.add(makeMenus(MENU_PARENT_CONTROLLER,
+        pop.add(makeMenus(new String[]{CONTROLLERS},
                 JMeterUtils.getResString("change_parent"),// $NON-NLS-1$
                 ActionNames.CHANGE_PARENT));
 
-        pop.add(makeMenus(MENU_PARENT_CONTROLLER,
+        pop.add(makeMenus(new String[]{CONTROLLERS},
                 JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
                 ActionNames.ADD_PARENT));
         MenuFactory.addEditMenu(pop, true);
@@ -306,12 +340,30 @@ public final class MenuFactory {
         return pop;
     }
 
+    private static JMenu createDefaultAddMenu() {
+        String addAction = ActionNames.ADD;
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
+        addDefaultAddMenuToMenu(addMenu, addAction);
+        return addMenu;
+    }
+    
+    private static JMenu addDefaultAddMenuToMenu(JMenu addMenu, String addAction) {
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, addAction));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, addAction));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, addAction));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, addAction));
+        addMenu.addSeparator();
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, addAction));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, addAction));
+        return addMenu;
+    }
+
     public static JPopupMenu getDefaultSamplerMenu() {
         JPopupMenu pop = new JPopupMenu();
-        pop.add(MenuFactory.makeMenus(MENU_ADD_SAMPLER,
-                JMeterUtils.getResString("add"),// $NON-NLS-1$
-                ActionNames.ADD));
-        pop.add(makeMenus(MENU_PARENT_SAMPLER,
+        pop.add(createDefaultAddMenu());
+        pop.add(makeMenus(new String[]{CONTROLLERS},
                 JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
                 ActionNames.ADD_PARENT));
         MenuFactory.addEditMenu(pop, true);
@@ -328,8 +380,8 @@ public final class MenuFactory {
 
     public static JPopupMenu getDefaultVisualizerMenu() {
         JPopupMenu pop = new JPopupMenu();
-        pop.add(
-                MenuFactory.makeMenuItemRes("clear", ActionNames.CLEAR)); //$NON-NLS-1$
+        pop.add(MenuFactory.makeMenuItemRes(
+                "clear", ActionNames.CLEAR)); //$NON-NLS-1$
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;
@@ -366,29 +418,35 @@ public final class MenuFactory {
     /**
      * Create a menu from a menu category.
      *
-     * @param category - predefined string (used as key for menuMap HashMap and messages.properties lookup)
-     * @param actionCommand - predefined string, e.g. ActionNames.ADD
-     *     @see org.apache.jmeter.gui.action.ActionNames
+     * @param category      predefined string (used as key for menuMap HashMap
+     *                      and messages.properties lookup)
+     * @param actionCommand predefined string, e.g. {@code }ActionNames.ADD}
+     *                      {@link ActionNames}
      * @return the menu
      */
     public static JMenu makeMenu(String category, String actionCommand) {
-        return makeMenu(menuMap.get(category), actionCommand, JMeterUtils.getResString(category));
+        return makeMenu(
+                menuMap.get(category),
+                actionCommand,
+                JMeterUtils.getResString(category));
     }
 
     /**
      * Create a menu from a collection of items.
      *
-     * @param menuInfo - collection of MenuInfo items
-     * @param actionCommand - predefined string, e.g. ActionNames.ADD
-     *     @see org.apache.jmeter.gui.action.ActionNames
+     * @param menuInfo      collection of MenuInfo items
+     * @param actionCommand predefined string, e.g. ActionNames.ADD
+     *                      {@link ActionNames}
      * @param menuName The name of the newly created menu
      * @return the menu
      */
-    public static JMenu makeMenu(Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
+    private static JMenu makeMenu(
+            Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
+
         JMenu menu = new JMenu(menuName);
-        for (MenuInfo info : menuInfo) {
-            menu.add(makeMenuItem(info, actionCommand));
-        }
+        menuInfo.stream()
+                .map(info -> makeMenuItem(info, actionCommand))
+                .forEach(menu::add);
         GuiUtils.makeScrollableMenu(menu);
         return menu;
     }
@@ -404,8 +462,8 @@ public final class MenuFactory {
      *
      * @param label for the MenuItem
      * @param name for the MenuItem
-     * @param actionCommand - predefined string, e.g. ActionNames.ADD
-     *     @see org.apache.jmeter.gui.action.ActionNames
+     * @param actionCommand predefined string, e.g. ActionNames.ADD
+     *                      {@link ActionNames}
      * @return the menu item
      */
     public static JMenuItem makeMenuItem(String label, String name, String actionCommand) {
@@ -423,8 +481,8 @@ public final class MenuFactory {
      * Create a single menu item from the resource name.
      *
      * @param resource for the MenuItem
-     * @param actionCommand - predefined string, e.g. ActionNames.ADD
-     *     @see org.apache.jmeter.gui.action.ActionNames
+     * @param actionCommand predefined string, e.g. ActionNames.ADD
+     *                      {@link ActionNames}
      * @return the menu item
      */
     public static JMenuItem makeMenuItemRes(String resource, String actionCommand) {
@@ -442,13 +500,18 @@ public final class MenuFactory {
      * Create a single menu item from a MenuInfo object
      *
      * @param info the MenuInfo object
-     * @param actionCommand - predefined string, e.g. ActionNames.ADD
-     *     @see org.apache.jmeter.gui.action.ActionNames
+     * @param actionCommand predefined string, e.g. ActionNames.ADD
+     *                      {@link ActionNames}
      * @return the menu item
      */
-    public static Component makeMenuItem(MenuInfo info, String actionCommand) {
+    private static Component makeMenuItem(MenuInfo info, String actionCommand) {
+        if (info instanceof MenuSeparatorInfo) {
+            return new JPopupMenu.Separator();
+        }
+
         JMenuItem newMenuChoice = new JMenuItem(info.getLabel());
         newMenuChoice.setName(info.getClassName());
+        newMenuChoice.setEnabled(info.getEnabled(actionCommand));
         newMenuChoice.addActionListener(ActionRouter.getInstance());
         if (actionCommand != null) {
             newMenuChoice.setActionCommand(actionCommand);
@@ -457,142 +520,28 @@ public final class MenuFactory {
         return newMenuChoice;
     }
 
-    public static JMenuItem makeMenuItemRes(String resource, String actionCommand, KeyStroke accel) {
+    private static JMenuItem makeMenuItemRes(String resource, String actionCommand, KeyStroke accel) {
         JMenuItem item = makeMenuItemRes(resource, actionCommand);
         item.setAccelerator(accel);
         return item;
     }
 
-    public static JMenuItem makeMenuItem(String label, String name, String actionCommand, KeyStroke accel) {
-        JMenuItem item = makeMenuItem(label, name, actionCommand);
-        item.setAccelerator(accel);
-        return item;
-    }
-
-    private static void initializeMenus() {
-        try {
-            List<String> guiClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] {
-                    JMeterGUIComponent.class, TestBean.class });
-            Collections.sort(guiClasses);
-            for (String name : guiClasses) {
-
-                /*
-                 * JMeterTreeNode and TestBeanGUI are special GUI classes, and
-                 * aren't intended to be added to menus
-                 *
-                 * TODO: find a better way of checking this
-                 */
-                if (name.endsWith("JMeterTreeNode") // $NON-NLS-1$
-                        || name.endsWith("TestBeanGUI")) {// $NON-NLS-1$
-                    continue;// Don't try to instantiate these
-                }
-
-                if (elementsToSkip.contains(name)) { // No point instantiating class
-                    log.info("Skipping {}", name);
-                    continue;
-                }
-
-                boolean hideBean = false; // Should the TestBean be hidden?
-
-                JMeterGUIComponent item = null;
-                try {
-                    Class<?> c = Class.forName(name);
-                    if (TestBean.class.isAssignableFrom(c)) {
-                        TestBeanGUI tbgui = new TestBeanGUI(c);
-                        hideBean = tbgui.isHidden() || (tbgui.isExpert() && !JMeterUtils.isExpertMode());
-                        item = tbgui;
-                    } else {
-                        item = (JMeterGUIComponent) c.newInstance();
-                    }
-                } catch (NoClassDefFoundError e) {
-                    log.warn(
-                            "Configuration error, probably corrupt or missing third party library(jar) ? Could not create class: {}. {}",
-                            name, e, e);
-                    continue;
-                } catch(HeadlessException e) {
-                    log.warn("Could not instantiate class: {}", name, e); // NOSONAR
-                    continue;
-                } catch(RuntimeException e) {
-                    throw e;
-                } catch (Exception e) {
-                    log.warn("Could not instantiate class: {}", name, e); // NOSONAR
-                    continue;
-                }
-                if (hideBean || elementsToSkip.contains(item.getStaticLabel())) {
-                    log.info("Skipping {}", name);
-                    continue;
-                } else {
-                    elementsToSkip.add(name); // Don't add it again
-                }
-                Collection<String> categories = item.getMenuCategories();
-                if (categories == null) {
-                    log.debug("{} participates in no menus.", name);
-                    continue;
-                }
-                if (categories.contains(THREADS)) {
-                    threads.add(new MenuInfo(item, name));
-                }
-                if (categories.contains(FRAGMENTS)) {
-                    fragments.add(new MenuInfo(item, name));
-                }
-                if (categories.contains(TIMERS)) {
-                    timers.add(new MenuInfo(item, name));
-                }
-
-                if (categories.contains(POST_PROCESSORS)) {
-                    postProcessors.add(new MenuInfo(item, name));
-                }
-
-                if (categories.contains(PRE_PROCESSORS)) {
-                    preProcessors.add(new MenuInfo(item, name));
-                }
-
-                if (categories.contains(CONTROLLERS)) {
-                    controllers.add(new MenuInfo(item, name));
-                }
-
-                if (categories.contains(SAMPLERS)) {
-                    samplers.add(new MenuInfo(item, name));
-                }
-
-                if (categories.contains(NON_TEST_ELEMENTS)) {
-                    nonTestElements.add(new MenuInfo(item, name));
-                }
-
-                if (categories.contains(LISTENERS)) {
-                    listeners.add(new MenuInfo(item, name));
-                }
-
-                if (categories.contains(CONFIG_ELEMENTS)) {
-                    configElements.add(new MenuInfo(item, name));
-                }
-                if (categories.contains(ASSERTIONS)) {
-                    assertions.add(new MenuInfo(item, name));
-                }
-
-            }
-        } catch (IOException e) {
-            log.error("IO Exception while initializing menus.", e);
-        }
-    }
-
     private static void addSeparator(JPopupMenu menu) {
         MenuElement[] elements = menu.getSubElements();
-        if ((elements.length > 0) && !(elements[elements.length - 1] instanceof JPopupMenu.Separator)) {
+        if ((elements.length > 0)
+                && !(elements[elements.length - 1] instanceof JPopupMenu.Separator)) {
             menu.addSeparator();
         }
     }
 
     /**
      * Determine whether or not nodes can be added to this parent.
-     *
+     * <p>
      * Used by Merge
      *
-     * @param parentNode
-     *            The {@link JMeterTreeNode} to test, if a new element can be
-     *            added to it
-     * @param element
-     *            - top-level test element to be added
+     * @param parentNode The {@link JMeterTreeNode} to test, if a new element
+     *                   can be added to it
+     * @param element    top-level test element to be added
      * @return whether it is OK to add the element to this parent
      */
     public static boolean canAddTo(JMeterTreeNode parentNode, TestElement element) {
@@ -602,67 +551,64 @@ public final class MenuFactory {
 
     /**
      * Determine whether or not nodes can be added to this parent.
-     *
+     * <p>
      * Used by DragNDrop and Paste.
      *
-     * @param parentNode
-     *            The {@link JMeterTreeNode} to test, if <code>nodes[]</code>
+     * @param parentNode The {@link JMeterTreeNode} to test, if <code>nodes[]</code>
      *            can be added to it
-     * @param nodes
-     *            - array of nodes that are to be added
+     * @param nodes      array of nodes that are to be added
      * @return whether it is OK to add the dragged nodes to this parent
      */
     public static boolean canAddTo(JMeterTreeNode parentNode, JMeterTreeNode[] nodes) {
-        if (null == parentNode) {
-            return false;
-        }
-        if (foundClass(nodes, new Class[]{WorkBench.class})){// Can't add a Workbench anywhere
-            return false;
-        }
-        if (foundClass(nodes, new Class[]{TestPlan.class})){// Can't add a TestPlan anywhere
+        if (parentNode == null
+                || foundClass(nodes, new Class[]{TestPlan.class})) {
             return false;
         }
         TestElement parent = parentNode.getTestElement();
 
         // Force TestFragment to only be pastable under a Test Plan
-        if (foundClass(nodes, new Class[]{org.apache.jmeter.control.TestFragmentController.class})){
-            if (parent instanceof TestPlan) {
-                return true;
-            }
+        if (foundClass(nodes, new Class[]{TestFragmentController.class})) {
+            return parent instanceof TestPlan;
+        }
+
+        // Cannot move Non-Test Elements from root of Test Plan or Test Fragment
+        if (foundMenuCategories(nodes, NON_TEST_ELEMENTS)
+                && !(parent instanceof TestPlan || parent instanceof TestFragmentController)) {
             return false;
         }
 
-        if (parent instanceof WorkBench) {// allow everything else
-            return true;
-        }
         if (parent instanceof TestPlan) {
-            if (foundClass(nodes,
-                     new Class[]{Sampler.class, Controller.class}, // Samplers and Controllers need not apply ...
-                     org.apache.jmeter.threads.AbstractThreadGroup.class)  // but AbstractThreadGroup (Controller) is OK
-                ){
-                return false;
-            }
-            return true;
+            List<Class> samplerAndController = Arrays.asList(Sampler.class, Controller.class);
+            List<Class> exceptions = Arrays.asList(AbstractThreadGroup.class, NonTestElement.class);
+            return !foundClass(nodes, samplerAndController, exceptions);
         }
         // AbstractThreadGroup is only allowed under a TestPlan
-        if (foundClass(nodes, new Class[]{org.apache.jmeter.threads.AbstractThreadGroup.class})){
+        if (foundClass(nodes, new Class[]{AbstractThreadGroup.class})) {
             return false;
         }
-        if (parent instanceof Controller) {// Includes thread group; anything goes
+
+        // Includes thread group; anything goes
+        if (parent instanceof Controller) {
             return true;
         }
-        if (parent instanceof Sampler) {// Samplers and Controllers need not apply ...
-            if (foundClass(nodes, new Class[]{Sampler.class, Controller.class})){
-                return false;
-            }
-            return true;
+
+        // No Samplers and Controllers
+        if (parent instanceof Sampler) {
+            return !foundClass(nodes, new Class[]{Sampler.class, Controller.class});
         }
+
         // All other
         return false;
     }
 
-    // Is any node an instance of one of the classes?
-    private static boolean foundClass(JMeterTreeNode[] nodes, Class<?>[] classes) {
+    /**
+     * Is any of nodes an instance of one of the classes?
+     *
+     * @param nodes Array of {@link JMeterTreeNode}
+     * @param classes Array of {@link Class}
+     * @return true if nodes is one of classes
+     */
+    private static boolean foundClass(JMeterTreeNode[] nodes, Class[] classes) {
         for (JMeterTreeNode node : nodes) {
             for (Class<?> aClass : classes) {
                 if (aClass.isInstance(node.getUserObject())) {
@@ -673,83 +619,31 @@ public final class MenuFactory {
         return false;
     }
 
-    // Is any node an instance of one of the classes, but not an exception?
-    private static boolean foundClass(JMeterTreeNode[] nodes, Class<?>[] classes, Class<?> except) {
-        for (JMeterTreeNode node : nodes) {
-            Object userObject = node.getUserObject();
-            if (!except.isInstance(userObject)) {
-                for (Class<?> aClass : classes) {
-                    if (aClass.isInstance(userObject)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    // Methods used for Test cases
-    static int menuMap_size() {
-        return menuMap.size();
-    }
-    static int assertions_size() {
-        return assertions.size();
-    }
-    static int configElements_size() {
-        return configElements.size();
-    }
-    static int controllers_size() {
-        return controllers.size();
-    }
-    static int listeners_size() {
-        return listeners.size();
-    }
-    static int nonTestElements_size() {
-        return nonTestElements.size();
-    }
-    static int postProcessors_size() {
-        return postProcessors.size();
-    }
-    static int preProcessors_size() {
-        return preProcessors.size();
-    }
-    static int samplers_size() {
-        return samplers.size();
-    }
-    static int timers_size() {
-        return timers.size();
-    }
-    static int elementsToSkip_size() {
-        return elementsToSkip.size();
+    /**
+     * Is any node an instance of one of the menu category?
+     * @param nodes Array of {@link JMeterTreeNode}
+     * @param category Category
+     * @return true if nodes is in category
+     */
+    private static boolean foundMenuCategories(JMeterTreeNode[] nodes, String category) {
+        return Arrays.stream(nodes)
+                .flatMap(node -> node.getMenuCategories().stream())
+                .anyMatch(category::equals);
     }
 
     /**
-     * Menu sort helper class
+     * Is any node an instance of one of the classes, but not an exceptions?
+     *
+     * @param nodes array of {@link JMeterTreeNode}
+     * @param classes Array of {@link Class}
+     * @param exceptions Array of {@link Class}
+     * @return boolean
      */
-    private static class MenuInfoComparator implements Comparator<MenuInfo>, Serializable {
-        private static final long serialVersionUID = 1L;
-        private final boolean caseBlind;
-        MenuInfoComparator(boolean caseBlind){
-            this.caseBlind = caseBlind;
-        }
-        @Override
-        public int compare(MenuInfo o1, MenuInfo o2) {
-            String lab1 = o1.getLabel();
-            String lab2 = o2.getLabel();
-            if (caseBlind) {
-                return lab1.toLowerCase(Locale.ENGLISH).compareTo(lab2.toLowerCase(Locale.ENGLISH));
-            }
-            return lab1.compareTo(lab2);
-        }
-    }
-
-    /**
-     * Sort loaded menus; all but THREADS are sorted case-blind.
-     * [This is so Thread Group appears before setUp and tearDown]
-     */
-    private static void sortPluginMenus() {
-        for(Entry<String, List<MenuInfo>> me : menuMap.entrySet()){
-            Collections.sort(me.getValue(), new MenuInfoComparator(!me.getKey().equals(THREADS)));
-        }
+    private static boolean foundClass(
+            JMeterTreeNode[] nodes, List<Class> classes, List<Class> exceptions) {
+        return Arrays.stream(nodes)
+                .map(DefaultMutableTreeNode::getUserObject)
+                .filter(userObj -> exceptions.stream().noneMatch(c -> c.isInstance(userObj)))
+                .anyMatch(userObj -> classes.stream().anyMatch(c -> c.isInstance(userObj)));
     }
 }

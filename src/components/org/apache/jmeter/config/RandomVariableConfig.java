@@ -72,7 +72,7 @@ public class RandomVariableConfig extends ConfigTestElement
                 @Override
                 protected Random initialValue() {
                     init();
-                    return new Random(getRandomSeedAsLong());
+                    return createRandom();
                 }};
     }
 
@@ -113,7 +113,7 @@ public class RandomVariableConfig extends ConfigTestElement
             synchronized(this){
                 if (globalRandom == null){
                     init();
-                    globalRandom = new Random(getRandomSeedAsLong());
+                    globalRandom = createRandom();
                 }
                 randGen=globalRandom;
             }
@@ -189,20 +189,27 @@ public class RandomVariableConfig extends ConfigTestElement
     public synchronized String getRandomSeed() {
         return randomSeed;
     }
+    
+    private Random createRandom() {
+        if (randomSeed.length()>0){
+            Long seed = getRandomSeedAsLong();
+            if(seed != null) {
+                return new Random(seed.longValue());
+            }
+        } 
+        return new Random();
+    }
 
     /**
      * @return the randomSeed as a long
      */
-    private synchronized long getRandomSeedAsLong() {
-        long seed;
-        if (randomSeed.length()==0){
-            seed = System.currentTimeMillis();
-        }  else {
-            try {
-                seed = Long.parseLong(randomSeed);
-            } catch (NumberFormatException e) {
-                seed = System.currentTimeMillis();
-                log.warn("Cannot parse random seed: '{}'", randomSeed);
+    private synchronized Long getRandomSeedAsLong() {
+        Long seed = null;
+        try {
+            seed = Long.parseLong(randomSeed);
+        } catch (NumberFormatException e) {
+            if(log.isWarnEnabled()) {
+                log.warn("Cannot parse random seed: '{}' in element {}", randomSeed, getName());
             }
         }
         return seed;

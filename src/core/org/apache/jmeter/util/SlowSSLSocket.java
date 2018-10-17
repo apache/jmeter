@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
@@ -40,7 +39,7 @@ import javax.net.ssl.SSLSocket;
  */
 public class SlowSSLSocket extends SSLSocket {
 
-    private final int CPS; // Characters per second to emulate
+    private final int charactersPerSecond; // Characters per second to emulate
 
     private final SSLSocket sslSock; // Save the actual socket
 
@@ -54,19 +53,19 @@ public class SlowSSLSocket extends SSLSocket {
             throw new IllegalArgumentException("Speed (cps) <= 0");
         }
         sslSock=sock;
-        CPS=cps;
+        charactersPerSecond=cps;
     }
 
     // Override so we can intercept the stream
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return new SlowOutputStream(sslSock.getOutputStream(), CPS);
+        return new SlowOutputStream(sslSock.getOutputStream(), charactersPerSecond);
     }
 
     // Override so we can intercept the stream
     @Override
     public InputStream getInputStream() throws IOException {
-        return new SlowInputStream(sslSock.getInputStream(), CPS);
+        return new SlowInputStream(sslSock.getInputStream(), charactersPerSecond);
     }
 
     // Forward all the SSLSocket methods to the input socket
@@ -175,12 +174,6 @@ public class SlowSSLSocket extends SSLSocket {
 
     @Override
     public void connect(SocketAddress endpoint, int timeout) throws IOException {
-        // see Bug 59902
-        if(endpoint instanceof InetSocketAddress) {
-            InetSocketAddress address = 
-                    (InetSocketAddress) endpoint;
-            HostNameSetter.setServerNameIndication(address.getHostString(), sslSock);
-        }
         sslSock.connect(endpoint, timeout);
     }
 

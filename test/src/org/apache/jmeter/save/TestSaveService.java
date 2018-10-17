@@ -85,12 +85,16 @@ public class TestSaveService extends JMeterTestCase {
 
     @Test
     public void testPropfile1() throws Exception {
-        assertEquals("Property Version mismatch, ensure you update SaveService#PROPVERSION field with _version property value from saveservice.properties", SaveService.PROPVERSION, SaveService.getPropertyVersion());            
+        assertEquals(
+                "Property Version mismatch, ensure you update SaveService#PROPVERSION field with _version property value from saveservice.properties",
+                SaveService.PROPVERSION, SaveService.getPropertyVersion());
     }
 
     @Test
     public void testPropfile2() throws Exception {
-        assertEquals("Property File Version mismatch, ensure you update SaveService#FILEVERSION field with sha1 of saveservice.properties without newline", SaveService.FILEVERSION, SaveService.getFileVersion());
+        assertEquals(
+                "Property File Version mismatch, ensure you update SaveService#FILEVERSION field with sha1 of saveservice.properties without newline",
+                SaveService.FILEVERSION, SaveService.getFileVersion());
     }
 
     @Test
@@ -141,7 +145,7 @@ public class TestSaveService extends JMeterTestCase {
         // fail, because the order of the properties within each
         // test element may change. Comparing the lengths should be
         // enough to detect most problem cases...
-        if ((checkSize && !compareStats.isSameSize(outputStats)) || !compareStats.hasSameLinesCount(outputStats)) {
+        if (checkSize && !compareStats.isSameSize(outputStats) || !compareStats.hasSameLinesCount(outputStats)) {
             failed = true;
             System.out.println();
             System.out.println("Loading file testfiles/" + fileName + " and "

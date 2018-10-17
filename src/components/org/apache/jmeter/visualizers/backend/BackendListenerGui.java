@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -51,11 +53,9 @@ import org.slf4j.LoggerFactory;
  * {@link BackendListener} object.
  * @since 2.13
  */
+@GUIMenuSortOrder(4)
 public class BackendListenerGui extends AbstractListenerGui implements ActionListener {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     /** Logging */
@@ -63,7 +63,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
     /** A combo box allowing the user to choose a backend class. */
     private JComboBox<String> classnameCombo;
-    
+
     /**
      * A field allowing the user to specify the size of Queue
      */
@@ -71,6 +71,10 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
     /** A panel allowing the user to set arguments for this test. */
     private ArgumentsPanel argsPanel;
+
+    /** The current className of the Backend listenenr **/
+    private String className;
+
 
     /**
      * Create a new BackendListenerGui as a standalone component.
@@ -101,6 +105,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         classnameRequestPanel.add(createParameterPanel(), BorderLayout.CENTER);
 
         add(classnameRequestPanel, BorderLayout.CENTER);
+        className = ((String) classnameCombo.getSelectedItem()).trim();
     }
 
     /**
@@ -161,27 +166,35 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
     @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == classnameCombo) {
-            String className = ((String) classnameCombo.getSelectedItem()).trim();
+
+            String newClassName = ((String) classnameCombo.getSelectedItem()).trim();
             try {
-                BackendListenerClient client = (BackendListenerClient) Class.forName(className, true,
+                BackendListenerClient client = (BackendListenerClient) Class.forName(newClassName, true,
+                        Thread.currentThread().getContextClassLoader()).newInstance();
+                BackendListenerClient oldClient = (BackendListenerClient) Class.forName(className, true,
                         Thread.currentThread().getContextClassLoader()).newInstance();
 
                 Arguments currArgs = new Arguments();
                 argsPanel.modifyTestElement(currArgs);
                 Map<String, String> currArgsMap = currArgs.getArgumentsAsMap();
-
+                Map<String, String> userArgMap = new HashMap<>();
+                userArgMap.putAll(currArgsMap);
                 Arguments newArgs = new Arguments();
-                Arguments testParams = null;
+                Arguments defaultArgs = null;
                 try {
-                    testParams = client.getDefaultParameters();
+                    defaultArgs = client.getDefaultParameters();
+                    Arguments currentUserArgs = oldClient.getDefaultParameters();
+                    if(currentUserArgs != null) {
+                        userArgMap.keySet().removeAll(currentUserArgs.getArgumentsAsMap().keySet());
+                    }
                 } catch (AbstractMethodError e) {
                     log.warn("BackendListenerClient doesn't implement "
                             + "getDefaultParameters.  Default parameters won't "
-                            + "be shown.  Please update your client class: {}", className);
+                            + "be shown.  Please update your client class: {}", newClassName);
                 }
 
-                if (testParams != null) {
-                    for (JMeterProperty jMeterProperty : testParams.getArguments()) {
+                if (defaultArgs != null) {
+                    for (JMeterProperty jMeterProperty : defaultArgs.getArguments()) {
                         Argument arg = (Argument) jMeterProperty.getObjectValue();
                         String name = arg.getName();
                         String value = arg.getValue();
@@ -199,10 +212,12 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                         newArgs.addArgument(name, value);
                     }
                 }
+                userArgMap.forEach(newArgs::addArgument);
 
+                className = newClassName;
                 argsPanel.configure(newArgs);
             } catch (Exception e) {
-                log.error("Error getting argument list for {}", className, e);
+                log.error("Error getting argument list for {}", newClassName, e);
             }
         }
     }
@@ -225,12 +240,13 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
         argsPanel.configure((Arguments) config.getProperty(BackendListener.ARGUMENTS).getObjectValue());
 
-        String className = config.getPropertyAsString(BackendListener.CLASSNAME);
+        className = config.getPropertyAsString(BackendListener.CLASSNAME);
         if(checkContainsClassName(classnameCombo.getModel(), className)) {
             classnameCombo.setSelectedItem(className);
         } else {
             log.error(
-                    "Error setting class: '{}' in BackendListener: {}, check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties",
+                    "Error setting class: '{}' in BackendListener: {}, check for a missing jar in"
+                    + "your jmeter 'search_paths' and 'plugin_dependency_paths' properties",
                     className, getName());
         }
         queueSize.setText(((BackendListener)config).getQueueSize());
@@ -268,7 +284,6 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         backendListener.setArguments((Arguments) argsPanel.createTestElement());
         backendListener.setClassname(String.valueOf(classnameCombo.getSelectedItem()));
         backendListener.setQueueSize(queueSize.getText());
-        
     }
 
     /* (non-Javadoc)

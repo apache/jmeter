@@ -1,0 +1,6 @@
+HR_AutoRedirect,200,OK,TG1 1-1,text,true
+HR_NoAutoRedirect,302,FOUND,TG1 1-1,text,true
+HR_FollowRedirect,200,OK,TG1 1-1,text,true
+HR_NoAutoRedirect,302,FOUND,TG2 2-1,text,true
+HR_FollowRedirect,200,OK,TG2 2-1,text,true
+HR_AutoRedirect,200,OK,TG2 2-1,text,true

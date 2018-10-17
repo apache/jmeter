@@ -63,25 +63,6 @@ public class MongoSourceElement
     private int writeOperationTimeout;
     private boolean continueOnInsertError;
     
-//    public final static String CONNECTION = "MongoSourceElement.connection"; //$NON-NLS-1$
-//    public final static String SOURCE = "MongoSourceElement.source"; //$NON-NLS-1$
-//
-//    public final static String AUTO_CONNECT_RETRY = "MongoSourceElement.autoConnectRetry"; //$NON-NLS-1$
-//    public final static String CONNECTIONS_PER_HOST = "MongoSourceElement.connectionsPerHost"; //$NON-NLS-1$
-//    public final static String CONNECT_TIMEOUT = "MongoSourceElement.connectTimeout"; //$NON-NLS-1$
-//    public final static String CONTINUE_ON_INSERT_ERROR = "MongoSourceElement.continueOnInsertError"; //$NON-NLS-1$
-//    public final static String MAX_AUTO_CONNECT_RETRY_TIME = "MongoSourceElement.maxAutoConnectRetryTime"; //$NON-NLS-1$
-//    public final static String MAX_WAIT_TIME = "MongoSourceElement.maxWaitTime"; //$NON-NLS-1$
-//    public final static String SOCKET_TIMEOUT = "MongoSourceElement.socketTimeout"; //$NON-NLS-1$
-//    public final static String SOCKET_KEEP_ALIVE = "MongoSourceElement.socketKeepAlive"; //$NON-NLS-1$
-//    public final static String THREADS_ALLOWED_TO_BLOCK_MULTIPLIER = "MongoSourceElement.threadsAllowedToBlockForConnectionMultiplier"; //$NON-NLS-1$
-//
-//    public final static String FSYNC = "MongoSourceElement.fsync"; //$NON-NLS-1$
-//    public final static String SAFE = "MongoSourceElement.safe"; //$NON-NLS-1$
-//    public final static String WAIT_FOR_JOURNALING = "MongoSourceElement.waitForJournaling"; //$NON-NLS-1$
-//    public final static String WRITE_OPERATION_NUMBER_OF_SERVERS = "MongoSourceElement.writeOperationNumberOfServers"; //$NON-NLS-1$
-//    public final static String WRITE_OPERATION_TIMEOUT = "MongoSourceElement.writeOperationTimeout"; //$NON-NLS-1$
-
     public String getTitle() {
         return this.getName();
     }
@@ -102,20 +83,16 @@ public class MongoSourceElement
         this.source = source;
     }
 
-
-
     public static MongoDB getMongoDB(String source) {
 
         Object mongoSource = JMeterContextService.getContext().getVariables().getObject(source);
 
         if(mongoSource == null) {
             throw new IllegalStateException("mongoSource is null");
-        }
-        else {
+        } else {
             if(mongoSource instanceof MongoDB) {
                 return (MongoDB)mongoSource;
-            }
-            else {
+            } else {
                 throw new IllegalStateException("Variable:"+ source +" is not a MongoDB instance, class:"+mongoSource.getClass());
             }
         }
@@ -174,7 +151,8 @@ public class MongoSourceElement
                 log.debug(getSource() + "  is being defined.");
             }
             try {
-                getThreadContext().getVariables().putObject(getSource(), new MongoDB(MongoUtils.toServerAddresses(getConnection()), mongoOptions));
+                getThreadContext().getVariables().putObject(
+                        getSource(), new MongoDB(MongoUtils.toServerAddresses(getConnection()), mongoOptions));
             } catch (UnknownHostException e) {
                 throw new IllegalStateException(e);
             }

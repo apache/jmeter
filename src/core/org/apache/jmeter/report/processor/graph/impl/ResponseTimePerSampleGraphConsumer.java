@@ -47,6 +47,11 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
      * Instantiates a new response time per sample graph consumer.
      */
     public ResponseTimePerSampleGraphConsumer() {
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
         setRevertKeysAndValues(true);
     }
 

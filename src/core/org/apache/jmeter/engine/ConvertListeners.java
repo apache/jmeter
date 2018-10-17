@@ -54,10 +54,8 @@ public class ConvertListeners implements HashTreeTraverser {
     @Override
     public void addNode(Object node, HashTree subTree) {
         for (Object item : subTree.list()) {
-            if (item instanceof AbstractThreadGroup) {
-                if (log.isDebugEnabled()) {
-                    log.debug("num threads = {}", ((AbstractThreadGroup) item).getNumThreads());
-                }
+            if (item instanceof AbstractThreadGroup && log.isDebugEnabled()) {
+                log.debug("num threads = {}", ((AbstractThreadGroup) item).getNumThreads());
             }
             if (item instanceof Remoteable) {
                 if (item instanceof RemoteThreadsListenerTestElement){
@@ -104,6 +102,7 @@ public class ConvertListeners implements HashTreeTraverser {
      */
     @Override
     public void subtractNode() {
+        // NOOP
     }
 
     /**
@@ -111,6 +110,7 @@ public class ConvertListeners implements HashTreeTraverser {
      */
     @Override
     public void processPath() {
+        // NOOP
     }
 
 }

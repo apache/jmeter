@@ -21,9 +21,11 @@ package org.apache.jorphan.gui;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
@@ -93,6 +95,7 @@ public final class GuiUtils {
         JPanel labelCombo = new JPanel();
         labelCombo.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         JLabel caption = new JLabel(label);
+        caption.setLabelFor(comboBox);
         caption.setBorder(new EmptyBorder(0, 5, 0, 5));
         labelCombo.add(caption);
         labelCombo.add(comboBox);
@@ -151,13 +154,23 @@ public final class GuiUtils {
      * Make menu scrollable
      * @param menu {@link JMenu}
      */
-    public static void makeScrollableMenu(JMenu menu) { 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        if(menu.getItemCount()>0) {
+    public static void makeScrollableMenu(JMenu menu) {
+        if (menu.getItemCount() > 0 && !GraphicsEnvironment.isHeadless()) {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             // We use 80% of height
             int maxItems = (int)Math.round(
                     screenSize.getHeight()*0.8/menu.getMenuComponent(0).getPreferredSize().getHeight());
             MenuScroller.setScrollerFor(menu, maxItems, 200);
         }
+    }
+
+    /**
+     * Copy text to clipboard
+     * @param text Text to copy
+     */
+    public static final void copyTextToClipboard(String text) {
+        Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection stringSelection = new StringSelection(text);
+        clpbrd.setContents(stringSelection, null);
     }
 }

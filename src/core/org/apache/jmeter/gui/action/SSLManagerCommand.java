@@ -82,13 +82,14 @@ public class SSLManagerCommand extends AbstractAction {
 
     /**
      * Called by sslManager button. Raises sslManager dialog.
-     * I.e. a FileChooser for PCSI12 (.p12|.P12) files.
+     * I.e. a FileChooser for PCSI12 (.p12|.P12) or JKS files.
      */
     private void sslManager() {
         SSLManager.reset();
 
         JFileChooser keyStoreChooser = new JFileChooser(System.getProperty("user.dir")); //$NON-NLS-1$
-        keyStoreChooser.addChoosableFileFilter(new AcceptPKCS12FileFilter());
+        keyStoreChooser.setDialogTitle(JMeterUtils.getResString("sslmanager.title"));
+        keyStoreChooser.addChoosableFileFilter(new AcceptPKCS12OrJKSFileFilter());
         keyStoreChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int retVal = keyStoreChooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
 
@@ -107,7 +108,7 @@ public class SSLManagerCommand extends AbstractAction {
     /**
      * Internal class to add a PKCS12 file format filter for JFileChooser.
      */
-    static private class AcceptPKCS12FileFilter extends FileFilter {
+    private static class AcceptPKCS12OrJKSFileFilter extends FileFilter {
         /**
          * Get the description that shows up in JFileChooser filter menu.
          *
@@ -115,7 +116,7 @@ public class SSLManagerCommand extends AbstractAction {
          */
         @Override
         public String getDescription() {
-            return JMeterUtils.getResString("pkcs12_desc"); //$NON-NLS-1$
+            return JMeterUtils.getResString("keystore_desc"); //$NON-NLS-1$
         }
 
         /**
@@ -127,9 +128,11 @@ public class SSLManagerCommand extends AbstractAction {
          */
         @Override
         public boolean accept(File testFile) {
+            String lowerCaseName = testFile.getName().toLowerCase();
             return testFile.isDirectory()
-            || testFile.getName().endsWith(".p12")  //$NON-NLS-1$
-            || testFile.getName().endsWith(".P12"); //$NON-NLS-1$
+            || lowerCaseName.endsWith(".p12")  //$NON-NLS-1$
+            || lowerCaseName.endsWith(".jks")
+            || lowerCaseName.endsWith(".pfx");
         }
     }
 }

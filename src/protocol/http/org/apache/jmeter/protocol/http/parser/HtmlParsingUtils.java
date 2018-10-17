@@ -34,21 +34,19 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
-
-// For Junit tests @see TestHtmlParsingUtils
 
 public final class HtmlParsingUtils {
     private static final Logger log = LoggerFactory.getLogger(HtmlParsingUtils.class);
@@ -73,7 +71,7 @@ public final class HtmlParsingUtils {
      */
     public static boolean isAnchorMatched(HTTPSamplerBase newLink, HTTPSamplerBase config)
     {
-        String query = null;
+        String query;
         try {
             query = URLDecoder.decode(newLink.getQueryString(), StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
@@ -283,14 +281,6 @@ public final class HtmlParsingUtils {
         String selectName = null;
         LinkedList<HTTPSamplerBase> urlConfigs = new LinkedList<>();
         recurseForm(doc, urlConfigs, context, selectName, false);
-        /*
-         * NamedNodeMap atts = formNode.getAttributes();
-         * if(atts.getNamedItem("action") == null) { throw new
-         * MalformedURLException(); } String action =
-         * atts.getNamedItem("action").getNodeValue(); UrlConfig url =
-         * createUrlFromAnchor(action, context); recurseForm(doc, url,
-         * selectName,true,formStart);
-         */
         return urlConfigs;
     }
 

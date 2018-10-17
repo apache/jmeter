@@ -21,6 +21,7 @@ package org.apache.jmeter.gui.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.event.TableModelEvent;
@@ -149,13 +150,11 @@ public class PowerTableModel extends DefaultTableModel {
 
     public Object[] getRowData(int row) {
         Object[] rowData = new Object[getColumnCount()];
-        for (int i = 0; i < rowData.length; i++) {
-            rowData[i] = model.getColumnValue(i, row);
-        }
+        Arrays.setAll(rowData, i -> model.getColumnValue(i, row));
         return rowData;
     }
 
-    private Object createDefaultValue(int i) {
+    private Object createDefaultValue(int i) { // CHECKSTYLE IGNORE ReturnCount
         Class<?> colClass = getColumnClass(i);
         try {
             return colClass.newInstance();

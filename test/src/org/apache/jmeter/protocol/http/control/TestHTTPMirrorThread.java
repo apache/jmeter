@@ -28,17 +28,17 @@ import java.net.URI;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import junit.extensions.TestSetup;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * Class for testing the HTTPMirrorThread, which is handling the
  * incoming requests for the HTTPMirrorServer
  */
-public class TestHTTPMirrorThread extends TestCase {
+public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
     /** The encodings used for http headers and control information */
     private static final String ISO_8859_1 = "ISO-8859-1"; // $NON-NLS-1$
     private static final String UTF_8 = "UTF-8"; // $NON-NLS-1$
@@ -53,7 +53,7 @@ public class TestHTTPMirrorThread extends TestCase {
     // We need to use a suite in order to preserve the server across test cases
     // With JUnit4 we could use before/after class annotations
     public static Test suite(){
-        TestSetup setup = new TestSetup(new TestSuite(TestHTTPMirrorThread.class)){
+        return new TestSetup(new TestSuite(TestHTTPMirrorThread.class)){
             private HttpMirrorServer httpServer;
 
             @Override
@@ -68,7 +68,6 @@ public class TestHTTPMirrorThread extends TestCase {
                 httpServer = null;
             }
         };
-        return setup;
     }
 
     /**
@@ -82,10 +81,10 @@ public class TestHTTPMirrorThread extends TestCase {
      *             if something fails
      */
     public static HttpMirrorServer startHttpMirror(int port) throws Exception {
-        HttpMirrorServer server = null;
+        HttpMirrorServer server;
         server = new HttpMirrorServer(port);
         server.start();
-        Exception e = null;
+        Exception e;
         for (int i=0; i < 10; i++) {// Wait up to 1 second
             try {
                 Thread.sleep(100);
@@ -126,7 +125,7 @@ public class TestHTTPMirrorThread extends TestCase {
         // Read the response
         ByteArrayOutputStream response = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
-        int length = 0;
+        int length;
         while(( length = inputStream.read(buffer)) != -1) {
             response.write(buffer, 0, length);
         }
@@ -155,7 +154,7 @@ public class TestHTTPMirrorThread extends TestCase {
         bos.close();
         byte[] firstChunk = bos.toByteArray();
         outputStream.write(firstChunk);
-        Thread.sleep(300);
+        Thread.sleep(200);
         // Write the rest of the headers
         bos = new ByteArrayOutputStream();
         bos.write("Host: localhost".getBytes(ISO_8859_1));
@@ -167,7 +166,6 @@ public class TestHTTPMirrorThread extends TestCase {
         // Read the response
         response = new ByteArrayOutputStream();
         buffer = new byte[1024];
-        length = 0;
         while((length = inputStream.read(buffer)) != -1) {
             response.write(buffer, 0, length);
         }
@@ -217,7 +215,7 @@ public class TestHTTPMirrorThread extends TestCase {
         // Read the response
         ByteArrayOutputStream response = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
-        int length = 0;
+        int length;
         while((length = inputStream.read(buffer)) != -1) {
             response.write(buffer, 0, length);
         }
@@ -253,7 +251,7 @@ public class TestHTTPMirrorThread extends TestCase {
         bos.close();
         byte[] firstChunk = bos.toByteArray();
         outputStream.write(firstChunk);
-        Thread.sleep(300);
+        Thread.sleep(200);
 
         // Write the body
         byte[] secondChunk = postBody;
@@ -261,7 +259,6 @@ public class TestHTTPMirrorThread extends TestCase {
         // Read the response
         response = new ByteArrayOutputStream();
         buffer = new byte[1024];
-        length = 0;
         while((length = inputStream.read(buffer)) != -1) {
             response.write(buffer, 0, length);
         }
@@ -309,7 +306,7 @@ public class TestHTTPMirrorThread extends TestCase {
         bos.close();
         firstChunk = bos.toByteArray();
         outputStream.write(firstChunk);
-        Thread.sleep(300);
+        Thread.sleep(200);
 
         // Write the body
         secondChunk = postBody;
@@ -317,7 +314,6 @@ public class TestHTTPMirrorThread extends TestCase {
         // Read the response
         response = new ByteArrayOutputStream();
         buffer = new byte[1024];
-        length = 0;
         while((length = inputStream.read(buffer)) != -1) {
             response.write(buffer, 0, length);
         }
@@ -401,24 +397,20 @@ public class TestHTTPMirrorThread extends TestCase {
     public void testSleep() throws Exception {
         URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.addRequestProperty("X-Sleep", "1000");
+        conn.addRequestProperty("X-Sleep", "200");
         // use nanoTime to do timing measurement or calculation
         // See https://blogs.oracle.com/dholmes/entry/inside_the_hotspot_vm_clocks
         long now = System.nanoTime();
         conn.connect();
         final InputStream inputStream = conn.getInputStream();
-        while(inputStream.read() != -1) {}
+        while(inputStream.read() != -1) {} // CHECKSTYLE IGNORE EmptyBlock
         inputStream.close();
-        final long elapsed = (System.nanoTime() - now)/1000000L;
-        assertTrue("Expected > 990 " + elapsed, elapsed >= 990);
+        final long elapsed = (System.nanoTime() - now)/200000L;
+        assertTrue("Expected > 180 " + elapsed, elapsed >= 180);
     }
 
     /**
      * Check that the two byte arrays have identical content
-     *
-     * @param expected
-     * @param actual
-     * @throws UnsupportedEncodingException
      */
     private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {

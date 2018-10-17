@@ -86,16 +86,17 @@ public class SaveGraphics extends AbstractAction {
         }
         if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS_ALL)) {
             JMeterGUIComponent component = GuiPackage.getInstance().getCurrentGui();
-            JComponent comp=((JComponent) component).getRootPane();
+            JComponent comp = ((JComponent) component).getRootPane();
             saveImage(comp);
         }
     }
 
-    private void saveImage(JComponent comp){
+    private void saveImage(JComponent comp) {
 
         String filename;
-        JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
-                .getCurrentNode().getName(), extensions);
+        JFileChooser chooser = FileDialoger.promptToSaveFile(
+                GuiPackage.getInstance().getTreeListener().getCurrentNode().getName(),
+                extensions);
         if (chooser == null) {
             return;
         }
@@ -104,14 +105,14 @@ public class SaveGraphics extends AbstractAction {
         filename = chooser.getSelectedFile().getAbsolutePath();
         if (filename != null) {
             File f = new File(filename);
-            if(f.exists()) {
+            if (f.exists()) {
                 int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
                         JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
                         JMeterUtils.getResString("save?"),  // $NON-NLS-1$
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
-                    return ; // Do not save, user does not want to overwrite
+                    return; // Do not save, user does not want to overwrite
                 }
             }
             SaveGraphicsService save = new SaveGraphicsService();
@@ -125,6 +126,5 @@ public class SaveGraphics extends AbstractAction {
                 save.saveJComponent(filename, SaveGraphicsService.PNG, comp);
             }
         }
-
     }
 }

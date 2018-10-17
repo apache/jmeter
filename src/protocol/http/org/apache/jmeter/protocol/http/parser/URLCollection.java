@@ -26,8 +26,8 @@ import java.util.Iterator;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Collection class designed for handling URLs
@@ -37,7 +37,6 @@ import org.slf4j.Logger;
  * <p>
  * N.B. Designed for use by HTMLParser, so is not a full implementation - e.g.
  * does not support remove()
- *
  */
 public class URLCollection implements Iterable<URL> {
     private static final Logger log = LoggerFactory.getLogger(URLCollection.class);
@@ -81,9 +80,8 @@ public class URLCollection implements Iterable<URL> {
         if (url == null || url.length() == 0) {
             return false;
         }
-        //url.replace('+',' ');
         url=StringEscapeUtils.unescapeXml(url);
-        boolean b = false;
+        boolean b;
         try {
             b = this.add(ConversionUtils.makeRelativeURL(baseUrl, url));
         } catch (MalformedURLException mfue) {
@@ -106,7 +104,6 @@ public class URLCollection implements Iterable<URL> {
 
     /*
      * Private iterator used to unwrap the URL from the URLString class
-     *
      */
     private static class UrlIterator implements Iterator<URL> {
         private final Iterator<URLString> iter;

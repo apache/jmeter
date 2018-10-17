@@ -170,10 +170,15 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
                 getMethodNames.add(name);
                 assertTrue("SAVE_CONFIG_NAMES should contain save" + name, SampleSaveConfiguration.SAVE_CONFIG_NAMES.contains(name));
             }
-            if (name.startsWith(SampleSaveConfiguration.CONFIG_SETTER_PREFIX) && method.getParameterTypes().length == 1 && boolean.class.equals(method.getParameterTypes()[0])) {
-                name = name.substring(SampleSaveConfiguration.CONFIG_SETTER_PREFIX.length());
+            if (name.startsWith(SampleSaveConfiguration.CONFIG_SETTER_PREFIX)
+                    && method.getParameterTypes().length == 1
+                    && boolean.class.equals(method.getParameterTypes()[0])) {
+                name = name.substring(
+                        SampleSaveConfiguration.CONFIG_SETTER_PREFIX.length());
                 setMethodNames.add(name);
-                assertTrue("SAVE_CONFIG_NAMES should contain set" + name, SampleSaveConfiguration.SAVE_CONFIG_NAMES.contains(name));
+                assertTrue("SAVE_CONFIG_NAMES should contain set" + name,
+                        SampleSaveConfiguration.SAVE_CONFIG_NAMES
+                                .contains(name));
             }
         }
         for (String name : SampleSaveConfiguration.SAVE_CONFIG_NAMES) {

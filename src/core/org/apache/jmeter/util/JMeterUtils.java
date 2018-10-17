@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.URL;
@@ -45,6 +46,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -54,7 +56,6 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.reflect.ClassFinder;
@@ -79,7 +80,10 @@ import com.thoughtworks.xstream.security.NoTypePermission;
  */
 public class JMeterUtils implements UnitTestManager {
     private static final Logger log = LoggerFactory.getLogger(JMeterUtils.class);
-    
+
+    private static final String JMETER_VARS_PREFIX = "__jm__";
+    public static final String THREAD_GROUP_DISTRIBUTED_PREFIX_PROPERTY_NAME = "__jm.D_TG";
+
     // Note: cannot use a static variable here, because that would be processed before the JMeter properties
     // have been defined (Bug 52783)
     private static class LazyPatternCacheHolder {
@@ -106,12 +110,8 @@ public class JMeterUtils implements UnitTestManager {
     private static volatile ResourceBundle resources;
 
     // What host am I running on?
-
-    //@GuardedBy("this")
     private static String localHostIP = null;
-    //@GuardedBy("this")
     private static String localHostName = null;
-    //@GuardedBy("this")
     private static String localHostFullName = null;
     
     // TODO needs to be synch? Probably not changed after threads have started
@@ -160,7 +160,7 @@ public class JMeterUtils implements UnitTestManager {
 
     /**
      * Initialise JMeter logging
-     * @deprecated
+     * @deprecated does not do anything anymore
      */
     @Deprecated
     public static void initLogging() {
@@ -179,7 +179,6 @@ public class JMeterUtils implements UnitTestManager {
             } else {
                 setLocale(new Locale(loc, "")); // $NON-NLS-1$
             }
-
         } else {
             setLocale(Locale.getDefault());
         }
@@ -204,15 +203,14 @@ public class JMeterUtils implements UnitTestManager {
             p.load(is);
         } catch (IOException e) {
             try {
-                is =
-                    ClassLoader.getSystemResourceAsStream("org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
+                is = ClassLoader.getSystemResourceAsStream(
+                        "org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
                 if (is == null) {
-                    throw new RuntimeException("Could not read JMeter properties file:"+file);
+                    throw new RuntimeException("Could not read JMeter properties file:" + file);
                 }
                 p.load(is);
             } catch (IOException ex) {
-                // JMeter.fail("Could not read internal resource. " +
-                // "Archive is broken.");
+                throw new RuntimeException("Could not read JMeter properties file:" + file);
             }
         } finally {
             JOrphanUtils.closeQuietly(is);
@@ -252,17 +250,17 @@ public class JMeterUtils implements UnitTestManager {
             try {
                 final URL resource = JMeterUtils.class.getClassLoader().getResource(file);
                 if (resource == null) {
-                    log.warn("Cannot find " + file);
+                    log.warn("Cannot find {}", file);
                     return defaultProps;
                 }
                 is = resource.openStream();
                 if (is == null) {
-                    log.warn("Cannot open " + file);
+                    log.warn("Cannot open {}", file);
                     return defaultProps;
                 }
                 p.load(is);
             } catch (IOException ex) {
-                log.warn("Error reading " + file + " " + ex.toString());
+                log.warn("Error reading {} {}", file, ex.toString());
                 return defaultProps;
             }
         } finally {
@@ -365,7 +363,7 @@ public class JMeterUtils implements UnitTestManager {
      *            new locale
      */
     public static void setLocale(Locale loc) {
-        log.info("Setting Locale to " + loc.toString());
+        log.info("Setting Locale to {}", loc);
         /*
          * See bug 29920. getBundle() defaults to the property file for the
          * default Locale before it defaults to the base property file, so we
@@ -394,12 +392,13 @@ public class JMeterUtils implements UnitTestManager {
             resources = resBund;
             locale = loc;
             final Locale resBundLocale = resBund.getLocale();
-            if (isDefault || resBundLocale.equals(loc)) {// language change worked
-            // Check if we at least found the correct language:
-            } else if (resBundLocale.getLanguage().equals(loc.getLanguage())) {
-                log.info("Could not find resources for '"+loc.toString()+"', using '"+resBundLocale.toString()+"'");
-            } else {
-                log.error("Could not find resources for '"+loc.toString()+"'");
+            if (!isDefault && !resBundLocale.equals(loc)) {
+                // Check if we at least found the correct language:
+                if (resBundLocale.getLanguage().equals(loc.getLanguage())) {
+                    log.info("Could not find resources for '{}', using '{}'", loc, resBundLocale);
+                } else {
+                    log.error("Could not find resources for '{}'", loc);
+                }
             }
         }
         notifyLocaleChangeListeners();
@@ -524,8 +523,12 @@ public class JMeterUtils implements UnitTestManager {
             if (bundle.containsKey(resKey)) {
                 resString = bundle.getString(resKey);
             } else {
-                log.warn("ERROR! Resource string not found: [" + resKey + "]");
-                resString = defaultValue;                
+                if(defaultValue == null) {
+                    log.warn("ERROR! Resource string not found: [{}]", resKey);
+                } else {
+                    log.debug("Resource string not found: [{}], using default value {}", resKey, defaultValue);
+                }
+                resString = defaultValue;
             }
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "["+key+"]";
@@ -534,7 +537,11 @@ public class JMeterUtils implements UnitTestManager {
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "[?"+key+"?]";
             }
-            log.warn("ERROR! Resource string not found: [" + resKey + "]", mre);
+            if(defaultValue == null) {
+                log.warn("ERROR! Resource string not found: [{}]", resKey);
+            } else {
+                log.debug("Resource string not found: [{}], using default value {}", resKey, defaultValue);
+            }
             resString = defaultValue;
         }
         return resString;
@@ -638,11 +645,11 @@ public class JMeterUtils implements UnitTestManager {
             if(url != null) {
                 return new ImageIcon(url); // $NON-NLS-1$
             } else {
-                log.warn("no icon for " + name);
+                log.warn("no icon for {}", name);
                 return null;                
             }
         } catch (NoClassDefFoundError | InternalError e) {// Can be returned by headless hosts
-            log.info("no icon for " + name + " " + e.getMessage());
+            log.info("no icon for {} {}", name, e.getMessage());
             return null;
         }
     }
@@ -668,26 +675,20 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     public static String getResourceFileAsText(String name) {
-        BufferedReader fileReader = null;
         try {
             String lineEnd = System.getProperty("line.separator"); // $NON-NLS-1$
             InputStream is = JMeterUtils.class.getClassLoader().getResourceAsStream(name);
             if(is != null) {
-                fileReader = new BufferedReader(new InputStreamReader(is));
-                StringBuilder text = new StringBuilder();
-                String line;
-                while ((line = fileReader.readLine()) != null) {
-                    text.append(line);
-                    text.append(lineEnd);
+                try (Reader in = new InputStreamReader(is);
+                        BufferedReader fileReader = new BufferedReader(in)) {
+                    return fileReader.lines()
+                            .collect(Collectors.joining(lineEnd, "", lineEnd));
                 }
-                return text.toString();
             } else {
                 return ""; // $NON-NLS-1$                
             }
         } catch (IOException e) {
             return ""; // $NON-NLS-1$
-        } finally {
-            IOUtils.closeQuietly(fileReader);
         }
     }
 
@@ -705,7 +706,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = Integer.parseInt(appProperties.getProperty(propName, Integer.toString(defaultVal)).trim());
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching int property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '{}' occurred when fetching int property:'{}', defaulting to: {}", e.getMessage() , propName, defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -732,7 +733,7 @@ public class JMeterUtils implements UnitTestManager {
                 ans = Integer.parseInt(strVal) == 1;
             }
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching boolean property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '{}' occurred when fetching boolean property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -752,7 +753,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = Long.parseLong(appProperties.getProperty(propName, Long.toString(defaultVal)).trim());
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching long property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '{}' occurred when fetching long property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -772,7 +773,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = Float.parseFloat(appProperties.getProperty(propName, Float.toString(defaultVal)).trim());
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching float property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '{}' occurred when fetching float property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -796,7 +797,7 @@ public class JMeterUtils implements UnitTestManager {
                 ans = value.trim();
             }
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching String property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '{}' occurred when fetching String property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -814,7 +815,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = appProperties.getProperty(propName);
         } catch (Exception e) {
-            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching String property:'"+propName+"'");
+            log.warn("Exception '{}' occurred when fetching String property:'{}'", e.getMessage(), propName);
             ans = null;
         }
         return ans;
@@ -892,7 +893,7 @@ public class JMeterUtils implements UnitTestManager {
                     titleMsg,
                     JOptionPane.ERROR_MESSAGE);
         } catch (HeadlessException e) {
-            log.warn("reportErrorToUser(\"" + errorMsg + "\") caused", e);
+            log.warn("reportErrorToUser(\"{}\") caused", errorMsg, e);
         }
     }
 
@@ -1006,7 +1007,7 @@ public class JMeterUtils implements UnitTestManager {
      * Determine whether we are in 'expert' mode. Certain features may be hidden
      * from user's view unless in expert mode.
      *
-     * @return true iif we're in expert mode
+     * @return true if we're in expert mode
      */
     public static boolean isExpertMode() {
         return JMeterUtils.getPropDefault(EXPERT_MODE_PROPERTY, false);
@@ -1123,8 +1124,8 @@ public class JMeterUtils implements UnitTestManager {
                 try {
                     SwingUtilities.invokeAndWait(runnable);
                 } catch (InterruptedException e) {
-                    log.warn("Interrupted in thread "
-                            + Thread.currentThread().getName(), e);
+                    log.warn("Interrupted in thread {}",
+                            Thread.currentThread().getName(), e);
                     Thread.currentThread().interrupt();
                 } catch (InvocationTargetException e) {
                     throw new Error(e);
@@ -1266,5 +1267,17 @@ public class JMeterUtils implements UnitTestManager {
         // See https://groups.google.com/forum/#!topic/xstream-user/wiKfdJPL8aY
         // TODO : How much are we concerned by CVE-2013-7285 
         xstream.addPermission(AnyTypePermission.ANY);
+    }
+    
+    /**
+     * @param elementName String elementName
+     * @return variable name for index following JMeter convention
+     */
+    public static String formatJMeterExportedVariableName(String elementName) {
+        StringBuilder builder = new StringBuilder(
+                JMETER_VARS_PREFIX.length()+elementName.length());
+        return builder.append(JMETER_VARS_PREFIX)
+                .append(elementName)
+                .toString();
     }
 }

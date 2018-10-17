@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassFinder;
@@ -48,14 +49,14 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
     /**
      * 
      */
-    private static final int DEFAULT_LOCAL_PORT = 
-            JMeterUtils.getPropDefault("client.rmi.localport", 0); // $NON-NLS-1$
+    private static final int DEFAULT_LOCAL_PORT = addOffset(
+            JMeterUtils.getPropDefault("client.rmi.localport", 0), 1); // $NON-NLS-1$
 
     /**
      * @throws RemoteException if failed to export object
      */
     public RemoteThreadsListenerImpl() throws RemoteException {
-        super(DEFAULT_LOCAL_PORT);
+        super(DEFAULT_LOCAL_PORT, RmiUtils.createClientSocketFactory(), RmiUtils.createServerSocketFactory());
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
                     JMeterUtils.getSearchPaths(), 
@@ -77,6 +78,13 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         } catch (IOException e) {
             log.error("Exception finding implementations of {}", RemoteThreadsLifeCycleListener.class, e);
         }
+    }
+
+    private static int addOffset(int port, int offset) {
+        if (port == 0) {
+            return 0;
+        }
+        return port + offset;
     }
 
     /**

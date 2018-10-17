@@ -29,8 +29,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This component allows you to specify reference name of a regular expression that extracts names and values of HTTP request parameters. 
@@ -67,7 +67,9 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
 
         Map<String, String> paramMap = buildParamsMap();
         if(paramMap == null || paramMap.isEmpty()){
-            log.info("RegExUserParameters element:"+getName()+" => Referenced RegExp was not found, no parameter will be changed");
+            log.info(
+                    "RegExUserParameters element: {} => Referenced RegExp was not found, no parameter will be changed",
+                    getName());
             return;
         }
 
@@ -82,7 +84,9 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
                 arg.setValue(val);
             }
             if (log.isDebugEnabled()) {
-                log.debug("RegExUserParameters element:" + getName() + " => changed parameter: " + arg.getName() + " = " + arg.getValue() + ", was:" + oldValue);
+                log.debug(
+                        "RegExUserParameters element: {} => changed parameter: {} = {}, was: {}",
+                        getName(), arg.getName(), arg.getValue(), oldValue);
             }
         }
     }
@@ -111,8 +115,6 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
      * A new instance is created for each thread group, and the
      * clone() method is then called to create copies for each thread in a
      * thread group.
-     * 
-     * @see java.lang.Object#clone()
      */
     @Override
     public Object clone() {

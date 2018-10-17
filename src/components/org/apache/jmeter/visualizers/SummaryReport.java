@@ -45,6 +45,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.samplers.Clearable;
@@ -54,6 +55,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.MinMaxLongRenderer;
 import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.ObjectTableSorter;
@@ -65,6 +67,7 @@ import org.apache.jorphan.reflect.Functor;
  * Simpler (lower memory) version of Aggregate Report (StatVisualizer).
  * Excludes the Median and 90% columns, which are expensive in memory terms
  */
+@GUIMenuSortOrder(2)
 public class SummaryReport extends AbstractVisualizer implements Clearable, ActionListener {
 
     private static final long serialVersionUID = 241L;
@@ -124,8 +127,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             null, // Label
             null, // count
             null, // Mean
-            null, // Min
-            null, // Max
+            new MinMaxLongRenderer("#0"), // Min //$NON-NLS-1$
+            new MinMaxLongRenderer("#0"), // Max //$NON-NLS-1$
             new NumberRenderer("#0.00"), // Std Dev. //$NON-NLS-1$
             new NumberRenderer("#0.00%"), // Error %age //$NON-NLS-1$
             new RateRenderer("#.0"),      // Throughput //$NON-NLS-1$
@@ -140,8 +143,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             null, // Label
             null, // count
             null, // Mean
-            null, // Min
-            null, // Max
+            new DecimalFormat("#0"), // Min //$NON-NLS-1$
+            new DecimalFormat("#0"), // Max //$NON-NLS-1$
             new DecimalFormat("#0.00"), // Std Dev. //$NON-NLS-1$
             new DecimalFormat("#0.000%"), // Error %age //$NON-NLS-1$
             new DecimalFormat("#.00000"),      // Throughput //$NON-NLS-1$

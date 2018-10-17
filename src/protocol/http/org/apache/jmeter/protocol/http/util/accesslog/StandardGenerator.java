@@ -26,9 +26,9 @@ import java.io.Serializable;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Description:<br>
@@ -50,7 +50,6 @@ import org.slf4j.Logger;
  * added and should be left up to the user. One option is to provide parameters,
  * so the user can pass the desired listener to the tool.
  */
-
 public class StandardGenerator implements Generator, Serializable {
 
     private static final long serialVersionUID = 234L;
@@ -58,11 +57,8 @@ public class StandardGenerator implements Generator, Serializable {
     private static final Logger log = LoggerFactory.getLogger(StandardGenerator.class);
 
     protected HTTPSamplerBase SAMPLE = null;
-
     protected transient OutputStream OUTPUT = null;
-
     protected String FILENAME = null;
-
     protected File FILE = null;
 
     /**

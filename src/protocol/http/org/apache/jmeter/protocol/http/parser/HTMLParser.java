@@ -27,12 +27,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * {@link HTMLParser} subclasses can parse HTML content to obtain URLs.
- *
  */
 public abstract class HTMLParser extends BaseParser {
 

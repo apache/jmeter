@@ -21,15 +21,11 @@ import java.util.Collections;
 
 /**
  * A controller that runs its children each at most once, but in a random order.
- *
  */
 public class RandomOrderController extends GenericController implements Serializable {
 
     private static final long serialVersionUID = 240L;
 
-    /**
-     * Create a new RandomOrderController.
-     */
     public RandomOrderController() {
     }
 

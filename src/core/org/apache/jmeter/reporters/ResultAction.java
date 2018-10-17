@@ -24,6 +24,7 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.OnErrorTestElement;
+import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,11 +34,11 @@ import org.slf4j.LoggerFactory;
  */
 public class ResultAction extends OnErrorTestElement implements Serializable, SampleListener {
 
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     private static final Logger log = LoggerFactory.getLogger(ResultAction.class);
 
-    /*
+    /**
      * Constructor is initially called once for each occurrence in the test plan
      * For GUI, several more instances are created Then clear is called at start
      * of test Called several times during test startup The name will not
@@ -56,20 +57,21 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
     public void sampleOccurred(SampleEvent e) {
         SampleResult s = e.getResult();
         if (log.isDebugEnabled()) {
-            log.debug("{} OK? {}", s.getSampleLabel(), s.isSuccessful());
+            log.debug("ResultStatusHandler {} for {} OK? {}", getName(), s.getSampleLabel(), s.isSuccessful());
         }
         if (!s.isSuccessful()) {
             if (isStopTestNow()) {
                 s.setStopTestNow(true);
-            }
-            if (isStopTest()) {
+            } else if (isStopTest()) {
                 s.setStopTest(true);
-            }
-            if (isStopThread()) {
+            } else if (isStopThread()) {
                 s.setStopThread(true);
-            }
-            if (isStartNextThreadLoop()) {
-               s.setStartNextThreadLoop(true);
+            } else if (isStartNextThreadLoop()) {
+                s.setTestLogicalAction(TestLogicalAction.START_NEXT_ITERATION_OF_THREAD);
+            } else if(isStartNextIterationOfCurrentLoop()) {
+                s.setTestLogicalAction(TestLogicalAction.START_NEXT_ITERATION_OF_CURRENT_LOOP);
+            } else if(isBreakCurrentLoop()) {
+                s.setTestLogicalAction(TestLogicalAction.BREAK_CURRENT_LOOP);
             }
         }
     }

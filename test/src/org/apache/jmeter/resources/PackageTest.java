@@ -42,12 +42,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.jmeter.gui.util.JMeterMenuBar;
+import org.apache.jorphan.util.JOrphanUtils;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import org.apache.jmeter.gui.util.JMeterMenuBar;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /*
  * Created on Nov 29, 2003
@@ -241,9 +241,9 @@ public class PackageTest extends TestCase {
         findFile(srcFileDir, set, new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.equals("messages.properties") ||
-                        (name.endsWith("Resources.properties")
-                                && !name.matches("Example\\d+Resources\\.properties")))
+                return name.equals("messages.properties") ||
+                        name.endsWith("Resources.properties")
+                                && !name.matches("Example\\d+Resources\\.properties")
                         || new File(dir, name).isDirectory();
             }
         });
@@ -283,7 +283,7 @@ public class PackageTest extends TestCase {
     */
     public static Test suite() {
         TestSuite ts = new TestSuite("Resources PackageTest");
-        String languages[] = JMeterMenuBar.getLanguages();
+        String[] languages = JMeterMenuBar.getLanguages();
         for(String prefix : prefixList){
             TestSuite pfx = new TestSuite(prefix) ;
             pfx.addTest(new PackageTest("testLang","", prefix)); // load the default resource
@@ -344,15 +344,9 @@ public class PackageTest extends TestCase {
         assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
     }
 
-    /**
-     * Check messages are available in language
-     * @param missingLabelsPerBundle2 
-     * @param missingLabelsPerBundle 
-     * @param messages Properties messages in english
-     * @param language Language 
-     * @throws IOException
-     */
-    private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle, Map<String, Map<String, String>> missingLabelsPerBundle2, Properties messages, String bundlePath,String language)
+    private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle,
+            Map<String, Map<String, String>> missingLabelsPerBundle2,
+            Properties messages, String bundlePath, String language)
             throws IOException {
         Properties messagesFr = new Properties();
         String languageBundle = bundlePath+"_"+language+ ".properties";
@@ -375,7 +369,7 @@ public class PackageTest extends TestCase {
                 String value = (String) entry.getValue();
                 // TODO improve check of values that don't need translation
                 if (value.matches(I18NString)) {
-                    // System.out.println("Ignoring missing "+key+"="+value+" in "+languageBundle); // TODO convert to list and display at end
+                    System.out.println("Ignoring missing " + key + "=" + value + " in " + languageBundle); // TODO convert to list and display at end
                 } else {
                     missingLabels.put(key, (String) entry.getValue());
                 }
@@ -391,12 +385,6 @@ public class PackageTest extends TestCase {
         }
     }
 
-    /**
-     * Build message with missing labels per bundle.
-     *
-     * @param missingLabelsPerBundle
-     * @return String
-     */
     private String printLabels(Map<String, Map<String, String>> missingLabelsPerBundle) {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<String, Map<String, String>> entry : missingLabelsPerBundle.entrySet()) {

@@ -21,13 +21,14 @@ package org.apache.jmeter.visualizers;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Method;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestRenderAsJson {
 
     private Method prettyJSON;
-    private final String TAB = ":   ";
+    private final String TAB = "    ";
 
     private String prettyJSON(String prettify) throws Exception {
         return (String) prettyJSON.invoke(null, prettify);
@@ -43,7 +44,7 @@ public class TestRenderAsJson {
     @Test
     public void testRenderResultWithLongStringBug54826() throws Exception {
         StringBuilder json = new StringBuilder();
-        json.append("\"customData\":\"");
+        json.append("\"customData\": \"");
         for (int i = 0; i < 100; i++) {
             json.append("somenotsorandomtext");
         }
@@ -60,7 +61,13 @@ public class TestRenderAsJson {
 
     @Test
     public void testRenderResultSimpleArray() throws Exception {
-        assertEquals("[\n]", prettyJSON("[]"));
+        assertEquals("[]", prettyJSON("[]"));
+    }
+
+    @Test
+    public void testRenderArrayInObject() throws Exception {
+        assertEquals("{\n" + TAB + "\"foo\": [\n" + TAB + "]\n}",
+                prettyJSON("{\"foo\":[]}"));
     }
 
     @Test
@@ -76,9 +83,9 @@ public class TestRenderAsJson {
     @Test
     public void testRenderResultSimpleStructure() throws Exception {
         assertEquals(
-                "{\n" + TAB + "\"Hello\": \"World\", \n" + TAB + "\"more\": \n"
-                        + TAB + "[\n" + TAB + TAB + "\"Something\", \n" + TAB
-                        + TAB + "\"else\", \n" + TAB + "]\n}",
+                "{\n" + TAB + "\"Hello\": \"World\",\n" + TAB + "\"more\": [\n"
+                        + TAB + TAB + "\"Something\",\n" + TAB
+                        + TAB + "\"else\"\n" + TAB + "]\n}",
                 prettyJSON("{\"Hello\": \"World\", \"more\": [\"Something\", \"else\", ]}"));
     }
 

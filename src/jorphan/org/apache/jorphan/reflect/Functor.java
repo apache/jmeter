@@ -448,27 +448,29 @@ public class Functor {
     }
 
     private Class<?> getPrimitive(Class<?> t) {
-        if (t==null) {
+        if (t == null) {
             return null;
         }
-        if (t.equals(Integer.class)) {
-            return int.class;
+
+        Class<?> c = null;
+         if (t.equals(Integer.class)) {
+            c = int.class;
         } else if (t.equals(Long.class)) {
-            return long.class;
+            c = long.class;
         } else if (t.equals(Double.class)) {
-            return double.class;
+            c = double.class;
         } else if (t.equals(Float.class)) {
-            return float.class;
+            c = float.class;
         } else if (t.equals(Byte.class)) {
-            return byte.class;
+            c = byte.class;
         } else if (t.equals(Boolean.class)) {
-            return boolean.class;
+            c = boolean.class;
         } else if (t.equals(Short.class)) {
-            return short.class;
+            c = short.class;
         } else if (t.equals(Character.class)) {
-            return char.class;
+            c = char.class;
         }
-        return null;
+        return c;
     }
 
     private Class<?>[] getNewArray(int i, Class<?> replacement, Class<?>[] orig) {
@@ -484,8 +486,7 @@ public class Functor {
     }
 
     private Class<?>[] getTypes(Object[] _args) {
-        if (types == null)
-        {
+        if (types == null) {
             return _getTypes(_args);
         }
         return types;

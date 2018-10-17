@@ -54,7 +54,6 @@ import javax.swing.event.PopupMenuListener;
  */
 public class MenuScroller {
 
-    // private JMenu menu;
     private JPopupMenu menu;
     private Component[] menuItems;
     private MenuScrollItem upItem;
@@ -448,7 +447,7 @@ public class MenuScroller {
         if (firstIndex <= topFixedCount) {
             firstIndex = topFixedCount;
         } else {
-            firstIndex += (topFixedCount - this.topFixedCount);
+            firstIndex = firstIndex + topFixedCount - this.topFixedCount;
         }
         this.topFixedCount = topFixedCount;
     }
@@ -520,44 +519,43 @@ public class MenuScroller {
      * Ensures that the <code>dispose</code> method of this MenuScroller is
      * called when there are no more references to it.
      * 
-     * @exception Throwable
-     *                if an error occurs.
      * @see MenuScroller#dispose()
      */
     @Override
     public void finalize() throws Throwable {
         dispose();
+        super.finalize();
     }
 
     private void refreshMenu() {
-        if (menuItems != null && menuItems.length > 0) {
+        if (menuItems != null && menuItems.length > 0 && scrollCount <= menuItems.length) {
             firstIndex = Math.max(topFixedCount, firstIndex);
-            firstIndex = Math.min(menuItems.length - bottomFixedCount
-                    - scrollCount, firstIndex);
+            firstIndex = Math.max(0, Math.min(menuItems.length - bottomFixedCount
+                    - scrollCount, firstIndex));
 
             upItem.setEnabled(firstIndex > topFixedCount);
             downItem.setEnabled(firstIndex + scrollCount < menuItems.length
                     - bottomFixedCount);
 
             menu.removeAll();
-            for (int i = 0; i < topFixedCount; i++) {
-                menu.add(menuItems[i]);
-            }
             if (topFixedCount > 0) {
+                for (int i = 0; i < topFixedCount; i++) {
+                    menu.add(menuItems[i]);
+                }
                 menu.addSeparator();
             }
 
             menu.add(upItem);
-            for (int i = firstIndex; i < scrollCount + firstIndex; i++) {
+            for (int i = firstIndex; i < Math.min(menuItems.length, scrollCount + firstIndex); i++) {
                 menu.add(menuItems[i]);
             }
             menu.add(downItem);
 
             if (bottomFixedCount > 0) {
                 menu.addSeparator();
-            }
-            for (int i = menuItems.length - bottomFixedCount; i < menuItems.length; i++) {
-                menu.add(menuItems[i]);
+                for (int i = Math.max(0, menuItems.length - bottomFixedCount); i < menuItems.length; i++) {
+                    menu.add(menuItems[i]);
+                }
             }
 
             int preferredWidth = 0;
@@ -570,11 +568,11 @@ public class MenuScroller {
             parent.repaint();
         }
     }
-    
+
     private class MouseScrollListener implements MouseWheelListener {
         @Override
         public void mouseWheelMoved(MouseWheelEvent mwe){
-            firstIndex += mwe.getWheelRotation();
+            firstIndex = Math.max(0, Math.min(menuItems.length - 1, firstIndex + mwe.getWheelRotation()));
             refreshMenu();
             mwe.consume(); // (Comment 16, Huw)
         }

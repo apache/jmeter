@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleBuilder;
 import org.apache.jmeter.report.core.SampleMetadata;
-import org.apache.jmeter.report.processor.AbstractSampleConsumer;
 
 /**
  * The Class TimeCountConsumer adds a data field to the samples it consumes.

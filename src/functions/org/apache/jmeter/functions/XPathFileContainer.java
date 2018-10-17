@@ -56,9 +56,7 @@ public class XPathFileContainer {
 
     public XPathFileContainer(String file, String xpath) throws FileNotFoundException, IOException,
             ParserConfigurationException, SAXException, TransformerException {
-        if(log.isDebugEnabled()) {
-            log.debug("XPath(" + file + ") xpath " + xpath);
-        }
+        log.debug("XPath({}) xpath {}", file, xpath);
         fileName = file;
         nextRow = 0;
         nodeList=load(xpath);
@@ -72,7 +70,7 @@ public class XPathFileContainer {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             nl = XPathUtil.selectNodeList(builder.parse(bis), xpath);
             if(log.isDebugEnabled()) {
-                log.debug("found " + nl.getLength());
+                log.debug("found {}", nl.getLength());
             }
         } catch (TransformerException | SAXException
                 | ParserConfigurationException | IOException e) {
@@ -100,7 +98,7 @@ public class XPathFileContainer {
         {
             nextRow = 0;
         }
-        log.debug(new StringBuilder("Row: ").append(row).toString());
+        log.debug("Row: {}", row);
         return row;
     }
 

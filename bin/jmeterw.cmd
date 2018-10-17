@@ -16,10 +16,9 @@ rem   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
 
-set JM_START=start
+set JM_START=start "Apache_JMeter"
 set JM_LAUNCH=javaw.exe
 
-rem Only works in Win2K
 call jmeter %*
 
 set JM_START=

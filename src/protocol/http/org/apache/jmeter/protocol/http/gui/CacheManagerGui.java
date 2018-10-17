@@ -26,28 +26,24 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
- * The GUI for the HTTP Cache Manager
- *
+ * The GUI for the HTTP Cache Manager {@link CacheManager}
  */
+@GUIMenuSortOrder(4)
 public class CacheManagerGui extends AbstractConfigGui {
 
     private static final long serialVersionUID = 240L;
 
     private JCheckBox clearEachIteration;
-
     private JCheckBox useExpires;
-
     private JTextField maxCacheSize;
 
-    /**
-     * Create a new LoginConfigGui as a standalone component.
-     */
     public CacheManagerGui() {
         init();
     }
@@ -57,15 +53,6 @@ public class CacheManagerGui extends AbstractConfigGui {
         return "cache_manager_title"; // $NON-NLS-1$
     }
 
-    /**
-     * A newly created component can be initialized with the contents of a Test
-     * Element object by calling this method. The component is responsible for
-     * querying the Test Element object for the relevant information to display
-     * in its GUI.
-     *
-     * @param element
-     *            the TestElement to configure
-     */
     @Override
     public void configure(TestElement element) {
         super.configure(element);
@@ -75,7 +62,6 @@ public class CacheManagerGui extends AbstractConfigGui {
         maxCacheSize.setText(Integer.toString(cacheManager.getMaxSize()));
     }
 
-    /* Implements JMeterGUIComponent.createTestElement() */
     @Override
     public TestElement createTestElement() {
         CacheManager element = new CacheManager();
@@ -83,7 +69,6 @@ public class CacheManagerGui extends AbstractConfigGui {
         return element;
     }
 
-    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     @Override
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
@@ -92,7 +77,7 @@ public class CacheManagerGui extends AbstractConfigGui {
         cacheManager.setUseExpires(useExpires.isSelected());
         try {
             cacheManager.setMaxSize(Integer.parseInt(maxCacheSize.getText()));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ignored) {
             // NOOP
         }
     }
@@ -104,14 +89,15 @@ public class CacheManagerGui extends AbstractConfigGui {
     public void clearGui() {
         super.clearGui();
         clearEachIteration.setSelected(false);
-        useExpires.setSelected(false);
+        useExpires.setSelected(true);
         maxCacheSize.setText(""); //$NON-NLS-1$
     }
 
     /**
      * Initialize the components and layout of this component.
+     * WARNING: called from ctor so must not be overridden (i.e. must be private or final)
      */
-    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+    private void init() {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
 

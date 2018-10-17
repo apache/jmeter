@@ -25,9 +25,9 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.reflect.Functor;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The ObjectTableModel is a TableModel whose rows are objects;

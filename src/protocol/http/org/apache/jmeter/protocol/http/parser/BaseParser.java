@@ -21,8 +21,8 @@ package org.apache.jmeter.protocol.http.parser;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * BaseParser is the base class for {@link LinkExtractorParser}

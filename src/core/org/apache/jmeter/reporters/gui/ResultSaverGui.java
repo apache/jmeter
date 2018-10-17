@@ -19,16 +19,19 @@
 package org.apache.jmeter.reporters.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import org.apache.jmeter.reporters.ResultSaver;
 import org.apache.jmeter.samplers.Clearable;
-import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
@@ -39,25 +42,27 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * of files
  *
  */
-public class ResultSaverGui extends AbstractListenerGui implements Clearable {
+public class ResultSaverGui extends AbstractListenerGui implements Clearable { // NOSONAR Ignore inheritance rule
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private JTextField filename;
+    private JLabeledTextField filename;
 
-    private JTextField variableName;
+    private JLabeledTextField variableName;
+    
+    private JLabeledTextField numberPadLength;
 
     private JCheckBox errorsOnly;
 
     private JCheckBox successOnly;
+
+    private JCheckBox ignoreTC;
 
     private JCheckBox skipAutoNumber;
 
     private JCheckBox skipSuffix;
 
     private JCheckBox addTimestamp;
-
-    private JLabeledTextField numberPadLength;
 
     public ResultSaverGui() {
         super();
@@ -78,14 +83,17 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        filename.setText(el.getPropertyAsString(ResultSaver.FILENAME));
-        errorsOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.ERRORS_ONLY));
-        successOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.SUCCESS_ONLY));
-        skipAutoNumber.setSelected(el.getPropertyAsBoolean(ResultSaver.SKIP_AUTO_NUMBER));
-        skipSuffix.setSelected(el.getPropertyAsBoolean(ResultSaver.SKIP_SUFFIX));
-        variableName.setText(el.getPropertyAsString(ResultSaver.VARIABLE_NAME,""));
-        addTimestamp.setSelected(el.getPropertyAsBoolean(ResultSaver.ADD_TIMESTAMP));
-        numberPadLength.setText(el.getPropertyAsString(ResultSaver.NUMBER_PAD_LENGTH,""));
+        ResultSaver resultSaver = (ResultSaver) el;
+        filename.setText(resultSaver.getFilename());
+        errorsOnly.setSelected(resultSaver.getErrorsOnly());
+        successOnly.setSelected(resultSaver.getSuccessOnly());
+        ignoreTC.setSelected(resultSaver.getIgnoreTC());
+        skipAutoNumber.setSelected(resultSaver.getSkipAutoNumber());
+        skipSuffix.setSelected(resultSaver.getSkipSuffix());
+        variableName.setText(resultSaver.getVariableName());
+        addTimestamp.setSelected(resultSaver.getAddTimeStamp());
+        numberPadLength.setText(resultSaver.getNumberPadLen() == 0 ? 
+                "" : Integer.toString(resultSaver.getNumberPadLen()));
     }
 
     /**
@@ -106,15 +114,16 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     @Override
     public void modifyTestElement(TestElement te) {
         super.configureTestElement(te);
-        te.setProperty(ResultSaver.FILENAME, filename.getText());
-        te.setProperty(ResultSaver.ERRORS_ONLY, errorsOnly.isSelected());
-        te.setProperty(ResultSaver.SKIP_AUTO_NUMBER, skipAutoNumber.isSelected());
-        te.setProperty(ResultSaver.SKIP_SUFFIX, skipSuffix.isSelected());
-        te.setProperty(ResultSaver.SUCCESS_ONLY, successOnly.isSelected());
-        te.setProperty(ResultSaver.ADD_TIMESTAMP, addTimestamp.isSelected(), false);
-        AbstractTestElement at = (AbstractTestElement) te;
-        at.setProperty(ResultSaver.VARIABLE_NAME, variableName.getText(),""); //$NON-NLS-1$
-        at.setProperty(ResultSaver.NUMBER_PAD_LENGTH, numberPadLength.getText(),""); //$NON-NLS-1$
+        ResultSaver resultSaver = (ResultSaver) te;
+        resultSaver.setFilename(filename.getText());
+        resultSaver.setErrorsOnly(errorsOnly.isSelected());
+        resultSaver.setSuccessOnly(successOnly.isSelected());
+        resultSaver.setSkipSuffix(skipSuffix.isSelected());
+        resultSaver.setSkipAutoNumber(skipAutoNumber.isSelected());
+        resultSaver.setIgnoreTC(ignoreTC.isSelected());
+        resultSaver.setAddTimestamp(addTimestamp.isSelected());
+        resultSaver.setVariableName(variableName.getText());
+        resultSaver.setNumberPadLength(numberPadLength.getText());
     }
 
     /**
@@ -129,6 +138,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
         filename.setText(""); //$NON-NLS-1$
         errorsOnly.setSelected(false);
         successOnly.setSelected(false);
+        ignoreTC.setSelected(true);
         addTimestamp.setSelected(false);
         variableName.setText(""); //$NON-NLS-1$
         numberPadLength.setText(""); //$NON-NLS-1$
@@ -137,57 +147,107 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
         setBorder(makeBorder());
+        
         Box box = Box.createVerticalBox();
         box.add(makeTitlePanel());
-        box.add(createFilenamePrefixPanel());
-        box.add(createVariableNamePanel());
-        errorsOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_errors")); // $NON-NLS-1$
-        box.add(errorsOnly);
-        successOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_success")); // $NON-NLS-1$
-        box.add(successOnly);
-        skipAutoNumber = new JCheckBox(JMeterUtils.getResString("resultsaver_skipautonumber")); // $NON-NLS-1$
-        box.add(skipAutoNumber);
-        skipSuffix = new JCheckBox(JMeterUtils.getResString("resultsaver_skipsuffix")); // $NON-NLS-1$
-        box.add(skipSuffix);
-        addTimestamp = new JCheckBox(JMeterUtils.getResString("resultsaver_addtimestamp")); // $NON-NLS-1$
-        box.add(addTimestamp);
-        numberPadLength = new JLabeledTextField(JMeterUtils.getResString("resultsaver_numberpadlen"));// $NON-NLS-1$
-        box.add(numberPadLength);
+        box.add(createSaveConditionsPanel());
+        box.add(createSaveFormatPanel());
         add(box, BorderLayout.NORTH);
     }
 
-    private JPanel createFilenamePrefixPanel()
-    {
-        JLabel label = new JLabel(JMeterUtils.getResString("resultsaver_prefix")); // $NON-NLS-1$
-
-        filename = new JTextField(10);
+    private Component createSaveFormatPanel() {
+        filename = new JLabeledTextField(JMeterUtils.getResString("resultsaver_prefix"));
         filename.setName(ResultSaver.FILENAME);
-        label.setLabelFor(filename);
 
-        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
-        filenamePanel.add(label, BorderLayout.WEST);
-        filenamePanel.add(filename, BorderLayout.CENTER);
-        return filenamePanel;
-    }
+        numberPadLength = new JLabeledTextField(JMeterUtils.getResString("resultsaver_numberpadlen"));// $NON-NLS-1$
+        numberPadLength.setName(ResultSaver.NUMBER_PAD_LENGTH);
 
+        skipAutoNumber = new JCheckBox(JMeterUtils.getResString("resultsaver_skipautonumber")); // $NON-NLS-1$
+        skipSuffix = new JCheckBox(JMeterUtils.getResString("resultsaver_skipsuffix")); // $NON-NLS-1$
+        addTimestamp = new JCheckBox(JMeterUtils.getResString("resultsaver_addtimestamp")); // $NON-NLS-1$
 
-    private JPanel createVariableNamePanel()
-    {
-        JLabel label = new JLabel(JMeterUtils.getResString("resultsaver_variable")); // $NON-NLS-1$
-
-        variableName = new JTextField(10);
+        variableName = new JLabeledTextField(JMeterUtils.getResString("resultsaver_variable"));
         variableName.setName(ResultSaver.VARIABLE_NAME);
-        label.setLabelFor(variableName);
 
-        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
-        filenamePanel.add(label, BorderLayout.WEST);
-        filenamePanel.add(variableName, BorderLayout.CENTER);
-        return filenamePanel;
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("resultsaver_save_format"))); //$NON-NLS-1$
+        GridBagConstraints gbc = new GridBagConstraints();
+        initConstraints(gbc);
+
+        addField(panel, variableName, gbc);
+        resetContraints(gbc);
+        addField(panel, filename, gbc);
+        resetContraints(gbc);
+        addField(panel, skipAutoNumber, gbc);
+        resetContraints(gbc);
+        addField(panel, skipSuffix, gbc);
+        resetContraints(gbc);
+        addField(panel, addTimestamp, gbc);
+        resetContraints(gbc);
+        addField(panel, numberPadLength, gbc);
+        resetContraints(gbc);
+
+        return panel;
     }
 
+    private Component createSaveConditionsPanel() {
+        successOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_success")); // $NON-NLS-1$
+        errorsOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_errors")); // $NON-NLS-1$
+        ignoreTC = new JCheckBox(JMeterUtils.getResString("resultsaver_ignore_tc")); // $NON-NLS-1$
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("resultsaver_save_conditions"))); //$NON-NLS-1$
+        GridBagConstraints gbc = new GridBagConstraints();
+        initConstraints(gbc);
+        
+        addField(panel, successOnly, gbc);
+        resetContraints(gbc);
+        addField(panel, errorsOnly, gbc);
+        resetContraints(gbc);
+        addField(panel, ignoreTC, gbc);
+        resetContraints(gbc);
+
+        return panel;
+    }
+    
     // Needed to avoid Class cast error in Clear.java
     @Override
     public void clearData() {
+        // NOOP
+    }
+
+    private void addField(JPanel panel, JCheckBox field, GridBagConstraints gbc) {
+        gbc.weightx = 2;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        panel.add(field, gbc.clone());
+    }
+    
+    private void addField(JPanel panel, JLabeledTextField field, GridBagConstraints gbc) {
+        List<JComponent> item = field.getComponentList();
+        panel.add(item.get(0), gbc.clone());
+        gbc.gridx++;
+        gbc.weightx = 1;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        panel.add(item.get(1), gbc.clone());
+    }
+
+    // Next line
+    private void resetContraints(GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.weightx = 0;
+        gbc.fill=GridBagConstraints.NONE;
+    }
+
+    private void initConstraints(GridBagConstraints gbc) {
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
     }
 
 }

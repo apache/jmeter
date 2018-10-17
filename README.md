@@ -1,23 +1,27 @@
-![Apache JMeter logo](https://jmeter.apache.org/images/logo.svg)
-# Apache JMeter
-
+<h1 align="center"><img src="https://jmeter.apache.org/images/logo.svg" alt="Apache JMeter logo" /></h1>
+<h4 align="center">Open Source application designed to load test applications and measure performance. By The Apache Software Foundation</h4>
+<br>
 
 [![Build Status](https://api.travis-ci.org/apache/jmeter.svg?branch=trunk)](https://travis-ci.org/apache/jmeter/)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
+[![codecov](https://codecov.io/gh/apache/jmeter/branch/trunk/graph/badge.svg)](https://codecov.io/gh/apache/jmeter)
 [![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
-[![Stack Overflow](http://img.shields.io/:stack%20overflow-jmeter-brightgreen.svg)](http://stackoverflow.com/questions/tagged/jmeter)
+[![Stack Overflow](https://img.shields.io/:stack%20overflow-jmeter-brightgreen.svg)](https://stackoverflow.com/questions/tagged/jmeter)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
+[![Javadocs](https://www.javadoc.io/badge/org.apache.jmeter/ApacheJMeter_core.svg)](https://www.javadoc.io/doc/org.apache.jmeter/ApacheJMeter_core)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/apache/jmeter.svg?style=social)](https://twitter.com/intent/tweet?text=Powerful%20load%20testing%20with%20Apache%20JMeter:&url=https://jmeter.apache.org)
 
 ## What is it?
 
-Apache JMeter is a 100% pure Java application designed to test
-and measure performance.  It may be used as a highly portable 
-server benchmark as well as multi-client load generator.
+Apache JMeter may be used to test performance both on static and dynamic resources, Web dynamic applications.
+It can be used to simulate a heavy load on a server, group of servers, network or object to test its strength or to analyze overall performance under different load types.
+
+![Image of JMeter 4.0](https://raw.githubusercontent.com/apache/jmeter/trunk/xdocs/images/screenshots/JMETER_4.0.png)
 
 Apache JMeter features include:
 
-Ability to load and performance test many different server/protocol types:
- -  Web - HTTP, HTTPS
- -  SOAP / REST
+Ability to load and performance test many different applications/server/protocol types: 
+ -  Web - HTTP, HTTPS (Java, NodeJS, PHP, ASP.NET,...)
+ -  SOAP / REST Webservices
  -  FTP
  -  Database via JDBC
  -  LDAP
@@ -25,24 +29,42 @@ Ability to load and performance test many different server/protocol types:
  -  Mail - SMTP(S), POP3(S) and IMAP(S)
  -  Native commands or shell scripts
  -  TCP
+ -  Java Objects
+
+Full featured Test IDE that allows fast Test Plan **recording (from Browsers or native applications), building and debugging.**
+
+[**Command-line mode (Non GUI / headless mode)**](http://jmeter.apache.org/usermanual/get-started.html#non_gui) to load test from any Java compatible OS (Linux, Windows, Mac OSX, ...)
+
+A complete and [**ready to present dynamic HTML report**](http://jmeter.apache.org/usermanual/generating-dashboard.html)
+
+![Dashboard screenshot](https://raw.githubusercontent.com/apache/jmeter/trunk/xdocs/images/screenshots/dashboard/response_time_percentiles_over_time.png)
+
+[**Live reporting**](http://jmeter.apache.org/usermanual/realtime-results.html) into 3rd party databases like InfluxDB or Graphite
+
+![Live report](https://raw.githubusercontent.com/apache/jmeter/trunk/xdocs/images/screenshots/grafana_dashboard.png)
+
+Easy correlation through ability to extract data from most popular response formats, [**HTML**](http://jmeter.apache.org/usermanual/component_reference.html#CSS/JQuery_Extractor), [**JSON**](http://jmeter.apache.org/usermanual/component_reference.html#JSON_Extractor), [**XML**](http://jmeter.apache.org/usermanual/component_reference.html#XPath_Extractor) or [**any textual format**](http://jmeter.apache.org/usermanual/component_reference.html#Regular_Expression_Extractor)
+
+Complete portability and 100% Java purity
 
 Full multi-threading framework allows concurrent sampling by many threads
 and simultaneous sampling of different functions by separate thread groups.
-Careful GUI design allows faster Test Plan building and debugging.
+
 Caching and offline analysis/replaying of test results.
 
 Highly Extensible core:
  -  Pluggable Samplers allow unlimited testing capabilities.
- -  Several load statistics may be chosen with pluggable timers.
- -  Data analysis and visualization plugins allow great extensibility and personalization.
+ -  **Scriptable Samplers** (JSR223-compatible languages like Groovy)
+ -  Several load statistics may be chosen with **pluggable timers**.
+ -  Data analysis and **visualization plugins** allow great extensibility and personalization.
  -  Functions can be used to provide dynamic input to a test or provide data manipulation.
- -  Scriptable Samplers (Groovy, BeanShell, BSF- and JSR223- compatible languages)
+ -  Easy Continuous Integration through 3rd party Open Source libraries for Maven, Gradle and Jenkins
 
 
 ## The Latest Version
 
 Details of the latest version can be found on the JMeter Apache 
-Project web site (http://jmeter.apache.org/).
+Project web site (https://jmeter.apache.org/).
 
 ## Requirements
 
@@ -101,7 +123,7 @@ and it may be browsed starting from the file called `index.html`.
 
 ## Reporting a bug/enhancement
 
-See [Issue Tracking](http://jmeter.apache.org/issues.html)
+See [Issue Tracking](https://jmeter.apache.org/issues.html)
 
 ## Build instructions
 
@@ -175,6 +197,8 @@ does not have a suitable GUI display.
 
 ## Developer information
 
+Building and contributing is explained in details at https://jmeter.apache.org/building.html
+
 The code is maintained in SVN at https://svn.apache.org/repos/asf/jmeter/trunk
 
 There is a read-only mirror at GitHub: https://github.com/apache/jmeter
@@ -216,7 +240,7 @@ may be subject to export controls on cryptographic software:
 
     - HTTPS support
 
-  Apache JMeter interfaces (via Apache HttpClient3) with the
+  Apache JMeter interfaces (via Apache HttpClient4) with the
   Java Cryptography Extension (JCE) API to provide
 
     - NTLM authentication

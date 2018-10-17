@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.visualizers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -59,7 +59,7 @@ public class TestSampleCompareTo {
     }
 
     private Sample sample(long count) {
-        return new Sample("dummy", 0l, 0L, 0L, 0L, 0L, 0.0, 0L, true, count, 0L);
+        return new Sample("dummy", 0L, 0L, 0L, 0L, 0L, 0.0, 0L, true, count, 0L);
     }
 
 }

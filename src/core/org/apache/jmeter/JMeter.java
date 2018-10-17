@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Authenticator;
@@ -39,11 +40,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.tree.TreePath;
@@ -52,13 +60,16 @@ import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.control.ReplaceableController;
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.DistributedRunner;
 import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
+import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.MainFrame;
@@ -78,6 +89,7 @@ import org.apache.jmeter.report.dashboard.GenerationException;
 import org.apache.jmeter.report.dashboard.ReportGenerator;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
+import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.save.SaveService;
@@ -106,6 +118,8 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * Main JMeter class; processes options and starts the GUI, non-GUI or server as appropriate.
  */
 public class JMeter implements JMeterPlugin {
+    private static final String JSR223_INIT_FILE = "jsr223.init.file";
+
     private static final Logger log = LoggerFactory.getLogger(JMeter.class);
     
     public static final int UDP_PORT_DEFAULT = 4445; // needed for ShutdownClient
@@ -277,7 +291,7 @@ public class JMeter implements JMeterPlugin {
      private static final CLOptionDescriptor D_FORCE_DELETE_RESULT_FILE =
             new CLOptionDescriptor("forceDeleteResultFile",
                     CLOptionDescriptor.ARGUMENT_DISALLOWED, FORCE_DELETE_RESULT_FILE,
-                    "force delete existing results files before start the test");
+                    "force delete existing results files and web report folder if present before starting the test");
 
     private static final String[][] DEFAULT_ICONS = {
             { "org.apache.jmeter.control.gui.TestPlanGui",               "org/apache/jmeter/images/beaker.gif" },     //$NON-NLS-1$ $NON-NLS-2$
@@ -344,17 +358,19 @@ public class JMeter implements JMeterPlugin {
      */
     private void startGui(String testFile) {
         System.out.println("================================================================================");//NOSONAR
-        System.out.println("Don't use GUI mode for load testing, only for Test creation and Test debugging !");//NOSONAR
+        System.out.println("Don't use GUI mode for load testing !, only for Test creation and Test debugging.");//NOSONAR
         System.out.println("For load testing, use NON GUI Mode:");//NOSONAR
-        System.out.println("   jmeter -n -t [jmx file] -l [results file] -e -o [Path to output folder]");//NOSONAR
-        System.out.println("& adapt Java Heap to your test requirements:");//NOSONAR
-        System.out.println("   Modify HEAP=\"-Xms512m -Xmx512m\" in the JMeter batch file");//NOSONAR
+        System.out.println("   jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]");//NOSONAR
+        System.out.println("& increase Java Heap to meet your test requirements:");//NOSONAR
+        System.out.println("   Modify current env variable HEAP=\"-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m\" in the jmeter batch file");//NOSONAR
+        System.out.println("Check : https://jmeter.apache.org/usermanual/best-practices.html");//NOSONAR
         System.out.println("================================================================================");//NOSONAR
         
         SplashScreen splash = new SplashScreen();
         splash.showScreen();
         String jMeterLaf = LookAndFeelCommand.getJMeterLaf();
         try {
+            log.info("Setting LAF to: {}", jMeterLaf);
             UIManager.setLookAndFeel(jMeterLaf);
         } catch (Exception ex) {
             log.warn("Could not set LAF to: {}", jMeterLaf, ex);
@@ -375,7 +391,9 @@ public class JMeter implements JMeterPlugin {
         MainFrame main = new MainFrame(treeModel, treeLis);
         splash.setProgress(100);
         ComponentUtil.centerComponentInWindow(main, 80);
+        main.setLocationRelativeTo(splash);
         main.setVisible(true);
+        main.toFront();
         instance.actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
         if (testFile != null) {
             try {
@@ -493,7 +511,7 @@ public class JMeter implements JMeterPlugin {
             } else if (parser.getArgumentById(SERVER_OPT) != null) {
                 // Start the server
                 try {
-                    RemoteJMeterEngineImpl.startServer(JMeterUtils.getPropDefault("server_port", 0)); // $NON-NLS-1$
+                    RemoteJMeterEngineImpl.startServer(RmiUtils.getRmiRegistryPort()); // $NON-NLS-1$
                     startOptionalServers();
                 } catch (Exception ex) {
                     System.err.println("Server failed to start: "+ex);//NOSONAR
@@ -512,14 +530,14 @@ public class JMeter implements JMeterPlugin {
                 CLOption testReportOpt = parser.getArgumentById(REPORT_GENERATING_OPT);
                 if (testReportOpt != null) { // generate report from existing file
                     String reportFile = testReportOpt.getArgument();
-                    extractAndSetReportOutputFolder(parser);
+                    extractAndSetReportOutputFolder(parser, false);
                     ReportGenerator generator = new ReportGenerator(reportFile, null);
                     generator.generate();
                 } else if (parser.getArgumentById(NONGUI_OPT) == null) { // not non-GUI => GUI
                     startGui(testFile);
                     startOptionalServers();
                 } else { // NON-GUI must be true
-                    extractAndSetReportOutputFolder(parser);
+                    extractAndSetReportOutputFolder(parser, deleteResultFile);
                     
                     CLOption rem = parser.getArgumentById(REMOTE_OPT_PARAM);
                     if (rem == null) {
@@ -557,14 +575,14 @@ public class JMeter implements JMeterPlugin {
      * @param parser {@link CLArgsParser}
      * @throws IllegalArgumentException
      */
-    private void extractAndSetReportOutputFolder(CLArgsParser parser) {
+    private void extractAndSetReportOutputFolder(CLArgsParser parser, boolean deleteResultFile) {
         CLOption reportOutputFolderOpt = parser
                 .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
         if(reportOutputFolderOpt != null) {
             String reportOutputFolder = parser.getArgumentById(REPORT_OUTPUT_FOLDER_OPT).getArgument();
             File reportOutputFolderAsFile = new File(reportOutputFolder);
 
-            JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile);
+            JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile, deleteResultFile);
             final String reportOutputFolderAbsPath = reportOutputFolderAsFile.getAbsolutePath();
             log.info("Setting property '{}' to:'{}'", JMETER_REPORT_OUTPUT_DIR_PROPERTY, reportOutputFolderAbsPath);
             JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, reportOutputFolderAbsPath);
@@ -629,23 +647,7 @@ public class JMeter implements JMeterPlugin {
             t.run(); // NOSONAR we just evaluate some code here
         }
 
-        // Should we run a beanshell script on startup?
-        String bshinit = JMeterUtils.getProperty("beanshell.init.file");// $NON-NLS-1$
-        if (bshinit != null){
-            log.info("Run Beanshell on file: {}", bshinit);
-            try {
-                BeanShellInterpreter bsi = new BeanShellInterpreter();
-                bsi.source(bshinit);
-            } catch (ClassNotFoundException e) {
-                if (log.isWarnEnabled()) {
-                    log.warn("Could not start Beanshell: {}", e.getLocalizedMessage());
-                }
-            } catch (JMeterException e) {
-                if (log.isWarnEnabled()) {
-                    log.warn("Could not process Beanshell file: {}", e.getLocalizedMessage());
-                }
-            }
-        }
+        runInitScripts();
 
         int mirrorPort=JMeterUtils.getPropDefault("mirror.server.port", 0);// $NON-NLS-1$
         if (mirrorPort > 0){
@@ -659,6 +661,67 @@ public class JMeter implements JMeterPlugin {
                 log.warn("Could not start Mirror server",e);
             }
         }
+    }
+
+
+    /**
+     * Runs user configured init scripts
+     */
+    void runInitScripts() {
+        // Should we run a beanshell script on startup?
+        String bshinit = JMeterUtils.getProperty("beanshell.init.file");// $NON-NLS-1$
+        if (bshinit != null){
+            log.info("Running Beanshell on file: {}", bshinit);
+            try {
+                BeanShellInterpreter bsi = new BeanShellInterpreter();
+                bsi.source(bshinit);
+            } catch (ClassNotFoundException|JMeterException e) {
+                if (log.isWarnEnabled()) {
+                    log.warn("Could not process Beanshell file: {}", e.getMessage());
+                }
+            }
+        }
+        
+        // Should we run a JSR223 script on startup?
+        String jsr223Init = JMeterUtils.getProperty(JSR223_INIT_FILE);// $NON-NLS-1$
+        if (jsr223Init != null){
+            log.info("Running JSR-223 init script in file: {}", jsr223Init);
+            File file = new File(jsr223Init);
+            if(file.exists() && file.canRead()) {
+                String extension = StringUtils.defaultIfBlank(FilenameUtils.getExtension(jsr223Init), "Groovy");
+                try (FileReader reader = new FileReader(file)) {
+                    ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+                    ScriptEngine engine = scriptEngineManager.getEngineByExtension(extension);
+                    if (engine == null) {
+                        log.warn(
+                                "No script engine found for [{}]. Will try to use Groovy. Possible engines and their extensions are: {}",
+                                extension, getEnginesAndExtensions(scriptEngineManager));
+                        extension = "Groovy";
+                        engine = scriptEngineManager.getEngineByName(extension);
+                    }
+                    Bindings bindings = engine.createBindings();
+                    final Logger logger = LoggerFactory.getLogger(JSR223_INIT_FILE);
+                    bindings.put("log", logger); // $NON-NLS-1$ (this name is fixed)
+                    Properties props = JMeterUtils.getJMeterProperties();
+                    bindings.put("props", props); // $NON-NLS-1$ (this name is fixed)
+                    // For use in debugging:
+                    bindings.put("OUT", System.out); // NOSONAR $NON-NLS-1$ (this name is fixed)
+                    engine.eval(reader, bindings);
+                } catch (IOException | ScriptException ex) {
+                    log.error("Error running init script {} with engine for {}: {}", jsr223Init, extension, ex);
+                }
+            } else {
+                log.error("Script {} referenced by property {} is not readable or does not exist", file.getAbsolutePath(), JSR223_INIT_FILE);
+            }
+        }
+    }
+
+
+    private Map<String, List<String>> getEnginesAndExtensions(ScriptEngineManager scriptEngineManager) {
+        return scriptEngineManager.getEngineFactories().stream()
+                .collect(Collectors.toMap(
+                        f -> f.getLanguageName() + " (" + f.getLanguageVersion() + ")",
+                        ScriptEngineFactory::getExtensions));
     }
 
     /**
@@ -767,6 +830,7 @@ public class JMeter implements JMeterPlugin {
                 throw new IllegalArgumentException("Unknown arg: " + option.getArgument());
 
             case PROPFILE2_OPT: // Bug 33920 - allow multiple props
+                log.info("Loading additional properties from: {}", name);
                 try (FileInputStream fis = new FileInputStream(new File(name))){
                     Properties tmp = new Properties();
                     tmp.load(fis);
@@ -923,7 +987,7 @@ public class JMeter implements JMeterPlugin {
             HashTree tree = SaveService.loadTree(f);
 
             @SuppressWarnings("deprecation") // Deliberate use of deprecated ctor
-            JMeterTreeModel treeModel = new JMeterTreeModel(new Object());// Create non-GUI version to avoid headless problems
+            JMeterTreeModel treeModel = new JMeterTreeModel(new Object());// NOSONAR Create non-GUI version to avoid headless problems
             JMeterTreeNode root = (JMeterTreeNode) treeModel.getRoot();
             treeModel.addSubTree(tree, root);
 
@@ -936,56 +1000,59 @@ public class JMeter implements JMeterPlugin {
                 replaceableController.resolveReplacementSubTree(root);
             }
 
-            // Remove the disabled items
+            // Ensure tree is interpreted (ReplaceableControllers are replaced)
             // For GUI runs this is done in Start.java
-            convertSubTree(tree);
+            HashTree clonedTree = convertSubTree(tree, true);
             
-            if (deleteResultFile) {
-                SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
-                tree.traverse(resultListeners);
-                Iterator<ResultCollector> irc = resultListeners.getSearchResults().iterator();
-                while (irc.hasNext()) {
-                    ResultCollector rc = irc.next();
-                    File resultFile = new File(rc.getFilename());
-                    if (resultFile.exists()) {
-                        resultFile.delete();
-                    }
-                }
-            }
-
-            Summariser summer = null;
+            Summariser summariser = null;
             String summariserName = JMeterUtils.getPropDefault("summariser.name", "");//$NON-NLS-1$
             if (summariserName.length() > 0) {
                 log.info("Creating summariser <{}>", summariserName);
                 println("Creating summariser <" + summariserName + ">");
-                summer = new Summariser(summariserName);
+                summariser = new Summariser(summariserName);
             }
-            ReportGenerator reportGenerator = null;
+            ResultCollector resultCollector = null;
             if (logFile != null) {
-                ResultCollector logger = new ResultCollector(summer);
-                logger.setFilename(logFile);
-                tree.add(tree.getArray()[0], logger);
-                if(generateReportDashboard) {
-                    reportGenerator = new ReportGenerator(logFile, logger);
-                }
+                resultCollector = new ResultCollector(summariser);
+                resultCollector.setFilename(logFile);
+                clonedTree.add(clonedTree.getArray()[0], resultCollector);
             }
             else {
                 // only add Summariser if it can not be shared with the ResultCollector
-                if (summer != null) {
-                    tree.add(tree.getArray()[0], summer);
+                if (summariser != null) {
+                    clonedTree.add(clonedTree.getArray()[0], summariser);
                 }
             }
+
+            if (deleteResultFile) {
+                SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
+                clonedTree.traverse(resultListeners);
+                Iterator<ResultCollector> irc = resultListeners.getSearchResults().iterator();
+                while (irc.hasNext()) {
+                    ResultCollector rc = irc.next();
+                    File resultFile = new File(rc.getFilename());
+                    if (resultFile.exists() && !resultFile.delete()) {
+                        throw new IllegalStateException("Could not delete results file " + resultFile.getAbsolutePath()
+                            + "(canRead:"+resultFile.canRead()+", canWrite:"+resultFile.canWrite()+")");
+                    }
+                }
+            }
+            ReportGenerator reportGenerator = null;
+            if (logFile != null && generateReportDashboard) {
+                reportGenerator = new ReportGenerator(logFile, resultCollector);
+            }
+
             // Used for remote notification of threads start/stop,see BUG 54152
             // Summariser uses this feature to compute correctly number of threads 
             // when NON GUI mode is used
-            tree.add(tree.getArray()[0], new RemoteThreadsListenerTestElement());
+            clonedTree.add(clonedTree.getArray()[0], new RemoteThreadsListenerTestElement());
 
             List<JMeterEngine> engines = new LinkedList<>();
-            tree.add(tree.getArray()[0], new ListenToTest(remoteStart && remoteStop ? engines : null, reportGenerator));
+            clonedTree.add(clonedTree.getArray()[0], new ListenToTest(remoteStart && remoteStop ? engines : null, reportGenerator));
             println("Created the tree successfully using "+testFile);
             if (!remoteStart) {
                 JMeterEngine engine = new StandardJMeterEngine();
-                engine.configure(tree);
+                engine.configure(clonedTree);
                 long now=System.currentTimeMillis();
                 println("Starting the test @ "+new Date(now)+" ("+now+")");
                 engine.runTest();
@@ -1000,7 +1067,7 @@ public class JMeter implements JMeterPlugin {
                 DistributedRunner distributedRunner=new DistributedRunner(this.remoteProps);
                 distributedRunner.setStdout(System.out); // NOSONAR
                 distributedRunner.setStdErr(System.err); // NOSONAR
-                distributedRunner.init(hosts, tree);
+                distributedRunner.init(hosts, clonedTree);
                 engines.addAll(distributedRunner.getEngines());
                 distributedRunner.start();
             }
@@ -1010,14 +1077,54 @@ public class JMeter implements JMeterPlugin {
             log.error("Error in NonGUIDriver", e);
         }
     }
+    
+    /**
+     * This function does the following:
+     * <ul>
+     * <li>Remove disabled elements</li>
+     * <li>Replace the ReplaceableController with the target subtree</li>
+     * <li>Clone the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
+     * </ul>
+     * @param tree The {@link HashTree} to convert
+     * @return HashTree the output {@link HashTree} to use
+     */
+    public static HashTree convertSubTree(HashTree tree) {
+        return convertSubTree(tree, true);
+    }
+    
+    /**
+     * This function does the following:
+     * <ul>
+     * <li>Remove disabled elements</li>
+     * <li>Replace the ReplaceableController with the target subtree</li>
+     * <li>If cloneAtEnd is true : Clone the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
+     * </ul>
+     * THIS IS INTERNAL JMETER API and should not be used
+     * @param tree The {@link HashTree} to convert
+     * @param cloneAtEnd  boolean wether we clone the tree at end
+     * @return HashTree the output {@link HashTree} to use
+     */
+    public static HashTree convertSubTree(HashTree tree, boolean cloneAtEnd) {
+        pConvertSubTree(tree);
+        if(cloneAtEnd) {
+            TreeCloner cloner = new TreeCloner(false);
+            tree.traverse(cloner);
+            return cloner.getClonedTree();
+        }
+        return tree;
+    }
 
     /**
-     * Remove disabled elements
-     * Replace the ReplaceableController with the target subtree
-     *
+     * This function does the following:
+     * <ul>
+     * <li>Remove disabled elements</li>
+     * <li>Replace the ReplaceableController with the target subtree</li>
+     * <li>Clones the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
+     * </ul>
      * @param tree The {@link HashTree} to convert
+     * @return HashTree the output {@link HashTree} to use
      */
-    public static void convertSubTree(HashTree tree) {
+    private static void pConvertSubTree(HashTree tree) {
         LinkedList<Object> copyList = new LinkedList<>(tree.list());
         for (Object o  : copyList) {
             if (o instanceof TestElement) {
@@ -1030,13 +1137,13 @@ public class JMeter implements JMeterPlugin {
                         if (subTree != null) {
                             HashTree replacementTree = rc.getReplacementSubTree();
                             if (replacementTree != null) {
-                                convertSubTree(replacementTree);
+                                pConvertSubTree(replacementTree);
                                 tree.replaceKey(item, rc);
                                 tree.set(rc, replacementTree);
                             }
                         } 
                     } else { // not Replaceable Controller
-                        convertSubTree(tree.getTree(item));
+                        pConvertSubTree(tree.getTree(item));
                     }
                 } else { // Not enabled
                     tree.remove(item);
@@ -1055,13 +1162,13 @@ public class JMeter implements JMeterPlugin {
                         if (subTree != null) {
                             HashTree replacementTree = rc.getReplacementSubTree();
                             if (replacementTree != null) {
-                                convertSubTree(replacementTree);
+                                pConvertSubTree(replacementTree);
                                 tree.replaceKey(item, rc);
                                 tree.set(rc, replacementTree);
                             }
                         }
                     } else { // Not a ReplaceableController
-                        convertSubTree(tree.getTree(item));
+                        pConvertSubTree(tree.getTree(item));
                         TestElement testElement = item.getTestElement();
                         tree.replaceKey(item, testElement);
                     }

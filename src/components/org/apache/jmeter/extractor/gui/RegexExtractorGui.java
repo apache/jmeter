@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.apache.jmeter.extractor.RegexExtractor;
+import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -41,37 +42,24 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * Regular Expression Extractor Post-Processor GUI
  */
+@GUIMenuSortOrder(4)
 public class RegexExtractorGui extends AbstractPostProcessorGui {
     private static final long serialVersionUID = 240L;
 
     private JLabeledTextField regexField;
-
     private JLabeledTextField templateField;
-
     private JLabeledTextField defaultField;
-
     private JLabeledTextField matchNumberField;
-
     private JLabeledTextField refNameField;
-
     private JRadioButton useBody;
-
     private JRadioButton useUnescapedBody;
-
     private JRadioButton useBodyAsDocument;
-
     private JRadioButton useHeaders;
-
     private JRadioButton useRequestHeaders;
-
     private JRadioButton useURL;
-
     private JRadioButton useCode;
-
     private JRadioButton useMessage;
-
     private ButtonGroup group;
-    
     private JCheckBox emptyDefaultValue;
 
     public RegexExtractorGui() {
