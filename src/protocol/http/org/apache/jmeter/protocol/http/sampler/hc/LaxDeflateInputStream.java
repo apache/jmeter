@@ -23,10 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.http.client.entity.DeflateInputStream;
-import org.apache.http.client.entity.DeflateInputStreamFactory;
 
 /**
- * {@link DeflateInputStreamFactory} subclass that has a flag to accept 
+ * {@link DeflateInputStream} subclass that has a flag to accept 
  * "edgy streams" that signal end of stream with {@link EOFException} 
  * which seems to be rather frequent
  * 
