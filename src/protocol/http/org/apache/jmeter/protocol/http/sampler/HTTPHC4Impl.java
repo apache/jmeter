@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
 
 import javax.security.auth.Subject;
 
@@ -144,6 +143,7 @@ import org.apache.jmeter.protocol.http.control.DynamicKerberosSchemeFactory;
 import org.apache.jmeter.protocol.http.control.DynamicSPNegoSchemeFactory;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.hc.LaxDeflateInputStream;
+import org.apache.jmeter.protocol.http.sampler.hc.LaxGZIPInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LazyLayeredConnectionSocketFactory;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -185,6 +185,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         
     private static final String CONTEXT_ATTRIBUTE_METRICS = "__jmeter.M__";
 
+    private static final boolean GZIP_RELAX_MODE = JMeterUtils.getPropDefault("httpclient4.gzip_relax_mode", false);
+
     private static final boolean DEFLATE_RELAX_MODE = JMeterUtils.getPropDefault("httpclient4.deflate_relax_mode", false);
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHC4Impl.class);
@@ -192,7 +194,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final InputStreamFactory GZIP = new InputStreamFactory() {
         @Override
         public InputStream create(final InputStream instream) throws IOException {
-            return new GZIPInputStream(instream);
+            return new LaxGZIPInputStream(instream, GZIP_RELAX_MODE);
         }
     };
 
