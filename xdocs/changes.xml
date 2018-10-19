@@ -76,6 +76,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><bug>62840</bug>HTTP Request : Add option httpclient4.gzip_relax_mode to avoid error when unzipping what seems to be invalid streams</li>
 </ul>
 
 <h3>Other samplers</h3>
