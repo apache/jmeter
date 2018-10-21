@@ -243,26 +243,25 @@ public class SaveService {
                         log.info("Using SaveService properties file encoding {}", fileEncoding);
                     } else {
                         key = key.substring(1);// Remove the leading "_"
-                        try {
-                            final String trimmedValue = val.trim();
-                            if (trimmedValue.equals("collection") // $NON-NLS-1$
-                             || trimmedValue.equals("mapping")) { // $NON-NLS-1$
-                                registerConverter(key, JMXSAVER, true);
-                                registerConverter(key, JTLSAVER, true);
-                            } else {
-                                registerConverter(key, JMXSAVER, false);
-                                registerConverter(key, JTLSAVER, false);
-                            }
-                        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | IllegalArgumentException|
-                                SecurityException | InvocationTargetException | NoSuchMethodException e1) {
-                            log.warn("Can't register a converter: {}", key, e1);
-                        }
+                        registerConverter(key, val);
                     }
                 }
             }
         } catch (IOException e) {
             log.error("Bad saveservice properties file", e);
             throw new JMeterError("JMeter requires the saveservice properties file to continue");
+        }
+    }
+
+    private static void registerConverter(String key, String val) {
+        try {
+            final String trimmedValue = val.trim();
+            boolean useMapper = "collection".equals(trimmedValue) || "mapping".equals(trimmedValue); // $NON-NLS-1$ $NON-NLS-2$
+            registerConverter(key, JMXSAVER, useMapper);
+            registerConverter(key, JTLSAVER, useMapper);
+        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | IllegalArgumentException|
+                SecurityException | InvocationTargetException | NoSuchMethodException e1) {
+            log.warn("Can't register a converter: {}", key, e1);
         }
     }
 
@@ -283,9 +282,7 @@ public class SaveService {
             InvocationTargetException, NoSuchMethodException,
             ClassNotFoundException {
         if (useMapper){
-            jmxsaver.registerConverter((Converter) Class.forName(key).getConstructor(
-                    new Class[] { Mapper.class }).newInstance(
-                            new Object[] { jmxsaver.getMapper() }));
+            jmxsaver.registerConverter((Converter) Class.forName(key).getConstructor(Mapper.class).newInstance(jmxsaver.getMapper()));
         } else {
             jmxsaver.registerConverter((Converter) Class.forName(key).newInstance());
         }
@@ -344,7 +341,7 @@ public class SaveService {
      * @throws IOException when writing data to output fails
      */
     // Used by ResultCollector.sampleOccurred(SampleEvent event)
-    public synchronized static void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
+    public static synchronized void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
         DataHolder dh = JTLSAVER.newDataHolder();
         dh.put(SAMPLE_EVENT_OBJECT, evt);
         // This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
@@ -536,11 +533,8 @@ public class SaveService {
      * @return string with details of error
      */
     public static String CEtoString(ConversionException ce){
-        String msg =
-            "XStream ConversionException at line: " + ce.get("line number")
-            + "\n" + ce.get("message")
-            + "\nPerhaps a missing jar? See log file.";
-        return msg;
+        return "XStream ConversionException at line: " + ce.get("line number") + "\n" + ce.get("message")
+                + "\nPerhaps a missing jar? See log file.";
     }
 
     public static String getPropertiesVersion() {

@@ -535,6 +535,14 @@ JMETER-SERVER</source>
     Bigger results will be clipped.<br/>
     Defaults to: <code>327678</code> (bytes)
 </property>
+<property name="httpclient4.deflate_relax_mode">
+    Ignore EOFException that some edgy application may emit to signal end of Deflated stream.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="httpclient4.gzip_relax_mode">
+    Ignore EOFException that some edgy application may emit to signal end of GZipped stream.<br/>
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 

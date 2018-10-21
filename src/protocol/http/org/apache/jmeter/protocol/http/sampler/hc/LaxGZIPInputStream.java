@@ -21,18 +21,17 @@ package org.apache.jmeter.protocol.http.sampler.hc;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.http.client.entity.DeflateInputStream;
+import java.util.zip.GZIPInputStream;
 
 /**
- * {@link DeflateInputStream} subclass that has a flag to accept 
+ * {@link GZIPInputStream} subclass that has a flag to accept 
  * "edgy streams" that signal end of stream with {@link EOFException} 
  * which seems to be rather frequent
  * 
  * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61058">Bugzilla 61058</a>
  * @since 5.0
  */
-public class LaxDeflateInputStream extends DeflateInputStream {
+public class LaxGZIPInputStream extends GZIPInputStream {
     private final boolean relax;
     
     /**
@@ -40,7 +39,7 @@ public class LaxDeflateInputStream extends DeflateInputStream {
      * @param relax flag to enable relaxed mode
      * @throws IOException when super class throws an IOException
      */
-    public LaxDeflateInputStream(InputStream wrapped, boolean relax) throws IOException {
+    public LaxGZIPInputStream(InputStream wrapped, boolean relax) throws IOException {
         super(wrapped);
         this.relax = relax;
     }

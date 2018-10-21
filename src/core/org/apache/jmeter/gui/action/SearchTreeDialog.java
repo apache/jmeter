@@ -260,21 +260,23 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
      */
     private void doReplace() {
         GuiPackage.getInstance().updateCurrentNode();
-        JMeterTreeNode currentNode = lastSearchResult.get(currentSearchIndex);
-        if(currentNode != null) {
-            String wordToSearch = searchTF.getText();
-            String wordToReplace = replaceTF.getText();
-            String regex = isRegexpCB.isSelected() ? wordToSearch : Pattern.quote(wordToSearch);
-            boolean caseSensitiveReplacement = isCaseSensitiveCB.isSelected();
-            Pair<Integer, JMeterTreeNode> pair = doReplacementInCurrentNode(currentNode, regex, wordToReplace, caseSensitiveReplacement);
-            int nbReplacements = 0;
-            if(pair != null) {
-                nbReplacements = pair.getLeft();
-                GuiPackage.getInstance().updateCurrentGui();
-                GuiPackage.getInstance().getMainFrame().repaint();
-            } 
-            statusLabel.setText(MessageFormat.format("Replaced {0} occurrences", nbReplacements));
+        int nbReplacements = 0;
+        if(currentSearchIndex >= 0) {
+            JMeterTreeNode currentNode = lastSearchResult.get(currentSearchIndex);
+            if(currentNode != null) {
+                String wordToSearch = searchTF.getText();
+                String wordToReplace = replaceTF.getText();
+                String regex = isRegexpCB.isSelected() ? wordToSearch : Pattern.quote(wordToSearch);
+                boolean caseSensitiveReplacement = isCaseSensitiveCB.isSelected();
+                Pair<Integer, JMeterTreeNode> pair = doReplacementInCurrentNode(currentNode, regex, wordToReplace, caseSensitiveReplacement);
+                if(pair != null) {
+                    nbReplacements = pair.getLeft();
+                    GuiPackage.getInstance().updateCurrentGui();
+                    GuiPackage.getInstance().getMainFrame().repaint();
+                } 
+            }
         }
+        statusLabel.setText(MessageFormat.format("Replaced {0} occurrences", nbReplacements));
     }
 
     private JMeterTreeNode doNavigateToSearchResult(boolean isNext) {

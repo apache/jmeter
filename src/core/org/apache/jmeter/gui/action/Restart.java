@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
 public class Restart extends AbstractActionWithNoRunningTest implements MenuCreator {
     private static final Logger log = LoggerFactory.getLogger(Restart.class);
 
-    private static final String RESTART = "restart";
     /** 
      * Sun property pointing the main class and its arguments. 
      * Might not be defined on non Hotspot VM implementations.
@@ -56,7 +55,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
     private static final Set<String> commands = new HashSet<>();
 
     static {
-        commands.add(RESTART);
+        commands.add(ActionNames.RESTART);
     }
 
     /**
@@ -173,9 +172,9 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
         if(location == MENU_LOCATION.FILE) {
             
             JMenuItem menuItemIC = new JMenuItem(
-                    JMeterUtils.getResString(RESTART), KeyEvent.VK_UNDEFINED);
-            menuItemIC.setName(RESTART);
-            menuItemIC.setActionCommand(RESTART);
+                    JMeterUtils.getResString(ActionNames.RESTART), KeyEvent.VK_UNDEFINED);
+            menuItemIC.setName(ActionNames.RESTART);
+            menuItemIC.setActionCommand(ActionNames.RESTART);
             menuItemIC.setAccelerator(null);
             menuItemIC.addActionListener(ActionRouter.getInstance());
 

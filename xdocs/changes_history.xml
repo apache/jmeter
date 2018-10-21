@@ -147,7 +147,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <ul>
   <li><pr>376</pr>JUnitSampler logs exceptions except assertion-failures from test cases as warnings. Contributed by Davide Angelocola (davide.angelocola at fisglobal.com)</li>
   <li><bug>62244</bug>Rename <code>Test Action</code> to <code>Flow Control Action</code></li>
-  <li><bug>62302</bug>Move JSR223 Sampler up the menu. Contributed by orimarko at gmail.com</li>
+  <li><bug>62302</bug>Move JSR223 Sampler up the menu. Contributed by Ori Marko (orimarko at gmail.com)</li>
   <li><bug>62595</bug>SMTPSampler does not allow configuring the SSL/TLS protocols to be used on handshake. Contributed by Felipe Cuozzo (felipe.cuozzo at gmail.com)</li>
 </ul>
 
@@ -169,15 +169,15 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <ul>
     <li><bug>62320</bug>Counter : Reference Name property is not clear</li>
     <li><bug>60991</bug>XPath Extractor : Implement XPath 2.0. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>62593</bug>Rename CSS/JQuery Extractor to CSS Selector Extractor. Contributed by orimarko at gmail.com</li>
+    <li><bug>62593</bug>Rename CSS/JQuery Extractor to CSS Selector Extractor. Contributed by Ori Marko (orimarko at gmail.com)</li>
 </ul>
 
 <h3>Functions</h3>
 <ul>
-    <li><bug>62178</bug>Add default value to <code><funclink name="__V"/></code> function. Contributed by orimarko at gmail.com</li>
-    <li><bug>62178</bug>Add function <code><funclink name="__threadGroupName"/></code> function to obtain ThreadGroup name. Mainly contributed by orimarko at gmail.com</li>
+    <li><bug>62178</bug>Add default value to <code><funclink name="__V"/></code> function. Contributed by Ori Marko (orimarko at gmail.com)</li>
+    <li><bug>62178</bug>Add function <code><funclink name="__threadGroupName"/></code> function to obtain ThreadGroup name. Mainly contributed by Ori Marko (orimarko at gmail.com)</li>
     <li><bug>62533</bug>Allow use epoch time as Date String value in function <code><funclink name="__dateTimeConvert"/></code> </li>
-    <li><bug>62541</bug>Allow <code><funclink name="__jexl3"/></code>, <code><funclink name="__jexl2"/></code> functions to support new syntax as <code>var x;</code>. Contributed by orimarko at gmail.com</li>
+    <li><bug>62541</bug>Allow <code><funclink name="__jexl3"/></code>, <code><funclink name="__jexl2"/></code> functions to support new syntax as <code>var x;</code>. Contributed by Ori Marko (orimarko at gmail.com)</li>
     <li><bug>61834</bug>Function Helper Dialog : Improve tests by showing variables and keeping them available between evaluations</li>
 </ul>
 <h3>I18N</h3>
@@ -222,14 +222,14 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
     <li><pr>358</pr><pr>365</pr><pr>366</pr><pr>375</pr>Updated to latest checkstyle (v8.8). Expanded Checkstyle to files
       in <code>src</code> and <code>test</code>; fixed newly checked files. Based on contribution
       by Graham Russell (graham at ham1.co.uk)</li>
-    <li><bug>62095</bug>Correct description for right boundary parameter in Boundary Extractor. Contributed by orimarko (orimarko at gmail.com)</li>
+    <li><bug>62095</bug>Correct description for right boundary parameter in Boundary Extractor. Contributed by Ori Marko (orimarko at gmail.com)</li>
     <li><bug>62113</bug>Updated to latest Bouncycastle (v1.60). Based on contribution by Olaf Flebbe (oflebbe at apache.org)</li>
     <li><bug>62171</bug>Remove <code>.md5</code> checksums and keep only <code>.sha512</code> checksums for source and binary archives</li>
     <li>Updated to groovy-all-2.4.15 (from groovy-all-2.4.13)</li>
     <li>Updated to asm-6.1 (from 6.1)</li>
     <li>Updated to tika-core and tika-parsers 1.18 (from 1.17)</li>
-    <li><bug>62482</bug>Sync documentation to the implementation of the ForEachController. Based on contribution by orimarko (orimarko at gmail.com)</li>
-    <li><bug>62529</bug>Updated to httpclient-4.5.6 (from httpclient 4.5.5) and updated to freemarker-2.3.28 (from freemarker-2.3.23). Based on patch by orimarko (orimarko at gmail.com)</li>
+    <li><bug>62482</bug>Sync documentation to the implementation of the ForEachController. Based on contribution by Ori Marko (orimarko at gmail.com)</li>
+    <li><bug>62529</bug>Updated to httpclient-4.5.6 (from httpclient 4.5.5) and updated to freemarker-2.3.28 (from freemarker-2.3.23). Based on patch by Ori Marko (orimarko at gmail.com)</li>
     <li>Updated to httpmime-4.5.6 (from httpmime-4.5.5)</li>
     <li>Updated to caffeine-2.6.2 (from caffeine-2.6.1)</li>
     <li>Updated to cglib-nodep-3.2.7 (from cglib-nodep-3.2.6)</li>
@@ -306,7 +306,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>Documentation</h3>
 <ul>
-    <li><bug>62211</bug>Fix HTTP Request Server Documentation. Contributed by orimarko at gmail.com</li>
+    <li><bug>62211</bug>Fix HTTP Request Server Documentation. Contributed by Ori Marko (orimarko at gmail.com)</li>
     <li><pr>388</pr>Fix a typo. Contributed by Giancarlo Romeo (giancarloromeo at gmail.com)</li>
 </ul>
 
@@ -337,7 +337,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 </p>
 <ul>
     <li>Graham Russell (graham at ham1.co.uk)</li>
-    <li>orimarko at gmail.com</li>
+    <li>Ori Marko (orimarko at gmail.com)</li>
     <li>Davide Angelocola (davide.angelocola at fisglobal.com)</li>
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Olaf Flebbe (oflebbe at apache.org)</li>

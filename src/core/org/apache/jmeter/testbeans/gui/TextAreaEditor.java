@@ -84,7 +84,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      *            to be used for the editor. Must not be <code>null</code>
      */
     public TextAreaEditor(PropertyDescriptor descriptor) {
-        textUI = JSyntaxTextArea.getInstance(20, 20);
+        textUI = JSyntaxTextArea.getInstance(10, 60);
         textUI.setLanguage((String) descriptor.getValue(GenericTestBeanCustomizer.TEXT_LANGUAGE));
         scroller = JTextScrollPane.getInstance(textUI, true);
         init();

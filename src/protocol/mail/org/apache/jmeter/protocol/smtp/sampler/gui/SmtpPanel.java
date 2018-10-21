@@ -1019,7 +1019,7 @@ public class SmtpPanel extends JPanel {
     }
 
     private JButton addHeaderActionPerformed(ActionEvent evt){
-        if(headerFields.size() == 0){
+        if(headerFields.isEmpty()){
             headerFieldName.setVisible(true);
             headerFieldValue.setVisible(true);
         }

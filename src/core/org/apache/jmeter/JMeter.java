@@ -69,6 +69,7 @@ import org.apache.jmeter.engine.DistributedRunner;
 import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
+import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.MainFrame;
@@ -986,7 +987,7 @@ public class JMeter implements JMeterPlugin {
             HashTree tree = SaveService.loadTree(f);
 
             @SuppressWarnings("deprecation") // Deliberate use of deprecated ctor
-            JMeterTreeModel treeModel = new JMeterTreeModel(new Object());// Create non-GUI version to avoid headless problems
+            JMeterTreeModel treeModel = new JMeterTreeModel(new Object());// NOSONAR Create non-GUI version to avoid headless problems
             JMeterTreeNode root = (JMeterTreeNode) treeModel.getRoot();
             treeModel.addSubTree(tree, root);
 
@@ -999,9 +1000,9 @@ public class JMeter implements JMeterPlugin {
                 replaceableController.resolveReplacementSubTree(root);
             }
 
-            // Remove the disabled items
+            // Ensure tree is interpreted (ReplaceableControllers are replaced)
             // For GUI runs this is done in Start.java
-            convertSubTree(tree);
+            HashTree clonedTree = convertSubTree(tree, true);
             
             Summariser summariser = null;
             String summariserName = JMeterUtils.getPropDefault("summariser.name", "");//$NON-NLS-1$
@@ -1014,18 +1015,18 @@ public class JMeter implements JMeterPlugin {
             if (logFile != null) {
                 resultCollector = new ResultCollector(summariser);
                 resultCollector.setFilename(logFile);
-                tree.add(tree.getArray()[0], resultCollector);
+                clonedTree.add(clonedTree.getArray()[0], resultCollector);
             }
             else {
                 // only add Summariser if it can not be shared with the ResultCollector
                 if (summariser != null) {
-                    tree.add(tree.getArray()[0], summariser);
+                    clonedTree.add(clonedTree.getArray()[0], summariser);
                 }
             }
 
             if (deleteResultFile) {
                 SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
-                tree.traverse(resultListeners);
+                clonedTree.traverse(resultListeners);
                 Iterator<ResultCollector> irc = resultListeners.getSearchResults().iterator();
                 while (irc.hasNext()) {
                     ResultCollector rc = irc.next();
@@ -1044,14 +1045,14 @@ public class JMeter implements JMeterPlugin {
             // Used for remote notification of threads start/stop,see BUG 54152
             // Summariser uses this feature to compute correctly number of threads 
             // when NON GUI mode is used
-            tree.add(tree.getArray()[0], new RemoteThreadsListenerTestElement());
+            clonedTree.add(clonedTree.getArray()[0], new RemoteThreadsListenerTestElement());
 
             List<JMeterEngine> engines = new LinkedList<>();
-            tree.add(tree.getArray()[0], new ListenToTest(remoteStart && remoteStop ? engines : null, reportGenerator));
+            clonedTree.add(clonedTree.getArray()[0], new ListenToTest(remoteStart && remoteStop ? engines : null, reportGenerator));
             println("Created the tree successfully using "+testFile);
             if (!remoteStart) {
                 JMeterEngine engine = new StandardJMeterEngine();
-                engine.configure(tree);
+                engine.configure(clonedTree);
                 long now=System.currentTimeMillis();
                 println("Starting the test @ "+new Date(now)+" ("+now+")");
                 engine.runTest();
@@ -1066,7 +1067,7 @@ public class JMeter implements JMeterPlugin {
                 DistributedRunner distributedRunner=new DistributedRunner(this.remoteProps);
                 distributedRunner.setStdout(System.out); // NOSONAR
                 distributedRunner.setStdErr(System.err); // NOSONAR
-                distributedRunner.init(hosts, tree);
+                distributedRunner.init(hosts, clonedTree);
                 engines.addAll(distributedRunner.getEngines());
                 distributedRunner.start();
             }
@@ -1076,14 +1077,54 @@ public class JMeter implements JMeterPlugin {
             log.error("Error in NonGUIDriver", e);
         }
     }
+    
+    /**
+     * This function does the following:
+     * <ul>
+     * <li>Remove disabled elements</li>
+     * <li>Replace the ReplaceableController with the target subtree</li>
+     * <li>Clone the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
+     * </ul>
+     * @param tree The {@link HashTree} to convert
+     * @return HashTree the output {@link HashTree} to use
+     */
+    public static HashTree convertSubTree(HashTree tree) {
+        return convertSubTree(tree, true);
+    }
+    
+    /**
+     * This function does the following:
+     * <ul>
+     * <li>Remove disabled elements</li>
+     * <li>Replace the ReplaceableController with the target subtree</li>
+     * <li>If cloneAtEnd is true : Clone the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
+     * </ul>
+     * THIS IS INTERNAL JMETER API and should not be used
+     * @param tree The {@link HashTree} to convert
+     * @param cloneAtEnd  boolean wether we clone the tree at end
+     * @return HashTree the output {@link HashTree} to use
+     */
+    public static HashTree convertSubTree(HashTree tree, boolean cloneAtEnd) {
+        pConvertSubTree(tree);
+        if(cloneAtEnd) {
+            TreeCloner cloner = new TreeCloner(false);
+            tree.traverse(cloner);
+            return cloner.getClonedTree();
+        }
+        return tree;
+    }
 
     /**
-     * Remove disabled elements
-     * Replace the ReplaceableController with the target subtree
-     *
+     * This function does the following:
+     * <ul>
+     * <li>Remove disabled elements</li>
+     * <li>Replace the ReplaceableController with the target subtree</li>
+     * <li>Clones the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
+     * </ul>
      * @param tree The {@link HashTree} to convert
+     * @return HashTree the output {@link HashTree} to use
      */
-    public static void convertSubTree(HashTree tree) {
+    private static void pConvertSubTree(HashTree tree) {
         LinkedList<Object> copyList = new LinkedList<>(tree.list());
         for (Object o  : copyList) {
             if (o instanceof TestElement) {
@@ -1096,13 +1137,13 @@ public class JMeter implements JMeterPlugin {
                         if (subTree != null) {
                             HashTree replacementTree = rc.getReplacementSubTree();
                             if (replacementTree != null) {
-                                convertSubTree(replacementTree);
+                                pConvertSubTree(replacementTree);
                                 tree.replaceKey(item, rc);
                                 tree.set(rc, replacementTree);
                             }
                         } 
                     } else { // not Replaceable Controller
-                        convertSubTree(tree.getTree(item));
+                        pConvertSubTree(tree.getTree(item));
                     }
                 } else { // Not enabled
                     tree.remove(item);
@@ -1121,13 +1162,13 @@ public class JMeter implements JMeterPlugin {
                         if (subTree != null) {
                             HashTree replacementTree = rc.getReplacementSubTree();
                             if (replacementTree != null) {
-                                convertSubTree(replacementTree);
+                                pConvertSubTree(replacementTree);
                                 tree.replaceKey(item, rc);
                                 tree.set(rc, replacementTree);
                             }
                         }
                     } else { // Not a ReplaceableController
-                        convertSubTree(tree.getTree(item));
+                        pConvertSubTree(tree.getTree(item));
                         TestElement testElement = item.getTestElement();
                         tree.replaceKey(item, testElement);
                     }

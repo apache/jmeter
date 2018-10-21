@@ -240,7 +240,7 @@ http://www.slf4j.org/
 - jodd-core
 - json-path
 
-tika-1.19
+tika-1.19.1
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor
@@ -263,7 +263,7 @@ xalan_2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 +org.apache.xalan|xml|xpath
 
-xercesimpl-2.11.0
+xercesImpl-2.12.0
 ----------------
 http://xerces.apache.org/xerces2-j/download.cgi
 +org.apache.html.dom|org.apache.wml|org.apache.xerces|org.apache.xml.serialize

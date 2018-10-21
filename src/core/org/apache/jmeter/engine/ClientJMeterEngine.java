@@ -51,7 +51,7 @@ public class ClientJMeterEngine implements JMeterEngine {
      * Maybe only host or host:port
      */
     private final String hostAndPort;
-
+    
     private static RemoteJMeterEngine getEngine(String hostAndPort) 
             throws RemoteException, NotBoundException {
         final String name = RemoteJMeterEngineImpl.JMETER_ENGINE_RMI_NAME; // $NON-NLS-1$ $NON-NLS-2$
@@ -95,7 +95,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     /** {@inheritDoc} */
     @Override
     public void stopTest(boolean now) {
-        log.info("about to {} remote test on {}", now ? "stop" : "shutdown", hostAndPort);
+        log.info("About to {} remote test on {}", now ? "stop" : "shutdown", hostAndPort);
         try {
             remote.rstopTest(now);
         } catch (Exception ex) {
@@ -110,7 +110,7 @@ public class ClientJMeterEngine implements JMeterEngine {
             try {
                 remote.rreset();
             } catch (java.rmi.ConnectException e) {
-                log.info("Retry reset after: "+e);
+                log.info("Retry reset after: {}", e.getMessage());
                 remote = getEngine(hostAndPort);
                 remote.rreset();
             }
@@ -159,7 +159,7 @@ public class ClientJMeterEngine implements JMeterEngine {
                 methodName="rsetProperties()";// NOSONAR Used for tracing
                 remote.rsetProperties(savep);
             } catch (RemoteException e) {
-                log.warn("Could not set properties: " + e.toString());
+                log.warn("Could not set properties: {}, error:{}", savep, e.getMessage(), e);
             }
             methodName="rrunTest()";
             remote.rrunTest();
@@ -169,7 +169,7 @@ public class ClientJMeterEngine implements JMeterEngine {
             tidyRMI(log);
             throw ex; // Don't wrap this error - display it as is
         } catch (Exception ex) {
-            log.error("Error in "+methodName+" method "+ex); // $NON-NLS-1$ $NON-NLS-2$
+            log.error("Error in {} method", methodName, ex); // $NON-NLS-1$ $NON-NLS-2$
             tidyRMI(log);
             throw new JMeterEngineException("Error in "+methodName+" method "+ex, ex); // $NON-NLS-1$ $NON-NLS-2$
         }
@@ -202,7 +202,7 @@ public class ClientJMeterEngine implements JMeterEngine {
             log.warn("Could not perform remote exit: " + e.toString());
         }
     }
-
+    
     private Properties savep;
     
     /** {@inheritDoc} */
