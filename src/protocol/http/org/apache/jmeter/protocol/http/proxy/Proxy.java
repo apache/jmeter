@@ -523,8 +523,7 @@ public class Proxy extends Thread {
                 if (HTTPConstants.HEADER_CONTENT_ENCODING.equalsIgnoreCase(parts[0])
                     && (HTTPConstants.ENCODING_GZIP.equalsIgnoreCase(parts[1])
                             || HTTPConstants.ENCODING_DEFLATE.equalsIgnoreCase(parts[1])
-                            // TODO BROTLI not supported by HC4, so no uncompression would occur, add it once available
-                            // || HTTPConstants.ENCODING_BROTLI.equalsIgnoreCase(parts[1]) 
+                            || HTTPConstants.ENCODING_BROTLI.equalsIgnoreCase(parts[1]) 
                             )
                 ){
                     headerLines[i] = null; // We don't want this passed on to browser
