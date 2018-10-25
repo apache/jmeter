@@ -123,6 +123,7 @@ Summary
     <li><bug>62818</bug>Updated to xercesImpl to 2.12.0 (from 2.11.0). Reported by Stefan Seide (stefan at trilobyte-se.de)</li>
     <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
     <li><pr>408</pr>Log an informational message instead of an stack trace, when JavaFX is not found for the <code>RenderInBrowser</code> component.</li>
+    <li><pr>412</pr>Update Chinese translation. Contributed by 刘士 (liushilive at outlook.com).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -194,6 +195,7 @@ Summary
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
     <li>Stefan Seide (stefan at trilobyte-se.de)</li>
+    <li>刘士 (liushilive at outlook.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
