@@ -170,6 +170,7 @@ public class JMeter implements JMeterPlugin {
     
     private static final int SYSTEM_PROPERTY    = 'D';// $NON-NLS-1$
     private static final int JMETER_GLOBAL_PROP = 'G';// $NON-NLS-1$
+    private static final int PROXY_SCHEME       = 'E';// $NON-NLS-1$
     private static final int PROXY_HOST         = 'H';// $NON-NLS-1$
     private static final int JMETER_PROPERTY    = 'J';// $NON-NLS-1$
     private static final int LOGLEVEL           = 'L';// $NON-NLS-1$
@@ -228,6 +229,9 @@ public class JMeter implements JMeterPlugin {
     private static final CLOptionDescriptor D_SERVER_OPT =
             new CLOptionDescriptor("server", CLOptionDescriptor.ARGUMENT_DISALLOWED, SERVER_OPT,
                     "run the JMeter server");
+    private static final CLOptionDescriptor D_PROXY_SCHEME =
+            new CLOptionDescriptor("proxyScheme", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_SCHEME,
+                    "Set a proxy scheme to use for the proxy server");
     private static final CLOptionDescriptor D_PROXY_HOST =
             new CLOptionDescriptor("proxyHost", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_HOST,
                     "Set a proxy server for JMeter to use");
@@ -319,6 +323,7 @@ public class JMeter implements JMeterPlugin {
             D_JMLOGFILE_OPT,
             D_NONGUI_OPT,
             D_SERVER_OPT,
+            D_PROXY_SCHEME,
             D_PROXY_HOST,
             D_PROXY_PORT,
             D_NONPROXY_HOSTS,
@@ -752,7 +757,11 @@ public class JMeter implements JMeterPlugin {
             System.setProperty("https.proxyHost", h);// $NON-NLS-1$
             System.setProperty("http.proxyPort",  p);// $NON-NLS-1$
             System.setProperty("https.proxyPort", p);// $NON-NLS-1$
-            log.info("Set http[s].proxyHost: {} Port: {}", h, p);
+            String proxyScheme = parser.getArgumentById(PROXY_SCHEME).getArgument();
+            if(!StringUtils.isBlank(proxyScheme)){
+                System.setProperty("http.proxyScheme",  proxyScheme );// $NON-NLS-1$
+            }
+            log.info("Set scheme: {} proxyHost: {} Port: {}", proxyScheme, h, p);
         } else if (parser.getArgumentById(PROXY_HOST) != null || parser.getArgumentById(PROXY_PORT) != null) {
             throw new IllegalUserActionException(JMeterUtils.getResString("proxy_cl_error"));// $NON-NLS-1$
         }

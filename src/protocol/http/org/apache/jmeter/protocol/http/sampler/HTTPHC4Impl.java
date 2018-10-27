@@ -842,6 +842,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         private final String target; // protocol://[user:pass@]host:[port]
         private final boolean hasProxy;
+        private final String proxyScheme;
         private final String proxyHost;
         private final int proxyPort;
         private final String proxyUser;
@@ -857,12 +858,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
          * @param proxyUser proxy user
          * @param proxyPass proxy password
          */
-        public HttpClientKey(URL url, boolean hasProxy, String proxyHost,
+        public HttpClientKey(URL url, boolean hasProxy, String proxyScheme, String proxyHost,
                 int proxyPort, String proxyUser, String proxyPass) {
             // N.B. need to separate protocol from authority otherwise http://server would match https://erver (<= sic, not typo error)
             // could use separate fields, but simpler to combine them
             this.target = url.getProtocol()+"://"+url.getAuthority();
             this.hasProxy = hasProxy;
+            this.proxyScheme = proxyScheme;
             this.proxyHost = proxyHost;
             this.proxyPort = proxyPort;
             this.proxyUser = proxyUser;
@@ -874,6 +876,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             int hash = 17;
             hash = hash*31 + (hasProxy ? 1 : 0);
             if (hasProxy) {
+                hash = hash*31 + getHash(proxyScheme);
                 hash = hash*31 + getHash(proxyHost);
                 hash = hash*31 + proxyPort;
                 hash = hash*31 + getHash(proxyUser);
@@ -902,6 +905,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 this.hasProxy == other.hasProxy &&
                 this.proxyPort == other.proxyPort &&
                 this.proxyHost.equals(other.proxyHost) &&
+                this.proxyScheme.equals(other.proxyScheme) &&
                 this.proxyUser.equals(other.proxyUser) &&
                 this.proxyPass.equals(other.proxyPass) &&
                 this.target.equals(other.target);
@@ -926,6 +930,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 sb.append(" via ");
                 sb.append(proxyUser);
                 sb.append('@');
+                sb.append(proxyScheme);
+                sb.append("://");
                 sb.append(proxyHost);
                 sb.append(':');
                 sb.append(proxyPort);
@@ -940,6 +946,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         
         final String host = url.getHost();
+        String proxyScheme = getProxyScheme();
         String proxyHost = getProxyHost();
         int proxyPort = getProxyPortInt();
         String proxyPass = getProxyPass();
@@ -953,14 +960,16 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         
         // if both dynamic and static are used, the dynamic proxy has priority over static
         if(!useDynamicProxy) {
+            proxyScheme = PROXY_SCHEME;
             proxyHost = PROXY_HOST;
             proxyPort = PROXY_PORT;
             proxyUser = PROXY_USER;
             proxyPass = PROXY_PASS;
         }
 
+        proxyScheme = StringUtils.isBlank(proxyScheme) ? null : proxyScheme;
         // Lookup key - must agree with all the values used to create the HttpClient.
-        HttpClientKey key = new HttpClientKey(url, useProxy, proxyHost, proxyPort, proxyUser, proxyPass);
+        HttpClientKey key = new HttpClientKey(url, useProxy, proxyScheme, proxyHost, proxyPort, proxyUser, proxyPass);
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY, key);
         CloseableHttpClient httpClient = null;
         boolean concurrentDwn = this.testElement.isConcurrentDwn();
@@ -1037,7 +1046,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // Set up proxy details
             if(useProxy) {
-                HttpHost proxy = new HttpHost(proxyHost, proxyPort);
+                HttpHost proxy = new HttpHost(proxyHost, proxyPort, proxyScheme);
                 builder.setProxy(proxy);
                 
                 CredentialsProvider credsProvider = new BasicCredentialsProvider();
