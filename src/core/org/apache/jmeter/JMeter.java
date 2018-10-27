@@ -1204,7 +1204,7 @@ public class JMeter implements JMeterPlugin {
      * it calls ClientJMeterEngine.tidyRMI() to deal with the Naming Timer Thread.
      */
     private static class ListenToTest implements TestStateListener, Runnable, Remoteable {
-        private final AtomicInteger started = new AtomicInteger(0); // keep track of remote tests
+        private AtomicInteger startedEngines; // keep track of remote tests
 
         private final List<JMeterEngine> engines;
 
@@ -1216,6 +1216,7 @@ public class JMeter implements JMeterPlugin {
          */
         public ListenToTest(List<JMeterEngine> engines, ReportGenerator reportGenerator) {
             this.engines=engines;
+            this.startedEngines = new AtomicInteger(engines == null ? 0 : engines.size());
             this.reportGenerator = reportGenerator;
         }
 
@@ -1224,7 +1225,7 @@ public class JMeter implements JMeterPlugin {
         public void testEnded(String host) {
             final long now=System.currentTimeMillis();
             log.info("Finished remote host: {} ({})", host, now);
-            if (started.decrementAndGet() <= 0) {
+            if (startedEngines.decrementAndGet() <= 0) {
                 Thread stopSoon = new Thread(this);
                 // the calling thread is a daemon; this thread must not be
                 // see Bug 59391
@@ -1249,7 +1250,6 @@ public class JMeter implements JMeterPlugin {
 
         @Override
         public void testStarted(String host) {
-            started.incrementAndGet();
             final long now=System.currentTimeMillis();
             log.info("Started remote host:  {} ({})", host, now);
         }
