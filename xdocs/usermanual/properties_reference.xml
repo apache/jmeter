@@ -796,7 +796,7 @@ JMETER-SERVER</source>
 <property name="proxy.binary.types">
     Binary <code>content-type</code> handling.<br/>
     These <code>content-types</code> will be handled by saving the request in a file.<br/>
-    Defaults to: <code>application/x-amf,application/x-java-serialized-object</code>
+    Defaults to: <code>application/x-amf,application/x-java-serialized-object,binary/octet-stream</code>
 </property>
 <property name="proxy.binary.directory">
     The files will be saved in this directory.<br/>
