@@ -184,6 +184,7 @@ Summary
     <li><bug>62767</bug>NPE when searching under certain conditions. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62790</bug>ArrayIndexOutOfBoundsException when calling replace without selecting the first match</li>
     <li><bug>62795</bug>JMeter master sometimes ends distributed test even though some of the slaves have not finished</li>
+    <li><bug>62336</bug><pr>396</pr>Some shortcuts are not working correctly on windows. Contributed by Michael Pavlov (michael.paulau at gmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -198,6 +199,7 @@ Summary
     <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
     <li>Stefan Seide (stefan at trilobyte-se.de)</li>
     <li>刘士 (liushilive at outlook.com)</li>
+    <li>Michael Pavlov (michael.paulau at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
