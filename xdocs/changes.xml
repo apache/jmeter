@@ -76,6 +76,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><bug>62840</bug>HTTP Request : Add option httpclient4.gzip_relax_mode to avoid error when unzipping what seems to be invalid streams</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -88,11 +89,13 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
+  <li><bug>62822</bug><pr>407</pr>Render uninitialized min and max values in Summary Report as <code>#N/A</code></li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
     <li><bug>62766</bug>Keystore Config : We should load all aliases by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62832</bug>JDBC Connection Configuration: Be able to set init SQL statements. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -110,13 +113,19 @@ Summary
 <h3>General</h3>
 <ul>
   <li><pr>394</pr>Allow <code>null</code> values in <code>FieldStringEditor</code>. Based on patch by Mingun (alexander_sergey at mail.ru)</li>
+  <li><bug>62826</bug>When changing LAF, make JMeter restart if user clicks yes to popup</li>
   <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
    <li><bug>62257</bug> Expand/Collapse short key doesn't work with numpad -. Contributed by orimarko at gmail.com</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li>Updated to tika-core and tika-parsers 1.19 (from 1.18)</li>
+    <li>Updated to tika-core and tika-parsers 1.19.1 (from 1.18)</li>
+    <li><bug>62818</bug>Updated to xercesImpl to 2.12.0 (from 2.11.0). Reported by Stefan Seide (stefan at trilobyte-se.de)</li>
+    <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
+    <li><pr>408</pr>Log an informational message instead of an stack trace, when JavaFX is not found for the <code>RenderInBrowser</code> component.</li>
+    <li><pr>412</pr>Update Chinese translation. Contributed by 刘士 (liushilive at outlook.com).</li>
+    <li><pr>406</pr>Add a short paragraph on how to use a security manager with JMeter.</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -126,6 +135,8 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>62785</bug><pr>400</pr>Incomplete search path applied to the filenames used in the upload functionality of the HTTP sampler. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
+    <li><bug>62842</bug>HTTP(S) Test Script Recorder : Brotli compression is not supported leading to "Content Encoding Error"</li>
+    <li><bug>60424</bug>Hessian Burlap application : JMeter inserts 0x0D before 0x0A automatically (http binary post data)</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -135,6 +146,7 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>62806</bug>ModuleController cloning by Run behaves differently wether in GUI or Non GUI mode. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -173,6 +185,8 @@ Summary
     <li><bug>62743</bug>Client auth must be enabled on distributed testing</li>
     <li><bug>62767</bug>NPE when searching under certain conditions. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62790</bug>ArrayIndexOutOfBoundsException when calling replace without selecting the first match</li>
+    <li><bug>62795</bug>JMeter master sometimes ends distributed test even though some of the slaves have not finished</li>
+    <li><bug>62336</bug><pr>396</pr>Some shortcuts are not working correctly on windows. Contributed by Michael Pavlov (michael.paulau at gmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -186,6 +200,9 @@ Summary
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
     <li>Ori Marko (orimarko at gmail.com>)</li>
+    <li>Stefan Seide (stefan at trilobyte-se.de)</li>
+    <li>刘士 (liushilive at outlook.com)</li>
+    <li>Michael Pavlov (michael.paulau at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

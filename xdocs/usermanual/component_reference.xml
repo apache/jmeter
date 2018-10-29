@@ -3933,6 +3933,8 @@ instead. (see figures 12 and 13).</p>
         <property name="Time Between Eviction Runs (ms)" required="Yes">The number of milliseconds to sleep between runs of the idle object evictor thread. When non-positive, no idle object evictor thread will be run. (Defaults to "<code>60000</code>", 1 minute).
         See <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getTimeBetweenEvictionRunsMillis--" >BasicDataSource.html#getTimeBetweenEvictionRunsMillis</a></property>
         <property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
+        <property name="Transaction isolation" required="Yes">Transaction isolation level</property>
+        <property name="Init SQL statements separated by new line" required="No">A Collection of SQL statements that will be used to initialize physical connections when they are first created. These statements are executed only once - when the configured connection factory creates the connection. </property>
         <property name="Test While Idle" required="Yes">Test idle connections of the pool, see <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getTestWhileIdle--">BasicDataSource.html#getTestWhileIdle</a>. 
         Validation Query will be used to test it.</property>
         <property name="Soft Min Evictable Idle Time(ms)" required="Yes">Minimum amount of time a connection may sit idle in the pool before it is eligible for eviction by the idle object evictor, with the extra condition that at least <code>minIdle</code> connections remain in the pool.

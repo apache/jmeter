@@ -153,7 +153,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                     for (int i = 1; i <= matchCount; i++) {
                         match = getCorrectMatch(matches, i);
                         if (match != null) {
-                            final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
+                            final String refName_n = refName + UNDERSCORE + i;
                             vars.put(refName_n, generateResult(match));
                             saveGroups(vars, refName_n, match);
                         }
@@ -161,7 +161,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 }
                 // Remove any left-over variables
                 for (int i = matchCount + 1; i <= prevCount; i++) {
-                    final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
+                    final String refName_n = refName + UNDERSCORE + i;
                     vars.remove(refName_n);
                     removeGroups(vars, refName_n);
                 }

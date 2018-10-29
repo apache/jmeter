@@ -133,7 +133,7 @@ public class LookAndFeelCommand extends AbstractAction {
                     JMeterUtils.getResString("exit"), // $NON-NLS-1$
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (chosenOption == JOptionPane.YES_OPTION) {
-                ActionRouter.getInstance().doActionNow(new ActionEvent(ev.getSource(), ev.getID(), ActionNames.EXIT));
+                ActionRouter.getInstance().doActionNow(new ActionEvent(ev.getSource(), ev.getID(), ActionNames.RESTART));
             }
         } catch (UnsupportedLookAndFeelException
                 | InstantiationException

@@ -55,6 +55,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.MinMaxLongRenderer;
 import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.ObjectTableSorter;
@@ -126,8 +127,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             null, // Label
             null, // count
             null, // Mean
-            null, // Min
-            null, // Max
+            new MinMaxLongRenderer("#0"), // Min //$NON-NLS-1$
+            new MinMaxLongRenderer("#0"), // Max //$NON-NLS-1$
             new NumberRenderer("#0.00"), // Std Dev. //$NON-NLS-1$
             new NumberRenderer("#0.00%"), // Error %age //$NON-NLS-1$
             new RateRenderer("#.0"),      // Throughput //$NON-NLS-1$
@@ -142,8 +143,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             null, // Label
             null, // count
             null, // Mean
-            null, // Min
-            null, // Max
+            new DecimalFormat("#0"), // Min //$NON-NLS-1$
+            new DecimalFormat("#0"), // Max //$NON-NLS-1$
             new DecimalFormat("#0.00"), // Std Dev. //$NON-NLS-1$
             new DecimalFormat("#0.000%"), // Error %age //$NON-NLS-1$
             new DecimalFormat("#.00000"),      // Throughput //$NON-NLS-1$

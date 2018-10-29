@@ -18,6 +18,7 @@ package org.apache.jmeter.protocol.jdbc.config;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,6 +50,7 @@ public class DataSourceElement extends AbstractTestElement
     private transient String username;
     private transient String password;
     private transient String checkQuery;
+    private transient String initQuery;
     private transient String poolMax;
     private transient String connectionAge;
     private transient String timeout;
@@ -222,6 +224,12 @@ public class DataSourceElement extends AbstractTestElement
         dataSource.setMinIdle(0);
         dataSource.setInitialSize(poolSize);
         dataSource.setEnableAutoCommitOnReturn(false);
+        if(StringUtils.isNotEmpty(initQuery)) {
+            String[] sqls = initQuery.split("\n");
+            dataSource.setConnectionInitSqls(Arrays.asList(sqls));
+        } else {
+            dataSource.setConnectionInitSqls(Collections.emptyList());
+        }
         dataSource.setRollbackOnReturn(false);
         dataSource.setMaxIdle(poolSize);
         dataSource.setMaxTotal(poolSize);
@@ -563,5 +571,19 @@ public class DataSourceElement extends AbstractTestElement
      */
     public void setTransactionIsolation(String transactionIsolation) {
         this.transactionIsolation = transactionIsolation;
+    }
+
+    /**
+     * @return the initQuery
+     */
+    public String getInitQuery() {
+        return initQuery;
+    }
+
+    /**
+     * @param initQuery the initQuery to set
+     */
+    public void setInitQuery(String initQuery) {
+        this.initQuery = initQuery;
     }
 }
