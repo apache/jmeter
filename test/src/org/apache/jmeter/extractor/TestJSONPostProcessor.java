@@ -111,6 +111,28 @@ public class TestJSONPostProcessor {
         assertThat(vars.get("varname_1"), CoreMatchers.is(CoreMatchers.nullValue()));
         assertThat(vars.get("varname_2"), CoreMatchers.is(CoreMatchers.nullValue()));
     }
+    
+    @Test
+    public void testCaseEmptyVarBug62860() {
+        JMeterContext context = JMeterContextService.getContext();
+        JSONPostProcessor processor = setupProcessor(context, "0", false);
+        JMeterVariables vars = new JMeterVariables();
+        processor.setDefaultValues("NONE");
+        processor.setJsonPathExpressions("$[*]");
+        processor.setRefNames("varname");
+        processor.setScopeVariable("contentvar");
+        context.setVariables(vars);
+        vars.remove("contentvar");
+        processor.process();
+        assertThat(vars.get("varname"), CoreMatchers.is("NONE"));
+        assertThat(vars.get("varname_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
+        
+        vars.put("contentvar", "");
+        processor.process();
+        assertThat(vars.get("varname"), CoreMatchers.is("NONE"));
+        assertThat(vars.get("varname_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
+
+    }
 
     @Test
     public void testPR235CaseMatchOneWithZero() {
