@@ -42,6 +42,9 @@
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
             </ul>       
         ]]></description>
+        <parameters>
+        	<parameter key="flan" value="bi"/>
+        </parameters>
     </template>
     <template isTestPlan="true">
         <name>Recording with Think Time</name>
@@ -65,6 +68,8 @@
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
             </ul>       
         ]]></description>
+        <parameters>
+        </parameters>
     </template>
     <template isTestPlan="true">
         <name>JDBC Load Test</name>
@@ -98,6 +103,7 @@
                 <li><a href="http://groovy-lang.org/documentation.html" >Apache Groovy</a></li>
             </ul>
         ]]></description>
+        
     </template>
     <template isTestPlan="false">
         <name>BeanShell Sampler</name>
