@@ -68,8 +68,6 @@
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
             </ul>       
         ]]></description>
-        <parameters>
-        </parameters>
     </template>
     <template isTestPlan="true">
         <name>JDBC Load Test</name>

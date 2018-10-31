@@ -40,6 +40,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  */
 public class TemplateManager {
     // Created by XStream reading templates.xml
+    // Test formatage
     private static class Templates {
         /*
          * N.B. Must use LinkedHashMap for field type
