@@ -206,12 +206,14 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
             actionName = ActionNames.MOVE_LEFT;
         } else if (KeyStrokes.matches(e, KeyStrokes.ALT_RIGHT_ARROW)) {
             actionName = ActionNames.MOVE_RIGHT;
-        } else if (KeyStrokes.matches(e, KeyStrokes.SHIFT_LEFT_ARROW)) {
+        } else if (KeyStrokes.matches(e, KeyStrokes.SHIFT_LEFT_ARROW)
+                || KeyStrokes.matches(e, KeyStrokes.COLLAPSE_ALL_SUBTRACT)) {
             actionName = ActionNames.COLLAPSE;
-        } else if (KeyStrokes.matches(e, KeyStrokes.SHIFT_RIGHT_ARROW)) {
+        } else if (KeyStrokes.matches(e, KeyStrokes.SHIFT_RIGHT_ARROW)
+                || KeyStrokes.matches(e, KeyStrokes.EXPAND_ALL_SUBTRACT)) {
             actionName = ActionNames.EXPAND;
-        } 
-        
+        }
+
         if (actionName != null) {
             final ActionRouter actionRouter = ActionRouter.getInstance();
             actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), actionName));
