@@ -143,7 +143,7 @@ public class JMeterContext {
     }
 
     /**
-     * Returns the threadNum.
+     * Returns the threadNum which starts at 0
      *
      * @return int
      */

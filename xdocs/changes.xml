@@ -116,6 +116,7 @@ Summary
   <li><bug>62826</bug>When changing LAF, make JMeter restart if user clicks yes to popup</li>
   <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
    <li><bug>62257</bug><pr>401</pr>Expand/Collapse short key <keysym>-</keysym> (minus sign) on numpad doesn't work. Contributed by Ori Marko (orimarko at gmail.com)</li>
+   <li><bug>62752</bug>Add to Documentation: <code>ctx.getThreadNum()</code> is 0-based while <code>${__threadNum}</code> is 1-based</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
