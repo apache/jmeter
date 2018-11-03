@@ -108,6 +108,7 @@ public class WhileController extends GenericController implements Serializable, 
      */
     @Override
     public Sampler next(){
+        updateIterationIndex(getName(), getIterCount());
         try {
             if (isFirst() && endOfLoop(false)) {
                 resetBreakLoop();
