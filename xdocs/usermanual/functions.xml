@@ -376,7 +376,7 @@ If you want to have a count that increments for each sample, use the function in
 
 <component index="&sect-num;.5.3a" name="__threadNum">
 <description><p>The thread number function simply returns the number of the thread currently
-being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
+being executed.  These numbers are only locally unique with respect to their ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
 <note>The function returns a number between one and the max number of running threads. Note that if you're using
 JSR223 code with <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object (<code>ctx</code> variable),
