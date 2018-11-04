@@ -378,8 +378,9 @@ If you want to have a count that increments for each sample, use the function in
 <description><p>The thread number function simply returns the number of the thread currently
 being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
-<note>The function returns a number between 1 and the max number of running threads. Note that if you're using 
-JSR223 code with <a href="" >JMeterContext</a> object (ctx variable), the below code returns a number between 0 and (max number of running threads - 1)
+<note>The function returns a number between one and the max number of running threads. Note that if you're using
+JSR223 code with <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object (<code>ctx</code> variable),
+the below code returns a number between zero and (max number of running threads minus one)
 <source>ctx.getThreadNum()</source>
 </note>
 
