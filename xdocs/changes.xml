@@ -69,8 +69,8 @@ Summary
 
 <ch_section>Incompatible changes</ch_section>
 
-<li>In Response Time Percentiles Over Time (successful responses) graph of the HTML report, before this version, percentile computation of each timeslot used the percentile data
-of previous time stot as a base, starting with this version, each timeslot is independant. See <bugzilla>62883</bugzilla></li>
+<li>In <code>Response Time Percentiles Over Time (successful responses)</code> graph of the HTML report, before this version, percentile computation of each time slot used the percentile data
+of previous time slot as a base. Starting with this version, each time slot is independant. See <bugzilla>62883</bugzilla></li>
 
 <!-- =================== Improvements =================== -->
 
