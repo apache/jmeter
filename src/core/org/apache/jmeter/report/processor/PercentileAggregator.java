@@ -50,7 +50,7 @@ public class PercentileAggregator implements Aggregator {
      * @param lastAggregator {@link PercentileAggregator}
      */
     public PercentileAggregator(PercentileAggregator lastAggregator) {
-        this.statistics = new DescriptiveStatistics(lastAggregator.statistics);
+        statistics = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
         this.percentileIndex = lastAggregator.percentileIndex;
     }
 
