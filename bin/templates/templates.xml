@@ -18,8 +18,11 @@
 <!-- 
     See the DTD for allowable elements and attributes.
  -->
- <!DOCTYPE templates SYSTEM "templates.dtd">
-<templates>
+<templates
+xmlns="https://jmeter.apache.org/"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
+
     <template isTestPlan="true">
         <name>Recording</name>
         <fileName>/bin/templates/recording.jmx</fileName>
@@ -42,9 +45,6 @@
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
             </ul>       
         ]]></description>
-        <parameters>
-        	<parameter key="flan" value="bi"/>
-        </parameters>
     </template>
     <template isTestPlan="true">
         <name>Recording with Think Time</name>

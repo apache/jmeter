@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="https://jmeter.apache.org/"
+	xmlns="https://jmeter.apache.org/" elementFormDefault="qualified">
+
+	<!-- parameters element -->
+	<xs:element name="parameters">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="parameter" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="key" type="xs:string" />
+						<xs:attribute name="value" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- templates element, body of the xml document -->
+	<xs:element name="templates">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="template" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="name" type="xs:string" />
+							<xs:element name="fileName" type="xs:string" />
+							<xs:element name="description" type="xs:string" />
+							<xs:element ref="parameters" minOccurs="0"/>
+						</xs:sequence>
+						<xs:attribute name="isTestPlan" type="xs:boolean" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
