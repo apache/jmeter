@@ -23,6 +23,17 @@ xmlns="https://jmeter.apache.org/"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
 
+
+	<template isTestPlan="true">
+        <name>MyTestTemplates</name>
+        <fileName>/bin/templates/testTemplate.jmx.fmkr</fileName>
+        <description><![CDATA[
+        <h1>Test template</h1>
+        ]]></description>
+        <parameters>
+        	<parameter key="testKey" defaultValue="testDefaultValue"/>
+        </parameters>
+    </template>
     <template isTestPlan="true">
         <name>Recording</name>
         <fileName>/bin/templates/recording.jmx</fileName>
@@ -45,10 +56,6 @@ xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
             </ul>       
         ]]></description>
-        <parameters>
-        	<parameter key="patate" defaultValue="raclette"/>
-        	<parameter key="hamburger" defaultValue="temps d'attente potentiellement important"/>
-        </parameters>
     </template>
     <template isTestPlan="true">
         <name>Recording with Think Time</name>
@@ -72,9 +79,6 @@ xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
             </ul>       
         ]]></description>
-        <parameters>
-        	<parameter key="pizza" defaultValue="savoyarde"/>
-        </parameters>
     </template>
     <template isTestPlan="true">
         <name>JDBC Load Test</name>

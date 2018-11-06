@@ -25,13 +25,8 @@ import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -51,6 +46,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.template.Template;
 import org.apache.jmeter.gui.action.template.TemplateManager;
@@ -64,7 +60,6 @@ import org.slf4j.LoggerFactory;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
 
 /**
  * Dialog used for Templates selection
@@ -143,34 +138,38 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
      */
     private void checkDirtyAndLoad(final ActionEvent actionEvent)
             throws HeadlessException {
+        String separator = File.separator;
         final String selectedTemplate = templateList.getText();
         final Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);
         if (template == null) {
             return;
         }
-        // ####################################################
-//            Ici faut vérifier si ya des parametres dans le template
-//            Si oui, ouvrir une fenêtre qui demande les valeurs à donner
-//            Remplacer par la suite les valeurs dans le freeMarker correpondant au filename du template.
-//            Créer un fichier jmx correspondant avec freeMarker et changer le filename sur ce jmx
-        if(template.getParameters() != null && !template.getParameters().isEmpty()) {
+        
+        String jmeterTemplateDirectory = JMeterUtils.getJMeterBinDir()+separator+"templates"; // $NON-NLS-1$
+        String jmxFolderPath = jmeterTemplateDirectory+separator+template.getName();
+        if(template.getParameters() != null && !template.getParameters().isEmpty()) { // handle customized templates (the .jmx.fmkr files)
+            String fmkrFileName = getFileFromUri(template.getFileName());
+            String jmxFileName = fmkrFileName.substring(0, fmkrFileName.length()-5);
+            
             SelectTemplatesParameters.launch(template.getParameters());// launch a GUI that asks what to put in the parameters
             
             // Get template directory property value
             Configuration templateCfg = TemplateUtil.getTemplateConfig();
             try {
-                TemplateUtil.processTemplate(JMeterUtils.getJMeterBinDir(), "freemarkerTemplate.jmx.fmkr", "freemarkerTemplate.jmx",
-                        "toto", templateCfg, template.getParameters());
+                TemplateUtil.processTemplate(jmeterTemplateDirectory, fmkrFileName, jmxFileName,
+                        jmxFolderPath, templateCfg, template.getParameters());
+                String generatedJmxRelativePath = separator+"bin"+separator+"templates"+separator+ //$NON-NLS-1$ //$NON-NLS-2$ 
+                        template.getName()+separator+jmxFileName;
+                template.setFileName(generatedJmxRelativePath); // put the generated jmx in the template fileName
             } catch (IOException e) {
-                log.error("Could not retrive directory {}",JMeterUtils.getJMeterBinDir(), e);
+                log.error("Could not retrive directory {}",jmeterTemplateDirectory, e);
                 return;
             } catch (TemplateException e) {
-                log.error("couldn't replace elements in {}", JMeterUtils.getJMeterBinDir()+File.separator+"freemarkerTemplate.jmx.fmkr", e);
+                log.error("couldn't replace elements in {}", jmeterTemplateDirectory+File.separator+fmkrFileName, e);
                 return;
             }
         }
         
-        // ####################################################
         final boolean isTestPlan = template.isTestPlan();
         // Check if the user wants to drop any changes
         if (isTestPlan) {
@@ -197,9 +196,17 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
               ? new File(parent, template.getFileName())
               : new File(JMeterUtils.getJMeterHome(), template.getFileName());       
         Load.loadProjectFile(actionEvent, fileToCopy, !isTestPlan, false);
-        // ####################################################
-            // Supprimer le jmx créer auparavant
-        // ####################################################
+        
+        // suppress the previously created jmx in case of customized templates
+        if(template.getParameters() != null && !template.getParameters().isEmpty()) {
+            try {
+                FileUtils.deleteDirectory(new File(jmxFolderPath));
+            } catch (IOException e) {
+                log.error("could not suppress created template directory",e);
+            } catch(IllegalArgumentException e) {
+                log.error("could not find directory {}",jmxFolderPath,e);
+            }
+        }
         this.setVisible(false);
     }
 
@@ -265,6 +272,19 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         applyTemplateButton.setText(template.isTestPlan() 
                 ? JMeterUtils.getResString("template_create_from")
                 : JMeterUtils.getResString("template_merge_from") );
+    }
+    
+    private String getFileFromUri(String uri) {
+        int lastSeparator = 0;
+        String separator = "/";
+        String separator2 = "\\";
+        for (int i = 0; i < uri.length(); i++) {
+            String currentChar = String.valueOf(uri.charAt(i));
+            if(currentChar.equals(separator) || currentChar.equals(separator2)) {
+                lastSeparator = i;
+            }
+        }
+        return uri.substring(lastSeparator+1, uri.length());
     }
 
     @Override

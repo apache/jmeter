@@ -31,11 +31,14 @@ public class TemplateUtil {
     
     public static void processTemplate(String templateDirectory, String templateName, String createdFileName, String createdFileDirectory,
             Configuration templateConfig, Map<String, String> data) throws IOException, TemplateException {
-        File templateDirectoryFile = new File(JMeterUtils.getJMeterBinDir());
+        File templateDirectoryFile = new File(templateDirectory);
         templateConfig.setDirectoryForTemplateLoading(templateDirectoryFile);
         freemarker.template.Template temp = templateConfig.getTemplate(templateName);
         
-        try (FileOutputStream stream = new FileOutputStream(templateDirectory+File.separator+createdFileName);
+        File dir = new File (createdFileDirectory);
+        dir.mkdir();
+        
+        try (FileOutputStream stream = new FileOutputStream(createdFileDirectory+File.separator+createdFileName);
                 Writer writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
                 BufferedWriter bufferedWriter = new BufferedWriter(writer)){
             temp.process(data, bufferedWriter);
