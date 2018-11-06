@@ -117,13 +117,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     private static void initSingletonEngine(StandardJMeterEngine standardJMeterEngine) {
         StandardJMeterEngine.engine = standardJMeterEngine; 
     }
-    
-    /**
-     * set the shared engine to null
-     */
-    private static void resetSingletonEngine() {
-        StandardJMeterEngine.engine = null;
-    }
 
     public static void stopEngineNow() {
         if (engine != null) {// May be null if called from Unit test
@@ -170,7 +163,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         testTree.traverse(testPlan);
         Object[] plan = testPlan.getSearchResults().toArray();
         if (plan.length == 0) {
-            throw new RuntimeException("Could not find the TestPlan class!");
+            throw new IllegalStateException("Could not find the TestPlan class!");
         }
         TestPlan tp = (TestPlan) plan[0];
         serialized = tp.isSerialized();
@@ -198,9 +191,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         Iterator<?> iter = elements.iterator();
         while (iter.hasNext()) { // Can't use for loop here because we remove elements
             Object item = iter.next();
-            if (item instanceof AbstractThreadGroup) {
-                iter.remove();
-            } else if (!(item instanceof TestElement)) {
+            if (item instanceof AbstractThreadGroup || !(item instanceof TestElement)) {
                 iter.remove();
             }
         }
@@ -317,7 +308,14 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             }            
             return reminingThreads; 
         }
-        
+
+        /**
+         * set the shared engine to null
+         */
+        private void resetSingletonEngine() {
+            StandardJMeterEngine.engine = null; // NOSONAR We cannot make the method static here
+        }
+
         @Override
         public void run() {
             running = false;
@@ -328,7 +326,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 boolean stopped = verifyThreadsStopped();
                 if (!stopped) {  // we totally failed to stop the test
                     if (JMeter.isNonGUI()) {
-                        // TODO should we call test listeners? That might hang too ...
                         log.error(JMeterUtils.getResString("stopping_test_failed")); //$NON-NLS-1$
                         if (SYSTEM_EXIT_ON_STOP_FAIL) { // default is true
                             log.error("Exiting");
