@@ -20,6 +20,10 @@ public class TemplateUtil {
     
     private static Configuration templateConfiguration;
     
+    /**
+     * Give a basic templateConfiguration
+     * @return a Configuration
+     */
     public static Configuration getTemplateConfig() {
         if(templateConfiguration == null) {
             templateConfiguration = new Configuration(Configuration.getVersion());
@@ -29,11 +33,21 @@ public class TemplateUtil {
         return templateConfiguration;
     }
     
-    public static void processTemplate(String templateDirectory, String templateName, String createdFileName, String createdFileDirectory,
+    /**
+     * Process a given freemarker template and put its result in a new folder.
+     * 
+     * @param template : file that contains the freemarker template to process
+     * @param createdFileName name of the result file
+     * @param createdFileDirectory path of the directory where to put the result. If it does not exist, the directory is created.
+     * @param templateConfig Configuration of the template
+     * @param data to inject in the template
+     * @throws IOException if an I/O exception occurs during writing to the writer
+     * @throws TemplateException if an exception occurs during template processing
+     */
+    public static void processTemplate(File template, String createdFileName, String createdFileDirectory,
             Configuration templateConfig, Map<String, String> data) throws IOException, TemplateException {
-        File templateDirectoryFile = new File(templateDirectory);
-        templateConfig.setDirectoryForTemplateLoading(templateDirectoryFile);
-        freemarker.template.Template temp = templateConfig.getTemplate(templateName);
+        templateConfig.setDirectoryForTemplateLoading(template.getParentFile());
+        freemarker.template.Template temp = templateConfig.getTemplate(template.getName());
         
         File dir = new File (createdFileDirectory);
         dir.mkdir();

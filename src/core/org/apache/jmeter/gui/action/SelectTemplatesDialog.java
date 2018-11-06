@@ -161,13 +161,13 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
             // Get template directory property value
             Configuration templateCfg = TemplateUtil.getTemplateConfig();
             try {
-                TemplateUtil.processTemplate(jmeterTemplateDirectory, fmkrFileName, jmxFileName,
+                TemplateUtil.processTemplate(new File(jmeterTemplateDirectory+separator+fmkrFileName), jmxFileName,
                         jmxFolderPath, templateCfg, template.getParameters());
                 String generatedJmxRelativePath = separator+"bin"+separator+"templates"+separator+ //$NON-NLS-1$ //$NON-NLS-2$ 
                         template.getName()+separator+jmxFileName;
                 template.setFileName(generatedJmxRelativePath); // put the generated jmx in the template fileName
             } catch (IOException e) {
-                log.error("Could not retrieve directory {}",jmeterTemplateDirectory, e);
+                log.error("IOException while processing template", e);
                 return;
             } catch (TemplateException e) {
                 log.error("couldn't replace elements in {}", jmeterTemplateDirectory+File.separator+fmkrFileName, e);
