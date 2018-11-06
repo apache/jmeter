@@ -106,7 +106,7 @@ public class AssertionResult implements Serializable, Searchable {
     }
 
     /**
-     * Set the flag indicating whether or not an error occurred.
+     * Set the flag indicating whether or not an error occurred while evaluating assertion failure clause.
      *
      * @param e
      *            true if an error occurred, false otherwise
