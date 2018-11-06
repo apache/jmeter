@@ -120,6 +120,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
   <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
    <li><bug>62257</bug><pr>401</pr>Expand/Collapse short key <keysym>-</keysym> (minus sign) on numpad doesn't work. Contributed by Ori Marko (orimarko at gmail.com)</li>
    <li><bug>62752</bug>Add to Documentation: <code>ctx.getThreadNum()</code> is zero-based while <code>${__threadNum}</code> is one-based</li>
+   <li><pr>411</pr>Use <code>SHA-1</code> instead of <code>SHA1</code> in <code>org.apache.jmeter.save.SaveService</code>. Contributed by Paco (paco.xu at daocloud.io)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -209,6 +210,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li>刘士 (liushilive at outlook.com)</li>
     <li>Michael Pavlov (michael.paulau at gmail.com)</li>
     <li>Ori Marko (orimarko at gmail.com)</li>
+    <li>Paco (paco.xu at daocloud.io)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
