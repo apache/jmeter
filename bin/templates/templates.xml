@@ -45,6 +45,10 @@ xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
             </ul>       
         ]]></description>
+        <parameters>
+        	<parameter key="patate" defaultValue="raclette"/>
+        	<parameter key="hamburger" defaultValue="temps d'attente potentiellement important"/>
+        </parameters>
     </template>
     <template isTestPlan="true">
         <name>Recording with Think Time</name>
@@ -68,6 +72,9 @@ xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
             </ul>       
         ]]></description>
+        <parameters>
+        	<parameter key="pizza" defaultValue="savoyarde"/>
+        </parameters>
     </template>
     <template isTestPlan="true">
         <name>JDBC Load Test</name>
@@ -119,7 +126,7 @@ xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
         ]]></description>
     </template>
     <template isTestPlan="true">
-        <name>MongoDB Load Test</name>
+	    <name>MongoDB Load Test</name>
         <fileName>mongodb.jmx</fileName>
         <description>
         <![CDATA[<h1>Template showing how to Load Test MongoDB code using MongoDB Java Driver</h1>

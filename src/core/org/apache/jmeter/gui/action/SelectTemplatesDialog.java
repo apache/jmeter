@@ -25,7 +25,13 @@ import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -50,10 +56,15 @@ import org.apache.jmeter.gui.action.template.Template;
 import org.apache.jmeter.gui.action.template.TemplateManager;
 import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.TemplateUtil;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 
 /**
  * Dialog used for Templates selection
@@ -137,6 +148,29 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         if (template == null) {
             return;
         }
+        // ####################################################
+//            Ici faut vérifier si ya des parametres dans le template
+//            Si oui, ouvrir une fenêtre qui demande les valeurs à donner
+//            Remplacer par la suite les valeurs dans le freeMarker correpondant au filename du template.
+//            Créer un fichier jmx correspondant avec freeMarker et changer le filename sur ce jmx
+        if(template.getParameters() != null && !template.getParameters().isEmpty()) {
+            SelectTemplatesParameters.launch(template.getParameters());// launch a GUI that asks what to put in the parameters
+            
+            // Get template directory property value
+            Configuration templateCfg = TemplateUtil.getTemplateConfig();
+            try {
+                TemplateUtil.processTemplate(JMeterUtils.getJMeterBinDir(), "freemarkerTemplate.jmx.fmkr", "freemarkerTemplate.jmx",
+                        "toto", templateCfg, template.getParameters());
+            } catch (IOException e) {
+                log.error("Could not retrive directory {}",JMeterUtils.getJMeterBinDir(), e);
+                return;
+            } catch (TemplateException e) {
+                log.error("couldn't replace elements in {}", JMeterUtils.getJMeterBinDir()+File.separator+"freemarkerTemplate.jmx.fmkr", e);
+                return;
+            }
+        }
+        
+        // ####################################################
         final boolean isTestPlan = template.isTestPlan();
         // Check if the user wants to drop any changes
         if (isTestPlan) {
@@ -163,6 +197,9 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
               ? new File(parent, template.getFileName())
               : new File(JMeterUtils.getJMeterHome(), template.getFileName());       
         Load.loadProjectFile(actionEvent, fileToCopy, !isTestPlan, false);
+        // ####################################################
+            // Supprimer le jmx créer auparavant
+        // ####################################################
         this.setVisible(false);
     }
 

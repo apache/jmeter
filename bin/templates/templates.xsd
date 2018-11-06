@@ -7,10 +7,10 @@
 	<xs:element name="parameters">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="parameter" minOccurs="0">
+				<xs:element name="parameter" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:attribute name="key" type="xs:string" />
-						<xs:attribute name="value" type="xs:string" />
+						<xs:attribute name="defaultValue" type="xs:string" />
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>

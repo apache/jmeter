@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui.action.template;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * Template Bean
@@ -78,4 +79,16 @@ public class Template {
     public void setParent(File parent) {
         this.parent = parent;
     }
+    
+    // #################################################
+    private Map<String, String> parameters;
+
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+    
+    public void setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
+    }
+    // #################################################
 }

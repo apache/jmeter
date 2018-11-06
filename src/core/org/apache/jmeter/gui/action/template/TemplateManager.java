@@ -120,12 +120,14 @@ public class TemplateManager {
         return temps;
     }
     
+    // used to parse the templates.xml document
     private class SaxHandler extends DefaultHandler {
         LinkedHashMap<String, Template> templatesMap = new LinkedHashMap<>();
         
         private Template template;
         private String node;
         private StringBuilder nodeBuffer = new StringBuilder();
+        private Map<String, String> parameters = new LinkedHashMap<>();
         
         @Override
         public void characters(char[] data, int start, int end){
@@ -153,16 +155,20 @@ public class TemplateManager {
             node = qname;
             if(qname.equals("template")) {
                 if(template != null) {
+                    template.setParameters(parameters);
                     templatesMap.put(template.getName(), template);
+                    parameters = new LinkedHashMap<>();
                 }
                 template = new Template();
                 template.setTestPlan(Boolean.valueOf(attrs.getValue("isTestPlan")));
             }else if(qname.equals("parameter")) {
-                // faire le traitement sur mes parametres customs
+                String keyParam = attrs.getValue("key");
+                String valueParam = attrs.getValue("defaultValue");
+                parameters.put(keyParam, valueParam);
             }
           }
 
-        // need this one to put the last template in the map
+        // need this method to put the last template in the map
         @Override
         public void endDocument() throws SAXException {
             if(template != null) {
