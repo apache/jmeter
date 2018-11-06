@@ -1086,12 +1086,13 @@ public class JMeter implements JMeterPlugin {
      * <li>Clone the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
      * </ul>
      * @param tree The {@link HashTree} to convert
-     * @return HashTree the output {@link HashTree} to use
+     * @deprecated This method does not correctly handle a tree with Replaceable controllers that contain NoThreadClone element. Use {@link JMeter#convertSubTree(HashTree, boolean)}
      */
-    public static HashTree convertSubTree(HashTree tree) {
-        return convertSubTree(tree, true);
+    @Deprecated
+    public static void convertSubTree(HashTree tree) {
+        convertSubTree(tree, false);
     }
-    
+
     /**
      * This function does the following:
      * <ul>
@@ -1099,7 +1100,7 @@ public class JMeter implements JMeterPlugin {
      * <li>Replace the ReplaceableController with the target subtree</li>
      * <li>If cloneAtEnd is true : Clone the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
      * </ul>
-     * THIS IS INTERNAL JMETER API and should not be used
+     * THIS IS INTERNAL JMETER API and should be used with care
      * @param tree The {@link HashTree} to convert
      * @param cloneAtEnd  boolean wether we clone the tree at end
      * @return HashTree the output {@link HashTree} to use
