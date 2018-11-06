@@ -150,7 +150,8 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         String jmeterTemplateDirectory = JMeterUtils.getJMeterBinDir()+separator+"templates"; // $NON-NLS-1$
         String jmxFolderPath = jmeterTemplateDirectory+separator+template.getName();
         if(template.getParameters() != null && !template.getParameters().isEmpty()) { // handle customized templates (the .jmx.fmkr files)
-            String fmkrFileName = getFileFromUri(template.getFileName());
+            File fmkrFile = new File(template.getFileName());
+            String fmkrFileName = fmkrFile.getName();
             String jmxFileName = fmkrFileName.substring(0, fmkrFileName.length()-5);
             
             SelectTemplatesParameters.launch(template.getParameters(), this);// launch a GUI that asks what to put in the parameters
@@ -277,19 +278,6 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         applyTemplateButton.setText(template.isTestPlan() 
                 ? JMeterUtils.getResString("template_create_from")
                 : JMeterUtils.getResString("template_merge_from") );
-    }
-    
-    private String getFileFromUri(String uri) {
-        int lastSeparator = 0;
-        String separator = "/";
-        String separator2 = "\\";
-        for (int i = 0; i < uri.length(); i++) {
-            String currentChar = String.valueOf(uri.charAt(i));
-            if(currentChar.equals(separator) || currentChar.equals(separator2)) {
-                lastSeparator = i;
-            }
-        }
-        return uri.substring(lastSeparator+1, uri.length());
     }
     
     public void setUserCancelParametersInput(boolean userCancelParametersInput) {
