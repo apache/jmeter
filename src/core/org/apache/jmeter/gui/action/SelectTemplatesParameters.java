@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,17 +36,27 @@ public class SelectTemplatesParameters extends JDialog implements ActionListener
     private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
     private final JButton validateButton = new JButton(JMeterUtils.getResString("validate_threadgroup")); //$NON-NLS-1$
     
+    private SelectTemplatesDialog templateDialog;
     private Map<String, String> parameters;
     private Map<String, JLabeledTextField> buttonsParameters = new LinkedHashMap<>();
     
-    public static void launch(Map<String, String> parameters) {
-        SelectTemplatesParameters frame = new SelectTemplatesParameters(parameters);
+    public static void launch(Map<String, String> parameters, SelectTemplatesDialog templateDialog) {
+        SelectTemplatesParameters frame = new SelectTemplatesParameters(parameters, templateDialog);
         frame.setVisible(true);
 }
 
-    public SelectTemplatesParameters(Map<String, String> parameters) {
+    public SelectTemplatesParameters(Map<String, String> parameters, SelectTemplatesDialog templateDialog) {
         super((JFrame) null, JMeterUtils.getResString("template_title"), true); //$NON-NLS-1$
         this.parameters = parameters;
+        this.templateDialog = templateDialog;
+        this.addWindowListener(new WindowAdapter(){
+            //capture the window closing event i.e clicking 'X'
+            @Override
+            public void windowClosing(WindowEvent evt){
+                templateDialog.setUserCancelParametersInput(true);
+                dispose();
+            }
+          });
         init();
     }
 
@@ -99,15 +111,14 @@ public class SelectTemplatesParameters extends JDialog implements ActionListener
     public void actionPerformed(ActionEvent e) {
         final Object source = e.getSource();
         if (source == cancelButton) {
-            this.dispose();
-            return;
+            templateDialog.setUserCancelParametersInput(true);
         } else if (source == validateButton) {
             for(Entry<String, String> entry : parameters.entrySet()) {
                 String valueToSet = buttonsParameters.get(entry.getKey()).getText();
                 entry.setValue(valueToSet);
             }
-            this.dispose();
-            return;
+            templateDialog.setUserCancelParametersInput(false);
         }
+        this.dispose();
     }
 }

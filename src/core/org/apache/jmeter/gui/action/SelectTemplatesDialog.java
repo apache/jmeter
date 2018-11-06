@@ -90,6 +90,8 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
     private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
     
     private final JScrollPane scroller = new JScrollPane(helpDoc);
+    
+    private boolean userCancelParametersInput = false;
 
     public SelectTemplatesDialog() {
         super((JFrame) null, JMeterUtils.getResString("template_title"), true); //$NON-NLS-1$
@@ -151,7 +153,10 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
             String fmkrFileName = getFileFromUri(template.getFileName());
             String jmxFileName = fmkrFileName.substring(0, fmkrFileName.length()-5);
             
-            SelectTemplatesParameters.launch(template.getParameters());// launch a GUI that asks what to put in the parameters
+            SelectTemplatesParameters.launch(template.getParameters(), this);// launch a GUI that asks what to put in the parameters
+            if(userCancelParametersInput) { // check if the user clicked on cancel or closed the parameters window
+                return;
+            }
             
             // Get template directory property value
             Configuration templateCfg = TemplateUtil.getTemplateConfig();
@@ -162,7 +167,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
                         template.getName()+separator+jmxFileName;
                 template.setFileName(generatedJmxRelativePath); // put the generated jmx in the template fileName
             } catch (IOException e) {
-                log.error("Could not retrive directory {}",jmeterTemplateDirectory, e);
+                log.error("Could not retrieve directory {}",jmeterTemplateDirectory, e);
                 return;
             } catch (TemplateException e) {
                 log.error("couldn't replace elements in {}", jmeterTemplateDirectory+File.separator+fmkrFileName, e);
@@ -285,6 +290,10 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
             }
         }
         return uri.substring(lastSeparator+1, uri.length());
+    }
+    
+    public void setUserCancelParametersInput(boolean userCancelParametersInput) {
+        this.userCancelParametersInput = userCancelParametersInput;
     }
 
     @Override
