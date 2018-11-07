@@ -11,13 +11,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -32,6 +35,9 @@ public class SelectTemplatesParameters extends JDialog implements ActionListener
     // Minimal dimensions for dialog box
     private static final int MINIMAL_BOX_WIDTH = 500;
     private static final int MINIMAL_BOX_HEIGHT = 300;
+    
+    JPanel gridbagpanel = new JPanel(new GridBagLayout());
+    private final JScrollPane scroller = new JScrollPane(gridbagpanel);
 
     private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
     private final JButton validateButton = new JButton(JMeterUtils.getResString("validate_threadgroup")); //$NON-NLS-1$
@@ -46,7 +52,7 @@ public class SelectTemplatesParameters extends JDialog implements ActionListener
 }
 
     public SelectTemplatesParameters(Map<String, String> parameters, SelectTemplatesDialog templateDialog) {
-        super((JFrame) null, JMeterUtils.getResString("template_title"), true); //$NON-NLS-1$
+        super((JFrame) null, JMeterUtils.getResString("template_choose_parameters"), true); //$NON-NLS-1$
         this.parameters = parameters;
         this.templateDialog = templateDialog;
         this.addWindowListener(new WindowAdapter(){
@@ -70,7 +76,6 @@ public class SelectTemplatesParameters extends JDialog implements ActionListener
         this.setMinimumSize(new Dimension(MINIMAL_BOX_WIDTH, MINIMAL_BOX_HEIGHT));
         ComponentUtil.centerComponentInWindow(this, 40); // center position and 40% of screen size
 
-        JPanel gridbagpanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         initConstraints(gbc);
         int parameterCount = 0;
@@ -83,16 +88,21 @@ public class SelectTemplatesParameters extends JDialog implements ActionListener
             buttonsParameters.put(key, paramLabel);
 
             gbc.gridy = parameterCount;
-            gridbagpanel.add(paramLabel, gbc.clone());
+            List<JComponent> listedParamLabel = paramLabel.getComponentList();
+            gridbagpanel.add(listedParamLabel.get(0), gbc.clone());
+            gbc.gridx = 1;
+            gridbagpanel.add(listedParamLabel.get(1), gbc.clone());
+            gbc.gridx = 0;
 
             parameterCount++;
         }
-        this.add(gridbagpanel, BorderLayout.CENTER);
+        
+        this.getContentPane().add(scroller, BorderLayout.CENTER);
         // Bottom buttons bar
         JPanel actionBtnBar = new JPanel(new FlowLayout());
         actionBtnBar.add(validateButton);
         actionBtnBar.add(cancelButton);
-        this.add(actionBtnBar, BorderLayout.SOUTH);
+        this.getContentPane().add(actionBtnBar, BorderLayout.SOUTH);
     }
 
     private void initConstraints(GridBagConstraints gbc) {
