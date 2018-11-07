@@ -25,8 +25,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONStyle;
+import net.minidev.json.JSONValue;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 
@@ -57,7 +59,7 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
     public static String prettyJSON(String json) {
         return prettyJSON(json, TAB_SEPARATOR);
     }
-    
+
     /**
      * Pretty-print JSON text
      * @param json input text
@@ -70,6 +72,12 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
                     .parse(json);
             if (o instanceof JSONObject) {
                 return ((JSONObject) o)
+                        .toJSONString(new PrettyJSONStyle(tabSeparator));
+            } else if (o instanceof JSONArray) {
+                return ((JSONArray) o)
+                        .toJSONString(new PrettyJSONStyle(tabSeparator));
+            } else if (o instanceof JSONValue) {
+                return ((JSONValue) o)
                         .toJSONString(new PrettyJSONStyle(tabSeparator));
             }
         } catch (ParseException e) {
