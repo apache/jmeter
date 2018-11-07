@@ -195,6 +195,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62790</bug><code>ArrayIndexOutOfBoundsException</code> when calling replace without selecting the first match</li>
     <li><bug>62795</bug>JMeter master sometimes ends distributed test even though some of the slaves have not finished</li>
     <li><bug>62336</bug><pr>396</pr>Some shortcuts are not working correctly on windows. Contributed by Michael Pavlov (michael.paulau at gmail.com)</li>
+    <li><bug>62889</bug>Format JSON Arrays when displayed with JSON Path Tester.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
