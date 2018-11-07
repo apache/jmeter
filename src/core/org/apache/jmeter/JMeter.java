@@ -1086,7 +1086,8 @@ public class JMeter implements JMeterPlugin {
      * <li>Clone the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
      * </ul>
      * @param tree The {@link HashTree} to convert
-     * @deprecated This method does not correctly handle a tree with Replaceable controllers that contain NoThreadClone element. Use {@link JMeter#convertSubTree(HashTree, boolean)}
+     * @deprecated This method does not correctly handle a tree with Replaceable controllers
+     *     that contain NoThreadClone element. Use {@link JMeter#convertSubTree(HashTree, boolean)}
      */
     @Deprecated
     public static void convertSubTree(HashTree tree) {
