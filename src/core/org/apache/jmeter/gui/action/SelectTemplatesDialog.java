@@ -155,13 +155,13 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
      */
     private void checkDirtyAndLoad(final ActionEvent actionEvent)
             throws HeadlessException {
-        templateList.setValues(TemplateManager.getInstance().reset().getTemplateNames()); // reload the templates before loading
         String separator = File.separator;
         final String selectedTemplate = templateList.getText();
         final Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);
         if (template == null) {
             return;
         }
+        templateList.setValues(TemplateManager.getInstance().reset().getTemplateNames()); // reload the templates before loading
         
         String jmeterTemplateDirectory = JMeterUtils.getJMeterBinDir()+separator+"templates"; // $NON-NLS-1$
         String jmxFolderPath = jmeterTemplateDirectory+separator+template.getName();
@@ -310,8 +310,8 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         } else if (source == reloadTemplateButton || source == previous) {
             resetJDialog();
         } else if(source == validateButton) {
-            resetJDialog();
             checkDirtyAndLoad(e);
+            resetJDialog();
         }
     }
     
