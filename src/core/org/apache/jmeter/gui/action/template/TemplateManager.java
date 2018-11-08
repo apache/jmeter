@@ -19,9 +19,11 @@
 package org.apache.jmeter.gui.action.template;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -83,20 +85,16 @@ public class TemplateManager {
         final String[] templateFiles = TEMPLATE_FILES.split(",");
         for (String templateFile : templateFiles) {
             if(!StringUtils.isEmpty(templateFile)) {
-                final File f = new File(JMeterUtils.getJMeterHome(), templateFile); 
+                final File file = new File(JMeterUtils.getJMeterHome(), templateFile); 
                 try {
-                    if(f.exists() && f.canRead()) {
+                    if(file.exists() && file.canRead()) {
                         if (log.isInfoEnabled()) {
-                            log.info("Reading templates from: {}", f.getAbsolutePath());
+                            log.info("Reading templates from: {}", file.getAbsolutePath());
                         }
                         
-                        SAXParserFactory factory = SAXParserFactory.newInstance();
-                        SAXParser parser = factory.newSAXParser();
-                        SaxHandler saxHandler = new SaxHandler();
-                        parser.parse(f, saxHandler);
-                        Map<String, Template> templates = saxHandler.getTemplatesMap();
+                        Map<String, Template> templates = parseTemplateFile(file);
                         
-                        final File parent = f.getParentFile();
+                        final File parent = file.getParentFile();
                         for(Template t : templates.values()) {
                             if (!t.getFileName().startsWith("/")) {
                                 t.setParent(parent);
@@ -106,18 +104,26 @@ public class TemplateManager {
                     } else {
                         if (log.isWarnEnabled()) {
                             log.warn("Ignoring template file:'{}' as it does not exist or is not readable",
-                                    f.getAbsolutePath());
+                                    file.getAbsolutePath());
                         }
                     }
                 } catch(Exception ex) {
                     if (log.isWarnEnabled()) {
-                        log.warn("Ignoring template file:'{}', an error occurred parsing the file", f.getAbsolutePath(),
+                        log.warn("Ignoring template file:'{}', an error occurred parsing the file", file.getAbsolutePath(),
                                 ex);
                     }
                 } 
             }
         }
         return temps;
+    }
+    
+    public Map<String, Template> parseTemplateFile(File file) throws SAXException, ParserConfigurationException, IOException{
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser parser = factory.newSAXParser();
+        SaxHandler saxHandler = new SaxHandler();
+        parser.parse(file, saxHandler);
+        return saxHandler.getTemplatesMap();
     }
     
     // used to parse the templates.xml document
@@ -172,6 +178,7 @@ public class TemplateManager {
         @Override
         public void endDocument() throws SAXException {
             if(template != null) {
+                template.setParameters(parameters);
                 templatesMap.put(template.getName(), template);
             }
         }

@@ -31,6 +31,7 @@ public class Template {
     private String fileName;
     private String description;
     private transient File parent; // for relative links
+    private Map<String, String> parameters;
     /**
      * @return the name
      */
@@ -80,8 +81,6 @@ public class Template {
         this.parent = parent;
     }
     
-    // #################################################
-    private Map<String, String> parameters;
 
     public Map<String, String> getParameters() {
         return parameters;
@@ -90,5 +89,57 @@ public class Template {
     public void setParameters(Map<String, String> parameters) {
         this.parameters = parameters;
     }
-    // #################################################
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((fileName == null) ? 0 : fileName.hashCode());
+        result = prime * result + (isTestPlan ? 1231 : 1237);
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((parameters == null) ? 0 : parameters.hashCode());
+        result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+        return result;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Template other = (Template) obj;
+        if (description == null) {
+            if (other.description != null)
+                return false;
+        } else if (!description.equals(other.description))
+            return false;
+        if (fileName == null) {
+            if (other.fileName != null)
+                return false;
+        } else if (!fileName.equals(other.fileName))
+            return false;
+        if (isTestPlan != other.isTestPlan)
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (parameters == null) {
+            if (other.parameters != null)
+                return false;
+        } else if (!parameters.equals(other.parameters))
+            return false;
+        if (parent == null) {
+            if (other.parent != null)
+                return false;
+        } else if (!parent.equals(other.parent))
+            return false;
+        return true;
+    }
+
 }

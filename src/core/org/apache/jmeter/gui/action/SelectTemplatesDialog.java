@@ -22,16 +22,22 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -56,6 +62,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.TemplateUtil;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
+import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,9 +97,20 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
     private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
     
-    private final JScrollPane scroller = new JScrollPane(helpDoc);
+    // #########################################################################
+    private final JButton goBack = new JButton("goBack"); //$NON-NLS-1$
+    private final JButton validateButton = new JButton("validate"); //$NON-NLS-1$
+    private final JButton cancelButton2 = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
+    private JScrollPane scroller2;
+    private JPanel actionBtnBar2 = new JPanel(new FlowLayout());
+ // #########################################################################
+    private JScrollPane scroller;
     
-    private boolean userCancelParametersInput = false;
+    private Map<String, JLabeledTextField> buttonsParameters = new LinkedHashMap<>();
+    
+    private JPanel gridbagpanel = new JPanel(new GridBagLayout());
+    
+    JPanel actionBtnBar = new JPanel(new FlowLayout());
 
     public SelectTemplatesDialog() {
         super((JFrame) null, JMeterUtils.getResString("template_title"), true); //$NON-NLS-1$
@@ -150,21 +168,17 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         
         String jmeterTemplateDirectory = JMeterUtils.getJMeterBinDir()+separator+"templates"; // $NON-NLS-1$
         String jmxFolderPath = jmeterTemplateDirectory+separator+template.getName();
-        if(template.getParameters() != null && !template.getParameters().isEmpty()) { // handle customized templates (the .jmx.fmkr files)
+        if(buttonsParameters != null && !buttonsParameters.isEmpty()) { // handle customized templates (the .jmx.fmkr files)
             File fmkrFile = new File(template.getFileName());
             String fmkrFileName = fmkrFile.getName();
             String jmxFileName = fmkrFileName.substring(0, fmkrFileName.length()-5);
             
-            SelectTemplatesParameters.launch(template.getParameters(), this);// launch a GUI that asks what to put in the parameters
-            if(userCancelParametersInput) { // check if the user clicked on cancel or closed the parameters window
-                return;
-            }
+            Map<String, String> userParameters = getUserParameters();
             
-            // Get template directory property value
             Configuration templateCfg = TemplateUtil.getTemplateConfig();
             try {
                 TemplateUtil.processTemplate(new File(jmeterTemplateDirectory+separator+fmkrFileName), jmxFileName,
-                        jmxFolderPath, templateCfg, template.getParameters());
+                        jmxFolderPath, templateCfg, userParameters);
                 String generatedJmxRelativePath = separator+"bin"+separator+"templates"+separator+ //$NON-NLS-1$ //$NON-NLS-2$ 
                         template.getName()+separator+jmxFileName;
                 template.setFileName(generatedJmxRelativePath); // put the generated jmx in the template fileName
@@ -216,38 +230,56 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         }
         this.setVisible(false);
     }
+    
+    private Map<String, String> getUserParameters(){
+        Map<String, String> userParameters = new LinkedHashMap<>();
+        for(Entry<String, JLabeledTextField> entry : buttonsParameters.entrySet()) {
+            userParameters.put(entry.getKey(), entry.getValue().getText());
+        }
+        return userParameters;
+    }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         templateList.setValues(TemplateManager.getInstance().getTemplateNames());            
         templateList.addChangeListener(this);
         reloadTemplateButton.addActionListener(this);
         reloadTemplateButton.setFont(FONT_SMALL);
-        this.getContentPane().setLayout(new BorderLayout(10, 0));
-        
-        JPanel templateBar = new JPanel(new BorderLayout());
-        templateBar.add(templateList, BorderLayout.CENTER);
-        JPanel reloadBtnBar = new JPanel();
-        reloadBtnBar.add(reloadTemplateButton);
-        templateBar.add(reloadBtnBar, BorderLayout.EAST);
-        this.getContentPane().add(templateBar, BorderLayout.NORTH);
         helpDoc.setContentType("text/html"); //$NON-NLS-1$
         helpDoc.setEditable(false);
         helpDoc.addHyperlinkListener(this);
-        this.getContentPane().add(scroller, BorderLayout.CENTER);
-
         applyTemplateButton.addActionListener(this);
         cancelButton.addActionListener(this);
-
-        // Bottom buttons bar
-        JPanel actionBtnBar = new JPanel(new FlowLayout());
-        actionBtnBar.add(applyTemplateButton);
-        actionBtnBar.add(cancelButton);
-        this.getContentPane().add(actionBtnBar, BorderLayout.SOUTH);
+        goBack.addActionListener(this);
+        validateButton.addActionListener(this);
+        
+        this.setContentPane(templateSelectionPanel());
 
         this.pack();
         this.setMinimumSize(new Dimension(MINIMAL_BOX_WIDTH, MINIMAL_BOX_HEIGHT));
         ComponentUtil.centerComponentInWindow(this, 50); // center position and 50% of screen size
         populateTemplatePage();
+    }
+    
+    private JPanel templateSelectionPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        
+        scroller = new JScrollPane();
+        scroller.setViewportView(helpDoc);
+        JPanel templateBar = new JPanel(new BorderLayout());
+        templateBar.add(templateList, BorderLayout.CENTER);
+        JPanel reloadBtnBar = new JPanel();
+        reloadBtnBar.add(reloadTemplateButton);
+        templateBar.add(reloadBtnBar, BorderLayout.EAST);
+
+        // Bottom buttons bar
+        actionBtnBar.add(applyTemplateButton);
+        actionBtnBar.add(cancelButton);
+        
+        panel.add(templateBar, BorderLayout.NORTH);
+        panel.add(scroller, BorderLayout.CENTER);
+        panel.add(actionBtnBar, BorderLayout.SOUTH);
+        
+        return panel;
     }
 
     /**
@@ -261,9 +293,22 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
             this.setVisible(false);
             return;
         } else if (source == applyTemplateButton) {
-            checkDirtyAndLoad(e);            
+            final String selectedTemplate = templateList.getText();
+            final Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);
+            if(template.getParameters() != null && !template.getParameters().isEmpty()) {
+                this.setContentPane(choseParametersPanel(template.getParameters()));
+                this.revalidate();
+            }else {
+                checkDirtyAndLoad(e);
+            }
         } else if (source == reloadTemplateButton) {
             templateList.setValues(TemplateManager.getInstance().reset().getTemplateNames());
+        } else if (source == goBack) {
+            this.setContentPane(templateSelectionPanel());
+            buttonsParameters.clear();
+            this.revalidate();
+        } else if(source == validateButton) {
+            checkDirtyAndLoad(e);
         }
     }
     
@@ -281,8 +326,54 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
                 : JMeterUtils.getResString("template_merge_from") );
     }
     
-    public void setUserCancelParametersInput(boolean userCancelParametersInput) {
-        this.userCancelParametersInput = userCancelParametersInput;
+
+    
+    private JPanel choseParametersPanel(Map<String, String> parameters) {
+        JPanel panel = new JPanel(new BorderLayout());
+        buttonsParameters.clear();
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        initConstraints(gbc);
+        int parameterCount = 0;
+
+        for(Entry<String, String> entry : parameters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            JLabeledTextField paramLabel = new JLabeledTextField(key + " : ");
+            paramLabel.setText(value);
+            buttonsParameters.put(key, paramLabel);
+
+            gbc.gridy = parameterCount;
+            List<JComponent> listedParamLabel = paramLabel.getComponentList();
+            gridbagpanel.add(listedParamLabel.get(0), gbc.clone());
+            gbc.gridx = 1;
+            gridbagpanel.add(listedParamLabel.get(1), gbc.clone());
+            gbc.gridx = 0;
+
+            parameterCount++;
+        }
+        
+        actionBtnBar2.add(validateButton);
+        actionBtnBar2.add(cancelButton2);
+        actionBtnBar2.add(goBack);
+        
+        scroller2 = new JScrollPane(gridbagpanel);
+        panel.add(scroller2, BorderLayout.CENTER);
+        panel.add(actionBtnBar2, BorderLayout.SOUTH);
+        
+        return panel;
+    }
+    
+    private void initConstraints(GridBagConstraints gbc) {
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0,0,5,0);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
     }
 
     @Override

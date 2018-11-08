@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<templates
+xmlns="https://jmeter.apache.org/"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="https://jmeter.apache.org/ testTemplates.xsd">
+
+	<template isTestPlan="true">
+        <name>MyTestTemplates</name>
+        <fileName>/bin/templates/testTemplate.jmx.fmkr</fileName>
+        <description><![CDATA[
+        <h1>first template</h1>
+        ]]></description>
+    </template>
+    <template isTestPlan="false">
+        <name>MyTestTemplates2</name>
+        <fileName>/bin/templates/testTemplate.jmx.fmkr</fileName>
+        <description>Second Template</description>
+        <parameters>
+        	<parameter key="keyOfSecondTemplate" defaultValue="SecondTemplateDefaultValue"/>
+        </parameters>
+    </template>
+    <template isTestPlan="true">
+        <name>MyTestTemplates3</name>
+        <fileName>/bin/templates/testTemplate.jmx.fmkr</fileName>
+        <description><![CDATA[
+        <h1>Last template</h1>
+        ]]></description>
+        <parameters>
+        	<parameter key="testKey1" defaultValue="n 1"/>
+        	<parameter key="testKey2" defaultValue="n 2"/>
+        	<parameter key="testKey3" defaultValue="n 3"/>
+        </parameters>
+    </template>
+    
+</templates>
