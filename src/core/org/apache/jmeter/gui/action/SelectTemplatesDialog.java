@@ -237,7 +237,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        templateList.setValues(TemplateManager.getInstance().getTemplateNames());            
+        templateList.setValues(TemplateManager.getInstance().getTemplateNames());
         templateList.addChangeListener(this);
         reloadTemplateButton.addActionListener(this);
         reloadTemplateButton.setFont(FONT_SMALL);
@@ -252,7 +252,6 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         // allow to reset the JDialog if the user click on the close button while
         // it was displaying templates parameters
         this.addWindowListener(new WindowAdapter(){
-            //capture the window closing event i.e clicking 'X'
             @Override
             public void windowClosing(WindowEvent evt){
                 resetJDialog();
@@ -308,9 +307,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
             }else {
                 checkDirtyAndLoad(e);
             }
-        } else if (source == reloadTemplateButton) {
-            templateList.setValues(TemplateManager.getInstance().reset().getTemplateNames());
-        } else if (source == previous) {
+        } else if (source == reloadTemplateButton || source == previous) {
             resetJDialog();
         } else if(source == validateButton) {
             resetJDialog();
@@ -324,6 +321,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
     }
     
     private void resetJDialog() {
+        templateList.setValues(TemplateManager.getInstance().reset().getTemplateNames()); // reload templates
         this.setContentPane(templateSelectionPanel());
         this.revalidate();
     }

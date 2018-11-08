@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action.template;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -73,10 +74,12 @@ public class TemplateManager {
     }
 
     /**
-     * @return the templates names
+     * @return the templates names sorted in alphabetical order
      */
     public String[] getTemplateNames() {
-        return allTemplates.keySet().toArray(new String[allTemplates.size()]);
+        String [] result = allTemplates.keySet().toArray(new String[allTemplates.size()]);
+        Arrays.sort(result);
+        return result;
     }
 
     private Map<String, Template> readTemplates() {
