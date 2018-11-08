@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
-<templates
-xmlns="https://jmeter.apache.org/"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="https://jmeter.apache.org/ testTemplates.xsd">
+
+<templates>
 
 	<template isTestPlan="true">
         <name>testTemplates1</name>
@@ -13,19 +11,11 @@ xsi:schemaLocation="https://jmeter.apache.org/ testTemplates.xsd">
         <name>testTemplates2</name>
         <fileName>/bin/templates/testTemplate.jmx.fmkr</fileName>
         <description>Second Template</description>
-        <parameters>
-        	<parameter key="keyOfSecondTemplate" defaultValue="SecondTemplateDefaultValue"/>
-        </parameters>
     </template>
     <template isTestPlan="true">
         <name>testTemplates3</name>
         <fileName>/bin/templates/testTemplate.jmx.fmkr</fileName>
         <description>Last template</description>
-        <parameters>
-        	<parameter key="testKey1" defaultValue="n 1"/>
-        	<parameter key="testKey2" defaultValue="n 2"/>
-        	<parameter key="testKey3" defaultValue="n 3"/>
-        </parameters>
     </template>
     
 </templates>

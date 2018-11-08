@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action.template;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Template Bean
@@ -105,8 +106,6 @@ public class Template {
     
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (obj == null)
             return false;
         if (getClass() != obj.getClass())
@@ -129,16 +128,39 @@ public class Template {
                 return false;
         } else if (!name.equals(other.name))
             return false;
-        if (parameters == null) {
-            if (other.parameters != null)
-                return false;
-        } else if (!parameters.equals(other.parameters))
+        if (!mapsEquals(parameters, other.parameters))
             return false;
         if (parent == null) {
             if (other.parent != null)
                 return false;
         } else if (!parent.equals(other.parent))
             return false;
+        return true;
+    }
+    
+    private boolean mapsEquals(Map<String, String> map1, Map<String, String> map2) {
+        if(map1 == null) {
+            return map2 == null;
+        }else if(map2 == null) {
+            return false;
+        }
+        
+        if(map1.size() != map2.size()) {
+            return false;
+        }
+        
+        for(Entry<String, String> entry : map1.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if(map2.containsKey(key)) {
+                if(!map2.get(key).equals(value)) {
+                    return false;
+                }
+            }else {
+                return false;
+            }
+        }
+        
         return true;
     }
 
