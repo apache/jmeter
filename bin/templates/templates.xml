@@ -23,7 +23,16 @@ xmlns="https://jmeter.apache.org/"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
 
-
+	<template isTestPlan="true">
+        <name>A Test Template</name>
+        <fileName>/bin/templates/customTemplate.jmx.fmkr</fileName>
+        <description><![CDATA[
+        <h1>Test templatet</h1>
+        ]]></description>
+        <parameters>
+        	<parameter key="testKey" defaultValue="test Value"/>
+        </parameters>
+    </template>
     <template isTestPlan="true">
         <name>Recording</name>
         <fileName>/bin/templates/recording.jmx</fileName>
