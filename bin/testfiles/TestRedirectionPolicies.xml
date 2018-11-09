@@ -45,8 +45,8 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
-  <httpSample s="true" lb="http://httpbin.org/redirect/1" rc="302" rm="FOUND" dt="text"/>
-  <httpSample s="true" lb="http://httpbin.org/get" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="HR_FollowRedirect-0" rc="302" rm="FOUND" dt="text"/>
+  <httpSample s="true" lb="HR_FollowRedirect-1" rc="200" rm="OK" dt="text"/>
 </httpSample>
 <httpSample s="true" lb="HR_NoAutoRedirect" rc="302" rm="FOUND" dt="text">
   <assertionResult>
@@ -76,8 +76,8 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
-  <httpSample s="true" lb="http://httpbin.org/redirect/1" rc="302" rm="FOUND" dt="text"/>
-  <httpSample s="true" lb="http://httpbin.org/get" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="HR_FollowRedirect-0" rc="302" rm="FOUND" dt="text"/>
+  <httpSample s="true" lb="HR_FollowRedirect-1" rc="200" rm="OK" dt="text"/>
 </httpSample>
 <httpSample s="true" lb="HR_AutoRedirect" rc="200" rm="OK" dt="text">
   <assertionResult>
