@@ -47,7 +47,7 @@ function summaryTableHeader(header) {
     cell = document.createElement('th');
     cell.setAttribute("data-sorter", false);
     cell.colSpan = 1;
-    cell.innerHTML = "Throughput (Trans or Req/s)";
+    cell.innerHTML = "Throughput";
     newRow.appendChild(cell);
 
     cell = document.createElement('th');
