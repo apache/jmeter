@@ -16,23 +16,12 @@
    limitations under the License.
 -->
 <!-- 
-    See the DTD for allowable elements and attributes.
+    See the XSD for allowable elements and attributes.
  -->
 <templates
 xmlns="https://jmeter.apache.org/"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
-
-	<template isTestPlan="true">
-        <name>A Test Template</name>
-        <fileName>/bin/templates/customTemplate.jmx.fmkr</fileName>
-        <description><![CDATA[
-        <h1>Test templatet</h1>
-        ]]></description>
-        <parameters>
-        	<parameter key="testKey" defaultValue="test Value"/>
-        </parameters>
-    </template>
     <template isTestPlan="true">
         <name>Recording</name>
         <fileName>/bin/templates/recording.jmx</fileName>
@@ -111,7 +100,6 @@ xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
                 <li><a href="http://groovy-lang.org/documentation.html" >Apache Groovy</a></li>
             </ul>
         ]]></description>
-        
     </template>
     <template isTestPlan="false">
         <name>BeanShell Sampler</name>
@@ -129,7 +117,7 @@ xsi:schemaLocation="https://jmeter.apache.org/ templates.xsd">
         ]]></description>
     </template>
     <template isTestPlan="true">
-	    <name>MongoDB Load Test</name>
+        <name>MongoDB Load Test</name>
         <fileName>mongodb.jmx</fileName>
         <description>
         <![CDATA[<h1>Template showing how to Load Test MongoDB code using MongoDB Java Driver</h1>
