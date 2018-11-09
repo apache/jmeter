@@ -144,7 +144,7 @@
   <httpSample s="true" lb="HR-FollowRedirect-18" rc="302" dt="text"/>
   <httpSample s="true" lb="HR-FollowRedirect-19" rc="302" dt="text"/>
   <httpSample s="true" lb="HR-FollowRedirect-20" rc="302" dt="text"/>
-  <httpSample s="false" lb="HR-FollowRedirect-21" rc="Non HTTP response code: java.io.IOException" dt="text"/>
+  <httpSample s="false" lb="HR-FollowRedirect-20" rc="Non HTTP response code: java.io.IOException" dt="text"/>
 </httpSample>
 <httpSample s="true" lb="HR-FollowRedirect" rc="Non HTTP response code: org.apache.http.client.ClientProtocolException" dt="text">
   <assertionResult>
