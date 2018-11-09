@@ -344,5 +344,25 @@ public class TestSampleResult implements JMeterSerialTest {
             Thread.sleep(ms);
             return System.currentTimeMillis() - start;
         }
+
+        @Test
+        public void testCompareSampleLabels() {
+            SampleResult result = new SampleResult();
+            result.setStartTime(System.currentTimeMillis());
+            result.setSampleLabel("parent label");
+
+            SampleResult subResult = new SampleResult();
+            subResult.setStartTime(System.currentTimeMillis());
+            subResult.setSampleLabel("subResult label");
+
+            assertFalse(result.compareSampleLabels(subResult));
+            result.addSubResult(subResult);
+            assertEquals("subResult label", subResult.getSampleLabel());
+
+            subResult.setSampleLabel("parent label");
+            assertTrue(result.compareSampleLabels(subResult));
+            result.addRawSubResult(subResult);
+            assertEquals("parent label-0", subResult.getSampleLabel());
+        }
 }
 

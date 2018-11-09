@@ -614,8 +614,26 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void addSubResult(SampleResult subResult) {
-        addSubResult(subResult, true);
+        if(subResult == null) {
+            // see https://bz.apache.org/bugzilla/show_bug.cgi?id=54778
+            return;
+        }
+        addSubResult(subResult, compareSampleLabels(subResult));
     }
+
+    /**
+     * Compare Sample label of parent with Sample label of sub result
+     * @param subResult
+     *      the {@link SampleResult} to sub result
+     * @return boolean value. true - if Sample label of parent and sub result is equals,
+     *          otherwise - false.
+     */
+    protected boolean compareSampleLabels(SampleResult subResult) {
+        // Using compareTo() is faster than equals() for each subSample
+        // http://jniosocket.sourceforge.net/result.html
+        return getSampleLabel().compareTo(subResult.getSampleLabel()) == 0;
+    }
+
     /**
      * Add a subresult and adjust the parent byte count and end-time.
      * 
@@ -652,7 +670,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void addRawSubResult(SampleResult subResult){
-        storeSubResult(subResult, true);
+        if(subResult == null) {
+            // see https://bz.apache.org/bugzilla/show_bug.cgi?id=54778
+            return;
+        }
+        addRawSubResult(subResult, compareSampleLabels(subResult));
     }
     
     /**
@@ -676,7 +698,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void storeSubResult(SampleResult subResult) {
-        storeSubResult(subResult, true);
+        if(subResult == null) {
+            // see https://bz.apache.org/bugzilla/show_bug.cgi?id=54778
+            return;
+        }
+        storeSubResult(subResult, compareSampleLabels(subResult));
     }
     
     /**

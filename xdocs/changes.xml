@@ -142,6 +142,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62785</bug><pr>400</pr>Incomplete search path applied to the filenames used in the upload functionality of the HTTP sampler. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
     <li><bug>62842</bug>HTTP(S) Test Script Recorder: Brotli compression is not supported leading to "<code>Content Encoding Error</code>"</li>
     <li><bug>60424</bug>Hessian Burlap application: JMeter inserts <code>0x0D</code> before <code>0x0A</code> automatically (http binary post data)</li>
+    <li><bug>62887</bug>Customized SampleLabel is ignored and overwritten by JMeter 5.0. Implemented by Artem Fedorov (artem.fedorov@blazemeter.com) and contributed by BlazeMeter. Partly based on a patch by Alan Silva (alansq16@hotmail.com)</li>
 </ul>
 
 <h3>Other Samplers</h3>
