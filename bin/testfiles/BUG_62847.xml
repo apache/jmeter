@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="SuccessLoop" rc="200" rm="OK" tn="TG 1-1"/>
+<sample s="true" lb="DS_after_loop" rc="200" rm="OK" tn="TG 1-1"/>
+<sample s="true" lb="SuccessWhile" rc="200" rm="OK" tn="TG 2-1"/>
+<sample s="true" lb="DS_after_while" rc="200" rm="OK" tn="TG 2-1"/>
+<sample s="true" lb="Success_FEC" rc="200" rm="OK" tn="TG 3-1"/>
+<sample s="true" lb="DS_after_fec" rc="200" rm="OK" tn="TG 3-1"/>
+
+</testResults>

@@ -203,7 +203,7 @@ public class SaveService {
 
     private static String getChecksumForPropertiesFile()
             throws NoSuchAlgorithmException, IOException {
-        MessageDigest md = MessageDigest.getInstance("SHA1");
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
         File saveServiceFile = getSaveServiceFile();
         try (BufferedReader reader = 
                 Files.newBufferedReader(saveServiceFile.toPath(), Charset.defaultCharset())) {

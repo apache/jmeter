@@ -60,8 +60,12 @@ public class TestRenderAsJson {
     }
 
     @Test
+    public void testRenderResultComplexArray() throws Exception {
+        assertEquals("[\n" + TAB + "1,\n" + TAB + "{\n" + TAB + TAB + "\"A\": \"B\"\n" + TAB + "}\n]", prettyJSON("[1,{\"A\":\"B\"}]"));
+    }
+    @Test
     public void testRenderResultSimpleArray() throws Exception {
-        assertEquals("[]", prettyJSON("[]"));
+        assertEquals("[\n]", prettyJSON("[]"));
     }
 
     @Test
