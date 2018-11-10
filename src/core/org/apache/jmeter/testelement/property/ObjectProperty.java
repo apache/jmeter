@@ -101,7 +101,11 @@ public class ObjectProperty extends AbstractProperty {
      */
     @Override
     public String getStringValue() {
-        return value.toString();
+        if(value != null) {
+            return value.toString();
+        } else {
+            return null;
+        }
     }
 
     /**
