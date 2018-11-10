@@ -17,8 +17,8 @@
  */
 package org.apache.jmeter.report.processor;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;

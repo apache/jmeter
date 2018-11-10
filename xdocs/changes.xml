@@ -131,6 +131,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><pr>408</pr>Log an informational message instead of an stack trace, when JavaFX is not found for the <code>RenderInBrowser</code> component.</li>
     <li><pr>412</pr>Update Chinese translation. Contributed by 刘士 (liushilive at outlook.com).</li>
     <li><pr>406</pr>Add a short paragraph on how to use a security manager with JMeter.</li>
+    <li><bug>62893</bug>Use StringEscapeUtils from commons-text (version 1.6) instead of the deprecated ones from commons-lang3.</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
