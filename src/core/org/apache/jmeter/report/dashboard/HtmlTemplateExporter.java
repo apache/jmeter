@@ -27,9 +27,9 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.ExporterConfiguration;

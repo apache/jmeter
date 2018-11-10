@@ -71,6 +71,7 @@ under the License.
       <commons-math3.version>3.6.1</commons-math3.version>
       <commons-net.version>3.6</commons-net.version>
       <commons-pool2.version>2.6.0</commons-pool2.version>
+      <commons-text.version>1.6</commons-text.version>
       <dnsjava.version>2.1.8</dnsjava.version>
       <freemarker.version>2.3.28</freemarker.version>
       <groovy-all.version>2.4.15</groovy-all.version>
@@ -219,6 +220,11 @@ under the License.
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-pool2</artifactId>
         <version>${commons-pool2.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-text</artifactId>
+        <version>${commons-text.version}</version>
       </dependency>
       <dependency>
         <groupId>dnsjava</groupId>

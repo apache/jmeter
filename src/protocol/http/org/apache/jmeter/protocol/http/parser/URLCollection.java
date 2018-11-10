@@ -23,8 +23,8 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
