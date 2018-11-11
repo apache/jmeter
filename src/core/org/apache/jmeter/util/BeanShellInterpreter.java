@@ -114,8 +114,8 @@ public class BeanShellInterpreter {
             throw new ClassNotFoundException(BSH_INTERPRETER);
         }
         try {
-            bshInstance = bshClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            bshInstance = bshClass.getConstructor().newInstance();
+        } catch (ReflectiveOperationException e) {
             log.error("Can't instantiate BeanShell", e);
             throw new ClassNotFoundException("Can't instantiate BeanShell", e);
         } 
@@ -136,16 +136,16 @@ public class BeanShellInterpreter {
                         +File.separator+initFile;
                 in = new File(fileToUse);
                 if (!in.exists()) {
-                    log.warn("Cannot find init file: "+initFile);
+                    log.warn("Cannot find init file: {}", initFile);
                 }
             }
             if (!in.canRead()) {
-                log.warn("Cannot read init file: "+fileToUse);
+                log.warn("Cannot read init file: {}", fileToUse);
             }
             try {
                 source(fileToUse);
             } catch (JMeterException e) {
-                log.warn("Cannot source init file: "+fileToUse,e);
+                log.warn("Cannot source init file: {}", fileToUse,e);
             }
         }
     }
