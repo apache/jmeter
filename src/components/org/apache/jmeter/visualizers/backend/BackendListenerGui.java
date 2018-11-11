@@ -170,9 +170,9 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
             String newClassName = ((String) classnameCombo.getSelectedItem()).trim();
             try {
                 BackendListenerClient client = (BackendListenerClient) Class.forName(newClassName, true,
-                        Thread.currentThread().getContextClassLoader()).newInstance();
+                        Thread.currentThread().getContextClassLoader()).getConstructor().newInstance();
                 BackendListenerClient oldClient = (BackendListenerClient) Class.forName(className, true,
-                        Thread.currentThread().getContextClassLoader()).newInstance();
+                        Thread.currentThread().getContextClassLoader()).getConstructor().newInstance();
 
                 Arguments currArgs = new Arguments();
                 argsPanel.modifyTestElement(currArgs);
