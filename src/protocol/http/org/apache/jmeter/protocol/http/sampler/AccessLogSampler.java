@@ -30,6 +30,7 @@ import org.apache.jmeter.testelement.TestCloneable;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.util.JMeterException;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -197,18 +198,17 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     public void instantiateParser() {
         if (parser == null) {
             try {
-                if (this.getParserClassName() != null && this.getParserClassName().length() > 0) {
-                    if (this.getLogFile() != null && this.getLogFile().length() > 0) {
-                        parser = (LogParser) Class.forName(getParserClassName()).newInstance();
+                if (StringUtils.isNotBlank(this.getParserClassName())) {
+                    if (StringUtils.isNotBlank(this.getLogFile())) {
+                        parser = (LogParser) Class.forName(getParserClassName()).getConstructor().newInstance();
                         parser.setSourceFile(this.getLogFile());
                         parser.setFilter(filter);
                     } else {
                         log.error("No log file specified");
                     }
                 }
-            } catch (InstantiationException | ClassNotFoundException
-                    | IllegalAccessException e) {
-                log.error("", e);
+            } catch (ReflectiveOperationException e) {
+                log.error("Can't instantiate {}", getParserClassName(), e);
             }
         }
     }
@@ -306,11 +306,11 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     }
 
     protected void initFilter() {
-        if (filter == null && filterClassName != null && filterClassName.length() > 0) {
+        if (filter == null && Strings.isNotBlank(filterClassName)) {
             try {
-                filter = (Filter) Class.forName(filterClassName).newInstance();
-            } catch (Exception e) {
-                log.warn("Couldn't instantiate filter '" + filterClassName + "'", e);
+                filter = (Filter) Class.forName(filterClassName).getConstructor().newInstance();
+            } catch (ReflectiveOperationException e) {
+                log.warn("Couldn't instantiate filter '{}'", filterClassName, e);
             }
         }
     }
@@ -321,26 +321,21 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     @Override
     public Object clone() {
         AccessLogSampler s = (AccessLogSampler) super.clone();
-        if (started) {
-            if (filterClassName != null && filterClassName.length() > 0) {
-
-                try {
-                    if (TestCloneable.class.isAssignableFrom(Class.forName(filterClassName))) {
-                        initFilter();
-                        s.filter = (Filter) ((TestCloneable) filter).clone();
-                    }
-                    if (TestCloneable.class.isAssignableFrom(Class.forName(parserClassName)))
-                    {
-                        instantiateParser();
-                        s.parser = (LogParser)((TestCloneable)parser).clone();
-                        if (filter != null)
-                        {
-                            s.parser.setFilter(s.filter);
-                        }
-                    }
-                } catch (Exception e) {
-                    log.warn("Could not clone cloneable filter", e);
+        if (started && StringUtils.isNotBlank(filterClassName)) {
+            try {
+                if (TestCloneable.class.isAssignableFrom(Class.forName(filterClassName))) {
+                    initFilter();
+                    s.filter = (Filter) ((TestCloneable) filter).clone();
                 }
+                if (TestCloneable.class.isAssignableFrom(Class.forName(parserClassName))) {
+                    instantiateParser();
+                    s.parser = (LogParser) ((TestCloneable) parser).clone();
+                    if (filter != null) {
+                        s.parser.setFilter(s.filter);
+                    }
+                }
+            } catch (Exception e) {
+                log.warn("Could not clone cloneable filter", e);
             }
         }
         return s;
