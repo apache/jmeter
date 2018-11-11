@@ -372,10 +372,7 @@ public final class MenuFactory {
     }
 
     public static JPopupMenu getDefaultConfigElementMenu() {
-        JPopupMenu pop = new JPopupMenu();
-        MenuFactory.addEditMenu(pop, true);
-        MenuFactory.addFileMenu(pop);
-        return pop;
+        return createDefaultPopupMenu();
     }
 
     public static JPopupMenu getDefaultVisualizerMenu() {
@@ -388,27 +385,22 @@ public final class MenuFactory {
     }
 
     public static JPopupMenu getDefaultTimerMenu() {
-        JPopupMenu pop = new JPopupMenu();
-        MenuFactory.addEditMenu(pop, true);
-        MenuFactory.addFileMenu(pop);
-        return pop;
+        return createDefaultPopupMenu();
     }
 
     public static JPopupMenu getDefaultAssertionMenu() {
-        JPopupMenu pop = new JPopupMenu();
-        MenuFactory.addEditMenu(pop, true);
-        MenuFactory.addFileMenu(pop);
-        return pop;
+        return createDefaultPopupMenu();
     }
 
     public static JPopupMenu getDefaultExtractorMenu() {
-        JPopupMenu pop = new JPopupMenu();
-        MenuFactory.addEditMenu(pop, true);
-        MenuFactory.addFileMenu(pop);
-        return pop;
+        return createDefaultPopupMenu();
     }
 
     public static JPopupMenu getDefaultMenu() { // if type is unknown
+        return createDefaultPopupMenu();
+    }
+
+    private static JPopupMenu createDefaultPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
