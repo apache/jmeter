@@ -578,8 +578,8 @@ public final class MenuFactory {
         }
 
         if (parent instanceof TestPlan) {
-            List<Class> samplerAndController = Arrays.asList(Sampler.class, Controller.class);
-            List<Class> exceptions = Arrays.asList(AbstractThreadGroup.class, NonTestElement.class);
+            List<Class<?>> samplerAndController = Arrays.asList(Sampler.class, Controller.class);
+            List<Class<?>> exceptions = Arrays.asList(AbstractThreadGroup.class, NonTestElement.class);
             return !foundClass(nodes, samplerAndController, exceptions);
         }
         // AbstractThreadGroup is only allowed under a TestPlan
@@ -608,7 +608,7 @@ public final class MenuFactory {
      * @param classes Array of {@link Class}
      * @return true if nodes is one of classes
      */
-    private static boolean foundClass(JMeterTreeNode[] nodes, Class[] classes) {
+    private static boolean foundClass(JMeterTreeNode[] nodes, Class<?>[] classes) {
         for (JMeterTreeNode node : nodes) {
             for (Class<?> aClass : classes) {
                 if (aClass.isInstance(node.getUserObject())) {
@@ -640,7 +640,7 @@ public final class MenuFactory {
      * @return boolean
      */
     private static boolean foundClass(
-            JMeterTreeNode[] nodes, List<Class> classes, List<Class> exceptions) {
+            JMeterTreeNode[] nodes, List<Class<?>> classes, List<Class<?>> exceptions) {
         return Arrays.stream(nodes)
                 .map(DefaultMutableTreeNode::getUserObject)
                 .filter(userObj -> exceptions.stream().noneMatch(c -> c.isInstance(userObj)))
