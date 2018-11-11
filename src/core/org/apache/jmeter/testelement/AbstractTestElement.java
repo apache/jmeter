@@ -71,7 +71,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     @Override
     public Object clone() {
         try {
-            TestElement clonedElement = this.getClass().newInstance();
+            TestElement clonedElement = this.getClass().getConstructor().newInstance();
 
             PropertyIterator iter = propertyIterator();
             while (iter.hasNext()) {
@@ -79,7 +79,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             }
             clonedElement.setRunningVersion(runningVersion);
             return clonedElement;
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (ReflectiveOperationException e) {
             throw new AssertionError(e); // clone should never return null
         }
     }
