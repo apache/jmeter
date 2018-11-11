@@ -21,6 +21,8 @@
  */
 package org.apache.jmeter.testelement.property;
 
+import java.util.Objects;
+
 import org.apache.jmeter.testelement.TestElement;
 
 public class ObjectProperty extends AbstractProperty {
@@ -101,11 +103,7 @@ public class ObjectProperty extends AbstractProperty {
      */
     @Override
     public String getStringValue() {
-        if(value != null) {
-            return value.toString();
-        } else {
-            return null;
-        }
+        return Objects.toString(value, null);
     }
 
     /**
