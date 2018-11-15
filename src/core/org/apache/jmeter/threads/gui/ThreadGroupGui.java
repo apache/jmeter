@@ -23,10 +23,12 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
@@ -45,7 +47,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     private static final String THREAD_NAME = "Thread Field";
 
     private static final String RAMP_NAME = "Ramp Up Field";
-
+    
     private JTextField threadInput;
 
     private JTextField rampInput;
@@ -237,6 +239,11 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("scheduler_configuration"))); // $NON-NLS-1$
+
+        ImageIcon warningImg = JMeterUtils.getImage("warning.png");
+        JLabel warningLabel = new JLabel(JMeterUtils.getResString("thread_group_scheduler_warning"), 
+                warningImg, SwingConstants.CENTER); // $NON-NLS-1$
+        mainPanel.add(warningLabel);
         mainPanel.add(createDurationPanel());
         mainPanel.add(createDelayPanel());
         toggleSchedulerFields(false);
