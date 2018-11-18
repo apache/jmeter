@@ -122,6 +122,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
    <li><bug>62752</bug>Add to Documentation: <code>ctx.getThreadNum()</code> is zero-based while <code>${__threadNum}</code> is one-based</li>
    <li><pr>411</pr>Use <code>SHA-1</code> instead of <code>SHA1</code> in <code>org.apache.jmeter.save.SaveService</code>. Contributed by Paco (paco.xu at daocloud.io)</li>
    <li><bug>62914</bug>Add a hint in Thread Group UI about duration of test</li>
+   <li><bug>62925</bug>Add support for ThreadDump to the JMeter non-GUI</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

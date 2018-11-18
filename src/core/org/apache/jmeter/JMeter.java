@@ -107,6 +107,7 @@ import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.HeapDumper;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.ThreadDumper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
@@ -1419,7 +1420,7 @@ public class JMeter implements JMeterPlugin {
 
     private static void waitForSignals(final List<JMeterEngine> engines, DatagramSocket socket) {
         byte[] buf = new byte[80];
-        System.out.println("Waiting for possible Shutdown/StopTestNow/Heapdump message on port "+socket.getLocalPort());//NOSONAR
+        System.out.println("Waiting for possible Shutdown/StopTestNow/HeapDump/ThreadDump message on port "+socket.getLocalPort());//NOSONAR
         DatagramPacket request = new DatagramPacket(buf, buf.length);
         try {
             while(true) {
@@ -1443,6 +1444,9 @@ public class JMeter implements JMeterPlugin {
                             break;
                         case "HeapDump" :
                             HeapDumper.dumpHeap();
+                            break;
+                        case "ThreadDump" :
+                            ThreadDumper.threadDump();
                             break;
                         default:
                             System.out.println("Command: "+command+" not recognised ");//NOSONAR                            
