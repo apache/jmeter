@@ -268,6 +268,15 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     /**
+     * Invokes {@link HTTPSamplerBase#getProxyScheme()}
+     *
+     * @return the configured host scheme to use for proxy
+     */
+    protected String getProxyScheme() {
+        return testElement.getProxyScheme();
+    }
+
+    /**
      * Invokes {@link HTTPSamplerBase#getProxyHost()}
      *
      * @return the configured host to use as a proxy
