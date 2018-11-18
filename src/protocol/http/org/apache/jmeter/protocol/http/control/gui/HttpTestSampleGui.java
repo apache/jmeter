@@ -65,6 +65,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
     private JTextField sourceIpAddr; // does not apply to Java implementation
     private JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
+    private JTextField proxyScheme;
     private JTextField proxyHost;
     private JTextField proxyPort;
     private JTextField proxyUser;
@@ -102,6 +103,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         if (!isAJP) {
             sourceIpAddr.setText(samplerBase.getIpSource());
             sourceIpType.setSelectedIndex(samplerBase.getIpSourceType());
+            proxyScheme.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYSCHEME));
             proxyHost.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYHOST));
             proxyPort.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYPORT));
             proxyUser.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYUSER));
@@ -141,6 +143,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         if (!isAJP) {
             samplerBase.setIpSource(sourceIpAddr.getText());
             samplerBase.setIpSourceType(sourceIpType.getSelectedIndex());
+            samplerBase.setProperty(HTTPSamplerBase.PROXYSCHEME, proxyScheme.getText(),"");
             samplerBase.setProperty(HTTPSamplerBase.PROXYHOST, proxyHost.getText(),"");
             samplerBase.setProperty(HTTPSamplerBase.PROXYPORT, proxyPort.getText(),"");
             samplerBase.setProperty(HTTPSamplerBase.PROXYUSER, proxyUser.getText(),"");
@@ -330,6 +333,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         if (!isAJP) {
             sourceIpAddr.setText(""); // $NON-NLS-1$
             sourceIpType.setSelectedIndex(HTTPSamplerBase.SourceType.HOSTNAME.ordinal()); //default: IP/Hostname
+            proxyScheme.setText(""); // $NON-NLS-1$
             proxyHost.setText(""); // $NON-NLS-1$
             proxyPort.setText(""); // $NON-NLS-1$
             proxyUser.setText(""); // $NON-NLS-1$
@@ -362,6 +366,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
      */
     protected final JPanel getProxyServerPanel(){
         JPanel proxyServer = new HorizontalPanel();
+        proxyServer.add(getProxySchemePanel(), BorderLayout.WEST);
         proxyServer.add(getProxyHostPanel(), BorderLayout.CENTER);
         proxyServer.add(getProxyPortPanel(), BorderLayout.EAST);
 
@@ -378,6 +383,19 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         return proxyServerPanel;
     }
 
+    private JPanel getProxySchemePanel() {
+        proxyScheme = new JTextField(5);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("web_proxy_scheme")); // $NON-NLS-1$
+        label.setLabelFor(proxyScheme);
+        label.setFont(FONT_SMALL);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(proxyScheme, BorderLayout.CENTER);
+        return panel;
+    }
+
     private JPanel getProxyHostPanel() {
         proxyHost = new JTextField(10);
 
@@ -390,7 +408,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         panel.add(proxyHost, BorderLayout.CENTER);
         return panel;
     }
-    
+
     private JPanel getProxyPortPanel() {
         proxyPort = new JTextField(10);
 

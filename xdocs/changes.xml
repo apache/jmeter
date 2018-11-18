@@ -123,6 +123,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
    <li><pr>411</pr>Use <code>SHA-1</code> instead of <code>SHA1</code> in <code>org.apache.jmeter.save.SaveService</code>. Contributed by Paco (paco.xu at daocloud.io)</li>
    <li><bug>62914</bug>Add a hint in Thread Group UI about duration of test</li>
    <li><bug>62925</bug>Add support for ThreadDump to the JMeter non-GUI</li>
+   <li><bug>62829</bug>Allow specifying Proxy server scheme for HTTP request sampler, Advanced tab and command line option. Contributed by Hitesh Patel (hitesh.h.patel at gmail.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -219,6 +220,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li>Michael Pavlov (michael.paulau at gmail.com)</li>
     <li>Ori Marko (orimarko at gmail.com)</li>
     <li>Paco (paco.xu at daocloud.io)</li>
+    <li>Hitesh Patel (hitesh.h.patel at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
