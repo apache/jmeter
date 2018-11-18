@@ -903,11 +903,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             HttpClientKey other = (HttpClientKey) obj;
             if (this.hasProxy) { // otherwise proxy String fields may be null
                 if (proxyScheme == null) {
-                    if (other.proxyScheme != null)
+                    if (other.proxyScheme != null) {
                         return false;
-                } else if (!proxyScheme.equals(other.proxyScheme))
+                    }
+                } else if (!proxyScheme.equals(other.proxyScheme)) {
                     return false;
-                
+                }
                 return 
                 this.hasProxy == other.hasProxy &&
                 this.proxyPort == other.proxyPort &&
