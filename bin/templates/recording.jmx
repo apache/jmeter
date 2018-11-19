@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="4.0" jmeter="4.0-SNAPSHOT.20180218">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.1-SNAPSHOT.20181118">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -12,16 +12,27 @@
     </TestPlan>
     <hashTree>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="host" elementType="Argument">
+            <stringProp name="Argument.name">host</stringProp>
+            <stringProp name="Argument.value">[=hostToRecord]</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="scheme" elementType="Argument">
+            <stringProp name="Argument.name">scheme</stringProp>
+            <stringProp name="Argument.value">[=schemeToRecord]</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
       </Arguments>
       <hashTree/>
       <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
           <collectionProp name="Arguments.arguments"/>
         </elementProp>
-        <stringProp name="HTTPSampler.domain"></stringProp>
+        <stringProp name="HTTPSampler.domain">[=hostToRecord]</stringProp>
         <stringProp name="HTTPSampler.port"></stringProp>
-        <stringProp name="HTTPSampler.protocol"></stringProp>
+        <stringProp name="HTTPSampler.protocol">[=schemeToRecord]</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"></stringProp>
         <stringProp name="HTTPSampler.path"></stringProp>
         <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
@@ -90,32 +101,32 @@
       <ProxyControl guiclass="ProxyControlGui" testclass="ProxyControl" testname="HTTP(S) Test Script Recorder" enabled="false">
         <stringProp name="ProxyControlGui.port">8888</stringProp>
         <collectionProp name="ProxyControlGui.exclude_list">
-          <stringProp name="1301401588">.*toolbar\.live\.com.*</stringProp>
           <stringProp name="1179605444">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|eot|otf|ttf|mp4|woff|woff2)</stringProp>
-          <stringProp name="1276958334">update\.microsoft\.com.*</stringProp>
-          <stringProp name="195066122">toolbarqueries\.google\..*</stringProp>
-          <stringProp name="-1570593883">clients.*\.google.*</stringProp>
-          <stringProp name="339269285">api\.bing\.com.*</stringProp>
+          <stringProp name="-88591710">www\.download\.windowsupdate\.com.*</stringProp>
+          <stringProp name="1206954446">tiles.*\.mozilla\.com.*</stringProp>
+          <stringProp name="-1424663473">.*detectportal\.firefox\.com.*</stringProp>
+          <stringProp name="-1899150273">api\.bing\.com.*</stringProp>
+          <stringProp name="-192420923">.*yimg\.com.*</stringProp>
           <stringProp name="305776760">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|eot|otf|ttf|mp4|woff|woff2)[\?;].*</stringProp>
-          <stringProp name="-1927115225">us\.update\.toolbar\.yahoo\.com.*</stringProp>
-          <stringProp name="-939433526">safebrowsing.*\.google\.com.*</stringProp>
-          <stringProp name="2114619729">g\.msn.*</stringProp>
-          <stringProp name="1205246556">.*msg\.yahoo\.com.*</stringProp>
-          <stringProp name="-1284196184">tiles.*\.mozilla\.com.*</stringProp>
-          <stringProp name="-1464494344">sqm\.microsoft\.com.*</stringProp>
-          <stringProp name="-1896539416">geo\.yahoo\.com.*</stringProp>
-          <stringProp name="-2044016004">www\.download\.windowsupdate\.com.*</stringProp>
-          <stringProp name="2037242655">.*yimg\.com.*</stringProp>
-          <stringProp name="-48692778">www\.google-analytics\.com.*</stringProp>
+          <stringProp name="2118375536">www\.google-analytics\.com.*</stringProp>
+          <stringProp name="-1314416226">sqm\.microsoft\.com.*</stringProp>
+          <stringProp name="11072252">.*toolbar\.yahoo\.com.*</stringProp>
+          <stringProp name="1726898318">geo\.yahoo\.com.*</stringProp>
+          <stringProp name="805311387">windowsupdate\.microsoft\.com.*</stringProp>
+          <stringProp name="1658855950">.*toolbar\.live\.com.*</stringProp>
+          <stringProp name="110431874">.*msg\.yahoo\.com.*</stringProp>
+          <stringProp name="1323576868">toolbarqueries\.google\..*</stringProp>
           <stringProp name="1739087931">http?://self-repair\.mozilla\.org.*</stringProp>
-          <stringProp name="-673404811">windowsupdate\.microsoft\.com.*</stringProp>
-          <stringProp name="-918174667">.*detectportal\.firefox\.com.*</stringProp>
-          <stringProp name="1814888918">.*toolbar\.yahoo\.com.*</stringProp>
-          <stringProp name="397298662">.*\.google\.com.*/safebrowsing/.*</stringProp>
-          <stringProp name="-1315567221">toolbar\.google\.com.*</stringProp>
-          <stringProp name="-607618767">pgq\.yahoo\.com.*</stringProp>
-          <stringProp name="-1855735577">toolbar\.avg\.com/.*</stringProp>
-          <stringProp name="517993994">toolbar\.msn\.com.*</stringProp>
+          <stringProp name="1779943373">us\.update\.toolbar\.yahoo\.com.*</stringProp>
+          <stringProp name="-190610036">.*\.google\.com.*/safebrowsing/.*</stringProp>
+          <stringProp name="-958112859">toolbar\.google\.com.*</stringProp>
+          <stringProp name="-576820688">toolbar\.msn\.com.*</stringProp>
+          <stringProp name="-1435252351">toolbar\.avg\.com/.*</stringProp>
+          <stringProp name="1193216536">update\.microsoft\.com.*</stringProp>
+          <stringProp name="-1279148329">pgq\.yahoo\.com.*</stringProp>
+          <stringProp name="1815174768">safebrowsing.*\.google\.com.*</stringProp>
+          <stringProp name="587935979">g\.msn.*</stringProp>
+          <stringProp name="1629558731">clients.*\.google.*</stringProp>
         </collectionProp>
         <collectionProp name="ProxyControlGui.include_list"/>
         <boolProp name="ProxyControlGui.capture_http_headers">true</boolProp>
@@ -171,7 +182,7 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">recording.xml</stringProp>
+          <stringProp name="filename">[=recordingOutputFile]</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
