@@ -31,7 +31,6 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -95,7 +94,8 @@ public class TestTemplateManager extends JMeterTestCase {
             TemplateManager templateManager = TemplateManager.getInstance();
             templateManager.parseTemplateFile(templateFile);
         } catch (SAXParseException ex) {
-            assertTrue("Exception did not contains expected message, got:"+ex.getMessage(), ex.getMessage().indexOf("Element type \"key\" must be declared.")>=0);
+            assertTrue("Exception did not contains expected message, got:"+ex.getMessage(), 
+                    ex.getMessage().indexOf("Element type \"key\" must be declared.")>=0);
         }
     }
 }
