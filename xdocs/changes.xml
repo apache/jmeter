@@ -83,6 +83,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>62934</bug>Add compatibility for JDBC drivers that do not support QueryTimeout </li>
 </ul>
 
 <h3>Controllers</h3>
