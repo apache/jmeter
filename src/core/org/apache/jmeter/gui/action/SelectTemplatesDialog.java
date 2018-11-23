@@ -172,34 +172,45 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         File fileToCopy = parent != null 
               ? new File(parent, template.getFileName())
               : new File(JMeterUtils.getJMeterHome(), template.getFileName());
+        replaceTemplateParametersAndLoad(actionEvent, template, isTestPlan, fileToCopy);
+    }
+
+    /**
+     * @param actionEvent {@link ActionEvent}
+     * @param template {@link Template} definition
+     * @param isTestPlan If it's a full test plan or a part
+     * @param templateFile Template file to load
+     */
+    void replaceTemplateParametersAndLoad(final ActionEvent actionEvent, final Template template,
+            final boolean isTestPlan, File templateFile) {
         File temporaryGeneratedFile = null;
         try {
             // handle customized templates (the .jmx.fmkr files)
             if (template.getParameters() != null && !template.getParameters().isEmpty()) {
-                File jmxFile = new File(fileToCopy.getAbsolutePath());
+                File jmxFile = new File(templateFile.getAbsolutePath());
                 Map<String, String> userParameters = getUserParameters();
                 Configuration templateCfg = TemplateUtil.getTemplateConfig();
                 try {
                     temporaryGeneratedFile = File.createTempFile(template.getName(), ".output");
-                    fileToCopy = temporaryGeneratedFile;
+                    templateFile = temporaryGeneratedFile;
                     TemplateUtil.processTemplate(jmxFile, temporaryGeneratedFile, templateCfg, userParameters);
                 } catch (IOException | TemplateException ex) {
                     log.error("Error generating output file {} from template {}", temporaryGeneratedFile, jmxFile, ex);
                     return;
                 }
             }
-            Load.loadProjectFile(actionEvent, fileToCopy, !isTestPlan, false);
+            Load.loadProjectFile(actionEvent, templateFile, !isTestPlan, false);
             this.dispose();
         } finally {
-            if(temporaryGeneratedFile != null && !temporaryGeneratedFile.delete()) {
-                log.warn("Could not delete generated output file {} from template {}", temporaryGeneratedFile, fileToCopy);
+            if (temporaryGeneratedFile != null && !temporaryGeneratedFile.delete()) {
+                log.warn("Could not delete generated output file {} from template {}", temporaryGeneratedFile, templateFile);
             }
         }
     }
 
     /**
-     * @param actionEvent
-     * @return true if we can continue
+     * @param actionEvent {@link ActionEvent}
+     * @return true if plan is not dirty or has been saved 
      */
     boolean checkDirty(final ActionEvent actionEvent) {
         ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.CHECK_DIRTY));
@@ -211,7 +222,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
                     JMeterUtils.getResString("template_load?"),  // $NON-NLS-1$
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
-            if(response == JOptionPane.YES_OPTION) {
+            if (response == JOptionPane.YES_OPTION) {
                 ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.SAVE));
                 return true;
             }
@@ -224,7 +235,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
     
     private Map<String, String> getUserParameters(){
         Map<String, String> userParameters = new LinkedHashMap<>();
-        for(Entry<String, JLabeledTextField> entry : parametersTextFields.entrySet()) {
+        for (Entry<String, JLabeledTextField> entry : parametersTextFields.entrySet()) {
             userParameters.put(entry.getKey(), entry.getValue().getText());
         }
         return userParameters;
@@ -295,18 +306,27 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         } else if (source == applyTemplateButton) {
             String selectedTemplate = templateList.getText();
             Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);
-            if(template.getParameters() != null && !template.getParameters().isEmpty()) {
+            if (hasParameters(template)) {
                 this.setContentPane(configureParametersPanel(template.getParameters()));
                 this.revalidate();
-            }else {
+            } else {
                 checkDirtyAndLoad(e);
             }
         } else if (source == reloadTemplateButton || source == previous) {
             resetJDialog();
-        } else if(source == validateButton) {
+        } else if (source == validateButton) {
             checkDirtyAndLoad(e);
             resetJDialog();
         }
+    }
+    
+    /**
+     * 
+     * @param template {@link Template}
+     * @return true if template has not parameter 
+     */
+    private boolean hasParameters(Template template) {
+        return !(template.getParameters() == null || template.getParameters().isEmpty());
     }
     
     @Override
@@ -349,7 +369,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         int parameterCount = 0;
         
         JPanel gridbagpanel = new JPanel(new GridBagLayout());
-        for(Entry<String, String> entry : parameters.entrySet()) {
+        for (Entry<String, String> entry : parameters.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             JLabeledTextField paramLabel = new JLabeledTextField(key + " : ");

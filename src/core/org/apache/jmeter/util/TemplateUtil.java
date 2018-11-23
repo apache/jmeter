@@ -62,8 +62,8 @@ public final class TemplateUtil {
     /**
      * Process a given freemarker template and put its result in a new folder.
      * 
-     * @param template : file that contains the freemarker template to process
-     * @param outputFile : {@link File} created from template
+     * @param template file that contains the freemarker template to process
+     * @param outputFile {@link File} created from template
      * @param templateConfig Configuration of the template
      * @param data to inject in the template
      * @throws IOException if an I/O exception occurs during writing to the writer

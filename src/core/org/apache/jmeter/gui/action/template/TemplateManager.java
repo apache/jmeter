@@ -125,9 +125,11 @@ public class TemplateManager {
     
     public final class LoggingErrorHandler implements ErrorHandler {
         private Logger logger;
+        private File file;
 
-        public LoggingErrorHandler(Logger logger) {
+        public LoggingErrorHandler(Logger logger, File file) {
             this.logger = logger;
+            this.file = file;
         }
         @Override
         public void error(SAXParseException ex) throws SAXException {
@@ -141,7 +143,7 @@ public class TemplateManager {
 
         @Override
         public void warning(SAXParseException ex) throws SAXException {
-            logger.warn("Warning", ex);
+            logger.warn("Warning parsing file {}", file, ex);
         }
     }
     
@@ -167,7 +169,7 @@ public class TemplateManager {
         dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
         DocumentBuilder bd = dbf.newDocumentBuilder();
         bd.setEntityResolver(new DefaultEntityResolver());
-        LoggingErrorHandler errorHandler = new LoggingErrorHandler(log);
+        LoggingErrorHandler errorHandler = new LoggingErrorHandler(log, file);
         bd.setErrorHandler(errorHandler);
         Document document = bd.parse(file.getAbsolutePath());
         document.getDocumentElement().normalize();
@@ -181,17 +183,17 @@ public class TemplateManager {
     }
 
     /**
-     * @param templates
-     * @param templateNode
+     * @param templates Map of {@link Template} referenced by name
+     * @param templateNode {@link Node} the xml template node
      */
     void parseTemplateNode(Map<String, Template> templates, Node templateNode) {
         if (templateNode.getNodeType() == Node.ELEMENT_NODE) {
             Template template = new Template();
             Element element =  (Element) templateNode;
             template.setTestPlan("true".equals(element.getAttribute("isTestPlan")));
-            template.setName(element.getElementsByTagName("name").item(0).getTextContent());
-            template.setDescription(element.getElementsByTagName("description").item(0).getTextContent());
-            template.setFileName(element.getElementsByTagName("fileName").item(0).getTextContent());
+            template.setName(textOfFirstTag(element, "name"));
+            template.setDescription(textOfFirstTag(element, "description"));
+            template.setFileName(textOfFirstTag(element, "fileName"));
             NodeList nl = element.getElementsByTagName("parameters");
             if(nl.getLength()>0) {
                 NodeList parameterNodes = ((Element) nl.item(0)).getElementsByTagName("parameter");
@@ -202,6 +204,10 @@ public class TemplateManager {
         }
     }
 
+    private String textOfFirstTag(Element element, String tagName) {
+        return element.getElementsByTagName(tagName).item(0).getTextContent();
+    }
+    
     private Map<String, String> parseParameterNodes(NodeList parameterNodes) {
         Map<String, String> parametersMap = new HashMap<>();
         for (int i = 0; i < parameterNodes.getLength(); i++) {
