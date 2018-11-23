@@ -196,12 +196,17 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     }
 
     private void addErrorMetric(String transaction, String responseCode, String responseMessage, long count) {
+        final int MAX_RES_CODE_LENGTH_FOR_UDP = 50;
         if (count > 0) {
             StringBuilder tag = new StringBuilder(70);
             tag.append(TAG_APPLICATION).append(application);
             tag.append(TAG_TRANSACTION).append(transaction);
             tag.append(TAG_RESPONSE_CODE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseCode));
-            tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage));
+            if(this.influxdbMetricsManager instanceof UdpMetricsSender && responseMessage.length() > MAX_RES_CODE_LENGTH_FOR_UDP) {
+                tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage.substring(0, MAX_RES_CODE_LENGTH_FOR_UDP) + "..."));
+            } else {
+                tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage));
+            }
             tag.append(userTag);
 
             StringBuilder field = new StringBuilder(30);
