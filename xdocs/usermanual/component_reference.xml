@@ -1733,6 +1733,7 @@ Relative paths are resolved against the current directory.
 <br />Failing that, against the directory containing the test script (JMX file).
 </property>
 </properties>
+<note>You can pass mail related environment properties by adding to user.properties any of the properties described <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/pop3/package-summary.html">here</a>.</note>
 <p>
 Messages are stored as subsamples of the main sampler.
 Multipart message parts are stored as subsamples of the message.
