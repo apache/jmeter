@@ -54,6 +54,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -202,6 +203,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                     props.put(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
                 }
             }
+            addCustomProperties(props);
 
             // Get session
             Session session = Session.getInstance(props, null);
@@ -311,6 +313,19 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         }
         parent.setSuccessful(isOK);
         return parent;
+    }
+
+    protected void addCustomProperties(Properties props) {
+        Properties jMeterProperties = JMeterUtils.getJMeterProperties();
+        @SuppressWarnings("unchecked")
+        Enumeration<String> enums = (Enumeration<String>) jMeterProperties.propertyNames();
+        while (enums.hasMoreElements()) {
+            String key = enums.nextElement();
+            if (key.startsWith("mail.")) {
+                String value = jMeterProperties.getProperty(key);
+                props.put(key, value);
+            }
+        }
     }
 
     private void appendMessageData(SampleResult child, Message message)
