@@ -203,7 +203,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             tag.append(TAG_TRANSACTION).append(transaction);
             tag.append(TAG_RESPONSE_CODE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseCode));
             if(this.influxdbMetricsManager instanceof UdpMetricsSender && responseMessage.length() > MAX_RES_CODE_LENGTH_FOR_UDP) {
-                tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage.substring(0, MAX_RES_CODE_LENGTH_FOR_UDP) + "..."));
+                String trimmedMessage = responseMessage.substring(0, MAX_RES_CODE_LENGTH_FOR_UDP);
+                tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(trimmedMessage + "..."));
             } else {
                 tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage));
             }
