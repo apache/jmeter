@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -281,8 +282,8 @@ public class KeyToolUtils {
 
     private static void generateSignedCert(File keystore, String password,
             int validity, String alias, String subject) throws IOException {
-        String dname = "cn=" + subject + ", o=JMeter Proxy (TEMPORARY TRUST ONLY)";
-        String ext = "san=dns:" + subject;
+        String dname = "cn=" + guardSubjectName(subject) + ", o=JMeter Proxy (TEMPORARY TRUST ONLY)";
+        String ext = "san=" + chooseExtension(subject);
         KeyToolUtils.genkeypair(keystore, alias, password, validity, dname, ext);
         //rem generate cert for DOMAIN using CA and import it
 
@@ -299,6 +300,34 @@ public class KeyToolUtils {
         // import the certificate
         InputStream certIn = new ByteArrayInputStream(certOut.toByteArray());
         KeyToolUtils.keytool("-importcert", keystore, password, alias, certIn, null, "-noprompt");
+    }
+
+    /**
+     * The subject name of an certificate must not start with a number or else the keytool will bark.
+     * To mitigate this prefix the argument with a word, if it starts with a number.
+     *
+     * @param subject name of the host or an IP address
+     * @return a string that is safe to use as subject name
+     */
+    private static String guardSubjectName(String subject) {
+        if (NumberUtils.isDigits(subject.substring(0,1))) {
+            return "ip" + subject;
+        }
+        return subject;
+    }
+
+    /**
+     * The SAN (subject alternative name) includes the IP address or hostname of the service, but the types
+     * are different for IP address and hostname.
+     *
+     * @param subject name of the host or its IP address
+     * @return prefixed extension
+     */
+    private static String chooseExtension(String subject) {
+        if (NumberUtils.isDigits(subject.substring(0,1))) {
+            return "ip:" + subject;
+        }
+        return "dns:" + subject;
     }
 
     /**
