@@ -52,7 +52,7 @@ public class KeyToolUtils {
 
     /** Name of property that can be used to override the default keytool location */
     private static final String KEYTOOL_DIRECTORY = "keytool.directory"; // $NON-NLS-1$
-    
+
     private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=JMeter Intermediate CA for recording (INSTALL ONLY IF IT S YOURS)"; // $NON-NLS-1$
 
     public static final String ROOT_CACERT_CRT_PFX = "ApacheJMeterTemporaryRootCA"; // $NON-NLS-1$ (do not change)
@@ -72,7 +72,7 @@ public class KeyToolUtils {
 
     static {
         StringBuilder sb = new StringBuilder();
-        
+
         sb.append("CN=_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)"); // $NON-NLS-1$
         String userName = System.getProperty("user.name"); // $NON-NLS-1$
         userName = userName.replace('\\','/'); // Backslash is special (Bugzilla 56178)
@@ -126,7 +126,7 @@ public class KeyToolUtils {
             sb.append(value);
         }
     }
-    
+
     /**
      * Generate a self-signed keypair using the algorithm "RSA".
      *
@@ -256,7 +256,7 @@ public class KeyToolUtils {
         KeyToolUtils.keytool("-exportcert", keystore, password, ROOTCA_ALIAS, null, null, "-rfc", "-file", ROOT_CACERT_CRT);
         // Copy for Opera
         if(caCertCrt.exists() && caCertCrt.canRead()) {
-            FileUtils.copyFile(caCertCrt, caCertUsr);            
+            FileUtils.copyFile(caCertCrt, caCertUsr);
         } else {
             log.warn("Failed creating "+caCertCrt.getAbsolutePath()+", check 'keytool' utility in path is available and points to a JDK >= 7");
         }
@@ -368,7 +368,7 @@ public class KeyToolUtils {
             if (exitVal != 0) {
                 throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
             }
-        } catch (InterruptedException e) { // NOSONAR 
+        } catch (InterruptedException e) { // NOSONAR
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
     }
