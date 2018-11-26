@@ -102,6 +102,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         DEFAULT_ARGS.put("application", "application name");
         DEFAULT_ARGS.put("measurement", DEFAULT_MEASUREMENT);
         DEFAULT_ARGS.put("summaryOnly", "false");
+        DEFAULT_ARGS.put("responseMessageSize", "0");
         DEFAULT_ARGS.put("samplersRegex", ".*");
         DEFAULT_ARGS.put("percentiles", "99;95;90");
         DEFAULT_ARGS.put("testTitle", "Test name");
@@ -110,6 +111,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     private boolean summaryOnly;
     private String measurement = "DEFAULT_MEASUREMENT";
+    private int responseMessageSize;
     private String samplersRegex = "";
     private Pattern samplersToFilter;
     private Map<String, Float> okPercentiles;
@@ -196,14 +198,14 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     }
 
     private void addErrorMetric(String transaction, String responseCode, String responseMessage, long count) {
-        final int MAX_RES_CODE_LENGTH_FOR_UDP = 50;
         if (count > 0) {
             StringBuilder tag = new StringBuilder(70);
             tag.append(TAG_APPLICATION).append(application);
             tag.append(TAG_TRANSACTION).append(transaction);
             tag.append(TAG_RESPONSE_CODE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseCode));
-            if(this.influxdbMetricsManager instanceof UdpMetricsSender && responseMessage.length() > MAX_RES_CODE_LENGTH_FOR_UDP) {
-                String trimmedMessage = responseMessage.substring(0, MAX_RES_CODE_LENGTH_FOR_UDP);
+            if (this.influxdbMetricsManager instanceof UdpMetricsSender && responseMessageSize > 0
+                    && responseMessage.length() > responseMessageSize) {
+                String trimmedMessage = responseMessage.substring(0, responseMessageSize);
                 tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(trimmedMessage + "..."));
             } else {
                 tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage));
@@ -323,6 +325,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         String influxdbMetricsSender = context.getParameter("influxdbMetricsSender");
         String influxdbUrl = context.getParameter("influxdbUrl");
         summaryOnly = context.getBooleanParameter("summaryOnly", false);
+        responseMessageSize = context.getIntParameter("responseMessageSize", 0);
         samplersRegex = context.getParameter("samplersRegex", "");
         application = AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter("application", ""));
         measurement = AbstractInfluxdbMetricsSender
