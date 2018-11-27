@@ -459,7 +459,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         for (String clazz : classesToAdd) {
             try {
                 // Instantiate render classes
-                final ResultRenderer renderer = (ResultRenderer) Class.forName(clazz).newInstance();
+                final ResultRenderer renderer = (ResultRenderer) Class.forName(clazz).getDeclaredConstructor().newInstance();
                 if (textRenderer.equals(renderer.toString())){
                     textObject=renderer;
                 }
