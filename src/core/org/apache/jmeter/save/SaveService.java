@@ -284,7 +284,7 @@ public class SaveService {
         if (useMapper){
             jmxsaver.registerConverter((Converter) Class.forName(key).getConstructor(Mapper.class).newInstance(jmxsaver.getMapper()));
         } else {
-            jmxsaver.registerConverter((Converter) Class.forName(key).newInstance());
+            jmxsaver.registerConverter((Converter) Class.forName(key).getDeclaredConstructor().newInstance());
         }
     }
 
