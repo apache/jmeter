@@ -132,12 +132,13 @@ public class AddThinkTimeBetweenEachStep extends AbstractAction {
      * @param guiPackage {@link GuiPackage}
      * @param parentNode {@link JMeterTreeNode}
      * @return array of {@link JMeterTreeNode}
-     * @throws IllegalUserActionException
+     * @throws ReflectiveOperationException when class instantiation for {@value #DEFAULT_IMPLEMENTATION} fails
+     * @throws IllegalUserActionException when {@link ThinkTimeCreator#createThinkTime(GuiPackage, JMeterTreeNode)} throws this
      */
-    private JMeterTreeNode[] createThinkTime(GuiPackage guiPackage, JMeterTreeNode parentNode) 
-        throws Exception {
+    private JMeterTreeNode[] createThinkTime(GuiPackage guiPackage, JMeterTreeNode parentNode)
+            throws ReflectiveOperationException, IllegalUserActionException  {
         Class<?> clazz = Class.forName(DEFAULT_IMPLEMENTATION);
-        ThinkTimeCreator thinkTimeCreator = (ThinkTimeCreator) clazz.newInstance();
+        ThinkTimeCreator thinkTimeCreator = (ThinkTimeCreator) clazz.getDeclaredConstructor().newInstance();
         return thinkTimeCreator.createThinkTime(guiPackage, parentNode);
     }
     
