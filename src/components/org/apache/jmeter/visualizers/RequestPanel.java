@@ -63,7 +63,7 @@ public class RequestPanel {
         for (String clazz : classesToAdd) {
             try {
                 // Instantiate requestview classes
-                final RequestView requestView = (RequestView) Class.forName(clazz).newInstance();
+                final RequestView requestView = (RequestView) Class.forName(clazz).getDeclaredConstructor().newInstance();
                 if (rawTab.equals(requestView.getLabel())) {
                     rawObject = requestView; // use later
                 } else {
