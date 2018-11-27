@@ -95,12 +95,12 @@ public class BeanShellInterpreter {
     /**
      *
      * @param init initialisation file
-     * @param _log logger to pass to interpreter
+     * @param log logger to pass to interpreter
      * @throws ClassNotFoundException when beanshell can not be instantiated
      */
-    public BeanShellInterpreter(String init, Logger _log)  throws ClassNotFoundException {
+    public BeanShellInterpreter(String init, Logger log)  throws ClassNotFoundException {
         initFile = init;
-        logger = _log;
+        logger = log;
         init();
     }
 
