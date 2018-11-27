@@ -128,7 +128,7 @@ public class Daemon extends Thread implements Stoppable {
                     Socket clientSocket = mainSocket.accept();
                     if (running) {
                         // Pass request to new proxy thread
-                        Proxy thd = proxyClass.newInstance();
+                        Proxy thd = proxyClass.getDeclaredConstructor().newInstance();
                         thd.configure(clientSocket, target, pageEncodings, formEncodings);
                         thd.start();
                     }
