@@ -308,11 +308,10 @@ public final class AllTests {
         if (args.length >= 3) {
             try {
                 System.out.println("Using initializeProperties() from " + args[2]);
-                UnitTestManager um = (UnitTestManager) Class.forName(args[2]).newInstance();
+                UnitTestManager um = (UnitTestManager) Class.forName(args[2]).getDeclaredConstructor().newInstance();
                 System.out.println("Setting up initial properties using: " + args[1]);
                 um.initializeProperties(args[1]);
-            } catch (ClassNotFoundException | IllegalAccessException
-                    | InstantiationException e) {
+            } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
                 System.out.println("Couldn't create: " + args[2]);
                 e.printStackTrace();
             }
