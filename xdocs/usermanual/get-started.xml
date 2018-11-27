@@ -381,7 +381,15 @@ options when <code>-jar</code> is used.</p>
 <p>A popup appears, you can then choose a template among the list:
 <figure image="template_wizard.png">Templates popup</figure>
 </p>
+<p>Some templates may need parameters input from the user. For theses ones, after a click on the create button,
+a new window will appear as follow :
+<figure image="templates/template_parameters.png">Parameters window</figure>
+</p>
+<p>
+When you are done with parameters, click on the <code>Validate</code> button and the template will be created.
+</p>
 <p>A documentation for each template explains what to do once test plan is created from template.</p>
+<note>You can create your own templates following documentation <a href="../creating-templates.html" >here</a></note>
 </subsection>
 
 <subsection name="&sect-num;.4.3 Using JMeter behind a proxy" anchor="proxy_server">

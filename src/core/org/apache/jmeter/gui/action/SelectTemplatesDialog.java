@@ -212,7 +212,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
      * @param actionEvent {@link ActionEvent}
      * @return true if plan is not dirty or has been saved 
      */
-    boolean checkDirty(final ActionEvent actionEvent) {
+    private boolean checkDirty(final ActionEvent actionEvent) {
         ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.CHECK_DIRTY));
         GuiPackage guiPackage = GuiPackage.getInstance();
         if (guiPackage.isDirty()) {
