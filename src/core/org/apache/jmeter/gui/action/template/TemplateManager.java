@@ -19,9 +19,12 @@
 package org.apache.jmeter.gui.action.template;
 
 import java.io.File;
-import java.util.LinkedHashMap;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -29,24 +32,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.StreamException;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * Manages Test Plan templates
  * @since 2.10
  */
 public class TemplateManager {
-    // Created by XStream reading templates.xml
-    private static class Templates {
-        /*
-         * N.B. Must use LinkedHashMap for field type
-         * XStream creates a plain HashMap if one uses Map as the field type.
-         */
-        private final LinkedHashMap<String, Template> templates = new LinkedHashMap<>();
-    }
     private static final String TEMPLATE_FILES = JMeterUtils.getPropDefault("template.files", // $NON-NLS-1$
             "/bin/templates/templates.xml");
 
@@ -56,52 +56,12 @@ public class TemplateManager {
     
     private final Map<String, Template> allTemplates;
 
-    private final XStream xstream = initXStream();
-
     public static TemplateManager getInstance() {
         return SINGLETON;
     }
     
     private TemplateManager()  {
-        allTemplates = readTemplates();            
-    }
-    
-    private XStream initXStream() {
-        XStream xstream = new XStream(new DomDriver(){
-            /**
-             * Create the DocumentBuilderFactory instance.
-             * See https://blog.compass-security.com/2012/08/secure-xml-parser-configuration/
-             * See https://github.com/x-stream/xstream/issues/25
-             * @return the new instance
-             */
-            @Override
-            protected DocumentBuilderFactory createDocumentBuilderFactory() {
-                final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                try {
-                    factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-                    factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-                } catch (ParserConfigurationException e) {
-                    throw new StreamException(e);
-                }
-                factory.setExpandEntityReferences(false);
-                return factory;
-            }
-        });
-        JMeterUtils.setupXStreamSecurityPolicy(xstream);
-        xstream.alias("template", Template.class);
-        xstream.alias("templates", Templates.class);
-        xstream.useAttributeFor(Template.class, "isTestPlan");
-        
-        // templates i
-        xstream.addImplicitMap(Templates.class, 
-                // field TemplateManager#templates 
-                "templates", // $NON-NLS-1$
-                Template.class,     
-                // field Template#name 
-                "name" // $NON-NLS-1$
-                );
-                
-        return xstream;
+        allTemplates = readTemplates();
     }
 
     public void addTemplate(Template template) {
@@ -120,26 +80,26 @@ public class TemplateManager {
     }
 
     /**
-     * @return the templates names
+     * @return the templates names sorted in alphabetical order
      */
     public String[] getTemplateNames() {
         return allTemplates.keySet().toArray(new String[allTemplates.size()]);
     }
 
     private Map<String, Template> readTemplates() {
-        final Map<String, Template> temps = new LinkedHashMap<>();
+        final Map<String, Template> temps = new TreeMap<>();
        
         final String[] templateFiles = TEMPLATE_FILES.split(",");
         for (String templateFile : templateFiles) {
             if(!StringUtils.isEmpty(templateFile)) {
-                final File f = new File(JMeterUtils.getJMeterHome(), templateFile); 
+                final File file = new File(JMeterUtils.getJMeterHome(), templateFile); 
                 try {
-                    if(f.exists() && f.canRead()) {
+                    if(file.exists() && file.canRead()) {
                         if (log.isInfoEnabled()) {
-                            log.info("Reading templates from: {}", f.getAbsolutePath());
+                            log.info("Reading templates from: {}", file.getAbsolutePath());
                         }
-                        final File parent = f.getParentFile();
-                        final LinkedHashMap<String, Template> templates = ((Templates) xstream.fromXML(f)).templates;
+                        Map<String, Template> templates = parseTemplateFile(file);
+                        final File parent = file.getParentFile();
                         for(Template t : templates.values()) {
                             if (!t.getFileName().startsWith("/")) {
                                 t.setParent(parent);
@@ -149,18 +109,112 @@ public class TemplateManager {
                     } else {
                         if (log.isWarnEnabled()) {
                             log.warn("Ignoring template file:'{}' as it does not exist or is not readable",
-                                    f.getAbsolutePath());
+                                    file.getAbsolutePath());
                         }
                     }
                 } catch(Exception ex) {
                     if (log.isWarnEnabled()) {
-                        log.warn("Ignoring template file:'{}', an error occurred parsing the file", f.getAbsolutePath(),
+                        log.warn("Ignoring template file:'{}', an error occurred parsing the file", file.getAbsolutePath(),
                                 ex);
                     }
                 } 
             }
         }
         return temps;
+    }
+    
+    public final class LoggingErrorHandler implements ErrorHandler {
+        private Logger logger;
+        private File file;
+
+        public LoggingErrorHandler(Logger logger, File file) {
+            this.logger = logger;
+            this.file = file;
+        }
+        @Override
+        public void error(SAXParseException ex) throws SAXException {
+            throw ex;
+        }
+
+        @Override
+        public void fatalError(SAXParseException ex) throws SAXException {
+            throw ex;
+        }
+
+        @Override
+        public void warning(SAXParseException ex) throws SAXException {
+            logger.warn("Warning parsing file {}", file, ex);
+        }
+    }
+    
+    public static class DefaultEntityResolver implements EntityResolver {
+        public DefaultEntityResolver() {
+            super();
+        }
+
+        public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+            if(systemId.endsWith("templates.dtd")) {
+                return new InputSource(TemplateManager.class.getResourceAsStream("/org/apache/jmeter/gui/action/template/templates.dtd"));
+            } else {
+                return null;
+            }
+        }
+    }
+
+    public Map<String, Template> parseTemplateFile(File file) throws IOException, SAXException, ParserConfigurationException{
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setValidating(true);
+        dbf.setNamespaceAware(true);
+        dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        DocumentBuilder bd = dbf.newDocumentBuilder();
+        bd.setEntityResolver(new DefaultEntityResolver());
+        LoggingErrorHandler errorHandler = new LoggingErrorHandler(log, file);
+        bd.setErrorHandler(errorHandler);
+        Document document = bd.parse(file.getAbsolutePath());
+        document.getDocumentElement().normalize();
+        Map<String, Template> templates = new TreeMap<>();
+        NodeList templateNodes = document.getElementsByTagName("template");
+        for (int i = 0; i < templateNodes.getLength(); i++) {
+            Node node = templateNodes.item(i);
+            parseTemplateNode(templates, node);
+        }
+        return templates;
+    }
+
+    /**
+     * @param templates Map of {@link Template} referenced by name
+     * @param templateNode {@link Node} the xml template node
+     */
+    void parseTemplateNode(Map<String, Template> templates, Node templateNode) {
+        if (templateNode.getNodeType() == Node.ELEMENT_NODE) {
+            Template template = new Template();
+            Element element =  (Element) templateNode;
+            template.setTestPlan("true".equals(element.getAttribute("isTestPlan")));
+            template.setName(textOfFirstTag(element, "name"));
+            template.setDescription(textOfFirstTag(element, "description"));
+            template.setFileName(textOfFirstTag(element, "fileName"));
+            NodeList nl = element.getElementsByTagName("parameters");
+            if(nl.getLength()>0) {
+                NodeList parameterNodes = ((Element) nl.item(0)).getElementsByTagName("parameter");
+                Map<String, String> parameters = parseParameterNodes(parameterNodes);
+                template.setParameters(parameters);
+            }
+            templates.put(template.getName(), template);
+        }
+    }
+
+    private String textOfFirstTag(Element element, String tagName) {
+        return element.getElementsByTagName(tagName).item(0).getTextContent();
+    }
+    
+    private Map<String, String> parseParameterNodes(NodeList parameterNodes) {
+        Map<String, String> parametersMap = new HashMap<>();
+        for (int i = 0; i < parameterNodes.getLength(); i++) {
+            Element element =  (Element) parameterNodes.item(i);
+            parametersMap.put(element.getAttribute("key"), element.getAttribute("defaultValue"));
+        }
+        return parametersMap;
     }
 
     /**
