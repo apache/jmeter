@@ -18,7 +18,7 @@
 <!-- 
     See the DTD for allowable elements and attributes.
  -->
- <!DOCTYPE templates SYSTEM "templates.dtd">
+<!DOCTYPE templates SYSTEM "templates.dtd">
 <templates>
     <template isTestPlan="true">
         <name>Recording</name>
@@ -42,6 +42,11 @@
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
             </ul>       
         ]]></description>
+        <parameters>
+            <parameter defaultValue="recording.xml" key="recordingOutputFile"/>
+            <parameter defaultValue="www.example.com" key="hostToRecord"/>
+            <parameter defaultValue="https" key="schemeToRecord"/>
+        </parameters>
     </template>
     <template isTestPlan="true">
         <name>Recording with Think Time</name>

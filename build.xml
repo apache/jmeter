@@ -1057,8 +1057,8 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${src.core}" includes="**/*.properties">
         <exclude name="*eucJP*"/>
       </fileset>
-      <fileset dir="${src.core}" includes="**/*.xml">
-      </fileset>
+      <fileset dir="${src.core}" includes="**/*.xml" />
+      <fileset dir="${src.core}" includes="**/*.dtd" />
       <!-- This file is used by the jmeter -h option -->
       <fileset dir="${src.core}" includes="org/apache/jmeter/help.txt"/>
     </jar>
@@ -1703,6 +1703,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="log4j2.xml"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="proxyserver.jks"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="users.dtd"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="templates/templates.dtd"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="users.xml"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="report-template/**/*.*" />
     </jar>
