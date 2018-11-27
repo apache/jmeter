@@ -222,7 +222,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
                     Class<?> commandClass = Class.forName(strClassName);
                     if (!Modifier.isAbstract(commandClass.getModifiers())) {
                         log.debug("Instantiating: {}", commandClass);
-                        MenuCreator creator = (MenuCreator) commandClass.newInstance();
+                        MenuCreator creator = (MenuCreator) commandClass.getDeclaredConstructor().newInstance();
                         creators.add(creator);
                     }
                 } catch (Exception e) {
