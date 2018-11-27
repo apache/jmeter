@@ -157,7 +157,7 @@ public class PowerTableModel extends DefaultTableModel {
     private Object createDefaultValue(int i) { // CHECKSTYLE IGNORE ReturnCount
         Class<?> colClass = getColumnClass(i);
         try {
-            return colClass.newInstance();
+            return colClass.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { String.class });
