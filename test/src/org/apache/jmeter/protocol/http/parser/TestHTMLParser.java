@@ -326,7 +326,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
             HTMLParser.getParser(TestClass.class.getName());
             fail("Should not have been able to create the parser");
         } catch (LinkExtractorParseException e) {
-            if (e.getCause() instanceof InstantiationException) {
+            if (e.getCause() instanceof ReflectiveOperationException) {
                 return;
             }
             throw e;
