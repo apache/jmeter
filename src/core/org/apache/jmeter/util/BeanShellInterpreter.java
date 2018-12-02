@@ -114,8 +114,8 @@ public class BeanShellInterpreter {
             throw new ClassNotFoundException(BSH_INTERPRETER);
         }
         try {
-            bshInstance = bshClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            bshInstance = bshClass.getDeclaredConstructor().newInstance();
+        } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
             log.error("Can't instantiate BeanShell", e);
             throw new ClassNotFoundException("Can't instantiate BeanShell", e);
         } 
