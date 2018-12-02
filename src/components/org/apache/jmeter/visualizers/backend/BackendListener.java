@@ -279,7 +279,7 @@ public class BackendListener extends AbstractTestElement
             return new ErrorBackendListenerClient();
         }
         try {
-            return (BackendListenerClient) clientClass.newInstance();
+            return (BackendListenerClient) clientClass.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             log.error("Exception creating: {}", clientClass, e);
             return new ErrorBackendListenerClient();
