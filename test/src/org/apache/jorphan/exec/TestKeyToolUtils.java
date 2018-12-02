@@ -19,7 +19,6 @@
 /**
  * Package to test JOrphanUtils methods 
  */
-     
 package org.apache.jorphan.exec;
 
 import static org.junit.Assert.fail;
@@ -44,7 +43,7 @@ public class TestKeyToolUtils {
     public void setup() throws IOException {
         keystore = File.createTempFile("dummy-keystore", "jks");
         keystore.deleteOnExit();
-        KeyToolUtils.generateProxyCA(keystore, password , validity );
+        KeyToolUtils.generateProxyCA(keystore, password, validity );
     }
 
     @After
