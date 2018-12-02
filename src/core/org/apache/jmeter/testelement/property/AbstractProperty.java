@@ -255,7 +255,7 @@ public abstract class AbstractProperty implements JMeterProperty {
 
     protected JMeterProperty getBlankProperty() {
         try {
-            JMeterProperty prop = getPropertyType().newInstance();
+            JMeterProperty prop = getPropertyType().getDeclaredConstructor().newInstance();
             if (prop instanceof NullProperty) {
                 return new StringProperty();
             }
@@ -295,7 +295,7 @@ public abstract class AbstractProperty implements JMeterProperty {
     protected Collection<JMeterProperty> normalizeList(Collection<?> coll) {
         try {
             @SuppressWarnings("unchecked") // empty collection
-            Collection<JMeterProperty> newColl = coll.getClass().newInstance();
+            Collection<JMeterProperty> newColl = coll.getClass().getDeclaredConstructor().newInstance();
             for (Object item : coll) {
                 newColl.add(convertObject(item));
             }
@@ -317,7 +317,7 @@ public abstract class AbstractProperty implements JMeterProperty {
     protected Map<String, JMeterProperty> normalizeMap(Map<?,?> coll) {
         try {
             @SuppressWarnings("unchecked") // empty collection
-            Map<String, JMeterProperty> newColl = coll.getClass().newInstance();
+            Map<String, JMeterProperty> newColl = coll.getClass().getDeclaredConstructor().newInstance();
             for (Map.Entry<?,?> entry : coll.entrySet()) {
                 Object key = entry.getKey();
                 Object prop = entry.getValue();
