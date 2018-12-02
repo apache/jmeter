@@ -139,6 +139,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><pr>406</pr>Add a short paragraph on how to use a security manager with JMeter.</li>
     <li><bug>62893</bug>Use StringEscapeUtils from commons-text (version 1.6) instead of the deprecated ones from commons-lang3.</li>
     <li>Update to ActiveMQ 5.15.7 (from 5.5.16)</li>
+    <li><bug>62972</bug><pr>435</pr>Replace calls to deprecated method <code>Class#newInstance</code>.</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
