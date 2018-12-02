@@ -169,10 +169,8 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
             String newClassName = ((String) classnameCombo.getSelectedItem()).trim();
             try {
-                BackendListenerClient client = (BackendListenerClient) Class.forName(newClassName, true,
-                        Thread.currentThread().getContextClassLoader()).newInstance();
-                BackendListenerClient oldClient = (BackendListenerClient) Class.forName(className, true,
-                        Thread.currentThread().getContextClassLoader()).newInstance();
+                BackendListenerClient client = createBackendListenerClient(newClassName);
+                BackendListenerClient oldClient = createBackendListenerClient(className);
 
                 Arguments currArgs = new Arguments();
                 argsPanel.modifyTestElement(currArgs);
@@ -220,6 +218,13 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                 log.error("Error getting argument list for {}", newClassName, e);
             }
         }
+    }
+
+
+    private BackendListenerClient createBackendListenerClient(String newClassName)
+            throws ReflectiveOperationException {
+        return (BackendListenerClient) Class.forName(newClassName, true,
+                Thread.currentThread().getContextClassLoader()).getDeclaredConstructor().newInstance();
     }
 
     /**
