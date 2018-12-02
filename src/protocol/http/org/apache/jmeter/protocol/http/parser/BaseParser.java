@@ -63,14 +63,13 @@ public abstract class BaseParser implements LinkExtractorParser {
         }
 
         try {
-            Object clazz = Class.forName(parserClassName).newInstance();
+            Object clazz = Class.forName(parserClassName).getDeclaredConstructor().newInstance();
             if (clazz instanceof LinkExtractorParser) {
                 parser = (LinkExtractorParser) clazz;
             } else {
                 throw new LinkExtractorParseException(new ClassCastException(parserClassName));
             }
-        } catch (InstantiationException | ClassNotFoundException
-                | IllegalAccessException e) {
+        } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
             throw new LinkExtractorParseException(e);
         }
         LOG.info("Created " + parserClassName);
