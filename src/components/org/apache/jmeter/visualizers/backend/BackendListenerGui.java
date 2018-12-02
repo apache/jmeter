@@ -35,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -204,7 +205,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                 // values that they did in the original test.
                 if (currArgsMap.containsKey(name)) {
                     String newVal = currArgsMap.get(name);
-                    if (newVal != null && newVal.length() > 0) {
+                    if (StringUtils.isNotBlank(newVal)) {
                         value = newVal;
                     }
                 }
