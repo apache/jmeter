@@ -309,7 +309,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
             try {
                 filter = (Filter) Class.forName(filterClassName).getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                log.warn("Couldn't instantiate filter '" + filterClassName + "'", e);
+                log.warn("Couldn't instantiate filter '{}'", filterClassName, e);
             }
         }
     }
