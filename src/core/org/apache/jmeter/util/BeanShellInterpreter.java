@@ -66,14 +66,10 @@ public class BeanShellInterpreter {
             Class<String> string = String.class;
             Class<Object> object = Object.class;
 
-            get = clazz.getMethod("get", //$NON-NLS-1$
-                    new Class[] { string });
-            eval = clazz.getMethod("eval", //$NON-NLS-1$
-                    new Class[] { string });
-            set = clazz.getMethod("set", //$NON-NLS-1$
-                    new Class[] { string, object });
-            source = clazz.getMethod("source", //$NON-NLS-1$
-                    new Class[] { string });
+            get = clazz.getMethod("get", string); //$NON-NLS-1$
+            eval = clazz.getMethod("eval", string); //$NON-NLS-1$
+            set = clazz.getMethod("set", string, object); //$NON-NLS-1$
+            source = clazz.getMethod("source", string); //$NON-NLS-1$
         } catch (ClassNotFoundException|SecurityException | NoSuchMethodException e) {
             log.error("Beanshell Interpreter not found", e);
         } finally {
