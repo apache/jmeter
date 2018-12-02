@@ -73,7 +73,7 @@ public class BeanShellServer implements Runnable {
 
         try {
             Class<?> interpreter = loader.loadClass("bsh.Interpreter");//$NON-NLS-1$
-            Object instance = interpreter.newInstance();
+            Object instance = interpreter.getDeclaredConstructor().newInstance();
             Class<String> string = String.class;
             Class<Object> object = Object.class;
 
