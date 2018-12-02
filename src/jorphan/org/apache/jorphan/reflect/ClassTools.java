@@ -41,9 +41,8 @@ public class ClassTools {
     public static Object construct(String className) throws JMeterException {
         Object instance = null;
         try {
-            instance = ClassUtils.getClass(className).newInstance();
-        } catch (ClassNotFoundException | IllegalAccessException
-                | InstantiationException e) {
+            instance = ClassUtils.getClass(className).getDeclaredConstructor().newInstance();
+        } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
             throw new JMeterException(e);
         }
         return instance;

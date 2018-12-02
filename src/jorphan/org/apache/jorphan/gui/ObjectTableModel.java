@@ -257,11 +257,8 @@ public class ObjectTableModel extends DefaultTableModel {
         Object value;
         if (_value == null && objectClass != null) {
             try {
-                value = objectClass.newInstance();
-            } catch (InstantiationException e) {
-                log.error("Cannot create instance of class "+objectClass.getName(),e);
-                return false;
-            } catch (IllegalAccessException e) {
+                value = objectClass.getDeclaredConstructor().newInstance();
+            } catch (ReflectiveOperationException e) {
                 log.error("Cannot create instance of class "+objectClass.getName(),e);
                 return false;
             }

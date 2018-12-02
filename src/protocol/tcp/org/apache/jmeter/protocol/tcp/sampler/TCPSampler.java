@@ -334,7 +334,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             return null;
         }
         try {
-            tcpClient = (TCPClient) javaClass.newInstance();
+            tcpClient = (TCPClient) javaClass.getDeclaredConstructor().newInstance();
             if (getPropertyAsString(EOL_BYTE, "").length()>0){
                 tcpClient.setEolByte(getEolByte());
                 log.info("Using eolByte={}", getEolByte());
