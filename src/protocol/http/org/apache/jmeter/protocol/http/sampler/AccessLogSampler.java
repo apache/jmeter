@@ -199,15 +199,14 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
             try {
                 if (StringUtils.isNotBlank(this.getParserClassName())) {
                     if (StringUtils.isNotBlank(this.getLogFile())) {
-                        parser = (LogParser) Class.forName(getParserClassName()).newInstance();
+                        parser = (LogParser) Class.forName(getParserClassName()).getDeclaredConstructor().newInstance();
                         parser.setSourceFile(this.getLogFile());
                         parser.setFilter(filter);
                     } else {
                         log.error("No log file specified");
                     }
                 }
-            } catch (InstantiationException | ClassNotFoundException
-                    | IllegalAccessException e) {
+            } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
                 log.error("", e);
             }
         }
@@ -308,7 +307,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     protected void initFilter() {
         if (filter == null && StringUtils.isNotBlank(filterClassName)) {
             try {
-                filter = (Filter) Class.forName(filterClassName).newInstance();
+                filter = (Filter) Class.forName(filterClassName).getDeclaredConstructor().newInstance();
             } catch (Exception e) {
                 log.warn("Couldn't instantiate filter '" + filterClassName + "'", e);
             }
