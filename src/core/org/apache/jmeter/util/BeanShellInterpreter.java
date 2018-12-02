@@ -22,6 +22,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JMeterException;
 import org.slf4j.Logger;
@@ -122,7 +123,7 @@ public class BeanShellInterpreter {
                 log.warn("Can't set logger variable", e);
             }
         }
-        if (initFile != null && initFile.length() > 0) {
+        if (StringUtils.isNotBlank(initFile)) {
             String fileToUse=initFile;
             // Check file so we can distinguish file error from script error
             File in = new File(fileToUse);
