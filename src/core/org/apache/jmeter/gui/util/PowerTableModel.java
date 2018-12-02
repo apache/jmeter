@@ -19,9 +19,9 @@
 package org.apache.jmeter.gui.util;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.event.TableModelEvent;
@@ -39,6 +39,10 @@ public class PowerTableModel extends DefaultTableModel {
     private Data model = new Data();
 
     private Class<?>[] columnClasses;
+
+    private static final List<Object> DEFAULT_ARGS = Collections.unmodifiableList(Arrays.asList("", Integer.valueOf(0),
+            Long.valueOf(0L), Boolean.FALSE, Float.valueOf(0F), Double.valueOf(0D), Character.valueOf(' '),
+            Byte.valueOf(Byte.MIN_VALUE), Short.valueOf(Short.MIN_VALUE)));
 
     public PowerTableModel(String[] headers, Class<?>[] classes) {
         if (headers.length != classes.length){
@@ -159,50 +163,13 @@ public class PowerTableModel extends DefaultTableModel {
         try {
             return colClass.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            try {
-                Constructor<?> constr = colClass.getConstructor(String.class);
-                return constr.newInstance("");
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
-            }
-            try {
-                Constructor<?> constr = colClass.getConstructor(Integer.TYPE);
-                return constr.newInstance(Integer.valueOf(0));
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
-            }
-            try {
-                Constructor<?> constr = colClass.getConstructor(Long.TYPE);
-                return constr.newInstance(Long.valueOf(0L));
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
-            }
-            try {
-                Constructor<?> constr = colClass.getConstructor(Boolean.TYPE);
-                return constr.newInstance(Boolean.FALSE);
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
-            }
-            try {
-                Constructor<?> constr = colClass.getConstructor(Float.TYPE);
-                return constr.newInstance(Float.valueOf(0F));
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
-            }
-            try {
-                Constructor<?> constr = colClass.getConstructor(Double.TYPE);
-                return constr.newInstance(Double.valueOf(0D));
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
-            }
-            try {
-                Constructor<?> constr = colClass.getConstructor(Character.TYPE);
-                return constr.newInstance(Character.valueOf(' '));
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
-            }
-            try {
-                Constructor<?> constr = colClass.getConstructor(Byte.TYPE);
-                return constr.newInstance(Byte.valueOf(Byte.MIN_VALUE));
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
-            }
-            try {
-                Constructor<?> constr = colClass.getConstructor(Short.TYPE);
-                return constr.newInstance(Short.valueOf(Short.MIN_VALUE));
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
+            for (Object initArg: DEFAULT_ARGS) {
+                try {
+                    Constructor<?> constr = colClass.getConstructor(initArg.getClass());
+                    return constr.newInstance(initArg);
+                } catch (ReflectiveOperationException ignored) {
+                    // no need to log this, as we are just trying out all available default args
+                }
             }
         }
         return "";
