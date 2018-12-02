@@ -96,7 +96,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
         }
         context.put(SaveService.TEST_CLASS_NAME, targetName); // needed by property converters  (Bug 52466)
         try {
-            TestElement el = (TestElement) type.newInstance();
+            TestElement el = (TestElement) type.getDeclaredConstructor().newInstance();
             // No need to check version, just process the attributes if present
             ConversionHelp.restoreSpecialProperties(el, reader);
             // Slight hack - we need to ensure the TestClass is not reset by the previous call
@@ -110,7 +110,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
                 reader.moveUp();
             }
             return el;
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
             log.error("TestElement not instantiable: {}", type, e);
             return null;
         }

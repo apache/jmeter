@@ -143,7 +143,7 @@ public class CollectionProperty extends MultiProperty {
     private Collection<JMeterProperty> cloneCollection() {
         try {
             @SuppressWarnings("unchecked") // value is of type Collection<JMeterProperty>
-            Collection<JMeterProperty> newCol = value.getClass().newInstance();
+            Collection<JMeterProperty> newCol = value.getClass().getDeclaredConstructor().newInstance();
             for (JMeterProperty jMeterProperty : this) {
                 newCol.add(jMeterProperty.clone());
             }
