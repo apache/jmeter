@@ -118,7 +118,7 @@ public class MapProperty extends MultiProperty {
     private Map<String, JMeterProperty> cloneMap() {
         try {
             @SuppressWarnings("unchecked") // value is the correct class
-            Map<String, JMeterProperty> newCol = value.getClass().newInstance();
+            Map<String, JMeterProperty> newCol = value.getClass().getDeclaredConstructor().newInstance();
             PropertyIterator iter = valueIterator();
             while (iter.hasNext()) {
                 JMeterProperty item = iter.next();

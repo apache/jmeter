@@ -171,7 +171,7 @@ public final class MenuFactory {
                         || (testBeanGUI.isExpert() && !JMeterUtils.isExpertMode());
                 item = testBeanGUI;
             } else {
-                item = (JMeterGUIComponent) c.newInstance();
+                item = (JMeterGUIComponent) c.getDeclaredConstructor().newInstance();
             }
         } catch (NoClassDefFoundError e) {
             log.warn("Configuration error, probably corrupt or missing third party library(jar)? Could not create class: {}.",
