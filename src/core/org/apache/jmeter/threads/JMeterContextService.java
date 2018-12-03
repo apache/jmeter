@@ -130,6 +130,7 @@ public final class JMeterContextService {
      */
     public static synchronized void endTest() {
         testStart = 0;
+        resetClientSideVariables();
     }
 
     public static synchronized long getTestStartTime() {
@@ -192,5 +193,12 @@ public final class JMeterContextService {
      */
     public static void initClientSideVariables(JMeterVariables clientSideVariables) {
         JMeterContextService.variables = new UnmodifiableJMeterVariables(clientSideVariables);
+    }
+    
+    /**
+     * Reset client side variables in a distributed mode 
+     */
+    public static void resetClientSideVariables() {
+        JMeterContextService.variables = null;
     }
 }
