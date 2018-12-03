@@ -160,7 +160,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         if (template == null) {
             return;
         }
-        templateList.setValues(TemplateManager.getInstance().reset().getTemplateNames()); // reload the templates before loading
+        templateList.setValues(TemplateManager.getInstance().getTemplateNames()); // reload the templates before loading
         
         final boolean isTestPlan = template.isTestPlan();
         // Check if the user wants to drop any changes
@@ -259,7 +259,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         this.addWindowListener(new WindowAdapter(){
             @Override
             public void windowClosing(WindowEvent evt){
-                resetJDialog();
+                resetJDialog(false);
                 dispose();
             }
         });
@@ -301,7 +301,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
     public void actionPerformed(ActionEvent e) {
         final Object source = e.getSource();
         if (source == cancelButton) {
-            resetJDialog();
+            resetJDialog(false);
             this.dispose();
         } else if (source == applyTemplateButton) {
             String selectedTemplate = templateList.getText();
@@ -312,11 +312,13 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
             } else {
                 checkDirtyAndLoad(e);
             }
-        } else if (source == reloadTemplateButton || source == previous) {
-            resetJDialog();
+        } else if (source == reloadTemplateButton) {
+            resetJDialog(true);
+        } else if (source == previous) { 
+            resetJDialog(false);
         } else if (source == validateButton) {
             checkDirtyAndLoad(e);
-            resetJDialog();
+            resetJDialog(false);
         }
     }
     
@@ -334,8 +336,11 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         populateTemplatePage();
     }
     
-    private void resetJDialog() {
-        templateList.setValues(TemplateManager.getInstance().reset().getTemplateNames()); // reload templates
+    private void resetJDialog(boolean reloadTemplates) {
+        if(reloadTemplates) {
+            TemplateManager.getInstance().reset();
+        }
+        templateList.setValues(TemplateManager.getInstance().getTemplateNames()); // reload templates
         this.setContentPane(templateSelectionPanel());
         this.revalidate();
     }
