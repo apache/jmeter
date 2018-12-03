@@ -152,7 +152,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62842</bug>HTTP(S) Test Script Recorder: Brotli compression is not supported leading to "<code>Content Encoding Error</code>"</li>
     <li><bug>60424</bug>Hessian Burlap application: JMeter inserts <code>0x0D</code> before <code>0x0A</code> automatically (http binary post data)</li>
     <li><bug>62940</bug>Use different <code>cn</code> and type of SAN extension when we are generating certificates based on IP addresses.</li>
-    <li><bug>62916</bug>JMeter HTTP Test Script Recorder randomly stops recording</li>
+    <li><bug>62916</bug>HTTP Test Script Recorder fails with UnsupportedOperationException if recording is started after a distributed test has been run</li>
 </ul>
 
 <h3>Other Samplers</h3>
