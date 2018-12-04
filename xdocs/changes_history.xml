@@ -127,6 +127,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <li>Since JMeter 5.0, when using CSV output, sub results will now be also output to CSV file. To revert to previous behaviour set <code>jmeter.save.saveservice.subresults=false</code>, see <bugzilla>62470</bugzilla>, <bugzilla>60917</bugzilla>, <bugzilla>62550</bugzilla>.</li>
 <li>Since JMeter 5.0, <code>CSS/JQuery Extractor</code> has been renamed to <code>CSS Selector Extractor</code></li>
 <li>Since JMeter 5.0, <code>Test Action</code> has been renamed to <code>Flow Control Action</code></li>
+<li>Since JMeter 5.0, JMeter renames subResults to <code>parentName-N</code> where N is a number to ensure that Hits Per Second graph includes resources downloads, see <bugzilla>62550</bugzilla>, <bugzilla>62470</bugzilla> and <bugzilla>60917</bugzilla></li>
 
 </ul>
 <!-- =================== Improvements =================== -->
