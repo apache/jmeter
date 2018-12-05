@@ -1069,12 +1069,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             httpClient = builder.build();
             if (log.isDebugEnabled()) {
-                log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
+                log.debug("Created new HttpClient: @{} {}", System.identityHashCode(httpClient), key);
             }
             mapHttpClientPerHttpClientKey.put(key, Pair.of(httpClient, pHCCM)); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {
-                log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
+                log.debug("Reusing the HttpClient: @{} {}", System.identityHashCode(httpClient),key);
             }
         }
 
