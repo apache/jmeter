@@ -81,6 +81,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.NonTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
@@ -1437,6 +1438,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 if (subNode.isEnabled()) {
                     TestElement testElement = subNode.getTestElement();
                     if (testElement instanceof TestStateListener) {
+                        TestBeanHelper.prepare(testElement);
                         ((TestStateListener) testElement).testStarted();
                     }
                 }
