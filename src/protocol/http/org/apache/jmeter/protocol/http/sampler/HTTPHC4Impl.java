@@ -35,6 +35,7 @@ import java.security.GeneralSecurityException;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -570,9 +571,16 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // perform the sample
             httpResponse = 
                     executeRequest(httpClient, httpRequest, localContext, url);
-
+            if (log.isDebugEnabled()) {
+                log.debug("Headers in request before:{}", Arrays.asList(httpRequest.getAllHeaders()));
+            }
             // Needs to be done after execute to pick up all the headers
             final HttpRequest request = (HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
+            if (log.isDebugEnabled()) {
+                log.debug("Headers in request after:{}, in localContext#request:{}", 
+                        Arrays.asList(httpRequest.getAllHeaders()),
+                        Arrays.asList(request.getAllHeaders()));
+            }
             extractClientContextAfterSample(jMeterVariables, localContext);
             // We've finished with the request, so we can add the LocalAddress to it for display
             if (localAddress != null) {
