@@ -828,7 +828,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public String getProxyScheme() {
-        return getPropertyAsString(PROXYSCHEME);
+        return getPropertyAsString(PROXYSCHEME, HTTPHCAbstractImpl.PROXY_SCHEME);
     }
 
     public String getProxyHost() {
