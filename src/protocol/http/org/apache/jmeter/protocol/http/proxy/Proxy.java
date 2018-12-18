@@ -221,7 +221,7 @@ public class Proxy extends Thread {
 
             samplerCreator = SAMPLERFACTORY.getSamplerCreator(request, pageEncodings, formEncodings);
             sampler = samplerCreator.createAndPopulateSampler(request, pageEncodings, formEncodings);
-
+            sampler.setUseKeepAlive(false);
             /*
              * Create a Header Manager to ensure that the browsers headers are
              * captured and sent to the server
@@ -233,6 +233,7 @@ public class Proxy extends Thread {
             if (isDebug) {
                 log.debug("{} Execute sample: {} and url {}",port, sampler.getMethod(), sampler.getUrl());
             }
+            
             result = sampler.sample();
 
             // Find the page encoding and possibly encodings for forms in the page
