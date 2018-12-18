@@ -90,4 +90,16 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
     public Iterator<ResultData> iterator() {
         return items.iterator();
     }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ListResultData [items=");
+        builder.append(items);
+        builder.append("]");
+        return builder.toString();
+    }
 }
