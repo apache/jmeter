@@ -194,6 +194,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62781</bug>Web Report / Dashboard : Display All in <code>Response Time Overview</code> fails.</li>
     <li><bug>62782</bug>Web Report / Dashboard : Remove duplicate/unused dependencies</li>
     <li><bug>62894</bug>Report / Dashboard : Throughput is in wrong column which is confusing as unit is millisecond</li>
+    <li><bug>63016</bug>Empty HTML report if source csv contains labels with quotes. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Documentation</h3>

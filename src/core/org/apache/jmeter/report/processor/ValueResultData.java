@@ -53,4 +53,16 @@ public class ValueResultData implements ResultData {
         return visitor.visitValueResult(this);
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ValueResultData [value=");
+        builder.append(value);
+        builder.append("]");
+        return builder.toString();
+    }
+
 }
