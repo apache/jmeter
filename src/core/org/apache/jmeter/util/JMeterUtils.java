@@ -50,7 +50,9 @@ import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
@@ -889,12 +891,22 @@ public class JMeterUtils implements UnitTestManager {
         }
         try {
             JOptionPane.showMessageDialog(instance.getMainFrame(),
-                    errorMsg,
+                    formatMessage(errorMsg),
                     titleMsg,
                     JOptionPane.ERROR_MESSAGE);
         } catch (HeadlessException e) {
             log.warn("reportErrorToUser(\"{}\") caused", errorMsg, e);
         }
+    }
+
+    private static JScrollPane formatMessage(String errorMsg) {
+        JTextArea ta = new JTextArea(10, 50);
+        ta.setText(errorMsg);
+        ta.setWrapStyleWord(true);
+        ta.setLineWrap(true);
+        ta.setCaretPosition(0);
+        ta.setEditable(false);
+        return new JScrollPane(ta);
     }
 
     /**
