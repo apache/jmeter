@@ -36,7 +36,10 @@ public class BasicCurlParserTest {
     
     @Test
     public void testFFParsing() {
-        String cmdLine = "curl 'http://jmeter.apache.org/' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'DNT: 1' -H 'Connection: keep-alive' -H 'Upgrade-Insecure-Requests: 1'";
+        String cmdLine = "curl 'http://jmeter.apache.org/' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' "
+                + "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' "
+                + "-H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'DNT: 1' "
+                + "-H 'Connection: keep-alive' -H 'Upgrade-Insecure-Requests: 1'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("http://jmeter.apache.org/", request.getUrl());
@@ -47,7 +50,12 @@ public class BasicCurlParserTest {
     
     @Test
     public void testChromeParsing() {
-        String cmdLine = "curl 'https://jmeter.apache.org/' -H 'Proxy-Connection: keep-alive' -H 'Proxy-Authorization: Basic XXXXXXXXX/' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Mobile Safari/537.36' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' -H 'Accept-Encoding: gzip, deflate' -H 'Accept-Language: en-US,en;q=0.9,fr;q=0.8' --compressed";
+        String cmdLine = "curl 'https://jmeter.apache.org/' -H 'Proxy-Connection: keep-alive' "
+                + "-H 'Proxy-Authorization: Basic XXXXXXXXX/' -H 'Upgrade-Insecure-Requests: 1' "
+                + "-H 'User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) "
+                + "Chrome/70.0.3538.102 Mobile Safari/537.36' "
+                + "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' "
+                + "-H 'Accept-Encoding: gzip, deflate' -H 'Accept-Language: en-US,en;q=0.9,fr;q=0.8' --compressed";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("https://jmeter.apache.org/", request.getUrl());
@@ -58,7 +66,13 @@ public class BasicCurlParserTest {
     
     @Test
     public void testChromeParsingNotCompressed() {
-        String cmdLine = "curl 'https://jmeter.apache.org/' -H 'Proxy-Connection: keep-alive' -H 'Proxy-Authorization: Basic XXXXXXXXX/' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Mobile Safari/537.36' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' -H 'Accept-Encoding: gzip, deflate' -H 'Accept-Language: en-US,en;q=0.9,fr;q=0.8'";
+        String cmdLine = "curl 'https://jmeter.apache.org/' -H 'Proxy-Connection: keep-alive' "
+                + "-H 'Proxy-Authorization: Basic XXXXXXXXX/' -H 'Upgrade-Insecure-Requests: 1' "
+                + "-H 'User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko)"
+                    + " Chrome/70.0.3538.102 Mobile Safari/537.36' "
+                + "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' "
+                + "-H 'Accept-Encoding: gzip, deflate' "
+                + "-H 'Accept-Language: en-US,en;q=0.9,fr;q=0.8'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("https://jmeter.apache.org/", request.getUrl());
@@ -80,7 +94,12 @@ public class BasicCurlParserTest {
     
     @Test
     public void testPost() {
-        String cmdLine = "curl 'https://jmeter.apache.org/test' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' -H 'Accept: */*' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Referer: https://www.example.com/' -H 'content-type: application/json;charset=UTF-8' -H 'Origin: https://www.example.com' -H 'DNT: 1' -H 'Connection: keep-alive' -H 'TE: Trailers' --data '{\"abc\":\"123\",\"no\":\"matter on sunshine\"}'";
+        String cmdLine = "curl 'https://jmeter.apache.org/test' "
+                + "-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' -H 'Accept: */*' "
+                + "-H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Referer: https://www.example.com/' "
+                + "-H 'content-type: application/json;charset=UTF-8' -H 'Origin: https://www.example.com' "
+                + "-H 'DNT: 1' -H 'Connection: keep-alive' -H 'TE: Trailers' "
+                + "--data '{\"abc\":\"123\",\"no\":\"matter on sunshine\"}'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("https://jmeter.apache.org/test", request.getUrl());
@@ -91,7 +110,14 @@ public class BasicCurlParserTest {
     
     @Test(expected=IllegalArgumentException.class)
     public void testError() {
-        String cmdLine = "curl 'https://jmeter.apache.org/' -u -H 'Proxy-Connection: keep-alive' -H 'Proxy-Authorization: Basic XXXXXXXXX/' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Mobile Safari/537.36' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' -H 'Accept-Encoding: gzip, deflate' -H 'Accept-Language: en-US,en;q=0.9,fr;q=0.8'";
+        String cmdLine = "curl 'https://jmeter.apache.org/' -u -H 'Proxy-Connection: keep-alive' "
+                + "-H 'Proxy-Authorization: Basic XXXXXXXXX/' "
+                + "-H 'Upgrade-Insecure-Requests: 1' "
+                + "-H 'User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko)"
+                    + " Chrome/70.0.3538.102 Mobile Safari/537.36' "
+                    + "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' "
+                    + "-H 'Accept-Encoding: gzip, deflate' "
+                    + "-H 'Accept-Language: en-US,en;q=0.9,fr;q=0.8'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         basicCurlParser.parse(cmdLine);
     }
