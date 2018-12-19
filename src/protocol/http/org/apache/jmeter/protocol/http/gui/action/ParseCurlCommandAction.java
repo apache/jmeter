@@ -112,7 +112,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      */
     private final void showInputDialog() {
         EscapeDialog messageDialog = new EscapeDialog(GuiPackage.getInstance().getMainFrame(),
-                JMeterUtils.getResString("curl_import"), true); //$NON-NLS-1$
+                JMeterUtils.getResString("curl_import"), false); //$NON-NLS-1$
         Container contentPane = messageDialog.getContentPane();
         contentPane.setLayout(new BorderLayout());
         statusText = new JLabel("", JLabel.CENTER);
@@ -143,12 +143,15 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         ThreadGroup threadGroup = new ThreadGroup();
         threadGroup.setProperty(TestElement.GUI_CLASS, ThreadGroupGui.class.getName());
         threadGroup.setProperty(TestElement.NAME, "Thread Group");
-        threadGroup.setNumThreads(1);
-        threadGroup.setRampUp(1);
+        threadGroup.setNumThreads(10);
+        threadGroup.setRampUp(10);
+        threadGroup.setScheduler(true);
+        threadGroup.setDuration(3600);
+        threadGroup.setDelay(5);
 
         LoopController loopCtrl = new LoopController();
-        loopCtrl.setLoops(1);
-        loopCtrl.setContinueForever(false);
+        loopCtrl.setLoops(-1);
+        loopCtrl.setContinueForever(true);
         threadGroup.setSamplerController(loopCtrl);
 
         TestPlan testPlan = new TestPlan();
@@ -185,6 +188,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         httpSampler.setProperty(TestElement.NAME, "HTTP Request");
         httpSampler.setProtocol(new URL(request.getUrl()).getProtocol());
         httpSampler.setPath(request.getUrl());
+        httpSampler.setUseKeepAlive(true);
+        httpSampler.setFollowRedirects(true);
         httpSampler.setMethod(request.getMethod());
         
         HashTree samplerHT = parentHT.add(httpSampler);
