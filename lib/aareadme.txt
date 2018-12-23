@@ -249,7 +249,7 @@ commons-dbcp2-2.5.0 (org.apache.commons.dbcp2)
 --------------------------
 - DataSourceElement (JDBC)
 
-Saxon-HE-9.8.0-12 (net.sf.saxon)
+Saxon-HE-9.9.0-2 (net.sf.saxon)
 --------------------------
 - XPath2Extractor (XML)
 
