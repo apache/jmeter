@@ -161,9 +161,9 @@ public class JMeterVersionTest extends JMeterTestCase {
                 } else if (jar.equals("spock-core-1.0-groovy")) { // special handling
                     jar = "spock-core";
                     version = "1.0-groovy-2.4";
-                } else if (jar.equals("Saxon-HE-9.9.0")) { // special handling
+                } else if (jar.equals("Saxon-HE-9.8.0")) { // special handling
                     jar = "Saxon-HE";
-                    version = "9.9.0-2";
+                    version = "9.8.0-14";
                 }else {
                     String tmp = JAR_TO_BUILD_PROP.get(jar);
                     if (tmp != null) {
