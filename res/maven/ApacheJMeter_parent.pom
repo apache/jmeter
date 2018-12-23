@@ -100,7 +100,7 @@ under the License.
       <ph-css.version>6.1.1</ph-css.version>
       <ph-commons.version>9.2.0</ph-commons.version>
       <rsyntaxtextarea.version>2.6.1</rsyntaxtextarea.version>
-      <Saxon-HE.version>9.8.0-12</Saxon-HE.version>
+      <Saxon-HE.version>9.9.0-2</Saxon-HE.version>
       <slf4j-api.version>1.7.25</slf4j-api.version>
       <slf4j-ext.version>1.7.25</slf4j-ext.version>
       <log4j-api.version>2.11.1</log4j-api.version>
