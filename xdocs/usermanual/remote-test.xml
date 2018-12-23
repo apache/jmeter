@@ -383,11 +383,11 @@ grant codeBase "file:${jmeter.home}/lib/jorphan.jar" {
   permission java.security.AllPermission;
 };
 
-grant codeBase "file:${jmeter.home}/lib/log4j-api-2.11.0.jar" {
+grant codeBase "file:${jmeter.home}/lib/log4j-api-2.11.1.jar" {
   permission java.security.AllPermission;
 };
 
-grant codeBase "file:${jmeter.home}/lib/log4j-slf4j-impl-2.11.0.jar" {
+grant codeBase "file:${jmeter.home}/lib/log4j-slf4j-impl-2.11.1.jar" {
   permission java.security.AllPermission;
 };
 
@@ -395,7 +395,7 @@ grant codeBase "file:${jmeter.home}/lib/slf4j-api-1.7.25.jar" {
   permission java.security.AllPermission;
 };
 
-grant codeBase "file:${jmeter.home}/lib/log4j-core-2.11.0.jar" {
+grant codeBase "file:${jmeter.home}/lib/log4j-core-2.11.1.jar" {
   permission java.security.AllPermission;
 };
 
