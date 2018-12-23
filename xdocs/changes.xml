@@ -71,6 +71,7 @@ Summary
 
 <li>In <code>Response Time Percentiles Over Time (successful responses)</code> graph of the HTML report, before this version, percentile computation of each time slot used the percentile data
 of previous time slot as a base. Starting with this version, each time slot is independant. See <bugzilla>62883</bugzilla></li>
+<li><code>ClientJMeterEngine#rsetProperties</code> signature has been changed to use <code>HashMap&lt;String,String&gt;</code> instead of Properties, see <bugzilla>63034</bugzilla></li>
 
 <!-- =================== Improvements =================== -->
 
@@ -153,6 +154,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62893</bug>Use StringEscapeUtils from commons-text (version 1.6) instead of the deprecated ones from commons-lang3.</li>
     <li>Update to ActiveMQ 5.15.7 (from 5.5.16)</li>
     <li><bug>62972</bug><pr>435</pr>Replace calls to deprecated method <code>Class#newInstance</code>.</li>
+    <li><bug>63034</bug>ClientJMeterEngine: Make rsetProperties use <code>HashMap&lt;String,String&gt;</code> instead of Properties</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

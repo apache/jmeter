@@ -25,7 +25,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.RemoteObject;
+import java.util.HashMap;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.services.FileServer;
@@ -157,7 +159,7 @@ public class ClientJMeterEngine implements JMeterEngine {
             log.info("Sending properties {}", savep);
             try {
                 methodName="rsetProperties()";// NOSONAR Used for tracing
-                remote.rsetProperties(savep);
+                remote.rsetProperties(toHashMapOfString(savep));
             } catch (RemoteException e) {
                 log.warn("Could not set properties: {}, error:{}", savep, e.getMessage(), e);
             }
@@ -173,6 +175,13 @@ public class ClientJMeterEngine implements JMeterEngine {
             tidyRMI(log);
             throw new JMeterEngineException("Error in "+methodName+" method "+ex, ex); // $NON-NLS-1$ $NON-NLS-2$
         }
+    }
+
+    private static final HashMap<String, String> toHashMapOfString(Properties properties) {
+        return new HashMap<>(
+                properties.entrySet().stream().collect(Collectors.toMap(
+                        e -> e.getKey().toString(), 
+                        e -> e.getValue().toString())));
     }
 
     /**

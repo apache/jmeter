@@ -21,7 +21,7 @@ package org.apache.jmeter.engine;
 import java.io.File;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Properties;
+import java.util.HashMap;
 
 import org.apache.jorphan.collections.HashTree;
 
@@ -37,7 +37,7 @@ public interface RemoteJMeterEngine extends Remote {
 
     void rreset() throws RemoteException;
 
-    void rsetProperties(Properties p) throws RemoteException;
+    void rsetProperties(HashMap<String,String> p) throws RemoteException;
 
     void rexit() throws RemoteException;
 }
