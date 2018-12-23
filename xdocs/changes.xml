@@ -138,6 +138,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li>Updated to groovy-all-2.4.16 (from groovy-all-2.4.15)</li>
     <li>Updated to httpasyncclient-4.1.4.jar (from 4.1.3)</li>
     <li>Updated to jsoup-1.11.3 (from 1.11.2)</li>
+    <li>Updated to cglib-nodep-3.2.9 (from cglib-nodep-3.2.7)</li>
     <li><bug>62818</bug>Updated to xercesImpl to 2.12.0 (from 2.11.0). Reported by Stefan Seide (stefan at trilobyte-se.de)</li>
     <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
     <li><pr>408</pr>Log an informational message instead of an stack trace, when JavaFX is not found for the <code>RenderInBrowser</code> component.</li>
