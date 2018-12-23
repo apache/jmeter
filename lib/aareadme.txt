@@ -134,22 +134,22 @@ jdom-1.1.3
 http://www.jdom.org/downloads/index.html
 - Anakia
 
-jodd-core-5.0.3
+jodd-core-5.0.6
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-5.0.3
+jodd-lagarto-5.0.6
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
 
-jodd-log-5.0.3
+jodd-log-5.0.6
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-props-5.0.3
+jodd-props-5.0.6
 --------
 http://www.jodd.org/
 - used by Report/Dashboard feature properties management
