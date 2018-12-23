@@ -270,7 +270,7 @@ For details, please see the files under: licenses/bin
 * javax.activation-1.2.0.jar  (CDDL Version 1.1)
 * jcharts-0.7.5.jar (?)
 * jcl-over-slf4j-1.7.25.jar (MIT)
-* jsoup-1.11.2.jar (MIT)
+* jsoup-1.11.3.jar (MIT)
 * jodd-core-4.1.4.jar (Simplified BSD)
 * jodd-lagarto-4.1.4.jar (Simplified BSD)
 * jodd-log-4.1.4.jar (Simplified BSD)
