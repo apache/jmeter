@@ -384,6 +384,18 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final HttpRequestExecutor REQUEST_EXECUTOR = new HttpRequestExecutor() {
 
         @Override
+        public void preProcess(HttpRequest request, org.apache.http.protocol.HttpProcessor processor, HttpContext context) throws HttpException ,IOException {
+            Object savedRequest = context.getAttribute(HttpCoreContext.HTTP_REQUEST);
+            super.preProcess(request, processor, context);
+            // Temporary fix to https://issues.apache.org/jira/browse/HTTPCLIENT-1956
+            // TODO Remove it when httpclient-4.5.7 is released
+            if (HTTPConstants.CONNECT.equals(request.getRequestLine().getMethod())) {
+                log.debug("Swap in original http request: {} for {}", savedRequest, request);
+                context.setAttribute(HttpCoreContext.HTTP_REQUEST, savedRequest);
+            }
+        }
+
+        @Override
         protected HttpResponse doSendRequest(
                 final HttpRequest request,
                 final HttpClientConnection conn,

@@ -156,6 +156,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62916</bug>HTTP Test Script Recorder fails with UnsupportedOperationException if recording is started after a distributed test has been run</li>
     <li><bug>62987</bug>A TestBean element under HTTP(S) Test Script recorder does not work. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62987</bug>Abnormal NoHttpResponseException when running request through proxy HTTP(S) Test Script Recorder after a first failing request. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62852</bug>HTTP Request Header missing information when using a proxy</li>
 </ul>
 
 <h3>Other Samplers</h3>
