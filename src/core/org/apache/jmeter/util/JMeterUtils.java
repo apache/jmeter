@@ -535,7 +535,7 @@ public class JMeterUtils implements UnitTestManager {
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "["+key+"]";
             }
-        } catch (MissingResourceException mre) {
+        } catch (MissingResourceException mre) { // NOSONAR We handle correctly exception
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "[?"+key+"?]";
             }
