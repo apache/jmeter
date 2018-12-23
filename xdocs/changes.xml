@@ -141,6 +141,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li>Updated to cglib-nodep-3.2.9 (from cglib-nodep-3.2.7)</li>
     <li>Updated to ph-commons-9.2.0 (from ph-commons-9.1.2)</li>
     <li>Updated to log4j-2.11.1 (from log4j-2.11.0)</li>
+    <li>Updated to xmlgraphics-commons 2.3 (from 2.2)</li>
     <li><bug>62818</bug>Updated to xercesImpl to 2.12.0 (from 2.11.0). Reported by Stefan Seide (stefan at trilobyte-se.de)</li>
     <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
     <li><pr>408</pr>Log an informational message instead of an stack trace, when JavaFX is not found for the <code>RenderInBrowser</code> component.</li>
