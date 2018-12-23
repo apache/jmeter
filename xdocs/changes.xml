@@ -132,7 +132,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li>Updated to tika-core and tika-parsers 1.19.1 (from 1.18)</li>
+    <li>Updated to tika-core and tika-parsers 1.20 (from 1.18)</li>
     <li>Updated to commons-dbcp2-2.5.0 (from commons-dbcp2-2.4.0)</li>
     <li>Updated to commons-lang3-3.8.1 (from commons-lang3-3.8)</li>
     <li>Updated to groovy-all-2.4.16 (from groovy-all-2.4.15)</li>
