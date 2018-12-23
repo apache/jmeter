@@ -3978,7 +3978,7 @@ instead. (see figures 12 and 13).</p>
               <dt>Ingres</dt><dd>com.ingres.jdbc.IngresDriver</dd>
               <dt>Derby</dt><dd>org.apache.derby.jdbc.ClientDriver</dd>
               <dt>H2</dt><dd>org.h2.Driver</dd>
-              <dt>Firebird</dt><dd>org.firebirdsql.jdbc.FBDrivery</dd>
+              <dt>Firebird</dt><dd>org.firebirdsql.jdbc.FBDriver</dd>
               <dt>Apache Derby</dt><dd>org.apache.derby.jdbc.ClientDriver</dd>
               <dt>MariaDB</dt><dd>org.mariadb.jdbc.Driver</dd>
               <dt>SQLite</dt><dd>org.sqlite.JDBC</dd>
