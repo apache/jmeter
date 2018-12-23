@@ -207,7 +207,7 @@ junit 4.12
 HttpComponents
 - HttpComponents Core 4.4.10
 - HttpComponents Client 4.5.6
-- HttpComponents AsyncClient 4.1.3
+- HttpComponents AsyncClient 4.1.4
 - HttpComponents Core NIO 4.4.10
 -----------
 http://hc.apache.org/
