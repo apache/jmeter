@@ -11,14 +11,14 @@ commons-dbcp2-2.2.0.jar
 commons-io-2.6.jar
 commons-jexl-2.1.1.jar
 commons-jexl3-3.1.jar
-commons-lang3-3.7.jar
+commons-lang3-3.8.1.jar
 commons-math3-3.5.jar
 commons-net-3.6.jar
 commons-pool2-2.5.0.jar
 commons-text-1.6.jar
 excalibur-logger-1.1.jar
 geronimo-jms_1.1_spec-1.1.1.jar
-groovy-all-2.4.15.jar
+groovy-all-2.4.16.jar
 httpclient-4.5.3.jar
 httpcore-4.4.7.jar
 httpcore-nio-4.4.7.jar
