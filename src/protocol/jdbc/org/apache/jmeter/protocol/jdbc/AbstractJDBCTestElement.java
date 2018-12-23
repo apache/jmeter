@@ -628,7 +628,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      * @return the integer representation queryTimeout
      */
     public int getIntegerQueryTimeout() {
-        int timeout = 0;
+        int timeout;
         if(StringUtils.isEmpty(queryTimeout)) {
             return 0;
         } else {
