@@ -19,7 +19,6 @@
 package org.apache.jmeter.functions;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -28,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +75,7 @@ public class FileRowColContainer {
 
     private void load() throws IOException, FileNotFoundException {
         try (BufferedReader myBread = 
-                Files.newBufferedReader(new File(fileName).toPath(), 
+                Files.newBufferedReader(FileServer.getFileServer().getResolvedFile(fileName).toPath(), 
                         Charset.defaultCharset())) {
             String line = myBread.readLine();
             /*

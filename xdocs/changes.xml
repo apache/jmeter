@@ -105,6 +105,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
 
 <h3>Functions</h3>
 <ul>
+  <li><bug>63037</bug>When using <code>CSVRead</code> search the script base path for files, too.</li>
 </ul>
 
 <h3>I18N</h3>
