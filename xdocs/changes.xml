@@ -122,7 +122,6 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62959</bug>Ability to create a Test plan from a cURL command. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><pr>394</pr>Allow <code>null</code> values in <code>FieldStringEditor</code>. Based on patch by Mingun (alexander_sergey at mail.ru)</li>
     <li><bug>62826</bug>When changing LAF, make JMeter restart if user clicks yes to popup</li>
-    <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
     <li><bug>62257</bug><pr>401</pr>Expand/Collapse short key <keysym>-</keysym> (minus sign) on numpad doesn't work. Contributed by Ori Marko (orimarko at gmail.com)</li>
     <li><bug>62752</bug>Add to Documentation: <code>ctx.getThreadNum()</code> is zero-based while <code>${__threadNum}</code> is one-based</li>
     <li><pr>411</pr>Use <code>SHA-1</code> instead of <code>SHA1</code> in <code>org.apache.jmeter.save.SaveService</code>. Contributed by Paco (paco.xu at daocloud.io)</li>
@@ -134,6 +133,12 @@ of previous time slot as a base. Starting with this version, each time slot is i
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li><pr>408</pr>Log an informational message instead of an stack trace, when JavaFX is not found for the <code>RenderInBrowser</code> component.</li>
+    <li><pr>412</pr>Update Chinese translation. Contributed by 刘士 (liushilive at outlook.com).</li>
+    <li><pr>406</pr>Add a short paragraph on how to use a security manager with JMeter.</li>
+    <li><bug>62893</bug>Use StringEscapeUtils from commons-text (version 1.6) instead of the deprecated ones from commons-lang3.</li>
+    <li><bug>62972</bug><pr>435</pr>Replace calls to deprecated method <code>Class#newInstance</code>.</li>
+    <li><bug>63034</bug>ClientJMeterEngine: Make rsetProperties use <code>HashMap&lt;String,String&gt;</code> instead of Properties</li>
     <li>Updated to tika-core and tika-parsers 1.20 (from 1.18)</li>
     <li>Updated to commons-dbcp2-2.5.0 (from commons-dbcp2-2.4.0)</li>
     <li>Updated to commons-lang3-3.8.1 (from commons-lang3-3.8)</li>
@@ -148,15 +153,11 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li>Updated to xstream 1.4.11 (from 1.4.10)</li>
     <li>Updated to jodd 5.0.6 (from 4.1.4)</li>
     <li>Updated to asm-7.0 (from 6.1)</li>
-    <li><bug>62818</bug>Updated to xercesImpl to 2.12.0 (from 2.11.0). Reported by Stefan Seide (stefan at trilobyte-se.de)</li>
-    <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
-    <li><pr>408</pr>Log an informational message instead of an stack trace, when JavaFX is not found for the <code>RenderInBrowser</code> component.</li>
-    <li><pr>412</pr>Update Chinese translation. Contributed by 刘士 (liushilive at outlook.com).</li>
-    <li><pr>406</pr>Add a short paragraph on how to use a security manager with JMeter.</li>
-    <li><bug>62893</bug>Use StringEscapeUtils from commons-text (version 1.6) instead of the deprecated ones from commons-lang3.</li>
     <li>Update to ActiveMQ 5.15.7 (from 5.5.16)</li>
-    <li><bug>62972</bug><pr>435</pr>Replace calls to deprecated method <code>Class#newInstance</code>.</li>
-    <li><bug>63034</bug>ClientJMeterEngine: Make rsetProperties use <code>HashMap&lt;String,String&gt;</code> instead of Properties</li>
+    <li>Updated to rsyntaxtextarea-3.0.0 (from 2.6.1)</li>
+    <li><bug>62818</bug>Updated to xercesImpl to 2.12.0 (from 2.11.0). Reported by Stefan Seide (stefan at trilobyte-se.de)</li>
+    <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
+    <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
