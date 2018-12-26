@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class wraps the FileRowColContainer for use across multiple threads.
- *
+ * <p>
  * It does this by maintaining a list of open files, keyed by file name (or
  * alias, if used). A list of open files is also maintained for each thread,
  * together with the current line number.
@@ -191,9 +191,6 @@ public final class FileWrapper {
         return fw.currentRow;
     }
 
-    /**
-     *
-     */
     public static void clearAll() {
         log.debug("clearAll()");
         Map<String, FileWrapper> my = filePacks.get();
