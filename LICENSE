@@ -278,7 +278,7 @@ For details, please see the files under: licenses/bin
 * jtidy-r938.jar (?)
 * junit-4.12.jar (BSD)
 * rhino-1.7.10.jar (MPL 2.0)
-* rsyntaxtextarea-2.6.1.jar (BSD)
+* rsyntaxtextarea-3.0.0.jar (BSD)
 * slf4j-api-1.7.25.jar (MIT)
 * slf4j-ext-1.7.25.jar (MIT)
 * xmlpull-1.1.3.1.jar (Public Domain)
