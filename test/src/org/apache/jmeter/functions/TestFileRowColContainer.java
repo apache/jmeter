@@ -29,6 +29,7 @@ import java.nio.file.NoSuchFileException;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,7 @@ import org.junit.Test;
  * via row and column number
  * 
  */
-public class TestFileRowColContainer extends JMeterTestCase {
+public class TestFileRowColContainer extends JMeterTestCase implements JMeterSerialTest {
 
     private String defaultBase = null;
 
