@@ -150,12 +150,12 @@ Latency is set to the time it takes to login.
          When a connection is released by JMeter, it may or may not be re-used by the same thread.</li>
          <li>The API is best suited to single-threaded usage - various settings
          are defined via system properties, and therefore apply to all connections.</li>
-         <li>There is a bug in the handling of HTTPS via a Proxy (the <code>CONNECT</code> is not handled correctly).
-         See Java bugs 6226610 and 6208335.
-         </li>
+         <li>No support of Kerberos authentication</li>
+         <li>It does not support client based certificate testing with Keystore Config.</li>
+         <li>Better control of Retry mechanism</li>
          <li>It does not support virtual hosts.</li>
          <li>It supports only the following methods: <code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>PUT</code>, <code>DELETE</code> and <code>TRACE</code></li>
-         <li>It does not support client based certificate testing with Keystore Config.</li>
+         <li>Better control on DNS Caching with <complink name="DNS Cache Manager"/></li>
          </ul>
          <note>Note: the <code>FILE</code> protocol is intended for testing purposes only.
          It is handled by the same code regardless of which HTTP Sampler is used.</note>
