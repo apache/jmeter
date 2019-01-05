@@ -290,7 +290,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
         for (int i = 0; i < hdrs.size(); i++) {
             final JMeterProperty hdr = hdrs.get(i);
             Header head = (Header) hdr.getObjectValue();
-            JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, head.getValue(), head::setValue);
+            totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, head.getValue(), head::setValue);
         }
         return totalReplaced;
     }
