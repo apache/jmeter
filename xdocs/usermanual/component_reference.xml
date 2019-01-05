@@ -917,10 +917,7 @@ This will not have any impact on existing Test plans.
 <center><h2>(Beta Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
-request it accepted. This means every image, CSS file, JavaScript file, html file, &hellip;
-The current implementation is complete, but some features have not been enabled. 
-There is a filter for the access log parser, but I haven't figured out how to link to the pre-processor. 
-Once I do, changes to the sampler will be made to enable that functionality.</p>
+request it accepted. This means every image, CSS file, JavaScript file, html file, &hellip;</p>
 <p>Tomcat uses the common format for access logs. This means any webserver that uses the
 common log format can use the AccessLogSampler. Server that use common log format include:
 Tomcat, Resin, Weblogic, and SunOne. Common log format looks
