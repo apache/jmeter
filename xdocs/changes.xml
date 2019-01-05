@@ -160,6 +160,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62818</bug>Updated to xercesImpl to 2.12.0 (from 2.11.0). Reported by Stefan Seide (stefan at trilobyte-se.de)</li>
     <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
     <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
+    <li><bug>63053</bug>Remove referrals to never implemented internals from user documentation. Reported by U. Poblotzki (u.poblotzki at thalia.de)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -253,6 +254,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li>Paco (paco.xu at daocloud.io)</li>
     <li>Hitesh Patel (hitesh.h.patel at gmail.com)</li>
     <li>Sonali (arora.sonali99 at gmail.com)</li>
+    <li>U. Poblotzki (u.poblotzki at thalia.de)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
