@@ -39,7 +39,6 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.function.Consumer;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -2095,28 +2094,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         int totalReplaced = 0;
         for (JMeterProperty jMeterProperty : getArguments()) {
             HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
-            totalReplaced += replaceValue(regex, replaceBy, caseSensitive, arg.getValue(), arg::setValue);
+            totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, arg.getValue(), arg::setValue);
         }
 
-        totalReplaced += replaceValue(regex, replaceBy, caseSensitive, getPath(), this::setPath);
-        totalReplaced += replaceValue(regex, replaceBy, caseSensitive, getDomain(), this::setDomain);
+        totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, getPath(), this::setPath);
+        totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, getDomain(), this::setDomain);
         for (String key: Arrays.asList(PORT, PROTOCOL)) {
-            totalReplaced += replaceValue(regex, replaceBy, caseSensitive, getPropertyAsString(key), s -> setProperty(key, s));
+            totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, getPropertyAsString(key), s -> setProperty(key, s));
         }
 
         return totalReplaced;
-    }
-    
-    private int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, Consumer<String> setter) {
-        if (StringUtils.isBlank(value)) {
-            return 0;
-        }
-        Object[] result = JOrphanUtils.replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
-        int nbReplaced = ((Integer) result[1]).intValue();
-        if (nbReplaced <= 0) {
-            return 0;
-        }
-        setter.accept((String) result[0]);
-        return nbReplaced;
     }
 }
