@@ -2100,6 +2100,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
         totalReplaced += replaceValue(regex, replaceBy, caseSensitive, getPath(), this::setPath);
         totalReplaced += replaceValue(regex, replaceBy, caseSensitive, getDomain(), this::setDomain);
+        for (String key: Arrays.asList(PORT, PROTOCOL)) {
+            totalReplaced += replaceValue(regex, replaceBy, caseSensitive, getPropertyAsString(key), s -> setProperty(key, s));
+        }
 
         return totalReplaced;
     }
