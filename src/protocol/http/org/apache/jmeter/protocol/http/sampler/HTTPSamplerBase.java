@@ -39,6 +39,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -2094,40 +2095,25 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         int totalReplaced = 0;
         for (JMeterProperty jMeterProperty : getArguments()) {
             HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
-            String value = arg.getValue();
-            if(!StringUtils.isEmpty(value)) {
-                Object[] result = JOrphanUtils.replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
-                // check if there is anything to replace
-                int nbReplaced = ((Integer)result[1]).intValue();
-                if (nbReplaced>0) {
-                    String replacedText = (String) result[0];
-                    arg.setValue(replacedText);
-                    totalReplaced += nbReplaced;
-                }
-            }
-        }
-        String value = getPath();
-        if(!StringUtils.isEmpty(value)) {
-            Object[] result = JOrphanUtils.replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
-            // check if there is anything to replace
-            int nbReplaced = ((Integer)result[1]).intValue();
-            if (nbReplaced>0) {
-                String replacedText = (String) result[0];
-                setPath(replacedText);
-                totalReplaced += nbReplaced;
-            }
+            totalReplaced += replaceValue(regex, replaceBy, caseSensitive, arg.getValue(), arg::setValue);
         }
 
-        if(!StringUtils.isEmpty(getDomain())) {
-            Object[] result = JOrphanUtils.replaceAllWithRegex(getDomain(), regex, replaceBy, caseSensitive);            
-            // check if there is anything to replace
-            int nbReplaced = ((Integer)result[1]).intValue();
-            if (nbReplaced>0) {
-                String replacedText = (String) result[0];
-                setDomain(replacedText);
-                totalReplaced += nbReplaced;
-            }
-        }
+        totalReplaced += replaceValue(regex, replaceBy, caseSensitive, getPath(), this::setPath);
+        totalReplaced += replaceValue(regex, replaceBy, caseSensitive, getDomain(), this::setDomain);
+
         return totalReplaced;
+    }
+    
+    private int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, Consumer<String> setter) {
+        if (StringUtils.isBlank(value)) {
+            return 0;
+        }
+        Object[] result = JOrphanUtils.replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
+        int nbReplaced = ((Integer) result[1]).intValue();
+        if (nbReplaced <= 0) {
+            return 0;
+        }
+        setter.accept((String) result[0]);
+        return nbReplaced;
     }
 }
