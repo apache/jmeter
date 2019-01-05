@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 
 import org.apache.commons.io.FileUtils;
@@ -679,5 +680,18 @@ public final class JOrphanUtils {
                 result.toString(),
                 totalReplaced
         };
+    }
+
+    public static int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, Consumer<String> setter) {
+        if (StringUtils.isBlank(value)) {
+            return 0;
+        }
+        Object[] result = replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
+        int nbReplaced = ((Integer) result[1]).intValue();
+        if (nbReplaced <= 0) {
+            return 0;
+        }
+        setter.accept((String) result[0]);
+        return nbReplaced;
     }
 }
