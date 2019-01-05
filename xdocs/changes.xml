@@ -80,6 +80,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>62840</bug>HTTP Request: Add option <code>httpclient4.gzip_relax_mode</code> to avoid error when unzipping what seems to be invalid streams</li>
+    <li><bug>63025</bug>Enhance Search &amp; Replace functionality for HTTP Request to include port and protocol field.</li>
 </ul>
 
 <h3>Other samplers</h3>
