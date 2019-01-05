@@ -80,7 +80,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>62840</bug>HTTP Request: Add option <code>httpclient4.gzip_relax_mode</code> to avoid error when unzipping what seems to be invalid streams</li>
-    <li><bug>63025</bug>Enhance Search &amp; Replace functionality for HTTP Request to include port and protocol field.</li>
+    <li><bug>63025</bug>Enhance Search &amp; Replace functionality for HTTP Request to include port and protocol field. Initial code fix by Mohamed Ibrahim (rollno748 at gmail.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -254,6 +254,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li>Paco (paco.xu at daocloud.io)</li>
     <li>Hitesh Patel (hitesh.h.patel at gmail.com)</li>
     <li>Sonali (arora.sonali99 at gmail.com)</li>
+    <li>Mohamed Ibrahim (rollno748 at gmail.com)</li>
     <li>U. Poblotzki (u.poblotzki at thalia.de)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
