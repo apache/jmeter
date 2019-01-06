@@ -51,6 +51,8 @@ public final class NewDriver {
     private static final String JAVA_CLASS_PATH = "java.class.path";// $NON-NLS-1$
 
     private static final String JMETER_LOGFILE_SYSTEM_PROPERTY = "jmeter.logfile";// $NON-NLS-1$
+
+    private static final String HEADLESS_MODE_PROPERTY = "java.awt.headless";// $NON-NLS-1$
     /** The class loader to use for loading JMeter classes. */
     private static final DynamicClassLoader loader;
 
@@ -237,9 +239,14 @@ public final class NewDriver {
         } else {
             Thread.currentThread().setContextClassLoader(loader);
 
+            
             setLoggingProperties(args);
 
             try {
+                // Only set property if it has not been set explicitely 
+                if(System.getProperty(HEADLESS_MODE_PROPERTY) == null && shouldBeHeadless(args)) {
+                    System.setProperty(HEADLESS_MODE_PROPERTY, "true");
+                }
                 Class<?> initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
                 Object instance = initialClass.getDeclaredConstructor().newInstance();
                 Method startup = initialClass.getMethod("start", new Class[] { new String[0].getClass() });// $NON-NLS-1$
@@ -297,10 +304,18 @@ public final class NewDriver {
         }
     }
 
+    private static boolean shouldBeHeadless(String[] args) {
+        for (String arg : args) {
+            if("-n".equals(arg) || "-s".equals(arg)) {
+                return true;
+            }
+        }
+        return false;
+    }
     /*
      * Find command line argument option value by the id and name.
      */
-    private static String getCommandLineArgument(String [] args, int id, String name) {
+    private static String getCommandLineArgument(String[] args, int id, String name) {
         final String shortArgName = "-" + ((char) id);// $NON-NLS-1$
         final String longArgName = "--" + name;// $NON-NLS-1$
 

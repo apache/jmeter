@@ -476,6 +476,7 @@ public class JMeter implements JMeterPlugin {
                 log.info("os.arch={}", System.getProperty("os.arch"));//$NON-NLS-1$ //$NON-NLS-2$
                 log.info("os.version={}", System.getProperty("os.version"));//$NON-NLS-1$ //$NON-NLS-2$
                 log.info("file.encoding={}", System.getProperty("file.encoding"));//$NON-NLS-1$ //$NON-NLS-2$
+                log.info("java.awt.headless={}", System.getProperty("java.awt.headless"));//$NON-NLS-1$ //$NON-NLS-2$
                 log.info("Max memory     ={}", Runtime.getRuntime().maxMemory());
                 log.info("Available Processors ={}", Runtime.getRuntime().availableProcessors());
                 log.info("Default Locale={}", Locale.getDefault().getDisplayName());
