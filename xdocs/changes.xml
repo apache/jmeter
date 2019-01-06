@@ -131,6 +131,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62870</bug>Templates : Add ability to provide parameters. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62829</bug>Allow specifying Proxy server scheme for HTTP request sampler, Advanced tab and command line option. Contributed by Hitesh Patel (hitesh.h.patel at gmail.com)</li>
     <li><bug>59633</bug>Menus <code>Save Test Plan as</code>, <code>Save as Test Fragment</code> and <code>Save Selection as ...</code> should use a new file name in File Dialog</li>
+    <li><bug>61486</bug>Make jmeter-server and non GUI mode run headless</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
