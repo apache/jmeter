@@ -306,7 +306,7 @@ public final class NewDriver {
 
     private static boolean shouldBeHeadless(String[] args) {
         for (String arg : args) {
-            if("-n".equals(arg) || "-s".equals(arg)) {
+            if("-n".equals(arg) || "-s".equals(arg) || "-g".equals(arg)) {
                 return true;
             }
         }
