@@ -420,6 +420,9 @@
     <include name="${lib.dir}/${httpcore-nio.jar}"/>
     <include name="${lib.dir}/${httpmime.jar}"/>
     <include name="${lib.dir}/${jakarta-oro.jar}"/>
+    <include name="${lib.dir}/${jackson-annotations.jar}"/>
+    <include name="${lib.dir}/${jackson-core.jar}"/>
+    <include name="${lib.dir}/${jackson-databind.jar}"/>
     <include name="${lib.dir}/${javamail.jar}"/>
     <include name="${lib.dir}/${jcharts.jar}"/>
     <include name="${lib.dir}/${jcl-over-slf4j.jar}"/>
@@ -507,6 +510,9 @@
     <pathelement location="${lib.dir}/${httpcore-nio.jar}"/>
     <pathelement location="${lib.dir}/${httpmime.jar}"/>
     <pathelement location="${lib.dir}/${jakarta-oro.jar}"/>
+    <pathelement location="${lib.dir}/${jackson-annotations.jar}"/>
+    <pathelement location="${lib.dir}/${jackson-core.jar}"/>
+    <pathelement location="${lib.dir}/${jackson-databind.jar}"/>
     <pathelement location="${lib.dir}/${javamail.jar}"/>
     <pathelement location="${lib.dir}/${jcharts.jar}"/>
     <pathelement location="${lib.dir}/${jms.jar}"/>
@@ -3384,6 +3390,9 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="httpcore-nio"/>
     <process_jarfile jarname="httpmime"/>
     <process_jarfile jarname="jakarta-oro"/>
+    <process_jarfile jarname="jackson-annotations"/>
+    <process_jarfile jarname="jackson-core"/>
+    <process_jarfile jarname="jackson-databind"/>
     <process_jarfile jarname="javamail"/>
     <process_jarfile jarname="jcharts"/>
     <process_jarfile jarname="jdom" dest.dir="${lib.doc}"/>
