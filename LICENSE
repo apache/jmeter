@@ -251,6 +251,9 @@ The following software is provided under the Apache License V 2.0 (as above):
 * caffeine-2.6.2.jar
 * darcula.jar
 * freemarker-2.3.28.jar (AL2.0, see licenses/bin for additional info)
+* jackson-annotations-2.9.8.jar
+* jackson-core-2.9.8.jar
+* jackson-databind-2.9.8.jar
 * json-path-2.4.0.jar
 * json-smart-2.3.jar
 * mongo-java-driver-2.11.3.jar
