@@ -46,6 +46,7 @@ import org.junit.Test;
 
 /**
  * Check the eclipse and Maven version definitions against build.properties
+ * Drop this if we move to Maven the build process
  */
 public class JMeterVersionTest extends JMeterTestCase {
 
