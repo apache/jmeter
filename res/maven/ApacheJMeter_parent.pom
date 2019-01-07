@@ -82,7 +82,9 @@ under the License.
       <httpcore.version>4.4.10</httpcore.version>
       <httpcore-nio.version>4.4.10</httpcore-nio.version>
       <httpmime.version>4.5.6</httpmime.version>
-      <jackson.version>2.9.8</jackson.version>
+      <jackson-annotations.version>2.9.8</jackson-annotations.version>
+      <jackson-core.version>2.9.8</jackson-core.version>
+      <jackson-databind.version>2.9.8</jackson-databind.version>
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <javax.activation-api.version>1.2.0</javax.activation-api.version>
       <javax.activation.version>1.2.0</javax.activation.version>
@@ -270,17 +272,17 @@ under the License.
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
-        <version>${jackson.version}</version>
+        <version>${jackson-databind.version}</version>
       </dependency>
         <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-annotations</artifactId>
-        <version>${jackson.version}</version>
+        <version>${jackson-annotations.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-core</artifactId>
-        <version>${jackson.version}</version>
+        <version>${jackson-core.version}</version>
       </dependency>
       <dependency>
         <groupId>jcharts</groupId>
