@@ -174,7 +174,7 @@ public class IfController extends GenericController implements Serializable, Thr
      * @return the condition associated with this controller
      */
     public String getCondition() {
-        return getPropertyAsString(CONDITION);
+        return getPropertyAsString(CONDITION).trim();
     }
 
     /**
