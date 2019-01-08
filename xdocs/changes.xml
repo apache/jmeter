@@ -192,6 +192,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
 <ul>
     <li><bug>62806</bug>ModuleController cloning by Run behaves differently wether in GUI or Non GUI mode. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62847</bug>If Controller cannot use variable for index exposed by LoopController/WhileController/ForEachController</li>
+    <li><bug>63064</bug>Ignore spaces at the end and beginning of expressions used in IfController</li>
 </ul>
 
 <h3>Listeners</h3>

@@ -19,6 +19,7 @@
 package org.apache.jmeter.control;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import org.apache.jmeter.config.Arguments;
@@ -293,5 +294,24 @@ public class TestIfController extends JMeterTestCase {
             counter++;
         }
         assertEquals(counter, 6);
+    }
+
+    @Test
+    public void shouldIgnoreEmptyLastLine() {
+        GenericController controller = new GenericController();
+
+        IfController ifCont = new IfController("true\n");
+        ifCont.setUseExpression(true);
+        ifCont.setEvaluateAll(false);
+
+        ifCont.addTestElement(new TestSampler("sample1"));
+        controller.addTestElement(ifCont);
+
+        controller.initialize();
+        controller.setRunningVersion(true);
+        ifCont.setRunningVersion(true);
+
+        Sampler sampler = controller.next();
+        assertFalse(sampler == null);
     }
 }
