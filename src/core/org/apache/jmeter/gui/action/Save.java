@@ -161,11 +161,12 @@ public class Save extends AbstractAction {
         if (!ActionNames.SAVE.equals(e.getActionCommand()) // Saving existing plan 
                 // New File
                 || updateFile == null) {
+            boolean isNewFile = updateFile == null;
             updateFile = computeFileName();
             if(updateFile == null) {
                 return;
             }
-            if (e.getActionCommand().equals(ActionNames.SAVE_ALL_AS)) {
+            if (e.getActionCommand().equals(ActionNames.SAVE_ALL_AS) || isNewFile) {
                 GuiPackage.getInstance().setTestPlanFile(updateFile);
             }
         }
