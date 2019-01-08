@@ -198,6 +198,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
 <h3>Listeners</h3>
 <ul>
     <li><bug>62770</bug>Aggregate Graph throws <code>ArrayIndexOutOfBoundsException</code></li>
+    <li><bug>63069</bug>ResultCollector does not write end of XML file if user exits while a Recording or a test is running. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
