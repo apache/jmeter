@@ -676,6 +676,11 @@
         <path refid="logging.classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.core}" dest="${build.core}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
@@ -690,6 +695,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.components}" dest="${build.components}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-functions" depends="compile-jorphan,compile-core" description="Compile functions.">
@@ -703,6 +713,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.functions}" dest="${build.functions}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-http" depends="compile-jorphan,compile-core,compile-components" description="Compile components specific to HTTP sampling.">
@@ -721,6 +736,11 @@
         <pathelement location="${lib.dir}/${log4j-core.jar}"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.http}" dest="${build.http}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <!-- Tests need main classes -->
@@ -749,6 +769,11 @@
         <path refid="logging.classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.test}" dest="${build.test}" includes="**/*.properties" encoding="UTF-8"/>
 
     <!-- Compile Spock tests (groovy) -->
     <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc">
@@ -791,6 +816,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.ftp}" dest="${build.ftp}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-jdbc" depends="compile-jorphan,compile-core" description="Compile components specific to JDBC sampling.">
@@ -804,6 +834,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.jdbc}" dest="${build.jdbc}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-ldap" depends="compile-jorphan,compile-core"
@@ -818,6 +853,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.ldap}" dest="${build.ldap}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="create-mail-dir">
@@ -835,6 +875,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.mail}" dest="${build.mail}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-java" depends="compile-jorphan,compile-core" description="Compile components specific to Java sampling.">
@@ -848,6 +893,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.java}" dest="${build.java}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-junit" depends="compile-jorphan,compile-core" description="Compile components specific to JUnit sampling.">
@@ -861,6 +911,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.junit}" dest="${build.junit}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-tcp" depends="compile-jorphan,compile-core" description="Compile components specific to TCP sampling.">
@@ -874,6 +929,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.tcp}" dest="${build.tcp}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-mail,compile-tcp" description="Compile all protocol-specific components."/>
@@ -889,6 +949,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.examples}" dest="${build.examples}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-jorphan" depends="init-version" description="Compile JOrphan utility classes.">
@@ -900,6 +965,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.jorphan}" dest="${build.jorphan}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-jms" depends="compile-jorphan,compile-core,compile-components"
@@ -914,6 +984,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.jms}" dest="${build.jms}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-native" depends="compile-jorphan,compile-core,compile-components"
@@ -928,6 +1003,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.native}" dest="${build.native}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile-mongodb" depends="compile-jorphan,compile-core,compile-components"
@@ -942,6 +1022,11 @@
         <path refid="classpath"/>
       </classpath>
     </javac>
+
+    <!-- Convert the message files from UTF-8 to ASCII. This can be removed
+    after upgrading to Java 9+ as the minimum JRE and specifying the encoding
+    when loading the ResourceBundles -->
+    <native2ascii src="${src.mongodb}" dest="${build.mongodb}" includes="**/*.properties" encoding="UTF-8"/>
   </target>
 
   <target name="compile"
@@ -1060,7 +1145,7 @@ run JMeter unless all the JMeter jars are added.
         excludes="**/BeanShellClient*.class,**/NewDriver*,**/DynamicClassLoader*"/>
       <fileset dir="${src.core}" includes="org/apache/jmeter/images/**"
         excludes="**/*.properties,org/apache/jmeter/images/toolbar/icons-custom/**"/>
-      <fileset dir="${src.core}" includes="**/*.properties">
+      <fileset dir="${build.core}" includes="**/*.properties">
         <exclude name="*eucJP*"/>
       </fileset>
       <fileset dir="${src.core}" includes="**/*.xml" />
@@ -1076,7 +1161,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.components}" includes="**/*.class" />
-      <fileset dir="${src.components}" includes="**/*.properties" />
+      <fileset dir="${build.components}" includes="**/*.properties" />
     </jar>
 
     <!-- functions -->
@@ -1086,7 +1171,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.functions}" includes="**/*.class" />
-      <fileset dir="${src.functions}" includes="**/*.properties" />
+      <fileset dir="${build.functions}" includes="**/*.properties" />
     </jar>
 
     <!-- http -->
@@ -1096,7 +1181,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.http}" includes="**/*.class"/>
-      <fileset dir="${src.http}" includes="**/*.properties" />
+      <fileset dir="${build.http}" includes="**/*.properties" />
     </jar>
 
     <!-- ftp -->
@@ -1106,7 +1191,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.ftp}" includes="**/*.class" />
-      <fileset dir="${src.ftp}" includes="**/*.properties" />
+      <fileset dir="${build.ftp}" includes="**/*.properties" />
     </jar>
 
     <!-- jdbc -->
@@ -1116,7 +1201,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.jdbc}" includes="**/*.class" />
-      <fileset dir="${src.jdbc}" includes="**/*.properties" />
+      <fileset dir="${build.jdbc}" includes="**/*.properties" />
     </jar>
 
     <!-- java -->
@@ -1126,7 +1211,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.java}" includes="**/*.class" />
-      <fileset dir="${src.java}" includes="**/*.properties" />
+      <fileset dir="${build.java}" includes="**/*.properties" />
     </jar>
 
     <!-- BeanShell Client -->
@@ -1148,7 +1233,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.junit}" includes="org/**/*.class" />
-      <fileset dir="${src.junit}" includes="**/*.properties" />
+      <fileset dir="${build.junit}" includes="**/*.properties" />
     </jar>
 
     <!-- Build junit/test.jar sample -->
@@ -1168,7 +1253,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.ldap}" includes="**/*.class" />
-      <fileset dir="${src.ldap}" includes="**/*.properties" />
+      <fileset dir="${build.ldap}" includes="**/*.properties" />
     </jar>
 
     <!-- mail -->
@@ -1178,7 +1263,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.mail}" includes="**/*.class"  />
-      <fileset dir="${src.mail}" includes="**/*.properties" />
+      <fileset dir="${build.mail}" includes="**/*.properties" />
       <fileset dir="${src.mail}" includes="**/*.providers" />
     </jar>
 
@@ -1189,7 +1274,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.tcp}" includes="**/*.class" />
-      <fileset dir="${src.tcp}" includes="**/*.properties" />
+      <fileset dir="${build.tcp}" includes="**/*.properties" />
     </jar>
 
     <!-- jms -->
@@ -1201,7 +1286,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.jms}" includes="**/*.class" />
-      <fileset dir="${src.jms}" includes="**/*.properties" />
+      <fileset dir="${build.jms}" includes="**/*.properties" />
     </jar>
 
     <!-- native -->
@@ -1213,7 +1298,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.native}" includes="**/*.class" />
-      <fileset dir="${src.native}" includes="**/*.properties" />
+      <fileset dir="${build.native}" includes="**/*.properties" />
     </jar>
 
     <!-- mongodb -->
@@ -1225,7 +1310,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.mongodb}" includes="**/*.class" />
-      <fileset dir="${src.mongodb}" includes="**/*.properties" />
+      <fileset dir="${build.mongodb}" includes="**/*.properties" />
     </jar>
 
     <jar jarfile="${lib.dir}/jorphan.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
@@ -1234,7 +1319,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
           fullpath="META-INF/LICENSE" />
       <fileset dir="${build.jorphan}" includes="**/*.class"/>
-      <fileset dir="${src.jorphan}" includes="**/*.properties"/>
+      <fileset dir="${build.jorphan}" includes="**/*.properties"/>
     </jar>
   </target>
 
@@ -1286,7 +1371,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.examples}" includes="**/*.class" />
-      <fileset dir="${src.examples}" includes="**/*.properties" />
+      <fileset dir="${build.examples}" includes="**/*.properties" />
     </jar>
   </target>
 
