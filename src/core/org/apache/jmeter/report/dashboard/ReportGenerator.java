@@ -314,7 +314,8 @@ public class ReportGenerator {
             tmpDirCreated = tmpDir.mkdir();
             if (!tmpDirCreated) {
                 String message = String.format(
-                        "Cannot create temporary directory \"%s\".", tmpDir);
+                        "Cannot create temporary directory \"%s\", check property \"%s\"", tmpDir.getAbsolutePath(), 
+                        ReportGeneratorConfiguration.REPORT_GENERATOR_KEY_TEMP_DIR);
                 log.error(message);
                 throw new GenerationException(message);
             }

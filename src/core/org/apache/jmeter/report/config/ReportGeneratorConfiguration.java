@@ -58,7 +58,7 @@ public class ReportGeneratorConfiguration {
             + KEY_DELIMITER + "exporter";
 
     // Temporary directory
-    private static final String REPORT_GENERATOR_KEY_TEMP_DIR = REPORT_GENERATOR_KEY_PREFIX
+    public static final String REPORT_GENERATOR_KEY_TEMP_DIR = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "temp_dir";
     private static final File REPORT_GENERATOR_KEY_TEMP_DIR_DEFAULT = new File(
             "temp");
