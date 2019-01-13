@@ -100,7 +100,7 @@
 	<classpathentry kind="lib" path="lib/ph-css-6.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/ph-commons-9.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.7.10.jar"/>
-	<classpathentry kind="lib" path="lib/rsyntaxtextarea-3.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/rsyntaxtextarea-3.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/Saxon-HE-9.8.0-14.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
