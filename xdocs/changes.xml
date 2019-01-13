@@ -159,7 +159,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li>Updated to jodd 5.0.6 (from 4.1.4)</li>
     <li>Updated to asm-7.0 (from 6.1)</li>
     <li>Update to ActiveMQ 5.15.7 (from 5.5.16)</li>
-    <li>Updated to rsyntaxtextarea-3.0.0 (from 2.6.1)</li>
+    <li>Updated to rsyntaxtextarea-3.0.2 (from 2.6.1)</li>
     <li><bug>62818</bug>Updated to xercesImpl to 2.12.0 (from 2.11.0). Reported by Stefan Seide (stefan at trilobyte-se.de)</li>
     <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
     <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
