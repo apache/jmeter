@@ -6,12 +6,14 @@
   <httpSample s="true" lb="HTTP-Request-HC31-1" rc="200" rm="OK" dt="text"/>
   <httpSample s="true" lb="HTTP-Request-HC31-2" rc="200" rm="OK" dt="bin"/>
   <httpSample s="true" lb="HTTP-Request-HC31-3" rc="200" rm="OK" dt="bin"/>
+  <httpSample s="true" lb="HTTP-Request-HC31-4" rc="200" rm="OK" dt="bin"/>
 </httpSample>
 <httpSample s="true" lb="HTTP-Request-HC4" rc="200" rm="OK" dt="text">
   <httpSample s="true" lb="HTTP-Request-HC4-0" rc="200" rm="OK" dt="text"/>
   <httpSample s="true" lb="HTTP-Request-HC4-1" rc="200" rm="OK" dt="text"/>
   <httpSample s="true" lb="HTTP-Request-HC4-2" rc="200" rm="OK" dt="bin"/>
   <httpSample s="true" lb="HTTP-Request-HC4-3" rc="200" rm="OK" dt="bin"/>
+  <httpSample s="true" lb="HTTP-Request-HC4-4" rc="200" rm="OK" dt="bin"/>
 </httpSample>
 
 </testResults>
