@@ -67,7 +67,7 @@ public class CssParser implements LinkExtractorParser {
             final URLCollection urlCollection = orDefault(CSS_URL_CACHE.get(triple), EMPTY_URL_COLLECTION);
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Parsed:" + baseUrl + ", got:" + StringUtils.join(urlCollection, ","));
+                LOG.debug("Parsed: {}, got: {}", baseUrl, StringUtils.join(urlCollection, ","));
             }
 
             return urlCollection.iterator();
