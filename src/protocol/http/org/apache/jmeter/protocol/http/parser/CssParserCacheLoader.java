@@ -72,8 +72,7 @@ public class CssParserCacheLoader implements
         final URLCollection urls = new URLCollection(new ArrayList<>());
 
         if (aCSS == null) {
-            LOG.warn("Failed parsing CSS: " + baseUrl
-                    + ", got null CascadingStyleSheet");
+            LOG.warn("Failed parsing CSS: {}, got null CascadingStyleSheet", baseUrl);
             return urls;
         }
 
