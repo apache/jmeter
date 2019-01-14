@@ -107,6 +107,12 @@ public class TestBug60842HtmlParser {
                     new Object[] { parserToTest,
                             "<link href='  with spaces\n.css  ' rel='stylesheet'/>",
                             "http://example.org/with spaces.css" },
+                    new Object[] { parserToTest,
+                            "<link href='favicon.ico' rel='shortcut icon' type='image/vnd.microsoft.icon'/>",
+                            "http://example.org/favicon.ico" },
+                    new Object[] { parserToTest,
+                            "<link href='favicon.ico' rel='icon' type='image/vnd.microsoft.icon'/>",
+                            "http://example.org/favicon.ico" },
                     new Object[] { parserToTest, "<embed src=''/>", "" },
                     new Object[] { parserToTest, "<embed src='  '/>", "" })) {
                 result.add(data);
