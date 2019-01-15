@@ -63,9 +63,9 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     private static final FileFilter HTML_REPORT_FILE_FILTER = 
         file -> 
             (file.isFile() && 
-                        file.getName().equals("index.html"))
+                    "index.html".equals(file.getName()))
                     || (file.isDirectory() && 
-                            (file.getName().equals("content") ||
+                            ("content".equals(file.getName()) ||
                                     file.getName().startsWith("sbadmin2-")));
     private static final String CUSTOM_GRAPH_PREFIX = "custom_";
 
