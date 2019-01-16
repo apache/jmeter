@@ -118,6 +118,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62883</bug>Report / Dashboard : Change the way percentiles are computed for Response Time Percentiles Over Time (successful responses) graph</li>
     <li><bug>63060</bug>Report Generator: A generator should only check for folder/files it generates and only delete those ones</li>
     <li><bug>63059</bug>Create a new JsonExporter that exports as JSON the content of data computed for HTML Dashboard Statistics table. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63081</bug>Command line Option <code>-f</code> does not delete report folder when using generation only through command line option <code>-g</code>. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>General</h3>

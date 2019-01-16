@@ -351,7 +351,7 @@ public class JMeter implements JMeterPlugin {
     /** should remote engines be stopped at end of non-GUI test? */
     private boolean remoteStop; 
 
-    /** should delete result file before start ? */
+    /** should delete result file / report folder before start ? */
     private boolean deleteResultFile = false; 
     
     public JMeter() {
@@ -537,7 +537,7 @@ public class JMeter implements JMeterPlugin {
                 CLOption testReportOpt = parser.getArgumentById(REPORT_GENERATING_OPT);
                 if (testReportOpt != null) { // generate report from existing file
                     String reportFile = testReportOpt.getArgument();
-                    extractAndSetReportOutputFolder(parser, false);
+                    extractAndSetReportOutputFolder(parser, deleteResultFile);
                     ReportGenerator generator = new ReportGenerator(reportFile, null);
                     generator.generate();
                 } else if (parser.getArgumentById(NONGUI_OPT) == null) { // not non-GUI => GUI
@@ -580,16 +580,17 @@ public class JMeter implements JMeterPlugin {
      * {@link JMeter#JMETER_REPORT_OUTPUT_DIR_PROPERTY} after checking folder can
      * be safely written to
      * @param parser {@link CLArgsParser}
+     * @param deleteReportFolder true means delete report folder
      * @throws IllegalArgumentException
      */
-    private void extractAndSetReportOutputFolder(CLArgsParser parser, boolean deleteResultFile) {
+    private void extractAndSetReportOutputFolder(CLArgsParser parser, boolean deleteReportFolder) {
         CLOption reportOutputFolderOpt = parser
                 .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
         if(reportOutputFolderOpt != null) {
             String reportOutputFolder = parser.getArgumentById(REPORT_OUTPUT_FOLDER_OPT).getArgument();
             File reportOutputFolderAsFile = new File(reportOutputFolder);
 
-            JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile, deleteResultFile);
+            JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile, deleteReportFolder);
             final String reportOutputFolderAbsPath = reportOutputFolderAsFile.getAbsolutePath();
             log.info("Setting property '{}' to:'{}'", JMETER_REPORT_OUTPUT_DIR_PROPERTY, reportOutputFolderAbsPath);
             JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, reportOutputFolderAbsPath);
