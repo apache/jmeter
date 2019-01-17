@@ -165,6 +165,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>62744</bug>Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
     <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
     <li><bug>63053</bug>Remove referrals to never implemented internals from user documentation. Reported by U. Poblotzki (u.poblotzki at thalia.de)</li>
+    <li><bug>63082</bug><pr>437</pr>Use utf-8 for properties files in source</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
