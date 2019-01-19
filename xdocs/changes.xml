@@ -79,6 +79,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><code>Compile JSR223 Elements</code></li>
     <li><code>Export Transactions for Report</code></li>
     <li><code>Import from cURL</code></li>
+    <li><code>Function Helper Dialog</code></li>
 </ul>
 See <bugzilla>63094</bugzilla>
 </li>

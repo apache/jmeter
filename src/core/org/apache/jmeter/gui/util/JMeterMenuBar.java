@@ -276,13 +276,14 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem threadDump = makeMenuItemRes("thread_dump", ActionNames.THREAD_DUMP);//$NON-NLS-1$
         toolsMenu.add(heapDump);
         toolsMenu.add(threadDump);
-        
+        toolsMenu.addSeparator();
+        toolsMenu.add(makeMenuItemRes("function_dialog_menu_item", 'F', ActionNames.FUNCTIONS, KeyStrokes.FUNCTIONS));
+
         addPluginsMenuItems(toolsMenu, menuCreators, MENU_LOCATION.TOOLS);
     }
 
     private void makeOptionsMenu() {
         optionsMenu = makeMenuRes("option",'O'); //$NON-NLS-1$
-        optionsMenu.add(makeMenuItemRes("function_dialog_menu_item", 'F', ActionNames.FUNCTIONS, KeyStrokes.FUNCTIONS));
         optionsMenu.add(createLaFMenu());
 
         JCheckBoxMenuItem menuLoggerPanel = makeCheckBoxMenuItemRes("menu_logger_panel", ActionNames.LOGGER_PANEL_ENABLE_DISABLE); //$NON-NLS-1$
