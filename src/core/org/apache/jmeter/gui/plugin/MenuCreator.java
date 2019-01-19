@@ -32,7 +32,8 @@ public interface MenuCreator {
         RUN,
         OPTIONS,
         HELP,
-        SEARCH
+        SEARCH,
+        TOOLS
     }
     
     /**

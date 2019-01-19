@@ -68,11 +68,21 @@ Summary
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
-
+<ul>
 <li>In <code>Response Time Percentiles Over Time (successful responses)</code> graph of the HTML report, before this version, percentile computation of each time slot used the percentile data
 of previous time slot as a base. Starting with this version, each time slot is independant. See <bugzilla>62883</bugzilla></li>
 <li><code>ClientJMeterEngine#rsetProperties</code> signature has been changed to use <code>HashMap&lt;String,String&gt;</code> instead of Properties, see <bugzilla>63034</bugzilla></li>
-
+<li>A new Menu item <code>Tools</code> has been introduced, the following menu items that were in <code>Help</code> menu are now under this new menu item:
+<ul>
+    <li><code>Create Heap Dump</code></li>
+    <li><code>Create Thread Dump</code></li>
+    <li><code>Compile JSR223 Elements</code></li>
+    <li><code>Export Transactions for Report</code></li>
+    <li><code>Import from cURL</code></li>
+</ul>
+See <bugzilla>63094</bugzilla>
+</li>
+</ul>
 <!-- =================== Improvements =================== -->
 
 <ch_section>Improvements</ch_section>
@@ -136,6 +146,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
     <li><bug>59633</bug>Menus <code>Save Test Plan as</code>, <code>Save as Test Fragment</code> and <code>Save Selection as ...</code> should use a new file name in File Dialog</li>
     <li><bug>61486</bug>Make jmeter-server and non GUI mode run headless</li>
     <li><bug>63093</bug>Add <code>Compile JSR223 Test Elements</code> menu item. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63094</bug>Introduce a new Tools menu</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
