@@ -130,7 +130,7 @@ public class CompileJSR223TestElements extends AbstractAction implements MenuCre
 
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
-        if(location == MENU_LOCATION.HELP) {
+        if(location == MENU_LOCATION.TOOLS) {
             
             JMenuItem menuItemIC = new JMenuItem(
                     JMeterUtils.getResString("compile_menu"), KeyEvent.VK_UNDEFINED);
