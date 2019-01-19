@@ -184,7 +184,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
 
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
-        if(location == MENU_LOCATION.HELP) {
+        if(location == MENU_LOCATION.TOOLS) {
             
             JMenuItem menuItemIC = new JMenuItem(
                     JMeterUtils.getResString("export_transactions_menu"), KeyEvent.VK_UNDEFINED);
