@@ -131,7 +131,7 @@ public final class FileDialoger {
      *         finished using it - null if no file was chosen
      */
     public static JFileChooser promptToOpenFile(String[] exts, String existingFileName) {
-        return promptToOpenFile(exts, null, false);
+        return promptToOpenFile(exts, existingFileName, false);
     }
   
     /**
