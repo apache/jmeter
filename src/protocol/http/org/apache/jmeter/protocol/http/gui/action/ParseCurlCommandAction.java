@@ -225,7 +225,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
 
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
-        if(location == MENU_LOCATION.HELP) {
+        if(location == MENU_LOCATION.TOOLS) {
             JMenuItem menuItemIC = new JMenuItem(
                     JMeterUtils.getResString("curl_import_menu"), KeyEvent.VK_UNDEFINED);
             menuItemIC.setName(IMPORT_CURL);
