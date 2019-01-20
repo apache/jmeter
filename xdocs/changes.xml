@@ -193,7 +193,7 @@ See <bugzilla>63094</bugzilla>
     <li><bug>62940</bug>Use different <code>cn</code> and type of SAN extension when we are generating certificates based on IP addresses.</li>
     <li><bug>62916</bug>HTTP Test Script Recorder fails with UnsupportedOperationException if recording is started after a distributed test has been run</li>
     <li><bug>62987</bug>A TestBean element under HTTP(S) Test Script recorder does not work. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>62987</bug>Abnormal NoHttpResponseException when running request through proxy HTTP(S) Test Script Recorder after a first failing request. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63015</bug>Abnormal NoHttpResponseException when running request through proxy HTTP(S) Test Script Recorder after a first failing request. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62852</bug>HTTP Request Header missing information when using a proxy</li>
     <li><bug>63048</bug> - JMeter does not retrieve link resources of type "shortcut icon" or "icon". Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
