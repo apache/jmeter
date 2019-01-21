@@ -111,7 +111,7 @@ See <bugzilla>63094</bugzilla>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>62766</bug>Keystore Config : We should load all aliases by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62766</bug>Keystore Config: We should load all aliases by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62832</bug>JDBC Connection Configuration: Be able to set init SQL statements. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
@@ -126,7 +126,7 @@ See <bugzilla>63094</bugzilla>
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>62883</bug>Report / Dashboard : Change the way percentiles are computed for Response Time Percentiles Over Time (successful responses) graph</li>
+    <li><bug>62883</bug>Report / Dashboard: Change the way percentiles are computed for Response Time Percentiles Over Time (successful responses) graph</li>
     <li><bug>63060</bug>Report Generator: A generator should only check for folder/files it generates and only delete those ones</li>
     <li><bug>63059</bug>Create a new JsonExporter that exports as JSON the content of data computed for HTML Dashboard Statistics table. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63081</bug>Command line Option <code>-f</code> does not delete report folder when using generation only through command line option <code>-g</code>. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
@@ -142,7 +142,7 @@ See <bugzilla>63094</bugzilla>
     <li><pr>411</pr>Use <code>SHA-1</code> instead of <code>SHA1</code> in <code>org.apache.jmeter.save.SaveService</code>. Contributed by Paco (paco.xu at daocloud.io)</li>
     <li><bug>62914</bug>Add a hint in Thread Group UI about duration of test</li>
     <li><bug>62925</bug>Add support for ThreadDump to the JMeter non-GUI</li>
-    <li><bug>62870</bug>Templates : Add ability to provide parameters. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62870</bug>Templates: Add ability to provide parameters. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62829</bug>Allow specifying Proxy server scheme for HTTP request sampler, Advanced tab and command line option. Contributed by Hitesh Patel (hitesh.h.patel at gmail.com)</li>
     <li><bug>59633</bug>Menus <code>Save Test Plan as</code>, <code>Save as Test Fragment</code> and <code>Save Selection as ...</code> should use a new file name in File Dialog</li>
     <li><bug>61486</bug>Make jmeter-server and non GUI mode run headless</li>
@@ -201,7 +201,7 @@ See <bugzilla>63094</bugzilla>
 <h3>Other Samplers</h3>
 <ul>
     <li><bug>62775</bug>If many jars are in a folder referenced by <code>user.classpath</code>, startup can be extremely slow due to JUnit</li>
-    <li><bug>63031</bug>Incorrect JDBC driver class : <code>org.firebirdsql.jdbc.FBDrivery</code>. Contributed by Sonali (arora.sonali99 at gmail.com)</li>
+    <li><bug>63031</bug>Incorrect JDBC driver class: <code>org.firebirdsql.jdbc.FBDrivery</code>. Contributed by Sonali (arora.sonali99 at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -219,7 +219,7 @@ See <bugzilla>63094</bugzilla>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>62774</bug>XPath2Extractor : Scope variable is broken. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>62774</bug>XPath2Extractor: Scope variable is broken. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62860</bug>JSON Extractor: Avoid NPE and noisy error message "<code>Error processing JSON content in</code>" when variable is not found</li>
 </ul>
 
@@ -233,11 +233,11 @@ See <bugzilla>63094</bugzilla>
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>62777</bug>Web Report / Dashboard : Hide All in <code>Response Time Percentiles Over Time (successful responses)</code> fails.</li>
-    <li><bug>62780</bug>Web Report / Dashboard : Display All in <code>Response Time Vs Request</code> fails.</li>
-    <li><bug>62781</bug>Web Report / Dashboard : Display All in <code>Response Time Overview</code> fails.</li>
-    <li><bug>62782</bug>Web Report / Dashboard : Remove duplicate/unused dependencies</li>
-    <li><bug>62894</bug>Report / Dashboard : Throughput is in wrong column which is confusing as unit is millisecond</li>
+    <li><bug>62777</bug>Web Report / Dashboard: Hide All in <code>Response Time Percentiles Over Time (successful responses)</code> fails.</li>
+    <li><bug>62780</bug>Web Report / Dashboard: Display All in <code>Response Time Vs Request</code> fails.</li>
+    <li><bug>62781</bug>Web Report / Dashboard: Display All in <code>Response Time Overview</code> fails.</li>
+    <li><bug>62782</bug>Web Report / Dashboard: Remove duplicate/unused dependencies</li>
+    <li><bug>62894</bug>Report / Dashboard: Throughput is in wrong column which is confusing as unit is millisecond</li>
     <li><bug>63016</bug>Empty HTML report if source csv contains labels with quotes. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
