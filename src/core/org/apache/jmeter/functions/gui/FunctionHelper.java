@@ -280,15 +280,19 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             while ((c = r.read()) != -1) {
                 char nextChar = (char) c;
                 if (lastChar == '\\') {
-                    // do nothing
+                    lastChar = ANY_NORMAL_CHAR;
                 } else if (lastChar == '$' && nextChar == '{') {
                     level++;
+                    lastChar = ANY_NORMAL_CHAR;
                 } else if (nextChar == '}') {
                     level--;
+                    lastChar = ANY_NORMAL_CHAR;
                 } else if (nextChar == ',' && level == 0) {
                     result.append('\\');
+                    lastChar = ANY_NORMAL_CHAR;
+                } else {
+                    lastChar = nextChar;
                 }
-                lastChar = nextChar;
                 result.append(nextChar);
             }
         } catch (IOException e) {
