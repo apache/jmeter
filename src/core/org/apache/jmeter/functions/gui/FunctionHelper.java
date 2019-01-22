@@ -22,6 +22,9 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -251,13 +254,48 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
                 if (!first) {
                     functionCall.append(",");
                 }
-                functionCall.append(arg.getValue().replaceAll(",", "\\\\,"));
+                functionCall.append(escapeCommata(arg.getValue()));
                 first = false;
             }
             functionCall.append(")");
         }
         functionCall.append("}");
         return functionCall.toString();
+    }
+
+    private static final char ANY_NORMAL_CHAR = ' ';
+
+    /**
+     * Escape commata that are in the argument but "outside" of variable replacement structures.
+     *
+     * @param arg string that should be escaped
+     * @return escaped string
+     */
+    private String escapeCommata(String arg) {
+        int level = 0;
+        StringBuilder result = new StringBuilder(arg.length());
+        try (Reader r = new StringReader(arg)) {
+            int c;
+            char lastChar = ANY_NORMAL_CHAR;
+            while ((c = r.read()) != -1) {
+                char nextChar = (char) c;
+                if (lastChar == '\\') {
+                    // do nothing
+                } else if (lastChar == '$' && nextChar == '{') {
+                    level++;
+                } else if (nextChar == '}') {
+                    level--;
+                } else if (nextChar == ',' && level == 0) {
+                    result.append('\\');
+                }
+                lastChar = nextChar;
+                result.append(nextChar);
+            }
+        } catch (IOException e) {
+            log.warn("Can't escape commata in input string: {}", arg, e);
+            return arg;
+        }
+        return result.toString();
     }
 
     private class HelpListener implements ActionListener {

@@ -256,6 +256,7 @@ See <bugzilla>63094</bugzilla>
     <li><bug>62336</bug><pr>396</pr>Some shortcuts are not working correctly on windows. Contributed by Michael Pavlov (michael.paulau at gmail.com)</li>
     <li><bug>62889</bug>Format JSON Arrays when displayed with JSON Path Tester.</li>
     <li><bug>62900</bug>ObjectProperty#getStringValue() can throw NullPointerException</li>
+    <li><bug>63099</bug>Escape commata in function helper dialog only outside of variable replacement structures.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
