@@ -47,6 +47,7 @@ class FunctionHelperSpec extends JMeterSpec {
           "fname"      | ["a,b,c"]     | "\${fname(a\\,b\\,c)}"
           "fname"      | ["a", "b"]    | "\${fname(a,b)}"
           "fname"      | ["a,b", "c"]  | "\${fname(a\\,b,c)}"
+          "fname"      | ["\\\${f(a,b)}"]                  | "\${fname(\\\${f(a\\,b)})}"
           "fname"      | ["\${f(a,b)},c,\${g(d,e)}","h"]   | "\${fname(\${f(a,b)}\\,c\\,\${g(d,e)},h)}"
           "fname"      | ["a,\${f(b,\${g(c,d)},e)},f","h"] | "\${fname(a\\,\${f(b,\${g(c,d)},e)}\\,f,h)}"
     }
