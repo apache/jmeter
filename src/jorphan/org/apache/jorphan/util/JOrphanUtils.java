@@ -53,13 +53,12 @@ public final class JOrphanUtils {
     }
 
     /**
-     * This is _almost_ equivalent to the String.split method in JDK 1.4. It is
+     * This is <em>almost</em> equivalent to the {@link String#split(String)} method in JDK 1.4. It is
      * here to enable us to support earlier JDKs.
-     *
+     * <p>
      * Note that unlike JDK1.4 split(), it optionally ignores leading split Characters,
      * and the splitChar parameter is not a Regular expression
-     *
-     * <P>
+     * <p>
      * This piece of code used to be part of JMeterUtils, but was moved here
      * because some JOrphan classes use it too.
      *
@@ -70,12 +69,12 @@ public final class JOrphanUtils {
      * @param truncate
      *            Should adjacent and leading/trailing splitChars be removed?
      *
-     * @return Array of all the tokens; empty if the input string is null or the splitChar is null
+     * @return Array of all the tokens; empty if the input string is {@code null} or the splitChar is {@code null}
      *
      * @see #split(String, String, String)
      *
      */
-    public static String[] split(String splittee, String splitChar,boolean truncate) {
+    public static String[] split(String splittee, String splitChar,boolean truncate) { //NOSONAR
         if (splittee == null || splitChar == null) {
             return new String[0];
         }
@@ -126,7 +125,7 @@ public final class JOrphanUtils {
     /**
      * Takes a String and a tokenizer character string, and returns a new array of
      * strings of the string split by the tokenizer character(s).
-     *
+     * <p>
      * Trailing delimiters are significant (unless the default = null)
      *
      * @param splittee
@@ -139,7 +138,7 @@ public final class JOrphanUtils {
      *
      * @return Array of all the tokens.
      *
-     * @throws NullPointerException if splittee or delims are null
+     * @throws NullPointerException if splittee or delims are {@code null}
      *
      * @see #split(String, String, boolean)
      * @see #split(String, String)
@@ -389,7 +388,7 @@ public final class JOrphanUtils {
      *
      * @param target array to scan
      * @param search array to search for
-     * @param offset starting offset (&gt;=0)
+     * @param offset starting offset (&ge;0)
      * @return true if the search array matches the target at the current offset
      */
     public static boolean startsWith(byte [] target, byte [] search, int offset){
@@ -533,9 +532,9 @@ public final class JOrphanUtils {
     }
 
     /**
-     * Returns null if input is empty, null or contains spaces
+     * Returns {@code null} if input is empty, {@code null} or contains spaces only
      * @param input String
-     * @return String
+     * @return trimmed input or {@code null}
      */
     public static String nullifyIfEmptyTrimmed(final String input) {
         if (input == null) {
@@ -549,9 +548,9 @@ public final class JOrphanUtils {
     }
 
     /**
-     * Check that value is empty (""), null or whitespace only.
+     * Check that value is empty (""), {@code null} or whitespace only.
      * @param value Value
-     * @return true if the String is not empty (""), not null and not whitespace only.
+     * @return {@code true} if the String is not empty (""), not {@code null} and not whitespace only.
      */
     public static boolean isBlank(final String value) {
         return StringUtils.isBlank(value);
@@ -597,7 +596,7 @@ public final class JOrphanUtils {
      *  <li>Because it exists but is not empty</li>
      *  <li>Because it does not exist but cannot be created</li>
      * </ul>
-     * @param folder {@link File} 
+     * @param folder to check
      * @throws IllegalArgumentException when folder can't be written to
      */
     public static void canSafelyWriteToFolder(File folder) {
@@ -614,8 +613,8 @@ public final class JOrphanUtils {
      *  <li>Because it exists but is not empty using folder.listFiles(exporterFileFilter)</li>
      *  <li>Because it does not exist but cannot be created</li>
      * </ul>
-     * @param folder {@link File} 
-     * @param exporterFileFilter {@link FileFilter} used to 
+     * @param folder to check 
+     * @param fileFilter  used to filter listing of folder
      * @throws IllegalArgumentException when folder can't be written to
      */
     public static void canSafelyWriteToFolder(File folder, FileFilter fileFilter) {
@@ -623,11 +622,12 @@ public final class JOrphanUtils {
     }
     
     /**
-     * Check whether we can write to a folder.
-     * @param folder {@link File} 
-     * @param deleteFolderContent if true flag whether the folder should be emptied or a file with the same name deleted
+     * Check whether we can write to a folder. If {@code deleteFolderContent} is {@code true} the folder or file with
+     * the same name will be emptied or deleted.
+     * @param folder to check 
+     * @param deleteFolderContent flag whether the folder should be emptied or a file with the same name deleted
      * @throws IllegalArgumentException when folder can't be written to
-     * Throw {@link IllegalArgumentException} if folder cannot be written
+     * Throw IllegalArgumentException if folder cannot be written
      */
     public static void canSafelyWriteToFolder(File folder, boolean deleteFolderContent) {
         canSafelyWriteToFolder(folder, deleteFolderContent, file -> true);
@@ -637,9 +637,9 @@ public final class JOrphanUtils {
     /**
      * Check whether we can write to a folder.
      *
-     * @param folder which should be checked for writability and emptyness
+     * @param folder which should be checked for writability and emptiness
      * @param deleteFolderIfExists flag whether the folder should be emptied or a file with the same name deleted
-     * @param exporterFileFilter {@link FileFilter}
+     * @param exporterFileFilter used for filtering listing of the folder
      * @throws IllegalArgumentException when folder can't be written to. That could have the following reasons:
      * <ul>
      *  <li>it exists but is not a folder</li>
@@ -715,6 +715,17 @@ public final class JOrphanUtils {
         };
     }
 
+    /**
+     * Replace all occurrences of {@code regex} in {@code value} by {@code replaceBy} if {@code value} is not blank.
+     * The replaced text is fed into the {@code setter}.
+     *
+     * @param regex Regular expression that is used for the search
+     * @param replaceBy value that is used for replacement
+     * @param caseSensitive flag whether the regex should be applied case sensitive
+     * @param value in which the replacement takes place
+     * @param setter that gets called with the replaced value
+     * @return number of matches that were replaced
+     */
     public static int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, Consumer<String> setter) {
         if (StringUtils.isBlank(value)) {
             return 0;
