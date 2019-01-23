@@ -258,6 +258,7 @@ See <bugzilla>63094</bugzilla>
     <li><bug>62900</bug>ObjectProperty#getStringValue() can throw NullPointerException</li>
     <li><bug>63099</bug>Escape commata in function helper dialog only outside of variable replacement structures.</li>
     <li><bug>63105</bug>Export Transactions for Report: fix 2 bugs</li>
+    <li><bug>63106</bug>Apply naming policy does not refresh UI</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
