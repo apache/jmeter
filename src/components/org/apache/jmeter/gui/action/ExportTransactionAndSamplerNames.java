@@ -37,6 +37,7 @@ import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.EscapeDialog;
@@ -62,7 +63,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
     
     private static final String TRANSACTIONS_REGEX_PATTERN = 
             JMeterUtils.getPropDefault("jmeter.reportgenerator.exported_transactions_pattern", 
-                    "[a-zA-Z0-9_\\-{}\\$\\.]*[-_][0-9]*");
+                    "[a-zA-Z0-9_ \\-{}\\$\\.]*["+DefaultTreeNodeNamingPolicy.TRANSACTION_CHILDREN_SEPARATOR+"][0-9]*");
     
     private static final Pattern TRANSACTIONS_REGEX = 
             Pattern.compile(TRANSACTIONS_REGEX_PATTERN);
