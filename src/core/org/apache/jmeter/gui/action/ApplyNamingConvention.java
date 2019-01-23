@@ -46,6 +46,7 @@ public class ApplyNamingConvention extends AbstractAction {
     }
 
     public ApplyNamingConvention() {
+        super();
     }
 
     @Override
@@ -57,7 +58,8 @@ public class ApplyNamingConvention extends AbstractAction {
             return;
         }
         try {
-            applyNamingPolicyToCurrentNode(guiPackage, currentNode);            
+            applyNamingPolicyToCurrentNode(guiPackage, currentNode);
+            GuiPackage.getInstance().getMainFrame().repaint();
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
             log.error("Failed to apply naming policy", err);
@@ -82,7 +84,7 @@ public class ApplyNamingConvention extends AbstractAction {
             JMeterTreeNode childNode = (JMeterTreeNode)enumeration.nextElement();
             namingPolicy.rename(currentNode, childNode, index);
             index++;
-        }        
+        }
     }
 
     @Override
