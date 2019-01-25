@@ -226,10 +226,10 @@ The following software is provided under the Apache License V 2.0 (as above):
 * dec-0.1.2.jar
 * groovy-all-2.4.16.jar
 * httpasyncclient-4.1.4.jar
-* httpclient-4.5.6.jar
-* httpcore-4.4.10.jar
+* httpclient-4.5.7.jar
+* httpcore-4.4.11.jar
 * httpcore-nio-4.4.10.jar
-* httpmime-4.5.6.jar
+* httpmime-4.5.7.jar
 * jakarta-oro-2.0.8.jar
 * jms-1.1.1.jar
 * log4j-1.2-api-2.11.1.jar

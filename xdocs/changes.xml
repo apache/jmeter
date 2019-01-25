@@ -158,6 +158,8 @@ See <bugzilla>63094</bugzilla>
     <li><bug>62893</bug>Use StringEscapeUtils from commons-text (version 1.6) instead of the deprecated ones from commons-lang3.</li>
     <li><bug>62972</bug><pr>435</pr>Replace calls to deprecated method <code>Class#newInstance</code>.</li>
     <li><bug>63034</bug>ClientJMeterEngine: Make rsetProperties use <code>HashMap&lt;String,String&gt;</code> instead of Properties</li>
+    <li>Updated to httpclient/httpmime 4.5.7 (from 4.5.6)</li>
+    <li>Updated to httpcore 4.4.11 (from 4.4.10)</li>
     <li>Updated to tika-core and tika-parsers 1.20 (from 1.18)</li>
     <li>Updated to commons-dbcp2-2.5.0 (from commons-dbcp2-2.4.0)</li>
     <li>Updated to commons-lang3-3.8.1 (from commons-lang3-3.8)</li>
@@ -194,7 +196,7 @@ See <bugzilla>63094</bugzilla>
     <li><bug>62916</bug>HTTP Test Script Recorder fails with UnsupportedOperationException if recording is started after a distributed test has been run</li>
     <li><bug>62987</bug>A TestBean element under HTTP(S) Test Script recorder does not work. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63015</bug>Abnormal NoHttpResponseException when running request through proxy HTTP(S) Test Script Recorder after a first failing request. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>62852</bug>HTTP Request Header missing information when using a proxy</li>
+    <li><bug>62852</bug>HTTP Request Header missing information when using a proxy. Thanks to Oleg Kalnichevski (olegk at apache.org)</li>
     <li><bug>63048</bug>JMeter does not retrieve link resources of type "shortcut icon" or "icon". Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
@@ -267,6 +269,7 @@ See <bugzilla>63094</bugzilla>
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
+    <li>Oleg Kalnichevski (olegk at apache.org)</li>
     <li>Till Neunast (https://github.com/tilln)</li>
     <li>Mingun (alexander_sergey at mail.ru)</li>
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
