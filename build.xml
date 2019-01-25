@@ -447,7 +447,6 @@
     <include name="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <include name="${lib.dir}/${serializer.jar}"/>
     <include name="${lib.dir}/${slf4j-api.jar}"/>
-    <include name="${lib.dir}/${slf4j-ext.jar}"/>
     <include name="${lib.dir}/${log4j-api.jar}"/>
     <include name="${lib.dir}/${jtidy.jar}"/>
     <include name="${lib.dir}/${tika-core.jar}"/>
@@ -536,7 +535,6 @@
     <pathelement location="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
-    <pathelement location="${lib.dir}/${slf4j-ext.jar}"/>
     <pathelement location="${lib.dir}/${spock-core.jar}"/>
     <pathelement location="${lib.dir}/${cglib-nodep.jar}"/>
     <pathelement location="${lib.dir}/${objenesis.jar}"/>
@@ -3499,7 +3497,6 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="rsyntaxtextarea"/>
     <process_jarfile jarname="serializer"/>
     <process_jarfile jarname="slf4j-api"/>
-    <process_jarfile jarname="slf4j-ext"/>
     <process_jarfile jarname="jcl-over-slf4j"/>
     <process_jarfile jarname="log4j-api"/>
     <process_jarfile jarname="log4j-1.2-api"/>
@@ -3577,6 +3574,8 @@ run JMeter unless all the JMeter jars are added.
       <!-- tidy up unused logkit jars -->
       <fileset dir="${lib.dir}" includes="logkit-2.0.jar"/>
       <fileset dir="${lib.opt}" includes="org.jacoco.ant-*-nodeps.jar" excludes="${jacocoant.jar}"/>
+      <!-- tidy up unused slf4j-ext jar -->
+      <fileset dir="${lib.dir}" includes="slf4j-ext-1.7.25.jar" />
     </delete>
     <antcall target="_process_all_jars">
         <param name="_get_file" value="true"/>
