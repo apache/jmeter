@@ -247,6 +247,7 @@ slf4j-api-1.7.25
 http://www.slf4j.org/
 - jodd-core
 - json-path
+- jmeter internal logging
 
 tika-1.20
 --------------
