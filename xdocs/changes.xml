@@ -83,6 +83,8 @@ of previous time slot as a base. Starting with this version, each time slot is i
 </ul>
 See <bugzilla>63094</bugzilla>
 </li>
+<li>slf4j-ext has been removed from libraries (lib folder) and JMeter pom. It was not used by default and due to CVE-2018-8088 and unavailability of a stable version
+containing a fix to this issue, we decided to remove it. If you still needed, you can add it in lib folder.</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -261,6 +263,7 @@ See <bugzilla>63094</bugzilla>
     <li><bug>63099</bug>Escape commata in function helper dialog only outside of variable replacement structures.</li>
     <li><bug>63105</bug>Export Transactions for Report: fix 2 bugs</li>
     <li><bug>63106</bug>Apply naming policy does not refresh UI</li>
+    <li><bug>63090</bug>Remove slf4j-ext due to CVE-2018-8088</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
