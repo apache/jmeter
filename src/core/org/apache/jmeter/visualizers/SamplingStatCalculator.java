@@ -178,11 +178,11 @@ public class SamplingStatCalculator {
      */
     public Sample addSample(SampleResult res) {
         Sample[] holder = new Sample[1];
-        Runnable runnable = () -> { addSampleInEDT(res, holder); };
+        Runnable runnable = () -> addSampleInEDT(res, holder);
         JMeterUtils.runSafe(true, runnable);
         return holder[0];
     }
-    
+
     private void addSampleInEDT(SampleResult res, Sample[] holder) {
         long rtime;
         long cmean = 0;
@@ -194,7 +194,7 @@ public class SamplingStatCalculator {
         double throughput;
         boolean rbool;
 
-        calculator.addValue(res.getTime(), res.getSampleCount());
+        calculator.addValue(Long.valueOf(res.getTime()), res.getSampleCount());
         calculator.addBytes(res.getBytesAsLong());
         calculator.addSentBytes(res.getSentBytes());
         setStartTime(res);
@@ -209,12 +209,11 @@ public class SamplingStatCalculator {
         }
 
         rtime = res.getTime();
-//        if (calculator.getCount() > 1) {
-            cmean = (long) calculator.getMean();
-            cstdv = (long) calculator.getStandardDeviation();
-            cmedian = calculator.getMedian().longValue();
-            cpercent = calculator.getPercentPoint(0.500).longValue();
-//        }
+
+        cmean = (long) calculator.getMean();
+        cstdv = (long) calculator.getStandardDeviation();
+        cmedian = calculator.getMedian().longValue();
+        cpercent = calculator.getPercentPoint(0.500).longValue();
         // TODO cpercent is the same as cmedian here - why? and why pass it to
         // "distributionLine"?
         rbool = res.isSuccessful();
@@ -310,17 +309,11 @@ public class SamplingStatCalculator {
     }
 
     public double getMean() {
-//        if (calculator.getCount() > 1) {
-            return calculator.getMean();
-//        }
-//        return 0;
+        return calculator.getMean();
     }
 
     public Number getMeanAsNumber() {
-//        if (calculator.getCount() > 1) {
-            return Long.valueOf((long) calculator.getMean());
-//        }
-//        return 0;
+        return Long.valueOf((long) calculator.getMean());
     }
 
     public Number getMedian() {
