@@ -48,11 +48,11 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
             HistogramStatCalculator histoCalc = (HistogramStatCalculator) calc;
             sum += histoCalc.sum;
             count += histoCalc.count;
-            mean = (mean + histoCalc.mean) / 2;
-            m2 += histoCalc.m2; // this is not correct, but hopefully close enough for big counts
             bytes += histoCalc.bytes;
             sentBytes += histoCalc.sentBytes;
             histogram.add(histoCalc.histogram);
+            mean = histogram.getMean();
+            m2 = histogram.getStdDeviation() * histogram.getStdDeviation();
         } else {
             throw new IllegalArgumentException("Only instances of HistogramStatCalculator allowed.");
         }
