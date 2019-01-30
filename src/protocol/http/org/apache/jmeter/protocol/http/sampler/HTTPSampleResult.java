@@ -114,11 +114,11 @@ public class HTTPSampleResult extends SampleResult {
          * 305 = Use Proxy
          * 306 = (Unused)
          */
-        final String[] REDIRECT_CODES = { HTTPConstants.SC_MOVED_PERMANENTLY,
+        final String[] redirectCodes = { HTTPConstants.SC_MOVED_PERMANENTLY,
                 HTTPConstants.SC_MOVED_TEMPORARILY,
                 HTTPConstants.SC_SEE_OTHER };
         String code = getResponseCode();
-        for (String redirectCode : REDIRECT_CODES) {
+        for (String redirectCode : redirectCodes) {
             if (redirectCode.equals(code)) {
                 return true;
             }
@@ -128,11 +128,8 @@ public class HTTPSampleResult extends SampleResult {
         // the user agent MUST NOT automatically redirect the request unless it can be confirmed by the user,
         // since this might change the conditions under which the request was issued.
         // See Bug 54119
-        if (HTTPConstants.SC_TEMPORARY_REDIRECT.equals(code) && 
-                (HTTPConstants.GET.equals(getHTTPMethod()) || HTTPConstants.HEAD.equals(getHTTPMethod()))) {
-            return true;
-        }
-        return false;
+        return HTTPConstants.SC_TEMPORARY_REDIRECT.equals(code) && 
+                (HTTPConstants.GET.equals(getHTTPMethod()) || HTTPConstants.HEAD.equals(getHTTPMethod()));
     }
 
     /**
@@ -246,10 +243,10 @@ public class HTTPSampleResult extends SampleResult {
             // Preserve original case
             String matchAgainst = prefix.toLowerCase(java.util.Locale.ENGLISH);
             // Extract the content-type if present
-            final String METATAG = "<meta http-equiv=\"content-type\" content=\""; // $NON-NLS-1$
-            int tagstart=matchAgainst.indexOf(METATAG);
+            final String metaTag = "<meta http-equiv=\"content-type\" content=\""; // $NON-NLS-1$
+            int tagstart=matchAgainst.indexOf(metaTag);
             if (tagstart!=-1){
-                tagstart += METATAG.length();
+                tagstart += metaTag.length();
                 int tagend = prefix.indexOf('\"', tagstart); // $NON-NLS-1$
                 if (tagend!=-1){
                     final String ct = prefix.substring(tagstart,tagend);
