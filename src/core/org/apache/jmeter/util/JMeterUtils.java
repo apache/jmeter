@@ -898,6 +898,29 @@ public class JMeterUtils implements UnitTestManager {
             log.warn("reportErrorToUser(\"{}\") caused", errorMsg, e);
         }
     }
+    
+    /**
+     * Report an information through a dialog box in GUI mode 
+     *
+     * @param msg - the information message.
+     * @param titleMsg - title string
+     */
+    public static void reportInfoToUser(String msg, String titleMsg) {
+        GuiPackage instance = GuiPackage.getInstance();
+        if (instance == null) {
+            log.info(msg);
+            System.out.println(msg); // NOSONAR intentional
+            return; // Done
+        }
+        try {
+            JOptionPane.showMessageDialog(instance.getMainFrame(),
+                    formatMessage(msg),
+                    titleMsg,
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (HeadlessException e) {
+            log.warn("reportInfoToUser(\"{}\") caused", msg, e);
+        }
+    }
 
     private static JScrollPane formatMessage(String errorMsg) {
         JTextArea ta = new JTextArea(10, 50);

@@ -1910,6 +1910,16 @@ JMETER-SERVER</source>
     Defaults to: <code>100</code></property>
 </properties>
 </section>
+
+<section name="&sect-num;.45 Documentation generation" anchor="docgeneration">
+<description>Advanced properties for documentation generation</description>
+<properties>
+    <property name="docgeneration.schematic_xsl">
+    Path to XSL file used to generate Schematic View of Test Plan.<br/>
+    When empty, JMeter will use the embedded one in src/core/org/apache/jmeter/gui/action/schematic.xsl<br/>
+    No default value</property>
+</properties>
+</section>
 <!-- 
 <section name="&sect-num;.10 Reports" anchor="Reports">
 <description>
