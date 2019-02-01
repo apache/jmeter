@@ -150,6 +150,7 @@ containing a fix to this issue, we decided to remove it. If you still needed, yo
     <li><bug>61486</bug>Make jmeter-server and non GUI mode run headless</li>
     <li><bug>63093</bug>Add <code>Compile JSR223 Test Elements</code> menu item. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63094</bug>Introduce a new Tools menu</li>
+    <li><bug>63101</bug>Propose a menu item to generate readable overview of Test Plan</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
