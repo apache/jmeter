@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.InterruptedIOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
@@ -150,7 +151,7 @@ public class HttpMirrorServer extends Thread implements Stoppable, NonTestElemen
             threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
         }
         try {
-            getLogger().info("Creating HttpMirror ... on port " + daemonPort);
+            getLogger().info("Creating HttpMirror ... on port {}", Integer.valueOf(daemonPort));
             mainSocket = new ServerSocket(daemonPort);
             mainSocket.setSoTimeout(ACCEPT_TIMEOUT);
             getLogger().info("HttpMirror up and running!");
@@ -177,6 +178,10 @@ public class HttpMirrorServer extends Thread implements Stoppable, NonTestElemen
                 }
             }
             getLogger().info("HttpMirror Server stopped");
+        } catch (BindException e) {
+            except = e;
+            getLogger().warn("Could not bind HttpMirror to port {}. Maybe there is already a HttpMirror running?",
+                    Integer.valueOf(daemonPort));
         } catch (Exception e) {
             except = e;
             getLogger().warn("HttpMirror Server stopped", e);
@@ -249,18 +254,18 @@ public class HttpMirrorServer extends Thread implements Stoppable, NonTestElemen
                         if (name.startsWith("jmeter") || name.startsWith("jorphan")) {
                             loggerName = "org.apache." + name;// $NON-NLS-1$
                         }
-                        getLogger().info("Setting log level to " + value + " for " + loggerName);// $NON-NLS-1$ // $NON-NLS-2$
+                        getLogger().info("Setting log level to '{}' for '{}'.", value, loggerName);// $NON-NLS-1$ // $NON-NLS-2$
                         Configurator.setAllLevels(loggerName, logLevel);
                     } else {
-                        getLogger().warn("Invalid log level, '" + value + "' for '" + name + "'.");// $NON-NLS-1$ // $NON-NLS-2$
+                        getLogger().warn("Invalid log level, '{}' for '{}'.", value, name);// $NON-NLS-1$ // $NON-NLS-2$
                     }
                 } else { // Set root level
                     final Level logLevel = Level.getLevel(name);
                     if (logLevel != null) {
-                        getLogger().info("Setting root log level to " + name);// $NON-NLS-1$
+                        getLogger().info("Setting root log level to '{}'", name);// $NON-NLS-1$
                         Configurator.setRootLevel(logLevel);
                     } else {
-                        getLogger().warn("Invalid log level, '" + name + "' for the root logger.");// $NON-NLS-1$ // $NON-NLS-2$
+                        getLogger().warn("Invalid log level, '{}' for the root logger.", name);// $NON-NLS-1$ // $NON-NLS-2$
                     }
                 }
                 break;
