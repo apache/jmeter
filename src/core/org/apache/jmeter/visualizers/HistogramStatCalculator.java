@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.HdrHistogram.Histogram;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.math.IStatCalculator;
 import org.slf4j.LoggerFactory;
 
 public class HistogramStatCalculator implements IStatCalculator<Long> {
 
-    private final Histogram histogram = new Histogram(3);
+    private final Histogram histogram = new Histogram(JMeterUtils.getPropDefault("histogram.accuracy", 3));
     private long bytes = 0;
     private long sentBytes = 0;
     private long sum = 0;
@@ -18,7 +19,7 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
     private long count = 0;
 
     public HistogramStatCalculator() {
-        LoggerFactory.getLogger(this.getClass()).info("HistogramStatCalculator used.");
+        LoggerFactory.getLogger(this.getClass()).debug("HistogramStatCalculator used.");
     }
 
     @Override
