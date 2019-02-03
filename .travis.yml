@@ -23,20 +23,24 @@ matrix:
     - jdk: oraclejdk8
       env: RUN_CHECKSTYLE=true
       script: ant -Djava.awt.headless=true checkstyle
-    - jdk: oraclejdk8
+    - name: Coverage on our default build with Oracle Java 8
+      jdk: oraclejdk8
       script: 
           - ant coverage-travis
       after_success:
           - bash <(curl -s https://codecov.io/bash)
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
-    - jdk: openjdk8
+    - name: Tests with OpenJDK 8
+      jdk: openjdk8
       script: 
           - ant test
-    - jdk: openjdk11
+    - name: Tests with OpenJDK 11
+      jdk: openjdk11
       script: 
           - ant test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
-    - jdk: openjdk-ea
+    - name: Tests with OpenJDK EA
+      jdk: openjdk-ea
       script: 
           - ant test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
