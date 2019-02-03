@@ -40,8 +40,8 @@ matrix:
       script: 
           - ant test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
-    - allow_failures:
-      - jdk: openjdk-ea
+  allow_failures:
+    - jdk: openjdk-ea
 # disable building with jdk9 as it has a bug and will not compile JMeter
 # see https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8193802
 #    - jdk: oraclejdk9
