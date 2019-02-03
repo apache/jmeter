@@ -14,24 +14,38 @@ before_install:
 # skip default "install" command
 install: true
 
+env:
+  global:
+  - ANT_OPTS="-Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true"
+
 matrix:
   include:
     - jdk: oraclejdk8
       env: RUN_CHECKSTYLE=true
       script: ant -Djava.awt.headless=true checkstyle
-    - jdk: oraclejdk8
-      script: 
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
+    - name: Coverage on our default build with Oracle Java 8
+      jdk: oraclejdk8
+      script:
+          - ant coverage-travis
       after_success:
           - bash <(curl -s https://codecov.io/bash)
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
-    - jdk: openjdk8
-      script: 
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
-    - jdk: openjdk11
-      script: 
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
+    - name: Tests with OpenJDK 8
+      jdk: openjdk8
+      script:
+          - ant test
+    - name: Tests with OpenJDK 11
+      jdk: openjdk11
+      script:
+          - ant test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
+    - name: Tests with OpenJDK EA
+      jdk: openjdk-ea
+      script:
+          - ant test
+      sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
+  allow_failures:
+    - jdk: openjdk-ea
 # disable building with jdk9 as it has a bug and will not compile JMeter
 # see https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8193802
 #    - jdk: oraclejdk9
