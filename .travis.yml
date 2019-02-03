@@ -14,6 +14,10 @@ before_install:
 # skip default "install" command
 install: true
 
+env:
+  global:
+  - ANT_OPTS="-Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true"
+
 matrix:
   include:
     - jdk: oraclejdk8
@@ -21,20 +25,20 @@ matrix:
       script: ant -Djava.awt.headless=true checkstyle
     - jdk: oraclejdk8
       script: 
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
+          - ant coverage-travis
       after_success:
           - bash <(curl -s https://codecov.io/bash)
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
     - jdk: openjdk8
       script: 
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
+          - ant coverage-travis
     - jdk: openjdk11
       script: 
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
+          - ant coverage-travis
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
     - jdk: openjdk-ea
       script: 
-          - ant -Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true coverage-travis
+          - ant coverage-travis
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
     - allow_failures:
       - jdk: openjdk-ea
