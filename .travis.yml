@@ -31,14 +31,14 @@ matrix:
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
     - jdk: openjdk8
       script: 
-          - ant coverage-travis
+          - ant test
     - jdk: openjdk11
       script: 
-          - ant coverage-travis
+          - ant test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
     - jdk: openjdk-ea
       script: 
-          - ant coverage-travis
+          - ant test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
     - allow_failures:
       - jdk: openjdk-ea
