@@ -255,7 +255,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             try {
                 ((Compilable) scriptEngine).compile(getScript());
                 return true;
-            } catch (ScriptException e) {
+            } catch (ScriptException e) { // NOSONAR
                 logger.error("Error compiling script for test element {}, error:{}", getName(), e.getMessage());
                 return false;
             }
@@ -266,7 +266,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                 try {
                     ((Compilable) scriptEngine).compile(fileReader);
                     return true;
-                } catch (ScriptException e) {
+                } catch (ScriptException e) { // NOSONAR
                     logger.error("Error compiling script for test element {}, error:{}", getName(), e.getMessage());
                     return false;
                 }
