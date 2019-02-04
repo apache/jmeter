@@ -164,7 +164,7 @@ public class JMeterVersionTest extends JMeterTestCase {
                     version = "1.0-groovy-2.4";
                 } else if (jar.equals("Saxon-HE-9.8.0")) { // special handling
                     jar = "Saxon-HE";
-                    version = "9.8.0-14";
+                    version = "9.9.1-1";
                 }else {
                     String tmp = JAR_TO_BUILD_PROP.get(jar);
                     if (tmp != null) {
