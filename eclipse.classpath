@@ -98,7 +98,7 @@
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.3.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/ph-css-6.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/ph-commons-9.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/ph-commons-9.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.7.10.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-3.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/Saxon-HE-9.9.1-1.jar"/>
