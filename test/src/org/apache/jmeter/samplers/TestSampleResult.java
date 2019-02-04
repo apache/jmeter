@@ -352,7 +352,6 @@ public class TestSampleResult implements JMeterSerialTest {
             TestPlan plan = new TestPlan();
             plan.setFunctionalMode(true);
             try {
-
                 SampleResult result = new SampleResult();
                 result.setStartTime(System.currentTimeMillis());
                 result.setSampleLabel("parent label");
