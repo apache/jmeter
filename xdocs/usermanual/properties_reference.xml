@@ -732,6 +732,11 @@ JMETER-SERVER</source>
     Set this to a value less than zero to disable the background thread.<br/>
     Defaults to: <code>5000</code>
 </property>
+<property name="functional_mode">
+    Since version 5.0 JMeter has a new SubResult Naming Policy<br/>
+    This property allow to ignore renaming SubResult Names<br/>
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.17 Upgrade" anchor="upgrade">
