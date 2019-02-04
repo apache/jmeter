@@ -174,7 +174,7 @@ containing a fix to this issue, we decided to remove it. If you still needed, yo
     <li>Updated to ph-commons-9.2.0 (from ph-commons-9.1.2)</li>
     <li>Updated to log4j-2.11.1 (from log4j-2.11.0)</li>
     <li>Updated to xmlgraphics-commons 2.3 (from 2.2)</li>
-    <li>Updated to Saxon-HE 9.8.0-14 (from 9.8.0-12)</li>
+    <li><bug>63033</bug>Updated to Saxon-HE 9.9.1-1 (from 9.8.0-12). Thanks at Saxonica</li>
     <li>Updated to xstream 1.4.11 (from 1.4.10)</li>
     <li>Updated to jodd 5.0.6 (from 4.1.4)</li>
     <li>Updated to asm-7.0 (from 6.1)</li>
@@ -289,6 +289,7 @@ containing a fix to this issue, we decided to remove it. If you still needed, yo
     <li>Sonali (arora.sonali99 at gmail.com)</li>
     <li>Mohamed Ibrahim (rollno748 at gmail.com)</li>
     <li>U. Poblotzki (u.poblotzki at thalia.de)</li>
+    <li><a href="https://www.saxonica.com">Saxonica</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
