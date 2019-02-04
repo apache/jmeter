@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.LogRecordingDelegatingLogger;
 import org.apache.jorphan.test.JMeterSerialTest;
@@ -343,6 +344,32 @@ public class TestSampleResult implements JMeterSerialTest {
             long start = System.currentTimeMillis();
             Thread.sleep(ms);
             return System.currentTimeMillis() - start;
+        }
+
+        @Test
+        public void testCompareSampleLabels() {
+            final boolean prevValue = TestPlan.getFunctionalMode();
+            TestPlan plan = new TestPlan();
+            plan.setFunctionalMode(true);
+            try {
+                SampleResult result = new SampleResult();
+                result.setStartTime(System.currentTimeMillis());
+                result.setSampleLabel("parent label");
+
+                SampleResult subResult = new SampleResult();
+                subResult.setStartTime(System.currentTimeMillis());
+                subResult.setSampleLabel("subResult label");
+
+                result.addSubResult(subResult);
+                assertEquals("subResult label", subResult.getSampleLabel());
+
+                plan.setFunctionalMode(false);
+                subResult.setSampleLabel("parent label");
+                result.addRawSubResult(subResult);
+                assertEquals("parent label-0", subResult.getSampleLabel());
+            } finally {
+                plan.setFunctionalMode(prevValue);
+            }
         }
 }
 
