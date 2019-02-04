@@ -218,7 +218,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
             if(response != null && response.getEntity() != null) {
                 body = EntityUtils.toString(response.getEntity());
             }
-        } catch (Exception e) {
+        } catch (Exception e) { // NOSONAR
             // NOOP
         }
         return body;
