@@ -71,7 +71,7 @@ public class SchematicView extends AbstractAction implements MenuCreator, HashTr
                 throws Exception {
             TransformerFactory factory = TransformerFactory.newInstance(
                     "net.sf.saxon.BasicTransformerFactory", Thread.currentThread().getContextClassLoader());
-            Source xslt = null;
+            Source xslt;
             if (StringUtils.isEmpty(DEFAULT_XSL_FILE)) {
                 log.info("Will use file {} for Schematic View generation", DEFAULT_XSL_FILE);
                 xslt = new StreamSource(new File(DEFAULT_XSL_FILE));
