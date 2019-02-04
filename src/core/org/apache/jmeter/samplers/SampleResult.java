@@ -626,7 +626,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * https://bz.apache.org/bugzilla/show_bug.cgi?id=63055
      */
     protected boolean isRenameSampleLabel() {
-        return TestPlan.getFunctionalMode() || IS_FUNCTIONAL_MODE;
+        return !(TestPlan.getFunctionalMode() || IS_FUNCTIONAL_MODE);
     }
 
     /**
