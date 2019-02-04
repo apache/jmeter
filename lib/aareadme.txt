@@ -189,7 +189,7 @@ ph-css-6.1.1
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-9.2.0
+ph-commons-9.2.1
 --------
 https://github.com/phax/ph-commons
 - CssParser
