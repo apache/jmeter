@@ -22,23 +22,45 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.io.PrintStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.transform.stream.StreamSource;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XPathCompiler;
+import net.sf.saxon.s9api.XPathExecutable;
+import net.sf.saxon.s9api.XPathSelector;
+import net.sf.saxon.s9api.XdmItem;
+import net.sf.saxon.s9api.XdmValue;
 
 public class XPathUtilTest {
     private static final Logger log = LoggerFactory.getLogger(XPathUtil.class);
     final String lineSeparator = System.getProperty("line.separator");
 
     final String xmlDoc = JMeterUtils.getResourceFileAsText("XPathUtilTestXml.xml");
+    
+    @Test
+    public void testBug63033() throws SaxonApiException {
+        Processor p = new Processor(false);
+        XPathCompiler c = p.newXPathCompiler();
+        c.declareNamespace("age", "http://www.w3.org/2003/01/geo/wgs84_pos#");
+        String xPathQuery="//Employees/Employee[1]/age:ag";;
+        XPathExecutable e = c.compile(xPathQuery);
+        XPathSelector selector = e.load();
+        selector.setContextItem(p.newDocumentBuilder().build(new StreamSource(new StringReader(xmlDoc))));
+        XdmValue nodes = selector.evaluate();
+        XdmItem item = nodes.itemAt(0);
+        assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",item.toString());
+    }
     
     @Test
     public void testputValuesForXPathInListUsingSaxon() throws SaxonApiException, FactoryConfigurationError{
