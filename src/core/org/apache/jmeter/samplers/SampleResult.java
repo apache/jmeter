@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.Searchable;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -96,7 +97,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @see #setDataType(java.lang.String)
      */
     public static final String BINARY = "bin"; // $NON-NLS-1$
-    
+
+    private static final boolean IS_FUNCTIONAL_MODE = JMeterUtils.getPropDefault("functional_mode", false);
+
     // List of types that are known to be binary
     private static final String[] BINARY_TYPES = {
         "image/",       //$NON-NLS-1$
@@ -614,8 +617,18 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void addSubResult(SampleResult subResult) {
-        addSubResult(subResult, true);
+        addSubResult(subResult, isRenameSampleLabel());
     }
+
+    /**
+     * If JMeter run in Functional Mode will return true,
+     *      otherwise - false.
+     * https://bz.apache.org/bugzilla/show_bug.cgi?id=63055
+     */
+    protected boolean isRenameSampleLabel() {
+        return TestPlan.getFunctionalMode() || IS_FUNCTIONAL_MODE;
+    }
+
     /**
      * Add a subresult and adjust the parent byte count and end-time.
      * 
@@ -652,7 +665,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void addRawSubResult(SampleResult subResult){
-        storeSubResult(subResult, true);
+        storeSubResult(subResult, isRenameSampleLabel());
     }
     
     /**
@@ -676,7 +689,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void storeSubResult(SampleResult subResult) {
-        storeSubResult(subResult, true);
+        storeSubResult(subResult, isRenameSampleLabel());
     }
     
     /**
