@@ -73,7 +73,7 @@ public class SchematicView extends AbstractAction implements MenuCreator, HashTr
                     "net.sf.saxon.BasicTransformerFactory", Thread.currentThread().getContextClassLoader());
             Source xslt;
             if (StringUtils.isEmpty(DEFAULT_XSL_FILE)) {
-                log.info("Will use file {} for Schematic View generation", DEFAULT_XSL_FILE);
+                log.info("Will use file {} for Schematic View generation", DEFAULT_XSL_FILE);
                 xslt = new StreamSource(new File(DEFAULT_XSL_FILE));
             } else {
                 xslt = new StreamSource(SchematicView.class.getResourceAsStream("/org/apache/jmeter/gui/action/schematic.xsl"));
