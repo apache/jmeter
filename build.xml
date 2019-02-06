@@ -1039,6 +1039,9 @@
       <classpath>
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
       </classpath>
+      <jvmarg value="-Xms64m"/>
+      <jvmarg value="-Xmx64m"/>
+      <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
       <jvmarg value="${jacoco_params}run_gui:java(server)"/>
       <sysproperty key="jmeter.home" value="${basedir}"/>
     </java>
@@ -2219,7 +2222,7 @@ run JMeter unless all the JMeter jars are added.
               fork="true"
               dir="${basedir}"
               failonerror="true">
-          <jvmarg value="-Xmx512m"/>
+          <jvmarg value="-Xmx256m"/>
           <classpath>
             <fileset dir="${maven.home}/boot">
               <include name="*.jar" />
@@ -2713,6 +2716,9 @@ run JMeter unless all the JMeter jars are added.
             <path refid="logging.classpath"/>
           </classpath>
           <jvmarg value="${jacoco_params}batchtest:daemon:java(server)"/>
+          <jvmarg value="-Xms64m"/>
+          <jvmarg value="-Xmx64m"/>
+          <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
           <!-- pick up default properties -->
@@ -2823,6 +2829,9 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
+      <jvmarg value="-Xms64m"/>
+      <jvmarg value="-Xmx64m"/>
+      <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
       <jvmarg value="${jacoco_params}batchtest:java(${taskname})"/>
       <jvmarg value="-Djava.rmi.server.hostname=${computer.hostname}" if:set="rmi_force_localhost"/>
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
@@ -3188,6 +3197,9 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
+      <jvmarg value="-Xms64m"/>
+      <jvmarg value="-Xmx64m"/>
+      <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
       <jvmarg value="-server"/>
       <jvmarg value="${jacoco_params}_test:java"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
