@@ -1039,10 +1039,8 @@
       <classpath>
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
       </classpath>
-      <jvmarg value="-Xms64m"/>
-      <jvmarg value="-Xmx128m"/>
       <jvmarg value="-Xss256k"/>
-      <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
+      <jvmarg value="-XX:MaxMetaspaceSize=256m"/>
       <jvmarg value="${jacoco_params}run_gui:java(server)"/>
       <sysproperty key="jmeter.home" value="${basedir}"/>
     </java>
@@ -3200,8 +3198,8 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
-      <jvmarg value="-Xms128m"/>
-      <jvmarg value="-Xmx128m"/>
+      <jvmarg value="-Xms256m"/>
+      <jvmarg value="-Xmx256m"/>
       <jvmarg value="-Xss256k"/>
       <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
       <jvmarg value="-server"/>
