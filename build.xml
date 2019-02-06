@@ -3199,7 +3199,7 @@ run JMeter unless all the JMeter jars are added.
         <path refid="logging.classpath"/>
       </classpath>
       <jvmarg value="-Xms256m"/>
-      <jvmarg value="-Xmx256m"/>
+      <jvmarg value="-Xmx512m"/>
       <jvmarg value="-Xss256k"/>
       <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
       <jvmarg value="-server"/>
