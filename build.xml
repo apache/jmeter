@@ -1040,7 +1040,8 @@
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
       </classpath>
       <jvmarg value="-Xms64m"/>
-      <jvmarg value="-Xmx64m"/>
+      <jvmarg value="-Xmx128m"/>
+      <jvmarg value="-Xss256k"/>
       <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
       <jvmarg value="${jacoco_params}run_gui:java(server)"/>
       <sysproperty key="jmeter.home" value="${basedir}"/>
@@ -2717,7 +2718,8 @@ run JMeter unless all the JMeter jars are added.
           </classpath>
           <jvmarg value="${jacoco_params}batchtest:daemon:java(server)"/>
           <jvmarg value="-Xms64m"/>
-          <jvmarg value="-Xmx64m"/>
+          <jvmarg value="-Xmx128m"/>
+          <jvmarg value="-Xss256k"/>
           <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
@@ -2830,7 +2832,8 @@ run JMeter unless all the JMeter jars are added.
         <path refid="logging.classpath"/>
       </classpath>
       <jvmarg value="-Xms64m"/>
-      <jvmarg value="-Xmx64m"/>
+      <jvmarg value="-Xmx128m"/>
+      <jvmarg value="-Xss256k"/>
       <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
       <jvmarg value="${jacoco_params}batchtest:java(${taskname})"/>
       <jvmarg value="-Djava.rmi.server.hostname=${computer.hostname}" if:set="rmi_force_localhost"/>
@@ -3199,6 +3202,7 @@ run JMeter unless all the JMeter jars are added.
       </classpath>
       <jvmarg value="-Xms128m"/>
       <jvmarg value="-Xmx128m"/>
+      <jvmarg value="-Xss256k"/>
       <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
       <jvmarg value="-server"/>
       <jvmarg value="${jacoco_params}_test:java"/>
