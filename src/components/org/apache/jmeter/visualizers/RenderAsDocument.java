@@ -44,7 +44,7 @@ public class RenderAsDocument extends SamplerResultTab implements ResultRenderer
         String response = Document.getTextFromDocument(sampleResult.getResponseData());
 
         results.setContentType("text/plain"); // $NON-NLS-1$
-        results.setText(response);
+        setTextOptimized(response);
         results.setCaretPosition(0);
         resultsScrollPane.setViewportView(results);
     }
