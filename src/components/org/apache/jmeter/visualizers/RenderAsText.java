@@ -33,7 +33,7 @@ public class RenderAsText extends SamplerResultTab implements ResultRenderer {
 
     private void showTextResponse(String response) {
         results.setContentType("text/plain"); // $NON-NLS-1$
-        results.setText(response == null ? "" : response); // $NON-NLS-1$
+        setTextOptimized(response == null ? "" : response); // $NON-NLS-1$
         results.setCaretPosition(0);
         resultsScrollPane.setViewportView(results);
         // Bug 55111 - Refresh JEditor pane size depending on the presence or absence of scrollbars
