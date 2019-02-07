@@ -44,7 +44,7 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
 
     private void showRenderJSONResponse(String response) {
         results.setContentType("text/plain"); // $NON-NLS-1$
-        results.setText(response == null ? "" : prettyJSON(response));
+        setTextOptimized(response == null ? "" : prettyJSON(response));
         results.setCaretPosition(0);
         resultsScrollPane.setViewportView(results);
     }
