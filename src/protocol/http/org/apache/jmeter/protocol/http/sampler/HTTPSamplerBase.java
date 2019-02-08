@@ -1011,7 +1011,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @throws MalformedURLException if url is malformed
      */
     public URL getUrl() throws MalformedURLException {
-        StringBuilder pathAndQuery = new StringBuilder(100);
         String path = this.getPath();
         // Hack to allow entire URL to be provided in host field
         if (path.startsWith(HTTP_PREFIX)
@@ -1021,6 +1020,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         String domain = getDomain();
         String protocol = getProtocol();
         String method = getMethod();
+        StringBuilder pathAndQuery = new StringBuilder(100);
         if (PROTOCOL_FILE.equalsIgnoreCase(protocol)) {
             domain = null; // allow use of relative file URLs
         } else {
@@ -1077,7 +1077,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         
         CollectionProperty arguments = getArguments().getArguments();
         // Optimisation : avoid building useless objects if empty arguments
-        if(arguments.size() == 0) {
+        if(arguments.isEmpty()) {
             return "";
         }
         String lContentEncoding = contentEncoding;
@@ -1106,7 +1106,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 item = new HTTPArgument((Argument) objectValue);
             }
             final String encodedName = item.getEncodedName();
-            if (encodedName.length() == 0) {
+            if (encodedName.isEmpty()) {
                 continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
             }
             if (!first) {
