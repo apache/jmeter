@@ -682,7 +682,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
     /**
      * Optimized way to set text based on :
      * http://javatechniques.com/blog/faster-jtextpane-text-insertion-part-i/
-     * @param response String data
+     * @param data String data
      */
     protected void setTextOptimized(String data) {
         Document document = results.getDocument();
