@@ -106,10 +106,10 @@ public class FileToString extends AbstractFunction {
             if(file.exists() && file.canRead()) {
                 myValue = FileUtils.readFileToString(new File(fileName), encoding);
             } else {
-                log.warn("Could not read open: "+fileName+" ");
+                log.warn("Could not read open: {} ", fileName);
             }
         } catch (IOException e) {
-            log.warn("Could not read file: "+fileName+" "+e.getMessage(), e);
+            log.warn("Could not read file: {} {}", fileName, e.getMessage(), e);
         }
 
         if (myName.length() > 0) {
@@ -120,9 +120,7 @@ public class FileToString extends AbstractFunction {
         }
 
         if (log.isDebugEnabled()) {
-            String tn = Thread.currentThread().getName();
-            log.debug(tn + " name:" //$NON-NLS-1$
-                    + myName + " value:" + myValue);//$NON-NLS-1$
+            log.debug("{} name: {} value: {}", Thread.currentThread().getName(), myName, myValue); //$NON-NLS-1$
         }
 
         return myValue;
