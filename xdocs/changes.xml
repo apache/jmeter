@@ -58,13 +58,23 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 <ch_title>Core improvements</ch_title>
-
+<ul>
+<li>Templates can provide parameters that are filled in on test plan generation</li>
+<li>A new Tools menu has been introduced to collect those entries, that are used for general usage around JMeter, like taking a heap dump</li>
+<li>Various bug fixes have been implemented, like gathering the correct headers when recording requests through the https script recorder using https</li>
+</ul>
 <ch_title>Scripting / Debugging enhancements</ch_title>
-
+<ul>
+<li>Option to compile all JSR223 ELements</li>
+</ul>
 <ch_title>Live Reporting and Web Report</ch_title>
-
+<ul>
+<li>JSON formatted data</li>
+<li>various improvements</li>
+</ul>
+<!--
 <ch_title>Functions</ch_title>
-
+-->
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
