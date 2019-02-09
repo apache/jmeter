@@ -35,16 +35,20 @@ import org.slf4j.LoggerFactory;
 
 /**
  * FileToString Function to read a complete file into a String.
- *
+ * <p>
  * Parameters:
- * - file name
- * - file encoding (optional)
- * - variable name (optional)
+ * <ul>
+ *  <li>file name</li>
+ *  <li>file encoding (optional)</li>
+ *  <li>variable name (optional)</li>
+ * </ul>
  *
  * Returns:
- * - the whole text from a file
- * - or **ERR** if an error occurs
- * - value is also optionally saved in the variable for later re-use.
+ * <ul>
+ *  <li>the whole text from a file</li>
+ *  <li>or {@code **ERR**} if an error occurs</li>
+ *  <li>value is also optionally saved in the variable for later re-use.</li>
+ * </ul>
  * @since 2.4
  */
 public class FileToString extends AbstractFunction {
