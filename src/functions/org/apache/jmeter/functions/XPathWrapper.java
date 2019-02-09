@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
- * This class wraps the XPathFileContainer for use across multiple threads.
- *
+ * This class wraps the {@link XPathFileContainer} for use across multiple threads.
+ * <p>
  * It maintains a list of nodelist containers, one for each file/xpath combination
  *
  */
@@ -39,7 +39,7 @@ final class XPathWrapper {
 
     private static final Logger log = LoggerFactory.getLogger(XPathWrapper.class);
 
-    /*
+    /**
      * This Map serves two purposes:
      * <ul>
      *   <li>maps names to  containers</li>
@@ -64,8 +64,9 @@ final class XPathWrapper {
     }
 
     private static XPathFileContainer open(String file, String xpathString) {
-        String tname = Thread.currentThread().getName();
-        log.info(tname+": Opening " + file);
+        if (log.isInfoEnabled()) {
+            log.info("{}: Opening {}", Thread.currentThread().getName(), file);
+        }
         XPathFileContainer frcc=null;
         try {
             frcc = new XPathFileContainer(file, xpathString);
@@ -106,19 +107,22 @@ final class XPathWrapper {
             my.put(key,xpfc); // save our local copy
         }
         if (xpfc.size()==0){
-            log.warn("XPathFileContainer has no nodes: "+file+" "+xpathString);
+            log.warn("XPathFileContainer has no nodes: {} {}", file, xpathString);
             return ""; //$NON-NLS-1$
         }
         int currentRow = xpfc.nextRow();
-        log.debug("getting match number " + currentRow);
+        if (log.isDebugEnabled()) {
+            log.debug("getting match number {}", Integer.toString(currentRow));
+        }
         return xpfc.getXPathString(currentRow);
     }
 
     public static void clearAll() {
         log.debug("clearAll()");
         filePacks.get().clear();
-        String tname = Thread.currentThread().getName();
-        log.info(tname+": clearing container");
+        if (log.isInfoEnabled()) {
+            log.info("{}: clearing container", Thread.currentThread().getName());
+        }
         synchronized (fileContainers) {
             fileContainers.clear();
         }
