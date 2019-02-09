@@ -145,7 +145,7 @@ public class JavaScript extends AbstractFunction {
                 vars.put(varName, resultStr);
             }
         } catch (Exception e) {
-            log.error("Error processing Javascript: [" + script + "]\n", e);
+            log.error("Error processing Javascript: [{}]", script, e);
             throw new InvalidVariableException("Error processing Javascript: [" + script + "]", e);
         } 
         return resultStr;
@@ -188,7 +188,7 @@ public class JavaScript extends AbstractFunction {
                 vars.put(varName, resultStr);
             }
         } catch (RhinoException e) {
-            log.error("Error processing Javascript: [" + script + "]\n", e);
+            log.error("Error processing Javascript: [{}]", script, e);
             throw new InvalidVariableException("Error processing Javascript: [" + script + "]", e);
         } finally {
             Context.exit();

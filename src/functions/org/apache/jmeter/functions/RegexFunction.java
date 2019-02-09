@@ -124,7 +124,7 @@ public class RegexFunction extends AbstractFunction {
                 inputVariable = ((CompoundVariable) values[6]).execute();
             }
         } catch (MalformedCachePatternException e) {
-            log.error("Malformed cache pattern:"+values[0], e);
+            log.error("Malformed cache pattern:{}", values[0], e);
             throw new InvalidVariableException("Malformed cache pattern:"+values[0], e);
         }
 
