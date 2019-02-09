@@ -35,7 +35,7 @@ The following targets may prove useful:
 ## Invoking Ant targets inside Eclipse
 
 You can use the `Run As --> Ant Build` and select target, or you can use
-the `Windows->Show View->Ant View`. Then select the `build.xml` file and
+the `Windows --> Show View --> Ant View`. Then select the `build.xml` file and
 drag and drop to the `Ant View`.
 Now you can invoke targets by clicking on them.
 Note that if you invoke for example the `compile` target, and get error
@@ -48,9 +48,9 @@ messages about
 
 
 it just means that your Eclipse project is set up with JRE libraries instead of JDK libraries.
-The suggested fix is to add a JDK in `Window->Preferences->Java->Installed JREs`.
+The suggested fix is to add a JDK in `Window --> Preferences --> Java --> Installed JREs`.
 
-Then do a `Project->Properties` and select `Java Build Path` in the left pane, and then
+Then do a `Project --> Properties` and select `Java Build Path` in the left pane, and then
 select the `Libraries` tab in the right pane. Scroll to the bottom, select the `JRE System Library`,
 and click `Remove`. Then click `Add library...` , select `JRE System Library`, and then select
 the JDK.
