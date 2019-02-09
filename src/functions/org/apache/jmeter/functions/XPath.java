@@ -34,13 +34,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The function represented by this class allows data to be read from XML files.
+ * <p>
  * Syntax is similar to the CVSRead function. The function allows the test to
- * line-thru the nodes in the XML file - one node per each test. E.g. inserting
- * the following in the test scripts :
- *
+ * line-thru the nodes in the XML file - one node per each test, e.g. inserting
+ * the following in the test scripts:
+ * <pre><code>
  * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // match the (first) node
  * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // Go to next match of '/xpath/' expression
- *
+ * </code></pre>
  * NOTE: A single instance of each different file/expression combination
  * is opened and used for all threads.
  * @since 2.0.3
@@ -71,15 +72,11 @@ public class XPath extends AbstractFunction {
         String fileName = ((CompoundVariable) values[0]).execute();
         String xpathString = ((CompoundVariable) values[1]).execute();
 
-        if (log.isDebugEnabled()){
-            log.debug("execute (" + fileName + " " + xpathString + ")   ");
-        }
+        log.debug("execute ({} {})", fileName, xpathString);
 
         myValue = XPathWrapper.getXPathString(fileName, xpathString);
 
-        if (log.isDebugEnabled()){
-            log.debug("execute value: " + myValue);
-        }
+        log.debug("execute value: {}", myValue);
 
         return myValue;
     }
@@ -99,13 +96,15 @@ public class XPath extends AbstractFunction {
     /** {@inheritDoc} */
     @Override
     public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
-        log.debug("setParameter - Collection.size=" + parameters.size());
+        if (log.isDebugEnabled()) {
+            log.debug("setParameter - Collection.size={}", Integer.toString(parameters.size()));
+        }
 
         values = parameters.toArray();
 
         if (log.isDebugEnabled()) {
             for (int i = 0; i < parameters.size(); i++) {
-                log.debug("i:" + ((CompoundVariable) values[i]).execute());
+                log.debug("i:{}", ((CompoundVariable) values[i]).execute());
             }
         }
 
