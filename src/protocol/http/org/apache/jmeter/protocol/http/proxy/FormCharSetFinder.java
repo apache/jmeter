@@ -51,9 +51,7 @@ public class FormCharSetFinder {
      */
     public void addFormActionsAndCharSet(String html, Map<String, String> formEncodings, String pageEncoding)
             throws HTMLParseException {
-        if (log.isDebugEnabled()) {
-            log.debug("Parsing html of: " + html);
-        }
+        log.debug("Parsing html of: {}", html);
 
         Document document = Jsoup.parse(html);
         Elements forms = document.select("form");
