@@ -69,7 +69,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     static {
         if (log.isInfoEnabled()) {
-            log.info("Will only cache the following methods: " + Arrays.toString(CACHEABLE_METHODS));
+            log.info("Will only cache the following methods: {}", Arrays.toString(CACHEABLE_METHODS));
         }
     }
     //+ JMX attributes, do not change values
@@ -276,7 +276,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                     .parseDate(expires);
         } catch (IllegalArgumentException e) {
             if (log.isDebugEnabled()) {
-                log.debug("Unable to parse Expires: '" + expires + "' " + e);
+                log.debug("Unable to parse Expires: '{}' {}", expires, e.toString());
             }
             expiresDate = CacheManager.EXPIRED_DATE; // invalid dates must be
                                                      // treated as expired
