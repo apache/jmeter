@@ -102,9 +102,7 @@ public class RandomString extends AbstractFunction {
         }
 
         if (log.isDebugEnabled()) {
-            String tn = Thread.currentThread().getName();
-            log.debug(tn + " name:" //$NON-NLS-1$
-                    + myName + " value:" + myValue);//$NON-NLS-1$
+            log.debug("{} name:{} value:{}", Thread.currentThread().getName(), myName, myValue); //$NON-NLS-1$
         }
 
         return myValue;
