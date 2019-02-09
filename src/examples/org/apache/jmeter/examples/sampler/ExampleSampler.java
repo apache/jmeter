@@ -119,9 +119,9 @@ public class ExampleSampler extends AbstractSampler {
      * Helper method
      */
     private void trace(String s) {
-        String tl = getTitle();
-        String tn = Thread.currentThread().getName();
-        String th = this.toString();
-        log.debug(tn + " (" + classCount.get() + ") " + tl + " " + s + " " + th);
+        if (log.isDebugEnabled()) {
+            log.debug("{} ({}) {} {} {}", Thread.currentThread().getName(), Integer.valueOf(classCount.get()),
+                    getTitle(), s, this.toString());
+        }
     }
 }
