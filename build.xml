@@ -3381,7 +3381,7 @@ run JMeter unless all the JMeter jars are added.
         <tokenfilter>
           <filetokenizer/>
           <!-- Replace version with a wildcard. e.g, foo-1.2.3.jar or foo-1.2.3.RELEASE.jar to foo-*.jar -->
-          <replaceregex pattern="-(\d+\.){2,}([A-Za-z]+\.)?(jar|zip)" replace="-*\2"/>
+          <replaceregex pattern="-(\d+\.){2,}([A-Za-z]*)[-|\d]*?\.(jar|zip)" replace="-*\2"/>
         </tokenfilter>
       </filterchain>
     </loadresource>
