@@ -61,7 +61,7 @@ Summary
 <ul>
 <li>Templates can provide parameters that are filled in on test plan generation</li>
 <li>A new Tools menu has been introduced to collect those entries, that are used for general usage around JMeter, like taking a heap dump</li>
-<li>Various bug fixes have been implemented, like gathering the correct headers when recording requests through the https script recorder using https</li>
+<li>Various bug fixes have been implemented, like gathering the correct headers when recording requests through the HTTP(S) Test Script Recorder using HTTPS</li>
 </ul>
 <ch_title>Scripting / Debugging enhancements</ch_title>
 <ul>
@@ -70,7 +70,7 @@ Summary
 <ch_title>Live Reporting and Web Report</ch_title>
 <ul>
 <li>JSON formatted data</li>
-<li>various improvements</li>
+<li>Various improvements</li>
 </ul>
 <!--
 <ch_title>Functions</ch_title>
@@ -84,16 +84,17 @@ of previous time slot as a base. Starting with this version, each time slot is i
 <li><code>ClientJMeterEngine#rsetProperties</code> signature has been changed to use <code>HashMap&lt;String,String&gt;</code> instead of Properties, see <bugzilla>63034</bugzilla></li>
 <li>A new Menu item <code>Tools</code> has been introduced, the following menu items that were in <code>Help</code> menu are now under this new menu item:
 <ul>
-    <li><code>Create Heap Dump</code></li>
-    <li><code>Create Thread Dump</code></li>
-    <li><code>Compile JSR223 Elements</code></li>
-    <li><code>Export Transactions for Report</code></li>
-    <li><code>Import from cURL</code></li>
+    <li><code>Create a heap dump</code></li>
+    <li><code>Create a thread dump</code></li>
     <li><code>Function Helper Dialog</code></li>
+    <li><code>Compile JSR223 Test Elements</code></li>
+    <li><code>Export transactions for report</code></li>
+    <li><code>Generate Schematic View</code></li>
+    <li><code>Import from cURL</code></li>
 </ul>
 See <bugzilla>63094</bugzilla>
 </li>
-<li>slf4j-ext has been removed from libraries (lib folder) and JMeter pom. It was not used by default and due to CVE-2018-8088 and unavailability of a stable version
+<li><code>slf4j-ext</code> has been removed from libraries (lib folder) and JMeter pom. It was not used by default and due to CVE-2018-8088 and unavailability of a stable version
 containing a fix to this issue, we decided to remove it. If you still needed, you can add it in lib folder.</li>
 </ul>
 <!-- =================== Improvements =================== -->
