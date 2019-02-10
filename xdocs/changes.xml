@@ -58,16 +58,22 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 <ch_title>Core improvements</ch_title>
+<p>JDBC testing has been improved with ability to set init SQL statements and add 
+compatibility with JDBC drivers that do not support QueryTimeout
+<figure width="1122" height="727" image="changes/5.1/jdbc-connection-config-init-request.png" />
+</p>
 <ul>
-<li>JDBC testing has been improved with ability to set init SQL statements and add compatibility with JDBC drivers that do not support QueryTimeout</li>
 <li>Various bug fixes have been implemented, like gathering the correct headers when recording requests through the HTTP(S) Test Script Recorder using HTTPS</li>
 <li>In version 5.0, JMeter was changed to rename Sub results using a custom Naming Policy (<bugzilla>62550</bugzilla>). This change could be annoying for Functional Testing, a new property
 <code>subresults.disable_renaming=true</code> has been introduced to revert if needed to previous behaviour. An alternative is to check <code>Functional Test Mode</code> in Test Plan, see <bugzilla>63055</bugzilla></li>
 </ul>
 <ch_title>UX improvements</ch_title>
-<ul>
-<li>Templates can provide parameters that are filled in on test plan generation, <code>Recording</code> template uses this feature</li>
-<li>A new <code>Tools</code> menu has been introduced to collect those entries, that are used for general usage around JMeter, like:
+<p>Templates can provide parameters that are filled in on test plan generation,
+<code>Recording</code> template uses this feature
+<figure width="726" height="453" image="changes/5.1/templates-parametes.png" />
+</p>
+<p>A new <code>Tools</code> menu has been introduced to collect those entries,
+that are used for general usage around JMeter, like:
 <ul>
     <li><code>Function Helper Dialog</code></li>
     <li><code>Export transactions for report</code></li>
@@ -76,8 +82,13 @@ Summary
     <li><code>Compile JSR223 Test Elements</code></li>
     <li><code>Create a heap dump</code></li>
     <li><code>Create a thread dump</code></li>
-</ul></li>
 </ul>
+<figure width="268" height="237" image="changes/5.1/jmeter-new-menu-tools.png" />
+</p>
+<ch_title>Test Plan</ch_title>
+<p>Ability to create a Test plan from a cURL command.
+<figure width="1026" height="439" image="changes/5.1/http-request-from-curl-request.png" />
+</p>
 <ch_title>Scripting / Debugging enhancements</ch_title>
 <ul>
 <li>A menu item to compile all JSR223 Elements is now available in <code>Tools</code> menu</li>
