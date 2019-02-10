@@ -245,21 +245,94 @@ Summary
 
 <h3 class="ch_title">Core improvements</h3>
 
+<p>JDBC testing has been improved with ability to set init SQL statements and add 
+compatibility with JDBC drivers that do not support QueryTimeout
+<figure>
+<a href="./images/screenshots/changes/5.1/jdbc-connection-config-init-request.png"><img src="./images/screenshots/changes/5.1/jdbc-connection-config-init-request.png" width="1122" height="727" alt=""></a>
+<figcaption></figcaption>
+</figure>
+
+</p>
+
 <ul>
-
-<li>Templates can provide parameters that are filled in on test plan generation</li>
-
-<li>A new Tools menu has been introduced to collect those entries, that are used for general usage around JMeter, like taking a heap dump</li>
 
 <li>Various bug fixes have been implemented, like gathering the correct headers when recording requests through the HTTP(S) Test Script Recorder using HTTPS</li>
 
+<li>In version 5.0, JMeter was changed to rename Sub results using a custom Naming Policy (<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62550">
+      Bug
+      62550</a>). This change could be annoying for Functional Testing, a new property
+<span class="code">subresults.disable_renaming=true</span> has been introduced to revert if needed to previous behaviour. An alternative is to check <span class="code">Functional Test Mode</span> in Test Plan, see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63055">
+      Bug
+      63055</a>
+</li>
+
 </ul>
+
+<h3 class="ch_title">UX improvements</h3>
+
+<p>Templates can provide parameters that are filled in on test plan generation,
+<span class="code">Recording</span> template uses this feature
+<figure>
+<a href="./images/screenshots/changes/5.1/templates-parametes.png"><img src="./images/screenshots/changes/5.1/templates-parametes.png" width="726" height="453" alt=""></a>
+<figcaption></figcaption>
+</figure>
+
+</p>
+
+<p>A new <span class="code">Tools</span> menu has been introduced to collect those entries,
+that are used for general usage around JMeter, like:
+<ul>
+    
+<li>
+<span class="code">Function Helper Dialog</span>
+</li>
+    
+<li>
+<span class="code">Export transactions for report</span>
+</li>
+    
+<li>
+<span class="code">Generate Schematic View</span> which provides an overview as HTML of the Test plan</li>
+    
+<li>
+<span class="code">Import from cURL</span> which allows you to create or update your test plan by importing a cURL command</li>
+    
+<li>
+<span class="code">Compile JSR223 Test Elements</span>
+</li>
+    
+<li>
+<span class="code">Create a heap dump</span>
+</li>
+    
+<li>
+<span class="code">Create a thread dump</span>
+</li>
+
+</ul>
+
+<figure>
+<a href="./images/screenshots/changes/5.1/jmeter-new-menu-tools.png"><img src="./images/screenshots/changes/5.1/jmeter-new-menu-tools.png" width="268" height="237" alt=""></a>
+<figcaption></figcaption>
+</figure>
+
+</p>
+
+<h3 class="ch_title">Test Plan</h3>
+
+<p>Ability to create a Test plan from a cURL command.
+<figure>
+<a href="./images/screenshots/changes/5.1/http-request-from-curl-request.png"><img src="./images/screenshots/changes/5.1/http-request-from-curl-request.png" width="1026" height="439" alt=""></a>
+<figcaption></figcaption>
+</figure>
+
+</p>
 
 <h3 class="ch_title">Scripting / Debugging enhancements</h3>
 
 <ul>
 
-<li>Option to compile all JSR223 ELements</li>
+<li>A menu item to compile all JSR223 Elements is now available in <span class="code">Tools</span> menu</li>
 
 </ul>
 
@@ -267,9 +340,11 @@ Summary
 
 <ul>
 
-<li>JSON formatted data</li>
+<li>A JSON file containing summary of a load test statistics is now generated when using <span class="code">-e</span> or <span class="code">-g</span> options.</li>
 
-<li>Various improvements</li>
+<li>Percentiles computing graphed over time algorithm has been modified to restart for  each time slot</li>
+
+<li>More user-friendly behaviour when reporting folder does not exist or is not empty through <span class="code">-f</span> commmand line option</li>
 
 </ul>
 
@@ -292,39 +367,7 @@ of previous time slot as a base. Starting with this version, each time slot is i
       63034</a>
 </li>
 
-<li>A new Menu item <span class="code">Tools</span> has been introduced, the following menu items that were in <span class="code">Help</span> menu are now under this new menu item:
-<ul>
-    
-<li>
-<span class="code">Create a heap dump</span>
-</li>
-    
-<li>
-<span class="code">Create a thread dump</span>
-</li>
-    
-<li>
-<span class="code">Function Helper Dialog</span>
-</li>
-    
-<li>
-<span class="code">Compile JSR223 Test Elements</span>
-</li>
-    
-<li>
-<span class="code">Export transactions for report</span>
-</li>
-    
-<li>
-<span class="code">Generate Schematic View</span>
-</li>
-    
-<li>
-<span class="code">Import from cURL</span>
-</li>
-
-</ul>
-See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63094">
+<li>A new Menu item <span class="code">Tools</span> has been introduced, some menu items that were in <span class="code">Help</span> menu are now under this new menu item. See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63094">
       Bug
       63094</a>
 
