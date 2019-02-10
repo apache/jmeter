@@ -372,6 +372,10 @@
 <a href="#jsr223">19.44 Advanced JSR-223 Scripting configuration</a>
 <ul></ul>
 </li>
+<li>
+<a href="#docgeneration">19.45 Documentation generation</a>
+<ul></ul>
+</li>
 </ul>
 <div class="section">
 <h1 id="introduction">19 Introduction<a class="sectionlink" href="#introduction" title="Link to here">&para;</a>
@@ -1641,6 +1645,30 @@ JMETER-SERVER</pre>
           </div>
 </div>
 
+<div class="property">
+<div class="name req-true">httpclient4.deflate_relax_mode</div>
+<div class="description req-true">
+    Ignore EOFException that some edgy application may emit to signal end of Deflated stream.<br>
+    Defaults to: <span class="code">false</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">httpclient4.gzip_relax_mode</div>
+<div class="description req-true">
+    Ignore EOFException that some edgy application may emit to signal end of GZipped stream.<br>
+    Defaults to: <span class="code">false</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
 </div>
 
 </div>
@@ -2231,6 +2259,19 @@ JMETER-SERVER</pre>
           </div>
 </div>
 
+<div class="property">
+<div class="name req-true">subresults.disable_renaming</div>
+<div class="description req-true">
+    Since version 5.0 JMeter has a new SubResult Naming Policy which numbers subresults by default<br>
+    This property if set to <span class="code">true</span> discards renaming policy. This can be required if you're using JMeter for functional testing.<br>
+    Defaults to: <span class="code">false</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
 </div>
 
 </div>
@@ -2414,7 +2455,7 @@ JMETER-SERVER</pre>
 <div class="description req-true">
     Binary <span class="code">content-type</span> handling.<br>
     These <span class="code">content-types</span> will be handled by saving the request in a file.<br>
-    Defaults to: <span class="code">application/x-amf,application/x-java-serialized-object</span>
+    Defaults to: <span class="code">application/x-amf,application/x-java-serialized-object,binary/octet-stream</span>
 
 </div>
 <div class="required req-true">
@@ -3060,7 +3101,7 @@ JMETER-SERVER</pre>
 <div class="name req-true">jdbc.config.jdbc.driver.class</div>
 <div class="description req-true">
     List of JDBC driver class name<br>
-    Defaults to: <pre class="source">com.mysql.jdbc.Driver|org.postgresql.Driver|oracle.jdbc.OracleDriver|com.ingres.jdbc.IngresDriver|com.microsoft.sqlserver.jdbc.SQLServerDriver|com.microsoft.jdbc.sqlserver.SQLServerDriver|org.apache.derby.jdbc.ClientDriver|org.hsqldb.jdbc.JDBCDriver|com.ibm.db2.jcc.DB2Driver|org.apache.derby.jdbc.ClientDriver|org.h2.Driver|org.firebirdsql.jdbc.FBDrivery|org.mariadb.jdbc.Driver|org.sqlite.JDBC|net.sourceforge.jtds.jdbc.Driver</pre>
+    Defaults to: <pre class="source">com.mysql.jdbc.Driver|org.postgresql.Driver|oracle.jdbc.OracleDriver|com.ingres.jdbc.IngresDriver|com.microsoft.sqlserver.jdbc.SQLServerDriver|com.microsoft.jdbc.sqlserver.SQLServerDriver|org.apache.derby.jdbc.ClientDriver|org.hsqldb.jdbc.JDBCDriver|com.ibm.db2.jcc.DB2Driver|org.apache.derby.jdbc.ClientDriver|org.h2.Driver|org.firebirdsql.jdbc.FBDriver|org.mariadb.jdbc.Driver|org.sqlite.JDBC|net.sourceforge.jtds.jdbc.Driver</pre>
 
 </div>
 <div class="required req-true">
@@ -5640,6 +5681,36 @@ JMETER-SERVER</pre>
 </div>
 
 </div>
+<div class="section">
+<h1 id="docgeneration">19.45 Documentation generation<a class="sectionlink" href="#docgeneration" title="Link to here">&para;</a>
+</h1>
+
+<div class="description">Advanced properties for documentation generation</div>
+
+<div class="properties">
+<h3>
+        Parameters
+        </h3>
+<div class="property title">
+<div class="name title">Attribute</div>
+<div class="description title">Description</div>
+<div class="required title">Required</div>
+</div>
+    
+<div class="property">
+<div class="name req-true">docgeneration.schematic_xsl</div>
+<div class="description req-true">
+    Path to XSL file used to generate Schematic View of Test Plan.<br>
+    When empty, JMeter will use the embedded one in src/core/org/apache/jmeter/gui/action/schematic.xsl<br>
+    No default value</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+</div>
+
+</div>
 <ul class="pagelinks">
 <li>
 <a href="component_reference.html">&lt; Prev</a>
@@ -5660,9 +5731,6 @@ JMETER-SERVER</pre>
 <li class="twitter">
 <a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a>
 </li>
-<li class="gplus">
-<a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a>
-</li>
 </ul>
 </div>
 <a href="#top" id="topButton">Go to top</a>
@@ -5671,7 +5739,7 @@ JMETER-SERVER</pre>
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2018
+            2019
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
