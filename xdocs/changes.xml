@@ -59,18 +59,34 @@ Summary
 <ch_section>New and Noteworthy</ch_section>
 <ch_title>Core improvements</ch_title>
 <ul>
-<li>Templates can provide parameters that are filled in on test plan generation</li>
-<li>A new Tools menu has been introduced to collect those entries, that are used for general usage around JMeter, like taking a heap dump</li>
+<li>JDBC testing has been improved with ability to set init SQL statements and add compatibility with JDBC drivers that do not support QueryTimeout</li>
 <li>Various bug fixes have been implemented, like gathering the correct headers when recording requests through the HTTP(S) Test Script Recorder using HTTPS</li>
+<li>In version 5.0, JMeter was changed to rename Sub results using a custom Naming Policy (<bugzilla>62550</bugzilla>). This change could be annoying for Functional Testing, a new property
+<code>subresults.disable_renaming=true</code> has been introduced to revert if needed to previous behaviour. An alternative is to check <code>Functional Test Mode</code> in Test Plan, see <bugzilla>63055</bugzilla></li>
+</ul>
+<ch_title>UX improvements</ch_title>
+<ul>
+<li>Templates can provide parameters that are filled in on test plan generation, <code>Recording</code> template uses this feature</li>
+<li>A new <code>Tools</code> menu has been introduced to collect those entries, that are used for general usage around JMeter, like:
+<ul>
+    <li><code>Function Helper Dialog</code></li>
+    <li><code>Export transactions for report</code></li>
+    <li><code>Generate Schematic View</code> which provides an overview as HTML of the Test plan</li>
+    <li><code>Import from cURL</code> which allows you to create or update your test plan by importing a cURL command</li>
+    <li><code>Compile JSR223 Test Elements</code></li>
+    <li><code>Create a heap dump</code></li>
+    <li><code>Create a thread dump</code></li>
+</ul></li>
 </ul>
 <ch_title>Scripting / Debugging enhancements</ch_title>
 <ul>
-<li>Option to compile all JSR223 ELements</li>
+<li>A menu item to compile all JSR223 Elements is now available in <code>Tools</code> menu</li>
 </ul>
 <ch_title>Live Reporting and Web Report</ch_title>
 <ul>
-<li>JSON formatted data</li>
-<li>Various improvements</li>
+<li>A JSON file containing summary of a load test statistics is now generated when using <code>-e</code> or <code>-g</code> options.</li>
+<li>Percentiles computing graphed over time algorithm has been modified to restart for  each time slot</li>
+<li>More user-friendly behaviour when reporting folder does not exist or is not empty through <code>-f</code> commmand line option</li>
 </ul>
 <!--
 <ch_title>Functions</ch_title>
@@ -82,17 +98,7 @@ Summary
 <li>In <code>Response Time Percentiles Over Time (successful responses)</code> graph of the HTML report, before this version, percentile computation of each time slot used the percentile data
 of previous time slot as a base. Starting with this version, each time slot is independant. See <bugzilla>62883</bugzilla></li>
 <li><code>ClientJMeterEngine#rsetProperties</code> signature has been changed to use <code>HashMap&lt;String,String&gt;</code> instead of Properties, see <bugzilla>63034</bugzilla></li>
-<li>A new Menu item <code>Tools</code> has been introduced, the following menu items that were in <code>Help</code> menu are now under this new menu item:
-<ul>
-    <li><code>Create a heap dump</code></li>
-    <li><code>Create a thread dump</code></li>
-    <li><code>Function Helper Dialog</code></li>
-    <li><code>Compile JSR223 Test Elements</code></li>
-    <li><code>Export transactions for report</code></li>
-    <li><code>Generate Schematic View</code></li>
-    <li><code>Import from cURL</code></li>
-</ul>
-See <bugzilla>63094</bugzilla>
+<li>A new Menu item <code>Tools</code> has been introduced, some menu items that were in <code>Help</code> menu are now under this new menu item. See <bugzilla>63094</bugzilla>
 </li>
 <li><code>slf4j-ext</code> has been removed from libraries (lib folder) and JMeter pom. It was not used by default and due to CVE-2018-8088 and unavailability of a stable version
 containing a fix to this issue, we decided to remove it. If you still needed, you can add it in lib folder.</li>
