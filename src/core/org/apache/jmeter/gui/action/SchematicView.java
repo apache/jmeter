@@ -42,10 +42,8 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.plugin.MenuCreator;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.collections.HashTreeTraverser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +51,7 @@ import org.slf4j.LoggerFactory;
  * Schematic view of Test Plan
  * @since 5.1
  */
-public class SchematicView extends AbstractAction implements MenuCreator, HashTreeTraverser {
+public class SchematicView extends AbstractAction implements MenuCreator {
     private static final Logger log = LoggerFactory.getLogger(SchematicView.class);
     private static final String DEFAULT_XSL_FILE = 
             JMeterUtils.getProperty("docgeneration.schematic_xsl"); //$NON-NLS-1$
@@ -71,9 +69,9 @@ public class SchematicView extends AbstractAction implements MenuCreator, HashTr
                 throws Exception {
             TransformerFactory factory = TransformerFactory.newInstance(
                     "net.sf.saxon.BasicTransformerFactory", Thread.currentThread().getContextClassLoader());
-            Source xslt = null;
-            if (StringUtils.isEmpty(DEFAULT_XSL_FILE)) {
-                log.info("Will use file {} for Schematic View generation", DEFAULT_XSL_FILE);
+            Source xslt;
+            if (!StringUtils.isEmpty(DEFAULT_XSL_FILE)) {
+                log.info("Will use file {} for Schematic View generation", DEFAULT_XSL_FILE);
                 xslt = new StreamSource(new File(DEFAULT_XSL_FILE));
             } else {
                 xslt = new StreamSource(SchematicView.class.getResourceAsStream("/org/apache/jmeter/gui/action/schematic.xsl"));
@@ -121,7 +119,6 @@ public class SchematicView extends AbstractAction implements MenuCreator, HashTr
                             return; // Do not save, user does not want to overwrite
                         }
                     }
-                    GuiPackage.getInstance().getCurrentSubTree().traverse(this);
                     try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
                             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream)) {
                         new XslSchematicViewGenerator().generate(GuiPackage.getInstance().getCurrentSubTree(), 
@@ -176,24 +173,6 @@ public class SchematicView extends AbstractAction implements MenuCreator, HashTr
 
     @Override
     public void localeChanged() {
-        // NOOP
-    }
-
-    @Override
-    public void addNode(Object node, HashTree subTree) {
-        // 
-        JMeterTreeNode treeNode = (JMeterTreeNode) node;
-        Object userObject = treeNode.getUserObject();
-        System.out.println(userObject);
-    }
-
-    @Override
-    public void subtractNode() {
-        System.out.println();
-    }
-
-    @Override
-    public void processPath() {
         // NOOP
     }
 }

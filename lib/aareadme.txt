@@ -189,7 +189,7 @@ ph-css-6.1.1
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-9.2.0
+ph-commons-9.2.1
 --------
 https://github.com/phax/ph-commons
 - CssParser
@@ -216,7 +216,7 @@ HttpComponents
 - HttpComponents Core 4.4.10
 - HttpComponents Client 4.5.7
 - HttpComponents AsyncClient 4.1.4
-- HttpComponents Core NIO 4.4.10
+- HttpComponents Core NIO 4.4.11
 -----------
 http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler
@@ -258,7 +258,7 @@ commons-dbcp2-2.5.0 (org.apache.commons.dbcp2)
 --------------------------
 - DataSourceElement (JDBC)
 
-Saxon-HE-9.8.0-14 (net.sf.saxon)
+Saxon-HE-9.9.1-1 (net.sf.saxon)
 --------------------------
 - XPath2Extractor (XML)
 

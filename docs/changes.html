@@ -201,7 +201,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 
 
-<h1>Version 5.0</h1>
+<h1>Version 5.1</h1>
 
 <p>
 Summary
@@ -245,147 +245,108 @@ Summary
 
 <h3 class="ch_title">Core improvements</h3>
 
-<p>Rest support has been improved in many fields
+<p>JDBC testing has been improved with ability to set init SQL statements and add 
+compatibility with JDBC drivers that do not support QueryTimeout
+<figure>
+<a href="./images/screenshots/changes/5.1/jdbc-connection-config-init-request.png"><img src="./images/screenshots/changes/5.1/jdbc-connection-config-init-request.png" width="1122" height="727" alt=""></a>
+<figcaption></figcaption>
+</figure>
+
+</p>
+
+<ul>
+
+<li>Various bug fixes have been implemented, like gathering the correct headers when recording requests through the HTTP(S) Test Script Recorder using HTTPS</li>
+
+<li>In version 5.0, JMeter was changed to rename Sub results using a custom Naming Policy (<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62550">
+      Bug
+      62550</a>). This change could be annoying for Functional Testing, a new property
+<span class="code">subresults.disable_renaming=true</span> has been introduced to revert if needed to previous behaviour. An alternative is to check <span class="code">Functional Test Mode</span> in Test Plan, see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63055">
+      Bug
+      63055</a>
+</li>
+
+</ul>
+
+<h3 class="ch_title">UX improvements</h3>
+
+<p>Templates can provide parameters that are filled in on test plan generation,
+<span class="code">Recording</span> template uses this feature
+<figure>
+<a href="./images/screenshots/changes/5.1/templates-parametes.png"><img src="./images/screenshots/changes/5.1/templates-parametes.png" width="726" height="453" alt=""></a>
+<figcaption></figcaption>
+</figure>
+
+</p>
+
+<p>A new <span class="code">Tools</span> menu has been introduced to collect those entries,
+that are used for general usage around JMeter, like:
 <ul>
     
-<li>Multipart/form-data requests now work for <span class="code">PUT</span>, <span class="code">DELETE</span> &hellip;</li>
+<li>
+<span class="code">Function Helper Dialog</span>
+</li>
     
-<li>It is now also possible to send a JSON Body with attached file</li>
+<li>
+<span class="code">Export transactions for report</span>
+</li>
     
-<li>Parameters entered in Parameters Tab are now used in body instead of being ignored</li>
+<li>
+<span class="code">Generate Schematic View</span> which provides an overview as HTML of the Test plan</li>
+    
+<li>
+<span class="code">Import from cURL</span> which allows you to create or update your test plan by importing a cURL command</li>
+    
+<li>
+<span class="code">Compile JSR223 Test Elements</span>
+</li>
+    
+<li>
+<span class="code">Create a heap dump</span>
+</li>
+    
+<li>
+<span class="code">Create a thread dump</span>
+</li>
 
 </ul>
 
 <figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_rest1.png"><img src="./images/screenshots/changes/5.0/jmeter_5_rest1.png" width="1216" height="340" alt=""></a>
-<figcaption></figcaption>
-</figure>
-
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_rest2.png"><img src="./images/screenshots/changes/5.0/jmeter_5_rest2.png" width="1223" height="314" alt=""></a>
+<a href="./images/screenshots/changes/5.1/jmeter-new-menu-tools.png"><img src="./images/screenshots/changes/5.1/jmeter-new-menu-tools.png" width="268" height="237" alt=""></a>
 <figcaption></figcaption>
 </figure>
 
 </p>
 
-<p>In distributed testing, JMeter now automatically prefixes thread names with engine host and port, this makes the counting of threads correct in the HTML report without any other configuration as it was required before
+<h3 class="ch_title">Test Plan</h3>
+
+<p>Ability to create a Test plan from a cURL command.
 <figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_distributed.png"><img src="./images/screenshots/changes/5.0/jmeter_5_distributed.png" width="1156" height="543" alt=""></a>
+<a href="./images/screenshots/changes/5.1/http-request-from-curl-request.png"><img src="./images/screenshots/changes/5.1/http-request-from-curl-request.png" width="1026" height="439" alt=""></a>
 <figcaption></figcaption>
 </figure>
 
 </p>
-
-<p>XPath 2.0 is supported in a new element called <span class="code">XPath2 extractor</span> providing easier XML namespaces handling, up to date XPath syntax and better performances
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_xpath2_extractor.png"><img src="./images/screenshots/changes/5.0/jmeter_5_xpath2_extractor.png" width="879" height="340" alt=""></a>
-<figcaption></figcaption>
-</figure>
-
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_xpath2_tester.png"><img src="./images/screenshots/changes/5.0/jmeter_5_xpath2_tester.png" width="1213" height="730" alt=""></a>
-<figcaption></figcaption>
-</figure>
-
-</p>
-
-<p>Upgrade to HTTP Components 4.6 last APIs has been completed and JMeter does not rely anymore on deprecated APIs of this library</p>
-
-<p>It is now possible to control in an easier way Loop breaking and Loop switching to next iteration. This is available in <span class="code">Flow Control Action</span> and <span class="code">Result Status Action Handler</span> elements
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_flow_control_action.png"><img src="./images/screenshots/changes/5.0/jmeter_5_flow_control_action.png" width="772" height="270" alt=""></a>
-<figcaption></figcaption>
-</figure>
-
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_result_status_handler.png"><img src="./images/screenshots/changes/5.0/jmeter_5_result_status_handler.png" width="615" height="212" alt=""></a>
-<figcaption></figcaption>
-</figure>
-
-
-</p>
-
-<p>While Controller now exports a variable containing its current index named <span class="code">__jm__&lt;Name of your element&gt;__idx</span>. So for
-example, if your While Controller is named WC, then you can access the looping index through <span class="code">${__jm__WC__idx}</span>
-</p>
-
 
 <h3 class="ch_title">Scripting / Debugging enhancements</h3>
 
-<p>Search feature has been improved to allow you to iterate in the tree over search results and do necessary replacements through <span class="code">Next</span>/<span class="code">Previous</span>/<span class="code">Replace</span>/<span class="code">Replace/Find</span> buttons
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_search_feature.png"><img src="./images/screenshots/changes/5.0/jmeter_5_search_feature.png" width="829" height="524" alt=""></a>
-<figcaption></figcaption>
-</figure>
+<ul>
 
-</p>
+<li>A menu item to compile all JSR223 Elements is now available in <span class="code">Tools</span> menu</li>
 
-<p>In View Results Tree, the request and response headers/body are clearly separated to allow you to better inspect requests and responses. You can also search in all those tabs for a particular value
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_vrt_request_body.png"><img src="./images/screenshots/changes/5.0/jmeter_5_vrt_request_body.png" width="737" height="366" alt=""></a>
-<figcaption></figcaption>
-</figure>
-
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_vrt_response_body.png"><img src="./images/screenshots/changes/5.0/jmeter_5_vrt_response_body.png" width="771" height="552" alt=""></a>
-<figcaption></figcaption>
-</figure>
-
-</p>
-
-<p>Recording feature has been improved to provide a popup that is always on top when you navigate in browser allowing you to name transactions while you navigate in your application.
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_recording.png"><img src="./images/screenshots/changes/5.0/jmeter_5_recording.png" width="1425" height="796" alt=""></a>
-<figcaption></figcaption>
-</figure>
-
-</p>
-
-<p>You can now restart JMeter from menu <span class="menuchoice"><span class="guimenuitem">File</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Restart</span></span>
-
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_restart.png"><img src="./images/screenshots/changes/5.0/jmeter_5_restart.png" width="199" height="318" alt=""></a>
-<figcaption></figcaption>
-</figure>
-
-</p>
-
+</ul>
 
 <h3 class="ch_title">Live Reporting and Web Report</h3>
-Reporting feature has been enhanced 
-<p>A new Graph Total Transactions per second has been added to the HTML Web Report
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_total_trans_per_sec.png"><img src="./images/screenshots/changes/5.0/jmeter_5_total_trans_per_sec.png" width="1156" height="536" alt=""></a>
-<figcaption></figcaption>
-</figure>
 
-</p> 
+<ul>
 
-<p>It is now possible to graph over time custom metrics available as JMeter Variables through <span class="code">sample_variables</span>. Those custom metrics graphs will be 
-available in the HTML Report in <span class="code">Custom Graphs section</span>
+<li>A JSON file containing summary of a load test statistics is now generated when using <span class="code">-e</span> or <span class="code">-g</span> options.</li>
 
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_custom_graphs.png"><img src="./images/screenshots/changes/5.0/jmeter_5_custom_graphs.png" width="1426" height="755" alt=""></a>
-<figcaption></figcaption>
-</figure>
+<li>Percentiles computing graphed over time algorithm has been modified to restart for  each time slot</li>
 
-</p>
+<li>More user-friendly behaviour when reporting folder does not exist or is not empty through <span class="code">-f</span> commmand line option</li>
 
-<p>Hits per second graph now takes into account the embedded resources
-<figure>
-<a href="./images/screenshots/changes/5.0/jmeter_5_hits_per_sec.png"><img src="./images/screenshots/changes/5.0/jmeter_5_hits_per_sec.png" width="1153" height="537" alt=""></a>
-<figcaption></figcaption>
-</figure>
-
-</p>
-
-
-<p>In Live reporting, the sent and received bytes are now sent to Backends (InfluxDB or Graphite)</p>
-
-
-<h3 class="ch_title">Functions</h3>
-
-<p>A New function <span class="code"><a href="./usermanual/functions.html#__threadGroupName">__threadGroupName</a></span> has been introduced to obtain ThreadGroup name.</p>
+</ul>
 
 
 
@@ -394,26 +355,27 @@ available in the HTML Report in <span class="code">Custom Graphs section</span>
 
 <ul>
 
-<li>Since JMeter 5.0, when using default HC4 Implementation, JMeter will reset HTTP state (SSL State + Connections) on each thread group iteration. If you don't want
-this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_iteration=false</span>
+<li>In <span class="code">Response Time Percentiles Over Time (successful responses)</span> graph of the HTML report, before this version, percentile computation of each time slot used the percentile data
+of previous time slot as a base. Starting with this version, each time slot is independant. See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62883">
+      Bug
+      62883</a>
 </li>
 
-<li>Since JMeter 5.0, in relation to above remark, <span class="code">https.use.cached.ssl.context</span> is deprecated and not used anymore.</li>
-
-<li>Since JMeter 5.0, when using CSV output, sub results will now be also output to CSV file. To revert to previous behaviour set <span class="code">jmeter.save.saveservice.subresults=false</span>, see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62470">
+<li>
+<span class="code">ClientJMeterEngine#rsetProperties</span> signature has been changed to use <span class="code">HashMap&lt;String,String&gt;</span> instead of Properties, see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63034">
       Bug
-      62470</a>, <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=60917">
-      Bug
-      60917</a>, <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62550">
-      Bug
-      62550</a>.</li>
-
-<li>Since JMeter 5.0, <span class="code">CSS/JQuery Extractor</span> has been renamed to <span class="code">CSS Selector Extractor</span>
+      63034</a>
 </li>
 
-<li>Since JMeter 5.0, <span class="code">Test Action</span> has been renamed to <span class="code">Flow Control Action</span>
+<li>A new Menu item <span class="code">Tools</span> has been introduced, some menu items that were in <span class="code">Help</span> menu are now under this new menu item. See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63094">
+      Bug
+      63094</a>
+
 </li>
 
+<li>
+<span class="code">slf4j-ext</span> has been removed from libraries (lib folder) and JMeter pom. It was not used by default and due to CVE-2018-8088 and unavailability of a stable version
+containing a fix to this issue, we decided to remove it. If you still needed, you can add it in lib folder.</li>
 
 </ul>
 
@@ -427,46 +389,18 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <ul>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62260">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62840">
       Bug
-      62260</a>
+      62840</a>
     -
-  Improve Rest support. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  HTTP Request: Add option <span class="code">httpclient4.gzip_relax_mode</span> to avoid error when unzipping what seems to be invalid streams</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=58757">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63025">
       Bug
-      58757</a>
+      63025</a>
     -
-  HTTP Request : Updated deprecated methods of HttpComponents to last APIs of httpclient-4.5.X. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62212">
-      Bug
-      62212</a>
-    -
-  Recorder : Improve UX by providing a popup above all windows to be able to change Transaction names and pauses while using Browser. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62248">
-      Bug
-      62248</a>
-    -
-  HTTP Request : Parameters entered in Parameters Tab should be used in body instead of being ignored. Partly based on a patch by Artem Fedorov contributed by Blazemeter.</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=60015">
-      Bug
-      60015</a>
-    -
-  Multipart/form-data works only for <span class="code">POST</span> using HTTPClient4 while it should for <span class="code">PUT</span>, <span class="code">DELETE</span>, &hellip; Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62317">
-      Bug
-      62317</a>
-    -
-  HTTP(S) Test Script Recorder: allow to add ResultSaver to created sampler</li>
+  Enhance Search &amp; Replace functionality for HTTP Request to include port and protocol field. Initial code fix by Mohamed Ibrahim (rollno748 at gmail.com)</li>
 
 </ul>
 
@@ -474,34 +408,27 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <h3>Other samplers</h3>
 
 <ul>
-  
+    
 <li>
-<a href="https://github.com/apache/jmeter/pull/376">
-      Pull request #376</a>
-    -
-  JUnitSampler logs exceptions except assertion-failures from test cases as warnings. Contributed by Davide Angelocola (davide.angelocola at fisglobal.com)</li>
-  
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62244">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62934">
       Bug
-      62244</a>
+      62934</a>
     -
-  Rename <span class="code">Test Action</span> to <span class="code">Flow Control Action</span>
-</li>
-  
+  Add compatibility for JDBC drivers that do not support QueryTimeout </li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62302">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62935">
       Bug
-      62302</a>
+      62935</a>
     -
-  Move JSR223 Sampler up the menu. Contributed by orimarko at gmail.com</li>
-  
+  Pass custom <span class="code">mail.*</span> properties to Mail Reader Sampler. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62595">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63055">
       Bug
-      62595</a>
+      63055</a>
     -
-  SMTPSampler does not allow configuring the SSL/TLS protocols to be used on handshake. Contributed by Felipe Cuozzo (felipe.cuozzo at gmail.com)</li>
+  Don't rename SampleResult Label when test is running in Functional mode or property <span class="code">subresults.disable_renaming=true</span>. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
 
 </ul>
 
@@ -509,13 +436,6 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <h3>Controllers</h3>
 
 <ul>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62237">
-      Bug
-      62237</a>
-    -
-  While Controller : Export variable containing current index of iteration. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 
 </ul>
 
@@ -523,41 +443,17 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <h3>Listeners</h3>
 
 <ul>
-    
+  
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62195">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62822">
       Bug
-      62195</a>
+      62822</a>
     -
-  Save Responses to a file : Improve component and UI. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62209">
-      Bug
-      62209</a>
+  <a href="https://github.com/apache/jmeter/pull/407">
+      Pull request #407</a>
     -
-  InfluxBackendListenerClient: First Assertion Failure Message must be sent if error code and response code are empty or OK</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62269">
-      Bug
-      62269</a>
-    -
-  Bug 62269 - View Results Tree : Response and Request Tabs should contains Header and Body tabs. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62270">
-      Bug
-      62270</a>
-    -
-  View Results Tree : Allow searching in Request headers, Response Headers, and Request body. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62276">
-      Bug
-      62276</a>
-    -
-  InfluxDBBackendListenerClient / GraphiteBackendListenerClient : Add sent and received bytes to metrics. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  Render uninitialized min and max values in Summary Report as <span class="code">#N/A</span>
+</li>
 
 </ul>
 
@@ -567,25 +463,18 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <ul>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62320">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62766">
       Bug
-      62320</a>
+      62766</a>
     -
-  Counter : Reference Name property is not clear</li>
+  Keystore Config: We should load all aliases by default. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=60991">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62832">
       Bug
-      60991</a>
+      62832</a>
     -
-  XPath Extractor : Implement XPath 2.0. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62593">
-      Bug
-      62593</a>
-    -
-  Rename CSS/JQuery Extractor to CSS Selector Extractor. Contributed by orimarko at gmail.com</li>
+  JDBC Connection Configuration: Be able to set init SQL statements. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 
 </ul>
 
@@ -593,44 +482,16 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <h3>Functions</h3>
 
 <ul>
-    
+  
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62178">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63037">
       Bug
-      62178</a>
+      63037</a>
     -
-  Add default value to <span class="code"><a href="./usermanual/functions.html#__V">__V</a></span> function. Contributed by orimarko at gmail.com</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62178">
-      Bug
-      62178</a>
-    -
-  Add function <span class="code"><a href="./usermanual/functions.html#__threadGroupName">__threadGroupName</a></span> function to obtain ThreadGroup name. Mainly contributed by orimarko at gmail.com</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62533">
-      Bug
-      62533</a>
-    -
-  Allow use epoch time as Date String value in function <span class="code"><a href="./usermanual/functions.html#__dateTimeConvert">__dateTimeConvert</a></span> 
-</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62541">
-      Bug
-      62541</a>
-    -
-  Allow <span class="code">funclink name="__jexl3"/&gt;</span>, <span class="code"><a href="./usermanual/functions.html#__jexl2">__jexl2</a></span> functions to support new syntax as <span class="code">var x;</span>. Contributed by orimarko at gmail.com</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61834">
-      Bug
-      61834</a>
-    -
-  Function Helper Dialog : Improve tests by showing variables and keeping them available between evaluations</li>
+  When using <span class="code">CSVRead</span> search the script base path for files, too.</li>
 
 </ul>
+
 
 <h3>I18N</h3>
 
@@ -644,53 +505,32 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <ul>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62243">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62883">
       Bug
-      62243</a>
+      62883</a>
     -
-  Dashboard : make option "<span class="code">--forceDeleteResultFile</span>"/"<span class="code">-f</span>" option delete folder referenced by "<span class="code">-o</span>" option</li>
+  Report / Dashboard: Change the way percentiles are computed for Response Time Percentiles Over Time (successful responses) graph</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62367">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63060">
       Bug
-      62367</a>
+      63060</a>
     -
-  HTML Report Generator: Add Graph Total Transactions per Second. Contributed mainly by Martha Laks (laks.martha at gmail.com)</li>
+  Report Generator: A generator should only check for folder/files it generates and only delete those ones</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62166">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63059">
       Bug
-      62166</a>
+      63059</a>
     -
-  Report/Dashboard: Provide ability to register custom graphs and metrics in the JMeter Dashboard. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  Create a new JsonExporter that exports as JSON the content of data computed for HTML Dashboard Statistics table. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62542">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63081">
       Bug
-      62542</a>
+      63081</a>
     -
-  Report/Dashboard : Display more information on filters when graph is empty. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62426">
-      Bug
-      62426</a>
-    -
-  Optimize performance of report generation. Based on feedback by Allen (444104595 at qq.com)</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62550">
-      Bug
-      62550</a>
-    -
-  Modify SubResult Naming Policy</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=60917">
-      Bug
-      60917</a>
-    -
-  Load Test with embedded resources download : Hits per seconds does not take into account the downloaded resources</li>
+  Command line Option <span class="code">-f</span> does not delete report folder when using generation only through command line option <span class="code">-g</span>. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 
 </ul>
 
@@ -698,128 +538,119 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <h3>General</h3>
 
 <ul>
-  
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62684">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62959">
       Bug
-      62684</a>
+      62959</a>
     -
-  Distributed Testing : Add automatically to thread name a prefix to identify engine. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-  
+  Ability to create a Test plan from a cURL command. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62155">
+<a href="https://github.com/apache/jmeter/pull/394">
+      Pull request #394</a>
+    -
+  Allow <span class="code">null</span> values in <span class="code">FieldStringEditor</span>. Based on patch by Mingun (alexander_sergey at mail.ru)</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62826">
       Bug
-      62155</a>
+      62826</a>
     -
-  Search Feature: Make Search text field get focus</li>
-  
+  When changing LAF, make JMeter restart if user clicks yes to popup</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62156">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62257">
       Bug
-      62156</a>
+      62257</a>
     -
-  Search Feature : Distinguish between node that matches search and node that contains a child that matches search</li>
-  
+  <a href="https://github.com/apache/jmeter/pull/401">
+      Pull request #401</a>
+    -
+  Expand/Collapse short key <span class="keysym">-</span> (minus sign) on numpad doesn't work. Contributed by Ori Marko (orimarko at gmail.com)</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62234">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62752">
       Bug
-      62234</a>
+      62752</a>
     -
-  Search/Replace Feature : Enhance UX and add Replace/Next/Previous/Replace &amp; Find features. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-  
+  Add to Documentation: <span class="code">ctx.getThreadNum()</span> is zero-based while <span class="code">${__threadNum}</span> is one-based</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62238">
+<a href="https://github.com/apache/jmeter/pull/411">
+      Pull request #411</a>
+    -
+  Use <span class="code">SHA-1</span> instead of <span class="code">SHA1</span> in <span class="code">org.apache.jmeter.save.SaveService</span>. Contributed by Paco (paco.xu at daocloud.io)</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62914">
       Bug
-      62238</a>
+      62914</a>
     -
-  Add ability to Switch to next iteration of Current Loop. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-  
+  Add a hint in Thread Group UI about duration of test</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62239">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62925">
       Bug
-      62239</a>
+      62925</a>
     -
-  Add ability to Break Current Loop</li>
-  
+  Add support for ThreadDump to the JMeter non-GUI</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61635">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62870">
       Bug
-      61635</a>
+      62870</a>
     -
-  Add a menu to restart JMeter</li>
-  
+  Templates: Add ability to provide parameters. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62470">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62829">
       Bug
-      62470</a>
+      62829</a>
     -
-  CSV Output : Enable logging of sub results when <span class="code">jmeter.save.saveservice.subresults=true</span>. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-  
+  Allow specifying Proxy server scheme for HTTP request sampler, Advanced tab and command line option. Contributed by Hitesh Patel (hitesh.h.patel at gmail.com)</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62473">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=59633">
       Bug
-      62473</a>
+      59633</a>
     -
-  Setting "<span class="code">saveservice_properties</span>" has counter intuitive behaviour</li>
-  
+  Menus <span class="code">Save Test Plan as</span>, <span class="code">Save as Test Fragment</span> and <span class="code">Save Selection as ...</span> should use a new file name in File Dialog</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62354">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61486">
       Bug
-      62354</a>
+      61486</a>
     -
-  Correct calculation and usage of units for second per user (reported by jffagot05 at gmail.com)</li>
-  
+  Make jmeter-server and non GUI mode run headless</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62700">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63093">
       Bug
-      62700</a>
+      63093</a>
     -
-  Introduce <span class="code">jsr223.init.file</span> to allow calling a JSR-223 script on JMeter startup</li>
-  
+  Add <span class="code">Compile JSR223 Test Elements</span> menu item. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62128">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63094">
       Bug
-      62128</a>
+      63094</a>
     -
-  Try to guess <span class="code">JMETER_HOME</span> correctly, when <span class="code">jmeter.bat</span> is called from a batch file in another directory. Contributed by logox01 (logox01 at gmx.at)</li>
-  
+  Introduce a new Tools menu</li>
+    
 <li>
-<a href="https://github.com/apache/jmeter/pull/386">
-      Pull request #386</a>
-    -
-  Add parameter support for RMI keystore creation scripts. Contributed by Logan Mauzaize (t524467 at airfrance.fr)</li>
-  
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62065">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63101">
       Bug
-      62065</a>
+      63101</a>
     -
-  Use Maven artifact for JAF Module instead of embedded module</li>
-  
+  Propose a menu item to generate readable overview of Test Plan</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61714">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63144">
       Bug
-      61714</a>
+      63144</a>
     -
-  Update Real-time results documentation</li>
-  
-<li>
-<a href="https://github.com/apache/jmeter/pull/382">
-      Pull request #382</a>
-    -
-  Correct typo in documentation. Reported by Perze Ababa (perze.ababa at gmail.com&gt;)</li>
-  
-<li>
-<a href="https://github.com/apache/jmeter/pull/392">
-      Pull request #392</a>
-    -
-  Correct typo in documentation. Reported by Aaron Levin</li>
-  
-<li>
-<a href="https://github.com/apache/jmeter/pull/379">
-      Pull request #379</a>
-    -
-   Improve chinese translations. Contributed by XmeterNet</li>
+  View listener tree take a long time to open response that has huge text. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 
 </ul>
 
@@ -829,81 +660,138 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <ul>
     
 <li>
-<a href="https://github.com/apache/jmeter/pull/358">
-      Pull request #358</a>,
-  <a href="https://github.com/apache/jmeter/pull/365">
-      Pull request #365</a>,
-  <a href="https://github.com/apache/jmeter/pull/366">
-      Pull request #366</a>,
-  <a href="https://github.com/apache/jmeter/pull/375">
-      Pull request #375</a>Updated to latest checkstyle (v8.8). Expanded Checkstyle to files
-      in <span class="code">src</span> and <span class="code">test</span>; fixed newly checked files. Based on contribution
-      by Graham Russell (graham at ham1.co.uk)</li>
+<a href="https://github.com/apache/jmeter/pull/408">
+      Pull request #408</a>
+    -
+  Log an informational message instead of an stack trace, when JavaFX is not found for the <span class="code">RenderInBrowser</span> component.</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62095">
-      Bug
-      62095</a>
+<a href="https://github.com/apache/jmeter/pull/412">
+      Pull request #412</a>
     -
-  Correct description for right boundary parameter in Boundary Extractor. Contributed by orimarko (orimarko at gmail.com)</li>
+  Update Chinese translation. Contributed by &#21016;&#22763; (liushilive at outlook.com).</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62113">
-      Bug
-      62113</a>
+<a href="https://github.com/apache/jmeter/pull/406">
+      Pull request #406</a>
     -
-  Updated to latest Bouncycastle (v1.60). Based on contribution by Olaf Flebbe (oflebbe at apache.org)</li>
+  Add a short paragraph on how to use a security manager with JMeter.</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62171">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62893">
       Bug
-      62171</a>
+      62893</a>
     -
-  Remove <span class="code">.md5</span> checksums and keep only <span class="code">.sha512</span> checksums for source and binary archives</li>
-    
-<li>Updated to groovy-all-2.4.15 (from groovy-all-2.4.13)</li>
-    
-<li>Updated to asm-6.1 (from 6.1)</li>
-    
-<li>Updated to tika-core and tika-parsers 1.18 (from 1.17)</li>
+  Use StringEscapeUtils from commons-text (version 1.6) instead of the deprecated ones from commons-lang3.</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62482">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62972">
       Bug
-      62482</a>
+      62972</a>
     -
-  Sync documentation to the implementation of the ForEachController. Based on contribution by orimarko (orimarko at gmail.com)</li>
+  <a href="https://github.com/apache/jmeter/pull/435">
+      Pull request #435</a>
+    -
+  Replace calls to deprecated method <span class="code">Class#newInstance</span>.</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62529">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63034">
       Bug
-      62529</a>
+      63034</a>
     -
-  Updated to httpclient-4.5.6 (from httpclient 4.5.5) and updated to freemarker-2.3.28 (from freemarker-2.3.23). Based on patch by orimarko (orimarko at gmail.com)</li>
+  ClientJMeterEngine: Make rsetProperties use <span class="code">HashMap&lt;String,String&gt;</span> instead of Properties</li>
     
-<li>Updated to httpmime-4.5.6 (from httpmime-4.5.5)</li>
+<li>Updated to httpclient/httpmime 4.5.7 (from 4.5.6)</li>
     
-<li>Updated to caffeine-2.6.2 (from caffeine-2.6.1)</li>
+<li>Updated to httpcore 4.4.11 (from 4.4.10)</li>
     
-<li>Updated to cglib-nodep-3.2.7 (from cglib-nodep-3.2.6)</li>
+<li>Updated to httpcore-nio 4.4.11 (from 4.4.10)</li>
     
-<li>Updated to commons-dbcp2-2.4.0 (from commons-dbcp2-2.2.0)</li>
+<li>Updated to tika-core and tika-parsers 1.20 (from 1.18)</li>
     
-<li>Updated to commons-pool2-2.6.0 (from commons-pool2-2.5.0)</li>
+<li>Updated to commons-dbcp2-2.5.0 (from commons-dbcp2-2.4.0)</li>
     
-<li>Updated to httpcore-4.4.10 (from httpcore-4.4.9)</li>
+<li>Updated to commons-lang3-3.8.1 (from commons-lang3-3.8)</li>
     
-<li>Updated to httpcore-nio-4.4.10 (from httpcore-nio-4.4.9)</li>
+<li>Updated to groovy-all-2.4.16 (from groovy-all-2.4.15)</li>
     
-<li>Updated to log4j-2.11.0 (from log4j-2.10.0)</li>
+<li>Updated to httpasyncclient-4.1.4.jar (from 4.1.3)</li>
     
-<li>Updated to ph-css-6.1.1 (from ph-css-6.0.0)</li>
+<li>Updated to jsoup-1.11.3 (from 1.11.2)</li>
     
-<li>Updated to ph-commons-9.1.2 (from ph-commons-9.0.0)</li>
+<li>Updated to cglib-nodep-3.2.9 (from cglib-nodep-3.2.7)</li>
     
-<li>Updated to rhino-1.7.10 (from +rhino-1.7.7.2)</li>
+<li>Updated to ph-commons-9.2.1 (from ph-commons-9.1.2)</li>
     
-<li>Updated to commons-lang3-3.8 (from commons-lang3-3.7)</li>
+<li>Updated to log4j-2.11.1 (from log4j-2.11.0)</li>
+    
+<li>Updated to xmlgraphics-commons 2.3 (from 2.2)</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63033">
+      Bug
+      63033</a>
+    -
+  Updated to Saxon-HE 9.9.1-1 (from 9.8.0-12). Thanks at Saxonica</li>
+    
+<li>Updated to xstream 1.4.11 (from 1.4.10)</li>
+    
+<li>Updated to jodd 5.0.6 (from 4.1.4)</li>
+    
+<li>Updated to asm-7.0 (from 6.1)</li>
+    
+<li>Update to ActiveMQ 5.15.8 (from 5.5.16)</li>
+    
+<li>Updated to rsyntaxtextarea-3.0.2 (from 2.6.1)</li>
+    
+<li>Updated to apache-rat-0.13 (from 0.12)</li>
+    
+<li>Updated to jacocoant-0.8.3 (from 0.8.2)</li>
+    
+<li>Updated to hsqldb-2.4.1 (from 2.4.0)</li>
+    
+<li>Updated to mina-core-2.0.19 (from 2.0.16)</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62818">
+      Bug
+      62818</a>
+    -
+  Updated to xercesImpl to 2.12.0 (from 2.11.0). Reported by Stefan Seide (stefan at trilobyte-se.de)</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62744">
+      Bug
+      62744</a>
+    -
+  Upgrade jquery to version 3.3.1, jquery-ui to 1.12.1, bootstrap to 3.3.7</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62821">
+      Bug
+      62821</a>
+    -
+  <a href="https://github.com/apache/jmeter/pull/405">
+      Pull request #405</a>
+    -
+  Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63053">
+      Bug
+      63053</a>
+    -
+  Remove referrals to never implemented internals from user documentation. Reported by U. Poblotzki (u.poblotzki at thalia.de)</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63082">
+      Bug
+      63082</a>
+    -
+  <a href="https://github.com/apache/jmeter/pull/437">
+      Pull request #437</a>
+    -
+  Use utf-8 for properties files in source</li>
 
 </ul>
 
@@ -918,56 +806,70 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <ul>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62114">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62785">
       Bug
-      62114</a>
+      62785</a>
     -
-  HTTP(S) Test Script Recorder : Client certificate authentication uses the first SSLManager created. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  <a href="https://github.com/apache/jmeter/pull/400">
+      Pull request #400</a>
+    -
+  Incomplete search path applied to the filenames used in the upload functionality of the HTTP sampler. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61058">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62842">
       Bug
-      61058</a>
+      62842</a>
     -
-  HTTP Request : Add option <span class="code">httpclient4.deflate_relax_mode</span> to avoid "Unexpected end of ZLIB input stream" when deflating what seems to be invalid streams. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  HTTP(S) Test Script Recorder: Brotli compression is not supported leading to "<span class="code">Content Encoding Error</span>"</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=43612">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=60424">
       Bug
-      43612</a>
+      60424</a>
     -
-  HTTP PUT does not honor request parameters. Implemented by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
+  Hessian Burlap application: JMeter inserts <span class="code">0x0D</span> before <span class="code">0x0A</span> automatically (http binary post data)</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=60190">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62940">
       Bug
-      60190</a>
+      62940</a>
     -
-  Content-Type is added for <span class="code">POST</span> unconditionally. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  Use different <span class="code">cn</span> and type of SAN extension when we are generating certificates based on IP addresses.</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62462">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62916">
       Bug
-      62462</a>
+      62916</a>
     -
-  <a href="https://github.com/apache/jmeter/pull/387">
-      Pull request #387</a>
-    -
-  Make delegation of credentials in SPNEGO possible again.</li>
+  HTTP Test Script Recorder fails with UnsupportedOperationException if recording is started after a distributed test has been run</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=58807">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62987">
       Bug
-      58807</a>
+      62987</a>
     -
-  <span class="code">Reset SSL State on Thread Group iteration only (was https.use.cached.ssl.context=false</span> is broken)</li>
+  A TestBean element under HTTP(S) Test Script recorder does not work. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62716">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63015">
       Bug
-      62716</a>
+      63015</a>
     -
-  When Recording, JMeter removes Authorization from generated Header Manager when using Bearer Token</li>
+  Abnormal NoHttpResponseException when running request through proxy HTTP(S) Test Script Recorder after a first failing request. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62852">
+      Bug
+      62852</a>
+    -
+  HTTP Request Header missing information when using a proxy. Thanks to Oleg Kalnichevski (olegk at apache.org)</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63048">
+      Bug
+      63048</a>
+    -
+  JMeter does not retrieve link resources of type "shortcut icon" or "icon". Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 
 </ul>
 
@@ -977,25 +879,18 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <ul>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62235">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62775">
       Bug
-      62235</a>
+      62775</a>
     -
-  Java 9 - illegal reflective access by org.apache.jmeter.util.HostNameSetter</li>
+  If many jars are in a folder referenced by <span class="code">user.classpath</span>, startup can be extremely slow due to JUnit</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62464">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63031">
       Bug
-      62464</a>
+      63031</a>
     -
-  Set start- and end-time on JMS publisher sampler, even if initialization fails.</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62616">
-      Bug
-      62616</a>
-    -
-  FTPSampler: Upload file-size is not counted in sentBytes</li>
+  Incorrect JDBC driver class: <span class="code">org.firebirdsql.jdbc.FBDrivery</span>. Contributed by Sonali (arora.sonali99 at gmail.com)</li>
 
 </ul>
 
@@ -1005,11 +900,25 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <ul>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62265">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62806">
       Bug
-      62265</a>
+      62806</a>
     -
-  ModuleController behaves strangely</li>
+  ModuleController cloning by Run behaves differently wether in GUI or Non GUI mode. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62847">
+      Bug
+      62847</a>
+    -
+  If Controller cannot use variable for index exposed by LoopController/WhileController/ForEachController</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63064">
+      Bug
+      63064</a>
+    -
+  Ignore spaces at the end and beginning of expressions used in IfController</li>
 
 </ul>
 
@@ -1017,34 +926,28 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <h3>Listeners</h3>
 
 <ul>
-  
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62097">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62770">
       Bug
-      62097</a>
+      62770</a>
     -
-  Update JTable in Aggregate Report only when new data has arrived. That way selections of rows will be kept longer around.</li>
-  
+  Aggregate Graph throws <span class="code">ArrayIndexOutOfBoundsException</span>
+</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62203">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63069">
       Bug
-      62203</a>
+      63069</a>
     -
-  Influxdb BackendListener client: store user tags to annotation and internal transaction. Contributed by Sergey Batalin (sergey_batalin at mail.ru)</li>
-  
+  ResultCollector does not write end of XML file if user exits while a Recording or a test is running. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62251">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63138">
       Bug
-      62251</a>
+      63138</a>
     -
-  TextGraphiteMetricsSender does not invalidate lost connections in case of network errors </li>
-  
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=60705">
-      Bug
-      60705</a>
-    -
-  Fix headers of Aggregate Reports and friends when columns are moved around.</li>
+  InfluxDB BackendListenerClient: In case of error, log is in debug, it should be in error</li>
 
 </ul>
 
@@ -1054,39 +957,18 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <ul>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61664">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62774">
       Bug
-      61664</a>
+      62774</a>
     -
-  HTTP Authorization Manager : Digest works only with legacy <a href="https://tools.ietf.org/html/2069">RFC 2069</a>, <a href="https://tools.ietf.org/html/2617">RFC 2617</a> is not implemented. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  XPath2Extractor: Scope variable is broken. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62252">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62860">
       Bug
-      62252</a>
+      62860</a>
     -
-  HTTP header merging logic does not correspond to the documentation</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62554">
-      Bug
-      62554</a>
-    -
-  BoundaryExtractor : Field to check is not reset</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62553">
-      Bug
-      62553</a>
-    -
-  Random element might return same value even if property "Per thread user (User)" is set to TRUE</li>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62637">
-      Bug
-      62637</a>
-    -
-  Take scheduler into account when calcuting delay for Synchronizing Timer</li>
+  JSON Extractor: Avoid NPE and noisy error message "<span class="code">Error processing JSON content in</span>" when variable is not found</li>
 
 </ul>
 
@@ -1101,13 +983,6 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <h3>I18N</h3>
 
 <ul>
-    
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62310">
-      Bug
-      62310</a>
-    -
-  French translation of Precise Throughput Timer label</li>
 
 </ul>
 
@@ -1117,25 +992,46 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <ul>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62333">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62777">
       Bug
-      62333</a>
+      62777</a>
     -
-  Report Dashboard - When one series contains no value, the graph colors logic is wrong. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  Web Report / Dashboard: Hide All in <span class="code">Response Time Percentiles Over Time (successful responses)</span> fails.</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62283">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62780">
       Bug
-      62283</a>
+      62780</a>
     -
-  Report Dashboard - Date is not correctly displayed on chart when granularity is &lt;= 1 day</li>
+  Web Report / Dashboard: Display All in <span class="code">Response Time Vs Request</span> fails.</li>
     
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62520">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62781">
       Bug
-      62520</a>
+      62781</a>
     -
-  The tool-tip text when we hover on the point in 'Latency Vs Request' graph should be 'Median Latency'</li>
+  Web Report / Dashboard: Display All in <span class="code">Response Time Overview</span> fails.</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62782">
+      Bug
+      62782</a>
+    -
+  Web Report / Dashboard: Remove duplicate/unused dependencies</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62894">
+      Bug
+      62894</a>
+    -
+  Report / Dashboard: Throughput is in wrong column which is confusing as unit is millisecond</li>
+    
+<li>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63016">
+      Bug
+      63016</a>
+    -
+  Empty HTML report if source csv contains labels with quotes. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 
 </ul>
 
@@ -1144,18 +1040,7 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 
 <ul>
     
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62211">
-      Bug
-      62211</a>
-    -
-  Fix HTTP Request Server Documentation. Contributed by orimarko at gmail.com</li>
-    
-<li>
-<a href="https://github.com/apache/jmeter/pull/388">
-      Pull request #388</a>
-    -
-  Fix a typo. Contributed by Giancarlo Romeo (giancarloromeo at gmail.com)</li>
+<li>Change <span class="code">Test Action</span> (old name) to <span class="code">Flow Control Action</span> in Component Reference documentation. Contributed by Ori Marko (orimarko at gmail.com)</li>
 
 </ul>
 
@@ -1163,117 +1048,93 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 <h3>General</h3>
 
 <ul>
-  
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62107">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62745">
       Bug
-      62107</a>
+      62745</a>
     -
-  JMeter fails to start under Windows when <span class="code">JM_LAUNCH</span> contains spaces</li>
-  
+  Fix undefined disabled icon. Contributed by Till Neunast (https://github.com/tilln)</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62110">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62743">
       Bug
-      62110</a>
+      62743</a>
     -
-  A broken JUnit class (due to missing dependency) breaks JMeter menus. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-  
+  Client auth must be enabled on distributed testing</li>
+    
 <li>
-<a href="https://github.com/apache/jmeter/pull/377">
-      Pull request #377</a>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62767">
+      Bug
+      62767</a>
     -
-  Small fix of the docs. Contributed by Peter Doornbosch (peter.doornbosch at luminis.eu)</li>
-  
+  NPE when searching under certain conditions. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62124">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62790">
       Bug
-      62124</a>
+      62790</a>
     -
-  Recording templates : Add more exclusions and use Transaction Name by default</li>
-  
+  <span class="code">ArrayIndexOutOfBoundsException</span> when calling replace without selecting the first match</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62127">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62795">
       Bug
-      62127</a>
+      62795</a>
     -
-  Store filename as String instead of File in FileEditor. This will prevent conversion of filenames from Unix style path separators to Windows style when used for example in CSV Data Set Config.</li>
-  
+  JMeter master sometimes ends distributed test even though some of the slaves have not finished</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=56150">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62336">
       Bug
-      56150</a>
+      62336</a>
     -
-  Keep the index right, when scrolling through the menu items.</li>
-  
+  <a href="https://github.com/apache/jmeter/pull/396">
+      Pull request #396</a>
+    -
+  Some shortcuts are not working correctly on windows. Contributed by Michael Pavlov (michael.paulau at gmail.com)</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62240">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62889">
       Bug
-      62240</a>
+      62889</a>
     -
-  If SampleMonitor implementation is a TestBean if will not be initialized correctly</li>
-  
+  Format JSON Arrays when displayed with JSON Path Tester.</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62295">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62900">
       Bug
-      62295</a>
+      62900</a>
     -
-  Correct order of elements when duplicating a selection of multiple elements.</li>
-  
+  ObjectProperty#getStringValue() can throw NullPointerException</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62397">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63099">
       Bug
-      62397</a>
+      63099</a>
     -
-  Don't break lines at commata when using JSON Path Tester</li> 
-  
+  Escape commata in function helper dialog only outside of variable replacement structures.</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62281">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63105">
       Bug
-      62281</a>
+      63105</a>
     -
-  Prevent NPE in MapProperty. Patch by belugabehr (dam6923 at gmail.com)</li>
-  
+  Export Transactions for Report: fix 2 bugs</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62457">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63106">
       Bug
-      62457</a>
+      63106</a>
     -
-  In usermanual, the UUID Function's example is wrong. Contributed by helppass (onegaicimasu at hotmail.com)</li>
-  
+  Apply naming policy does not refresh UI</li>
+    
 <li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62478">
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=63090">
       Bug
-      62478</a>
+      63090</a>
     -
-  Escape commata in parameters when constructing function strings in the GUI function helper. Reported by blue414 (blue414 at 163.com)</li>
-  
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62463">
-      Bug
-      62463</a>
-    -
-  Fix usage of ports, when <span class="code">client.rmi.localport</span> is set for distributed runs.</li>
-  
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62545">
-      Bug
-      62545</a>
-    -
-  Don't use a colon as part of the "tab" string when indenting JSON in RenderAsJSON.</li>
-  
-<li>Part of <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62637">
-      Bug
-      62637</a>
-    -
-   Avoid Integer overrun when dealing with very large values in <span class="code">TimerService#adjustDelay</span>
-</li>
-  
-<li>
-<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=62683">
-      Bug
-      62683</a>
-    -
-  Error dialog has no text when user opens completely invalid test plan.</li>
+  Remove slf4j-ext due to CVE-2018-8088</li>
 
 </ul>
 
@@ -1287,57 +1148,47 @@ this behaviour, set <span class="code">httpclient.reset_state_on_thread_group_it
 
 <ul>
     
-<li>Graham Russell (graham at ham1.co.uk)</li>
+<li>Oleg Kalnichevski (olegk at apache.org)</li>
     
-<li>orimarko at gmail.com</li>
+<li>Till Neunast (https://github.com/tilln)</li>
     
-<li>Davide Angelocola (davide.angelocola at fisglobal.com)</li>
+<li>Mingun (alexander_sergey at mail.ru)</li>
     
 <li>
 <a href="https://ubikloadpack.com">Ubik Load Pack</a>
 </li>
     
-<li>Olaf Flebbe (oflebbe at apache.org)</li>
+<li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
     
-<li>Peter Doornbosch (peter.doornbosch at luminis.eu)</li>
+<li>Stefan Seide (stefan at trilobyte-se.de)</li>
     
-<li>logox01 (logox01 at gmx.at)</li>
+<li>&#21016;&#22763; (liushilive at outlook.com)</li>
     
-<li>Sergey Batalin (sergey_batalin at mail.ru)</li>
+<li>Michael Pavlov (michael.paulau at gmail.com)</li>
+    
+<li>Ori Marko (orimarko at gmail.com)</li>
+    
+<li>Paco (paco.xu at daocloud.io)</li>
+    
+<li>Hitesh Patel (hitesh.h.patel at gmail.com)</li>
+    
+<li>Sonali (arora.sonali99 at gmail.com)</li>
+    
+<li>Mohamed Ibrahim (rollno748 at gmail.com)</li>
+    
+<li>U. Poblotzki (u.poblotzki at thalia.de)</li>
     
 <li>
-<a href="https://www.xmeter.net">XMeter</a>
+<a href="https://www.saxonica.com">Saxonica</a>
 </li>
-    
-<li>Imane Ankhila (iankhila at ahlane.net)</li>
-    
-<li>jffagot05 (jffagot05 at gmail.com)</li>
-    
-<li>Perze Ababa (perze.ababa at gmail.com)</li>
-    
-<li>Martha Laks (laks.martha at gmail.com)</li>
-    
-<li>Logan Mauzaize (t524467 at airfrance.fr)</li>
-    
-<li>belugabehr (dam6923 at gmail.com)</li>
-    
-<li>Giancarlo Romeo (giancarloromeo at gmail.com)</li>
-    
-<li>helppass (onegaicimasu at hotmail.com)</li>
-    
-<li>blue414 (blue414 at 163.com)</li>
-    
-<li>Aaron Levin</li>
-    
-<li>Allen (444104595 at qq.com)</li>
-    
-<li>Felipe Cuozzo (felipe.cuozzo at gmail.com)</li>
-    
-<li>bangnab (ambrosetti.nicola at gmail.com)</li>
 
 </ul>
 
 <p>We also thank bug reporters who helped us improve JMeter.</p>
+
+<ul>
+
+</ul>
 
 <p>
 Apologies if we have omitted anyone else.
@@ -1436,9 +1287,6 @@ The fix is to use JDK 8 b132 or later.
 <li class="twitter">
 <a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a>
 </li>
-<li class="gplus">
-<a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a>
-</li>
 </ul>
 </div>
 <a href="#top" id="topButton">Go to top</a>
@@ -1447,7 +1295,7 @@ The fix is to use JDK 8 b132 or later.
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2018
+            2019
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache

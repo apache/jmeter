@@ -269,7 +269,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
                             addresses[i] = ((ARecord) records[i]).getAddress();
                         }
                     } catch (TextParseException tpe) {
-                        log.debug("Failed to create Lookup object: " + tpe);
+                        log.debug("Failed to create Lookup object: {}", tpe.toString());
                     }
                     return addresses;
                 }

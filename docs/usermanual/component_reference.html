@@ -663,7 +663,7 @@
     
 <p>
     Samplers perform the actual work of JMeter.
-    Each sampler (except <a href="../usermanual/component_reference.html#Test_Action">Test Action</a>) generates one or more sample results.
+    Each sampler (except <a href="../usermanual/component_reference.html#Flow_Control_Action">Flow Control Action</a>) generates one or more sample results.
     The sample results have various attributes (success/fail, elapsed time, data size etc.) and can be viewed in the various listeners.
     </p>
 
@@ -882,16 +882,19 @@ Latency is set to the time it takes to login.
 <li>The API is best suited to single-threaded usage - various settings
          are defined via system properties, and therefore apply to all connections.</li>
          
-<li>There is a bug in the handling of HTTPS via a Proxy (the <span class="code">CONNECT</span> is not handled correctly).
-         See Java bugs 6226610 and 6208335.
-         </li>
+<li>No support of Kerberos authentication</li>
+         
+<li>It does not support client based certificate testing with Keystore Config.</li>
+         
+<li>Better control of Retry mechanism</li>
          
 <li>It does not support virtual hosts.</li>
          
 <li>It supports only the following methods: <span class="code">GET</span>, <span class="code">POST</span>, <span class="code">HEAD</span>, <span class="code">OPTIONS</span>, <span class="code">PUT</span>, <span class="code">DELETE</span> and <span class="code">TRACE</span>
 </li>
          
-<li>It does not support client based certificate testing with Keystore Config.</li>
+<li>Better control on DNS Caching with <a href="../usermanual/component_reference.html#DNS_Cache_Manager">DNS Cache Manager</a>
+</li>
          
 </ul>
          
@@ -1737,6 +1740,13 @@ the additional variables for rows four, five and six will be removed.
 <pre class="source">columnValue = vars.getObject("resultObject").get(0).get("Column Name");</pre>
         
 </div>
+<div class="required req-false">No</div>
+</div>
+        
+<div class="property">
+<div class="name req-false">Query timeout(s)</div>
+<div class="description req-false">Set a timeout in seconds for query, empty value means 0 which is infinite. <span class="code">-1</span> means don't set any query timeout
+which might be needed for use case or when certain drivers don't support timeout. Defaults to 0.</div>
 <div class="required req-false">No</div>
 </div>
         
@@ -2645,10 +2655,7 @@ This will not have any impact on existing Test plans.
 <div class="description">
 <p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
-request it accepted. This means every image, CSS file, JavaScript file, html file, &hellip;
-The current implementation is complete, but some features have not been enabled. 
-There is a filter for the access log parser, but I haven't figured out how to link to the pre-processor. 
-Once I do, changes to the sampler will be made to enable that functionality.</p>
+request it accepted. This means every image, CSS file, JavaScript file, html file, &hellip;</p>
 
 <p>Tomcat uses the common format for access logs. This means any webserver that uses the
 common log format can use the AccessLogSampler. Server that use common log format include:
@@ -4662,6 +4669,9 @@ Relative paths are resolved against the current directory.
 </div>
 
 </div>
+<div class="clear"></div>
+<div class="note">You can pass mail related environment properties by adding to user.properties any of the properties described <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/pop3/package-summary.html">here</a>.</div>
+<div class="clear"></div>
 <p>
 Messages are stored as subsamples of the main sampler.
 Multipart message parts are stored as subsamples of the message.
@@ -4691,7 +4701,7 @@ The current implementation is quite basic, and is mainly intended for debugging 
           </a><a class="sectionlink" href="#Flow_Control_Action" title="Link to here">&para;</a>
 </h2>
 <div class="description">
-The Test Action sampler is a sampler that is intended for use in a conditional controller.
+The Flow Control Action sampler is a sampler that is intended for use in a conditional controller.
 Rather than generate a sample, the test element either pauses or stops the selected target.
 <p>This sampler can also be useful in conjunction with the Transaction Controller, as it allows
 pauses to be included without needing to generate a sample. 
@@ -9988,6 +9998,18 @@ instead. (see figures 12 and 13).</p>
 </div>
         
 <div class="property">
+<div class="name req-true">Transaction isolation</div>
+<div class="description req-true">Transaction isolation level</div>
+<div class="required req-true">Yes</div>
+</div>
+        
+<div class="property">
+<div class="name req-false">Init SQL statements separated by new line</div>
+<div class="description req-false">A Collection of SQL statements that will be used to initialize physical connections when they are first created. These statements are executed only once - when the configured connection factory creates the connection. </div>
+<div class="required req-false">No</div>
+</div>
+        
+<div class="property">
 <div class="name req-true">Test While Idle</div>
 <div class="description req-true">Test idle connections of the pool, see <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getTestWhileIdle--">BasicDataSource.html#getTestWhileIdle</a>. 
         Validation Query will be used to test it.</div>
@@ -10119,7 +10141,7 @@ instead. (see figures 12 and 13).</p>
 <dd>org.h2.Driver</dd>
               
 <dt>Firebird</dt>
-<dd>org.firebirdsql.jdbc.FBDrivery</dd>
+<dd>org.firebirdsql.jdbc.FBDriver</dd>
               
 <dt>Apache Derby</dt>
 <dd>org.apache.derby.jdbc.ClientDriver</dd>
@@ -10380,7 +10402,8 @@ This component is typically used in HTTPS scenarios where you don't want to take
   
 <div class="property">
 <div class="name req-false">Variable name holding certificate alias</div>
-<div class="description req-false">Variable name that will contain the alias to use for authentication by client certificate. Variable value will be filled from CSV Data Set for example. In the screenshot, "<span class="code">certificat_ssl</span>" will also be a variable in CSV Data Set.</div>
+<div class="description req-false">Variable name that will contain the alias to use for authentication by client certificate. Variable value will be filled from CSV Data Set for example. In the screenshot, "<span class="code">certificat_ssl</span>" will also be a variable in CSV Data Set. Defaults to <span class="code">clientCertAliasVarName</span>
+</div>
 <div class="required req-false">False</div>
 </div>
   
@@ -10392,7 +10415,7 @@ This component is typically used in HTTPS scenarios where you don't want to take
   
 <div class="property">
 <div class="name req-true">Alias End Index</div>
-<div class="description req-true">The index of the last key to use in Keystore, 0-based. When using "<span class="code">Variable name holding certificate alias</span>" ensure it is large enough so that all keys are loaded at startup.</div>
+<div class="description req-true">The index of the last key to use in Keystore, 0-based. When using "<span class="code">Variable name holding certificate alias</span>" ensure it is large enough so that all keys are loaded at startup. Default to -1 which means load all.</div>
 <div class="required req-true">Yes</div>
 </div>
 
@@ -12571,7 +12594,7 @@ please ensure that you select "<span class="code">Store the message using MIME (
     To apply a timer to a single sampler, add the timer as a child element of the sampler.
     The timer will be applied before the sampler is executed.
     To apply a timer after a sampler, either add it to the next sampler, or add it as the
-    child of a <a href="../usermanual/component_reference.html#Test_Action">Test Action</a> Sampler.
+    child of a <a href="../usermanual/component_reference.html#Flow_Control_Action">Flow Control Action</a> Sampler.
     </div>
 <div class="clear"></div>
 
@@ -17225,9 +17248,6 @@ If Test Plan is stopped, tearDown will not run even if option is checked.
 <li class="twitter">
 <a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a>
 </li>
-<li class="gplus">
-<a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a>
-</li>
 </ul>
 </div>
 <a href="#top" id="topButton">Go to top</a>
@@ -17236,7 +17256,7 @@ If Test Plan is stopped, tearDown will not run even if option is checked.
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2018
+            2019
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache

@@ -93,7 +93,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         sampler.setUseKeepAlive(true);
 
         if (log.isDebugEnabled()) {
-            log.debug("getSampler: sampler path = " + sampler.getPath());
+            log.debug("getSampler: sampler path = {}", sampler.getPath());
         }
         return sampler;
     }
@@ -111,7 +111,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
 
         computeFromPostBody(sampler, request);
         if (log.isDebugEnabled()) {
-            log.debug("sampler path = " + sampler.getPath());
+            log.debug("sampler path = {}", sampler.getPath());
         }
         Arguments arguments = sampler.getArguments();
         if(arguments.getArgumentCount() == 1 && arguments.getArgument(0).getName().length()==0) {
@@ -166,7 +166,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             String postData = null;
             if (log.isDebugEnabled()) {
                 if(!StringUtils.isEmpty(contentEncoding)) {
-                    log.debug("Using encoding " + contentEncoding + " for request body");
+                    log.debug("Using encoding {} for request body", contentEncoding);
                 }
                 else {
                     log.debug("No encoding found, using JRE default encoding for request body");
@@ -218,7 +218,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                         HTTPFileArg [] files = {new HTTPFileArg(out.getPath(),"",contentType)};
                         sampler.setHTTPFiles(files);
                     } catch (IOException e) {
-                        log.warn("Could not create binary file: "+e);
+                        log.warn("Could not create binary file: {}", e.toString());
                     }
                 } else {
                     // Just put the whole postbody as the value of a parameter
@@ -329,7 +329,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             sampler.setPath(request.getPath(), null);
         }
         if (log.isDebugEnabled()) {
-            log.debug("Proxy: setting path: " + sampler.getPath());
+            log.debug("Proxy: setting path: {}", sampler.getPath());
         }
     }
 
@@ -423,7 +423,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     protected void computePort(HTTPSamplerBase sampler, HttpRequestHdr request) {
         sampler.setPort(request.serverPort());
         if (log.isDebugEnabled()) {
-            log.debug("Proxy: setting port: " + sampler.getPort());
+            log.debug("Proxy: setting port: {}", Integer.toString(sampler.getPort()));
         }
     }
 
@@ -434,7 +434,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      */
     protected void computeMethod(HTTPSamplerBase sampler, HttpRequestHdr request) {
         sampler.setMethod(request.getMethod());
-        log.debug("Proxy: setting method: " + sampler.getMethod());
+        log.debug("Proxy: setting method: {}", sampler.getMethod());
     }
 
     /**
@@ -445,7 +445,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     protected void computeDomain(HTTPSamplerBase sampler, HttpRequestHdr request) {
         sampler.setDomain(request.serverName());
         if (log.isDebugEnabled()) {
-            log.debug("Proxy: setting server: " + sampler.getDomain());
+            log.debug("Proxy: setting server: {}", sampler.getDomain());
         }
     }
 }

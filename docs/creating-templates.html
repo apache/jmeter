@@ -1,0 +1,411 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<title>Apache JMeter
+          -
+          User guide: Customizables templates</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="./css/new-style.css">
+<link rel="apple-touch-icon-precomposed" href="./images/apple-touch-icon.png">
+<link rel="icon" href="./images/favicon.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="./images/mstile-144x144.png">
+<meta name="theme-color" content="#ffffff">
+</head>
+<body role="document">
+<a href="#content" class="hidden">Main content</a>
+<div class="header">
+<!--
+            APACHE LOGO
+          -->
+<div>
+<a href="https://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="./images/asf-logo.svg" alt="Logo ASF"></a>
+</div>
+<!--
+              PROJECT LOGO
+            -->
+<div>
+<a href="https://jmeter.apache.org/"><img class="logo" src="./images/logo.svg" alt="Apache JMeter"></a>
+</div>
+<div class="banner">
+<a href="https://www.apache.org/events/current-event.html"><img src="https://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a>
+<div class="clear"></div>
+</div>
+</div>
+<div class="nav">
+<ul class="menu">
+<li onClick="return true">
+<div class="menu-title">About</div>
+<ul>
+<li>
+<a href="./index.html">Overview</a>
+</li>
+<li>
+<a href="https://www.apache.org/licenses/">License</a>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="menu">
+<li onClick="return true">
+<div class="menu-title">Download</div>
+<ul>
+<li>
+<a href="./download_jmeter.cgi">Download Releases</a>
+</li>
+<li>
+<a href="./changes.html">Release Notes</a>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="menu">
+<li onClick="return true">
+<div class="menu-title">Documentation</div>
+<ul>
+<li>
+<a href="./usermanual/get-started.html">Get Started</a>
+</li>
+<li>
+<a href="./usermanual/index.html">User Manual</a>
+</li>
+<li>
+<a href="./usermanual/best-practices.html">Best Practices</a>
+</li>
+<li>
+<a href="./usermanual/component_reference.html">Component Reference</a>
+</li>
+<li>
+<a href="./usermanual/functions.html">Functions Reference</a>
+</li>
+<li>
+<a href="./usermanual/properties_reference.html">Properties Reference</a>
+</li>
+<li>
+<a href="./changes_history.html">Change History</a>
+</li>
+<li>
+<a href="./api/index.html">Javadocs</a>
+</li>
+<li>
+<a href="https://wiki.apache.org/jmeter">JMeter Wiki</a>
+</li>
+<li>
+<a href="https://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="menu">
+<li onClick="return true">
+<div class="menu-title">Tutorials</div>
+<ul>
+<li>
+<a href="./usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a>
+</li>
+<li>
+<a href="./usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a>
+</li>
+<li>
+<a href="./usermanual/junitsampler_tutorial.html">JUnit Sampler</a>
+</li>
+<li>
+<a href="./usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a>
+</li>
+<li>
+<a href="./usermanual/jmeter_tutorial.html">Extending JMeter</a>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="menu">
+<li onClick="return true">
+<div class="menu-title">Community</div>
+<ul>
+<li>
+<a href="./issues.html">Issue Tracking</a>
+</li>
+<li>
+<a href="https://www.apache.org/security/">Security</a>
+</li>
+<li>
+<a href="./mail.html">Mailing Lists</a>
+</li>
+<li>
+<a href="./svnindex.html">Source Repositories</a>
+</li>
+<li>
+<a href="./building.html">Building and Contributing</a>
+</li>
+<li>
+<a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a>
+</li>
+<li>
+<a href="https://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="menu">
+<li onClick="return true">
+<div class="menu-title">Foundation</div>
+<ul>
+<li>
+<a href="https://www.apache.org/">The Apache Software Foundation (ASF)</a>
+</li>
+<li>
+<a href="https://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
+</li>
+<li>
+<a href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</li>
+<li>
+<a href="https://www.apache.org/foundation/thanks.html">Thanks</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="main" id="content">
+<div class="social-media">
+<ul class="social-media-links">
+<li class="twitter">
+<a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a>
+</li>
+<li class="github">
+<a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a>
+</li>
+</ul>
+</div>
+<div class="section">
+<h1>Customizable template</h1>
+            
+<p>
+                This document describes how to create a customizable template.
+            </p>
+            
+<div class="subsection">
+<h2 id="folder_structure">1 Folder structure<a class="sectionlink" href="#folder_structure" title="Link to here">&para;</a>
+</h2>
+                    
+<p>
+                        The template feature uses the bin/templates folder which contains :<br>
+                        
+<ul>
+                            
+<li>templates.xml, the file where you declare the templates you want to be able to use</li>
+                            
+<li>some .jmx and .jmx.fmkr files which are the templates</li>
+                        
+</ul>
+                    
+</p>
+                    
+<p>Here is how it looks like:
+                    <figure>
+<a href="./images/screenshots/templates/template_folder.png"><img src="./images/screenshots/templates/template_folder.png" width="" height="" alt="Figure 1 - template folder"></a>
+<figcaption>Figure 1 - template folder</figcaption>
+</figure>
+                    
+</p>
+            
+</div>
+            
+<div class="subsection">
+<h2 id="template_creation">2 Template declaration<a class="sectionlink" href="#template_creation" title="Link to here">&para;</a>
+</h2>
+                
+<div class="subsection">
+<h2 id="basic_template_declaration">2.1 Basic template declaration<a class="sectionlink" href="#basic_template_declaration" title="Link to here">&para;</a>
+</h2>
+                    
+<p>
+                        First of all you must declare your template. To do that, look into the templates.xml file.<br>
+                        This file respect a DTD <br>
+                        Below is the already existing Recording template declaration inside the templates.xml :
+                        <figure>
+<a href="./images/screenshots/templates/templates_xml.png"><img src="./images/screenshots/templates/templates_xml.png" width="" height="" alt="Figure 2 - recording template declaration"></a>
+<figcaption>Figure 2 - recording template declaration</figcaption>
+</figure>
+                        A template declaration is made as follow :<br>
+                        
+<ul>
+                            
+<li>
+<span class="code">template</span> element which contains the informations described in the followings tags</li>
+                            
+<li>
+<span class="code">name</span> element which contains the template name the user will see</li>
+                            
+<li>
+<span class="code">fileName</span> element which contains the relative path of the template.</li>
+                            
+<li>
+<span class="code">description</span> element which uses html to describe the template</li>
+                            
+<li>
+<span class="code">optional</span> parameters tag (will be discussed later)</li>
+                        
+</ul>
+                    
+</p>
+                
+</div>
+                
+<div class="subsection">
+<h2 id="customizable_template_declaration">2.2 Customizable template declaration<a class="sectionlink" href="#customizable_template_declaration" title="Link to here">&para;</a>
+</h2>
+                    
+<p>
+                        Let's say we want the exact same Recording template as in the 2.1 section, but we want to choose the name
+                        of the xml file where the recording of view result tree will be saved.<br>
+<br>
+                        To do so we will use the parameters tag to tell JMeter to ask the user about a name for the concerned file :
+                        <figure>
+<a href="./images/screenshots/templates/templates_xml_parameters.png"><img src="./images/screenshots/templates/templates_xml_parameters.png" width="" height="" alt="Figure 3 - recording template with parameters"></a>
+<figcaption>Figure 3 - recording template with parameters</figcaption>
+</figure>
+                        
+<div class="clear"></div>
+<div class="note">You can put as many parameter tags as you want in the parameters tag.</div>
+<div class="clear"></div>
+                        Let's see what changed here.<br>
+                        Firstly, customs templates are <span class="code">.jmx.fmkr</span> files and not only <span class="code">.jmx</span>.<br>
+<br>
+                        Lastly, we added a <span class="code">parameters</span> tag.<br> As you can see in the image, a <span class="code">parameters</span> tag contains <span class="code">parameter</span> tags.<br>
+                        Parameter tags are empty and contains 2 attributes :
+                        <ul>
+                            
+<li>
+<span class="code">key</span> is the name of the parameter you will ask the user to fill.</li>
+                            
+<li>
+<span class="code">defaultValue</span> is as its name says, the default value the user will see for the parameter.</li>
+                        
+</ul>
+                    
+</p>
+                
+</div>
+            
+</div>
+            
+<div class="subsection">
+<h2 id="template_file">3 Template file<a class="sectionlink" href="#template_file" title="Link to here">&para;</a>
+</h2>
+                
+<div class="subsection">
+<h2 id="basic_template_file">3.1 Basic template file<a class="sectionlink" href="#basic_template_file" title="Link to here">&para;</a>
+</h2>
+                    
+<p>
+                        The template file is the one you used in the fileName tag when you declared your template.
+                        A template file is just the saving of a JMeter test plan.
+                    </p>
+                
+</div>
+                
+                
+<div class="subsection">
+<h2 id="customizable_template_file">3.2 Customizable template file<a class="sectionlink" href="#customizable_template_file" title="Link to here">&para;</a>
+</h2>
+                    
+<p>
+                        In the 2.2 section we saw that a custom template file is a .jmx.fmkr file.<br>
+                        The single difference between them is the .jmx.fmkr will be analyzed by JMeter to<br>
+                        detect customs tag. If a custom tag is found, JMeter will try to replace it by the corresponding
+                        given value from the user.<br>
+<br>
+                        A custom tag is defined as follow : 
+                        <pre class="source">[=&lt;key&gt;]</pre>
+                        This is based on <a href="https://freemarker.apache.org/docs/dgui_misc_alternativesyntax.html#dgui_misc_alternativesyntax_interpolation">Freemarker alternative Interpolation syntax</a>.
+                        Let's illustrate how it works with an example.<br>
+                        Consider the following part of the recording.jmx template file : <br>
+                        
+<figure>
+<a href="./images/screenshots/templates/template_recording_filename.png"><img src="./images/screenshots/templates/template_recording_filename.png" width="" height="" alt="Figure 4 - recording.jmx save file"></a>
+<figcaption>Figure 4 - recording.jmx save file</figcaption>
+</figure>
+                        The surrounded area correspond to the name of the xml file where the View Results Tree output will be saved.
+                        As it is, when you use the template you will always have the same saving filename : <span class="code">recording.xml</span>.<br>
+<br>
+                        To make it customizable, change your recording template declaration in the templates.xml files by the<br>
+                        one shown in the 2.2 section. Then, rename the recording.jmx file to recording.jmx.fmkr.<br>
+<br>
+                        When it's done, Change the above selected line by this one : 
+                        <pre class="source">&lt;stringProp name="filename"&gt;[=xmlFileName]&lt;/stringProp&gt;</pre>
+                        
+<br>
+                        It's over ! With this configuration, if you chose to use the recording template, JMeter will ask you
+                        a xmlFileName (correspond to the key value in the declaration).
+                        <figure>
+<a href="./images/screenshots/templates/template_parameters_window.png"><img src="./images/screenshots/templates/template_parameters_window.png" width="" height="" alt="Figure 5 - JMeter asks you the value you want to put for the key"></a>
+<figcaption>Figure 5 - JMeter asks you the value you want to put for the key</figcaption>
+</figure>
+                        Then, you will find the expected value in the created template where you placed the [=xmlFileName] tag :
+                        <figure>
+<a href="./images/screenshots/templates/template_recording_retrieved_value.png"><img src="./images/screenshots/templates/template_recording_retrieved_value.png" width="" height="" alt="Figure 6 - the value changed"></a>
+<figcaption>Figure 6 - the value changed</figcaption>
+</figure>
+                    
+</p>
+                
+</div>
+            
+</div>
+        
+</div>
+<div class="share-links">
+      Share this page:
+      <ul>
+<li class="fb">
+<a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a>
+</li>
+<li class="twitter">
+<a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a>
+</li>
+</ul>
+</div>
+<a href="#top" id="topButton">Go to top</a>
+</div>
+<div class="footer">
+<div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2019
+            , Apache Software Foundation
+          </div>
+<div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div>
+</div>
+<script>(function(){
+            "use strict";
+            // enable 'go to top' button functionality
+            document.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                    document.getElementById("topButton").style.display = "block";
+                } else {
+                    document.getElementById("topButton").style.display = "none";
+                }
+            });
+            // fill in the current location into social links on this page.
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script>
+</body>
+</html>

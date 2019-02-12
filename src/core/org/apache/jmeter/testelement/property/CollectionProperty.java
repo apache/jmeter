@@ -44,10 +44,8 @@ public class CollectionProperty extends MultiProperty {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof CollectionProperty) {
-            if (value != null) {
-                return value.equals(((JMeterProperty) o).getObjectValue());
-            }
+        if (o instanceof CollectionProperty && value != null) {
+            return value.equals(((JMeterProperty) o).getObjectValue());
         }
         return false;
     }
@@ -128,6 +126,10 @@ public class CollectionProperty extends MultiProperty {
 
     public int size() {
         return value.size();
+    }
+
+    public boolean isEmpty() {
+        return value.isEmpty();
     }
 
     /**

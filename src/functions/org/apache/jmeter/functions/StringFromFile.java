@@ -125,7 +125,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
 
     public StringFromFile() {
         if (log.isDebugEnabled()) {
-            log.debug("++++++++ Construct " + this);
+            log.debug("++++++++ Construct {}" + this);
         }
     }
 
@@ -136,18 +136,19 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         if (myBread == null) {
             return;
         }
-        String tn = Thread.currentThread().getName();
-        log.info(tn + " closing file " + fileName);//$NON-NLS-1$
+        if (log.isInfoEnabled()) {
+            log.info("{} closing file {}", Thread.currentThread().getName(), fileName);//$NON-NLS-1$
+        }
         try {
             myBread.close();
         } catch (IOException e) {
-            log.error("closeFile() error: " + e.toString(), e);//$NON-NLS-1$
+            log.error("closeFile() error: {}", e.toString(), e);//$NON-NLS-1$
         }
         
         try {
             myFileReader.close();
         } catch (IOException e) {
-            log.error("closeFile() error: " + e.toString(), e);//$NON-NLS-1$
+            log.error("closeFile() error: {}", e.toString(), e);//$NON-NLS-1$
         }
     }
     
@@ -163,7 +164,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
                 myStart = Integer.parseInt(start);
             } catch(NumberFormatException e) {
                 myStart = COUNT_UNUSED;// Don't process invalid numbers
-                log.warn("Exception parsing "+start + " as int, value will not be considered as Start Number sequence");
+                log.warn("Exception parsing {} as int, value will not be considered as Start Number sequence", start);
             }
         }
         // Have we used myCurrent yet?
@@ -179,15 +180,19 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
                 myEnd = Integer.parseInt(tmp);
             } catch(NumberFormatException e) {
                 myEnd = COUNT_UNUSED;// Don't process invalid numbers (including "")
-                log.warn("Exception parsing "+tmp + " as int, value will not be considered as End Number sequence");
+                log.warn("Exception parsing {} as int, value will not be considered as End Number sequence", tmp);
             }
         }
 
         if (values.length >= PARAM_START) {
-            log.info(tn + " Start = " + myStart + " Current = " + myCurrent + " End = " + myEnd);//$NON-NLS-1$
+            if (log.isInfoEnabled()) {
+                log.info("{} Start = {} Current = {} End = {}", tn, myStart, myCurrent, myEnd);//$NON-NLS-1$
+            }
             if (myEnd != COUNT_UNUSED) {
                 if (myCurrent > myEnd) {
-                    log.info(tn + " No more files to process, " + myCurrent + " > " + myEnd);//$NON-NLS-1$
+                    if (log.isInfoEnabled()) {
+                        log.info("{} No more files to process, {} > {}", tn, myCurrent, myEnd);//$NON-NLS-1$
+                    }
                     myBread = null;
                     return;
                 }
@@ -201,7 +206,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
             if (myStart != COUNT_UNUSED) // Only try to format if there is a
                                             // number
             {
-                log.info(tn + " using format " + fileName);
+                log.info("{} using format {}", tn, fileName);
                 try {
                     DecimalFormat myFormatter = new DecimalFormat(fileName);
                     fileName = myFormatter.format(myCurrent);
@@ -212,12 +217,12 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
             myCurrent++;// for next time
         }
 
-        log.info(tn + " opening file " + fileName);//$NON-NLS-1$
+        log.info("{} opening file {}", tn, fileName);//$NON-NLS-1$
         try {
             myFileReader = new FileReader(fileName);
             myBread = new BufferedReader(myFileReader);
         } catch (Exception e) {
-            log.error("openFile() error: " + e.toString());//$NON-NLS-1$
+            log.error("openFile() error: {}", e.toString());//$NON-NLS-1$
             IOUtils.closeQuietly(myFileReader);
             IOUtils.closeQuietly(myBread);
             myBread = null;
@@ -250,7 +255,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
                 String line = myBread.readLine();
                 if (line == null) { // EOF, re-open file
                     String tn = Thread.currentThread().getName();
-                    log.info(tn + " EOF on  file " + fileName);//$NON-NLS-1$
+                    log.info("{} EOF on  file {}", tn, fileName);//$NON-NLS-1$
                     closeFile();
                     openFile();
                     if (myBread != null) {
@@ -259,7 +264,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
                         line = ERR_IND;
                         if (myEnd != COUNT_UNUSED) {// Are we processing a file
                                                     // sequence?
-                            log.info(tn + " Detected end of sequence.");
+                            log.info("{} Detected end of sequence.", tn);
                             throw new JMeterStopThreadException("End of sequence");
                         }
                     }
@@ -267,12 +272,13 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
                 myValue = line;
             } catch (IOException e) {
                 String tn = Thread.currentThread().getName();
-                log.error(tn + " error reading file " + e.toString());//$NON-NLS-1$
+                log.error("{} error reading file {}", tn, e.toString());//$NON-NLS-1$
             }
         } else { // File was not opened successfully
             if (myEnd != COUNT_UNUSED) {// Are we processing a file sequence?
-                String tn = Thread.currentThread().getName();
-                log.info(tn + " Detected end of sequence.");
+                if (log.isInfoEnabled()) {
+                    log.info("{} Detected end of sequence.", Thread.currentThread().getName());
+                }
                 throw new JMeterStopThreadException("End of sequence");
             }
         }
@@ -285,9 +291,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         }
 
         if (log.isDebugEnabled()) {
-            String tn = Thread.currentThread().getName();
-            log.debug(tn + " name:" //$NON-NLS-1$
-                    + myName + " value:" + myValue);//$NON-NLS-1$
+            log.debug("{} name:{} value:{}", Thread.currentThread().getName(), myName, myValue); //$NON-NLS-1$
         }
 
         return myValue;
@@ -298,7 +302,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
     @Override
     public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
 
-        log.debug(this + "::StringFromFile.setParameters()");//$NON-NLS-1$
+        log.debug("{}::StringFromFile.setParameters()", this);//$NON-NLS-1$
         checkParameterCount(parameters, MIN_PARAM_COUNT, MAX_PARAM_COUNT);
         values = parameters.toArray();
 
@@ -311,7 +315,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
             sb.append(((CompoundVariable) values[i]).getRawParameters());
         }
         sb.append(')');//$NON-NLS-1$
-        log.info(sb.toString());
+        log.info("{}", sb);
 
         // N.B. setParameters is called before the test proper is started,
         // and thus variables are not interpreted at this point

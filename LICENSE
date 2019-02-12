@@ -228,7 +228,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * httpasyncclient-4.1.4.jar
 * httpclient-4.5.7.jar
 * httpcore-4.4.11.jar
-* httpcore-nio-4.4.10.jar
+* httpcore-nio-4.4.11.jar
 * httpmime-4.5.7.jar
 * jakarta-oro-2.0.8.jar
 * jms-1.1.1.jar
@@ -258,7 +258,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * json-smart-2.3.jar
 * mongo-java-driver-2.11.3.jar
 * objenesis-2.6.jar
-* ph-commons-9.2.0.jar
+* ph-commons-9.2.1.jar
 * ph-css-6.1.1.jar
 * spock-core-1.0-groovy-2.4.jar
 
@@ -287,4 +287,4 @@ For details, please see the files under: licenses/bin
 * xpp3-1.1.4c.jar (Indiana University Extreme! Lab Software License 1.1.1)
 * xstream-1.4.11.jar (BSD)
 * hamcrest-date-2.0.4.jar (BSD)
-* Saxon-HE-9.8.0-14.jar (Mozilla Public License version 2.0)
+* Saxon-HE-9.9.1-1.jar (Mozilla Public License version 2.0)

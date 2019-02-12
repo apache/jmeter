@@ -1039,6 +1039,8 @@
       <classpath>
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
       </classpath>
+      <jvmarg value="-Xss256k"/>
+      <jvmarg value="-XX:MaxMetaspaceSize=256m"/>
       <jvmarg value="${jacoco_params}run_gui:java(server)"/>
       <sysproperty key="jmeter.home" value="${basedir}"/>
     </java>
@@ -2219,7 +2221,7 @@ run JMeter unless all the JMeter jars are added.
               fork="true"
               dir="${basedir}"
               failonerror="true">
-          <jvmarg value="-Xmx512m"/>
+          <jvmarg value="-Xmx256m"/>
           <classpath>
             <fileset dir="${maven.home}/boot">
               <include name="*.jar" />
@@ -2713,6 +2715,10 @@ run JMeter unless all the JMeter jars are added.
             <path refid="logging.classpath"/>
           </classpath>
           <jvmarg value="${jacoco_params}batchtest:daemon:java(server)"/>
+          <jvmarg value="-Xms64m"/>
+          <jvmarg value="-Xmx128m"/>
+          <jvmarg value="-Xss256k"/>
+          <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
           <!-- pick up default properties -->
@@ -2823,6 +2829,10 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
+      <jvmarg value="-Xms64m"/>
+      <jvmarg value="-Xmx128m"/>
+      <jvmarg value="-Xss256k"/>
+      <jvmarg value="-XX:MaxMetaspaceSize=128m"/>
       <jvmarg value="${jacoco_params}batchtest:java(${taskname})"/>
       <jvmarg value="-Djava.rmi.server.hostname=${computer.hostname}" if:set="rmi_force_localhost"/>
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
@@ -3188,6 +3198,8 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
+      <jvmarg value="-Xss256k"/>
+      <jvmarg value="-XX:MaxMetaspaceSize=256m"/>
       <jvmarg value="-server"/>
       <jvmarg value="${jacoco_params}_test:java"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
@@ -3369,7 +3381,7 @@ run JMeter unless all the JMeter jars are added.
         <tokenfilter>
           <filetokenizer/>
           <!-- Replace version with a wildcard. e.g, foo-1.2.3.jar or foo-1.2.3.RELEASE.jar to foo-*.jar -->
-          <replaceregex pattern="-(\d+\.){2,}([A-Za-z]+\.)?(jar|zip)" replace="-*\2"/>
+          <replaceregex pattern="-(\d+\.){2,}([A-Za-z]*)[-|\d]*?\.(jar|zip)" replace="-*\2"/>
         </tokenfilter>
       </filterchain>
     </loadresource>

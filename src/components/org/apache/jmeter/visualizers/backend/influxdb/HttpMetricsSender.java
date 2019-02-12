@@ -187,7 +187,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                                 log.debug("Success, number of metrics written: {}", copyMetrics.size());
                             } 
                         } else {
-                            log.error("Error writing metrics to influxDB Url: {}, responseCode: {}, responseBody: {}", url, code, getBody(response));
+                            log.error("Error writing metrics to influxDB Url: {}, responseCode: {}, responseBody: {}", url, code, getBody(response));
                         }
                     }
                     @Override
@@ -218,7 +218,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
             if(response != null && response.getEntity() != null) {
                 body = EntityUtils.toString(response.getEntity());
             }
-        } catch (Exception e) {
+        } catch (Exception e) { // NOSONAR
             // NOOP
         }
         return body;

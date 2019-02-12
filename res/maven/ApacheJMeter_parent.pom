@@ -80,7 +80,7 @@ under the License.
       <httpasyncclient.version>4.1.4</httpasyncclient.version>
       <httpclient.version>4.5.7</httpclient.version>
       <httpcore.version>4.4.11</httpcore.version>
-      <httpcore-nio.version>4.4.10</httpcore-nio.version>
+      <httpcore-nio.version>4.4.11</httpcore-nio.version>
       <httpmime.version>4.5.7</httpmime.version>
       <jackson-annotations.version>2.9.8</jackson-annotations.version>
       <jackson-core.version>2.9.8</jackson-core.version>
@@ -101,9 +101,9 @@ under the License.
       <junit.version>4.12</junit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
       <ph-css.version>6.1.1</ph-css.version>
-      <ph-commons.version>9.2.0</ph-commons.version>
+      <ph-commons.version>9.2.1</ph-commons.version>
       <rsyntaxtextarea.version>3.0.2</rsyntaxtextarea.version>
-      <Saxon-HE.version>9.8.0-14</Saxon-HE.version>
+      <Saxon-HE.version>9.9.1-1</Saxon-HE.version>
       <slf4j-api.version>1.7.25</slf4j-api.version>
       <log4j-api.version>2.11.1</log4j-api.version>
       <log4j-core.version>2.11.1</log4j-core.version>

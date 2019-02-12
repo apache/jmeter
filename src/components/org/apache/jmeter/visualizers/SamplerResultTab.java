@@ -45,6 +45,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Document;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -62,6 +64,8 @@ import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Right side in View Results Tree
@@ -69,7 +73,7 @@ import org.apache.jorphan.reflect.Functor;
  */
 public abstract class SamplerResultTab implements ResultRenderer {
 
-    
+    private static final Logger LOGGER = LoggerFactory.getLogger(RenderAsText.class);
     // N.B. these are not multi-threaded, so don't make it static
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
 
@@ -673,5 +677,22 @@ public abstract class SamplerResultTab implements ResultRenderer {
         public synchronized void setValue(Object value) {
             this.value = value;
         }
+    }
+    
+    /**
+     * Optimized way to set text based on :
+     * http://javatechniques.com/blog/faster-jtextpane-text-insertion-part-i/
+     * @param data String data
+     */
+    protected void setTextOptimized(String data) {
+        Document document = results.getDocument();
+        Document blank = new DefaultStyledDocument();
+        results.setDocument(blank);
+        try {
+            document.insertString(0, data == null ? "" : data, null);
+        } catch (BadLocationException ex) {
+            LOGGER.error("Error inserting text", ex);
+        }
+        results.setDocument(document);
     }
 }

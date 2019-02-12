@@ -71,7 +71,7 @@
 	<classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpasyncclient-4.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient-4.5.7.jar"/>
-	<classpathentry kind="lib" path="lib/httpcore-nio-4.4.10.jar"/>
+	<classpathentry kind="lib" path="lib/httpcore-nio-4.4.11.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.4.11.jar"/>
 	<classpathentry kind="lib" path="lib/httpmime-4.5.7.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-annotations-2.9.8.jar"/>
@@ -98,10 +98,10 @@
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.3.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/ph-css-6.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/ph-commons-9.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/ph-commons-9.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.7.10.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-3.0.2.jar"/>
-	<classpathentry kind="lib" path="lib/Saxon-HE-9.8.0-14.jar"/>
+	<classpathentry kind="lib" path="lib/Saxon-HE-9.9.1-1.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/tika-core-1.20.jar"/>

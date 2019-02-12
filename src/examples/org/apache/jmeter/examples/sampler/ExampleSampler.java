@@ -28,14 +28,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Example Sampler (non-Bean version)
- *
+ * <p>
  * JMeter creates an instance of a sampler class for every occurrence of the
  * element in every thread. [some additional copies may be created before the
  * test run starts]
- *
+ * <p>
  * Thus each sampler is guaranteed to be called by a single thread - there is no
  * need to synchronize access to instance variables.
- *
+ * <p>
  * However, access to class fields must be synchronized.
  *
  */
@@ -119,9 +119,9 @@ public class ExampleSampler extends AbstractSampler {
      * Helper method
      */
     private void trace(String s) {
-        String tl = getTitle();
-        String tn = Thread.currentThread().getName();
-        String th = this.toString();
-        log.debug(tn + " (" + classCount.get() + ") " + tl + " " + s + " " + th);
+        if (log.isDebugEnabled()) {
+            log.debug("{} ({}) {} {} {}", Thread.currentThread().getName(), Integer.valueOf(classCount.get()),
+                    getTitle(), s, this.toString());
+        }
     }
 }
