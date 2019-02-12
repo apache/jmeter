@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -389,6 +390,9 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             if (pageEncodings != null) {
                 synchronized (pageEncodings) {
                     contentEncoding = pageEncodings.get(urlWithoutQuery);
+                    if(contentEncoding == null && pageEncodings.size()>0) {
+                       contentEncoding = new ArrayList<String>(pageEncodings.values()).get(0);
+                    }
                 }
             }
             // Check if we know the encoding of the form
