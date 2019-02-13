@@ -29,6 +29,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.PrivilegedActionException;
@@ -44,8 +45,6 @@ import java.util.regex.Pattern;
 
 import javax.security.auth.Subject;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.Header;
@@ -1688,17 +1687,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 // Must decode the value now, so that when the
                 // httpclient encodes it, we end up with the same value
                 // as the user had entered.
-                try {
-                    URLCodec urlCodec = new URLCodec(contentEncoding);
-                    parameterName = urlCodec.decode(parameterName, urlContentEncoding);
-                    parameterValue = urlCodec.decode(parameterValue,urlContentEncoding);
-                } catch (UnsupportedEncodingException e) {
-                    log.error(contentEncoding + " encoding not supported!");
-                    throw new Error(e.toString(), e);
-                } catch (DecoderException e) {
-                    log.error(contentEncoding + " encoding not supported!");
-                    throw new Error(e.toString(), e);
-                }
+                parameterName = URLDecoder.decode(parameterName, urlContentEncoding);
+                parameterValue = URLDecoder.decode(parameterValue, urlContentEncoding);
             }
             // Add the parameter, httpclient will urlencode it
             nvps.add(new BasicNameValuePair(parameterName, parameterValue));
