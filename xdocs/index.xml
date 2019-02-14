@@ -57,7 +57,7 @@
         </ul>
     </li>
     <li>Full featured Test IDE that allows fast Test Plan <b>recording (from Browsers or native applications), building and debugging</b>.</li>
-    <li><b><a href="usermanual/get-started.html#non_gui">Command-line mode (Non GUI / headless mode)</a></b> to load test from any Java compatible OS (Linux, Windows, Mac OSX, &hellip;)</li>
+    <li><b><a href="usermanual/get-started.html#non_gui">CLI mode (Command-line mode (previously called Non GUI) / headless mode)</a></b> to load test from any Java compatible OS (Linux, Windows, Mac OSX, &hellip;)</li>
     <li>A complete and <b><a href="usermanual/generating-dashboard.html" >ready to present dynamic HTML report</a></b></li>
     <li>Easy correlation through ability to extract data from most popular response formats, <b><a href="usermanual/component_reference.html#CSS/JQuery_Extractor" >HTML</a>, <a href="usermanual/component_reference.html#JSON_Extractor" >JSON </a>, 
         <a href="usermanual/component_reference.html#XPath_Extractor" >XML</a> or <a href="usermanual/component_reference.html#Regular_Expression_Extractor" >any textual format</a></b></li>
