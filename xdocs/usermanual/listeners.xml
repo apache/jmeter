@@ -69,7 +69,7 @@ The same filename can be used by multiple samplers - but make sure they all use 
 <p>
 The default items to be saved can be defined in the <code>jmeter.properties</code> (or <code>user.properties</code>) file.
 The properties are used as the initial settings for the Listener Config pop-up, and are also
-used for the log file specified by the <code>-l</code> command-line flag (commonly used for non-GUI test runs).
+used for the log file specified by the <code>-l</code> command-line flag (commonly used for CLI mode test runs).
 </p>
 <p>To change the default format, find the following line in <code>jmeter.properties</code>:</p>
 <source>jmeter.save.saveservice.output_format=</source>
@@ -237,9 +237,9 @@ Note that cookies, method and the query string are saved as part of the "<code>S
 </p>
 </section>
 
-<section name="&sect-num;.2 non-GUI (batch) test runs" anchor="batch">
+<section name="&sect-num;.2 CLI mode (batch) test runs" anchor="batch">
 <p>
-When running in non-GUI mode, the <code>-l</code> flag can be used to create a top-level listener for the test run.
+When running in CLI mode, the <code>-l</code> flag can be used to create a top-level listener for the test run.
 This is in addition to any Listeners defined in the test plan.
 The configuration of this listener is controlled by entries in the file <code>jmeter.properties</code>
 as described in the previous section.

@@ -89,7 +89,7 @@ then JMeter is running your test plan (or, at least, it thinks it is).</p>
 The numbers to the left of the green box are the number of active threads / total number of threads.
 These only apply to a locally run test; they do not include any threads started on remote systems when using client-server mode.
 </p>
-<note>Using GUI mode as described here should only be used when debugging your Test Plan. To run the real load test, use NON-GUI mode.</note>
+<note>Using GUI mode as described here should only be used when debugging your Test Plan. To run the real load test, use CLI mode.</note>
 </subsection>
 
 <subsection name="&sect-num;.6 Stopping a Test" anchor="stop">
@@ -111,8 +111,8 @@ The modal shutdown dialog box will remain active until all threads have stopped.
 If Shutdown is taking too long. Close the Shutdown dialog box and select <code>Run</code>/<code>Stop</code>, or just press <keycombo><keysym>Control</keysym><keysym>.</keysym></keycombo>.
 </p>
 <p>
-When running JMeter in non-GUI mode, there is no Menu, and JMeter does not react to keystrokes such as <keycombo><keysym>Control</keysym><keysym>.</keysym></keycombo>.
-So JMeter non-GUI mode will listen for commands on a specific port (default <code>4445</code>, see the JMeter property <code>jmeterengine.nongui.port</code>).
+When running JMeter in CLI mode, there is no Menu, and JMeter does not react to keystrokes such as <keycombo><keysym>Control</keysym><keysym>.</keysym></keycombo>.
+So JMeter CLI mode will listen for commands on a specific port (default <code>4445</code>, see the JMeter property <code>jmeterengine.nongui.port</code>).
 JMeter supports automatic choice of an alternate port if the default port is being used 
 (for example by another JMeter instance). In this case, JMeter will try the next higher port, continuing until
 it reaches the JMeter property <code>jmeterengine.nongui.maxport</code>) which defaults to <code>4455</code>.
