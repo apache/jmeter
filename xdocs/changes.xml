@@ -301,6 +301,7 @@ containing a fix to this issue, we decided to remove it. If you still needed, yo
     <li><bug>63099</bug>Escape commata in function helper dialog only outside of variable replacement structures.</li>
     <li><bug>63105</bug>Export Transactions for Report: fix 2 bugs</li>
     <li><bug>63106</bug>Apply naming policy does not refresh UI</li>
+    <li><bug>63180</bug>Apply Naming Policy allows multi selection but only considers first node</li>
     <li><bug>63090</bug>Remove slf4j-ext due to CVE-2018-8088</li>
 </ul>
 
