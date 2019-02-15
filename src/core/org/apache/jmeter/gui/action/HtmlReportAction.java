@@ -1,4 +1,4 @@
-package org.apache.jmeter.protocol.http.gui.action;
+package org.apache.jmeter.gui.action;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,14 +16,11 @@ public class HtmlReportAction {
 
     public final static String ERROR_GENERATING = "html_report_error";
 
-    public final static String NO_FILE_CSV = "no_such_file_csv";
-    public final static String WRONG_FILE_CSV = "wrong_type_csv";
+    public final static String NO_FILE = "no_such_file";
+    public final static String WRONG_FILE = "wrong_type";
 
-    public final static String NO_FILE_USER_PROPERTIES = "no_such_file_user_properties";
-    public final static String WRONG_FILE_USER_PROPERTIES = "wrong_type_user_properties";
-
-    public final static String NO_DIRECTORY_OUTPUT = "no_such_directory";
-    public final static String NOT_EMPTY_DIRECTORY_OUTPUT = "directory_not_empty";
+    public final static String NO_DIRECTORY = "no_such_directory";
+    public final static String NOT_EMPTY_DIRECTORY = "directory_not_empty";
 
     private static Logger LOGGER = LoggerFactory.getLogger(HtmlReportAction.class);
 
@@ -35,7 +32,7 @@ public class HtmlReportAction {
         this.cSVFilePath = cSVFilePath;
         this.userPropertiesFilePath = userPropertiesFilePath;
         if (outputDirectoryPath == null) {
-            this.outputDirectoryPath = JMeterUtils.getJMeterHome() + "bin/report-output/";
+            this.outputDirectoryPath = JMeterUtils.getJMeterBinDir()+"/report-output/";
         } else {
             this.outputDirectoryPath = outputDirectoryPath;
         }
@@ -48,7 +45,7 @@ public class HtmlReportAction {
         List<String> returnValue = new ArrayList<>();
         List<String> testFilesResult = testArguments();
         if (testFilesResult.isEmpty()) {
-            SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterHome() + "/bin"), null);
+            SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterBinDir()), null);
             int resultCode = -1;
             try {
                 resultCode = sc.run(createGenerationCommand());
@@ -80,7 +77,7 @@ public class HtmlReportAction {
         String java = System.getProperty("java.home") + "/bin/java";
         arguments.add(java);
         arguments.add("-jar");
-        arguments.add(JMeterUtils.getJMeterHome() + "/bin/ApacheJMeter.jar");
+        arguments.add(JMeterUtils.getJMeterBinDir()+"/ApacheJMeter.jar");
         arguments.add("-q");
         arguments.add(userPropertiesFilePath);
         arguments.add("-g");
@@ -127,10 +124,10 @@ public class HtmlReportAction {
      */
     private String checkFile(File fileToCheck, String extension) {
         if (!fileToCheck.exists() || !fileToCheck.isFile()) {
-            return JMeterUtils.getResString("no_such_file");
+            return JMeterUtils.getResString(NO_FILE);
         }
         if (!fileToCheck.getName().contains(extension)) {
-            return JMeterUtils.getResString("wrong_type");
+            return JMeterUtils.getResString(WRONG_FILE);
         }
         return "";
     }
@@ -144,10 +141,10 @@ public class HtmlReportAction {
      */
     private String checkDirectory(File directoryToCheck) {
         if (!directoryToCheck.exists() || !directoryToCheck.isDirectory()) {
-            return JMeterUtils.getResString("no_such_directory");
+            return JMeterUtils.getResString(NO_DIRECTORY);
         }
         if (directoryToCheck.list().length > 0) {
-            return JMeterUtils.getResString("directory_not_empty");
+            return JMeterUtils.getResString(NOT_EMPTY_DIRECTORY);
         }
         return "";
     }
