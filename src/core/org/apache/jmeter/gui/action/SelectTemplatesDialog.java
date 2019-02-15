@@ -101,7 +101,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
     
     private final JButton previous = new JButton(JMeterUtils.getResString("previous")); //$NON-NLS-1$
     
-    private final JButton validateButton = new JButton(JMeterUtils.getResString("validate_threadgroup")); //$NON-NLS-1$
+    private final JButton validateButton = new JButton();
     
     private Map<String, JLabeledTextField> parametersTextFields = new LinkedHashMap<>();
     
@@ -350,6 +350,9 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);
         helpDoc.setText(template.getDescription());
         applyTemplateButton.setText(template.isTestPlan() 
+                ? JMeterUtils.getResString("template_create_from")
+                : JMeterUtils.getResString("template_merge_from") );
+        validateButton.setText(template.isTestPlan() 
                 ? JMeterUtils.getResString("template_create_from")
                 : JMeterUtils.getResString("template_merge_from") );
     }
