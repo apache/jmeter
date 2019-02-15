@@ -254,12 +254,12 @@ The first step is to configure the injectors that will run JMeter, this as for a
 
 </ul> 
 
-Once everything is ready, you will use Command-line mode (called <a href="#non_gui">Non-GUI mode</a>) to run it for the Load Test. 
+Once everything is ready, you will use CLI mode (Command-line mode previously called <a href="#non_gui">Non-GUI mode</a>) to run it for the Load Test. 
 <div class="clear"></div>
 <div class="note">Don't run load test using GUI mode !</div>
 <div class="clear"></div>
 <br>
-Using Non-GUI mode, you can generate a CSV (or XML) file containing results and have JMeter <a href="generating-dashboard.html">generate an HTML report</a> at end of Load Test.
+Using CLI mode, you can generate a CSV (or XML) file containing results and have JMeter <a href="generating-dashboard.html">generate an HTML report</a> at end of Load Test.
 JMeter will by default provide a summary of load test while it's running. <br>
 You can also have <a href="realtime-results.html">real-time results</a> during your test using <a href="component_reference.html#Backend_Listener">Backend Listener</a>.
 </p>
@@ -562,7 +562,7 @@ You can rename the parent directory (i.e. <span class="code">apache-jmeter-X.Y</
 These files are found in the <span class="code">bin</span> directory.
 After a short time, the JMeter GUI should appear.
 <div class="clear"></div>
-<div class="note">GUI mode should only be used for creating the test script, NON GUI mode must be used for load testing</div>
+<div class="note">GUI mode should only be used for creating the test script, CLI mode (NON GUI) must be used for load testing</div>
 <div class="clear"></div>
 
 </p>
@@ -588,12 +588,12 @@ Windows script files (the .CMD files require Win2K or later):
 <dt>
 <span class="code">jmeter-n.cmd</span>
 </dt>
-<dd>drop a JMX file on this to run a non-GUI test</dd>
+<dd>drop a JMX file on this to run a CLI mode test</dd>
 
 <dt>
 <span class="code">jmeter-n-r.cmd</span>
 </dt>
-<dd>drop a JMX file on this to run a non-GUI test remotely</dd>
+<dd>drop a JMX file on this to run a CLI mode test remotely</dd>
 
 <dt>
 <span class="code">jmeter-t.cmd</span>
@@ -608,17 +608,17 @@ Windows script files (the .CMD files require Win2K or later):
 <dt>
 <span class="code">mirror-server.cmd</span>
 </dt>
-<dd>runs the JMeter Mirror Server in non-GUI mode</dd>
+<dd>runs the JMeter Mirror Server in CLI mode</dd>
 
 <dt>
 <span class="code">shutdown.cmd</span>
 </dt>
-<dd>Run the Shutdown client to stop a non-GUI instance gracefully</dd>
+<dd>Run the Shutdown client to stop a CLI mode instance gracefully</dd>
 
 <dt>
 <span class="code">stoptest.cmd</span>
 </dt>
-<dd>Run the Shutdown client to stop a non-GUI instance abruptly</dd>
+<dd>Run the Shutdown client to stop a CLI mode instance abruptly</dd>
 
 </dl>
 
@@ -732,17 +732,17 @@ Un*x script files; should work on most Linux/Unix systems:
 <dt>
 <span class="code">mirror-server.sh</span>
 </dt>
-<dd>runs the JMeter Mirror Server in non-GUI mode</dd>
+<dd>runs the JMeter Mirror Server in CLI mode</dd>
 
 <dt>
 <span class="code">shutdown.sh</span>
 </dt>
-<dd>Run the Shutdown client to stop a non-GUI instance gracefully</dd>
+<dd>Run the Shutdown client to stop a CLI mode instance gracefully</dd>
 
 <dt>
 <span class="code">stoptest.sh</span>
 </dt>
-<dd>Run the Shutdown client to stop a non-GUI instance abruptly</dd>
+<dd>Run the Shutdown client to stop a CLI mode instance abruptly</dd>
 
 </dl>
 
@@ -1059,7 +1059,7 @@ This is not to be confused with the proxy settings described above, which are us
 
 
 <div class="subsection">
-<h2 id="non_gui">1.4.4 Non-GUI Mode (Command Line mode)<a class="sectionlink" href="#non_gui" title="Link to here">&para;</a>
+<h2 id="non_gui">1.4.4 CLI Mode (Command Line mode was called NON GUI mode)<a class="sectionlink" href="#non_gui" title="Link to here">&para;</a>
 </h2>
 
 <p>For load testing, you must run JMeter in this mode (Without the GUI) to get the optimal results from it. To do so, use
@@ -1070,7 +1070,7 @@ the following command options:</p>
 <dt>
 <span class="code">-n</span>
 </dt>
-<dd>This specifies JMeter is to run in non-gui mode</dd>
+<dd>This specifies JMeter is to run in cli mode</dd>
 
 <dt>
 <span class="code">-t</span>
@@ -1148,7 +1148,7 @@ Normally this is not necessary.
 </h2>
 
 <p>For <a href="remote-test.html">distributed testing</a>, run JMeter in server mode on the remote node(s), and then control the server(s) from the GUI.
-You can also use non-GUI mode to run remote tests.
+You can also use CLI mode to run remote tests.
 To start the server(s), run <span class="code">jmeter-server[.bat]</span> on each server host.</p>
 
 <p>The script also lets you specify the optional firewall/proxy server information:</p>
@@ -1173,7 +1173,7 @@ To start the server(s), run <span class="code">jmeter-server[.bat]</span> on eac
 <p>If you want the server to exit after a single test has been run, then define the JMeter property <span class="code">server.exitaftertest=true</span>.
 </p>
 
-<p>To run the test from the client in non-GUI mode, use the following command:</p>
+<p>To run the test from the client in CLI mode, use the following command:</p>
 
 <pre class="source">
 jmeter -n -t testplan.jmx -r [-Gprop=val] [-Gglobal.properties] [-X]
@@ -1614,7 +1614,7 @@ These are shown below.</p>
     -d, --homedir &lt;argument&gt;
         the jmeter home directory to use
     -X, --remoteexit
-        Exit the remote servers at end of test (non-GUI)
+        Exit the remote servers at end of test (CLI mode)
     -g, --reportonly &lt;argument&gt;
         generate report dashboard only, from a test results file
     -e, --reportatendofloadtests
@@ -1638,11 +1638,11 @@ that was run in interactive mode.
 
 
 <div class="subsection">
-<h2 id="shutdown">1.4.9 non-GUI shutdown<a class="sectionlink" href="#shutdown" title="Link to here">&para;</a>
+<h2 id="shutdown">1.4.9 CLI mode shutdown<a class="sectionlink" href="#shutdown" title="Link to here">&para;</a>
 </h2>
 
 <p>
-Prior to version 2.5.1, JMeter invoked <span class="code">System.exit()</span> when a non-GUI test completed.
+Prior to version 2.5.1, JMeter invoked <span class="code">System.exit()</span> when a CLI mode test completed.
 This caused problems for applications that invoke JMeter directly, so JMeter no longer invokes <span class="code">System.exit()</span>
 for a normal test completion. [Some fatal errors may still invoke <span class="code">System.exit()</span>]
 JMeter will exit all the non-daemon threads it starts, but it is possible that some non-daemon threads

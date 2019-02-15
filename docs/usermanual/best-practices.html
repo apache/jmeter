@@ -214,7 +214,7 @@ You should absolutely avoid using versions that are older than 3 versions before
 run with JMeter.  The number will also depend on how fast your server is (a faster server
  makes JMeter work harder since it returns a response quicker).  As with any Load Testing tool, if you don't correctly size
  the number of threads, you will face the "Coordinated Omission" problem which can give you wrong or inaccurate results.
- If you need large-scale load testing, consider running multiple non-GUI JMeter instances on multiple machines 
+ If you need large-scale load testing, consider running multiple CLI JMeter instances on multiple machines 
  using distributed mode (or not). When using distributed mode the result file is combined on the Controller node, if
  using multiple autonomous instances, the sample result files can be combined for subsequent analysis.
 For testing how JMeter performs on a given platform, the JavaTest sampler can be used.
@@ -346,7 +346,7 @@ Some suggestions on reducing resource usage.
 
 <ul>
 
-<li>Use non-GUI mode: <span class="code">jmeter -n -t test.jmx -l test.jtl</span>
+<li>Use CLI mode: <span class="code">jmeter -n -t test.jmx -l test.jtl</span>
 </li>
 
 <li>Use as few Listeners as possible; if using the <span class="code">-l</span> flag as above they can all be deleted or disabled.</li>
@@ -451,7 +451,7 @@ bsh % &hellip; disconnected from server.
 </p>
 
 <p>
-As a practical example, assume you have a long-running JMeter test running in non-GUI mode,
+As a practical example, assume you have a long-running JMeter test running in CLI mode,
 and you want to vary the throughput at various times during the test.
 The test-plan includes a Constant Throughput Timer which is defined in terms of a property,
 e.g. <span class="code">${__P(throughput)}</span>.
@@ -609,7 +609,7 @@ To run the test with 20 loops, just change the value of the <span class="code">L
 </p>
 
 <p>
-This quickly becomes tedious if you want to run lots of tests in non-GUI mode.
+This quickly becomes tedious if you want to run lots of tests in CLI mode.
 One solution to this is to define the Test Plan variable in terms of a property,
 for example <span class="code">LOOPS=${__P(loops,10)}</span>.
 This uses the value of the property "<span class="code">loops</span>", defaulting to <span class="code">10</span> if the property is not found.

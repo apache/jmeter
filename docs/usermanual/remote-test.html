@@ -223,7 +223,7 @@ So if you set 1000 Threads and have 6 JMeter server, you end up injecting 6000 T
 <div class="clear"></div>
 
 <p>
-However, remote mode does use more resources than running the same number of non-GUI tests independently.
+However, remote mode does use more resources than running the same number of CLI mode tests independently.
 If many server instances are used, the client JMeter can become overloaded, as can the client network connection.
 This has been improved by switching to Stripped modes (see below) but you should always check that your client is not overloaded.
 </p>
@@ -322,11 +322,11 @@ normal JMeter start and stop menu items.</p>
 
 
 <p>
-<b>Step 3b: Start the JMeter from a non-GUI Client</b>
+<b>Step 3b: Start the JMeter from a CLI mode Client</b>
 </p>
 
 <p>
-GUI mode should only be used for debugging, as a better alternative, you should start the test on remote server(s) from a non-GUI (command-line) client.
+GUI mode should only be used for debugging, as a better alternative, you should start the test on remote server(s) from a CLI mode (command-line) client.
 The command to do this is:</p>
 
 <pre class="source">

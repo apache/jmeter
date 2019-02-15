@@ -297,7 +297,7 @@
 <ul></ul>
 </li>
 <li>
-<a href="#summariser">19.26 Summariser - Generate Summary Results - configuration (mainly applies to non-GUI mode)</a>
+<a href="#summariser">19.26 Summariser - Generate Summary Results - configuration (mainly applies to CLI mode)</a>
 <ul></ul>
 </li>
 <li>
@@ -3243,7 +3243,7 @@ JMETER-SERVER</pre>
 
 </div>
 <div class="section">
-<h1 id="summariser">19.26 Summariser - Generate Summary Results - configuration (mainly applies to non-GUI mode)<a class="sectionlink" href="#summariser" title="Link to here">&para;</a>
+<h1 id="summariser">19.26 Summariser - Generate Summary Results - configuration (mainly applies to CLI mode)<a class="sectionlink" href="#summariser" title="Link to here">&para;</a>
 </h1>
 
 <div class="properties">
@@ -3259,11 +3259,11 @@ JMETER-SERVER</pre>
 <div class="property">
 <div class="name req-true">summariser.name</div>
 <div class="description req-true">
-    Comment the following property to disable the default non-GUI summariser.<br>
+    Comment the following property to disable the default CLI mode summariser.<br>
     [or change the value to rename it]<br>
     
 <div class="clear"></div>
-<div class="note">Applies to non-GUI mode only</div>
+<div class="note">Applies to CLI mode only</div>
 <div class="clear"></div>
     Defaults to: <span class="code">summary</span>
 
@@ -4244,8 +4244,7 @@ JMETER-SERVER</pre>
 <div class="property">
 <div class="name req-true">jmeterengine.stopfail.system.exit</div>
 <div class="description req-true">
-    Whether to call <span class="code">System.exit(1)</span> on failure to stop threads in
-    non-GUI mode.<br>
+    Whether to call <span class="code">System.exit(1)</span> on failure to stop threads in CLI mode.<br>
     This only takes effect if the test was explicitly requested to stop.<br>
     If this is disabled, it may be necessary to kill the JVM externally.<br>
     Defaults to: <span class="code">true</span>
@@ -4259,7 +4258,7 @@ JMETER-SERVER</pre>
 <div class="property">
 <div class="name req-true">jmeterengine.force.system.exit</div>
 <div class="description req-true">
-    Whether to force call <span class="code">System.exit(0)</span> at end of test in non-GUI mode,
+    Whether to force call <span class="code">System.exit(0)</span> at end of test in CLI mode,
     even if there were no failures and the test was not explicitly asked to stop.<br>
     Without this, the JVM may never exit if there are other threads spawned by
     the test which never exit.<br>
@@ -4288,7 +4287,7 @@ JMETER-SERVER</pre>
 <div class="property">
 <div class="name req-true">jmeterengine.nongui.port</div>
 <div class="description req-true">
-    If running non-GUI, then JMeter listens on the following port for a shutdown message.<br>
+    If running CLI mode, then JMeter listens on the following port for a shutdown message.<br>
     To disable, set the port to <span class="code">1000</span> or less.<br>
     Defaults to: <span class="code">4445</span>
 
@@ -4575,7 +4574,7 @@ JMETER-SERVER</pre>
 <div class="name req-true">classfinder.functions.contain</div>
 <div class="description req-true">
     The classpath finder currently needs to load every single JMeter class to find the classes it needs.<br>
-    For non-GUI mode, it's only necessary to scan for Function classes, but all classes are still loaded.<br>
+    For CLI mode, it's only necessary to scan for Function classes, but all classes are still loaded.<br>
     All current Function classes include "<span class="code">.function.</span>" in their name, and none include
     "<span class="code">.gui.</span>" in the name, so the number of unwanted classes loaded can be reduced by
     checking for these. However, if a valid function class name does not match these restrictions,
