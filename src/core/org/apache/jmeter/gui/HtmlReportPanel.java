@@ -1,4 +1,4 @@
-package org.apache.jmeter.protocol.http.gui;
+package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,10 +23,10 @@ import javax.swing.SwingUtilities;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.AbstractAction;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.HtmlReportAction;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jmeter.protocol.http.gui.action.HtmlReportAction;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.slf4j.Logger;
