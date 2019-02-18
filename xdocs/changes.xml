@@ -219,6 +219,7 @@ containing a fix to this issue, we decided to remove it. If you still needed, yo
     <li><bug>62821</bug><pr>405</pr>Use SHA-512 checksums instead of MD5 to verify jar downloads</li>
     <li><bug>63053</bug>Remove referrals to never implemented internals from user documentation. Reported by U. Poblotzki (u.poblotzki at thalia.de)</li>
     <li><bug>63082</bug><pr>437</pr>Use utf-8 for properties files in source</li>
+    <li><bug>63177</bug>Rename NON GUI mode into CLI Mode in documentation</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -300,6 +301,7 @@ containing a fix to this issue, we decided to remove it. If you still needed, yo
     <li><bug>63099</bug>Escape commata in function helper dialog only outside of variable replacement structures.</li>
     <li><bug>63105</bug>Export Transactions for Report: fix 2 bugs</li>
     <li><bug>63106</bug>Apply naming policy does not refresh UI</li>
+    <li><bug>63180</bug>Apply Naming Policy allows multi selection but only considers first node</li>
     <li><bug>63090</bug>Remove slf4j-ext due to CVE-2018-8088</li>
 </ul>
 
@@ -334,11 +336,6 @@ Apologies if we have omitted anyone else.
  <!--  =================== Known bugs or issues related to JAVA Bugs =================== -->
 
 <ch_section>Known problems and workarounds</ch_section>
-<ul>
-<li>View Results Tree may freeze rendering large response particularly if this response has no spaces, see <bugzilla>60816</bugzilla>.
-This is due to an identified Java Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8172336">UI stuck when calling <code>JEditorPane.setText()</code> or <code>JTextArea.setText()</code> with long text without space</a>.
-</li>
-</ul>
 <ul>
 <li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</li>
