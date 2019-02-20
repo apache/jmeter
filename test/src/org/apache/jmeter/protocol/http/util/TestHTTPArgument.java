@@ -94,16 +94,4 @@ public class TestHTTPArgument {
             assertEquals("", arg.getEncodedName());
             assertEquals("\00\01\07", arg.getEncodedValue());
         }
-        
-        @Test(expected=Error.class)
-        public void testDecoderException() throws Exception {
-            //When invalid string is passed DecoderException occurs
-            new HTTPArgument("s=*&^%~@==y", "\00\01\07", true, "UTF-8");
-        }
-        
-        @Test(expected=Error.class)
-        public void testUnsupportedEncodingException() throws Exception {
-            //When invalid encoding is passed UnsupportedException occurs
-            new HTTPArgument("Ravi", "\00\01\07", true, "Sanjay");
-        }
 }
