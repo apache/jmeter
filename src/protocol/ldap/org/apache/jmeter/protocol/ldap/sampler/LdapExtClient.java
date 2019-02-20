@@ -78,7 +78,8 @@ public class LdapExtClient {
      * @exception NamingException
      *                when creating the {@link DirContext} fails
      */
-    public static DirContext connect(String host, String port, String rootdn, String username, String password, String connTimeOut, boolean secure)
+    public static DirContext connect(String host, String port, String rootdn, String username, String password, String connTimeOut, 
+            boolean secure, boolean trustAll)
             throws NamingException {
         DirContext dirContext;
         Hashtable<String, String> env = new Hashtable<>();
@@ -86,6 +87,10 @@ public class LdapExtClient {
         StringBuilder sb = new StringBuilder(80);
         if (secure) {
             sb.append("ldaps://"); // $NON-NLS-1$
+            if (trustAll){
+                log.debug("Secure true, trustAll true");
+                env.put("java.naming.ldap.factory.socket", "org.apache.jmeter.protocol.ldap.sampler.TrustAllSocket");
+            }
         } else {
             sb.append("ldap://"); // $NON-NLS-1$
         }

@@ -132,6 +132,8 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
     private JCheckBox parseflag = new JCheckBox(JMeterUtils.getResString("ldap_parse_results")); // $NON-NLS-1$
 
     private JCheckBox secure = new JCheckBox(JMeterUtils.getResString("ldap_secure")); // $NON-NLS-1$
+    
+    private JCheckBox trustAll = new JCheckBox(JMeterUtils.getResString("ldap_trust_all")); // $NON-NLS-1$
 
     private JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("addtest")); // $NON-NLS-1$
 
@@ -208,6 +210,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
         connto.setText(element.getPropertyAsString(LDAPExtSampler.CONNTO));
         parseflag.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.PARSEFLAG));
         secure.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.SECURE));
+        trustAll.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.TRUSTALL));
         userpw.setText(element.getPropertyAsString(LDAPExtSampler.USERPW));
         userdn.setText(element.getPropertyAsString(LDAPExtSampler.USERDN));
         comparedn.setText(element.getPropertyAsString(LDAPExtSampler.COMPAREDN));
@@ -283,6 +286,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
         element.setProperty(LDAPExtSampler.CONNTO, connto.getText());
         element.setProperty(LDAPExtSampler.PARSEFLAG,Boolean.toString(parseflag.isSelected()));
         element.setProperty(LDAPExtSampler.SECURE,Boolean.toString(secure.isSelected()));
+        element.setProperty(LDAPExtSampler.TRUSTALL,Boolean.toString(trustAll.isSelected()));
         element.setProperty(LDAPExtSampler.USERDN, userdn.getText());
         element.setProperty(LDAPExtSampler.USERPW, userpw.getText());
         element.setProperty(LDAPExtSampler.COMPAREDN, comparedn.getText());
@@ -357,6 +361,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
         deref.setSelected(false);
         parseflag.setSelected(false);
         secure.setSelected(false);
+        trustAll.setSelected(false);
         addTest.setSelected(false);
         modifyTest.setSelected(false);
         deleteTest.setSelected(false);
@@ -413,6 +418,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
         bindPanel.add(createLabelPanel("ldap_connto", connto));
 
         bindPanel.add(secure);
+        bindPanel.add(trustAll);
         return bindPanel;
     }
 
