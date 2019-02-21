@@ -33,13 +33,17 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509ExtendedTrustManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TrustAllSocket extends SocketFactory {
     private static final AtomicReference<TrustAllSocket> defaultFactory = new AtomicReference<>();
 
+    private static final Logger log = LoggerFactory.getLogger(TrustAllSocket.class);
+
     private static SSLSocketFactory sf;
 
-    public TrustAllSocket() {
-        //KeyStore keyStore = ... /* Get a keystore containing the self-signed certificate) */
+    public TrustAllSocket() throws NoSuchAlgorithmException, KeyManagementException {
         TrustManager[] trustAllCerts = new TrustManager[] {new X509ExtendedTrustManager() {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                 return null;
@@ -51,45 +55,37 @@ public class TrustAllSocket extends SocketFactory {
             @Override
             public void checkClientTrusted(X509Certificate[] arg0, String arg1, Socket arg2)
                 throws CertificateException {
-                // TODO Auto-generated method stub
             }
             @Override
             public void checkClientTrusted(X509Certificate[] arg0, String arg1, SSLEngine arg2)
                 throws CertificateException {
-                // TODO Auto-generated method stub
             }
             @Override
             public void checkServerTrusted(X509Certificate[] arg0, String arg1, Socket arg2)
                 throws CertificateException {
-                // TODO Auto-generated method stub
             }
             @Override
             public void checkServerTrusted(X509Certificate[] arg0, String arg1, SSLEngine arg2)
                 throws CertificateException {
-                // TODO Auto-generated method stub
             }
         }};
 
         SSLContext ctx = null;
-        try {
-            ctx = SSLContext.getInstance("TLS");
-        } catch (NoSuchAlgorithmException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        try {
-            ctx.init(null, trustAllCerts, new java.security.SecureRandom());
-        } catch (KeyManagementException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        ctx = SSLContext.getInstance("TLS");
+        ctx.init(null, trustAllCerts, new java.security.SecureRandom());
         sf = ctx.getSocketFactory();
     }
 
     public static SocketFactory getDefault() {
         final TrustAllSocket value = defaultFactory.get();
         if (value == null) {
-            defaultFactory.compareAndSet(null, new TrustAllSocket());
+            try {
+                defaultFactory.compareAndSet(null, new TrustAllSocket());
+            } catch (KeyManagementException e) {
+            	log.error("KeyManagementException: "+e.getLocalizedMessage());
+            } catch (NoSuchAlgorithmException e) {
+                log.error("NoSuchAlgorithmException: "+e.getLocalizedMessage());
+            }
             return defaultFactory.get();
         }
         return value;
