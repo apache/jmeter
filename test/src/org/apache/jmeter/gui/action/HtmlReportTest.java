@@ -17,6 +17,7 @@ import org.apache.jmeter.gui.MainFrame;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.util.JMeterUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -25,7 +26,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class HtmlReportTest extends JMeterTestCase {
+public class HtmlReportTest extends JMeterTestCaseJUnit {
 
     @BeforeClass
     public static void setupTest() throws IOException {
@@ -102,18 +103,6 @@ public class HtmlReportTest extends JMeterTestCase {
         if (testDirectory.exists()) {
             FileUtils.forceDelete(testDirectory);
         }
-    }
-
-    /**
-     * HtmlReportAction should throw NPE as there is no
-     * GuiPackage.getMainFrame()
-     * 
-     * @throws IllegalUserActionException
-     */
-    @Test(expected = NullPointerException.class)
-    public void testDoActionWithoutCallFrame() throws IllegalUserActionException {
-        HtmlReportAction htmlReportAction = new HtmlReportAction();
-        htmlReportAction.doAction(null);
     }
 
     /**

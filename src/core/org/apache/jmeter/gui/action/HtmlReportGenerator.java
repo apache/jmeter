@@ -1,5 +1,6 @@
 package org.apache.jmeter.gui.action;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,30 +46,34 @@ public class HtmlReportGenerator {
         List<String> returnValue = new ArrayList<>();
         List<String> testFilesResult = testArguments();
         if (testFilesResult.isEmpty()) {
-            String commandExecutionError = new String();
+            ByteArrayOutputStream commandExecutionError = new ByteArrayOutputStream();
             int resultCode = -1;
             List<String> generationCommand = createGenerationCommand();
             try {
-                SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterBinDir()), 60000, 100, null, null, null, commandExecutionError);
+                SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterBinDir()), 60000, 100, null, null,
+                        null, commandExecutionError);
                 resultCode = sc.run(generationCommand);
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Running ");
                 }
+                if (resultCode == 0) {
+                    returnValue.add(HTML_REPORT_SUCCESS);
+
+                } else {
+                    returnValue.add(ERROR_GENERATING);
+                    if (LOGGER.isErrorEnabled()) {
+                        LOGGER.error("The HTML report generation failed : {}", commandExecutionError);
+                    }
+                }
             } catch (InterruptedException | IOException e) {
                 returnValue.add(ERROR_GENERATING);
-                if(LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Error during HTML report generation : {}",commandExecutionError);
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Error during HTML report generation : {}", e.getMessage(),e);
                 }
             }
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("SystemCommand ran : {}",generationCommand);
+                LOGGER.debug("SystemCommand ran : {}", generationCommand);
                 LOGGER.debug("SystemCommand returned : {}", resultCode);
-            }
-            if (resultCode == 0) {
-                returnValue.add(HTML_REPORT_SUCCESS);
-
-            } else {
-                returnValue.add(ERROR_GENERATING);
             }
 
         } else {
@@ -90,13 +95,13 @@ public class HtmlReportGenerator {
         arguments.add("-jar");
         arguments.add(JMeterUtils.getJMeterBinDir() + "/ApacheJMeter.jar");
         arguments.add("-p");
-        arguments.add(JMeterUtils.getJMeterBinDir()+"/jmeter.properties");
+        arguments.add(JMeterUtils.getJMeterBinDir() + "/jmeter.properties");
         arguments.add("-q");
         arguments.add(userPropertiesFilePath);
         arguments.add("-g");
         arguments.add(cSVFilePath);
         arguments.add("-j");
-        arguments.add(JMeterUtils.getJMeterBinDir()+"/jmeter.log");
+        arguments.add(JMeterUtils.getJMeterBinDir() + "/jmeter.log");
         arguments.add("-o");
         arguments.add(outputDirectoryPath);
         return arguments;
