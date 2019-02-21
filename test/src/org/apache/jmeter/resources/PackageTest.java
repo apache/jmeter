@@ -100,19 +100,16 @@ public class PackageTest extends TestCase {
             new Object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
     // Read resource file saving the keys
-    private int readRF(String res, List<String> l) throws Exception {
-        int fails = 0;
+    private void readRF(String res, List<String> l) throws Exception {
         InputStream ras = this.getClass().getResourceAsStream(res);
         if (ras == null){
             if (MESSAGES.equals(resourcePrefix)|| lang.length() == 0 ) {
                 throw new IOException("Cannot open resource file "+res);
             } else {
-                return 0;
+                return;
             }
         }
-        BufferedReader fileReader = null;
-        try {
-            fileReader = new BufferedReader(new InputStreamReader(ras));
+        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(ras));) {
             String s;
             while ((s = fileReader.readLine()) != null) {
                 if (s.length() > 0 && !s.startsWith("#") && !s.startsWith("!")) {
@@ -124,8 +121,7 @@ public class PackageTest extends TestCase {
                          * the key, so make sure all keys pass the test
                          */
                         if (key.contains(" ") || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
-                            System.out.println("Invalid key for JMeterUtils " + key);
-                            fails++;
+                            failures.add("Invalid key for JMeterUtils " + key);
                         }
                     }
                     String val = s.substring(equ + 1);
@@ -139,23 +135,17 @@ public class PackageTest extends TestCase {
                     if (val.contains("{0}") && val.contains("'")) {
                         String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
                         if (m.contains("{")) {
-                            fails++;
-                            System.out.println("Incorrect message format ? (input/output) for: "+key);
-                            System.out.println(val);
-                            System.out.println(m);
+                            failures.add("Incorrect message format ? (input/output) for: " + key +
+                                    ". Output contains {, it seems not all paratemeters were replaced." +
+                                    "Format: " + val + ", message with dummy parameters: " + m);
                         }
                     }
 
                     if (!isPureAscii(val)) {
-                        fails++;
-                        System.out.println("Incorrect char value in: "+s);                    
+                        failures.add("Message format should be pure ASCII. Actual format is " + val);
                     }
                 }
             }
-            return fails;
-        }
-        finally {
-            JOrphanUtils.closeQuietly(fileReader);
         }
     }
 
@@ -179,15 +169,14 @@ public class PackageTest extends TestCase {
     private void check(String resname, boolean checkUnexpected) throws Exception {
         ArrayList<String> alf = new ArrayList<>(500);// holds keys from file
         String res = getResName(resname);
-        subTestFailures += readRF(res, alf);
+        readRF(res, alf);
         Collections.sort(alf);
 
         // Look for duplicate keys in the file
         String last = "";
         for (String curr : alf) {
             if (curr.equals(last)) {
-                subTestFailures++;
-                System.out.println("\nDuplicate key =" + curr + " in " + res);
+                failures.add("Duplicate key=" + curr + " in " + res);
             }
             last = curr;
         }
@@ -214,19 +203,18 @@ public class PackageTest extends TestCase {
                 try {
                     String val = defaultPRB.getString(key); // Also Check key is in default
                     if (mainResourceFile && val.equals(prb.getString(key))){
-                        System.out.println("Duplicate value? "+key+"="+val+" in "+res);
-                        subTestFailures++;
+                        failures.add("Duplicate value? "+key+"="+val+" in "+res);
                     }
                 } catch (MissingResourceException e) {
-                    subTestFailures++;
-                    System.out.println(resourcePrefix + "_" + resname + " has unexpected key: " + key);
+                    failures.add(resourcePrefix + "_" + resname + " has unexpected key: " + key);
                 }
             }
         }
 
-        if (subTestFailures > 0) {
-            fail("One or more subtests failed");
+        if (failures.isEmpty()) {
+            return;
         }
+        fail(String.join("\n", failures));
     }
 
     private static final String[] prefixList = getResources(srcFiledir);
@@ -307,8 +295,7 @@ public class PackageTest extends TestCase {
         return ts;
     }
    
-    
-    private int subTestFailures;
+    private List<String> failures = new ArrayList<>();
 
     private final String lang;
     
@@ -321,7 +308,6 @@ public class PackageTest extends TestCase {
     public PackageTest(String testName, String _lang, String propName) {
         super(testName);
         lang=_lang;
-        subTestFailures = 0;
         resourcePrefix = propName;
     }
 
