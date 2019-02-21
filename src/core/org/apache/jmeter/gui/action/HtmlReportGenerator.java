@@ -10,7 +10,7 @@ import org.apache.jorphan.exec.SystemCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HtmlReportAction {
+public class HtmlReportGenerator {
 
     public final static String HTML_REPORT_SUCCESS = "html_report_success";
 
@@ -22,37 +22,48 @@ public class HtmlReportAction {
     public final static String NO_DIRECTORY = "no_such_directory";
     public final static String NOT_EMPTY_DIRECTORY = "directory_not_empty";
 
-    private static Logger LOGGER = LoggerFactory.getLogger(HtmlReportAction.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
 
     private String cSVFilePath;
     private String userPropertiesFilePath;
     private String outputDirectoryPath;
 
-    public HtmlReportAction(String cSVFilePath, String userPropertiesFilePath, String outputDirectoryPath) {
+    public HtmlReportGenerator(String cSVFilePath, String userPropertiesFilePath, String outputDirectoryPath) {
         this.cSVFilePath = cSVFilePath;
         this.userPropertiesFilePath = userPropertiesFilePath;
         if (outputDirectoryPath == null) {
-            this.outputDirectoryPath = JMeterUtils.getJMeterBinDir()+"/report-output/";
+            this.outputDirectoryPath = JMeterUtils.getJMeterBinDir() + "/report-output/";
         } else {
             this.outputDirectoryPath = outputDirectoryPath;
         }
     }
 
     /*
-     * Preapre and Run the HTML report generation command
+     * Prepare and Run the HTML report generation command
      */
     public List<String> run() {
         List<String> returnValue = new ArrayList<>();
         List<String> testFilesResult = testArguments();
         if (testFilesResult.isEmpty()) {
-            SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterBinDir()), null);
+            String commandExecutionError = new String();
             int resultCode = -1;
+            List<String> generationCommand = createGenerationCommand();
             try {
-                resultCode = sc.run(createGenerationCommand());
+                SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterBinDir()), 60000, 100, null, null, null, commandExecutionError);
+                resultCode = sc.run(generationCommand);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Running ");
+                }
             } catch (InterruptedException | IOException e) {
                 returnValue.add(ERROR_GENERATING);
+                if(LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Error during HTML report generation : {}",commandExecutionError);
+                }
             }
-            LOGGER.debug("SystemCommand run returned : {}", resultCode);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("SystemCommand ran : {}",generationCommand);
+                LOGGER.debug("SystemCommand returned : {}", resultCode);
+            }
             if (resultCode == 0) {
                 returnValue.add(HTML_REPORT_SUCCESS);
 
@@ -77,14 +88,17 @@ public class HtmlReportAction {
         String java = System.getProperty("java.home") + "/bin/java";
         arguments.add(java);
         arguments.add("-jar");
-        arguments.add(JMeterUtils.getJMeterBinDir()+"/ApacheJMeter.jar");
+        arguments.add(JMeterUtils.getJMeterBinDir() + "/ApacheJMeter.jar");
+        arguments.add("-p");
+        arguments.add(JMeterUtils.getJMeterBinDir()+"/jmeter.properties");
         arguments.add("-q");
         arguments.add(userPropertiesFilePath);
         arguments.add("-g");
         arguments.add(cSVFilePath);
+        arguments.add("-j");
+        arguments.add(JMeterUtils.getJMeterBinDir()+"/jmeter.log");
         arguments.add("-o");
         arguments.add(outputDirectoryPath);
-        LOGGER.debug("Command line for HTML Report generation : {}", arguments.toString());
         return arguments;
     }
 
@@ -98,17 +112,17 @@ public class HtmlReportAction {
 
         String cSVError = checkFile(new File(cSVFilePath), ".csv");
         if (!cSVError.isEmpty()) {
-            errors.add(JMeterUtils.getResString("csv_file")+cSVError);
+            errors.add(JMeterUtils.getResString("csv_file") + cSVError);
         }
 
         String userPropertiesError = checkFile(new File(userPropertiesFilePath), ".properties");
         if (!userPropertiesError.isEmpty()) {
-            errors.add(JMeterUtils.getResString("user_properties_file")+userPropertiesError);
+            errors.add(JMeterUtils.getResString("user_properties_file") + userPropertiesError);
         }
 
         String outputError = checkDirectory(new File(outputDirectoryPath));
         if (!outputError.isEmpty()) {
-            errors.add(JMeterUtils.getResString("output_directory")+outputError);
+            errors.add(JMeterUtils.getResString("output_directory") + outputError);
         }
         return errors;
     }
