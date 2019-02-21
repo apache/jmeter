@@ -13,18 +13,12 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 
-import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.action.AbstractAction;
-import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.gui.action.HtmlReportAction;
-import org.apache.jmeter.gui.plugin.MenuCreator;
+import org.apache.jmeter.gui.action.ActionNames;
+import org.apache.jmeter.gui.action.HtmlReportGenerator;
 import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.util.JMeterUtils;
@@ -32,44 +26,63 @@ import org.apache.jorphan.gui.ComponentUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.glass.events.KeyEvent;
+import com.helger.commons.annotation.VisibleForTesting;
 
-public class HtmlReportPanel extends AbstractAction implements MenuCreator, ActionListener {
-
+public class HtmlReportPanel implements ActionListener {
+    private static Set<String> commands = new HashSet<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportPanel.class);
-    private static final Set<String> commands = new HashSet<>();
-    public static final String HTML_REPORT = "html_report";
+
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
     private static final String BROWSE_CSV = "BROWSE_CSV";
     private static final String BROWSE_USER_PROPERTIES = "BROWSE_USER_PROPERTIES";
     private static final String BROWSE_OUTPUT = "BROWSE_OUTPUT";
 
-    static {
-        commands.add(HTML_REPORT);
-    }
+    private EscapeDialog messageDialog;
 
     private JTextField cSVFilePathTextField;
     private JTextField userPropertiesFilePathTextField;
     private JTextField outputDirectoryPathTextField;
     private JButton reportLaunchButton;
 
+    static {
+        commands.add(ActionNames.HTML_REPORT);
+    }
+
     public HtmlReportPanel() {
-        super();
+
     }
 
-    @Override
-    public void doAction(ActionEvent e) {
-        showInputDialog();
+    public void showInputDialog() {
+        setupInputDialog();
+        launchInputDialog();
     }
-
-    private void showInputDialog() {
-        EscapeDialog messageDialog = new EscapeDialog(GuiPackage.getInstance().getMainFrame(),
+    
+    private void launchInputDialog() {
+        messageDialog.pack();
+        ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(), messageDialog);
+        SwingUtilities.invokeLater(() -> messageDialog.setVisible(true));
+    }
+    
+    @VisibleForTesting
+    public void setupInputDialog() {
+        messageDialog = new EscapeDialog(GuiPackage.getInstance().getMainFrame(),
                 JMeterUtils.getResString("html_report_menu"), false);
+
+        setupContentPane();
+
+    }
+
+    private void setupContentPane() {
         Container contentPane = messageDialog.getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-        JPanel fileChooserPanel = new JPanel(new GridLayout(3, 3));
+        contentPane.add(setupFileChooserPanel(), BorderLayout.CENTER);
 
+        contentPane.add(setupButtonPanel(), BorderLayout.SOUTH);
+    }
+
+    private JPanel setupFileChooserPanel() {
+        JPanel fileChooserPanel = new JPanel(new GridLayout(3, 3));
         fileChooserPanel.add(new JLabel(JMeterUtils.getResString("csv_file")));
 
         cSVFilePathTextField = new JTextField();
@@ -99,20 +112,17 @@ public class HtmlReportPanel extends AbstractAction implements MenuCreator, Acti
         outputDirectoryButton.setActionCommand(BROWSE_OUTPUT);
         outputDirectoryButton.addActionListener(this);
         fileChooserPanel.add(outputDirectoryButton);
+        return fileChooserPanel;
+    }
 
-        contentPane.add(fileChooserPanel, BorderLayout.CENTER);
-
+    private JPanel setupButtonPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(1, 1));
-        
+
         reportLaunchButton = new JButton(JMeterUtils.getResString("html_report_request"));
         reportLaunchButton.setActionCommand(CREATE_REQUEST);
         reportLaunchButton.addActionListener(this);
         buttonPanel.add(reportLaunchButton);
-        contentPane.add(buttonPanel, BorderLayout.SOUTH);
-
-        messageDialog.pack();
-        ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(), messageDialog);
-        SwingUtilities.invokeLater(() -> messageDialog.setVisible(true));
+        return buttonPanel;
     }
 
     @Override
@@ -126,7 +136,7 @@ public class HtmlReportPanel extends AbstractAction implements MenuCreator, Acti
                 LOGGER.debug("user.properties file path : {}", userPropertiesFilePathTextField.getText());
                 LOGGER.debug("Output directory file path : {}", outputDirectoryPathTextField.getText());
             }
-            HtmlReportAction htmlReportAction = new HtmlReportAction(cSVFilePathTextField.getText(),
+            HtmlReportGenerator htmlReportAction = new HtmlReportGenerator(cSVFilePathTextField.getText(),
                     userPropertiesFilePathTextField.getText(), outputDirectoryPathTextField.getText());
             reportToUser(htmlReportAction.run());
             reportLaunchButton.setText(JMeterUtils.getResString("html_report_request"));
@@ -147,13 +157,15 @@ public class HtmlReportPanel extends AbstractAction implements MenuCreator, Acti
 
     private void reportToUser(List<String> runResults) {
         if (runResults.isEmpty()) {
-            LOGGER.error("No result after HTML Report Generation command");
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("No result after HTML Report Generation command");
+            }
         } else {
             switch (runResults.get(0)) {
-            case HtmlReportAction.ERROR_GENERATING:
+            case HtmlReportGenerator.ERROR_GENERATING:
                 JMeterUtils.reportErrorToUser(JMeterUtils.getResString("html_report_unknown_error"));
                 break;
-            case HtmlReportAction.HTML_REPORT_SUCCESS:
+            case HtmlReportGenerator.HTML_REPORT_SUCCESS:
                 JMeterUtils.reportInfoToUser(JMeterUtils.getResString("html_report_success"),
                         JMeterUtils.getResString("html_report_menu"));
                 break;
@@ -197,36 +209,33 @@ public class HtmlReportPanel extends AbstractAction implements MenuCreator, Acti
         JMeterUtils.reportErrorToUser(errorMessage);
     }
 
-    @Override
-    public Set<String> getActionNames() {
-        return commands;
+    public JTextField getcSVFilePathTextField() {
+        return cSVFilePathTextField;
     }
 
-    @Override
-    public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
-        if (location == MENU_LOCATION.TOOLS) {
-            JMenuItem menuItemIC = new JMenuItem(JMeterUtils.getResString("html_report_menu"), KeyEvent.VK_UNDEFINED);
-            menuItemIC.setName(HTML_REPORT);
-            menuItemIC.setActionCommand(HTML_REPORT);
-            menuItemIC.setAccelerator(null);
-            menuItemIC.addActionListener(ActionRouter.getInstance());
-            return new JMenuItem[] { menuItemIC };
-        }
-        return new JMenuItem[0];
+    public void setcSVFilePathTextField(JTextField cSVFilePathTextField) {
+        this.cSVFilePathTextField = cSVFilePathTextField;
     }
 
-    @Override
-    public JMenu[] getTopLevelMenus() {
-        return new JMenu[0];
+    public JTextField getUserPropertiesFilePathTextField() {
+        return userPropertiesFilePathTextField;
     }
 
-    @Override
-    public boolean localeChanged(MenuElement menu) {
-        return false;
+    public JTextField getOutputDirectoryPathTextField() {
+        return outputDirectoryPathTextField;
     }
 
-    @Override
-    public void localeChanged() {
-        // NOOP
+    public JButton getReportLaunchButton() {
+        return reportLaunchButton;
     }
+
+    public EscapeDialog getMessageDialog() {
+        return messageDialog;
+    }
+
+    @VisibleForTesting
+    public void setMessageDialog(EscapeDialog messageDialog) {
+        this.messageDialog = messageDialog;
+    }
+
 }
