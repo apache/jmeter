@@ -148,11 +148,11 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
+    <li><bug>63198</bug>Response Time Vs Request and Latency Vs Request graphs don't line up with throughput. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Documentation</h3>
 <ul>
-    <li>Change <code>Test Action</code> (old name) to <code>Flow Control Action</code> in Component Reference documentation. Contributed by Ori Marko (orimarko at gmail.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -165,6 +165,7 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
+    <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
