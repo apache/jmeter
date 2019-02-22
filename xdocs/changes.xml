@@ -157,6 +157,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>63201</bug>SearchTreeDialog disappears behind master JFrame. Contributed by Benoit Vatan (benoit.vatan at gmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -166,6 +167,7 @@ Summary
 </p>
 <ul>
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
+    <li>Benoit Vatan (benoit.vatan at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
