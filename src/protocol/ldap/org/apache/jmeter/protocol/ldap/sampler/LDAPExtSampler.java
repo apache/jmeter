@@ -86,7 +86,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
     public static final String SECURE = "secure"; // $NON-NLS-1$
     
-    public static final String TRUSTALL = "TrustAll";
+    public static final String TRUSTALL = "trustall";
 
     public static final String ROOTDN = "rootdn"; // $NON-NLS-1$
 
@@ -670,7 +670,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
         try {
             res.sampleStart();
-            ctx = LdapExtClient.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure(),isTrustAll());
+            ctx = LdapExtClient.connect(getServername(), getPort(), getRootdn(), getUserDN(),
+                    getUserPw(),getConnTimeOut(),isSecure(), isTrustAll());
         } finally {
             res.sampleEnd();
         }
@@ -684,7 +685,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     private void singleBindOp(SampleResult res) throws NamingException {
         try {
             res.sampleStart();
-            DirContext ctx = LdapExtClient.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure(),isTrustAll());
+            DirContext ctx = LdapExtClient.connect(getServername(), getPort(), getRootdn(), 
+                    getUserDN(), getUserPw(),getConnTimeOut(),isSecure(), isTrustAll());
             LdapExtClient.disconnect(ctx);
         } finally {
             res.sampleEnd();
