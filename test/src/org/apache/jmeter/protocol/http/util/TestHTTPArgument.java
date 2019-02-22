@@ -22,9 +22,14 @@ import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class TestHTTPArgument {
+
+        @Rule
+        public final ExpectedException exception = ExpectedException.none();
 
         @Test
         public void testCloning() throws Exception {
@@ -93,5 +98,139 @@ public class TestHTTPArgument {
             arg.setAlwaysEncoded(false);
             assertEquals("", arg.getEncodedName());
             assertEquals("\00\01\07", arg.getEncodedValue());
+        }
+        
+        @Test
+        public void testShift_JISEncoding() throws Exception {
+            HTTPArgument arg;
+            arg = new HTTPArgument("name.?", "value_ here", false, "Shift_JIS");
+            assertEquals("name.?", arg.getName());
+            assertEquals("value_ here", arg.getValue());
+            assertEquals("name.%3F", arg.getEncodedName());
+            assertEquals("value_+here", arg.getEncodedValue());
+            // Show that can bypass encoding:
+            arg.setAlwaysEncoded(false);
+            assertEquals("name.?", arg.getEncodedName());
+            assertEquals("value_ here", arg.getEncodedValue());
+            
+            // The sample does not use a valid encoding
+            arg = new HTTPArgument("name.?", "value_ here", true, "Shift_JIS");
+            assertEquals("name.?", arg.getName());
+            assertEquals("value_ here", arg.getValue());
+            assertEquals("name.%3F", arg.getEncodedName());
+            assertEquals("value_+here", arg.getEncodedValue());
+            arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch 
+            assertEquals("name.?", arg.getEncodedName());
+            assertEquals("value_ here", arg.getEncodedValue());
+            
+            // Try a real encoded argument
+            arg = new HTTPArgument("name.%3F", "value_+here", true, "Shift_JIS");
+            assertEquals("name.?", arg.getName());
+            assertEquals("value_ here", arg.getValue());
+            assertEquals("name.%3F", arg.getEncodedName());
+            assertEquals("value_+here", arg.getEncodedValue());
+            // Show that can bypass encoding:
+            arg.setAlwaysEncoded(false);
+            assertEquals("name.?", arg.getEncodedName());
+            assertEquals("value_ here", arg.getEncodedValue());
+            
+            arg = new HTTPArgument("", "\00\01\07", "", false, "Shift_JIS");
+            arg.setAlwaysEncoded(false);
+            assertEquals("", arg.getEncodedName());
+            assertEquals("\00\01\07", arg.getEncodedValue());
+        }
+        
+        @Test
+        public void testUS_ASCIIEncoding() throws Exception {
+            HTTPArgument arg;
+            arg = new HTTPArgument("name.?", "value_ here", false, "US-ASCII");
+            assertEquals("name.?", arg.getName());
+            assertEquals("value_ here", arg.getValue());
+            assertEquals("name.%3F", arg.getEncodedName());
+            assertEquals("value_+here", arg.getEncodedValue());
+            // Show that can bypass encoding:
+            arg.setAlwaysEncoded(false);
+            assertEquals("name.?", arg.getEncodedName());
+            assertEquals("value_ here", arg.getEncodedValue());
+            
+            // The sample does not use a valid encoding
+            arg = new HTTPArgument("name.?", "value_ here", true, "US-ASCII");
+            assertEquals("name.?", arg.getName());
+            assertEquals("value_ here", arg.getValue());
+            assertEquals("name.%3F", arg.getEncodedName());
+            assertEquals("value_+here", arg.getEncodedValue());
+            arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch 
+            assertEquals("name.?", arg.getEncodedName());
+            assertEquals("value_ here", arg.getEncodedValue());
+            
+            // Try a real encoded argument
+            arg = new HTTPArgument("name.%3F", "value_+here", true, "US-ASCII");
+            assertEquals("name.?", arg.getName());
+            assertEquals("value_ here", arg.getValue());
+            assertEquals("name.%3F", arg.getEncodedName());
+            assertEquals("value_+here", arg.getEncodedValue());
+            // Show that can bypass encoding:
+            arg.setAlwaysEncoded(false);
+            assertEquals("name.?", arg.getEncodedName());
+            assertEquals("value_ here", arg.getEncodedValue());
+            
+            arg = new HTTPArgument("", "\00\01\07", "", false, "US-ASCII");
+            arg.setAlwaysEncoded(false);
+            assertEquals("", arg.getEncodedName());
+            assertEquals("\00\01\07", arg.getEncodedValue());
+        }
+        
+        @Test
+        public void testCP1252Encoding() throws Exception {
+            HTTPArgument arg;
+            arg = new HTTPArgument("name.?", "value_ here", false, "CP1252");
+            assertEquals("name.?", arg.getName());
+            assertEquals("value_ here", arg.getValue());
+            assertEquals("name.%3F", arg.getEncodedName());
+            assertEquals("value_+here", arg.getEncodedValue());
+            // Show that can bypass encoding:
+            arg.setAlwaysEncoded(false);
+            assertEquals("name.?", arg.getEncodedName());
+            assertEquals("value_ here", arg.getEncodedValue());
+            
+            // The sample does not use a valid encoding
+            arg = new HTTPArgument("name.?", "value_ here", true, "CP1252");
+            assertEquals("name.?", arg.getName());
+            assertEquals("value_ here", arg.getValue());
+            assertEquals("name.%3F", arg.getEncodedName());
+            assertEquals("value_+here", arg.getEncodedValue());
+            arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch 
+            assertEquals("name.?", arg.getEncodedName());
+            assertEquals("value_ here", arg.getEncodedValue());
+            
+            // Try a real encoded argument
+            arg = new HTTPArgument("name.%3F", "value_+here", true, "CP1252");
+            assertEquals("name.?", arg.getName());
+            assertEquals("value_ here", arg.getValue());
+            assertEquals("name.%3F", arg.getEncodedName());
+            assertEquals("value_+here", arg.getEncodedValue());
+            // Show that can bypass encoding:
+            arg.setAlwaysEncoded(false);
+            assertEquals("name.?", arg.getEncodedName());
+            assertEquals("value_ here", arg.getEncodedValue());
+            
+            arg = new HTTPArgument("", "\00\01\07", "", false, "CP1252");
+            arg.setAlwaysEncoded(false);
+            assertEquals("", arg.getEncodedName());
+            assertEquals("\00\01\07", arg.getEncodedValue());
+        }
+        
+        @Test
+        public void testDecoderException() throws Exception {
+            //When invalid string is passed error occurs
+            exception.expect(Error.class);
+            new HTTPArgument("s=*&^%~@==y", "\00\01\07", true, "UTF-8");
+        }
+        
+        @Test
+        public void testUnsupportedEncodingException() throws Exception {
+            //When invalid encoding is passed error occurs
+            exception.expect(Error.class);
+            new HTTPArgument("Ravi", "\00\01\07", true, "Sanjay");
         }
 }
