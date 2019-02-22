@@ -82,7 +82,7 @@ public class TrustAllSocket extends SocketFactory {
             try {
                 defaultFactory.compareAndSet(null, new TrustAllSocket());
             } catch (KeyManagementException e) {
-            	log.error("KeyManagementException: "+e.getLocalizedMessage());
+                log.error("KeyManagementException: "+e.getLocalizedMessage());
             } catch (NoSuchAlgorithmException e) {
                 log.error("NoSuchAlgorithmException: "+e.getLocalizedMessage());
             }
