@@ -18,9 +18,16 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 /**
  * Search nodes for a text
@@ -34,12 +41,51 @@ public class SearchTreeCommand extends AbstractAction {
         commands.add(ActionNames.SEARCH_TREE);
     }
 
-    private SearchTreeDialog dialog = new SearchTreeDialog();
+    private SearchTreeDialog dialog;
+
+    /**
+     * <p>
+     * Create the search dialog from the specified source component.<br>
+     * This method tries to find a JFrame ancestor from the specified source in
+     * order to be the parent of the search dialog.<br>
+     * With no parent set the search dialog might be hidden by the main JFrame when
+     * focus is transfered to that JFrame.
+     * </p>
+     * <p>
+     * If no parent if found, then we give up and build a search dialog with no
+     * parent.
+     * </p>
+     * 
+     * @param source The source object that originated the display of the dialog
+     * @return A freshly created search dialog with the parent frame that could be
+     *         found, or no parent otherwise.
+     */
+    private SearchTreeDialog createSearchDialog(Object source) {
+        JFrame parent = null;
+        if (source instanceof JMenuItem) {
+            JMenuItem item = (JMenuItem) source;
+            Component comp = item.getParent();
+            if (comp instanceof JPopupMenu) {
+                JPopupMenu popup = (JPopupMenu) comp;
+                comp = popup.getInvoker();
+                Window window = SwingUtilities.windowForComponent((Component) comp);
+                if (window instanceof JFrame) {
+                    parent = (JFrame) window;
+                }
+            }
+        }
+        return new SearchTreeDialog(parent);
+    }
+    
     /**
      * @see Command#doAction(ActionEvent)
      */
     @Override
     public void doAction(ActionEvent e) {
+        // we create the dialog upon first display event only
+        if (dialog == null) {
+            dialog = createSearchDialog(e.getSource());
+        }
         dialog.setVisible(true);
     }
 

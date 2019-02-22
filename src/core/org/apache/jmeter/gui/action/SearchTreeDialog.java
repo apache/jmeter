@@ -111,8 +111,8 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
     private List<JMeterTreeNode> lastSearchResult = new ArrayList<>();
     private int currentSearchIndex;
 
-    public SearchTreeDialog() {
-        super((JFrame) null, JMeterUtils.getResString("search_tree_title"), false); //$NON-NLS-1$
+    public SearchTreeDialog(JFrame parent) {
+        super(parent, JMeterUtils.getResString("search_tree_title"), false); //$NON-NLS-1$
         init();
     }
 
