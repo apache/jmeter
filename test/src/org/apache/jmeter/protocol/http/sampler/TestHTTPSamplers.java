@@ -382,7 +382,6 @@ public class TestHTTPSamplers {
             sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("bin/jmeter.properties", "", "")});
 
             SampleResult sample = sampler.sample();
-            System.out.println(sample.getResponseDataAsString());
             assertFalse(sample.getResponseDataAsString().contains("java.io.FileNotFoundException:"));
         } finally {
             FileServer.getFileServer().setBase(baseDir);
