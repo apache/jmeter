@@ -108,6 +108,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><pr>444</pr> Update to latest Spock v1.2 (was 1.0). Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -168,6 +169,7 @@ Summary
 <ul>
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Benoit Vatan (benoit.vatan at gmail.com)</li>
+    <li>Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
