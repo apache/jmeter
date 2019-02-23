@@ -25,9 +25,12 @@ class ListResultDataSpec extends Specification {
 
     def sut = new ListResultData()
 
+    def "a new ListResultData is empty"() {
+        expect:
+            new ListResultData().size() == 0
+    }
+
     def "addResult adds #object to list and returns true"() {
-        given:
-            assert sut.getSize() == 0
         when:
             def result = sut.addResult(object)
         then:
