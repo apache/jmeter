@@ -23,7 +23,11 @@ import spock.lang.Specification
 import java.nio.charset.Charset
 
 /**
- * Common setup for Spock test cases
+ * Common setup for Spock test cases.
+ * <p>
+ * Please only use this class if you <em>need</em> the things set up here.
+ * <p>
+ * Otherwise, extend {@link Specification}
  */
 abstract class JMeterSpec extends Specification {
 

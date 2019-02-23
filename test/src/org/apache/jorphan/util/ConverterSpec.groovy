@@ -15,107 +15,93 @@
  * limitations under the License.
  */
 
-package org.apache.jorphan.util;
+package org.apache.jorphan.util
 
-import java.awt.event.ActionEvent
 
-import org.apache.jmeter.junit.spock.JMeterSpec
-
-import spock.lang.IgnoreIf
+import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
-class ConverterSpec extends JMeterSpec {
+class ConverterSpec extends Specification {
 
-    def "convert #value to #type should give [#expected] when value or type is null"() {
-        when:
-          def converted = Converter.convert(value, type)
-        then:
-          converted == expected
+    def 'convert #value to #type should give "" when value or type is null'() {
+        expect:
+            Converter.convert(value, type) == ""
         where:
-          value | type              | expected
-          null       | null         | ""
-          "anything" | null         | ""
-          23         | null         | ""
-          null       | String.class | ""
-          null       | Number.class | ""
+            value      | type
+            null       | null
+            "anything" | null
+            23         | null
+            null       | String.class
+            null       | Number.class
     }
 
     def "convert #value to #type should downcast gracefully and give [#expected]"() {
-        when:
-          def converted = Converter.convert(value, type)
-        then:
-          converted == expected
+        expect:
+            Converter.convert(value, type) == expected
         where:
-          value      | type         | expected
-          "anything" | String.class | "anything"
-          "anything" | Object.class | "anything"
-          23         | Number.class | 23
+            value      | type         | expected
+            "anything" | Object.class | "anything"
+            23         | Number.class | 23
     }
 
     def "convert #value to string should give [#expected]"() {
-        when:
-          def converted = Converter.convert(value, String.class)
-        then:
-          converted == expected
+        expect:
+            Converter.convert(value, String.class) == expected
         where:
-          value               | expected
-          "anything"          | "anything"
-          23                  | "23"
+            value      | expected
+            "anything" | "anything"
+            23         | "23"
+            42L        | "42"
+            64f        | "64.0"
     }
 
-    def "convert #value to #type should give number [#expected]"() {
-        when:
-          def converted = Converter.convert(value, type)
-        then:
-          Math.abs(converted - expected) < expected * 0.000001
+    def "convert #value to number #type should give number [#expected]"() {
+        expect:
+            Converter.convert(value, type) == expected
         where:
-          value      | type         | expected
-          23f        | float.class  | 23f
-          42f        | Float.class  | 42f
-          "42"       | Float.class  | 42f
-          23f        | double.class | 23d
-          42f        | Double.class | 42d
-          "42"       | Double.class | 42d
-          23l        | int.class    | 23
-          42         | Integer.class| 42
-          "42"       | Integer.class| 42
-          23l        | long.class   | 23
-          42         | Long.class   | 42
-          "42"       | Long.class   | 42
+            value | type          | expected
+            23f   | float.class   | 23f
+            42f   | Float.class   | 42f
+            "42"  | Float.class   | 42f
+            23f   | double.class  | 23d
+            42f   | Double.class  | 42d
+            "42"  | Double.class  | 42d
+            23L   | int.class     | 23
+            42    | Integer.class | 42
+            "42"  | Integer.class | 42
+            23L   | long.class    | 23L
+            42    | Long.class    | 42L
+            "42"  | Long.class    | 42L
     }
 
-    def "Convert #value to diverse class types (#type)"() {
-        when:
-          def converted = Converter.convert(value, type)
-        then:
-          converted == expected
+    def "Convert #value to Class gives #expected"() {
+        expect:
+            Converter.convert(value, Class.class) == expected
         where:
-          value              | type        | expected
-          "java.lang.String" | Class.class | String.class
-          "not.a.valid.class"| Class.class | "not.a.valid.class"
+            value               | expected
+            "java.lang.String"  | String.class
+            "not.a.valid.class" | "not.a.valid.class"
     }
 
     def "Convert #value to #type"() {
-        when:
-          def converted = Converter.convert(value, type)
-        then:
-          converted == expected
+        expect:
+            Converter.convert(value, type) == expected
         where:
-          value                | type            | expected
-          ""                   | Boolean.class   | false
-          "true"               | Boolean.class   | true
-          true                 | Boolean.class   | true
-          false                | Boolean.class   | false
-          ""                   | boolean.class   | false
-          "true"               | boolean.class   | true
-          true                 | boolean.class   | true
-          false                | boolean.class   | false
-          "filename"           | File.class      | new File("filename")
-          new File("filename") | File.class      | new File("filename")
-          "c"                  | Character.class | 'c'
-          "c"                  | char.class      | 'c'
-          "char"               | char.class      | 'c'
-          65                   | char.class      | 'A'
+            value                | type            | expected
+            ""                   | Boolean.class   | false
+            "true"               | Boolean.class   | true
+            true                 | Boolean.class   | true
+            false                | Boolean.class   | false
+            ""                   | boolean.class   | false
+            "true"               | boolean.class   | true
+            true                 | boolean.class   | true
+            false                | boolean.class   | false
+            "filename"           | File.class      | new File("filename")
+            new File("filename") | File.class      | new File("filename")
+            "c"                  | Character.class | 'c'
+            "c"                  | char.class      | 'c'
+            "char"               | char.class      | 'c'
+            65                   | char.class      | 'A'
     }
 }
