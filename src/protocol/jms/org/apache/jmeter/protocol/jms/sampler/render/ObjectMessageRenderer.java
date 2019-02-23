@@ -66,8 +66,7 @@ class ObjectMessageRenderer implements MessageRenderer<Serializable> {
     public Serializable getValueFromText(final String xmlMessage) {
       Serializable readObject = null;
       try {
-          XStream xstream = new XStream();
-          JMeterUtils.setupXStreamSecurityPolicy(xstream);
+          XStream xstream = JMeterUtils.createXStream();
           readObject = (Serializable) xstream.fromXML(xmlMessage, readObject);
       } catch (Exception e) {
           throw new IllegalStateException("Unable to load object instance from text", e);
@@ -86,7 +85,7 @@ class ObjectMessageRenderer implements MessageRenderer<Serializable> {
             encoding = findEncoding(filename);
         }
         String stringValue = delegate.getValueFromFile(filename, encoding, hasVariable, cache);
-        value = (Serializable) new XStream().fromXML(stringValue);
+        value = (Serializable) JMeterUtils.createXStream().fromXML(stringValue);
         return value;
     }
 
@@ -102,6 +101,6 @@ class ObjectMessageRenderer implements MessageRenderer<Serializable> {
     }
 
     protected Serializable getContent(String filename) {
-        return (Serializable) new XStream().fromXML(new File(filename));
+        return (Serializable) JMeterUtils.createXStream().fromXML(new File(filename));
     }
 }
