@@ -14,24 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.jmeter.extractor
 
-package org.apache.jmeter.extractor;
-
-import java.awt.event.ActionEvent
-
-import org.apache.jmeter.junit.spock.JMeterSpec
-
-import spock.lang.IgnoreIf
+import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
-class JoddExtractorSpec extends JMeterSpec {
+class JoddExtractorSpec extends Specification {
 
     def "extract #expression and #attribute"() {
-        when:
-          def extractor = new JoddExtractor()
-          def resultList = []
-          def input = """
+        given:
+            def resultList = []
+            def input = """
 <html>
   <head><title>Test</title></head>
   <body>
@@ -41,14 +35,16 @@ class JoddExtractorSpec extends JMeterSpec {
   </body>
 </html>
 """
+        when:
+            def foundCount = new JoddExtractor().extract(expression, attribute, matchNumber, input, resultList, found, cacheKey)
         then:
-          expected == extractor.extract(expression, attribute, matchNumber, input, resultList, found, cacheKey)
-          expectedList == resultList
+            foundCount == expected
+            resultList == expectedList
         where:
-          expression        | attribute | matchNumber | expectedList                  | found | expected | cacheKey
-          "p"               | ""        | 1           | ["Some text"]                 | -1    | 0        | "key"
-          "h1[class=title]" | "class"   | 1           | ["title"]                     | -1    | 0        | "key"
-          "h1"              | ""        | 0           | ["TestTitle", "AnotherTitle"] | -1    | 1        | "key"
-          "notthere"        | ""        | 0           | []                            | -1    | -1       | "key"
+            expression        | attribute | matchNumber | expectedList                  | found | expected | cacheKey
+            "p"               | ""        | 1           | ["Some text"]                 | -1    | 0        | "key"
+            "h1[class=title]" | "class"   | 1           | ["title"]                     | -1    | 0        | "key"
+            "h1"              | ""        | 0           | ["TestTitle", "AnotherTitle"] | -1    | 1        | "key"
+            "notthere"        | ""        | 0           | []                            | -1    | -1       | "key"
     }
 }

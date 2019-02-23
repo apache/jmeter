@@ -13,31 +13,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-
 package org.apache.jmeter.report.processor
 
+import org.apache.jmeter.report.core.Sample
+import org.apache.jmeter.report.core.SampleMetadata
 import spock.lang.Specification
-import spock.lang.Unroll
 
-@Unroll
-class ListResultDataSpec extends Specification {
+class FieldSampleComparatorSpec extends Specification {
 
-    def sut = new ListResultData()
+    def sampleMetadata = new SampleMetadata(',' as char, "test")
+    def comparator = new FieldSampleComparator("test")
 
-    def "a new ListResultData is empty"() {
+    def testCompare() {
+        given:
+            def s1 = new Sample(0, sampleMetadata, "1")
+            def s2 = new Sample(1, sampleMetadata, "2")
+            comparator.initialize(sampleMetadata)
         expect:
-            new ListResultData().size() == 0
+            comparator.compare(s1, s2) < 0
+            comparator.compare(s2, s1) > 0
+            comparator.compare(s1, s1) == 0
+            comparator.compare(s2, s2) == 0
     }
 
-    def "addResult adds #object to list and returns true"() {
-        when:
-            def result = sut.addResult(object)
-        then:
-            result
-            sut.getSize() == 1
-            sut.get(0) == object
-        where:
-            object << [null, Mock(ResultData), new ListResultData()]
-    }
 }

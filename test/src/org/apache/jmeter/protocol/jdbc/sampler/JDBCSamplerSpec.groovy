@@ -18,9 +18,9 @@
 package org.apache.jmeter.protocol.jdbc.sampler
 
 import org.apache.jmeter.config.ConfigTestElement
-import org.apache.jmeter.junit.spock.JMeterSpec
 import org.apache.jmeter.samplers.SampleResult
 import org.apache.jmeter.testelement.property.JMeterProperty
+import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.sql.Connection
@@ -30,7 +30,7 @@ import java.sql.SQLException
 import java.sql.Statement
 
 @Unroll
-class JDBCSamplerSpec extends JMeterSpec {
+class JDBCSamplerSpec extends Specification {
 
     def sut = new JDBCSampler()
 
