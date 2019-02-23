@@ -159,10 +159,10 @@ public class JMeterVersionTest extends JMeterTestCase {
                     jar=jar.replace("-jdk15on","");
                 } else if (jar.equals("commons-jexl") && version.startsWith("2")) { // special handling
                     jar = "commons-jexl2";
-                } else if (jar.equals("spock-core-1.0-groovy")) { // special handling
+                } else if (jar.equals("spock-core-1.2-groovy")) { // special handling
                     jar = "spock-core";
-                    version = "1.0-groovy-2.4";
-                }else {
+                    version = "1.2-groovy-2.4";
+                } else {
                     String tmp = JAR_TO_BUILD_PROP.get(jar);
                     if (tmp != null) {
                         jar = tmp;
@@ -186,10 +186,8 @@ public class JMeterVersionTest extends JMeterTestCase {
                 propNames.remove(jar);
                 if (expected == null) {
                     fail("Versions list does not contain: " + jar);
-                } else {
-                    if (!version.equals(expected)) {
-                        assertEquals(jar,version,expected);
-                    }
+                } else if (!version.equals(expected)) {
+                    assertEquals(jar,version,expected);
                 }
             }
         }
