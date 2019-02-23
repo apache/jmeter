@@ -3589,6 +3589,7 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${lib.opt}" includes="org.jacoco.ant-*-nodeps.jar" excludes="${jacocoant.jar}"/>
       <!-- tidy up unused slf4j-ext jar -->
       <fileset dir="${lib.dir}" includes="slf4j-ext-1.7.25.jar" />
+      <fileset dir="${lib.dir}" includes="spock-core-1.0-groovy-2.4.jar" />
     </delete>
     <antcall target="_process_all_jars">
         <param name="_get_file" value="true"/>
