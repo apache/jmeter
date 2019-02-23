@@ -18,9 +18,7 @@
 package org.apache.jmeter.assertions
 
 import org.apache.jmeter.assertions.gui.AssertionGui;
-import org.apache.commons.lang3.StringUtils
 import org.apache.jmeter.junit.spock.JMeterSpec
-import org.apache.jmeter.samplers.SampleResult
 import spock.lang.Unroll
 
 import java.nio.charset.StandardCharsets
@@ -37,14 +35,14 @@ class AssertionGuiSpec extends JMeterSpec {
             notThrown(Exception)
     }
     
-    def "clearGui fails"() {
+    def "GUI component fields clearing fails"() {
         when:
             sut.clearGui()
         then:
             notThrown(Exception)
     }
     
-    def "createTestElement fails"() {
+    def "Creation of ResponseAssertion fails"() {
         when:
             def result = sut.createTestElement()
         then:
@@ -52,7 +50,7 @@ class AssertionGuiSpec extends JMeterSpec {
             result.isEnabled()
     }
     
-    def "modifyElement has unexpected behaviour"() {
+    def "Modification of ResponseAssertion by GUI has unexpected behaviour"() {
         given:
             def element = new ResponseAssertion();
             sut.clearGui()
@@ -67,7 +65,7 @@ class AssertionGuiSpec extends JMeterSpec {
             element.isSubstringType()
     }
     
-    def "configure has unexpected behaviour"() {
+    def "Modification of GUI by ResponseAssertion has unexpected behaviour"() {
         given:
             def element = new ResponseAssertion();
         when:
