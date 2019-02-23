@@ -125,6 +125,7 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
+    <li><bug>63202</bug>JMS Publisher : ObjectMessageRenderer creates XStream instance with unitialized security</li>
 </ul>
 
 <h3>Controllers</h3>

@@ -1315,4 +1315,13 @@ public class JMeterUtils implements UnitTestManager {
                 .append(elementName)
                 .toString();
     }
+
+    /** 
+     * @return {@link XStream} XStream instance following JMeter security policy
+     */
+    public static final XStream createXStream() {
+        XStream xstream = new XStream();
+        JMeterUtils.setupXStreamSecurityPolicy(xstream);
+        return xstream;
+    }
 }
