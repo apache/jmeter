@@ -15,17 +15,14 @@
  * limitations under the License.
  */
 
-package org.apache.jorphan.util;
+package org.apache.jorphan.util
 
-import java.awt.event.ActionEvent
 
-import org.apache.jmeter.junit.spock.JMeterSpec
-
-import spock.lang.IgnoreIf
+import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
-class ConverterSpec extends JMeterSpec {
+class ConverterSpec extends Specification {
 
     def "convert #value to #type should give [#expected] when value or type is null"() {
         when:
