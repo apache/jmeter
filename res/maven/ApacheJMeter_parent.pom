@@ -109,7 +109,7 @@ under the License.
       <log4j-core.version>2.11.1</log4j-core.version>
       <log4j-slf4j-impl.version>2.11.1</log4j-slf4j-impl.version>
       <log4j-1.2-api.version>2.11.1</log4j-1.2-api.version>
-      <spock-core.version>1.0-groovy-2.4</spock-core.version>
+      <spock-core.version>1.2-groovy-2.4</spock-core.version>
       <cglib-nodep.version>3.2.9</cglib-nodep.version>
       <objenesis.version>2.6</objenesis.version>
       <jtidy.version>r938</jtidy.version>
