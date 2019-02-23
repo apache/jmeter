@@ -58,12 +58,12 @@ class AssertionGuiSpec extends JMeterSpec {
         when:
             sut.modifyTestElement(element)
         then:
-            element.getName().isEmpty()
+            element.getName().equals("Response Assertion")
             element.isTestFieldResponseData()
             element.getTestStrings().isEmpty()
-            reult.isAssumeSuccess()
-            result.isSubstringType()
-            !result.isNotType()
+            !element.getAssumeSuccess()
+            element.isSubstringType()
+            !element.isNotType()
     }
     
     def "configure has unexpected behaviour"() {
