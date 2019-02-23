@@ -18,14 +18,14 @@
 package org.apache.jmeter.assertions
 
 import org.apache.commons.lang3.StringUtils
-import org.apache.jmeter.junit.spock.JMeterSpec
 import org.apache.jmeter.samplers.SampleResult
+import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.nio.charset.StandardCharsets
 
 @Unroll
-class MD5HexAssertionSpec extends JMeterSpec {
+class MD5HexAssertionSpec extends Specification {
 
     def sut = new MD5HexAssertion()
 

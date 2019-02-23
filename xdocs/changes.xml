@@ -108,7 +108,8 @@ Summary
 
 <h3>General</h3>
 <ul>
-    <li><pr>444</pr> Update to latest Spock v1.2 (was 1.0). Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>444</pr>Update to latest Spock v1.2 (was 1.0). Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>446</pr>Improve Unit tests readability and use of Spock. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

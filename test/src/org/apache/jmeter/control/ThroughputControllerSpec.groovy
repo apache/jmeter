@@ -90,25 +90,25 @@ class ThroughputControllerSpec extends Specification {
      */
     def "0 maxThroughput does not run any sampler inside the TC and does not cause StackOverFlowError"() {
         given:
-        sut.setStyle(ThroughputController.BYNUMBER)
-        sut.setMaxThroughput(0)
+            sut.setStyle(ThroughputController.BYNUMBER)
+            sut.setMaxThroughput(0)
 
-        LoopController innerLoop = new LoopController()
-        innerLoop.setLoops(10000)
-        innerLoop.addTestElement(sut)
-        innerLoop.addIterationListener(sut)
-        innerLoop.initialize()
-        innerLoop.setRunningVersion(true)
-        sut.testStarted()
-        sut.setRunningVersion(true)
+            LoopController innerLoop = new LoopController()
+            innerLoop.setLoops(10000)
+            innerLoop.addTestElement(sut)
+            innerLoop.addIterationListener(sut)
+            innerLoop.initialize()
+            innerLoop.setRunningVersion(true)
+            sut.testStarted()
+            sut.setRunningVersion(true)
 
         when:
-            innerLoop.next() == null;
+            innerLoop.next() == null
             innerLoop.next() == null
         then:
             sut.testEnded()
     }
-    
+
     /**
      * <pre>
      *   - innerLoop
@@ -119,20 +119,20 @@ class ThroughputControllerSpec extends Specification {
      */
     def "0.0 percentThroughput does not run any sampler inside the TC and does not cause StackOverFlowError"() {
         given:
-        sut.setStyle(ThroughputController.BYPERCENT)
-        sut.setPercentThroughput("0.0")
+            sut.setStyle(ThroughputController.BYPERCENT)
+            sut.setPercentThroughput("0.0")
 
-        LoopController innerLoop = new LoopController()
-        innerLoop.setLoops(10000)
-        innerLoop.addTestElement(sut)
-        innerLoop.addIterationListener(sut)
-        innerLoop.initialize()
-        innerLoop.setRunningVersion(true)
-        sut.testStarted()
-        sut.setRunningVersion(true)
+            LoopController innerLoop = new LoopController()
+            innerLoop.setLoops(10000)
+            innerLoop.addTestElement(sut)
+            innerLoop.addIterationListener(sut)
+            innerLoop.initialize()
+            innerLoop.setRunningVersion(true)
+            sut.testStarted()
+            sut.setRunningVersion(true)
 
         when:
-            innerLoop.next() == null;
+            innerLoop.next() == null
             innerLoop.next() == null
         then:
             sut.testEnded()
@@ -222,7 +222,7 @@ class ThroughputControllerSpec extends Specification {
      * </pre>
      *
      * @param innerLoops number of times to loop the {@link ThroughputController}
-     * @return the {@link LoopController}
+     * @return the{@link LoopController}
      */
     def createLoopController(int innerLoops) {
         LoopController innerLoop = new LoopController()
