@@ -23,6 +23,21 @@ class Top5ErrorsSummaryDataSpec extends Specification {
 
     def sut = new Top5ErrorsSummaryData()
 
+    def "error and total count start at 0"() {
+        expect:
+            sut.getErrors() == 0
+            sut.getTotal() == 0
+    }
+
+    def "error and total count increment by one each time"() {
+        when:
+            sut.incErrors()
+            sut.incTotal()
+        then:
+            sut.getErrors() == 1
+            sut.getTotal() == 1
+    }
+
     def "when no errors are registered an array with null values is returned"() {
         expect:
             sut.getTop5ErrorsMetrics() == new Object[5][2]
@@ -37,26 +52,9 @@ class Top5ErrorsSummaryDataSpec extends Specification {
 
     def "error messages are sorted by size, descending"() {
         given:
-            ["A", "A", "A", "B", "B", "C"].each {
-                sut.registerError(it)
-            }
+            ["A", "A", "A", "B", "B", "C"].each { sut.registerError(it) }
         expect:
             sut.getTop5ErrorsMetrics() == [["A", 3], ["B", 2], ["C", 1], [null, null], [null, null]]
-    }
-
-    def "error and total count start at 0"() {
-        expect:
-            sut.getErrors() == 0
-            sut.getTotal() == 0
-    }
-
-    def "error and total count increment by one each time"() {
-        when:
-            sut.incErrors()
-            sut.incTotal()
-        then:
-            sut.getErrors() == 1
-            sut.getTotal() == 1
     }
 
 }
