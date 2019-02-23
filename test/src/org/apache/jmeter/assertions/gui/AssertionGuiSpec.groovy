@@ -17,60 +17,56 @@
 
 package org.apache.jmeter.assertions.gui
 
-import org.apache.jmeter.assertions.gui.AssertionGui
+import org.apache.jmeter.assertions.ResponseAssertion
 import org.apache.jmeter.junit.spock.JMeterSpec
-import spock.lang.Unroll
 
-import java.nio.charset.StandardCharsets
-
-@Unroll
 class AssertionGuiSpec extends JMeterSpec {
 
     def sut = new AssertionGui()
 
-    def "init of component fails"() {
+    def "init of component doesn't fail"() {
         when:
             sut.init()
         then:
-            notThrown(Exception)
+            noExceptionThrown()
     }
-    
-    def "GUI component fields clearing fails"() {
+
+    def "clearing GUI component fields doesn't fail"() {
         when:
             sut.clearGui()
         then:
-            notThrown(Exception)
+            noExceptionThrown()
     }
-    
-    def "Creation of ResponseAssertion fails"() {
+
+    def "Creation of ResponseAssertion doesn't fail"() {
         when:
             def result = sut.createTestElement()
         then:
-            result.getName().equals("Response Assertion")
+            result.getName() == "Response Assertion"
             result.isEnabled()
     }
-    
-    def "Modification of ResponseAssertion by GUI has unexpected behaviour"() {
+
+    def "Modification of ResponseAssertion by GUI has no unexpected behaviour"() {
         given:
-            def element = new ResponseAssertion();
+            def element = new ResponseAssertion()
             sut.clearGui()
         when:
             sut.modifyTestElement(element)
         then:
-            element.getName().equals("Response Assertion")
+            element.getName() == "Response Assertion"
             element.isTestFieldResponseData()
             element.getTestStrings().isEmpty()
             !element.getAssumeSuccess()
             !element.isNotType()
             element.isSubstringType()
     }
-    
-    def "Modification of GUI by ResponseAssertion has unexpected behaviour"() {
+
+    def "Modification of GUI by ResponseAssertion has no unexpected behaviour"() {
         given:
-            def element = new ResponseAssertion();
+            def element = new ResponseAssertion()
         when:
             sut.configure(element)
         then:
-            notThrown(Exception)
+            noExceptionThrown()
     }
 }
