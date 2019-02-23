@@ -25,7 +25,7 @@ import org.apache.jmeter.report.core.SampleMetadata;
  * @since 3.0
  */
 public class FieldSampleComparator implements SampleComparator {
-    
+
     private int index;
 
     private final String fieldName;
@@ -41,7 +41,7 @@ public class FieldSampleComparator implements SampleComparator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.core.SampleComparator#compare(org.apache
      * .jmeter.report.csv.core.Sample, org.apache.jmeter.report.csv.core.Sample)

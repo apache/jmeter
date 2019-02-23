@@ -37,4 +37,5 @@ class FieldSampleComparatorSpec extends Specification {
             comparator.compare(s1, s1) == 0
             comparator.compare(s2, s2) == 0
     }
+
 }
