@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.assertions
+package org.apache.jmeter.assertions.gui
 
-import org.apache.jmeter.assertions.gui.AssertionGui;
+import org.apache.jmeter.assertions.gui.AssertionGui
 import org.apache.jmeter.junit.spock.JMeterSpec
 import spock.lang.Unroll
 
