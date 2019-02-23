@@ -55,6 +55,7 @@ class AssertionGuiSpec extends JMeterSpec {
     def "modifyElement has unexpected behaviour"() {
         given:
             def element = new ResponseAssertion();
+            sut.clearGui()
         when:
             sut.modifyTestElement(element)
         then:
@@ -62,8 +63,8 @@ class AssertionGuiSpec extends JMeterSpec {
             element.isTestFieldResponseData()
             element.getTestStrings().isEmpty()
             !element.getAssumeSuccess()
-            element.isSubstringType()
             !element.isNotType()
+            element.isSubstringType()
     }
     
     def "configure has unexpected behaviour"() {
