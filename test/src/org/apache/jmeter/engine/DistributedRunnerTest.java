@@ -125,7 +125,8 @@ public class DistributedRunnerTest {
         @Override
         protected JMeterEngine createEngine(String address) {
             if (engines.isEmpty()) {
-                throw new IllegalArgumentException("Throwing on Engine creation to simulate failure");
+                // Throwing on Engine creation to simulate failure
+                throw new IllegalArgumentException();
             }
             EmulatorEngine engine = engines.remove(0);
             engine.setHost(address);
