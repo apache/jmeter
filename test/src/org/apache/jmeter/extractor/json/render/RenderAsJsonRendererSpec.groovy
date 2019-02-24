@@ -57,19 +57,39 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
             sut.jsonDataField.getText() == ""
     }
     
-    def "render JSON Response"() {
+    def "render '#input' as JSON Response to '#output'"() {
         given:
             sut.init();
             def sampleResult = new SampleResult();
-            sampleResult.setResponseData("{name:\"Ludwig\",age: 23,city: \"Bonn\"}");
         when:
+            sampleResult.setResponseData(input);
             sut.renderResult(sampleResult)
         then:
-            sut.jsonDataField.getText() == '''{
+            output == sut.jsonDataField.getText()
+        where:
+            input               |   output
+            "This is not json"  |   "This is not json" 
+            "{name:\"Ludwig\",age: 23,city: \"Bonn\"}" | '''{
     "city": "Bonn",
     "name": "Ludwig",
     "age": 23
 }'''
+    }
+    
+    def "execute '#expression' on '#input' results into '#output'"() {
+        given:
+            sut.init();
+            sut.jsonPathExpressionField.setText(expression);
+            def sampleResult = new SampleResult();
+        when:
+            sut.executeAndJSonPathTester(input);
+        then:
+            output == sut.jsonPathResultField.getText()
+        where:
+            input               | expression          | output
+            "{name:\"Ludwig\",age: 23,city: \"Bonn\"}"   | "\$..name"           | "Result[0]=Ludwig\n"
+            "This is not json"  | "\$..name" | "NO MATCH" 
+            "{name:\"Ludwig\",age: 23,city: \"Bonn\"}" | "\$.." | "Exception: Path must not end with a '.' or '..'"
     }
     
     def "clearData clears expected fields"() {
