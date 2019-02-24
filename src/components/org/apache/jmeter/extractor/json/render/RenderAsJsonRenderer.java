@@ -118,8 +118,9 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     }
 
     private String process(String textToParse) {
+        String jsonPathExpression = jsonPathExpressionField.getText();
         try {
-            List<Object> matchStrings = extractWithJSonPath(textToParse, jsonPathExpressionField.getText());
+            List<Object> matchStrings = extractWithJSonPath(textToParse, jsonPathExpression);
             if (matchStrings.isEmpty()) {
                 return NO_MATCH; //$NON-NLS-1$
             } else {
@@ -133,7 +134,8 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
                 return builder.toString();
             }
-        } catch (Exception e) {
+        } catch (Exception e) { // NOSONAR We handle it through return message
+            log.debug("Exception extracting from '{}' with JSON Path expression '{}'", textToParse, jsonPathExpression);
             return "Exception: " + e.getMessage(); //$NON-NLS-1$
         }
     }
