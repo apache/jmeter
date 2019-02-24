@@ -1,6 +1,16 @@
 # Directory trees to ignore
 /backups/
 /build/
+/buildSrc/build/
+/buildSrc/subprojects/*/build/**
+/buildSrc/subprojects/*/bin/**
+/buildSrc/subprojects/*/out/**
+/src/*/build/
+/src/*/bin/
+/src/*/out/
+/src/protocol/*/build/
+/src/protocol/*/bin/
+/src/protocol/*/out/
 /dist/
 /docs/
 /local/
@@ -10,6 +20,14 @@
 /target/
 
 !/bin/report-template/**/dist
+/bin/temp/
+/bin/testfiles/testReport*
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# macOS
+.DS_Store
 
 # specific files to ignore
 *.log
