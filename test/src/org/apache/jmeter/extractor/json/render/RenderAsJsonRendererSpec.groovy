@@ -24,8 +24,8 @@ import org.apache.jmeter.util.JMeterUtils
 import javax.swing.JTabbedPane
 import org.apache.jmeter.junit.categories.NeedGuiTests
 import org.junit.experimental.categories.Category
+import spock.lang.IgnoreIf
 
-@Category(NeedGuiTests.class)
 class RenderAsJsonRendererSpec extends JMeterSpec {
     def sut = new RenderAsJsonRenderer()
 
@@ -37,6 +37,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
             sut.jsonWithJSonPathPanel != null;
     }
     
+    @IgnoreIf({ JMeterSpec.isHeadless() })
     def "render image"() {
         given:
             sut.init()
@@ -57,6 +58,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
             sut.jsonDataField.getText() == ""
     }
     
+    @IgnoreIf({ JMeterSpec.isHeadless() })
     def "render '#input' as JSON Response to '#output'"() {
         given:
             sut.init();
