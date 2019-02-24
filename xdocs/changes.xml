@@ -114,6 +114,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Bug 63203 - Unit Tests : Replace use of <code>@Deprecated</code> by <code>@VisibleForTesting</code> for methods/constructors/classes made public for Unit Testing only</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
