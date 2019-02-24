@@ -32,7 +32,7 @@ import java.lang.annotation.RetentionPolicy;
  * The default is to consider the element private.
  * 
  * Copy of this class under ASL license:
- * https://github.com/aosp-mirror/platform_frameworks_base/blob/8b2c3a14603d163d7564e6f60286995079687690/core/java/com/android/internal/annotations/VisibleForTesting.java
+ * https://github.com/aosp-mirror/platform_frameworks_base/blob/master/core/java/com/android/internal/annotations/VisibleForTesting.java
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
