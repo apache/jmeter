@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
 public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
     private static final Logger log = LoggerFactory.getLogger(RenderAsJsonRenderer.class);
-
+    private static final String NO_MATCH = "NO MATCH"; //$NON-NLS-1$
     private static final String TAB_SEPARATOR = "    "; //$NON-NLS-1$
     
     private static final String JSONPATH_TESTER_COMMAND = "jsonpath_tester"; // $NON-NLS-1$
@@ -121,7 +121,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         try {
             List<Object> matchStrings = extractWithJSonPath(textToParse, jsonPathExpressionField.getText());
             if (matchStrings.isEmpty()) {
-                return "NO MATCH"; //$NON-NLS-1$
+                return NO_MATCH; //$NON-NLS-1$
             } else {
                 StringBuilder builder = new StringBuilder();
                 int i = 0;
@@ -149,14 +149,8 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     @Override
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
-        try {
-            jsonDataField.setText(response == null ? "" : RenderAsJSON.prettyJSON(response, TAB_SEPARATOR));  //$NON-NLS-1$
-            jsonDataField.setCaretPosition(0);
-        } catch (Exception e) {
-            log.error("Exception converting to XML: {}, message: {}", response, e.getMessage(), e); //$NON-NLS-1$ $NON-NLS-2$
-            jsonDataField.setText("Exception converting to XML: "+response+ ", message: "+e.getMessage()); //$NON-NLS-1$ $NON-NLS-2$
-            jsonDataField.setCaretPosition(0);
-        }
+        jsonDataField.setText(response == null ? "" : RenderAsJSON.prettyJSON(response, TAB_SEPARATOR));  //$NON-NLS-1$
+        jsonDataField.setCaretPosition(0);
     }
 
 

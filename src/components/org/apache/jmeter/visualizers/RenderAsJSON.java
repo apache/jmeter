@@ -28,7 +28,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONStyle;
-import net.minidev.json.JSONValue;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 
@@ -75,9 +74,6 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
                         .toJSONString(new PrettyJSONStyle(tabSeparator));
             } else if (o instanceof JSONArray) {
                 return ((JSONArray) o)
-                        .toJSONString(new PrettyJSONStyle(tabSeparator));
-            } else if (o instanceof JSONValue) {
-                return ((JSONValue) o)
                         .toJSONString(new PrettyJSONStyle(tabSeparator));
             }
         } catch (ParseException e) {
