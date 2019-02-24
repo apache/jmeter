@@ -22,9 +22,11 @@ import org.apache.jmeter.extractor.json.render.RenderAsJsonRenderer
 import org.apache.jmeter.junit.spock.JMeterSpec
 import org.apache.jmeter.util.JMeterUtils
 import javax.swing.JTabbedPane
+import org.apache.jmeter.junit.categories.NeedGuiTests
+import org.junit.experimental.categories.Category
 
+@Category(NeedGuiTests.class)
 class RenderAsJsonRendererSpec extends JMeterSpec {
-
     def sut = new RenderAsJsonRenderer()
 
     def "init of component doesn't fail"() {
