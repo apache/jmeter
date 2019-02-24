@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -29,20 +29,50 @@
 Before you can compile JMeter, you will need a few things:
 <ul>
 <li>a Java 8 compatible JDK (Java Development Kit)</li>
-<li>a working installation of <a href="http://ant.apache.org">Ant</a> (at least version 1.9.1)</li>
+<li>Optional: <a href="https://gradle.org/">Gradle</a> installation</li>
 <li>the JMeter sources as shown in the next section</li>
 </ul>
 
 <h3>Acquiring the source</h3>
-<p>The full source is distributed alongside the binary, and you can also find it <a href="./svnindex.html">in the source repositories.</a></p>
+<p>The official source releases of Apache JMeter can be downloaded from <a href="download_jmeter.cgi">download page</a>.</p>
+
+<h3>Compiling and packaging JMeter using Gradle</h3>
 <p>
-The source archive, SVN and GIT do not contain any of the required library files.
+JMeter can be built entirely using Gradle.
+The basic command is:</p>
+<source>
+./gradlew build
+</source>
+<p>
+See the list of available tasks via <code>./gradlew tasks</code> (or <code>./gradlew tasks --all</code>)
+for the other tasks that can be used.
+</p>
+
+<h3>Opening project via IntelliJ IDEA</h3>
+    <p>You require IntelliJ 2018.3.1 or newer.</p>
+
+    <ul>
+        <li>Open the build.gradle.kts file with IntelliJ IDEA and choose "Open as Project"</li>
+        <li>Make sure "Create separate module per source set" is selected</li>
+        <li>Make sure "Use default gradle wrapper" is selected</li>
+        <li>In the "File already exists" dialogue, choose "Yes" to overwrite</li>
+        <li>In the "Open Project" dialogue, choose "Delete Existing Project and Import"</li>
+    </ul>
 
 <h3>Compiling and packaging JMeter using Eclipse</h3>
-<h4>Option 1 : Setting up Eclipse project with Ant task</h4>
-Once you have downloaded the sources using git or svn, you can setup the Eclipse project by running:
+<h4>Option 1 : Importing Eclipse project via Eclipse's "import Gradle project" wizard</h4>
+Recent Eclipse versions can import Gradle projects automatically, so use
+<menuchoice>
+    <guimenuitem>File</guimenuitem>
+    <guimenuitem>Import...</guimenuitem>
+</menuchoice>
+Then choose <menuchoice><guimenuitem>Existing Gradle Project</guimenuitem></menuchoice> and proceed
+with the import.
 
-<source>ant setup-eclipse-project</source>
+<h4>Option 2 : Setting up Eclipse project with Gradle task</h4>
+Once you have downloaded the sources, you can setup the Eclipse project by running:
+
+<source>./gradlew eclipse</source>
 
 You can then import the project using 
 <menuchoice>
@@ -51,65 +81,7 @@ You can then import the project using
     <guimenuitem>Existing projects into Workspace</guimenuitem>
 </menuchoice> and select the folder containing JMeter sources.
 
-<h4>Option 2 : Setting up Eclipse project manually</h4> 
-The first step is to download dependencies by running the Ant command:</p>
-<source>
-ant download_jars
-</source>
-<p>Or you can download the binary distribution archive for a release and unpack it into the same directory structure as the source.
-This will ensure that the <code>lib/</code> directory contains the jar files needed for running JMeter.
-There are a few additional jars that are needed to build JMeter, download these using:
-</p>
-<source>
-ant download_jars
-</source>
-<p>
-This will retrieve any missing jars.
-</p>
-<note>
-If you are behind a proxy, you can set a few build properties in <code>build-local.properties</code> for ant to use the proxy:
-<source>
-proxy.use=true
-proxy.host=proxy.example.invalid
-proxy.port=8080
-proxy.user=your_user_name
-proxy.pass=your_password
-</source>
-You might also want to skip some tests - that are failing without proper access to the internet - by adding some more
-properties into <code>build-local.properties</code>:
-<source>
-skip.bug52310=true
-skip.bug60607=true
-skip.batchtest_Http4ImplPreemptiveBasicAuth=true
-skip.batchtest_SlowCharsFeature=true
-skip.batchtest_TestKeepAlive=true
-skip.test_http=true
-skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
-</source>
-</note>
-
-<p>
-Once you have downloaded the source from SVN or the release archives and run the ant <code>download_jars</code> target to
-install the dependent jars, you can configure Eclipse. The easiest way to do this is to replace the Eclipse <code>.classpath</code>
-file with the <code>eclipse.classpath</code> file provided with JMeter. This will set up the source-paths and most of the libraries.
-</p>
-<p>
-Ensure you read <code>eclipse.md</code> for project configuration.
-</p>
-
-
-<h3>Compiling and packaging JMeter using Ant</h3>
-<p>
-JMeter can be built entirely using Ant.
-The basic command is:</p>
-<source>
-ant install
-</source>
-<p>
-See <code>build.xml</code> (or call <code>ant -p</code>) for the other targets that can be used. Note that you can skip the word <code><em>install</em></code> after <code>ant</code> as it is the default target.
-</p>
 </section>
-
 <section name="Contributing to JMeter">
 <h2>We love contribution</h2>
 <p>
@@ -129,11 +101,11 @@ Before submitting your patch ensure you do the following:<br/>
 
 Check that patch compiles and follows Tab space policy by running:
 </p>
-<source>ant package-and-check</source>
+<source>./gradlew check</source>
 <p>
 Check that patch does not break JUnit tests by running:
 </p>
-<source>ant test</source>
+<source>./gradlew test</source>
 
 <h3>Create a PR using GIT</h3>
 <ul>
@@ -143,17 +115,20 @@ Check that patch does not break JUnit tests by running:
     <li>Create a branch using for example bugzilla id: <source>git branch BUGID</source></li>
     <li>Checkout the new branch : <source>git checkout BUGID</source></li>
     <li>commit your fix there : <source>git commit -m 'Fix to BUGID' list of files</source></li>
+    <li>Please avoid creating merge commits in the PR. We embrace small changes, and merge commits are harder to review</li>
     <li>Add JMeter repository as upstream : <source>git remote add upstream http://www.github.com/apache/jmeter</source></li>
     <li>push it : <source>git push origin BUGID</source></li>
     <li>Create a PR and link it in the bugzilla issue</li>
 </ul>
 
-<note>We have added a <code>.gitattributes</code> file to configure line endings of the files under version control.
-  Those settings can lead to strange looking <em>changes</em> on some newly checked out files, e.g. JavaScript or CSS files,
-  where the only change is the line ending.<br/>
-  To get rid of those problems set <code>core.autocrlf</code> to <code>input</code> before you clone the repository using
-  the following command:
-  <source>git config --global core.autocrlf input</source>
+<note>Different operation systems have different defaults for end-of-line markers.
+  Typical configuration is CRLF for Windows and LF for macOS and GNU/Linux.<br/>
+  It is recommended to follow that configuration by appropriate settings of <code>core.autocrlf</code>.
+  For Windows <source>git config --global core.autocrlf true</source>, and for macOS and GNU/Linux set <source>git config --global core.autocrlf input</source>
+  Git will automatically recognize text files in the repository thanks to <code>.gitattributes</code>,
+  and Git will convert line endings for text files to the appropriate platform-native format (according to <code>core.autocrlf</code>)<br/>
+  Certain files (e.g. <code>*.sh</code> or <code>*.bat</code>) have predefined end of line policy
+  no matter the configuration of the developer workstation.
 </note>
 
 <h3>Create a PR using Patch</h3>
