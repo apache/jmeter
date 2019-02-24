@@ -1,54 +1,38 @@
 sudo: false
 language: java
 
-before_script:
-  - test "x$RUN_CHECKSTYLE" != 'x' || ant -Djava.awt.headless=true download_jars install
-  - test "x$RUN_CHECKSTYLE" != 'xtrue' || ant -Djava.awt.headless=true download_checkstyle
-
-before_install:
-    - wget --no-check-certificate https://www.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.tar.gz
-    - tar -xzvf apache-ant-1.10.5-bin.tar.gz
-    - export PATH="$(pwd)/apache-ant-1.10.5/bin:$PATH"
-    - echo $(ant -version)
-
 # skip default "install" command
 install: true
 
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
 env:
   global:
-  - ANT_OPTS="-Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true"
+    - GRADLE_ARGS="-Djava.awt.headless=true"
+    # Building source and binary distributions takes time, and it does not verify much, so we skip it in CI
+    - SKIP_DIST_TASKS="$GRADLE_ARGS -PskipDist"
 
 matrix:
   include:
-    - jdk: oraclejdk8
-      env: RUN_CHECKSTYLE=true
-      script: ant -Djava.awt.headless=true checkstyle
-    - name: Coverage on our default build with Oracle Java 8
+    - name: Tests with OracleJDK 8 + code coverage
       jdk: oraclejdk8
       script:
-          - ant coverage-travis
+        - ./gradlew $GRADLE_ARGS check createDist jacocoReport
       after_success:
-          - bash <(curl -s https://codecov.io/bash)
-      sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
-    - name: Tests with OpenJDK 8
-      jdk: openjdk8
-      script:
-          - ant test
+        - bash <(curl -s https://codecov.io/bash)
     - name: Tests with OpenJDK 11
       jdk: openjdk11
       script:
-          - ant test
-      sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
+        - ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle build createDist
     - name: Tests with OpenJDK EA
       jdk: openjdk-ea
       script:
-          - ant test
-      sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
+        - ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle build createDist
   allow_failures:
     - jdk: openjdk-ea
-# disable building with jdk9 as it has a bug and will not compile JMeter
-# see https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8193802
-#    - jdk: oraclejdk9
-#      script: ant -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true test
-#      sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
-

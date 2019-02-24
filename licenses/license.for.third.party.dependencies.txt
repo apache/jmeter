@@ -1,0 +1,24 @@
+Source and binary distributions of Apache JMeter contain:
+
+- icons from the Open Icon Library http://openiconlibrary.sourceforge.net/
+For license details, please see the file: licenses/src/openiconlibrary.txt
+
+Additional source files (also included in binary distributions):
+For details, please see the files under: licenses/src
+
+* bootstrap-3.3.4.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/bootstrap
+* bootstrap-social.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/bootstrap-social
+* datatables-1.10.9.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/datatables
+* datatables-plugins.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/datatables-plugins
+* datatables-responsive-1.0.5.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/datatables-responsive
+* flot-0.8.3.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/flot
+* flot-axislabels.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/flot-axislabels
+* flot-tooltip-0.7.1.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/flot.tooltip
+* font-awesome-4.2.0.txt (OFL-1.1 | MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/font-awesome
+* holderjs.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/holderjs
+* jquery-2.1.3.txt (MIT | ./bin/report-template/sbadmin2-1.0.7/bower_components/jquery
+* metisMenu-1.1.3.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/metisMenu
+* mocha-1.17.1.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/mocha
+* morrisjs-0.5.0.txt (Simplified BSD) | ./bin/report-template/sbadmin2-1.0.7/bower_components/morrisjs
+* raphael-2.1.4.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/raphael
+* start-bootstrap-admin2-1.0.7.txt (Apache License V2.0) | ./bin/report-template/sbadmin2-1.0.7 and not in the above folders

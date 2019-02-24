@@ -29,7 +29,7 @@
 
   <!-- Verify that EVERY source file has the appropriate license -->
   <module name="RegexpHeader">
-    <property name="headerFile" value="java.header.regex"/>
+    <property name="headerFile" value="${config_loc}/java.header.regex"/>
     <property name="multiLines" value="10"/>
     <property name="fileExtensions" value="java, groovy"/>
   </module>

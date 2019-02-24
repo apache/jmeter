@@ -23,6 +23,42 @@ See:
 * https://bz.apache.org/bugzilla/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=NEEDINFO&bug_severity=Blocker&bug_severity=Critical&bug_severity=Major&bug_severity=Normal&bug_severity=Regression&bug_severity=Minor&bug_severity=Trivial&product=JMeter&order=Bug%20Number&list_id=164231
 * https://bz.apache.org/bugzilla/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=NEEDINFO&bug_severity=Enhancement&product=JMeter&order=Bug%20Number&list_id=164232
 
+## Development setup
+
+### Gradle
+
+You might find useful Gradle commands in [gradle.md](gradle.md)
+
+### <a name="intellij"></a>IntelliJ IDEA
+
+You require IntelliJ 2018.3.1 or newer.
+
+1. Open the build.gradle.kts file with IntelliJ IDEA and choose "Open as Project"
+1. Make sure "Create separate module per source set" is selected
+1. Make sure "Use default gradle wrapper" is selected
+1. In the "File already exists" dialogue, choose "Yes" to overwrite
+1. In the "Open Project" dialogue, choose "Delete Existing Project and Import"
+
+### Eclipse
+
+You can generate the Eclipse projects by running
+
+    ./gradlew eclipse
+
+Then you can import the generated projects into Eclipse
+
+1. Install Eclipse 4.5 (Mars) at least
+1. Install the Groovy Eclipse plugin from http://dist.springsource.org/snapshot/GRECLIPSE/e4.5/
+1. Make sure you have a Java 8 compatible JDK configured in your workspace
+1. In `Window->Preferences->Groovy->Compiler`, check `Enable Script folder support` and add `**/*.gradle.kts`
+1. Import all projects using the "Import Existing Projects into Workspace" wizard
+
+The following files should be excluded from build output:
+
+    *.metaprops
+
+See `Project Preferences/Java Compiler/Building/Output Folder/Filtered Resources`
+
 ## :star2: Have a patch?
 The best way to make sure your issue or feature is addressed is to submit a patch.
 We accept patches through: 

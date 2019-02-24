@@ -18,6 +18,7 @@ package org.apache.jmeter.testbeans.gui;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.junit.Test;
 
 public class TestFieldStringEditor {
@@ -28,6 +29,7 @@ public class TestFieldStringEditor {
         }
 
         private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
+            System.out.println("JMeterUtils.getJMeterVe rsion() = " + JMeterUtils.getJMeterVersion());
             e.setAsText(text);
             assertEquals(text, e.getAsText());
         }
