@@ -163,6 +163,7 @@ Summary
 <h3>General</h3>
 <ul>
     <li><bug>63201</bug>SearchTreeDialog disappears behind master JFrame. Contributed by Benoit Vatan (benoit.vatan at gmail.com)</li>
+    <li><bug>63207</bug>java.lang.NullPointerException: null when run Jmeter 5.1 with proxy options</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
