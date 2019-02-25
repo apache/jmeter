@@ -38,26 +38,26 @@ import org.apache.jmeter.report.processor.ValueResultData;
  * an aggregator to define the value (y-axis coordinate).
  * </p>
  *
- * <b>About the seriesData :</b>
+ * <strong>About the seriesData:</strong>
  * <p>
  * Series are defined by the seriesSelector, so they can be static or dynamic
  * (sample linked) depending on the implementation of the selector.
  * </p>
  *
- * <b>About the groupData :</b>
+ * <strong>About the groupData:</strong>
  * <p>
  * The grapher build an aggregator for each seriesData/key pair using an
  * external factory. All groupData from a series do the same aggregate
  * calculation.
  * </p>
  *
- * <b>About the keys (x-axis coordinates) :</b>
+ * <strong>About the keys (x-axis coordinates):</strong>
  * <p>
  * Keys are defined by the keysSelector for each seriesData, so the keys can be
  * different depending on the seriesData
  * </p>
  *
- * <b>About the values (y-axis coordinates) :</b>
+ * <strong>About the values (y-axis coordinates):</strong>
  * <p>
  * Values are defined by the result aggregate produced by each aggregator.
  * During consumption, values to add to the groupData are defined by the
@@ -150,8 +150,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /**
      * Enables or disables the percentiles render.
      *
-     * @param renderPercentiles
-     *            the render mode to set
+     * @param renderPercentiles flag to render percentiles or not
      */
     public final void setRenderPercentiles(boolean renderPercentiles) {
         this.renderPercentiles = renderPercentiles;
@@ -178,8 +177,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /**
      * Sets the format of the "overall" seriesData name.
      *
-     * @param overallSeriesFormat
-     *            the name of "overall" seriesData to set
+     * @param overallSeriesFormat the name of "overall" seriesData to set
      */
     public final void setOverallSeriesFormat(String overallSeriesFormat) {
         this.overallSeriesFormat = overallSeriesFormat;
@@ -207,7 +205,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Gets the title of the graph.
-     * 
+     *
      * @return the title of the graph
      */
     public final String getTitle() {
@@ -216,17 +214,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Sets the title of the graph.
-     * 
-     * @param title
-     *            the title to set
+     *
+     * @param title the title to set
      */
     public final void setTitle(String title) {
         this.title = title;
     }
 
-    /**
-     * Instantiates a new abstract graph consumer.
-     */
     protected AbstractGraphConsumer() {
     }
 
@@ -250,8 +244,9 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Adds a value map build from specified parameters to the result map.
-     * @param result {@link MapResultData}
-     * @param group 
+     *
+     * @param result     {@link MapResultData}
+     * @param group
      * @param series
      * @param seriesData
      * @param aggregated
@@ -375,14 +370,14 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     }
 
     /**
-     * @param serie String serie name
+     * @param series      The series name
      * @param seriesData {@link SeriesData}
      * @return MapResultData metadata for serie
      */
-    protected MapResultData createSerieResult(String serie, SeriesData seriesData) {
+    protected MapResultData createSerieResult(String series, SeriesData seriesData) {
         MapResultData seriesResult = new MapResultData();
         seriesResult.setResult(RESULT_SERIES_NAME,
-                new ValueResultData(serie));
+                new ValueResultData(series));
         seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
                 new ValueResultData(
                         Boolean.valueOf(seriesData.isControllersSeries())));
@@ -456,14 +451,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /**
      * Inherited classes can add properties to the result
      *
-     * @param parentResult
-     *            the parent result
+     * @param parentResult the parent result
      */
     protected abstract void initializeExtraResults(MapResultData parentResult);
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleConsumer#startConsuming()
      */
@@ -481,7 +475,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleConsumer#consume(org.apache
      * .jmeter.report.csv.core.Sample, int)
@@ -532,13 +526,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleConsumer#stopConsuming()
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.graph.SampleConsumer#stopConsuming()
      */
