@@ -20,11 +20,7 @@ package org.apache.jmeter.protocol.http.control;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.http.conn.DnsResolver;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
@@ -113,9 +109,6 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         return clone;
     }
 
-    /**
-     * @return {@link Resolver}
-     */
     private Resolver createResolver() {
         CollectionProperty dnsServers = getServers();
         try {
@@ -154,33 +147,31 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         // https://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html
         if (result != null || cache.containsKey(host)) {
             if (log.isDebugEnabled()) {
-                log.debug("Cache hit thr#{}: {} => {}",
-                        JMeterContextService.getContext().getThreadNum(),
-                        host,
-                        Arrays.toString(result));
+                logCache("hit", host, result);
             }
             return result;
         } else if (isStaticHost(host)) {
             InetAddress[] staticAddresses = fromStaticHost(host);
             if (log.isDebugEnabled()) {
-                log.debug("Cache miss thr#{}: (static) {} => {}",
-                        JMeterContextService.getContext().getThreadNum(),
-                        host,
-                        Arrays.toString(staticAddresses));
+                logCache("miss", host, staticAddresses);
             }
             cache.put(host, staticAddresses);
             return staticAddresses;
         } else {
             InetAddress[] addresses = requestLookup(host);
             if (log.isDebugEnabled()) {
-                log.debug("Cache miss thr#{}: {} => {}",
-                        JMeterContextService.getContext().getThreadNum(),
-                        host,
-                        Arrays.toString(addresses));
+                logCache("miss", host, addresses);
             }
             cache.put(host, addresses);
             return addresses;
         }
+    }
+
+    private void logCache(String hitOrMiss, String host, InetAddress[] addresses) {
+        log.debug("Cache " + hitOrMiss + " thread#{}: {} => {}",
+                JMeterContextService.getContext().getThreadNum(),
+                host,
+                Arrays.toString(addresses));
     }
 
     private boolean isStaticHost(String host) {
@@ -256,49 +247,45 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     private InetAddress[] requestLookup(String host) throws UnknownHostException {
         InetAddress[] addresses = null;
         if (isCustomResolver()) {
-            ExtendedResolver extendedResolver = getResolver();
-            if (extendedResolver != null) {
-                if(extendedResolver.getResolvers().length > 0) {
-                    try {
-                        Lookup lookup = new Lookup(host, Type.A);
-                        lookup.setCache(lookupCache);
-                        if (timeoutMs > 0) {
-                            resolver.setTimeout(timeoutMs / 1000, timeoutMs % 1000);
-                        }
-                        lookup.setResolver(resolver);
-                        Record[] records = lookup.run();
-                        if (records == null || records.length == 0) {
-                            throw new UnknownHostException("Failed to resolve host name: " + host);
-                        }
-                        addresses = new InetAddress[records.length];
-                        for (int i = 0; i < records.length; i++) {
-                            addresses[i] = ((ARecord) records[i]).getAddress();
-                        }
-                    } catch (TextParseException tpe) {
-                        log.debug("Failed to create Lookup object: {}", tpe.toString());
+            ExtendedResolver extendedResolver = getOrCreateResolver();
+            if (extendedResolver == null) {
+                throw new UnknownHostException("Could not resolve host:" + host
+                        +", failed to initialize resolver or no resolver found");
+            } else if (extendedResolver.getResolvers().length > 0) {
+                try {
+                    Lookup lookup = new Lookup(host, Type.A);
+                    lookup.setCache(lookupCache);
+                    if (timeoutMs > 0) {
+                        resolver.setTimeout(timeoutMs / 1000, timeoutMs % 1000);
                     }
-                    return addresses;
+                    lookup.setResolver(resolver);
+                    Record[] records = lookup.run();
+                    if (records == null || records.length == 0) {
+                        throw new UnknownHostException("Failed to resolve host name: " + host);
+                    }
+                    addresses = new InetAddress[records.length];
+                    for (int i = 0; i < records.length; i++) {
+                        addresses[i] = ((ARecord) records[i]).getAddress();
+                    }
+                } catch (TextParseException tpe) {
+                    log.debug("Failed to create Lookup object: {}", tpe.toString());
                 }
-            } else {
-                throw new UnknownHostException("Could not resolve host:"+host
-                        +", failed to initialize resolver"
-                        + " or no resolver found");
+                return addresses;
             }
         }
         addresses = systemDefaultDnsResolver.resolve(host);
         if (log.isDebugEnabled()) {
-            log.debug("Cache miss: {} Thread #{}, resolved with system resolver into {}", host,
-                    JMeterContextService.getContext().getThreadNum(), Arrays.toString(addresses));
+            logCache("miss (resolved with system resolver)", host, addresses);
         }
         return addresses;
     }
 
     /**
-     * Tries to initialize resolver , otherwise sets initFailed to true
+     * Tries to initialize resolver, otherwise sets initFailed to true
      * @return ExtendedResolver if init succeeded or null otherwise
      */
-    private ExtendedResolver getResolver() {
-        if(resolver == null && !initFailed) {
+    private ExtendedResolver getOrCreateResolver() {
+        if (resolver == null && !initFailed) {
             resolver = createResolver();
         }
         return (ExtendedResolver) resolver;
