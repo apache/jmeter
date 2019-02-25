@@ -5,9 +5,9 @@
  * licenses this file to You under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -85,7 +85,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     final Map<String, InetAddress[]> cache;
 
-    transient Resolver resolver;
+    private transient Resolver resolver;
 
     private transient int timeoutMs;
 
@@ -154,14 +154,18 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         // https://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html
         if (result != null || cache.containsKey(host)) {
             if (log.isDebugEnabled()) {
-                log.debug("Cache hit thr#{}: {} => {}", JMeterContextService.getContext().getThreadNum(), host,
+                log.debug("Cache hit thr#{}: {} => {}",
+                        JMeterContextService.getContext().getThreadNum(),
+                        host,
                         Arrays.toString(result));
             }
             return result;
         } else if (isStaticHost(host)) {
             InetAddress[] staticAddresses = fromStaticHost(host);
             if (log.isDebugEnabled()) {
-                log.debug("Cache miss thr#{}: (static) {} => {}", JMeterContextService.getContext().getThreadNum(), host,
+                log.debug("Cache miss thr#{}: (static) {} => {}",
+                        JMeterContextService.getContext().getThreadNum(),
+                        host,
                         Arrays.toString(staticAddresses));
             }
             cache.put(host, staticAddresses);
@@ -169,7 +173,9 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         } else {
             InetAddress[] addresses = requestLookup(host);
             if (log.isDebugEnabled()) {
-                log.debug("Cache miss thr#{}: {} => {}", JMeterContextService.getContext().getThreadNum(), host,
+                log.debug("Cache miss thr#{}: {} => {}",
+                        JMeterContextService.getContext().getThreadNum(),
+                        host,
                         Arrays.toString(addresses));
             }
             cache.put(host, addresses);
@@ -372,7 +378,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     /**
      * Clean DNS cache each iteration
-     * 
+     *
      * @return boolean
      */
     public boolean isClearEachIteration() {
