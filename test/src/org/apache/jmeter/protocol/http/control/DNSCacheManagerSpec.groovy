@@ -24,14 +24,14 @@ import spock.lang.IgnoreIf
 
 class DNSCacheManagerSpec extends JMeterSpec {
 
-    private static final String INVALID_DNS_SERVER = "bob"
     private static final String VALID_DNS_SERVER = "8.8.8.8"
+    private static final String INVALID_DNS_SERVER = "512.1.1.1"
 
     static def localDNSResolverFailed() {
         try {
             new DNSCacheManager().resolve("apache.org")
             return false
-        } catch (Exception e) {
+        } catch (UnknownHostException uhe) {
             return true
         }
     }
