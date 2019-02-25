@@ -18,7 +18,6 @@
 package org.apache.jmeter.report.processor.graph;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -186,8 +185,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /**
      * Sets the format for the name of aggregated keys seriesData.
      *
-     * @param aggregatedKeysSeriesFormat
-     *            the format for the name of aggregated keys seriesData to set
+     * @param aggregatedKeysSeriesFormat the format for the name of aggregated keys seriesData to set
      */
     public final void setAggregatedKeysSeriesFormat(
             String aggregatedKeysSeriesFormat) {
@@ -361,7 +359,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     }
 
     /**
-     * @param series      The series name
+     * @param series     The series name
      * @param seriesData {@link SeriesData}
      * @return MapResultData metadata for serie
      */
@@ -425,12 +423,11 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         result.setResult(RESULT_TITLE, new ValueResultData(getTitle()));
         result.setResult(RESULT_SERIES, new ListResultData());
 
-        boolean supportsControllersDiscrimination = true;
-        Iterator<GroupInfo> it = groupInfos.values().iterator();
-        while (supportsControllersDiscrimination && it.hasNext()) {
-            supportsControllersDiscrimination &= it.next().getSeriesSelector()
-                    .allowsControllersDiscrimination();
-        }
+        boolean supportsControllersDiscrimination = groupInfos.values()
+                .stream()
+                .map(GroupInfo::getSeriesSelector)
+                .allMatch(GraphSeriesSelector::allowsControllersDiscrimination);
+
         result.setResult(RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
                 new ValueResultData(
                         Boolean.valueOf(supportsControllersDiscrimination)));
@@ -491,10 +488,15 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 Map<String, SeriesData> seriesInfo = groupData.getSeriesInfo();
                 SeriesData seriesData = seriesInfo.get(seriesName);
                 if (seriesData == null) {
-                    seriesData = new SeriesData(factory, aggregatedKeysSeries,
+                    boolean isControllersSeries =
                             groupInfo.getSeriesSelector()
                                     .allowsControllersDiscrimination()
-                                            ? sample.isController() : false,
+                                    && sample.isController();
+
+                    seriesData = new SeriesData(
+                            factory,
+                            aggregatedKeysSeries,
+                            isControllersSeries,
                             false);
                     seriesInfo.put(seriesName, seriesData);
                 }
@@ -502,7 +504,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 // Get the value to aggregate and dispatch it to the groupData
                 Double value = groupInfo.getValueSelector().select(seriesName,
                         sample);
-                if(value != null) {
+                if (value != null) {
                     aggregateValue(factory, seriesData, key, value);
                     if (overallSeries) {
                         SeriesData overallData = groupData.getOverallSeries();
