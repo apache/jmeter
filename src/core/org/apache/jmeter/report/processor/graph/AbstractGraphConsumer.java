@@ -94,8 +94,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /** The aggregated keys seriesData format. */
     private String aggregatedKeysSeriesFormat = DEFAULT_AGGREGATED_KEYS_SERIES_FORMAT;
 
-    /** reverts keys and values in the result. */
-    private boolean revertsKeysAndValues;
+    /** Flag to indicate if we should swap keys and values in the result. */
+    private boolean invertKeysAndValues;
 
     private boolean renderPercentiles;
     private String title;
@@ -110,22 +110,21 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     }
 
     /**
-     * Reverts keys and values.
+     * Get flag to indicate we should swap keys and values.
      *
-     * @return the revertKeysAndValues
+     * @return the invertKeysAndValues flag
      */
-    protected final boolean revertsKeysAndValues() {
-        return revertsKeysAndValues;
+    protected final boolean getInvertsKeysAndValues() {
+        return invertKeysAndValues;
     }
 
     /**
-     * Reverts keys and values.
+     * Set flag to indicate we should swap keys and values.
      *
-     * @param revertsKeysAndValues
-     *            the reverts keys and values
+     * @param invertKeysAndValues the reverts keys and values
      */
-    protected final void setRevertKeysAndValues(boolean revertsKeysAndValues) {
-        this.revertsKeysAndValues = revertsKeysAndValues;
+    protected final void setRevertKeysAndValues(boolean invertKeysAndValues) {
+        this.invertKeysAndValues = invertKeysAndValues;
     }
 
     /**
@@ -287,20 +286,17 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         }
         if (!renderPercentiles) {
             for (Map.Entry<Double, Aggregator> entry : aggInfo.entrySet()) {
-                // Init key and value depending on revertsKeysAndValues property
+                // Init key and value depending on invertKeysAndValues property
                 Double key = entry.getKey();
                 Double value = Double.valueOf(entry.getValue().getResult());
 
-                // Create result storage for coordinates
-                ListResultData coordResult = new ListResultData();
-
-                if (!revertsKeysAndValues) {
-                    key = entry.getKey();
-                    value = Double.valueOf(entry.getValue().getResult());
-                } else {
+                if (invertKeysAndValues) {
                     key = Double.valueOf(entry.getValue().getResult());
                     value = entry.getKey();
                 }
+
+                // Create result storage for coordinates
+                ListResultData coordResult = new ListResultData();
                 coordResult.addResult(new ValueResultData(key));
                 coordResult.addResult(new ValueResultData(value));
                 dataResult.addResult(coordResult);
@@ -314,7 +310,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             int rank = 0;
             double percent = 0;
             TreeMap<Double, Aggregator> sortedInfo = new TreeMap<>(aggInfo);
-            if (!revertsKeysAndValues) {
+            if (!invertKeysAndValues) {
                 for (Map.Entry<Double, Aggregator> entry : sortedInfo
                         .entrySet()) {
                     Double value = entry.getKey();
