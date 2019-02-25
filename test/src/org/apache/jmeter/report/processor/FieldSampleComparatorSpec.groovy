@@ -23,19 +23,41 @@ import spock.lang.Specification
 
 class FieldSampleComparatorSpec extends Specification {
 
-    def sampleMetadata = new SampleMetadata(',' as char, "test")
-    def comparator = new FieldSampleComparator("test")
+    static char separator = ',' as char
+    def multiColSampleMeta = new SampleMetadata(separator, "col1", "col2")
+
 
     def testCompare() {
         given:
-            def s1 = new Sample(0, sampleMetadata, "1")
-            def s2 = new Sample(1, sampleMetadata, "2")
-            comparator.initialize(sampleMetadata)
+            def sampleMetadata = new SampleMetadata(separator, "col1")
+            def firstRow = new Sample(0, sampleMetadata, "1")
+            def secondRow = new Sample(1, sampleMetadata, "2")
+            def sut = new FieldSampleComparator("col1")
+            sut.initialize(sampleMetadata)
         expect:
-            comparator.compare(s1, s2) < 0
-            comparator.compare(s2, s1) > 0
-            comparator.compare(s1, s1) == 0
-            comparator.compare(s2, s2) == 0
+            sut.compare(firstRow, secondRow) < 0
+            sut.compare(secondRow, firstRow) > 0
+            sut.compare(firstRow, firstRow) == 0
+            sut.compare(secondRow, secondRow) == 0
+    }
+
+    def "initialize ensures correct column is compared"() {
+        given:
+            def sut = new FieldSampleComparator("col2")
+            def firstRow = new Sample(0, multiColSampleMeta, "1", "3")
+            def secondRow = new Sample(1, multiColSampleMeta, "2", "3")
+            sut.initialize(multiColSampleMeta)
+        expect:
+            sut.compare(firstRow, secondRow) == 0
+    }
+
+    def "Incorrectly uses first column if initialize isn't called"() {
+        given:
+            def sut = new FieldSampleComparator("col2")
+            def firstRow = new Sample(0, multiColSampleMeta, "1", "3")
+            def secondRow = new Sample(1, multiColSampleMeta, "2", "3")
+        expect:
+            sut.compare(firstRow, secondRow) != 0
     }
 
 }
