@@ -760,11 +760,16 @@ public class JMeter implements JMeterPlugin {
             System.setProperty("https.proxyHost", h);// $NON-NLS-1$
             System.setProperty("http.proxyPort",  p);// $NON-NLS-1$
             System.setProperty("https.proxyPort", p);// $NON-NLS-1$
-            String proxyScheme = parser.getArgumentById(PROXY_SCHEME).getArgument();
-            if(!StringUtils.isBlank(proxyScheme)){
-                System.setProperty("http.proxyScheme",  proxyScheme );// $NON-NLS-1$
+            String proxyScheme = null;
+            if (parser.getArgumentById(PROXY_SCHEME) != null) {
+                proxyScheme = parser.getArgumentById(PROXY_SCHEME).getArgument();
+                if(!StringUtils.isBlank(proxyScheme)){
+                    System.setProperty("http.proxyScheme",  proxyScheme );// $NON-NLS-1$
+                }
             }
-            log.info("Set scheme: {} proxyHost: {} Port: {}", proxyScheme, h, p);
+            if(log.isInfoEnabled()) {
+                log.info("Set proxy Host: {}, Port: {}, Scheme: {}", h, p, proxyScheme != null ? proxyScheme : "Not set");
+            }
         } else if (parser.getArgumentById(PROXY_HOST) != null || parser.getArgumentById(PROXY_PORT) != null) {
             throw new IllegalUserActionException(JMeterUtils.getResString("proxy_cl_error"));// $NON-NLS-1$
         }
