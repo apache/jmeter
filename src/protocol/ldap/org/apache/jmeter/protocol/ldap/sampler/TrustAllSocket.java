@@ -96,22 +96,22 @@ public class TrustAllSocket extends SocketFactory {
     }
 
     @Override
-    public Socket createSocket(final String s, final int i) throws IOException {
-        return sf.createSocket(s, i);
+    public Socket createSocket(final String host, final int port) throws IOException {
+        return sf.createSocket(host, port);
     }
 
     @Override
-    public Socket createSocket(final String s, final int i, final InetAddress inetAddress, final int i1) throws IOException {
-        return sf.createSocket(s, i, inetAddress, i1);
+    public Socket createSocket(final String host, final int port, final InetAddress localHost, final int localPort) throws IOException {
+        return sf.createSocket(host, port, localHost, localPort);
     }
 
     @Override
-    public Socket createSocket(final InetAddress inetAddress, final int i) throws IOException {
-        return sf.createSocket(inetAddress, i);
+    public Socket createSocket(final InetAddress localHost, final int localPort) throws IOException {
+        return sf.createSocket(localHost, localPort);
     }
 
     @Override
-    public Socket createSocket(final InetAddress inetAddress, final int i, final InetAddress inetAddress1, final int i1) throws IOException {
-        return sf.createSocket(inetAddress, i, inetAddress1, i1);
+    public Socket createSocket(final InetAddress address, final int Port, final InetAddress localHost, final int localPort) throws IOException {
+        return sf.createSocket(address, Port, localHost, localPort);
     }
 }
