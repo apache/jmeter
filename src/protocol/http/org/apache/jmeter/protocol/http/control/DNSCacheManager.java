@@ -206,32 +206,32 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             return new InetAddress[0];
         }
         CollectionProperty property = (CollectionProperty) p;
-        PropertyIterator iterator = property.iterator();
-        while (iterator.hasNext()) {
-            StaticHost entry = (StaticHost) ((TestElementProperty)iterator.next()).getObjectValue();
-            if (entry.getName().equals(host)) {
-                List<InetAddress> addresses = new ArrayList<>();
-                for (String address : Arrays.asList(entry.getAddress().split("\\s*,\\s*"))) {
-                    try {
-                        final InetAddress[] requestLookup = requestLookup(address);
-                        if (requestLookup == null) {
-                            addAsLiteralAddress(addresses, address);
-                        } else {
-                            addresses.addAll(Arrays.asList(requestLookup));
-                        }
-                    } catch (UnknownHostException e) {
-                        addAsLiteralAddress(addresses, address);
-                        log.warn("Couldn't resolve static address {} for host {}", address, host, e);
-                    }
-                }
-                return addresses.toArray(new InetAddress[addresses.size()]);
+        for (JMeterProperty jMeterProperty : property) {
+            StaticHost entry = (StaticHost) ((TestElementProperty) jMeterProperty).getObjectValue();
+            if (!entry.getName().equals(host)) {
+                continue; // try the next property
             }
+
+            List<InetAddress> addresses = new ArrayList<>();
+            for (String address : entry.getAddress().split("\\s*,\\s*")) {
+                try {
+                    final InetAddress[] requestLookup = requestLookup(address);
+                    if (requestLookup == null) {
+                        addAsLiteralAddress(addresses, address);
+                    } else {
+                        addresses.addAll(Arrays.asList(requestLookup));
+                    }
+                } catch (UnknownHostException e) {
+                    addAsLiteralAddress(addresses, address);
+                    log.warn("Couldn't resolve static address {} for host {}", address, host, e);
+                }
+            }
+            return addresses.toArray(new InetAddress[addresses.size()]);
         }
         return new InetAddress[0];
     }
 
-    private void addAsLiteralAddress(List<InetAddress> addresses,
-            String address) {
+    private void addAsLiteralAddress(List<InetAddress> addresses, String address) {
         try {
             addresses.add(InetAddress.getByName(address));
         } catch (UnknownHostException e) {
@@ -241,41 +241,50 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     /**
      * Sends DNS request via system or custom DNS resolver
-     * @param host Host
+     *
+     * @param host Host to lookup
      * @return array of {@link InetAddress} or null if lookup did not return result
      */
     private InetAddress[] requestLookup(String host) throws UnknownHostException {
         InetAddress[] addresses = null;
+
         if (isCustomResolver()) {
             ExtendedResolver extendedResolver = getOrCreateResolver();
             if (extendedResolver == null) {
                 throw new UnknownHostException("Could not resolve host:" + host
                         +", failed to initialize resolver or no resolver found");
             } else if (extendedResolver.getResolvers().length > 0) {
-                try {
-                    Lookup lookup = new Lookup(host, Type.A);
-                    lookup.setCache(lookupCache);
-                    if (timeoutMs > 0) {
-                        resolver.setTimeout(timeoutMs / 1000, timeoutMs % 1000);
-                    }
-                    lookup.setResolver(resolver);
-                    Record[] records = lookup.run();
-                    if (records == null || records.length == 0) {
-                        throw new UnknownHostException("Failed to resolve host name: " + host);
-                    }
-                    addresses = new InetAddress[records.length];
-                    for (int i = 0; i < records.length; i++) {
-                        addresses[i] = ((ARecord) records[i]).getAddress();
-                    }
-                } catch (TextParseException tpe) {
-                    log.debug("Failed to create Lookup object: {}", tpe.toString());
-                }
-                return addresses;
+                addresses = customRequestLookup(host);
+            }
+        } else {
+            addresses = systemDefaultDnsResolver.resolve(host);
+            if (log.isDebugEnabled()) {
+                logCache("miss (resolved with system resolver)", host, addresses);
             }
         }
-        addresses = systemDefaultDnsResolver.resolve(host);
-        if (log.isDebugEnabled()) {
-            logCache("miss (resolved with system resolver)", host, addresses);
+
+        return addresses;
+    }
+
+    private InetAddress[] customRequestLookup(String host) throws UnknownHostException {
+        InetAddress[] addresses = null;
+        try {
+            Lookup lookup = new Lookup(host, Type.A);
+            lookup.setCache(lookupCache);
+            if (timeoutMs > 0) {
+                resolver.setTimeout(timeoutMs / 1000, timeoutMs % 1000);
+            }
+            lookup.setResolver(resolver);
+            Record[] records = lookup.run();
+            if (records == null || records.length == 0) {
+                throw new UnknownHostException("Failed to resolve host name: " + host);
+            }
+            addresses = new InetAddress[records.length];
+            for (int i = 0; i < records.length; i++) {
+                addresses[i] = ((ARecord) records[i]).getAddress();
+            }
+        } catch (TextParseException tpe) {
+            log.debug("Failed to create Lookup object: {}", tpe.toString());
         }
         return addresses;
     }
