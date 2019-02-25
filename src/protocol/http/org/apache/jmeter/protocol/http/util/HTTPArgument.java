@@ -149,14 +149,12 @@ public class HTTPArgument extends Argument implements Serializable {
                 if(log.isDebugEnabled()) {
                     log.debug("Decoding name, calling URLDecoder.decode with '"+name+"' and contentEncoding:"+EncoderCache.URL_ARGUMENT_ENCODING);
                 }
-                //name = URLDecoder.decode(name, EncoderCache.URL_ARGUMENT_ENCODING);
                 URLCodec urlCodec = new URLCodec(contentEncoding);
                 name = urlCodec.decode(name, contentEncoding);
                 // The value is encoded in the specified encoding
                 if(log.isDebugEnabled()) {
                     log.debug("Decoding value, calling URLDecoder.decode with '"+value+"' and contentEncoding:"+contentEncoding);
                 }
-                //value = URLDecoder.decode(value, contentEncoding);
                 value = urlCodec.decode(value, contentEncoding);
             } catch (UnsupportedEncodingException e) {
                 log.error(contentEncoding + " encoding not supported!");

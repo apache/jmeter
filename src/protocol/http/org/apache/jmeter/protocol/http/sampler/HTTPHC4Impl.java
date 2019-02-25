@@ -1690,12 +1690,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 // as the user had entered.
                 try {
                     URLCodec urlCodec = new URLCodec(contentEncoding);
-                    //parameterName = URLDecoder.decode(parameterName, urlContentEncoding);
                     parameterName = urlCodec.decode(parameterName, urlContentEncoding);
-                    //parameterValue = URLDecoder.decode(parameterValue, urlContentEncoding);
                     parameterValue = urlCodec.decode(parameterValue, urlContentEncoding);
                 } catch (DecoderException e) {
-                    log.error(contentEncoding + " exception in encoding!");
+                    log.error("exception in encoding {} for parameter name {} and parameter value {}!", contentEncoding,parameterName,parameterValue);
                     throw new Error(e.toString(), e);
                 }
             }
