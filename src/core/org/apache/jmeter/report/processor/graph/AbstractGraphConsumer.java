@@ -83,16 +83,10 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     public static final String RESULT_SERIES_IS_CONTROLLER = "isController";
     public static final String RESULT_SERIES_IS_OVERALL = "isOverall";
 
-    /** The Constant DEFAULT_OVERALL_SERIES_NAME. */
     public static final String DEFAULT_OVERALL_SERIES_FORMAT = "Overall %s";
-
-    /** The Constant DEFAULT_AGGREGATED_KEYS_SERIES_FORMAT. */
     public static final String DEFAULT_AGGREGATED_KEYS_SERIES_FORMAT = "%s-Aggregated";
 
-    /** The map used to store group information. */
     private HashMap<String, GroupInfo> groupInfos;
-
-    /** The keys selector. */
     private GraphKeysSelector keysSelector;
 
     /** The overall seriesData name. */
@@ -104,10 +98,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /** reverts keys and values in the result. */
     private boolean revertsKeysAndValues;
 
-    /** Renders percentiles in the results. */
     private boolean renderPercentiles;
-
-    /** The title of the graph. */
     private String title;
 
     /**
@@ -252,7 +243,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @param aggregated
      */
     private void addKeyData(MapResultData result, String group, String series,
-            SeriesData seriesData, boolean aggregated) {
+                            SeriesData seriesData, boolean aggregated) {
 
         // Override series name when aggregated
         if (aggregated) {
@@ -392,7 +383,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * Aggregate a value to the aggregator defined by the specified parameters.
      */
     private void aggregateValue(AggregatorFactory factory, SeriesData data,
-            Double key, double value) {
+                                Double key, double value) {
         Map<Double, Aggregator> aggInfo = data.getAggregatorInfo();
 
         // Get or create aggregator
