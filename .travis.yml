@@ -32,6 +32,10 @@ matrix:
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
     - name: Tests with OpenJDK 8
       jdk: openjdk8
+      env:
+      - TZ=Pacific/Chatham # flips between +12:45 and +13:45
+      - LANG=ru_RU.utf-8
+      - LC_ALL=ru_RU.utf-8
       script:
           - ant test
     - name: Tests with OpenJDK 11
