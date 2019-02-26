@@ -18,7 +18,6 @@
 package org.apache.jmeter.report.processor.graph;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -38,26 +37,26 @@ import org.apache.jmeter.report.processor.ValueResultData;
  * an aggregator to define the value (y-axis coordinate).
  * </p>
  *
- * <b>About the seriesData :</b>
+ * <strong>About the seriesData:</strong>
  * <p>
  * Series are defined by the seriesSelector, so they can be static or dynamic
  * (sample linked) depending on the implementation of the selector.
  * </p>
  *
- * <b>About the groupData :</b>
+ * <strong>About the groupData:</strong>
  * <p>
  * The grapher build an aggregator for each seriesData/key pair using an
  * external factory. All groupData from a series do the same aggregate
  * calculation.
  * </p>
  *
- * <b>About the keys (x-axis coordinates) :</b>
+ * <strong>About the keys (x-axis coordinates):</strong>
  * <p>
  * Keys are defined by the keysSelector for each seriesData, so the keys can be
  * different depending on the seriesData
  * </p>
  *
- * <b>About the values (y-axis coordinates) :</b>
+ * <strong>About the values (y-axis coordinates):</strong>
  * <p>
  * Values are defined by the result aggregate produced by each aggregator.
  * During consumption, values to add to the groupData are defined by the
@@ -83,16 +82,10 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     public static final String RESULT_SERIES_IS_CONTROLLER = "isController";
     public static final String RESULT_SERIES_IS_OVERALL = "isOverall";
 
-    /** The Constant DEFAULT_OVERALL_SERIES_NAME. */
     public static final String DEFAULT_OVERALL_SERIES_FORMAT = "Overall %s";
-
-    /** The Constant DEFAULT_AGGREGATED_KEYS_SERIES_FORMAT. */
     public static final String DEFAULT_AGGREGATED_KEYS_SERIES_FORMAT = "%s-Aggregated";
 
-    /** The map used to store group information. */
     private HashMap<String, GroupInfo> groupInfos;
-
-    /** The keys selector. */
     private GraphKeysSelector keysSelector;
 
     /** The overall seriesData name. */
@@ -101,13 +94,10 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /** The aggregated keys seriesData format. */
     private String aggregatedKeysSeriesFormat = DEFAULT_AGGREGATED_KEYS_SERIES_FORMAT;
 
-    /** reverts keys and values in the result. */
-    private boolean revertsKeysAndValues;
+    /** Flag to indicate if we should swap keys and values in the result. */
+    private boolean invertKeysAndValues;
 
-    /** Renders percentiles in the results. */
     private boolean renderPercentiles;
-
-    /** The title of the graph. */
     private String title;
 
     /**
@@ -120,22 +110,21 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     }
 
     /**
-     * Reverts keys and values.
+     * Get flag to indicate we should swap keys and values.
      *
-     * @return the revertKeysAndValues
+     * @return the invertKeysAndValues flag
      */
-    protected final boolean revertsKeysAndValues() {
-        return revertsKeysAndValues;
+    protected final boolean getInvertsKeysAndValues() {
+        return invertKeysAndValues;
     }
 
     /**
-     * Reverts keys and values.
+     * Set flag to indicate we should swap keys and values.
      *
-     * @param revertsKeysAndValues
-     *            the reverts keys and values
+     * @param invertKeysAndValues the reverts keys and values
      */
-    protected final void setRevertKeysAndValues(boolean revertsKeysAndValues) {
-        this.revertsKeysAndValues = revertsKeysAndValues;
+    protected final void setRevertKeysAndValues(boolean invertKeysAndValues) {
+        this.invertKeysAndValues = invertKeysAndValues;
     }
 
     /**
@@ -150,8 +139,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /**
      * Enables or disables the percentiles render.
      *
-     * @param renderPercentiles
-     *            the render mode to set
+     * @param renderPercentiles flag to render percentiles or not
      */
     public final void setRenderPercentiles(boolean renderPercentiles) {
         this.renderPercentiles = renderPercentiles;
@@ -178,8 +166,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /**
      * Sets the format of the "overall" seriesData name.
      *
-     * @param overallSeriesFormat
-     *            the name of "overall" seriesData to set
+     * @param overallSeriesFormat the name of "overall" seriesData to set
      */
     public final void setOverallSeriesFormat(String overallSeriesFormat) {
         this.overallSeriesFormat = overallSeriesFormat;
@@ -197,8 +184,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /**
      * Sets the format for the name of aggregated keys seriesData.
      *
-     * @param aggregatedKeysSeriesFormat
-     *            the format for the name of aggregated keys seriesData to set
+     * @param aggregatedKeysSeriesFormat the format for the name of aggregated keys seriesData to set
      */
     public final void setAggregatedKeysSeriesFormat(
             String aggregatedKeysSeriesFormat) {
@@ -207,7 +193,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Gets the title of the graph.
-     * 
+     *
      * @return the title of the graph
      */
     public final String getTitle() {
@@ -216,17 +202,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Sets the title of the graph.
-     * 
-     * @param title
-     *            the title to set
+     *
+     * @param title the title to set
      */
     public final void setTitle(String title) {
         this.title = title;
     }
 
-    /**
-     * Instantiates a new abstract graph consumer.
-     */
     protected AbstractGraphConsumer() {
     }
 
@@ -250,14 +232,15 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Adds a value map build from specified parameters to the result map.
-     * @param result {@link MapResultData}
-     * @param group 
+     *
+     * @param result     {@link MapResultData}
+     * @param group
      * @param series
      * @param seriesData
      * @param aggregated
      */
     private void addKeyData(MapResultData result, String group, String series,
-            SeriesData seriesData, boolean aggregated) {
+                            SeriesData seriesData, boolean aggregated) {
 
         // Override series name when aggregated
         if (aggregated) {
@@ -303,20 +286,17 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         }
         if (!renderPercentiles) {
             for (Map.Entry<Double, Aggregator> entry : aggInfo.entrySet()) {
-                // Init key and value depending on revertsKeysAndValues property
+                // Init key and value depending on invertKeysAndValues property
                 Double key = entry.getKey();
                 Double value = Double.valueOf(entry.getValue().getResult());
 
-                // Create result storage for coordinates
-                ListResultData coordResult = new ListResultData();
-
-                if (!revertsKeysAndValues) {
-                    key = entry.getKey();
-                    value = Double.valueOf(entry.getValue().getResult());
-                } else {
+                if (invertKeysAndValues) {
                     key = Double.valueOf(entry.getValue().getResult());
                     value = entry.getKey();
                 }
+
+                // Create result storage for coordinates
+                ListResultData coordResult = new ListResultData();
                 coordResult.addResult(new ValueResultData(key));
                 coordResult.addResult(new ValueResultData(value));
                 dataResult.addResult(coordResult);
@@ -330,7 +310,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             int rank = 0;
             double percent = 0;
             TreeMap<Double, Aggregator> sortedInfo = new TreeMap<>(aggInfo);
-            if (!revertsKeysAndValues) {
+            if (!invertKeysAndValues) {
                 for (Map.Entry<Double, Aggregator> entry : sortedInfo
                         .entrySet()) {
                     Double value = entry.getKey();
@@ -375,14 +355,14 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     }
 
     /**
-     * @param serie String serie name
+     * @param series     The series name
      * @param seriesData {@link SeriesData}
      * @return MapResultData metadata for serie
      */
-    protected MapResultData createSerieResult(String serie, SeriesData seriesData) {
+    protected MapResultData createSerieResult(String series, SeriesData seriesData) {
         MapResultData seriesResult = new MapResultData();
         seriesResult.setResult(RESULT_SERIES_NAME,
-                new ValueResultData(serie));
+                new ValueResultData(series));
         seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
                 new ValueResultData(
                         Boolean.valueOf(seriesData.isControllersSeries())));
@@ -397,7 +377,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * Aggregate a value to the aggregator defined by the specified parameters.
      */
     private void aggregateValue(AggregatorFactory factory, SeriesData data,
-            Double key, double value) {
+                                Double key, double value) {
         Map<Double, Aggregator> aggInfo = data.getAggregatorInfo();
 
         // Get or create aggregator
@@ -439,12 +419,11 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         result.setResult(RESULT_TITLE, new ValueResultData(getTitle()));
         result.setResult(RESULT_SERIES, new ListResultData());
 
-        boolean supportsControllersDiscrimination = true;
-        Iterator<GroupInfo> it = groupInfos.values().iterator();
-        while (supportsControllersDiscrimination && it.hasNext()) {
-            supportsControllersDiscrimination &= it.next().getSeriesSelector()
-                    .allowsControllersDiscrimination();
-        }
+        boolean supportsControllersDiscrimination = groupInfos.values()
+                .stream()
+                .map(GroupInfo::getSeriesSelector)
+                .allMatch(GraphSeriesSelector::allowsControllersDiscrimination);
+
         result.setResult(RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
                 new ValueResultData(
                         Boolean.valueOf(supportsControllersDiscrimination)));
@@ -456,14 +435,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /**
      * Inherited classes can add properties to the result
      *
-     * @param parentResult
-     *            the parent result
+     * @param parentResult the parent result
      */
     protected abstract void initializeExtraResults(MapResultData parentResult);
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleConsumer#startConsuming()
      */
@@ -481,7 +459,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleConsumer#consume(org.apache
      * .jmeter.report.csv.core.Sample, int)
@@ -506,10 +484,15 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 Map<String, SeriesData> seriesInfo = groupData.getSeriesInfo();
                 SeriesData seriesData = seriesInfo.get(seriesName);
                 if (seriesData == null) {
-                    seriesData = new SeriesData(factory, aggregatedKeysSeries,
+                    boolean isControllersSeries =
                             groupInfo.getSeriesSelector()
                                     .allowsControllersDiscrimination()
-                                            ? sample.isController() : false,
+                                    && sample.isController();
+
+                    seriesData = new SeriesData(
+                            factory,
+                            aggregatedKeysSeries,
+                            isControllersSeries,
                             false);
                     seriesInfo.put(seriesName, seriesData);
                 }
@@ -517,7 +500,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 // Get the value to aggregate and dispatch it to the groupData
                 Double value = groupInfo.getValueSelector().select(seriesName,
                         sample);
-                if(value != null) {
+                if (value != null) {
                     aggregateValue(factory, seriesData, key, value);
                     if (overallSeries) {
                         SeriesData overallData = groupData.getOverallSeries();
@@ -532,13 +515,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleConsumer#stopConsuming()
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.graph.SampleConsumer#stopConsuming()
      */
