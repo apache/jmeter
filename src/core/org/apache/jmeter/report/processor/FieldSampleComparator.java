@@ -25,7 +25,7 @@ import org.apache.jmeter.report.core.SampleMetadata;
  * @since 3.0
  */
 public class FieldSampleComparator implements SampleComparator {
-    
+
     private int index;
 
     private final String fieldName;
@@ -39,15 +39,9 @@ public class FieldSampleComparator implements SampleComparator {
         index = metadata.ensureIndexOf(fieldName);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.report.csv.core.SampleComparator#compare(org.apache
-     * .jmeter.report.csv.core.Sample, org.apache.jmeter.report.csv.core.Sample)
-     */
     @Override
     public long compare(Sample s1, Sample s2) {
-        return s1.getData(long.class, index, fieldName).compareTo(s2.getData(long.class, index, fieldName));
+        return s1.getData(long.class, index, fieldName)
+                .compareTo(s2.getData(long.class, index, fieldName));
     }
 }

@@ -117,6 +117,7 @@ Summary
     <li><bug>63203</bug>Unit Tests : Replace use of <code>@Deprecated</code> by <code>@VisibleForTesting</code> for methods/constructors/classes made public for Unit Testing only</li>
     <li><pr>449</pr>Refactor and Test ResponseTimePercentilesOverTimeGraphConsumer. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><pr>450</pr>Abstract graph consumer improvements. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>451</pr>Improve a few unit tests and classes. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
