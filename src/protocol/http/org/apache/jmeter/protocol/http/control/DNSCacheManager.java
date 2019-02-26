@@ -20,7 +20,11 @@ package org.apache.jmeter.protocol.http.control;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.http.conn.DnsResolver;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
@@ -68,7 +72,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     private static final String SERVERS = "DNSCacheManager.servers"; // $NON-NLS-1$
 
-    private  static final String HOSTS = "DNSCacheManager.hosts"; // $NON-NLS-1$
+    private static final String HOSTS = "DNSCacheManager.hosts"; // $NON-NLS-1$
 
     private static final String IS_CUSTOM_RESOLVER = "DNSCacheManager.isCustomResolver"; // $NON-NLS-1$
     //-- JMX tag values
@@ -133,7 +137,6 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     }
 
     /**
-     *
      * Resolves address using system or custom DNS resolver
      */
     @Override
@@ -252,7 +255,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             ExtendedResolver extendedResolver = getOrCreateResolver();
             if (extendedResolver == null) {
                 throw new UnknownHostException("Could not resolve host:" + host
-                        +", failed to initialize resolver or no resolver found");
+                        + ", failed to initialize resolver or no resolver found");
             } else if (extendedResolver.getResolvers().length > 0) {
                 addresses = customRequestLookup(host);
             }
@@ -291,6 +294,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     /**
      * Tries to initialize resolver, otherwise sets initFailed to true
+     *
      * @return ExtendedResolver if init succeeded or null otherwise
      */
     private ExtendedResolver getOrCreateResolver() {
@@ -333,6 +337,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     /**
      * Add DNS Server
+     *
      * @param dnsServer DNS Server
      */
     public void addServer(String dnsServer) {
@@ -357,7 +362,8 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     /**
      * Add static host
-     * @param dnsHost DNS host
+     *
+     * @param dnsHost   DNS host
      * @param addresses Comma separated list of addresses
      */
     public void addHost(String dnsHost, String addresses) {
@@ -384,8 +390,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     /**
      * Clean DNS cache each iteration
      *
-     * @param clear
-     *            flag whether DNS cache should be cleared on each iteration
+     * @param clear flag whether DNS cache should be cleared on each iteration
      */
     public void setClearEachIteration(boolean clear) {
         setProperty(new BooleanProperty(CLEAR_CACHE_EACH_ITER, clear));
