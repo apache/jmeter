@@ -1142,7 +1142,7 @@ run JMeter unless all the JMeter jars are added.
         fullpath="META-INF/LICENSE-openiconlibrary.txt" />
       <!-- Only include class files from build tree - see above -->
       <fileset dir="${build.core}" includes="**/*.class"
-        excludes="**/BeanShellClient*.class,**/NewDriver*,**/DynamicClassLoader*"/>
+        excludes="**/BeanShellClient*.class,**/NewDriver*,**/DynamicClassLoader*,**/ShutdownClient.class"/>
       <fileset dir="${src.core}" includes="org/apache/jmeter/images/**"
         excludes="**/*.properties,org/apache/jmeter/images/toolbar/icons-custom/**"/>
       <fileset dir="${build.core}" includes="**/*.properties">
