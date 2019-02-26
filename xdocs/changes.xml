@@ -114,7 +114,8 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li>Bug 63203 - Unit Tests : Replace use of <code>@Deprecated</code> by <code>@VisibleForTesting</code> for methods/constructors/classes made public for Unit Testing only</li>
+    <li><bug>63203</bug>Unit Tests : Replace use of <code>@Deprecated</code> by <code>@VisibleForTesting</code> for methods/constructors/classes made public for Unit Testing only</li>
+    <li><pr>449</pr>Refactor and Test ResponseTimePercentilesOverTimeGraphConsumer. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
