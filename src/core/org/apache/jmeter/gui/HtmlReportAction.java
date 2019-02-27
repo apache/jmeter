@@ -16,24 +16,24 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class HtmlReportAction extends AbstractAction implements MenuCreator{
+public class HtmlReportAction extends AbstractAction implements MenuCreator {
     public static Set<String> commands = new HashSet<>();
     private HtmlReportPanel htmlReportPanel;
 
     static {
         commands.add(ActionNames.HTML_REPORT);
     }
-    
+
     public HtmlReportAction() {
     }
-    
+
     @Override
     public void doAction(ActionEvent e) throws IllegalUserActionException {
-        
+
         htmlReportPanel = new HtmlReportPanel();
         htmlReportPanel.showInputDialog();
     }
-    
+
     @Override
     public Set<String> getActionNames() {
         return commands;
@@ -64,7 +64,7 @@ public class HtmlReportAction extends AbstractAction implements MenuCreator{
 
     @Override
     public void localeChanged() {
-        //NOOP
+        // NOOP
     }
 
     public HtmlReportPanel getHtmlReportPanel() {

@@ -25,12 +25,12 @@ public class HtmlReportGenerator {
 
     private static Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
 
-    private String cSVFilePath;
+    private String csvFilePath;
     private String userPropertiesFilePath;
     private String outputDirectoryPath;
 
-    public HtmlReportGenerator(String cSVFilePath, String userPropertiesFilePath, String outputDirectoryPath) {
-        this.cSVFilePath = cSVFilePath;
+    public HtmlReportGenerator(String csvFilePath, String userPropertiesFilePath, String outputDirectoryPath) {
+        this.csvFilePath = csvFilePath;
         this.userPropertiesFilePath = userPropertiesFilePath;
         if (outputDirectoryPath == null) {
             this.outputDirectoryPath = JMeterUtils.getJMeterBinDir() + "/report-output/";
@@ -43,43 +43,32 @@ public class HtmlReportGenerator {
      * Prepare and Run the HTML report generation command
      */
     public List<String> run() {
-        List<String> returnValue = new ArrayList<>();
-        List<String> testFilesResult = testArguments();
-        if (testFilesResult.isEmpty()) {
-            ByteArrayOutputStream commandExecutionError = new ByteArrayOutputStream();
+        List<String> errorMessageList = new ArrayList<>();
+        errorMessageList.addAll(testArguments());
+        if (errorMessageList.isEmpty()) {
+            ByteArrayOutputStream commandExecutionOutput = new ByteArrayOutputStream();
             int resultCode = -1;
             List<String> generationCommand = createGenerationCommand();
             try {
                 SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterBinDir()), 60000, 100, null, null,
-                        null, commandExecutionError);
+                        commandExecutionOutput, null);
                 resultCode = sc.run(generationCommand);
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Running ");
-                }
-                if (resultCode == 0) {
-                    returnValue.add(HTML_REPORT_SUCCESS);
-
-                } else {
-                    returnValue.add(ERROR_GENERATING);
-                    if (LOGGER.isErrorEnabled()) {
-                        LOGGER.error("The HTML report generation failed : {}", commandExecutionError);
-                    }
+                LOGGER.debug("Running report generation");
+                if (resultCode != 0) {
+                    errorMessageList.add(commandExecutionOutput.toString());
+                    LOGGER.info("The HTML report generation failed and returned : {}", commandExecutionOutput);
+                    return errorMessageList;
                 }
             } catch (InterruptedException | IOException e) {
-                returnValue.add(ERROR_GENERATING);
+                errorMessageList.add(commandExecutionOutput.toString());
                 if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Error during HTML report generation : {}", e.getMessage(),e);
+                    LOGGER.error("Error during HTML report generation : {}", e.getMessage(), e);
                 }
             }
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("SystemCommand ran : {}", generationCommand);
-                LOGGER.debug("SystemCommand returned : {}", resultCode);
-            }
-
-        } else {
-            returnValue.addAll(testFilesResult);
+            LOGGER.debug("SystemCommand ran : {}  returned : {}", generationCommand, resultCode);
+            return errorMessageList;
         }
-        return returnValue;
+        return errorMessageList;
     }
 
     /**
@@ -99,9 +88,9 @@ public class HtmlReportGenerator {
         arguments.add("-q");
         arguments.add(userPropertiesFilePath);
         arguments.add("-g");
-        arguments.add(cSVFilePath);
+        arguments.add(csvFilePath);
         arguments.add("-j");
-        arguments.add(JMeterUtils.getJMeterBinDir() + "/jmeter.log");
+        arguments.add(JMeterUtils.getJMeterBinDir() + "/jmeter_html_report.log");
         arguments.add("-o");
         arguments.add(outputDirectoryPath);
         return arguments;
@@ -115,9 +104,9 @@ public class HtmlReportGenerator {
     private List<String> testArguments() {
         List<String> errors = new ArrayList<>();
 
-        String cSVError = checkFile(new File(cSVFilePath), ".csv");
-        if (!cSVError.isEmpty()) {
-            errors.add(JMeterUtils.getResString("csv_file") + cSVError);
+        String csvError = checkFile(new File(csvFilePath), ".csv");
+        if (!csvError.isEmpty()) {
+            errors.add(JMeterUtils.getResString("csv_file") + csvError);
         }
 
         String userPropertiesError = checkFile(new File(userPropertiesFilePath), ".properties");

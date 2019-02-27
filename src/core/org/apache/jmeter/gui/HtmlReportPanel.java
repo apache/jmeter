@@ -6,9 +6,11 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -16,17 +18,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.HtmlReportGenerator;
 import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.helger.commons.annotation.VisibleForTesting;
 
 public class HtmlReportPanel implements ActionListener {
     private static Set<String> commands = new HashSet<>();
@@ -39,10 +42,11 @@ public class HtmlReportPanel implements ActionListener {
 
     private EscapeDialog messageDialog;
 
-    private JTextField cSVFilePathTextField;
+    private JTextField csvFilePathTextField;
     private JTextField userPropertiesFilePathTextField;
     private JTextField outputDirectoryPathTextField;
     private JButton reportLaunchButton;
+    private JSyntaxTextArea reportingArea;
 
     static {
         commands.add(ActionNames.HTML_REPORT);
@@ -53,30 +57,33 @@ public class HtmlReportPanel implements ActionListener {
     }
 
     public void showInputDialog() {
+
         setupInputDialog();
         launchInputDialog();
     }
-    
+
     private void launchInputDialog() {
         messageDialog.pack();
         ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(), messageDialog);
         SwingUtilities.invokeLater(() -> messageDialog.setVisible(true));
     }
-    
-    @VisibleForTesting
+
     public void setupInputDialog() {
         messageDialog = new EscapeDialog(GuiPackage.getInstance().getMainFrame(),
                 JMeterUtils.getResString("html_report_menu"), false);
 
         setupContentPane();
-
     }
 
     private void setupContentPane() {
         Container contentPane = messageDialog.getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-        contentPane.add(setupFileChooserPanel(), BorderLayout.CENTER);
+        contentPane.add(setupFileChooserPanel(), BorderLayout.NORTH);
+
+        reportingArea = JSyntaxTextArea.getInstance(10, 30, true);
+        reportingArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+        contentPane.add(reportingArea, BorderLayout.CENTER);
 
         contentPane.add(setupButtonPanel(), BorderLayout.SOUTH);
     }
@@ -85,8 +92,8 @@ public class HtmlReportPanel implements ActionListener {
         JPanel fileChooserPanel = new JPanel(new GridLayout(3, 3));
         fileChooserPanel.add(new JLabel(JMeterUtils.getResString("csv_file")));
 
-        cSVFilePathTextField = new JTextField();
-        fileChooserPanel.add(cSVFilePathTextField);
+        csvFilePathTextField = new JTextField();
+        fileChooserPanel.add(csvFilePathTextField);
 
         JButton cSVFileButton = new JButton(JMeterUtils.getResString("browse"));
         cSVFileButton.setActionCommand(BROWSE_CSV);
@@ -125,28 +132,60 @@ public class HtmlReportPanel implements ActionListener {
         return buttonPanel;
     }
 
+    private class ReportGenerationWorker extends SwingWorker<List<String>, String> {
+
+        @Override
+        protected List<String> doInBackground() throws Exception {
+            HtmlReportGenerator htmlReportAction = new HtmlReportGenerator(csvFilePathTextField.getText(),
+                    userPropertiesFilePathTextField.getText(), outputDirectoryPathTextField.getText());
+
+            return htmlReportAction.run();
+        }
+
+        @Override
+        protected void done() {
+            try {
+                reportToUser(get());
+            } catch (InterruptedException | ExecutionException exception) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Error during html report generation : {}", exception.getMessage(), exception);
+                }
+                List<String> reportException = new ArrayList<>();
+                reportException.add(exception.getMessage());
+                reportToUser(reportException);
+            }
+        }
+    }
+
+    private void reportingAddText(String resString) {
+        reportingArea.setText(reportingArea.getText() + resString + "\n");
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
         case CREATE_REQUEST:
-            reportLaunchButton.setText(JMeterUtils.getResString("html_report_processing"));
-            reportLaunchButton.setForeground(Color.ORANGE);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("CSV file path : {}", cSVFilePathTextField.getText());
-                LOGGER.debug("user.properties file path : {}", userPropertiesFilePathTextField.getText());
-                LOGGER.debug("Output directory file path : {}", outputDirectoryPathTextField.getText());
+            try {
+                reportingArea.setText(JMeterUtils.getResString("html_report_processing") + "\n");
+                reportLaunchButton.setForeground(Color.orange);
+                new ReportGenerationWorker().execute();
+            } catch (Exception exception) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Error during html report generation : {}", exception.getMessage(), exception);
+                }
             }
-            HtmlReportGenerator htmlReportAction = new HtmlReportGenerator(cSVFilePathTextField.getText(),
-                    userPropertiesFilePathTextField.getText(), outputDirectoryPathTextField.getText());
-            reportToUser(htmlReportAction.run());
-            reportLaunchButton.setText(JMeterUtils.getResString("html_report_request"));
-            reportLaunchButton.setForeground(null);
+            if (LOGGER.isDebugEnabled()) {
+                StringBuilder sb = new StringBuilder("CSV file path {} \n").append("user.properties file path : {} \n")
+                        .append("Output directory file path : {}");
+                LOGGER.debug(sb.toString(), csvFilePathTextField.getText(), userPropertiesFilePathTextField.getText(),
+                        outputDirectoryPathTextField.getText());
+            }
             break;
         case BROWSE_USER_PROPERTIES:
             userPropertiesFilePathTextField.setText(showFileChooser(userPropertiesFilePathTextField, false));
             break;
         case BROWSE_CSV:
-            cSVFilePathTextField.setText(showFileChooser(cSVFilePathTextField, false));
+            csvFilePathTextField.setText(showFileChooser(csvFilePathTextField, false));
             break;
         case BROWSE_OUTPUT:
             outputDirectoryPathTextField.setText(showFileChooser(outputDirectoryPathTextField, true));
@@ -157,23 +196,15 @@ public class HtmlReportPanel implements ActionListener {
 
     private void reportToUser(List<String> runResults) {
         if (runResults.isEmpty()) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("No result after HTML Report Generation command");
-            }
+            reportingAddText(JMeterUtils.getResString(HtmlReportGenerator.HTML_REPORT_SUCCESS));
+            reportLaunchButton.setForeground(Color.green);
         } else {
-            switch (runResults.get(0)) {
-            case HtmlReportGenerator.ERROR_GENERATING:
-                JMeterUtils.reportErrorToUser(JMeterUtils.getResString("html_report_unknown_error"));
-                break;
-            case HtmlReportGenerator.HTML_REPORT_SUCCESS:
-                JMeterUtils.reportInfoToUser(JMeterUtils.getResString("html_report_success"),
-                        JMeterUtils.getResString("html_report_menu"));
-                break;
-            default:
-                // It means that it's a List of file selection error
-                sendFileSelectionError(runResults);
-                break;
+            StringBuilder sb = new StringBuilder();
+            for (String errorString : runResults) {
+                sb.append(errorString + "\n");
             }
+            reportingAddText(sb.toString());
+            reportLaunchButton.setForeground(Color.red);
         }
     }
 
@@ -195,26 +226,8 @@ public class HtmlReportPanel implements ActionListener {
         return fileChooser.getSelectedFile().getPath();
     }
 
-    /**
-     * Show file selection errors to the users
-     * 
-     * @param errors
-     *            A list of all selection error messages to send
-     */
-    private void sendFileSelectionError(List<String> errors) {
-        String errorMessage = new String();
-        for (String error : errors) {
-            errorMessage += error + "\n";
-        }
-        JMeterUtils.reportErrorToUser(errorMessage);
-    }
-
-    public JTextField getcSVFilePathTextField() {
-        return cSVFilePathTextField;
-    }
-
-    public void setcSVFilePathTextField(JTextField cSVFilePathTextField) {
-        this.cSVFilePathTextField = cSVFilePathTextField;
+    public JTextField getCsvFilePathTextField() {
+        return csvFilePathTextField;
     }
 
     public JTextField getUserPropertiesFilePathTextField() {
@@ -229,13 +242,11 @@ public class HtmlReportPanel implements ActionListener {
         return reportLaunchButton;
     }
 
+    public JSyntaxTextArea getReportingArea() {
+        return reportingArea;
+    }
+
     public EscapeDialog getMessageDialog() {
         return messageDialog;
     }
-
-    @VisibleForTesting
-    public void setMessageDialog(EscapeDialog messageDialog) {
-        this.messageDialog = messageDialog;
-    }
-
 }
