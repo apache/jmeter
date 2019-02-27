@@ -3250,7 +3250,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="complete-junit"  depends="compile-tests"
-    description="Run individual JUnit test (-Dtest.case=org.apache.jorphan.test.AllTests) (-Dtest.format=plain) (-Dtest.showoutput=true)"
+    description="Run all JUnit tests (-Dtest.format=plain) (-Dtest.showoutput=true)"
     xmlns:jacoco="antlib:org.jacoco.ant">
   <mkdir dir="reports"/>
   <property name="test.format" value="plain"/>
