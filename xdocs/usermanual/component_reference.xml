@@ -800,6 +800,9 @@ This will not have any impact on existing Test plans.
           <property name="Username" required="No">Full distinguished name of the user as which you want to bind.</property>
           <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind.
             If it is incorrect, the sampler will return an error and revert to an anonymous bind. (N.B. this is stored unencrypted in the test plan)</property>
+          <property name="Connection timeout (in milliseconds)" required="No">Timeout for connection, if exceeded connection will be aborted</property>
+          <property name="Use Secure LDAP Protocol" required="No">Use <code>ldaps://</code> scheme instead of <code>ldap://</code></property>
+          <property name="Trust All Certificates" required="No">Trust all certificates, only used if <code>Use Secure LDAP Protocol</code> is checked</property>
         </properties>
       </dd>
       <dt><b>Thread unbind</b></dt>
