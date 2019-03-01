@@ -80,6 +80,7 @@ Summary
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>63185</bug>Add option to implicitly trust SSL/TLS connections/Disable hostname verification. Based on contribution by Brian Wolfe (wolfebrian2120 at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -178,6 +179,7 @@ Summary
     <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Benoit Vatan (benoit.vatan at gmail.com)</li>
     <li>Graham Russell (graham at ham1.co.uk)</li>
+    <li>Brian Wolfe (wolfebrian2120 at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

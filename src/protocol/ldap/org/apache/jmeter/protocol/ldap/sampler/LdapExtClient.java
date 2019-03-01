@@ -30,21 +30,16 @@ import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*******************************************************************************
- *
+/**
  * Ldap Client class is main class to create ,modify, search and delete all the
  * LDAP functionality available
- *
- * author Dolf Smits(Dolf.Smits@Siemens.com) created Aug 09 2003 11:00 AM
- * company Siemens Netherlands N.V..
- *
  * Based on the work of: author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
  *
- ******************************************************************************/
+ */
 public class LdapExtClient {
     private static final Logger log = LoggerFactory.getLogger(LdapExtClient.class);
 
@@ -53,7 +48,8 @@ public class LdapExtClient {
     /**
      * Constructor for the LdapClient object
      */
-    public LdapExtClient() {
+    private LdapExtClient() {
+        super();
     }
 
     /**
@@ -78,14 +74,25 @@ public class LdapExtClient {
      * @exception NamingException
      *                when creating the {@link DirContext} fails
      */
-    public static DirContext connect(String host, String port, String rootdn, String username, String password, String connTimeOut, boolean secure)
+    public static DirContext connect(String host,
+            String port, 
+            String rootdn, 
+            String username,
+            String password, 
+            String connTimeOut, 
+            boolean secure, 
+            boolean trustAll)
             throws NamingException {
         DirContext dirContext;
-        Hashtable<String, String> env = new Hashtable<>();
+        Hashtable<String, String> env = new Hashtable<>(); // NOSONAR : Env needs to be HashTable
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory"); // $NON-NLS-1$
         StringBuilder sb = new StringBuilder(80);
         if (secure) {
             sb.append("ldaps://"); // $NON-NLS-1$
+            if (trustAll){
+                log.debug("Using secure connection with trustAll");
+                env.put("java.naming.ldap.factory.socket", TrustAllSocketFactory.class.getName());
+            }
         } else {
             sb.append("ldap://"); // $NON-NLS-1$
         }
@@ -97,7 +104,9 @@ public class LdapExtClient {
         sb.append("/"); // $NON-NLS-1$
         sb.append(rootdn);
         env.put(Context.PROVIDER_URL,sb.toString());
-        log.info("prov_url= " + env.get(Context.PROVIDER_URL)); // $NON-NLS-1$
+        if(log.isInfoEnabled()) {
+            log.info("prov_url= {}", env.get(Context.PROVIDER_URL)); // $NON-NLS-1$
+        }
         if (connTimeOut.length()> 0) {
             env.put("com.sun.jndi.ldap.connect.timeout", connTimeOut); // $NON-NLS-1$
         }
@@ -128,7 +137,7 @@ public class LdapExtClient {
         }
     }
 
-    /***************************************************************************
+    /**
      * Filter the data in the ldap directory for the given search base
      * 
      * @param dirContext
@@ -158,23 +167,24 @@ public class LdapExtClient {
      * @return result of the search
      * @throws NamingException
      *             when searching fails
-     **************************************************************************/
-    public static NamingEnumeration<SearchResult> searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
-            int timelim, String[] attrs, boolean retobj, boolean deref) throws NamingException {
+     **/
+    public static NamingEnumeration<SearchResult> searchTest(  
+            DirContext dirContext, 
+            String searchBase, 
+            String searchFilter, 
+            int scope, 
+            long countlim,
+            int timelim, 
+            String[] attrs, 
+            boolean retobj, 
+            boolean deref) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
         }
         if (log.isDebugEnabled()){
             log.debug(
-                    "searchBase=" + searchBase +
-                    " scope=" + scope +
-                    " countlim=" + countlim +
-                    " timelim=" + timelim +
-                    " attrs=" + JMeterUtils.unsplit(attrs,",") +
-                    " retobj=" + retobj +
-                    " deref=" + deref +
-                    " filter=" + searchFilter
-                      );
+                    "searchBase={}, scope={}, countlim={}, timelim={}, attrs={}, retobj={}, deref={}, filter={}",
+                    searchBase,scope, countlim,timelim, attrs != null ? JOrphanUtils.unsplit(attrs,","): null,retobj,deref,searchFilter);
         }
         SearchControls searchcontrols = new SearchControls(scope, countlim,
                 timelim, attrs, retobj, deref);
@@ -216,7 +226,7 @@ public class LdapExtClient {
      *
      **************************************************************************/
     public static void moddnOp(DirContext dirContext, String ddn, String newdn) throws NamingException {
-        log.debug("ddn and newDn= " + ddn + "@@@@" + newdn);
+        log.debug("ddn and newDn= {}@@@@{}", ddn , newdn);
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
         }
@@ -265,7 +275,7 @@ public class LdapExtClient {
         return dirContext.createSubcontext(string, attributes);
     }
 
-    /***************************************************************************
+    /**
      * Delete the attribute from the ldap directory
      *
      * @param dirContext
@@ -274,7 +284,7 @@ public class LdapExtClient {
      *            distinguished name of the subcontext to destroy
      * @throws NamingException
      *             when destroying the subcontext fails
-     **************************************************************************/
+     */
     public static void deleteTest(DirContext dirContext, String string) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
