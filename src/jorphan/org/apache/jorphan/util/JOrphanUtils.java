@@ -738,4 +738,29 @@ public final class JOrphanUtils {
         setter.accept((String) result[0]);
         return nbReplaced;
     }
+    
+    /**
+     * Takes an array of strings and a tokenizer character, and returns a string
+     * of all the strings concatenated with the tokenizer string in between each
+     * one.
+     *
+     * @param splittee
+     *            Array of Objects to be concatenated.
+     * @param splitChar
+     *            Object to unsplit the strings with.
+     * @return Array of all the tokens.
+     */
+    public static String unsplit(Object[] splittee, Object splitChar) {
+        StringBuilder retVal = new StringBuilder();
+        int count = -1;
+        while (++count < splittee.length) {
+            if (splittee[count] != null) {
+                retVal.append(splittee[count]);
+            }
+            if (count + 1 < splittee.length && splittee[count + 1] != null) {
+                retVal.append(splitChar);
+            }
+        }
+        return retVal.toString();
+    }
 }
