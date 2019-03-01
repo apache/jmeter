@@ -143,15 +143,14 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
      */
     @Override
     public void writeAndSendMetrics() {
-        List<MetricTuple> tempMetrics;
+        List<MetricTuple> copyMetrics;
         synchronized (lock) {
             if(metrics.isEmpty()) {
                 return;
             }
-            tempMetrics = metrics;
-            metrics = new ArrayList<>(tempMetrics.size());            
+            copyMetrics = metrics;
+            metrics = new ArrayList<>(copyMetrics.size());
         }
-        final List<MetricTuple> copyMetrics = tempMetrics;
         if (!copyMetrics.isEmpty()) {
             try {
                 if(httpRequest == null) {
