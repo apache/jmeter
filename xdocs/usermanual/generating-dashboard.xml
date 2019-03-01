@@ -7,6 +7,7 @@
 <!DOCTYPE document[
 <!ENTITY sect-num '14'>
 <!ENTITY hellip   "&#x02026;" >
+<!ENTITY rarr     "&#x02192;" >
 ]>
 
 <document prev="remote-test.html" next="realtime-results.html" id="$Id$">
@@ -585,6 +586,22 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                     </p>
                 </subsection>
             </subsection>
+            
+            <subsection name="&sect-num;.3.3 Generation using GUI Tools" anchor="report_gui">
+                <p>
+                	You can find the following dialog by clicking on <code>Tools &rarr; HTML report </code>:
+                	<figure image="html_report_menu.png">Figure &sect-num;.1. HTML Report Dialog Menu</figure>
+                </p>
+                <p>For each parameters see the following table :</p>
+                <properties>
+	                <property name="Log file"  required="Yes">A log file from a test plan (.csv)</property>
+	                <property name="Properties file"  required="Yes">A generator properties file (.properties)</property>
+	                <property name="Output directory" required="No">The directory where you want to store the report (must be empty)</property>
+                </properties>
+                <p>If no output directory is defined, the controller will use <code>${JMETER_HOME}/bin/report-output</code>.</p>
+                <p>You then only have to click on the <code>Request launch</code> button and wait for an information dialog to appear
+                <i>(Note that the report generation may take up to 5 minutes)</i></p>
+             </subsection>
 
             <subsection name="&sect-num;.4 Default graphs" anchor="default_graphs">
                 <note>Due to limitations of this early version, each default graph
