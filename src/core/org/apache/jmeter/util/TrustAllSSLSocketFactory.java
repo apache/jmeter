@@ -16,25 +16,25 @@
  *
  */
 
-package org.apache.jmeter.protocol.smtp.sampler.protocol;
+package org.apache.jmeter.util;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.X509ExtendedTrustManager;
 
 /**
  * This class can be used as a SocketFactory with SSL-connections.
  * Its purpose is to ensure that all certificates - no matter from which CA - are accepted to secure the SSL-connection.
- * @deprecated Will be removed in next version, use {@link org.apache.jmeter.util.TrustAllSSLSocketFactory}
  */
-@Deprecated
 public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
 
     private final SSLSocketFactory factory;
@@ -50,24 +50,44 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
         try {
             sslcontext = SSLContext.getInstance("TLS"); // $NON-NLS-1$
             sslcontext.init( null, new TrustManager[]{
-                    new X509TrustManager() {
+                    new X509ExtendedTrustManager() {
                         @Override
-                        public X509Certificate[] getAcceptedIssuers() {
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                             return EMPTY_X509Certificate;
                         }
                         @Override
-                        public void checkClientTrusted(
-                                X509Certificate[] certs, String authType) {
+                        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                            // NOOP
                         }
                         @Override
-                        public void checkServerTrusted(
-                                X509Certificate[] certs, String authType) {
+                        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                            // NOOP
+                        }
+                        @Override
+                        public void checkClientTrusted(X509Certificate[] arg0, String arg1, Socket arg2)
+                            throws CertificateException {
+                            // NOOP
+                        }
+                        @Override
+                        public void checkClientTrusted(X509Certificate[] arg0, String arg1, SSLEngine arg2)
+                            throws CertificateException {
+                            // NOOP
+                        }
+                        @Override
+                        public void checkServerTrusted(X509Certificate[] arg0, String arg1, Socket arg2)
+                            throws CertificateException {
+                            // NOOP
+                        }
+                        @Override
+                        public void checkServerTrusted(X509Certificate[] arg0, String arg1, SSLEngine arg2)
+                            throws CertificateException {
+                            // NOOP
                         }
                     }
                 },
                         new java.security.SecureRandom());
         } catch (Exception e) {
-            throw new RuntimeException("Could not create the SSL context",e);
+            throw new IllegalStateException("Could not create the SSL context",e);
         }
         factory = sslcontext.getSocketFactory();
     }
