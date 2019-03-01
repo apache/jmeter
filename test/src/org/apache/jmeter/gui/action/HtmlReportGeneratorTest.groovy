@@ -27,20 +27,20 @@ class HtmlReportGeneratorTest extends JMeterSpec{
         HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(csvPath, userPropertiesPath, outputDirectoryPath)
         List<String> resultList = htmlReportGenerator.run()
         then:
-        resultList.equals(contains)
+        resultList.equals(expected)
         where:
-        csvPath                                                           | userPropertiesPath                               | outputDirectoryPath                         || contains
-        ""         | ""                                               | ""                                          || [
+        csvPath                                                           | userPropertiesPath                                        | outputDirectoryPath                                   || expected
+        ""                                                                | ""                                                        | ""                                                    || [
             JMeterUtils.getResString("csv_file")+JMeterUtils.getResString("no_such_file"),
             JMeterUtils.getResString("user_properties_file")+JMeterUtils.getResString("no_such_file"),
             JMeterUtils.getResString("output_directory")+JMeterUtils.getResString("no_such_directory")
         ]
-        JMeterUtils.getJMeterBinDir()+"/testfiles/XPathTest2.xml" | JMeterUtils.getJMeterBinDir()+"/testfiles/XPathTest2.xml" | JMeterUtils.getJMeterBinDir()+"/testfiles" || [
+        JMeterUtils.getJMeterBinDir()+"/testfiles/XPathTest2.xml"         | JMeterUtils.getJMeterBinDir()+"/testfiles/XPathTest2.xml" | JMeterUtils.getJMeterBinDir()+"/testfiles"            || [
             JMeterUtils.getResString("csv_file")+JMeterUtils.getResString("wrong_type"),
             JMeterUtils.getResString("user_properties_file")+JMeterUtils.getResString("wrong_type"),
             JMeterUtils.getResString("output_directory")+JMeterUtils.getResString("directory_not_empty")
         ]
-        JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties" | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport" || []
+        JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport" || []
     }
     
     def "check if generation is correct"(){

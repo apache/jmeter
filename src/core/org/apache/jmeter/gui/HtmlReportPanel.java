@@ -17,7 +17,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import org.apache.jmeter.gui.action.ActionNames;
@@ -65,7 +64,7 @@ public class HtmlReportPanel implements ActionListener {
     private void launchInputDialog() {
         messageDialog.pack();
         ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(), messageDialog);
-        SwingUtilities.invokeLater(() -> messageDialog.setVisible(true));
+        messageDialog.setVisible(true);
     }
 
     public void setupInputDialog() {
