@@ -61,7 +61,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
         JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport" || []
     }
     
-    def "check if generation is correct"(){
+    def "check that report generation succeeds"(){
         setup:
         File testDirectory = new File(JMeterUtils.getJMeterBinDir() + "/testfiles/testReport");
         if(testDirectory.exists()) {
@@ -84,7 +84,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
         8615 == root.path("Total").path("sampleCount").intValue();
     }
     
-    def "check if generation is wrong"(){
+    def "check that generation fails"(){
         setup:
         File testDirectory = new File(JMeterUtils.getJMeterBinDir() + "/testfiles/testReport");
         if(testDirectory.exists()) {
