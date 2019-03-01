@@ -26,9 +26,7 @@ import org.apache.jmeter.junit.spock.JMeterSpec
 import spock.lang.IgnoreIf
 
 
-@IgnoreIf({
-    Boolean.valueOf(System.properties['java.awt.headless'])
-})
+@IgnoreIf({ JMeterSpec.isHeadless() })
 class HtmlReportGUITest extends JMeterSpec{
 
     def "test HtmlReportPanel initialization should throw NullPointerException when GuiPackage is not initialized"() {
