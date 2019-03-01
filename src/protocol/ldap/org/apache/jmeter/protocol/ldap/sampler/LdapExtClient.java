@@ -30,6 +30,7 @@ import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
+import org.apache.jmeter.util.TrustAllSSLSocketFactory;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +92,7 @@ public class LdapExtClient {
             sb.append("ldaps://"); // $NON-NLS-1$
             if (trustAll){
                 log.debug("Using secure connection with trustAll");
-                env.put("java.naming.ldap.factory.socket", TrustAllSocketFactory.class.getName());
+                env.put("java.naming.ldap.factory.socket", TrustAllSSLSocketFactory.class.getName());
             }
         } else {
             sb.append("ldap://"); // $NON-NLS-1$
