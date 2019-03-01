@@ -18,10 +18,12 @@
 package org.apache.jmeter.assertions.gui
 
 import org.apache.jmeter.assertions.ResponseAssertion
+import org.apache.jmeter.junit.spock.JMeterSpec
 
-import spock.lang.Specification
-
-class AssertionGuiSpec extends Specification {
+/**
+ * Extending JMeterSpec is required to initialize resource bundle org.apache.jmeter.resource.messages
+ */
+class AssertionGuiSpec extends JMeterSpec {
 
     def sut = new AssertionGui()
 
