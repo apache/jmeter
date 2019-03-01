@@ -60,6 +60,7 @@ public final class ActionNames {
     public static final String FUNCTIONS        = "functions"; // $NON-NLS-1$
     public static final String HELP             = "help"; // $NON-NLS-1$
     public static final String HEAP_DUMP        = "heap_dump"; // $NON-NLS-1$
+    public static final String HTML_REPORT      = "html_report";
     public static final String LAF_PREFIX       = "laf:"; // Look and Feel prefix
     public static final String LINK_BUG_TRACKER = "link_bug_tracker:"; // URI of bug tracker
     public static final String LINK_COMP_REF    = "link_component_reference:"; // URI of component reference
