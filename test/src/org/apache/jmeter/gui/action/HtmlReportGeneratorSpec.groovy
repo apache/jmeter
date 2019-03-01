@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonMerge
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 
-class HtmlReportGeneratorTest extends JMeterSpec{
+class HtmlReportGeneratorSpec extends JMeterSpec{
 
     def "check if generation contains the right file error"(){
         setup:
