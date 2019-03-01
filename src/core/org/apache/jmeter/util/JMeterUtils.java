@@ -942,20 +942,11 @@ public class JMeterUtils implements UnitTestManager {
      * @param splitChar
      *            Object to unsplit the strings with.
      * @return Array of all the tokens.
+     * @deprecated use {@link JOrphanUtils#unsplit(Object[], Object)}
      */
-    //TODO - move to JOrphanUtils?
+    @Deprecated
     public static String unsplit(Object[] splittee, Object splitChar) {
-        StringBuilder retVal = new StringBuilder();
-        int count = -1;
-        while (++count < splittee.length) {
-            if (splittee[count] != null) {
-                retVal.append(splittee[count]);
-            }
-            if (count + 1 < splittee.length && splittee[count + 1] != null) {
-                retVal.append(splitChar);
-            }
-        }
-        return retVal.toString();
+        return JOrphanUtils.unsplit(splittee, splitChar);
     }
 
     // End Method
