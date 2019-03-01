@@ -18,27 +18,28 @@
 package org.apache.jmeter.assertions.gui
 
 import org.apache.jmeter.assertions.ResponseAssertion
-import org.apache.jmeter.junit.spock.JMeterSpec
 
-class AssertionGuiSpec extends JMeterSpec {
+import spock.lang.Specification
+
+class AssertionGuiSpec extends Specification {
 
     def sut = new AssertionGui()
 
-    def "init of component doesn't fail"() {
+    def "init of new component does not throw an exception"() {
         when:
             sut.init()
         then:
             noExceptionThrown()
     }
 
-    def "clearing GUI component fields doesn't fail"() {
+    def "clearing GUI component fields does not throw an exception"() {
         when:
             sut.clearGui()
         then:
             noExceptionThrown()
     }
 
-    def "Creation of ResponseAssertion doesn't fail"() {
+    def "Creation of ResponseAssertion sets name of element and enables it"() {
         when:
             def result = sut.createTestElement()
         then:
@@ -61,7 +62,7 @@ class AssertionGuiSpec extends JMeterSpec {
             element.isSubstringType()
     }
 
-    def "Modification of GUI by ResponseAssertion has no unexpected behaviour"() {
+    def "Modification of GUI by ResponseAssertion does not throw an exception"() {
         given:
             def element = new ResponseAssertion()
         when:
