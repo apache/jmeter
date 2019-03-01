@@ -21,6 +21,7 @@ package org.apache.jmeter.gui.action;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,17 +32,15 @@ import org.slf4j.LoggerFactory;
 
 public class HtmlReportGenerator {
 
-    public final static String HTML_REPORT_SUCCESS = "html_report_success";
+    public static final String HTML_REPORT_SUCCESS = "generate_report_ui.html_report_success";
+    public static final String ERROR_GENERATING = "generate_report_ui.html_report_error";
+    public static final String NO_FILE = "generate_report_ui.no_such_file";
+    public static final String NO_DIRECTORY = "generate_report_ui.no_such_directory";
+    public static final String NOT_EMPTY_DIRECTORY = "generate_report_ui.directory_not_empty";
+    public static final String CANNOT_CREATE_DIRECTORY = "generate_report_ui.cannot_create_directory";
 
-    public final static String ERROR_GENERATING = "html_report_error";
-
-    public final static String NO_FILE = "no_such_file";
-    public final static String WRONG_FILE = "wrong_type";
-
-    public final static String NO_DIRECTORY = "no_such_directory";
-    public final static String NOT_EMPTY_DIRECTORY = "directory_not_empty";
-
-    private static Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
+    private static final long COMMAND_TIMEOUT = JMeterUtils.getPropDefault("generate_report_ui.generation_timeout", 120000L);
 
     private String csvFilePath;
     private String userPropertiesFilePath;
@@ -62,16 +61,16 @@ public class HtmlReportGenerator {
      */
     public List<String> run() {
         List<String> errorMessageList = new ArrayList<>();
-        errorMessageList.addAll(testArguments());
+        errorMessageList.addAll(checkArguments());
         if (errorMessageList.isEmpty()) {
             ByteArrayOutputStream commandExecutionOutput = new ByteArrayOutputStream();
             int resultCode = -1;
             List<String> generationCommand = createGenerationCommand();
             try {
-                SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterBinDir()), 60000, 100, null, null,
+                SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterBinDir()), COMMAND_TIMEOUT, 100, null, null,
                         commandExecutionOutput, null);
-                resultCode = sc.run(generationCommand);
                 LOGGER.debug("Running report generation");
+                resultCode = sc.run(generationCommand);
                 if (resultCode != 0) {
                     errorMessageList.add(commandExecutionOutput.toString());
                     LOGGER.info("The HTML report generation failed and returned : {}", commandExecutionOutput);
@@ -96,19 +95,20 @@ public class HtmlReportGenerator {
      * @return the list of arguments for SystemCommand execution
      */
     private List<String> createGenerationCommand() {
+        String jmeterBinDir = JMeterUtils.getJMeterBinDir();
         List<String> arguments = new ArrayList<>();
         String java = System.getProperty("java.home") + "/bin/java";
         arguments.add(java);
         arguments.add("-jar");
-        arguments.add(JMeterUtils.getJMeterBinDir() + "/ApacheJMeter.jar");
+        arguments.add(jmeterBinDir + "/ApacheJMeter.jar");
         arguments.add("-p");
-        arguments.add(JMeterUtils.getJMeterBinDir() + "/jmeter.properties");
+        arguments.add(jmeterBinDir + "/jmeter.properties");
         arguments.add("-q");
         arguments.add(userPropertiesFilePath);
         arguments.add("-g");
         arguments.add(csvFilePath);
         arguments.add("-j");
-        arguments.add(JMeterUtils.getJMeterBinDir() + "/jmeter_html_report.log");
+        arguments.add(jmeterBinDir + "/jmeter_html_report.log");
         arguments.add("-o");
         arguments.add(outputDirectoryPath);
         return arguments;
@@ -119,43 +119,39 @@ public class HtmlReportGenerator {
      * 
      * @return whether or not the files are correct
      */
-    private List<String> testArguments() {
+    private List<String> checkArguments() {
         List<String> errors = new ArrayList<>();
 
-        String csvError = checkFile(new File(csvFilePath), ".csv");
-        if (!csvError.isEmpty()) {
-            errors.add(JMeterUtils.getResString("csv_file") + csvError);
+        String csvError = checkFile(new File(csvFilePath));
+        if (csvError != null) {
+            errors.add(JMeterUtils.getResString("generate_report_ui.csv_file") + csvError);
         }
 
-        String userPropertiesError = checkFile(new File(userPropertiesFilePath), ".properties");
-        if (!userPropertiesError.isEmpty()) {
-            errors.add(JMeterUtils.getResString("user_properties_file") + userPropertiesError);
+        String userPropertiesError = checkFile(new File(userPropertiesFilePath));
+        if (userPropertiesError != null) {
+            errors.add(JMeterUtils.getResString("generate_report_ui.user_properties_file") + userPropertiesError);
         }
 
         String outputError = checkDirectory(new File(outputDirectoryPath));
-        if (!outputError.isEmpty()) {
-            errors.add(JMeterUtils.getResString("output_directory") + outputError);
+        if (outputError != null) {
+            errors.add(JMeterUtils.getResString("generate_report_ui.output_directory") + outputError);
         }
         return errors;
     }
 
     /**
-     * Check if a file is accurate for report generation
+     * Check if a file is correct for report generation
      * 
      * @param fileToCheck
      *            the directory to check
-     * @param extension
-     *            the needed file extension for the file
-     * @return the error message or an empty string if the file is accurate
+     * @return the error message or null if the file is ok
      */
-    private String checkFile(File fileToCheck, String extension) {
-        if (!fileToCheck.exists() || !fileToCheck.isFile()) {
-            return JMeterUtils.getResString(NO_FILE);
+    private String checkFile(File fileToCheck) {
+        if (fileToCheck.exists() && fileToCheck.canRead() && fileToCheck.isFile()) {
+            return null;
+        } else {
+            return MessageFormat.format(JMeterUtils.getResString(NO_FILE), fileToCheck);
         }
-        if (!fileToCheck.getName().contains(extension)) {
-            return JMeterUtils.getResString(WRONG_FILE);
-        }
-        return "";
     }
 
     /**
@@ -166,13 +162,24 @@ public class HtmlReportGenerator {
      * @return the error message or an empty string if the directory is fine
      */
     private String checkDirectory(File directoryToCheck) {
-        if (!directoryToCheck.exists() || !directoryToCheck.isDirectory()) {
-            return JMeterUtils.getResString(NO_DIRECTORY);
+        if(directoryToCheck.exists()) {
+            String[] files = directoryToCheck.list();
+            if (files != null && files.length > 0) {
+                return MessageFormat.format(JMeterUtils.getResString(NOT_EMPTY_DIRECTORY), directoryToCheck);
+            } else {
+                return null;
+            }
+        } else {
+            File parentDirectory = directoryToCheck.getParentFile();
+            if(parentDirectory.exists() && parentDirectory.canWrite()) {
+                if(directoryToCheck.mkdir()) {
+                    return null;
+                } else {
+                    return MessageFormat.format(JMeterUtils.getResString(CANNOT_CREATE_DIRECTORY), directoryToCheck);
+                }
+            } else {
+                return MessageFormat.format(JMeterUtils.getResString(CANNOT_CREATE_DIRECTORY), directoryToCheck);
+            }
         }
-        if (directoryToCheck.list().length > 0) {
-            return JMeterUtils.getResString(NOT_EMPTY_DIRECTORY);
-        }
-        return "";
     }
-
 }

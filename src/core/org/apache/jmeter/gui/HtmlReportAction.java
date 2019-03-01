@@ -35,21 +35,21 @@ import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class HtmlReportAction extends AbstractAction implements MenuCreator {
-    public static Set<String> commands = new HashSet<>();
-    private HtmlReportPanel htmlReportPanel;
+    private static Set<String> commands = new HashSet<>();
+    private HtmlReportUI htmlReportPanel;
 
     static {
         commands.add(ActionNames.HTML_REPORT);
     }
 
     public HtmlReportAction() {
+        super();
     }
 
     @Override
     public void doAction(ActionEvent e) throws IllegalUserActionException {
-
-        htmlReportPanel = new HtmlReportPanel();
-        htmlReportPanel.showInputDialog();
+        htmlReportPanel = new HtmlReportUI();
+        htmlReportPanel.showInputDialog(e);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class HtmlReportAction extends AbstractAction implements MenuCreator {
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
         if (location == MENU_LOCATION.TOOLS) {
-            JMenuItem menuItemIC = new JMenuItem(JMeterUtils.getResString("html_report_menu"), KeyEvent.VK_UNDEFINED);
+            JMenuItem menuItemIC = new JMenuItem(JMeterUtils.getResString("generate_report_ui.html_report_menu"), KeyEvent.VK_UNDEFINED);
             menuItemIC.setName(ActionNames.HTML_REPORT);
             menuItemIC.setActionCommand(ActionNames.HTML_REPORT);
             menuItemIC.setAccelerator(null);
@@ -85,8 +85,7 @@ public class HtmlReportAction extends AbstractAction implements MenuCreator {
         // NOOP
     }
 
-    public HtmlReportPanel getHtmlReportPanel() {
+    public HtmlReportUI getHtmlReportPanel() {
         return htmlReportPanel;
     }
-
 }
