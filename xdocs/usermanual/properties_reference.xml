@@ -1295,6 +1295,10 @@ JMETER-SERVER</source>
 </section>
 <section name="&sect-num;.35 Miscellaneous configuration" anchor="miscellaneous">
 <properties>
+<property name="cssselector.parser.cache.size">
+    Size of cache used by <code>CSS Selector Extractor</code> (for JODD implementation only) to store parsed CSS Selector expressions.<br/>
+    Defaults to: <code>400</code>
+</property>
 <property name="resultcollector.action_if_file_exists">
     Used to control what happens when you start a test and have listeners that could overwrite existing result files.<br/>
     Possible values:
