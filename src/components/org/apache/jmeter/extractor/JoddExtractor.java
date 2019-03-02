@@ -21,8 +21,14 @@ package org.apache.jmeter.extractor;
 import java.util.List;
 
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+
+import jodd.csselly.CSSelly;
+import jodd.csselly.CssSelector;
 import jodd.lagarto.dom.LagartoDOMBuilder;
 import jodd.lagarto.dom.Node;
 import jodd.lagarto.dom.NodeSelector;
@@ -39,9 +45,12 @@ public class JoddExtractor implements Extractor {
     private static final long serialVersionUID = -7235814605293262972L;
 
     private static final String CACHE_KEY_PREFIX = JoddExtractor.class.getName()+"_PARSED_BODY";
-    
+    private static final LoadingCache<String, List<List<CssSelector>>> CSS_SELECTOR_CACHE;
     static {
         LoggerFactory.setLoggerProvider(Slf4jLogger.PROVIDER);
+        final int cacheSize = JMeterUtils.getPropDefault(
+                    "cssselector.parser.cache.size", 400);
+        CSS_SELECTOR_CACHE = Caffeine.newBuilder().maximumSize(cacheSize).build(CSSelly::parse);
     }
 
     public JoddExtractor() {
@@ -70,7 +79,9 @@ public class JoddExtractor implements Extractor {
             jodd.lagarto.dom.Document doc = domBuilder.parse(inputString);
             nodeSelector = new NodeSelector(doc);
         }
-        List<Node> elements = nodeSelector.select(expression);
+        
+        List<List<CssSelector>> cssSelectors = CSS_SELECTOR_CACHE.get(expression);
+        List<Node> elements = nodeSelector.select(cssSelectors);
         for (Node element : elements) {
             if (matchNumber <= 0 || found != matchNumber) {
                 result.add(extractValue(attribute, element));
