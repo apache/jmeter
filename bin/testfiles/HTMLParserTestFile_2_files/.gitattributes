@@ -1,0 +1,3 @@
+# JMeter hard-codes resource sizes, so we should stick to single end-of-line setting
+*.htm        text=auto eol=crlf
+*.css        text=auto eol=crlf
