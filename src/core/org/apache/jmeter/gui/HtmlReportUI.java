@@ -95,21 +95,8 @@ public class HtmlReportUI implements ActionListener {
     }
 
     public void setupInputDialog(Object source) {
-        JFrame parent = null;
-        if (source instanceof JMenuItem) {
-            JMenuItem item = (JMenuItem) source;
-            Component comp = item.getParent();
-            if (comp instanceof JPopupMenu) {
-                JPopupMenu popup = (JPopupMenu) comp;
-                comp = popup.getInvoker();
-                Window window = SwingUtilities.windowForComponent((Component) comp);
-                if (window instanceof JFrame) {
-                    parent = (JFrame) window;
-                }
-            }
-        }
+        JFrame parent = getParentWindow(source);
         messageDialog = new EscapeDialog(parent, JMeterUtils.getResString("generate_report_ui.html_report_menu"), false);
-
         setupContentPane();
     }
 
