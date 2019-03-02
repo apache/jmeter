@@ -25,7 +25,6 @@ import java.util.Set;
 import org.apache.jmeter.functions.gui.FunctionHelper;
 
 public class CreateFunctionDialog extends AbstractAction {
-    private final FunctionHelper helper;
 
     private static final Set<String> commands;
     static {
@@ -34,7 +33,7 @@ public class CreateFunctionDialog extends AbstractAction {
     }
 
     public CreateFunctionDialog() {
-        helper = new FunctionHelper();
+        super();
     }
 
     /**
@@ -46,7 +45,8 @@ public class CreateFunctionDialog extends AbstractAction {
     }
 
     @Override
-    public void doAction(ActionEvent arg0) {
+    public void doAction(ActionEvent event) {
+        FunctionHelper helper = new FunctionHelper(getParentFrame(event));
         helper.setVisible(true);
     }
 }

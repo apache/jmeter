@@ -64,6 +64,7 @@ import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
+import org.apache.jorphan.documentation.VisibleForTesting;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
@@ -92,8 +93,13 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     
     private JMeterVariables jMeterVariables = new JMeterVariables();
 
+    @VisibleForTesting
     public FunctionHelper() {
-        super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
+        super();
+    }
+    
+    public FunctionHelper(JFrame parent) {
+        super(parent, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
         init();
         JMeterUtils.addLocaleChangeListener(this);
     }
