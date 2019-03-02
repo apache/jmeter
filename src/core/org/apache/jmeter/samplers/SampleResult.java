@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SampleResult implements Serializable, Cloneable, Searchable {
-    private static final Byte BYTE = Byte.valueOf((byte)0);
+    private static final Byte MARKER = Byte.valueOf((byte) 0);
     private static final long serialVersionUID = 241L;
 
     // Needs to be accessible from Test code
@@ -500,8 +500,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return <code>true</code> if the result was previously marked
      */
     public boolean markFile(String filename) {
-        Byte result = files.putIfAbsent(filename, BYTE);
-        return result != null;
+        Byte previousMarker = files.putIfAbsent(filename, MARKER);
+        return previousMarker != null;
     }
 
     public String getResponseCode() {
