@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project default="install">
+    <target name="clean"/>
+    <target name="build"/>
+    <target name="install"/>
+    <target name="uninstall"/>
+</project>
