@@ -16,10 +16,12 @@
  *
  */
 
-package org.apache.jmeter.gui.action;
+package org.apache.jmeter.gui.action
 
 import spock.lang.IgnoreIf
 import spock.lang.Unroll
+
+import java.text.MessageFormat
 
 import org.apache.commons.io.FileUtils
 import org.apache.jmeter.junit.spock.JMeterSpec
@@ -31,75 +33,100 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 class HtmlReportGeneratorSpec extends JMeterSpec{
 
-    def "check if generation contains the right file error"(){
+    def "check if generation from csv: '#csvPath' with properties: '#userPropertiesPath' in folder: '#outputDirectoryPath' contains the expected error"(){
         setup:
-        File testDirectory = new File(JMeterUtils.getJMeterBinDir() + "/testfiles/testReport");
+        File testDirectory = new File(JMeterUtils.getJMeterBinDir(), "/testfiles/testReport")
         if(testDirectory.exists()) {
             if (testDirectory.list().length>0) {
-                FileUtils.cleanDirectory(testDirectory);
+                FileUtils.cleanDirectory(testDirectory)
             }
         } else {
-            testDirectory.mkdir();
+            testDirectory.mkdir()
         }
         when:
-        HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(csvPath, userPropertiesPath, outputDirectoryPath)
-        List<String> resultList = htmlReportGenerator.run()
+            HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(csvPath, userPropertiesPath, outputDirectoryPath)
+            List<String> resultList = htmlReportGenerator.checkArguments()
         then:
-        resultList.equals(expected)
+            resultList.equals(expected)
         where:
-        csvPath                                                           | userPropertiesPath                                        | outputDirectoryPath                                   || expected
-        ""                                                                | ""                                                        | ""                                                    || [
-            JMeterUtils.getResString("csv_file")+JMeterUtils.getResString("no_such_file"),
-            JMeterUtils.getResString("user_properties_file")+JMeterUtils.getResString("no_such_file"),
-            JMeterUtils.getResString("output_directory")+JMeterUtils.getResString("no_such_directory")
-        ]
-        JMeterUtils.getJMeterBinDir()+"/testfiles/XPathTest2.xml"         | JMeterUtils.getJMeterBinDir()+"/testfiles/XPathTest2.xml" | JMeterUtils.getJMeterBinDir()+"/testfiles"            || [
-            JMeterUtils.getResString("csv_file")+JMeterUtils.getResString("wrong_type"),
-            JMeterUtils.getResString("user_properties_file")+JMeterUtils.getResString("wrong_type"),
-            JMeterUtils.getResString("output_directory")+JMeterUtils.getResString("directory_not_empty")
-        ]
-        JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport" || []
+            csvPath                                                           | userPropertiesPath                                        | outputDirectoryPath                                   | expected
+            JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport" | []
+            JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles" | [
+                JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NOT_EMPTY_DIRECTORY), outputDirectoryPath),
+            ]
+            JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFileMissing.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport" | [
+                JMeterUtils.getResString("generate_report_ui.csv_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), csvPath)
+            ]
+            ""                                                                | ""                                                        | ""                                                    | [
+                JMeterUtils.getResString("generate_report_ui.csv_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), csvPath),
+                JMeterUtils.getResString("generate_report_ui.user_properties_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), userPropertiesPath),
+                JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath),
+            ]
+            JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties" | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport/oneLevel/twolevel"            | [
+                JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath)
+            ]
     }
     
-    def "check that report generation succeeds"(){
+    def "check that report generation succeeds and statistic are generated"(){
         setup:
-        File testDirectory = new File(JMeterUtils.getJMeterBinDir() + "/testfiles/testReport");
-        if(testDirectory.exists()) {
-            if (testDirectory.list().length>0) {
-                FileUtils.cleanDirectory(testDirectory);
+            File testDirectory = new File(JMeterUtils.getJMeterBinDir(), "/testfiles/testReport")
+            if(testDirectory.exists()) {
+                if (testDirectory.list().length>0) {
+                    FileUtils.cleanDirectory(testDirectory)
+                }
+            } else {
+                testDirectory.mkdir()
             }
-        } else {
-            testDirectory.mkdir();
-        }
         when:
-        HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
-                JMeterUtils.getJMeterBinDir() + "/testfiles/HTMLReportTestFile.csv",
-                JMeterUtils.getJMeterBinDir() + "/user.properties", JMeterUtils.getJMeterBinDir() + "/testfiles/testReport");
+            HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
+                    JMeterUtils.getJMeterBinDir() + "/testfiles/HTMLReportTestFile.csv",
+                    JMeterUtils.getJMeterBinDir() + "/user.properties", 
+                    JMeterUtils.getJMeterBinDir() + "/testfiles/testReport")
+            List<String> resultList = htmlReportGenerator.run()
+            File statistics = new File(JMeterUtils.getJMeterBinDir(), "/testfiles/testReport/statistics.json")
+            ObjectMapper mapper = new ObjectMapper()
+            JsonNode root =null;
+            if (statistics.exists()) {
+                statistics.withReader { jsonFileReader -> 
+                    root = mapper.readTree(jsonFileReader)
+                }
+            }
         then:
-        new ArrayList<String>().equals(htmlReportGenerator.run())
-        ObjectMapper mapper = new ObjectMapper();
-        FileReader jsonFileReader = new FileReader(JMeterUtils.getJMeterBinDir() + "/testfiles/testReport/statistics.json");
-        JsonNode root = mapper.readTree(jsonFileReader);
-        jsonFileReader.close();
-        8615 == root.path("Total").path("sampleCount").intValue();
+            resultList.isEmpty()
+            statistics.exists()
+            8615 == root.path("Total").path("sampleCount").intValue()
+        cleanup:
+            if(testDirectory.exists()) {
+                if (testDirectory.list().length>0) {
+                    FileUtils.cleanDirectory(testDirectory)
+                }
+            }
     }
     
-    def "check that generation fails"(){
+    def "check that report generation fails when format does not match and error is reported"(){
         setup:
-        File testDirectory = new File(JMeterUtils.getJMeterBinDir() + "/testfiles/testReport");
-        if(testDirectory.exists()) {
-            if (testDirectory.list().length>0) {
-                FileUtils.cleanDirectory(testDirectory);
+            File testDirectory = new File(JMeterUtils.getJMeterBinDir(),"/testfiles/testReport")
+            if(testDirectory.exists()) {
+                if (testDirectory.list().length>0) {
+                    FileUtils.cleanDirectory(testDirectory)
+                }
+            } else {
+                testDirectory.mkdir()
             }
-        } else {
-            testDirectory.mkdir();
-        }
         when:
-        HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
+            HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
                 JMeterUtils.getJMeterBinDir() + "/testfiles/HTMLReportFalseTestFile.csv",
-                JMeterUtils.getJMeterBinDir() + "/user.properties", JMeterUtils.getJMeterBinDir() + "/testfiles/testReport");
+                JMeterUtils.getJMeterBinDir() + "/user.properties", 
+                JMeterUtils.getJMeterBinDir() + "/testfiles/testReport")
+            List<String> resultList = htmlReportGenerator.run()
         then:
-        htmlReportGenerator.run().get(0).contains("An error occurred:");
-        testDirectory.list().length == 0
+            testDirectory.list().length == 0
+            resultList.get(0).contains("An error occurred: Error while processing samples:Consumer failed with message")
+        cleanup:
+            if(testDirectory.exists()) {
+                if (testDirectory.list().length>0) {
+                    FileUtils.cleanDirectory(testDirectory)
+                }
+            }
     }
 }

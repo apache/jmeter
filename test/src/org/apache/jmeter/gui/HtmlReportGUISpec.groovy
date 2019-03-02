@@ -30,17 +30,6 @@ import spock.lang.IgnoreIf
 
 @IgnoreIf({ JMeterSpec.isHeadless() })
 class HtmlReportGUISpec extends JMeterSpec{
-
-    def "test HtmlReportUI initialization should throw NullPointerException when GuiPackage is not initialized"() {
-        given:
-        def htmlReportPanel = new HtmlReportUI()
-        when:
-        htmlReportPanel.showInputDialog(null)
-        then:
-        thrown(NullPointerException)
-    }
-
-
     def "test HtmlReportUI initialization"(){
         given:
         def HtmlReportUI htmlReportPanel = new HtmlReportUI();

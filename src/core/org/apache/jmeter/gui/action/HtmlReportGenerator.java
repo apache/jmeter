@@ -171,7 +171,7 @@ public class HtmlReportGenerator {
             }
         } else {
             File parentDirectory = directoryToCheck.getParentFile();
-            if(parentDirectory.exists() && parentDirectory.canWrite()) {
+            if(parentDirectory != null && parentDirectory.exists() && parentDirectory.canWrite()) {
                 if(directoryToCheck.mkdir()) {
                     return null;
                 } else {
