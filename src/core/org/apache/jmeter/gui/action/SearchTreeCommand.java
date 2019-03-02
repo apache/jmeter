@@ -18,16 +18,11 @@
 
 package org.apache.jmeter.gui.action;
 
-import java.awt.Component;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
 
 /**
  * Search nodes for a text
@@ -60,22 +55,11 @@ public class SearchTreeCommand extends AbstractAction {
      * @return A freshly created search dialog with the parent frame that could be
      *         found, or no parent otherwise.
      */
-    private SearchTreeDialog createSearchDialog(Object source) {
-        JFrame parent = null;
-        if (source instanceof JMenuItem) {
-            JMenuItem item = (JMenuItem) source;
-            Component comp = item.getParent();
-            if (comp instanceof JPopupMenu) {
-                JPopupMenu popup = (JPopupMenu) comp;
-                comp = popup.getInvoker();
-                Window window = SwingUtilities.windowForComponent((Component) comp);
-                if (window instanceof JFrame) {
-                    parent = (JFrame) window;
-                }
-            }
-        }
+    private SearchTreeDialog createSearchDialog(ActionEvent event) {
+        JFrame parent = getParentFrame(event);
         return new SearchTreeDialog(parent);
     }
+
     
     /**
      * @see Command#doAction(ActionEvent)
@@ -84,7 +68,7 @@ public class SearchTreeCommand extends AbstractAction {
     public void doAction(ActionEvent e) {
         // we create the dialog upon first display event only
         if (dialog == null) {
-            dialog = createSearchDialog(e.getSource());
+            dialog = createSearchDialog(e);
         }
         dialog.setVisible(true);
     }
