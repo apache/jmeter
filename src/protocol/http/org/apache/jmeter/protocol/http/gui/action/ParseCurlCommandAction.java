@@ -109,14 +109,15 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
 
     @Override
     public void doAction(ActionEvent e) {
-        showInputDialog();
+        showInputDialog(e);
     }
     
     /**
      * Show popup where user can import cURL command
+     * @param event {@link ActionEvent}
      */
-    private final void showInputDialog() {
-        EscapeDialog messageDialog = new EscapeDialog(GuiPackage.getInstance().getMainFrame(),
+    private final void showInputDialog(ActionEvent event) {
+        EscapeDialog messageDialog = new EscapeDialog(getParentFrame(event),
                 JMeterUtils.getResString("curl_import"), false); //$NON-NLS-1$
         Container contentPane = messageDialog.getContentPane();
         contentPane.setLayout(new BorderLayout());

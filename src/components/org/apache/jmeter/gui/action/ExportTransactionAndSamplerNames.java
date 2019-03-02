@@ -133,7 +133,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
         if(sampleNames.isEmpty()) {
             log.warn("No transaction exported using regexp '{}', modify property '{}' to fix this problem",
                     TRANSACTIONS_REGEX_PATTERN, "report_transactions_pattern");
-            showResult("No transaction exported using regexp '"
+            showResult(e, "No transaction exported using regexp '"
                     +TRANSACTIONS_REGEX_PATTERN
                     +"', modify property 'report_transactions_pattern' to fix this problem");
         } else {
@@ -146,7 +146,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
             log.info("Exported transactions: jmeter.reportgenerator.exporter.html.series_filter=^({})(-success|-failure)?$", 
                     result);
 
-            showResult("jmeter.reportgenerator.exporter.html.series_filter=^("
+            showResult(e, "jmeter.reportgenerator.exporter.html.series_filter=^("
                     +result
                     +")(-success|-failure)?$");
             
@@ -155,11 +155,12 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
 
     /**
      * Display result in popup
+     * @param event {@link ActionEvent}
      * @param result String 
      */
-    private static final void showResult(String result) {
-        EscapeDialog messageDialog = new EscapeDialog(GuiPackage.getInstance().getMainFrame(),
-                JMeterUtils.getResString("export_transactions_title"), true); //$NON-NLS-1$
+    private final void showResult(ActionEvent event, String result) {
+        EscapeDialog messageDialog = new EscapeDialog(getParentFrame(event),
+                JMeterUtils.getResString("export_transactions_title"), false); //$NON-NLS-1$
         Container contentPane = messageDialog.getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(new JLabel(
