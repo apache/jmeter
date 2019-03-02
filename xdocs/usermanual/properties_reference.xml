@@ -1763,6 +1763,10 @@ JMETER-SERVER</source>
     End date of report using date_format property.<br/>
     Defaults to: nothing
 </property>
+<property name="generate_report_ui.generation_timeout">
+    Timeout in milliseconds for Report generation when using Tools &gt; Generate HTML report.<br/>
+    Defaults to: 120000
+</property>
 </properties>
 </section>
 <section name="&sect-num;.38 Additional property files to load" anchor="properties">

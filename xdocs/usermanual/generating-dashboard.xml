@@ -587,20 +587,20 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                 </subsection>
             </subsection>
             
-            <subsection name="&sect-num;.3.3 Generation using GUI Tools" anchor="report_gui">
+            <subsection name="&sect-num;.3.3 Generation using GUI Tools menu" anchor="report_gui">
                 <p>
-                	You can find the following dialog by clicking on <code>Tools &rarr; HTML report </code>:
-                	<figure image="html_report_menu.png">Figure &sect-num;.1. HTML Report Dialog Menu</figure>
+                You can generate the HTML report using menu item <code>Tools &rarr; Generate HTML report</code>:
+                <figure image="html_report_menu.png">Figure &sect-num;.1. HTML Report Dialog Menu</figure>
                 </p>
                 <p>For each parameters see the following table :</p>
                 <properties>
-	                <property name="Log file"  required="Yes">A log file from a test plan (.csv)</property>
-	                <property name="Properties file"  required="Yes">A generator properties file (.properties)</property>
-	                <property name="Output directory" required="No">The directory where you want to store the report (must be empty)</property>
+	                <property name="Results file (csv or jtl)" required="Yes">The CSV output of a tes run</property>
+	                <property name="user.properties file" required="Yes">The user.properties file used to run the load test</property>
+	                <property name="Output directory" required="No">The directory where you want the report to be created(must be empty)</property>
                 </properties>
                 <p>If no output directory is defined, the controller will use <code>${JMETER_HOME}/bin/report-output</code>.</p>
-                <p>You then only have to click on the <code>Request launch</code> button and wait for an information dialog to appear
-                <i>(Note that the report generation may take up to 5 minutes)</i></p>
+                <p>You then only have to click on the <code>Generate report</code> button and wait for an information dialog to appear
+                <note>If report generation takes more than two minutes, adjust the property <code>generate_report_ui.generation_timeout</code></note></p>
              </subsection>
 
             <subsection name="&sect-num;.4 Default graphs" anchor="default_graphs">
