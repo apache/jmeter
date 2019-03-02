@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -36,9 +35,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -82,9 +79,8 @@ public class HtmlReportUI implements ActionListener {
         super();
     }
 
-    public void showInputDialog(ActionEvent e) {
-
-        setupInputDialog(e.getSource());
+    public void showInputDialog(JFrame parent) {
+        setupInputDialog(parent);
         launchInputDialog();
     }
 
@@ -94,8 +90,7 @@ public class HtmlReportUI implements ActionListener {
         messageDialog.setVisible(true);
     }
 
-    public void setupInputDialog(Object source) {
-        JFrame parent = getParentWindow(source);
+    public void setupInputDialog(JFrame parent) {
         messageDialog = new EscapeDialog(parent, JMeterUtils.getResString("generate_report_ui.html_report_menu"), false);
         setupContentPane();
     }

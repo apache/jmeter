@@ -35,7 +35,7 @@ class HtmlReportGUISpec extends JMeterSpec{
         given:
         def htmlReportPanel = new HtmlReportUI()
         when:
-        htmlReportPanel.showInputDialog()
+        htmlReportPanel.showInputDialog(null)
         then:
         thrown(NullPointerException)
     }
@@ -49,7 +49,7 @@ class HtmlReportGUISpec extends JMeterSpec{
         GuiPackage.initInstance(treeListener, treeModel);
         GuiPackage.getInstance().setMainFrame(new MainFrame(treeModel, treeListener));
         when:
-        htmlReportPanel.showInputDialog(new ActionEvent(new Object(), 1, "Test"))
+        htmlReportPanel.showInputDialog(GuiPackage.getInstance().getMainFrame())
         htmlReportPanel.getMessageDialog().setVisible(false)
         then:
         "".equals(htmlReportPanel.getCsvFilePathTextField().getText());
