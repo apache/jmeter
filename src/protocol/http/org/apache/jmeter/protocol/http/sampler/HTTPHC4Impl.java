@@ -186,6 +186,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         
     private static final String CONTEXT_ATTRIBUTE_METRICS = "__jmeter.M__";
 
+    private static final boolean DISABLE_DEFAULT_UA = JMeterUtils.getPropDefault("httpclient4.default_user_agent_disabled", false);
+
     private static final boolean GZIP_RELAX_MODE = JMeterUtils.getPropDefault("httpclient4.gzip_relax_mode", false);
 
     private static final boolean DEFLATE_RELAX_MODE = JMeterUtils.getPropDefault("httpclient4.deflate_relax_mode", false);
@@ -1040,7 +1042,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     setConnectionTimeToLive(TIME_TO_LIVE, TimeUnit.MILLISECONDS).
                     setRetryHandler(new StandardHttpRequestRetryHandler(RETRY_COUNT, REQUEST_SENT_RETRY_ENABLED)).
                     setConnectionReuseStrategy(DefaultClientConnectionReuseStrategy.INSTANCE);
-            
+            if(DISABLE_DEFAULT_UA) {
+                builder.disableDefaultUserAgent();
+            }
             Lookup<AuthSchemeProvider> authSchemeRegistry =
                     RegistryBuilder.<AuthSchemeProvider>create()
                         .register(AuthSchemes.BASIC, new BasicSchemeFactory())

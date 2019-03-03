@@ -76,11 +76,12 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><bug>62977</bug>Unable to send HTTP requests without a User-Agent header</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-    <li><bug>63185</bug>Add option to implicitly trust SSL/TLS connections/Disable hostname verification. Based on contribution by Brian Wolfe (wolfebrian2120 at gmail.com)</li>
+    <li><bug>63185</bug>LDAP related elements: Add option to implicitly trust SSL/TLS connections/Disable hostname verification. Based on contribution by Brian Wolfe (wolfebrian2120 at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>

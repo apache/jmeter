@@ -543,6 +543,10 @@ JMETER-SERVER</source>
     Ignore EOFException that some edgy application may emit to signal end of GZipped stream.<br/>
     Defaults to: <code>false</code>
 </property>
+<property name="httpclient4.default_user_agent_disabled">
+    If true, default HC4 User-Agent (Apache-HttpClient/X.Y.Z (Java/A.B.C_D)) will not be added.<br/>
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 
