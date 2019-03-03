@@ -148,6 +148,7 @@ Summary
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
     <li><bug>62446</bug>Counter documentation is wrong in required fieds. Contributed by orimarko at gmail.com</li>
+    <li><bug>62327</bug>TestPlan: In library table if path is modified and plan saved, the modification is lost on file reload</li>
 </ul>
 
 <h3>Functions</h3>
