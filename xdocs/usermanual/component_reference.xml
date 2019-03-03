@@ -992,6 +992,7 @@ to configure this via the GUI, so it cannot really be used.
     <description><p>This sampler allows you to write a sampler using the BeanShell scripting language.
 </p><p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 Sampler" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p>
 <p>
 The test element supports the <code>ThreadListener</code> and <code>TestListener</code> interface methods.
@@ -3082,6 +3083,7 @@ The BeanShell Listener allows the use of BeanShell for processing samples for sa
 </p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 Listener" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p>
 <p>
 The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
@@ -4571,6 +4573,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 Assertion" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p><p>
 Note that a different Interpreter is used for each independent occurrence of the assertion
 in each thread in a test script, but the same Interpreter is used for subsequent invocations.
@@ -5113,6 +5116,7 @@ The BeanShell Timer can be used to generate a delay.
 </p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 Timer" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p>
 <p>
 The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
@@ -5357,6 +5361,7 @@ The BeanShell PreProcessor allows arbitrary code to be applied before taking a s
 </p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 PreProcessor" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p>
 <p>
 The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
@@ -5957,6 +5962,7 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 <p>BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 PostProcessor" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p>
 <p>
 The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
