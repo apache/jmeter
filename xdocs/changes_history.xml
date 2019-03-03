@@ -901,6 +901,7 @@ itself does not have to be edited anymore.</p>
     </li>
     <li>SwitchController now trims by default the content of switch to avoid issue related to unwanted spaces. See <bugzilla>61771</bugzilla></li>
     <li>JMeter JVM heap settings have changed from <code>-Xms512m -Xmx512m</code> to <code>-Xms1g -Xmx1g</code></li>
+    <li>Beanshell version has been upgraded to bsh-2.0b6 which introduces breaking changes and more strict parsing rules</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
