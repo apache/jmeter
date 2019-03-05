@@ -59,15 +59,16 @@ public class HtmlReportAction extends AbstractAction implements MenuCreator {
 
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
-        if (location == MENU_LOCATION.TOOLS) {
-            JMenuItem menuItemIC = new JMenuItem(JMeterUtils.getResString("generate_report_ui.html_report_menu"), KeyEvent.VK_UNDEFINED);
-            menuItemIC.setName(ActionNames.HTML_REPORT);
-            menuItemIC.setActionCommand(ActionNames.HTML_REPORT);
-            menuItemIC.setAccelerator(null);
-            menuItemIC.addActionListener(ActionRouter.getInstance());
-            return new JMenuItem[] { menuItemIC };
+        if (location != MENU_LOCATION.TOOLS) {
+            return new JMenuItem[0];
         }
-        return new JMenuItem[0];
+
+        JMenuItem menuItemIC = new JMenuItem(JMeterUtils.getResString("generate_report_ui.html_report_menu"), KeyEvent.VK_UNDEFINED);
+        menuItemIC.setName(ActionNames.HTML_REPORT);
+        menuItemIC.setActionCommand(ActionNames.HTML_REPORT);
+        menuItemIC.setAccelerator(null);
+        menuItemIC.addActionListener(ActionRouter.getInstance());
+        return new JMenuItem[] { menuItemIC };
     }
 
     @Override

@@ -62,29 +62,30 @@ public class HtmlReportGenerator {
     public List<String> run() {
         List<String> errorMessageList = new ArrayList<>();
         errorMessageList.addAll(checkArguments());
-        if (errorMessageList.isEmpty()) {
-            ByteArrayOutputStream commandExecutionOutput = new ByteArrayOutputStream();
-            int resultCode = -1;
-            List<String> generationCommand = createGenerationCommand();
-            try {
-                SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterBinDir()), COMMAND_TIMEOUT, 100, null, null,
-                        commandExecutionOutput, null);
-                LOGGER.debug("Running report generation");
-                resultCode = sc.run(generationCommand);
-                if (resultCode != 0) {
-                    errorMessageList.add(commandExecutionOutput.toString());
-                    LOGGER.info("The HTML report generation failed and returned : {}", commandExecutionOutput);
-                    return errorMessageList;
-                }
-            } catch (InterruptedException | IOException e) {
-                errorMessageList.add(commandExecutionOutput.toString());
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Error during HTML report generation : {}", e.getMessage(), e);
-                }
-            }
-            LOGGER.debug("SystemCommand ran : {}  returned : {}", generationCommand, resultCode);
+        if (!errorMessageList.isEmpty()) {
             return errorMessageList;
         }
+        
+        ByteArrayOutputStream commandExecutionOutput = new ByteArrayOutputStream();
+        int resultCode = -1;
+        List<String> generationCommand = createGenerationCommand();
+        try {
+            SystemCommand sc = new SystemCommand(new File(JMeterUtils.getJMeterBinDir()), COMMAND_TIMEOUT, 100, null, null,
+                    commandExecutionOutput, null);
+            LOGGER.debug("Running report generation");
+            resultCode = sc.run(generationCommand);
+            if (resultCode != 0) {
+                errorMessageList.add(commandExecutionOutput.toString());
+                LOGGER.info("The HTML report generation failed and returned : {}", commandExecutionOutput);
+                return errorMessageList;
+            }
+        } catch (InterruptedException | IOException e) {
+            errorMessageList.add(commandExecutionOutput.toString());
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Error during HTML report generation : {}", e.getMessage(), e);
+            }
+        }
+        LOGGER.debug("SystemCommand ran : {}  returned : {}", generationCommand, resultCode);
         return errorMessageList;
     }
 
