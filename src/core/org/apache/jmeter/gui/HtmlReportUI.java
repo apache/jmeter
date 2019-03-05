@@ -25,7 +25,7 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -66,7 +66,7 @@ public class HtmlReportUI implements ActionListener {
     private JTextField userPropertiesFilePathTextField;
     private JTextField outputDirectoryPathTextField;
     private JButton reportLaunchButton;
-    private JSyntaxTextArea reportingArea;
+    private JSyntaxTextArea reportArea;
     private JButton csvFileButton;
     private JButton outputDirectoryButton;
     private JButton userPropertiesFileButton;
@@ -101,10 +101,10 @@ public class HtmlReportUI implements ActionListener {
 
         contentPane.add(setupFileChooserPanel(), BorderLayout.NORTH);
 
-        reportingArea = JSyntaxTextArea.getInstance(10, 60, true);
-        reportingArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
-        reportingArea.setEditable(false);
-        contentPane.add(reportingArea, BorderLayout.CENTER);
+        reportArea = JSyntaxTextArea.getInstance(10, 60, true);
+        reportArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+        reportArea.setEditable(false);
+        contentPane.add(reportArea, BorderLayout.CENTER);
 
         contentPane.add(setupButtonPanel(), BorderLayout.SOUTH);
     }
@@ -174,17 +174,15 @@ public class HtmlReportUI implements ActionListener {
                 reportToUser(get());
             } catch (InterruptedException | ExecutionException exception) {
                 if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Error during html report generation : {}", exception.getMessage(), exception);
+                    LOGGER.error("Error during html report generation: {}", exception.getMessage(), exception);
                 }
-                List<String> reportException = new ArrayList<>();
-                reportException.add(exception.getMessage());
-                reportToUser(reportException);
+                reportToUser(Arrays.asList(exception.getMessage()));
             }
         }
     }
 
-    private void reportingAddText(String resString) {
-        reportingArea.setText(reportingArea.getText() + resString + "\n");
+    private void addTextToReport(String errorMessage) {
+        reportArea.setText(reportArea.getText() + errorMessage + "\n");
     }
 
     @Override
@@ -192,16 +190,16 @@ public class HtmlReportUI implements ActionListener {
         switch (e.getActionCommand()) {
         case CREATE_REQUEST:
             try {
-                reportingArea.setText(JMeterUtils.getResString("generate_report_ui.html_report_processing") + "\n");
+                reportArea.setText(JMeterUtils.getResString("generate_report_ui.html_report_processing") + "\n");
                 reportLaunchButton.setForeground(Color.orange);
                 new ReportGenerationWorker(reportLaunchButton).execute();
             } catch (Exception exception) {
                 if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Error during html report generation : {}", exception.getMessage(), exception);
+                    LOGGER.error("Error during html report generation: {}", exception.getMessage(), exception);
                 }
             }
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("CSV file path {} \n user.properties file path : {} \nOutput directory file path : {}",
+                LOGGER.debug("CSV file path {}\nuser.properties file path: {}\nOutput directory file path: {}",
                         csvFilePathTextField.getText(), userPropertiesFilePathTextField.getText(),
                         outputDirectoryPathTextField.getText());
             }
@@ -225,10 +223,10 @@ public class HtmlReportUI implements ActionListener {
 
     void reportToUser(List<String> runErrors) {
         if (runErrors.isEmpty()) {
-            reportingAddText(JMeterUtils.getResString(HtmlReportGenerator.HTML_REPORT_SUCCESS));
+            addTextToReport(JMeterUtils.getResString(HtmlReportGenerator.HTML_REPORT_SUCCESS));
             reportLaunchButton.setForeground(Color.green);
         } else {
-            reportingAddText(String.join("\n", runErrors));
+            addTextToReport(String.join("\n", runErrors));
             reportLaunchButton.setForeground(Color.red);
         }
     }
@@ -250,29 +248,5 @@ public class HtmlReportUI implements ActionListener {
             return locationTextField.getText();
         }
         return fileChooser.getSelectedFile().getPath();
-    }
-
-    public JTextField getCsvFilePathTextField() {
-        return csvFilePathTextField;
-    }
-
-    public JTextField getUserPropertiesFilePathTextField() {
-        return userPropertiesFilePathTextField;
-    }
-
-    public JTextField getOutputDirectoryPathTextField() {
-        return outputDirectoryPathTextField;
-    }
-
-    public JButton getReportLaunchButton() {
-        return reportLaunchButton;
-    }
-
-    public JSyntaxTextArea getReportingArea() {
-        return reportingArea;
-    }
-
-    public EscapeDialog getMessageDialog() {
-        return messageDialog;
     }
 }

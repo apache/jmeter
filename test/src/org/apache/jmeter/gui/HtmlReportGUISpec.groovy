@@ -39,12 +39,12 @@ class HtmlReportGUISpec extends JMeterSpec{
             GuiPackage.getInstance().setMainFrame(new MainFrame(treeModel, treeListener));
         when:
             htmlReportPanel.showInputDialog(GuiPackage.getInstance().getMainFrame())
-            htmlReportPanel.getMessageDialog().setVisible(false)
+            htmlReportPanel.messageDialog.setVisible(false)
         then:
-            "" == htmlReportPanel.getCsvFilePathTextField().getText()
-            "" == htmlReportPanel.getUserPropertiesFilePathTextField().getText()
-            "" == htmlReportPanel.getOutputDirectoryPathTextField().getText()
-            "" == htmlReportPanel.getReportingArea().getText()
-            1 == htmlReportPanel.getMessageDialog().getComponents().length;
+            "" == htmlReportPanel.csvFilePathTextField.getText()
+            "" == htmlReportPanel.userPropertiesFilePathTextField.getText()
+            "" == htmlReportPanel.outputDirectoryPathTextField.getText()
+            "" == htmlReportPanel.reportArea.getText()
+            1 == htmlReportPanel.messageDialog.getComponents().length;
     }
 }

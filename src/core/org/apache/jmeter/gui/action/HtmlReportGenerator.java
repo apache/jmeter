@@ -76,16 +76,16 @@ public class HtmlReportGenerator {
             resultCode = sc.run(generationCommand);
             if (resultCode != 0) {
                 errorMessageList.add(commandExecutionOutput.toString());
-                LOGGER.info("The HTML report generation failed and returned : {}", commandExecutionOutput);
+                LOGGER.info("The HTML report generation failed and returned: {}", commandExecutionOutput);
                 return errorMessageList;
             }
         } catch (InterruptedException | IOException e) {
             errorMessageList.add(commandExecutionOutput.toString());
             if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Error during HTML report generation : {}", e.getMessage(), e);
+                LOGGER.error("Error during HTML report generation: {}", e.getMessage(), e);
             }
         }
-        LOGGER.debug("SystemCommand ran : {}  returned : {}", generationCommand, resultCode);
+        LOGGER.debug("SystemCommand ran: {}  returned: {}", generationCommand, resultCode);
         return errorMessageList;
     }
 
@@ -163,7 +163,7 @@ public class HtmlReportGenerator {
      * @return the error message or an empty string if the directory is fine
      */
     private String checkDirectory(File directoryToCheck) {
-        if(directoryToCheck.exists()) {
+        if (directoryToCheck.exists()) {
             String[] files = directoryToCheck.list();
             if (files != null && files.length > 0) {
                 return MessageFormat.format(JMeterUtils.getResString(NOT_EMPTY_DIRECTORY), directoryToCheck);
