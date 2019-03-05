@@ -43,7 +43,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
             csvPath                                                           | userPropertiesPath                                        | outputDirectoryPath                                   | expected
             JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport" | []
             JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles" | [
-                JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NOT_EMPTY_DIRECTORY), outputDirectoryPath),
+                JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NOT_EMPTY_DIRECTORY), outputDirectoryPath)
             ]
             JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFileMissing.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport" | [
                 JMeterUtils.getResString("generate_report_ui.csv_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), csvPath)
@@ -51,7 +51,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
             ""                                                                | ""                                                        | ""                                                    | [
                 JMeterUtils.getResString("generate_report_ui.csv_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), csvPath),
                 JMeterUtils.getResString("generate_report_ui.user_properties_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), userPropertiesPath),
-                JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath),
+                JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath)
             ]
             JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties" | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport/oneLevel/twolevel"            | [
                 JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath)
@@ -68,6 +68,12 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
             } else {
                 testDirectory.mkdir()
             }
+            ObjectMapper mapper = new ObjectMapper()
+            File expected = new File(JMeterUtils.getJMeterBinDir(),"/testfiles/HTMLReportExpect.json")
+            JsonNode expectedRoot = null;
+            expected.withReader { jsonFileReader ->
+                expectedRoot = mapper.readTree(jsonFileReader)
+            }
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
                     JMeterUtils.getJMeterBinDir() + "/testfiles/HTMLReportTestFile.csv",
@@ -75,17 +81,16 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
                     JMeterUtils.getJMeterBinDir() + "/testfiles/testReport")
             List<String> resultList = htmlReportGenerator.run()
             File statistics = new File(JMeterUtils.getJMeterBinDir(), "/testfiles/testReport/statistics.json")
-            ObjectMapper mapper = new ObjectMapper()
-            JsonNode root =null;
+            JsonNode actualRoot = null;
             if (statistics.exists()) {
                 statistics.withReader { jsonFileReader -> 
-                    root = mapper.readTree(jsonFileReader)
+                    actualRoot = mapper.readTree(jsonFileReader)
                 }
             }
         then:
             resultList.isEmpty()
             statistics.exists()
-            8615 == root.path("Total").path("sampleCount").intValue()
+            expectedRoot == actualRoot
         cleanup:
             if(testDirectory.exists()) {
                 if (testDirectory.list().length>0) {
