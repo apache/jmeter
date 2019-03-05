@@ -223,16 +223,12 @@ public class HtmlReportUI implements ActionListener {
         }
     }
 
-    void reportToUser(List<String> runResults) {
-        if (runResults.isEmpty()) {
+    void reportToUser(List<String> runErrors) {
+        if (runErrors.isEmpty()) {
             reportingAddText(JMeterUtils.getResString(HtmlReportGenerator.HTML_REPORT_SUCCESS));
             reportLaunchButton.setForeground(Color.green);
         } else {
-            StringBuilder sb = new StringBuilder();
-            for (String errorString : runResults) {
-                sb.append(errorString + "\n");
-            }
-            reportingAddText(sb.toString());
+            reportingAddText(String.join("\n", runErrors));
             reportLaunchButton.setForeground(Color.red);
         }
     }

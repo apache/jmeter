@@ -34,15 +34,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 class HtmlReportGeneratorSpec extends JMeterSpec{
 
     def "check if generation from csv: '#csvPath' with properties: '#userPropertiesPath' in folder: '#outputDirectoryPath' contains the expected error"(){
-        setup:
-        File testDirectory = new File(JMeterUtils.getJMeterBinDir(), "/testfiles/testReport")
-        if(testDirectory.exists()) {
-            if (testDirectory.list().length>0) {
-                FileUtils.cleanDirectory(testDirectory)
-            }
-        } else {
-            testDirectory.mkdir()
-        }
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(csvPath, userPropertiesPath, outputDirectoryPath)
             List<String> resultList = htmlReportGenerator.checkArguments()
@@ -105,7 +96,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
     
     def "check that report generation fails when format does not match and error is reported"(){
         setup:
-            File testDirectory = new File(JMeterUtils.getJMeterBinDir(),"/testfiles/testReport")
+            File testDirectory = new File(JMeterUtils.getJMeterBinDir(),"/testfiles/testReportThatShouldBeEmpty")
             if(testDirectory.exists()) {
                 if (testDirectory.list().length>0) {
                     FileUtils.cleanDirectory(testDirectory)

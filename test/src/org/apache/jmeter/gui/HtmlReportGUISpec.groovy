@@ -27,24 +27,24 @@ import org.apache.jmeter.junit.spock.JMeterSpec
 
 import spock.lang.IgnoreIf
 
-
 @IgnoreIf({ JMeterSpec.isHeadless() })
 class HtmlReportGUISpec extends JMeterSpec{
+
     def "test HtmlReportUI initialization"(){
         given:
-        def HtmlReportUI htmlReportPanel = new HtmlReportUI();
-        def JMeterTreeModel treeModel = new JMeterTreeModel();
-        def JMeterTreeListener treeListener = new JMeterTreeListener(treeModel);
-        GuiPackage.initInstance(treeListener, treeModel);
-        GuiPackage.getInstance().setMainFrame(new MainFrame(treeModel, treeListener));
+            def HtmlReportUI htmlReportPanel = new HtmlReportUI();
+            def JMeterTreeModel treeModel = new JMeterTreeModel();
+            def JMeterTreeListener treeListener = new JMeterTreeListener(treeModel);
+            GuiPackage.initInstance(treeListener, treeModel);
+            GuiPackage.getInstance().setMainFrame(new MainFrame(treeModel, treeListener));
         when:
-        htmlReportPanel.showInputDialog(GuiPackage.getInstance().getMainFrame())
-        htmlReportPanel.getMessageDialog().setVisible(false)
+            htmlReportPanel.showInputDialog(GuiPackage.getInstance().getMainFrame())
+            htmlReportPanel.getMessageDialog().setVisible(false)
         then:
-        "".equals(htmlReportPanel.getCsvFilePathTextField().getText());
-        "".equals(htmlReportPanel.getUserPropertiesFilePathTextField().getText());
-        "".equals(htmlReportPanel.getOutputDirectoryPathTextField().getText());
-        "".equals(htmlReportPanel.getReportingArea().getText())
-        1 == htmlReportPanel.getMessageDialog().getComponents().length;
+            "" == htmlReportPanel.getCsvFilePathTextField().getText()
+            "" == htmlReportPanel.getUserPropertiesFilePathTextField().getText()
+            "" == htmlReportPanel.getOutputDirectoryPathTextField().getText()
+            "" == htmlReportPanel.getReportingArea().getText()
+            1 == htmlReportPanel.getMessageDialog().getComponents().length;
     }
 }
