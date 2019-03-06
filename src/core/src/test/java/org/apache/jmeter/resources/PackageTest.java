@@ -20,7 +20,6 @@ package org.apache.jmeter.resources;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,12 +37,8 @@ import java.util.PropertyResourceBundle;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.jmeter.gui.util.JMeterMenuBar;
-import org.apache.jorphan.util.JOrphanUtils;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -70,15 +65,13 @@ import junit.framework.TestSuite;
  */
 
 public class PackageTest extends TestCase {
-    private static final String basedir = new File(System.getProperty("user.dir")).getParent(); // assumes the test starts in the bin directory
-
-    private static final File srcFiledir = new File(basedir,"src");
+    // We assume the test starts in "src/core" directory (which is true for Gradle and IDEs)
+    private static final File srcFiledir = new File("src/main/java");
+    private static final File resourceFiledir = new File("src/main/resources");
 
     private static final String MESSAGES = "messages";
 
     private static PropertyResourceBundle defaultPRB; // current default language properties file
-
-    private static PropertyResourceBundle messagePRB; // messages.properties
 
     private static final CharsetEncoder ASCII_ENCODER =
         Charset.forName("US-ASCII").newEncoder(); // Ensure properties files don't use special characters
@@ -141,9 +134,11 @@ public class PackageTest extends TestCase {
                         }
                     }
 
-                    if (!isPureAscii(val)) {
-                        failures.add("Message format should be pure ASCII. Actual format is " + val);
-                    }
+                    // We don't need to verify ASCII as build system ensures the final properties will be in ASCII
+                    // The proper test would be to get value of a well-known resource and validate it
+                    //if (!isPureAscii(val)) {
+                    //    failures.add("Message format should be pure ASCII. Actual format is " + val);
+                    //}
                 }
             }
         }
@@ -187,9 +182,6 @@ public class PackageTest extends TestCase {
             if (defaultPRB == null){
                 throw new IOException("Could not find required file: "+res);
             }
-            if (resourcePrefix.endsWith(MESSAGES)) {
-                messagePRB = defaultPRB;
-            }
         } else if (checkUnexpected) {
             // Check all the keys are in the default props file
             PropertyResourceBundle prb = getRAS(res);
@@ -217,7 +209,7 @@ public class PackageTest extends TestCase {
         fail(String.join("\n", failures));
     }
 
-    private static final String[] prefixList = getResources(srcFiledir);
+    private static final String[] prefixList = getResources(resourceFiledir);
 
     /**
      * Find I18N resources in classpath
@@ -225,6 +217,10 @@ public class PackageTest extends TestCase {
      * @return list of properties files subject to I18N
      */
     public static String[] getResources(File srcFileDir) {
+        if (!srcFileDir.exists() && "resources".equals(srcFileDir.getName())) {
+            // Allow non-existing resources directory
+            return new String[0];
+        }
         Set<String> set = new TreeSet<>();
         findFile(srcFileDir, set, new FilenameFilter() {
             @Override
@@ -250,7 +246,7 @@ public class PackageTest extends TestCase {
      *            filter that the files must satisfy to be included into
      *            <code>set</code>
      */
-    private static void findFile(File file, Set<String> set,
+    static void findFile(File file, Set<String> set,
             FilenameFilter filenameFilter) {
         File[] foundFiles = file.listFiles(filenameFilter);
         assertNotNull("Not a directory: "+file, foundFiles);
@@ -291,7 +287,6 @@ public class PackageTest extends TestCase {
 //        ts.addTest(new PackageTest("checkI18n", Locale.JAPANESE.toString()));
 //        ts.addTest(new PackageTest("checkI18n", Locale.SIMPLIFIED_CHINESE.toString()));
 //        ts.addTest(new PackageTest("checkI18n", Locale.TRADITIONAL_CHINESE.toString()));
-        ts.addTest(new PackageTest("checkResourceReferences", ""));
         return ts;
     }
 
@@ -386,56 +381,5 @@ public class PackageTest extends TestCase {
             builder.append("======================================================\r\n");
         }
         return builder.toString();
-    }
-
-    // Check that calls to getResString use a valid property key name
-    public void checkResourceReferences() {
-        final AtomicInteger errors = new AtomicInteger(0);
-        findFile(srcFiledir, null, new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                final File file = new File(dir, name);
-                // Look for calls to JMeterUtils.getResString()
-                final Pattern pat = Pattern.compile(".*getResString\\(\"([^\"]+)\"\\).*");
-                if (name.endsWith(".java")) {
-                  BufferedReader fileReader = null;
-                  try {
-                    fileReader = new BufferedReader(new FileReader(file));
-                    String s;
-                    while ((s = fileReader.readLine()) != null) {
-                        if (s.matches("\\s*//.*")) { // leading comment
-                            continue;
-                        }
-                        Matcher m = pat.matcher(s);
-                        if (m.matches()) {
-                            final String key = m.group(1);
-                            // Resource keys cannot contain spaces, and are forced to lower case
-                            String resKey = key.replace(' ', '_'); // $NON-NLS-1$ // $NON-NLS-2$
-                            resKey = resKey.toLowerCase(java.util.Locale.ENGLISH);
-                            if (!key.equals(resKey)) {
-                                System.out.println(file+": non-standard message key: '"+key+"'");
-                            }
-                            try {
-                                messagePRB.getString(resKey);
-                            } catch (MissingResourceException e) {
-                                System.out.println(file+": missing message key: '"+key+"'");
-                                errors.incrementAndGet();
-                            }
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    JOrphanUtils.closeQuietly(fileReader);
-                }
-
-                }
-                return file.isDirectory();
-            }
-        });
-        int errs = errors.get();
-        if (errs > 0) {
-            fail("Detected "+errs+" missing message property keys");
-        }
     }
 }
