@@ -76,11 +76,12 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><bug>62977</bug>Unable to send HTTP requests without a User-Agent header</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-    <li><bug>63185</bug>Add option to implicitly trust SSL/TLS connections/Disable hostname verification. Based on contribution by Brian Wolfe (wolfebrian2120 at gmail.com)</li>
+    <li><bug>63185</bug>LDAP related elements: Add option to implicitly trust SSL/TLS connections/Disable hostname verification. Based on contribution by Brian Wolfe (wolfebrian2120 at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -93,6 +94,7 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>63178</bug>CSS Selector Extractor : Improve performance of JODD (JoddExtractor) based implementation</li>
 </ul>
 
 <h3>Functions</h3>
@@ -131,7 +133,7 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
-    <li><bug>63202</bug>JMS Publisher : ObjectMessageRenderer creates XStream instance with unitialized security</li>
+    <li><bug>63202</bug>JMS Publisher : ObjectMessageRenderer creates XStream instance with uninitialized security</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -145,6 +147,8 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>62446</bug>Counter documentation is wrong in required fieds. Contributed by orimarko at gmail.com</li>
+    <li><bug>62327</bug>TestPlan: In library table if path is modified and plan saved, the modification is lost on file reload</li>
 </ul>
 
 <h3>Functions</h3>
@@ -169,6 +173,7 @@ Summary
     <li><bug>63201</bug>SearchTreeDialog disappears behind master JFrame. Contributed by Benoit Vatan (benoit.vatan at gmail.com)</li>
     <li><bug></bug><code>Function Helper Dialog</code>, <code>Export transactions for report</code> and <code>Import from cURL</code> disappear being master JFrame. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63207</bug>java.lang.NullPointerException: null when run Jmeter 5.1 with proxy options</li>
+    <li><bug>58183</bug>Rampup may not be respected if thread take time to start leading to threads continuing to start post ramp up time</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -181,6 +186,7 @@ Summary
     <li>Benoit Vatan (benoit.vatan at gmail.com)</li>
     <li>Graham Russell (graham at ham1.co.uk)</li>
     <li>Brian Wolfe (wolfebrian2120 at gmail.com)</li>
+    <li>orimarko at gmail.com</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

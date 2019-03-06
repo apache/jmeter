@@ -40,6 +40,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
@@ -162,11 +163,12 @@ public class FileListPanel extends JPanel implements ActionListener {
     }
 
     public String[] getFiles() {
-        String[] _files = new String[tableModel.getRowCount()];
-        for (int idx=0; idx < _files.length; idx++) {
-            _files[idx] = (String)tableModel.getValueAt(idx,0);
+        GuiUtils.stopTableEditing(files);
+        String[] filesArray = new String[tableModel.getRowCount()];
+        for (int idx=0; idx < filesArray.length; idx++) {
+            filesArray[idx] = (String)tableModel.getValueAt(idx,0);
         }
-        return _files;
+        return filesArray;
     }
 
     protected void deleteFile() {

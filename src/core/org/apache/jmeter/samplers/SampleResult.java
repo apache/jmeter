@@ -25,8 +25,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -47,7 +48,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SampleResult implements Serializable, Cloneable, Searchable {
-    private static final Byte BYTE = Byte.valueOf((byte)0);
+
     private static final long serialVersionUID = 241L;
 
     // Needs to be accessible from Test code
@@ -215,7 +216,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * In Non GUI mode and when best config is used, size never exceeds 1,
      * but as a compromise set it to 2
      */
-    private final Map<String, Byte> files = new ConcurrentHashMap<>(2);
+    private final Set<String> files = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>(2));
 
     // TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
     private String dataEncoding;// (is this really the character set?) e.g.
@@ -500,8 +501,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return <code>true</code> if the result was previously marked
      */
     public boolean markFile(String filename) {
-        Byte result = files.putIfAbsent(filename, BYTE);
-        return result != null;
+        return !files.add(filename);
     }
 
     public String getResponseCode() {
