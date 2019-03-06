@@ -107,6 +107,7 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
+    <li><bug>59896</bug> Report / Dashboard : Add a menu entry to generate a report on demand from a CSV file. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>General</h3>
