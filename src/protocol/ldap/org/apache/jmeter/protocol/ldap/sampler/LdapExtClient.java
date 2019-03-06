@@ -71,6 +71,7 @@ public class LdapExtClient {
      *            "com.sun.jndi.ldap.connect.timeout"
      * @param secure
      *            flag whether ssl should be used
+     * @param trustAll flag whether we should trust all certificates 
      * @return newly created {@link DirContext}
      * @exception NamingException
      *                when creating the {@link DirContext} fails
