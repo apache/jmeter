@@ -25,6 +25,7 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -43,7 +44,6 @@ import javax.swing.SwingWorker;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.HtmlReportGenerator;
 import org.apache.jmeter.gui.util.EscapeDialog;
-import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -70,6 +70,7 @@ public class HtmlReportUI implements ActionListener {
     private JButton csvFileButton;
     private JButton outputDirectoryButton;
     private JButton userPropertiesFileButton;
+    private String lastJFCDirectory;
 
     static {
         commands.add(ActionNames.HTML_REPORT);
@@ -243,10 +244,32 @@ public class HtmlReportUI implements ActionListener {
      *         chooser, the previous path
      */
     private String showFileChooser(Component component, JTextField locationTextField, boolean onlyDirectory, String[] extensions) {
-        JFileChooser fileChooser = FileDialoger.promptToOpenFile(component, extensions, System.getProperty("user.home"), onlyDirectory);
-        if (fileChooser == null) {
+        JFileChooser jfc = new JFileChooser();
+        if (onlyDirectory) {
+            jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        } else {
+            jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        }
+        if(extensions != null && extensions.length > 0) {
+            JMeterFileFilter currentFilter = new JMeterFileFilter(extensions);
+            jfc.addChoosableFileFilter(currentFilter);
+            jfc.setAcceptAllFileFilterUsed(true);
+            jfc.setFileFilter(currentFilter);
+        }
+        if (lastJFCDirectory != null) {
+            jfc.setCurrentDirectory(new File(lastJFCDirectory));
+        } else {
+            String start = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
+            if (!start.isEmpty()) {
+                jfc.setCurrentDirectory(new File(start));
+            }
+        }
+        int retVal = jfc.showOpenDialog(component);
+        if (retVal == JFileChooser.APPROVE_OPTION) {
+            lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
+            return jfc.getSelectedFile().getPath();
+        } else {
             return locationTextField.getText();
         }
-        return fileChooser.getSelectedFile().getPath();
     }
 }
