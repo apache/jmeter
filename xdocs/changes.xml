@@ -143,7 +143,7 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>63204</bug><code>RenderAsJSON#prettyJSON<code>: <code>JSONParser#parse</code> cannot return JSONValue</li>
+    <li><bug>63204</bug><code>RenderAsJSON#prettyJSON</code>: <code>JSONParser#parse</code> cannot return JSONValue</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
