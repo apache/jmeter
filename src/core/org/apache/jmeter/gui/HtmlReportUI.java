@@ -19,7 +19,6 @@
 package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridLayout;
@@ -32,6 +31,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -44,6 +44,7 @@ import javax.swing.SwingWorker;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.HtmlReportGenerator;
 import org.apache.jmeter.gui.util.EscapeDialog;
+import org.apache.jmeter.gui.util.JMeterToolBar;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -71,6 +72,17 @@ public class HtmlReportUI implements ActionListener {
     private JButton outputDirectoryButton;
     private JButton userPropertiesFileButton;
     private String lastJFCDirectory;
+    private final String iconSize = JMeterUtils.getPropDefault(JMeterToolBar.TOOLBAR_ICON_SIZE, JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE); 
+
+    private static final String GENERATE_REPORT_LABEL = JMeterUtils.getResString("generate_report_ui.html_report_request");
+    private static final String GENERATING_REPORT_LABEL = JMeterUtils.getResString("generate_report_ui.html_report_processing");
+    private static final String BROWSE = "browse";
+    /** An image which is displayed when a test is running. */
+    private static final String IMAGES_PREFIX = "status/";
+    private final ImageIcon runningIcon = JMeterUtils.getImage(IMAGES_PREFIX + iconSize +"/task-recurring.png");// $NON-NLS-1$
+    private final ImageIcon inErrorIcon = JMeterUtils.getImage(IMAGES_PREFIX + iconSize +"/dialog-error-5.png");// $NON-NLS-1$
+    private final ImageIcon completedIcon = JMeterUtils.getImage(IMAGES_PREFIX + iconSize +"/task-complete.png");// $NON-NLS-1$
+
 
     static {
         commands.add(ActionNames.HTML_REPORT);
@@ -117,7 +129,7 @@ public class HtmlReportUI implements ActionListener {
         csvFilePathTextField = new JTextField();
         fileChooserPanel.add(csvFilePathTextField);
 
-        this.csvFileButton = new JButton(JMeterUtils.getResString("browse"));
+        this.csvFileButton = new JButton(JMeterUtils.getResString(BROWSE));
         csvFileButton.setActionCommand(BROWSE_CSV);
         csvFileButton.addActionListener(this);
         fileChooserPanel.add(csvFileButton);
@@ -127,7 +139,7 @@ public class HtmlReportUI implements ActionListener {
         userPropertiesFilePathTextField = new JTextField();
         fileChooserPanel.add(userPropertiesFilePathTextField);
 
-        this.userPropertiesFileButton = new JButton(JMeterUtils.getResString("browse"));
+        this.userPropertiesFileButton = new JButton(JMeterUtils.getResString(BROWSE));
         userPropertiesFileButton.setActionCommand(BROWSE_USER_PROPERTIES);
         userPropertiesFileButton.addActionListener(this);
         fileChooserPanel.add(userPropertiesFileButton);
@@ -137,7 +149,7 @@ public class HtmlReportUI implements ActionListener {
         outputDirectoryPathTextField = new JTextField();
         fileChooserPanel.add(outputDirectoryPathTextField);
 
-        this.outputDirectoryButton = new JButton(JMeterUtils.getResString("browse"));
+        this.outputDirectoryButton = new JButton(JMeterUtils.getResString(BROWSE));
         outputDirectoryButton.setActionCommand(BROWSE_OUTPUT);
         outputDirectoryButton.addActionListener(this);
         fileChooserPanel.add(outputDirectoryButton);
@@ -147,7 +159,7 @@ public class HtmlReportUI implements ActionListener {
     private JPanel setupButtonPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(1, 1));
 
-        reportLaunchButton = new JButton(JMeterUtils.getResString("generate_report_ui.html_report_request"));
+        reportLaunchButton = new JButton(GENERATE_REPORT_LABEL);
         reportLaunchButton.setActionCommand(CREATE_REQUEST);
         reportLaunchButton.addActionListener(this);
         buttonPanel.add(reportLaunchButton);
@@ -164,7 +176,11 @@ public class HtmlReportUI implements ActionListener {
         protected List<String> doInBackground() throws Exception {
             HtmlReportGenerator htmlReportAction = new HtmlReportGenerator(csvFilePathTextField.getText(),
                     userPropertiesFilePathTextField.getText(), outputDirectoryPathTextField.getText());
-            SwingUtilities.invokeAndWait(() -> reportLaunchButton.setEnabled(false));
+            SwingUtilities.invokeAndWait(() -> { 
+                reportLaunchButton.setEnabled(false);
+                reportLaunchButton.setIcon(runningIcon);
+                reportLaunchButton.setText(GENERATING_REPORT_LABEL);
+            });
             return htmlReportAction.run();
         }
 
@@ -172,6 +188,7 @@ public class HtmlReportUI implements ActionListener {
         protected void done() {
             try {
                 reportLaunchButton.setEnabled(true);
+                reportLaunchButton.setText(GENERATE_REPORT_LABEL);
                 reportToUser(get());
             } catch (InterruptedException | ExecutionException exception) {
                 if (LOGGER.isErrorEnabled()) {
@@ -191,8 +208,8 @@ public class HtmlReportUI implements ActionListener {
         switch (e.getActionCommand()) {
         case CREATE_REQUEST:
             try {
-                reportArea.setText(JMeterUtils.getResString("generate_report_ui.html_report_processing") + "\n");
-                reportLaunchButton.setForeground(Color.orange);
+                reportArea.setText(GENERATING_REPORT_LABEL + "\n");
+                reportLaunchButton.setIcon(runningIcon);
                 new ReportGenerationWorker(reportLaunchButton).execute();
             } catch (Exception exception) {
                 if (LOGGER.isErrorEnabled()) {
@@ -225,10 +242,10 @@ public class HtmlReportUI implements ActionListener {
     void reportToUser(List<String> runErrors) {
         if (runErrors.isEmpty()) {
             addTextToReport(JMeterUtils.getResString(HtmlReportGenerator.HTML_REPORT_SUCCESS));
-            reportLaunchButton.setForeground(Color.green);
+            reportLaunchButton.setIcon(completedIcon);
         } else {
             addTextToReport(String.join("\n", runErrors));
-            reportLaunchButton.setForeground(Color.red);
+            reportLaunchButton.setIcon(inErrorIcon);
         }
     }
 
