@@ -22,6 +22,7 @@ import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Unroll
 
+import java.nio.file.Paths
 import java.net.URL;
 import java.text.MessageFormat
 
@@ -36,7 +37,16 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 class HtmlReportGeneratorSpec extends JMeterSpec{
 
-    @Shared jmeterBinDir = JMeterUtils.getJMeterBinDir();
+    /**
+     * Combine the given path parts to one path with the correct path separator of the current platform.
+     * The current JMeter bin directory will be prepended to the path.
+     * 
+     * @param paths to be combined (should contain no path separators)
+     * @return combined path as string
+     */
+    def combine(String... paths) {
+       Paths.get(JMeterUtils.getJMeterBinDir(), paths).toString()
+    }
 
     def "check if generation from csv: '#csvPath' with properties: '#userPropertiesPath' in folder: '#outputDirectoryPath' contains the expected error"(){
         when:
@@ -45,27 +55,27 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
         then:
             resultList.equals(expected)
         where:
-            csvPath                                                           | userPropertiesPath                                        | outputDirectoryPath                                   | expected
-            jmeterBinDir+"/testfiles/HTMLReportTestFile.csv" | jmeterBinDir+"/user.properties"          | jmeterBinDir+"/testfiles/testReport" | []
-            jmeterBinDir+"/testfiles/HTMLReportTestFile.csv" | jmeterBinDir+"/user.properties"          | jmeterBinDir+"/testfiles" | [
+            csvPath                                               | userPropertiesPath                  | outputDirectoryPath                     | expected
+            combine("testfiles", "HTMLReportTestFile.csv")        | combine("user.properties")          | combine("testfiles", "testReport")      | []
+            combine("testfiles", "HTMLReportTestFile.csv")        | combine("user.properties")          | combine("testfiles")                    | [
                 JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NOT_EMPTY_DIRECTORY), outputDirectoryPath)
             ]
-            jmeterBinDir+"/testfiles/HTMLReportTestFileMissing.csv" | jmeterBinDir+"/user.properties"          | jmeterBinDir+"/testfiles/testReport" | [
+            combine("testfiles", "HTMLReportTestFileMissing.csv") | combine("user.properties")          | combine("testfiles", "testReport")      | [
                 JMeterUtils.getResString("generate_report_ui.csv_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), csvPath)
             ]
-            ""                                                                | ""                                                        | ""                                                    | [
+            ""                                                    | ""                                  | ""                                      | [
                 JMeterUtils.getResString("generate_report_ui.csv_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), csvPath),
                 JMeterUtils.getResString("generate_report_ui.user_properties_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), userPropertiesPath),
                 JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath)
             ]
-            jmeterBinDir+"/testfiles/HTMLReportTestFile.csv" | jmeterBinDir+"/user.properties" | jmeterBinDir+"/testfiles/testReport/oneLevel/twolevel"            | [
+            combine("testfiles", "HTMLReportTestFile.csv")        | combine("user.properties")          | combine("testfiles", "testReport", "oneLevel", "twolevel") | [
                 JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath)
             ]
     }
     
     def "check that report generation succeeds and statistic are generated"(){
         setup:
-            File testDirectory = new File(jmeterBinDir, "/testfiles/testReport")
+            File testDirectory = new File(combine("testfiles", "testReport"))
             if(testDirectory.exists()) {
                 if (testDirectory.list().length>0) {
                     FileUtils.cleanDirectory(testDirectory)
@@ -81,11 +91,11 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
             }
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
-                    jmeterBinDir + "/testfiles/HTMLReportTestFile.csv",
-                    jmeterBinDir + "/user.properties", 
+                    combine("testfiles", "HTMLReportTestFile.csv"),
+                    combine("user.properties"), 
                     testDirectory.toString())
             List<String> resultList = htmlReportGenerator.run()
-            File statistics = new File(jmeterBinDir, "/testfiles/testReport/statistics.json")
+            File statistics = new File(combine("testfiles", "testReport", "statistics.json"))
             JsonNode actualRoot = null;
             if (statistics.exists()) {
                 statistics.withReader { jsonFileReader -> 
@@ -107,7 +117,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
     
     def "check that report generation fails when format does not match and error is reported"(){
         setup:
-            File testDirectory = new File(jmeterBinDir,"/testfiles/testReportThatShouldBeEmpty")
+            File testDirectory = new File(combine("testfiles", "testReportThatShouldBeEmpty"))
             if(testDirectory.exists()) {
                 if (testDirectory.list().length>0) {
                     FileUtils.cleanDirectory(testDirectory)
@@ -117,8 +127,8 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
             }
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
-                jmeterBinDir + "/testfiles/HTMLReportFalseTestFile.csv",
-                jmeterBinDir + "/user.properties", 
+                combine("testfiles", "HTMLReportFalseTestFile.csv"),
+                combine("user.properties"), 
                 testDirectory.toString())
             List<String> resultList = htmlReportGenerator.run()
         then:
