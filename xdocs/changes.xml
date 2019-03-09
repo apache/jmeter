@@ -76,7 +76,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>62977</bug>Unable to send HTTP requests without a User-Agent header</li>
+    <li><bug>62977</bug>Allow sending HTTP requests without a default User-Agent header</li>
 </ul>
 
 <h3>Other samplers</h3>
