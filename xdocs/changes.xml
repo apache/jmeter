@@ -154,6 +154,7 @@ Summary
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>63241</bug><code>__threadGroupName</code> causes a NullPointerException if called from non Test threads</li>
 </ul>
 
 <h3>I18N</h3>
