@@ -19,11 +19,14 @@
 package org.apache.jmeter.gui.action
 
 import spock.lang.IgnoreIf
+import spock.lang.Shared
 import spock.lang.Unroll
 
+import java.net.URL;
 import java.text.MessageFormat
 
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.FilenameUtils
 import org.apache.jmeter.junit.spock.JMeterSpec
 import org.apache.jmeter.util.JMeterUtils
 
@@ -33,6 +36,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 class HtmlReportGeneratorSpec extends JMeterSpec{
 
+    @Shared jmeterBinDir = JMeterUtils.getJMeterBinDir();
+
     def "check if generation from csv: '#csvPath' with properties: '#userPropertiesPath' in folder: '#outputDirectoryPath' contains the expected error"(){
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(csvPath, userPropertiesPath, outputDirectoryPath)
@@ -41,11 +46,11 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
             resultList.equals(expected)
         where:
             csvPath                                                           | userPropertiesPath                                        | outputDirectoryPath                                   | expected
-            JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport" | []
-            JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles" | [
+            jmeterBinDir+"/testfiles/HTMLReportTestFile.csv" | jmeterBinDir+"/user.properties"          | jmeterBinDir+"/testfiles/testReport" | []
+            jmeterBinDir+"/testfiles/HTMLReportTestFile.csv" | jmeterBinDir+"/user.properties"          | jmeterBinDir+"/testfiles" | [
                 JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NOT_EMPTY_DIRECTORY), outputDirectoryPath)
             ]
-            JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFileMissing.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties"          | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport" | [
+            jmeterBinDir+"/testfiles/HTMLReportTestFileMissing.csv" | jmeterBinDir+"/user.properties"          | jmeterBinDir+"/testfiles/testReport" | [
                 JMeterUtils.getResString("generate_report_ui.csv_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), csvPath)
             ]
             ""                                                                | ""                                                        | ""                                                    | [
@@ -53,14 +58,14 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
                 JMeterUtils.getResString("generate_report_ui.user_properties_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), userPropertiesPath),
                 JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath)
             ]
-            JMeterUtils.getJMeterBinDir()+"/testfiles/HTMLReportTestFile.csv" | JMeterUtils.getJMeterBinDir()+"/user.properties" | JMeterUtils.getJMeterBinDir()+"/testfiles/testReport/oneLevel/twolevel"            | [
+            jmeterBinDir+"/testfiles/HTMLReportTestFile.csv" | jmeterBinDir+"/user.properties" | jmeterBinDir+"/testfiles/testReport/oneLevel/twolevel"            | [
                 JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath)
             ]
     }
     
     def "check that report generation succeeds and statistic are generated"(){
         setup:
-            File testDirectory = new File(JMeterUtils.getJMeterBinDir(), "/testfiles/testReport")
+            File testDirectory = new File(jmeterBinDir, "/testfiles/testReport")
             if(testDirectory.exists()) {
                 if (testDirectory.list().length>0) {
                     FileUtils.cleanDirectory(testDirectory)
@@ -69,18 +74,18 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
                 testDirectory.mkdir()
             }
             ObjectMapper mapper = new ObjectMapper()
-            File expected = new File(JMeterUtils.getJMeterBinDir(),"/testfiles/HTMLReportExpect.json")
+            URL expected = HtmlReportGenerator.class.getResource("/org/apache/jmeter/gui/report/HTMLReportExpect.json");
             JsonNode expectedRoot = null;
             expected.withReader { jsonFileReader ->
                 expectedRoot = mapper.readTree(jsonFileReader)
             }
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
-                    JMeterUtils.getJMeterBinDir() + "/testfiles/HTMLReportTestFile.csv",
-                    JMeterUtils.getJMeterBinDir() + "/user.properties", 
-                    JMeterUtils.getJMeterBinDir() + "/testfiles/testReport")
+                    jmeterBinDir + "/testfiles/HTMLReportTestFile.csv",
+                    jmeterBinDir + "/user.properties", 
+                    testDirectory.toString())
             List<String> resultList = htmlReportGenerator.run()
-            File statistics = new File(JMeterUtils.getJMeterBinDir(), "/testfiles/testReport/statistics.json")
+            File statistics = new File(jmeterBinDir, "/testfiles/testReport/statistics.json")
             JsonNode actualRoot = null;
             if (statistics.exists()) {
                 statistics.withReader { jsonFileReader -> 
@@ -90,6 +95,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
         then:
             resultList.isEmpty()
             statistics.exists()
+            expectedRoot != null
             expectedRoot == actualRoot
         cleanup:
             if(testDirectory.exists()) {
@@ -101,7 +107,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
     
     def "check that report generation fails when format does not match and error is reported"(){
         setup:
-            File testDirectory = new File(JMeterUtils.getJMeterBinDir(),"/testfiles/testReportThatShouldBeEmpty")
+            File testDirectory = new File(jmeterBinDir,"/testfiles/testReportThatShouldBeEmpty")
             if(testDirectory.exists()) {
                 if (testDirectory.list().length>0) {
                     FileUtils.cleanDirectory(testDirectory)
@@ -111,9 +117,9 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
             }
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
-                JMeterUtils.getJMeterBinDir() + "/testfiles/HTMLReportFalseTestFile.csv",
-                JMeterUtils.getJMeterBinDir() + "/user.properties", 
-                JMeterUtils.getJMeterBinDir() + "/testfiles/testReport")
+                jmeterBinDir + "/testfiles/HTMLReportFalseTestFile.csv",
+                jmeterBinDir + "/user.properties", 
+                testDirectory.toString())
             List<String> resultList = htmlReportGenerator.run()
         then:
             testDirectory.list().length == 0
