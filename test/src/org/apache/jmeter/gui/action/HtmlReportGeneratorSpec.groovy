@@ -27,11 +27,9 @@ import java.net.URL;
 import java.text.MessageFormat
 
 import org.apache.commons.io.FileUtils
-import org.apache.commons.io.FilenameUtils
 import org.apache.jmeter.junit.spock.JMeterSpec
 import org.apache.jmeter.util.JMeterUtils
 
-import com.fasterxml.jackson.annotation.JsonMerge
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 
