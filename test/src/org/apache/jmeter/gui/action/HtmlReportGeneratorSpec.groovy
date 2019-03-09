@@ -18,10 +18,6 @@
 
 package org.apache.jmeter.gui.action
 
-import spock.lang.IgnoreIf
-import spock.lang.Shared
-import spock.lang.Unroll
-
 import java.nio.file.Paths
 import java.net.URL;
 import java.text.MessageFormat
