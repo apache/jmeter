@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 
@@ -51,7 +52,13 @@ public class ThreadGroupName extends AbstractFunctionByKey {
         } else {
             context = JMeterContextService.getContext();
         }
-        return context.getThreadGroup().getName();
+        AbstractThreadGroup threadGroup = context.getThreadGroup();
+        if (threadGroup != null) {
+            return threadGroup.getName();
+        } else {
+            // Can happen if called from GUI or from non test threads
+            return "";
+        }
     }
 
     /** {@inheritDoc} */
