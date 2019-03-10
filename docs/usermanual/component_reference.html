@@ -2252,6 +2252,25 @@ This will not have any impact on existing Test plans.
             If it is incorrect, the sampler will return an error and revert to an anonymous bind. (N.B. this is stored unencrypted in the test plan)</div>
 <div class="required req-false">No</div>
 </div>
+          
+<div class="property">
+<div class="name req-false">Connection timeout (in milliseconds)</div>
+<div class="description req-false">Timeout for connection, if exceeded connection will be aborted</div>
+<div class="required req-false">No</div>
+</div>
+          
+<div class="property">
+<div class="name req-false">Use Secure LDAP Protocol</div>
+<div class="description req-false">Use <span class="code">ldaps://</span> scheme instead of <span class="code">ldap://</span>
+</div>
+<div class="required req-false">No</div>
+</div>
+          
+<div class="property">
+<div class="name req-false">Trust All Certificates</div>
+<div class="description req-false">Trust all certificates, only used if <span class="code">Use Secure LDAP Protocol</span> is checked</div>
+<div class="required req-false">No</div>
+</div>
         
 </div>
       
@@ -2814,6 +2833,10 @@ to configure this via the GUI, so it cannot really be used.
 <p>
 
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+
+<div class="clear"></div>
+<div class="note">Migration to <a href="../usermanual/component_reference.html#JSR223_Sampler">JSR223 Sampler</a>+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</div>
+<div class="clear"></div>
 
 </p>
 
@@ -7908,6 +7931,10 @@ The BeanShell Listener allows the use of BeanShell for processing samples for sa
 
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 
+<div class="clear"></div>
+<div class="note">Migration to <a href="../usermanual/component_reference.html#JSR223_Listener">JSR223 Listener</a>+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</div>
+<div class="clear"></div>
+
 </p>
 
 <p>
@@ -10868,16 +10895,16 @@ with the start, continuing on like that until the test is ended.  </p>
 </div>
         
 <div class="property">
-<div class="name req-true">Starting value</div>
-<div class="description req-true">The starting value for the counter.  The counter will equal this
-        value during the first iteration.</div>
-<div class="required req-true">Yes</div>
+<div class="name req-false">Starting value</div>
+<div class="description req-false">The starting value for the counter.  The counter will equal this
+        value during the first iteration (defaults to 0).</div>
+<div class="required req-false">No</div>
 </div>
         
 <div class="property">
 <div class="name req-true">Increment</div>
 <div class="description req-true">How much to increment the counter by after each
-        iteration.</div>
+        iteration (defaults to 0, meaning no increment).</div>
 <div class="required req-true">Yes</div>
 </div>
         
@@ -10901,12 +10928,11 @@ with the start, continuing on like that until the test is ended.  </p>
 </div>
         
 <div class="property">
-<div class="name req-true">Exported Variable Name</div>
-<div class="description req-true">This will be the variable name under which the counter value is available.  
+<div class="name req-false">Exported Variable Name</div>
+<div class="description req-false">This will be the variable name under which the counter value is available.  
         If you name it <span class="code">counterA</span>, you can then access it using <span class="code">${counterA}</span> 
-        as explained in <a href="functions.html">user-defined values</a>
-</div>
-<div class="required req-true">Yes</div>
+        as explained in <a href="functions.html">user-defined values</a> (By default, it creates an empty string variable that can be accessed using <span class="code">${}</span> but this is highly discouraged)</div>
+<div class="required req-false">No</div>
 </div>
         
 <div class="property">
@@ -11698,6 +11724,10 @@ validate the XML based on a DTD or schema or do any further validation.</p>
 <p>
 
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+
+<div class="clear"></div>
+<div class="note">Migration to <a href="../usermanual/component_reference.html#JSR223_Assertion">JSR223 Assertion</a>+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</div>
+<div class="clear"></div>
 
 </p>
 <p>
@@ -13173,6 +13203,10 @@ The BeanShell Timer can be used to generate a delay.
 
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 
+<div class="clear"></div>
+<div class="note">Migration to <a href="../usermanual/component_reference.html#JSR223_Timer">JSR223 Timer</a>+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</div>
+<div class="clear"></div>
+
 </p>
 
 <p>
@@ -13738,6 +13772,10 @@ The BeanShell PreProcessor allows arbitrary code to be applied before taking a s
 <p>
 
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+
+<div class="clear"></div>
+<div class="note">Migration to <a href="../usermanual/component_reference.html#JSR223_PreProcessor">JSR223 PreProcessor</a>+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</div>
+<div class="clear"></div>
 
 </p>
 
@@ -15214,6 +15252,10 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 <p>
 
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+
+<div class="clear"></div>
+<div class="note">Migration to <a href="../usermanual/component_reference.html#JSR223_PostProcessor">JSR223 PostProcessor</a>+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</div>
+<div class="clear"></div>
 
 </p>
 

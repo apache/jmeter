@@ -1669,6 +1669,18 @@ JMETER-SERVER</pre>
           </div>
 </div>
 
+<div class="property">
+<div class="name req-true">httpclient4.default_user_agent_disabled</div>
+<div class="description req-true">
+    If true, default HC4 User-Agent (Apache-HttpClient/X.Y.Z (Java/A.B.C_D)) will not be added.<br>
+    Defaults to: <span class="code">false</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
 </div>
 
 </div>
@@ -3926,6 +3938,18 @@ JMETER-SERVER</pre>
 </div>
 
 <div class="property">
+<div class="name req-true">cssselector.parser.cache.size</div>
+<div class="description req-true">
+    Size of cache used by <span class="code">CSS Selector Extractor</span> (for JODD implementation only) to store parsed CSS Selector expressions.<br>
+    Defaults to: <span class="code">400</span>
+
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
 <div class="name req-true">resultcollector.action_if_file_exists</div>
 <div class="description req-true">
     Used to control what happens when you start a test and have listeners that could overwrite existing result files.<br>
@@ -5247,6 +5271,17 @@ JMETER-SERVER</pre>
 <div class="description req-true">
     End date of report using date_format property.<br>
     Defaults to: nothing
+</div>
+<div class="required req-true">
+            No
+          </div>
+</div>
+
+<div class="property">
+<div class="name req-true">generate_report_ui.generation_timeout</div>
+<div class="description req-true">
+    Timeout in milliseconds for Report generation when using Tools &gt; Generate HTML report.<br>
+    Defaults to: 120000
 </div>
 <div class="required req-true">
             No
