@@ -1,14 +1,14 @@
 # Directory trees to ignore
-backups/
-build/
-dist/
-local/
-printable_docs/
-reports/
-site/
-target/
+/backups/
+/build/
+/dist/
+/local/
+/printable_docs/
+/reports/
+/site/
+/target/
 
-!bin/report-template/**/dist
+!/bin/report-template/**/dist
 
 # specific files to ignore
 *.log
@@ -21,7 +21,7 @@ target/
 .pmd
 .project
 .settings
-bin/ApacheJMeter.jar
+/bin/ApacheJMeter.jar
 
 build-local.properties
 jmeter-fb.*
@@ -39,7 +39,7 @@ jmeter-fb.*
 /output/
 
 # IDEA
-out/
+/out/
 .idea/
 *.iml
 
