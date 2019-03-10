@@ -57,11 +57,23 @@ Summary
 </ul>
 
 <ch_section>New and Noteworthy</ch_section>
+<p>
+This release is mainly a bugfix release. Please see the <a href="changes_history.html">Changes history page</a>
+to view the last major behaviors with the version 5.1.
+</p>
+<!--
 <ch_title>Core improvements</ch_title>
 <ch_title>UX improvements</ch_title>
 <ch_title>Test Plan</ch_title>
 <ch_title>Scripting / Debugging enhancements</ch_title>
+-->
 <ch_title>Live Reporting and Web Report</ch_title>
+<p>A new menu entry has been added to the <b>Tools</b> menu. It's allow to generate
+a results report from a previous CSV/JTL file.
+<figure width="1209" height="341" image="changes/5.1.1/01_menu_generate_report.png" />
+<br/>
+<figure width="1624" height="565" image="changes/5.1.1/02_windows_generate_report.png" />
+</p>
 <!--
 <ch_title>Functions</ch_title>
 -->
