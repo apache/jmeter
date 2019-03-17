@@ -1443,7 +1443,7 @@ public class JMeter implements JMeterPlugin {
                 InetAddress address = request.getAddress();
                 // Only accept commands from the local host
                 if (address.isLoopbackAddress()){
-                    String command = new String(request.getData(), request.getOffset(), request.getLength(),"ASCII");
+                    String command = new String(request.getData(), request.getOffset(), request.getLength(), StandardCharsets.US_ASCII);
                     System.out.println("Command: "+command+" received from "+address);//NOSONAR
                     log.info("Command: {} received from {}", command, address);
                     switch(command) {
