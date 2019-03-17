@@ -1141,7 +1141,6 @@ public class JMeter implements JMeterPlugin {
      * <li>Clones the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
      * </ul>
      * @param tree The {@link HashTree} to convert
-     * @return HashTree the output {@link HashTree} to use
      */
     private static void pConvertSubTree(HashTree tree) {
         LinkedList<Object> copyList = new LinkedList<>(tree.list());
