@@ -39,9 +39,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.junit.Test;
 
-
-
-
 public class TestTransactionController extends JMeterTestCase {
 
     /**
@@ -160,7 +157,8 @@ public class TestTransactionController extends JMeterTestCase {
         thread.run();
 
         assertEquals("First TC must discard 'Comment' value from its SampleResult", "", listener1.events.get(0).getResult().getSampleComment());
-        assertEquals("Second TC must force 'Comment' value from its SampleResult", "Test with forced use of comment", listener2.events.get(0).getResult().getSampleComment());
+        assertEquals("Second TC must force 'Comment' value from its SampleResult", "Test with forced use of comment", 
+        		listener2.events.get(0).getResult().getSampleComment());
         assertEquals("Third TC must discard 'Comment' value from its SampleResult", "", listener3.events.get(0).getResult().getSampleComment());
     }
     
@@ -225,8 +223,10 @@ public class TestTransactionController extends JMeterTestCase {
         thread.setOnErrorStopThread(true);
         thread.run();
 
-        assertEquals("First TC must force 'Comment' value from its SampleResult", "Test with default use of comment", listener1.events.get(0).getResult().getSampleComment());
-        assertEquals("Second TC must force 'Comment' value from its SampleResult", "Test with forced use of comment", listener2.events.get(0).getResult().getSampleComment());
+        assertEquals("First TC must force 'Comment' value from its SampleResult", "Test with default use of comment", 
+        		listener1.events.get(0).getResult().getSampleComment());
+        assertEquals("Second TC must force 'Comment' value from its SampleResult", "Test with forced use of comment", 
+        		listener2.events.get(0).getResult().getSampleComment());
         assertEquals("Third TC must discard 'Comment' value from its SampleResult", "", listener3.events.get(0).getResult().getSampleComment());
     }
     public class TestSampleListener extends ResultCollector implements SampleListener {
