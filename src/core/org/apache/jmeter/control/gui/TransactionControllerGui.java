@@ -65,7 +65,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
         super.configure(el);
         generateParentSample.setSelected(((TransactionController) el).isGenerateParentSample());
         includeTimers.setSelected(((TransactionController) el).isIncludeTimers());
-        useComment.setTristateFromProperty(((TransactionController) el), TransactionController.USE_COMMENT);
+        useComment.setTristateFromProperty((TransactionController) el, TransactionController.USE_COMMENT);
     }
 
     @Override
