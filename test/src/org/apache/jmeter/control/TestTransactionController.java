@@ -158,7 +158,7 @@ public class TestTransactionController extends JMeterTestCase {
 
         assertEquals("First TC must discard 'Comment' value from its SampleResult", "", listener1.events.get(0).getResult().getSampleComment());
         assertEquals("Second TC must force 'Comment' value from its SampleResult", "Test with forced use of comment", 
-        		listener2.events.get(0).getResult().getSampleComment());
+                listener2.events.get(0).getResult().getSampleComment());
         assertEquals("Third TC must discard 'Comment' value from its SampleResult", "", listener3.events.get(0).getResult().getSampleComment());
     }
     
@@ -224,9 +224,9 @@ public class TestTransactionController extends JMeterTestCase {
         thread.run();
 
         assertEquals("First TC must force 'Comment' value from its SampleResult", "Test with default use of comment", 
-        		listener1.events.get(0).getResult().getSampleComment());
+                listener1.events.get(0).getResult().getSampleComment());
         assertEquals("Second TC must force 'Comment' value from its SampleResult", "Test with forced use of comment", 
-        		listener2.events.get(0).getResult().getSampleComment());
+                listener2.events.get(0).getResult().getSampleComment());
         assertEquals("Third TC must discard 'Comment' value from its SampleResult", "", listener3.events.get(0).getResult().getSampleComment());
     }
     public class TestSampleListener extends ResultCollector implements SampleListener {
