@@ -369,7 +369,7 @@ public final class ActionRouter implements ActionListener {
             }
             for (String strClassName : listClasses) {
                 Class<?> commandClass = Class.forName(strClassName);
-                Command command = (Command) commandClass.newInstance();
+                Command command = (Command) commandClass.getDeclaredConstructor().newInstance();
                 for (String commandName : command.getActionNames()) {
                     Set<Command> commandObjects = commands.computeIfAbsent(commandName, k -> new HashSet<>());
                     commandObjects.add(command);

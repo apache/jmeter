@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
 public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
     private static final Logger log = LoggerFactory.getLogger(RenderAsJsonRenderer.class);
-
+    private static final String NO_MATCH = "NO MATCH"; //$NON-NLS-1$
     private static final String TAB_SEPARATOR = "    "; //$NON-NLS-1$
     
     private static final String JSONPATH_TESTER_COMMAND = "jsonpath_tester"; // $NON-NLS-1$
@@ -74,9 +74,6 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     private JTabbedPane rightSide;
 
     private SampleResult sampleResult;
-
-    private JScrollPane jsonDataPane;
-
 
     /** {@inheritDoc} */
     @Override
@@ -104,7 +101,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         String command = e.getActionCommand();
         if ((sampleResult != null) && (JSONPATH_TESTER_COMMAND.equals(command))) {
             String response = jsonDataField.getText();
-            executeAndShowXPathTester(response);
+            executeAndJSonPathTester(response);
         }
     }
 
@@ -112,7 +109,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
      * Launch json path engine to parse a input text
      * @param textToParse
      */
-    private void executeAndShowXPathTester(String textToParse) {
+    private void executeAndJSonPathTester(String textToParse) {
         if (textToParse != null && textToParse.length() > 0
                 && this.jsonPathExpressionField.getText().length() > 0) {
             this.jsonPathResultField.setText(process(textToParse));
@@ -121,10 +118,11 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     }
 
     private String process(String textToParse) {
+        String jsonPathExpression = jsonPathExpressionField.getText();
         try {
-            List<Object> matchStrings = extractWithJSonPath(textToParse, jsonPathExpressionField.getText());
+            List<Object> matchStrings = extractWithJSonPath(textToParse, jsonPathExpression);
             if (matchStrings.isEmpty()) {
-                return "NO MATCH"; //$NON-NLS-1$
+                return NO_MATCH; //$NON-NLS-1$
             } else {
                 StringBuilder builder = new StringBuilder();
                 int i = 0;
@@ -136,7 +134,8 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
                 return builder.toString();
             }
-        } catch (Exception e) {
+        } catch (Exception e) { // NOSONAR We handle it through return message
+            log.debug("Exception extracting from '{}' with JSON Path expression '{}'", textToParse, jsonPathExpression);
             return "Exception: " + e.getMessage(); //$NON-NLS-1$
         }
     }
@@ -152,14 +151,8 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     @Override
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
-        try {
-            jsonDataField.setText(response == null ? "" : RenderAsJSON.prettyJSON(response, TAB_SEPARATOR));  //$NON-NLS-1$
-            jsonDataField.setCaretPosition(0);
-        } catch (Exception e) {
-            log.error("Exception converting to XML: {}, message: {}", response, e.getMessage(), e); //$NON-NLS-1$ $NON-NLS-2$
-            jsonDataField.setText("Exception converting to XML: "+response+ ", message: "+e.getMessage()); //$NON-NLS-1$ $NON-NLS-2$
-            jsonDataField.setCaretPosition(0);
-        }
+        jsonDataField.setText(response == null ? "" : RenderAsJSON.prettyJSON(response, TAB_SEPARATOR));  //$NON-NLS-1$
+        jsonDataField.setCaretPosition(0);
     }
 
 
@@ -194,7 +187,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         jsonDataField.setWrapStyleWord(true);
         
 
-        this.jsonDataPane = JTextScrollPane.getInstance(jsonDataField, true);
+        JScrollPane jsonDataPane = JTextScrollPane.getInstance(jsonDataField, true);
         jsonDataPane.setPreferredSize(new Dimension(100, 200));
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
@@ -220,10 +213,10 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         jsonPathExpressionField = new JLabeledTextField(JMeterUtils.getResString("jsonpath_tester_field")); // $NON-NLS-1$
         jsonPathActionPanel.add(jsonPathExpressionField, BorderLayout.WEST);
 
-        JButton xpathTester = new JButton(JMeterUtils.getResString("jsonpath_tester_button_test")); // $NON-NLS-1$
-        xpathTester.setActionCommand(JSONPATH_TESTER_COMMAND);
-        xpathTester.addActionListener(this);
-        jsonPathActionPanel.add(xpathTester, BorderLayout.EAST);
+        JButton jsonPathTester = new JButton(JMeterUtils.getResString("jsonpath_tester_button_test")); // $NON-NLS-1$
+        jsonPathTester.setActionCommand(JSONPATH_TESTER_COMMAND);
+        jsonPathTester.addActionListener(this);
+        jsonPathActionPanel.add(jsonPathTester, BorderLayout.EAST);
 
         jsonPathResultField = new JTextArea();
         jsonPathResultField.setEditable(false);
@@ -231,11 +224,11 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         jsonPathResultField.setWrapStyleWord(true);
         jsonPathResultField.setMinimumSize(new Dimension(100, 150));
 
-        JPanel xpathTasksPanel = new JPanel(new BorderLayout(0, 5));
-        xpathTasksPanel.add(jsonPathActionPanel, BorderLayout.NORTH);
-        xpathTasksPanel.add(GuiUtils.makeScrollPane(jsonPathResultField), BorderLayout.CENTER);
+        JPanel jsonPathTasksPanel = new JPanel(new BorderLayout(0, 5));
+        jsonPathTasksPanel.add(jsonPathActionPanel, BorderLayout.NORTH);
+        jsonPathTasksPanel.add(GuiUtils.makeScrollPane(jsonPathResultField), BorderLayout.CENTER);
 
-        return xpathTasksPanel;
+        return jsonPathTasksPanel;
     }
 
     /** {@inheritDoc} */

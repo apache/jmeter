@@ -314,7 +314,8 @@ public class ReportGenerator {
             tmpDirCreated = tmpDir.mkdir();
             if (!tmpDirCreated) {
                 String message = String.format(
-                        "Cannot create temporary directory \"%s\".", tmpDir);
+                        "Cannot create temporary directory \"%s\", check property \"%s\"", tmpDir.getAbsolutePath(), 
+                        ReportGeneratorConfiguration.REPORT_GENERATOR_KEY_TEMP_DIR);
                 log.error(message);
                 throw new GenerationException(message);
             }
@@ -333,7 +334,7 @@ public class ReportGenerator {
         String className = graphConfiguration.getClassName();
         try {
             Class<?> clazz = Class.forName(className);
-            Object obj = clazz.newInstance();
+            Object obj = clazz.getDeclaredConstructor().newInstance();
             AbstractGraphConsumer graph = (AbstractGraphConsumer) obj;
             graph.setName(graphName);
             
@@ -358,8 +359,7 @@ public class ReportGenerator {
                     .excludesControllers() ? excludeControllerFilter
                     : nameFilter;
             entryPoint.addSampleConsumer(graph);
-        } catch (ClassNotFoundException | IllegalAccessException
-                | InstantiationException | ClassCastException ex) {
+        } catch (ClassCastException | IllegalArgumentException |  ReflectiveOperationException | SecurityException ex) {
             String error = String.format(INVALID_CLASS_FMT, className);
             log.error(error, ex);
             throw new GenerationException(error, ex);
@@ -373,14 +373,13 @@ public class ReportGenerator {
         String className = exporterConfiguration.getClassName();
         try {
             Class<?> clazz = Class.forName(className);
-            Object obj = clazz.newInstance();
+            Object obj = clazz.getDeclaredConstructor().newInstance();
             DataExporter exporter = (DataExporter) obj;
             exporter.setName(exporterName);
 
             // Export data
             exporter.export(sampleContext, testFile, configuration);
-        } catch (ClassNotFoundException | IllegalAccessException
-                | InstantiationException | ClassCastException ex) {
+        } catch (ReflectiveOperationException | ClassCastException ex) {
             String error = String.format(INVALID_CLASS_FMT, className);
             throw new GenerationException(error, ex);
         } catch (ExportException ex) {

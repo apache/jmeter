@@ -20,6 +20,7 @@ package org.apache.jorphan.util;
 
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 
 import org.apache.commons.io.FileUtils;
@@ -51,13 +53,12 @@ public final class JOrphanUtils {
     }
 
     /**
-     * This is _almost_ equivalent to the String.split method in JDK 1.4. It is
+     * This is <em>almost</em> equivalent to the {@link String#split(String)} method in JDK 1.4. It is
      * here to enable us to support earlier JDKs.
-     *
+     * <p>
      * Note that unlike JDK1.4 split(), it optionally ignores leading split Characters,
      * and the splitChar parameter is not a Regular expression
-     *
-     * <P>
+     * <p>
      * This piece of code used to be part of JMeterUtils, but was moved here
      * because some JOrphan classes use it too.
      *
@@ -68,12 +69,12 @@ public final class JOrphanUtils {
      * @param truncate
      *            Should adjacent and leading/trailing splitChars be removed?
      *
-     * @return Array of all the tokens; empty if the input string is null or the splitChar is null
+     * @return Array of all the tokens; empty if the input string is {@code null} or the splitChar is {@code null}
      *
      * @see #split(String, String, String)
      *
      */
-    public static String[] split(String splittee, String splitChar,boolean truncate) {
+    public static String[] split(String splittee, String splitChar,boolean truncate) { //NOSONAR
         if (splittee == null || splitChar == null) {
             return new String[0];
         }
@@ -124,7 +125,7 @@ public final class JOrphanUtils {
     /**
      * Takes a String and a tokenizer character string, and returns a new array of
      * strings of the string split by the tokenizer character(s).
-     *
+     * <p>
      * Trailing delimiters are significant (unless the default = null)
      *
      * @param splittee
@@ -137,7 +138,7 @@ public final class JOrphanUtils {
      *
      * @return Array of all the tokens.
      *
-     * @throws NullPointerException if splittee or delims are null
+     * @throws NullPointerException if splittee or delims are {@code null}
      *
      * @see #split(String, String, boolean)
      * @see #split(String, String)
@@ -387,7 +388,7 @@ public final class JOrphanUtils {
      *
      * @param target array to scan
      * @param search array to search for
-     * @param offset starting offset (&gt;=0)
+     * @param offset starting offset (&ge;0)
      * @return true if the search array matches the target at the current offset
      */
     public static boolean startsWith(byte [] target, byte [] search, int offset){
@@ -531,9 +532,9 @@ public final class JOrphanUtils {
     }
 
     /**
-     * Returns null if input is empty, null or contains spaces
+     * Returns {@code null} if input is empty, {@code null} or contains spaces only
      * @param input String
-     * @return String
+     * @return trimmed input or {@code null}
      */
     public static String nullifyIfEmptyTrimmed(final String input) {
         if (input == null) {
@@ -547,9 +548,9 @@ public final class JOrphanUtils {
     }
 
     /**
-     * Check that value is empty (""), null or whitespace only.
+     * Check that value is empty (""), {@code null} or whitespace only.
      * @param value Value
-     * @return true if the String is not empty (""), not null and not whitespace only.
+     * @return {@code true} if the String is not empty (""), not {@code null} and not whitespace only.
      */
     public static boolean isBlank(final String value) {
         return StringUtils.isBlank(value);
@@ -587,25 +588,58 @@ public final class JOrphanUtils {
     }
 
     /**
+     * Check whether we can write to a folder. 
+     * A folder can be written to if if does not contain any file or folder
      * Throw {@link IllegalArgumentException} if folder cannot be written to either:
      * <ul>
      *  <li>Because it exists but is not a folder</li>
      *  <li>Because it exists but is not empty</li>
      *  <li>Because it does not exist but cannot be created</li>
      * </ul>
-     * @param folder {@link File} 
-     * 
+     * @param folder to check
      * @throws IllegalArgumentException when folder can't be written to
      */
     public static void canSafelyWriteToFolder(File folder) {
-        canSafelyWriteToFolder(folder, false);
+        canSafelyWriteToFolder(folder, false, file -> true);
     }
+    
+    
+    /**
+     * Check whether we can write to a folder. 
+     * A folder can be written to if folder.listFiles(exporterFileFilter) does not return any file or folder.
+     * Throw {@link IllegalArgumentException} if folder cannot be written to either:
+     * <ul>
+     *  <li>Because it exists but is not a folder</li>
+     *  <li>Because it exists but is not empty using folder.listFiles(exporterFileFilter)</li>
+     *  <li>Because it does not exist but cannot be created</li>
+     * </ul>
+     * @param folder to check 
+     * @param fileFilter  used to filter listing of folder
+     * @throws IllegalArgumentException when folder can't be written to
+     */
+    public static void canSafelyWriteToFolder(File folder, FileFilter fileFilter) {
+        canSafelyWriteToFolder(folder, false, fileFilter);
+    }
+    
+    /**
+     * Check whether we can write to a folder. If {@code deleteFolderContent} is {@code true} the folder or file with
+     * the same name will be emptied or deleted.
+     * @param folder to check 
+     * @param deleteFolderContent flag whether the folder should be emptied or a file with the same name deleted
+     * @throws IllegalArgumentException when folder can't be written to
+     * Throw IllegalArgumentException if folder cannot be written
+     */
+    public static void canSafelyWriteToFolder(File folder, boolean deleteFolderContent) {
+        canSafelyWriteToFolder(folder, deleteFolderContent, file -> true);
+    }
+
+    
     /**
      * Check whether we can write to a folder.
      *
-     * @param folder which should be checked for writability and emptyness
+     * @param folder which should be checked for writability and emptiness
      * @param deleteFolderIfExists flag whether the folder should be emptied or a file with the same name deleted
-     *
+     * @param exporterFileFilter used for filtering listing of the folder
      * @throws IllegalArgumentException when folder can't be written to. That could have the following reasons:
      * <ul>
      *  <li>it exists but is not a folder</li>
@@ -613,7 +647,7 @@ public final class JOrphanUtils {
      *  <li>it does not exist but cannot be created</li>
      * </ul>
      */
-    public static void canSafelyWriteToFolder(File folder, boolean deleteFolderIfExists) {
+    public static void canSafelyWriteToFolder(File folder, boolean deleteFolderIfExists, FileFilter exporterFileFilter) {
         if(folder.exists()) {
             if (folder.isFile()) {
                 if(deleteFolderIfExists) {
@@ -626,7 +660,7 @@ public final class JOrphanUtils {
                         +folder.getAbsolutePath()+"' as it is an existing file");
                 }
             } else {
-                File[] listedFiles = folder.listFiles();
+                File[] listedFiles = folder.listFiles(exporterFileFilter);
                 if(listedFiles != null && listedFiles.length > 0) {
                     if(deleteFolderIfExists) {
                         try {
@@ -679,5 +713,54 @@ public final class JOrphanUtils {
                 result.toString(),
                 totalReplaced
         };
+    }
+
+    /**
+     * Replace all occurrences of {@code regex} in {@code value} by {@code replaceBy} if {@code value} is not blank.
+     * The replaced text is fed into the {@code setter}.
+     *
+     * @param regex Regular expression that is used for the search
+     * @param replaceBy value that is used for replacement
+     * @param caseSensitive flag whether the regex should be applied case sensitive
+     * @param value in which the replacement takes place
+     * @param setter that gets called with the replaced value
+     * @return number of matches that were replaced
+     */
+    public static int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, Consumer<String> setter) {
+        if (StringUtils.isBlank(value)) {
+            return 0;
+        }
+        Object[] result = replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
+        int nbReplaced = ((Integer) result[1]).intValue();
+        if (nbReplaced <= 0) {
+            return 0;
+        }
+        setter.accept((String) result[0]);
+        return nbReplaced;
+    }
+    
+    /**
+     * Takes an array of strings and a tokenizer character, and returns a string
+     * of all the strings concatenated with the tokenizer string in between each
+     * one.
+     *
+     * @param splittee
+     *            Array of Objects to be concatenated.
+     * @param splitChar
+     *            Object to unsplit the strings with.
+     * @return Array of all the tokens.
+     */
+    public static String unsplit(Object[] splittee, Object splitChar) {
+        StringBuilder retVal = new StringBuilder();
+        int count = -1;
+        while (++count < splittee.length) {
+            if (splittee[count] != null) {
+                retVal.append(splittee[count]);
+            }
+            if (count + 1 < splittee.length && splittee[count + 1] != null) {
+                retVal.append(splitChar);
+            }
+        }
+        return retVal.toString();
     }
 }

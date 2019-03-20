@@ -123,6 +123,7 @@ public class LoopController extends GenericController implements Serializable, I
      */
     @Override
     public Sampler next() {
+        updateIterationIndex(getName(), loopCount);
         try {
             if(endOfLoop()) {
                 if (!getContinueForever()) {

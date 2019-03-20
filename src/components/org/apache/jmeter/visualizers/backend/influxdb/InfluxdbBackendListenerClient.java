@@ -365,7 +365,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         userTag = userTagBuilder.toString();
 
         Class<?> clazz = Class.forName(influxdbMetricsSender);
-        this.influxdbMetricsManager = (InfluxdbMetricsSender) clazz.newInstance();
+        this.influxdbMetricsManager = (InfluxdbMetricsSender) clazz.getDeclaredConstructor().newInstance();
         influxdbMetricsManager.setup(influxdbUrl);
         samplersToFilter = Pattern.compile(samplersRegex);
         addAnnotation(true);

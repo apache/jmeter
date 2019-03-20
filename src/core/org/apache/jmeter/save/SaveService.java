@@ -203,7 +203,7 @@ public class SaveService {
 
     private static String getChecksumForPropertiesFile()
             throws NoSuchAlgorithmException, IOException {
-        MessageDigest md = MessageDigest.getInstance("SHA1");
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
         File saveServiceFile = getSaveServiceFile();
         try (BufferedReader reader = 
                 Files.newBufferedReader(saveServiceFile.toPath(), Charset.defaultCharset())) {
@@ -284,7 +284,7 @@ public class SaveService {
         if (useMapper){
             jmxsaver.registerConverter((Converter) Class.forName(key).getConstructor(Mapper.class).newInstance(jmxsaver.getMapper()));
         } else {
-            jmxsaver.registerConverter((Converter) Class.forName(key).newInstance());
+            jmxsaver.registerConverter((Converter) Class.forName(key).getDeclaredConstructor().newInstance());
         }
     }
 

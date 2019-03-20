@@ -46,6 +46,7 @@ import org.junit.Test;
 
 /**
  * Check the eclipse and Maven version definitions against build.properties
+ * Drop this if we move to Maven the build process
  */
 public class JMeterVersionTest extends JMeterTestCase {
 
@@ -145,7 +146,7 @@ public class JMeterVersionTest extends JMeterTestCase {
 //      <classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 //      <classpathentry kind="lib" path="lib/activation-1.1.1.jar"/>
 //      <classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
-        final Pattern p = Pattern.compile("\\s+<classpathentry kind=\"lib\" path=\"lib/(?:api/)?(.+?)-([^-]+(-b\\d+|-BETA\\d)?)\\.jar\"/>");
+        final Pattern p = Pattern.compile("\\s+<classpathentry kind=\"lib\" path=\"lib/(?:api/)?(.+?)-([^-]+(-\\d*|-b\\d+|-BETA\\d)?)\\.jar\"/>");
         final Pattern versionPat = Pattern.compile("\\$\\{(.+)\\.version\\}");
         String line;
         final ArrayList<String> toRemove = new ArrayList<>();
@@ -158,13 +159,10 @@ public class JMeterVersionTest extends JMeterTestCase {
                     jar=jar.replace("-jdk15on","");
                 } else if (jar.equals("commons-jexl") && version.startsWith("2")) { // special handling
                     jar = "commons-jexl2";
-                } else if (jar.equals("spock-core-1.0-groovy")) { // special handling
+                } else if (jar.equals("spock-core-1.2-groovy")) { // special handling
                     jar = "spock-core";
-                    version = "1.0-groovy-2.4";
-                } else if (jar.equals("Saxon-HE-9.8.0")) { // special handling
-                    jar = "Saxon-HE";
-                    version = "9.8.0-12";
-                }else {
+                    version = "1.2-groovy-2.4";
+                } else {
                     String tmp = JAR_TO_BUILD_PROP.get(jar);
                     if (tmp != null) {
                         jar = tmp;
@@ -188,10 +186,8 @@ public class JMeterVersionTest extends JMeterTestCase {
                 propNames.remove(jar);
                 if (expected == null) {
                     fail("Versions list does not contain: " + jar);
-                } else {
-                    if (!version.equals(expected)) {
-                        assertEquals(jar,version,expected);
-                    }
+                } else if (!version.equals(expected)) {
+                    assertEquals(jar,version,expected);
                 }
             }
         }

@@ -51,7 +51,7 @@ Once you've made sure the systems are ready, it's time to setup remote testing. 
 have JMeter installed on all the systems. The way JMeter works is one master controller initiates the test on multiple slave systems.
 </p>
 
-<note>In this tutorial we use GUI Mode just for demonstration. In real life you should use NON GUI mode to start your load test</note>
+<note>In this tutorial we use GUI Mode just for demonstration. In real life you should use CLI mode (NON GUI) to start your load test</note>
 
 <figure width="610" height="462" image="distributed-jmeter.svg">One master controls multiple slaves</figure>
 

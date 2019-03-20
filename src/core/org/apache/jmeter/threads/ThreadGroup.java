@@ -216,21 +216,31 @@ public class ThreadGroup extends AbstractThreadGroup {
         this.threadGroupTree = threadGroupTree;
         int numThreads = getNumThreads();
         int rampUpPeriodInSeconds = getRampUp();
-        float perThreadDelayInMillis = (float) (rampUpPeriodInSeconds * 1000) / (float) getNumThreads();
-
         delayedStartup = isDelayedStartup(); // Fetch once; needs to stay constant
-        log.info("Starting thread group... number={} threads={} ramp-up={} perThread={} delayedStart={}", groupNumber,
-                numThreads, rampUpPeriodInSeconds, perThreadDelayInMillis, delayedStartup);
+        log.info("Starting thread group... number={} threads={} ramp-up={} delayedStart={}", groupNumber,
+                numThreads, rampUpPeriodInSeconds, delayedStartup);
         if (delayedStartup) {
             threadStarter = new Thread(new ThreadStarter(notifier, threadGroupTree, engine), getName()+"-ThreadStarter");
             threadStarter.setDaemon(true);
             threadStarter.start();
             // N.B. we don't wait for the thread to complete, as that would prevent parallel TGs
         } else {
-            long now = System.currentTimeMillis(); // needs to be same time for all threads in the group
             final JMeterContext context = JMeterContextService.getContext();
+            long lastThreadStartInMillis = 0;
+            int delayForNextThreadInMillis = 0;
+            final int perThreadDelayInMillis = Math.round((float) rampUpPeriodInSeconds * 1000 / numThreads);
             for (int threadNum = 0; running && threadNum < numThreads; threadNum++) {
-                startNewThread(notifier, threadGroupTree, engine, threadNum, context, now, (int)(threadNum * perThreadDelayInMillis));
+                long nowInMillis = System.currentTimeMillis();
+                if(threadNum > 0) {
+                    long timeElapsedToStartLastThread = nowInMillis - lastThreadStartInMillis;
+                    delayForNextThreadInMillis += perThreadDelayInMillis - timeElapsedToStartLastThread;
+                }
+                if (log.isDebugEnabled()) {
+                    log.debug("Computed delayForNextThreadInMillis:{} for thread:{}", delayForNextThreadInMillis);
+                }
+                lastThreadStartInMillis = nowInMillis;
+                startNewThread(notifier, threadGroupTree, engine, threadNum, context, nowInMillis,
+                        Math.max(0, delayForNextThreadInMillis));
             }
         }
         log.info("Started thread group number {}", groupNumber);
@@ -585,10 +595,14 @@ public class ThreadGroup extends AbstractThreadGroup {
                     }
                 }
                 final int numThreads = getNumThreads();
-                final int perThreadDelayInMillis = Math.round((float) (getRampUp() * 1000) / (float) numThreads);
+                final float rampUpOriginInMillis = (float) getRampUp() * 1000;
+                final long startTimeInMillis = System.currentTimeMillis();
                 for (int threadNumber = 0; running && threadNumber < numThreads; threadNumber++) {
                     if (threadNumber > 0) {
-                        pause(perThreadDelayInMillis); // ramp-up delay (except first)
+                        long elapsedInMillis = System.currentTimeMillis() - startTimeInMillis; 
+                        final int perThreadDelayInMillis = 
+                                Math.round((rampUpOriginInMillis - elapsedInMillis) / (float) (numThreads - threadNumber));
+                        pause(Math.max(0, perThreadDelayInMillis)); // ramp-up delay (except first)
                     }
                     if (usingScheduler && System.currentTimeMillis() > endtime) {
                         break; // no point continuing beyond the end time

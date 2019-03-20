@@ -87,4 +87,16 @@ public class MapResultData implements ResultData {
     public ResultData removeResult(String name) {
         return map.remove(name);
     }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("MapResultData [map=");
+        builder.append(map);
+        builder.append("]");
+        return builder.toString();
+    }
 }

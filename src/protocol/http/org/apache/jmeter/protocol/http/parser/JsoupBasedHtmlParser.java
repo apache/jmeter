@@ -89,7 +89,7 @@ public class JsoupBasedHtmlParser extends HTMLParser {
                         baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseref);
                     }
                 } catch (MalformedURLException e1) {
-                    throw new RuntimeException(e1);
+                    throw new IllegalArgumentException("Error creating relative url from " + baseref, e1);
                 }
             } else if (tagName.equals(TAG_IMAGE)) {
                 extractAttribute(tag, ATT_SRC);
@@ -112,8 +112,10 @@ public class JsoupBasedHtmlParser extends HTMLParser {
             } else if (tagName.equals(TAG_BGSOUND)){
                 extractAttribute(tag, ATT_SRC);
             } else if (tagName.equals(TAG_LINK)) {
+                String relAttr = tag.attr(ATT_REL);
                 // Putting the string first means it works even if the attribute is null
-                if (STYLESHEET.equalsIgnoreCase(tag.attr(ATT_REL))) {
+                if (STYLESHEET.equalsIgnoreCase(relAttr) || ICON.equalsIgnoreCase(relAttr) 
+                        || SHORTCUT_ICON.equalsIgnoreCase(relAttr)) {
                     extractAttribute(tag, ATT_HREF);
                 }
             } else {
@@ -142,7 +144,7 @@ public class JsoupBasedHtmlParser extends HTMLParser {
             String contents = new String(html,encoding);
             Document doc = Jsoup.parse(contents);
             JMeterNodeVisitor nodeVisitor = new JMeterNodeVisitor(new URLPointer(baseUrl), coll);
-            new NodeTraversor(nodeVisitor).traverse(doc);
+            NodeTraversor.traverse(nodeVisitor, doc);
             return coll.iterator();
         } catch (Exception e) {
             throw new HTMLParseException(e);

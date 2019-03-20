@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+    license agreements. See the NOTICE file distributed with this work for additional 
+    information regarding copyright ownership. The ASF licenses this file to 
+    You under the Apache License, Version 2.0 (the "License"); you may not use 
+    this file except in compliance with the License. You may obtain a copy of 
+    the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+    by applicable law or agreed to in writing, software distributed under the 
+    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+    OF ANY KIND, either express or implied. See the License for the specific 
+    language governing permissions and limitations under the License. -->
+
+<!DOCTYPE document[
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document id="$Id$">
+    <properties>
+        <title>User guide: Customizables templates</title>
+    </properties>
+    <body>
+        <section name="Customizable template">
+            <p>
+                This document describes how to create a customizable template.
+            </p>
+            <subsection name="1 Folder structure" anchor="folder_structure">
+                    <p>
+                        The template feature uses the bin/templates folder which contains :<br/>
+                        <ul>
+                            <li>templates.xml, the file where you declare the templates you want to be able to use</li>
+                            <li>some .jmx and .jmx.fmkr files which are the templates</li>
+                        </ul>
+                    </p>
+                    <p>Here is how it looks like:
+                    <figure image="templates/template_folder.png">Figure 1 - template folder</figure>
+                    </p>
+            </subsection>
+            <subsection name="2 Template declaration" anchor="template_creation">
+                <subsection name="2.1 Basic template declaration" anchor="basic_template_declaration">
+                    <p>
+                        First of all you must declare your template. To do that, look into the templates.xml file.<br/>
+                        This file respect a DTD <br/>
+                        Below is the already existing Recording template declaration inside the templates.xml :
+                        <figure image="templates/templates_xml.png">Figure 2 - recording template declaration</figure>
+                        A template declaration is made as follow :<br/>
+                        <ul>
+                            <li><code>template</code> element which contains the informations described in the followings tags</li>
+                            <li><code>name</code> element which contains the template name the user will see</li>
+                            <li><code>fileName</code> element which contains the relative path of the template.</li>
+                            <li><code>description</code> element which uses html to describe the template</li>
+                            <li><code>optional</code> parameters tag (will be discussed later)</li>
+                        </ul>
+                    </p>
+                </subsection>
+                <subsection name="2.2 Customizable template declaration" anchor="customizable_template_declaration">
+                    <p>
+                        Let's say we want the exact same Recording template as in the 2.1 section, but we want to choose the name
+                        of the xml file where the recording of view result tree will be saved.<br/><br/>
+                        To do so we will use the parameters tag to tell JMeter to ask the user about a name for the concerned file :
+                        <figure image="templates/templates_xml_parameters.png">Figure 3 - recording template with parameters</figure>
+                        <note>You can put as many parameter tags as you want in the parameters tag.</note>
+                        Let's see what changed here.<br/>
+                        Firstly, customs templates are <code>.jmx.fmkr</code> files and not only <code>.jmx</code>.<br/><br/>
+                        Lastly, we added a <code>parameters</code> tag.<br/> As you can see in the image, a <code>parameters</code> tag contains <code>parameter</code> tags.<br/>
+                        Parameter tags are empty and contains 2 attributes :
+                        <ul>
+                            <li><code>key</code> is the name of the parameter you will ask the user to fill.</li>
+                            <li><code>defaultValue</code> is as its name says, the default value the user will see for the parameter.</li>
+                        </ul>
+                    </p>
+                </subsection>
+            </subsection>
+            <subsection name="3 Template file" anchor="template_file">
+                <subsection name="3.1 Basic template file" anchor="basic_template_file">
+                    <p>
+                        The template file is the one you used in the fileName tag when you declared your template.
+                        A template file is just the saving of a JMeter test plan.
+                    </p>
+                </subsection>
+                
+                <subsection name="3.2 Customizable template file" anchor="customizable_template_file">
+                    <p>
+                        In the 2.2 section we saw that a custom template file is a .jmx.fmkr file.<br/>
+                        The single difference between them is the .jmx.fmkr will be analyzed by JMeter to<br/>
+                        detect customs tag. If a custom tag is found, JMeter will try to replace it by the corresponding
+                        given value from the user.<br/><br/>
+                        A custom tag is defined as follow : 
+                        <source><![CDATA[[=<key>]]]></source>
+                        This is based on <a href="https://freemarker.apache.org/docs/dgui_misc_alternativesyntax.html#dgui_misc_alternativesyntax_interpolation">Freemarker alternative Interpolation syntax</a>.
+                        Let's illustrate how it works with an example.<br/>
+                        Consider the following part of the recording.jmx template file : <br/>
+                        <figure image="templates/template_recording_filename.png">Figure 4 - recording.jmx save file</figure>
+                        The surrounded area correspond to the name of the xml file where the View Results Tree output will be saved.
+                        As it is, when you use the template you will always have the same saving filename : <code>recording.xml</code>.<br/><br/>
+                        To make it customizable, change your recording template declaration in the templates.xml files by the<br/>
+                        one shown in the 2.2 section. Then, rename the recording.jmx file to recording.jmx.fmkr.<br/><br/>
+                        When it's done, Change the above selected line by this one : 
+                        <source><![CDATA[<stringProp name="filename">[=xmlFileName]</stringProp>]]></source>
+                        <br/>
+                        It's over ! With this configuration, if you chose to use the recording template, JMeter will ask you
+                        a xmlFileName (correspond to the key value in the declaration).
+                        <figure image="templates/template_parameters_window.png">Figure 5 - JMeter asks you the value you want to put for the key</figure>
+                        Then, you will find the expected value in the created template where you placed the [=xmlFileName] tag :
+                        <figure image="templates/template_recording_retrieved_value.png">Figure 6 - the value changed</figure>
+                    </p>
+                </subsection>
+            </subsection>
+        </section>
+    </body>
+</document>

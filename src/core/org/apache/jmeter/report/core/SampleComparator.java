@@ -19,7 +19,7 @@ package org.apache.jmeter.report.core;
 
 /**
  * Defines a comparator for {@link Sample} instances
- * 
+ *
  * @since 3.0
  */
 public interface SampleComparator {
@@ -28,19 +28,17 @@ public interface SampleComparator {
      * Compares to sample
      * <p>
      * Must return an long integer that define the relational order of the 2
-     * compared samples :</p>
+     * compared samples:</p>
      * <ul>
      * <li>Negative long integer : s1 is lower than s2</li>
      * <li>Zero long integer : s1 is strictly equal to s2</li>
      * <li>Positive long integer : s1 is greater than s2</li>
      * </ul>
-     * 
-     * @param s1
-     *            The first sample to be compared
-     * @param s2
-     *            The second sample to compared
+     *
+     * @param s1 The first sample to be compared
+     * @param s2 The second sample to compared
      * @return A negative is <code>s1 &lt; s2</code>, <code>0 if s1 = s2</code>,
-     *         a positive integer if <code>s1 &gt; s2</code>
+     * a positive integer if <code>s1 &gt; s2</code>
      */
     long compare(Sample s1, Sample s2);
 
@@ -55,10 +53,8 @@ public interface SampleComparator {
      * Not that this function is the place to get sample column indexes for
      * better performance
      * </p>
-     * 
-     * @param metadata
-     *            The sample metadata of the sample to be compared by this
-     *            instance
+     *
+     * @param metadata The metadata of the sample to be compared by this instance
      */
     void initialize(SampleMetadata metadata);
 

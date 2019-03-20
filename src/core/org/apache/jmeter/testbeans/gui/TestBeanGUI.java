@@ -174,8 +174,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 
     private Customizer createCustomizer() {
         try {
-            return (Customizer) customizerClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            return (Customizer) customizerClass.getDeclaredConstructor().newInstance();
+        } catch (ReflectiveOperationException e) {
             log.error("Could not instantiate customizer of {}", customizerClass, e);
             throw new Error(e.toString());
         }
@@ -198,7 +198,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
    @Override
     public TestElement createTestElement() {
         try {
-            TestElement element = (TestElement) testBeanClass.newInstance();
+            TestElement element = (TestElement) testBeanClass.getDeclaredConstructor().newInstance();
             // In other GUI component, clearGUI resets the value to defaults one as there is one GUI per Element
             // With TestBeanGUI as it's shared, its default values are only known here, we must call setValues with 
             // element (as it holds default values)
@@ -209,7 +209,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             // put the default values back into the new element
             modifyTestElement(element);
             return element;
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (ReflectiveOperationException e) {
             log.error("Can't create test element", e);
             throw new Error(e); // Programming error. Don't continue.
         }

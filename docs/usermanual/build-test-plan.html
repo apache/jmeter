@@ -288,7 +288,7 @@ These only apply to a locally run test; they do not include any threads started 
 </p>
 
 <div class="clear"></div>
-<div class="note">Using GUI mode as described here should only be used when debugging your Test Plan. To run the real load test, use NON-GUI mode.</div>
+<div class="note">Using GUI mode as described here should only be used when debugging your Test Plan. To run the real load test, use CLI mode.</div>
 <div class="clear"></div>
 
 </div>
@@ -322,8 +322,8 @@ If Shutdown is taking too long. Close the Shutdown dialog box and select <span c
 </p>
 
 <p>
-When running JMeter in non-GUI mode, there is no Menu, and JMeter does not react to keystrokes such as <span class="keycombo"><span class="keysym">Control</span>&nbsp;+&nbsp;<span class="keysym">.</span></span>.
-So JMeter non-GUI mode will listen for commands on a specific port (default <span class="code">4445</span>, see the JMeter property <span class="code">jmeterengine.nongui.port</span>).
+When running JMeter in CLI mode, there is no Menu, and JMeter does not react to keystrokes such as <span class="keycombo"><span class="keysym">Control</span>&nbsp;+&nbsp;<span class="keysym">.</span></span>.
+So JMeter CLI mode will listen for commands on a specific port (default <span class="code">4445</span>, see the JMeter property <span class="code">jmeterengine.nongui.port</span>).
 JMeter supports automatic choice of an alternate port if the default port is being used 
 (for example by another JMeter instance). In this case, JMeter will try the next higher port, continuing until
 it reaches the JMeter property <span class="code">jmeterengine.nongui.maxport</span>) which defaults to <span class="code">4455</span>.
@@ -391,9 +391,6 @@ The status of a sample result can be seen in the various different Listeners.
 <li class="twitter">
 <a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a>
 </li>
-<li class="gplus">
-<a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a>
-</li>
 </ul>
 </div>
 <a href="#top" id="topButton">Go to top</a>
@@ -402,7 +399,7 @@ The status of a sample result can be seen in the various different Listeners.
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2018
+            2019
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache

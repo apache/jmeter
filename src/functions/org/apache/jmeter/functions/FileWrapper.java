@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class wraps the FileRowColContainer for use across multiple threads.
- *
+ * <p>
  * It does this by maintaining a list of open files, keyed by file name (or
  * alias, if used). A list of open files is also maintained for each thread,
  * together with the current line number.
@@ -75,7 +75,7 @@ public final class FileWrapper {
     private static String checkDefault(String file) {
         if (file.length() == 0) {
             if (fileContainers.size() == 1 && defaultFile.length() > 0) {
-                log.warn("Using default: " + defaultFile);
+                log.warn("Using default: {}", defaultFile);
                 file = defaultFile;
             } else {
                 log.error("Cannot determine default file name");
@@ -88,7 +88,7 @@ public final class FileWrapper {
      * called by CSVRead(file,alias)
      */
     public static synchronized void open(String file, String alias) {
-        log.info("Opening " + file + " as " + alias);
+        log.info("Opening {} as {}", file, alias);
         file = checkDefault(file);
         if (alias.length() == 0) {
             log.error("Alias cannot be empty");
@@ -99,7 +99,7 @@ public final class FileWrapper {
             FileRowColContainer frcc;
             try {
                 frcc = getFile(file, alias);
-                log.info("Stored " + file + " as " + alias);
+                log.info("Stored {} as {}", file, alias);
                 m.put(alias, new FileWrapper(frcc));
             } catch (IOException e) {
                 // Already logged
@@ -112,7 +112,7 @@ public final class FileWrapper {
         if ((frcc = fileContainers.get(alias)) == null) {
             frcc = new FileRowColContainer(file);
             fileContainers.put(alias, frcc);
-            log.info("Saved " + file + " as " + alias + " delimiter=<" + frcc.getDelimiter() + ">");
+            log.info("Saved {} as {} delimiter=<{}>", file, alias, frcc.getDelimiter());
             if (defaultFile.length() == 0) {
                 defaultFile = file;// Save in case needed later
             }
@@ -130,7 +130,7 @@ public final class FileWrapper {
         Map<String, FileWrapper> my = filePacks.get();
         FileWrapper fw = my.get(file);
         if (fw == null) {
-            log.warn("endRow(): no entry for " + file);
+            log.warn("endRow(): no entry for {}", file);
         } else {
             fw.endRow();
         }
@@ -149,10 +149,10 @@ public final class FileWrapper {
         if (fw == null) // First call
         {
             if (file.startsWith("*")) { //$NON-NLS-1$
-                log.warn("Cannot perform initial open using alias " + file);
+                log.warn("Cannot perform initial open using alias {}", file);
             } else {
                 file = checkDefault(file);
-                log.info("Attaching " + file);
+                log.info("Attaching {}", file);
                 open(file, file);
                 fw = my.get(file);
             }
@@ -191,15 +191,12 @@ public final class FileWrapper {
         return fw.currentRow;
     }
 
-    /**
-     *
-     */
     public static void clearAll() {
         log.debug("clearAll()");
         Map<String, FileWrapper> my = filePacks.get();
         for (Iterator<Map.Entry<String, FileWrapper>>  i = my.entrySet().iterator(); i.hasNext();) {
             Map.Entry<String, FileWrapper> fw = i.next();
-            log.info("Removing " + fw.toString());
+            log.info("Removing {}", fw);
             i.remove();
         }
         fileContainers.clear();

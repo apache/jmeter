@@ -103,8 +103,9 @@ class RegexpHTMLParser extends HTMLParser {
             + "|[^<]+?STYLE\\s*=['\"].*?URL\\(\\s*['\"](.+?)['\"]\\s*\\)"
             + "|INPUT(?:" + SEP + "(?:SRC" + VALUE
             + "|TYPE\\s*=\\s*(?:\"image\"|'image'|image(?=[\\s>])))){2,}"
-            + "|LINK(?:" + SEP + "(?:HREF" + VALUE
-            + "|REL\\s*=\\s*(?:\"stylesheet\"|'stylesheet'|stylesheet(?=[\\s>])))){2,}" + ")";
+            + "|LINK(?:" + SEP + "(?:HREF" + VALUE+"|REL\\s*=\\s*(?:\"stylesheet\"|'stylesheet'|stylesheet(?=[\\s>])))){2,}"
+            + "|LINK(?:" + SEP + "(?:HREF" + VALUE+"|REL\\s*=\\s*(?:\"icon\"|'icon'|icon(?=[\\s>])))){2,}"
+            + "|LINK(?:" + SEP + "(?:HREF" + VALUE+"|REL\\s*=\\s*(?:\"shortcut icon\"|'shortcut icon'|shortcut icon(?=[\\s>])))){2,})";
 
     // Number of capturing groups possibly containing Base HREFs:
     private static final int NUM_BASE_GROUPS = 3;

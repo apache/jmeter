@@ -145,19 +145,7 @@ public class Save extends AbstractAction {
             JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
             if(checkAcceptableForTestFragment(nodes)) {
                 // Create Test Fragment node
-                TestElement element = GuiPackage.getInstance().createTestElement(TestFragmentControllerGui.class.getName());
-                HashTree hashTree = new ListedHashTree();
-                HashTree tfTree = hashTree.add(new JMeterTreeNode(element, null));
-                for (JMeterTreeNode node : nodes) {
-                    // Clone deeply current node
-                    TreeCloner cloner = new TreeCloner(false);
-                    GuiPackage.getInstance().getTreeModel().getCurrentSubTree(node).traverse(cloner);
-                    // Add clone to tfTree
-                    tfTree.add(cloner.getClonedTree());
-                }
-
-                subTree = hashTree;
-
+                subTree = createTestFragmentNode(nodes);
             } else {
                 JMeterUtils.reportErrorToUser(
                         JMeterUtils.getResString("save_as_test_fragment_error"), // $NON-NLS-1$
@@ -170,41 +158,89 @@ public class Save extends AbstractAction {
         }
 
         String updateFile = GuiPackage.getInstance().getTestPlanFile();
-        if (!ActionNames.SAVE.equals(e.getActionCommand()) || updateFile == null) {
-            JFileChooser chooser = FileDialoger.promptToSaveFile(updateFile == null ? GuiPackage.getInstance().getTreeListener()
-                    .getCurrentNode().getName()
-                    + JMX_FILE_EXTENSION : updateFile);
-            if (chooser == null) {
+        if (!ActionNames.SAVE.equals(e.getActionCommand()) // Saving existing plan 
+                // New File
+                || updateFile == null) {
+            boolean isNewFile = updateFile == null;
+            updateFile = computeFileName();
+            if(updateFile == null) {
                 return;
             }
-            updateFile = chooser.getSelectedFile().getAbsolutePath();
-            // Make sure the file ends with proper extension
-            if(FilenameUtils.getExtension(updateFile).isEmpty()) {
-                updateFile = updateFile + JMX_FILE_EXTENSION;
-            }
-            // Check if the user is trying to save to an existing file
-            File f = new File(updateFile);
-            if(f.exists()) {
-                int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
-                        JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
-                        JMeterUtils.getResString("save?"),  // $NON-NLS-1$
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
-                if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
-                    return ; // Do not save, user does not want to overwrite
-                }
-            }
-
-            if (!e.getActionCommand().equals(ActionNames.SAVE_AS)) {
+            if (e.getActionCommand().equals(ActionNames.SAVE_ALL_AS) || isNewFile) {
                 GuiPackage.getInstance().setTestPlanFile(updateFile);
             }
         }
         
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
-        // backup existing file according to jmeter/user.properties settings
+        backupAndSave(e, subTree, fullSave, updateFile); 
+
+        GuiPackage.getInstance().updateCurrentGui();
+    }
+
+    /**
+     * Create TestFragment test plan from selected nodes
+     * @param nodes Array of {@link JMeterTreeNode}
+     * @return {@link HashTree} new test plan
+     */
+    private HashTree createTestFragmentNode(JMeterTreeNode[] nodes) {
+        TestElement element = GuiPackage.getInstance().createTestElement(TestFragmentControllerGui.class.getName());
+        HashTree hashTree = new ListedHashTree();
+        HashTree tfTree = hashTree.add(new JMeterTreeNode(element, null));
+        for (JMeterTreeNode node : nodes) {
+            // Clone deeply current node
+            TreeCloner cloner = new TreeCloner(false);
+            GuiPackage.getInstance().getTreeModel().getCurrentSubTree(node).traverse(cloner);
+            // Add clone to tfTree
+            tfTree.add(cloner.getClonedTree());
+        }
+        return hashTree;
+    }
+
+    /**
+     * @return String new file name or null if user want to cancel
+     */
+    private String computeFileName() {
+        JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
+                .getCurrentNode().getName()
+                + JMX_FILE_EXTENSION);
+        if (chooser == null) {
+            return null;
+        }
+        String updateFile = chooser.getSelectedFile().getAbsolutePath();
+        // Make sure the file ends with proper extension
+        if(FilenameUtils.getExtension(updateFile).isEmpty()) {
+            updateFile = updateFile + JMX_FILE_EXTENSION;
+        }
+        // Check if the user is trying to save to an existing file
+        File f = new File(updateFile);
+        if(f.exists()) {
+            int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
+                    JMeterUtils.getResString("save?"),  // $NON-NLS-1$
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
+                return null; // Do not save, user does not want to overwrite
+            }
+        }
+        return updateFile;
+    }
+
+    /**
+     * Backup existing file according to jmeter/user.properties settings
+     * and save
+     * @param e {@link ActionEvent}
+     * @param subTree HashTree Test plan to save
+     * @param fullSave Partial or full save
+     * @param newFile File to save
+     * @throws IllegalUserActionException
+     */
+    void backupAndSave(ActionEvent e, HashTree subTree, boolean fullSave, String newFile)
+            throws IllegalUserActionException {
+        // 
         List<File> expiredBackupFiles = EMPTY_FILE_LIST;
         if (GuiPackage.getInstance().isDirty()) {
-            File fileToBackup = new File(updateFile);
+            File fileToBackup = new File(newFile);
             log.debug("Test plan has changed, make backup of {}", fileToBackup);
             try {
                 expiredBackupFiles = createBackupFile(fileToBackup);
@@ -221,10 +257,10 @@ public class Save extends AbstractAction {
             }
         }
 
-        try (FileOutputStream ostream = new FileOutputStream(updateFile)){
+        try (FileOutputStream ostream = new FileOutputStream(newFile)){
             SaveService.saveTree(subTree, ostream);
             if (fullSave) { // Only update the stored copy of the tree for a full save
-                FileServer.getFileServer().setScriptName(new File(updateFile).getName());
+                FileServer.getFileServer().setScriptName(new File(newFile).getName());
                 subTree = GuiPackage.getInstance().getTreeModel().getTestPlan(); // refetch, because convertSubTree affects it
                 ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
             }
@@ -236,10 +272,8 @@ public class Save extends AbstractAction {
             throw ex;
         } catch (Exception ex) {
             log.error("Error saving tree.", ex);
-            throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
-        } 
-
-        GuiPackage.getInstance().updateCurrentGui();
+            throw new IllegalUserActionException("Couldn't save test plan to file: " + newFile, ex);
+        }
     }
     
     /**

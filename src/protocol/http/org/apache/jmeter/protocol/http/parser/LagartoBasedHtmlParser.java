@@ -20,9 +20,10 @@ package org.apache.jmeter.protocol.http.parser;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayDeque;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
@@ -64,7 +65,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
         private URLCollection urls;
         private URLPointer baseUrl;
         private Float ieVersion;
-        private Stack<Boolean> enabled = new Stack<>();
+        private Deque<Boolean> enabled = new ArrayDeque<>();
 
         /**
          * @param baseUrl base url to add possibly missing information to urls found in <code>urls</code>
@@ -123,7 +124,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                             baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseref.toString());
                         }
                     } catch (MalformedURLException e1) {
-                        throw new RuntimeException(e1);
+                        throw new IllegalArgumentException("Error creating relative url from " + baseref, e1);
                     }
                 } else if (tag.nameEquals(TAG_IMAGE)) {
                     extractAttribute(tag, ATT_SRC);
@@ -151,14 +152,15 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 } else if (tag.nameEquals(TAG_LINK)) {
                     CharSequence relAttribute = tag.getAttributeValue(ATT_REL);
                     // Putting the string first means it works even if the attribute is null
-                    if (relAttribute != null && CharSequenceUtil.equalsIgnoreCase(STYLESHEET,relAttribute)) {
+                    if (relAttribute != null && 
+                            (CharSequenceUtil.equalsIgnoreCase(STYLESHEET,relAttribute)
+                                    || CharSequenceUtil.equalsIgnoreCase(ICON, relAttribute) 
+                                    || CharSequenceUtil.equalsIgnoreCase(SHORTCUT_ICON, relAttribute))) {
                         extractAttribute(tag, ATT_HREF);
                     }
                 } else {
                     extractAttribute(tag, ATT_BACKGROUND);
                 }
-    
-    
                 // Now look for URLs in the STYLE attribute
                 CharSequence styleTagStr = tag.getAttributeValue(ATT_STYLE);
                 if(!StringUtils.isEmpty(styleTagStr)) {

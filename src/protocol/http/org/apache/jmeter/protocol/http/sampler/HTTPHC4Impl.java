@@ -35,13 +35,13 @@ import java.security.GeneralSecurityException;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
 
 import javax.security.auth.Subject;
 
@@ -144,6 +144,7 @@ import org.apache.jmeter.protocol.http.control.DynamicKerberosSchemeFactory;
 import org.apache.jmeter.protocol.http.control.DynamicSPNegoSchemeFactory;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.hc.LaxDeflateInputStream;
+import org.apache.jmeter.protocol.http.sampler.hc.LaxGZIPInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LazyLayeredConnectionSocketFactory;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -185,6 +186,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         
     private static final String CONTEXT_ATTRIBUTE_METRICS = "__jmeter.M__";
 
+    private static final boolean DISABLE_DEFAULT_UA = JMeterUtils.getPropDefault("httpclient4.default_user_agent_disabled", false);
+
+    private static final boolean GZIP_RELAX_MODE = JMeterUtils.getPropDefault("httpclient4.gzip_relax_mode", false);
+
     private static final boolean DEFLATE_RELAX_MODE = JMeterUtils.getPropDefault("httpclient4.deflate_relax_mode", false);
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHC4Impl.class);
@@ -192,7 +197,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final InputStreamFactory GZIP = new InputStreamFactory() {
         @Override
         public InputStream create(final InputStream instream) throws IOException {
-            return new GZIPInputStream(instream);
+            return new LaxGZIPInputStream(instream, GZIP_RELAX_MODE);
         }
     };
 
@@ -379,7 +384,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     // see  https://stackoverflow.com/questions/26166469/measure-bandwidth-usage-with-apache-httpcomponents-httpclient
     private static final HttpRequestExecutor REQUEST_EXECUTOR = new HttpRequestExecutor() {
-
         @Override
         protected HttpResponse doSendRequest(
                 final HttpRequest request,
@@ -568,9 +572,16 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // perform the sample
             httpResponse = 
                     executeRequest(httpClient, httpRequest, localContext, url);
-
+            if (log.isDebugEnabled()) {
+                log.debug("Headers in request before:{}", Arrays.asList(httpRequest.getAllHeaders()));
+            }
             // Needs to be done after execute to pick up all the headers
             final HttpRequest request = (HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
+            if (log.isDebugEnabled()) {
+                log.debug("Headers in request after:{}, in localContext#request:{}", 
+                        Arrays.asList(httpRequest.getAllHeaders()),
+                        Arrays.asList(request.getAllHeaders()));
+            }
             extractClientContextAfterSample(jMeterVariables, localContext);
             // We've finished with the request, so we can add the LocalAddress to it for display
             if (localAddress != null) {
@@ -746,7 +757,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         Object userToken = null;
         // During recording JMeterContextService.getContext().getVariables() is null
         if(jMeterVariables != null) {
-            userToken = jMeterVariables.getObject(JMETER_VARIABLE_USER_TOKEN);            
+            userToken = jMeterVariables.getObject(JMETER_VARIABLE_USER_TOKEN);
         }
         if(userToken != null) {
             log.debug("Found user token:{} as JMeter variable:{}, storing it in HttpContext", userToken, JMETER_VARIABLE_USER_TOKEN);
@@ -840,6 +851,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         private final String target; // protocol://[user:pass@]host:[port]
         private final boolean hasProxy;
+        private final String proxyScheme;
         private final String proxyHost;
         private final int proxyPort;
         private final String proxyUser;
@@ -850,17 +862,19 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         /**
          * @param url URL Only protocol and url authority are used (protocol://[user:pass@]host:[port])
          * @param hasProxy has proxy
+         * @param proxyScheme scheme
          * @param proxyHost proxy host
          * @param proxyPort proxy port
          * @param proxyUser proxy user
          * @param proxyPass proxy password
          */
-        public HttpClientKey(URL url, boolean hasProxy, String proxyHost,
+        public HttpClientKey(URL url, boolean hasProxy, String proxyScheme, String proxyHost,
                 int proxyPort, String proxyUser, String proxyPass) {
             // N.B. need to separate protocol from authority otherwise http://server would match https://erver (<= sic, not typo error)
             // could use separate fields, but simpler to combine them
             this.target = url.getProtocol()+"://"+url.getAuthority();
             this.hasProxy = hasProxy;
+            this.proxyScheme = proxyScheme;
             this.proxyHost = proxyHost;
             this.proxyPort = proxyPort;
             this.proxyUser = proxyUser;
@@ -872,6 +886,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             int hash = 17;
             hash = hash*31 + (hasProxy ? 1 : 0);
             if (hasProxy) {
+                hash = hash*31 + getHash(proxyScheme);
                 hash = hash*31 + getHash(proxyHost);
                 hash = hash*31 + proxyPort;
                 hash = hash*31 + getHash(proxyUser);
@@ -896,6 +911,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             HttpClientKey other = (HttpClientKey) obj;
             if (this.hasProxy) { // otherwise proxy String fields may be null
+                if (proxyScheme == null) {
+                    if (other.proxyScheme != null) {
+                        return false;
+                    }
+                } else if (!proxyScheme.equals(other.proxyScheme)) {
+                    return false;
+                }
                 return 
                 this.hasProxy == other.hasProxy &&
                 this.proxyPort == other.proxyPort &&
@@ -924,6 +946,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 sb.append(" via ");
                 sb.append(proxyUser);
                 sb.append('@');
+                sb.append(proxyScheme);
+                sb.append("://");
                 sb.append(proxyHost);
                 sb.append(':');
                 sb.append(proxyPort);
@@ -938,6 +962,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         
         final String host = url.getHost();
+        String proxyScheme = getProxyScheme();
         String proxyHost = getProxyHost();
         int proxyPort = getProxyPortInt();
         String proxyPass = getProxyPass();
@@ -951,6 +976,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         
         // if both dynamic and static are used, the dynamic proxy has priority over static
         if(!useDynamicProxy) {
+            proxyScheme = PROXY_SCHEME;
             proxyHost = PROXY_HOST;
             proxyPort = PROXY_PORT;
             proxyUser = PROXY_USER;
@@ -958,7 +984,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         // Lookup key - must agree with all the values used to create the HttpClient.
-        HttpClientKey key = new HttpClientKey(url, useProxy, proxyHost, proxyPort, proxyUser, proxyPass);
+        HttpClientKey key = new HttpClientKey(url, useProxy, proxyScheme, proxyHost, proxyPort, proxyUser, proxyPass);
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY, key);
         CloseableHttpClient httpClient = null;
         boolean concurrentDwn = this.testElement.isConcurrentDwn();
@@ -1016,7 +1042,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     setConnectionTimeToLive(TIME_TO_LIVE, TimeUnit.MILLISECONDS).
                     setRetryHandler(new StandardHttpRequestRetryHandler(RETRY_COUNT, REQUEST_SENT_RETRY_ENABLED)).
                     setConnectionReuseStrategy(DefaultClientConnectionReuseStrategy.INSTANCE);
-            
+            if(DISABLE_DEFAULT_UA) {
+                builder.disableDefaultUserAgent();
+            }
             Lookup<AuthSchemeProvider> authSchemeRegistry =
                     RegistryBuilder.<AuthSchemeProvider>create()
                         .register(AuthSchemes.BASIC, new BasicSchemeFactory())
@@ -1035,7 +1063,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // Set up proxy details
             if(useProxy) {
-                HttpHost proxy = new HttpHost(proxyHost, proxyPort);
+                HttpHost proxy = new HttpHost(proxyHost, proxyPort, proxyScheme);
                 builder.setProxy(proxy);
                 
                 CredentialsProvider credsProvider = new BasicCredentialsProvider();
@@ -1052,12 +1080,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             httpClient = builder.build();
             if (log.isDebugEnabled()) {
-                log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
+                log.debug("Created new HttpClient: @{} {}", System.identityHashCode(httpClient), key);
             }
             mapHttpClientPerHttpClientKey.put(key, Pair.of(httpClient, pHCCM)); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {
-                log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
+                log.debug("Reusing the HttpClient: @{} {}", System.identityHashCode(httpClient),key);
             }
         }
 

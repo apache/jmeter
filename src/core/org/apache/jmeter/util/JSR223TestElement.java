@@ -55,6 +55,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
 {
     private static final long serialVersionUID = 232L;
        
+    private static final Logger logger = LoggerFactory.getLogger(JSR223TestElement.class);
     /**
      * Cache of compiled scripts
      */
@@ -124,8 +125,8 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         final String fileName = getFilename();
         final String scriptParameters = getParameters();
         // Use actual class name for log
-        final Logger logger = LoggerFactory.getLogger(getClass());
-        bindings.put("log", logger); // $NON-NLS-1$ (this name is fixed)
+        final Logger elementLogger = LoggerFactory.getLogger(getClass().getName()+"."+getName());
+        bindings.put("log", elementLogger); // $NON-NLS-1$ (this name is fixed)
         bindings.put("Label", label); // $NON-NLS-1$ (this name is fixed)
         bindings.put("FileName", fileName); // $NON-NLS-1$ (this name is fixed)
         bindings.put("Parameters", scriptParameters); // $NON-NLS-1$ (this name is fixed)
@@ -154,13 +155,14 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * - If ScriptEngine implements Compilable script will be compiled and cached
      * - If not if will be run
      * @param scriptEngine ScriptEngine
-     * @param bindings {@link Bindings} might be null
+     * @param pBindings {@link Bindings} might be null
      * @return Object returned by script
      * @throws IOException when reading the script fails
      * @throws ScriptException when compiling or evaluation of the script fails
      */
-    protected Object processFileOrScript(ScriptEngine scriptEngine, Bindings bindings)
+    protected Object processFileOrScript(ScriptEngine scriptEngine, final Bindings pBindings)
             throws IOException, ScriptException {
+        Bindings bindings = pBindings; 
         if (bindings == null) {
             bindings = scriptEngine.createBindings();
         }
@@ -174,19 +176,19 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             if (!StringUtils.isEmpty(getFilename())) {
                 if (scriptFile.exists() && scriptFile.canRead()) {
                     if (supportsCompilable) {
-                        String cacheKey = getScriptLanguage() + "#" + // $NON-NLS-1$
+                        String newCacheKey = getScriptLanguage() + "#" + // $NON-NLS-1$
                                 scriptFile.getAbsolutePath() + "#" + // $NON-NLS-1$
                                 scriptFile.lastModified();
-                        CompiledScript compiledScript = compiledScriptsCache.get(cacheKey);
+                        CompiledScript compiledScript = compiledScriptsCache.get(newCacheKey);
                         if (compiledScript == null) {
                             synchronized (compiledScriptsCache) {
-                                compiledScript = compiledScriptsCache.get(cacheKey);
+                                compiledScript = compiledScriptsCache.get(newCacheKey);
                                 if (compiledScript == null) {
                                     // TODO Charset ?
                                     try (BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile),
                                             (int) scriptFile.length())) {
                                         compiledScript = ((Compilable) scriptEngine).compile(fileReader);
-                                        compiledScriptsCache.put(cacheKey, compiledScript);
+                                        compiledScriptsCache.put(newCacheKey, compiledScript);
                                     }
                                 }
                             }
@@ -235,6 +237,43 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         }
     }
     
+    /**
+     * @return boolean true if element is not compilable or if compilation succeeds
+     * @throws IOException if script is missing
+     * @throws ScriptException if compilation fails
+     */
+    public boolean compile() 
+        throws ScriptException, IOException {
+        String lang = getScriptLanguageWithDefault();
+        ScriptEngine scriptEngine = getInstance().getEngineByName(lang);
+        boolean supportsCompilable = scriptEngine instanceof Compilable
+                && !("bsh.engine.BshScriptEngine".equals(scriptEngine.getClass().getName())); // NOSONAR // $NON-NLS-1$
+        if(!supportsCompilable) {
+            return true;
+        }
+        if (!StringUtils.isEmpty(getScript())) {
+            try {
+                ((Compilable) scriptEngine).compile(getScript());
+                return true;
+            } catch (ScriptException e) { // NOSONAR
+                logger.error("Error compiling script for test element {}, error:{}", getName(), e.getMessage());
+                return false;
+            }
+        } else {
+            File scriptFile = new File(getFilename());
+            try (BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile),
+                    (int) scriptFile.length())) {
+                try {
+                    ((Compilable) scriptEngine).compile(fileReader);
+                    return true;
+                } catch (ScriptException e) { // NOSONAR
+                    logger.error("Error compiling script for test element {}, error:{}", getName(), e.getMessage());
+                    return false;
+                }
+            }
+        }
+    }
+
     /**
      * compute MD5 if it is null
      */

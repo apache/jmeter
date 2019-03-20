@@ -18,6 +18,7 @@
 package org.apache.jmeter.report.dashboard;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -27,11 +28,10 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.JMeter;
-import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.GraphConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
@@ -60,7 +60,13 @@ import freemarker.template.TemplateExceptionHandler;
  * @since 3.0
  */
 public class HtmlTemplateExporter extends AbstractDataExporter {
-
+    private static final FileFilter HTML_REPORT_FILE_FILTER = 
+        file -> 
+            (file.isFile() && 
+                    "index.html".equals(file.getName()))
+                    || (file.isDirectory() && 
+                            ("content".equals(file.getName()) ||
+                                    file.getName().startsWith("sbadmin2-")));
     private static final String CUSTOM_GRAPH_PREFIX = "custom_";
 
     /** Format used for non null check of parameters. */
@@ -83,16 +89,15 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     public static final String TIMESTAMP_FORMAT_MS = "ms";
     private static final String INVALID_TEMPLATE_DIRECTORY_FMT = "\"%s\" is not a valid template directory";
-    private static final String INVALID_PROPERTY_CONFIG_FMT = "Wrong property \"%s\" in \"%s\" export configuration";
 
     // Template directory
     private static final String TEMPLATE_DIR = "template_dir";
     private static final String TEMPLATE_DIR_NAME_DEFAULT = "report-template";
 
     // Output directory
-    private static final String OUTPUT_DIR = "output_dir";
+    static final String OUTPUT_DIR = "output_dir";
     // Default output folder name
-    private static final String OUTPUT_DIR_NAME_DEFAULT = "report-output";
+    static final String OUTPUT_DIR_NAME_DEFAULT = "report-output";
 
     /**
      * Adds to context the value surrounding it with quotes
@@ -326,17 +331,6 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         return timestamp;
     }
 
-    private <TProperty> TProperty getPropertyFromConfig(SubConfiguration cfg,
-            String property, TProperty defaultValue, Class<TProperty> clazz)
-                    throws ExportException {
-        try {
-            return cfg.getProperty(property, defaultValue, clazz);
-        } catch (ConfigurationException ex) {
-            throw new ExportException(String.format(INVALID_PROPERTY_CONFIG_FMT,
-                    property, getName()), ex);
-        }
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -379,7 +373,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             outputDir = new File(globallyDefinedOutputDir);
         }
         
-        JOrphanUtils.canSafelyWriteToFolder(outputDir);
+        JOrphanUtils.canSafelyWriteToFolder(outputDir, HTML_REPORT_FILE_FILTER);
 
         if (log.isInfoEnabled()) {
             log.info("Will generate dashboard in folder: {}", outputDir.getAbsolutePath());

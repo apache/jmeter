@@ -22,6 +22,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JMeterException;
 import org.slf4j.Logger;
@@ -66,14 +67,10 @@ public class BeanShellInterpreter {
             Class<String> string = String.class;
             Class<Object> object = Object.class;
 
-            get = clazz.getMethod("get", //$NON-NLS-1$
-                    new Class[] { string });
-            eval = clazz.getMethod("eval", //$NON-NLS-1$
-                    new Class[] { string });
-            set = clazz.getMethod("set", //$NON-NLS-1$
-                    new Class[] { string, object });
-            source = clazz.getMethod("source", //$NON-NLS-1$
-                    new Class[] { string });
+            get = clazz.getMethod("get", string); //$NON-NLS-1$
+            eval = clazz.getMethod("eval", string); //$NON-NLS-1$
+            set = clazz.getMethod("set", string, object); //$NON-NLS-1$
+            source = clazz.getMethod("source", string); //$NON-NLS-1$
         } catch (ClassNotFoundException|SecurityException | NoSuchMethodException e) {
             log.error("Beanshell Interpreter not found", e);
         } finally {
@@ -99,12 +96,12 @@ public class BeanShellInterpreter {
     /**
      *
      * @param init initialisation file
-     * @param _log logger to pass to interpreter
+     * @param log logger to pass to interpreter
      * @throws ClassNotFoundException when beanshell can not be instantiated
      */
-    public BeanShellInterpreter(String init, Logger _log)  throws ClassNotFoundException {
+    public BeanShellInterpreter(String init, Logger log)  throws ClassNotFoundException {
         initFile = init;
-        logger = _log;
+        logger = log;
         init();
     }
 
@@ -114,8 +111,8 @@ public class BeanShellInterpreter {
             throw new ClassNotFoundException(BSH_INTERPRETER);
         }
         try {
-            bshInstance = bshClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            bshInstance = bshClass.getDeclaredConstructor().newInstance();
+        } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
             log.error("Can't instantiate BeanShell", e);
             throw new ClassNotFoundException("Can't instantiate BeanShell", e);
         } 
@@ -126,7 +123,7 @@ public class BeanShellInterpreter {
                 log.warn("Can't set logger variable", e);
             }
         }
-        if (initFile != null && initFile.length() > 0) {
+        if (StringUtils.isNotBlank(initFile)) {
             String fileToUse=initFile;
             // Check file so we can distinguish file error from script error
             File in = new File(fileToUse);
@@ -136,16 +133,16 @@ public class BeanShellInterpreter {
                         +File.separator+initFile;
                 in = new File(fileToUse);
                 if (!in.exists()) {
-                    log.warn("Cannot find init file: "+initFile);
+                    log.warn("Cannot find init file: {}", initFile);
                 }
             }
             if (!in.canRead()) {
-                log.warn("Cannot read init file: "+fileToUse);
+                log.warn("Cannot read init file: {}", fileToUse);
             }
             try {
                 source(fileToUse);
             } catch (JMeterException e) {
-                log.warn("Cannot source init file: "+fileToUse,e);
+                log.warn("Cannot source init file: {}", fileToUse,e);
             }
         }
     }

@@ -229,7 +229,7 @@ ERROR - jmeter.functions.JavaScript: Error processing Javascript: [Math.max(2]
  
 <span class="code">Math.max(2</span> and <span class="code">5)</span>
 <br>
- Other error messages are possible. 
+ Other error messages are possible.
 </p>
 
 <p>Variables are referenced as follows:
@@ -266,7 +266,7 @@ and need to be referenced using the <span class="code">__P</span> or <span class
 When using <span class="code">\</span> before a variable for a windows path for example <span class="code">C:\test\${test}</span>, ensure you escape the <span class="code">\</span>
 otherwise JMeter will not interpret the variable, example:
 <span class="code">C:\\test\\${test}</span>.
-<br> 
+<br>
 Alternatively, just use <span class="code">/</span> instead for the path separator - e.g. <span class="code">C:/test/${test}</span> - Windows JVMs will convert the separators as necessary.
 </div>
 <div class="clear"></div>
@@ -274,7 +274,7 @@ Alternatively, just use <span class="code">/</span> instead for the path separat
 <p>List of functions, loosely grouped into types.</p>
 
 <table>
-        
+
         
 <tr>
 <th>Type of function</th><th>Name</th><th>Comment</th><th>Since</th>
@@ -484,7 +484,7 @@ Alternatively, just use <span class="code">/</span> instead for the path separat
 <p>There are two kinds of functions: user-defined static values (or variables), and built-in functions.<br>
 User-defined static values allow the user to define variables to be replaced with their static value when
 a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
-run.  This could be used to replace the DOMAIN field of all HTTP requests, for example - making it a simple 
+run.  This could be used to replace the DOMAIN field of all HTTP requests, for example - making it a simple
 matter to change a test to target a different server with the same test.
 </p>
 
@@ -504,7 +504,7 @@ thread the function is in, the time, and many other sources.  These values are g
 request throughout the course of the test. </p>
 
 <div class="clear"></div>
-<div class="note">Functions are shared between threads. 
+<div class="note">Functions are shared between threads.
 Each occurrence of a function call in a test plan is handled by a separate function instance.</div>
 <div class="clear"></div>
 
@@ -517,16 +517,16 @@ Each occurrence of a function call in a test plan is handled by a separate funct
 
 <p>
 Functions and variables can be written into any field of any test component (apart from the TestPlan - see below).
-Some fields do not allow random strings 
+Some fields do not allow random strings
 because they are expecting numbers, and thus will not accept a function.  However, most fields will allow
 functions.
 </p>
 
 <p>
 Functions which are used on the Test Plan have some restrictions.
-JMeter thread variables will have not been fully set up when the functions are processed, 
-so variable names passed as parameters will not be set up, and variable references will not work, 
-so <span class="code">split()</span> and <span class="code">regex()</span> and the variable evaluation functions won't work. 
+JMeter thread variables will have not been fully set up when the functions are processed,
+so variable names passed as parameters will not be set up, and variable references will not work,
+so <span class="code">split()</span> and <span class="code">regex()</span> and the variable evaluation functions won't work.
 The <span class="code">threadNum()</span> function won't work (and does not make sense at test plan level).
 The following functions should work OK on the test plan:
 <ul>
@@ -616,15 +616,15 @@ This works well in conjunction with the JSR223 or BeanShell Samplers, as these c
 </p>
 
 <p>
-Functions can reference variables and other functions, for example 
-<span class="code">${__XPath(${__P(xpath.file),${XPATH})}</span> 
+Functions can reference variables and other functions, for example
+<span class="code">${__XPath(${__P(xpath.file),${XPATH})}</span>
 will use the property "<span class="code">xpath.file</span>" as the file name
 and the contents of the variable <span class="code">XPATH</span> as the expression to search for.
 </p>
 
 <p>
 JMeter provides a tool to help you construct
-function calls for various built-in functions, which you can then copy-paste. 
+function calls for various built-in functions, which you can then copy-paste.
 It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.
 </p>
 
@@ -633,7 +633,7 @@ It will not automatically escape values for you, since functions can be paramete
 If a string contains a backslash('<span class="code">\</span>') and also contains a function or variable reference, the backslash will be removed if
 it appears before '<span class="code">$</span>' or '<span class="code">,</span>' or '<span class="code">\</span>'.
 This behaviour is necessary to allow for nested functions that include commas or the string <span class="code">${</span>.
-Backslashes before '<span class="code">$</span>' or '<span class="code">,</span>' or '<span class="code">\</span>' are not removed if the string does not contain a function or variable reference. 
+Backslashes before '<span class="code">$</span>' or '<span class="code">,</span>' or '<span class="code">\</span>' are not removed if the string does not contain a function or variable reference.
 </div>
 <div class="clear"></div>
 
@@ -643,7 +643,7 @@ Backslashes before '<span class="code">$</span>' or '<span class="code">,</span>
 The <span class="code">__logn()</span> function reference can be used anywhere in the test plan after the variable has been defined.
 Alternatively, the Java Request sampler can be used to create a sample containing variable references;
 the output will be shown in the appropriate Listener.
-Note there is a <a href="../usermanual/component_reference.html#Debug_Sampler">Debug Sampler</a> 
+Note there is a <a href="../usermanual/component_reference.html#Debug_Sampler">Debug Sampler</a>
 that can be used to display the values of variables etc. in the Tree View Listener.
 </p>
 
@@ -802,7 +802,7 @@ replacement string") parsed by this function</li>
         
 <div class="property">
 <div class="name req-false">Seventh argument</div>
-<div class="description req-false">Input variable name. 
+<div class="description req-false">Input variable name.
         If specified, then the value of the variable is used as the input instead of using the previous sample result.
         </div>
 <div class="required req-false">No</div>
@@ -828,7 +828,7 @@ counting how many times that request was run.
 
 <p>The counter uses an integer variable to hold the count, which therefore has a maximum of 2,147,483,647.</p>
 
-<p>The counter function instances are completely independent.  
+<p>The counter function instances are completely independent.
 The global counter - "<span class="code">FALSE</span>" - is separately maintained by each counter instance.
 </p>
 
@@ -883,8 +883,17 @@ If you want to have a count that increments for each sample, use the function in
 </h2>
 <div class="description">
 <p>The thread number function simply returns the number of the thread currently
-being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
+being executed.  These numbers are only locally unique with respect to their ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
+
+<div class="clear"></div>
+<div class="note">The function returns a number between one and the max number of running threads. Note that if you're using
+JSR223 code with <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object (<span class="code">ctx</span> variable),
+the below code returns a number between zero and (max number of running threads minus one)
+<pre class="source">ctx.getThreadNum()</pre>
+
+</div>
+<div class="clear"></div>
 
 
 <p>There are no arguments for this function.</p>
@@ -917,7 +926,7 @@ being executed.</p>
 <p>There are no arguments for this function.</p>
 
 <p>Usage Example:
-<pre class="source">${__threadGroupName}</pre> 
+<pre class="source">${__threadGroupName}</pre>
 
 </p>
 
@@ -981,7 +990,7 @@ The reference name is optional, but it must not be a valid integer.
         
 <div class="property">
 <div class="name req-false">last argument</div>
-<div class="description req-false">A reference name for reusing the value computed by this function. 
+<div class="description req-false">A reference name for reusing the value computed by this function.
                 If specified, the reference name must contain at least one non-numeric character otherwise it will
                 be treated as another int value to be added.
         </div>
@@ -1007,7 +1016,7 @@ The reference name is optional, but it must not be a valid integer.
 <h2 id="__longSum">__longSum<a class="sectionlink" href="#__longSum" title="Link to here">&para;</a>
 </h2>
 <div class="description">
-<p>The longSum function can be used to compute the sum of two or more long values, use this instead of __intSum whenever you know your values will not 
+<p>The longSum function can be used to compute the sum of two or more long values, use this instead of __intSum whenever you know your values will not
 be in the interval -2147483648 to 2147483647.
 </p>
 </div>
@@ -1042,7 +1051,7 @@ be in the interval -2147483648 to 2147483647.
         
 <div class="property">
 <div class="name req-false">last argument</div>
-<div class="description req-false">A reference name for reusing the value computed by this function. 
+<div class="description req-false">A reference name for reusing the value computed by this function.
                 If specified, the reference name must contain at least one non-numeric character otherwise it will
                 be treated as another long value to be added.
         </div>
@@ -1070,14 +1079,14 @@ be in the interval -2147483648 to 2147483647.
 <div class="description">
     
 <p>
-    The StringFromFile function can be used to read strings from a text file. 
+    The StringFromFile function can be used to read strings from a text file.
     This is useful for running tests that require lots of variable data.
     For example when testing a banking application, 100s or 1000s of different account numbers might be required.
     </p>
     
 <p>
-    See also the 
-    <a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config test element</a> 
+    See also the
+    <a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config test element</a>
     which may be easier to use. However, that does not currently support multiple input files.
     </p>
 
@@ -1442,9 +1451,9 @@ the comma after <span class="code">7</span> is escaped.</div>
 <br>
 
 <pre class="source">${__javaScript(new Date(),MYDATE)}</pre> will return <span class="code">Sat Jan 09 2016 16:22:15 GMT+0100 (CET)</span> and store it under variable <span class="code">MYDATE</span>
-<br> 
+<br>
 
-<pre class="source">${__javaScript(Math.floor(Math.random()*(${maxRandom}+1)),MYRESULT)}</pre> will use maxRandom variable, return a random value between 0 and maxRandom and store it in MYRESULT  
+<pre class="source">${__javaScript(Math.floor(Math.random()*(${maxRandom}+1)),MYRESULT)}</pre> will use maxRandom variable, return a random value between 0 and maxRandom and store it in MYRESULT
 <pre class="source">${__javaScript(${minRandom}+Math.floor(Math.random()*(${maxRandom}-${minRandom}+1)),MYRESULT)}</pre> will use <span class="code">maxRandom</span> and <span class="code">minRandom</span> variables, return a random value between <span class="code">maxRandom</span> and <span class="code">minRandom</span> and store it under variable <span class="code">MYRESULT</span>
 
 <pre class="source">${__javaScript("${VAR}"=="abcd",MYRESULT)}</pre> will compare the value of <span class="code">VAR</span> variable with <span class="code">abcd</span>, return <span class="code">true</span> or <span class="code">false</span> and store the result in MYRESULT
@@ -1657,7 +1666,7 @@ The variables can be simple or multi-valued as they can be generated by the foll
 
 </ul>
 
-Multi-value vars are the ones that are extracted when you set <span class="code">-1</span> for <span class="code">Match Numbers</span>. 
+Multi-value vars are the ones that are extracted when you set <span class="code">-1</span> for <span class="code">Match Numbers</span>.
 This leads to creation of match number variable called <span class="code">varName_matchNr</span> and for each value to the creation of variable <span class="code">varName_n</span> where n = 1, 2, 3 etc.
 
 </div>
@@ -1743,7 +1752,7 @@ This leads to creation of match number variable called <span class="code">varNam
     </p>
     
 <p>
-<b>In most cases, the newer 
+<b>In most cases, the newer
     <a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config element</a>
      is easier to use.</b>
 </p>
@@ -1847,7 +1856,7 @@ or <a href="#__StringFromFile">StringFromFile</a>.
 <h2 id="__property">__property<a class="sectionlink" href="#__property" title="Link to here">&para;</a>
 </h2>
 <div class="description">
-<p>The property function returns the value of a JMeter property. 
+<p>The property function returns the value of a JMeter property.
     If the property value cannot be found, and no default has been supplied, it returns the property name.
     When supplying a default value, there is no need to provide a function name - the parameter can be set to null, and it will be ignored.
     </p>For example:<p>
@@ -1918,7 +1927,7 @@ or <a href="#__StringFromFile">StringFromFile</a>.
 <p>This is a simplified property function which is
     intended for use with properties defined on the command line.
     Unlike the <span class="code">__property</span> function, there is no option to save the value in a variable,
-    and if no default value is supplied, it is assumed to be 1. 
+    and if no default value is supplied, it is assumed to be 1.
     The value of 1 was chosen because it is valid for common test variables such
     as loops, thread count, ramp up etc.
     </p>For example:<p>
@@ -1944,7 +1953,7 @@ Fetch the values:
 <br>
 
 </span>
-In the examples above, the first function call would return <span class="code">7</span>, 
+In the examples above, the first function call would return <span class="code">7</span>,
 the second would return <span class="code">1</span> and the last would return <span class="code">www.dummy.org</span>
 (unless those properties were defined elsewhere!)
 </p>
@@ -2024,7 +2033,7 @@ the second would return <span class="code">1</span> and the last would return <s
         
 <div class="property">
 <div class="name req-false">Comment</div>
-<div class="description req-false">If present, it is displayed in the string. 
+<div class="description req-false">If present, it is displayed in the string.
         Useful for identifying what is being logged.</div>
 <div class="required req-false">No</div>
 </div>
@@ -2181,7 +2190,7 @@ The following variables are set before the script is executed:
 <span class="code">SampleResult</span> - the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>, if any</li>
 
 </ul>
-(*) means that this is set before the init file, if any, is processed. 
+(*) means that this is set before the init file, if any, is processed.
 Other variables vary from invocation to invocation.
 </p>
 
@@ -2209,7 +2218,7 @@ Other variables vary from invocation to invocation.
                computed by this function.</div>
 <div class="required req-false">No</div>
 </div>
-        
+
 
 </div>
 <p>
@@ -2252,7 +2261,7 @@ Remember to include any necessary quotes for text strings and JMeter variables t
 </p>
 
 <p>
-If the property "<span class="code">groovy.utilities</span>" is defined, it will be loaded by the ScriptEngine. 
+If the property "<span class="code">groovy.utilities</span>" is defined, it will be loaded by the ScriptEngine.
 This can be used to define common methods and variables. There is a
 sample init file in the <span class="code">bin</span> directory: <span class="code">utility.groovy</span>.
 </p>
@@ -2290,7 +2299,7 @@ The following variables are set before the script is executed:
 </ul>
 
 <p>
-(*) means that this is set before the init file, if any, is processed. 
+(*) means that this is set before the init file, if any, is processed.
 Other variables vary from invocation to invocation.
 </p>
 
@@ -2332,7 +2341,7 @@ Instead do the following, which can be cached: <pre class="source">${__groovy(va
 <div class="name req-true">Expression to evaluate</div>
 <div class="description req-true">A groovy script (not a file name)
         <div class="clear"></div>
-<div class="note">Argument values that themselves contain commas should be escaped as necessary. 
+<div class="note">Argument values that themselves contain commas should be escaped as necessary.
         If you need to include a comma in your parameter value, escape it like this: '<span class="code">\,</span>'</div>
 <div class="clear"></div>
         
@@ -2346,7 +2355,7 @@ Instead do the following, which can be cached: <pre class="source">${__groovy(va
                computed by this function.</div>
 <div class="required req-false">No</div>
 </div>
-        
+
 
 </div>
 <p>
@@ -2389,10 +2398,10 @@ Remember to include any necessary quotes for text strings and JMeter variables t
 <p>
     The split function splits the string passed to it according to the delimiter,
     and returns the original string. If any delimiters are adjacent, "<span class="code">?</span>" is returned as the value.
-    The split strings are returned in the variables <span class="code">${VAR_1}</span>, <span class="code">${VAR_2}</span> etc. 
-    The count of variables is returned in <span class="code">${VAR_n}</span>. 
+    The split strings are returned in the variables <span class="code">${VAR_1}</span>, <span class="code">${VAR_2}</span> etc.
+    The count of variables is returned in <span class="code">${VAR_n}</span>.
     A trailing delimiter is treated as a missing variable, and "<span class="code">?</span>" is returned.
-    Also, to allow it to work better with the ForEach controller, 
+    Also, to allow it to work better with the ForEach controller,
     <span class="code">__split</span> now deletes the first unused variable in case it was set by a previous split.
     </p>
     
@@ -2457,12 +2466,12 @@ Remember to include any necessary quotes for text strings and JMeter variables t
         
 <div class="property">
 <div class="name req-false">Delimiter</div>
-<div class="description req-false">The delimiter character, e.g. <span class="code">|</span>. 
+<div class="description req-false">The delimiter character, e.g. <span class="code">|</span>.
 If omitted, <span class="code">,</span> is used. Note that <span class="code">,</span> would need to be specified as <span class="code">\,</span>.
 </div>
 <div class="required req-false">No</div>
 </div>
-        
+
 
 </div>
 <div class="go-top">
@@ -2527,7 +2536,7 @@ If omitted, <span class="code">,</span> is used. Note that <span class="code">,<
 </h2>
 <div class="description">
     
-<p>The setProperty function sets the value of a JMeter property. 
+<p>The setProperty function sets the value of a JMeter property.
         The default return value from the function is the empty string,
         so the function call can be used anywhere functions are valid.</p>
         
@@ -2662,8 +2671,8 @@ The following shorthand aliases are provided:
 </h2>
 <div class="description">
     
-<p>The jexl function returns the result of evaluating a 
-    <a href="http://commons.apache.org/jexl">Commons JEXL expression</a>. 
+<p>The jexl function returns the result of evaluating a
+    <a href="http://commons.apache.org/jexl">Commons JEXL expression</a>.
     See links below for more information on JEXL expressions.
     </p>
     
@@ -2772,8 +2781,8 @@ i.intValue(); // or use i.longValue()
 </h2>
 <div class="description">
     
-<p>The jexl function returns the result of evaluating a 
-    <a href="http://commons.apache.org/proper/commons-jexl/">Commons JEXL expression</a>. 
+<p>The jexl function returns the result of evaluating a
+    <a href="http://commons.apache.org/proper/commons-jexl/">Commons JEXL expression</a>.
     See links below for more information on JEXL expressions.
     </p>
     
@@ -2917,7 +2926,7 @@ i.intValue(); // or use i.longValue()
 <div class="property">
 <div class="name req-true">Variable name</div>
 <div class="description req-true">
-        The variable to be evaluated. 
+        The variable to be evaluated.
         </div>
 <div class="required req-true">Yes</div>
 </div>
@@ -2925,7 +2934,7 @@ i.intValue(); // or use i.longValue()
 <div class="property">
 <div class="name req-false">Default value</div>
 <div class="description req-false">
-        The default value in case no variable found, if it's empty and no variable found function returns the variable name 
+        The default value in case no variable found, if it's empty and no variable found function returns the variable name
         </div>
 <div class="required req-false">No</div>
 </div>
@@ -2947,9 +2956,9 @@ i.intValue(); // or use i.longValue()
     
 <p>
     This allows one to read a string from a file, and process any variable references in it.
-    For example, if the variable "<span class="code">query</span>" contains "<span class="code">select ${column} from ${table}</span>" 
+    For example, if the variable "<span class="code">query</span>" contains "<span class="code">select ${column} from ${table}</span>"
     and "<span class="code">column</span>" and "<span class="code">table</span>" contain "<span class="code">name</span>" and "<span class="code">customers</span>", then <span class="code">${__evalVar(query)}</span>
-    will evaluate as "<span class="code">select name from customers</span>". 
+    will evaluate as "<span class="code">select name from customers</span>".
     </p>
     
 </div>
@@ -2967,7 +2976,7 @@ i.intValue(); // or use i.longValue()
 <div class="property">
 <div class="name req-true">Variable name</div>
 <div class="description req-true">
-        The variable to be evaluated. 
+        The variable to be evaluated.
         </div>
 <div class="required req-true">Yes</div>
 </div>
@@ -3010,10 +3019,10 @@ i.intValue(); // or use i.longValue()
 </li>
     
 </ul>
-    then <span class="code">${__eval(${SQL})}</span> will evaluate as "<span class="code">select age from birthdays where name='Smith'</span>". 
-  
+    then <span class="code">${__eval(${SQL})}</span> will evaluate as "<span class="code">select age from birthdays where name='Smith'</span>".
+
     <p>
-    This can be used in conjunction with CSV Dataset, for example 
+    This can be used in conjunction with CSV Dataset, for example
     where the both SQL statements and the values are defined in the data file.
     </p>
     
@@ -3032,7 +3041,7 @@ i.intValue(); // or use i.longValue()
 <div class="property">
 <div class="name req-true">Variable name</div>
 <div class="description req-true">
-        The variable to be evaluated. 
+        The variable to be evaluated.
         </div>
 <div class="required req-true">Yes</div>
 </div>
@@ -3151,7 +3160,7 @@ i.intValue(); // or use i.longValue()
     
 <p>
 Function to unescape a string containing HTML entity escapes
-to a string containing the actual Unicode characters corresponding to the escapes. 
+to a string containing the actual Unicode characters corresponding to the escapes.
 Supports HTML 4.0 entities.
 </p>
 
@@ -3342,7 +3351,7 @@ For example, the string <pre class="source">${__urlencode(Word "school" is "&eac
 <p>
     The FileToString function can be used to read an entire file.
     Each time it is called it reads the entire file.
-    </p> 
+    </p>
     
 <p>If an error occurs opening or reading the file, then the function returns the string "<span class="code">**ERR**</span>"</p>
 
@@ -3401,7 +3410,7 @@ A reference name - <span class="code">refName</span> - for reusing the value cre
     
 <p>
     The function does not work in Test elements that don't have an associated sampler.
-    For example the Test Plan. 
+    For example the Test Plan.
     Configuration elements also don't have an associated sampler.
     However some Configuration elements are referenced directly by samplers, such as the HTTP Header Manager
     and Http Cookie Manager, and in this case the functions are resolved in the context of the Http Sampler.
@@ -3601,7 +3610,7 @@ returns:
 <div class="property">
 <div class="name req-false">value to shift</div>
 <div class="description req-false">
-        Indicate the specified amount of seconds, minutes, hours or days to shift according to a textual representation of a duration such as PnDTnHnMn.nS. See https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence- 
+        Indicate the specified amount of seconds, minutes, hours or days to shift according to a textual representation of a duration such as PnDTnHnMn.nS. See https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-
         <ul>
         
 <li>
@@ -3744,7 +3753,7 @@ returns:
         
 <pre class="source">${__digest(SHA-256,Felix qui potuit rerum cognoscere causas,mysalt,,)}</pre> returns <span class="code">a3bc6900fe2b2fc5fa8a601a4a84e27a079bf2c581d485009bc5c00516729ac7</span>
 <br>
-        
+
     
 </p>
 <div class="go-top">
@@ -3886,7 +3895,7 @@ returns:
 </h2>
 <div class="description">
         
-<p>The change case function returns a string value which 
+<p>The change case function returns a string value which
         case has been changed following a specific mode.
         Result can optionally be saved in a JMeter variable.</p>
     
@@ -3964,7 +3973,7 @@ returns:
 </h2>
 
 <p>
-Most variables are set by calling functions or by test elements such as User Defined Variables; 
+Most variables are set by calling functions or by test elements such as User Defined Variables;
 in which case the user has full control over the variable name that is used.
 However some variables are defined internally by JMeter. These are listed below.
 </p>
@@ -4046,9 +4055,6 @@ They are mainly intended for use in file names etc.
 <li class="twitter">
 <a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a>
 </li>
-<li class="gplus">
-<a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a>
-</li>
 </ul>
 </div>
 <a href="#top" id="topButton">Go to top</a>
@@ -4057,7 +4063,7 @@ They are mainly intended for use in file names etc.
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2018
+            2019
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache

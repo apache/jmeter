@@ -30,14 +30,14 @@ class ChangeCaseSpec extends Specification {
 
     def "convert '#input' using mode #mode to '#output'"() {
         given:
-            def changeCase = new ChangeCase();
-            def jMCtx = JMeterContextService.getContext();
-            def result = new SampleResult();
-            result.setResponseData("dummy data", null);
-            jMCtx.setVariables(new JMeterVariables());
-            jMCtx.setPreviousResult(result);
+            def changeCase = new ChangeCase()
+            def jMCtx = JMeterContextService.getContext()
+            def result = new SampleResult()
+            result.setResponseData("dummy data", null)
+            jMCtx.setVariables(new JMeterVariables())
+            jMCtx.setPreviousResult(result)
         when:
-            changeCase.setParameters([new CompoundVariable(input), new CompoundVariable(mode)]);
+            changeCase.setParameters([new CompoundVariable(input), new CompoundVariable(mode)])
         then:
             output == changeCase.execute(result, null)
         where:
@@ -67,4 +67,3 @@ class ChangeCaseSpec extends Specification {
     }
 
 }
-

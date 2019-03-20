@@ -69,9 +69,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private static class FileEntry{
         final PrintWriter pw;
         final SampleSaveConfiguration config;
-        FileEntry(PrintWriter _pw, SampleSaveConfiguration _config){
-            pw =_pw;
-            config = _config;
+        FileEntry(PrintWriter printWriter, SampleSaveConfiguration sampleSaveConfiguration){
+            this.pw = printWriter;
+            this.config = sampleSaveConfiguration;
         }
     }
     
@@ -81,7 +81,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         public void run() {
             log.info("Shutdown hook started");
             synchronized (LOCK) {
-                flushFileOutput();                    
+                finalizeFileOutput();
             }
             log.info("Shutdown hook ended");
         }     
@@ -300,6 +300,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     log.warn("Should not happen: shutdownHook==null, instanceCount={}", instanceCount);
                 }
                 finalizeFileOutput();
+                out = null;
                 inTest = false;
             }
         }
@@ -590,23 +591,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             out.flush();
         }
     }
-
-    /**
-     * Flush PrintWriter, called by Shutdown Hook to ensure no data is lost
-     */
-    private static void flushFileOutput() {
-        for(Map.Entry<String, ResultCollector.FileEntry> me : files.entrySet()) {
-            String key = me.getKey();
-            ResultCollector.FileEntry value = me.getValue();
-            log.debug("Flushing: {}", key);
-            value.pw.flush();
-            if (value.pw.checkError()){
-                log.warn("Problem detected during use of {}", key);
-            }
-        }
-    }
     
-    private void finalizeFileOutput() {
+    private static void finalizeFileOutput() {
         for(Map.Entry<String, ResultCollector.FileEntry> me : files.entrySet()) {
             String key = me.getKey();
             ResultCollector.FileEntry value = me.getValue();
@@ -622,7 +608,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
         }
         files.clear();
-        out = null;
     }
 
     /**

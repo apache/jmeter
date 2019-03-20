@@ -107,6 +107,7 @@ import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.HeapDumper;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.ThreadDumper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
@@ -170,6 +171,7 @@ public class JMeter implements JMeterPlugin {
     
     private static final int SYSTEM_PROPERTY    = 'D';// $NON-NLS-1$
     private static final int JMETER_GLOBAL_PROP = 'G';// $NON-NLS-1$
+    private static final int PROXY_SCHEME       = 'E';// $NON-NLS-1$
     private static final int PROXY_HOST         = 'H';// $NON-NLS-1$
     private static final int JMETER_PROPERTY    = 'J';// $NON-NLS-1$
     private static final int LOGLEVEL           = 'L';// $NON-NLS-1$
@@ -228,6 +230,9 @@ public class JMeter implements JMeterPlugin {
     private static final CLOptionDescriptor D_SERVER_OPT =
             new CLOptionDescriptor("server", CLOptionDescriptor.ARGUMENT_DISALLOWED, SERVER_OPT,
                     "run the JMeter server");
+    private static final CLOptionDescriptor D_PROXY_SCHEME =
+            new CLOptionDescriptor("proxyScheme", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_SCHEME,
+                    "Set a proxy scheme to use for the proxy server");
     private static final CLOptionDescriptor D_PROXY_HOST =
             new CLOptionDescriptor("proxyHost", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_HOST,
                     "Set a proxy server for JMeter to use");
@@ -319,6 +324,7 @@ public class JMeter implements JMeterPlugin {
             D_JMLOGFILE_OPT,
             D_NONGUI_OPT,
             D_SERVER_OPT,
+            D_PROXY_SCHEME,
             D_PROXY_HOST,
             D_PROXY_PORT,
             D_NONPROXY_HOSTS,
@@ -345,7 +351,7 @@ public class JMeter implements JMeterPlugin {
     /** should remote engines be stopped at end of non-GUI test? */
     private boolean remoteStop; 
 
-    /** should delete result file before start ? */
+    /** should delete result file / report folder before start ? */
     private boolean deleteResultFile = false; 
     
     public JMeter() {
@@ -359,7 +365,7 @@ public class JMeter implements JMeterPlugin {
     private void startGui(String testFile) {
         System.out.println("================================================================================");//NOSONAR
         System.out.println("Don't use GUI mode for load testing !, only for Test creation and Test debugging.");//NOSONAR
-        System.out.println("For load testing, use NON GUI Mode:");//NOSONAR
+        System.out.println("For load testing, use CLI Mode (was NON GUI):");//NOSONAR
         System.out.println("   jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]");//NOSONAR
         System.out.println("& increase Java Heap to meet your test requirements:");//NOSONAR
         System.out.println("   Modify current env variable HEAP=\"-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m\" in the jmeter batch file");//NOSONAR
@@ -470,6 +476,7 @@ public class JMeter implements JMeterPlugin {
                 log.info("os.arch={}", System.getProperty("os.arch"));//$NON-NLS-1$ //$NON-NLS-2$
                 log.info("os.version={}", System.getProperty("os.version"));//$NON-NLS-1$ //$NON-NLS-2$
                 log.info("file.encoding={}", System.getProperty("file.encoding"));//$NON-NLS-1$ //$NON-NLS-2$
+                log.info("java.awt.headless={}", System.getProperty("java.awt.headless"));//$NON-NLS-1$ //$NON-NLS-2$
                 log.info("Max memory     ={}", Runtime.getRuntime().maxMemory());
                 log.info("Available Processors ={}", Runtime.getRuntime().availableProcessors());
                 log.info("Default Locale={}", Locale.getDefault().getDisplayName());
@@ -530,7 +537,7 @@ public class JMeter implements JMeterPlugin {
                 CLOption testReportOpt = parser.getArgumentById(REPORT_GENERATING_OPT);
                 if (testReportOpt != null) { // generate report from existing file
                     String reportFile = testReportOpt.getArgument();
-                    extractAndSetReportOutputFolder(parser, false);
+                    extractAndSetReportOutputFolder(parser, deleteResultFile);
                     ReportGenerator generator = new ReportGenerator(reportFile, null);
                     generator.generate();
                 } else if (parser.getArgumentById(NONGUI_OPT) == null) { // not non-GUI => GUI
@@ -573,16 +580,17 @@ public class JMeter implements JMeterPlugin {
      * {@link JMeter#JMETER_REPORT_OUTPUT_DIR_PROPERTY} after checking folder can
      * be safely written to
      * @param parser {@link CLArgsParser}
+     * @param deleteReportFolder true means delete report folder
      * @throws IllegalArgumentException
      */
-    private void extractAndSetReportOutputFolder(CLArgsParser parser, boolean deleteResultFile) {
+    private void extractAndSetReportOutputFolder(CLArgsParser parser, boolean deleteReportFolder) {
         CLOption reportOutputFolderOpt = parser
                 .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
         if(reportOutputFolderOpt != null) {
             String reportOutputFolder = parser.getArgumentById(REPORT_OUTPUT_FOLDER_OPT).getArgument();
             File reportOutputFolderAsFile = new File(reportOutputFolder);
 
-            JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile, deleteResultFile);
+            JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile, deleteReportFolder);
             final String reportOutputFolderAbsPath = reportOutputFolderAsFile.getAbsolutePath();
             log.info("Setting property '{}' to:'{}'", JMETER_REPORT_OUTPUT_DIR_PROPERTY, reportOutputFolderAbsPath);
             JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, reportOutputFolderAbsPath);
@@ -752,7 +760,16 @@ public class JMeter implements JMeterPlugin {
             System.setProperty("https.proxyHost", h);// $NON-NLS-1$
             System.setProperty("http.proxyPort",  p);// $NON-NLS-1$
             System.setProperty("https.proxyPort", p);// $NON-NLS-1$
-            log.info("Set http[s].proxyHost: {} Port: {}", h, p);
+            String proxyScheme = null;
+            if (parser.getArgumentById(PROXY_SCHEME) != null) {
+                proxyScheme = parser.getArgumentById(PROXY_SCHEME).getArgument();
+                if(!StringUtils.isBlank(proxyScheme)){
+                    System.setProperty("http.proxyScheme",  proxyScheme );// $NON-NLS-1$
+                }
+            }
+            if(log.isInfoEnabled()) {
+                log.info("Set proxy Host: {}, Port: {}, Scheme: {}", h, p, proxyScheme != null ? proxyScheme : "Not set");
+            }
         } else if (parser.getArgumentById(PROXY_HOST) != null || parser.getArgumentById(PROXY_PORT) != null) {
             throw new IllegalUserActionException(JMeterUtils.getResString("proxy_cl_error"));// $NON-NLS-1$
         }
@@ -1086,12 +1103,14 @@ public class JMeter implements JMeterPlugin {
      * <li>Clone the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
      * </ul>
      * @param tree The {@link HashTree} to convert
-     * @return HashTree the output {@link HashTree} to use
+     * @deprecated This method does not correctly handle a tree with Replaceable controllers
+     *     that contain NoThreadClone element. Use {@link JMeter#convertSubTree(HashTree, boolean)}
      */
-    public static HashTree convertSubTree(HashTree tree) {
-        return convertSubTree(tree, true);
+    @Deprecated
+    public static void convertSubTree(HashTree tree) {
+        convertSubTree(tree, false);
     }
-    
+
     /**
      * This function does the following:
      * <ul>
@@ -1099,7 +1118,7 @@ public class JMeter implements JMeterPlugin {
      * <li>Replace the ReplaceableController with the target subtree</li>
      * <li>If cloneAtEnd is true : Clone the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
      * </ul>
-     * THIS IS INTERNAL JMETER API and should not be used
+     * THIS IS INTERNAL JMETER API and should be used with care
      * @param tree The {@link HashTree} to convert
      * @param cloneAtEnd  boolean wether we clone the tree at end
      * @return HashTree the output {@link HashTree} to use
@@ -1122,7 +1141,6 @@ public class JMeter implements JMeterPlugin {
      * <li>Clones the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
      * </ul>
      * @param tree The {@link HashTree} to convert
-     * @return HashTree the output {@link HashTree} to use
      */
     private static void pConvertSubTree(HashTree tree) {
         LinkedList<Object> copyList = new LinkedList<>(tree.list());
@@ -1204,7 +1222,7 @@ public class JMeter implements JMeterPlugin {
      * it calls ClientJMeterEngine.tidyRMI() to deal with the Naming Timer Thread.
      */
     private static class ListenToTest implements TestStateListener, Runnable, Remoteable {
-        private final AtomicInteger started = new AtomicInteger(0); // keep track of remote tests
+        private AtomicInteger startedEngines; // keep track of remote tests
 
         private final List<JMeterEngine> engines;
 
@@ -1216,6 +1234,7 @@ public class JMeter implements JMeterPlugin {
          */
         public ListenToTest(List<JMeterEngine> engines, ReportGenerator reportGenerator) {
             this.engines=engines;
+            this.startedEngines = new AtomicInteger(engines == null ? 0 : engines.size());
             this.reportGenerator = reportGenerator;
         }
 
@@ -1224,7 +1243,7 @@ public class JMeter implements JMeterPlugin {
         public void testEnded(String host) {
             final long now=System.currentTimeMillis();
             log.info("Finished remote host: {} ({})", host, now);
-            if (started.decrementAndGet() <= 0) {
+            if (startedEngines.decrementAndGet() <= 0) {
                 Thread stopSoon = new Thread(this);
                 // the calling thread is a daemon; this thread must not be
                 // see Bug 59391
@@ -1249,7 +1268,6 @@ public class JMeter implements JMeterPlugin {
 
         @Override
         public void testStarted(String host) {
-            started.incrementAndGet();
             final long now=System.currentTimeMillis();
             log.info("Started remote host:  {} ({})", host, now);
         }
@@ -1417,7 +1435,7 @@ public class JMeter implements JMeterPlugin {
 
     private static void waitForSignals(final List<JMeterEngine> engines, DatagramSocket socket) {
         byte[] buf = new byte[80];
-        System.out.println("Waiting for possible Shutdown/StopTestNow/Heapdump message on port "+socket.getLocalPort());//NOSONAR
+        System.out.println("Waiting for possible Shutdown/StopTestNow/HeapDump/ThreadDump message on port "+socket.getLocalPort());//NOSONAR
         DatagramPacket request = new DatagramPacket(buf, buf.length);
         try {
             while(true) {
@@ -1425,7 +1443,7 @@ public class JMeter implements JMeterPlugin {
                 InetAddress address = request.getAddress();
                 // Only accept commands from the local host
                 if (address.isLoopbackAddress()){
-                    String command = new String(request.getData(), request.getOffset(), request.getLength(),"ASCII");
+                    String command = new String(request.getData(), request.getOffset(), request.getLength(), StandardCharsets.US_ASCII);
                     System.out.println("Command: "+command+" received from "+address);//NOSONAR
                     log.info("Command: {} received from {}", command, address);
                     switch(command) {
@@ -1441,6 +1459,9 @@ public class JMeter implements JMeterPlugin {
                             break;
                         case "HeapDump" :
                             HeapDumper.dumpHeap();
+                            break;
+                        case "ThreadDump" :
+                            ThreadDumper.threadDump();
                             break;
                         default:
                             System.out.println("Command: "+command+" not recognised ");//NOSONAR                            

@@ -20,8 +20,10 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.jmeter.control.Controller;
@@ -46,24 +48,31 @@ public class ApplyNamingConvention extends AbstractAction {
     }
 
     public ApplyNamingConvention() {
+        super();
     }
 
     @Override
     public void doAction(ActionEvent e) {
         GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        if (!(currentNode.getUserObject() instanceof Controller)) {
-            Toolkit.getDefaultToolkit().beep();
-            return;
+        JMeterTreeNode[] currentNodes = guiPackage.getTreeListener().getSelectedNodes();
+        List<JMeterTreeNode> filteredNodes = new ArrayList<>();
+        for (JMeterTreeNode jMeterTreeNode : currentNodes) {
+            if (jMeterTreeNode.getUserObject() instanceof Controller) {
+                filteredNodes.add(jMeterTreeNode);
+            } else {
+                log.warn("Applying naming policy, selected node {} is not a Controller, will ignore it", jMeterTreeNode.getName());
+            }
         }
         try {
-            applyNamingPolicyToCurrentNode(guiPackage, currentNode);            
+            for (JMeterTreeNode currentNode : filteredNodes) {
+                applyNamingPolicyToCurrentNode(guiPackage, currentNode);
+            }
+            GuiPackage.getInstance().getMainFrame().repaint();
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
             log.error("Failed to apply naming policy", err);
             JMeterUtils.reportErrorToUser("Failed to apply naming policy", err);
         }
-
     }
 
     /**
@@ -82,7 +91,7 @@ public class ApplyNamingConvention extends AbstractAction {
             JMeterTreeNode childNode = (JMeterTreeNode)enumeration.nextElement();
             namingPolicy.rename(currentNode, childNode, index);
             index++;
-        }        
+        }
     }
 
     @Override

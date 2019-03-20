@@ -44,7 +44,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.LocalTrustStoreSSLSocketFactory;
-import org.apache.jmeter.protocol.smtp.sampler.protocol.TrustAllSSLSocketFactory;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
@@ -54,6 +53,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.TrustAllSSLSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -166,10 +167,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             }
 
             if (isTrustAllCerts()) {
-                if (isUseSSL()) {
-                    props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.class"), TRUST_ALL_SOCKET_FACTORY);  // $NON-NLS-1$
-                    props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
-                } else if (isUseStartTLS()) {
+                if (isUseSSL() || isUseStartTLS()) {
                     props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.class"), TRUST_ALL_SOCKET_FACTORY);  // $NON-NLS-1$
                     props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
                 }
@@ -190,18 +188,14 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                                         + truststore.getAbsolutePath());
                     }
                 }
-                if (isUseSSL()) {
+                if (isUseSSL() || isUseStartTLS()) {
                     // Requires JavaMail 1.4.2+
                     props.put(mailProp(serverProtocol, "ssl.socketFactory"),   // $NON-NLS-1$ 
                             new LocalTrustStoreSSLSocketFactory(truststore));
                     props.put(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
-                } else if (isUseStartTLS()) {
-                    // Requires JavaMail 1.4.2+
-                    props.put(mailProp(serverProtocol, "ssl.socketFactory"),  // $NON-NLS-1$
-                            new LocalTrustStoreSSLSocketFactory(truststore));
-                    props.put(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
                 }
             }
+            addCustomProperties(props);
 
             // Get session
             Session session = Session.getInstance(props, null);
@@ -311,6 +305,19 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         }
         parent.setSuccessful(isOK);
         return parent;
+    }
+
+    protected void addCustomProperties(Properties props) {
+        Properties jMeterProperties = JMeterUtils.getJMeterProperties();
+        @SuppressWarnings("unchecked")
+        Enumeration<String> enums = (Enumeration<String>) jMeterProperties.propertyNames();
+        while (enums.hasMoreElements()) {
+            String key = enums.nextElement();
+            if (key.startsWith("mail.")) {
+                String value = jMeterProperties.getProperty(key);
+                props.put(key, value);
+            }
+        }
     }
 
     private void appendMessageData(SampleResult child, Message message)

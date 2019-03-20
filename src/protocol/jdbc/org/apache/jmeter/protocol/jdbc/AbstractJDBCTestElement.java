@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -166,7 +167,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         String currentQueryType = getQueryType();
         if (SELECT.equals(currentQueryType)) {
             try (Statement stmt = conn.createStatement()) {
-                stmt.setQueryTimeout(getIntegerQueryTimeout());
+                setQueryTimeout(stmt, getIntegerQueryTimeout());
                 ResultSet rs = null;
                 try {
                     rs = stmt.executeQuery(getQuery());
@@ -188,7 +189,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             }
         } else if (UPDATE.equals(currentQueryType)) {
             try (Statement stmt = conn.createStatement()) {
-                stmt.setQueryTimeout(getIntegerQueryTimeout());
+                setQueryTimeout(stmt, getIntegerQueryTimeout());
                 stmt.executeUpdate(getQuery());
                 sample.latencyEnd();
                 int updateCount = stmt.getUpdateCount();
@@ -495,8 +496,19 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         } else {
             pstmt = conn.prepareStatement(getQuery()); // NOSONAR closed by caller
         }
-        pstmt.setQueryTimeout(getIntegerQueryTimeout());
+        setQueryTimeout(pstmt, getIntegerQueryTimeout());
         return pstmt;
+    }
+    
+    /**
+     * @param stmt {@link Statement} Statement for which we want to set timeout
+     * @param timeout int timeout value in seconds, if < 0 setQueryTimeout will not be called
+     * @throws SQLException
+     */
+    private static void setQueryTimeout(Statement stmt, int timeout) throws SQLException {
+        if(timeout >= 0) {
+            stmt.setQueryTimeout(timeout);
+        }
     }
 
     /**
@@ -616,11 +628,15 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      * @return the integer representation queryTimeout
      */
     public int getIntegerQueryTimeout() {
-        int timeout = 0;
-        try {
-            timeout = Integer.parseInt(queryTimeout);
-        } catch (NumberFormatException nfe) {
-            timeout = 0;
+        int timeout;
+        if(StringUtils.isEmpty(queryTimeout)) {
+            return 0;
+        } else {
+            try {
+                timeout = Integer.parseInt(queryTimeout);
+            } catch (NumberFormatException nfe) {
+                timeout = 0;
+            }
         }
         return timeout;
     }

@@ -190,6 +190,22 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
             FileServer.getFileServer().setScriptName(null);
         }
     }
+    
+    @Test
+    public void testThreadGroupNameBug63241() throws Exception {
+        AbstractFunctionByKey function = new ThreadGroupName();
+        try {
+            HTTPSamplerProxy httpRequest = new HTTPSamplerProxy();
+            JMeterContext context = JMeterContextService.getContext();
+            // This is the state when called from a non test thread
+            context.setThreadGroup(null);
+            context.setCurrentSampler(httpRequest);
+            String ret = function.execute(result, httpRequest);
+            assertEquals("", ret);
+        } finally {
+            FileServer.getFileServer().setScriptName(null);
+        }
+    }
 
     @Test
     public void testThreadGroupNameParameterCount() throws Exception {

@@ -363,7 +363,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                     "Missing jar? See log file." ,
                     JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(e.toString(), e); // Probably a missing jar
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        } catch ( ReflectiveOperationException e) {
             log.error("Problem retrieving gui for " + objClass, e);
             throw new RuntimeException(e.toString(), e); // Programming error: bail out.
         }
@@ -389,9 +389,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @throws IllegalAccessException
      *             if access rights do not allow the default constructor to be
      *             called
+     * @throws ReflectiveOperationException when construction of guiClass fails
      */
-    private JMeterGUIComponent getGuiFromCache(Class<?> guiClass, Class<?> testClass) throws InstantiationException,
-            IllegalAccessException {
+    private JMeterGUIComponent getGuiFromCache(Class<?> guiClass, Class<?> testClass) throws ReflectiveOperationException {
         JMeterGUIComponent comp;
         if (guiClass == TestBeanGUI.class) {
             comp = testBeanGUIs.get(testClass);
@@ -402,7 +402,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         } else {
             comp = guis.get(guiClass);
             if (comp == null) {
-                comp = (JMeterGUIComponent) guiClass.newInstance();
+                comp = (JMeterGUIComponent) guiClass.getDeclaredConstructor().newInstance();
                 if (!(comp instanceof UnsharedComponent)) {
                     guis.put(guiClass, comp);
                 }
@@ -909,7 +909,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
             try {
                 Class<?> implementationClass = Class.forName(namingPolicyImplementation);
-                this.namingPolicy = (TreeNodeNamingPolicy) implementationClass.newInstance();
+                this.namingPolicy = (TreeNodeNamingPolicy) implementationClass.getDeclaredConstructor().newInstance();
 
             } catch (Exception ex) {
                 log.error("Failed to create configured naming policy:" + namingPolicyImplementation + ", will use default one", ex);

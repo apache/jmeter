@@ -22,10 +22,20 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -35,6 +45,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
@@ -50,16 +61,21 @@ import org.apache.jmeter.gui.action.template.Template;
 import org.apache.jmeter.gui.action.template.TemplateManager;
 import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.TemplateUtil;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
+import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 
 /**
  * Dialog used for Templates selection
  * @since 2.10
  */
-public class SelectTemplatesDialog extends JDialog implements ChangeListener, ActionListener, HyperlinkListener {
+public class SelectTemplatesDialog extends JDialog implements ChangeListener, ActionListener, HyperlinkListener { // NOSONAR Ignore inheritence warning
 
     private static final long serialVersionUID = 1;
     
@@ -83,7 +99,13 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
     private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
     
-    private final JScrollPane scroller = new JScrollPane(helpDoc);
+    private final JButton previous = new JButton(JMeterUtils.getResString("previous")); //$NON-NLS-1$
+    
+    private final JButton validateButton = new JButton();
+    
+    private Map<String, JLabeledTextField> parametersTextFields = new LinkedHashMap<>();
+    
+    private JPanel actionBtnBar = new JPanel(new FlowLayout());
 
     public SelectTemplatesDialog() {
         super((JFrame) null, JMeterUtils.getResString("template_title"), true); //$NON-NLS-1$
@@ -127,7 +149,8 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
     
     /**
      * Check if existing Test Plan has been modified and ask user 
-     * what he wants to do if test plan is dirty
+     * what he wants to do if test plan is dirty. 
+     * Also ask user for parameters in case of customizable templates.
      * @param actionEvent {@link ActionEvent}
      */
     private void checkDirtyAndLoad(final ActionEvent actionEvent)
@@ -137,66 +160,137 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         if (template == null) {
             return;
         }
+        templateList.setValues(TemplateManager.getInstance().getTemplateNames()); // reload the templates before loading
+        
         final boolean isTestPlan = template.isTestPlan();
         // Check if the user wants to drop any changes
-        if (isTestPlan) {
-            ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.CHECK_DIRTY));
-            GuiPackage guiPackage = GuiPackage.getInstance();
-            if (guiPackage.isDirty()) {
-                // Check if the user wants to create from template
-                int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
-                        JMeterUtils.getResString("cancel_new_from_template"), // $NON-NLS-1$
-                        JMeterUtils.getResString("template_load?"),  // $NON-NLS-1$
-                        JOptionPane.YES_NO_CANCEL_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
-                if(response == JOptionPane.YES_OPTION) {
-                    ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.SAVE));
-                }
-                if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
-                    return; // Don't clear the plan
-                }
-            }
+        if (isTestPlan && !checkDirty(actionEvent)) {
+            return;
         }
         ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.STOP_THREAD));
         final File parent = template.getParent();
-        final File fileToCopy = parent != null 
+        File fileToCopy = parent != null 
               ? new File(parent, template.getFileName())
-              : new File(JMeterUtils.getJMeterHome(), template.getFileName());       
-        Load.loadProjectFile(actionEvent, fileToCopy, !isTestPlan, false);
-        this.setVisible(false);
+              : new File(JMeterUtils.getJMeterHome(), template.getFileName());
+        replaceTemplateParametersAndLoad(actionEvent, template, isTestPlan, fileToCopy);
+    }
+
+    /**
+     * @param actionEvent {@link ActionEvent}
+     * @param template {@link Template} definition
+     * @param isTestPlan If it's a full test plan or a part
+     * @param templateFile Template file to load
+     */
+    void replaceTemplateParametersAndLoad(final ActionEvent actionEvent, final Template template,
+            final boolean isTestPlan, File templateFile) {
+        File temporaryGeneratedFile = null;
+        try {
+            // handle customized templates (the .jmx.fmkr files)
+            if (template.getParameters() != null && !template.getParameters().isEmpty()) {
+                File jmxFile = new File(templateFile.getAbsolutePath());
+                Map<String, String> userParameters = getUserParameters();
+                Configuration templateCfg = TemplateUtil.getTemplateConfig();
+                try {
+                    temporaryGeneratedFile = File.createTempFile(template.getName(), ".output");
+                    templateFile = temporaryGeneratedFile;
+                    TemplateUtil.processTemplate(jmxFile, temporaryGeneratedFile, templateCfg, userParameters);
+                } catch (IOException | TemplateException ex) {
+                    log.error("Error generating output file {} from template {}", temporaryGeneratedFile, jmxFile, ex);
+                    return;
+                }
+            }
+            Load.loadProjectFile(actionEvent, templateFile, !isTestPlan, false);
+            this.dispose();
+        } finally {
+            if (temporaryGeneratedFile != null && !temporaryGeneratedFile.delete()) {
+                log.warn("Could not delete generated output file {} from template {}", temporaryGeneratedFile, templateFile);
+            }
+        }
+    }
+
+    /**
+     * @param actionEvent {@link ActionEvent}
+     * @return true if plan is not dirty or has been saved 
+     */
+    private boolean checkDirty(final ActionEvent actionEvent) {
+        ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.CHECK_DIRTY));
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        if (guiPackage.isDirty()) {
+            // Check if the user wants to create from template
+            int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("cancel_new_from_template"), // $NON-NLS-1$
+                    JMeterUtils.getResString("template_load?"),  // $NON-NLS-1$
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.YES_OPTION) {
+                ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.SAVE));
+                return true;
+            }
+            if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
+                return false; // Don't clear the plan
+            }
+        }
+        return true;
+    }
+    
+    private Map<String, String> getUserParameters(){
+        Map<String, String> userParameters = new LinkedHashMap<>();
+        for (Entry<String, JLabeledTextField> entry : parametersTextFields.entrySet()) {
+            userParameters.put(entry.getKey(), entry.getValue().getText());
+        }
+        return userParameters;
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        templateList.setValues(TemplateManager.getInstance().getTemplateNames());            
+        templateList.setValues(TemplateManager.getInstance().getTemplateNames());
         templateList.addChangeListener(this);
         reloadTemplateButton.addActionListener(this);
         reloadTemplateButton.setFont(FONT_SMALL);
-        this.getContentPane().setLayout(new BorderLayout(10, 0));
-        
-        JPanel templateBar = new JPanel(new BorderLayout());
-        templateBar.add(templateList, BorderLayout.CENTER);
-        JPanel reloadBtnBar = new JPanel();
-        reloadBtnBar.add(reloadTemplateButton);
-        templateBar.add(reloadBtnBar, BorderLayout.EAST);
-        this.getContentPane().add(templateBar, BorderLayout.NORTH);
         helpDoc.setContentType("text/html"); //$NON-NLS-1$
         helpDoc.setEditable(false);
         helpDoc.addHyperlinkListener(this);
-        this.getContentPane().add(scroller, BorderLayout.CENTER);
-
         applyTemplateButton.addActionListener(this);
         cancelButton.addActionListener(this);
-
-        // Bottom buttons bar
-        JPanel actionBtnBar = new JPanel(new FlowLayout());
-        actionBtnBar.add(applyTemplateButton);
-        actionBtnBar.add(cancelButton);
-        this.getContentPane().add(actionBtnBar, BorderLayout.SOUTH);
+        previous.addActionListener(this);
+        validateButton.addActionListener(this);
+        
+        // allow to reset the JDialog if the user click on the close button while
+        // it was displaying templates parameters
+        this.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosing(WindowEvent evt){
+                resetJDialog(false);
+                dispose();
+            }
+        });
+        this.setContentPane(templateSelectionPanel());
 
         this.pack();
         this.setMinimumSize(new Dimension(MINIMAL_BOX_WIDTH, MINIMAL_BOX_HEIGHT));
         ComponentUtil.centerComponentInWindow(this, 50); // center position and 50% of screen size
         populateTemplatePage();
+    }
+    
+    private JPanel templateSelectionPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        
+        JScrollPane scroller = new JScrollPane();
+        scroller.setViewportView(helpDoc);
+        JPanel templateBar = new JPanel(new BorderLayout());
+        templateBar.add(templateList, BorderLayout.CENTER);
+        JPanel reloadBtnBar = new JPanel();
+        reloadBtnBar.add(reloadTemplateButton);
+        templateBar.add(reloadBtnBar, BorderLayout.EAST);
+
+        // Bottom buttons bar
+        actionBtnBar.add(applyTemplateButton);
+        actionBtnBar.add(cancelButton);
+        
+        panel.add(templateBar, BorderLayout.NORTH);
+        panel.add(scroller, BorderLayout.CENTER);
+        panel.add(actionBtnBar, BorderLayout.SOUTH);
+        
+        return panel;
     }
 
     /**
@@ -207,18 +301,48 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
     public void actionPerformed(ActionEvent e) {
         final Object source = e.getSource();
         if (source == cancelButton) {
-            this.setVisible(false);
-            return;
+            resetJDialog(false);
+            this.dispose();
         } else if (source == applyTemplateButton) {
-            checkDirtyAndLoad(e);            
+            String selectedTemplate = templateList.getText();
+            Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);
+            if (hasParameters(template)) {
+                this.setContentPane(configureParametersPanel(template.getParameters()));
+                this.revalidate();
+            } else {
+                checkDirtyAndLoad(e);
+            }
         } else if (source == reloadTemplateButton) {
-            templateList.setValues(TemplateManager.getInstance().reset().getTemplateNames());
+            resetJDialog(true);
+        } else if (source == previous) { 
+            resetJDialog(false);
+        } else if (source == validateButton) {
+            checkDirtyAndLoad(e);
+            resetJDialog(false);
         }
+    }
+    
+    /**
+     * 
+     * @param template {@link Template}
+     * @return true if template has not parameter 
+     */
+    private boolean hasParameters(Template template) {
+        return !(template.getParameters() == null || template.getParameters().isEmpty());
     }
     
     @Override
     public void stateChanged(ChangeEvent event) {
         populateTemplatePage();
+    }
+    
+    private void resetJDialog(boolean reloadTemplates) {
+        if(reloadTemplates) {
+            TemplateManager.getInstance().reset();
+        }
+        templateList.setValues(TemplateManager.getInstance().getTemplateNames()); // reload templates
+        this.setContentPane(templateSelectionPanel());
+        this.revalidate();
     }
 
     private void populateTemplatePage() {
@@ -228,6 +352,68 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         applyTemplateButton.setText(template.isTestPlan() 
                 ? JMeterUtils.getResString("template_create_from")
                 : JMeterUtils.getResString("template_merge_from") );
+        validateButton.setText(template.isTestPlan() 
+                ? JMeterUtils.getResString("template_create_from")
+                : JMeterUtils.getResString("template_merge_from") );
+    }
+
+    /**
+     * @param parameters {@link Map} parameters map
+     * @return JPanel from parameters
+     */
+    private JPanel configureParametersPanel(Map<String, String> parameters) {
+        JPanel panel = new JPanel(new BorderLayout());
+        
+        JPanel northPanel = new JPanel(new FlowLayout()); 
+        JLabel label = new JLabel(JMeterUtils.getResString("template_fill_parameters"));
+        label.setPreferredSize(new Dimension(150,35));
+        northPanel.add(label);
+        panel.add(northPanel, BorderLayout.NORTH);
+        
+        parametersTextFields.clear();
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        initConstraints(gbc);
+        int parameterCount = 0;
+        
+        JPanel gridbagpanel = new JPanel(new GridBagLayout());
+        for (Entry<String, String> entry : parameters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            JLabeledTextField paramLabel = new JLabeledTextField(key + " : ");
+            paramLabel.setText(value);
+            parametersTextFields.put(key, paramLabel);
+
+            gbc.gridy = parameterCount++;
+            List<JComponent> listedParamLabel = paramLabel.getComponentList();
+            gridbagpanel.add(listedParamLabel.get(0), gbc.clone());
+            gbc.gridx = 1;
+            gridbagpanel.add(listedParamLabel.get(1), gbc.clone());
+            gbc.gridx = 0;
+        }
+        
+        JPanel actionBtnBarParameterPanel = new JPanel(new FlowLayout());
+        actionBtnBarParameterPanel.add(validateButton);
+        actionBtnBarParameterPanel.add(cancelButton);
+        actionBtnBarParameterPanel.add(previous);
+        
+        JScrollPane scroller = new JScrollPane(gridbagpanel);
+        panel.add(scroller, BorderLayout.CENTER);
+        panel.add(actionBtnBarParameterPanel, BorderLayout.SOUTH);
+        
+        return panel;
+    }
+    
+    private void initConstraints(GridBagConstraints gbc) {
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0,0,5,0);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
     }
 
     @Override
@@ -240,5 +426,4 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
             } 
         }
     }
-
 }

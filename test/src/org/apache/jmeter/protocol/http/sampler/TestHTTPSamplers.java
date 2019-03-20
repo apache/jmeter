@@ -19,17 +19,12 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-
-import java.io.File;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
-import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.services.FileServer;
 import org.junit.Test;
 
 public class TestHTTPSamplers {
@@ -370,22 +365,4 @@ public class TestHTTPSamplers {
         assertEquals("mime2", file.getMimeType());
     }
 
-    @Test
-    public void testRawBodyFromFile() {
-        String baseDirPath = FileServer.getFileServer().getBaseDir();
-        File baseDir = new File(baseDirPath);
-        try {
-            FileServer.getFileServer().setBase(baseDir.getParentFile());
-            HTTPSamplerBase sampler = new HTTPSampler3();
-            sampler.setMethod("POST");
-            sampler.setPath("http://httpbin.org/post");
-            sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("bin/jmeter.properties", "", "")});
-
-            SampleResult sample = sampler.sample();
-            System.out.println(sample.getResponseDataAsString());
-            assertFalse(sample.getResponseDataAsString().contains("java.io.FileNotFoundException:"));
-        } finally {
-            FileServer.getFileServer().setBase(baseDir);
-        }
-    }
 }

@@ -43,6 +43,8 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHCAbstractImpl.class);
 
+    protected static final String PROXY_SCHEME = System.getProperty("http.proxyScheme","http");
+
     protected static final String PROXY_HOST = System.getProperty("http.proxyHost","");
 
     protected static final String NONPROXY_HOSTS = System.getProperty("http.nonProxyHosts","");

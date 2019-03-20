@@ -81,8 +81,12 @@ public final class KeyStrokes {
     public static final KeyStroke ACTION_STOP       = KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, CONTROL_MASK);
     public static final KeyStroke ACTION_SHUTDOWN   = KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, CONTROL_MASK);
     public static final KeyStroke COLLAPSE_ALL      = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, CONTROL_MASK);
+    // Allow subtract key (numpad) to be used for collapse/expand action
+    public static final KeyStroke COLLAPSE_ALL_SUBTRACT  = KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, CONTROL_MASK);
     // VK_PLUS + CTRL_DOWN_MASK did not work...
     public static final KeyStroke EXPAND_ALL        = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke EXPAND_ALL_SUBTRACT = KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT,
+                        CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke ALT_UP_ARROW      = KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK);
     public static final KeyStroke ALT_DOWN_ARROW    = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK);
     public static final KeyStroke ALT_LEFT_ARROW    = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK);

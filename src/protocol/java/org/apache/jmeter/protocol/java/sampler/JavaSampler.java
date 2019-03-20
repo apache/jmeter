@@ -123,9 +123,9 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
             javaClass = Class.forName(name, false, Thread.currentThread().getContextClassLoader());
             Method method = javaClass.getMethod("teardownTest", JavaSamplerContext.class);
             isToBeRegistered = !method.getDeclaringClass().equals(AbstractJavaSamplerClient.class);
-            log.info("Created class: " + name + ". Uses tearDownTest: " + isToBeRegistered);
+            log.info("Created class: {}. Uses tearDownTest: ", name, isToBeRegistered);
         } catch (Exception e) {
-            log.error(whoAmI() + "\tException initialising: " + name, e);
+            log.error("{}\tException initialising: ", whoAmI(), name, e);
         }
         
     }
@@ -189,7 +189,9 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
                                                         // to test element name
         context = new JavaSamplerContext(args);
         if (javaClient == null) {
-            log.debug(whoAmI() + "\tCreating Java Client");
+            if (log.isDebugEnabled()) {
+                log.debug("{}\tCreating Java Client", whoAmI());
+            }
             javaClient = createJavaClient();
             javaClient.setupTest(context);
         }
@@ -219,18 +221,19 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
         }
         JavaSamplerClient client;
         try {
-            client = (JavaSamplerClient) javaClass.newInstance();
+            client = (JavaSamplerClient) javaClass.getDeclaredConstructor().newInstance();
 
             if (log.isDebugEnabled()) {
-                log.debug(whoAmI() + "\tCreated:\t" + getClassname() + "@"
-                        + Integer.toHexString(client.hashCode()));
+                log.debug("{}\tCreated:\t{}@{}", whoAmI(), getClassname(), Integer.toHexString(client.hashCode()));
             }
             
             if(isToBeRegistered) {
                 TEAR_DOWN_SET.add(this);
             }
         } catch (Exception e) {
-            log.error(whoAmI() + "\tException creating: " + getClassname(), e);
+            if (log.isErrorEnabled()) { 
+                log.error("{}\tException creating: {}", whoAmI(), getClassname(), e);
+            }
             client = new ErrorSamplerClient();
         }
         return client;
@@ -265,14 +268,18 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
     /* Implements TestStateListener.testStarted() */
     @Override
     public void testStarted() {
-        log.debug(whoAmI() + "\ttestStarted");
+        if (log.isDebugEnabled()) {
+            log.debug("{}\ttestStarted", whoAmI());
+        }
         initClass();
     }
 
     /* Implements TestStateListener.testStarted(String) */
     @Override
     public void testStarted(String host) {
-        log.debug(whoAmI() + "\ttestStarted(" + host + ")");
+        if (log.isDebugEnabled()) {
+            log.debug("{}\ttestStarted({})", whoAmI(), host);
+        }
         initClass();
     }
 
@@ -285,7 +292,9 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
      */
     @Override
     public void testEnded() {
-        log.debug(whoAmI() + "\ttestEnded");
+        if (log.isDebugEnabled()) {
+            log.debug("{}\ttestEnded", whoAmI());
+        }
         synchronized (TEAR_DOWN_SET) {
             for (JavaSampler javaSampler : TEAR_DOWN_SET) {
                 JavaSamplerClient client = javaSampler.javaClient;
@@ -318,7 +327,9 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
          */
         @Override
         public SampleResult runTest(JavaSamplerContext p_context) {
-            log.debug(whoAmI() + "\trunTest");
+            if (log.isDebugEnabled()) {
+                log.debug("{}\trunTest", whoAmI());
+            }
             Thread.yield();
             SampleResult results = new SampleResult();
             results.setSuccessful(false);

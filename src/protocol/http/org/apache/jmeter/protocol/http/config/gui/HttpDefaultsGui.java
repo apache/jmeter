@@ -68,6 +68,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
     private JTextField sourceIpAddr; // does not apply to Java implementation
     private JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
+    private JTextField proxyScheme;
     private JTextField proxyHost;
     private JTextField proxyPort;
     private JTextField proxyUser;
@@ -150,6 +151,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
             config.removeProperty(HTTPSamplerBase.IP_SOURCE_TYPE);
         }
 
+        config.setProperty(HTTPSamplerBase.PROXYSCHEME, proxyScheme.getText(),"");
         config.setProperty(HTTPSamplerBase.PROXYHOST, proxyHost.getText(),"");
         config.setProperty(HTTPSamplerBase.PROXYPORT, proxyPort.getText(),"");
         config.setProperty(HTTPSamplerBase.PROXYUSER, proxyUser.getText(),"");
@@ -174,6 +176,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         embeddedRE.setText(""); // $NON-NLS-1$
         sourceIpAddr.setText(""); // $NON-NLS-1$
         sourceIpType.setSelectedIndex(HTTPSamplerBase.SourceType.HOSTNAME.ordinal()); //default: IP/Hostname
+        proxyScheme.setText(""); // $NON-NLS-1$
         proxyHost.setText(""); // $NON-NLS-1$
         proxyPort.setText(""); // $NON-NLS-1$
         proxyUser.setText(""); // $NON-NLS-1$
@@ -198,6 +201,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
                 samplerBase.getPropertyAsInt(HTTPSamplerBase.IP_SOURCE_TYPE,
                         HTTPSamplerBase.SOURCE_TYPE_DEFAULT));
 
+        proxyScheme.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYSCHEME));
         proxyHost.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYHOST));
         proxyPort.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYPORT));
         proxyUser.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYUSER));
@@ -377,6 +381,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
      */
     protected final JPanel getProxyServerPanel(){
         JPanel proxyServer = new HorizontalPanel();
+        proxyServer.add(getProxySchemePanel(), BorderLayout.WEST);
         proxyServer.add(getProxyHostPanel(), BorderLayout.CENTER);
         proxyServer.add(getProxyPortPanel(), BorderLayout.EAST);
 
@@ -393,6 +398,19 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         return proxyServerPanel;
     }
 
+    private JPanel getProxySchemePanel() {
+        proxyScheme = new JTextField(5);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("web_proxy_scheme")); // $NON-NLS-1$
+        label.setLabelFor(proxyScheme);
+        label.setFont(FONT_SMALL);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(proxyScheme, BorderLayout.CENTER);
+        return panel;
+    }
+
     private JPanel getProxyHostPanel() {
         proxyHost = new JTextField(10);
 
@@ -405,7 +423,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         panel.add(proxyHost, BorderLayout.CENTER);
         return panel;
     }
-    
+
     private JPanel getProxyPortPanel() {
         proxyPort = new JTextField(10);
 

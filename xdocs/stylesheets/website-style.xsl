@@ -30,7 +30,7 @@
   <xsl:param name="sshotdir" select="concat($imgdir, '/screenshots')" />
   <xsl:param name="cssdir" select="concat($relative-path, '/css')" />
   <xsl:param name="jakarta-site" select="'https://jakarta.apache.org'" />
-  <xsl:param name="year" select="'2018'" />
+  <xsl:param name="year" select="'2019'" />
   <xsl:param name="max-img-width" select="'600'" />
 
   <!-- Output method -->
@@ -183,7 +183,6 @@
       <ul>
         <li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li>
         <li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li>
-        <li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li>
       </ul>
     </div>
   </xsl:template>

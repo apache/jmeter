@@ -17,11 +17,12 @@
 
 package org.apache.jmeter.report.processor
 
-import org.apache.jmeter.junit.spock.JMeterSpec
+
 import org.apache.jmeter.report.core.Sample
 import org.apache.jmeter.report.utils.MetricUtils
+import spock.lang.Specification
 
-class Top5ErrorsBySamplerConsumerSpec extends JMeterSpec {
+class Top5ErrorsBySamplerConsumerSpec extends Specification {
 
     def sut = new Top5ErrorsBySamplerConsumer()
 
@@ -71,7 +72,6 @@ class Top5ErrorsBySamplerConsumerSpec extends JMeterSpec {
         expect:
             sut.createResultTitles().size ==
                     3 + 2 * sut.MAX_NUMBER_OF_ERRORS_IN_TOP
-
     }
 
 }

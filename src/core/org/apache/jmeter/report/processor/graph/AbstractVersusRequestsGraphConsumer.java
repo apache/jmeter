@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.report.core.CsvSampleReader;
@@ -97,7 +98,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
     public void initialize() {
         super.initialize();
         embeddedConsumer = new TimeCountConsumer(this);
-        setGranularity(1L);
+        setGranularity(1000L);
     }
 
     private void startConsumingBase() {
@@ -208,7 +209,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
         // Collection of sample builders for channels
         private ArrayList<SampleBuilder> builders = new ArrayList<>();
         private ArrayList<FileInfo> fileInfos = new ArrayList<>();
-        private HashMap<Long, Long> counts = new HashMap<>();
+        private Map<Long, Long> counts = new HashMap<>();
         boolean createdWorkDir = false;
         private final AbstractVersusRequestsGraphConsumer parent;
 

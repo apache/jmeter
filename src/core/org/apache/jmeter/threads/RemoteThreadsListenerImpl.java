@@ -67,7 +67,7 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
                     Class<?> commandClass = Class.forName(strClassName);
                     if (!Modifier.isAbstract(commandClass.getModifiers())) {
                         log.debug("Instantiating: {}", commandClass);
-                        RemoteThreadsLifeCycleListener listener = (RemoteThreadsLifeCycleListener) commandClass.newInstance();
+                        RemoteThreadsLifeCycleListener listener = (RemoteThreadsLifeCycleListener) commandClass.getDeclaredConstructor().newInstance();
                         listeners.add(listener);
                     }
                 } catch (Exception e) {

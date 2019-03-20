@@ -18,11 +18,13 @@
 
 package org.apache.jmeter.gui;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -36,6 +38,7 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -675,39 +678,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     }
 
     private void addQuickComponentHotkeys(JTree treevar) {
-        Action quickComponent = new AbstractAction("Quick Component") {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                String propname = "gui.quick_" + actionEvent.getActionCommand();
-                String comp = JMeterUtils.getProperty(propname);
-                log.debug("Event {}: {}", propname, comp);
-
-                if (comp == null) {
-                    log.warn("No component set through property: {}", propname);
-                    return;
-                }
-
-                GuiPackage guiPackage = GuiPackage.getInstance();
-                try {
-                    guiPackage.updateCurrentNode();
-                    TestElement testElement = guiPackage.createTestElement(SaveService.aliasToClass(comp));
-                    JMeterTreeNode parentNode = guiPackage.getCurrentNode();
-                    while (!MenuFactory.canAddTo(parentNode, testElement)) {
-                        parentNode = (JMeterTreeNode) parentNode.getParent();
-                    }
-                    if (parentNode.getParent() == null) {
-                        log.debug("Cannot add element on very top level");
-                    } else {
-                        JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
-                        guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
-                    }
-                } catch (Exception err) {
-                    log.warn("Failed to perform quick component add: {}", comp, err); // $NON-NLS-1$
-                }
-            }
-        };
+        Action quickComponent = new QuickComponent("Quick Component");
 
         InputMap inputMap = treevar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         KeyStroke[] keyStrokes = new KeyStroke[]{KeyStrokes.CTRL_0,
@@ -727,6 +698,62 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     private TreeCellRenderer getCellRenderer() {
         return new JMeterCellRenderer();
+    }
+
+    private static final class QuickComponent extends AbstractAction {
+        private static final long serialVersionUID = 1L;
+
+        private QuickComponent(String name) {
+            super(name);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            String propname = "gui.quick_" + getCurrentKey(actionEvent);
+            String comp = JMeterUtils.getProperty(propname);
+            log.debug("Event {}: {}", propname, comp);
+
+            if (comp == null) {
+                log.warn("No component set through property: {}", propname);
+                return;
+            }
+
+            GuiPackage guiPackage = GuiPackage.getInstance();
+            try {
+                guiPackage.updateCurrentNode();
+                TestElement testElement = guiPackage.createTestElement(SaveService.aliasToClass(comp));
+                JMeterTreeNode parentNode = guiPackage.getCurrentNode();
+                while (!MenuFactory.canAddTo(parentNode, testElement)) {
+                    parentNode = (JMeterTreeNode) parentNode.getParent();
+                }
+                if (parentNode.getParent() == null) {
+                    log.debug("Cannot add element on very top level");
+                } else {
+                    JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
+                    guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
+                }
+            } catch (Exception err) {
+                log.warn("Failed to perform quick component add: {}", comp, err); // $NON-NLS-1$
+            }
+        }
+
+        /*
+         * Bug 62336: On Windows CTRL+6 doesn't give us an actionCommand, so
+         * we have to try harder and read the KeyEvent from the EventQueue
+         */
+        private String getCurrentKey(ActionEvent actionEvent) {
+            String actionCommand = actionEvent.getActionCommand();
+            if (actionCommand != null) {
+                return actionCommand;
+            }
+            AWTEvent currentEvent = EventQueue.getCurrentEvent();
+            if (currentEvent instanceof KeyEvent) {
+                KeyEvent keyEvent = (KeyEvent) currentEvent;
+                return KeyEvent.getKeyText(keyEvent.getKeyCode());
+            }
+            log.debug("No keycode could be found for this actionEvent {}", actionEvent);
+            return "NONE";
+        }
     }
 
     /**

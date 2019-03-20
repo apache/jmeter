@@ -89,12 +89,12 @@
         <li><a href="get-started.html#classpath">1.4.1 JMeter's Classpath</a></li>
         <li><a href="get-started.html#template">1.4.2 Create Test Plan from Template</a></li>
         <li><a href="get-started.html#proxy_server">1.4.3 Using JMeter behind a proxy</a></li>
-        <li><a href="get-started.html#non_gui">1.4.4 Non-GUI Mode</a></li>
+        <li><a href="get-started.html#non_gui">1.4.4 CLI mode</a></li>
         <li><a href="get-started.html#server">1.4.5 Server Mode</a></li>
         <li><a href="get-started.html#override">1.4.6 Overriding Properties Via The Command Line</a></li>
         <li><a href="get-started.html#logging">1.4.7 Logging and Error Messages</a></li>
         <li><a href="get-started.html#options">1.4.8 Full list of command-line options</a></li>
-        <li><a href="get-started.html#shutdown">1.4.9 non-GUI shutdown</a></li>
+        <li><a href="get-started.html#shutdown">1.4.9 CLI mode shutdown</a></li>
      </ul>
      </li>
      <li><a href="get-started.html#configuring_jmeter">1.5 Configuring JMeter</a></li>

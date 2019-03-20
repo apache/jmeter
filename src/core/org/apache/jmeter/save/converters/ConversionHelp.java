@@ -95,8 +95,7 @@ public class ConversionHelp {
             return p;
         }
         try {
-            String p1 = URLEncoder.encode(p, CHAR_SET);
-            return p1;
+            return URLEncoder.encode(p, CHAR_SET);
         } catch (UnsupportedEncodingException e) {
             log.warn("System doesn't support {}", CHAR_SET, e);
             return p;

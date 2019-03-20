@@ -15,7 +15,7 @@
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
 
-## This is a simple wrapper for the script bin/jmeter.sh
+## This is a simple wrapper for the script bin/jmeter
 ##
 ## Basic JMeter startup script for Un*x systems
 ## See the "jmeter" script for details of options that can be used for Sun JVMs

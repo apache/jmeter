@@ -61,6 +61,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.documentation.VisibleForTesting;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
@@ -111,8 +112,13 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
     private List<JMeterTreeNode> lastSearchResult = new ArrayList<>();
     private int currentSearchIndex;
 
+    @VisibleForTesting
     public SearchTreeDialog() {
-        super((JFrame) null, JMeterUtils.getResString("search_tree_title"), false); //$NON-NLS-1$
+        super();
+    }
+    
+    public SearchTreeDialog(JFrame parent) {
+        super(parent, JMeterUtils.getResString("search_tree_title"), false); //$NON-NLS-1$
         init();
     }
 

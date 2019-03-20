@@ -13,7 +13,7 @@ Which jars are used by which modules?
 ====================================
 [not exhaustive]
 
-asm-6.1 (org.ow2.asm)
+asm-7.0 (org.ow2.asm)
 ----------------------
 - JSON Path extractor
 
@@ -67,7 +67,7 @@ commons-lang-2.6
 http://commons.apache.org/downloads/download_lang.cgi
 - velocity (Anakia)
 
-commons-lang3-3.7
+commons-lang3-3.8.1
 ----------------
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
@@ -102,7 +102,7 @@ dnsjava-2.1.8
 http://www.dnsjava.org/download/
 - DNSCacheManager
 
-groovy-all-2.4.15
+groovy-all-2.4.16
 ----------------------
 Advised scripting language for JSR223 Test Elements
 
@@ -123,6 +123,14 @@ javax.activation-1.2.0.jar
 ----------------------
 - used by SMTP Sampler
 
+jackson-annotations-2.9.8 (com.fasterxml.jackson)
+----------------------
+
+Used by JsonExporter in report generator (com.fasterxml.jackson)
+----------------------
+jackson-annotations-2.9.8 (https://github.com/FasterXML/jackson-annotations)
+jackson-core-2.9.8 (https://github.com/FasterXML/jackson-core)
+jackson-databind-2.9.8 (https://github.com/FasterXML/jackson-databind)
 
 jCharts-0.7.5 (org.jCharts)
 -------------
@@ -134,22 +142,22 @@ jdom-1.1.3
 http://www.jdom.org/downloads/index.html
 - Anakia
 
-jodd-core-5.0.3
+jodd-core-5.0.6
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-5.0.3
+jodd-lagarto-5.0.6
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
 
-jodd-log-5.0.3
+jodd-log-5.0.6
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-props-5.0.3
+jodd-props-5.0.6
 --------
 http://www.jodd.org/
 - used by Report/Dashboard feature properties management
@@ -166,12 +174,12 @@ https://github.com/netplex/json-smart-v2
 - JSON Path Extractor
 - JSON Path Renderer
 
-jsoup-1.11.2
+jsoup-1.11.3
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
-log4j2-2.11.0
+log4j2-2.11.1
 --------
 https://logging.apache.org/log4j/2.x/
 - Logging framework
@@ -181,7 +189,7 @@ ph-css-6.1.1
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-9.1.2
+ph-commons-9.2.1
 --------
 https://github.com/phax/ph-commons
 - CssParser
@@ -206,9 +214,9 @@ junit 4.12
 
 HttpComponents
 - HttpComponents Core 4.4.10
-- HttpComponents Client 4.5.6
-- HttpComponents AsyncClient 4.1.3
-- HttpComponents Core NIO 4.4.10
+- HttpComponents Client 4.5.7
+- HttpComponents AsyncClient 4.1.4
+- HttpComponents Core NIO 4.4.11
 -----------
 http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler
@@ -224,7 +232,7 @@ oro-2.0.8
 http://jakarta.apache.org/site/downloads/downloads_oro.cgi
 - regular expressions: various
 
-rsyntaxtextarea-2.6.1
+rsyntaxtextarea-3.0.2
 ---------------------
 http://fifesoft.com/rsyntaxtextarea/
 - syntax coloration
@@ -239,17 +247,18 @@ slf4j-api-1.7.25
 http://www.slf4j.org/
 - jodd-core
 - json-path
+- jmeter internal logging
 
-tika-1.19.1
+tika-1.20
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor
 
-commons-dbcp2-2.4.0 (org.apache.commons.dbcp2)
+commons-dbcp2-2.5.0 (org.apache.commons.dbcp2)
 --------------------------
 - DataSourceElement (JDBC)
 
-Saxon-HE-9.8.0-12 (net.sf.saxon)
+Saxon-HE-9.9.1-1 (net.sf.saxon)
 --------------------------
 - XPath2Extractor (XML)
 
@@ -278,7 +287,7 @@ http://xerces.apache.org/xerces2-j/download.cgi
 
 The x* jars above are used for XML handling
 
-xmlgraphics-commons-2.2 (org.apache.xmlgraphics.image.codec)
+xmlgraphics-commons-2.3 (org.apache.xmlgraphics.image.codec)
 ------------------
 http://xmlgraphics.apache.org/commons/download.html
 - SaveGraphicsService
@@ -296,7 +305,7 @@ or
 http://www.extreme.indiana.edu/dist/java-repository/xpp3/distributions/
 - xstream
 
-xstream-1.4.10
+xstream-1.4.11
 -------------
 http://x-stream.github.io/download.html
 - SaveService

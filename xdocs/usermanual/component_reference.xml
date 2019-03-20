@@ -60,7 +60,7 @@
 <description>
     <p>
     Samplers perform the actual work of JMeter.
-    Each sampler (except <complink name="Test Action" />) generates one or more sample results.
+    Each sampler (except <complink name="Flow Control Action" />) generates one or more sample results.
     The sample results have various attributes (success/fail, elapsed time, data size etc.) and can be viewed in the various listeners.
     </p>
 </description>
@@ -150,12 +150,12 @@ Latency is set to the time it takes to login.
          When a connection is released by JMeter, it may or may not be re-used by the same thread.</li>
          <li>The API is best suited to single-threaded usage - various settings
          are defined via system properties, and therefore apply to all connections.</li>
-         <li>There is a bug in the handling of HTTPS via a Proxy (the <code>CONNECT</code> is not handled correctly).
-         See Java bugs 6226610 and 6208335.
-         </li>
+         <li>No support of Kerberos authentication</li>
+         <li>It does not support client based certificate testing with Keystore Config.</li>
+         <li>Better control of Retry mechanism</li>
          <li>It does not support virtual hosts.</li>
          <li>It supports only the following methods: <code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>PUT</code>, <code>DELETE</code> and <code>TRACE</code></li>
-         <li>It does not support client based certificate testing with Keystore Config.</li>
+         <li>Better control on DNS Caching with <complink name="DNS Cache Manager"/></li>
          </ul>
          <note>Note: the <code>FILE</code> protocol is intended for testing purposes only.
          It is handled by the same code regardless of which HTTP Sampler is used.</note>
@@ -595,6 +595,8 @@ the additional variables for rows four, five and six will be removed.
         Each map contains the column name as the key and the column data as the value. Usage:<br></br>
         <source>columnValue = vars.getObject("resultObject").get(0).get("Column Name");</source>
         </property>
+        <property name="Query timeout(s)" required="No">Set a timeout in seconds for query, empty value means 0 which is infinite. <code>-1</code> means don't set any query timeout
+which might be needed for use case or when certain drivers don't support timeout. Defaults to 0.</property>
         <property name="Handle ResultSet" required="No">Defines how ResultSet returned from callable statements be handled:
             <ul>
                 <li><code>Store As String</code> (default) - All variables on Variable Names list are stored as strings, will not iterate through a <code>ResultSet</code> when present on the list. <code>CLOB</code>s will be converted to Strings. <code>BLOB</code>s will be converted to Strings as if they were an UTF-8 encoded byte-array. Both <code>CLOB</code>s and <code>BLOB</code>s will be cut off after <code>jdbcsampler.max_retain_result_size</code> bytes.</li>
@@ -798,6 +800,9 @@ This will not have any impact on existing Test plans.
           <property name="Username" required="No">Full distinguished name of the user as which you want to bind.</property>
           <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind.
             If it is incorrect, the sampler will return an error and revert to an anonymous bind. (N.B. this is stored unencrypted in the test plan)</property>
+          <property name="Connection timeout (in milliseconds)" required="No">Timeout for connection, if exceeded connection will be aborted</property>
+          <property name="Use Secure LDAP Protocol" required="No">Use <code>ldaps://</code> scheme instead of <code>ldap://</code></property>
+          <property name="Trust All Certificates" required="No">Trust all certificates, only used if <code>Use Secure LDAP Protocol</code> is checked</property>
         </properties>
       </dd>
       <dt><b>Thread unbind</b></dt>
@@ -915,10 +920,7 @@ This will not have any impact on existing Test plans.
 <center><h2>(Beta Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
-request it accepted. This means every image, CSS file, JavaScript file, html file, &hellip;
-The current implementation is complete, but some features have not been enabled. 
-There is a filter for the access log parser, but I haven't figured out how to link to the pre-processor. 
-Once I do, changes to the sampler will be made to enable that functionality.</p>
+request it accepted. This means every image, CSS file, JavaScript file, html file, &hellip;</p>
 <p>Tomcat uses the common format for access logs. This means any webserver that uses the
 common log format can use the AccessLogSampler. Server that use common log format include:
 Tomcat, Resin, Weblogic, and SunOne. Common log format looks
@@ -990,6 +992,7 @@ to configure this via the GUI, so it cannot really be used.
     <description><p>This sampler allows you to write a sampler using the BeanShell scripting language.
 </p><p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 Sampler" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p>
 <p>
 The test element supports the <code>ThreadListener</code> and <code>TestListener</code> interface methods.
@@ -1731,6 +1734,7 @@ Relative paths are resolved against the current directory.
 <br />Failing that, against the directory containing the test script (JMX file).
 </property>
 </properties>
+<note>You can pass mail related environment properties by adding to user.properties any of the properties described <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/pop3/package-summary.html">here</a>.</note>
 <p>
 Messages are stored as subsamples of the main sampler.
 Multipart message parts are stored as subsamples of the message.
@@ -1748,7 +1752,7 @@ The current implementation is quite basic, and is mainly intended for debugging 
 
 <component name="Flow Control Action" was="Test Action" index="&sect-num;.1.18" width="467" height="184" screenshot="test_action.png">
 <description>
-The Test Action sampler is a sampler that is intended for use in a conditional controller.
+The Flow Control Action sampler is a sampler that is intended for use in a conditional controller.
 Rather than generate a sample, the test element either pauses or stops the selected target.
 <p>This sampler can also be useful in conjunction with the Transaction Controller, as it allows
 pauses to be included without needing to generate a sample. 
@@ -1758,7 +1762,7 @@ The "<code>Stop</code>" action stops the thread or test after completing any sam
 The "<code>Stop Now</code>" action stops the test without waiting for samples to complete; it will interrupt any active samples.
 If some threads fail to stop within the 5 second time-limit, a message will be displayed in GUI mode.
 You can try using the <code>Stop</code> command to see if this will stop the threads, but if not, you should exit JMeter.
-In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 second time limit.
+In CLI mode, JMeter will exit if some threads fail to stop within the 5 second time limit.
 <note>The time to wait can be changed using the JMeter property <code>jmeterengine.threadstop.wait</code>. The time is given in milliseconds.</note>
 </p>
 </description>
@@ -2570,9 +2574,9 @@ files, typically with a "<code>.jtl</code>" extension.
 Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).
 </p>
 <p>
-<b>Listeners do <i>not</i> process sample data in non-GUI mode, but the raw data will be saved if an output
+<b>Listeners do <i>not</i> process sample data in CLI mode, but the raw data will be saved if an output
 file has been configured.</b>
-In order to analyse the data generated by a non-GUI test run, you need to load the file into the appropriate
+In order to analyse the data generated by a CLI run, you need to load the file into the appropriate
 Listener.
 </p>
 <note>
@@ -2974,7 +2978,7 @@ If this is selected, then the sub-samples are displayed instead of the main samp
 <description>This listener can record results to a file
 but not to the UI.  It is meant to provide an efficient means of
 recording data by eliminating GUI overhead.
-When running in non-GUI mode, the <code>-l</code> flag can be used to create a data file.
+When running in CLI mode, the <code>-l</code> flag can be used to create a data file.
 The fields to save are defined by JMeter properties.
 See the <code>jmeter.properties</code> file for details.
 </description>
@@ -3079,6 +3083,7 @@ The BeanShell Listener allows the use of BeanShell for processing samples for sa
 </p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 Listener" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p>
 <p>
 The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
@@ -3266,7 +3271,7 @@ time boundary, so that multiple test runs on the same time will be synchronised.
 See <code>jmeter.properties</code> file for the summariser configuration items:
 <source>
 # Define the following property to automatically start a summariser with that name
-# (applies to non-GUI mode only)
+# (applies to CLI mode only)
 #summariser.name=summary
 #
 # interval between summaries (in seconds) default 3 minutes
@@ -3278,7 +3283,7 @@ See <code>jmeter.properties</code> file for the summariser configuration items:
 # Write messages to System.out
 #summariser.out=true
 </source>
-This element is mainly intended for batch (non-GUI) runs.
+This element is mainly intended for batch (CLI) runs.
 The output looks like the following:
 <source>
 label +     16 in 0:00:12 =    1.3/s Avg:  1608 Min:  1163 Max:  2009 Err:     0 (0.00%) Active: 5 Started: 5 Finished: 0
@@ -3324,7 +3329,7 @@ Different summary groupings can be implemented
 by using suitable labels and adding the summarisers to appropriate parts of the test plan.
 </p>
 <note>
-In Non-GUI mode by default a Generate Summary Results listener named "<code>summariser</code>" is configured, if you have already added one to your Test Plan, ensure you name it differently 
+In CLI mode by default a Generate Summary Results listener named "<code>summariser</code>" is configured, if you have already added one to your Test Plan, ensure you name it differently 
 otherwise results will be accumulated under this label (summary) leading to wrong results (sum of total samples + samples located under the Parent of Generate Summary Results listener).<br/>
 This is not a bug but a design choice allowing to summarize across thread groups.
 </note>
@@ -3933,6 +3938,8 @@ instead. (see figures 12 and 13).</p>
         <property name="Time Between Eviction Runs (ms)" required="Yes">The number of milliseconds to sleep between runs of the idle object evictor thread. When non-positive, no idle object evictor thread will be run. (Defaults to "<code>60000</code>", 1 minute).
         See <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getTimeBetweenEvictionRunsMillis--" >BasicDataSource.html#getTimeBetweenEvictionRunsMillis</a></property>
         <property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
+        <property name="Transaction isolation" required="Yes">Transaction isolation level</property>
+        <property name="Init SQL statements separated by new line" required="No">A Collection of SQL statements that will be used to initialize physical connections when they are first created. These statements are executed only once - when the configured connection factory creates the connection. </property>
         <property name="Test While Idle" required="Yes">Test idle connections of the pool, see <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getTestWhileIdle--">BasicDataSource.html#getTestWhileIdle</a>. 
         Validation Query will be used to test it.</property>
         <property name="Soft Min Evictable Idle Time(ms)" required="Yes">Minimum amount of time a connection may sit idle in the pool before it is eligible for eviction by the idle object evictor, with the extra condition that at least <code>minIdle</code> connections remain in the pool.
@@ -3973,7 +3980,7 @@ instead. (see figures 12 and 13).</p>
               <dt>Ingres</dt><dd>com.ingres.jdbc.IngresDriver</dd>
               <dt>Derby</dt><dd>org.apache.derby.jdbc.ClientDriver</dd>
               <dt>H2</dt><dd>org.h2.Driver</dd>
-              <dt>Firebird</dt><dd>org.firebirdsql.jdbc.FBDrivery</dd>
+              <dt>Firebird</dt><dd>org.firebirdsql.jdbc.FBDriver</dd>
               <dt>Apache Derby</dt><dd>org.apache.derby.jdbc.ClientDriver</dd>
               <dt>MariaDB</dt><dd>org.mariadb.jdbc.Driver</dd>
               <dt>SQLite</dt><dd>org.sqlite.JDBC</dd>
@@ -4236,10 +4243,10 @@ with the start, continuing on like that until the test is ended.  </p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Starting value" required="Yes">The starting value for the counter.  The counter will equal this
-        value during the first iteration.</property>
+        <property name="Starting value" required="No">The starting value for the counter.  The counter will equal this
+        value during the first iteration (defaults to 0).</property>
         <property name="Increment" required="Yes">How much to increment the counter by after each
-        iteration.</property>
+        iteration (defaults to 0, meaning no increment).</property>
         <property name="Maximum value" required="No">If the counter exceeds the maximum, then it is reset to the <code>Starting value</code>.
         Default is <code>Long.MAX_VALUE</code>
         </property>
@@ -4248,9 +4255,9 @@ with the start, continuing on like that until the test is ended.  </p>
         If there is a problem interpreting the format, then it is ignored.
     [The default format is generated using <code>Long.toString()</code>]
         </property>
-        <property name="Exported Variable Name" required="Yes">This will be the variable name under which the counter value is available.  
+        <property name="Exported Variable Name" required="No">This will be the variable name under which the counter value is available.  
         If you name it <code>counterA</code>, you can then access it using <code>${counterA}</code> 
-        as explained in <a href="functions.html">user-defined values</a></property>
+        as explained in <a href="functions.html">user-defined values</a> (By default, it creates an empty string variable that can be accessed using <code>${}</code> but this is highly discouraged)</property>
         <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
         own counter?  If unchecked, the counter is global (i.e., user #1 will get value "<code>1</code>", and user #2 will get value "<code>2</code>" on
         the first iteration).  If checked, each user has an independent counter.</property>
@@ -4566,6 +4573,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 Assertion" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p><p>
 Note that a different Interpreter is used for each independent occurrence of the assertion
 in each thread in a test script, but the same Interpreter is used for subsequent invocations.
@@ -4871,7 +4879,7 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
     To apply a timer to a single sampler, add the timer as a child element of the sampler.
     The timer will be applied before the sampler is executed.
     To apply a timer after a sampler, either add it to the next sampler, or add it as the
-    child of a <complink name="Test Action"/> Sampler.
+    child of a <complink name="Flow Control Action"/> Sampler.
     </note>
 </description>
 <component name="Constant Timer" index="&sect-num;.6.1" anchor="constant" width="372" height="100" screenshot="timers/constant_timer.png">
@@ -5108,6 +5116,7 @@ The BeanShell Timer can be used to generate a delay.
 </p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 Timer" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p>
 <p>
 The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
@@ -5352,6 +5361,7 @@ The BeanShell PreProcessor allows arbitrary code to be applied before taking a s
 </p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 PreProcessor" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p>
 <p>
 The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
@@ -5952,6 +5962,7 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 <p>BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
+<note>Migration to <complink name="JSR223 PostProcessor" />+Groovy is highly recommended for performance, support of new Java features and limited maintenance of the BeanShell library.</note>
 </p>
 <p>
 The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.

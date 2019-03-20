@@ -15,38 +15,37 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.functions.gui;
-
-import java.awt.event.ActionEvent
+package org.apache.jmeter.functions.gui
 
 import org.apache.jmeter.config.Argument
 import org.apache.jmeter.config.Arguments
-import org.apache.jmeter.junit.spock.JMeterSpec
-import org.apache.jorphan.gui.GuiUtils
-
 import spock.lang.IgnoreIf
+import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
-class FunctionHelperSpec extends JMeterSpec {
+class FunctionHelperSpec extends Specification {
 
-    @IgnoreIf({ Boolean.valueOf(System.properties['java.awt.headless']) })
+    @IgnoreIf({ System.properties['java.awt.headless'] as boolean })
     def "construct correct call string for parameters #parameters"() {
         setup:
-          def functionHelper = new FunctionHelper()
+            def functionHelper = new FunctionHelper()
         when:
-          def args = new Arguments()
-          args.setArguments(parameters.collect { new Argument("dummy${it}", it)})
+            def args = new Arguments()
+            args.setArguments(parameters.collect { new Argument("dummy${it}", it) })
         then:
-          functionHelper.buildFunctionCallString(functionName, args).toString() == combined
+            functionHelper.buildFunctionCallString(functionName, args).toString() == combined
         where:
-          functionName | parameters    | combined
-          "fname"      | []            | "\${fname}"
-          "fname"      | ["a"]         | "\${fname(a)}"
-          "fname"      | ["a,b"]       | "\${fname(a\\,b)}"
-          "fname"      | ["a,b,c"]     | "\${fname(a\\,b\\,c)}"
-          "fname"      | ["a", "b"]    | "\${fname(a,b)}"
-          "fname"      | ["a,b", "c"]  | "\${fname(a\\,b,c)}"
+            functionName | parameters                         | combined
+            "fname"      | []                                 | "\${fname}"
+            "fname"      | ["a"]                              | "\${fname(a)}"
+            "fname"      | ["a,b"]                            | "\${fname(a\\,b)}"
+            "fname"      | ["a,b,c"]                          | "\${fname(a\\,b\\,c)}"
+            "fname"      | ["a", "b"]                         | "\${fname(a,b)}"
+            "fname"      | ["a,b", "c"]                       | "\${fname(a\\,b,c)}"
+            "fname"      | ["\\\${f(a,b)}"]                   | "\${fname(\\\${f(a\\,b)})}"
+            "fname"      | ["\${f(a,b)},c,\${g(d,e)}", "h"]   | "\${fname(\${f(a,b)}\\,c\\,\${g(d,e)},h)}"
+            "fname"      | ["a,\${f(b,\${g(c,d)},e)},f", "h"] | "\${fname(a\\,\${f(b,\${g(c,d)},e)}\\,f,h)}"
     }
 }
 

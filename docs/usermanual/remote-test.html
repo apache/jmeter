@@ -195,12 +195,12 @@
 <h1>13. Remote Testing</h1>
 
 
-<p>In the event that your JMeter client machine is unable, performance-wise, to simulate 
+<p>In the event that your JMeter client machine is unable, performance-wise, to simulate
 enough users to stress your server or is limited at network level, an option exists to control multiple, remote JMeter
-engines from a single JMeter client.  By running JMeter remotely, you can replicate 
+engines from a single JMeter client.  By running JMeter remotely, you can replicate
 a test across many low-end computers and thus simulate a larger load on the server.  One
 instance of the JMeter client can control any number of remote JMeter instances, and collect
-all the data from them.  This offers the following features: 
+all the data from them.  This offers the following features:
 
 <ul>
 
@@ -223,18 +223,18 @@ So if you set 1000 Threads and have 6 JMeter server, you end up injecting 6000 T
 <div class="clear"></div>
 
 <p>
-However, remote mode does use more resources than running the same number of non-GUI tests independently.
+However, remote mode does use more resources than running the same number of CLI mode tests independently.
 If many server instances are used, the client JMeter can become overloaded, as can the client network connection.
 This has been improved by switching to Stripped modes (see below) but you should always check that your client is not overloaded.
 </p>
 
-<p>Note that while you can execute the JMeterEngine on your application 
-server, you need to be mindful of the fact that this will be adding processing 
-overhead on the application server and thus your testing results will be 
+<p>Note that while you can execute the JMeterEngine on your application
+server, you need to be mindful of the fact that this will be adding processing
+overhead on the application server and thus your testing results will be
 somewhat tainted.  The recommended approach is to have one or more machines on
 the same Ethernet segment as your application server that you configure to run
-the JMeter Engine.  This will minimize the impact of the network on the test 
-results without impacting the performance of the application server 
+the JMeter Engine.  This will minimize the impact of the network on the test
+results without impacting the performance of the application server
 itself.
 </p>
 
@@ -263,7 +263,7 @@ make sure that these are available in the appropriate directory on each server</
 If necessary you can define different values for properties by editing the <span class="code">user.properties</span> or <span class="code">system.properties</span>
 files on each server. These properties will be picked up when the server is started and may be
 used in the test plan to affect its behaviour (e.g. connecting to a different remote server).
-Alternatively use different content in any datafiles used by the test 
+Alternatively use different content in any datafiles used by the test
 (e.g. if each server must use unique ids, divide these between the data files)
 </p>
 
@@ -277,14 +277,14 @@ the <span class="code">JMETER_HOME/bin/jmeter-server</span> (unix) or <span clas
 
 <p>Note that there can only be one JMeter server on each node unless different RMI ports are used.</p>
 
-<p>Since JMeter 2.3.1, the JMeter server application starts the RMI registry itself; 
+<p>Since JMeter 2.3.1, the JMeter server application starts the RMI registry itself;
 there is no need to start RMI registry separately.
 To revert to the previous behaviour, define the JMeter property <pre class="source">server.rmi.create=false</pre> on the server host systems.
 </p>
 
 <p>
 By default, RMI uses dynamic ports for the JMeter server engine. This can cause problems for firewalls,
-so you can define the JMeter property <span class="code">server.rmi.localport</span> 
+so you can define the JMeter property <span class="code">server.rmi.localport</span>
 to control this port numbers.
 If this is non-zero, it will be used as the base for local port numbers for the server engine. At the moment JMeter will open up to three ports beginning with the port defined in <span class="code">server.rmi.localport</span>.
 </p>
@@ -294,7 +294,7 @@ If this is non-zero, it will be used as the base for local port numbers for the 
 </p>
 
 <p>Edit the properties file <i>on the controlling JMeter machine</i>.  In <span class="code">JMETER_HOME/bin/jmeter.properties</span>,
-find the property named, "<span class="code">remote_hosts</span>", and
+find the property named "<span class="code">remote_hosts</span>" and
 add the value of your running JMeter server's IP address.  Multiple such servers can be added, comma-delimited.</p>
 
 <p>Note that you can use the <span class="code">-R</span> <a href="get-started.html#override">command line option</a>
@@ -310,9 +310,9 @@ See also the <span class="code">-X</span> flag (described below)
 <b>Step 3a: Start the JMeter Client from a GUI client to check configuration</b>
 </p>
 
-<p>Now you are ready to start the controlling JMeter client. For MS-Windows, start the client with the script "<span class="code">bin/jmeter.bat</span>".  For UNIX, 
-use the script "<span class="code">bin/jmeter</span>".  You will notice that the Run menu contains two new sub-menus: "Remote Start" and "Remote Stop" 
-(see figure 1). These menus contain the client that you set in the properties file.  Use the remote start and stop instead of the 
+<p>Now you are ready to start the controlling JMeter client. For MS-Windows, start the client with the script "<span class="code">bin/jmeter.bat</span>".  For UNIX,
+use the script "<span class="code">bin/jmeter</span>".  You will notice that the Run menu contains two new sub-menus: "Remote Start" and "Remote Stop"
+(see figure 1). These menus contain the client that you set in the properties file.  Use the remote start and stop instead of the
 normal JMeter start and stop menu items.</p>
 
 <figure>
@@ -322,11 +322,11 @@ normal JMeter start and stop menu items.</p>
 
 
 <p>
-<b>Step 3b: Start the JMeter from a non-GUI Client</b>
+<b>Step 3b: Start the JMeter from a CLI mode Client</b>
 </p>
 
 <p>
-GUI mode should only be used for debugging, as a better alternative, you should start the test on remote server(s) from a non-GUI (command-line) client.
+GUI mode should only be used for debugging, as a better alternative, you should start the test on remote server(s) from a CLI mode (command-line) client.
 The command to do this is:</p>
 
 <pre class="source">
@@ -425,7 +425,7 @@ and follow the instructions below.
 </p>
 
 <p>JMeter uses Remote Method Invocation (RMI) as the remote communication mechanism.  Therefore, you need
-to run the RMI Registry application (which is named, "<span class="code">rmiregistry</span>") that comes with the JDK and is located in the "<span class="code">bin</span>"
+to run the RMI Registry application (which is named "<span class="code">rmiregistry</span>") that comes with the JDK and is located in the "<span class="code">bin</span>"
 directory.  Before running <span class="code">rmiregistry</span>, make sure that the following jars are in your system classpath:
 <ul>
     
@@ -442,8 +442,8 @@ directory.  Before running <span class="code">rmiregistry</span>, make sure that
 </li>
 
 </ul>
-The 
-rmiregistry application needs access to certain JMeter classes.  Run <span class="code">rmiregistry</span> with no parameters.  By default the 
+The
+rmiregistry application needs access to certain JMeter classes.  Run <span class="code">rmiregistry</span> with no parameters.  By default the
 application listens to port <span class="code">1099</span>.</p>
 
 
@@ -557,7 +557,7 @@ $ SERVER_PORT=1664 jmeter-server [other options]
 </pre>
 [N.B. use upper case for the environment variable]
 <p>
-In both cases, the script starts rmiregistry on the specified port, 
+In both cases, the script starts rmiregistry on the specified port,
 and then starts JMeter in server mode, having defined the "<span class="code">server_port</span>" property.
 </p>
 
@@ -601,7 +601,7 @@ There are some JMeter properties that can be set to alter this behaviour.
 <dt>
 <span class="code">DiskStore</span>
 </dt>
-<dd>store samples in a disk file (under <span class="code">java.io.temp</span>) until the end of a run. 
+<dd>store samples in a disk file (under <span class="code">java.io.temp</span>) until the end of a run.
     The serialised data file is deleted on JVM exit.</dd>
     
 <dt>
@@ -629,13 +629,13 @@ There are some JMeter properties that can be set to alter this behaviour.
 <dd>time threshold, default 60000 ms = 60 seconds</dd>
         
 </dl>
-    
+
      See also the Asynch mode, described below.</dd>
     
 <dt>
 <span class="code">Statistical</span>
 </dt>
-<dd>send a summary sample when either the count or time exceeds a threshold. 
+<dd>send a summary sample when either the count or time exceeds a threshold.
     The samples are summarised by thread group name and sample label.
     The following fields are accumulated:
       <ul>
@@ -661,7 +661,7 @@ There are some JMeter properties that can be set to alter this behaviour.
 </li>
       
 </ul>
-    Other fields that vary between samples are lost. 
+    Other fields that vary between samples are lost.
     </dd>
     
 <dt>
@@ -696,7 +696,7 @@ There are some JMeter properties that can be set to alter this behaviour.
 </dt>
 <dd>set the mode parameter to your custom sample sender class name.
     This must implement the interface <span class="code">SampleSender</span> and have a constructor which takes a single
-    parameter of type <span class="code">RemoteSampleListener</span>. 
+    parameter of type <span class="code">RemoteSampleListener</span>.
     </dd>
     
 </dl>
@@ -738,15 +738,15 @@ This is not really a problem as there is always a more efficient way to implemen
 </h2>
   
 <p>
-    For large-scale tests there is a chance that some part of remote servers will be unavailable or down. 
+    For large-scale tests there is a chance that some part of remote servers will be unavailable or down.
     For example, when you use automation script to allocate many cloud machines and use them as generators,
     some of requested machines might fail booting because of cloud's issues.
     Since JMeter 2.13 there are new properties to control this behaviour.
   </p>
   
 <p>
-    First what you might want is to retry initialization attempts in hope that failed nodes just slightly delayed their boot. 
-    To enable retries, you should set <span class="code">client.tries</span> property to total number of connection attempts. 
+    First what you might want is to retry initialization attempts in hope that failed nodes just slightly delayed their boot.
+    To enable retries, you should set <span class="code">client.tries</span> property to total number of connection attempts.
     By default it does only one attempt. To control retry delay, set the <span class="code">client.retries_delay</span> property
     to number of milliseconds to sleep between attempts.
   </p>
@@ -755,6 +755,110 @@ This is not really a problem as there is always a more efficient way to implemen
     Finally, you might still want to run the test with those generators that succeeded initialization and skipping failed nodes.
     To enable that, set the <span class="code">client.continue_on_fail=true</span> property.
   </p>
+
+</div>
+
+
+<div class="subsection">
+<h2 id="security-manager">13.7 Using a security-manager<a class="sectionlink" href="#security-manager" title="Link to here">&para;</a>
+</h2>
+  
+<p>When running JMeter in a distributed environment you have to be aware, that JMeter is basically a remote execution agent on both the server and client side. This could be used by a malicious party to gain further access, once it has compromised one of the JMeter clients or servers. To mitigate this Java has the concept of a security manager that gets asked by the JVM before potential dangerous actions are executed. Those actions could be resolving host names, creating or reading files or executing commands in the OS.</p>
+  
+<p>The security manager can be enabled by setting the Java system properties <span class="code">java.security.manager</span> and <span class="code">java.security.policy</span>. Be sure to have a look at the <a href="https://docs.oracle.com/javase/tutorial/security/tour2/index.html">Quick Tour of Controlling Applications</a>.</p>
+  
+<p>Using the new mechansism of <span class="code">setenv.sh</span> (or <span class="code">setenv.bat</span> under Windows) you can enable the security manager by adding the following code snippet to <span class="code">${JMETER_HOME}/bin/setenv.sh</span>:</p>
+  
+<pre class="source">JVM_ARGS=" \
+   -Djava.security.manager \
+   -Djava.security.policy=${JMETER_HOME}/bin/java.policy \
+   -Djmeter.home=${JMETER_HOME} \
+"</pre>
+  
+<p>The JVM will now add the policies defined in the file <span class="code">${JMETER_HOME}/bin/java.policy</span> to the possibly globally defined policies. If you want your definition to be the only source for policies, use two equal signs instead of one when setting the property <span class="code">java.security.policy</span>.</p>
+  
+<p>The policies will be dependent upon your use case and it might take a while to find the correct restricted and allowed actions. Java can help you find the needed policies with the property <span class="code">java.security.debug</span>. Set it to <span class="code">access</span> and it will log all permissions, that it gets asked to allow. Simply add the following line to your <span class="code">setenv.sh</span>:</p>
+  
+<pre class="source">JVM_ARGS="${JVM_ARGS} -Djava.security.debug=access"</pre>
+  
+<p>It might look a bit strange, that we define a Java system property <span class="code">jmeter.home</span> with the value of <span class="code">${JMETER_HOME}</span>. This variable will be used in the example <span class="code">java.policy</span> to limit the file system access and allow it only to read JMeters configuration and libraries and restrict write access to specific locations, only.</p>
+  
+<p>The following policy definition file has been used for a simple remote test. You will probably have to tweak the policies, when you run more complex scenarios. The test plans are somewhere placed inside the users home directory under a directory called <span class="code">jmeter-testplans</span>. The sample <span class="code">java.policy</span> looks like:</p>
+  
+<pre class="source">
+grant codeBase "file:${jmeter.home}/bin/*" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/jorphan.jar" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/log4j-api-2.11.1.jar" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/log4j-slf4j-impl-2.11.1.jar" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/slf4j-api-1.7.25.jar" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/log4j-core-2.11.1.jar" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/ext/*" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jmeter.home}/lib/httpclient-4.5.6.jar" {
+  permission java.net.SocketPermission "*", "connect,resolve";
+};
+
+grant codeBase "file:${jmeter.home}/lib/darcula.jar" {
+  permission java.lang.RuntimePermission "modifyThreadGroup";
+};
+
+grant codeBase "file:${jmeter.home}/lib/xercesImpl-2.12.0.jar" {
+  permission java.io.FilePermission "${java.home}/lib/xerces.properties", "read";
+};
+
+grant codeBase "file:${jmeter.home}/lib/groovy-all-2.4.15.jar" {
+  permission groovy.security.GroovyCodeSourcePermission "/groovy/script";
+  permission java.lang.RuntimePermission "accessClassInPackage.sun.reflect";
+  permission java.lang.RuntimePermission "getProtectionDomain";
+};
+
+grant {
+  permission java.io.FilePermission "${jmeter.home}/backups", "read,write";
+  permission java.io.FilePermission "${jmeter.home}/backups/*", "read,write,delete";
+  permission java.io.FilePermission "${jmeter.home}/bin/upgrade.properties", "read";
+  permission java.io.FilePermission "${jmeter.home}/lib/ext/-", "read";
+  permission java.io.FilePermission "${jmeter.home}/lib/ext", "read";
+  permission java.io.FilePermission "${jmeter.home}/lib/-", "read";
+  permission java.io.FilePermission "${user.home}/jmeter-testplans/-", "read,write";
+  permission java.io.SerializablePermission "enableSubclassImplementation";
+  permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+  permission java.lang.RuntimePermission "accessClassInPackage.jdk.internal.dynalink.support";
+  permission java.lang.RuntimePermission "accessClassInPackage.sun.awt";
+  permission java.lang.RuntimePermission "accessClassInPackage.sun.misc";
+  permission java.lang.RuntimePermission "accessClassInPackage.sun.swing";
+  permission java.lang.RuntimePermission "accessDeclaredMembers";
+  permission java.lang.RuntimePermission "createClassLoader";
+  permission java.lang.RuntimePermission "createSecurityManager";
+  permission java.lang.RuntimePermission "getClassLoader";
+  permission java.lang.RuntimePermission "getenv.*";
+  permission java.lang.RuntimePermission "nashorn.createGlobal";
+  permission java.util.PropertyPermission "*", "read";
+};
+  </pre>
+  
+<div class="clear"></div>
+<div class="note">The usage of <span class="code">java.security.AllPermission</span> is an easy way to make your test plans work, but it might be a dangerous shortcut on your path to security.</div>
+<div class="clear"></div>
 
 </div>
 
@@ -780,9 +884,6 @@ This is not really a problem as there is always a more efficient way to implemen
 <li class="twitter">
 <a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a>
 </li>
-<li class="gplus">
-<a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a>
-</li>
 </ul>
 </div>
 <a href="#top" id="topButton">Go to top</a>
@@ -791,7 +892,7 @@ This is not really a problem as there is always a more efficient way to implemen
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2018
+            2019
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache

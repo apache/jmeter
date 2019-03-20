@@ -81,6 +81,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.NonTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
@@ -1160,7 +1161,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 if (subNode.isEnabled()) {
                     TestElement element = (TestElement) subNode.getUserObject();
                     if (myClass.isInstance(element)) {
-                        log.debug("Applicable: " + element.getName());
+                        log.debug("Applicable: {}", element.getName());
                         if (ascending) {
                             elements.addFirst(element);
                         } else {
@@ -1437,6 +1438,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 if (subNode.isEnabled()) {
                     TestElement testElement = subNode.getTestElement();
                     if (testElement instanceof TestStateListener) {
+                        TestBeanHelper.prepare(testElement);
                         ((TestStateListener) testElement).testStarted();
                     }
                 }
@@ -1485,7 +1487,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         case USER_KEYSTORE:
             storePassword = JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD); // $NON-NLS-1$
             keyPassword = JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD); // $NON-NLS-1$
-            log.info("HTTP(S) Test Script Recorder will use the keystore '"+ CERT_PATH_ABS + "' with the alias: '" + CERT_ALIAS + "'");
+            log.info("HTTP(S) Test Script Recorder will use the keystore '{}' with the alias: '{}'", CERT_PATH_ABS, CERT_ALIAS);
             initUserKeyStore();
             break;
         case NONE:
@@ -1530,7 +1532,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                         break; // cannot continue
                     } else {
                         caCert.checkValidity(new Date(System.currentTimeMillis()+DateUtils.MILLIS_PER_DAY));
-                        log.info("Valid alias found for " + alias);
+                        log.info("Valid alias found for {}", alias);
                     }
                 }
             } catch (IOException e) { // store is faulty, we need to recreate it

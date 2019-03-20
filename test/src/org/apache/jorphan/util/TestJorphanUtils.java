@@ -334,4 +334,27 @@ public class TestJorphanUtils {
                 JOrphanUtils.replaceAllWithRegex("TO1232a123ti${var2}","123", "${var}", true));
 
     }
+
+    @Test
+    public void testReplaceValueWithNullValue() {
+        Assert.assertThat(Integer.valueOf(JOrphanUtils.replaceValue(null, null, false, null, null)),
+                CoreMatchers.is(Integer.valueOf(0)));
+    }
+
+    @Test
+    public void testReplaceValueWithValidValueAndValidSetter() {
+        Holder h = new Holder();
+        Assert.assertThat(Integer.valueOf(JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", s -> h.value = s)),
+                CoreMatchers.is(Integer.valueOf(1)));
+        Assert.assertThat(h.value, CoreMatchers.is("${port}"));
+    }
+
+    private static class Holder {
+        String value;
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testReplaceValueWithNullSetterThatGetsCalled() {
+        JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", null);
+    }
 }

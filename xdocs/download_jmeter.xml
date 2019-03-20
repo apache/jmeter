@@ -18,7 +18,7 @@
 
 <!DOCTYPE document
 [
-<!ENTITY release '5.0'>
+<!ENTITY release '5.1.1'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
     
@@ -78,7 +78,7 @@
       <a href="https://www.apache.org/dist/jmeter/KEYS">KEYS</a>
       </p>
     </section>
-    <section name="Apache JMeter &release; (Requires Java 8 or 9.)">
+    <section name="Apache JMeter &release; (Requires Java 8+)">
       <subsection name="Binaries" anchor="binaries">
         <table>
           <tr>

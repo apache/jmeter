@@ -298,7 +298,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                model.addRow(clazz.newInstance());
+                model.addRow(clazz.getDeclaredConstructor().newInstance());
                 
                 removeButton.setEnabled(true);
                 clearButton.setEnabled(true);
@@ -321,7 +321,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
                 for (String clipboardLine : clipboardLines) {
                     String[] columns = clipboardLine.split("\t"); // $NON-NLS-1$
 
-                    model.addRow(clazz.newInstance());
+                    model.addRow(clazz.getDeclaredConstructor().newInstance());
                     
                     for (int i=0; i < columns.length; i++) {
                         model.setValueAt(columns[i], model.getRowCount() - 1, i);

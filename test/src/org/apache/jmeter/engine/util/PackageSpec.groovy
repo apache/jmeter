@@ -17,19 +17,19 @@
 
 package org.apache.jmeter.engine.util
 
-import org.apache.jmeter.junit.spock.JMeterSpec
 import org.apache.jmeter.samplers.SampleResult
 import org.apache.jmeter.testelement.property.JMeterProperty
 import org.apache.jmeter.testelement.property.StringProperty
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
+import spock.lang.Specification
 import spock.lang.Unroll
 
 /**
  * To run this test stand-alone, ensure that ApacheJMeter_functions.jar is on the classpath,
  * as it is needed to resolve the functions.
  */
-class PackageSpec extends JMeterSpec {
+class PackageSpec extends Specification {
 
     def transformer
     def jmctx

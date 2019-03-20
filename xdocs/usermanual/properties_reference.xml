@@ -535,6 +535,18 @@ JMETER-SERVER</source>
     Bigger results will be clipped.<br/>
     Defaults to: <code>327678</code> (bytes)
 </property>
+<property name="httpclient4.deflate_relax_mode">
+    Ignore EOFException that some edgy application may emit to signal end of Deflated stream.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="httpclient4.gzip_relax_mode">
+    Ignore EOFException that some edgy application may emit to signal end of GZipped stream.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="httpclient4.default_user_agent_disabled">
+    If true, default HC4 User-Agent (Apache-HttpClient/X.Y.Z (Java/A.B.C_D)) will not be added.<br/>
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 
@@ -724,6 +736,11 @@ JMETER-SERVER</source>
     Set this to a value less than zero to disable the background thread.<br/>
     Defaults to: <code>5000</code>
 </property>
+<property name="subresults.disable_renaming">
+    Since version 5.0 JMeter has a new SubResult Naming Policy which numbers subresults by default<br/>
+    This property if set to <code>true</code> discards renaming policy. This can be required if you're using JMeter for functional testing.<br/>
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.17 Upgrade" anchor="upgrade">
@@ -788,7 +805,7 @@ JMETER-SERVER</source>
 <property name="proxy.binary.types">
     Binary <code>content-type</code> handling.<br/>
     These <code>content-types</code> will be handled by saving the request in a file.<br/>
-    Defaults to: <code>application/x-amf,application/x-java-serialized-object</code>
+    Defaults to: <code>application/x-amf,application/x-java-serialized-object,binary/octet-stream</code>
 </property>
 <property name="proxy.binary.directory">
     The files will be saved in this directory.<br/>
@@ -1009,7 +1026,7 @@ JMETER-SERVER</source>
 </property>
 <property name="jdbc.config.jdbc.driver.class">
     List of JDBC driver class name<br/>
-    Defaults to: <source>com.mysql.jdbc.Driver|org.postgresql.Driver|oracle.jdbc.OracleDriver|com.ingres.jdbc.IngresDriver|com.microsoft.sqlserver.jdbc.SQLServerDriver|com.microsoft.jdbc.sqlserver.SQLServerDriver|org.apache.derby.jdbc.ClientDriver|org.hsqldb.jdbc.JDBCDriver|com.ibm.db2.jcc.DB2Driver|org.apache.derby.jdbc.ClientDriver|org.h2.Driver|org.firebirdsql.jdbc.FBDrivery|org.mariadb.jdbc.Driver|org.sqlite.JDBC|net.sourceforge.jtds.jdbc.Driver</source>
+    Defaults to: <source>com.mysql.jdbc.Driver|org.postgresql.Driver|oracle.jdbc.OracleDriver|com.ingres.jdbc.IngresDriver|com.microsoft.sqlserver.jdbc.SQLServerDriver|com.microsoft.jdbc.sqlserver.SQLServerDriver|org.apache.derby.jdbc.ClientDriver|org.hsqldb.jdbc.JDBCDriver|com.ibm.db2.jcc.DB2Driver|org.apache.derby.jdbc.ClientDriver|org.h2.Driver|org.firebirdsql.jdbc.FBDriver|org.mariadb.jdbc.Driver|org.sqlite.JDBC|net.sourceforge.jtds.jdbc.Driver</source>
 </property>
 </properties>
 </section>
@@ -1053,12 +1070,12 @@ JMETER-SERVER</source>
     Defaults to: <code>2</code></property>
 </properties>
 </section>
-<section name="&sect-num;.26 Summariser - Generate Summary Results - configuration (mainly applies to non-GUI mode)" anchor="summariser">
+<section name="&sect-num;.26 Summariser - Generate Summary Results - configuration (mainly applies to CLI mode)" anchor="summariser">
 <properties>
 <property name="summariser.name">
-    Comment the following property to disable the default non-GUI summariser.<br/>
+    Comment the following property to disable the default CLI mode summariser.<br/>
     [or change the value to rename it]<br/>
-    <note>Applies to non-GUI mode only</note>
+    <note>Applies to CLI mode only</note>
     Defaults to: <code>summary</code>
 </property>
 <property name="summariser.interval">
@@ -1282,6 +1299,10 @@ JMETER-SERVER</source>
 </section>
 <section name="&sect-num;.35 Miscellaneous configuration" anchor="miscellaneous">
 <properties>
+<property name="cssselector.parser.cache.size">
+    Size of cache used by <code>CSS Selector Extractor</code> (for JODD implementation only) to store parsed CSS Selector expressions.<br/>
+    Defaults to: <code>400</code>
+</property>
 <property name="resultcollector.action_if_file_exists">
     Used to control what happens when you start a test and have listeners that could overwrite existing result files.<br/>
     Possible values:
@@ -1396,14 +1417,13 @@ JMETER-SERVER</source>
     Defaults to: <code>false</code>
 </property>
 <property name="jmeterengine.stopfail.system.exit">
-    Whether to call <code>System.exit(1)</code> on failure to stop threads in
-    non-GUI mode.<br/>
+    Whether to call <code>System.exit(1)</code> on failure to stop threads in CLI mode.<br/>
     This only takes effect if the test was explicitly requested to stop.<br/>
     If this is disabled, it may be necessary to kill the JVM externally.<br/>
     Defaults to: <code>true</code>
 </property>
 <property name="jmeterengine.force.system.exit">
-    Whether to force call <code>System.exit(0)</code> at end of test in non-GUI mode,
+    Whether to force call <code>System.exit(0)</code> at end of test in CLI mode,
     even if there were no failures and the test was not explicitly asked to stop.<br/>
     Without this, the JVM may never exit if there are other threads spawned by
     the test which never exit.<br/>
@@ -1416,7 +1436,7 @@ JMETER-SERVER</source>
     Defaults to: <code>2000</code>
 </property>
 <property name="jmeterengine.nongui.port">
-    If running non-GUI, then JMeter listens on the following port for a shutdown message.<br/>
+    If running CLI mode, then JMeter listens on the following port for a shutdown message.<br/>
     To disable, set the port to <code>1000</code> or less.<br/>
     Defaults to: <code>4445</code>
 </property>
@@ -1530,7 +1550,7 @@ JMETER-SERVER</source>
 </property>
 <property name="classfinder.functions.contain">
     The classpath finder currently needs to load every single JMeter class to find the classes it needs.<br/>
-    For non-GUI mode, it's only necessary to scan for Function classes, but all classes are still loaded.<br/>
+    For CLI mode, it's only necessary to scan for Function classes, but all classes are still loaded.<br/>
     All current Function classes include "<code>.function.</code>" in their name, and none include
     "<code>.gui.</code>" in the name, so the number of unwanted classes loaded can be reduced by
     checking for these. However, if a valid function class name does not match these restrictions,
@@ -1751,6 +1771,10 @@ JMETER-SERVER</source>
     End date of report using date_format property.<br/>
     Defaults to: nothing
 </property>
+<property name="generate_report_ui.generation_timeout">
+    Timeout in milliseconds for Report generation when using Tools &gt; Generate HTML report.<br/>
+    Defaults to: 120000
+</property>
 </properties>
 </section>
 <section name="&sect-num;.38 Additional property files to load" anchor="properties">
@@ -1900,6 +1924,16 @@ JMETER-SERVER</source>
     Used by JSR-223 elements.<br/>
     Size of compiled scripts cache.<br/>
     Defaults to: <code>100</code></property>
+</properties>
+</section>
+
+<section name="&sect-num;.45 Documentation generation" anchor="docgeneration">
+<description>Advanced properties for documentation generation</description>
+<properties>
+    <property name="docgeneration.schematic_xsl">
+    Path to XSL file used to generate Schematic View of Test Plan.<br/>
+    When empty, JMeter will use the embedded one in src/core/org/apache/jmeter/gui/action/schematic.xsl<br/>
+    No default value</property>
 </properties>
 </section>
 <!-- 

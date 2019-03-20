@@ -132,6 +132,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String PORT = "HTTPSampler.port"; // $NON-NLS-1$
 
+    public static final String PROXYSCHEME = "HTTPSampler.proxyScheme"; // $NON-NLS-1$
+
     public static final String PROXYHOST = "HTTPSampler.proxyHost"; // $NON-NLS-1$
 
     public static final String PROXYPORT = "HTTPSampler.proxyPort"; // $NON-NLS-1$
@@ -825,6 +827,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return getPropertyAsInt(RESPONSE_TIMEOUT, 0);
     }
 
+    public String getProxyScheme() {
+        return getPropertyAsString(PROXYSCHEME, HTTPHCAbstractImpl.PROXY_SCHEME);
+    }
+
     public String getProxyHost() {
         return getPropertyAsString(PROXYHOST);
     }
@@ -1005,7 +1011,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @throws MalformedURLException if url is malformed
      */
     public URL getUrl() throws MalformedURLException {
-        StringBuilder pathAndQuery = new StringBuilder(100);
         String path = this.getPath();
         // Hack to allow entire URL to be provided in host field
         if (path.startsWith(HTTP_PREFIX)
@@ -1015,6 +1020,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         String domain = getDomain();
         String protocol = getProtocol();
         String method = getMethod();
+        StringBuilder pathAndQuery = new StringBuilder(100);
         if (PROTOCOL_FILE.equalsIgnoreCase(protocol)) {
             domain = null; // allow use of relative file URLs
         } else {
@@ -1071,7 +1077,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         
         CollectionProperty arguments = getArguments().getArguments();
         // Optimisation : avoid building useless objects if empty arguments
-        if(arguments.size() == 0) {
+        if(arguments.isEmpty()) {
             return "";
         }
         String lContentEncoding = contentEncoding;
@@ -1100,7 +1106,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 item = new HTTPArgument((Argument) objectValue);
             }
             final String encodedName = item.getEncodedName();
-            if (encodedName.length() == 0) {
+            if (encodedName.isEmpty()) {
                 continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
             }
             if (!first) {
@@ -2088,40 +2094,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         int totalReplaced = 0;
         for (JMeterProperty jMeterProperty : getArguments()) {
             HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
-            String value = arg.getValue();
-            if(!StringUtils.isEmpty(value)) {
-                Object[] result = JOrphanUtils.replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
-                // check if there is anything to replace
-                int nbReplaced = ((Integer)result[1]).intValue();
-                if (nbReplaced>0) {
-                    String replacedText = (String) result[0];
-                    arg.setValue(replacedText);
-                    totalReplaced += nbReplaced;
-                }
-            }
-        }
-        String value = getPath();
-        if(!StringUtils.isEmpty(value)) {
-            Object[] result = JOrphanUtils.replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
-            // check if there is anything to replace
-            int nbReplaced = ((Integer)result[1]).intValue();
-            if (nbReplaced>0) {
-                String replacedText = (String) result[0];
-                setPath(replacedText);
-                totalReplaced += nbReplaced;
-            }
+            totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, arg.getValue(), arg::setValue);
         }
 
-        if(!StringUtils.isEmpty(getDomain())) {
-            Object[] result = JOrphanUtils.replaceAllWithRegex(getDomain(), regex, replaceBy, caseSensitive);            
-            // check if there is anything to replace
-            int nbReplaced = ((Integer)result[1]).intValue();
-            if (nbReplaced>0) {
-                String replacedText = (String) result[0];
-                setDomain(replacedText);
-                totalReplaced += nbReplaced;
-            }
+        totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, getPath(), this::setPath);
+        totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, getDomain(), this::setDomain);
+        for (String key: Arrays.asList(PORT, PROTOCOL)) {
+            totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, getPropertyAsString(key), s -> setProperty(key, s));
         }
+
         return totalReplaced;
     }
 }

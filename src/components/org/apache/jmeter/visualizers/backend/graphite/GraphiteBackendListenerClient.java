@@ -340,7 +340,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             }
         }
         Class<?> clazz = Class.forName(graphiteMetricsSenderClass);
-        this.graphiteMetricsManager = (GraphiteMetricsSender) clazz.newInstance();
+        this.graphiteMetricsManager = (GraphiteMetricsSender) clazz.getDeclaredConstructor().newInstance();
         graphiteMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
         if (useRegexpForSamplersList) {
             pattern = Pattern.compile(samplersList);

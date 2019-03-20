@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +52,7 @@ public class KeyToolUtils {
 
     /** Name of property that can be used to override the default keytool location */
     private static final String KEYTOOL_DIRECTORY = "keytool.directory"; // $NON-NLS-1$
-    
+
     private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=JMeter Intermediate CA for recording (INSTALL ONLY IF IT S YOURS)"; // $NON-NLS-1$
 
     public static final String ROOT_CACERT_CRT_PFX = "ApacheJMeterTemporaryRootCA"; // $NON-NLS-1$ (do not change)
@@ -71,7 +72,7 @@ public class KeyToolUtils {
 
     static {
         StringBuilder sb = new StringBuilder();
-        
+
         sb.append("CN=_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)"); // $NON-NLS-1$
         String userName = System.getProperty("user.name"); // $NON-NLS-1$
         userName = userName.replace('\\','/'); // Backslash is special (Bugzilla 56178)
@@ -125,7 +126,7 @@ public class KeyToolUtils {
             sb.append(value);
         }
     }
-    
+
     /**
      * Generate a self-signed keypair using the algorithm "RSA".
      *
@@ -255,7 +256,7 @@ public class KeyToolUtils {
         KeyToolUtils.keytool("-exportcert", keystore, password, ROOTCA_ALIAS, null, null, "-rfc", "-file", ROOT_CACERT_CRT);
         // Copy for Opera
         if(caCertCrt.exists() && caCertCrt.canRead()) {
-            FileUtils.copyFile(caCertCrt, caCertUsr);            
+            FileUtils.copyFile(caCertCrt, caCertUsr);
         } else {
             log.warn("Failed creating "+caCertCrt.getAbsolutePath()+", check 'keytool' utility in path is available and points to a JDK >= 7");
         }
@@ -281,8 +282,8 @@ public class KeyToolUtils {
 
     private static void generateSignedCert(File keystore, String password,
             int validity, String alias, String subject) throws IOException {
-        String dname = "cn=" + subject + ", o=JMeter Proxy (TEMPORARY TRUST ONLY)";
-        String ext = "san=dns:" + subject;
+        String dname = "cn=" + guardSubjectName(subject) + ", o=JMeter Proxy (TEMPORARY TRUST ONLY)";
+        String ext = "san=" + chooseExtension(subject);
         KeyToolUtils.genkeypair(keystore, alias, password, validity, dname, ext);
         //rem generate cert for DOMAIN using CA and import it
 
@@ -299,6 +300,34 @@ public class KeyToolUtils {
         // import the certificate
         InputStream certIn = new ByteArrayInputStream(certOut.toByteArray());
         KeyToolUtils.keytool("-importcert", keystore, password, alias, certIn, null, "-noprompt");
+    }
+
+    /**
+     * The subject name of an certificate must not start with a number or else the keytool will bark.
+     * To mitigate this prefix the argument with a word, if it starts with a number.
+     *
+     * @param subject name of the host or an IP address
+     * @return a string that is safe to use as subject name
+     */
+    private static String guardSubjectName(String subject) {
+        if (NumberUtils.isDigits(subject.substring(0,1))) {
+            return "ip" + subject;
+        }
+        return subject;
+    }
+
+    /**
+     * The SAN (subject alternative name) includes the IP address or hostname of the service, but the types
+     * are different for IP address and hostname.
+     *
+     * @param subject name of the host or its IP address
+     * @return prefixed extension
+     */
+    private static String chooseExtension(String subject) {
+        if (NumberUtils.isDigits(subject.substring(0,1))) {
+            return "ip:" + subject;
+        }
+        return "dns:" + subject;
     }
 
     /**
@@ -339,7 +368,7 @@ public class KeyToolUtils {
             if (exitVal != 0) {
                 throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
             }
-        } catch (InterruptedException e) { // NOSONAR 
+        } catch (InterruptedException e) { // NOSONAR
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
     }
