@@ -101,23 +101,23 @@ public class TestTransactionController extends JMeterTestCase {
 
 
         // transactioncontroller.use_comment_on_all value defined as "false" per default
-        JMeterUtils.setProperty("transactioncontroller.use_comment_on_all", "false");
+        JMeterUtils.setProperty("transactioncontroller.use_comments_on_all", "false");
 
         TestSampleListener listener1 = new TestSampleListener();
         TestSampleListener listener2 = new TestSampleListener();
         TestSampleListener listener3 = new TestSampleListener();
 
         TransactionController transactionController1 = new TransactionController();
-        transactionController1.setComment("Test with default use of comment");
+        transactionController1.setComment("Test with default use of comments");
         transactionController1.setGenerateParentSample(true);
 
         TransactionController transactionController2 = new TransactionController();
-        transactionController2.setComment("Test with forced use of comment");
+        transactionController2.setComment("Test with forced use of comments");
         transactionController2.setGenerateParentSample(true);
         transactionController2.setUseComment(true);
 
         TransactionController transactionController3 = new TransactionController();
-        transactionController3.setComment("Test with discarded use of comment");
+        transactionController3.setComment("Test with discarded use of comments");
         transactionController3.setGenerateParentSample(true);
         transactionController3.setUseComment(false);
 
@@ -156,10 +156,10 @@ public class TestTransactionController extends JMeterTestCase {
         thread.setOnErrorStopThread(true);
         thread.run();
 
-        assertEquals("First TC must discard 'Comment' value from its SampleResult", "", listener1.events.get(0).getResult().getSampleComment());
-        assertEquals("Second TC must force 'Comment' value from its SampleResult", "Test with forced use of comment", 
+        assertEquals("First TC must discard 'Comments' value from its SampleResult", "", listener1.events.get(0).getResult().getSampleComment());
+        assertEquals("Second TC must force 'Comments' value from its SampleResult", "Test with forced use of comments", 
                 listener2.events.get(0).getResult().getSampleComment());
-        assertEquals("Third TC must discard 'Comment' value from its SampleResult", "", listener3.events.get(0).getResult().getSampleComment());
+        assertEquals("Third TC must discard 'Comments' value from its SampleResult", "", listener3.events.get(0).getResult().getSampleComment());
     }
     
     @Test
@@ -168,23 +168,23 @@ public class TestTransactionController extends JMeterTestCase {
         JMeterUtils.getJMeterProperties();
 
         // transactioncontroller.use_comment_on_all value defined as "true"
-        JMeterUtils.setProperty("transactioncontroller.use_comment_on_all", "true");
+        JMeterUtils.setProperty("transactioncontroller.use_comments_on_all", "true");
 
         TestSampleListener listener1 = new TestSampleListener();
         TestSampleListener listener2 = new TestSampleListener();
         TestSampleListener listener3 = new TestSampleListener();
         
         TransactionController transactionController1 = new TransactionController();
-        transactionController1.setComment("Test with default use of comment");
+        transactionController1.setComment("Test with default use of comments");
         transactionController1.setGenerateParentSample(true);
 
         TransactionController transactionController2 = new TransactionController();
-        transactionController2.setComment("Test with forced use of comment");
+        transactionController2.setComment("Test with forced use of comments");
         transactionController2.setGenerateParentSample(true);
         transactionController2.setUseComment(true);
 
         TransactionController transactionController3 = new TransactionController();
-        transactionController3.setComment("Test with discarded use of comment");
+        transactionController3.setComment("Test with discarded use of comments");
         transactionController3.setGenerateParentSample(true);
         transactionController3.setUseComment(false);
 
@@ -223,11 +223,11 @@ public class TestTransactionController extends JMeterTestCase {
         thread.setOnErrorStopThread(true);
         thread.run();
 
-        assertEquals("First TC must force 'Comment' value from its SampleResult", "Test with default use of comment", 
+        assertEquals("First TC must force 'Comments' value from its SampleResult", "Test with default use of comments", 
                 listener1.events.get(0).getResult().getSampleComment());
-        assertEquals("Second TC must force 'Comment' value from its SampleResult", "Test with forced use of comment", 
+        assertEquals("Second TC must force 'Comments' value from its SampleResult", "Test with forced use of comments", 
                 listener2.events.get(0).getResult().getSampleComment());
-        assertEquals("Third TC must discard 'Comment' value from its SampleResult", "", listener3.events.get(0).getResult().getSampleComment());
+        assertEquals("Third TC must discard 'Comments' value from its SampleResult", "", listener3.events.get(0).getResult().getSampleComment());
     }
     public class TestSampleListener extends ResultCollector implements SampleListener {
         public List<SampleEvent> events = new ArrayList<>();

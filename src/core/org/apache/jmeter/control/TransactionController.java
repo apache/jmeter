@@ -57,7 +57,7 @@ public class TransactionController extends GenericController implements SampleLi
 
     private static final String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
     
-    public static final String USE_COMMENT = "TransactionController.useComment";// $NON-NLS-1$
+    public static final String USE_COMMENTS = "TransactionController.useComments";// $NON-NLS-1$
     
     private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
 
@@ -159,18 +159,18 @@ public class TransactionController extends GenericController implements SampleLi
                 log.debug("Start of transaction {}", getName());
             }
             
-            String useCommentOnAllTCs = JMeterUtils.getPropDefault(
-                    "transactioncontroller.use_comment_on_all", //$NON-NLS-1$
+            String useCommentsOnAllTCs = JMeterUtils.getPropDefault(
+                    "transactioncontroller.use_comments_on_all", //$NON-NLS-1$
                     "false"); //$NON-NLS-1$
-            String comment = getComment();
-            if (getUseComment().isEmpty()) { // Let global property decide
-                if (!useCommentOnAllTCs.equalsIgnoreCase("true")) { // ignore comment value in all SampleResults
-                    comment = "";
+            String comments = getComment();
+            if (getUseComments().isEmpty()) { // Let global property decide
+                if (!useCommentsOnAllTCs.equalsIgnoreCase("true")) { // ignore comment value in all SampleResults
+                    comments = "";
                 }
-            } else if (!getUseComment().equalsIgnoreCase("true")) { // force to ignore this value in particular
-                comment = "";
+            } else if (!getUseComments().equalsIgnoreCase("true")) { // force to ignore this value in particular
+                comments = "";
             }
-            transactionSampler = new TransactionSampler(this, getName(), comment);
+            transactionSampler = new TransactionSampler(this, getName(), comments);
         }
 
         // Sample the children of the transaction
@@ -212,18 +212,18 @@ public class TransactionController extends GenericController implements SampleLi
             res = new SampleResult();
             res.setSampleLabel(getName());
             
-            String useCommentOnAllTCs = JMeterUtils.getPropDefault(
-                    "transactioncontroller.use_comment_on_all", //$NON-NLS-1$
+            String useCommentsOnAllTCs = JMeterUtils.getPropDefault(
+                    "transactioncontroller.use_comments_on_all", //$NON-NLS-1$
                     "false"); //$NON-NLS-1$
-            String comment = getComment();
-            if (getUseComment().isEmpty()) { // Let global property decide
-                if (!useCommentOnAllTCs.equalsIgnoreCase("true")) { // ignore comment value in all SampleResults
-                    comment = "";
+            String comments = getComment();
+            if (getUseComments().isEmpty()) { // Let global property decide
+                if (!useCommentsOnAllTCs.equalsIgnoreCase("true")) { // ignore comments value in all SampleResults
+                    comments = "";
                 }
-            } else if (!getUseComment().equalsIgnoreCase("true")) { // force to ignore this value in particular
-                comment = "";
+            } else if (!getUseComments().equalsIgnoreCase("true")) { // force to ignore this value in particular
+                comments = "";
             }
-            res.setSampleComment(comment);
+            res.setSampleComment(comments);
             
             // Assume success
             res.setSuccessful(true);
@@ -377,11 +377,11 @@ public class TransactionController extends GenericController implements SampleLi
         return getPropertyAsBoolean(INCLUDE_TIMERS, DEFAULT_VALUE_FOR_INCLUDE_TIMERS);
     }
     
-    public void setUseComment(boolean useComment) {
-        setProperty(USE_COMMENT, Boolean.toString(useComment), "");
+    public void setUseComment(boolean useComments) {
+        setProperty(USE_COMMENTS, Boolean.toString(useComments), "");
     }
     
-    public String getUseComment() {
-        return getPropertyAsString(USE_COMMENT);
+    public String getUseComments() {
+        return getPropertyAsString(USE_COMMENTS);
     }
 }

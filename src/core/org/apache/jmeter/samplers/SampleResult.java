@@ -167,7 +167,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private String label = "";// Never return null
     
-    private String comment = "";// Never return null
+    private String comments = "";// Never return null
 
     /** Filename used by ResultSaver */
     private String resultFileName = "";
@@ -318,7 +318,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         groupThreads = res.groupThreads;//OK
         idleTime = res.idleTime;
         label = res.label;//OK
-        comment = res.comment;//OK
+        comments = res.comments;//OK
         latency = res.latency;
         connectTime = res.connectTime;
         location = res.location;//OK
@@ -594,12 +594,12 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         this.label = label;
     }
     
-    public String getSampleComment() {
-        return comment;
+    public String getSampleComments() {
+        return comments;
     }
 
-    public void setSampleComment(String comment) {
-        this.comment = comment;
+    public void setSampleComments(String comments) {
+        this.comments = comments;
     }
 
     public void addAssertionResult(AssertionResult assertResult) {
