@@ -223,7 +223,7 @@ public class TransactionController extends GenericController implements SampleLi
             } else if (!getUseComments().equalsIgnoreCase("true")) { // force to ignore this value in particular
                 comments = "";
             }
-            res.setSampleComment(comments);
+            res.setSampleComments(comments);
             
             // Assume success
             res.setSuccessful(true);
