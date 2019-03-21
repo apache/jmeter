@@ -172,7 +172,7 @@ public class TestTransactionController extends JMeterTestCase {
 
         // transactioncontroller.use_comment_on_all value defined as "true"
         JMeterUtils.setProperty("transactioncontroller.use_comments_on_all", "true");
-        testLog.info("\"transactioncontroller.use_comments_on_all\" set to \"true\"");
+        testLog.debug("\"transactioncontroller.use_comments_on_all\" set to \"true\"");
         assertEquals("\"transactioncontroller.use_comments_on_all\" set to \"true\"", "true", 
                 JMeterUtils.getProperty("transactioncontroller.use_comments_on_all"));
 
