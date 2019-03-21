@@ -102,6 +102,9 @@ public class TestTransactionController extends JMeterTestCase {
 
         // transactioncontroller.use_comment_on_all value defined as "false" per default
         JMeterUtils.setProperty("transactioncontroller.use_comments_on_all", "false");
+        testLog.debug("\"transactioncontroller.use_comments_on_all\" set to \"false\"");
+        assertEquals("\"transactioncontroller.use_comments_on_all\" set to \"true\"", "false", 
+                JMeterUtils.getProperty("transactioncontroller.use_comments_on_all"));
 
         TestSampleListener listener1 = new TestSampleListener();
         TestSampleListener listener2 = new TestSampleListener();
@@ -169,6 +172,9 @@ public class TestTransactionController extends JMeterTestCase {
 
         // transactioncontroller.use_comment_on_all value defined as "true"
         JMeterUtils.setProperty("transactioncontroller.use_comments_on_all", "true");
+        testLog.debug("\"transactioncontroller.use_comments_on_all\" set to \"true\"");
+        assertEquals("\"transactioncontroller.use_comments_on_all\" set to \"true\"", "true", 
+                JMeterUtils.getProperty("transactioncontroller.use_comments_on_all"));
 
         TestSampleListener listener1 = new TestSampleListener();
         TestSampleListener listener2 = new TestSampleListener();
