@@ -68,7 +68,7 @@ public abstract class SSLManager {
     private JmeterKeyStore keyStore;
 
     /** Cache the TrustStore instance - null if no truststore name was provided */
-    private volatile KeyStore trustStore = null;
+    private KeyStore trustStore = null;
     // Have we yet tried to load the truststore?
     private volatile boolean truststoreLoaded=false;
 
