@@ -133,7 +133,7 @@ public abstract class SSLManager {
                         if (log.isInfoEnabled()) {
                             log.info(
                                     "Total of {} aliases loaded OK from keystore",
-                                    keyStore.getAliasCount());
+                                    Integer.valueOf(keyStore.getAliasCount()));
                         }
                     }
                 } else {
@@ -207,7 +207,7 @@ public abstract class SSLManager {
             if (fileName == null) {
                 return null;
             }
-            log.info("TrustStore Location: " + fileName);
+            log.info("TrustStore Location: {}", fileName);
 
             try {
                 this.trustStore = KeyStore.getInstance("JKS");
