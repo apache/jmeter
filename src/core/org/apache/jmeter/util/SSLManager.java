@@ -65,10 +65,10 @@ public abstract class SSLManager {
     private static final boolean IS_SSL_SUPPORTED = true;
 
     /** Cache the KeyStore instance */
-    private volatile JmeterKeyStore keyStore;
+    private JmeterKeyStore keyStore;
 
     /** Cache the TrustStore instance - null if no truststore name was provided */
-    private KeyStore trustStore = null;
+    private volatile KeyStore trustStore = null;
     // Have we yet tried to load the truststore?
     private volatile boolean truststoreLoaded=false;
 
@@ -282,7 +282,7 @@ public abstract class SSLManager {
      *            name of the default key, if empty the first key will be used
      *            as default key
      */
-    public void configureKeystore(boolean preload, int startIndex, int endIndex, String clientCertAliasVarName) {
+    public synchronized void configureKeystore(boolean preload, int startIndex, int endIndex, String clientCertAliasVarName) {
         this.keystoreAliasStartIndex = startIndex;
         this.keystoreAliasEndIndex = endIndex;
         this.clientCertAliasVarName = clientCertAliasVarName;
@@ -294,7 +294,7 @@ public abstract class SSLManager {
     /**
      * Destroy Keystore
      */
-    public void destroyKeystore() {
+    public synchronized void destroyKeystore() {
         keyStore=null;
     }
 }
