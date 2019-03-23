@@ -83,7 +83,7 @@ Before we dive into the step-by-step instructions, it's a good idea to define th
   <li>Open <code>jmeter.properties</code> in a text editor</li>
   <li>Edit the line <code>remote_hosts=127.0.0.1</code></li>
   <li>Add the IP address. For example, if I have JMeter server running on <code>192.168.0.10</code>,
-    &hellip;, <code>192.168.0.15</code>, the entry would like like this:
+    &hellip;, <code>192.168.0.15</code>, the entry would look like this:
     <source>remote_hosts=192.168.0.10,192.168.0.11,192.168.0.12,192.168.0.13,192.168.0.14</source>
   </li>
   <li>Start JMeter.</li>
