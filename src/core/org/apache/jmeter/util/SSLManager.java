@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  * SSLManager will try to automatically select the client certificate for you,
  * but if it can't make a decision, it will pop open a dialog asking you for
  * more information.
- *
+ * <p>
  * TODO? - N.B. does not currently allow the selection of a client certificate.
  *
  */
@@ -185,17 +185,21 @@ public abstract class SSLManager {
      * Opens and initializes the TrustStore.
      *
      * There are 3 possibilities:
-     * - no truststore name provided, in which case the default Java truststore should be used
-     * - truststore name is provided, and loads OK
-     * - truststore name is provided, but is not found or does not load OK, in which case an empty
-     * truststore is created
+     * <ul>
+     * <li>no truststore name provided, in which case the default Java truststore
+     * should be used</li>
+     * <li>truststore name is provided, and loads OK</li>
+     * <li>truststore name is provided, but is not found or does not load OK, in
+     * which case an empty
+     * truststore is created</li>
+     * </ul>
+     * If the KeyStore object cannot be created, then this is currently treated the
+     * same as if no truststore name was provided.
      *
-     * If the KeyStore object cannot be created, then this is currently treated the same
-     * as if no truststore name was provided.
-     *
-     * @return truststore
-     * - null: use Java truststore
-     * - otherwise, the truststore, which may be empty if the file could not be loaded.
+     * @return
+     *         {@code null} when Java truststore should be used.
+     *         Otherwise the truststore, which may be empty if the file could not be
+     *         loaded.
      *
      */
     protected KeyStore getTrustStore() {
