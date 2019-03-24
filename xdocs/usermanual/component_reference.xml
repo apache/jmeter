@@ -4080,6 +4080,8 @@ This component is typically used in HTTPS scenarios where you don't want to take
     </ul>
 </li>
 </ol>
+<p>To use PKCS11 as the source for the store, you need to set <code>javax.net.ssl.keyStoreType</code> to <code>PKCS11</code>
+and <code>javax.net.ssl.keyStore</code> to <code>NONE</code>.</p>
 </description>
 
 <properties>
