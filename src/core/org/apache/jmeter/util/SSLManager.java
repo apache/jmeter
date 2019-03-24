@@ -26,10 +26,13 @@ import java.net.HttpURLConnection;
 import java.security.KeyStore;
 import java.security.Provider;
 import java.security.Security;
+import java.util.Arrays;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
 import org.slf4j.Logger;
@@ -123,10 +126,16 @@ public abstract class SSLManager {
                 throw new IllegalArgumentException("Could not create keystore: "+e.getMessage(), e);
             }
 
-            try {
-                File initStore = new File(fileName);
+           try {
 
-                if (fileName.length() >0 && initStore.exists()) {
+              // The string 'NONE' is used for the keystore location when using PKCS11
+              // https://docs.oracle.com/javase/8/docs/technotes/guides/security/p11guide.html#JSSE
+              if ("NONE".equalsIgnoreCase(fileName)) {
+                 this.keyStore.load(null, Validate.notNull(getPassword(), "Password should not be null"));
+                 log.info("Total of {} aliases loaded OK from PKCS11", Integer.valueOf(keyStore.getAliasCount()));
+              } else {
+                 File initStore = new File(fileName);
+                 if (fileName.length() > 0 && initStore.exists()) {
                     try (InputStream fis = new FileInputStream(initStore);
                             InputStream fileInputStream = new BufferedInputStream(fis)) {
                         this.keyStore.load(fileInputStream, getPassword());
@@ -136,18 +145,19 @@ public abstract class SSLManager {
                                     Integer.valueOf(keyStore.getAliasCount()));
                         }
                     }
-                } else {
+                 } else {
                     log.warn("Keystore file not found, loading empty keystore");
                     this.defaultpw = ""; // Ensure not null
                     this.keyStore.load(null, "");
-                }
-            } catch (Exception e) {
-                log.error("Problem loading keystore: {}", e.getMessage(), e);
-            }
+                 }
+              }
+           } catch (Exception e) {
+              log.error("Problem loading keystore: {}", e.getMessage(), e);
+           }
 
-            if (log.isDebugEnabled()) {
-                log.debug("JmeterKeyStore type: {}", this.keyStore.getClass());
-            }
+           if (log.isDebugEnabled()) {
+              log.debug("JmeterKeyStore type: {}", this.keyStore.getClass());
+           }
         }
 
         return this.keyStore;
@@ -156,26 +166,31 @@ public abstract class SSLManager {
     /*
      * The password can be defined as a property; this dialogue is provided to allow it
      * to be entered at run-time.
-     *
-     * However, this does not gain much, as the dialogue does not (yet) support hidden input ...
-     *
-    */
+     */
     private String getPassword() {
         String password = this.defaultpw;
         if (null == password) {
             final GuiPackage guiInstance = GuiPackage.getInstance();
             if (guiInstance != null) {
                 synchronized (this) { // TODO is sync really needed?
-                    this.defaultpw = JOptionPane.showInputDialog(
-                            guiInstance.getMainFrame(),
-                            JMeterUtils.getResString("ssl_pass_prompt"),  // $NON-NLS-1$
-                            JMeterUtils.getResString("ssl_pass_title"),  // $NON-NLS-1$
-                            JOptionPane.QUESTION_MESSAGE);
-                    System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
-                    password = this.defaultpw;
-                }
+                  JPasswordField pwf = new JPasswordField(64);
+                  pwf.setEchoChar('*');
+                  int choice = JOptionPane.showConfirmDialog(
+                          guiInstance.getMainFrame(),
+                          pwf,
+                          JMeterUtils.getResString("ssl_pass_prompt"),
+                          JOptionPane.OK_CANCEL_OPTION,
+                          JOptionPane.PLAIN_MESSAGE);
+                  if (choice == JOptionPane.OK_OPTION) {
+                     char[] pwchars = pwf.getPassword();
+                     this.defaultpw = new String(pwchars);
+                     Arrays.fill(pwchars, '*');
+                  }
+                  System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
+                  password = this.defaultpw;
+               }
             } else {
-                log.warn("No password provided, and no GUI present so cannot prompt");
+               log.warn("No password provided, and no GUI present so cannot prompt");
             }
         }
         return password;
