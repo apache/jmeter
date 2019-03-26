@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
+ * 
  */
 
 package org.apache.jorphan.collections;
@@ -178,10 +178,4 @@ public class PackageTest {
             assertEquals(1, searcher.getSearchResults().size());
         }
 
-        @Test
-        public void testGetCurrentPos()
-        {
-            Data testData = new Data();
-            assertNotNull(testData.getCurrentPos());
-        }
 }
