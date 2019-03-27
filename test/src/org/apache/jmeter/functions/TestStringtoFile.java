@@ -128,7 +128,7 @@ public class TestStringtoFile extends JMeterTestCase {
         params.add(new CompoundVariable(ENCODING));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should have successfully run",
+        Assert.assertTrue("This method 'Stringtofile' should have successfully run if parent directory already exists",
                 Boolean.parseBoolean(returnValue));
     }
 
@@ -149,7 +149,7 @@ public class TestStringtoFile extends JMeterTestCase {
         params.add(new CompoundVariable("true"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should have successfully run with null encoding",
+        Assert.assertTrue("This method 'Stringtofile' should have successfully run with no charset",
                 Boolean.parseBoolean(returnValue));
 
     }
@@ -178,7 +178,7 @@ public class TestStringtoFile extends JMeterTestCase {
         try {
             file = tempFolder.newFile(FILENAME);
         } catch (IOException e1) {
-            log.error("cant create the file successfully");
+            Assert.fail("Can't create the file successfully");
         }
         params.add(new CompoundVariable(file.getAbsolutePath()));
         params.add(new CompoundVariable(STRING_TO_WRITE));
@@ -196,7 +196,7 @@ public class TestStringtoFile extends JMeterTestCase {
         try {
             file = tempFolder.newFile(FILENAME);
         } catch (IOException e1) {
-            log.error("cant create the file successfully");
+            Assert.fail("Can't create the file successfully");
         }
         file.setWritable(false);
         params.add(new CompoundVariable(file.getAbsolutePath()));
@@ -226,7 +226,7 @@ public class TestStringtoFile extends JMeterTestCase {
         try {
             file = tempFolder.newFile(FILENAME);
         } catch (IOException e1) {
-            log.error("can't create the file successfully");
+            Assert.fail("Can't create the file successfully");
         }
         params.add(new CompoundVariable(file.getAbsolutePath()));
         params.add(new CompoundVariable(""));
