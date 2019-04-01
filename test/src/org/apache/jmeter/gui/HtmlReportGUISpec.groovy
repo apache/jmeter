@@ -18,9 +18,6 @@
 
 package org.apache.jmeter.gui;
 
-import java.awt.event.ActionEvent;
-
-import org.apache.jmeter.gui.tree.JMeterCellRenderer
 import org.apache.jmeter.gui.tree.JMeterTreeListener
 import org.apache.jmeter.gui.tree.JMeterTreeModel
 import org.apache.jmeter.junit.spock.JMeterSpec
@@ -39,6 +36,7 @@ class HtmlReportGUISpec extends JMeterSpec{
             GuiPackage.getInstance().setMainFrame(new MainFrame(treeModel, treeListener));
         when:
             htmlReportPanel.showInputDialog(GuiPackage.getInstance().getMainFrame())
+            Thread.sleep(50) // https://bugs.openjdk.java.net/browse/JDK-5109571
             htmlReportPanel.messageDialog.setVisible(false)
         then:
             "" == htmlReportPanel.csvFilePathTextField.getText()

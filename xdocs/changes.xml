@@ -39,9 +39,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 5.1.1 =================== -->
+<!--  =================== 5.2 =================== -->
 
-<h1>Version 5.1.1</h1>
+<h1>Version 5.2</h1>
 <p>
 Summary
 </p>
@@ -57,11 +57,16 @@ Summary
 </ul>
 
 <ch_section>New and Noteworthy</ch_section>
+<p>
+This release is mainly a bugfix release. Please see the <a href="changes_history.html">Changes history page</a>
+to view the last major behaviors with the version 5.1.1.
+</p>
+<!--
 <ch_title>Core improvements</ch_title>
 <ch_title>UX improvements</ch_title>
 <ch_title>Test Plan</ch_title>
 <ch_title>Scripting / Debugging enhancements</ch_title>
-<ch_title>Live Reporting and Web Report</ch_title>
+-->
 <!--
 <ch_title>Functions</ch_title>
 -->
@@ -76,12 +81,10 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>62977</bug>Unable to send HTTP requests without a User-Agent header</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-    <li><bug>63185</bug>LDAP related elements: Add option to implicitly trust SSL/TLS connections/Disable hostname verification. Based on contribution by Brian Wolfe (wolfebrian2120 at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -94,7 +97,7 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>63178</bug>CSS Selector Extractor : Improve performance of JODD (JoddExtractor) based implementation</li>
+  <li><bug>62863</bug>Enable PKCS11 keystores for usage with KeyStore Manager. Based on patch by Clifford Harms (clifford.harms at gmail.com).</li>
 </ul>
 
 <h3>Functions</h3>
@@ -107,21 +110,14 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>59896</bug> Report / Dashboard : Add a menu entry to generate a report on demand from a CSV file. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>General</h3>
 <ul>
-    <li><pr>444</pr>Update to latest Spock v1.2 (was 1.0). Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><pr>446</pr>Improve Unit tests readability and use of Spock. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li><bug>63203</bug>Unit Tests : Replace use of <code>@Deprecated</code> by <code>@VisibleForTesting</code> for methods/constructors/classes made public for Unit Testing only</li>
-    <li><pr>449</pr>Refactor and Test ResponseTimePercentilesOverTimeGraphConsumer. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><pr>450</pr>Abstract graph consumer improvements. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><pr>451</pr>Improve a few unit tests and classes. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -134,7 +130,6 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
-    <li><bug>63202</bug>JMS Publisher : ObjectMessageRenderer creates XStream instance with uninitialized security</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -143,13 +138,10 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>63204</bug>RenderAsJSON#prettyJSON : JSONParser#parse cannot return JSONValue</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>62446</bug>Counter documentation is wrong in required fieds. Contributed by orimarko at gmail.com</li>
-    <li><bug>62327</bug>TestPlan: In library table if path is modified and plan saved, the modification is lost on file reload</li>
 </ul>
 
 <h3>Functions</h3>
@@ -162,7 +154,6 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>63198</bug>Response Time Vs Request and Latency Vs Request graphs don't line up with throughput. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Documentation</h3>
@@ -171,10 +162,6 @@ Summary
 
 <h3>General</h3>
 <ul>
-    <li><bug>63201</bug>SearchTreeDialog disappears behind master JFrame. Contributed by Benoit Vatan (benoit.vatan at gmail.com)</li>
-    <li><bug></bug><code>Function Helper Dialog</code>, <code>Export transactions for report</code> and <code>Import from cURL</code> disappear being master JFrame. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>63207</bug>java.lang.NullPointerException: null when run Jmeter 5.1 with proxy options</li>
-    <li><bug>58183</bug>Rampup may not be respected if thread take time to start leading to threads continuing to start post ramp up time</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -183,11 +170,7 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-    <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
-    <li>Benoit Vatan (benoit.vatan at gmail.com)</li>
-    <li>Graham Russell (graham at ham1.co.uk)</li>
-    <li>Brian Wolfe (wolfebrian2120 at gmail.com)</li>
-    <li>orimarko at gmail.com</li>
+  <li>Clifford Harms (clifford.harms at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

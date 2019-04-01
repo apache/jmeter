@@ -38,7 +38,7 @@ abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
      * @return GenericKeyedObjectPool the newly generated pool
      */
     protected GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> createSocketOutputStreamPool() {
-        GenericKeyedObjectPoolConfig config = new GenericKeyedObjectPoolConfig();
+        GenericKeyedObjectPoolConfig<SocketOutputStream> config = new GenericKeyedObjectPoolConfig<>();
         config.setTestOnBorrow(true);
         config.setTestWhileIdle(true);
         config.setMaxTotalPerKey(-1);

@@ -1324,6 +1324,63 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
 
             
 <div class="subsection">
+<h2 id="report_gui">14.3.3 Generation using GUI Tools menu<a class="sectionlink" href="#report_gui" title="Link to here">&para;</a>
+</h2>
+                
+<p>
+                You can generate the HTML report using menu item <span class="code">Tools &rarr; Generate HTML report</span>:
+                <figure>
+<a href="../images/screenshots/html_report_menu.png"><img src="../images/screenshots/html_report_menu.png" width="" height="" alt="Figure 14.1. HTML Report Dialog Menu"></a>
+<figcaption>Figure 14.1. HTML Report Dialog Menu</figcaption>
+</figure>
+                
+</p>
+                
+<p>For each parameters see the following table :</p>
+                
+<div class="properties">
+<h3>
+        Parameters
+        </h3>
+<div class="property title">
+<div class="name title">Attribute</div>
+<div class="description title">Description</div>
+<div class="required title">Required</div>
+</div>
+	                
+<div class="property">
+<div class="name req-true">Results file (csv or jtl)</div>
+<div class="description req-true">The CSV output of a tes run</div>
+<div class="required req-true">Yes</div>
+</div>
+	                
+<div class="property">
+<div class="name req-true">user.properties file</div>
+<div class="description req-true">The user.properties file used to run the load test</div>
+<div class="required req-true">Yes</div>
+</div>
+	                
+<div class="property">
+<div class="name req-false">Output directory</div>
+<div class="description req-false">The directory where you want the report to be created(must be empty)</div>
+<div class="required req-false">No</div>
+</div>
+                
+</div>
+                
+<p>If no output directory is defined, the controller will use <span class="code">${JMETER_HOME}/bin/report-output</span>.</p>
+                
+<p>You then only have to click on the <span class="code">Generate report</span> button and wait for an information dialog to appear
+                <div class="clear"></div>
+<div class="note">If report generation takes more than two minutes, adjust the property <span class="code">generate_report_ui.generation_timeout</span>
+</div>
+<div class="clear"></div>
+</p>
+             
+</div>
+
+            
+<div class="subsection">
 <h2 id="default_graphs">14.4 Default graphs<a class="sectionlink" href="#default_graphs" title="Link to here">&para;</a>
 </h2>
                 

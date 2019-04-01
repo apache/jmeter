@@ -1141,7 +1141,6 @@ public class JMeter implements JMeterPlugin {
      * <li>Clones the tree to ensure Commonly referenced NoThreadClone elements are cloned</li>
      * </ul>
      * @param tree The {@link HashTree} to convert
-     * @return HashTree the output {@link HashTree} to use
      */
     private static void pConvertSubTree(HashTree tree) {
         LinkedList<Object> copyList = new LinkedList<>(tree.list());
@@ -1444,7 +1443,7 @@ public class JMeter implements JMeterPlugin {
                 InetAddress address = request.getAddress();
                 // Only accept commands from the local host
                 if (address.isLoopbackAddress()){
-                    String command = new String(request.getData(), request.getOffset(), request.getLength(),"ASCII");
+                    String command = new String(request.getData(), request.getOffset(), request.getLength(), StandardCharsets.US_ASCII);
                     System.out.println("Command: "+command+" received from "+address);//NOSONAR
                     log.info("Command: {} received from {}", command, address);
                     switch(command) {
