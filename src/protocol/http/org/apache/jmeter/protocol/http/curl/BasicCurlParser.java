@@ -42,6 +42,10 @@ public class BasicCurlParser {
     private static final int COMPRESSED_OPT      = 'c';// $NON-NLS-1$
     private static final int HEADER_OPT      = 'H';// $NON-NLS-1$
     private static final int DATA_OPT      = 'd';// $NON-NLS-1$
+    private static final int USER_AGENT_OPT = 'A';// $NON-NLS-1$
+    private static final int CONNECT_TIMEOUT_OPT = "connect_timeout".hashCode();// $NON-NLS-1$
+    private static final int COOKIE_OPT = 'b';// $NON-NLS-1$
+
     
     public static final class Request {
         private boolean compressed;
@@ -54,6 +58,7 @@ public class BasicCurlParser {
         public Request() {
             super();
         }
+
         /**
          * @return the compressed
          */
