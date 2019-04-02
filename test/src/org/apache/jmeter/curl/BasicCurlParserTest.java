@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.protocol.http.control.Cookie;
+import org.apache.http.auth.AUTH;
+import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.curl.BasicCurlParser;
 import org.junit.Assert;
 import org.junit.Test;
@@ -126,7 +128,7 @@ public class BasicCurlParserTest {
 
     @Test
     public void testPost() {
-        String cmdLine = "curl 'https://jmeter.apache.org/test' -X 'POST' " 
+        String cmdLine = "curl 'https://jmeter.apache.org/test' -X 'POST' "
                 + "-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' -H 'Accept: */*' "
                 + "-H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Referer: https://www.example.com/' "
                 + "-H 'content-type: application/json;charset=UTF-8' -H 'Origin: https://www.example.com' "
@@ -156,7 +158,7 @@ public class BasicCurlParserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testError() {
-        String cmdLine = "curl 'https://jmeter.apache.org/' -u -H 'Proxy-Connection: keep-alive' "
+        String cmdLine = "curl 'https://jmeter.apache.org/' -m -H 'Proxy-Connection: keep-alive' "
                 + "-H 'Proxy-Authorization: Basic XXXXXXXXX/' "
                 + "-H 'User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko)"
                 + " Chrome/70.0.3538.102 Mobile Safari/537.36' "
@@ -232,5 +234,61 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         basicCurlParser.parse(cmdLine);
         Assert.fail("The method 'parser() can't transfer cookies Unqualified URLs,");
+    }
+
+    @Test
+    public void testAuthUser() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' -H 'User-Agent: Mozilla/5.0 "
+                + "(Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' "
+                + "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' "
+                + "-H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'DNT: 1' "
+                + "-H 'Connection: keep-alive' -H 'Upgrade-Insecure-Requests: 1' -u 'arun:12345'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals(
+                "With method 'parser',request should contain the parameters of the userneame of authorization", "arun",
+                request.getAutorization().getUser());
+        Assert.assertEquals(
+                "With method 'parser',request should contain the " + "parameters of the password of authorization",
+                "12345", request.getAutorization().getPass());
+    }
+
+    @Test
+    public void testAuthMechanismIsDigest() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' -H 'User-Agent: Mozilla/5.0 "
+                + "(Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' "
+                + "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' "
+                + "-H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'DNT: 1' "
+                + "-H 'Connection: keep-alive' -H 'Upgrade-Insecure-Requests: 1' -u 'arun:12345' --digest";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser',the mechanism should be 'DIGEST' ", "DIGEST",
+                request.getAutorization().getMechanism().toString());
+    }
+
+    @Test
+    public void testAuthMechanismIsBasic() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' -H 'User-Agent: Mozilla/5.0 "
+                + "(Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' "
+                + "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' "
+                + "-H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'DNT: 1' "
+                + "-H 'Connection: keep-alive' -H 'Upgrade-Insecure-Requests: 1'  -u 'arun:12345' --basic";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser',the mechanism should be 'BASIC' ", "BASIC",
+                request.getAutorization().getMechanism().toString());
+    }
+
+    @Test
+    public void testDefaultAuthMechanism() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' -H 'User-Agent: Mozilla/5.0 "
+                + "(Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' "
+                + "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' "
+                + "-H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'DNT: 1' "
+                + "-H 'Connection: keep-alive' -H 'Upgrade-Insecure-Requests: 1' -u 'arun:12345'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser',the mechanism should be 'BASIC' ", "BASIC",
+                request.getAutorization().getMechanism().toString());
     }
 }

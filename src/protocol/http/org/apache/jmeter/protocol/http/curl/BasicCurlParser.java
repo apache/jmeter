@@ -28,6 +28,8 @@ import java.util.StringTokenizer;
 import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
+import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
+import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.Cookie;
 
 /**
@@ -44,6 +46,14 @@ public class BasicCurlParser {
     private static final int USER_AGENT_OPT = 'A';// $NON-NLS-1$
     private static final int CONNECT_TIMEOUT_OPT = "connect_timeout".hashCode();// $NON-NLS-1$
     private static final int COOKIE_OPT = 'b';// $NON-NLS-1$
+    private static final int USER_OPT = 'u';// $NON-NLS-1$
+    private static final int BASIC_OPT = "basic".hashCode();// $NON-NLS-1$
+    private static final int DIGEST_OPT = "digest".hashCode();// $NON-NLS-1$
+    private static final List<Integer> AUTH_OPT = new ArrayList<>();// $NON-NLS-1$
+    static {
+        AUTH_OPT.add(BASIC_OPT);
+        AUTH_OPT.add(DIGEST_OPT);
+    }
 
     public static final class Request {
         private boolean compressed;
@@ -53,9 +63,8 @@ public class BasicCurlParser {
         private String postData;
         private String connectTimeout = "";
         private List<Cookie> cookies = new ArrayList<>();
+        private Authorization autorization = new Authorization();
 
-        /**
-         */
         public Request() {
             super();
         }
@@ -74,6 +83,10 @@ public class BasicCurlParser {
 
         public void setCookies(List<Cookie> cookies) {
             this.cookies = cookies;
+        }
+
+        public Authorization getAutorization() {
+            return autorization;
         }
 
         /**
@@ -175,8 +188,15 @@ public class BasicCurlParser {
             "Maximum time in seconds that the connection to the server");
     private static final CLOptionDescriptor D_COOKIE_OPT = new CLOptionDescriptor("cookie",
             CLOptionDescriptor.ARGUMENT_REQUIRED, COOKIE_OPT, "Pass the data to the HTTP server as a cookie");
+    private static final CLOptionDescriptor D_USER_OPT = new CLOptionDescriptor("user",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, USER_OPT, "User and password to use for server authentication. ");
+    private static final CLOptionDescriptor D_BASIC_OPT = new CLOptionDescriptor("basic",
+            CLOptionDescriptor.ARGUMENT_DISALLOWED, BASIC_OPT, "HTTP Basic authentication ");
+    private static final CLOptionDescriptor D_DIGEST_OPT = new CLOptionDescriptor("digest",
+            CLOptionDescriptor.ARGUMENT_DISALLOWED, DIGEST_OPT, "HTTP digest authentication ");
     private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[] { D_COMPRESSED_OPT, D_HEADER_OPT,
-            D_METHOD_OPT, D_DATA_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT };
+            D_METHOD_OPT, D_DATA_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT, D_USER_OPT, D_BASIC_OPT,
+            D_DIGEST_OPT };
 
     public BasicCurlParser() {
         super();
@@ -189,7 +209,6 @@ public class BasicCurlParser {
         if (error == null) {
             List<CLOption> clOptions = parser.getArguments();
             Request request = new Request();
-            request.setCookies(null);
             for (CLOption option : clOptions) {
                 if (option.getDescriptor().getId() == CLOption.TEXT_ARGUMENT) {
                     // Curl or URL
@@ -222,6 +241,12 @@ public class BasicCurlParser {
                 } else if (option.getDescriptor().getId() == COOKIE_OPT) {
                     String value = option.getArgument(0);
                     request.setCookies(this.stringToCookie(value, request.getUrl()));
+                } else if (option.getDescriptor().getId() == USER_OPT) {
+                    String value = option.getArgument(0);
+                    setAuthUserPasswd(value, request.getUrl(), request.getAutorization());
+                } else if (AUTH_OPT.contains(option.getDescriptor().getId())) {
+                    String authOption = option.getDescriptor().getName();
+                    setAuthMechanism(authOption, request.getAutorization());
                 }
             }
             return request;
@@ -319,5 +344,25 @@ public class BasicCurlParser {
             }
         }
         return cookies;
+    }
+
+    public void setAuthUserPasswd(String autorizationStr, String url, Authorization authorization) {
+        String[] autorizationParameters = autorizationStr.split(":");
+        authorization.setUser(autorizationParameters[0].trim());
+        authorization.setPass(autorizationParameters[1].trim());
+        authorization.setURL(url);
+    }
+
+    private void setAuthMechanism(String authOption, Authorization authorization) {
+        switch (authOption) {
+        case ("basic"):
+            authorization.setMechanism(Mechanism.BASIC);
+            break;
+        case ("digest"):
+            authorization.setMechanism(Mechanism.DIGEST);
+            break;
+        default:
+            break;
+        }
     }
 }
