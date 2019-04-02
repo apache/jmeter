@@ -76,10 +76,6 @@ public class BasicCurlParser {
             this.cookies = cookies;
         }
 
-        public void setHeaders(Map<String, String> headers) {
-            this.headers = headers;
-        }
-
         /**
          * @return the compressed
          */
@@ -193,6 +189,7 @@ public class BasicCurlParser {
         if (error == null) {
             List<CLOption> clOptions = parser.getArguments();
             Request request = new Request();
+            request.setCookies(null);
             for (CLOption option : clOptions) {
                 if (option.getDescriptor().getId() == CLOption.TEXT_ARGUMENT) {
                     // Curl or URL
