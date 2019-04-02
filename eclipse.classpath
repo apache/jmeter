@@ -70,10 +70,10 @@
 	<classpathentry kind="lib" path="lib/hamcrest-date-2.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpasyncclient-4.1.4.jar"/>
-	<classpathentry kind="lib" path="lib/httpclient-4.5.7.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient-4.5.8.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-nio-4.4.11.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.4.11.jar"/>
-	<classpathentry kind="lib" path="lib/httpmime-4.5.7.jar"/>
+	<classpathentry kind="lib" path="lib/httpmime-4.5.8.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-annotations-2.9.8.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-core-2.9.8.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-databind-2.9.8.jar"/>

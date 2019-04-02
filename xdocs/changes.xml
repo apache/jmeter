@@ -114,6 +114,7 @@ to view the last major behaviors with the version 5.1.1.
 
 <h3>General</h3>
 <ul>
+    <li>Updated to httpclient/httpmime 4.5.8 (from 4.5.7)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -126,6 +127,7 @@ to view the last major behaviors with the version 5.1.1.
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><bug>63298</bug>HTTP Requests with encoded URLs are being sent in decoded format</li>
 </ul>
 
 <h3>Other Samplers</h3>
