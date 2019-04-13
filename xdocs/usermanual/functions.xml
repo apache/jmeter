@@ -120,6 +120,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Input</td><td> <a href="#__FileToString">FileToString</a></td><td>read an entire file</td><td>2.4</td></tr>
         <tr><td>Input</td><td> <a href="#__CSVRead">CSVRead</a></td><td>read from CSV delimited file</td><td>1.9</td></tr>
         <tr><td>Input</td><td> <a href="#__XPath">XPath</a></td><td>Use an XPath expression to read from a file</td><td>2.0.3</td></tr>
+        <tr><td>Input</td><td> <a href="#__StringToFile">StringToFile</a></td><td>write a string to a file</td><td>5.2</td></tr>
         <tr><td>Calculation</td><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td><td>1.X</td></tr>
         <tr><td>Formatting</td><td> <a href="#__dateTimeConvert">dateTimeConvert</a></td><td>Convert a date or time from source to target format</td><td>4.0</td></tr>
         <tr><td>Calculation</td><td> <a href="#__digest">digest</a></td><td>Generate a digest (SHA-1, SHA-256, MD5...)</td><td>4.0</td></tr>
@@ -1483,7 +1484,6 @@ A reference name - <code>refName</code> - for reusing the value created by this 
 </properties>
 <p>The file name, encoding and reference name parameters are resolved every time the function is executed.</p>
 </component>
-
 <component index="&sect-num;.5.30" name="__samplerName">
 
 <description>
@@ -1710,6 +1710,30 @@ returns:
     <source>${__changeCase(LABOR OMNIA VINCIT IMPROBUS,LOWER,)}</source> will return <code>labor omnia vincit improbus</code>
     <source>${__changeCase(omnibus viis romam pervenitur,CAPITALIZE,)}</source> will return <code>Omnibus viis romam pervenitur</code>
     </p>
+</component>
+
+<component index="&sect-num;.5.39" name="__StringToFile">
+<description>
+    <p>
+    The <code>__StringToFile</code> function can be used to write a string to a file.
+    Each time it is called it writes a string to file appending or overwriting.
+    </p>
+    <p>The default return value from the function is the empty string</p>
+</description>
+<properties>
+    <property name="Path to file" required="Yes">
+    Path to the file name.(The path is absolute)
+    </property>
+    <property name="String to write" required="Yes">
+    The string to write to the file
+    </property>
+    <property name="File encoding if not UTF-8" required="No">
+    The encoding to be used to write to the file. If not specified, the default encoding is <code>UTF-8</code>.
+    </property>
+    <property name="Append to file?" required="No">
+    The way to write the string, <code>true</code> means append, <code>false</code> means overwrite.
+    </property>
+</properties>
 </component>
 
 </subsection>

@@ -102,6 +102,7 @@ to view the last major behaviors with the version 5.1.1.
 
 <h3>Functions</h3>
 <ul>
+  <li><bug>63219</bug>New function <code>__StringToFile</code> to save a string into a file. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>I18N</h3>
@@ -173,6 +174,7 @@ to view the last major behaviors with the version 5.1.1.
 </p>
 <ul>
   <li>Clifford Harms (clifford.harms at gmail.com)</li>
+  <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
