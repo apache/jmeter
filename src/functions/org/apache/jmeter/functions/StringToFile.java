@@ -92,7 +92,7 @@ public class StringToFile extends AbstractFunction {
             log.error("File name '{}' is empty", fileName);
             return false;
         }
-        log.debug("Writing {} to file {} with charset {} and append {}", content, fileName, charset, append);
+        log.debug("Writing {} to file {} with charset {} and append {}", content, fileName, charset, append);
         
         Lock localLock = new ReentrantLock();
         Lock lock = lockMap.putIfAbsent(fileName, localLock);
@@ -107,7 +107,7 @@ public class StringToFile extends AbstractFunction {
             if (fileParent == null || (fileParent.exists() && fileParent.isDirectory() && fileParent.canWrite())) {
                 FileUtils.writeStringToFile(file, content, charset, append);
             } else {
-                log.error("The parent file of {} doesn't exist or is not writable", file);
+                log.error("The parent file of {} doesn't exist or is not writable", file);
                 return false;
             }
         } finally {
@@ -126,14 +126,15 @@ public class StringToFile extends AbstractFunction {
         boolean executionResult;
         try {
             executionResult = this.writeToFile();
-        } catch (UnsupportedCharsetException ue) {
+        } catch (UnsupportedCharsetException ue) { // NOSONAR
             executionResult = false;
-            log.error("The encoding of file is not supported");
-        } catch (IllegalCharsetNameException ie) {
+            log.error("The encoding of file is not supported", ue);
+        } catch (IllegalCharsetNameException ie) { // NOSONAR
             executionResult = false;
-            log.error("The encoding of file contains illegal characters");
-        } catch (IOException e) {
+            log.error("The encoding of file contains illegal characters", ie);
+        } catch (IOException e) { // NOSONAR
             executionResult = false;
+            log.error("IOException occurred", e);
         }
         return String.valueOf(executionResult);
     }
