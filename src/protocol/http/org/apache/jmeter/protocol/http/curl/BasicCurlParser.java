@@ -87,7 +87,6 @@ public class BasicCurlParser {
     private static final int MAX_TIME_OPT = 'm';// $NON-NLS-1$
     private static final int OUTPUT_OPT = 'o';// $NON-NLS-1$
     private static final int CREATE_DIRS_OPT = "create-dir".hashCode();// $NON-NLS-1$
-    private static final int OAUTH2_BEARER_OPT = "oauth-bearer".hashCode();// $NON-NLS-1$
     private static final int INSECURE_OPT = 'k';// $NON-NLS-1$
     private static final List<Integer> AUTH_OPT = new ArrayList<>();// $NON-NLS-1$
     static {
@@ -478,8 +477,6 @@ public class BasicCurlParser {
             "Maximum time in seconds that you allow the whole operation to take. ");
     private static final CLOptionDescriptor D_OUTPUT_OPT = new CLOptionDescriptor("output",
             CLOptionDescriptor.ARGUMENT_REQUIRED, OUTPUT_OPT, "Write result to a file");
-    private static final CLOptionDescriptor D_OAUTH2_BEARER_OPT = new CLOptionDescriptor("oauth2-bearer",
-            CLOptionDescriptor.ARGUMENT_REQUIRED, OAUTH2_BEARER_OPT, "OAuth 2 Bearer Token");
     private static final CLOptionDescriptor D_CREATE_DIRS_OPT = new CLOptionDescriptor("create-dir",
             CLOptionDescriptor.ARGUMENT_DISALLOWED, CREATE_DIRS_OPT,
             "Create the necessary local directory hierarchy as needed for output file");
@@ -489,7 +486,7 @@ public class BasicCurlParser {
             D_BASIC_OPT, D_DIGEST_OPT, D_CACERT_OPT, D_CAPATH_OPT, D_CERT_OPT, D_CERT_STATUS_OPT, D_CERT_TYPE_OPT,
             D_CIPHERS_OPT, D_GET_OPT, D_DNS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT, D_LOCATION_OPT, D_INCLUDE_OPT,
             D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT, D_PROXY_NEGOTIATE_OPT,
-            D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_OAUTH2_BEARER_OPT };
+            D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT};
 
     public BasicCurlParser() {
         super();
@@ -590,9 +587,6 @@ public class BasicCurlParser {
                 } else if (option.getDescriptor().getId() == OUTPUT_OPT) {
                     String value = option.getArgument(0);
                     request.setOutputFileName(value);
-                } else if (option.getDescriptor().getId() == OAUTH2_BEARER_OPT) {
-                    String value = option.getArgument(0);
-                    request.addHeader("Authorization", "Bearer " + value);
                 }
             }
             if (isPostToGet) {

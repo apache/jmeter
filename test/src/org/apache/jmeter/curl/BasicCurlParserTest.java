@@ -310,7 +310,6 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser',the parameters need to reserve '\n' and '\r' ", "name=test",
                 request.getPostData());
     }
-    
     @Test(expected = IllegalArgumentException.class)
     public void testDataReadFromNonexistentFile() {
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
@@ -319,7 +318,6 @@ public class BasicCurlParserTest {
         basicCurlParser.parse(cmdLine);
         Assert.fail("The method 'translateCommandline shouldn't run when the path of file is incorrect");
     }
-    
     @Test
     public void testDataUrlEncodeOneParameterWithoutName() {
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
@@ -452,6 +450,7 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser',the default port of proxy should be 1080", "1080",
                 request.getProxyServer().get("port"));
     }
+
     @Test
     public void testProxyUser() {
         String cmdLine = "curl 'http://jmeter.apache.org/' --proxy '201.36.208.19:3128' -U 'aa:bb'";
@@ -506,16 +505,6 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser', the path of output file should be 'C:\\Test\\output'",
                 "C:\\Test\\output", request.getOutputFileName());
     }
-
-    @Test
-    public void testOAuthBearer() {
-        String cmdLine = "curl 'https://api.kkbox.com/v1.1/new-hits-playlists?territory=TW&offset=0&limit=5' --oauth2-bearer '0B4tUuuyBqVMIF3LmNP28w=='";
-        BasicCurlParser basicCurlParser = new BasicCurlParser();
-        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser', the token of oauth2 should be set in http Header",
-                "Bearer 0B4tUuuyBqVMIF3LmNP28w==", request.getHeaders().get("Authorization"));
-    }
-
     @Test
     public void testCookie() {
         String cmdLine = "curl -X POST  \"https://api.imgur.com/3/upload\" -b 'name=Tom;password=123456'";
@@ -524,7 +513,6 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser', the cookie should be set in CookieManager",
                 "name=Tom;password=123456", request.getCookie());
     }
-    
     @Test
     public void testCookieFromFile() throws IOException {
         File file = tempFolder.newFile("test.txt");
@@ -533,6 +521,5 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser', the file of cookie should be uploaded in CookieManager",
-                file.getAbsolutePath(), request.getCookie());
-    }    
+                file.getAbsolutePath(), request.getCookie());}
 }

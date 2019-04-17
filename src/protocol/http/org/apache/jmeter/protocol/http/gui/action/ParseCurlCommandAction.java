@@ -452,7 +452,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             if (isContainsFile) {
                 formValue = formValue.substring(1, formValue.length());
                 if (isContainsContentType) {
-                    String[] formValueWithType = formValue.split(";type=|;Type=");
+                    String[] formValueWithType = formValue.split(";type=");
                     formValue = formValueWithType[0];
                     contentType = formValueWithType[1];
                 } else {
@@ -461,7 +461,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 httpFileArgs.add(new HTTPFileArg(formValue, formName, contentType));
             } else {
                 if (isContainsContentType) {
-                    String[] formValueWithType = formValue.split(";type=|;Type=");
+                    String[] formValueWithType = formValue.split(";type=");
                     formValue = formValueWithType[0];
                     contentType = formValueWithType[1];
                     httpSampler.addNonEncodedArgument(formName, formValue, "", contentType);
