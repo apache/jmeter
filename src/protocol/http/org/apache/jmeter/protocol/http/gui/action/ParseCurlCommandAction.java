@@ -447,7 +447,11 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         sampleTimeout.setTimeout(request.getMaxTime());
         return  sampleTimeout ;
     }
-
+    /**
+     * 
+     * @param request {@link Request}
+     * @param httpSampler
+     */
     private void createProxyServer(Request request, HTTPSamplerProxy httpSampler) {
         Map<String, String> proxyServer = request.getProxyServer();
         for (Map.Entry<String, String> proxyPara : proxyServer.entrySet()) {
