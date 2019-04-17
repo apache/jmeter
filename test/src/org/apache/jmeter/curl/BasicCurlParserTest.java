@@ -19,12 +19,10 @@ package org.apache.jmeter.curl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.curl.BasicCurlParser;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -71,13 +69,12 @@ public class BasicCurlParserTest {
                 + "-H 'User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) "
                 + "Chrome/70.0.3538.102 Mobile Safari/537.36' "
                 + "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' "
-                + "-H 'Accept-Encoding: gzip, deflate' -H 'Accept-Language: en-US,en;q=0.9,fr;q=0.8' --compressed -F 'name=test'";
+                + "-H 'Accept-Encoding: gzip, deflate' -H 'Accept-Language: en-US,en;q=0.9,fr;q=0.8' --compressed";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("https://jmeter.apache.org/", request.getUrl());
         Assert.assertEquals(7, request.getHeaders().size());
         Assert.assertTrue(request.isCompressed());
-        Assert.assertEquals("GET", request.getMethod());
     }
 
     @Test
@@ -176,7 +173,7 @@ public class BasicCurlParserTest {
     }
 
     @Test
-    public void testUserAuth() {
+    public void testUserAgent() {
         String cmdLine = "curl 'http://jmeter.apache.org/' -H 'User-Agent: Mozilla/5.0 (Macintosh;"
                 + " Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' "
                 + "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' "
@@ -196,63 +193,30 @@ public class BasicCurlParserTest {
                 + "-H 'Upgrade-Insecure-Requests: 1' --connect-timeout '2000'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser', " + "request should contain 'connect_timeout=2000'", "2000",
+        Assert.assertEquals("With method 'parser', " + "request should contain 'connect-timeout=2000'", "2000",
                 request.getConnectTimeout());
     }
 
     @Test
-    public void testCookie() {
-        String cmdLine = "curl 'http://jmeter.apache.org/' -b 'name=Tom;password=123456'";
-        BasicCurlParser basicCurlParser = new BasicCurlParser();
-        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("http://jmeter.apache.org/", request.getUrl());
-        List<Cookie> cookies = new ArrayList<>();
-        Cookie cookie1 = new Cookie();
-        cookie1.setName("name");
-        cookie1.setValue("Tom");
-        cookie1.setDomain("jmeter.apache.org");
-        cookie1.setPath("/");
-        cookies.add(cookie1);
-        Cookie cookie2 = new Cookie();
-        cookie2.setName("password");
-        cookie2.setValue("123456");
-        cookie1.setDomain("jmeter.apache.org");
-        cookie1.setPath("/");
-        cookies.add(cookie2);
-        Assert.assertTrue("With method 'parser',request should contain the parameters of the cookie",
-                request.getCookies().contains(cookie1));
-        Assert.assertEquals("With method 'parser',request should contain the parameters of the cookie", 2,
-                request.getCookies().size());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testUrlErrorForCookie() {
-        String cmdLine = "curl 'jmeter.apache.org' -b 'name=Tom;password=123456'";
-        BasicCurlParser basicCurlParser = new BasicCurlParser();
-        basicCurlParser.parse(cmdLine);
-        Assert.fail("The method 'parser() can't transfer cookies Unqualified URLs,");
-    }
-
-    @Test
-    public void testAuthUser() {
+    public void testAuthorization() {
         String cmdLine = "curl 'http://jmeter.apache.org/' -u 'arun:12345'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals(
                 "With method 'parser',request should contain the parameters of the userneame of authorization", "arun",
-                request.getAutorization().getUser());
+                request.getAuthorization().getUser());
         Assert.assertEquals(
                 "With method 'parser',request should contain the " + "parameters of the password of authorization",
-                "12345", request.getAutorization().getPass());
+                "12345", request.getAuthorization().getPass());
     }
 
     @Test
-    public void testAuthMechanismIsDigest() {
+    public void testAuthorizationMechanismIsDigest() {
         String cmdLine = "curl 'http://jmeter.apache.org/' -u 'arun:12345' --digest";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser',the mechanism should be 'DIGEST' ", "DIGEST",
-                request.getAutorization().getMechanism().toString());
+                request.getAuthorization().getMechanism().toString());
     }
 
     @Test
@@ -261,7 +225,7 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser',the mechanism should be 'BASIC' ", "BASIC",
-                request.getAutorization().getMechanism().toString());
+                request.getAuthorization().getMechanism().toString());
     }
 
     @Test
@@ -270,7 +234,7 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser',the mechanism should be 'BASIC' ", "BASIC",
-                request.getAutorization().getMechanism().toString());
+                request.getAuthorization().getMechanism().toString());
     }
 
     @Test
@@ -278,7 +242,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --cacert 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to pass a warning' ", "cacert", request.getCacert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cacert", request.getCacert());
     }
 
     @Test
@@ -286,7 +250,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --capath 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to pass a warning' ", "capath", request.getCacert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "capath", request.getCacert());
     }
 
     @Test
@@ -294,7 +258,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' -E 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to pass a warning' ", "cert", request.getCacert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert", request.getCacert());
     }
 
     @Test
@@ -302,7 +266,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --ciphers 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to pass a warning' ", "ciphers", request.getCacert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "ciphers", request.getCacert());
     }
 
     @Test
@@ -310,7 +274,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/'  --cert-status ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to pass a warning' ", "cert-status",
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert-status",
                 request.getCacert());
     }
 
@@ -319,7 +283,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/'  --cert-type 'test'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to pass a warning' ", "cert-type",
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert-type",
                 request.getCacert());
     }
 
@@ -335,7 +299,7 @@ public class BasicCurlParserTest {
 
     @Test
     public void testDataReadFromFile() throws IOException {
-        String encoding = "UTF-8";
+        String encoding = StandardCharsets.UTF_8.name();
         File file = tempFolder.newFile("test.txt");
         FileUtils.writeStringToFile(file, "name=test" + System.lineSeparator(), encoding, true);
         String pathname = file.getAbsolutePath();
@@ -346,7 +310,16 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser',the parameters need to reserve '\n' and '\r' ", "name=test",
                 request.getPostData());
     }
-
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testDataReadFromNonexistentFile() {
+        String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
+                + "-H 'cache-control: no-cache' --data '@test.txt' ";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        basicCurlParser.parse(cmdLine);
+        Assert.fail("The method 'translateCommandline shouldn't run when the path of file is incorrect");
+    }
+    
     @Test
     public void testDataUrlEncodeOneParameterWithoutName() {
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
@@ -356,7 +329,6 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser',the parameters need to be encoded' ", "%C3%A9",
                 request.getPostData());
     }
-
     @Test
     public void testDataUrlEncodeOneParameterWithName() {
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
@@ -369,17 +341,31 @@ public class BasicCurlParserTest {
 
     @Test
     public void testDataUrlEncodeMoreThanOneParameters() {
-        String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
-                + "-H 'cache-control: no-cache' --data-urlencode 'name=é&value=é' ";
+        String cmdLine = "curl 'https://postman-echo.com/post' -H 'Content-Type: application/x-www-form-urlencoded'"
+                + " -H 'cache-control: no-cache' --data-urlencode 'foo1=!!!&foo2=???'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the parameters need to be encoded' ", "name=%C3%A9&value=%C3%A9",
+        Assert.assertEquals("With method 'parser',the parameters need to be encoded' ",
+                "foo1=%21%21%21%26foo2%3D%3F%3F%3F", request.getPostData());
+    }
+
+    @Test
+    public void testDataUrlEncodeFromFile() throws IOException {
+        String encoding = StandardCharsets.UTF_8.name();
+        File file = tempFolder.newFile("test.txt");
+        FileUtils.writeStringToFile(file, "test", encoding, true);
+        String pathname = file.getAbsolutePath();
+        String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
+                + "-H 'cache-control: no-cache' --data-urlencode 'name@" + pathname + "' ";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser',the parameters in the file need to be encoded' ", "name=test",
                 request.getPostData());
     }
 
     @Test
     public void testDataBinaryReadFromFile() throws IOException {
-        String encoding = "UTF-8";
+        String encoding = StandardCharsets.UTF_8.name();
         File file = tempFolder.newFile("test.txt");
         FileUtils.writeStringToFile(file, "name=test" + System.lineSeparator(), encoding, true);
         String pathname = file.getAbsolutePath();
@@ -398,8 +384,17 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Map<String, String> res = request.getFormData();
-        Assert.assertEquals("With method 'parser', we should post form data", "name", res.get("test"));
         Assert.assertEquals("With method 'parser', we should post form data", "name1", res.get("test1"));
+    }
+
+    @Test
+    public void testFormString() {
+        String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
+                + "-H 'cache-control: no-cache' --form-string 'image=@C:\\Test\\test.jpg' ";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Map<String, String> res = request.getFormStringData();
+        Assert.assertEquals("With method 'parser', we should post form data", "@C:\\Test\\test.jpg", res.get("image"));
     }
 
     @Test
@@ -450,6 +445,14 @@ public class BasicCurlParserTest {
     }
 
     @Test
+    public void testProxyDefaultPort() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' -x 'https://example.com'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser',the default port of proxy should be 1080", "1080",
+                request.getProxyServer().get("port"));
+    }
+    @Test
     public void testProxyUser() {
         String cmdLine = "curl 'http://jmeter.apache.org/' --proxy '201.36.208.19:3128' -U 'aa:bb'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
@@ -459,7 +462,15 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser',the password of proxy should be aa", "bb",
                 request.getProxyServer().get("password"));
     }
-    
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testProxyUriIncorrectFormat() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' -x 'https://xxxx.xxx?xxx=xxx|xxxx|'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        basicCurlParser.parse(cmdLine);
+        Assert.fail(
+                "The method 'translateCommandline shouldn't run when the uri of proxy is not in the correct format");
+    }
     @Test
     public void testKeepAliveTime() {
         String cmdLine = "curl 'http://jmeter.apache.org/' --keepalive-time '20'";
@@ -468,6 +479,7 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser', timeout of keep alive should be 20", "timeout=20",
                 request.getHeaders().get("Keep-Alive"));
     }
+
     @Test
     public void testMaxTime() {
         String cmdLine = "curl 'http://jmeter.apache.org/' -m '200'";
@@ -476,4 +488,51 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser', max time of all the operation should be 200", "200",
                 request.getMaxTime());
     }
+
+    @Test
+    public void testReferer() {
+        String cmdLine = "curl 'https://www.w3schools.com/action_page.php' --referer 'www.baidu.com'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser', the refer page information should be set in http Header",
+                "www.baidu.com", request.getHeaders().get("Referer"));
+    }
+
+    @Test
+    public void testOutputFile() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' -o 'C:\\Test\\output' --create-dir";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser', the path of output file should be 'C:\\Test\\output'",
+                "C:\\Test\\output", request.getOutputFileName());
+    }
+
+    @Test
+    public void testOAuthBearer() {
+        String cmdLine = "curl 'https://api.kkbox.com/v1.1/new-hits-playlists?territory=TW&offset=0&limit=5' --oauth2-bearer '0B4tUuuyBqVMIF3LmNP28w=='";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser', the token of oauth2 should be set in http Header",
+                "Bearer 0B4tUuuyBqVMIF3LmNP28w==", request.getHeaders().get("Authorization"));
+    }
+
+    @Test
+    public void testCookie() {
+        String cmdLine = "curl -X POST  \"https://api.imgur.com/3/upload\" -b 'name=Tom;password=123456'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser', the cookie should be set in CookieManager",
+                "name=Tom;password=123456", request.getCookie());
+    }
+    
+    @Test
+    public void testCookieFromFile() throws IOException {
+        File file = tempFolder.newFile("test.txt");
+        String pathname = file.getAbsolutePath();
+        String cmdLine = "curl -X POST  \"https://api.imgur.com/3/upload\" -b '" + pathname + "'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser', the file of cookie should be uploaded in CookieManager",
+                file.getAbsolutePath(), request.getCookie());
+    }    
 }

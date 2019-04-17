@@ -106,13 +106,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             "org.apache.jmeter.protocol.http.control.DNSCacheManager",
             "org.apache.jmeter.protocol.http.gui.DNSCachePanel", "org.apache.jmeter.protocol.http.gui.AuthPanel",
             "org.apache.jmeter.protocol.http.gui.CacheManagerGui", "org.apache.jmeter.protocol.http.gui.CookiePanel",
-            "org.apache.jmeter.testbeans.gui.TestBeanGUI","org.apache.jmeter.modifiers.gui.SampleTimeoutGui"));
+            "org.apache.jmeter.testbeans.gui.TestBeanGUI", "org.apache.jmeter.modifiers.gui.SampleTimeoutGui"));
     // + JMX names - do not change
     public static final String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$
     public static final String AUTH_MANAGER = "HTTPSampler.auth_manager"; // $NON-NLS-1$
     public static final String COOKIE_MANAGER = "HTTPSampler.cookie_manager"; // $NON-NLS-1$
     public static final String KEYSTORE_CONFIG = "HTTPSampler.keystore_configuration"; // $NON-NLS-1$
     public static final String SAMPLE_TIMEOUT = "HTTPSampler.sample_timeout"; // $NON-NLS-1$
+    public static final String TCP_CONFIG = "HTTPSampler.tcp_configuration"; // $NON-NLS-1$
     public static final String CACHE_MANAGER = "HTTPSampler.cache_manager"; // $NON-NLS-1$
     public static final String HEADER_MANAGER = "HTTPSampler.header_manager"; // $NON-NLS-1$
     public static final String DNS_CACHE_MANAGER = "HTTPSampler.dns_cache_manager"; // $NON-NLS-1$
@@ -635,8 +636,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             setKeystoreConfigProperty((KeystoreConfig) el);
         } else if (el instanceof SampleTimeout) {
             setSampleTimeoutProperty((SampleTimeout) el);
-        } 
-        else {
+        }
+         else {
             super.addTestElement(el);
         }
     }
@@ -888,9 +889,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public KeystoreConfig getKeystoreConfig() {
         return (KeystoreConfig) getProperty(KEYSTORE_CONFIG).getObjectValue();
     }
-    
-    
-    
+
     // private method to allow AsyncSample to reset the value without performing
     // checks
     private void setSampleTimeoutProperty(SampleTimeout value) {
@@ -901,7 +900,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         SampleTimeout mgr = getSampleTimeout();
         if (mgr != null) {
             if (log.isWarnEnabled()) {
-                log.warn("ExisetSampleTimeoutPropertysting SampleTimeout {} superseded by {}", mgr.getName(), value.getName());
+                log.warn("ExisetSampleTimeoutPropertysting SampleTimeout {} superseded by {}", mgr.getName(),
+                        value.getName());
             }
         }
         setSampleTimeoutProperty(value);
@@ -910,8 +910,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public SampleTimeout getSampleTimeout() {
         return (SampleTimeout) getProperty(SAMPLE_TIMEOUT).getObjectValue();
     }
-    
-    
     // private method to allow AsyncSample to reset the value without performing
     // checks
     private void setCacheManagerProperty(CacheManager value) {

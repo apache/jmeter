@@ -20,13 +20,11 @@ package org.apache.jmeter.protocol.http.curl;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +39,6 @@ import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
-import org.apache.jmeter.protocol.http.control.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,23 +49,23 @@ import org.slf4j.LoggerFactory;
  * @since 5.1
  */
 public class BasicCurlParser {
-    private static final Logger log = LoggerFactory.getLogger(BasicCurlParser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BasicCurlParser.class);
     private static final int METHOD_OPT = 'X';
     private static final int COMPRESSED_OPT = 'c';// $NON-NLS-1$
     private static final int HEADER_OPT = 'H';// $NON-NLS-1$
     private static final int DATA_OPT = 'd';// $NON-NLS-1$
     private static final int DATA_ASCII_OPT = "data-ascii".hashCode();// $NON-NLS-1$
-    private static final int DATA_BINARY_OPT = "data-binary".hashCode();// $NON-NLS-1$
-    private static final int DATA_URLENCODE_OPT = "data-urlencode".hashCode();// $NON-NLS-1$
-    private static final int DATA_RAW_OPT = "data-raw".hashCode();// $NON-NLS-1$
+    private static final int DATA_BINARY_OPT = "data-binary".hashCode();// NOSONAR
+    private static final int DATA_URLENCODE_OPT = "data-urlencode".hashCode();// NOSONAR
+    private static final int DATA_RAW_OPT = "data-raw".hashCode();// NOSONAR
     private static final int FORM_OPT = 'F';// $NON-NLS-1$
     private static final int FORM_STRING_OPT = "form".hashCode();// $NON-NLS-1$
     private static final int USER_AGENT_OPT = 'A';// $NON-NLS-1$
     private static final int CONNECT_TIMEOUT_OPT = "connect-timeout".hashCode();// $NON-NLS-1$
     private static final int COOKIE_OPT = 'b';// $NON-NLS-1$
     private static final int USER_OPT = 'u';// $NON-NLS-1$
-    private static final int BASIC_OPT = "basic".hashCode();// $NON-NLS-1$
-    private static final int DIGEST_OPT = "digest".hashCode();// $NON-NLS-1$
+    private static final int BASIC_OPT = "basic".hashCode();// NOSONAR
+    private static final int DIGEST_OPT = "digest".hashCode();// NOSONAR
     private static final int CERT_OPT = 'E';// $NON-NLS-1$
     private static final int CAFILE_OPT = "cacert".hashCode();// $NON-NLS-1$
     private static final int CAPATH_OPT = "capath".hashCode();// $NON-NLS-1$
@@ -84,8 +81,14 @@ public class BasicCurlParser {
     private static final int HEAD_OPT = 'I';// $NON-NLS-1$
     private static final int PROXY_OPT = 'x';// $NON-NLS-1$
     private static final int PROXY_USER_OPT = 'U';// $NON-NLS-1$
+    private static final int PROXY_NTLM_OPT = "proxy-ntlm".hashCode();// $NON-NLS-1$
+    private static final int PROXY_NEGOTIATE_OPT = "proxy-negotiate".hashCode();// $NON-NLS-1$
     private static final int KEEPALIVETILE_OPT = "keepalive-time".hashCode();// $NON-NLS-1$
     private static final int MAX_TIME_OPT = 'm';// $NON-NLS-1$
+    private static final int OUTPUT_OPT = 'o';// $NON-NLS-1$
+    private static final int CREATE_DIRS_OPT = "create-dir".hashCode();// $NON-NLS-1$
+    private static final int OAUTH2_BEARER_OPT = "oauth-bearer".hashCode();// $NON-NLS-1$
+    private static final int INSECURE_OPT = 'k';// $NON-NLS-1$
     private static final List<Integer> AUTH_OPT = new ArrayList<>();// $NON-NLS-1$
     static {
         AUTH_OPT.add(BASIC_OPT);
@@ -121,96 +124,19 @@ public class BasicCurlParser {
         private String method = "GET";
         private String postData;
         private String connectTimeout = "";
-        private List<Cookie> cookies = new ArrayList<>();
-        private Authorization autorization = new Authorization();
+        private String cookie = null;
+        private Authorization authorization = new Authorization();
         private String cacert = "";
         private Map<String, String> formData = new LinkedHashMap<>();
         private Map<String, String> formStringData = new LinkedHashMap<>();
         private List<String> dnsServers = new ArrayList<>();
         private boolean isKeepAlive = true;
         private String maxTime = null;
-
-        public String getMaxTime() {
-            return maxTime;
-        }
-
-        public void setMaxTime(String maxTime) {
-            this.maxTime = maxTime;
-        }
+        private String outputFileName = "";
+        private Map<String, String> proxyServer = new LinkedHashMap<>();
 
         public Request() {
             super();
-        }
-
-
-        private Map<String, String> proxyServer = new LinkedHashMap<>();
-
-        public Map<String, String> getProxyServer() {
-            return proxyServer;
-        }
-
-        public void setProxyServer(Map<String, String> proxyServer) {
-            this.proxyServer = proxyServer;
-        }
-
-        public boolean isKeepAlive() {
-            return isKeepAlive;
-        }
-
-        public void setKeepAlive(boolean isKeepAlive) {
-            this.isKeepAlive = isKeepAlive;
-        }
-
-        public List<String> getDnsServers() {
-            return dnsServers;
-        }
-
-        public void addDnsServers(String dnsServer) {
-            this.dnsServers.add(dnsServer);
-        }
-
-        public Map<String, String> getFormStringData() {
-            return formStringData;
-        }
-
-        public void addFormStringData(String key, String value) {
-            formStringData.put(key, value);
-        }
-
-        public Map<String, String> getFormData() {
-            return formData;
-        }
-
-        public void addFormData(String key, String value) {
-            formData.put(key, value);
-        }
-
-        public String getConnectTimeout() {
-            return connectTimeout;
-        }
-
-        public String getCacert() {
-            return cacert;
-        }
-
-        public void setCacert(String cacert) {
-            this.cacert = cacert;
-        }
-
-        public void setConnectTimeout(String connectTimeout) {
-            this.connectTimeout = connectTimeout;
-        }
-
-        public List<Cookie> getCookies() {
-            return cookies;
-        }
-
-        public void setCookies(List<Cookie> cookies) {
-            this.cookies = cookies;
-        }
-
-        public Authorization getAutorization() {
-            return autorization;
         }
 
         /**
@@ -227,6 +153,13 @@ public class BasicCurlParser {
             this.compressed = compressed;
         }
 
+        /**
+         * 
+         * @param name  the name of Header
+         * @param value the value of Header
+         * 
+         *              Add a new Header
+         */
         public void addHeader(String name, String value) {
             headers.put(name, value);
         }
@@ -252,6 +185,9 @@ public class BasicCurlParser {
             return headers;
         }
 
+        /**
+         * @return the method
+         */
         public String getMethod() {
             return method;
         }
@@ -263,6 +199,9 @@ public class BasicCurlParser {
             this.method = method;
         }
 
+        /**
+         * @param the postdata to set
+         */
         public void setPostData(String value) {
             this.postData = value;
         }
@@ -272,6 +211,157 @@ public class BasicCurlParser {
          */
         public String getPostData() {
             return postData;
+        }
+
+        /**
+         * @return the cookie
+         */
+        public String getCookie() {
+            return cookie;
+        }
+
+        /**
+         * @param cookie set the cookie
+         */
+        public void setCookie(String cookie) {
+            this.cookie = cookie;
+        }
+
+        /**
+         * @return the output file
+         */
+        public String getOutputFileName() {
+            return outputFileName;
+        }
+
+        /**
+         * 
+         * @param outputFileName set the output file
+         */
+        public void setOutputFileName(String outputFileName) {
+            this.outputFileName = outputFileName;
+        }
+
+        /**
+         * 
+         * @return the max time of the whole operation
+         */
+        public String getMaxTime() {
+            return maxTime;
+        }
+
+        /**
+         * 
+         * @param maxTime set the max time of the whole operation
+         */
+        public void setMaxTime(String maxTime) {
+            this.maxTime = maxTime;
+        }
+
+        /**
+         * 
+         * @return the map of proxy server
+         */
+        public Map<String, String> getProxyServer() {
+            return proxyServer;
+        }
+
+        /**
+         * 
+         * @param proxyServer set the map of proxy server
+         */
+        public void setProxyServer(String key, String value) {
+            this.proxyServer.put(key, value);
+        }
+
+        /**
+         * 
+         * @return if the Http request keeps alive
+         */
+        public boolean isKeepAlive() {
+            return isKeepAlive;
+        }
+
+        /**
+         * 
+         * @param isKeepAlive set if the Http request keeps alive
+         */
+        public void setKeepAlive(boolean isKeepAlive) {
+            this.isKeepAlive = isKeepAlive;
+        }
+
+        /**
+         * 
+         * @return the list of DNS server
+         */
+        public List<String> getDnsServers() {
+            return dnsServers;
+        }
+
+        /**
+         * 
+         * @param dnsServer set the list of DNS server
+         */
+        public void addDnsServers(String dnsServer) {
+            this.dnsServers.add(dnsServer);
+        }
+
+        /**
+         * 
+         * @return the map of form data
+         */
+        public Map<String, String> getFormStringData() {
+            return formStringData;
+        }
+
+        /**
+         * 
+         * @param key   the key of form data
+         * @param value the value of form data
+         */
+        public void addFormStringData(String key, String value) {
+            formStringData.put(key, value);
+        }
+
+        /**
+         * 
+         * @return the map of form data
+         */
+        public Map<String, String> getFormData() {
+            return formData;
+        }
+
+        /**
+         * 
+         * @param key   the key of form data
+         * @param value the value of form data
+         */
+        public void addFormData(String key, String value) {
+            formData.put(key, value);
+        }
+
+        /**
+         * 
+         * @return the timeout of connection
+         */
+        public String getConnectTimeout() {
+            return connectTimeout;
+        }
+
+        public void setConnectTimeout(String connectTimeout) {
+            this.connectTimeout = connectTimeout;
+        }
+
+        public String getCacert() {
+            return cacert;
+        }
+
+        public void setCacert(String cacert) {
+            this.cacert = cacert;
+        }
+
+        public Authorization getAuthorization() {
+            return authorization;
         }
 
         /*
@@ -364,28 +454,48 @@ public class BasicCurlParser {
             CLOptionDescriptor.ARGUMENT_DISALLOWED, INCLUDE_OPT, "Include the HTTP-header in the output ");
     private static final CLOptionDescriptor D_HEAD_OPT = new CLOptionDescriptor("head",
             CLOptionDescriptor.ARGUMENT_DISALLOWED, HEAD_OPT, "Fetch the HTTP-header only");
+    private static final CLOptionDescriptor D_INSECURE_OPT = new CLOptionDescriptor("insecure",
+            CLOptionDescriptor.ARGUMENT_DISALLOWED, INSECURE_OPT,
+            "Allows curl to perform insecure SSL connections and transfers");
     private static final CLOptionDescriptor D_PROXY_OPT = new CLOptionDescriptor("proxy",
             CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_OPT,
             "Use the specified HTTP proxy. If the port number" + " is not specified, it is assumed at port 1080.");
     private static final CLOptionDescriptor D_PROXY_USER_OPT = new CLOptionDescriptor("proxy-user",
             CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_USER_OPT,
-            "Use the specified HTTP proxy. If the port number is not specified, it is assumed at port 1080.");
+            "Specify user and password to use for proxy authentication.");
+    private static final CLOptionDescriptor D_PROXY_NTLM_OPT = new CLOptionDescriptor("proxy-ntlm",
+            CLOptionDescriptor.ARGUMENT_DISALLOWED, PROXY_NTLM_OPT,
+            "Tells curl to use HTTP ntlm authentication when communicating with the given proxy. ");
+    private static final CLOptionDescriptor D_PROXY_NEGOTIATE_OPT = new CLOptionDescriptor("proxy-negotiate",
+            CLOptionDescriptor.ARGUMENT_DISALLOWED, PROXY_NEGOTIATE_OPT,
+            "Tells curl to use HTTP negotiate authentication when communicating with the given proxy. ");
     private static final CLOptionDescriptor D_KEEPALIVETILE_OPT = new CLOptionDescriptor("keepalive-time",
             CLOptionDescriptor.ARGUMENT_REQUIRED, KEEPALIVETILE_OPT,
             " This option sets the  time  a  connection  needs  to  remain  idle  before  sending"
-            + " keepalive  probes and the time between individual keepalive probes..");
+                    + " keepalive  probes and the time between individual keepalive probes..");
     private static final CLOptionDescriptor D_MAX_TIME_OPT = new CLOptionDescriptor("max-time",
-            CLOptionDescriptor.ARGUMENT_REQUIRED, MAX_TIME_OPT,"Maximum time in seconds that you allow the whole operation to take. ");
+            CLOptionDescriptor.ARGUMENT_REQUIRED, MAX_TIME_OPT,
+            "Maximum time in seconds that you allow the whole operation to take. ");
+    private static final CLOptionDescriptor D_OUTPUT_OPT = new CLOptionDescriptor("output",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, OUTPUT_OPT, "Write result to a file");
+    private static final CLOptionDescriptor D_OAUTH2_BEARER_OPT = new CLOptionDescriptor("oauth2-bearer",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, OAUTH2_BEARER_OPT, "OAuth 2 Bearer Token");
+    private static final CLOptionDescriptor D_CREATE_DIRS_OPT = new CLOptionDescriptor("create-dir",
+            CLOptionDescriptor.ARGUMENT_DISALLOWED, CREATE_DIRS_OPT,
+            "Create the necessary local directory hierarchy as needed for output file");
     private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[] { D_COMPRESSED_OPT, D_HEADER_OPT,
             D_METHOD_OPT, D_DATA_OPT, D_DATA_ASCII_OPT, D_DATA_URLENCODE_OPT, D_DATA_RAW_OPT, D_DATA_BINARY_OPT,
             D_FORM_OPT, D_FORM_STRING_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT, D_USER_OPT,
             D_BASIC_OPT, D_DIGEST_OPT, D_CACERT_OPT, D_CAPATH_OPT, D_CERT_OPT, D_CERT_STATUS_OPT, D_CERT_TYPE_OPT,
             D_CIPHERS_OPT, D_GET_OPT, D_DNS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT, D_LOCATION_OPT, D_INCLUDE_OPT,
-            D_HEAD_OPT, D_PROXY_OPT,D_PROXY_USER_OPT,D_KEEPALIVETILE_OPT,D_MAX_TIME_OPT};
+            D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT, D_PROXY_NEGOTIATE_OPT,
+            D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_OAUTH2_BEARER_OPT };
 
     public BasicCurlParser() {
         super();
     }
+
+    private static Pattern deleteLinePattern = Pattern.compile("\r|\n|\r\n");
 
     public Request parse(String commandLine) {
         String[] args = translateCommandline(commandLine);
@@ -400,7 +510,6 @@ public class BasicCurlParser {
                     // Curl or URL
                     if (!"CURL".equalsIgnoreCase(option.getArgument())) {
                         request.setUrl(option.getArgument());
-                        continue;
                     }
                 } else if (option.getDescriptor().getId() == COMPRESSED_OPT) {
                     request.setCompressed(true);
@@ -416,7 +525,7 @@ public class BasicCurlParser {
                 } else if (DATAS_OPT.contains(option.getDescriptor().getId())) {
                     String value = option.getArgument(0);
                     String dataOptionName = option.getDescriptor().getName();
-                    value = getDifferentValueByOptionName(value, dataOptionName);
+                    value = getPostDataByDifferentOption(value, dataOptionName);
                     request.setMethod("POST");
                     request.setPostData(value);
                 } else if (FORMS_OPT.contains(option.getDescriptor().getId())) {
@@ -429,6 +538,7 @@ public class BasicCurlParser {
                     } else {
                         request.addFormData(key, value);
                     }
+                    request.setMethod("POST");
                 } else if (option.getDescriptor().getId() == USER_AGENT_OPT) {
                     String name = "User-Agent";
                     String value = option.getArgument(0);
@@ -442,13 +552,13 @@ public class BasicCurlParser {
                     request.setConnectTimeout(value);
                 } else if (option.getDescriptor().getId() == COOKIE_OPT) {
                     String value = option.getArgument(0);
-                    request.setCookies(this.stringToCookie(value, request.getUrl()));
+                    request.setCookie(value);
                 } else if (option.getDescriptor().getId() == USER_OPT) {
                     String value = option.getArgument(0);
-                    setAuthUserPasswd(value, request.getUrl(), request.getAutorization());
+                    setAuthUserPasswd(value, request.getUrl(), request.getAuthorization());
                 } else if (AUTH_OPT.contains(option.getDescriptor().getId())) {
                     String authOption = option.getDescriptor().getName();
-                    setAuthMechanism(authOption, request.getAutorization());
+                    setAuthMechanism(authOption, request.getAuthorization());
                 } else if (SSL_OPT.contains(option.getDescriptor().getId())) {
                     request.setCacert(option.getDescriptor().getName());
                 } else if (option.getDescriptor().getId() == GET_OPT) {
@@ -467,12 +577,22 @@ public class BasicCurlParser {
                 } else if (option.getDescriptor().getId() == PROXY_USER_OPT) {
                     String value = option.getArgument(0);
                     setProxyServerUserInfo(request, value);
+                } else if (option.getDescriptor().getId() == PROXY_NTLM_OPT) {
+                    request.addHeader("Proxy-Authenticate", "NTLM");
+                } else if (option.getDescriptor().getId() == PROXY_NEGOTIATE_OPT) {
+                    request.addHeader("Proxy-Authenticate", "Negotiate");
                 } else if (option.getDescriptor().getId() == KEEPALIVETILE_OPT) {
                     String value = option.getArgument(0);
                     request.addHeader("Keep-Alive", "timeout=" + value);
                 } else if (option.getDescriptor().getId() == MAX_TIME_OPT) {
                     String value = option.getArgument(0);
                     request.setMaxTime(value);
+                } else if (option.getDescriptor().getId() == OUTPUT_OPT) {
+                    String value = option.getArgument(0);
+                    request.setOutputFileName(value);
+                } else if (option.getDescriptor().getId() == OAUTH2_BEARER_OPT) {
+                    String value = option.getArgument(0);
+                    request.addHeader("Authorization", "Bearer " + value);
                 }
             }
             if (isPostToGet) {
@@ -488,7 +608,6 @@ public class BasicCurlParser {
                     "Unexpected format for command line:" + commandLine + ", error:" + error);
         }
     }
-
 
     /**
      * Crack a command line.
@@ -556,39 +675,30 @@ public class BasicCurlParser {
         return result.toArray(new String[result.size()]);
     }
 
-    public List<Cookie> stringToCookie(String cookieStr, String url) {
-        List<Cookie> cookies = new ArrayList<>();
-        final StringTokenizer tok = new StringTokenizer(cookieStr, "; ", true);
-        while (tok.hasMoreTokens()) {
-            String nextCookie = tok.nextToken();
-            if (nextCookie.contains("=")) {
-                String[] cookieParameters = nextCookie.split("=");
-                Cookie newCookie = new Cookie();
-                newCookie.setName(cookieParameters[0]);
-                newCookie.setValue(cookieParameters[1]);
-                URL newUrl;
-                try {
-                    newUrl = new URL(url);
-                    newCookie.setDomain(newUrl.getHost());
-                    newCookie.setPath(newUrl.getPath());
-                    cookies.add(newCookie);
-                } catch (MalformedURLException e) {
-                    throw new IllegalArgumentException("unqualified url");
-                }
-            }
-        }
-        return cookies;
-    }
-
-    public void setAuthUserPasswd(String autorizationStr, String url, Authorization authorization) {
-        String[] autorizationParameters = autorizationStr.split(":");
-        authorization.setUser(autorizationParameters[0].trim());
-        authorization.setPass(autorizationParameters[1].trim());
+    /**
+     * 
+     * Set the username , password and baseurl of authorization
+     * 
+     * @param authorizationStr the username and password of authorization
+     * @param url              the baseurl of authorization
+     * @param authorization    the object of authorization
+     */
+    public void setAuthUserPasswd(String authorizationStr, String url, Authorization authorization) {
+        String[] authorizationParameters = authorizationStr.split(":");
+        authorization.setUser(authorizationParameters[0].trim());
+        authorization.setPass(authorizationParameters[1].trim());
         authorization.setURL(url);
     }
 
-    private void setAuthMechanism(String authOption, Authorization authorization) {
-        switch (authOption) {
+    /**
+     * 
+     * Set the mechanism of authorization
+     * 
+     * @param mechanism     the mechanism of authorization
+     * @param authorization the object of authorization
+     */
+    private void setAuthMechanism(String mechanism, Authorization authorization) {
+        switch (mechanism) {
         case "basic":
             authorization.setMechanism(Mechanism.BASIC);
             break;
@@ -600,117 +710,161 @@ public class BasicCurlParser {
         }
     }
 
-    private void setProxyServer(Request request, String value) {
-        if (!value.contains("://")) {
-            value = "http://" + value;
+    /**
+     * 
+     * Set the parameters of proxy server in http request advanced
+     * 
+     * @param request         http request
+     * @param proxyServerPara the parameters of proxy server
+     * 
+     */
+    private void setProxyServer(Request request, String proxyServerPara) {
+        if (!proxyServerPara.contains("://")) {
+            proxyServerPara = "http://" + proxyServerPara;
         }
         URI uriProxy = null;
         try {
-            uriProxy = new URI(value);
+            uriProxy = new URI(proxyServerPara);
+            request.setProxyServer("scheme", uriProxy.getScheme());
+            Optional<String> userInfoOptional = Optional.ofNullable(uriProxy.getUserInfo());
+            if (userInfoOptional.isPresent()) {
+                String userinfo = userInfoOptional.get();
+                if (userinfo.contains(":")) {
+                    String[] userInfo = userinfo.split(":");
+                    request.setProxyServer("username", userInfo[0]);
+                    request.setProxyServer("password", userInfo[1]);
+                }
+            }
+            Optional<String> hostOptional = Optional.ofNullable(uriProxy.getHost());
+            if (hostOptional.isPresent()) {
+                request.setProxyServer("servername", hostOptional.get());
+            }
+            if (uriProxy.getPort() != -1) {
+                request.setProxyServer("port", String.valueOf(uriProxy.getPort()));
+            } else {
+                request.setProxyServer("port", "1080");
+            }
         } catch (URISyntaxException e) {
-            log.error(e.getMessage());
+            LOGGER.error("string '{}' cannot be converted to a URL", proxyServerPara);
+            throw new IllegalArgumentException(proxyServerPara + " cannot be converted to a URL");
         }
-        request.getProxyServer().put("scheme", uriProxy.getScheme());
-        Optional<String> userInfoOptional = Optional.ofNullable(uriProxy.getUserInfo());
-        if (userInfoOptional.isPresent()) {
-            String userinfo = userInfoOptional.get();
-            if (userinfo.contains(":")) {
-                String[] userInfo = userinfo.split(":");
-                request.getProxyServer().put("username", userInfo[0]);
-                request.getProxyServer().put("password", userInfo[1]);
-            }
-        }
-        Optional<String> hostOptional = Optional.ofNullable(uriProxy.getHost());
-        if (hostOptional.isPresent()) {
-            request.getProxyServer().put("servername", hostOptional.get());
-        }
-        if (uriProxy.getPort() != -1) {
-            request.getProxyServer().put("port", String.valueOf(uriProxy.getPort()));
-        } else {
-            request.getProxyServer().put("port", "1080");
-        }
-    }
-    private void setProxyServerUserInfo(Request request, String value) {
-        if (value.contains(":")) {
-            String[] userInfo = value.split(":");
-            request.getProxyServer().put("username", userInfo[0]);
-            request.getProxyServer().put("password", userInfo[1]);
-        }
-        
     }
 
-    private String getDifferentValueByOptionName(String value, String dataOptionName) {
-        if (value.contains("@") && !dataOptionName.equals("data-raw")) {
-            value = value.replace("@", "");
-            value = readFromFile(value);
-            if (!dataOptionName.equals("data-binary")) {
-                value = replaceSpecialStr(value);
-            }
+    /**
+     * Set the username and password of proxy server
+     * 
+     * @param request               http request
+     * @param proxyServerUserPasswd the username and password of proxy server
+     */
+    private void setProxyServerUserInfo(Request request, String proxyServerUserPasswd) {
+        if (proxyServerUserPasswd.contains(":")) {
+            String[] userInfo = proxyServerUserPasswd.split(":");
+            request.setProxyServer("username", userInfo[0]);
+            request.setProxyServer("password", userInfo[1]);
         }
+    }
+
+    /**
+     * Get post data by different type of data option
+     * 
+     * @param postdata       the post data
+     * @param dataOptionName the different option of "--data"
+     * @return the post data
+     */
+    private String getPostDataByDifferentOption(String postdata, String dataOptionName) {
         if (dataOptionName.equals("data-urlencode")) {
-            value = encodeUrl(value);
+            postdata = encodePostdata(postdata);
+        } else {
+            if (postdata.contains("@") && !dataOptionName.equals("data-raw")) {
+                postdata = postdata.replace("@", "");
+                postdata = readFromFile(postdata);
+                if (!dataOptionName.equals("data-binary")) {
+                    postdata = deleteLineBreak(postdata);
+                }
+            }
         }
-        return value;
+        return postdata;
     }
 
-    private String encodeUrl(String value) {
-        if (!value.contains("=")) {
+    /**
+     * Encode the post data
+     * 
+     * @param postdata the post data
+     * @return the result of encoding
+     * 
+     */
+    private String encodePostdata(String postdata) {
+        String res = null;
+        if (postdata.contains("@")) {
+            String[] arr = postdata.split("@");
             try {
-                value = URLEncoder.encode(value, "UTF-8");
+                res = URLEncoder.encode(readFromFile(arr[1]), StandardCharsets.UTF_8.name());
             } catch (UnsupportedEncodingException e) {
-                log.error(e.getMessage());
+                LOGGER.error("string '{}' cannot be encoded", readFromFile(arr[1]));// NOSONAR
             }
-            return value;
+            if (!arr[0].isEmpty()) {
+                res = arr[0] + "=" + res;
+            }
         } else {
-            Map<String, String> res = urlRequest(value);
-            StringBuilder urlAfterEncoding = new StringBuilder();
-            for (Map.Entry<String, String> entry : res.entrySet()) {
-                urlAfterEncoding.append(entry.getKey());
+            if (!postdata.contains("=")) {
+                try {
+                    res = URLEncoder.encode(postdata, StandardCharsets.UTF_8.name());
+                } catch (UnsupportedEncodingException e) {
+                    LOGGER.error("string '{}' cannot be encoded", postdata);
+                    throw new IllegalArgumentException(postdata + " cannot be encoded");
+                }
+            } else {
+                StringBuilder urlAfterEncoding = new StringBuilder();
+                int index = postdata.indexOf('=');
+                urlAfterEncoding.append(postdata.substring(0, index));
                 urlAfterEncoding.append("=");
                 try {
-                    urlAfterEncoding.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+                    urlAfterEncoding.append(URLEncoder.encode(postdata.substring(index + 1, postdata.length()),
+                            StandardCharsets.UTF_8.name()));
                 } catch (UnsupportedEncodingException e) {
-                    log.error(e.getMessage());
+                    LOGGER.error("string '{}' cannot be encoded", postdata.substring(index + 1, postdata.length()));
+                    throw new IllegalArgumentException(
+                            postdata.substring(index + 1, postdata.length()) + " cannot be encoded");
                 }
-                urlAfterEncoding.append("&");
-            }
-            return urlAfterEncoding.substring(0, urlAfterEncoding.length() - 1);
-        }
-    }
-
-    public static Map<String, String> urlRequest(String strUrlParam) {
-        Map<String, String> mapRequest = new HashMap<>();
-        String[] arrSplit = null;
-        arrSplit = strUrlParam.split("[&]");
-        for (String strSplit : arrSplit) {
-            String[] arrSplitEqual = null;
-            arrSplitEqual = strSplit.split("[=]");
-            if (arrSplitEqual.length > 1) {
-                mapRequest.put(arrSplitEqual[0], arrSplitEqual[1]);
+                res = urlAfterEncoding.toString();
             }
         }
-        return mapRequest;
+        return res;
     }
 
-    public static String readFromFile(String filePath) {
-        String encoding = "UTF-8";
-        String myValue = "";
-        File file = new File(filePath);
+    /**
+     * Read the postdata from file
+     * 
+     * @param filePath
+     * @return the content of file
+     */
+    private static String readFromFile(String filePath) {
+        String encoding = StandardCharsets.UTF_8.name();
+        String content = "";
+        File file = new File(filePath.trim());
         if (file.isFile() && file.exists()) {
             try {
-                myValue = FileUtils.readFileToString(file, encoding);
+                content = FileUtils.readFileToString(file, encoding);
             } catch (IOException e) {
-                log.error("Failed to read from File");
+                LOGGER.error("Failed to read from File {}", filePath);
+                throw new IllegalArgumentException("Failed to read from File " + filePath);
             }
+        } else {
+            throw new IllegalArgumentException(filePath + " is a directory or does not exist");
         }
-        return myValue;
+        return content;
     }
 
-    public static String replaceSpecialStr(String str) {
+    /**
+     * Delete line break
+     * 
+     * @param postdata the post data
+     * @return the string without break line
+     */
+    private static String deleteLineBreak(String postdata) {
         String repl = "";
-        if (str != null) {
-            Pattern p = Pattern.compile("\r|\n|\r\n");
-            Matcher m = p.matcher(str);
+        if (postdata != null) {
+            Matcher m = deleteLinePattern.matcher(postdata);
             repl = m.replaceAll("");
         }
         return repl;
