@@ -59,6 +59,7 @@ public class DataSourceElement extends AbstractTestElement
 
     private transient boolean keepAlive;
     private transient boolean autocommit;
+    private transient boolean preinit;
 
     /*
      *  The datasource is set up by testStarted and cleared by testEnded.
@@ -218,6 +219,8 @@ public class DataSourceElement extends AbstractTestElement
             sb.append(getTrimInterval());
             sb.append(" Auto-Commit: ");
             sb.append(isAutocommit());
+            sb.append(" Preinit: ");
+            sb.append(isPreinit());
             log.debug(sb.toString());
         }
         int poolSize = Integer.parseInt(maxPool);
@@ -289,6 +292,16 @@ public class DataSourceElement extends AbstractTestElement
         }
 
         log.debug("PoolConfiguration:{}", this.dataSource);
+
+        if(isPreinit()) {
+            // side effect - connection pool init - that is what we want
+            try {
+                dataSource.getConnection().close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
         return dataSource;
     }
 
@@ -541,6 +554,21 @@ public class DataSourceElement extends AbstractTestElement
      */
     public void setAutocommit(boolean autocommit) {
         this.autocommit = autocommit;
+    }
+
+    /**
+     * @return Returns the preinit.
+     */
+    public boolean isPreinit() {
+        return preinit;
+    }
+
+    /**
+     * @param preinit
+     *            The preinit to set.
+     */
+    public void setPreinit(boolean preinit) {
+        this.preinit = preinit;
     }
 
     /**
