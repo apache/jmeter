@@ -116,6 +116,7 @@ to view the last major behaviors with the version 5.1.1.
 <h3>General</h3>
 <ul>
     <li>Updated to httpclient/httpmime 4.5.8 (from 4.5.7)</li>
+    <li><bug>63396</bug>JSR223 Test Elements: Description of Parameters is misleading, same for Script</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
