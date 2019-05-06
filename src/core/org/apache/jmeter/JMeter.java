@@ -965,7 +965,7 @@ public class JMeter implements JMeterPlugin {
     }
 
     private void startNonGui(String testFile, String logFile, CLOption remoteStart, boolean generateReportDashboard)
-            throws IllegalUserActionException, ConfigurationException {
+            throws IllegalUserActionException, ConfigurationException, FileNotFoundException {
         // add a system property so samplers can check to see if JMeter
         // is running in NonGui mode
         System.setProperty(JMETER_NON_GUI, "true");// $NON-NLS-1$
@@ -992,12 +992,12 @@ public class JMeter implements JMeterPlugin {
     }
 
     // run test in batch mode
-    private void runNonGui(String testFile, String logFile, boolean remoteStart, String remoteHostsString, boolean generateReportDashboard) {
+    private void runNonGui(String testFile, String logFile, boolean remoteStart, String remoteHostsString, boolean generateReportDashboard)
+            throws FileNotFoundException {
         try {
             File f = new File(testFile);
             if (!f.exists() || !f.isFile()) {
-                println("Could not open " + testFile);
-                return;
+                throw new FileNotFoundException("Could not open "+testFile);
             }
             FileServer.getFileServer().setBaseForScript(f);
 
@@ -1089,6 +1089,8 @@ public class JMeter implements JMeterPlugin {
                 distributedRunner.start();
             }
             startUdpDdaemon(engines);
+        } catch (FileNotFoundException e) {
+            throw e;
         } catch (Exception e) {
             System.out.println("Error in NonGUIDriver " + e.toString());//NOSONAR
             log.error("Error in NonGUIDriver", e);
