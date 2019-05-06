@@ -1093,6 +1093,7 @@ public class JMeter implements JMeterPlugin {
         } catch (Exception e) {
             System.out.println("Error in NonGUIDriver " + e.toString());//NOSONAR
             log.error("Error in NonGUIDriver", e);
+            System.exit(1);
         }
     }
     
