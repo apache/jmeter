@@ -997,6 +997,7 @@ public class JMeter implements JMeterPlugin {
             File f = new File(testFile);
             if (!f.exists() || !f.isFile()) {
                 println("Could not open " + testFile);
+                System.exit(1);
                 return;
             }
             FileServer.getFileServer().setBaseForScript(f);
