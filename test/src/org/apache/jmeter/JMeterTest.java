@@ -31,11 +31,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class JMeterTest extends JMeterTestCase {
+    /**
+     * In order to test the way of system.exit(), we need to avoid the program
+     * directly exit the whole JVM. System.exit() calls the method
+     * 'SecurityManager.checkPermission' to verify the permissions, so if an
+     * exception is thrown inside the 'checkPermission' , the logic behind
+     * System.exit will be interrupted. Then we can get the kind of system.exit() in
+     * other junit cases.
+     */
+    private static final String SYSTEMEXIT1="exitVM.1";
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         final SecurityManager securityManager = new SecurityManager() {
+            @Override
             public void checkPermission(Permission permission) {
-                if (permission.getName().startsWith("exitVM.1")) {
+                if (permission.getName().startsWith(SYSTEMEXIT1)) {
                     throw new AccessControlException(permission.getName());
                 }
             }
@@ -43,21 +53,20 @@ public class JMeterTest extends JMeterTestCase {
         System.setSecurityManager(securityManager);
     }
 
-    @Test
-    public void testJmxDoesntExist() {
+    public void testFailureWhenJmxDoesntExist() {
         JMeter jmeter = new JMeter();
         String command = "-n -t testPlan.jmx";
         String[] args = command.split(" ");
         try {
             jmeter.start(args);
         } catch (AccessControlException ex) {
-            assertEquals("The jmx file does not exist, the system should exit with system.exit(1)", ex.getMessage(),
-                    "exitVM.1");
+            assertEquals("The jmx file does not exist, the system should exit with System.exit(1)", ex.getMessage(),
+                    SYSTEMEXIT1);
         }
     }
 
     @Test
-    public void testJmxExist() throws IOException {
+    public void testSuccessWhenJmxExists() throws IOException {
         File temp = File.createTempFile("testPlan", ".jmx");
         String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT\">\n" + "  <hashTree>\n"
@@ -69,11 +78,12 @@ public class JMeterTest extends JMeterTestCase {
                 + "      <elementProp name=\"TestPlan.user_defined_variables\" elementType=\"Arguments\" guiclass=\"ArgumentsPanel\" "
                 + "testclass=\"Arguments\" testname=\"User Defined Variables\" enabled=\"true\">\n"
                 + "        <collectionProp name=\"Arguments.arguments\"/>\n" + "      </elementProp>\n"
-                + "      <stringProp name=\"TestPlan.user_define_classpath\"></stringProp>\n" + "    </TestPlan>\n"
-                + "    <hashTree/>\n" + "  </hashTree>\n" + "</jmeterTestPlan>\n" + "";
-        BufferedWriter out = new BufferedWriter(new FileWriter(temp));
-        out.write(testPlan);
-        out.close();
+                + "      <stringProp name=\"TestPlan.user_define_classpath\"></stringProp></TestPlan>"
+                + "    <hashTree/></hashTree></jmeterTestPlan>";
+        try (FileWriter fw = new FileWriter(temp);
+                BufferedWriter out = new BufferedWriter(fw)) {
+                out.write(testPlan);
+        }
         JMeter jmeter = new JMeter();
         String command = "-n -t " + temp.getAbsolutePath();
         String[] args = command.split(" ");
@@ -81,7 +91,7 @@ public class JMeterTest extends JMeterTestCase {
     }
 
     @Test
-    public void testPluginDoesntExist() throws IOException {
+    public void testFailureWithMissingPlugin() throws IOException {
         File temp = File.createTempFile("testPlan", ".jmx");
         String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT.20190506\">\n"
@@ -102,17 +112,19 @@ public class JMeterTest extends JMeterTestCase {
                 + "          <boolProp name=\"SUCCESFULL\">true</boolProp>\n"
                 + "          <stringProp name=\"RESPONSE_CODE\">200</stringProp>\n"
                 + "          <stringProp name=\"RESPONSE_MESSAGE\">OK</stringProp>\n"
-                + "          <stringProp name=\"REQUEST_DATA\">{&quot;email&quot;:&quot;user1&quot;, &quot;password&quot;:&quot;password1&quot;}；</stringProp>\n"
+                + "          <stringProp name=\"REQUEST_DATA\">{&quot;email&quot;:&quot;user1&quot;, &quot;password&quot;:&quot;password1&quot;}；"
+                + "</stringProp>\n"
                 + "          <stringProp name=\"RESPONSE_DATA\">{&quot;successful&quot;: true, &quot;account_id&quot;:&quot;0123456789&quot;}</stringProp>\n"
                 + "          <stringProp name=\"RESPONSE_TIME\">${__Random(50,500)}</stringProp>\n"
                 + "          <stringProp name=\"LATENCY\">${__Random(1,50)}</stringProp>\n"
                 + "          <stringProp name=\"CONNECT\">${__Random(1,5)}</stringProp>\n"
-                + "        </kg.apc.jmeter.samplers.DummySampler>\n" + "      </hashTree>\n" + "    </hashTree>\n"
-                + "  </hashTree>\n" + "</jmeterTestPlan>\n" + "" + "    <hashTree/>\n" + "  </hashTree>\n"
-                + "</jmeterTestPlan>\n" + "";
-        BufferedWriter out = new BufferedWriter(new FileWriter(temp));
-        out.write(testPlan);
-        out.close();
+                + "        </kg.apc.jmeter.samplers.DummySampler></hashTree></hashTree>\n"
+                + "  </hashTree></jmeterTestPlan><hashTree/></hashTree>\n"
+                + "</jmeterTestPlan>";
+        try (FileWriter fw = new FileWriter(temp);
+                BufferedWriter out = new BufferedWriter(fw)) {
+                out.write(testPlan);
+        }
         JMeter jmeter = new JMeter();
         String command = "-n -t " + temp.getAbsolutePath();
         String[] args = command.split(" ");
@@ -121,7 +133,7 @@ public class JMeterTest extends JMeterTestCase {
         } catch (AccessControlException ex) {
             assertEquals(
                     "The plugin is used for jmx file which doesn't exist, the system should exit with system.exit(1)",
-                    ex.getMessage(), "exitVM.1");
+                    ex.getMessage(), SYSTEMEXIT1);
         }
     }
 }
