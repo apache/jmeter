@@ -19,6 +19,7 @@
 package org.apache.jmeter.timers;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -335,7 +336,8 @@ public class PoissonRandomTimer extends RandomTimer implements Serializable {
         double p = 1;
         do {
             k = k + 1;
-            double u = Math.random();
+	    Random rand = new Random();
+            double u = rand.nextDouble();
             p = p * u;
         } while (p > L);
         return k - 1;
