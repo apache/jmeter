@@ -336,7 +336,7 @@ public class PoissonRandomTimer extends RandomTimer implements Serializable {
         double p = 1;
         do {
             k = k + 1;
-	    Random rand = new Random();
+            Random rand = new Random();
             double u = rand.nextDouble();
             p = p * u;
         } while (p > L);
