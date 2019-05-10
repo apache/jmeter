@@ -645,7 +645,65 @@ public class XPathUtil {
                     .toString());
         }
     }
-
+    /***
+     * 
+     * @param result The result of xpath2 assertion
+     * @param xmlFile
+     * @param xPathQuery
+     * @param namespaces
+     * @throws SaxonApiException
+     * @throws FactoryConfigurationError
+     */
+    public static void computeAssertionResultUsingSaxon(AssertionResult result, String xmlFile, String xPathQuery,
+            String namespaces) throws SaxonApiException, FactoryConfigurationError {
+        // generating the cache key
+        final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
+        // check the cache
+        XPathExecutable xPathExecutable;
+        if (StringUtils.isNotEmpty(xPathQuery)) {
+            xPathExecutable = XPATH_CACHE.get(key);
+        } else {
+            log.warn("Error : {}", JMeterUtils.getResString("xpath2_extractor_empty_query"));
+            return;
+        }
+        try (StringReader reader = new StringReader(xmlFile)) {
+            // We could instanciate it once but might trigger issues in the future
+            // Sharing of a DocumentBuilder across multiple threads is not recommended.
+            // However, in the current implementation sharing a DocumentBuilder (once
+            // initialized)
+            // will only cause problems if a SchemaValidator is used.
+            net.sf.saxon.s9api.DocumentBuilder builder = PROCESSOR.newDocumentBuilder();
+            XdmNode xdmNode = builder.build(new SAXSource(new InputSource(reader)));
+            if (xPathExecutable != null) {
+                XPathSelector selector = null;
+                try {
+                    selector = xPathExecutable.load();
+                    selector.setContextItem(xdmNode);
+                    XdmValue nodes = selector.evaluate();
+                    int length = nodes.size();
+                    // In case we need to extract everything
+                    if (length == 0) {
+                        result.setFailure(true);
+                        result.setFailureMessage(xPathQuery);
+                    } 
+                } finally {
+                    if (selector != null) {
+                        try {
+                            selector.getUnderlyingXPathContext().setContextItem(null);
+                        } catch (Exception e) { // NOSONAR Ignored on purpose
+                            result.setError(true);
+                            result.setFailureMessage(
+                                    new StringBuilder("Exception: ")
+                                    .append(e.getMessage())
+                                    .append(" for:")
+                                    .append(xPathQuery)
+                                    .toString());
+                        }
+                    }
+                }
+            }
+        }
+    }
     /**
      * Formats XML
      * @param xml string to format
