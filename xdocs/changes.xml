@@ -20,6 +20,7 @@
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY rarr     "&#x02192;" >
 <!ENTITY vellip   "&#x022EE;" >
+<!ENTITY nbsp     "&#x00A0;" >
 ]>
 <document>
 <properties>
@@ -142,6 +143,7 @@ to view the last major behaviors with the version 5.1.1.
 
 <h3>Listeners</h3>
 <ul>
+    <li><bug>63319</bug><code>ArrayIndexOutOfBoundsException</code> in Aggregate Graph when selecting 90&nbsp;% or 95&nbsp;% columns</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
