@@ -220,7 +220,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
                     OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){
                 CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, StatGraphVisualizer.getFormatters()),
                         writer,
-                        saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(StatGraphVisualizer.getColumns()) : null);
+                        saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(StatGraphVisualizer.getColumns(), StatGraphVisualizer.getColumnsMsgParameters()) : null);
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             }

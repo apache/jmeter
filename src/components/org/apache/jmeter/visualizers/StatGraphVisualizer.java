@@ -212,7 +212,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private int defaultHeight = 300;
 
-    private JComboBox<String> columnsList = new JComboBox<>(getLabels(GRAPH_COLUMNS));
+    private JComboBox<String> columnsList = new JComboBox<>(getLabels(GRAPH_COLUMNS, getGraphColumnsMsgParameters()));
 
     private List<BarGraph> eltList = new ArrayList<>();
 
@@ -309,7 +309,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         clearData();
         init();
     }
-    
+
     static final Object[][] getColumnsMsgParameters() { 
         return new Object[][] { null, 
             null,
@@ -324,6 +324,18 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             null,
             null,
             null};
+    }
+
+    static final Object[][] getGraphColumnsMsgParameters() {
+        return new Object[][] {
+            null,
+            null,
+            new Object[] { PCT1_LABEL },
+            new Object[] { PCT2_LABEL },
+            new Object[] { PCT3_LABEL },
+            null,
+            null
+        };
     }
 
     private String[] keys(Map<String, ?> map) {
@@ -344,7 +356,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      * @return ObjectTableModel
      */
     static ObjectTableModel createObjectTableModel() {
-        return new ObjectTableModel(getLabels(COLUMNS),
+        return new ObjectTableModel(getLabels(COLUMNS, getColumnsMsgParameters()),
                 SamplingStatCalculator.class,
                 new Functor[] {
                 new Functor("getLabel"),                    //$NON-NLS-1$
@@ -406,20 +418,21 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             new NumberRenderer("#0.00"),    // Sent bytes per sec   //$NON-NLS-1$
         };
     }
-    
+
     /**
      * 
      * @param keys I18N keys
+     * @param columnMsgParams parameters to use to format the keys labels
      * @return labels
      */
-    static String[] getLabels(String[] keys) {
+    static String[] getLabels(String[] keys, Object[][] columnMsgParams) {
         String[] labels = new String[keys.length];
         for (int i = 0; i < labels.length; i++) {
-            labels[i]=MessageFormat.format(JMeterUtils.getResString(keys[i]), getColumnsMsgParameters()[i]);
+            labels[i]=MessageFormat.format(JMeterUtils.getResString(keys[i]), columnMsgParams[i]);
         }
         return labels;
     }
-    
+
     /**
      * We use this method to get the data, since we are using
      * ObjectTableModel, so the calling getDataVector doesn't
@@ -719,7 +732,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                     OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){ 
                 CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),
                         writer,
-                        saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
+                        saveHeaders.isSelected() ? getLabels(COLUMNS, getColumnsMsgParameters()) : null);
             } catch (IOException e) { // NOSONAR Error is reported in GUI
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } 
