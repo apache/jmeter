@@ -571,6 +571,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(spane, BorderLayout.CENTER);
         new Timer(REFRESH_PERIOD, e -> {
+                if (newRows.isEmpty()) {
+                    return;
+                }
                 synchronized (lock) {
                     while (!newRows.isEmpty()) {
                         model.insertRow(newRows.pop(), model.getRowCount() - 1);
