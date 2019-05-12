@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -51,6 +52,7 @@ public class HttpRequestHdr {
     private static final String HTTP = "http"; // $NON-NLS-1$
     private static final String HTTPS = "https"; // $NON-NLS-1$
     private static final String PROXY_CONNECTION = "proxy-connection"; // $NON-NLS-1$
+    private static final String CRLF = "<CRLF>";
     public static final String CONTENT_TYPE = "content-type"; // $NON-NLS-1$
     public static final String CONTENT_LENGTH = "content-length"; // $NON-NLS-1$
 
@@ -68,11 +70,6 @@ public class HttpRequestHdr {
      * describes the object or service the client is requesting.
      */
     private String url = ""; // $NON-NLS-1$
-
-    /**
-     * Version of http being used. Such as HTTP/1.0.
-     */
-    private String version = ""; // NOTREAD // $NON-NLS-1$
 
     private byte[] rawPostData;
 
@@ -158,7 +155,7 @@ public class HttpRequestHdr {
                     }
                 }
                 if (log.isDebugEnabled()){
-                    log.debug("Client Request Line: '" + reqLine.replaceFirst("\r\n$", "<CRLF>") + "'");
+                    log.debug("Client Request Line: '{}'", reqLine.replaceFirst("\r\n$", CRLF));
                 }
                 line.reset();
             } else if (!inHeaders) {
@@ -169,8 +166,9 @@ public class HttpRequestHdr {
         rawPostData = line.toByteArray();
 
         if (log.isDebugEnabled()){
-            log.debug("rawPostData in default JRE encoding: " + new String(rawPostData)); // TODO - charset?
-            log.debug("Request: '" + clientRequest.toString().replaceAll("\r\n", "<CRLF>") + "'");
+            log.debug("rawPostData in default JRE encoding: {}, Request: '{}'", 
+                    new String(rawPostData, Charset.defaultCharset()),
+                    clientRequest.toString().replaceAll("\r\n", CRLF));
         }
         return clientRequest.toByteArray();
     }
@@ -178,16 +176,14 @@ public class HttpRequestHdr {
     private void parseFirstLine(String firstLine) {
         this.firstLine = firstLine;
         if (log.isDebugEnabled()) {
-            log.debug("browser request: " + firstLine.replaceFirst("\r\n$", "<CRLF>"));
+            log.debug("browser request: {}", firstLine.replaceFirst("\r\n$", CRLF));
         }
         StringTokenizer tz = new StringTokenizer(firstLine);
         method = getToken(tz).toUpperCase(java.util.Locale.ENGLISH);
         url = getToken(tz);
-        version = getToken(tz);
+        String version = getToken(tz);
         if (log.isDebugEnabled()) {
-            log.debug("parsed method:   " + method);
-            log.debug("parsed url/host: " + url); // will be host:port for CONNECT
-            log.debug("parsed version:  " + version);
+            log.debug("parsed method: {}, url/host: {}, version: {}", method, url, version); // will be host:port for CONNECT
         }
         // SSL connection
         if (getMethod().startsWith(HTTPConstants.CONNECT)) {
@@ -207,28 +203,28 @@ public class HttpRequestHdr {
         }
         // JAVA Impl accepts URLs with unsafe characters so don't do anything
         if(HTTPSamplerFactory.IMPL_JAVA.equals(httpSamplerName)) {
-            log.debug("First Line url: " + url);
+            log.debug("First Line url: {}", url);
             return;
         }
         try {
             // See Bug 54482
             URI testCleanUri = new URI(url);
             if(log.isDebugEnabled()) {
-                log.debug("Successfully built URI from url:"+url+" => " + testCleanUri.toString());
+                log.debug("Successfully built URI from url:{} => {}", url, testCleanUri.toString());
             }
         } catch (URISyntaxException e) {
             log.warn("Url '" + url + "' contains unsafe characters, will escape it, message:"+e.getMessage());
             try {
                 String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
                 if(log.isDebugEnabled()) {
-                    log.debug("Successfully escaped url:'"+url +"' to:'"+escapedUrl+"'");
+                    log.debug("Successfully escaped url:'{}' to:'{}'", url, escapedUrl);
                 }
                 url = escapedUrl;
             } catch (Exception e1) {
                 log.error("Error escaping URL:'"+url+"', message:"+e1.getMessage());
             }
         }
-        log.debug("First Line url: " + url);
+        log.debug("First Line url: {}", url);
     }
 
     /*
@@ -281,10 +277,7 @@ public class HttpRequestHdr {
     }
 
     private boolean isMultipart(String contentType) {
-        if (contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA)) {
-            return true;
-        }
-        return false;
+        return contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA);
     }
 
     public MultipartUrlConfig getMultipartConfig(String contentType) {
@@ -328,8 +321,6 @@ public class HttpRequestHdr {
         }
         return str;
     }
-
-    // TODO replace repeated substr() above and below with more efficient method.
 
     /**
      * Find the :PORT from http://server.ect:PORT/some/file.xxx
@@ -411,10 +402,10 @@ public class HttpRequestHdr {
     }
 
 
-    public String getUrlWithoutQuery(URL _url) {
-        String fullUrl = _url.toString();
+    public String getUrlWithoutQuery(URL url) {
+        String fullUrl = url.toString();
         String urlWithoutQuery = fullUrl;
-        String query = _url.getQuery();
+        String query = url.getQuery();
         if(query != null) {
             // Get rid of the query and the ?
             urlWithoutQuery = urlWithoutQuery.substring(0, urlWithoutQuery.length() - query.length() - 1);
@@ -444,7 +435,7 @@ public class HttpRequestHdr {
         if (url.contains("//")) {
             String protocol = url.substring(0, url.indexOf(':'));
             if (log.isDebugEnabled()) {
-                log.debug("Proxy: setting protocol to : " + protocol);
+                log.debug("Proxy: setting protocol to : {}", protocol);
             }
             return protocol;
         } else if (sampler.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT) {
