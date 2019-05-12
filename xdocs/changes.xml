@@ -99,6 +99,7 @@ to view the last major behaviors with the version 5.1.1.
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
   <li><bug>62863</bug>Enable PKCS11 keystores for usage with KeyStore Manager. Based on patch by Clifford Harms (clifford.harms at gmail.com).</li>
+  <li><pr>457</pr>Slight performance improvement in PoissonRandomTimer by using ThreadLocalRandom. Based on a patch by Xia Li.</li>
 </ul>
 
 <h3>Functions</h3>
@@ -179,6 +180,7 @@ to view the last major behaviors with the version 5.1.1.
 <ul>
   <li>Clifford Harms (clifford.harms at gmail.com)</li>
   <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
+  <li>Xia Li</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
