@@ -114,7 +114,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     "org.apache.jmeter.protocol.http.gui.DNSCachePanel",
                     "org.apache.jmeter.protocol.http.gui.AuthPanel",
                     "org.apache.jmeter.protocol.http.gui.CacheManagerGui",
-                    "org.apache.jmeter.protocol.http.gui.CookiePanel"
+                    "org.apache.jmeter.protocol.http.gui.CookiePanel",
+                    "org.apache.jmeter.testbeans.gui.TestBeanGUI", 
+                    "org.apache.jmeter.modifiers.gui.SampleTimeoutGui"
             ));
 
     //+ JMX names - do not change
@@ -721,7 +723,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             setAuthManager((AuthManager) el);
         } else if (el instanceof DNSCacheManager) {
             setDNSResolver((DNSCacheManager) el);
-        } else {
+        } else if (el instanceof KeystoreConfig) {
+            setKeystoreConfigProperty((KeystoreConfig) el);
+        } else if (el instanceof SampleTimeout) {
+            setSampleTimeoutProperty((SampleTimeout) el);
+        } 
+          else {
             super.addTestElement(el);
         }
     }
