@@ -132,7 +132,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
      */
     private JToolBar createSearchToolBar() {
         // Search field
-        textToFindField = new JTextField(); // $NON-NLS-1$
+        textToFindField = new JTextField(30); // $NON-NLS-1$
         this.toolBar = new JToolBar();
         toolBar.setFloatable(false);
         toolBar.setFont(FONT_SMALL);
