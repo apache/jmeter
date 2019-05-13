@@ -4742,24 +4742,6 @@ Some sample expressions:
 <property name="XPath2 Assertion"    required="Yes">XPath to match in the document.</property>
 <property name="True if nothing matches"    required="No">True if a XPath expression is not matched</property>
 </properties>
-<note>
-The non-tolerant parser can be quite slow, as it may need to download the DTD etc.
-</note>
-<note>
-<b>NAMESPACES</b><br/>
-As a work-round for namespace limitations of the Xalan XPath parser (implementation on which JMeter is based) you need to:
-<ul>
-<li>provide a Properties file (if for example your file is named namespaces.properties) which contains mappings for the namespace prefixes: 
-<source>
-prefix1=http\://foo.apache.org
-prefix2=http\://toto.apache.org
-&hellip;
-</source></li>
-
-<li>reference this file in <code>user.properties</code> file using the property:
-    <source>xpath.namespace.config=namespaces.properties</source></li>
-</ul>
-</note>
 </component>
 
 

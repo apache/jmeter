@@ -18,7 +18,6 @@
 package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
@@ -54,24 +53,24 @@ public class XPath2Assertion extends AbstractScopedAssertion implements Serializ
         AssertionResult result = new AssertionResult(getName());
         result.setFailure(false);
         result.setFailureMessage("");
-        byte[] responseData = null;
+        String responseData = null;
         if (isScopeVariable()) {
             String inputString = getThreadContext().getVariables().get(getVariableName());
             if (!StringUtils.isEmpty(inputString)) {
-                responseData = inputString.getBytes(StandardCharsets.UTF_8);
+                responseData = inputString;
             }
         } else {
-            responseData = response.getResponseData();
+            responseData = response.getResponseDataAsString();
         }
-        if (responseData == null || responseData.length == 0) {
+        if (responseData == null) {
             return result.setResultForNull();
         }
         try {
-            XPathUtil.computeAssertionResultUsingSaxon(result, new String(responseData), getXPathString(),
+            XPathUtil.computeAssertionResultUsingSaxon(result, responseData, getXPathString(),
                     getNamespaces());
         } catch (SaxonApiException e) {
             result.setError(true);
-            result.setFailureMessage("SAXException: " + e.getMessage());
+            result.setFailureMessage("SaxonApiException occured computing assertion with XPath:" + getXPathString() + ", error:" + e.getMessage());
             return result;
         }
         return result;
