@@ -44,6 +44,7 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
                 "variableNames", // $NON-NLS-1$
                 "resultVariable", // $NON-NLS-1$
                 "queryTimeout", // $NON-NLS-1$
+                "resultSetMaxRows", // $NON-NLS-1$
                 "resultSetHandler" // $NON-NLS-1$
                 });
 
@@ -78,6 +79,10 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("queryTimeout"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
+
+        p = property("resultSetMaxRows"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
 

@@ -128,6 +128,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     private String resultSetHandler = RS_STORE_AS_STRING;
     private String resultVariable = ""; // $NON-NLS-1$
     private String queryTimeout = ""; // $NON-NLS-1$
+    private String resultSetMaxRows = ""; // $NON-NLS-1$
 
     private static final int MAX_RETAIN_SIZE = JMeterUtils.getPropDefault("jdbcsampler.max_retain_result_size", 64 * 1024);
 
@@ -545,33 +546,14 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             jmvars.putObject(currentResultVariable, results);
         }
         int j = 0;
-        while (rs.next()) {
-            Map<String, Object> row = null;
-            j++;
-            for (int i = 1; i <= numColumns; i++) {
-                Object o = rs.getObject(i);
-                if(results != null) {
-                    if(row == null) {
-                        row = new HashMap<>(numColumns);
-                        results.add(row);
-                    }
-                    row.put(meta.getColumnLabel(i), o);
-                }
-                if (o instanceof byte[]) {
-                    o = new String((byte[]) o, ENCODING);
-                }
-                sb.append(o);
-                if (i==numColumns){
-                    sb.append('\n');
-                } else {
-                    sb.append('\t');
-                }
-                if (i <= varNames.length) { // i starts at 1
-                    String name = varNames[i - 1].trim();
-                    if (name.length()>0){ // Save the value in the variable if present
-                        jmvars.put(name+UNDERSCORE+j, o == null ? null : o.toString());
-                    }
-                }
+        int k = getIntegerResultSetMaxRows();
+        if (k < 0) {
+            while (rs.next()) {
+                j = processRow(rs, meta, sb, numColumns, jmvars, varNames, results, j);
+            }
+        } else {
+            while (j < k && rs.next()) {
+                j = processRow(rs, meta, sb, numColumns, jmvars, varNames, results, j);
             }
         }
         // Remove any additional values from previous sample
@@ -592,6 +574,39 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         }
 
         return sb.toString();
+    }
+
+    private int processRow(ResultSet rs, ResultSetMetaData meta, StringBuilder sb, int numColumns,
+            JMeterVariables jmvars, String[] varNames, List<Map<String, Object>> results, int j)
+            throws SQLException, UnsupportedEncodingException {
+        Map<String, Object> row = null;
+        j++;
+        for (int i = 1; i <= numColumns; i++) {
+            Object o = rs.getObject(i);
+            if(results != null) {
+                if(row == null) {
+                    row = new HashMap<>(numColumns);
+                    results.add(row);
+                }
+                row.put(meta.getColumnLabel(i), o);
+            }
+            if (o instanceof byte[]) {
+                o = new String((byte[]) o, ENCODING);
+            }
+            sb.append(o);
+            if (i==numColumns){
+                sb.append('\n');
+            } else {
+                sb.append('\t');
+            }
+            if (i <= varNames.length) { // i starts at 1
+                String name = varNames[i - 1].trim();
+                if (name.length()>0){ // Save the value in the variable if present
+                    jmvars.put(name+UNDERSCORE+j, o == null ? null : o.toString());
+                }
+            }
+        }
+        return j;
     }
 
     public static void close(Connection c) {
@@ -653,6 +668,37 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      */
     public void setQueryTimeout(String queryTimeout) {
         this.queryTimeout = queryTimeout;
+    }
+
+    /**
+     * @return the integer representation resultSetMaxRows
+     */
+    public int getIntegerResultSetMaxRows() {
+        int maxrows;
+        if(StringUtils.isEmpty(resultSetMaxRows)) {
+            return -1;
+        } else {
+            try {
+                maxrows = Integer.parseInt(resultSetMaxRows);
+            } catch (NumberFormatException nfe) {
+                maxrows = -1;
+            }
+        }
+        return maxrows;
+    }
+
+    /**
+     * @return the resultSetMaxRows
+     */
+    public String getResultSetMaxRows() {
+        return resultSetMaxRows ;
+    }
+
+    /**
+     * @param resultSetMaxRows max number of rows to iterate through the ResultSet
+     */
+    public void setResultSetMaxRows(String resultSetMaxRows) {
+        this.resultSetMaxRows = resultSetMaxRows;
     }
 
     public String getQuery() {
