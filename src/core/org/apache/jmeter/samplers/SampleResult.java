@@ -624,7 +624,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * see https://bz.apache.org/bugzilla/show_bug.cgi?id=63055
      * @return true if TestPlan is in functional mode or property subresults.disable_renaming is true
      */
-    protected final boolean isRenameSampleLabel() {
+    public static final boolean isRenameSampleLabel() {
         return !(TestPlan.getFunctionalMode() || DISABLE_SUBRESULTS_RENAMING);
     }
 

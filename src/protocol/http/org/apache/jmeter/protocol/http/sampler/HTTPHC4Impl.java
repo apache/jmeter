@@ -806,7 +806,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected HTTPSampleResult createSampleResult(URL url, String method) {
         HTTPSampleResult res = new HTTPSampleResult();
 
-        res.setSampleLabel(this.testElement.getName());
+        configureSampleLabel(res, url);
         res.setHTTPMethod(method);
         res.setURL(url);
         
