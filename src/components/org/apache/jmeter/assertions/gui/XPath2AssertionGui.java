@@ -19,18 +19,13 @@
 package org.apache.jmeter.assertions.gui;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.assertions.XPath2Assertion;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
-import org.apache.jmeter.gui.util.JSyntaxTextArea;
-import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -38,8 +33,8 @@ import org.apache.jmeter.util.JMeterUtils;
 public class XPath2AssertionGui extends AbstractAssertionGui { // $NOSONAR
 
     private static final long serialVersionUID = 240L;// $NON-NLS-1$
-    private XPathPanel xpath;
-    private JSyntaxTextArea namespacesTA;
+    private XPath2Panel xpath;
+
 
     public XPath2AssertionGui() {
         super();
@@ -75,7 +70,7 @@ public class XPath2AssertionGui extends AbstractAssertionGui { // $NOSONAR
         showScopeSettings(assertion, true);
         xpath.setXPath(assertion.getXPathString());
         xpath.setNegated(assertion.isNegated());
-        namespacesTA.setText(assertion.getNamespaces());
+        xpath.setNamespaces(assertion.getNamespaces());
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
@@ -87,7 +82,6 @@ public class XPath2AssertionGui extends AbstractAssertionGui { // $NOSONAR
         topBox.add(makeTitlePanel());
 
         topBox.add(createScopePanel(true));
-        topBox.add(makeParameterPanel());
         add(topBox, BorderLayout.NORTH);
 
         // USER_INPUT
@@ -95,23 +89,9 @@ public class XPath2AssertionGui extends AbstractAssertionGui { // $NOSONAR
         sizePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         sizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 getXPathAttributesTitle()));
-        xpath = new XPathPanel();
+        xpath = new XPath2Panel();
         sizePanel.add(xpath);
         add(sizePanel, BorderLayout.CENTER);
-    }
-    private JPanel makeParameterPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        initConstraints(gbc);
-        panel.add(new JLabel(JMeterUtils.getResString("xpath_extractor_user_namespaces")), gbc.clone());
-        gbc.gridx++;
-        gbc.weightx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        namespacesTA = JSyntaxTextArea.getInstance(5, 80);
-        panel.add(JTextScrollPane.getInstance(namespacesTA, true), gbc.clone());
-        resetContraints(gbc);
-
-        return panel;
     }
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
@@ -126,7 +106,7 @@ public class XPath2AssertionGui extends AbstractAssertionGui { // $NOSONAR
             saveScopeSettings(assertion);
             assertion.setNegated(xpath.isNegated());
             assertion.setXPathString(xpath.getXPath());
-            assertion.setNamespaces(namespacesTA.getText());
+            assertion.setNamespaces(xpath.getNamespaces());
         }
     }
 
@@ -138,26 +118,7 @@ public class XPath2AssertionGui extends AbstractAssertionGui { // $NOSONAR
         super.clearGui();
         xpath.setXPath("/"); //$NON-NLS-1$
         xpath.setNegated(false);
-        namespacesTA.setText("");
-
-    }
-    private void resetContraints(GridBagConstraints gbc) {
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.weightx = 0;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.NONE;
-    }
-
-    private void initConstraints(GridBagConstraints gbc) {
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridheight = 1;
-        gbc.gridwidth = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 0;
-        gbc.weighty = 0;
+        xpath.setNamespaces("");
     }
 
 }

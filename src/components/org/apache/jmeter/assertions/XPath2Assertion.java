@@ -39,7 +39,7 @@ public class XPath2Assertion extends AbstractScopedAssertion implements Serializ
     private static final String XPATH_KEY = "XPath.xpath"; // $NON-NLS-1$
     private static final String VALIDATE_KEY = "XPath.validate"; // $NON-NLS-1$
     private static final String NEGATE_KEY = "XPath.negate"; // $NON-NLS-1$
-    private static final String NAMESPACES = "XPath2Assertion.namespaces"; // $NON-NLS-1$
+    private static final String NAMESPACES = "XPath.namespaces"; // $NON-NLS-1$
     // - JMX file attributes
     public static final String DEFAULT_XPATH = "/";
 

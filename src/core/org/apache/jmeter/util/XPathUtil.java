@@ -590,6 +590,29 @@ public class XPathUtil {
     }
 
     /**
+     * 
+     * @param document XML Document
+     * @return {@link PrefixResolver}
+     */
+    private static PrefixResolver getPrefixResolverForXPath2(Document document,String namespaces) {
+        return new PropertiesBasedPrefixResolverForXpath2(document.getDocumentElement(),namespaces);
+    }
+    /**
+     * Validate xpathString is a valid XPath expression
+     * @param document XML Document
+     * @param xpathString XPATH String
+     * @throws TransformerException if expression fails to evaluate
+     */
+    public static void validateXPath2(Document document, String xpathString,String namespaces) throws TransformerException {
+        if (XPathAPI.eval(document, xpathString, getPrefixResolverForXPath2(document,namespaces)) == null) {
+            // We really should never get here
+            // because eval will throw an exception
+            // if xpath is invalid, but whatever, better
+            // safe
+            throw new IllegalArgumentException("xpath eval of '" + xpathString + "' was null");
+        }
+    }
+    /**
      * Fills result
      * @param result {@link AssertionResult}
      * @param doc XML Document
@@ -645,6 +668,8 @@ public class XPathUtil {
                     .toString());
         }
     }
+    
+  
     /***
      * 
      * @param result The result of xpath2 assertion
