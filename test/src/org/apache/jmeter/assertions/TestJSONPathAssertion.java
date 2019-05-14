@@ -19,6 +19,8 @@ package org.apache.jmeter.assertions;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Locale;
+
 import org.apache.jmeter.samplers.SampleResult;
 import org.junit.Test;
 
@@ -367,19 +369,26 @@ public class TestJSONPathAssertion {
 
     @Test
     public void testGetResultFloat() {
-        SampleResult samplerResult = new SampleResult();
+        Locale prevLocale = Locale.getDefault();
+        try {
+            // 0.0000123456789 is locale-dependent
+            Locale.setDefault(Locale.US);
+            SampleResult samplerResult = new SampleResult();
 
-        samplerResult.setResponseData("{\"myval\": [{\"test\":0.0000123456789}]}".getBytes());
+            samplerResult.setResponseData("{\"myval\": [{\"test\":0.0000123456789}]}".getBytes());
 
-        JSONPathAssertion instance = new JSONPathAssertion();
-        instance.setJsonPath("$.myval[*].test");
-        instance.setJsonValidationBool(true);
-        instance.setIsRegex(false);
-        instance.setExpectedValue("0.0000123456789");
+            JSONPathAssertion instance = new JSONPathAssertion();
+            instance.setJsonPath("$.myval[*].test");
+            instance.setJsonValidationBool(true);
+            instance.setIsRegex(false);
+            instance.setExpectedValue("0.0000123456789");
 
-        AssertionResult expResult = new AssertionResult("");
-        AssertionResult result = instance.getResult(samplerResult);
-        assertEquals(expResult.getName(), result.getName());
-        assertEquals(false, result.isFailure());
+            AssertionResult expResult = new AssertionResult("");
+            AssertionResult result = instance.getResult(samplerResult);
+            assertEquals(expResult.getName(), result.getName());
+            assertEquals(false, result.isFailure());
+        } finally {
+            Locale.setDefault(prevLocale);
+        }
     }
 }
