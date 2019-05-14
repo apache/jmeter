@@ -648,10 +648,11 @@ public class XPathUtil {
                 }
                 return;
             case XObject.CLASS_BOOLEAN:
-                if (!xObject.bool()){
-                    result.setFailure(!isNegated);
-                    result.setFailureMessage("No Nodes Matched " + xPathExpression);
-                }
+                boolean resultOfEval = xObject.bool(); 
+                result.setFailure(isNegated ? resultOfEval : !resultOfEval);
+                result.setFailureMessage(isNegated ? 
+                        "Nodes Matched for " + xPathExpression
+                        : "No Nodes Matched for " + xPathExpression);
                 return;
             default:
                 result.setFailure(true);
