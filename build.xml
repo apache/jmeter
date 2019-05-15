@@ -3655,7 +3655,6 @@ run JMeter unless all the JMeter jars are added.
                 <fileset dir="${build.mongodb}"/>
                 <fileset dir="${build.native}"/>
                 <fileset dir="${build.tcp}"/>
-                <fileset dir="${build.test}"/>
             </classfiles>
             <sourcefiles encoding="${encoding}">
                 <fileset dir="${src.components}"/>
@@ -3673,7 +3672,6 @@ run JMeter unless all the JMeter jars are added.
                 <fileset dir="${src.mongodb}"/>
                 <fileset dir="${src.native}"/>
                 <fileset dir="${src.tcp}"/>
-                <fileset dir="${src.test}"/>
             </sourcefiles>
         </structure>
         <html destdir="reports/coverage"/>
