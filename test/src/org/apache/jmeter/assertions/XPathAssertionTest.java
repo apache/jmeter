@@ -27,6 +27,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import javax.xml.parsers.FactoryConfigurationError;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
@@ -338,5 +340,35 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
         assertFalse(res.isError());
     }
+    
+    @Test
+    public void testNegated() {
+        String data = "<html><head><title>testtitle</title></head>" + "<body>"
+                + "<p><i><b>invalid tag nesting</i></b><hr>" + "</body></html>";
+        result.setResponseData(data, null);
+        vars = new JMeterVariables();
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(result);
+        assertion.setValidating(true);
+        assertion.setTolerant(true);
+        
+        assertion.setNegated(true);    
+        assertion.setXPathString("/html/head/title");
+        AssertionResult res = assertion.getResult(result);
+        assertTrue("when isNegated is true, when xpath matches, result should fail",res.isFailure());
+        
+        assertion.setXPathString("/html/head/tit");
+        res = assertion.getResult(result);
+        assertFalse("when isNegated is true, when xpath doesn't matches, result should succeed",res.isFailure());
+        
+        assertion.setNegated(false);
+        assertion.setXPathString("/html/head/title");
+        res = assertion.getResult(result);
+        assertFalse("when isNegated is false, when xpath matches, result should succeed",res.isFailure());
+        
+        assertion.setXPathString("/html/head/tit");
+        res = assertion.getResult(result);
+        assertTrue("when isNegated is false, when xpath doesn't matches, result should fail",res.isFailure());
+    } 
 
 }
