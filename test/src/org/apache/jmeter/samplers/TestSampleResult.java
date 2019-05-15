@@ -371,5 +371,16 @@ public class TestSampleResult implements JMeterSerialTest {
                 plan.setFunctionalMode(prevValue);
             }
         }
+        
+        @Test
+        public void testBug63433() {
+            SampleResult firstResult = new SampleResult();
+            assertFalse("Expected false on first call of markFile", firstResult.markFile("result.csv"));
+            assertTrue("Expected true on second call of markFile", firstResult.markFile("result.csv"));
+
+            SampleResult secondResult = new SampleResult();
+            assertFalse("Expected false on first call of markFile with null", secondResult.markFile(null));
+            assertTrue("Expected true on second call of markFile with null", secondResult.markFile(null));
+        }
 }
 
