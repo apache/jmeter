@@ -48,6 +48,8 @@ public final class JmeterKeyStore {
 
     private static final Logger log = LoggerFactory.getLogger(JmeterKeyStore.class);
 
+    public static final String DEFAULT_ALIAS_VAR_NAME = "certAlias";
+
     private final KeyStore store;
 
     /** first index to consider for a key */
@@ -78,7 +80,7 @@ public final class JmeterKeyStore {
      *             &lt; 0 or <code>endIndex</code> &lt; </code>startIndex</code>
      */
     private JmeterKeyStore(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws KeyStoreException {
-        if (startIndex < 0 || endIndex < 0 || endIndex < startIndex) {
+        if (startIndex < 0 || (endIndex != -1 && endIndex < startIndex)) {
             throw new IllegalArgumentException("Invalid index(es). Start="+startIndex+", end="+endIndex);
         }
         this.store = KeyStore.getInstance(type);
@@ -111,57 +113,73 @@ public final class JmeterKeyStore {
      */
     public void load(InputStream is, String pword)
             throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
-        char[] pw = pword==null ? null : pword.toCharArray();
+        char[] pw = toCharArrayOrNull(pword);
         store.load(is, pw);
-    
+
         List<String> aliasesList = new ArrayList<>();
         this.privateKeyByAlias = new HashMap<>();
         this.certsByAlias = new HashMap<>();
 
-        if (null != is){ // No point checking an empty keystore
-            PrivateKey privateKey = null;
-            int index = 0;
-            Enumeration<String> aliases = store.aliases();
-            while (aliases.hasMoreElements()) {
-                String alias = aliases.nextElement();
-                if (store.isKeyEntry(alias)) {
-                    if (index >= startIndex && index <= endIndex) {
-                        privateKey = (PrivateKey) store.getKey(alias, pw);
-                        if (null == privateKey) {
-                            throw new IOException("No key found for alias: " + alias); // Should not happen
-                        }
-                        Certificate[] chain = store.getCertificateChain(alias);
-                        if (null == chain) {
-                            throw new IOException("No certificate chain found for alias: " + alias);
-                        }
-                        aliasesList.add(alias);
-                        X509Certificate[] x509certs = new X509Certificate[chain.length];
-                        for (int i = 0; i < x509certs.length; i++) {
-                            x509certs[i] = (X509Certificate)chain[i];
-                        }
-
-                        privateKeyByAlias.put(alias, privateKey);
-                        certsByAlias.put(alias, x509certs);
-                    }
-                    index++;
+       PrivateKey privateKey = null;
+       int index = 0;
+       Enumeration<String> aliases = store.aliases();
+       while (aliases.hasMoreElements()) {
+          String alias = aliases.nextElement();
+          if (store.isKeyEntry(alias)) {
+                if (isIndexInConfiguredRange(index)) {
+                    privateKey = validateNotNull(
+                            (PrivateKey) store.getKey(alias, pw),
+                            "No key found for alias: " + alias);
+                    Certificate[] chain = validateNotNull(
+                            store.getCertificateChain(alias),
+                            "No certificate chain found for alias" + alias);
+                    aliasesList.add(alias);
+                    privateKeyByAlias.put(alias, privateKey);
+                    certsByAlias.put(alias, toX509Certificates(chain));
                 }
+             index++;
+          }
+       }
+
+       if (is != null) { // only check for keys, if we were given a file as inputstream
+           validateNotNull(privateKey, "No key(s) found");
+            if (endIndex != -1 && index <= endIndex - startIndex && log.isWarnEnabled()) {
+                log.warn("Did not find as much aliases as configured in indexes Start={}, end={}, found={}", startIndex,
+                        endIndex, certsByAlias.size());
             }
-    
-            if (null == privateKey) {
-                throw new IOException("No key(s) found");
-            }
-            if (index <= endIndex-startIndex && log.isWarnEnabled()) {
-                log.warn("Did not find all requested aliases. Start={}, end={}, found={}",
-                        startIndex, endIndex, certsByAlias.size());
-            }
-        }
-    
+       }
+
         /*
-         * Note: if is == null, the arrays will be empty
+         * Note: if is == null and no pkcs11 store is configured, the arrays will be empty
          */
         this.names = aliasesList.toArray(new String[aliasesList.size()]);
     }
 
+    private <T> T validateNotNull(T object, String message) throws IOException {
+        if (null == object) {
+            throw new IOException(message);
+        }
+        return object;
+    }
+
+    private X509Certificate[] toX509Certificates(Certificate[] chain) {
+        X509Certificate[] x509certs = new X509Certificate[chain.length];
+        for (int i = 0; i < x509certs.length; i++) {
+           x509certs[i] = (X509Certificate) chain[i];
+        }
+        return x509certs;
+    }
+
+    private boolean isIndexInConfiguredRange(int index) {
+        return index >= startIndex && (endIndex == -1 || index <= endIndex);
+    }
+
+    private char[] toCharArrayOrNull(String pword) {
+        if (pword == null) {
+            return null; // NOSONAR the api used requires null for "no password used"
+        }
+        return pword.toCharArray();
+    }
 
     /**
      * Get the ordered certificate chain for a specific alias.
@@ -272,7 +290,7 @@ public final class JmeterKeyStore {
      *             when the type of the store is not supported
      */
     public static JmeterKeyStore getInstance(String type) throws KeyStoreException {
-        return getInstance(type, 0, 0, null);
+        return getInstance(type, 0, -1, DEFAULT_ALIAS_VAR_NAME);
     }
 
     /**

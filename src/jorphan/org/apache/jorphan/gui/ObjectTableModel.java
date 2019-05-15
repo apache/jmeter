@@ -104,18 +104,18 @@ public class ObjectTableModel extends DefaultTableModel {
 
         int numClasses = classes.size();
         if (numClasses != numHeaders){
-            log.warn("Header count="+numHeaders+" but classes count="+numClasses);
+            log.warn("Header count={} but classes count={}", numHeaders, numClasses);
         }
 
         // Functor count = 0 is handled specially
         int numWrite = writeFunctors.length;
         if (numWrite > 0 && numWrite != numHeaders){
-            log.warn("Header count="+numHeaders+" but writeFunctor count="+numWrite);
+            log.warn("Header count={} but writeFunctor count={}", numHeaders, numWrite);
         }
 
         int numRead = readFunctors.length;
         if (numRead > 0 && numRead != numHeaders){
-            log.warn("Header count="+numHeaders+" but readFunctor count="+numRead);
+            log.warn("Header count={} but readFunctor count={}", numHeaders, numRead);
         }
     }
 
@@ -138,7 +138,7 @@ public class ObjectTableModel extends DefaultTableModel {
     }
 
     public void addRow(Object value) {
-        log.debug("Adding row value: " + value);
+        log.debug("Adding row value: {}", value);
         if (objectClass != null) {
             final Class<?> valueClass = value.getClass();
             if (!objectClass.isAssignableFrom(valueClass)){
@@ -257,12 +257,9 @@ public class ObjectTableModel extends DefaultTableModel {
         Object value;
         if (_value == null && objectClass != null) {
             try {
-                value = objectClass.newInstance();
-            } catch (InstantiationException e) {
-                log.error("Cannot create instance of class "+objectClass.getName(),e);
-                return false;
-            } catch (IllegalAccessException e) {
-                log.error("Cannot create instance of class "+objectClass.getName(),e);
+                value = objectClass.getDeclaredConstructor().newInstance();
+            } catch (ReflectiveOperationException e) {
+                log.error("Cannot create instance of class {}", objectClass.getName(),e);
                 return false;
             }
         } else {
@@ -274,14 +271,14 @@ public class ObjectTableModel extends DefaultTableModel {
             if (setMethod != null
                  && !setMethod.checkMethod(value,getColumnClass(i))) {
                     status=false;
-                    log.warn(caller.getName()+" is attempting to use nonexistent "+setMethod.toString());
+                    log.warn("{} is attempting to use nonexistent {}", caller.getName(), setMethod);
             }
             
             Functor getMethod = readFunctors.get(i);
             if (getMethod != null 
                  && !getMethod.checkMethod(value)) {
                     status=false;
-                    log.warn(caller.getName()+" is attempting to use nonexistent "+getMethod.toString());
+                    log.warn("{} is attempting to use nonexistent {}", caller.getName(), getMethod);
             }
 
         }

@@ -39,7 +39,8 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchResult;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -85,6 +86,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     public static final String PORT = "port"; // $NON-NLS-1$
 
     public static final String SECURE = "secure"; // $NON-NLS-1$
+    
+    public static final String TRUSTALL = "trustall";
 
     public static final String ROOTDN = "rootdn"; // $NON-NLS-1$
 
@@ -157,10 +160,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     private static final int MAX_SORTED_RESULTS =
         JMeterUtils.getPropDefault("ldapsampler.max_sorted_results", 1000); // $NON-NLS-1$
 
-    /***************************************************************************
-     * !ToDo (Constructor description)
-     **************************************************************************/
     public LDAPExtSampler() {
+        super();
     }
 
     public void setConnTimeOut(String connto) {
@@ -177,6 +178,14 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
     public boolean isSecure() {
         return getPropertyAsBoolean(SECURE);
+    }
+    
+    public void setTrustAll(String trust){
+        setProperty(new StringProperty(TRUSTALL, trust));
+    }
+    
+    public boolean isTrustAll() {
+        return getPropertyAsBoolean(TRUSTALL);
     }
 
 
@@ -541,25 +550,25 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             } else if("replace".equals(opcode)) { // $NON-NLS-1$
                     mods[count++] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
             } else {
-                    log.warn("Invalid opCode: "+opcode);
+                    log.warn("Invalid opCode: {}", opcode);
             }
         }
         return mods;
     }
 
-    /***************************************************************************
+    /**
      * Collect all the value from the table (Arguments), using this create the
      * Attributes This will create the Basic Attributes for the User defined
      * TestCase for search test
      *
-     * @return The BasicAttributes
-     **************************************************************************/
+     * @return The BasicAttributes (null means all)
+     **/
     private String[] getRequestAttributes(String reqAttr) {
         int index;
         String[] mods;
         int count = 0;
         if (reqAttr.length() == 0) {
-            return null;
+            return null; // NOSONAR null means all , empty array means nothing
         }
         if (!reqAttr.endsWith(SEMI_COLON)) {
             reqAttr = reqAttr + SEMI_COLON;
@@ -660,7 +669,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
         try {
             res.sampleStart();
-            ctx = LdapExtClient.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
+            ctx = LdapExtClient.connect(getServername(), getPort(), getRootdn(), getUserDN(),
+                    getUserPw(),getConnTimeOut(),isSecure(), isTrustAll());
         } finally {
             res.sampleEnd();
         }
@@ -674,7 +684,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     private void singleBindOp(SampleResult res) throws NamingException {
         try {
             res.sampleStart();
-            DirContext ctx = LdapExtClient.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
+            DirContext ctx = LdapExtClient.connect(getServername(), getPort(), getRootdn(), 
+                    getUserDN(), getUserPw(),getConnTimeOut(),isSecure(), isTrustAll());
             LdapExtClient.disconnect(ctx);
         } finally {
             res.sampleEnd();
@@ -727,7 +738,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             xmlBuffer.openTag("operation"); // $NON-NLS-1$
             final String testType = getTest();
             xmlBuffer.tag("opertype", testType); // $NON-NLS-1$
-            log.debug("performing test: " + testType);
+            log.debug("performing test: {}", testType);
             if (testType.equals(UNBIND)) {
                 res.setSamplerData("Unbind");
                 xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
@@ -836,8 +847,11 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             String returnData = ex.toString();
             final int indexOfLDAPErrCode = returnData.indexOf("LDAP: error code");
             if (indexOfLDAPErrCode >= 0) {
+                // FIXME What is 21 ?
                 res.setResponseMessage(returnData.substring(indexOfLDAPErrCode + 21, returnData
                         .indexOf(']'))); // $NON-NLS-1$
+                // 17 is "LDAP: error code".length
+                // Code is on 2 characters ?
                 res.setResponseCode(returnData.substring(indexOfLDAPErrCode + 17, indexOfLDAPErrCode + 19));
             } else {
                 res.setResponseMessage(returnData);
@@ -901,7 +915,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     {
         final Attributes attrs = sr.getAttributes();
         final int size = attrs.size();
-        final ArrayList<Attribute> sortedAttrs = new ArrayList<>(size);
+        final List<Attribute> sortedAttrs = new ArrayList<>(size);
 
         xmlb.openTag("searchresult"); // $NON-NLS-1$
         xmlb.tag("dn", sr.getName()); // $NON-NLS-1$
@@ -909,8 +923,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         xmlb.openTag("attributes"); // $NON-NLS-1$
 
         try {
-            for (NamingEnumeration<? extends Attribute> en = attrs.getAll(); en.hasMore();)
-            {
+            for (NamingEnumeration<? extends Attribute> en = attrs.getAll(); en.hasMore();) {
                 final Attribute attr = en.next();
                 sortedAttrs.add(attr);
             }
@@ -921,25 +934,13 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                     sb.append(getWriteValue(attr.get()));
                 } else {
                     final ArrayList<String> sortedVals = new ArrayList<>(attr.size());
-                    boolean first = true;
 
-                    for (NamingEnumeration<?> ven = attr.getAll(); ven.hasMore();)
-                    {
+                    for (NamingEnumeration<?> ven = attr.getAll(); ven.hasMore();) {
                         final Object value = getWriteValue(ven.next());
                         sortedVals.add(value.toString());
                     }
-
                     Collections.sort(sortedVals);
-
-                    for (final String value : sortedVals)
-                    {
-                        if (first) {
-                            first = false;
-                        } else {
-                            sb.append(", "); // $NON-NLS-1$
-                        }
-                        sb.append(value);
-                    }
+                    sb.append(StringUtils.join(sortedVals, ", "));
                 }
                 xmlb.tag(attr.getID(),sb);
             }
@@ -997,15 +998,13 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     {
         String srName = sr.getName();
 
-        if (!srName.endsWith(searchBase))
-        {
+        if (!srName.endsWith(searchBase)) {
             if (srName.length() > 0) {
                 srName = srName + ',';
             }
             srName = srName + searchBase;
         }
-        if ((rootDn.length() > 0) && !srName.endsWith(rootDn))
-        {
+        if ((rootDn.length() > 0) && !srName.endsWith(rootDn)) {
             if (srName.length() > 0) {
                 srName = srName + ',';
             }
@@ -1015,8 +1014,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         return srName;
     }
 
-    private String getWriteValue(final Object value)
-    {
+    private String getWriteValue(final Object value) {
         if (value instanceof String) {
             // assume it's sensitive data
             return StringEscapeUtils.escapeXml10((String)value);

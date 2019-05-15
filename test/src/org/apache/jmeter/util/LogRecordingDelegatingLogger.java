@@ -24,19 +24,18 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.Marker;
-import org.slf4j.ext.LoggerWrapper;
 
 /**
  * Logger wrapper to keep the log event for the record and delegate to the internal logger.
  */
-public class LogRecordingDelegatingLogger extends LoggerWrapper {
-
-    private static final String FQCN = LogRecordingDelegatingLogger.class.getName();
+public class LogRecordingDelegatingLogger implements Logger {
 
     private List<LogRecord> logRecords = Collections.synchronizedList(new LinkedList<>());
 
+    private Logger delegate;
+
     public LogRecordingDelegatingLogger(Logger logger) {
-        super(logger, FQCN);
+        this.delegate = logger;
     }
 
     public Collection<LogRecord> getLogRecords() {
@@ -54,288 +53,355 @@ public class LogRecordingDelegatingLogger extends LoggerWrapper {
     @Override
     public void trace(String msg) {
         logRecords.add(new LogRecord(LogRecord.TRACE, msg));
-        super.trace(msg);
+        delegate.trace(msg);
     }
 
     @Override
     public void trace(String format, Object arg) {
         logRecords.add(new LogRecord(LogRecord.TRACE, format, arg));
-        super.trace(format, arg);
+        delegate.trace(format, arg);
     }
 
     @Override
     public void trace(String format, Object arg1, Object arg2) {
         logRecords.add(new LogRecord(LogRecord.TRACE, format, arg1, arg2));
-        super.trace(format, arg1, arg2);
+        delegate.trace(format, arg1, arg2);
     }
 
     @Override
     public void trace(String format, Object... argArray) {
         logRecords.add(new LogRecord(LogRecord.TRACE, format, argArray));
-        super.trace(format, argArray);
+        delegate.trace(format, argArray);
     }
 
     @Override
     public void trace(String msg, Throwable t) {
         logRecords.add(new LogRecord(LogRecord.TRACE, msg, t));
-        super.trace(msg, t);
+        delegate.trace(msg, t);
     }
 
     @Override
     public void trace(Marker marker, String msg) {
         logRecords.add(new LogRecord(LogRecord.TRACE, marker, msg));
-        super.trace(marker, msg);
+        delegate.trace(marker, msg);
     }
 
     @Override
     public void trace(Marker marker, String format, Object arg) {
         logRecords.add(new LogRecord(LogRecord.TRACE, marker, format, arg));
-        super.trace(marker, format, arg);
+        delegate.trace(marker, format, arg);
     }
 
     @Override
     public void trace(Marker marker, String format, Object arg1, Object arg2) {
         logRecords.add(new LogRecord(LogRecord.TRACE, marker, format, arg1, arg2));
-        super.trace(marker, format, arg1, arg2);
+        delegate.trace(marker, format, arg1, arg2);
     }
 
     @Override
     public void trace(Marker marker, String format, Object... argArray) {
         logRecords.add(new LogRecord(LogRecord.TRACE, marker, format, argArray));
-        super.trace(marker, format, argArray);
+        delegate.trace(marker, format, argArray);
     }
 
     @Override
     public void trace(Marker marker, String msg, Throwable t) {
         logRecords.add(new LogRecord(LogRecord.TRACE, marker, msg, t));
-        super.trace(marker, msg, t);
+        delegate.trace(marker, msg, t);
     }
 
     @Override
     public void debug(String msg) {
         logRecords.add(new LogRecord(LogRecord.DEBUG, msg));
-        super.debug(msg);
+        delegate.debug(msg);
     }
 
     @Override
     public void debug(String format, Object arg) {
         logRecords.add(new LogRecord(LogRecord.DEBUG, format, arg));
-        super.debug(format, arg);
+        delegate.debug(format, arg);
     }
 
     @Override
     public void debug(String format, Object arg1, Object arg2) {
         logRecords.add(new LogRecord(LogRecord.DEBUG, format, arg1, arg2));
-        super.debug(format, arg1, arg2);
+        delegate.debug(format, arg1, arg2);
     }
 
     @Override
     public void debug(String format, Object... argArray) {
         logRecords.add(new LogRecord(LogRecord.DEBUG, format, argArray));
-        super.debug(format, argArray);
+        delegate.debug(format, argArray);
     }
 
     @Override
     public void debug(String msg, Throwable t) {
         logRecords.add(new LogRecord(LogRecord.DEBUG, msg, t));
-        super.debug(msg, t);
+        delegate.debug(msg, t);
     }
 
     @Override
     public void debug(Marker marker, String msg) {
         logRecords.add(new LogRecord(LogRecord.DEBUG, marker, msg));
-        super.debug(marker, msg);
+        delegate.debug(marker, msg);
     }
 
     @Override
     public void debug(Marker marker, String format, Object arg) {
         logRecords.add(new LogRecord(LogRecord.DEBUG, marker, format, arg));
-        super.debug(marker, format, arg);
+        delegate.debug(marker, format, arg);
     }
 
     @Override
     public void debug(Marker marker, String format, Object arg1, Object arg2) {
         logRecords.add(new LogRecord(LogRecord.DEBUG, marker, format, arg1, arg2));
-        super.debug(marker, format, arg1, arg2);
+        delegate.debug(marker, format, arg1, arg2);
     }
 
     @Override
     public void debug(Marker marker, String format, Object... argArray) {
         logRecords.add(new LogRecord(LogRecord.DEBUG, marker, format, argArray));
-        super.debug(marker, format, argArray);
+        delegate.debug(marker, format, argArray);
     }
 
     @Override
     public void debug(Marker marker, String msg, Throwable t) {
         logRecords.add(new LogRecord(LogRecord.DEBUG, marker, msg, t));
-        super.debug(marker, msg, t);
+        delegate.debug(marker, msg, t);
     }
 
     @Override
     public void info(String msg) {
         logRecords.add(new LogRecord(LogRecord.INFO, msg));
-        super.info(msg);
+        delegate.info(msg);
     }
 
     @Override
     public void info(String format, Object arg) {
         logRecords.add(new LogRecord(LogRecord.INFO, format, arg));
-        super.info(format, arg);
+        delegate.info(format, arg);
     }
 
     @Override
     public void info(String format, Object arg1, Object arg2) {
         logRecords.add(new LogRecord(LogRecord.INFO, format, arg1, arg2));
-        super.info(format,  arg1, arg2);
+        delegate.info(format,  arg1, arg2);
     }
 
     @Override
     public void info(String format, Object... argArray) {
         logRecords.add(new LogRecord(LogRecord.INFO, format, argArray));
-        super.info(format, argArray);
+        delegate.info(format, argArray);
     }
 
     @Override
     public void info(String msg, Throwable t) {
         logRecords.add(new LogRecord(LogRecord.INFO, msg, t));
-        super.info(msg, t);
+        delegate.info(msg, t);
     }
 
     @Override
     public void info(Marker marker, String msg) {
         logRecords.add(new LogRecord(LogRecord.INFO, marker, msg));
-        super.info(marker, msg);
+        delegate.info(marker, msg);
     }
 
     @Override
     public void info(Marker marker, String format, Object arg) {
         logRecords.add(new LogRecord(LogRecord.INFO, marker, format, arg));
-        super.info(marker, format, arg);
+        delegate.info(marker, format, arg);
     }
 
     @Override
     public void info(Marker marker, String format, Object arg1, Object arg2) {
         logRecords.add(new LogRecord(LogRecord.INFO, marker, format, arg1, arg2));
-        super.info(marker, format, arg1, arg2);
+        delegate.info(marker, format, arg1, arg2);
     }
 
     @Override
     public void info(Marker marker, String format, Object... argArray) {
         logRecords.add(new LogRecord(LogRecord.INFO, marker, format, argArray));
-        super.info(marker, format, argArray);
+        delegate.info(marker, format, argArray);
     }
 
     @Override
     public void info(Marker marker, String msg, Throwable t) {
         logRecords.add(new LogRecord(LogRecord.INFO, marker, msg, t));
-        super.info(marker, msg, t);
+        delegate.info(marker, msg, t);
     }
 
     @Override
     public void warn(String msg) {
         logRecords.add(new LogRecord(LogRecord.WARN, msg));
-        super.warn(msg);
+        delegate.warn(msg);
     }
 
     @Override
     public void warn(String format, Object arg) {
         logRecords.add(new LogRecord(LogRecord.WARN, format, arg));
-        super.warn(format, arg);
+        delegate.warn(format, arg);
     }
 
     @Override
     public void warn(String format, Object arg1, Object arg2) {
         logRecords.add(new LogRecord(LogRecord.WARN, format, arg1, arg2));
-        super.warn(format, arg1, arg2);
+        delegate.warn(format, arg1, arg2);
     }
 
     @Override
     public void warn(String format, Object... argArray) {
         logRecords.add(new LogRecord(LogRecord.WARN, format, argArray));
-        super.warn(format, argArray);
+        delegate.warn(format, argArray);
     }
 
     @Override
     public void warn(String msg, Throwable t) {
         logRecords.add(new LogRecord(LogRecord.WARN, msg, t));
-        super.warn(msg, t);
+        delegate.warn(msg, t);
     }
 
     @Override
     public void warn(Marker marker, String msg) {
         logRecords.add(new LogRecord(LogRecord.WARN, marker, msg));
-        super.warn(marker, msg);
+        delegate.warn(marker, msg);
     }
 
     @Override
     public void warn(Marker marker, String format, Object arg) {
         logRecords.add(new LogRecord(LogRecord.WARN, marker, format, arg));
-        super.warn(marker, format, arg);
+        delegate.warn(marker, format, arg);
     }
 
     @Override
     public void warn(Marker marker, String format, Object arg1, Object arg2) {
         logRecords.add(new LogRecord(LogRecord.WARN, marker, format, arg1, arg2));
-        super.warn(marker, format, arg1, arg2);
+        delegate.warn(marker, format, arg1, arg2);
     }
 
+    @Override
     public void warn(Marker marker, String format, Object... argArray) {
         logRecords.add(new LogRecord(LogRecord.WARN, marker, format, argArray));
-        super.warn(marker, format, argArray);
+        delegate.warn(marker, format, argArray);
     }
 
+    @Override
     public void warn(Marker marker, String msg, Throwable t) {
         logRecords.add(new LogRecord(LogRecord.WARN, marker, msg, t));
-        super.warn(marker, msg, t);
+        delegate.warn(marker, msg, t);
     }
 
+    @Override
     public void error(String msg) {
         logRecords.add(new LogRecord(LogRecord.ERROR, msg));
-        super.error(msg);
+        delegate.error(msg);
     }
 
+    @Override
     public void error(String format, Object arg) {
         logRecords.add(new LogRecord(LogRecord.ERROR, format, arg));
-        super.error(format, arg);
+        delegate.error(format, arg);
     }
 
+    @Override
     public void error(String format, Object arg1, Object arg2) {
         logRecords.add(new LogRecord(LogRecord.ERROR, format, arg1, arg2));
-        super.error(format, arg1, arg2);
+        delegate.error(format, arg1, arg2);
     }
 
+    @Override
     public void error(String format, Object... argArray) {
         logRecords.add(new LogRecord(LogRecord.ERROR, format, argArray));
-        super.error(format, argArray);
+        delegate.error(format, argArray);
     }
 
+    @Override
     public void error(String msg, Throwable t) {
         logRecords.add(new LogRecord(LogRecord.ERROR, msg, t));
-        super.error(msg, t);
+        delegate.error(msg, t);
     }
 
+    @Override
     public void error(Marker marker, String msg) {
         logRecords.add(new LogRecord(LogRecord.ERROR, marker, msg));
-        super.error(marker, msg);
+        delegate.error(marker, msg);
     }
 
+    @Override
     public void error(Marker marker, String format, Object arg) {
         logRecords.add(new LogRecord(LogRecord.ERROR, marker, format, arg));
-        super.error(marker, format, arg);
+        delegate.error(marker, format, arg);
     }
 
+    @Override
     public void error(Marker marker, String format, Object arg1, Object arg2) {
         logRecords.add(new LogRecord(LogRecord.ERROR, marker, format, arg1, arg2));
-        super.error(marker, format, arg1, arg2);
+        delegate.error(marker, format, arg1, arg2);
     }
 
+    @Override
     public void error(Marker marker, String format, Object... argArray) {
         logRecords.add(new LogRecord(LogRecord.ERROR, marker, format, argArray));
-        super.error(marker, format, argArray);
+        delegate.error(marker, format, argArray);
     }
 
+    @Override
     public void error(Marker marker, String msg, Throwable t) {
         logRecords.add(new LogRecord(LogRecord.ERROR, marker, msg, t));
-        super.error(marker, msg, t);
+        delegate.error(marker, msg, t);
+    }
+
+    @Override
+    public String getName() {
+        return delegate.getName();
+    }
+
+    @Override
+    public boolean isDebugEnabled() {
+        return delegate.isDebugEnabled();
+    }
+
+    @Override
+    public boolean isDebugEnabled(Marker marker) {
+        return delegate.isDebugEnabled(marker);
+    }
+
+    @Override
+    public boolean isErrorEnabled() {
+        return delegate.isErrorEnabled();
+    }
+
+    @Override
+    public boolean isErrorEnabled(Marker marker) {
+        return delegate.isErrorEnabled(marker);
+    }
+
+    @Override
+    public boolean isInfoEnabled() {
+        return delegate.isInfoEnabled();
+    }
+
+    @Override
+    public boolean isInfoEnabled(Marker marker) {
+        return delegate.isInfoEnabled(marker);
+    }
+
+    @Override
+    public boolean isTraceEnabled() {
+        return delegate.isTraceEnabled();
+    }
+
+    @Override
+    public boolean isTraceEnabled(Marker marker) {
+        return delegate.isTraceEnabled(marker);
+    }
+
+    @Override
+    public boolean isWarnEnabled() {
+        return delegate.isWarnEnabled();
+    }
+
+    @Override
+    public boolean isWarnEnabled(Marker marker) {
+        return delegate.isWarnEnabled(marker);
     }
 }

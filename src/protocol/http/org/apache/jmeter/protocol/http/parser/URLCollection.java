@@ -23,8 +23,8 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +87,7 @@ public class URLCollection implements Iterable<URL> {
         } catch (MalformedURLException mfue) {
             // No WARN message to avoid performance impact
             if(log.isDebugEnabled()) {
-                log.debug("Error occurred building relative url for:"+url+", message:"+mfue.getMessage());
+                log.debug("Error occurred building relative url for: {}, message: {}", url, mfue.getMessage());
             }
             // No point in adding the URL as String as it will result in null 
             // returned during iteration, see URLString

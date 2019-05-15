@@ -58,7 +58,7 @@ Highly Extensible core:
  -  Several load statistics may be chosen with **pluggable timers**.
  -  Data analysis and **visualization plugins** allow great extensibility and personalization.
  -  Functions can be used to provide dynamic input to a test or provide data manipulation.
- -  Easy Continuous Integration through 3rd party Open Source libraries for Maven, Graddle and Jenkins
+ -  Easy Continuous Integration through 3rd party Open Source libraries for Maven, Gradle and Jenkins
 
 
 ## The Latest Version

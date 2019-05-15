@@ -25,13 +25,14 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.Searchable;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -60,6 +61,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     
     private static final String OK_CODE = Integer.toString(HttpURLConnection.HTTP_OK);
     private static final String OK_MSG = "OK"; // $NON-NLS-1$
+    private static final String INVALID_CALL_SEQUENCE_MSG = "Invalid call sequence"; // $NON-NLS-1$
 
 
     // Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
@@ -96,7 +98,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @see #setDataType(java.lang.String)
      */
     public static final String BINARY = "bin"; // $NON-NLS-1$
-    
+
+    private static final boolean DISABLE_SUBRESULTS_RENAMING = JMeterUtils.getPropDefault("subresults.disable_renaming", false);
+
     // List of types that are known to be binary
     private static final String[] BINARY_TYPES = {
         "image/",       //$NON-NLS-1$
@@ -134,15 +138,17 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private static final long NANOTHREAD_SLEEP = 
             JMeterUtils.getPropDefault("sampleresult.nanoThreadSleep", 5000);  // $NON-NLS-1$
 
+    private static final String NULL_FILENAME = "NULL";
+
     static {
         if (START_TIMESTAMP) {
             log.info("Note: Sample TimeStamps are START times");
         } else {
             log.info("Note: Sample TimeStamps are END times");
         }
-        log.info("sampleresult.default.encoding is set to " + DEFAULT_ENCODING);
-        log.info("sampleresult.useNanoTime="+USE_NANO_TIME);
-        log.info("sampleresult.nanoThreadSleep="+NANOTHREAD_SLEEP);
+        log.info("sampleresult.default.encoding is set to {}", DEFAULT_ENCODING);
+        log.info("sampleresult.useNanoTime={}", USE_NANO_TIME);
+        log.info("sampleresult.nanoThreadSleep={}", NANOTHREAD_SLEEP);
 
         if (USE_NANO_TIME && NANOTHREAD_SLEEP > 0) {
             // Make sure we start with a reasonable value
@@ -210,9 +216,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /**
      * Files that this sample has been saved in.
      * In Non GUI mode and when best config is used, size never exceeds 1,
-     * but as a compromise set it to 3
+     * but as a compromise set it to 2
      */
-    private final Set<String> files = new HashSet<>(3);
+    private final Set<String> files = ConcurrentHashMap.newKeySet(2);
 
     // TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
     private String dataEncoding;// (is this really the character set?) e.g.
@@ -267,6 +273,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private URL location;
 
     private transient boolean ignore;
+    
+    private transient int subResultIndex;
 
     /**
      * Cache for responseData as string to avoid multiple computations
@@ -450,7 +458,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public long currentTimeInMillis() {
         if (useNanoTime){
             if (nanoTimeOffset == Long.MIN_VALUE){
-                throw new RuntimeException("Invalid call; nanoTimeOffset as not been set");
+                throw new IllegalStateException("Invalid call; nanoTimeOffset has not been set");
             }
             return sampleNsClockInMs() + nanoTimeOffset;            
         }
@@ -483,7 +491,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void setStampAndTime(long stamp, long elapsed) {
         if (startTime != 0 || endTime != 0){
-            throw new RuntimeException("Calling setStampAndTime() after start/end times have been set");
+            throw new IllegalStateException("Calling setStampAndTime() after start/end times have been set");
         }
         stampAndTime(stamp, elapsed);
     }
@@ -494,8 +502,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @param filename the name of the file
      * @return <code>true</code> if the result was previously marked
      */
-    public synchronized boolean markFile(String filename) {
-        return !files.add(filename);
+    public boolean markFile(String filename) {
+        return !files.add(filename != null ? filename : NULL_FILENAME);
     }
 
     public String getResponseCode() {
@@ -612,16 +620,35 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void addSubResult(SampleResult subResult) {
+        addSubResult(subResult, isRenameSampleLabel());
+    }
+
+    /**
+     * see https://bz.apache.org/bugzilla/show_bug.cgi?id=63055
+     * @return true if TestPlan is in functional mode or property subresults.disable_renaming is true
+     */
+    public static final boolean isRenameSampleLabel() {
+        return !(TestPlan.getFunctionalMode() || DISABLE_SUBRESULTS_RENAMING);
+    }
+
+    /**
+     * Add a subresult and adjust the parent byte count and end-time.
+     * 
+     * @param subResult
+     *            the {@link SampleResult} to be added
+     * @param renameSubResults boolean do we rename subResults based on position
+     */
+    public void addSubResult(SampleResult subResult, boolean renameSubResults) {
         if(subResult == null) {
             // see https://bz.apache.org/bugzilla/show_bug.cgi?id=54778
             return;
         }
         String tn = getThreadName();
         if (tn.length()==0) {
-            tn=Thread.currentThread().getName();//TODO do this more efficiently
+            tn=Thread.currentThread().getName();
             this.setThreadName(tn);
         }
-        subResult.setThreadName(tn); // TODO is this really necessary?
+        subResult.setThreadName(tn);
 
         // Extend the time to the end of the added sample
         setEndTime(Math.max(getEndTime(), subResult.getEndTime() + nanoTimeOffset - subResult.nanoTimeOffset)); // Bug 51855
@@ -630,7 +657,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         setSentBytes(getSentBytes() + subResult.getSentBytes());
         setHeadersSize(getHeadersSize() + subResult.getHeadersSize());
         setBodySize(getBodySizeAsLong() + subResult.getBodySizeAsLong());
-        addRawSubResult(subResult);
+        addRawSubResult(subResult, renameSubResults);
     }
     
     /**
@@ -640,7 +667,17 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void addRawSubResult(SampleResult subResult){
-        storeSubResult(subResult);
+        storeSubResult(subResult, isRenameSampleLabel());
+    }
+    
+    /**
+     * Add a subresult to the collection without updating any parent fields.
+     * 
+     * @param subResult
+     *            the {@link SampleResult} to be added
+     */
+    private void addRawSubResult(SampleResult subResult, boolean renameSubResults){
+        storeSubResult(subResult, renameSubResults);
     }
 
     /**
@@ -654,8 +691,26 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void storeSubResult(SampleResult subResult) {
+        storeSubResult(subResult, isRenameSampleLabel());
+    }
+    
+    /**
+     * Add a subresult read from a results file.
+     * <p>
+     * As for {@link SampleResult#addSubResult(SampleResult)
+     * addSubResult(SampleResult)}, except that the fields don't need to be
+     * accumulated
+     *
+     * @param subResult
+     *            the {@link SampleResult} to be added
+     * @param renameSubResults boolean do we rename subResults based on position
+     */
+    private void storeSubResult(SampleResult subResult, boolean renameSubResults) {
         if (subResults == null) {
             subResults = new ArrayList<>();
+        }
+        if(renameSubResults) {
+            subResult.setSampleLabel(getSampleLabel()+"-"+subResultIndex++);
         }
         subResults.add(subResult);
         subResult.setParent(this);
@@ -1048,8 +1103,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             timeStamp = endTime;
         }
         if (startTime == 0) {
-            log.error("setEndTime must be called after setStartTime", new Throwable("Invalid call sequence"));
-            // TODO should this throw an error?
+            log.error("setEndTime must be called after setStartTime", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         } else {
             elapsedTime = endTime - startTime - idleTime;
         }
@@ -1077,7 +1131,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         if (startTime == 0) {
             setStartTime(currentTimeInMillis());
         } else {
-            log.error("sampleStart called twice", new Throwable("Invalid call sequence"));
+            log.error("sampleStart called twice", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         }
     }
 
@@ -1089,7 +1143,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         if (endTime == 0) {
             setEndTime(currentTimeInMillis());
         } else {
-            log.error("sampleEnd called twice", new Throwable("Invalid call sequence"));
+            log.error("sampleEnd called twice", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         }
     }
 
@@ -1099,7 +1153,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void samplePause() {
         if (pauseTime != 0) {
-            log.error("samplePause called twice", new Throwable("Invalid call sequence"));
+            log.error("samplePause called twice", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         }
         pauseTime = currentTimeInMillis();
     }
@@ -1110,7 +1164,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void sampleResume() {
         if (pauseTime == 0) {
-            log.error("sampleResume without samplePause", new Throwable("Invalid call sequence"));
+            log.error("sampleResume without samplePause", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         }
         idleTime += currentTimeInMillis() - pauseTime;
         pauseTime = 0;
@@ -1475,7 +1529,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     }
 
     /**
-     * @deprecated use {@link SampleResult#setTestLogicalAction(TestLogicalAction)}
+     * @deprecated use SampleResult#setTestLogicalAction(TestLogicalAction)
      * @param startNextThreadLoop the startNextLoop to set
      */
     @Deprecated

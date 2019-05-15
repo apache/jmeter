@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.HdrHistogram.Histogram;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.math.IStatCalculator;
 import org.slf4j.LoggerFactory;
 
 public class HistogramStatCalculator implements IStatCalculator<Long> {
-    
-    private final Histogram histogram = new Histogram(3);
+
+    private final Histogram histogram = new Histogram(JMeterUtils.getPropDefault("histogram.accuracy", 3));
     private long bytes = 0;
     private long sentBytes = 0;
     private long sum = 0;
@@ -18,7 +19,7 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
     private long count = 0;
 
     public HistogramStatCalculator() {
-        LoggerFactory.getLogger(this.getClass()).info("HistogramStatCalculator used.");
+        LoggerFactory.getLogger(this.getClass()).debug("HistogramStatCalculator used.");
     }
 
     @Override
@@ -35,7 +36,6 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
     @Override
     public void addBytes(long newValue) {
         bytes += newValue;
-
     }
 
     @Override
@@ -48,18 +48,20 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
         if (calc instanceof HistogramStatCalculator) {
             HistogramStatCalculator histoCalc = (HistogramStatCalculator) calc;
             sum += histoCalc.sum;
+            count += histoCalc.count;
             bytes += histoCalc.bytes;
             sentBytes += histoCalc.sentBytes;
             histogram.add(histoCalc.histogram);
+            mean = histogram.getMean();
+            m2 = histogram.getStdDeviation() * histogram.getStdDeviation();
         } else {
             throw new IllegalArgumentException("Only instances of HistogramStatCalculator allowed.");
         }
-
     }
 
     @Override
     public Long getMedian() {
-        return histogram.getValueAtPercentile(50);
+        return Long.valueOf(histogram.getValueAtPercentile(50));
     }
 
     @Override
@@ -79,14 +81,16 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
 
     @Override
     public Long getPercentPoint(double percent) {
-        return histogram.getValueAtPercentile(100.0 * percent);
+        return Long.valueOf(histogram.getValueAtPercentile(100.0 * percent));
     }
 
     @Override
     public Map<Number, Number[]> getDistribution() {
         Map<Number, Number[]> result = new HashMap<>();
         histogram.percentiles(5).forEach(p -> {
-            result.put(p.getValueIteratedTo(), new Number[] { p.getValueIteratedTo(), p.getCountAddedInThisIterationStep() } );
+            Long valueIteratedTo = Long.valueOf(p.getValueIteratedTo());
+            result.put(valueIteratedTo,
+                    new Number[] { valueIteratedTo, Long.valueOf(p.getCountAddedInThisIterationStep()) });
         });
         return result;
     }
@@ -94,29 +98,26 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
     @Override
     public double getMean() {
         return mean;
-//        return histogram.getMean();
     }
 
     @Override
     public double getStandardDeviation() {
         return Math.sqrt(m2);
-//        return histogram.getStdDeviation();
     }
 
     @Override
     public Long getMin() {
-        return histogram.getMinValue();
+        return Long.valueOf(histogram.getMinValue());
     }
 
     @Override
     public Long getMax() {
-        return histogram.getMaxValue();
+        return Long.valueOf(histogram.getMaxValue());
     }
 
     @Override
     public long getCount() {
         return count;
-//        return histogram.getTotalCount();
     }
 
     @Override
@@ -125,25 +126,29 @@ public class HistogramStatCalculator implements IStatCalculator<Long> {
     }
 
     @Override
-    public void addValue(Long val, long sampleCount) {
-        sum += val * sampleCount;
-        histogram.recordValueWithCount(val, sampleCount);
-        count += sampleCount;
-        double delta = val - mean;
-        mean = mean + delta / count;
-        double delta2 = val - mean;
-        m2 = m2 + delta * delta2;
+    public void addValue(Long value, long sampleCount) {
+        long lval = value.longValue();
+        sum += lval * sampleCount;
+        histogram.recordValueWithCount(lval, sampleCount);
+        for (int i = 0; i < sampleCount; i++) {
+            count++;
+            double delta = lval - mean;
+            mean += delta / count;
+            double delta2 = lval - mean;
+            m2 += delta * delta2;
+        }
     }
 
     @Override
-    public void addValue(Long val) {
-        sum += val;
-        histogram.recordValue(val);
+    public void addValue(Long value) {
+        long lval = value.longValue();
+        sum += lval;
+        histogram.recordValue(lval);
         count++;
-        double delta = val - mean;
-        mean = mean + delta / count;
-        double delta2 = val - mean;
-        m2 = m2 + delta * delta2;
+        double delta = lval - mean;
+        mean += delta / count;
+        double delta2 = lval - mean;
+        m2 += delta * delta2;
     }
 
 }

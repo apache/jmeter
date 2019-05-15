@@ -22,6 +22,7 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,19 +45,27 @@ import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Document;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.gui.util.JSyntaxSearchToolBar;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.TextBoxDialoger.TextBoxDoubleClick;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.SearchTextExtension.JEditorPaneSearchProvider;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Right side in View Results Tree
@@ -64,6 +73,7 @@ import org.apache.jorphan.reflect.Functor;
  */
 public abstract class SamplerResultTab implements ResultRenderer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RenderAsText.class);
     // N.B. these are not multi-threaded, so don't make it static
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
 
@@ -93,6 +103,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
     /** Contains results; contained in resultsPane */
     protected JScrollPane resultsScrollPane;
     
+    private JSyntaxTextArea headerData;
     /** Response Data shown here */
     protected JEditorPane results;
 
@@ -113,8 +124,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
     private AssertionResult assertionResult = null;
 
     protected SearchTextExtension searchTextExtension;
-
-    private JPanel searchPanel = null;
 
     protected boolean activateSearchExtension = true; // most current subclasses can process text
 
@@ -200,6 +209,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
     @Override
     public void clearData() {
         results.setText("");// Response Data // $NON-NLS-1$
+        headerData.setInitialText(""); // $NON-NLS-1$
         requestPanel.clearData();// Request Data // $NON-NLS-1$
         stats.setText(""); // Sampler result // $NON-NLS-1$
         resultModel.clearData();
@@ -209,7 +219,8 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     @Override
     public void init() {
-        rightSide.addTab(JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel()); // $NON-NLS-1$
+        rightSide.addTab(
+                JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel()); // $NON-NLS-1$
         // Create the panels for the other tabs
         requestPanel = new RequestPanel();
         resultsPane = createResponseDataPanel();
@@ -324,11 +335,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
                                 .getResString("view_results_response_message")) //$NON-NLS-1$
                         .append(responseMsgStr).append(NL);
                 statsBuff.append(NL);
-                statsBuff
-                        .append(JMeterUtils
-                                .getResString("view_results_response_headers")) //$NON-NLS-1$
-                        .append(NL);
-                statsBuff.append(sampleResult.getResponseHeaders()).append(NL);
                 statsBuff.append(NL);
                 statsBuff
                         .append(typeResult + " " //$NON-NLS-1$
@@ -396,7 +402,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 for (Entry<String, String> entry : keySet) {
                     resHeadersModel.addRow(new RowResult(entry.getKey(), entry.getValue()));
                 }
-                
+
+                headerData.setInitialText(sampleResult.getResponseHeaders());
+
                 // Fields table
                 resFieldsModel.addRow(new RowResult("Type Result ", typeResult)); //$NON-NLS-1$
                 //not sure needs I18N?
@@ -558,23 +566,35 @@ public abstract class SamplerResultTab implements ResultRenderer {
         results = new JEditorPane();
         results.setEditable(false);
 
+        headerData = JSyntaxTextArea.getInstance(20, 80, true);
+        headerData.setEditable(false);
+        headerData.setLineWrap(true);
+        headerData.setWrapStyleWord(true);
+
+        JPanel headersAndSearchPanel = new JPanel(new BorderLayout());
+        headersAndSearchPanel.add(new JSyntaxSearchToolBar(headerData).getToolBar(), BorderLayout.NORTH);
+        headersAndSearchPanel.add(JTextScrollPane.getInstance(headerData), BorderLayout.CENTER);
+
         resultsScrollPane = GuiUtils.makeScrollPane(results);
         imageLabel = new JLabel();
 
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(resultsScrollPane, BorderLayout.CENTER);
+        JPanel resultAndSearchPanel = new JPanel(new BorderLayout());
+        resultAndSearchPanel.add(resultsScrollPane, BorderLayout.CENTER);
+
 
         if (activateSearchExtension) {
             // Add search text extension
-            searchTextExtension = new SearchTextExtension();
-            searchTextExtension.init(panel);
-            searchPanel = searchTextExtension.createSearchTextExtensionPane();
-            searchTextExtension.setResults(results);
-            searchPanel.setVisible(true);
-            panel.add(searchPanel, BorderLayout.PAGE_END);
+            searchTextExtension = new SearchTextExtension(new JEditorPaneSearchProvider(results));
+            resultAndSearchPanel.add(searchTextExtension.getSearchToolBar(), BorderLayout.NORTH);
         }
 
-        return panel;
+        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane.addTab(JMeterUtils.getResString("view_results_response_body"), new JScrollPane(resultAndSearchPanel));
+        tabbedPane.addTab(JMeterUtils.getResString("view_results_response_headers"), new JScrollPane(headersAndSearchPanel));
+
+        JPanel gPanel = new JPanel(new GridLayout(1,1));
+        gPanel.add(tabbedPane);
+        return gPanel;
     }
 
     private void showImage(Icon image) {
@@ -658,5 +678,22 @@ public abstract class SamplerResultTab implements ResultRenderer {
         public synchronized void setValue(Object value) {
             this.value = value;
         }
+    }
+    
+    /**
+     * Optimized way to set text based on :
+     * http://javatechniques.com/blog/faster-jtextpane-text-insertion-part-i/
+     * @param data String data
+     */
+    protected void setTextOptimized(String data) {
+        Document document = results.getDocument();
+        Document blank = new DefaultStyledDocument();
+        results.setDocument(blank);
+        try {
+            document.insertString(0, data == null ? "" : data, null);
+        } catch (BadLocationException ex) {
+            LOGGER.error("Error inserting text", ex);
+        }
+        results.setDocument(document);
     }
 }

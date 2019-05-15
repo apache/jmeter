@@ -21,7 +21,7 @@
 cd "$(dirname "$0")" || exit 1
 
 CP=../lib/ext/ApacheJMeter_http.jar:../lib/ext/ApacheJMeter_core.jar:../lib/jorphan.jar:../lib/oro-2.0.8.jar
-CP=${CP}:../lib/slf4j-api-1.7.25.jar:../lib/jcl-over-slf4j-1.7.25.jar:../lib/log4j-slf4j-impl-2.10.0.jar
-CP=${CP}:../lib/log4j-api-2.10.0.jar:../lib/log4j-core-2.10.0.jar:../lib/log4j-1.2-api-2.10.0.jar
+CP=${CP}:../lib/slf4j-api-1.7.25.jar:../lib/jcl-over-slf4j-1.7.25.jar:../lib/log4j-slf4j-impl-2.11.0.jar
+CP=${CP}:../lib/log4j-api-2.11.1.jar:../lib/log4j-core-2.11.1.jar:../lib/log4j-1.2-api-2.11.1.jar
 
 java -cp $CP org.apache.jmeter.protocol.http.control.HttpMirrorServer "$@"

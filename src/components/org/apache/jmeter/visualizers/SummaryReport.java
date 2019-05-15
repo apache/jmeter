@@ -55,6 +55,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.MinMaxLongRenderer;
 import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.ObjectTableSorter;
@@ -88,6 +89,20 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             "aggregate_report_sent_bytes_per_sec",  //$NON-NLS-1$
             "average_bytes",               //$NON-NLS-1$
             };
+
+    private static final Object[][] COLUMNS_PARAMS = {
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+    };
 
     private final String TOTAL_ROW_LABEL
         = JMeterUtils.getResString("aggregate_report_total_label");  //$NON-NLS-1$
@@ -126,8 +141,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             null, // Label
             null, // count
             null, // Mean
-            null, // Min
-            null, // Max
+            new MinMaxLongRenderer("#0"), // Min //$NON-NLS-1$
+            new MinMaxLongRenderer("#0"), // Max //$NON-NLS-1$
             new NumberRenderer("#0.00"), // Std Dev. //$NON-NLS-1$
             new NumberRenderer("#0.00%"), // Error %age //$NON-NLS-1$
             new RateRenderer("#.0"),      // Throughput //$NON-NLS-1$
@@ -142,8 +157,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             null, // Label
             null, // count
             null, // Mean
-            null, // Min
-            null, // Max
+            new DecimalFormat("#0"), // Min //$NON-NLS-1$
+            new DecimalFormat("#0"), // Max //$NON-NLS-1$
             new DecimalFormat("#0.00"), // Std Dev. //$NON-NLS-1$
             new DecimalFormat("#0.000%"), // Error %age //$NON-NLS-1$
             new DecimalFormat("#.00000"),      // Throughput //$NON-NLS-1$
@@ -295,7 +310,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile());
                     OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))) {
                 CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, FORMATS),writer, 
-                        saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(COLUMNS) : null);
+                        saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(COLUMNS, COLUMNS_PARAMS) : null);
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } 

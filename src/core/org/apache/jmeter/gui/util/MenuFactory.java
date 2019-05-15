@@ -171,7 +171,7 @@ public final class MenuFactory {
                         || (testBeanGUI.isExpert() && !JMeterUtils.isExpertMode());
                 item = testBeanGUI;
             } else {
-                item = (JMeterGUIComponent) c.newInstance();
+                item = (JMeterGUIComponent) c.getDeclaredConstructor().newInstance();
             }
         } catch (NoClassDefFoundError e) {
             log.warn("Configuration error, probably corrupt or missing third party library(jar)? Could not create class: {}.",
@@ -372,10 +372,7 @@ public final class MenuFactory {
     }
 
     public static JPopupMenu getDefaultConfigElementMenu() {
-        JPopupMenu pop = new JPopupMenu();
-        MenuFactory.addEditMenu(pop, true);
-        MenuFactory.addFileMenu(pop);
-        return pop;
+        return createDefaultPopupMenu();
     }
 
     public static JPopupMenu getDefaultVisualizerMenu() {
@@ -388,27 +385,22 @@ public final class MenuFactory {
     }
 
     public static JPopupMenu getDefaultTimerMenu() {
-        JPopupMenu pop = new JPopupMenu();
-        MenuFactory.addEditMenu(pop, true);
-        MenuFactory.addFileMenu(pop);
-        return pop;
+        return createDefaultPopupMenu();
     }
 
     public static JPopupMenu getDefaultAssertionMenu() {
-        JPopupMenu pop = new JPopupMenu();
-        MenuFactory.addEditMenu(pop, true);
-        MenuFactory.addFileMenu(pop);
-        return pop;
+        return createDefaultPopupMenu();
     }
 
     public static JPopupMenu getDefaultExtractorMenu() {
-        JPopupMenu pop = new JPopupMenu();
-        MenuFactory.addEditMenu(pop, true);
-        MenuFactory.addFileMenu(pop);
-        return pop;
+        return createDefaultPopupMenu();
     }
 
     public static JPopupMenu getDefaultMenu() { // if type is unknown
+        return createDefaultPopupMenu();
+    }
+
+    private static JPopupMenu createDefaultPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
@@ -578,8 +570,8 @@ public final class MenuFactory {
         }
 
         if (parent instanceof TestPlan) {
-            List<Class> samplerAndController = Arrays.asList(Sampler.class, Controller.class);
-            List<Class> exceptions = Arrays.asList(AbstractThreadGroup.class, NonTestElement.class);
+            List<Class<?>> samplerAndController = Arrays.asList(Sampler.class, Controller.class);
+            List<Class<?>> exceptions = Arrays.asList(AbstractThreadGroup.class, NonTestElement.class);
             return !foundClass(nodes, samplerAndController, exceptions);
         }
         // AbstractThreadGroup is only allowed under a TestPlan
@@ -608,7 +600,7 @@ public final class MenuFactory {
      * @param classes Array of {@link Class}
      * @return true if nodes is one of classes
      */
-    private static boolean foundClass(JMeterTreeNode[] nodes, Class[] classes) {
+    private static boolean foundClass(JMeterTreeNode[] nodes, Class<?>[] classes) {
         for (JMeterTreeNode node : nodes) {
             for (Class<?> aClass : classes) {
                 if (aClass.isInstance(node.getUserObject())) {
@@ -640,7 +632,7 @@ public final class MenuFactory {
      * @return boolean
      */
     private static boolean foundClass(
-            JMeterTreeNode[] nodes, List<Class> classes, List<Class> exceptions) {
+            JMeterTreeNode[] nodes, List<Class<?>> classes, List<Class<?>> exceptions) {
         return Arrays.stream(nodes)
                 .map(DefaultMutableTreeNode::getUserObject)
                 .filter(userObj -> exceptions.stream().noneMatch(c -> c.isInstance(userObj)))

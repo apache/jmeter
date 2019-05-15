@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.TimeZone;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -29,15 +30,16 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test {@link DateTimeConvertFunction}
- * 
+ * We implement JMeterSerialTest as we change TimeZone
  * @since 4.0
  */
-public class TestDateTimeConvertFunction extends JMeterTestCase {
+public class TestDateTimeConvertFunction extends JMeterTestCase implements JMeterSerialTest {
 
     protected AbstractFunction dateConvert;
 
@@ -75,6 +77,19 @@ public class TestDateTimeConvertFunction extends JMeterTestCase {
         dateConvert.setParameters(params);
         String returnValue = dateConvert.execute(result, null);
         assertEquals("02-01-2017 09:00", returnValue);
+    }
+    
+    @Test
+    public void testDateTimeConvertEpochTime() throws Exception {
+        TimeZone initialTZ = TimeZone.getDefault();
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+        params.add(new CompoundVariable("1526574881000"));
+        params.add(new CompoundVariable(""));
+        params.add(new CompoundVariable("dd/MM/yyyy HH:mm"));
+        dateConvert.setParameters(params);
+        String returnValue = dateConvert.execute(result, null);
+        assertEquals("17/05/2018 16:34", returnValue);
+        TimeZone.setDefault(initialTZ);
     }
     
     @Test

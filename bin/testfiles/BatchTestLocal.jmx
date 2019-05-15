@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.2">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.0-SNAPSHOT.20180905">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -299,11 +299,11 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <label>true</label>
                 <code>true</code>
                 <message>true</message>
-                <threadName>true</threadName>
+                <threadName>false</threadName>
                 <dataType>true</dataType>
                 <encoding>false</encoding>
-                <assertions>true</assertions>
-                <subresults>true</subresults>
+                <assertions>false</assertions>
+                <subresults>false</subresults>
                 <responseData>true</responseData>
                 <samplerData>true</samplerData>
                 <xml>false</xml>
@@ -335,7 +335,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <label>true</label>
                 <code>true</code>
                 <message>true</message>
-                <threadName>true</threadName>
+                <threadName>false</threadName>
                 <dataType>true</dataType>
                 <encoding>false</encoding>
                 <assertions>true</assertions>
@@ -371,11 +371,11 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <label>true</label>
                 <code>true</code>
                 <message>true</message>
-                <threadName>true</threadName>
+                <threadName>false</threadName>
                 <dataType>true</dataType>
                 <encoding>false</encoding>
-                <assertions>true</assertions>
-                <subresults>true</subresults>
+                <assertions>false</assertions>
+                <subresults>false</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
                 <xml>false</xml>
@@ -402,7 +402,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <label>true</label>
                 <code>true</code>
                 <message>true</message>
-                <threadName>true</threadName>
+                <threadName>false</threadName>
                 <dataType>true</dataType>
                 <encoding>false</encoding>
                 <assertions>true</assertions>
@@ -800,7 +800,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>true</encoding>
               <assertions>true</assertions>
@@ -835,11 +835,11 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -871,7 +871,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
               <assertions>true</assertions>
@@ -1187,11 +1187,11 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>true</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -1223,11 +1223,11 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>false</samplerData>
               <xml>false</xml>
@@ -1531,11 +1531,11 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -1567,7 +1567,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
               <assertions>true</assertions>
@@ -1603,7 +1603,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
               <assertions>true</assertions>
@@ -1635,7 +1635,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
               <assertions>true</assertions>
@@ -1754,11 +1754,11 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -1790,7 +1790,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
               <assertions>true</assertions>
@@ -1890,11 +1890,11 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -1926,7 +1926,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
               <assertions>true</assertions>
@@ -1957,7 +1957,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
         <stringProp name="filename">BatchTestLocal.txt</stringProp>
         <boolProp name="quotedData">false</boolProp>
         <boolProp name="recycle">true</boolProp>
-        <stringProp name="shareMode">All threads</stringProp>
+        <stringProp name="shareMode">shareMode.all</stringProp>
         <boolProp name="stopThread">false</boolProp>
         <stringProp name="variableNames">CSV_VAR</stringProp>
       </CSVDataSet>
@@ -2037,11 +2037,11 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -2073,7 +2073,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
               <assertions>true</assertions>
@@ -2134,7 +2134,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
               <assertions>true</assertions>
@@ -2170,11 +2170,11 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>
@@ -2207,7 +2207,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
             <label>true</label>
             <code>true</code>
             <message>true</message>
-            <threadName>true</threadName>
+            <threadName>false</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
             <assertions>true</assertions>
@@ -2250,7 +2250,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
         </BSFSampler>
         <hashTree/>
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler" enabled="true">
-          <stringProp name="cacheKey"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="script">11*11</stringProp>
@@ -2269,7 +2269,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
               <assertions>true</assertions>
@@ -2305,11 +2305,11 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <label>true</label>
               <code>true</code>
               <message>true</message>
-              <threadName>true</threadName>
+              <threadName>false</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
               <xml>false</xml>

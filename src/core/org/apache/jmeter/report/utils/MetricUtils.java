@@ -20,7 +20,7 @@ package org.apache.jmeter.report.utils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * @since 4.1
+ * @since 5.0
  */
 public class MetricUtils {
     public static final String ASSERTION_FAILED = "Assertion failed"; //$NON-NLS-1$

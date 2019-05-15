@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * Those kind of variables are extracted by:
  * - Regular Expression extractor
  * - JSON extractor
- * - CSS/JQuery extractor
+ * - CSS Selector extractor
  * - XPath Extractor
  * 
  * @since 3.1

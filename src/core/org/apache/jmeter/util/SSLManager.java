@@ -26,10 +26,13 @@ import java.net.HttpURLConnection;
 import java.security.KeyStore;
 import java.security.Provider;
 import java.security.Security;
+import java.util.Arrays;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
 import org.slf4j.Logger;
@@ -42,7 +45,7 @@ import org.slf4j.LoggerFactory;
  * SSLManager will try to automatically select the client certificate for you,
  * but if it can't make a decision, it will pop open a dialog asking you for
  * more information.
- *
+ * <p>
  * TODO? - N.B. does not currently allow the selection of a client certificate.
  *
  */
@@ -65,7 +68,7 @@ public abstract class SSLManager {
     private static final boolean IS_SSL_SUPPORTED = true;
 
     /** Cache the KeyStore instance */
-    private volatile JmeterKeyStore keyStore;
+    private JmeterKeyStore keyStore;
 
     /** Cache the TrustStore instance - null if no truststore name was provided */
     private KeyStore trustStore = null;
@@ -120,34 +123,41 @@ public abstract class SSLManager {
                 log.info("KeyStore created OK");
             } catch (Exception e) {
                 this.keyStore = null;
-                throw new RuntimeException("Could not create keystore: "+e.getMessage(), e);
+                throw new IllegalArgumentException("Could not create keystore: "+e.getMessage(), e);
             }
 
-            try {
-                File initStore = new File(fileName);
+           try {
 
-                if (fileName.length() >0 && initStore.exists()) {
+              // The string 'NONE' is used for the keystore location when using PKCS11
+              // https://docs.oracle.com/javase/8/docs/technotes/guides/security/p11guide.html#JSSE
+              if ("NONE".equalsIgnoreCase(fileName)) {
+                 this.keyStore.load(null, Validate.notNull(getPassword(), "Password should not be null"));
+                 log.info("Total of {} aliases loaded OK from PKCS11", Integer.valueOf(keyStore.getAliasCount()));
+              } else {
+                 File initStore = new File(fileName);
+                 if (fileName.length() > 0 && initStore.exists()) {
                     try (InputStream fis = new FileInputStream(initStore);
                             InputStream fileInputStream = new BufferedInputStream(fis)) {
                         this.keyStore.load(fileInputStream, getPassword());
                         if (log.isInfoEnabled()) {
                             log.info(
                                     "Total of {} aliases loaded OK from keystore",
-                                    keyStore.getAliasCount());
+                                    Integer.valueOf(keyStore.getAliasCount()));
                         }
                     }
-                } else {
+                 } else {
                     log.warn("Keystore file not found, loading empty keystore");
                     this.defaultpw = ""; // Ensure not null
                     this.keyStore.load(null, "");
-                }
-            } catch (Exception e) {
-                log.error("Problem loading keystore: {}", e.getMessage(), e);
-            }
+                 }
+              }
+           } catch (Exception e) {
+              log.error("Problem loading keystore: {}", e.getMessage(), e);
+           }
 
-            if (log.isDebugEnabled()) {
-                log.debug("JmeterKeyStore type: {}", this.keyStore.getClass());
-            }
+           if (log.isDebugEnabled()) {
+              log.debug("JmeterKeyStore type: {}", this.keyStore.getClass());
+           }
         }
 
         return this.keyStore;
@@ -156,26 +166,31 @@ public abstract class SSLManager {
     /*
      * The password can be defined as a property; this dialogue is provided to allow it
      * to be entered at run-time.
-     *
-     * However, this does not gain much, as the dialogue does not (yet) support hidden input ...
-     *
-    */
+     */
     private String getPassword() {
         String password = this.defaultpw;
         if (null == password) {
             final GuiPackage guiInstance = GuiPackage.getInstance();
             if (guiInstance != null) {
                 synchronized (this) { // TODO is sync really needed?
-                    this.defaultpw = JOptionPane.showInputDialog(
-                            guiInstance.getMainFrame(),
-                            JMeterUtils.getResString("ssl_pass_prompt"),  // $NON-NLS-1$
-                            JMeterUtils.getResString("ssl_pass_title"),  // $NON-NLS-1$
-                            JOptionPane.QUESTION_MESSAGE);
-                    System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
-                    password = this.defaultpw;
-                }
+                  JPasswordField pwf = new JPasswordField(64);
+                  pwf.setEchoChar('*');
+                  int choice = JOptionPane.showConfirmDialog(
+                          guiInstance.getMainFrame(),
+                          pwf,
+                          JMeterUtils.getResString("ssl_pass_prompt"),
+                          JOptionPane.OK_CANCEL_OPTION,
+                          JOptionPane.PLAIN_MESSAGE);
+                  if (choice == JOptionPane.OK_OPTION) {
+                     char[] pwchars = pwf.getPassword();
+                     this.defaultpw = new String(pwchars);
+                     Arrays.fill(pwchars, '*');
+                  }
+                  System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
+                  password = this.defaultpw;
+               }
             } else {
-                log.warn("No password provided, and no GUI present so cannot prompt");
+               log.warn("No password provided, and no GUI present so cannot prompt");
             }
         }
         return password;
@@ -185,17 +200,21 @@ public abstract class SSLManager {
      * Opens and initializes the TrustStore.
      *
      * There are 3 possibilities:
-     * - no truststore name provided, in which case the default Java truststore should be used
-     * - truststore name is provided, and loads OK
-     * - truststore name is provided, but is not found or does not load OK, in which case an empty
-     * truststore is created
+     * <ul>
+     * <li>no truststore name provided, in which case the default Java truststore
+     * should be used</li>
+     * <li>truststore name is provided, and loads OK</li>
+     * <li>truststore name is provided, but is not found or does not load OK, in
+     * which case an empty
+     * truststore is created</li>
+     * </ul>
+     * If the KeyStore object cannot be created, then this is currently treated the
+     * same as if no truststore name was provided.
      *
-     * If the KeyStore object cannot be created, then this is currently treated the same
-     * as if no truststore name was provided.
-     *
-     * @return truststore
-     * - null: use Java truststore
-     * - otherwise, the truststore, which may be empty if the file could not be loaded.
+     * @return
+     *         {@code null} when Java truststore should be used.
+     *         Otherwise the truststore, which may be empty if the file could not be
+     *         loaded.
      *
      */
     protected KeyStore getTrustStore() {
@@ -207,7 +226,7 @@ public abstract class SSLManager {
             if (fileName == null) {
                 return null;
             }
-            log.info("TrustStore Location: " + fileName);
+            log.info("TrustStore Location: {}", fileName);
 
             try {
                 this.trustStore = KeyStore.getInstance("JKS");
@@ -282,7 +301,7 @@ public abstract class SSLManager {
      *            name of the default key, if empty the first key will be used
      *            as default key
      */
-    public void configureKeystore(boolean preload, int startIndex, int endIndex, String clientCertAliasVarName) {
+    public synchronized void configureKeystore(boolean preload, int startIndex, int endIndex, String clientCertAliasVarName) {
         this.keystoreAliasStartIndex = startIndex;
         this.keystoreAliasEndIndex = endIndex;
         this.clientCertAliasVarName = clientCertAliasVarName;
@@ -294,7 +313,7 @@ public abstract class SSLManager {
     /**
      * Destroy Keystore
      */
-    public void destroyKeystore() {
+    public synchronized void destroyKeystore() {
         keyStore=null;
     }
 }

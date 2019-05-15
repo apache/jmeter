@@ -23,23 +23,22 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.http.client.entity.DeflateInputStream;
-import org.apache.http.client.entity.DeflateInputStreamFactory;
 
 /**
- * {@link DeflateInputStreamFactory} subclass that has a flag to accept 
+ * {@link DeflateInputStream} subclass that has a flag to accept 
  * "edgy streams" that signal end of stream with {@link EOFException} 
  * which seems to be rather frequent
  * 
  * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61058">Bugzilla 61058</a>
- * @since 4.1
+ * @since 5.0
  */
 public class LaxDeflateInputStream extends DeflateInputStream {
     private final boolean relax;
     
     /**
-     * @param wrapped
-     * @param relax
-     * @throws IOException
+     * @param wrapped the InputStream that should be wrapped
+     * @param relax flag to enable relaxed mode
+     * @throws IOException when super class throws an IOException
      */
     public LaxDeflateInputStream(InputStream wrapped, boolean relax) throws IOException {
         super(wrapped);

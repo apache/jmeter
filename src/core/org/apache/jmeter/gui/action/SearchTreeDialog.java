@@ -61,6 +61,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.documentation.VisibleForTesting;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
@@ -111,8 +112,13 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
     private List<JMeterTreeNode> lastSearchResult = new ArrayList<>();
     private int currentSearchIndex;
 
+    @VisibleForTesting
     public SearchTreeDialog() {
-        super((JFrame) null, JMeterUtils.getResString("search_tree_title"), false); //$NON-NLS-1$
+        super();
+    }
+    
+    public SearchTreeDialog(JFrame parent) {
+        super(parent, JMeterUtils.getResString("search_tree_title"), false); //$NON-NLS-1$
         init();
     }
 
@@ -260,21 +266,23 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
      */
     private void doReplace() {
         GuiPackage.getInstance().updateCurrentNode();
-        JMeterTreeNode currentNode = lastSearchResult.get(currentSearchIndex);
-        if(currentNode != null) {
-            String wordToSearch = searchTF.getText();
-            String wordToReplace = replaceTF.getText();
-            String regex = isRegexpCB.isSelected() ? wordToSearch : Pattern.quote(wordToSearch);
-            boolean caseSensitiveReplacement = isCaseSensitiveCB.isSelected();
-            Pair<Integer, JMeterTreeNode> pair = doReplacementInCurrentNode(currentNode, regex, wordToReplace, caseSensitiveReplacement);
-            int nbReplacements = 0;
-            if(pair != null) {
-                nbReplacements = pair.getLeft();
-                GuiPackage.getInstance().updateCurrentGui();
-                GuiPackage.getInstance().getMainFrame().repaint();
-            } 
-            statusLabel.setText(MessageFormat.format("Replaced {0} occurrences", nbReplacements));
+        int nbReplacements = 0;
+        if(currentSearchIndex >= 0) {
+            JMeterTreeNode currentNode = lastSearchResult.get(currentSearchIndex);
+            if(currentNode != null) {
+                String wordToSearch = searchTF.getText();
+                String wordToReplace = replaceTF.getText();
+                String regex = isRegexpCB.isSelected() ? wordToSearch : Pattern.quote(wordToSearch);
+                boolean caseSensitiveReplacement = isCaseSensitiveCB.isSelected();
+                Pair<Integer, JMeterTreeNode> pair = doReplacementInCurrentNode(currentNode, regex, wordToReplace, caseSensitiveReplacement);
+                if(pair != null) {
+                    nbReplacements = pair.getLeft();
+                    GuiPackage.getInstance().updateCurrentGui();
+                    GuiPackage.getInstance().getMainFrame().repaint();
+                } 
+            }
         }
+        statusLabel.setText(MessageFormat.format("Replaced {0} occurrences", nbReplacements));
     }
 
     private JMeterTreeNode doNavigateToSearchResult(boolean isNext) {

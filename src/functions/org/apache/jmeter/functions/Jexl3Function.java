@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
-import org.apache.commons.jexl3.JexlExpression;
+import org.apache.commons.jexl3.JexlScript;
 import org.apache.commons.jexl3.MapContext;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -91,8 +91,8 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
             jc.set("OUT", System.out);//$NON-NLS-1$
 
             // Now evaluate the script, getting the result
-            JexlExpression e = getJexlEngine().createExpression( exp );
-            Object o = e.evaluate(jc);
+            JexlScript e = getJexlEngine().createScript(exp);
+            Object o = e.execute(jc);
             if (o != null)
             {
                 str = o.toString();

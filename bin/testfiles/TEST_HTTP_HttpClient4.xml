@@ -123,28 +123,28 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
-  <httpSample s="true" lb="http://localhost:8081/" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="true" lb="http://localhost:8081/redirect" rc="302" dt="text"/>
-  <httpSample s="false" lb="http://localhost:8081/redirect" rc="Non HTTP response code: java.io.IOException" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-0" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-1" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-2" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-3" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-4" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-5" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-6" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-7" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-8" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-9" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-10" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-11" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-12" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-13" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-14" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-15" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-16" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-17" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-18" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-19" rc="302" dt="text"/>
+  <httpSample s="true" lb="HR-FollowRedirect-20" rc="302" dt="text"/>
+  <httpSample s="false" lb="HR-FollowRedirect-21" rc="Non HTTP response code: java.io.IOException" dt="text"/>
 </httpSample>
 <httpSample s="true" lb="HR-FollowRedirect" rc="Non HTTP response code: org.apache.http.client.ClientProtocolException" dt="text">
   <assertionResult>
@@ -180,6 +180,11 @@
   </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HR-POST_WITH_BODY" rc="200" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
   <assertionResult>
     <name>Response Assertion</name>
     <failure>false</failure>

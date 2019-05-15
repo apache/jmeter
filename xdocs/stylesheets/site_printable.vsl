@@ -234,13 +234,26 @@ No
 <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
 #end
 
-#macro ( pr $id)
+#macro ( pullrequest $id)
 <a href="https://github.com/apache/jmeter/pull/$id.getText()">Pull request #$id.getText()</a>##
+#end
+
+#macro ( rfc $id)
+#if($id.getText())
+<a href="https://tools.ietf.org/html/rfc$id.getAttributeValue('link')">$id.getText()</a>##
+#else
+<a href="https://tools.ietf.org/html/rfc$id.getAttributeValue('link')">RFC $id.getAttributeValue('link')</a>##
+#end
 #end
 
 ## Shorthand - automatically adds " - " before remaining text
 #macro ( bug $id)
 #bugzilla($id) - ##
+#end
+
+## Shorthand - automatically adds " - " before remaining text
+#macro ( pr $id)
+#pullrequest($id) - ##
 #end
 
 #macro ( contributor $id)
@@ -299,6 +312,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #bug ($node)
 #elseif ($node.getName().equals("pr"))
 #pr ($node)
+#elseif ($node.getName().equals("rfc"))
+#rfc ($node)
 #elseif ($node.getName().equals("contributor"))
 #contributor ($node)
 #elseif ($node.getName().equals("ch_section"))

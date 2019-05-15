@@ -41,6 +41,11 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
      * Instantiates a new response time percentiles graph consumer.
      */
     public ResponseTimePercentilesGraphConsumer() {
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
         setRenderPercentiles(true);
     }
 

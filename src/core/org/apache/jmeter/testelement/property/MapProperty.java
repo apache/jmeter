@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.testelement.property;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
@@ -32,13 +33,14 @@ public class MapProperty extends MultiProperty {
 
     public MapProperty(String name, Map<?,?> value) {
         super(name);
-        log.info("map = " + value);
+        log.info("map = {}", value);
         this.value = normalizeMap(value);
-        log.info("normalized map = " + this.value);
+        log.info("normalized map = {}", this.value);
     }
 
     public MapProperty() {
         super();
+        value = new HashMap<>();
     }
 
     /** {@inheritDoc} */
@@ -87,7 +89,7 @@ public class MapProperty extends MultiProperty {
      */
     @Override
     protected Class<? extends JMeterProperty> getPropertyType() {
-        if (value.size() > 0) {
+        if (!value.isEmpty()) {
             return valueIterator().next().getClass();
         }
         return NullProperty.class;
@@ -116,7 +118,7 @@ public class MapProperty extends MultiProperty {
     private Map<String, JMeterProperty> cloneMap() {
         try {
             @SuppressWarnings("unchecked") // value is the correct class
-            Map<String, JMeterProperty> newCol = value.getClass().newInstance();
+            Map<String, JMeterProperty> newCol = value.getClass().getDeclaredConstructor().newInstance();
             PropertyIterator iter = valueIterator();
             while (iter.hasNext()) {
                 JMeterProperty item = iter.next();

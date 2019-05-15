@@ -60,8 +60,9 @@ public class ExitCommand extends AbstractActionWithNoRunningTest {
     @Override
     public void doActionAfterCheck(ActionEvent e) {
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
-        if (GuiPackage.getInstance().isDirty()) {
-            int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        if (guiPackage.isDirty()) {
+            int chosenOption = JOptionPane.showConfirmDialog(guiPackage.getMainFrame(), JMeterUtils
                     .getResString("cancel_exit_to_save"), // $NON-NLS-1$
                     JMeterUtils.getResString("save?"), // $NON-NLS-1$
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -69,7 +70,7 @@ public class ExitCommand extends AbstractActionWithNoRunningTest {
                 System.exit(0);
             } else if (chosenOption == JOptionPane.YES_OPTION) {
                 ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
-                if (!GuiPackage.getInstance().isDirty()) {
+                if (!guiPackage.isDirty()) {
                     System.exit(0);
                 }
             }

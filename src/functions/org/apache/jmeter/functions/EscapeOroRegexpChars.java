@@ -84,9 +84,7 @@ public class EscapeOroRegexpChars extends AbstractFunction {
         }
 
         if (log.isDebugEnabled()) {
-            String tn = Thread.currentThread().getName();
-            log.debug(tn + " name:" //$NON-NLS-1$
-                    + varName + " value:" + escapedValue);//$NON-NLS-1$
+            log.debug("{} name:{} value:{}", Thread.currentThread().getName(), varName, escapedValue); //$NON-NLS-1$
         }
 
         return escapedValue;

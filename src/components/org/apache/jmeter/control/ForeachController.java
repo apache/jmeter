@@ -20,6 +20,7 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -63,7 +64,6 @@ public class ForeachController extends GenericController implements Serializable
 
     public ForeachController() {
     }
-    
 
     /**
      * @param startIndex Start index  of loop
@@ -80,14 +80,13 @@ public class ForeachController extends GenericController implements Serializable
         return getPropertyAsInt(START_INDEX, 0);
     }
 
-
     /**
      * @return start index of loop as String
      */
     public String getStartIndexAsString() {
         return getPropertyAsString(START_INDEX, INDEX_DEFAULT_VALUE);
     }
-    
+
     /**
      * @param endIndex End index  of loop
      */
@@ -102,14 +101,14 @@ public class ForeachController extends GenericController implements Serializable
         // Although the default is not the same as for the string value, it is only used internally
         return getPropertyAsInt(END_INDEX, Integer.MAX_VALUE);
     }
-    
+
     /**
      * @return end index of loop
      */
     public String getEndIndexAsString() {
         return getPropertyAsString(END_INDEX, INDEX_DEFAULT_VALUE);
     }
-    
+
     public void setInputVal(String inputValue) {
         setProperty(new StringProperty(INPUTVAL, inputValue));
     }
@@ -168,8 +167,8 @@ public class ForeachController extends GenericController implements Serializable
         if (currentVariable != null) {
             variables.putObject(getReturnVal(), currentVariable);
             if (log.isDebugEnabled()) {
-                log.debug("{} : Found in vars:{}, isDone:{}", 
-                        getName(), inputVariable, false);
+                log.debug("{} : Found in vars:{}, isDone:{}",
+                        getName(), inputVariable, Boolean.FALSE);
 
             }
             return false;
@@ -200,8 +199,10 @@ public class ForeachController extends GenericController implements Serializable
     // Prevent entry if nothing to do
     @Override
     public Sampler next() {
+        updateIterationIndex(getName(), loopCount);
         try {
-            if (emptyList()) {
+            if (breakLoop || emptyList()) {
+                resetBreakLoop();
                 reInitialize();
                 resetLoopCount();
                 return null;
@@ -243,9 +244,11 @@ public class ForeachController extends GenericController implements Serializable
     protected Sampler nextIsNull() throws NextIsNullException {
         reInitialize();
         // Conditions to reset the loop count
-        if (endOfArguments() // no more variables to iterate
-                ||loopCount >= getEndIndex() // we reached end index
+        if (breakLoop
+                || endOfArguments() // no more variables to iterate
+                || loopCount >= getEndIndex() // we reached end index
                 ) {
+            resetBreakLoop();
             resetLoopCount();
             return null;
         }
@@ -278,7 +281,7 @@ public class ForeachController extends GenericController implements Serializable
         incrementLoopCount();
         recoverRunningVersion();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -287,7 +290,6 @@ public class ForeachController extends GenericController implements Serializable
         super.triggerEndOfLoop();
         resetLoopCount();
     }
-
 
     /**
      * Reset loopCount to Start index
@@ -298,15 +300,30 @@ public class ForeachController extends GenericController implements Serializable
         super.initialize();
         loopCount = getStartIndex();
     }
-    
+
     @Override
     public void startNextLoop() {
         reInitialize();
     }
-    
+
+    private void resetBreakLoop() {
+        if(breakLoop) {
+            breakLoop = false;
+        }
+    }
+
     @Override
     public void breakLoop() {
-        // FIXME TO BE COMPLETED
-        this.breakLoop = true;
+        breakLoop = true;
+        setFirst(true);
+        resetCurrent();
+        resetLoopCount();
+        recoverRunningVersion();
+    }
+
+    @Override
+    public void iterationStart(LoopIterationEvent iterEvent) {
+        reInitialize();
+        resetLoopCount();
     }
 }

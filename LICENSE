@@ -211,76 +211,81 @@ The following software is provided under the Apache License V 2.0 (as above):
 
 * apache-bsf-2.4.0.jar
 * beanshell-2.0b6.jar
-* cglib-nodep-3.2.6.jar
+* cglib-nodep-3.2.9.jar
 * commons-codec-1.11.jar
 * commons-collections-3.2.2.jar
-* commons-dbcp2-2.2.0.jar
+* commons-dbcp2-2.5.0.jar
 * commons-io-2.6.jar
 * commons-jexl2-2.1.1.jar
 * commons-jexl3-3.1.jar
-* commons-lang3-3.7.jar
+* commons-lang3-3.8.1.jar
 * commons-math3-3.6.1.jar
 * commons-net-3.6.jar
-* commons-pool2-2.5.0.jar
+* commons-pool2-2.6.0.jar
+* commons-text-1.6.jar
 * dec-0.1.2.jar
-* groovy-all-2.4.14.jar
-* httpasyncclient-4.1.3.jar
-* httpclient-4.5.5.jar
-* httpcore-4.4.9.jar
-* httpcore-nio-4.4.9.jar
-* httpmime-4.5.5.jar
+* groovy-all-2.4.16.jar
+* httpasyncclient-4.1.4.jar
+* httpclient-4.5.8.jar
+* httpcore-4.4.11.jar
+* httpcore-nio-4.4.11.jar
+* httpmime-4.5.8.jar
 * jakarta-oro-2.0.8.jar
 * jms-1.1.1.jar
-* log4j-1.2-api-2.10.0.jar
-* log4j-api-2.10.0.jar
-* log4j-core-2.10.0.jar
-* log4j-slf4j-impl-2.10.0.jar
+* log4j-1.2-api-2.11.1.jar
+* log4j-api-2.11.1.jar
+* log4j-core-2.11.1.jar
+* log4j-slf4j-impl-2.11.1.jar
 * serializer-2.7.2.jar
 * startbootstrap-sb-admin-2-1.0.7
-* tika-core-1.17.jar
-* tika-parsers-1.17.jar
+* tika-core-1.20.jar
+* tika-parsers-1.20.jar
 * xalan-2.7.2.jar
-* xerces-2.11.0.jar
+* xerces-2.12.0.jar
 * xml-apis-1.4.01.jar
-* xmlgraphics-commons-2.2.jar
+* xmlgraphics-commons-2.3.jar
 
 - Software produced outside the ASF which is available under AL 2.0:
 
 * accessors-smart-1.2.jar
-* caffeine-2.6.1.jar
+* caffeine-2.6.2.jar
 * darcula.jar
-* freemarker-2.3.23.jar (AL2.0, see licenses/bin for additional info)
+* freemarker-2.3.28.jar (AL2.0, see licenses/bin for additional info)
+* jackson-annotations-2.9.8.jar
+* jackson-core-2.9.8.jar
+* jackson-databind-2.9.8.jar
 * json-path-2.4.0.jar
 * json-smart-2.3.jar
 * mongo-java-driver-2.11.3.jar
 * objenesis-2.6.jar
-* ph-commons-9.0.0.jar
-* ph-css-6.0.0.jar
-* spock-core-1.0-groovy-2.4.jar
+* ph-commons-9.2.1.jar
+* ph-css-6.1.1.jar
+* spock-core-1.2-groovy-2.4.jar
 
 - Software produced outside the ASF which is available under other licenses (not AL 2.0):
 For details, please see the files under: licenses/bin
 
-* asm-6.1.jar (BSD)
+* asm-7.0.jar (BSD)
 * dnsjava-2.1.8.jar (BSD)
 * hamcrest-core-1.3.jar (BSD)
+* HdrHistogram-2.1.11.jar (BSD)
 * javamail-1.5.0-b01.jar (CDDL Version 1.0)
 * javax.activation-api-1.2.0.jar  (CDDL Version 1.1)
 * javax.activation-1.2.0.jar  (CDDL Version 1.1)
 * jcharts-0.7.5.jar (?)
 * jcl-over-slf4j-1.7.25.jar (MIT)
-* jsoup-1.11.2.jar (MIT)
-* jodd-core-4.1.4.jar (Simplified BSD)
-* jodd-lagarto-4.1.4.jar (Simplified BSD)
-* jodd-log-4.1.4.jar (Simplified BSD)
-* jodd-props-4.1.4.jar (Simplified BSD)
+* jsoup-1.11.3.jar (MIT)
+* jodd-core-5.0.6.jar (Simplified BSD)
+* jodd-lagarto-5.0.6.jar (Simplified BSD)
+* jodd-log-5.0.6.jar (Simplified BSD)
+* jodd-props-5.0.6.jar (Simplified BSD)
 * jtidy-r938.jar (?)
 * junit-4.12.jar (BSD)
-* rhino-1.7.7.2.jar (MPL 2.0)
-* rsyntaxtextarea-2.6.1.jar (BSD)
+* rhino-1.7.10.jar (MPL 2.0)
+* rsyntaxtextarea-3.0.2.jar (BSD)
 * slf4j-api-1.7.25.jar (MIT)
-* slf4j-ext-1.7.25.jar (MIT)
 * xmlpull-1.1.3.1.jar (Public Domain)
 * xpp3-1.1.4c.jar (Indiana University Extreme! Lab Software License 1.1.1)
-* xstream-1.4.10.jar (BSD)
+* xstream-1.4.11.jar (BSD)
 * hamcrest-date-2.0.4.jar (BSD)
+* Saxon-HE-9.9.1-1.jar (Mozilla Public License version 2.0)

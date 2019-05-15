@@ -35,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -169,49 +170,16 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
             String newClassName = ((String) classnameCombo.getSelectedItem()).trim();
             try {
-                BackendListenerClient client = (BackendListenerClient) Class.forName(newClassName, true,
-                        Thread.currentThread().getContextClassLoader()).newInstance();
-                BackendListenerClient oldClient = (BackendListenerClient) Class.forName(className, true,
-                        Thread.currentThread().getContextClassLoader()).newInstance();
+                BackendListenerClient client = createBackendListenerClient(newClassName);
+                BackendListenerClient oldClient = createBackendListenerClient(className);
 
                 Arguments currArgs = new Arguments();
                 argsPanel.modifyTestElement(currArgs);
                 Map<String, String> currArgsMap = currArgs.getArgumentsAsMap();
                 Map<String, String> userArgMap = new HashMap<>();
                 userArgMap.putAll(currArgsMap);
-                Arguments newArgs = new Arguments();
-                Arguments defaultArgs = null;
-                try {
-                    defaultArgs = client.getDefaultParameters();
-                    Arguments currentUserArgs = oldClient.getDefaultParameters();
-                    if(currentUserArgs != null) {
-                        userArgMap.keySet().removeAll(currentUserArgs.getArgumentsAsMap().keySet());
-                    }
-                } catch (AbstractMethodError e) {
-                    log.warn("BackendListenerClient doesn't implement "
-                            + "getDefaultParameters.  Default parameters won't "
-                            + "be shown.  Please update your client class: {}", newClassName);
-                }
-
-                if (defaultArgs != null) {
-                    for (JMeterProperty jMeterProperty : defaultArgs.getArguments()) {
-                        Argument arg = (Argument) jMeterProperty.getObjectValue();
-                        String name = arg.getName();
-                        String value = arg.getValue();
-
-                        // If a user has set parameters in one test, and then
-                        // selects a different test which supports the same
-                        // parameters, those parameters should have the same
-                        // values that they did in the original test.
-                        if (currArgsMap.containsKey(name)) {
-                            String newVal = currArgsMap.get(name);
-                            if (newVal != null && newVal.length() > 0) {
-                                value = newVal;
-                            }
-                        }
-                        newArgs.addArgument(name, value);
-                    }
-                }
+                Arguments defaultArgs = extractDefaultArguments(client, userArgMap, oldClient.getDefaultParameters());
+                Arguments newArgs = copyDefaultArguments(currArgsMap, defaultArgs);
                 userArgMap.forEach(newArgs::addArgument);
 
                 className = newClassName;
@@ -220,6 +188,55 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                 log.error("Error getting argument list for {}", newClassName, e);
             }
         }
+    }
+
+
+    private Arguments copyDefaultArguments(Map<String, String> currArgsMap, Arguments defaultArgs) {
+        Arguments newArgs = new Arguments();
+        if (defaultArgs != null) {
+            for (JMeterProperty jMeterProperty : defaultArgs.getArguments()) {
+                Argument arg = (Argument) jMeterProperty.getObjectValue();
+                String name = arg.getName();
+                String value = arg.getValue();
+
+                // If a user has set parameters in one test, and then
+                // selects a different test which supports the same
+                // parameters, those parameters should have the same
+                // values that they did in the original test.
+                if (currArgsMap.containsKey(name)) {
+                    String newVal = currArgsMap.get(name);
+                    if (StringUtils.isNotBlank(newVal)) {
+                        value = newVal;
+                    }
+                }
+                newArgs.addArgument(name, value);
+            }
+        }
+        return newArgs;
+    }
+
+
+    private Arguments extractDefaultArguments(BackendListenerClient client, Map<String, String> userArgMap,
+            Arguments currentUserArguments) {
+        Arguments defaultArgs = null;
+        try {
+            defaultArgs = client.getDefaultParameters();
+            if(currentUserArguments != null) {
+                userArgMap.keySet().removeAll(currentUserArguments.getArgumentsAsMap().keySet());
+            }
+        } catch (AbstractMethodError e) {
+            log.warn("BackendListenerClient doesn't implement "
+                    + "getDefaultParameters.  Default parameters won't "
+                    + "be shown.  Please update your client class: {}", client.getClass().getName());
+        }
+        return defaultArgs;
+    }
+
+
+    private BackendListenerClient createBackendListenerClient(String newClassName)
+            throws ReflectiveOperationException {
+        return (BackendListenerClient) Class.forName(newClassName, true,
+                Thread.currentThread().getContextClassLoader()).getDeclaredConstructor().newInstance();
     }
 
     /**

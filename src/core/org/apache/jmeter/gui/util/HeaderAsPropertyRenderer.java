@@ -19,7 +19,6 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
-import java.text.MessageFormat;
 
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -34,8 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
 
-    private static final long serialVersionUID = 240L;
-    private Object[][] columnsMsgParameters;
+    private static final long serialVersionUID = 241L;
 
     /**
      * 
@@ -45,11 +43,14 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
     }
     
     /**
-     * @param columnsMsgParameters Optional parameters of i18n keys
+     * @param columnsMsgParameters ignored
+     * @deprecated don't use {@code columnsMgsParameters} as they are
+     * not moved around when rows of the corresponding table object model
+     * are moved.
      */
+    @Deprecated
     public HeaderAsPropertyRenderer(Object[][] columnsMsgParameters) {
         super();
-        this.columnsMsgParameters = columnsMsgParameters;
     }
 
     @Override
@@ -78,7 +79,7 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
      * @return the text
      */
     protected String getText(Object value, int row, int column) {
-        return getText(value, row, column, columnsMsgParameters);
+        return getText(value, row, column, null);
     }
     
     /**
@@ -87,17 +88,14 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
      * @param value value for which to get the translation
      * @param column index which column message parameters should be used
      * @param row not used
-     * @param columnsMsgParameters
+     * @param columnsMsgParameters ignored
      * @return the text
      */
     static String getText(Object value, int row, int column, Object[][] columnsMsgParameters) {
         if (value == null){
             return "";
         }
-        if(columnsMsgParameters != null && columnsMsgParameters[column] != null) {
-            return MessageFormat.format(JMeterUtils.getResString(value.toString()), columnsMsgParameters[column]);
-        } else {
-            return JMeterUtils.getResString(value.toString());
-        }
+        String label = value.toString();
+        return JMeterUtils.getResString(label, label);
     }
 }

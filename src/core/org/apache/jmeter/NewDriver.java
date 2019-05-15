@@ -50,6 +50,9 @@ public final class NewDriver {
 
     private static final String JAVA_CLASS_PATH = "java.class.path";// $NON-NLS-1$
 
+    private static final String JMETER_LOGFILE_SYSTEM_PROPERTY = "jmeter.logfile";// $NON-NLS-1$
+
+    private static final String HEADLESS_MODE_PROPERTY = "java.awt.headless";// $NON-NLS-1$
     /** The class loader to use for loading JMeter classes. */
     private static final DynamicClassLoader loader;
 
@@ -60,11 +63,11 @@ public final class NewDriver {
 
     static {
         final List<URL> jars = new LinkedList<>();
-        final String initial_classpath = System.getProperty(JAVA_CLASS_PATH);
+        final String initiaClasspath = System.getProperty(JAVA_CLASS_PATH);
 
         // Find JMeter home dir from the initial classpath
         String tmpDir;
-        StringTokenizer tok = new StringTokenizer(initial_classpath, File.pathSeparator);
+        StringTokenizer tok = new StringTokenizer(initiaClasspath, File.pathSeparator);
         if (tok.countTokens() == 1
                 || (tok.countTokens()  == 2 // Java on Mac OS can add a second entry to the initial classpath
                     && OS_NAME_LC.startsWith("mac os x")// $NON-NLS-1$
@@ -126,7 +129,7 @@ public final class NewDriver {
         }
 
         // ClassFinder needs the classpath
-        System.setProperty(JAVA_CLASS_PATH, initial_classpath + classpath.toString());
+        System.setProperty(JAVA_CLASS_PATH, initiaClasspath + classpath.toString());
         loader = AccessController.doPrivileged(
                 (PrivilegedAction<DynamicClassLoader>) () ->
                         new DynamicClassLoader(jars.toArray(new URL[jars.size()]))
@@ -232,20 +235,25 @@ public final class NewDriver {
      */
     public static void main(String[] args) {
         if(!EXCEPTIONS_IN_INIT.isEmpty()) {
-            System.err.println("Configuration error during init, see exceptions:"+exceptionsToString(EXCEPTIONS_IN_INIT));
+            System.err.println("Configuration error during init, see exceptions:"+exceptionsToString(EXCEPTIONS_IN_INIT)); // NOSONAR Intentional System.err use
         } else {
             Thread.currentThread().setContextClassLoader(loader);
 
+            
             setLoggingProperties(args);
 
             try {
+                // Only set property if it has not been set explicitely 
+                if(System.getProperty(HEADLESS_MODE_PROPERTY) == null && shouldBeHeadless(args)) {
+                    System.setProperty(HEADLESS_MODE_PROPERTY, "true");
+                }
                 Class<?> initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
-                Object instance = initialClass.newInstance();
+                Object instance = initialClass.getDeclaredConstructor().newInstance();
                 Method startup = initialClass.getMethod("start", new Class[] { new String[0].getClass() });// $NON-NLS-1$
                 startup.invoke(instance, new Object[] { args });
             } catch(Throwable e){ // NOSONAR We want to log home directory in case of exception
                 e.printStackTrace(); // NOSONAR No logger at this step
-                System.err.println("JMeter home directory was detected as: "+JMETER_INSTALLATION_DIRECTORY);
+                System.err.println("JMeter home directory was detected as: "+JMETER_INSTALLATION_DIRECTORY); // NOSONAR Intentional System.err use
             }
         }
     }
@@ -274,9 +282,9 @@ public final class NewDriver {
 
         if (jmLogFile != null && !jmLogFile.isEmpty()) {
             jmLogFile = replaceDateFormatInFileName(jmLogFile);
-            System.setProperty("jmeter.logfile", jmLogFile);// $NON-NLS-1$
-        } else if (System.getProperty("jmeter.logfile") == null) {// $NON-NLS-1$
-            System.setProperty("jmeter.logfile", "jmeter.log");// $NON-NLS-1$ $NON-NLS-2$
+            System.setProperty(JMETER_LOGFILE_SYSTEM_PROPERTY, jmLogFile);// $NON-NLS-1$
+        } else if (System.getProperty(JMETER_LOGFILE_SYSTEM_PROPERTY) == null) {// $NON-NLS-1$
+            System.setProperty(JMETER_LOGFILE_SYSTEM_PROPERTY, "jmeter.log");// $NON-NLS-1$ $NON-NLS-2$
         }
 
         String jmLogConf = getCommandLineArgument(args, 'i', "jmeterlogconf");// $NON-NLS-1$ $NON-NLS-2$
@@ -296,28 +304,32 @@ public final class NewDriver {
         }
     }
 
+    private static boolean shouldBeHeadless(String[] args) {
+        for (String arg : args) {
+            if("-n".equals(arg) || "-s".equals(arg) || "-g".equals(arg)) {
+                return true;
+            }
+        }
+        return false;
+    }
     /*
      * Find command line argument option value by the id and name.
      */
-    private static String getCommandLineArgument(String [] args, int id, String name) {
+    private static String getCommandLineArgument(String[] args, int id, String name) {
         final String shortArgName = "-" + ((char) id);// $NON-NLS-1$
         final String longArgName = "--" + name;// $NON-NLS-1$
 
         String value = null;
 
         for (int i = 0; i < args.length; i++) {
-            if (shortArgName.equals(args[i]) && i < args.length - 1) {
+            if ((shortArgName.equals(args[i]) && i < args.length - 1)
+                    || longArgName.equals(args[i])) {
                 if (!args[i + 1].startsWith("-")) {// $NON-NLS-1$
                     value = args[i + 1];
                 }
                 break;
             } else if (!shortArgName.equals(args[i]) && args[i].startsWith(shortArgName)) {
                 value = args[i].substring(shortArgName.length());
-                break;
-            } else if (longArgName.equals(args[i])) {
-                if (!args[i + 1].startsWith("-")) {// $NON-NLS-1$
-                    value = args[i + 1];
-                }
                 break;
             }
         }

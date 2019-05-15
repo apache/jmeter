@@ -81,6 +81,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.NonTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
@@ -170,6 +171,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
 
     private static final String NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED = "ProxyControlGui.notify_child_sl_filtered"; // $NON-NLS-1$
+
+    private static final String BEARER_AUTH = "Bearer";
 
     private static final String BASIC_AUTH = "Basic"; // $NON-NLS-1$
 
@@ -308,7 +311,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private Set<Class<?>> addableInterfaces = new HashSet<>(
             Arrays.asList(Visualizer.class, ConfigElement.class,
                     Assertion.class, Timer.class, PreProcessor.class,
-                    PostProcessor.class));
+                    PostProcessor.class, SampleListener.class));
 
     /**
      * Tree node where the samples should be stored.
@@ -698,11 +701,29 @@ public class ProxyControl extends GenericController implements NonTestElement {
                     if (tep.getName().equals(HTTPConstants.HEADER_AUTHORIZATION)) {
                         //Construct Authorization object from HEADER_AUTHORIZATION
                         authHeader = (Header) tep.getObjectValue();
-                        String[] authHeaderContent = authHeader.getValue().split(" ");//$NON-NLS-1$
+                        String headerValue = authHeader.getValue().trim();
+                        String[] authHeaderContent = headerValue.split(" ");//$NON-NLS-1$
                         String authType;
                         String authCredentialsBase64;
                         if(authHeaderContent.length>=2) {
                             authType = authHeaderContent[0];
+                            // if HEADER_AUTHORIZATION contains "Basic"
+                            // then set Mechanism.BASIC_DIGEST, otherwise Mechanism.KERBEROS
+                            Mechanism mechanism;
+                            switch (authType) {
+                                case BEARER_AUTH:
+                                    // This one will need to be correlated manually by user
+                                    return null;
+                                case DIGEST_AUTH:
+                                    mechanism = Mechanism.DIGEST;
+                                    break;
+                                case BASIC_AUTH:
+                                    mechanism = Mechanism.BASIC;
+                                    break;
+                                default:
+                                    mechanism = Mechanism.KERBEROS;
+                                    break;
+                            } 
                             authCredentialsBase64 = authHeaderContent[1];
                             authorization=new Authorization();
                             try {
@@ -711,20 +732,6 @@ public class ProxyControl extends GenericController implements NonTestElement {
                                 log.error("Error filling url on authorization, message: {}", e.getMessage(), e);
                                 authorization.setURL("${AUTH_BASE_URL}");//$NON-NLS-1$
                             }
-                            // if HEADER_AUTHORIZATION contains "Basic"
-                            // then set Mechanism.BASIC_DIGEST, otherwise Mechanism.KERBEROS
-                            Mechanism mechanism;
-                            switch (authType) {
-                            case DIGEST_AUTH:
-                                mechanism = Mechanism.DIGEST;
-                                break;
-                            case BASIC_AUTH:
-                                mechanism = Mechanism.BASIC;
-                                break;
-                            default:
-                                mechanism = Mechanism.KERBEROS;
-                                break;
-                            } 
                             authorization.setMechanism(mechanism);
                             if(BASIC_AUTH.equals(authType)) {
                                 String authCred= new String(Base64.decodeBase64(authCredentialsBase64));
@@ -1154,7 +1161,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 if (subNode.isEnabled()) {
                     TestElement element = (TestElement) subNode.getUserObject();
                     if (myClass.isInstance(element)) {
-                        log.debug("Applicable: " + element.getName());
+                        log.debug("Applicable: {}", element.getName());
                         if (ascending) {
                             elements.addFirst(element);
                         } else {
@@ -1431,6 +1438,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 if (subNode.isEnabled()) {
                     TestElement testElement = subNode.getTestElement();
                     if (testElement instanceof TestStateListener) {
+                        TestBeanHelper.prepare(testElement);
                         ((TestStateListener) testElement).testStarted();
                     }
                 }
@@ -1479,7 +1487,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         case USER_KEYSTORE:
             storePassword = JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD); // $NON-NLS-1$
             keyPassword = JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD); // $NON-NLS-1$
-            log.info("HTTP(S) Test Script Recorder will use the keystore '"+ CERT_PATH_ABS + "' with the alias: '" + CERT_ALIAS + "'");
+            log.info("HTTP(S) Test Script Recorder will use the keystore '{}' with the alias: '{}'", CERT_PATH_ABS, CERT_ALIAS);
             initUserKeyStore();
             break;
         case NONE:
@@ -1524,7 +1532,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                         break; // cannot continue
                     } else {
                         caCert.checkValidity(new Date(System.currentTimeMillis()+DateUtils.MILLIS_PER_DAY));
-                        log.info("Valid alias found for " + alias);
+                        log.info("Valid alias found for {}", alias);
                     }
                 }
             } catch (IOException e) { // store is faulty, we need to recreate it

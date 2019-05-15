@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 public class ConstantPoissonProcessGenerator implements EventProducer {
     private static final Logger log = LoggerFactory.getLogger(ConstantPoissonProcessGenerator.class);
 
+    private static final double PRECISION = 0.00001;
+
     private Random rnd = new Random();
     private ThroughputProvider throughputProvider;
     private int batchSize;
@@ -163,10 +165,14 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
     @Override
     public double next() {
         if (!events.hasRemaining()
-                || throughputProvider.getThroughput() != lastThroughput) {
+                || !valuesAreEqualWithPrecision(throughputProvider.getThroughput(),lastThroughput)) {
             generateNext();
         }
         lastEvent = events.get();
         return lastEvent;
+    }
+
+    private boolean valuesAreEqualWithPrecision(double throughput, double lastThroughput) {
+        return Math.abs(throughput - lastThroughput) < PRECISION;
     }
 }

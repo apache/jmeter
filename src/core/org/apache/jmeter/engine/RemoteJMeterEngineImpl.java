@@ -25,6 +25,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.apache.jmeter.rmi.RmiUtils;
@@ -124,10 +125,13 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
      *
      * @param testTree
      *            the feature to be added to the ThreadGroup attribute
+     * @param hostAndPort Host and Port
+     * @param jmxBase JMX base
+     * @param scriptName Name of script
      */
     @Override
-    public void rconfigure(HashTree testTree, String host, File jmxBase, String scriptName) throws RemoteException {
-        log.info("Creating JMeter engine on host {} base '{}'", host, jmxBase);
+    public void rconfigure(HashTree testTree, String hostAndPort, File jmxBase, String scriptName) throws RemoteException {
+        log.info("Creating JMeter engine on host {} base '{}'", hostAndPort, jmxBase);
         try {
             if (log.isInfoEnabled()) {
                 log.info("Remote client host: {}", getClientHost());
@@ -141,7 +145,8 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
                 throw new IllegalStateException("Engine is busy - please try later");
             }
             ownerThread = Thread.currentThread();
-            backingEngine = new StandardJMeterEngine(host);
+            JMeterUtils.setProperty(JMeterUtils.THREAD_GROUP_DISTRIBUTED_PREFIX_PROPERTY_NAME, hostAndPort);
+            backingEngine = new StandardJMeterEngine(hostAndPort);
             backingEngine.configure(testTree); // sets active = true
         }
         FileServer.getFileServer().setScriptName(scriptName);
@@ -208,7 +213,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     }
 
     @Override
-    public void rsetProperties(Properties p) throws RemoteException {
+    public void rsetProperties(HashMap<String, String> map) throws RemoteException { // NOSONAR
         checkOwner("setProperties");
         if(remotelySetProperties != null) {
             Properties jmeterProperties = JMeterUtils.getJMeterProperties();
@@ -217,8 +222,10 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
                 jmeterProperties.remove(key);
             }
         }
-        backingEngine.setProperties(p);
-        this.remotelySetProperties = p;
+        Properties props = new Properties();
+        props.putAll(map);
+        backingEngine.setProperties(props);
+        this.remotelySetProperties = props;
     }
 
     /**

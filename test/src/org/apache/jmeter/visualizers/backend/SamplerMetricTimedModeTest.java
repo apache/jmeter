@@ -53,12 +53,16 @@ public class SamplerMetricTimedModeTest {
         assertEquals("Before reset  ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 0.001);
         assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.001);
         assertEquals("Before reset failure", 1, metric.getHits(), 0.0);
+        assertEquals("Before reset sent bytes", 1000, metric.getSentBytes(), 0.0);
+        assertEquals("Before reset received bytes", 2000, metric.getReceivedBytes(), 0.0);
 
         metric.resetForTimeInterval();
 
         assertEquals("After reset in TIMED mode ok.max", Double.NaN, metric.getOkMaxTime(), 0.0);
         assertEquals("After reset in TIMED mode all.max", Double.NaN, metric.getAllMaxTime(), 0.0);
         assertEquals("After reset failure", 0, metric.getHits(), 0.0);
+        assertEquals("After reset sent bytes", 0, metric.getSentBytes(), 0.0);
+        assertEquals("After reset received bytes", 0, metric.getReceivedBytes(), 0.0);
     }
 
     @Test
@@ -69,12 +73,16 @@ public class SamplerMetricTimedModeTest {
         assertEquals("Before reset  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 0.001);
         assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.001);
         assertEquals("Before reset failure", 1, metric.getFailures(), 0.0);
+        assertEquals("Before reset sent bytes", 1000, metric.getSentBytes(), 0.0);
+        assertEquals("Before reset received bytes", 2000, metric.getReceivedBytes(), 0.0);
 
         metric.resetForTimeInterval();
 
         assertEquals("After reset in TIMED mode  ko.max", Double.NaN, metric.getKoMaxTime(), 0.0);
         assertEquals("After reset in TIMED mode all.max", Double.NaN, metric.getAllMaxTime(), 0.0);
         assertEquals("After reset failure", 0, metric.getFailures(), 0.001);
+        assertEquals("After reset sent bytes", 0, metric.getSentBytes(), 0.0);
+        assertEquals("After reset received bytes", 0, metric.getReceivedBytes(), 0.0);
     }
 
     private SampleResult createSampleResult(boolean success) {
@@ -83,6 +91,8 @@ public class SamplerMetricTimedModeTest {
         result.setSampleCount(1);
         result.setErrorCount(success ? 0 : 1);
         result.sampleStart();
+        result.setSentBytes(1000);
+        result.setBytes(2000L);
         result.setEndTime(result.getStartTime() + DEFAULT_ELAPSED_TIME);
         return result;
     }

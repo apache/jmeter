@@ -22,14 +22,20 @@ import org.apache.http.auth.AuthScheme;
 import org.apache.http.impl.auth.KerberosScheme;
 import org.apache.http.impl.auth.KerberosSchemeFactory;
 import org.apache.http.protocol.HttpContext;
+import org.apache.jmeter.util.JMeterUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Extends {@link KerberosSchemeFactory} to provide ability to customize stripPort
  * setting in {@link KerberosScheme} based on {@link HttpContext}
- * @since 4.1
+ * @since 5.0
  */
 public class DynamicKerberosSchemeFactory extends KerberosSchemeFactory {
     static final String CONTEXT_ATTRIBUTE_STRIP_PORT = "__jmeter.K_SP__";
+    static final String CONTEXT_ATTRIBUTE_DELEGATE_CRED = "__jmeter.K_DT__";
+    static final boolean DELEGATE_CRED = JMeterUtils.getPropDefault("kerberos.spnego.delegate_cred", false);
+    private static final Logger log = LoggerFactory.getLogger(DynamicKerberosSchemeFactory.class);
 
     /**
      * Constructor for DynamicKerberosSchemeFactory
@@ -43,8 +49,19 @@ public class DynamicKerberosSchemeFactory extends KerberosSchemeFactory {
 
     @Override
     public AuthScheme create(final HttpContext context) {
-        Boolean localStripPort = (Boolean) context.getAttribute(CONTEXT_ATTRIBUTE_STRIP_PORT);
-        Boolean stripPort = localStripPort != null ? localStripPort : isStripPort();
+        boolean stripPort = isEnabled(context.getAttribute(CONTEXT_ATTRIBUTE_STRIP_PORT), isStripPort());
+        if (isEnabled(context.getAttribute(CONTEXT_ATTRIBUTE_DELEGATE_CRED), DELEGATE_CRED)) {
+            log.debug("Use DelegatingKerberosScheme");
+            return new DelegatingKerberosScheme(stripPort, isStripPort());
+        }
+        log.debug("Use KerberosScheme");
         return new KerberosScheme(stripPort, isUseCanonicalHostname());
+    }
+
+    private boolean isEnabled(Object contextAttribute, boolean defaultValue) {
+        if (contextAttribute instanceof Boolean) {
+            return ((Boolean) contextAttribute).booleanValue();
+        }
+        return defaultValue;
     }
 }

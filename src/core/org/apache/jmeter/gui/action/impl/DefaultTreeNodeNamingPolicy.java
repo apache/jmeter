@@ -32,9 +32,9 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 3.2
  */
 public class DefaultTreeNodeNamingPolicy implements TreeNodeNamingPolicy {
+    public static final char TRANSACTION_CHILDREN_SEPARATOR = '-';
     private static final String PREFIX = JMeterUtils.getPropDefault("naming_policy.prefix", ""); 
     private static final String SUFFIX = JMeterUtils.getPropDefault("naming_policy.suffix", ""); 
-    private int numberOfChildren;
     private int index;
     private DecimalFormat formatter;
 
@@ -46,7 +46,7 @@ public class DefaultTreeNodeNamingPolicy implements TreeNodeNamingPolicy {
     public void rename(JMeterTreeNode parentNode, JMeterTreeNode childNode, int iterationIndex) {
         if(childNode.getUserObject() instanceof TransactionController ||
                 childNode.getUserObject() instanceof Sampler) {
-            childNode.setName(parentNode.getName()+"-"+formatter.format(index));
+            childNode.setName(parentNode.getName()+TRANSACTION_CHILDREN_SEPARATOR+formatter.format(index));
             index++;
         }
     }
@@ -56,7 +56,7 @@ public class DefaultTreeNodeNamingPolicy implements TreeNodeNamingPolicy {
      */
     @Override
     public void resetState(JMeterTreeNode rootNode) {
-        this.numberOfChildren = rootNode.getChildCount();
+        int numberOfChildren = rootNode.getChildCount();
         this.index = 0;
         int numberOfDigits = String.valueOf(numberOfChildren).length();
         StringBuilder formatSB = new StringBuilder(numberOfDigits);

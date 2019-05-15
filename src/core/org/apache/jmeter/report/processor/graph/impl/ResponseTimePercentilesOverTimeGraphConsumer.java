@@ -20,6 +20,7 @@ package org.apache.jmeter.report.processor.graph.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.jmeter.report.processor.AggregatorFactory;
 import org.apache.jmeter.report.processor.MaxAggregatorFactory;
 import org.apache.jmeter.report.processor.MinAggregatorFactory;
 import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
@@ -31,22 +32,17 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * The class ResponseTimePercentilesOverTimeGraphConsumer provides a graph to visualize percentiles
- * over time period.
- * Only successful responses are taken into account for computations
+ * The class ResponseTimePercentilesOverTimeGraphConsumer provides a graph to
+ * visualize percentiles over time period.
+ * Only successful responses are taken into account for computations.
  *
  * @since 3.1
  */
-public class ResponseTimePercentilesOverTimeGraphConsumer extends
-        AbstractOverTimeGraphConsumer {
+public class ResponseTimePercentilesOverTimeGraphConsumer
+        extends AbstractOverTimeGraphConsumer {
+
     private static final String PERCENTILE_FORMAT = "%dth percentile";
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #createTimeStampKeysSelector()
-     */
+
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
         TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
@@ -54,79 +50,60 @@ public class ResponseTimePercentilesOverTimeGraphConsumer extends
         return keysSelector;
     }
 
-    /**
-     * Creates the group info for elapsed time percentile depending on jmeter
-     * properties.
-     *
-     * @param propertyKey
-     *            the property key
-     * @param defaultValue
-     *            the default value
-     * @param serieName Serie name
-     * @return the group info
-     */
-    private GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String serieName) {
-        int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
-        PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
-        factory.setPercentileIndex(property);
-        StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
-        seriesSelector.setSeriesName(serieName);
+    @Override
+    protected Map<String, GroupInfo> createGroupInfos() {
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(8);
 
-        return new GroupInfo(factory, seriesSelector,
-                new SuccessfulElapsedTimeValueSelector(), false, false);
+        groupInfos.put("aggregate_report_min", createMinGroupInfo());
+
+        groupInfos.put("aggregate_report_max", createMaxGroupInfo());
+
+        groupInfos.put("aggregate_rpt_pct1",
+                createPercentileGroupInfo("aggregate_rpt_pct1", 90));
+
+        groupInfos.put("aggregate_rpt_pct2",
+                createPercentileGroupInfo("aggregate_rpt_pct2", 95));
+
+        groupInfos.put("aggregate_rpt_pct3",
+                createPercentileGroupInfo("aggregate_rpt_pct3", 99));
+
+        return groupInfos;
     }
 
-    /**
-     * Creates the group info for min elapsed time
-     * @return the group info
-     */
+    private String formatPercentile(int percentile) {
+        return String.format(PERCENTILE_FORMAT, Integer.valueOf(percentile));
+    }
+
     private GroupInfo createMinGroupInfo() {
         StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
         seriesSelector.setSeriesName("Min");
-        return new GroupInfo(new MinAggregatorFactory(), seriesSelector,
-                new SuccessfulElapsedTimeValueSelector(), false, false);
+        return createGroupInfo(new MinAggregatorFactory(), seriesSelector);
     }
 
-    /**
-     * Creates the group info for max elapsed time
-     * @return the group info
-     */
     private GroupInfo createMaxGroupInfo() {
         StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
         seriesSelector.setSeriesName("Max");
-        return new GroupInfo(new MaxAggregatorFactory(), seriesSelector,
-                new SuccessfulElapsedTimeValueSelector(), false, false);
+        return createGroupInfo(new MaxAggregatorFactory(), seriesSelector);
     }
 
-    /**
-     *
-     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#createGroupInfos()
-     */
-    @Override
-    protected Map<String, GroupInfo> createGroupInfos() {
-        HashMap<String, GroupInfo> groupInfos = new HashMap<>(2);
+    private GroupInfo createPercentileGroupInfo(String propKey, int defaultValue) {
+        String seriesName = formatPercentile(defaultValue);
 
-        groupInfos.put("aggregate_report_min", //$NON-NLS-1$
-                createMinGroupInfo());
+        int property = JMeterUtils.getPropDefault(propKey, defaultValue);
+        PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
+        factory.setPercentileIndex(property);
+        StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
+        seriesSelector.setSeriesName(seriesName);
 
-        groupInfos.put("aggregate_report_max", //$NON-NLS-1$
-                createMaxGroupInfo());
+        return createGroupInfo(factory, seriesSelector);
+    }
 
-        groupInfos.put("aggregate_rpt_pct1", //$NON-NLS-1$
-                createPercentileGroupInfo("aggregate_rpt_pct1", 90, //$NON-NLS-1$
-                        String.format(
-                                PERCENTILE_FORMAT, Integer.valueOf(90))));
-
-        groupInfos.put("aggregate_rpt_pct2", //$NON-NLS-1$
-                createPercentileGroupInfo("aggregate_rpt_pct2", 95, //$NON-NLS-1$
-                        String.format(
-                                PERCENTILE_FORMAT, Integer.valueOf(95))));
-
-        groupInfos.put("aggregate_rpt_pct3", //$NON-NLS-1$
-                createPercentileGroupInfo("aggregate_rpt_pct3", 99,//$NON-NLS-1$
-                        String.format(
-                                PERCENTILE_FORMAT, Integer.valueOf(99))));
-
-        return groupInfos;
+    private GroupInfo createGroupInfo(AggregatorFactory aggregationFactory, StaticSeriesSelector seriesSelector) {
+        return new GroupInfo(
+                aggregationFactory,
+                seriesSelector,
+                new SuccessfulElapsedTimeValueSelector(),
+                false,
+                false);
     }
 }

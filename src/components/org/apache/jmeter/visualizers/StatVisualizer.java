@@ -123,16 +123,10 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
                     newRows.add(newRow);
                     return newRow;
                 });
-//        synchronized (row) {
-            /*
-             * Synch is needed because multiple threads can update the counts.
-             */
-            row.addSample(res);
-//        }
+
+        row.addSample(res);
         SamplingStatCalculator tot = tableRows.get(TOTAL_ROW_LABEL);
-//        synchronized(lock) {
-            tot.addSample(res);
-//        }
+        tot.addSample(res);
         dataChanged = true;
     }
 
@@ -218,9 +212,12 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
             }
             try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile());
                     OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){
-                CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, StatGraphVisualizer.getFormatters()),
-                        writer,
-                        saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(StatGraphVisualizer.getColumns()) : null);
+                CSVSaveService.saveCSVStats(
+                        StatGraphVisualizer.getAllTableData(model, StatGraphVisualizer.getFormatters()), writer,
+                        saveHeaders.isSelected()
+                                ? StatGraphVisualizer.getLabels(StatGraphVisualizer.getColumns(),
+                                        StatGraphVisualizer.getColumnsMsgParameters())
+                                : null);
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             }

@@ -443,6 +443,11 @@ When this field is kept empty, an anonymous bind will be established.
 <i>(Optional)</i> Check the box Use Secure LDAP Protocol if you access with LDAP over SSL (ldaps)
 </li>
 
+<li>
+
+<i>(Optional)</i> Check the box TrustAll if you want the client to trust all certificates
+</li>
+
 </ol>
 
 </p>
@@ -970,17 +975,15 @@ this is given in a (self defined) xml-style.
 <li class="twitter">
 <a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a>
 </li>
-<li class="gplus">
-<a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a>
-</li>
 </ul>
 </div>
+<a href="#top" id="topButton">Go to top</a>
 </div>
 <div class="footer">
 <div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2018
+            2019
             , Apache Software Foundation
           </div>
 <div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
@@ -990,8 +993,16 @@ this is given in a (self defined) xml-style.
           </div>
 </div>
 <script>(function(){
-            // fill in the current location into social links on this page.
             "use strict";
+            // enable 'go to top' button functionality
+            document.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                    document.getElementById("topButton").style.display = "block";
+                } else {
+                    document.getElementById("topButton").style.display = "none";
+                }
+            });
+            // fill in the current location into social links on this page.
             var as = document.getElementsByTagName('a');
             var loc = document.location.href;
             if (!loc.toLowerCase().startsWith('http')) {

@@ -185,6 +185,9 @@ When this field is kept empty, an anonymous bind will be established.
 <li>
 <i>(Optional)</i> Check the box Use Secure LDAP Protocol if you access with LDAP over SSL (ldaps)
 </li>
+<li>
+<i>(Optional)</i> Check the box TrustAll if you want the client to trust all certificates
+</li>
 </ol>
 </p>
 <p>

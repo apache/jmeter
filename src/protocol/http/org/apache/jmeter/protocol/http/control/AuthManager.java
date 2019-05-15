@@ -251,7 +251,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             s2 = url2.toString();
         }
 
-        log.debug("Target URL strings to match against: {} and {}", s1, s2);
+        log.debug("Target URL strings to match against: {} and {}", s1, s2);
         // TODO should really return most specific (i.e. longest) match.
         for (JMeterProperty jMeterProperty : getAuthObjects()) {
             Authorization auth = (Authorization) jMeterProperty.getObjectValue();
@@ -462,11 +462,11 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     
     /**
      * Configure credentials and auth scheme on client if an authorization is
-     * @param auth
-     * @param url
-     * @param localContext 
-     * @param credentialsProvider
-     * @param localhost
+     * @param auth information about the authorization to use
+     * @param url the URL for which the authorization info should be used
+     * @param localContext http client context which should be set up
+     * @param credentialsProvider provider which should be set up
+     * @param localhost name of the workstation to be used for {@link NTCredentials}
      */
     public void setupCredentials(Authorization auth, URL url, 
             HttpClientContext localContext, 
@@ -480,7 +480,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         }
         if(Mechanism.KERBEROS.equals(auth.getMechanism())) {
             localContext.setAttribute(DynamicKerberosSchemeFactory.CONTEXT_ATTRIBUTE_STRIP_PORT, 
-                    isStripPort(url));
+                    Boolean.valueOf(isStripPort(url)));
             credentialsProvider.setCredentials(new AuthScope(null, -1, null), USE_JAAS_CREDENTIALS);
         } else {
             credentialsProvider.setCredentials(

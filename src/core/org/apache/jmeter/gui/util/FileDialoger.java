@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.awt.Component;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -131,7 +132,7 @@ public final class FileDialoger {
      *         finished using it - null if no file was chosen
      */
     public static JFileChooser promptToOpenFile(String[] exts, String existingFileName) {
-        return promptToOpenFile(exts, null, false);
+        return promptToOpenFile(exts, existingFileName, false);
     }
   
     /**
@@ -151,7 +152,29 @@ public final class FileDialoger {
     * @return the JFileChooser that interacted with the user, after they are
     *         finished using it - null if no file was chosen
     */
-   public static JFileChooser promptToOpenFile(String[] exts, String existingFileName, boolean onlyDirectories) {
+    public static JFileChooser promptToOpenFile(String[] exts, String existingFileName, boolean onlyDirectories) {
+        return promptToOpenFile(GuiPackage.getInstance().getMainFrame(), exts, existingFileName, onlyDirectories);
+    }
+    
+    /**
+    * Prompts the user to choose a file or a directory from their filesystems for our own
+    * devious uses. This method maintains the last directory the user visited
+    * before dismissing the dialog. This does NOT imply they actually chose a
+    * file from that directory, only that they closed the dialog there. It is
+    * the caller's responsibility to check to see if the selected file is
+    * non-null.
+    * @param parentComponent Component parent of current element
+    * @param exts The list of allowed file extensions. If empty, any
+    *             file extension is allowed
+    * @param existingFileName The name of a file with path. If the filename points
+    *             to an existing file, the directory in which it lies, will be used
+    *             as the starting point for the returned JFileChooser.
+    * @param onlyDirectories If true, only directories are displayed in the FileChooser
+    *
+    * @return the JFileChooser that interacted with the user, after they are
+    *         finished using it - null if no file was chosen
+    */
+    public static JFileChooser promptToOpenFile(Component parentComponent, String[] exts, String existingFileName, boolean onlyDirectories) {
        if (onlyDirectories) {
            jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
        } else {
@@ -181,7 +204,7 @@ public final class FileDialoger {
            lastJFCDirectory = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
        }
        jfc.setCurrentDirectory(new File(lastJFCDirectory));
-       int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
+       int retVal = jfc.showOpenDialog(parentComponent);
        lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 
        if (retVal == JFileChooser.APPROVE_OPTION) {

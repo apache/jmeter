@@ -40,8 +40,14 @@ function summaryTableHeader(header) {
 
     cell = document.createElement('th');
     cell.setAttribute("data-sorter", false);
-    cell.colSpan = 7;
+    cell.colSpan = 6;
     cell.innerHTML = "Response Times (ms)";
+    newRow.appendChild(cell);
+
+    cell = document.createElement('th');
+    cell.setAttribute("data-sorter", false);
+    cell.colSpan = 1;
+    cell.innerHTML = "Throughput";
     newRow.appendChild(cell);
 
     cell = document.createElement('th');

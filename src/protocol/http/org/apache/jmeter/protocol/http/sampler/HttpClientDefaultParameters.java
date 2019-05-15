@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * Utility class to set up default HttpClient parameters from a file.
  * 
  * Supports Apache HttpClient.
- * @deprecated since 4.1
+ * @deprecated since 5.0
  */
 @Deprecated
 public class HttpClientDefaultParameters {

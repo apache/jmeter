@@ -50,7 +50,9 @@ import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
@@ -80,7 +82,10 @@ import com.thoughtworks.xstream.security.NoTypePermission;
  */
 public class JMeterUtils implements UnitTestManager {
     private static final Logger log = LoggerFactory.getLogger(JMeterUtils.class);
+
     private static final String JMETER_VARS_PREFIX = "__jm__";
+    public static final String THREAD_GROUP_DISTRIBUTED_PREFIX_PROPERTY_NAME = "__jm.D_TG";
+
     // Note: cannot use a static variable here, because that would be processed before the JMeter properties
     // have been defined (Bug 52783)
     private static class LazyPatternCacheHolder {
@@ -520,17 +525,25 @@ public class JMeterUtils implements UnitTestManager {
             if (bundle.containsKey(resKey)) {
                 resString = bundle.getString(resKey);
             } else {
-                log.warn("ERROR! Resource string not found: [{}]", resKey);
-                resString = defaultValue;                
+                if(defaultValue == null) {
+                    log.warn("ERROR! Resource string not found: [{}]", resKey);
+                } else {
+                    log.debug("Resource string not found: [{}], using default value {}", resKey, defaultValue);
+                }
+                resString = defaultValue;
             }
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "["+key+"]";
             }
-        } catch (MissingResourceException mre) {
+        } catch (MissingResourceException mre) { // NOSONAR We handle correctly exception
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "[?"+key+"?]";
             }
-            log.warn("ERROR! Resource string not found: [{}]", resKey, mre);
+            if(defaultValue == null) {
+                log.warn("ERROR! Resource string not found: [{}]", resKey);
+            } else {
+                log.debug("Resource string not found: [{}], using default value {}", resKey, defaultValue);
+            }
             resString = defaultValue;
         }
         return resString;
@@ -878,12 +891,45 @@ public class JMeterUtils implements UnitTestManager {
         }
         try {
             JOptionPane.showMessageDialog(instance.getMainFrame(),
-                    errorMsg,
+                    formatMessage(errorMsg),
                     titleMsg,
                     JOptionPane.ERROR_MESSAGE);
         } catch (HeadlessException e) {
             log.warn("reportErrorToUser(\"{}\") caused", errorMsg, e);
         }
+    }
+    
+    /**
+     * Report an information through a dialog box in GUI mode 
+     *
+     * @param msg - the information message.
+     * @param titleMsg - title string
+     */
+    public static void reportInfoToUser(String msg, String titleMsg) {
+        GuiPackage instance = GuiPackage.getInstance();
+        if (instance == null) {
+            log.info(msg);
+            System.out.println(msg); // NOSONAR intentional
+            return; // Done
+        }
+        try {
+            JOptionPane.showMessageDialog(instance.getMainFrame(),
+                    formatMessage(msg),
+                    titleMsg,
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (HeadlessException e) {
+            log.warn("reportInfoToUser(\"{}\") caused", msg, e);
+        }
+    }
+
+    private static JScrollPane formatMessage(String errorMsg) {
+        JTextArea ta = new JTextArea(10, 50);
+        ta.setText(errorMsg);
+        ta.setWrapStyleWord(true);
+        ta.setLineWrap(true);
+        ta.setCaretPosition(0);
+        ta.setEditable(false);
+        return new JScrollPane(ta);
     }
 
     /**
@@ -896,20 +942,11 @@ public class JMeterUtils implements UnitTestManager {
      * @param splitChar
      *            Object to unsplit the strings with.
      * @return Array of all the tokens.
+     * @deprecated use {@link JOrphanUtils#unsplit(Object[], Object)}
      */
-    //TODO - move to JOrphanUtils?
+    @Deprecated
     public static String unsplit(Object[] splittee, Object splitChar) {
-        StringBuilder retVal = new StringBuilder();
-        int count = -1;
-        while (++count < splittee.length) {
-            if (splittee[count] != null) {
-                retVal.append(splittee[count]);
-            }
-            if (count + 1 < splittee.length && splittee[count + 1] != null) {
-                retVal.append(splitChar);
-            }
-        }
-        return retVal.toString();
+        return JOrphanUtils.unsplit(splittee, splitChar);
     }
 
     // End Method
@@ -996,7 +1033,7 @@ public class JMeterUtils implements UnitTestManager {
      * Determine whether we are in 'expert' mode. Certain features may be hidden
      * from user's view unless in expert mode.
      *
-     * @return true iif we're in expert mode
+     * @return true if we're in expert mode
      */
     public static boolean isExpertMode() {
         return JMeterUtils.getPropDefault(EXPERT_MODE_PROPERTY, false);
@@ -1268,5 +1305,14 @@ public class JMeterUtils implements UnitTestManager {
         return builder.append(JMETER_VARS_PREFIX)
                 .append(elementName)
                 .toString();
+    }
+
+    /** 
+     * @return {@link XStream} XStream instance following JMeter security policy
+     */
+    public static final XStream createXStream() {
+        XStream xstream = new XStream();
+        JMeterUtils.setupXStreamSecurityPolicy(xstream);
+        return xstream;
     }
 }

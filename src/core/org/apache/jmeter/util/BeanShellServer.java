@@ -73,21 +73,21 @@ public class BeanShellServer implements Runnable {
 
         try {
             Class<?> interpreter = loader.loadClass("bsh.Interpreter");//$NON-NLS-1$
-            Object instance = interpreter.newInstance();
+            Object instance = interpreter.getDeclaredConstructor().newInstance();
             Class<String> string = String.class;
             Class<Object> object = Object.class;
 
-            Method eval = interpreter.getMethod("eval", new Class[] { string });//$NON-NLS-1$
-            Method setObj = interpreter.getMethod("set", new Class[] { string, object });//$NON-NLS-1$
-            Method setInt = interpreter.getMethod("set", new Class[] { string, int.class });//$NON-NLS-1$
-            Method source = interpreter.getMethod("source", new Class[] { string });//$NON-NLS-1$
+            Method eval = interpreter.getMethod("eval", string);//$NON-NLS-1$
+            Method setObj = interpreter.getMethod("set", string, object);//$NON-NLS-1$
+            Method setInt = interpreter.getMethod("set", string, int.class);//$NON-NLS-1$
+            Method source = interpreter.getMethod("source", string);//$NON-NLS-1$
 
-            setObj.invoke(instance, new Object[] { "t", this });//$NON-NLS-1$
-            setInt.invoke(instance, new Object[] { "portnum", Integer.valueOf(serverport) });//$NON-NLS-1$
+            setObj.invoke(instance, "t", this );//$NON-NLS-1$
+            setInt.invoke(instance, "portnum", Integer.valueOf(serverport));//$NON-NLS-1$
 
             if (serverfile.length() > 0) {
                 try {
-                    source.invoke(instance, new Object[] { serverfile });
+                    source.invoke(instance, serverfile);
                 } catch (InvocationTargetException ite) {
                     Throwable cause = ite.getCause();
                     if (log.isWarnEnabled()) {
@@ -99,8 +99,8 @@ public class BeanShellServer implements Runnable {
                     }
                 }
             }
-            eval.invoke(instance, new Object[] { "setAccessibility(true);" });//$NON-NLS-1$
-            eval.invoke(instance, new Object[] { "server(portnum);" });//$NON-NLS-1$
+            eval.invoke(instance, "setAccessibility(true);");//$NON-NLS-1$
+            eval.invoke(instance, "server(portnum);");//$NON-NLS-1$
 
         } catch (ClassNotFoundException e) {
             log.error("Beanshell Interpreter not found");

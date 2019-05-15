@@ -364,4 +364,5 @@ public class TestHTTPSamplers {
         file = sampler.getHTTPFiles()[0];
         assertEquals("mime2", file.getMimeType());
     }
+
 }

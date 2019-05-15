@@ -32,7 +32,9 @@ import javax.net.ssl.X509TrustManager;
 /**
  * This class can be used as a SocketFactory with SSL-connections.
  * Its purpose is to ensure that all certificates - no matter from which CA - are accepted to secure the SSL-connection.
+ * @deprecated Will be removed in next version, use {@link org.apache.jmeter.util.TrustAllSSLSocketFactory}
  */
+@Deprecated
 public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
 
     private final SSLSocketFactory factory;

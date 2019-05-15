@@ -65,10 +65,9 @@ class FileServerSpec extends JMeterSpec {
     }
 
     def "file is not opened until read from"() {
-        when:
+        given:
             sut.reserveFile(testFile) // Does not open file
-        then:
-            !sut.filesOpen()
+            assert !sut.filesOpen()
         when:
             def line = sut.readLine(testFile)
         then:

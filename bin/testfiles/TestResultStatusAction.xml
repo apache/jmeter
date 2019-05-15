@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=3" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-After-LC-0" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 15, number of failing samples : 2" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=3" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-After-LC-0" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 15, number of failing samples : 2" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=3" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-After-LC-0" rc="200" rm="OK" tn="TG-CONTINUE 1-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 15, number of failing samples : 2" tn="TG-CONTINUE 1-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=3" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-After-LC-4" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 13, number of failing samples : 2" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=3" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-After-LC-4" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 13, number of failing samples : 2" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=3" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-After-LC-4" rc="200" rm="OK" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 13, number of failing samples : 2" tn="TG-GOTONEXT_IT 2-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-After-LC-0" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 11, number of failing samples : 1" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-After-LC-0" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 11, number of failing samples : 1" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-After-LC-0" rc="200" rm="OK" tn="TG-BREAK 3-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 11, number of failing samples : 1" tn="TG-BREAK 3-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 9, number of failing samples : 1" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 9, number of failing samples : 1" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=0" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="Debug Sampler" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="sc2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 0" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="true" lb="DS-__jm__LC__idx=2" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="false" lb="JSS_FailsIfCptHigherThan1" rc="200" rm="OK" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="false" lb="sc2" rc="" rm="Number of samples in transaction : 2, number of failing samples : 1" tn="TG-STARTNEXTLOOP 4-1"/>
+<sample s="false" lb="TC" rc="" rm="Number of samples in transaction : 9, number of failing samples : 1" tn="TG-STARTNEXTLOOP 4-1"/>
+
+</testResults>

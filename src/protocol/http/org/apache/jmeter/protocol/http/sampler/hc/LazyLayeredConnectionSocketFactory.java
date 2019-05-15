@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * LazyLayeredConnectionSocketFactory that lazily initializes HTTPS Socket Factory
- * @since 4.1
+ * @since 5.0
  */
 public final class LazyLayeredConnectionSocketFactory implements LayeredConnectionSocketFactory{
     private static final Logger LOG = LoggerFactory.getLogger(LazyLayeredConnectionSocketFactory.class);

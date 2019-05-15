@@ -51,7 +51,7 @@ Once you've made sure the systems are ready, it's time to setup remote testing. 
 have JMeter installed on all the systems. The way JMeter works is one master controller initiates the test on multiple slave systems.
 </p>
 
-<note>In this tutorial we use GUI Mode just for demonstration. In real life you should use NON GUI mode to start your load test</note>
+<note>In this tutorial we use GUI Mode just for demonstration. In real life you should use CLI mode (NON GUI) to start your load test</note>
 
 <figure width="610" height="462" image="distributed-jmeter.svg">One master controls multiple slaves</figure>
 
@@ -83,7 +83,7 @@ Before we dive into the step-by-step instructions, it's a good idea to define th
   <li>Open <code>jmeter.properties</code> in a text editor</li>
   <li>Edit the line <code>remote_hosts=127.0.0.1</code></li>
   <li>Add the IP address. For example, if I have JMeter server running on <code>192.168.0.10</code>,
-    &hellip;, <code>192.168.0.15</code>, the entry would like like this:
+    &hellip;, <code>192.168.0.15</code>, the entry would look like this:
     <source>remote_hosts=192.168.0.10,192.168.0.11,192.168.0.12,192.168.0.13,192.168.0.14</source>
   </li>
   <li>Start JMeter.</li>

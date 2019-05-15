@@ -1,0 +1,23 @@
+<!DOCTYPE templates SYSTEM "templates.dtd">
+<templates>
+    <template isTestPlan="false">
+        <name>testTemplateNotTestPlan</name>
+        <fileName>/bin/templates/testTemplateNotTestPlan.jmx</fileName>
+        <description>testTemplateNotTestPlan desc</description>
+    </template>
+    <template isTestPlan="true">
+        <name>testTemplate</name>
+        <fileName>/bin/templates/testTemplate.jmx</fileName>
+        <description>testTemplate desc</description>
+    </template>
+    <template isTestPlan="true">
+        <name>testTemplateWithParameters</name>
+        <fileName>/bin/templates/testTemplate.jmx.fmkr</fileName>
+        <description>Template with parameters</description>
+        <parameters>
+            <parameter key="testKey1" defaultValue="n 1" />
+            <parameter key="testKey2" defaultValue="n 2" />
+            <parameter key="testKey3" defaultValue="n 3" />
+        </parameters>
+    </template>
+</templates>

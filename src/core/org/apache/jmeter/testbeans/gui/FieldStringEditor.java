@@ -27,7 +27,7 @@ import javax.swing.JTextField;
 
 
 /**
- * This class implements a property editor for non-null String properties that
+ * This class implements a property editor for possible null String properties that
  * supports custom editing (i.e.: provides a GUI component) based on a text
  * field.
  * <p>
@@ -47,7 +47,7 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
      * Value on which we started the editing. Used to avoid firing
      * PropertyChanged events when there's not been such change.
      */
-    private String initialValue = "";
+    private String initialValue;
 
     protected FieldStringEditor() {
         super();
@@ -55,6 +55,7 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
         textField = new JTextField();
         textField.addActionListener(this);
         textField.addFocusListener(this);
+        initialValue = textField.getText();
     }
 
     @Override
@@ -77,8 +78,10 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
     public void setValue(Object value) {
         if (value instanceof String) {
             setAsText((String) value);
+        } else if (value == null) {
+            setAsText(null);
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Expected String but got " + value.getClass() + ", value=" + value);
         }
     }
 
@@ -99,12 +102,16 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
     public void firePropertyChange() {
         String newValue = getAsText();
 
-        if (initialValue.equals(newValue)) {
+        if (equalOldValueOrBothNull(newValue)) {
             return;
         }
         initialValue = newValue;
 
         super.firePropertyChange();
+    }
+
+    private boolean equalOldValueOrBothNull(String newValue) {
+        return initialValue != null && initialValue.equals(newValue) || initialValue == null && newValue == null;
     }
 
     /**

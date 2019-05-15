@@ -18,11 +18,17 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.text.MessageFormat;
 
+import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
@@ -134,5 +140,29 @@ public abstract class AbstractAction implements Command {
             }
         }
         return true;
+    }
+    
+    /**
+     * @param event {@link ActionEvent} 
+     * @return parent Window
+     */
+    protected final JFrame getParentFrame(ActionEvent event) {
+        JFrame parent = null;
+        Object source = event.getSource();
+        if (source instanceof JMenuItem) {
+            JMenuItem item = (JMenuItem) source;
+            Component comp = item.getParent();
+            if (comp instanceof JPopupMenu) {
+                JPopupMenu popup = (JPopupMenu) comp;
+                comp = popup.getInvoker();
+                Window window = SwingUtilities.windowForComponent((Component) comp);
+                if (window instanceof JFrame) {
+                    parent = (JFrame) window;
+                }
+            }
+        } else {
+            parent = GuiPackage.getInstance().getMainFrame();
+        }
+        return parent;
     }
 }

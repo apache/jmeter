@@ -119,7 +119,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 log.debug("Successfully loaded properties"); //$NON-NLS-1$
                 hsp = true;
             } catch (FileNotFoundException e) {
-                log.debug("Property file {} not found", STATUS_PROPERTIES); //$NON-NLS-1$
+                log.debug("Property file {} not found", STATUS_PROPERTIES); //$NON-NLS-1$
             } catch (IOException e) {
                 log.debug("Error reading property file {} error {}", STATUS_PROPERTIES, e.toString()); //$NON-NLS-1$
             }
@@ -334,14 +334,14 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             return null;
         }
         try {
-            tcpClient = (TCPClient) javaClass.newInstance();
+            tcpClient = (TCPClient) javaClass.getDeclaredConstructor().newInstance();
             if (getPropertyAsString(EOL_BYTE, "").length()>0){
                 tcpClient.setEolByte(getEolByte());
                 log.info("Using eolByte={}", getEolByte());
             }
 
             if (log.isDebugEnabled()) {
-                log.debug("{} Created: {}@{}", this, getClassname(), Integer.toHexString(tcpClient.hashCode())); //$NON-NLS-1$
+                log.debug("{} Created: {}@{}", this, getClassname(), Integer.toHexString(tcpClient.hashCode())); //$NON-NLS-1$
             }
         } catch (Exception e) {
             log.error("{} Exception creating: {} ", this, getClassname(), e); //$NON-NLS-1$

@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.report.core.CsvSampleReader;
@@ -53,7 +54,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
      * The embedded time count consumer is used to buffer (disk storage) and tag
      * samples with the number of samples in the same interval.
      */
-    private final TimeCountConsumer embeddedConsumer;
+    private TimeCountConsumer embeddedConsumer;
 
     /**
      * Gets the granularity.
@@ -79,8 +80,6 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
      * Instantiates a new abstract over time graph consumer.
      */
     protected AbstractVersusRequestsGraphConsumer() {
-        embeddedConsumer = new TimeCountConsumer(this);
-        setGranularity(1L);
     }
 
     /*
@@ -93,6 +92,13 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
     @Override
     public void startConsuming() {
         embeddedConsumer.startConsuming();
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        embeddedConsumer = new TimeCountConsumer(this);
+        setGranularity(1000L);
     }
 
     private void startConsumingBase() {
@@ -203,7 +209,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
         // Collection of sample builders for channels
         private ArrayList<SampleBuilder> builders = new ArrayList<>();
         private ArrayList<FileInfo> fileInfos = new ArrayList<>();
-        private HashMap<Long, Long> counts = new HashMap<>();
+        private Map<Long, Long> counts = new HashMap<>();
         boolean createdWorkDir = false;
         private final AbstractVersusRequestsGraphConsumer parent;
 

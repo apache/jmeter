@@ -204,7 +204,7 @@ public class ThroughputController
                             && current >= getSubControllers().size())
                             || (getMaxThroughputAsInt() == 0)))
                         || (getStyle() == BYPERCENT
-                            && getPercentThroughputAsFloat() == 0.0f)
+                            && Float.compare(getPercentThroughputAsFloat(), 0.0f)==0)
                         );
     }
 

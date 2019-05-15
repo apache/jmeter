@@ -109,7 +109,12 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
                 if (log.isDebugEnabled()) {
                     log.debug("Wrote {} metrics", copyMetrics.size());
                 }
-                socketOutputStreamPool.returnObject(socketConnectionInfos, out);
+                if(pw.checkError()) {
+                    socketOutputStreamPool.invalidateObject(socketConnectionInfos, out);
+                    log.error("IO Errors writing to Graphite, some data will be lost");
+                } else {
+                    socketOutputStreamPool.returnObject(socketConnectionInfos, out);
+                }
             } catch (Exception e) {
                 if(out != null) {
                     try {

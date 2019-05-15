@@ -26,11 +26,17 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -40,6 +46,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.xml.utils.PrefixResolver;
 import org.apache.xpath.XPathAPI;
@@ -57,14 +65,42 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XPathExecutable;
+import net.sf.saxon.s9api.XPathSelector;
+import net.sf.saxon.s9api.XdmItem;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmValue;
+
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+
 /**
  * This class provides a few utility methods for dealing with XML/XPath.
  */
 public class XPathUtil {
+
     private static final Logger log = LoggerFactory.getLogger(XPathUtil.class);
+
+    private static final LoadingCache<ImmutablePair<String, String>, XPathExecutable> XPATH_CACHE;
+    static {
+        final int cacheSize = JMeterUtils.getPropDefault(
+                "xpath2query.parser.cache.size", 400);
+        XPATH_CACHE = Caffeine.newBuilder().maximumSize(cacheSize).build(new XPathQueryCacheLoader());
+    }
+
+    /**
+     * 
+     */
+    private static final Processor PROCESSOR = new Processor(false);
 
     private XPathUtil() {
         super();
+    }
+
+    public static Processor getProcessor() {
+        return PROCESSOR;
     }
 
     private static DocumentBuilderFactory documentBuilderFactory;
@@ -141,7 +177,7 @@ public class XPathUtil {
      */
     public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
             boolean tolerant, boolean quiet, boolean showWarnings, boolean reportErrors, boolean isXml, boolean downloadDTDs)
-            throws ParserConfigurationException, SAXException, IOException, TidyException {
+                    throws ParserConfigurationException, SAXException, IOException, TidyException {
         return makeDocument(stream, validate, whitespace, namespace,
                 tolerant, quiet, showWarnings, reportErrors, isXml, downloadDTDs, null);
     }
@@ -169,7 +205,7 @@ public class XPathUtil {
     public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
             boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml, boolean downloadDTDs, 
             OutputStream tidyOut)
-            throws ParserConfigurationException, SAXException, IOException, TidyException {
+                    throws ParserConfigurationException, SAXException, IOException, TidyException {
         Document doc;
         if (tolerant) {
             doc = tidyDoc(stream, quiet, showWarnings, report_errors, isXml, tidyOut);
@@ -271,7 +307,7 @@ public class XPathUtil {
             }
         }
     }
-    
+
     /**
      * Return value for node including node element
      * @param node Node
@@ -288,7 +324,8 @@ public class XPathUtil {
         }
         return sw.toString();
     }
-    
+
+
     /**
      * @param node {@link Node}
      * @return String content of node
@@ -328,8 +365,7 @@ public class XPathUtil {
             List<String> matchStrings, boolean fragment) throws TransformerException {
         putValuesForXPathInList(document, xPathQuery, matchStrings, fragment, -1);
     }
-    
-    
+
     /**
      * Put in matchStrings results of evaluation
      * @param document XML document
@@ -339,10 +375,8 @@ public class XPathUtil {
      * @param matchNumber match number
      * @throws TransformerException when the internally used xpath engine fails
      */
-    public static void putValuesForXPathInList(Document document, 
-            String xPathQuery,
-            List<String> matchStrings, boolean fragment, 
-            int matchNumber) throws TransformerException {
+    public static void putValuesForXPathInList(Document document, String xPathQuery, List<String> matchStrings, boolean fragment, int matchNumber)
+            throws TransformerException {
         String val = null;
         XObject xObject = XPathAPI.eval(document, xPathQuery, getPrefixResolver(document));
         final int objectType = xObject.getType();
@@ -365,7 +399,7 @@ public class XPathUtil {
                         val = getValueForNode(match);
                     }
                 } else {
-                   val = match.getNodeValue();
+                    val = match.getNodeValue();
                 }
                 matchStrings.add(val);
             }
@@ -378,7 +412,156 @@ public class XPathUtil {
         } else {
             val = xObject.toString();
             matchStrings.add(val);
-      }
+        }
+    }
+
+    public static void putValuesForXPathInListUsingSaxon(
+            String xmlFile, String xPathQuery, 
+            List<String> matchStrings, boolean fragment, 
+            int matchNumber, String namespaces)
+            throws SaxonApiException, FactoryConfigurationError {
+
+        // generating the cache key
+        final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
+
+        //check the cache
+        XPathExecutable xPathExecutable;
+        if(StringUtils.isNotEmpty(xPathQuery)) {
+            xPathExecutable = XPATH_CACHE.get(key);
+        }
+        else {
+            log.warn("Error : {}", JMeterUtils.getResString("xpath2_extractor_empty_query"));
+            return;
+        }
+
+        try (StringReader reader = new StringReader(xmlFile)) {
+            // We could instanciate it once but might trigger issues in the future 
+            // Sharing of a DocumentBuilder across multiple threads is not recommended. 
+            // However, in the current implementation sharing a DocumentBuilder (once initialized) 
+            // will only cause problems if a SchemaValidator is used.
+            net.sf.saxon.s9api.DocumentBuilder builder = PROCESSOR.newDocumentBuilder();
+            XdmNode xdmNode = builder.build(new SAXSource(new InputSource(reader)));
+            
+            if(xPathExecutable!=null) {
+                XPathSelector selector = null;
+                try {
+                    selector = xPathExecutable.load();
+                    selector.setContextItem(xdmNode);
+                    XdmValue nodes = selector.evaluate();
+                    int length = nodes.size();
+                    int indexToMatch = matchNumber;
+                    // In case we need to extract everything
+                    if(matchNumber < 0) {
+                        for(XdmItem item : nodes) {
+                            if(fragment) {
+                                matchStrings.add(item.toString());
+                            }
+                            else {
+                                matchStrings.add(item.getStringValue());
+                            }
+                        }
+                    } else {
+                        if(indexToMatch <= length) {
+                            if(matchNumber == 0 && length>0) {
+                                indexToMatch = JMeterUtils.getRandomInt(length)+1;
+                            } 
+                            XdmItem item = nodes.itemAt(indexToMatch-1);
+                            matchStrings.add(fragment ? item.toString() : item.getStringValue());
+                        } else {
+                            if(log.isWarnEnabled()) {
+                                log.warn("Error : {}{}", JMeterUtils.getResString("xpath2_extractor_match_number_failure"),indexToMatch);
+                            }
+                        }
+                    }
+                } finally {
+                    if(selector != null) {
+                        try {
+                            selector.getUnderlyingXPathContext().setContextItem(null);
+                        } catch (Exception e) { // NOSONAR Ignored on purpose
+                            // NOOP
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    public static List<String[]> namespacesParse(String namespaces) {
+        List<String[]> res = new ArrayList<>();
+        int length = namespaces.length();
+        int startWord = 0;
+        boolean afterEqual = false;
+        int positionLastKey = -1;
+        for(int i = 0; i < length; i++) {
+            char actualChar = namespaces.charAt(i);
+            if(actualChar=='=' && !afterEqual) {
+                String [] tmp = new String[2];
+                tmp[0] = namespaces.substring(startWord, i);
+                res.add(tmp);
+                afterEqual = true;
+                startWord = i+1;
+                positionLastKey++;
+            }
+            else if(namespaces.charAt(i)=='\n' && afterEqual) {
+                afterEqual = false;
+                res.get(positionLastKey)[1]= namespaces.substring(startWord, i);
+                startWord = i+1;
+            }
+            else if(namespaces.charAt(i)=='\n') {
+                startWord = i+1;
+            }
+            else if(i==length-1 && afterEqual) {
+                res.get(positionLastKey)[1]= namespaces.substring(startWord, i+1);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Compute namespaces for XML
+     * @param xml XML content
+     * @return List of Namespaces
+     * @throws XMLStreamException on problematic xml
+     * @throws FactoryConfigurationError when no xml input factory can be established
+     */
+    public static List<String[]> getNamespaces(String xml)
+            throws XMLStreamException, FactoryConfigurationError{
+        List<String[]> res= new ArrayList<>();
+        XMLStreamReader reader;
+        if(StringUtils.isNotEmpty(xml)) {
+            reader = XMLInputFactory.newFactory().createXMLStreamReader(new StringReader(xml));
+            while (reader.hasNext()) {
+                int event = reader.next();
+                if (XMLStreamConstants.START_ELEMENT == event ||
+                        XMLStreamConstants.NAMESPACE == event) {
+                    addToList(reader, res);
+                }
+            }
+        }
+        return res;
+    }
+
+    private static void addToList(XMLStreamReader reader, List<String[]> res) {
+        boolean isInList = false;
+        int namespaceCount = reader.getNamespaceCount(); 
+        if (namespaceCount > 0) {
+            for (int nsIndex = 0; nsIndex < namespaceCount; nsIndex++) {
+                String nsPrefix = reader.getNamespacePrefix(nsIndex);
+                for(int i = 0;i<res.size();i++) {
+                    String prefix = res.get(i)[0];
+                    if(prefix != null && prefix.equals(nsPrefix)) {
+                        isInList = true;
+                        break;
+                    }
+                }
+                if(!isInList) {
+                    String nsId = reader.getNamespaceURI(nsIndex);
+                    res.add(new String[] {nsPrefix, nsId});
+                }
+                isInList=false;
+            }
+        }
     }
 
     /**
@@ -420,37 +603,37 @@ public class XPathUtil {
         try {
             XObject xObject = XPathAPI.eval(doc, xPathExpression, getPrefixResolver(doc));
             switch (xObject.getType()) {
-                case XObject.CLASS_NODESET:
-                    NodeList nodeList = xObject.nodelist();
-                    final int len = (nodeList != null) ? nodeList.getLength() : 0;
-                    log.debug("nodeList length {}", len);
-                    // length == 0 means nodelist is null 
-                    if (len == 0) {
-                        log.debug("nodeList is null or empty. No match by xpath expression: {}", xPathExpression);
-                        result.setFailure(!isNegated);
-                        result.setFailureMessage("No Nodes Matched " + xPathExpression);
-                        return;
-                    }
-                    if (log.isDebugEnabled() && !isNegated) {
-                        for (int i = 0; i < len; i++) {
-                            log.debug("nodeList[{}]: {}", i, nodeList.item(i));
-                        }
-                    }
-                    result.setFailure(isNegated);
-                    if (isNegated) {
-                        result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
-                    }
+            case XObject.CLASS_NODESET:
+                NodeList nodeList = xObject.nodelist();
+                final int len = (nodeList != null) ? nodeList.getLength() : 0;
+                log.debug("nodeList length {}", len);
+                // length == 0 means nodelist is null 
+                if (len == 0) {
+                    log.debug("nodeList is null or empty. No match by xpath expression: {}", xPathExpression);
+                    result.setFailure(!isNegated);
+                    result.setFailureMessage("No Nodes Matched " + xPathExpression);
                     return;
-                case XObject.CLASS_BOOLEAN:
-                    if (!xObject.bool()){
-                        result.setFailure(!isNegated);
-                        result.setFailureMessage("No Nodes Matched " + xPathExpression);
+                }
+                if (log.isDebugEnabled() && !isNegated) {
+                    for (int i = 0; i < len; i++) {
+                        log.debug("nodeList[{}]: {}", i, nodeList.item(i));
                     }
-                    return;
-                default:
-                    result.setFailure(true);
-                    result.setFailureMessage("Cannot understand: " + xPathExpression);
-                    return;
+                }
+                result.setFailure(isNegated);
+                if (isNegated) {
+                    result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
+                }
+                return;
+            case XObject.CLASS_BOOLEAN:
+                if (!xObject.bool()){
+                    result.setFailure(!isNegated);
+                    result.setFailureMessage("No Nodes Matched " + xPathExpression);
+                }
+                return;
+            default:
+                result.setFailure(true);
+                result.setFailureMessage("Cannot understand: " + xPathExpression);
+                return;
             }
         } catch (TransformerException e) {
             result.setError(true);
@@ -462,7 +645,7 @@ public class XPathUtil {
                     .toString());
         }
     }
-    
+
     /**
      * Formats XML
      * @param xml string to format

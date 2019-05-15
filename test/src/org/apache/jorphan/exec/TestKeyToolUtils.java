@@ -19,19 +19,39 @@
 /**
  * Package to test JOrphanUtils methods 
  */
-     
 package org.apache.jorphan.exec;
 
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestKeyToolUtils {
 
+    private File keystore;
+    private String password = RandomStringUtils.randomAlphabetic(32);
+    private int validity = 1;
+
+    @Before
+    public void setup() throws IOException {
+        keystore = File.createTempFile("dummy-keystore", "jks");
+        keystore.deleteOnExit();
+        KeyToolUtils.generateProxyCA(keystore, password, validity );
+    }
+
+    @After
+    public void cleanup() {
+        if (keystore.exists()) {
+            keystore.delete();
+        }
+    }
 
     /*
      * Check the assumption that a missing executable will generate
@@ -51,4 +71,15 @@ public class TestKeyToolUtils {
         } catch (IOException expected) {
         }
     }
+
+    @Test
+    public void testIPBasedCert() throws Exception {
+        KeyToolUtils.generateHostCert(keystore, password, "10.1.2.3", validity);
+    }
+
+    @Test
+    public void testDNSNameBasedCert() throws Exception {
+        KeyToolUtils.generateHostCert(keystore, password, "www.example.invalid", validity);
+    }
+
 }

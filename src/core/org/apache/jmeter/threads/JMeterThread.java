@@ -612,6 +612,9 @@ public class JMeterThread implements Runnable, Interruptible {
         currentSamplerForInterruption = sampler;
         if (!sampleMonitors.isEmpty()) {
             for (SampleMonitor sampleMonitor : sampleMonitors) {
+                if(sampleMonitor instanceof TestElement) {
+                    TestBeanHelper.prepare((TestElement) sampleMonitor);
+                }
                 sampleMonitor.sampleStarting(sampler);
             }
         }

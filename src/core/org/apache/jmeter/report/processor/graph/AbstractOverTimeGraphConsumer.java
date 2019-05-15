@@ -51,20 +51,13 @@ public abstract class AbstractOverTimeGraphConsumer extends
      *            the granularity to set
      */
     public void setGranularity(long granularity) {
-        _setGranularity(granularity);
-    }
-
-    // Called from ctor
-    private final void _setGranularity(long granularity) {
         this.granularity = granularity;
-        ((TimeStampKeysSelector) getKeysSelector()).setGranularity(granularity);
     }
 
     /**
      * Instantiates a new abstract over time graph consumer.
      */
     protected AbstractOverTimeGraphConsumer() {
-        _setGranularity(1L);
     }
 
     /**
@@ -106,5 +99,11 @@ public abstract class AbstractOverTimeGraphConsumer extends
     protected void initializeExtraResults(MapResultData parentResult) {
         parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(
                 Long.valueOf(granularity)));
+    }
+    
+    @Override
+    public void initialize() {
+        super.initialize();
+        ((TimeStampKeysSelector) getKeysSelector()).setGranularity(granularity);
     }
 }

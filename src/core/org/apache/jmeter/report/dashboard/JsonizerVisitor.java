@@ -20,13 +20,13 @@ package org.apache.jmeter.report.dashboard;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.report.core.JsonUtil;
 import org.apache.jmeter.report.processor.ListResultData;
 import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.ResultData;
 import org.apache.jmeter.report.processor.ResultDataVisitor;
 import org.apache.jmeter.report.processor.ValueResultData;
-
 /**
  * The class JsonizerVisitor provides a visitor that can get json-like string
  * from ResultData.
@@ -96,7 +96,7 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
             Object value = valueResult.getValue();
             result = String.valueOf(value);
             if (value instanceof String) {
-                result = '"' + result + '"';
+                result = '"' + StringEscapeUtils.escapeEcmaScript(result.replace('\"', '\'')) + '"';
             }
         }
         return result;

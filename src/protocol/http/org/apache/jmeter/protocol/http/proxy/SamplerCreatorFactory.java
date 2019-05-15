@@ -61,7 +61,7 @@ public class SamplerCreatorFactory {
                         if(log.isDebugEnabled()) {
                             log.debug("Instantiating: {}", commandClass.getName());
                         }
-                        SamplerCreator creator = (SamplerCreator) commandClass.newInstance();
+                        SamplerCreator creator = (SamplerCreator) commandClass.getDeclaredConstructor().newInstance();
                         String[] contentTypes = creator.getManagedContentTypes();
                         for (String contentType : contentTypes) {
                             if(log.isDebugEnabled()) {

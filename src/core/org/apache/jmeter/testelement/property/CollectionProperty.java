@@ -44,10 +44,8 @@ public class CollectionProperty extends MultiProperty {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof CollectionProperty) {
-            if (value != null) {
-                return value.equals(((JMeterProperty) o).getObjectValue());
-            }
+        if (o instanceof CollectionProperty && value != null) {
+            return value.equals(((JMeterProperty) o).getObjectValue());
         }
         return false;
     }
@@ -130,6 +128,10 @@ public class CollectionProperty extends MultiProperty {
         return value.size();
     }
 
+    public boolean isEmpty() {
+        return value.isEmpty();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -143,7 +145,7 @@ public class CollectionProperty extends MultiProperty {
     private Collection<JMeterProperty> cloneCollection() {
         try {
             @SuppressWarnings("unchecked") // value is of type Collection<JMeterProperty>
-            Collection<JMeterProperty> newCol = value.getClass().newInstance();
+            Collection<JMeterProperty> newCol = value.getClass().getDeclaredConstructor().newInstance();
             for (JMeterProperty jMeterProperty : this) {
                 newCol.add(jMeterProperty.clone());
             }
@@ -186,7 +188,7 @@ public class CollectionProperty extends MultiProperty {
      */
     @Override
     protected Class<? extends JMeterProperty> getPropertyType() {
-        if (value != null && value.size() > 0) {
+        if (value != null && !value.isEmpty()) {
             return value.iterator().next().getClass();
         }
         return NullProperty.class;

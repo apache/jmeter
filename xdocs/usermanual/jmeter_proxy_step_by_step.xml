@@ -205,7 +205,7 @@ ready to run the test, there are two ways:
 
 
 <p>
-Solution 1, with the gui, but just during debug phase, use Non GUI for your load test.
+Solution 1, with the gui, but just during debug phase, use CLI mode (Non GUI) for your load test.
 </p>
 <p>
   <menuchoice>

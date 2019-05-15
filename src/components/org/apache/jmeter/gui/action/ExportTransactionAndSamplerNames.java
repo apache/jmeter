@@ -37,6 +37,7 @@ import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.EscapeDialog;
@@ -62,7 +63,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
     
     private static final String TRANSACTIONS_REGEX_PATTERN = 
             JMeterUtils.getPropDefault("jmeter.reportgenerator.exported_transactions_pattern", 
-                    "[a-zA-Z0-9_\\-{}\\$\\.]*[-_][0-9]*");
+                    "[a-zA-Z0-9_ \\-{}\\$\\.]*["+DefaultTreeNodeNamingPolicy.TRANSACTION_CHILDREN_SEPARATOR+"][0-9]*");
     
     private static final Pattern TRANSACTIONS_REGEX = 
             Pattern.compile(TRANSACTIONS_REGEX_PATTERN);
@@ -132,7 +133,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
         if(sampleNames.isEmpty()) {
             log.warn("No transaction exported using regexp '{}', modify property '{}' to fix this problem",
                     TRANSACTIONS_REGEX_PATTERN, "report_transactions_pattern");
-            showResult("No transaction exported using regexp '"
+            showResult(e, "No transaction exported using regexp '"
                     +TRANSACTIONS_REGEX_PATTERN
                     +"', modify property 'report_transactions_pattern' to fix this problem");
         } else {
@@ -145,7 +146,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
             log.info("Exported transactions: jmeter.reportgenerator.exporter.html.series_filter=^({})(-success|-failure)?$", 
                     result);
 
-            showResult("jmeter.reportgenerator.exporter.html.series_filter=^("
+            showResult(e, "jmeter.reportgenerator.exporter.html.series_filter=^("
                     +result
                     +")(-success|-failure)?$");
             
@@ -154,11 +155,12 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
 
     /**
      * Display result in popup
+     * @param event {@link ActionEvent}
      * @param result String 
      */
-    private static final void showResult(String result) {
-        EscapeDialog messageDialog = new EscapeDialog(GuiPackage.getInstance().getMainFrame(),
-                JMeterUtils.getResString("export_transactions_title"), true); //$NON-NLS-1$
+    private final void showResult(ActionEvent event, String result) {
+        EscapeDialog messageDialog = new EscapeDialog(getParentFrame(event),
+                JMeterUtils.getResString("export_transactions_title"), false); //$NON-NLS-1$
         Container contentPane = messageDialog.getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(new JLabel(
@@ -184,7 +186,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
 
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
-        if(location == MENU_LOCATION.HELP) {
+        if(location == MENU_LOCATION.TOOLS) {
             
             JMenuItem menuItemIC = new JMenuItem(
                     JMeterUtils.getResString("export_transactions_menu"), KeyEvent.VK_UNDEFINED);

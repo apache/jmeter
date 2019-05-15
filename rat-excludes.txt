@@ -4,6 +4,7 @@ rat-excludes.txt
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
 eclipse.md
+ISSUE_TEMPLATE.md
 PULL_REQUEST_TEMPLATE.md
 README.md
 **/*.jmx
@@ -21,6 +22,8 @@ dist/*.sha512
 docs/**
 extras/*.txt
 extras/*.json
+extras/Test.html
+extras/Test.jtl
 **/images/**
 lib/aareadme.txt
 lib/opt/**
@@ -34,3 +37,4 @@ src/core/org/apache/jmeter/help.txt
 test/resources/**
 **/*.log
 **/download_jmeter.cgi
+xdocs/extending/HTML_REPORT_README.TXT

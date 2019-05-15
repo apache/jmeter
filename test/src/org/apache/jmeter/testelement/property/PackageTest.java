@@ -258,7 +258,6 @@ public class PackageTest {
             fail("Should have generated an Illegal Argument Exception");
         } catch (IllegalArgumentException e) {
         }
-
     }
 
     @Test

@@ -63,7 +63,7 @@ public class CharFunction extends AbstractFunction {
                 char ch = (char) value;
                 sb.append(ch);
             } catch (NumberFormatException e) {
-                log.warn("Could not parse " + numberString + " : " + e);
+                log.warn("Could not parse {} : {}", numberString, e.toString());
             }
         }
         return sb.toString();

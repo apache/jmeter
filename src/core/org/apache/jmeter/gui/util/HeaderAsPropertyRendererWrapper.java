@@ -33,17 +33,21 @@ import javax.swing.table.TableCellRenderer;
  */
 public class HeaderAsPropertyRendererWrapper implements TableCellRenderer {
 
-    private Object[][] columnsMsgParameters;
-
     private TableCellRenderer delegate;
 
     /**
      * @param renderer {@link TableCellRenderer} to delegate to
-     * @param columnsMsgParameters Optional parameters of i18n keys
+     * @param columnsMsgParameters ignored
+     * @deprecated don't use {@code columnsMsgParameters} as they are not moved, when
+     * the corresponding columns in the tables object model are moved
      */
+    @Deprecated
     public HeaderAsPropertyRendererWrapper(TableCellRenderer renderer, Object[][] columnsMsgParameters) {
+        this(renderer);
+    }
+
+    public HeaderAsPropertyRendererWrapper(TableCellRenderer renderer) {
         this.delegate = renderer;
-        this.columnsMsgParameters = columnsMsgParameters;
     }
 
     @Override
@@ -63,7 +67,7 @@ public class HeaderAsPropertyRendererWrapper implements TableCellRenderer {
             tr.setHorizontalAlignment(SwingConstants.CENTER);
         }
         return delegate.getTableCellRendererComponent(table, 
-                HeaderAsPropertyRenderer.getText(value, row, column, columnsMsgParameters), 
+                HeaderAsPropertyRenderer.getText(value, row, column, null), 
                 isSelected, hasFocus, row, column);
     }
     
@@ -72,17 +76,20 @@ public class HeaderAsPropertyRendererWrapper implements TableCellRenderer {
      * @param table {@link JTable}
      */
     public static void setupDefaultRenderer(JTable table) {
-        setupDefaultRenderer(table, null);
+        TableCellRenderer defaultRenderer = table.getTableHeader().getDefaultRenderer();
+        HeaderAsPropertyRendererWrapper newRenderer = new HeaderAsPropertyRendererWrapper(defaultRenderer);
+        table.getTableHeader().setDefaultRenderer(newRenderer);
     }
 
     /**
      * @param table  {@link JTable}
-     * @param columnsMsgParameters Double dimension array of column message parameters
+     * @param columnsMsgParameters ignored
+     * @deprecated don't use {@code columnsMsgParameters} as they are not moved when the columns
+     * of the corresponding tables object model are moved
      */
+    @Deprecated
     public static void setupDefaultRenderer(JTable table, Object[][] columnsMsgParameters) {
-        TableCellRenderer defaultRenderer = table.getTableHeader().getDefaultRenderer();
-        HeaderAsPropertyRendererWrapper newRenderer = new HeaderAsPropertyRendererWrapper(defaultRenderer, columnsMsgParameters);
-        table.getTableHeader().setDefaultRenderer(newRenderer);
+        setupDefaultRenderer(table);
     }
 
 }

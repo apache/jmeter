@@ -91,11 +91,11 @@ public class XPathExtractor extends AbstractScopedTestElement implements
 
 
     private String concat(String s1,String s2){
-        return new StringBuilder(s1).append("_").append(s2).toString(); // $NON-NLS-1$
+        return s1 + "_" + s2; // $NON-NLS-1$
     }
 
     private String concat(String s1, int i){
-        return new StringBuilder(s1).append("_").append(i).toString(); // $NON-NLS-1$
+        return s1 + "_" + i; // $NON-NLS-1$
     }
 
     /**
@@ -169,7 +169,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
             log.error("IOException on ({})", getXPathQuery(), e);
             AssertionResult ass = new AssertionResult(getName());
             ass.setError(true);
-            ass.setFailureMessage(new StringBuilder("IOException: ").append(e.getLocalizedMessage()).toString());
+            ass.setFailureMessage("IOException: " + e.getLocalizedMessage());
             previousResult.addAssertionResult(ass);
             previousResult.setSuccessful(false);
         } catch (ParserConfigurationException e) {// Should not happen

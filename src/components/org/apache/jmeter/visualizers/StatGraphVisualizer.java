@@ -105,37 +105,38 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private static final String PCT2_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct2", "95");
     private static final String PCT3_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct3", "99");
 
-    private static final Float PCT1_VALUE = new Float(Float.parseFloat(PCT1_LABEL)/100);
-    private static final Float PCT2_VALUE =  new Float(Float.parseFloat(PCT2_LABEL)/100);
-    private static final Float PCT3_VALUE =  new Float(Float.parseFloat(PCT3_LABEL)/100);
+    private static final Float PCT1_VALUE = Float.valueOf(Float.parseFloat(PCT1_LABEL)/100);
+    private static final Float PCT2_VALUE =  Float.valueOf(Float.parseFloat(PCT2_LABEL)/100);
+    private static final Float PCT3_VALUE =  Float.valueOf(Float.parseFloat(PCT3_LABEL)/100);
 
     private static final Logger log = LoggerFactory.getLogger(StatGraphVisualizer.class);
     
     private final Histogram histogram = new Histogram(3);
 
     private static final String[] COLUMNS = { 
-            "sampler_label",                  //$NON-NLS-1$
-            "aggregate_report_count",         //$NON-NLS-1$
-            "average",                        //$NON-NLS-1$
-            "aggregate_report_median",        //$NON-NLS-1$
-            "aggregate_report_xx_pct1_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct2_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct3_line",      //$NON-NLS-1$
-            "aggregate_report_min",           //$NON-NLS-1$
-            "aggregate_report_max",           //$NON-NLS-1$
-            "aggregate_report_error%",        //$NON-NLS-1$
-            "aggregate_report_rate",          //$NON-NLS-1$
-            "aggregate_report_bandwidth",     //$NON-NLS-1$
-            "aggregate_report_sent_bytes_per_sec"  //$NON-NLS-1$
+            "sampler_label",                        //$NON-NLS-1$
+            "aggregate_report_count",               //$NON-NLS-1$
+            "average",                              //$NON-NLS-1$
+            "aggregate_report_median",              //$NON-NLS-1$
+            "aggregate_report_xx_pct1_line",        //$NON-NLS-1$
+            "aggregate_report_xx_pct2_line",        //$NON-NLS-1$
+            "aggregate_report_xx_pct3_line",        //$NON-NLS-1$
+            "aggregate_report_min",                 //$NON-NLS-1$
+            "aggregate_report_max",                 //$NON-NLS-1$
+            "aggregate_report_error%",              //$NON-NLS-1$
+            "aggregate_report_rate",                //$NON-NLS-1$
+            "aggregate_report_bandwidth",           //$NON-NLS-1$
+            "aggregate_report_sent_bytes_per_sec"   //$NON-NLS-1$
     };
 
-    private static final String[] GRAPH_COLUMNS = {"average",//$NON-NLS-1$
-            "aggregate_report_median",        //$NON-NLS-1$
-            "aggregate_report_xx_pct1_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct2_line",      //$NON-NLS-1$
-            "aggregate_report_xx_pct3_line",      //$NON-NLS-1$
-            "aggregate_report_min",           //$NON-NLS-1$
-            "aggregate_report_max"};          //$NON-NLS-1$
+    private static final String[] GRAPH_COLUMNS = {
+            "average",                          //$NON-NLS-1$
+            "aggregate_report_median",          //$NON-NLS-1$
+            "aggregate_report_xx_pct1_line",    //$NON-NLS-1$
+            "aggregate_report_xx_pct2_line",    //$NON-NLS-1$
+            "aggregate_report_xx_pct3_line",    //$NON-NLS-1$
+            "aggregate_report_min",             //$NON-NLS-1$
+            "aggregate_report_max"};            //$NON-NLS-1$
 
     private static final String TOTAL_ROW_LABEL =
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
@@ -214,7 +215,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private int defaultHeight = 300;
 
-    private JComboBox<String> columnsList = new JComboBox<>(GRAPH_COLUMNS);
+    private JComboBox<String> columnsList = new JComboBox<>(getLabels(GRAPH_COLUMNS, getGraphColumnsMsgParameters()));
 
     private List<BarGraph> eltList = new ArrayList<>();
 
@@ -285,14 +286,14 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                         MessageFormat.format(
                                 JMeterUtils.getResString(
                                         "aggregate_report_xx_pct1_line"),
-                                new Object[] { PCT1_LABEL }),
+                                PCT1_LABEL),
                         false, green));
         eltList.add(
                 new BarGraph(
                         MessageFormat.format(
                                 JMeterUtils.getResString(
                                         "aggregate_report_xx_pct2_line"),
-                                new Object[] { PCT2_LABEL }),
+                                PCT2_LABEL),
                         false, yellow));
         
         eltList.add(
@@ -300,7 +301,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                         MessageFormat.format(
                                 JMeterUtils.getResString(
                                         "aggregate_report_xx_pct3_line"),
-                                new Object[] { PCT3_LABEL }),
+                                PCT3_LABEL),
                         false, purple));
         eltList.add(
                 new BarGraph(JMeterUtils.getResString("aggregate_report_min"),
@@ -311,7 +312,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         clearData();
         init();
     }
-    
+
     static final Object[][] getColumnsMsgParameters() { 
         return new Object[][] { null, 
             null,
@@ -326,6 +327,18 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             null,
             null,
             null};
+    }
+
+    static final Object[][] getGraphColumnsMsgParameters() {
+        return new Object[][] {
+            null,
+            null,
+            new Object[] { PCT1_LABEL },
+            new Object[] { PCT2_LABEL },
+            new Object[] { PCT3_LABEL },
+            null,
+            null
+        };
     }
 
     private String[] keys(Map<String, ?> map) {
@@ -346,7 +359,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      * @return ObjectTableModel
      */
     static ObjectTableModel createObjectTableModel() {
-        return new ObjectTableModel(COLUMNS,
+        return new ObjectTableModel(getLabels(COLUMNS, getColumnsMsgParameters()),
                 SamplingStatCalculator.class,
                 new Functor[] {
                 new Functor("getLabel"),                    //$NON-NLS-1$
@@ -408,20 +421,21 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             new NumberRenderer("#0.00"),    // Sent bytes per sec   //$NON-NLS-1$
         };
     }
-    
+
     /**
      * 
      * @param keys I18N keys
+     * @param columnMsgParams parameters to use to format the keys labels
      * @return labels
      */
-    static String[] getLabels(String[] keys) {
+    static String[] getLabels(String[] keys, Object[][] columnMsgParams) {
         String[] labels = new String[keys.length];
         for (int i = 0; i < labels.length; i++) {
-            labels[i]=MessageFormat.format(JMeterUtils.getResString(keys[i]), getColumnsMsgParameters()[i]);
+            labels[i]=MessageFormat.format(JMeterUtils.getResString(keys[i]), columnMsgParams[i]);
         }
         return labels;
     }
-    
+
     /**
      * We use this method to get the data, since we are using
      * ObjectTableModel, so the calling getDataVector doesn't
@@ -516,7 +530,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         myJTable.setRowSorter(new ObjectTableSorter(model).fixLastRow());
         JMeterUtils.applyHiDPI(myJTable);
         // Fix centering of titles
-        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable, getColumnsMsgParameters());
+        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable);
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, getRenderers());
         myScrollPane = new JScrollPane(myJTable);
@@ -560,6 +574,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(spane, BorderLayout.CENTER);
         new Timer(REFRESH_PERIOD, e -> {
+                if (newRows.isEmpty()) {
+                    return;
+                }
                 synchronized (lock) {
                     while (!newRows.isEmpty()) {
                         model.insertRow(newRows.pop(), model.getRowCount() - 1);
@@ -719,7 +736,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             }
             try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile()); 
                     OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){ 
-                CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),writer,saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
+                CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),
+                        writer,
+                        saveHeaders.isSelected() ? getLabels(COLUMNS, getColumnsMsgParameters()) : null);
             } catch (IOException e) { // NOSONAR Error is reported in GUI
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } 

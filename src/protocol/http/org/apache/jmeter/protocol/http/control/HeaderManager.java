@@ -29,7 +29,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.gui.Replaceable;
 import org.apache.jmeter.testelement.TestElement;
@@ -291,17 +290,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
         for (int i = 0; i < hdrs.size(); i++) {
             final JMeterProperty hdr = hdrs.get(i);
             Header head = (Header) hdr.getObjectValue();
-            String value = head.getValue();
-            if(!StringUtils.isEmpty(value)) {
-                Object[] result = JOrphanUtils.replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
-                // check if there is anything to replace
-                int nbReplaced = ((Integer)result[1]).intValue();
-                if (nbReplaced>0) {
-                    String replacedText = (String) result[0];
-                    head.setValue(replacedText);
-                    totalReplaced += nbReplaced;
-                }
-            }
+            totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, head.getValue(), head::setValue);
         }
         return totalReplaced;
     }

@@ -43,6 +43,8 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHCAbstractImpl.class);
 
+    protected static final String PROXY_SCHEME = System.getProperty("http.proxyScheme","http");
+
     protected static final String PROXY_HOST = System.getProperty("http.proxyHost","");
 
     protected static final String NONPROXY_HOSTS = System.getProperty("http.nonProxyHosts","");
@@ -69,6 +71,10 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     protected static final int CPS_HTTP = JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0);
     
+    /**
+     * @deprecated Not used
+     */
+    @Deprecated
     protected static final int CPS_HTTPS = JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0);
 
     protected static final boolean USE_LOOPBACK = JMeterUtils.getPropDefault("httpclient.loopback", false);

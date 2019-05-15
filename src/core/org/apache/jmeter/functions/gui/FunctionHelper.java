@@ -22,6 +22,9 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,9 +56,15 @@ import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterThread;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
+import org.apache.jorphan.documentation.VisibleForTesting;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
@@ -68,6 +77,10 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     private static final Logger log = LoggerFactory.getLogger(ClientJMeterEngine.class);
 
+    private static final String GENERATE = "GENERATE";
+    
+    private static final String RESET_VARS = "RESET_VARS";
+
     private JLabeledChoice functionList;
 
     private ArgumentsPanel parameterPanel;
@@ -75,9 +88,18 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     private JLabeledTextField cutPasteFunction;
     
     private JSyntaxTextArea resultTextArea;
+    
+    private JSyntaxTextArea variablesTextArea;
+    
+    private JMeterVariables jMeterVariables = new JMeterVariables();
 
+    @VisibleForTesting
     public FunctionHelper() {
-        super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
+        super();
+    }
+    
+    public FunctionHelper(JFrame parent) {
+        super(parent, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
         init();
         JMeterUtils.addLocaleChangeListener(this);
     }
@@ -117,18 +139,31 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         JPanel resultsPanel = new VerticalPanel();
         JPanel generatePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel displayPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel variablesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35, null, false); //$NON-NLS-1$
         generatePanel.add(cutPasteFunction);
         JButton generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
+        generateButton.setActionCommand(GENERATE);
         generateButton.addActionListener(this);
         generatePanel.add(generateButton);
+
+        JButton resetVarsButton = new JButton(JMeterUtils.getResString("function_helper_reset_vars")); //$NON-NLS-1$
+        resetVarsButton.setActionCommand(RESET_VARS);
+        resetVarsButton.addActionListener(this);
+        generatePanel.add(resetVarsButton);
+
         resultTextArea = JSyntaxTextArea.getInstance(5,60);
         resultTextArea.setToolTipText(JMeterUtils.getResString("function_helper_dialog_result_warn"));
         displayPanel.add(new JLabel(JMeterUtils.getResString("result_function")));
         displayPanel.add(JTextScrollPane.getInstance(resultTextArea));
+
+        variablesTextArea = JSyntaxTextArea.getInstance(10,60);
+        variablesPanel.add(new JLabel(JMeterUtils.getResString("function_helper_dialog_variables")));
+        variablesPanel.add(JTextScrollPane.getInstance(variablesTextArea));
         
         resultsPanel.add(generatePanel);
         resultsPanel.add(displayPanel);
+        resultsPanel.add(variablesPanel);
         
         this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
         this.pack();
@@ -175,9 +210,47 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String actionCommand = e.getActionCommand();
+        if(GENERATE.equals(actionCommand)) {
+            String functionName = functionList.getText();
+            Arguments args = (Arguments) parameterPanel.createTestElement();
+            String functionCall = buildFunctionCallString(functionName, args);
+            cutPasteFunction.setText(functionCall);
+            GuiUtils.copyTextToClipboard(cutPasteFunction.getText());
+            CompoundVariable function = new CompoundVariable(functionCall);
+            JMeterContext threadContext = JMeterContextService.getContext();
+            threadContext.setVariables(jMeterVariables);
+            threadContext.setThreadNum(1);
+            threadContext.getVariables().put(JMeterThread.LAST_SAMPLE_OK, "true");
+            ThreadGroup threadGroup = new ThreadGroup();
+            threadGroup.setName("FunctionHelper-Dialog-ThreadGroup");
+            threadContext.setThreadGroup(threadGroup);
+            
+            try {
+                resultTextArea.setText(function.execute().trim());
+            } catch(Exception ex) {
+                log.error("Error calling function {}", functionCall, ex);
+                resultTextArea.setText(ex.getMessage() + ", \nstacktrace:\n "+
+                        ExceptionUtils.getStackTrace(ex));
+                resultTextArea.setCaretPosition(0);
+            }
+            
+            variablesTextArea.setText(variablesToString(jMeterVariables));
+        } else {
+            jMeterVariables = new JMeterVariables();
+            variablesTextArea.setText(variablesToString(jMeterVariables));
+        }
+    }
+
+    private String variablesToString(JMeterVariables jMeterVariables) {
+        StringBuilder sb = new StringBuilder();
+        jMeterVariables.entrySet().forEach(e->sb.append(e.getKey()).append("=").append(e.getValue()).append("\r\n"));
+        return sb.toString();
+    }
+
+    private String buildFunctionCallString(String functionName, Arguments args) {
         StringBuilder functionCall = new StringBuilder("${");
-        functionCall.append(functionList.getText());
-        Arguments args = (Arguments) parameterPanel.createTestElement();
+        functionCall.append(functionName);
         if (args.getArguments().size() > 0) {
             functionCall.append("(");
             PropertyIterator iter = args.iterator();
@@ -187,23 +260,52 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
                 if (!first) {
                     functionCall.append(",");
                 }
-                functionCall.append(arg.getValue());
+                functionCall.append(escapeCommata(arg.getValue()));
                 first = false;
             }
             functionCall.append(")");
         }
         functionCall.append("}");
-        cutPasteFunction.setText(functionCall.toString());
-        GuiUtils.copyTextToClipboard(cutPasteFunction.getText());
-        CompoundVariable function = new CompoundVariable(functionCall.toString());
-        try {
-            resultTextArea.setText(function.execute().trim());
-        } catch(Exception ex) {
-            log.error("Error calling function {}", functionCall.toString(), ex);
-            resultTextArea.setText(ex.getMessage() + ", \nstacktrace:\n "+
-                    ExceptionUtils.getStackTrace(ex));
-            resultTextArea.setCaretPosition(0);
+        return functionCall.toString();
+    }
+
+    private static final char ANY_NORMAL_CHAR = ' ';
+
+    /**
+     * Escape commata that are in the argument but "outside" of variable replacement structures.
+     *
+     * @param arg string that should be escaped
+     * @return escaped string
+     */
+    private String escapeCommata(String arg) {
+        int level = 0;
+        StringBuilder result = new StringBuilder(arg.length());
+        try (Reader r = new StringReader(arg)) {
+            int c;
+            char lastChar = ANY_NORMAL_CHAR;
+            while ((c = r.read()) != -1) {
+                char nextChar = (char) c;
+                if (lastChar == '\\') {
+                    lastChar = ANY_NORMAL_CHAR;
+                } else if (lastChar == '$' && nextChar == '{') {
+                    level++;
+                    lastChar = ANY_NORMAL_CHAR;
+                } else if (nextChar == '}') {
+                    level--;
+                    lastChar = ANY_NORMAL_CHAR;
+                } else if (nextChar == ',' && level == 0) {
+                    result.append('\\');
+                    lastChar = ANY_NORMAL_CHAR;
+                } else {
+                    lastChar = nextChar;
+                }
+                result.append(nextChar);
+            }
+        } catch (IOException e) {
+            log.warn("Can't escape commata in input string: {}", arg, e);
+            return arg;
         }
+        return result.toString();
     }
 
     private class HelpListener implements ActionListener {

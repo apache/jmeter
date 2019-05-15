@@ -459,13 +459,19 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         for (String clazz : classesToAdd) {
             try {
                 // Instantiate render classes
-                final ResultRenderer renderer = (ResultRenderer) Class.forName(clazz).newInstance();
+                final ResultRenderer renderer = (ResultRenderer) Class.forName(clazz).getDeclaredConstructor().newInstance();
                 if (textRenderer.equals(renderer.toString())){
                     textObject=renderer;
                 }
                 renderer.setBackgroundColor(getBackground());
                 map.put(renderer.getClass().getName(), renderer);
-            } catch (Exception | NoClassDefFoundError e) { // NOSONAR See bug 60583
+            } catch (NoClassDefFoundError e) { // NOSONAR See bug 60583
+                if (e.getMessage() != null && e.getMessage().contains("javafx")) {
+                    log.info("Add JavaFX to your Java installation if you want to use renderer: {}", clazz);
+                } else {
+                    log.warn("Error loading result renderer: {}", clazz, e);
+                }
+            } catch (Exception e) {
                 log.warn("Error loading result renderer: {}", clazz, e);
             }
         }

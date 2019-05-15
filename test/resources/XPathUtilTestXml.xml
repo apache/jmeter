@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Employees>
+    <Employee id="1">
+        <age:ag xmlns:age="http://www.w3.org/2003/01/geo/wgs84_pos#">29</age:ag>
+        <name>Pankaj</name>
+        <gender>Male</gender>
+        <role>Java Developer</role>
+    </Employee>
+    <Employee id="2">
+        <age:ag xmlns:age="http://www.w3.org/2003/01/geo/wgs84_pos#">35</age:ag>
+        <name>Lisa</name>
+        <gender>Female</gender>
+        <role>CEO</role>
+    </Employee>
+    <Employee id="3">
+        <age:ag xmlns:age="http://www.w3.org/2003/01/geo/wgs84_pos#">45</age:ag>
+        <name>Tom</name>
+        <gender>Male</gender>
+        <role>Manager</role>
+    </Employee>
+    <Employee id="4">
+        <age:ag xmlns:age="http://www.w3.org/2003/01/geo/wgs84_pos#">55</age:ag>
+        <name>Meghan</name>
+        <gender>Female</gender>
+        <role>Manager</role>
+    </Employee>
+</Employees>

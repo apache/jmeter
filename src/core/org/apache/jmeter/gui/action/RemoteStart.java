@@ -116,10 +116,10 @@ public class RemoteStart extends AbstractAction {
     private HashTree getTestTree() {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
-        JMeter.convertSubTree(testTree);
-        testTree.add(testTree.getArray()[0], gui.getMainFrame());
+        HashTree tree = JMeter.convertSubTree(testTree, true);
+        tree.add(tree.getArray()[0], gui.getMainFrame());
         // Used for remote notification of threads start/stop,see BUG 54152
-        testTree.add(testTree.getArray()[0], new RemoteThreadsListenerTestElement());
-        return testTree;
+        tree.add(tree.getArray()[0], new RemoteThreadsListenerTestElement());
+        return tree;
     }
 }

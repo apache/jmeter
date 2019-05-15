@@ -36,6 +36,7 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.TeeOutputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -89,6 +90,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
     private transient volatile FTPClient savedClient; // used for interrupting the sampler
 
     public FTPSampler() {
+        super();
     }
 
     public String getUsername() {
@@ -208,10 +210,10 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                         if (contents.length() > 0){
                             byte[] bytes = contents.getBytes(); // TODO - charset?
                             input = new ByteArrayInputStream(bytes);
-                            res.setBytes((long)bytes.length);
+                            res.setSentBytes((long)bytes.length);
                         } else {
                             File infile = new File(local);
-                            res.setBytes(infile.length());
+                            res.setSentBytes(infile.length());
                             fileIS = new FileInputStream(infile); // NOSONAR False positive, fileIS is closed in finally and not overwritten
                             input = new BufferedInputStream(fileIS);
                         }
@@ -269,12 +271,17 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                     res.setResponseMessage(ftp.getReplyString());
                 }
             } else {
-                res.setResponseCode("501"); // TODO
-                res.setResponseMessage("Could not connect");
-                res.setResponseMessage(ftp.getReplyString());
+                res.setResponseCode("501");
+                String replyString = ftp.getReplyString();
+                if(StringUtils.isEmpty(replyString)) {
+                    res.setResponseMessage("Could not connect");
+                }
+                else {
+                    res.setResponseMessage(replyString);
+                }
             }
         } catch (IOException ex) {
-            res.setResponseCode("000"); // TODO
+            res.setResponseCode("000");
             res.setResponseMessage(ex.toString());
         } finally {
             savedClient = null;
@@ -282,10 +289,12 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                 try {
                     ftp.logout();
                 } catch (IOException ignored) {
+                    // NOOP
                 }
                 try {
                     ftp.disconnect();
                 } catch (IOException ignored) {
+                    // NOOP
                 }
             }
             IOUtils.closeQuietly(input);
@@ -312,10 +321,12 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
             try {
                 client.abort();
             } catch (IOException ignored) {
+                // NOOP
             }
             try {
                 client.disconnect();
             } catch (IOException ignored) {
+             // NOOP
             }
         }
         return client != null;

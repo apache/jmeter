@@ -132,7 +132,13 @@ public class HC4CookieHandler implements CookieHandler {
             for (org.apache.http.cookie.Cookie cookie : cookies) {
                 try {
                     if (checkCookies) {
-                        cookieSpec.validate(cookie, cookieOrigin);
+                        try {
+                            cookieSpec.validate(cookie, cookieOrigin);
+                        } catch (MalformedCookieException e) { // This means the cookie was wrong for the URL
+                            log.info("Not storing invalid cookie: <{}> for URL {} ({})",
+                                cookieHeader, url, e.getLocalizedMessage());
+                            continue;
+                        }
                     }
                     Date expiryDate = cookie.getExpiryDate();
                     long exp = 0;
@@ -156,12 +162,9 @@ public class HC4CookieHandler implements CookieHandler {
                     } else {
                         cookieManager.removeMatchingCookies(newCookie);
                         if (debugEnabled){
-                            log.info("Dropping expired Cookie: {}", newCookie.toString());
+                            log.info("Dropping expired Cookie: {}", newCookie);
                         }
                     }
-                } catch (MalformedCookieException e) { // This means the cookie was wrong for the URL
-                log.warn("Not storing invalid cookie: <{}> for URL {} ({})",
-                        cookieHeader, url, e.getLocalizedMessage());
                 } catch (IllegalArgumentException e) {
                     log.warn(cookieHeader+e.getLocalizedMessage());
                 }
@@ -176,7 +179,7 @@ public class HC4CookieHandler implements CookieHandler {
         
         boolean debugEnabled = log.isDebugEnabled();
         if (debugEnabled){
-            log.debug("Found {} cookies for {}", c.size(), url.toExternalForm());
+            log.debug("Found {} cookies for {}", c.size(), url);
         }
         if (c.isEmpty()) {
             return null;

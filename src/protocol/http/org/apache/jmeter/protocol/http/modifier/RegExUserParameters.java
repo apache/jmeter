@@ -115,8 +115,6 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
      * A new instance is created for each thread group, and the
      * clone() method is then called to create copies for each thread in a
      * thread group.
-     * 
-     * @see java.lang.Object#clone()
      */
     @Override
     public Object clone() {

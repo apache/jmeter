@@ -20,6 +20,7 @@
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY rarr     "&#x02192;" >
 <!ENTITY vellip   "&#x022EE;" >
+<!ENTITY nbsp     "&#x00A0;" >
 ]>
 <document>
 <properties>
@@ -39,9 +40,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 4.1 =================== -->
+<!--  =================== 5.2 =================== -->
 
-<h1>Version 4.1</h1>
+<h1>Version 5.2</h1>
 <p>
 Summary
 </p>
@@ -57,26 +58,23 @@ Summary
 </ul>
 
 <ch_section>New and Noteworthy</ch_section>
-<!-- <ch_category>Sample category</ch_category> -->
-<!-- <ch_title>Sample title</ch_title> -->
-<!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
+<p>
+This release is mainly a bugfix release. Please see the <a href="changes_history.html">Changes history page</a>
+to view the last major behaviors with the version 5.1.1.
+</p>
+<!--
 <ch_title>Core improvements</ch_title>
-
 <ch_title>UX improvements</ch_title>
-
+<ch_title>Test Plan</ch_title>
+<ch_title>Scripting / Debugging enhancements</ch_title>
+-->
+<!--
 <ch_title>Functions</ch_title>
-
-<ch_title>Scripting and Plugin Development</ch_title>
-
-<ch_title>Live Reporting and Web Report</ch_title>
-
-
+-->
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
-<li>Since JMeter 4.1, when using default HC4 Implementation, JMeter will reset HTTP state (SSL State + Connections) on each thread group iteration. If you don't want
-this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false</code></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -84,33 +82,29 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>58757</bug>Fix deprecated methods of HTTPCLIENT after migration to httpclient-4.5.X. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>62212</bug>Recorder : Improve UX by providing a popup above all windows to be able to change Transaction names and pauses while using Browser. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-  <li><pr>376</pr>JUnitSampler logs exceptions except assertion-failures from test cases as warnings. Contributed by Davide Angelocola (davide.angelocola at fisglobal.com)</li>
 </ul>
 
 <h3>Controllers</h3>
 <ul>
-    <li><bug>62237</bug>While Controller : Export variable containing current index of iteration. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>62195</bug>Save Responses to a file : Improve component and UI. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>62209</bug>InfluxBackendListenerClient: First Assertion Failure Message must be sent if error code and response code are empty or ok</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+  <li><bug>62863</bug>Enable PKCS11 keystores for usage with KeyStore Manager. Based on patch by Clifford Harms (clifford.harms at gmail.com).</li>
+  <li><pr>457</pr>Slight performance improvement in PoissonRandomTimer by using ThreadLocalRandom. Based on a patch by Xia Li.</li>
 </ul>
 
 <h3>Functions</h3>
 <ul>
-    <li><bug>62178</bug>Add default value to <code>__V</code> function. Contributed by orimarko at gmail.com</li>
+  <li><bug>63219</bug>New function <code>__StringToFile</code> to save a string into a file. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>I18N</h3>
@@ -123,25 +117,12 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>General</h3>
 <ul>
-  <li><bug>62128</bug>Try to guess <code>JMETER_HOME</code> correctly, when <code>jmeter.bat</code> is called from a batch file in another directory. Contributed by logox01 (logox01 at gmx.at)</li>
-  <li><bug>62155</bug>Search Feature: Make Search text field get focus</li>
-  <li><bug>62156</bug>Search Feature : Distinguish between node that matches search and node that contains a child that matches search</li>
-  <li><bug>62234</bug>Search/Replace Feature : Enhance UX and add Replace/Next/Previous/Replace &amp; Find features. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-  <li><bug>62238</bug>Add ability to Switch to next iteration of Current Loop. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-  <li><bug>62065</bug>Use Maven artifact for JAF Module instead of embedded module</li>
-  <li><pr>379</pr> Improve chinese translations. Contributed by XmeterNet</li>
+    <li>Updated to httpclient/httpmime 4.5.8 (from 4.5.7)</li>
+    <li><bug>63396</bug>JSR223 Test Elements: Description of Parameters is misleading, same for Script</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li><pr>358</pr><pr>365</pr><pr>366</pr><pr>375</pr>Updated to latest checkstyle (v8.8). Expanded Checkstyle to files
-      in <code>src</code> and <code>test</code>; fixed newly checked files. Based on contribution
-      by Graham Russell (graham at ham1.co.uk)</li>
-    <li><bug>62095</bug>Correct description for right boundary parameter in Boundary Extractor. Contributed by orimarko (orimarko at gmail.com)</li>
-    <li><bug>62113</bug>Updated to latest Bouncycastle (v1.59). Based on contribution by Olaf Flebbe (oflebbe at apache.org)</li>
-    <li><bug>62171</bug>Remove .md5 checksums and keep only .sha512 checksums for source and binary archives</li>
-    <li>Updated to groovy-all-2.4.14 (from groovy-all-2.4.13)</li>
-    <li>Updated to asm-6.1 (from 6.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -150,13 +131,12 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>62114</bug>HTTP(S) Test Script Recorder : Client certificate authentication uses the first SSLManager created. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>61058</bug>HTTP Request : Deflate triggers "Unexpected end of ZLIB input stream". Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63298</bug>HTTP Requests with encoded URLs are being sent in decoded format</li>
+    <li><bug>63364</bug>When setting <code>subresults.disable_renaming=true</code>, sub results are still renamed using their parent SampleLabel while they shouldn't. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
-    <li><bug>58807</bug><code>https.use.cached.ssl.context=false</code> is broken</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -165,13 +145,14 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>Listeners</h3>
 <ul>
-  <li><bug>62097</bug>Update JTable in Aggregate Report only when new data has arrived. That way selections of rows will be kept longer around.</li>
-  <li><bug>62203</bug>Influxdb BackendListener client: store user tags to annotation and internal transaction. Contributed by Sergey Batalin (sergey_batalin at mail.ru)</li>
+    <li><bug>63319</bug><code>ArrayIndexOutOfBoundsException</code> in Aggregate Graph when selecting 90&nbsp;% or 95&nbsp;% columns</li>
+    <li><bug>63423</bug>Selection of table rows in Aggregate Graph gets lost too often</li>
+    <li><bug>63347</bug>View result tree: The search field is so small that even a single character is not visible on Windows 7</li>
+    <li><bug>63433</bug>ListenerNotifier: Detected problem in Listener NullPointerException if filename is null. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>61664</bug>HTTP Authorization Manager : Digest works only with legacy RFC 2069 , RFC 2617 is not implemented. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -188,17 +169,10 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 
 <h3>Documentation</h3>
 <ul>
-    <li><bug>62211</bug>Fix HTTP Request Server Documentation. Contributed by orimarko at gmail.com</li>
 </ul>
 
 <h3>General</h3>
 <ul>
-  <li><bug>62107</bug>JMeter fails to start under Windows when <code>JM_LAUNCH</code> contains spaces</li>
-  <li><bug>62110</bug>A broken junit class (due to missing dependency) breaks JMeter menus. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-  <li><pr>377</pr>Small fix of the docs. Contributed by Peter Doornbosch (peter.doornbosch at luminis.eu)</li>
-  <li><bug>62124</bug>Recording templates : Add more exclusions and use Transaction Name by default</li>
-  <li><bug>62127</bug>Store filename as String instead of File in FileEditor. This will prevent conversion of filenames from unix style path separators to Windows style when used for example in CSV Data Set Config.</li>
-  <li><bug>56150</bug>Keep the index right, when scrolling through the menu items.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -207,28 +181,19 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-    <li>Graham Russell (graham at ham1.co.uk)</li>
-    <li>orimarko at gmail.com</li>
-    <li>Davide Angelocola (davide.angelocola at fisglobal.com)</li>
-    <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
-    <li>Olaf Flebbe (oflebbe at apache.org)</li>
-    <li>Peter Doornbosch (peter.doornbosch at luminis.eu)</li>
-    <li>logox01 (logox01 at gmx.at)</li>
-    <li>Sergey Batalin (sergey_batalin at mail.ru)</li>
-    <li><a href="https://www.xmeter.net">XMeter</a></li>
+  <li>Clifford Harms (clifford.harms at gmail.com)</li>
+  <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
+  <li>Xia Li</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
+<ul>
+</ul>
 <p>
 Apologies if we have omitted anyone else.
 </p>
  <!--  =================== Known bugs or issues related to JAVA Bugs =================== -->
 
 <ch_section>Known problems and workarounds</ch_section>
-<ul>
-<li>View Results Tree may freeze rendering large response particularly if this response has no spaces, see <bugzilla>60816</bugzilla>.
-This is due to an identified Java Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8172336">UI stuck when calling <code>JEditorPane.setText()</code> or <code>JTextArea.setText()</code> with long text without space</a>.
-</li>
-</ul>
 <ul>
 <li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</li>
