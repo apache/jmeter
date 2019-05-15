@@ -29,19 +29,19 @@ import org.w3c.dom.Node;
  * jmeter property xpath.namespace.config
  */
 public class PropertiesBasedPrefixResolverForXpath2 extends PrefixResolverDefault {
-    private static final Map<String, String> NAMESPACE_MAP = new HashMap<>();
+    private Map<String, String> namespace_map = new HashMap<>();
 
     /**
      * @param xpathExpressionContext Node
      */
     public PropertiesBasedPrefixResolverForXpath2(Node xpathExpressionContext, String namespace) {
         super(xpathExpressionContext);
-        NAMESPACE_MAP.clear();
+        namespace_map.clear();
         namespace = namespace.trim();
         if (!namespace.isEmpty()) {
             for (String n : namespace.split("\\s+")) {
                 String[] keyandvalue = n.trim().split("=");
-                NAMESPACE_MAP.put(keyandvalue[0], keyandvalue[1]);
+                namespace_map.put(keyandvalue[0], keyandvalue[1]);
             }
         }
     }
@@ -55,7 +55,7 @@ public class PropertiesBasedPrefixResolverForXpath2 extends PrefixResolverDefaul
      */
     @Override
     public String getNamespaceForPrefix(String prefix, Node namespaceContext) {
-        String namespace = NAMESPACE_MAP.get(prefix);
+        String namespace = namespace_map.get(prefix);
         if (namespace == null) {
             return super.getNamespaceForPrefix(prefix, namespaceContext);
         } else {
