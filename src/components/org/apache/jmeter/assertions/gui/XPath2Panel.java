@@ -77,17 +77,18 @@ public class XPath2Panel extends JPanel {
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or
                           // final)
         setLayout(new BorderLayout());
-        Box topBox = Box.createVerticalBox();
+        Box topBox = Box.createVerticalBox();   
+        Box box = Box.createHorizontalBox();
+        box.add(getNegatedCheckBox());
+        box.add(Box.createHorizontalGlue());
+        box.add(getCheckXPathButton());
+        box.add(Box.createHorizontalGlue());
+        box.add(Box.createHorizontalGlue());
+        box.add(Box.createHorizontalGlue());
+        topBox.add(box);       
         topBox.add(makeParameterPanel());
         add(topBox, BorderLayout.NORTH);
-        Box hbox = Box.createHorizontalBox();
-        hbox.add(Box.createHorizontalGlue());
-        hbox.add(getNegatedCheckBox());
-        hbox.add(Box.createHorizontalGlue());
-        hbox.add(getCheckXPathButton());
-        hbox.add(Box.createHorizontalGlue());
         add(JTextScrollPane.getInstance(getXPathField()), BorderLayout.CENTER);
-        add(hbox, BorderLayout.SOUTH);
         setDefaultValues();
     }
     private JPanel makeParameterPanel() {
@@ -173,7 +174,7 @@ public class XPath2Panel extends JPanel {
      */
     public JCheckBox getNegatedCheckBox() {
         if (negated == null) {
-            negated = new JCheckBox(JMeterUtils.getResString("xpath_assertion_negate"), false); //$NON-NLS-1$
+            negated = new JCheckBox(JMeterUtils.getResString("xpath2_assertion_negate"), false); //$NON-NLS-1$
         }
 
         return negated;
@@ -186,7 +187,7 @@ public class XPath2Panel extends JPanel {
      */
     public JButton getCheckXPathButton() {
         if (checkXPath == null) {
-            checkXPath = new JButton(JMeterUtils.getResString("xpath_assertion_button")); //$NON-NLS-1$
+            checkXPath = new JButton(JMeterUtils.getResString("xpath2_assertion_button")); //$NON-NLS-1$
             checkXPath.addActionListener(e -> validXPath(xpath.getText(), true, this.getNamespaces()));
         }
         return checkXPath;
@@ -256,15 +257,6 @@ public class XPath2Panel extends JPanel {
         return success;
 
     }
-    private static final Map<String, String> NAMESPACE_MAP = new HashMap<>();
-
-    public void valid(String namespaces) {
-        String[]lines = namespaces.split(System.lineSeparator());
-        for (String s : lines) {
-            String[] keyAndValue = s.split("=");
-            NAMESPACE_MAP.put(keyAndValue[0], keyAndValue[1]);
-            System.out.println(keyAndValue[0]+"  "+keyAndValue[1]);
-        }
-    }
+  
     
 }

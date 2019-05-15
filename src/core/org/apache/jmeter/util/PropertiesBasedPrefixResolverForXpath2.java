@@ -36,8 +36,9 @@ public class PropertiesBasedPrefixResolverForXpath2 extends PrefixResolverDefaul
      */
     public PropertiesBasedPrefixResolverForXpath2(Node xpathExpressionContext, String namespace) {
         super(xpathExpressionContext);
+        NAMESPACE_MAP.clear();
         namespace = namespace.trim();
-        if (namespace!=null) {
+        if (!namespace.isEmpty()) {
             for (String n : namespace.split("\\s+")) {
                 String[] keyandvalue = n.trim().split("=");
                 NAMESPACE_MAP.put(keyandvalue[0], keyandvalue[1]);

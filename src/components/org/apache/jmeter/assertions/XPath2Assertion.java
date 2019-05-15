@@ -67,7 +67,7 @@ public class XPath2Assertion extends AbstractScopedAssertion implements Serializ
         }
         try {
             XPathUtil.computeAssertionResultUsingSaxon(result, responseData, getXPathString(),
-                    getNamespaces());
+                    getNamespaces(),isNegated());
         } catch (SaxonApiException e) {
             result.setError(true);
             result.setFailureMessage("SaxonApiException occured computing assertion with XPath:" + getXPathString() + ", error:" + e.getMessage());
