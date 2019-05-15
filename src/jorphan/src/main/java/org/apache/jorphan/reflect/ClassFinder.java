@@ -24,15 +24,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -187,22 +186,19 @@ public final class ClassFinder {
     }
 
     // For each directory in the search path, add all the jars found there
-    private static String[] addJarsInPath(String[] paths) {
-        Set<String> fullList = new HashSet<>();
+    private static Set<File> addJarsInPath(String[] paths) {
+        Set<File> fullList = new HashSet<>();
         for (final String path : paths) {
-            fullList.add(path); // Keep the unexpanded path
             File dir = new File(path);
+            fullList.add(dir);
             if (dir.exists() && dir.isDirectory()) {
-                String[] jars = dir.list((f, name) -> {
-                    File fileInDirectory = new File(f, name);
-                    return fileInDirectory.isFile() && name.endsWith(DOT_JAR);
-                });
+                File[] jars = dir.listFiles(f -> f.isFile() && f.getName().endsWith(DOT_JAR));
                 if (jars != null) {
                     Collections.addAll(fullList, jars);
                 }
             }
         }
-        return fullList.toArray(new String[fullList.size()]);
+        return fullList;
     }
 
     /**
@@ -322,21 +318,14 @@ public final class ClassFinder {
         }
 
         // Find all jars in the search path
-        List<String> strPathsOrJars = Arrays.stream(addJarsInPath(searchPathsOrJars))
-                .map(ClassFinder::fixPathEntry)
-                .collect(Collectors.toList());
+        Collection<File> strPathsOrJars = addJarsInPath(searchPathsOrJars);
 
-        // Now eliminate any classpath entries that do not "match" the search
-        List<String> listPaths = getClasspathMatches(strPathsOrJars);
-        if (log.isDebugEnabled()) {
-            for (String path : listPaths) {
-                log.debug("listPaths : {}", path);
-            }
-        }
+        // Some of the jars might be out of classpath, however java.class.path does not represent
+        // the actual ClassLoader in use. For instance, NewDriver builds its own classpath
 
         Set<String> listClasses = new TreeSet<>();
         // first get all the classes
-        for (String path : listPaths) {
+        for (File path : strPathsOrJars) {
             findClassesInOnePath(path, listClasses, filter);
         }
 
@@ -348,50 +337,6 @@ public final class ClassFinder {
         }
 
         return new ArrayList<>(listClasses);
-    }
-
-    /**
-     * Returns the classpath entries that match the search list of jars and paths
-     *
-     * @param strPathsOrJars can contain {@code null} element but must not be {@code null}
-     * @return List of paths (jars or folders) that ends with one of the rows of strPathsOrJars
-     */
-    private static List<String> getClasspathMatches(List<String> strPathsOrJars) {
-        final String javaClassPath = System.getProperty("java.class.path"); // $NON-NLS-1$
-        if (log.isDebugEnabled()) {
-            log.debug("Classpath = {}", javaClassPath);
-            for (int i = 0; i < strPathsOrJars.size(); i++) {
-                log.debug("strPathsOrJars[{}] : {}", i, strPathsOrJars.get(i));
-            }
-        }
-
-        // find all jar files or paths that end with strPathOrJar
-        List<String> listPaths = new ArrayList<>();
-        String classpathElement;
-        StringTokenizer classpathElements =
-                new StringTokenizer(javaClassPath, File.pathSeparator);
-
-        while (classpathElements.hasMoreTokens()) {
-            classpathElement = fixPathEntry(classpathElements.nextToken());
-            if (classpathElement == null) {
-                continue;
-            }
-            boolean found = false;
-            for (String currentStrPathOrJar : strPathsOrJars) {
-                log.debug("Testing if {} ends with {}", classpathElement, currentStrPathOrJar);
-                if (currentStrPathOrJar != null && classpathElement.endsWith(currentStrPathOrJar)) {
-                    found = true;
-                    log.debug("Adding {}", classpathElement);
-                    listPaths.add(classpathElement);
-                    break;// no need to look further
-                }
-            }
-            if (!found) {
-                log.debug("Classpath element {} does not match any search path {}", classpathElement,
-                        strPathsOrJars);
-            }
-        }
-        return listPaths;
     }
 
     /**
@@ -441,10 +386,9 @@ public final class ClassFinder {
     }
 
 
-    private static void findClassesInOnePath(String strPath, Set<String> listClasses, ClassFilter filter) throws IOException {
-        File file = new File(strPath);
+    private static void findClassesInOnePath(File file, Set<String> listClasses, ClassFilter filter) throws IOException {
         if (file.isDirectory()) {
-            findClassesInPathsDir(strPath, file, listClasses, filter);
+            findClassesInPathsDir(file.getAbsolutePath(), file, listClasses, filter);
         } else if (file.exists()) {
             try (ZipFile zipFile = new ZipFile(file)) {
                 Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -456,25 +400,24 @@ public final class ClassFinder {
                     }
                 }
             } catch (IOException e) {
-                log.warn("Can not open the jar {}, message: {}", strPath, e.getLocalizedMessage(),e);
+                log.warn("Can not open the jar {}, message: {}", file.getAbsolutePath(), e.getLocalizedMessage(), e);
             }
         }
     }
 
 
     private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses, ClassFilter filter) throws IOException {
-        String[] list = dir.list();
+        File[] list = dir.listFiles();
         if (list == null) {
             log.warn("{} is not a folder", dir.getAbsolutePath());
             return;
         }
 
-        for (String filePath : list) {
-            File file = new File(dir, filePath);
+        for (File file : list) {
             if (file.isDirectory()) {
                 // Recursive call
                 findClassesInPathsDir(strPathElement, file, listClasses, filter);
-            } else if (filePath.endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
+            } else if (file.getPath().endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
                 final String path = file.getPath();
                 String className = path.substring(strPathElement.length() + 1,
                         path.lastIndexOf('.')) // $NON-NLS-1$
