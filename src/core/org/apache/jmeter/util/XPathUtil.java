@@ -648,11 +648,10 @@ public class XPathUtil {
                 }
                 return;
             case XObject.CLASS_BOOLEAN:
-                boolean resultOfEval = xObject.bool(); 
-                result.setFailure(isNegated ? resultOfEval : !resultOfEval);
-                result.setFailureMessage(isNegated ? 
-                        "Nodes Matched for " + xPathExpression
-                        : "No Nodes Matched for " + xPathExpression);
+                if (!xObject.bool()){
+                    result.setFailure(!isNegated);
+                    result.setFailureMessage("No Nodes Matched " + xPathExpression);
+                }
                 return;
             default:
                 result.setFailure(true);
@@ -673,7 +672,7 @@ public class XPathUtil {
   
     /***
      * 
-     * @param result     The result of xpath2 assertion
+     * @param result The result of xpath2 assertion
      * @param xmlFile
      * @param xPathQuery
      * @param namespaces
@@ -681,7 +680,7 @@ public class XPathUtil {
      * @throws FactoryConfigurationError
      */
     public static void computeAssertionResultUsingSaxon(AssertionResult result, String xmlFile, String xPathQuery,
-            String namespaces, Boolean isNegated) throws SaxonApiException, FactoryConfigurationError {
+            String namespaces) throws SaxonApiException, FactoryConfigurationError {
         // generating the cache key
         final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
         // check the cache
@@ -706,23 +705,24 @@ public class XPathUtil {
                     selector = xPathExecutable.load();
                     selector.setContextItem(xdmNode);
                     XdmValue nodes = selector.evaluate();
-                    boolean resultOfEval = true;
                     int length = nodes.size();
                     // In case we need to extract everything
                     if (length == 0) {
-                        resultOfEval = false;
-                    }
-                    result.setFailure(isNegated ? resultOfEval : !resultOfEval);
-                    result.setFailureMessage(
-                            isNegated ? "Nodes Matched for " + xPathQuery : "No Nodes Matched for " + xPathQuery);
+                        result.setFailure(true);
+                        result.setFailureMessage(xPathQuery);
+                    } 
                 } finally {
                     if (selector != null) {
                         try {
                             selector.getUnderlyingXPathContext().setContextItem(null);
                         } catch (Exception e) { // NOSONAR Ignored on purpose
                             result.setError(true);
-                            result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage())
-                                    .append(" for:").append(xPathQuery).toString());
+                            result.setFailureMessage(
+                                    new StringBuilder("Exception: ")
+                                    .append(e.getMessage())
+                                    .append(" for:")
+                                    .append(xPathQuery)
+                                    .toString());
                         }
                     }
                 }
