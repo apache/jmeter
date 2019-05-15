@@ -61,6 +61,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     
     private static final String OK_CODE = Integer.toString(HttpURLConnection.HTTP_OK);
     private static final String OK_MSG = "OK"; // $NON-NLS-1$
+    private static final String INVALID_CALL_SEQUENCE_MSG = "Invalid call sequence"; // $NON-NLS-1$
 
 
     // Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
@@ -137,15 +138,17 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private static final long NANOTHREAD_SLEEP = 
             JMeterUtils.getPropDefault("sampleresult.nanoThreadSleep", 5000);  // $NON-NLS-1$
 
+    private static final String NULL_FILENAME = "NULL";
+
     static {
         if (START_TIMESTAMP) {
             log.info("Note: Sample TimeStamps are START times");
         } else {
             log.info("Note: Sample TimeStamps are END times");
         }
-        log.info("sampleresult.default.encoding is set to " + DEFAULT_ENCODING);
-        log.info("sampleresult.useNanoTime="+USE_NANO_TIME);
-        log.info("sampleresult.nanoThreadSleep="+NANOTHREAD_SLEEP);
+        log.info("sampleresult.default.encoding is set to {}", DEFAULT_ENCODING);
+        log.info("sampleresult.useNanoTime={}", USE_NANO_TIME);
+        log.info("sampleresult.nanoThreadSleep={}", NANOTHREAD_SLEEP);
 
         if (USE_NANO_TIME && NANOTHREAD_SLEEP > 0) {
             // Make sure we start with a reasonable value
@@ -455,7 +458,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public long currentTimeInMillis() {
         if (useNanoTime){
             if (nanoTimeOffset == Long.MIN_VALUE){
-                throw new RuntimeException("Invalid call; nanoTimeOffset has not been set");
+                throw new IllegalStateException("Invalid call; nanoTimeOffset has not been set");
             }
             return sampleNsClockInMs() + nanoTimeOffset;            
         }
@@ -488,7 +491,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void setStampAndTime(long stamp, long elapsed) {
         if (startTime != 0 || endTime != 0){
-            throw new RuntimeException("Calling setStampAndTime() after start/end times have been set");
+            throw new IllegalStateException("Calling setStampAndTime() after start/end times have been set");
         }
         stampAndTime(stamp, elapsed);
     }
@@ -500,7 +503,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return <code>true</code> if the result was previously marked
      */
     public boolean markFile(String filename) {
-        return !files.add(filename);
+        return !files.add(filename != null ? filename : NULL_FILENAME);
     }
 
     public String getResponseCode() {
@@ -642,10 +645,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         }
         String tn = getThreadName();
         if (tn.length()==0) {
-            tn=Thread.currentThread().getName();//TODO do this more efficiently
+            tn=Thread.currentThread().getName();
             this.setThreadName(tn);
         }
-        subResult.setThreadName(tn); // TODO is this really necessary?
+        subResult.setThreadName(tn);
 
         // Extend the time to the end of the added sample
         setEndTime(Math.max(getEndTime(), subResult.getEndTime() + nanoTimeOffset - subResult.nanoTimeOffset)); // Bug 51855
@@ -1100,8 +1103,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             timeStamp = endTime;
         }
         if (startTime == 0) {
-            log.error("setEndTime must be called after setStartTime", new Throwable("Invalid call sequence"));
-            // TODO should this throw an error?
+            log.error("setEndTime must be called after setStartTime", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         } else {
             elapsedTime = endTime - startTime - idleTime;
         }
@@ -1129,7 +1131,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         if (startTime == 0) {
             setStartTime(currentTimeInMillis());
         } else {
-            log.error("sampleStart called twice", new Throwable("Invalid call sequence"));
+            log.error("sampleStart called twice", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         }
     }
 
@@ -1141,7 +1143,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         if (endTime == 0) {
             setEndTime(currentTimeInMillis());
         } else {
-            log.error("sampleEnd called twice", new Throwable("Invalid call sequence"));
+            log.error("sampleEnd called twice", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         }
     }
 
@@ -1151,7 +1153,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void samplePause() {
         if (pauseTime != 0) {
-            log.error("samplePause called twice", new Throwable("Invalid call sequence"));
+            log.error("samplePause called twice", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         }
         pauseTime = currentTimeInMillis();
     }
@@ -1162,7 +1164,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void sampleResume() {
         if (pauseTime == 0) {
-            log.error("sampleResume without samplePause", new Throwable("Invalid call sequence"));
+            log.error("sampleResume without samplePause", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         }
         idleTime += currentTimeInMillis() - pauseTime;
         pauseTime = 0;
