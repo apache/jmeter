@@ -502,11 +502,7 @@ under the License.
       <dependency>
         <groupId>org.hdrhistogram</groupId>
         <artifactId>HdrHistogram</artifactId>
-<<<<<<< HEAD
-        <version>${hdrhistogram.version}</version>
-=======
         <version>${HdrHistogram.version}</version>
->>>>>>> hdrhistogram2
       </dependency>
     </dependencies>
 
