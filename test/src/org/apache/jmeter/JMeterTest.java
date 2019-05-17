@@ -52,7 +52,7 @@ public class JMeterTest extends JMeterTestCase {
         };
         System.setSecurityManager(securityManager);
     }
-
+    @Test
     public void testFailureWhenJmxDoesntExist() {
         JMeter jmeter = new JMeter();
         String command = "-n -t testPlan.jmx";
@@ -63,6 +63,7 @@ public class JMeterTest extends JMeterTestCase {
             assertEquals("The jmx file does not exist, the system should exit with System.exit(1)", ex.getMessage(),
                     SYSTEMEXIT1);
         }
+   
     }
 
     @Test
