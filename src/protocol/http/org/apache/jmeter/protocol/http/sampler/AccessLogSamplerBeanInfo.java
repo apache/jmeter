@@ -24,6 +24,7 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
@@ -37,6 +38,16 @@ import org.slf4j.LoggerFactory;
 
 public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
     private static final Logger log = LoggerFactory.getLogger(AccessLogSamplerBeanInfo.class);
+    private static final List<String> LOG_PARSER_CLASSES = logParsers();
+
+    private static List<String> logParsers() {
+        try {
+            return ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { LogParser.class });
+        } catch (IOException e) {
+            log.warn("Could not find log parsers.", e);
+            return Collections.emptyList();
+        }
+    }
 
     public AccessLogSamplerBeanInfo() {
         super(AccessLogSampler.class);
@@ -58,9 +69,9 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
             p.setValue(DEFAULT, AccessLogSampler.DEFAULT_CLASS);
             p.setValue(NOT_OTHER, Boolean.TRUE);
             p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-            final List<String> logParserClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { LogParser.class });
-            log.debug("found parsers: {}", logParserClasses);
-            p.setValue(TAGS, logParserClasses.toArray(new String[logParserClasses.size()]));
+            
+            log.debug("found parsers: {}", LOG_PARSER_CLASSES);
+            p.setValue(TAGS, LOG_PARSER_CLASSES.toArray(new String[LOG_PARSER_CLASSES.size()]));
 
             p = property("filterClassName"); // $NON-NLS-1$
             p.setValue(NOT_UNDEFINED, Boolean.FALSE);
