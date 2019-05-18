@@ -56,7 +56,7 @@ import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RendererUtils;
 
 /**
- * Aggregrate Table-Based Reporting Visualizer for JMeter.
+ * Aggregate Table-Based Reporting Visualizer for JMeter.
  */
 @GUIMenuSortOrder(3)
 public class StatVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
