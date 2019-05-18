@@ -25,7 +25,7 @@ import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -214,7 +214,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
                 return;
             }
             try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile());
-                    OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){
+                    OutputStreamWriter writer = new OutputStreamWriter(fo, StandardCharsets.UTF_8)){
                 CSVSaveService.saveCSVStats(
                         StatGraphVisualizer.getAllTableData(model, StatGraphVisualizer.getFormatters()), writer,
                         saveHeaders.isSelected()
