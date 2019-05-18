@@ -75,6 +75,7 @@ to view the last major behaviors with the version 5.1.1.
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
+    <li>HTTP(S) Test Script Recorder now appends number at end of names, while previously it added it at beginning. See <bugzilla>63450</bugzilla></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -133,6 +134,7 @@ to view the last major behaviors with the version 5.1.1.
 <ul>
     <li><bug>63298</bug>HTTP Requests with encoded URLs are being sent in decoded format</li>
     <li><bug>63364</bug>When setting <code>subresults.disable_renaming=true</code>, sub results are still renamed using their parent SampleLabel while they shouldn't. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63450</bug>HTTP(S) Test Script Recorder: Put number at end instead of beginning</li>
 </ul>
 
 <h3>Other Samplers</h3>
