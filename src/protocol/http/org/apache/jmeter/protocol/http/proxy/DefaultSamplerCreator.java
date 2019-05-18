@@ -286,22 +286,22 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         String prefix = request.getPrefix();
         int httpSampleNameMode = request.getHttpSampleNameMode();
         if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
-            if(!StringUtils.isEmpty(prefix)) {
-                if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_PREFIX) {
-                sampler.setName(prefix + incrementRequestNumberAndGet() + " " + sampler.getPath());
-                } else if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_COMPLETE) {
-                    sampler.setName(incrementRequestNumberAndGet() + " " + prefix);
+            if(StringUtils.isNotEmpty(prefix)) {
+                if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
+                    sampler.setName(prefix + sampler.getPath()+ "-" + incrementRequestNumberAndGet());
+                } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+                    sampler.setName(prefix + "-" + incrementRequestNumberAndGet());
                 } else {
                     log.debug("Sampler name naming mode not recognized");
                 }
             } else {
-                sampler.setName(incrementRequestNumberAndGet() + " " + sampler.getPath());
+                sampler.setName(sampler.getPath()+"-"+incrementRequestNumberAndGet());
             }
         } else {
-            if(!StringUtils.isEmpty(prefix)) {
-                if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_PREFIX) {
-                    sampler.setName(prefix+sampler.getPath());
-                } else if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+            if(StringUtils.isNotEmpty(prefix)) {
+                if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
+                    sampler.setName(prefix + sampler.getPath());
+                } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
                     sampler.setName(prefix);
                 } else {
                     log.debug("Sampler name naming mode not recognized");
