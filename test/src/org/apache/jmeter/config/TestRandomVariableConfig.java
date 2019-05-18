@@ -38,7 +38,7 @@ public class TestRandomVariableConfig extends JMeterTestCase {
     private static final String RANDOM_VAR_NAME = "randomVar";
 
     private JMeterVariables threadVars;
-    
+
     private static final String MIN_VALUE = "0";
     private static final String MAX_VALUE = "10";
     RandomVariableConfig config = new RandomVariableConfig();
@@ -47,16 +47,15 @@ public class TestRandomVariableConfig extends JMeterTestCase {
     public void setUp(){
         JMeterContext jmcx = JMeterContextService.getContext();
         jmcx.setVariables(new JMeterVariables());
-        threadVars = jmcx.getVariables();        
+        threadVars = jmcx.getVariables();
         config.setRandomSeed("abcd");
         config.setVariableName(RANDOM_VAR_NAME);
-
     }
 
     @After
     public void tearDown() throws IOException{
     }
-    
+
     @Test
     public void testRandom() throws Exception {
         config.setMinimumValue(MIN_VALUE);
@@ -66,11 +65,11 @@ public class TestRandomVariableConfig extends JMeterTestCase {
             String value = threadVars.get(RANDOM_VAR_NAME);
             Assert.assertNotNull(threadVars.get(RANDOM_VAR_NAME));
             int numericValue = Integer.parseInt(value);
-            Assert.assertTrue("value:"+numericValue+" is not in range ["+MIN_VALUE+","+MAX_VALUE+"]", 
-                    numericValue >=0 && numericValue <=10);            
+            Assert.assertTrue("value:" + numericValue + " is not in range [" + MIN_VALUE + "," + MAX_VALUE + "]",
+                    numericValue >= 0 && numericValue <= 10);
         }
     }
-    
+
     @Test
     public void testRandomWithFormat() throws Exception {
         config.setMinimumValue(MAX_VALUE);
@@ -82,7 +81,7 @@ public class TestRandomVariableConfig extends JMeterTestCase {
         Assert.assertEquals("010.00", value);
 
     }
-    
+
     @Test
     public void testInvalidRange() throws Exception {
         config.setMinimumValue(MAX_VALUE);
