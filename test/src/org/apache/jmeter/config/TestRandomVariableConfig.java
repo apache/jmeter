@@ -35,6 +35,8 @@ import org.junit.Test;
 
 public class TestRandomVariableConfig extends JMeterTestCase {
 
+    private static final String RANDOM_VAR_NAME = "randomVar";
+
     private JMeterVariables threadVars;
     
     private static final String MIN_VALUE = "0";
@@ -47,7 +49,7 @@ public class TestRandomVariableConfig extends JMeterTestCase {
         jmcx.setVariables(new JMeterVariables());
         threadVars = jmcx.getVariables();        
         config.setRandomSeed("abcd");
-        config.setVariableName("randomVar");
+        config.setVariableName(RANDOM_VAR_NAME);
 
     }
 
@@ -61,8 +63,8 @@ public class TestRandomVariableConfig extends JMeterTestCase {
         config.setMaximumValue(MAX_VALUE);
         for (int i = 0; i < 100;i++) {
             config.iterationStart(null);
-            String value = threadVars.get("randomVar");
-            Assert.assertNotNull(threadVars.get("randomVar"));
+            String value = threadVars.get(RANDOM_VAR_NAME);
+            Assert.assertNotNull(threadVars.get(RANDOM_VAR_NAME));
             int numericValue = Integer.parseInt(value);
             Assert.assertTrue("value:"+numericValue+" is not in range ["+MIN_VALUE+","+MAX_VALUE+"]", 
                     numericValue >=0 && numericValue <=10);            
@@ -75,8 +77,8 @@ public class TestRandomVariableConfig extends JMeterTestCase {
         config.setMaximumValue(MAX_VALUE);
         config.setOutputFormat("000.00");
         config.iterationStart(null);
-        String value = threadVars.get("randomVar");
-        Assert.assertNotNull(threadVars.get("randomVar"));
+        String value = threadVars.get(RANDOM_VAR_NAME);
+        Assert.assertNotNull(threadVars.get(RANDOM_VAR_NAME));
         Assert.assertEquals("010.00", value);
 
     }
@@ -86,7 +88,7 @@ public class TestRandomVariableConfig extends JMeterTestCase {
         config.setMinimumValue(MAX_VALUE);
         config.setMaximumValue(MIN_VALUE);
         config.iterationStart(null);
-        Assert.assertNull(threadVars.get("randomVar"));
+        Assert.assertNull(threadVars.get(RANDOM_VAR_NAME));
     }
 
 }
