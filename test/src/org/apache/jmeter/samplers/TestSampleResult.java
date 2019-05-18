@@ -278,10 +278,10 @@ public class TestSampleResult implements JMeterSerialTest {
              */
 
             long diff = parentElapsedTotal - sumSamplesTimes;
-            long maxDiff = nanoTime ? 3 : 16; // TimeMillis has granularity of 10-20
+            long maxDiff = nanoTime ? 10 : 16; // TimeMillis has granularity of 10-20
             if (diff < 0 || diff > maxDiff) {
                 fail("ParentElapsed: " + parentElapsedTotal + " - " + " sum(samples): " + sumSamplesTimes
-                        + " = " + diff + " not in [0," + maxDiff + "]; nanotime=" + nanoTime);
+                        + " => " + diff + " not in [0," + maxDiff + "]; nanotime=" + nanoTime);
             }
 
              // The overall time to run the test must be no less than,
@@ -290,7 +290,7 @@ public class TestSampleResult implements JMeterSerialTest {
             diff = overallTime - parentElapsedTotal;
             if (diff < 0 || diff > maxDiff) {
                 fail("TestElapsed: " + overallTime + " - " + " ParentElapsed: " + parentElapsedTotal
-                        + " = " + diff + " not in [0," + maxDiff + "]; nanotime="+nanoTime);
+                        + " => " + diff + " not in [0," + maxDiff + "]; nanotime="+nanoTime);
             }
 
             // Check that calculator gets the correct statistics from the sample
