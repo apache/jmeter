@@ -61,16 +61,13 @@ import org.apache.jorphan.gui.RendererUtils;
 @GUIMenuSortOrder(3)
 public class StatVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
 
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
     private static final String SAVE_HEADERS = "saveHeaders"; //$NON-NLS-1$
     private static final String TOTAL_ROW_LABEL = JMeterUtils
             .getResString("aggregate_report_total_label"); //$NON-NLS-1$
     private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500); // $NON-NLS-1$
-
-    private JTable myJTable;
-    private JScrollPane myScrollPane;
 
     private final JButton saveTable = new JButton(
             JMeterUtils.getResString("aggregate_graph_save_table")); //$NON-NLS-1$
@@ -165,13 +162,13 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
         mainPanel.add(makeTitlePanel());
 
-        myJTable = new JTable(model);
+        JTable myJTable = new JTable(model);
         myJTable.setRowSorter(new ObjectTableSorter(model).fixLastRow());
         JMeterUtils.applyHiDPI(myJTable);
         HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable, StatGraphVisualizer.getColumnsMsgParameters());
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, StatGraphVisualizer.getRenderers());
-        myScrollPane = new JScrollPane(myJTable);
+        JScrollPane myScrollPane = new JScrollPane(myJTable);
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(myScrollPane, BorderLayout.CENTER);
         saveTable.addActionListener(this);
