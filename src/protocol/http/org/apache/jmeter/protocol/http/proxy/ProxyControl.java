@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.UnrecoverableKeyException;
@@ -163,6 +164,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final String PREFIX_HTTP_SAMPLER_NAME = "ProxyControlGui.proxy_prefix_http_sampler_name"; // $NON-NLS-1$
     
     private static final String PROXY_PAUSE_HTTP_SAMPLER = "ProxyControlGui.proxy_pause_http_sampler"; // $NON-NLS-1$
+    
+    private static final String DEFAULT_ENCODING_PROPERTY = "ProxyControlGui.default_encoding"; // $NON-NLS-1$
 
     private static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
 
@@ -404,6 +407,13 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     public void setHTTPSampleNamingMode(int httpNamingMode) {
         setProperty(new IntegerProperty(HTTP_SAMPLER_NAMING_MODE, httpNamingMode));
+    }
+    
+    public String getDefaultEncoding() {
+        return getPropertyAsString(DEFAULT_ENCODING_PROPERTY, StandardCharsets.UTF_8.name());
+    }
+    public void setDefaultEncoding(String defaultEncoding) {
+        setProperty(DEFAULT_ENCODING_PROPERTY, defaultEncoding);
     }
     
     public void setPrefixHTTPSampleName(String prefixHTTPSampleName) {

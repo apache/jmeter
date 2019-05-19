@@ -135,6 +135,7 @@ to view the last major behaviors with the version 5.1.1.
 <ul>
     <li><bug>63298</bug>HTTP Requests with encoded URLs are being sent in decoded format</li>
     <li><bug>63364</bug>When setting <code>subresults.disable_renaming=true</code>, sub results are still renamed using their parent SampleLabel while they shouldn't. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63129</bug>JMeter can not identify encoding during first time page submission</li>
 </ul>
 
 <h3>Other Samplers</h3>

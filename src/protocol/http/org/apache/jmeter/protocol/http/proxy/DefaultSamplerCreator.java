@@ -386,21 +386,23 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         }
         else {
             // Check if we know the encoding of the page
-            if (pageEncodings != null) {
-                synchronized (pageEncodings) {
-                    contentEncoding = pageEncodings.get(urlWithoutQuery);
-                }
+            synchronized (pageEncodings) {
+                contentEncoding = pageEncodings.get(urlWithoutQuery);
+                log.debug("Computed encoding:{} for url:{}", contentEncoding, urlWithoutQuery);
             }
             // Check if we know the encoding of the form
-            if (formEncodings != null) {
-                synchronized (formEncodings) {
-                    String formEncoding = formEncodings.get(urlWithoutQuery);
-                    // Form encoding has priority over page encoding
-                    if (formEncoding != null) {
-                        contentEncoding = formEncoding;
-                    }
+            synchronized (formEncodings) {
+                String formEncoding = formEncodings.get(urlWithoutQuery);
+                // Form encoding has priority over page encoding
+                if (formEncoding != null) {
+                    contentEncoding = formEncoding;
+                    log.debug("Computed encoding:{} for url:{}", contentEncoding, urlWithoutQuery);
                 }
             }
+        }
+        if (contentEncoding == null) {
+            contentEncoding = pageEncodings.get(DEFAULT_ENCODING_KEY);
+            log.debug("Defaulting to encoding:{} for url:{}", contentEncoding, urlWithoutQuery);
         }
         return contentEncoding;
     }
