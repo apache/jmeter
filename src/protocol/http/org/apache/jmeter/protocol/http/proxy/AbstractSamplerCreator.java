@@ -38,7 +38,8 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
 
     protected static final String HTTP = "http"; // $NON-NLS-1$
     protected static final String HTTPS = "https"; // $NON-NLS-1$
-
+    protected static final String DEFAULT_ENCODING_KEY = "__defaultEncoding"; // $NON-NLS-1$
+    
     /** FileType to be used for the temporary binary files*/
     private static final String BINARY_FILE_SUFFIX =
         JMeterUtils.getPropDefault("proxy.binary.filesuffix",// $NON-NLS-1$

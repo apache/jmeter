@@ -164,6 +164,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      * Set/clear the Download images box on the samplers (default is false)
      */
     private JCheckBox samplerDownloadImages;
+    
+    /**
+     * Default enccoding for parsing
+     */
+    private JTextField defaultEncoding;
 
     /**
      * To choose between a prefix or a transaction name
@@ -219,6 +224,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private JButton restart;
 
     private transient RecorderDialog recorderDialog;
+
+    private Component labelDefaultEncoding;
 
     //+ action names
     private static final String ACTION_STOP = "stop"; // $NON-NLS-1$
@@ -308,6 +315,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setUseKeepAlive(useKeepAlive.isSelected());
             model.setSamplerDownloadImages(samplerDownloadImages.isSelected());
             model.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
+            model.setDefaultEncoding(defaultEncoding.getText());
             model.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
             model.setProxyPauseHTTPSample(proxyPauseHTTPSample.getText());
             model.setNotifyChildSamplerListenerOfFilteredSamplers(notifyChildSamplerListenerOfFilteredSamplersCB.isSelected());
@@ -372,6 +380,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         samplerDownloadImages.setSelected(model.getSamplerDownloadImages());
         httpSampleNamingMode.setSelectedIndex(model.getHTTPSampleNamingMode());
         prefixHTTPSampleName.setText(model.getPrefixHTTPSampleName());
+        defaultEncoding.setText(model.getDefaultEncoding());
         proxyPauseHTTPSample.setText(model.getProxyPauseHTTPSample());
         notifyChildSamplerListenerOfFilteredSamplersCB.setSelected(model.getNotifyChildSamplerListenerOfFilteredSamplers());
         regexMatch.setSelected(model.getRegexMatch());
@@ -913,6 +922,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         httpSampleNamingMode.setName(HTTP_SAMPLER_NAMING_MODE);
         httpSampleNamingMode.addItemListener(this);
         
+        defaultEncoding = new JTextField(15);
+        
         prefixHTTPSampleName = new JTextField(20);
         prefixHTTPSampleName.addKeyListener(this);
         prefixHTTPSampleName.setName(PREFIX_HTTP_SAMPLER_NAME);
@@ -923,6 +934,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         proxyPauseHTTPSample.setActionCommand(ENABLE_RESTART);
         JLabel labelProxyPause = new JLabel(JMeterUtils.getResString("proxy_pause_http_sampler")); // $NON-NLS-1$
         labelProxyPause.setLabelFor(proxyPauseHTTPSample);
+        
+        JLabel labelDefaultEncoding = new JLabel(JMeterUtils.getResString("proxy_default_encoding")); // $NON-NLS-1$
+        labelDefaultEncoding.setLabelFor(defaultEncoding);
               
         GridBagLayout gridBagLayout = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
@@ -950,6 +964,16 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(proxyPauseHTTPSample, gbc.clone());
         gbc.weightx = 1;
+        
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(labelDefaultEncoding, gbc.clone());
+        gbc.gridx++;
+        gbc.weightx = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(defaultEncoding, gbc.clone());
+        gbc.weightx = 1;
+        
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.fill=GridBagConstraints.VERTICAL;
