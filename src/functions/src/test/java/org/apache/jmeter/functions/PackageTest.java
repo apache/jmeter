@@ -131,7 +131,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
     }
 
     public void BSH1() throws Exception {
-        String fn = "testfiles/BeanShellTest.bsh";
+        String fn = "src/test/resources/org/apache/jmeter/functions/testfiles/BeanShellTest.bsh";
         try {
             BSHFParams(null, null, null);
             fail("Expected InvalidVariableException");
@@ -166,7 +166,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
         assertEquals(log.getClass().getName(), bsh.execute());
 
         // Check source works
-        bsh = BSHFParams("source (\"testfiles/BeanShellTest.bsh\")", null, null);
+        bsh = BSHFParams("source (\"" + fn + "\")", null, null);
         assertEquals("9876", bsh.execute());
 
         // Check persistence
