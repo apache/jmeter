@@ -45,7 +45,8 @@ public class JMeterTest extends JMeterTestCase {
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Throwable cause = e.getCause();
             if (cause instanceof ConfigurationException) {
-                assertEquals("When the file doesn't exist, the method should throw configuration exception",cause.getMessage(), "The file doesn't exist or can't be opened");
+                assertEquals("When the file doesn't exist, the method should throw configuration exception",
+                        cause.getMessage(), "The file doesn't exist or can't be opened");
             }
         }
     }
