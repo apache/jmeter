@@ -18,55 +18,33 @@
 package org.apache.jmeter;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.AccessControlException;
-import java.security.Permission;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.junit.Before;
+import org.apache.jmeter.report.config.ConfigurationException;
 import org.junit.Test;
 
 public class JMeterTest extends JMeterTestCase {
-    /**
-     * In order to test the way of system.exit(), we need to avoid the program
-     * directly exit the whole JVM. System.exit() calls the method
-     * 'SecurityManager.checkPermission' to verify the permissions, so if an
-     * exception is thrown inside the 'checkPermission' , the logic behind
-     * System.exit will be interrupted. Then we can get the kind of system.exit() in
-     * other junit cases.
-     */
-    private static final String SYSTEMEXIT1="exitVM.1";
-    @Before
-    public void setUp() {
-        final SecurityManager securityManager = new SecurityManager() {
-            @Override
-            public void checkPermission(Permission permission) {
-                if (permission.getName().startsWith(SYSTEMEXIT1)) {
-                    throw new AccessControlException(permission.getName());
-                }
-            }
-        };
-        System.setSecurityManager(securityManager);
-    }
-
+    @Test
     public void testFailureWhenJmxDoesntExist() {
         JMeter jmeter = new JMeter();
-        String command = "-n -t testPlan.jmx";
-        String[] args = command.split(" ");
         try {
-            jmeter.start(args);
-        } catch (AccessControlException ex) {
-            assertEquals("The jmx file does not exist, the system should exit with System.exit(1)", ex.getMessage(),
-                    SYSTEMEXIT1);
+            jmeter.runNonGui("testPlan.jmx", null, false, null, false);
+            fail("Expected ConfigurationException to be thrown");
+        } catch (ConfigurationException e) {
+            assertEquals("When the file doesn't exist, this method 'runNonGui' should throw un exception",
+                    "The file doesn't exist or can't be opened", e.getMessage());
         }
     }
 
     @Test
-    public void testSuccessWhenJmxExists() throws IOException {
+    public void testSuccessWhenJmxExists() throws IOException, ConfigurationException {
         File temp = File.createTempFile("testPlan", ".jmx");
         String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT\">\n" + "  <hashTree>\n"
@@ -80,18 +58,15 @@ public class JMeterTest extends JMeterTestCase {
                 + "        <collectionProp name=\"Arguments.arguments\"/>\n" + "      </elementProp>\n"
                 + "      <stringProp name=\"TestPlan.user_define_classpath\"></stringProp></TestPlan>"
                 + "    <hashTree/></hashTree></jmeterTestPlan>";
-        try (FileWriter fw = new FileWriter(temp);
-                BufferedWriter out = new BufferedWriter(fw)) {
-                out.write(testPlan);
+        try (FileWriter fw = new FileWriter(temp); BufferedWriter out = new BufferedWriter(fw)) {
+            out.write(testPlan);
         }
         JMeter jmeter = new JMeter();
-        String command = "-n -t " + temp.getAbsolutePath();
-        String[] args = command.split(" ");
-        jmeter.start(args);
+        jmeter.runNonGui(temp.getAbsolutePath(), null, false, null, false);
     }
 
     @Test
-    public void testFailureWithMissingPlugin() throws IOException {
+    public void testFailureWithMissingPlugin() throws IOException, ConfigurationException {
         File temp = File.createTempFile("testPlan", ".jmx");
         String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT.20190506\">\n"
@@ -119,21 +94,17 @@ public class JMeterTest extends JMeterTestCase {
                 + "          <stringProp name=\"LATENCY\">${__Random(1,50)}</stringProp>\n"
                 + "          <stringProp name=\"CONNECT\">${__Random(1,5)}</stringProp>\n"
                 + "        </kg.apc.jmeter.samplers.DummySampler></hashTree></hashTree>\n"
-                + "  </hashTree></jmeterTestPlan><hashTree/></hashTree>\n"
-                + "</jmeterTestPlan>";
-        try (FileWriter fw = new FileWriter(temp);
-                BufferedWriter out = new BufferedWriter(fw)) {
-                out.write(testPlan);
+                + "  </hashTree></jmeterTestPlan><hashTree/></hashTree>\n" + "</jmeterTestPlan>";
+        try (FileWriter fw = new FileWriter(temp); BufferedWriter out = new BufferedWriter(fw)) {
+            out.write(testPlan);
         }
         JMeter jmeter = new JMeter();
-        String command = "-n -t " + temp.getAbsolutePath();
-        String[] args = command.split(" ");
         try {
-            jmeter.start(args);
-        } catch (AccessControlException ex) {
-            assertEquals(
-                    "The plugin is used for jmx file which doesn't exist, the system should exit with system.exit(1)",
-                    ex.getMessage(), SYSTEMEXIT1);
+            jmeter.runNonGui(temp.getAbsolutePath(), null, false, null, false);
+            fail("Expected ConfigurationException to be thrown");
+        } catch (ConfigurationException e) {
+            assertTrue("When the plugin doesn't exist,, this method 'runNonGui' should throw un exception",
+                    e.getMessage().contains("Error in NonGUIDriver Problem loading XML from"));
         }
     }
 }
