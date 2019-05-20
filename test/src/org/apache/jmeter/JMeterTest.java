@@ -19,41 +19,32 @@ package org.apache.jmeter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.junit.Test;
 
 public class JMeterTest extends JMeterTestCase {
-
     @Test
-    public void testFailureWhenJmxDoesntExist() throws NoSuchMethodException {
+    public void testFailureWhenJmxDoesntExist() {
         JMeter jmeter = new JMeter();
-        Class<JMeter> clazz = JMeter.class;
-        Method declaredMethod = clazz.getDeclaredMethod("runNonGui",
-                new Class[] { String.class, String.class, boolean.class, String.class, boolean.class });// NOSONAR
-        declaredMethod.setAccessible(true);
         try {
-            declaredMethod.invoke(jmeter, new Object[] { "testPlan.jmx", null, false, null, false });// NOSONAR
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof ConfigurationException) {
-                assertEquals("When the file doesn't exist, the method should throw configuration exception",
-                        cause.getMessage(), "The file doesn't exist or can't be opened");
-            }
+            jmeter.runNonGui("testPlan.jmx", null, false, null, false);
+            fail("Expected ConfigurationException to be thrown");
+        } catch (ConfigurationException e) {
+            assertEquals("When the file doesn't exist, this method 'runNonGui' should throw un exception",
+                    "The file doesn't exist or can't be opened", e.getMessage());
         }
     }
 
     @Test
-    public void testSuccessWhenJmxExists()
-            throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void testSuccessWhenJmxExists() throws IOException, ConfigurationException {
         File temp = File.createTempFile("testPlan", ".jmx");
         String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT\">\n" + "  <hashTree>\n"
@@ -71,15 +62,11 @@ public class JMeterTest extends JMeterTestCase {
             out.write(testPlan);
         }
         JMeter jmeter = new JMeter();
-        Class<JMeter> clazz = JMeter.class;
-        Method declaredMethod = clazz.getDeclaredMethod("runNonGui",
-                new Class[] { String.class, String.class, boolean.class, String.class, boolean.class });// NOSONAR
-        declaredMethod.setAccessible(true);
-        declaredMethod.invoke(jmeter, new Object[] { temp.getAbsolutePath(), null, false, null, false });// NOSONAR
+        jmeter.runNonGui(temp.getAbsolutePath(), null, false, null, false);
     }
 
     @Test
-    public void testFailureWithMissingPlugin() throws IOException, NoSuchMethodException {
+    public void testFailureWithMissingPlugin() throws IOException, ConfigurationException {
         File temp = File.createTempFile("testPlan", ".jmx");
         String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT.20190506\">\n"
@@ -112,18 +99,12 @@ public class JMeterTest extends JMeterTestCase {
             out.write(testPlan);
         }
         JMeter jmeter = new JMeter();
-        Class<JMeter> clazz = JMeter.class;
-        Method declaredMethod = clazz.getDeclaredMethod("runNonGui",
-                new Class[] { String.class, String.class, boolean.class, String.class, boolean.class });// NOSONAR
-        declaredMethod.setAccessible(true);
         try {
-            declaredMethod.invoke(jmeter, new Object[] { temp.getAbsolutePath(), null, false, null, false });// NOSONAR
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof ConfigurationException) {
-                assertTrue("When the plugin doesn't exist, the method should throw an exception",
-                        cause.getMessage().contains("Error in NonGUIDriver Problem loading XML"));
-            }
+            jmeter.runNonGui(temp.getAbsolutePath(), null, false, null, false);
+            fail("Expected ConfigurationException to be thrown");
+        } catch (ConfigurationException e) {
+            assertTrue("When the plugin doesn't exist,, this method 'runNonGui' should throw un exception",
+                    e.getMessage().contains("Error in NonGUIDriver Problem loading XML from"));
         }
     }
 }
