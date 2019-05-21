@@ -901,7 +901,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @param ct content type
      * @return true if content-type is of type binary.
      */
-    private static boolean isBinaryType(String ct){
+    public static boolean isBinaryType(String ct){
         for (String entry : NON_BINARY_TYPES){
             if (ct.startsWith(entry)){
                 return false;
