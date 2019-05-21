@@ -75,7 +75,6 @@ import net.sf.saxon.s9api.XdmValue;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-
 /**
  * This class provides a few utility methods for dealing with XML/XPath.
  */
@@ -702,6 +701,9 @@ public class XPathUtil {
            if (xPathExecutable != null) {
                XPathSelector selector = null;
                try {
+                   Document doc;
+                   doc = XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
+                   XObject xObject = XPathAPI.eval(doc, xPathQuery, getPrefixResolverForXPath2(doc, namespaces));
                    selector = xPathExecutable.load();
                    selector.setContextItem(xdmNode);
                    XdmValue nodes = selector.evaluate();
@@ -710,10 +712,16 @@ public class XPathUtil {
                    // In case we need to extract everything
                    if (length == 0) {
                        resultOfEval = false;
+                   } else if (xObject.getType() == XObject.CLASS_BOOLEAN) {
+                       resultOfEval = Boolean.valueOf(nodes.itemAt(0).getStringValue());
                    }
                    result.setFailure(isNegated ? resultOfEval : !resultOfEval);
                    result.setFailureMessage(
                            isNegated ? "Nodes Matched for " + xPathQuery : "No Nodes Matched for " + xPathQuery);
+               } catch (ParserConfigurationException | TransformerException e) {
+                   result.setError(true);
+                   result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage()).append(" for:")
+                           .append(xPathQuery).toString());
                } finally {
                    if (selector != null) {
                        try {
@@ -728,6 +736,7 @@ public class XPathUtil {
            }
        }
    }
+
     /**
      * Formats XML
      * @param xml string to format

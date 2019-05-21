@@ -31,27 +31,7 @@ public class XPath2AssertionTest {
 
     final String xmlDoc = JMeterUtils.getResourceFileAsText("XPathUtilTestXml.xml");
     @Test
-    public void testComputeAssertionResultUsingSaxon() throws FactoryConfigurationError {
-       XPath2Assertion assertion = new XPath2Assertion();
-        SampleResult response = new SampleResult();
-        String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
-        String xPathQuery = "//Employees/Employee[1]/age:ag";
-        assertion.setNamespaces(namespaces);
-        assertion.setXPathString(xPathQuery);
-        response.setResponseData(xmlDoc, "UTF-8");
-        AssertionResult res = assertion.getResult(response);
-        assertFalse("When xpath2 conforms to xml, the result of assertion should be true ",res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
-        namespaces = "age=http://www.w3.org/2003/01/geo/wgs84#";
-        assertion.setNamespaces(namespaces);
-        assertion.setXPathString(xPathQuery);
-        res = assertion.getResult(response);
-        assertTrue("When xpath2 does,'t conforms to xml, the result of assertion should be false ", res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
-    }
-        
-    @Test
-    public void testComputeAssertionResultUsingSaxonisNegated() throws FactoryConfigurationError {
+    public void testXPath2AssertionPath1() throws FactoryConfigurationError {
         XPath2Assertion assertion = new XPath2Assertion();
         SampleResult response = new SampleResult();
         String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
@@ -62,13 +42,105 @@ public class XPath2AssertionTest {
         AssertionResult res = assertion.getResult(response);
         assertFalse("When xpath2 conforms to xml, the result of assertion should be true ",res.isFailure());
         assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
-        assertion.setNegated(true);
-        res = assertion.getResult(response);
-        assertTrue("When xpath2 conforms to xml and isNegated is true, the result of assertion should fail",res.isFailure());
-        xPathQuery = "//Employees/Employe[1]/age:ag";
+    }
+    @Test
+    public void testXPath2AssertionPath1Negated() throws FactoryConfigurationError {
+        XPath2Assertion assertion = new XPath2Assertion();
+        SampleResult response = new SampleResult();
+        String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
+        String xPathQuery = "//Employees/Employee[1]/age:ag";
+        assertion.setNamespaces(namespaces);
         assertion.setXPathString(xPathQuery);
-        res = assertion.getResult(response);
-        assertFalse("When xpath2 doesn't conforms to xml and isNegated is false, the result of assertion should succeed ",res.isFailure());
+        assertion.setNegated(true);
+        response.setResponseData(xmlDoc, "UTF-8");
+        AssertionResult res = assertion.getResult(response);
+        assertTrue("When xpath2 conforms to xml, the result of assertion should be false ",res.isFailure());
+        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
 
     }
+    @Test
+    public void testXPath2AssertionPath2() throws FactoryConfigurationError {
+       XPath2Assertion assertion = new XPath2Assertion();
+        SampleResult response = new SampleResult();
+        String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84#";
+        String xPathQuery = "//Employees/Employee[1]/age:ag";
+        assertion.setNamespaces(namespaces);
+        assertion.setXPathString(xPathQuery);
+        response.setResponseData(xmlDoc, "UTF-8");
+        AssertionResult res = assertion.getResult(response);
+        assertTrue("When xpath2 doesn't conform to xml, the result of assertion should be false ", res.isFailure());
+        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+    }
+    @Test
+    public void testXPath2AssertionPath2Negated() throws FactoryConfigurationError {
+        XPath2Assertion assertion = new XPath2Assertion();
+        SampleResult response = new SampleResult();
+        String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84#";
+        String xPathQuery = "//Employees/Employee[1]/age:ag";
+        assertion.setNamespaces(namespaces);
+        assertion.setXPathString(xPathQuery);
+        assertion.setNegated(true);
+        response.setResponseData(xmlDoc, "UTF-8");
+        AssertionResult res = assertion.getResult(response);
+        assertFalse("When xpath2 doesn't conform to xml, the result of assertion should be true ", res.isFailure());
+        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+
+    }
+    
+    @Test
+    public void testXPath2AssertionBool1() throws FactoryConfigurationError {
+       XPath2Assertion assertion = new XPath2Assertion();
+        SampleResult response = new SampleResult();
+        String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
+        String xPathQuery = "count(//Employee)=4";
+        assertion.setNamespaces(namespaces);
+        assertion.setXPathString(xPathQuery);
+        response.setResponseData(xmlDoc, "UTF-8");
+        AssertionResult res = assertion.getResult(response);
+        assertFalse("When xpath2 conforms to xml, the result of assertion should be true ",res.isFailure());
+        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+    }
+    @Test
+    public void testXPath2AssertionBool1Negated() throws FactoryConfigurationError {
+        XPath2Assertion assertion = new XPath2Assertion();
+        SampleResult response = new SampleResult();
+        String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
+        String xPathQuery = "count(//Employee)=4";
+        assertion.setNamespaces(namespaces);
+        assertion.setXPathString(xPathQuery);
+        assertion.setNegated(true);
+        response.setResponseData(xmlDoc, "UTF-8");
+        AssertionResult res = assertion.getResult(response);
+        assertTrue("When xpath2 conforms to xml, the result of assertion should be false ",res.isFailure());
+        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+    }
+    @Test
+    public void testXPath2AssertionBool2() throws FactoryConfigurationError {
+        XPath2Assertion assertion = new XPath2Assertion();
+        SampleResult response = new SampleResult();
+        String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
+        String xPathQuery = "count(//Employee)=3";  //Wrong
+        assertion.setNamespaces(namespaces);
+        assertion.setXPathString(xPathQuery);
+        response.setResponseData(xmlDoc, "UTF-8");
+        AssertionResult res = assertion.getResult(response);
+        assertTrue("When xpath2 doesn't conforms to xml, the result of assertion should be false ",res.isFailure());
+        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+    }
+    @Test
+    public void testXPath2AssertionBool2Negated() throws FactoryConfigurationError {
+        XPath2Assertion assertion = new XPath2Assertion();
+        SampleResult response = new SampleResult();
+        String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
+        String xPathQuery = "count(//Employee)=3";  //Wrong
+        assertion.setNamespaces(namespaces);
+        assertion.setXPathString(xPathQuery);
+        assertion.setNegated(true);
+        response.setResponseData(xmlDoc, "UTF-8");
+        AssertionResult res = assertion.getResult(response);
+        assertFalse("When xpath2 doesn't conforms to xml, the result of assertion should be true ",res.isFailure());
+        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+    }
+          
+
 }
