@@ -65,6 +65,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * 
      */
     public DefaultSamplerCreator() {
+        super();
     }
 
     /**
@@ -345,7 +346,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     protected void computeContentEncoding(HTTPSamplerBase sampler,
             HttpRequestHdr request, Map<String, String> pageEncodings,
             Map<String, String> formEncodings) throws MalformedURLException {
-        URL pageUrl = null;
+        URL pageUrl;
         if(sampler.isProtocolDefaultPort()) {
             pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), request.getPath());
         }
@@ -378,7 +379,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             Map<String, String> pageEncodings,
             Map<String, String> formEncodings, String urlWithoutQuery) {
         // Check if the request itself tells us what the encoding is
-        String contentEncoding = null;
+        String contentEncoding;
         String requestContentEncoding = ConversionUtils.getEncodingFromContentType(
                 request.getContentType());
         if(requestContentEncoding != null) {
@@ -386,18 +387,14 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         }
         else {
             // Check if we know the encoding of the page
-            synchronized (pageEncodings) {
-                contentEncoding = pageEncodings.get(urlWithoutQuery);
-                log.debug("Computed encoding:{} for url:{}", contentEncoding, urlWithoutQuery);
-            }
+            contentEncoding = pageEncodings.get(urlWithoutQuery);
+            log.debug("Computed encoding:{} for url:{}", contentEncoding, urlWithoutQuery);
             // Check if we know the encoding of the form
-            synchronized (formEncodings) {
-                String formEncoding = formEncodings.get(urlWithoutQuery);
-                // Form encoding has priority over page encoding
-                if (formEncoding != null) {
-                    contentEncoding = formEncoding;
-                    log.debug("Computed encoding:{} for url:{}", contentEncoding, urlWithoutQuery);
-                }
+            String formEncoding = formEncodings.get(urlWithoutQuery);
+            // Form encoding has priority over page encoding
+            if (formEncoding != null) {
+                contentEncoding = formEncoding;
+                log.debug("Computed encoding:{} for url:{}", contentEncoding, urlWithoutQuery);
             }
         }
         if (contentEncoding == null) {
