@@ -177,6 +177,7 @@ to view the last major behaviors with the version 5.1.1.
 
 <h3>General</h3>
 <ul>
+    <li><bug>63394</bug>JMeter should fail with non-zero when test execution fails (due to missing test plan or other reason). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -194,6 +195,7 @@ to view the last major behaviors with the version 5.1.1.
 <ul>
     <li>Sergiy Iampol (sergiy.iampol at playtech.com)</li>
     <li>Brian Tully (brian.tully at acquia.com)</li>
+    <li>Amer Ghazal (amerghazal at gmail.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
