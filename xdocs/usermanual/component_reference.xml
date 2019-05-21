@@ -4740,7 +4740,8 @@ Some sample expressions:
     You must specify them as follow : <code>prefix=namespace</code>. This implementation makes it easier to
     use namespaces than with the old XPathExtractor version.</property>
 <property name="XPath2 Assertion"    required="Yes">XPath to match in the document.</property>
-<property name="True if nothing matches"    required="No">True if a XPath expression is not matched</property>
+<property name="Invert assertion"    required="No">Will fail if xpath expression returns true or matches, succeed otherwise</property>
+<property name="Namespace aliases list"    required="No">List of namespace aliases prefix=full namespace (one per line)</property>
 </properties>
 </component>
 
