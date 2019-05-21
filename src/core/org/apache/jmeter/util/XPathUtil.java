@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.util;
 
 import java.io.ByteArrayInputStream;
@@ -64,9 +65,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XPathExecutable;
@@ -75,16 +73,23 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmValue;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+
 /**
  * This class provides a few utility methods for dealing with XML/XPath.
  */
 public class XPathUtil {
+
     private static final Logger log = LoggerFactory.getLogger(XPathUtil.class);
+
     private static final LoadingCache<ImmutablePair<String, String>, XPathExecutable> XPATH_CACHE;
     static {
-        final int cacheSize = JMeterUtils.getPropDefault("xpath2query.parser.cache.size", 400);
+        final int cacheSize = JMeterUtils.getPropDefault(
+                "xpath2query.parser.cache.size", 400);
         XPATH_CACHE = Caffeine.newBuilder().maximumSize(cacheSize).build(new XPathQueryCacheLoader());
     }
+
     /**
      * 
      */
@@ -101,12 +106,12 @@ public class XPathUtil {
     private static DocumentBuilderFactory documentBuilderFactory;
 
     /**
-     * Returns a suitable document builder factory. Caches the factory in case the
-     * next caller wants the same options.
+     * Returns a suitable document builder factory.
+     * Caches the factory in case the next caller wants the same options.
      *
-     * @param validate   should the parser validate documents?
+     * @param validate should the parser validate documents?
      * @param whitespace should the parser eliminate whitespace in element content?
-     * @param namespace  should the parser be namespace aware?
+     * @param namespace should the parser be namespace aware?
      *
      * @return javax.xml.parsers.DocumentBuilderFactory
      */
@@ -127,25 +132,23 @@ public class XPathUtil {
     /**
      * Create a DocumentBuilder using the makeDocumentFactory func.
      *
-     * @param validate     should the parser validate documents?
-     * @param whitespace   should the parser eliminate whitespace in element
-     *                     content?
-     * @param namespace    should the parser be namespace aware?
-     * @param downloadDTDs if true, parser should attempt to resolve external
-     *                     entities
+     * @param validate should the parser validate documents?
+     * @param whitespace should the parser eliminate whitespace in element content?
+     * @param namespace should the parser be namespace aware?
+     * @param downloadDTDs if true, parser should attempt to resolve external entities
      * @return document builder
-     * @throws ParserConfigurationException if {@link DocumentBuilder} can not be
-     *                                      created for the wanted configuration
+     * @throws ParserConfigurationException if {@link DocumentBuilder} can not be created for the wanted configuration
      */
-    public static DocumentBuilder makeDocumentBuilder(boolean validate, boolean whitespace, boolean namespace,
-            boolean downloadDTDs) throws ParserConfigurationException {
+    public static DocumentBuilder makeDocumentBuilder(boolean validate, boolean whitespace, boolean namespace, boolean downloadDTDs)
+            throws ParserConfigurationException {
         DocumentBuilder builder = makeDocumentBuilderFactory(validate, whitespace, namespace).newDocumentBuilder();
         builder.setErrorHandler(new MyErrorHandler(validate, false));
-        if (!downloadDTDs) {
-            EntityResolver er = new EntityResolver() {
+        if (!downloadDTDs){
+            EntityResolver er = new EntityResolver(){
                 @Override
-                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-                    return new InputSource(new ByteArrayInputStream(new byte[] {}));
+                public InputSource resolveEntity(String publicId, String systemId)
+                        throws SAXException, IOException {
+                    return new InputSource(new ByteArrayInputStream(new byte[]{}));
                 }
             };
             builder.setEntityResolver(er);
@@ -156,59 +159,53 @@ public class XPathUtil {
     /**
      * Utility function to get new Document
      *
-     * @param stream       - Document Input stream
-     * @param validate     - Validate Document (not Tidy)
-     * @param whitespace   - Element Whitespace (not Tidy)
-     * @param namespace    - Is Namespace aware. (not Tidy)
-     * @param tolerant     - Is tolerant - i.e. use the Tidy parser
-     * @param quiet        - set Tidy quiet
+     * @param stream - Document Input stream
+     * @param validate - Validate Document (not Tidy)
+     * @param whitespace - Element Whitespace (not Tidy)
+     * @param namespace - Is Namespace aware. (not Tidy)
+     * @param tolerant - Is tolerant - i.e. use the Tidy parser
+     * @param quiet - set Tidy quiet
      * @param showWarnings - set Tidy warnings
      * @param reportErrors - throw TidyException if Tidy detects an error
-     * @param isXml        - is document already XML (Tidy only)
+     * @param isXml - is document already XML (Tidy only)
      * @param downloadDTDs - if true, try to download external DTDs
      * @return document
-     * @throws ParserConfigurationException when no {@link DocumentBuilder} can be
-     *                                      constructed for the wanted configuration
-     * @throws SAXException                 if parsing fails
-     * @throws IOException                  if an I/O error occurs while parsing
-     * @throws TidyException                if a ParseError is detected and
-     *                                      <code>report_errors</code> is
-     *                                      <code>true</code>
+     * @throws ParserConfigurationException when no {@link DocumentBuilder} can be constructed for the wanted configuration
+     * @throws SAXException if parsing fails
+     * @throws IOException if an I/O error occurs while parsing
+     * @throws TidyException if a ParseError is detected and <code>report_errors</code> is <code>true</code>
      */
     public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
-            boolean tolerant, boolean quiet, boolean showWarnings, boolean reportErrors, boolean isXml,
-            boolean downloadDTDs) throws ParserConfigurationException, SAXException, IOException, TidyException {
-        return makeDocument(stream, validate, whitespace, namespace, tolerant, quiet, showWarnings, reportErrors, isXml,
-                downloadDTDs, null);
+            boolean tolerant, boolean quiet, boolean showWarnings, boolean reportErrors, boolean isXml, boolean downloadDTDs)
+                    throws ParserConfigurationException, SAXException, IOException, TidyException {
+        return makeDocument(stream, validate, whitespace, namespace,
+                tolerant, quiet, showWarnings, reportErrors, isXml, downloadDTDs, null);
     }
 
     /**
      * Utility function to get new Document
      *
-     * @param stream        - Document Input stream
-     * @param validate      - Validate Document (not Tidy)
-     * @param whitespace    - Element Whitespace (not Tidy)
-     * @param namespace     - Is Namespace aware. (not Tidy)
-     * @param tolerant      - Is tolerant - i.e. use the Tidy parser
-     * @param quiet         - set Tidy quiet
-     * @param showWarnings  - set Tidy warnings
+     * @param stream - Document Input stream
+     * @param validate - Validate Document (not Tidy)
+     * @param whitespace - Element Whitespace (not Tidy)
+     * @param namespace - Is Namespace aware. (not Tidy)
+     * @param tolerant - Is tolerant - i.e. use the Tidy parser
+     * @param quiet - set Tidy quiet
+     * @param showWarnings - set Tidy warnings
      * @param report_errors - throw TidyException if Tidy detects an error
-     * @param isXml         - is document already XML (Tidy only)
-     * @param downloadDTDs  - if true, try to download external DTDs
-     * @param tidyOut       OutputStream for Tidy pretty-printing
+     * @param isXml - is document already XML (Tidy only)
+     * @param downloadDTDs - if true, try to download external DTDs
+     * @param tidyOut OutputStream for Tidy pretty-printing
      * @return document
-     * @throws ParserConfigurationException if {@link DocumentBuilder} can not be
-     *                                      created for the wanted configuration
-     * @throws SAXException                 if parsing fails
-     * @throws IOException                  if I/O error occurs while parsing
-     * @throws TidyException                if a ParseError is detected and
-     *                                      <code>report_errors</code> is
-     *                                      <code>true</code>
+     * @throws ParserConfigurationException if {@link DocumentBuilder} can not be created for the wanted configuration
+     * @throws SAXException if parsing fails
+     * @throws IOException if I/O error occurs while parsing
+     * @throws TidyException if a ParseError is detected and <code>report_errors</code> is <code>true</code>
      */
     public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
-            boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml,
-            boolean downloadDTDs, OutputStream tidyOut)
-            throws ParserConfigurationException, SAXException, IOException, TidyException {
+            boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml, boolean downloadDTDs, 
+            OutputStream tidyOut)
+                    throws ParserConfigurationException, SAXException, IOException, TidyException {
         Document doc;
         if (tolerant) {
             doc = tidyDoc(stream, quiet, showWarnings, report_errors, isXml, tidyOut);
@@ -221,12 +218,12 @@ public class XPathUtil {
     /**
      * Create a document using Tidy
      *
-     * @param stream        - input
-     * @param quiet         - set Tidy quiet?
-     * @param showWarnings  - show Tidy warnings?
+     * @param stream - input
+     * @param quiet - set Tidy quiet?
+     * @param showWarnings - show Tidy warnings?
      * @param report_errors - log errors and throw TidyException?
-     * @param isXML         - treat document as XML?
-     * @param out           OutputStream, null if no output required
+     * @param isXML - treat document as XML?
+     * @param out OutputStream, null if no output required
      * @return the document
      *
      * @throws TidyException if a ParseError is detected and report_errors is true
@@ -240,7 +237,7 @@ public class XPathUtil {
         if (tidy.getParseErrors() > 0) {
             if (report_errors) {
                 log.error("TidyException: {}", sw);
-                throw new TidyException(tidy.getParseErrors(), tidy.getParseWarnings());
+                throw new TidyException(tidy.getParseErrors(),tidy.getParseWarnings());
             }
             log.warn("Tidy errors: {}", sw);
         }
@@ -250,9 +247,9 @@ public class XPathUtil {
     /**
      * Create a Tidy parser with the specified settings.
      *
-     * @param quiet        - set the Tidy quiet flag?
+     * @param quiet - set the Tidy quiet flag?
      * @param showWarnings - show Tidy warnings?
-     * @param isXml        - treat the content as XML?
+     * @param isXml - treat the content as XML?
      * @param stringWriter - if non-null, use this for Tidy errorOutput
      * @return the Tidy parser
      */
@@ -273,6 +270,7 @@ public class XPathUtil {
     static class MyErrorHandler implements ErrorHandler {
         private final boolean val;
         private final boolean tol;
+
         private final String type;
 
         MyErrorHandler(boolean validate, boolean tolerate) {
@@ -286,7 +284,7 @@ public class XPathUtil {
             if (log.isInfoEnabled()) {
                 log.info("Type={}. {}", type, ex.toString());
             }
-            if (val && !tol) {
+            if (val && !tol){
                 throw new SAXException(ex);
             }
         }
@@ -312,7 +310,6 @@ public class XPathUtil {
 
     /**
      * Return value for node including node element
-     * 
      * @param node Node
      * @return String
      */
@@ -327,6 +324,7 @@ public class XPathUtil {
         }
         return sw.toString();
     }
+
 
     /**
      * @param node {@link Node}
@@ -344,8 +342,7 @@ public class XPathUtil {
 
     /**
      * Extract NodeList using expression
-     * 
-     * @param document        {@link Document}
+     * @param document {@link Document}
      * @param xPathExpression XPath expression
      * @return {@link NodeList}
      * @throws TransformerException when the internally used xpath engine fails
@@ -357,30 +354,29 @@ public class XPathUtil {
 
     /**
      * Put in matchStrings results of evaluation
-     * 
-     * @param document     XML document
-     * @param xPathQuery   XPath Query
+     * @param document XML document
+     * @param xPathQuery XPath Query
      * @param matchStrings List of strings that will be filled
-     * @param fragment     return fragment
+     * @param fragment return fragment
      * @throws TransformerException when the internally used xpath engine fails
      */
-    public static void putValuesForXPathInList(Document document, String xPathQuery, List<String> matchStrings,
-            boolean fragment) throws TransformerException {
+    public static void putValuesForXPathInList(Document document, 
+            String xPathQuery,
+            List<String> matchStrings, boolean fragment) throws TransformerException {
         putValuesForXPathInList(document, xPathQuery, matchStrings, fragment, -1);
     }
 
     /**
      * Put in matchStrings results of evaluation
-     * 
-     * @param document     XML document
-     * @param xPathQuery   XPath Query
+     * @param document XML document
+     * @param xPathQuery XPath Query
      * @param matchStrings List of strings that will be filled
-     * @param fragment     return fragment
-     * @param matchNumber  match number
+     * @param fragment return fragment
+     * @param matchNumber match number
      * @throws TransformerException when the internally used xpath engine fails
      */
-    public static void putValuesForXPathInList(Document document, String xPathQuery, List<String> matchStrings,
-            boolean fragment, int matchNumber) throws TransformerException {
+    public static void putValuesForXPathInList(Document document, String xPathQuery, List<String> matchStrings, boolean fragment, int matchNumber)
+            throws TransformerException {
         String val = null;
         XObject xObject = XPathAPI.eval(document, xPathQuery, getPrefixResolver(document));
         final int objectType = xObject.getType();
@@ -388,16 +384,16 @@ public class XPathUtil {
             NodeList matches = xObject.nodelist();
             int length = matches.getLength();
             int indexToMatch = matchNumber;
-            if (matchNumber == 0 && length > 0) {
-                indexToMatch = JMeterUtils.getRandomInt(length) + 1;
-            }
-            for (int i = 0; i < length; i++) {
+            if(matchNumber == 0 && length>0) {
+                indexToMatch = JMeterUtils.getRandomInt(length)+1;
+            } 
+            for (int i = 0 ; i < length; i++) {
                 Node match = matches.item(i);
-                if (indexToMatch >= 0 && indexToMatch != (i + 1)) {
+                if(indexToMatch >= 0 && indexToMatch != (i+1)) {
                     continue;
                 }
-                if (match instanceof Element) {
-                    if (fragment) {
+                if ( match instanceof Element ){
+                    if (fragment){
                         val = getNodeContent(match);
                     } else {
                         val = getValueForNode(match);
@@ -407,7 +403,8 @@ public class XPathUtil {
                 }
                 matchStrings.add(val);
             }
-        } else if (objectType == XObject.CLASS_NULL || objectType == XObject.CLASS_UNKNOWN
+        } else if (objectType == XObject.CLASS_NULL
+                || objectType == XObject.CLASS_UNKNOWN
                 || objectType == XObject.CLASS_UNRESOLVEDVARIABLE) {
             if (log.isWarnEnabled()) {
                 log.warn("Unexpected object type: {} returned for: {}", xObject.getTypeString(), xPathQuery);
@@ -418,27 +415,34 @@ public class XPathUtil {
         }
     }
 
-    public static void putValuesForXPathInListUsingSaxon(String xmlFile, String xPathQuery, List<String> matchStrings,
-            boolean fragment, int matchNumber, String namespaces) throws SaxonApiException, FactoryConfigurationError {
+    public static void putValuesForXPathInListUsingSaxon(
+            String xmlFile, String xPathQuery, 
+            List<String> matchStrings, boolean fragment, 
+            int matchNumber, String namespaces)
+            throws SaxonApiException, FactoryConfigurationError {
+
         // generating the cache key
         final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
-        // check the cache
+
+        //check the cache
         XPathExecutable xPathExecutable;
-        if (StringUtils.isNotEmpty(xPathQuery)) {
+        if(StringUtils.isNotEmpty(xPathQuery)) {
             xPathExecutable = XPATH_CACHE.get(key);
-        } else {
+        }
+        else {
             log.warn("Error : {}", JMeterUtils.getResString("xpath2_extractor_empty_query"));
             return;
         }
+
         try (StringReader reader = new StringReader(xmlFile)) {
-            // We could instanciate it once but might trigger issues in the future
-            // Sharing of a DocumentBuilder across multiple threads is not recommended.
-            // However, in the current implementation sharing a DocumentBuilder (once
-            // initialized)
+            // We could instanciate it once but might trigger issues in the future 
+            // Sharing of a DocumentBuilder across multiple threads is not recommended. 
+            // However, in the current implementation sharing a DocumentBuilder (once initialized) 
             // will only cause problems if a SchemaValidator is used.
             net.sf.saxon.s9api.DocumentBuilder builder = PROCESSOR.newDocumentBuilder();
             XdmNode xdmNode = builder.build(new SAXSource(new InputSource(reader)));
-            if (xPathExecutable != null) {
+            
+            if(xPathExecutable!=null) {
                 XPathSelector selector = null;
                 try {
                     selector = xPathExecutable.load();
@@ -447,31 +451,30 @@ public class XPathUtil {
                     int length = nodes.size();
                     int indexToMatch = matchNumber;
                     // In case we need to extract everything
-                    if (matchNumber < 0) {
-                        for (XdmItem item : nodes) {
-                            if (fragment) {
+                    if(matchNumber < 0) {
+                        for(XdmItem item : nodes) {
+                            if(fragment) {
                                 matchStrings.add(item.toString());
-                            } else {
+                            }
+                            else {
                                 matchStrings.add(item.getStringValue());
                             }
                         }
                     } else {
-                        if (indexToMatch <= length) {
-                            if (matchNumber == 0 && length > 0) {
-                                indexToMatch = JMeterUtils.getRandomInt(length) + 1;
-                            }
-                            XdmItem item = nodes.itemAt(indexToMatch - 1);
+                        if(indexToMatch <= length) {
+                            if(matchNumber == 0 && length>0) {
+                                indexToMatch = JMeterUtils.getRandomInt(length)+1;
+                            } 
+                            XdmItem item = nodes.itemAt(indexToMatch-1);
                             matchStrings.add(fragment ? item.toString() : item.getStringValue());
                         } else {
-                            if (log.isWarnEnabled()) {
-                                log.warn("Error : {}{}",
-                                        JMeterUtils.getResString("xpath2_extractor_match_number_failure"),
-                                        indexToMatch);
+                            if(log.isWarnEnabled()) {
+                                log.warn("Error : {}{}", JMeterUtils.getResString("xpath2_extractor_match_number_failure"),indexToMatch);
                             }
                         }
                     }
                 } finally {
-                    if (selector != null) {
+                    if(selector != null) {
                         try {
                             selector.getUnderlyingXPathContext().setContextItem(null);
                         } catch (Exception e) { // NOSONAR Ignored on purpose
@@ -483,29 +486,33 @@ public class XPathUtil {
         }
     }
 
+
     public static List<String[]> namespacesParse(String namespaces) {
         List<String[]> res = new ArrayList<>();
         int length = namespaces.length();
         int startWord = 0;
         boolean afterEqual = false;
         int positionLastKey = -1;
-        for (int i = 0; i < length; i++) {
+        for(int i = 0; i < length; i++) {
             char actualChar = namespaces.charAt(i);
-            if (actualChar == '=' && !afterEqual) {
-                String[] tmp = new String[2];
+            if(actualChar=='=' && !afterEqual) {
+                String [] tmp = new String[2];
                 tmp[0] = namespaces.substring(startWord, i);
                 res.add(tmp);
                 afterEqual = true;
-                startWord = i + 1;
+                startWord = i+1;
                 positionLastKey++;
-            } else if (namespaces.charAt(i) == '\n' && afterEqual) {
+            }
+            else if(namespaces.charAt(i)=='\n' && afterEqual) {
                 afterEqual = false;
-                res.get(positionLastKey)[1] = namespaces.substring(startWord, i);
-                startWord = i + 1;
-            } else if (namespaces.charAt(i) == '\n') {
-                startWord = i + 1;
-            } else if (i == length - 1 && afterEqual) {
-                res.get(positionLastKey)[1] = namespaces.substring(startWord, i + 1);
+                res.get(positionLastKey)[1]= namespaces.substring(startWord, i);
+                startWord = i+1;
+            }
+            else if(namespaces.charAt(i)=='\n') {
+                startWord = i+1;
+            }
+            else if(i==length-1 && afterEqual) {
+                res.get(positionLastKey)[1]= namespaces.substring(startWord, i+1);
             }
         }
         return res;
@@ -513,21 +520,21 @@ public class XPathUtil {
 
     /**
      * Compute namespaces for XML
-     * 
      * @param xml XML content
      * @return List of Namespaces
-     * @throws XMLStreamException        on problematic xml
-     * @throws FactoryConfigurationError when no xml input factory can be
-     *                                   established
+     * @throws XMLStreamException on problematic xml
+     * @throws FactoryConfigurationError when no xml input factory can be established
      */
-    public static List<String[]> getNamespaces(String xml) throws XMLStreamException, FactoryConfigurationError {
-        List<String[]> res = new ArrayList<>();
+    public static List<String[]> getNamespaces(String xml)
+            throws XMLStreamException, FactoryConfigurationError{
+        List<String[]> res= new ArrayList<>();
         XMLStreamReader reader;
-        if (StringUtils.isNotEmpty(xml)) {
+        if(StringUtils.isNotEmpty(xml)) {
             reader = XMLInputFactory.newFactory().createXMLStreamReader(new StringReader(xml));
             while (reader.hasNext()) {
                 int event = reader.next();
-                if (XMLStreamConstants.START_ELEMENT == event || XMLStreamConstants.NAMESPACE == event) {
+                if (XMLStreamConstants.START_ELEMENT == event ||
+                        XMLStreamConstants.NAMESPACE == event) {
                     addToList(reader, res);
                 }
             }
@@ -537,22 +544,22 @@ public class XPathUtil {
 
     private static void addToList(XMLStreamReader reader, List<String[]> res) {
         boolean isInList = false;
-        int namespaceCount = reader.getNamespaceCount();
+        int namespaceCount = reader.getNamespaceCount(); 
         if (namespaceCount > 0) {
             for (int nsIndex = 0; nsIndex < namespaceCount; nsIndex++) {
                 String nsPrefix = reader.getNamespacePrefix(nsIndex);
-                for (int i = 0; i < res.size(); i++) {
+                for(int i = 0;i<res.size();i++) {
                     String prefix = res.get(i)[0];
-                    if (prefix != null && prefix.equals(nsPrefix)) {
+                    if(prefix != null && prefix.equals(nsPrefix)) {
                         isInList = true;
                         break;
                     }
                 }
-                if (!isInList) {
+                if(!isInList) {
                     String nsId = reader.getNamespaceURI(nsIndex);
-                    res.add(new String[] { nsPrefix, nsId });
+                    res.add(new String[] {nsPrefix, nsId});
                 }
-                isInList = false;
+                isInList=false;
             }
         }
     }
@@ -568,8 +575,7 @@ public class XPathUtil {
 
     /**
      * Validate xpathString is a valid XPath expression
-     * 
-     * @param document    XML Document
+     * @param document XML Document
      * @param xpathString XPATH String
      * @throws TransformerException if expression fails to evaluate
      */
@@ -588,20 +594,17 @@ public class XPathUtil {
      * @param document XML Document
      * @return {@link PrefixResolver}
      */
-    private static PrefixResolver getPrefixResolverForXPath2(Document document, String namespaces) {
-        return new PropertiesBasedPrefixResolverForXpath2(document.getDocumentElement(), namespaces);
+    private static PrefixResolver getPrefixResolverForXPath2(Document document,String namespaces) {
+        return new PropertiesBasedPrefixResolverForXpath2(document.getDocumentElement(),namespaces);
     }
-
     /**
      * Validate xpathString is a valid XPath expression
-     * 
-     * @param document    XML Document
+     * @param document XML Document
      * @param xpathString XPATH String
      * @throws TransformerException if expression fails to evaluate
      */
-    public static void validateXPath2(Document document, String xpathString, String namespaces)
-            throws TransformerException {
-        if (XPathAPI.eval(document, xpathString, getPrefixResolverForXPath2(document, namespaces)) == null) {
+    public static void validateXPath2(Document document, String xpathString,String namespaces) throws TransformerException {
+        if (XPathAPI.eval(document, xpathString, getPrefixResolverForXPath2(document,namespaces)) == null) {
             // We really should never get here
             // because eval will throw an exception
             // if xpath is invalid, but whatever, better
@@ -609,17 +612,16 @@ public class XPathUtil {
             throw new IllegalArgumentException("xpath eval of '" + xpathString + "' was null");
         }
     }
-
     /**
      * Fills result
-     * 
-     * @param result          {@link AssertionResult}
-     * @param doc             XML Document
+     * @param result {@link AssertionResult}
+     * @param doc XML Document
      * @param xPathExpression XPath expression
-     * @param isNegated       flag whether a non-match should be considered a
-     *                        success
+     * @param isNegated flag whether a non-match should be considered a success
      */
-    public static void computeAssertionResult(AssertionResult result, Document doc, String xPathExpression,
+    public static void computeAssertionResult(AssertionResult result,
+            Document doc, 
+            String xPathExpression,
             boolean isNegated) {
         try {
             XObject xObject = XPathAPI.eval(doc, xPathExpression, getPrefixResolver(doc));
@@ -628,7 +630,7 @@ public class XPathUtil {
                 NodeList nodeList = xObject.nodelist();
                 final int len = (nodeList != null) ? nodeList.getLength() : 0;
                 log.debug("nodeList length {}", len);
-                // length == 0 means nodelist is null
+                // length == 0 means nodelist is null 
                 if (len == 0) {
                     log.debug("nodeList is null or empty. No match by xpath expression: {}", xPathExpression);
                     result.setFailure(!isNegated);
@@ -646,7 +648,7 @@ public class XPathUtil {
                 }
                 return;
             case XObject.CLASS_BOOLEAN:
-                if (!xObject.bool()) {
+                if (!xObject.bool()){
                     result.setFailure(!isNegated);
                     result.setFailureMessage("No Nodes Matched " + xPathExpression);
                 }
@@ -658,88 +660,82 @@ public class XPathUtil {
             }
         } catch (TransformerException e) {
             result.setError(true);
-            result.setFailureMessage(new StringBuilder("TransformerException: ").append(e.getMessage()).append(" for:")
-                    .append(xPathExpression).toString());
+            result.setFailureMessage(
+                    new StringBuilder("TransformerException: ")
+                    .append(e.getMessage())
+                    .append(" for:")
+                    .append(xPathExpression)
+                    .toString());
         }
     }
-
+    
+  
     /***
-     *
-     * @param result     The result of xpath2 assertion
-     * @param xmlFile
-     * @param xPathQuery
-     * @param namespaces
-     * @throws SaxonApiException
-     * @throws FactoryConfigurationError
-     */
-    public static void computeAssertionResultUsingSaxon(AssertionResult result, String xmlFile, String xPathQuery,
-            String namespaces, Boolean isNegated) throws SaxonApiException, FactoryConfigurationError {
-        // generating the cache key
-        final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
-        // check the cache
-        XPathExecutable xPathExecutable;
-        if (StringUtils.isNotEmpty(xPathQuery)) {
-            xPathExecutable = XPATH_CACHE.get(key);
-        } else {
-            log.warn("Error : {}", JMeterUtils.getResString("xpath2_extractor_empty_query"));
-            return;
-        }
-        try (StringReader reader = new StringReader(xmlFile)) {
-            // We could instanciate it once but might trigger issues in the future
-            // Sharing of a DocumentBuilder across multiple threads is not recommended.
-            // However, in the current implementation sharing a DocumentBuilder (once
-            // initialized)
-            // will only cause problems if a SchemaValidator is used.
-            net.sf.saxon.s9api.DocumentBuilder builder = PROCESSOR.newDocumentBuilder();
-            XdmNode xdmNode = builder.build(new SAXSource(new InputSource(reader)));
-            if (xPathExecutable != null) {
-                XPathSelector selector = null;
-                try {
-                    Document doc;
-                    doc = XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
-                    XObject xObject = XPathAPI.eval(doc, xPathQuery, getPrefixResolverForXPath2(doc, namespaces));
-                    selector = xPathExecutable.load();
-                    selector.setContextItem(xdmNode);
-                    XdmValue nodes = selector.evaluate();
-                    boolean resultOfEval = true;
-                    int length = nodes.size();
-                    // In case we need to extract everything
-                    if (length == 0) {
-                        resultOfEval = false;
-                    } else if (xObject.getType() == XObject.CLASS_BOOLEAN) {
-                        resultOfEval = Boolean.valueOf(nodes.itemAt(0).getStringValue());
-                    }
-                    result.setFailure(isNegated ? resultOfEval : !resultOfEval);
-                    result.setFailureMessage(
-                            isNegated ? "Nodes Matched for " + xPathQuery : "No Nodes Matched for " + xPathQuery);
-                } catch (ParserConfigurationException | TransformerException e) {
-                    result.setError(true);
-                    result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage()).append(" for:")
-                            .append(xPathQuery).toString());
-                } finally {
-                    if (selector != null) {
-                        try {
-                            selector.getUnderlyingXPathContext().setContextItem(null);
-                        } catch (Exception e) { // NOSONAR Ignored on purpose
-                            result.setError(true);
-                            result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage())
-                                    .append(" for:").append(xPathQuery).toString());
-                        }
-                    }
-                }
-            }
-        }
-    }
-
+    *
+    * @param result     The result of xpath2 assertion
+    * @param xmlFile
+    * @param xPathQuery
+    * @param namespaces
+    * @throws SaxonApiException
+    * @throws FactoryConfigurationError
+    */
+   public static void computeAssertionResultUsingSaxon(AssertionResult result, String xmlFile, String xPathQuery,
+           String namespaces, Boolean isNegated) throws SaxonApiException, FactoryConfigurationError {
+       // generating the cache key
+       final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
+       // check the cache
+       XPathExecutable xPathExecutable;
+       if (StringUtils.isNotEmpty(xPathQuery)) {
+           xPathExecutable = XPATH_CACHE.get(key);
+       } else {
+           log.warn("Error : {}", JMeterUtils.getResString("xpath2_extractor_empty_query"));
+           return;
+       }
+       try (StringReader reader = new StringReader(xmlFile)) {
+           // We could instanciate it once but might trigger issues in the future
+           // Sharing of a DocumentBuilder across multiple threads is not recommended.
+           // However, in the current implementation sharing a DocumentBuilder (once
+           // initialized)
+           // will only cause problems if a SchemaValidator is used.
+           net.sf.saxon.s9api.DocumentBuilder builder = PROCESSOR.newDocumentBuilder();
+           XdmNode xdmNode = builder.build(new SAXSource(new InputSource(reader)));
+           if (xPathExecutable != null) {
+               XPathSelector selector = null;
+               try {
+                   selector = xPathExecutable.load();
+                   selector.setContextItem(xdmNode);
+                   XdmValue nodes = selector.evaluate();
+                   boolean resultOfEval = true;
+                   int length = nodes.size();
+                   // In case we need to extract everything
+                   if (length == 0) {
+                       resultOfEval = false;
+                   }
+                   result.setFailure(isNegated ? resultOfEval : !resultOfEval);
+                   result.setFailureMessage(
+                           isNegated ? "Nodes Matched for " + xPathQuery : "No Nodes Matched for " + xPathQuery);
+               } finally {
+                   if (selector != null) {
+                       try {
+                           selector.getUnderlyingXPathContext().setContextItem(null);
+                       } catch (Exception e) { // NOSONAR Ignored on purpose
+                           result.setError(true);
+                           result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage())
+                                   .append(" for:").append(xPathQuery).toString());
+                       }
+                   }
+               }
+           }
+       }
+   }
     /**
      * Formats XML
-     * 
      * @param xml string to format
      * @return String formatted XML
      */
-    public static String formatXml(String xml) {
+    public static String formatXml(String xml){
         try {
-            Transformer serializer = TransformerFactory.newInstance().newTransformer();
+            Transformer serializer= TransformerFactory.newInstance().newTransformer();
             serializer.setOutputProperty(OutputKeys.INDENT, "yes");
             serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             Source xmlSource = new SAXSource(new InputSource(new StringReader(xml)));
@@ -751,4 +747,5 @@ public class XPathUtil {
             return xml;
         }
     }
+
 }
