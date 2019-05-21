@@ -498,14 +498,6 @@ public class BasicCurlParserTest {
     }
 
     @Test
-    public void testOutputFile() {
-        String cmdLine = "curl 'http://jmeter.apache.org/' -o 'C:\\Test\\output' --create-dir";
-        BasicCurlParser basicCurlParser = new BasicCurlParser();
-        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser', the path of output file should be 'C:\\Test\\output'",
-                "C:\\Test\\output", request.getOutputFileName());
-    }
-    @Test
     public void testCookie() {
         String cmdLine = "curl -X POST  \"https://api.imgur.com/3/upload\" -b 'name=Tom;password=123456'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();

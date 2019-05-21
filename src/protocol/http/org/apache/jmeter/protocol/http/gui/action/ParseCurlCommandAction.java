@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -50,6 +51,7 @@ import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.KeystoreConfig;
 import org.apache.jmeter.control.Controller;
@@ -65,6 +67,7 @@ import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.EscapeDialog;
+import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.modifiers.SampleTimeout;
@@ -113,6 +116,9 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private static final Set<String> commands = new HashSet<>();
     public static final String IMPORT_CURL = "import_curl";
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
+    /** A panel allowing results to be saved. */
+    private FilePanel filePanel=null;
+    
     static {
         commands.add(IMPORT_CURL);
     }
@@ -144,7 +150,9 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         cURLCommandTA = JSyntaxTextArea.getInstance(10, 80, false);
         cURLCommandTA.setCaretPosition(0);
         contentPane.add(JTextScrollPane.getInstance(cURLCommandTA), BorderLayout.CENTER);
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 1));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
+        filePanel = new FilePanel("Read from file"); // $NON-NLS-1$
+        buttonPanel.add(filePanel);
         JButton button = new JButton(JMeterUtils.getResString("curl_create_request"));
         button.setActionCommand(CREATE_REQUEST);
         button.addActionListener(this);
@@ -205,7 +213,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         ResultCollector resultCollector = new ResultCollector();
         resultCollector.setProperty(TestElement.NAME, "View Results Tree");
         resultCollector.setProperty(TestElement.GUI_CLASS, ViewResultsFullVisualizer.class.getName());
-        resultCollector.setFilename(request.getOutputFileName());
         tree.add(tree.getArray()[0], resultCollector);
         final HashTree newTree = guiPackage.addSubTree(tree);
         guiPackage.updateCurrentGui();
@@ -561,6 +568,9 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         statusText.setForeground(Color.GREEN);
         if (e.getActionCommand().equals(CREATE_REQUEST)) {
             String curlCommand = cURLCommandTA.getText().trim();
+//            if(!filePanel.getFilename().trim().isEmpty()){
+//                curlCommand = readFromFile(filePanel.getFilename().trim());                
+//            }
             try {
                 LOGGER.info("Transforming CURL command {}", curlCommand);
                 BasicCurlParser basicCurlParser = new BasicCurlParser();
@@ -585,7 +595,11 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                         addToTestPlan(treeNode, request);
                     }
                 }
-                statusText.setText(JMeterUtils.getResString("curl_create_success"));
+                if (request.getOptionsIgnored().length()!=0) {
+                    statusText.setText(request.getOptionsIgnored().toString() + "are ignored");
+                } else {
+                    statusText.setText(JMeterUtils.getResString("curl_create_success"));
+                }
                 createSSLWarning(request);
             } catch (Exception ex) {
                 LOGGER.error("Error creating test plan from cURL command:{}, error:{}", curlCommand, ex.getMessage(),
@@ -628,11 +642,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                         dnsCacheManager = (DNSCacheManager) jMeterTreeNodeDns.getTestElement();
                         createDnsCacheManager(request, dnsCacheManager);
                     }
-                }
-                JMeterTreeNode jMeterTreeNode = findFirstNodeOfType(ResultCollector.class);
-                if (jMeterTreeNode != null) {
-                    ResultCollector resultCollector = (ResultCollector) jMeterTreeNode.getTestElement();
-                    resultCollector.setFilename(request.getOutputFileName());
                 }
                 CookieManager cookieManager = sampler.getCookieManager();
                 HeaderManager headerManager = sampler.getHeaderManager();
@@ -711,4 +720,18 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
         return cookies;
     }
+
+    public String readFromFile(String pathname) {
+        String encoding = StandardCharsets.UTF_8.name();
+        File file = new File(pathname);
+        if (file.exists() && file.isFile()) {
+            try {
+                return FileUtils.readFileToString(file, encoding).trim();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+   
 }
