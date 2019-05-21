@@ -48,7 +48,7 @@ class ObjectMessageRenderer implements MessageRenderer<Serializable> {
         if (hasVariable) {
             value = getInterpretedContent(filename, encoding, hasVariable, cache);
         } else {
-            value = (Serializable) cache.get(filename, _p -> getContent(filename));
+            value = (Serializable) cache.get(filename, p -> getContent(filename));
         }
 
         return value;
@@ -76,27 +76,26 @@ class ObjectMessageRenderer implements MessageRenderer<Serializable> {
 
     /**
      * <p>Gets content with variable replaced.</p>
-     * <p>If encoding {@link PublisherSampler#DEFAULT_ENCODING isn't provided}, try to find it.</p>
+     * <p>If pEncoding {@link PublisherSampler#DEFAULT_ENCODING isn't provided}, try to find it.</p>
      * <p>Only raw text is cached, neither interpreted text, neither parsed object.</p>
      */
-    protected Serializable getInterpretedContent(String filename, String encoding, boolean hasVariable, Cache<Object,Object> cache) {
-        Serializable value;
+    protected Serializable getInterpretedContent(String filename, final String pEncoding, boolean hasVariable, Cache<Object,Object> cache) {
+        String encoding = pEncoding;
         if (PublisherSampler.DEFAULT_ENCODING.equals(encoding)) {
             encoding = findEncoding(filename);
         }
         String stringValue = delegate.getValueFromFile(filename, encoding, hasVariable, cache);
-        value = (Serializable) JMeterUtils.createXStream().fromXML(stringValue);
-        return value;
+        return (Serializable) JMeterUtils.createXStream().fromXML(stringValue);
     }
 
     /** Try to determine encoding based on XML prolog, if none <code>null</code> is returned. **/
     protected String findEncoding(String filename) {
-        XMLInputFactory factory = XMLInputFactory.newFactory();
+        XMLInputFactory factory = XMLInputFactory.newInstance();
         try (FileInputStream input = new FileInputStream(filename)) {
             XMLStreamReader reader = factory.createXMLStreamReader(input);
             return reader.getEncoding();
         } catch (IOException|XMLStreamException e) {
-            throw new RuntimeException(format("Unable to read %s", filename), e);
+            throw new IllegalArgumentException(format("Unable to read %s", filename), e);
         }
     }
 
