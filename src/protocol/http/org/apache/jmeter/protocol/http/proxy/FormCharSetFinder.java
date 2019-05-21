@@ -74,9 +74,7 @@ public class FormCharSetFinder {
                     }
                 }
                 if(formCharSet != null) {
-                    synchronized (formEncodings) {
-                        formEncodings.put(action, formCharSet);
-                    }
+                    formEncodings.put(action, formCharSet);
                 }
             }      
         }
