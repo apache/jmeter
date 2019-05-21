@@ -452,7 +452,7 @@ public class HttpRequestHdr {
     }
 
     /**
-     * @return the prefix
+     * @return the prefix or transaction name
      */
     public String getPrefix() {
         return prefix;
