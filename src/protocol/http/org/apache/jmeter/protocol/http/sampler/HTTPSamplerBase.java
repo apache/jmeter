@@ -974,7 +974,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         KeystoreConfig mgr = getKeystoreConfig();
         if (mgr != null) {
             if (log.isWarnEnabled()) {
-                log.warn("Existing CookieManager {} superseded by {}", mgr.getName(), value.getName());
+                log.warn("Existing KeystoreConfig {} superseded by {}", mgr.getName(), value.getName());
             }
         }
         setKeystoreConfigProperty(value);
@@ -994,7 +994,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         SampleTimeout mgr = getSampleTimeout();
         if (mgr != null) {
             if (log.isWarnEnabled()) {
-                log.warn("ExisetSampleTimeoutPropertysting SampleTimeout {} superseded by {}", mgr.getName(),
+                log.warn("Exiset SampleTimeout {} superseded by {}", mgr.getName(),
                         value.getName());
             }
         }
