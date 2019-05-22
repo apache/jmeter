@@ -750,6 +750,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             try {
                 res=FileUtils.readLines(file,encoding);
             } catch (IOException e) {
+               LOGGER.error("can't find or open the file {}",pathname);
             }
         }
         return res;
