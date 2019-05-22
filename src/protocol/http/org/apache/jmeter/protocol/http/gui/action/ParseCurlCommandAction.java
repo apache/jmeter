@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -566,44 +567,64 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     public void actionPerformed(ActionEvent e) {
         statusText.setText("");
         statusText.setForeground(Color.GREEN);
+        boolean isReadFromFile = false;
         if (e.getActionCommand().equals(CREATE_REQUEST)) {
-            String curlCommand = cURLCommandTA.getText().trim();
-//            if(!filePanel.getFilename().trim().isEmpty()){
-//                curlCommand = readFromFile(filePanel.getFilename().trim());                
-//            }
+            List<String> commandsList = new ArrayList<>();
+            List<BasicCurlParser.Request> requests = new ArrayList<>();
+            if (!filePanel.getFilename().trim().isEmpty()) {
+                commandsList = readFromFile(filePanel.getFilename().trim());
+                isReadFromFile = true;
+            } else {
+                commandsList = readFromTextPanel(cURLCommandTA.getText().trim());
+            }
             try {
-                LOGGER.info("Transforming CURL command {}", curlCommand);
                 BasicCurlParser basicCurlParser = new BasicCurlParser();
-                BasicCurlParser.Request request = basicCurlParser.parse(curlCommand);
-                LOGGER.info("Parsed CURL command {} into {}", curlCommand, request);
-                GuiPackage guiPackage = GuiPackage.getInstance();
-                guiPackage.updateCurrentNode();
-                JMeterTreeNode treeNode = findFirstNodeOfType(AbstractThreadGroup.class);
-                if (treeNode == null) {
-                    LOGGER.info("No AbstractThreadGroup found, potentially empty plan, creating a new plan");
-                    createTestPlan(e, request);
-                } else {
-                    JMeterTreeNode currentNode = guiPackage.getCurrentNode();
-                    Object userObject = currentNode.getUserObject();
-                    if (userObject instanceof Controller && !(userObject instanceof ReplaceableController)) {
-                        LOGGER.info("Newly created element will be placed under current selected node {}",
-                                currentNode.getName());
-                        addToTestPlan(currentNode, request);
-                    } else {
-                        LOGGER.info("Newly created element will be placed under first AbstractThreadGroup node {}",
-                                treeNode.getName());
-                        addToTestPlan(treeNode, request);
+                for (int i=0;i<commandsList.size();i++) {
+                    try {
+                        BasicCurlParser.Request q = basicCurlParser.parse(commandsList.get(i));
+                        requests.add(q);
+                        LOGGER.info("Parsed CURL command {} into {}", commandsList.get(i), q);
+                    } catch (IllegalArgumentException ie) {
+                        if (isReadFromFile) {
+                            LOGGER.error("Error creating test plan from line {} of file, command:{}, error:{}", i+1,
+                                    commandsList.get(i), ie.getMessage(), ie);
+                        } else {
+                            LOGGER.error("Error creating test plan from cURL command:{}, error:{}",  commandsList.get(i),
+                                    ie.getMessage(), ie);
+                        }
+                        throw ie;
                     }
                 }
-                if (request.getOptionsIgnored().length()!=0) {
-                    statusText.setText(request.getOptionsIgnored().toString() + "are ignored");
-                } else {
-                    statusText.setText(JMeterUtils.getResString("curl_create_success"));
+                Iterator<Request> it=requests.iterator();
+                while(it.hasNext()) {
+                    BasicCurlParser.Request request = it.next();
+                    GuiPackage guiPackage = GuiPackage.getInstance();
+                    guiPackage.updateCurrentNode();
+                    JMeterTreeNode treeNode = findFirstNodeOfType(AbstractThreadGroup.class);
+                    if (treeNode == null) {
+                        LOGGER.info("No AbstractThreadGroup found, potentially empty plan, creating a new plan");
+                        createTestPlan(e, request);
+                    } else {
+                        JMeterTreeNode currentNode = guiPackage.getCurrentNode();
+                        Object userObject = currentNode.getUserObject();
+                        if (userObject instanceof Controller && !(userObject instanceof ReplaceableController)) {
+                            LOGGER.info("Newly created element will be placed under current selected node {}",
+                                    currentNode.getName());
+                            addToTestPlan(currentNode, request);
+                        } else {
+                            LOGGER.info("Newly created element will be placed under first AbstractThreadGroup node {}",
+                                    treeNode.getName());
+                            addToTestPlan(treeNode, request);
+                        }
+                    }
+                    if (request.getOptionsIgnored().length() != 0) {
+                        statusText.setText(request.getOptionsIgnored().toString() + "are ignored");
+                    } else {
+                        statusText.setText(JMeterUtils.getResString("curl_create_success"));
+                    }
+                    createSSLWarning(request);
                 }
-                createSSLWarning(request);
             } catch (Exception ex) {
-                LOGGER.error("Error creating test plan from cURL command:{}, error:{}", curlCommand, ex.getMessage(),
-                        ex);
                 statusText.setText(
                         MessageFormat.format(JMeterUtils.getResString("curl_create_failure"), ex.getMessage()));
                 statusText.setForeground(Color.RED);
@@ -721,17 +742,26 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         return cookies;
     }
 
-    public String readFromFile(String pathname) {
+    public static List<String> readFromFile(String pathname) {
         String encoding = StandardCharsets.UTF_8.name();
         File file = new File(pathname);
+        List<String> res=new ArrayList<>();
         if (file.exists() && file.isFile()) {
             try {
-                return FileUtils.readFileToString(file, encoding).trim();
+                res=FileUtils.readLines(file,encoding);
             } catch (IOException e) {
-                e.printStackTrace();
             }
         }
-        return null;
+        return res;
     }
+    public static List<String> readFromTextPanel(String commands) {
+        String[] cs = commands.split("curl");
+        List<String> s = new ArrayList<>();
+        for (int i=1;i<cs.length;i++) {
+            s.add("curl " + cs[i].trim());
+        }
+        return s;
+    }
+
    
 }
