@@ -116,7 +116,14 @@ public class BasicCurlParser {
         FORMS_OPT.add(FORM_OPT);
         FORMS_OPT.add(FORM_STRING_OPT);
     }
-
+    private static final List<Integer> IGNORE_OPTIONS_OPT = new ArrayList<>();// $NON-NLS-1$
+    static {
+        IGNORE_OPTIONS_OPT.add(OUTPUT_OPT );
+        IGNORE_OPTIONS_OPT.add(CREATE_DIRS_OPT);
+        IGNORE_OPTIONS_OPT.add(RAW_OPT);
+        IGNORE_OPTIONS_OPT.add(INCLUDE_OPT);
+        IGNORE_OPTIONS_OPT.add(HEAD_OPT);
+    }
     public static final class Request {
         private boolean compressed;
         private String url;
@@ -582,11 +589,8 @@ public class BasicCurlParser {
                 } else if (option.getDescriptor().getId() == MAX_TIME_OPT) {
                     String value = option.getArgument(0);
                     request.setMaxTime(value);
-                } else if (option.getDescriptor().getId() == OUTPUT_OPT) {
-                    request.setOptionsIgnored("-o/--output ");
-                }
-                else if (option.getDescriptor().getId() == RAW_OPT) {
-                    request.setOptionsIgnored("-raw ");
+                } else if (IGNORE_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
+                    request.setOptionsIgnored("--"+option.getDescriptor().getName()+" ");
                 }
             }
             if (isPostToGet) {
