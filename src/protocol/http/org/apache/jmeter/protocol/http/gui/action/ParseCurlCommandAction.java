@@ -117,6 +117,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private static final Set<String> commands = new HashSet<>();
     public static final String IMPORT_CURL = "import_curl";
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
+    private static final String TYPE_FORM=";type=";
     /** A panel allowing results to be saved. */
     private FilePanel filePanel = null;
     static {
@@ -455,11 +456,11 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             String formValue = entry.getValue();
             String contentType = "";
             boolean isContainsFile = formValue.substring(0, 1).equals("@");
-            boolean isContainsContentType = formValue.toLowerCase().contains(";type=");
+            boolean isContainsContentType = formValue.toLowerCase().contains(TYPE_FORM);
             if (isContainsFile) {
                 formValue = formValue.substring(1, formValue.length());
                 if (isContainsContentType) {
-                    String[] formValueWithType = formValue.split(";type=");
+                    String[] formValueWithType = formValue.split(TYPE_FORM);
                     formValue = formValueWithType[0];
                     contentType = formValueWithType[1];
                 } else {
@@ -468,7 +469,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 httpFileArgs.add(new HTTPFileArg(formValue, formName, contentType));
             } else {
                 if (isContainsContentType) {
-                    String[] formValueWithType = formValue.split(";type=");
+                    String[] formValueWithType = formValue.split(TYPE_FORM);
                     formValue = formValueWithType[0];
                     contentType = formValueWithType[1];
                     httpSampler.addNonEncodedArgument(formName, formValue, "", contentType);
@@ -568,7 +569,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         statusText.setForeground(Color.GREEN);
         boolean isReadFromFile = false;
         if (e.getActionCommand().equals(CREATE_REQUEST)) {
-            List<String> commandsList = new ArrayList<>();
+            List<String> commandsList = null;
             List<BasicCurlParser.Request> requests = new ArrayList<>();
             if (!filePanel.getFilename().trim().isEmpty()) {
                 commandsList = readFromFile(filePanel.getFilename().trim());
@@ -577,24 +578,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 commandsList = readFromTextPanel(cURLCommandTA.getText().trim());
             }
             try {
-                BasicCurlParser basicCurlParser = new BasicCurlParser();
-                for (int i = 0; i < commandsList.size(); i++) {
-                    try {
-                        BasicCurlParser.Request q = basicCurlParser.parse(commandsList.get(i));
-                        requests.add(q);
-                        LOGGER.info("Parsed CURL command {} into {}", commandsList.get(i), q);
-                    } catch (IllegalArgumentException ie) {
-                        if (isReadFromFile) {
-                            LOGGER.error("Error creating test plan from line {} of file, command:{}, error:{}", i + 1,
-                                    commandsList.get(i), ie.getMessage(), ie);
-                            throw new IllegalArgumentException("Error creating tast plan from file,see log file");
-                        } else {
-                            LOGGER.error("Error creating test plan from cURL command:{}, error:{}", commandsList.get(i),
-                                    ie.getMessage(), ie);
-                            throw ie;
-                        }
-                    }
-                }
+                parseCommands(isReadFromFile, commandsList, requests);
                 Iterator<Request> it = requests.iterator();
                 while (it.hasNext()) {
                     BasicCurlParser.Request request = it.next();
@@ -628,6 +612,28 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 statusText.setText(
                         MessageFormat.format(JMeterUtils.getResString("curl_create_failure"), ex.getMessage()));
                 statusText.setForeground(Color.RED);
+            }
+        }
+    }
+
+    private void parseCommands(boolean isReadFromFile, List<String> commandsList,
+            List<BasicCurlParser.Request> requests) {
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        for (int i = 0; i < commandsList.size(); i++) {
+            try {
+                BasicCurlParser.Request q = basicCurlParser.parse(commandsList.get(i));
+                requests.add(q);
+                LOGGER.info("Parsed CURL command {} into {}", commandsList.get(i), q);
+            } catch (IllegalArgumentException ie) {
+                if (isReadFromFile) {
+                    LOGGER.error("Error creating test plan from line {} of file, command:{}, error:{}", i + 1,
+                            commandsList.get(i), ie.getMessage(), ie);
+                    throw new IllegalArgumentException("Error creating tast plan from file,see log file");
+                } else {
+                    LOGGER.error("Error creating test plan from cURL command:{}, error:{}", commandsList.get(i),
+                            ie.getMessage(), ie);
+                    throw ie;
+                }
             }
         }
     }
