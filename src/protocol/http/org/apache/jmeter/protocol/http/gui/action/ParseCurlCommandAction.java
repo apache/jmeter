@@ -588,13 +588,11 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                             LOGGER.error("Error creating test plan from line {} of file, command:{}, error:{}", i + 1,
                                     commandsList.get(i), ie.getMessage(), ie);
                             throw new IllegalArgumentException("Error creating tast plan from file,see log file");
-                            
                         } else {
                             LOGGER.error("Error creating test plan from cURL command:{}, error:{}", commandsList.get(i),
                                     ie.getMessage(), ie);
                             throw ie;
                         }
-                        
                     }
                 }
                 Iterator<Request> it = requests.iterator();
@@ -627,13 +625,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                     createSSLWarning(request);
                 }
             } catch (Exception ex) {
-                if (isReadFromFile) {
-                    statusText.setText(
-                            MessageFormat.format(JMeterUtils.getResString("curl_create_failure"), ex.getMessage()));
-                } else {
-                    statusText.setText(
-                            MessageFormat.format(JMeterUtils.getResString("curl_create_failure"), ex.getMessage()));
-                }
+                statusText.setText(
+                        MessageFormat.format(JMeterUtils.getResString("curl_create_failure"), ex.getMessage()));
                 statusText.setForeground(Color.RED);
             }
         }
