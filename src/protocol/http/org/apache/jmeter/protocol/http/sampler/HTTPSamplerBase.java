@@ -994,7 +994,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         SampleTimeout mgr = getSampleTimeout();
         if (mgr != null) {
             if (log.isWarnEnabled()) {
-                log.warn("Exiset SampleTimeout {} superseded by {}", mgr.getName(),
+                log.warn("Existing SampleTimeout {} superseded by {}", mgr.getName(),
                         value.getName());
             }
         }
