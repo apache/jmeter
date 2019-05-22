@@ -249,7 +249,7 @@ http://www.slf4j.org/
 - json-path
 - jmeter internal logging
 
-tika-1.20
+tika-1.21
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor

@@ -125,6 +125,7 @@ to view the last major behaviors with the version 5.1.1.
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Updated to tika-core and tika-parsers 1.21 (from 1.21)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
