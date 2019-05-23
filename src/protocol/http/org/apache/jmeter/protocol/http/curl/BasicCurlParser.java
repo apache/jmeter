@@ -73,6 +73,7 @@ public class BasicCurlParser {
     private static final int CERT_STATUS_OPT = "cert-status".hashCode();// $NON-NLS-1$-1$
     private static final int CERT_TYPE_OPT = "cert-type".hashCode();// $NON-NLS-1$-1$
     private static final int KEY_OPT = "key".hashCode();// $NON-NLS-1$-1$
+    private static final int KEY_TYPE_OPT = "key-type".hashCode();// $NON-NLS-1$-1$
     private static final int GET_OPT = 'G';// $NON-NLS-1$
     private static final int DNS_OPT = "dns-servers".hashCode();// $NON-NLS-1$
     private static final int NO_KEEPALIVE_OPT = "no-keepalive".hashCode();// $NON-NLS-1$
@@ -105,6 +106,7 @@ public class BasicCurlParser {
         SSL_OPT.add(CERT_STATUS_OPT);
         SSL_OPT.add(CERT_TYPE_OPT);
         SSL_OPT.add(KEY_OPT);
+        SSL_OPT.add(KEY_TYPE_OPT);
     }
     private static final List<Integer> DATAS_OPT = new ArrayList<>();// $NON-NLS-1$
     static {
@@ -445,6 +447,9 @@ public class BasicCurlParser {
     private static final CLOptionDescriptor D_KEY_OPT = new CLOptionDescriptor("key",
             CLOptionDescriptor.ARGUMENT_REQUIRED, KEY_OPT,
             "Private key file name. Allows you to provide your private key in this separate file. ");
+    private static final CLOptionDescriptor D_KEY_TYPE_OPT = new CLOptionDescriptor("key-type",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, KEY_TYPE_OPT,
+            "Private key file type. Specify which type your --key provided private key is.");
     private static final CLOptionDescriptor D_GET_OPT = new CLOptionDescriptor("get",
             CLOptionDescriptor.ARGUMENT_DISALLOWED, GET_OPT,
             "Put the post data in the url and use get to replace post. ");
@@ -495,8 +500,8 @@ public class BasicCurlParser {
             D_METHOD_OPT, D_DATA_OPT, D_DATA_ASCII_OPT, D_DATA_URLENCODE_OPT, D_DATA_RAW_OPT, D_DATA_BINARY_OPT,
             D_FORM_OPT, D_FORM_STRING_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT, D_USER_OPT,
             D_BASIC_OPT, D_DIGEST_OPT, D_CACERT_OPT, D_CAPATH_OPT, D_CERT_OPT, D_CERT_STATUS_OPT, D_CERT_TYPE_OPT,
-            D_CIPHERS_OPT, D_KEY_OPT, D_GET_OPT, D_DNS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT, D_LOCATION_OPT,
-            D_INCLUDE_OPT, D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT,
+            D_CIPHERS_OPT, D_KEY_OPT, D_KEY_TYPE_OPT, D_GET_OPT, D_DNS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT,
+            D_LOCATION_OPT, D_INCLUDE_OPT, D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT,
             D_PROXY_NEGOTIATE_OPT, D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_RAW_OPT,
             D_INTERFACE_OPT };
 
