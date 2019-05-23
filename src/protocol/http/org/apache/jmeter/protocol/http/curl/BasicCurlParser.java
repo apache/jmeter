@@ -72,6 +72,7 @@ public class BasicCurlParser {
     private static final int CIPHERS_OPT = "ciphers".hashCode();// $NON-NLS
     private static final int CERT_STATUS_OPT = "cert-status".hashCode();// $NON-NLS-1$-1$
     private static final int CERT_TYPE_OPT = "cert-type".hashCode();// $NON-NLS-1$-1$
+    private static final int KEY_OPT = "key".hashCode();// $NON-NLS-1$-1$
     private static final int GET_OPT = 'G';// $NON-NLS-1$
     private static final int DNS_OPT = "dns-servers".hashCode();// $NON-NLS-1$
     private static final int NO_KEEPALIVE_OPT = "no-keepalive".hashCode();// $NON-NLS-1$
@@ -103,6 +104,7 @@ public class BasicCurlParser {
         SSL_OPT.add(CIPHERS_OPT);
         SSL_OPT.add(CERT_STATUS_OPT);
         SSL_OPT.add(CERT_TYPE_OPT);
+        SSL_OPT.add(KEY_OPT);
     }
     private static final List<Integer> DATAS_OPT = new ArrayList<>();// $NON-NLS-1$
     static {
@@ -119,12 +121,13 @@ public class BasicCurlParser {
     }
     private static final List<Integer> IGNORE_OPTIONS_OPT = new ArrayList<>();// $NON-NLS-1$
     static {
-        IGNORE_OPTIONS_OPT.add(OUTPUT_OPT );
+        IGNORE_OPTIONS_OPT.add(OUTPUT_OPT);
         IGNORE_OPTIONS_OPT.add(CREATE_DIRS_OPT);
         IGNORE_OPTIONS_OPT.add(RAW_OPT);
         IGNORE_OPTIONS_OPT.add(INCLUDE_OPT);
         IGNORE_OPTIONS_OPT.add(KEEPALIVETILE_OPT);
     }
+
     public static final class Request {
         private boolean compressed;
         private String url;
@@ -143,11 +146,11 @@ public class BasicCurlParser {
         private double maxTime = -1;
         private List<String> optionsIgnored = new ArrayList<>();
         private Map<String, String> proxyServer = new LinkedHashMap<>();
-        
+
         public Request() {
             super();
         }
-        
+
         public String getInterfaceName() {
             return interfaceName;
         }
@@ -155,6 +158,7 @@ public class BasicCurlParser {
         public void setInterfaceName(String interfaceName) {
             this.interfaceName = interfaceName;
         }
+
         public List<String> getOptionsIgnored() {
             return optionsIgnored;
         }
@@ -162,6 +166,7 @@ public class BasicCurlParser {
         public void addOptionsIgnored(String option) {
             this.optionsIgnored.add(option);
         }
+
         /**
          * @return the compressed
          */
@@ -343,6 +348,7 @@ public class BasicCurlParser {
         public Authorization getAuthorization() {
             return authorization;
         }
+
         public double getConnectTimeout() {
             return connectTimeout;
         }
@@ -358,6 +364,7 @@ public class BasicCurlParser {
         public void setMaxTime(double maxTime) {
             this.maxTime = maxTime;
         }
+
         /*
          * (non-Javadoc)
          * 
@@ -435,6 +442,9 @@ public class BasicCurlParser {
     private static final CLOptionDescriptor D_CERT_TYPE_OPT = new CLOptionDescriptor("cert-type",
             CLOptionDescriptor.ARGUMENT_REQUIRED, CERT_TYPE_OPT, "Tells curl the type of certificate type of the "
                     + "provided certificate. PEM, DER and ENG are recognized types ");
+    private static final CLOptionDescriptor D_KEY_OPT = new CLOptionDescriptor("key",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, KEY_OPT,
+            "Private key file name. Allows you to provide your private key in this separate file. ");
     private static final CLOptionDescriptor D_GET_OPT = new CLOptionDescriptor("get",
             CLOptionDescriptor.ARGUMENT_DISALLOWED, GET_OPT,
             "Put the post data in the url and use get to replace post. ");
@@ -478,16 +488,17 @@ public class BasicCurlParser {
     private static final CLOptionDescriptor D_RAW_OPT = new CLOptionDescriptor("raw",
             CLOptionDescriptor.ARGUMENT_DISALLOWED, RAW_OPT,
             "When used, it disables all internal HTTP decoding of content or transfer encodings "
-            + "and instead makes them passed on unaltered raw. ");
+                    + "and instead makes them passed on unaltered raw. ");
     private static final CLOptionDescriptor D_INTERFACE_OPT = new CLOptionDescriptor("interface",
             CLOptionDescriptor.ARGUMENT_REQUIRED, INTERFACE_OPT, "Perform an operation using a specified interface");
     private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[] { D_COMPRESSED_OPT, D_HEADER_OPT,
             D_METHOD_OPT, D_DATA_OPT, D_DATA_ASCII_OPT, D_DATA_URLENCODE_OPT, D_DATA_RAW_OPT, D_DATA_BINARY_OPT,
             D_FORM_OPT, D_FORM_STRING_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT, D_USER_OPT,
             D_BASIC_OPT, D_DIGEST_OPT, D_CACERT_OPT, D_CAPATH_OPT, D_CERT_OPT, D_CERT_STATUS_OPT, D_CERT_TYPE_OPT,
-            D_CIPHERS_OPT, D_GET_OPT, D_DNS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT, D_LOCATION_OPT, D_INCLUDE_OPT,
-            D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT, D_PROXY_NEGOTIATE_OPT,
-            D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_RAW_OPT, D_INTERFACE_OPT };
+            D_CIPHERS_OPT, D_KEY_OPT, D_GET_OPT, D_DNS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT, D_LOCATION_OPT,
+            D_INCLUDE_OPT, D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT,
+            D_PROXY_NEGOTIATE_OPT, D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_RAW_OPT,
+            D_INTERFACE_OPT };
 
     public BasicCurlParser() {
         super();
@@ -586,7 +597,7 @@ public class BasicCurlParser {
                     request.addOptionsIgnored("--" + option.getDescriptor().getName());
                 } else if (option.getDescriptor().getId() == HEAD_OPT) {
                     request.setMethod("HEAD");
-                }else if (option.getDescriptor().getId() == INTERFACE_OPT) {
+                } else if (option.getDescriptor().getId() == INTERFACE_OPT) {
                     String value = option.getArgument(0);
                     request.setInterfaceName(value);
                 }
