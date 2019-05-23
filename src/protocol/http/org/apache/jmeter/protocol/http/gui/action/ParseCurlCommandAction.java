@@ -71,8 +71,6 @@ import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
-import org.apache.jmeter.modifiers.SampleTimeout;
-import org.apache.jmeter.modifiers.gui.SampleTimeoutGui;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.Cookie;
@@ -240,9 +238,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         if (request.getCacert().equals("cert")) {
             samplerHT.add(httpSampler.getKeystoreConfig());
         }
-        if (request.getMaxTime() != null) {
-            samplerHT.add(httpSampler.getSampleTimeout());
-        }
         return httpSampler;
     }
 
@@ -263,7 +258,17 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         httpSampler.setUseKeepAlive(request.isKeepAlive());
         httpSampler.setFollowRedirects(true);
         httpSampler.setMethod(request.getMethod());
-        httpSampler.setConnectTimeout(request.getConnectTimeout());
+        double connectTimeout=request.getConnectTimeout();
+        double maxTime= request.getMaxTime();
+        if (connectTimeout >= 0) {
+            httpSampler.setConnectTimeout(String.valueOf((int)request.getConnectTimeout()));
+            if(maxTime>=0) {
+               maxTime=maxTime-connectTimeout;  
+            }
+        }
+        if (maxTime>= 0) {
+            httpSampler.setResponseTimeout(String.valueOf((int)maxTime));
+        }
         createProxyServer(request, httpSampler);
         if (!"GET".equals(request.getMethod()) && request.getPostData() != null) {
             Arguments arguments = new Arguments();
@@ -283,10 +288,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         if (request.getCacert().equals("cert")) {
             KeystoreConfig keystoreConfig = createKeystoreConfiguration();
             httpSampler.addTestElement(keystoreConfig);
-        }
-        if (request.getMaxTime() != null) {
-            SampleTimeout sampleTimeout = createSampleTimeout(request);
-            httpSampler.addTestElement(sampleTimeout);
         }
         return httpSampler;
     }
@@ -504,21 +505,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             statusText.setText(warning.toString());
         }
     }
-
-    /**
-     * @param request {@link Request}
-     * @return {@link SampleTimeout} element
-     */
-    private SampleTimeout createSampleTimeout(Request request) {
-        SampleTimeout sampleTimeout = new SampleTimeout();
-        sampleTimeout.setProperty(TestElement.GUI_CLASS, SampleTimeoutGui.class.getName());
-        sampleTimeout.setProperty(TestElement.NAME, "Sample Timeout");
-        sampleTimeout.setProperty(TestElement.COMMENTS,
-                "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
-        sampleTimeout.setTimeout(request.getMaxTime());
-        return sampleTimeout;
-    }
-
     /**
      * 
      * @param request     {@link Request}
@@ -674,7 +660,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 CookieManager cookieManager = sampler.getCookieManager();
                 HeaderManager headerManager = sampler.getHeaderManager();
                 KeystoreConfig keystoreConfig = sampler.getKeystoreConfig();
-                SampleTimeout sampleTimeout = sampler.getSampleTimeout();
                 final JMeterTreeNode newNode = treeModel.addComponent(sampler, currentNode);
                 treeModel.addComponent(headerManager, newNode);
                 if (request.getCookie() != null) {
@@ -682,9 +667,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 }
                 if (request.getCacert().equals("cert")) {
                     treeModel.addComponent(keystoreConfig, newNode);
-                }
-                if (request.getMaxTime() != null) {
-                    treeModel.addComponent(sampleTimeout, newNode);
                 }
                 if (canUpdateAuthManagerInHttpRequest) {
                     AuthManager authManager = new AuthManager();

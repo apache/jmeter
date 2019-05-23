@@ -48,7 +48,6 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.KeystoreConfig;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.Replaceable;
-import org.apache.jmeter.modifiers.SampleTimeout;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.Cookie;
@@ -115,8 +114,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     "org.apache.jmeter.protocol.http.gui.AuthPanel",
                     "org.apache.jmeter.protocol.http.gui.CacheManagerGui",
                     "org.apache.jmeter.protocol.http.gui.CookiePanel",
-                    "org.apache.jmeter.testbeans.gui.TestBeanGUI", 
-                    "org.apache.jmeter.modifiers.gui.SampleTimeoutGui"
+                    "org.apache.jmeter.testbeans.gui.TestBeanGUI"
             ));
 
     //+ JMX names - do not change
@@ -725,10 +723,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             setDNSResolver((DNSCacheManager) el);
         } else if (el instanceof KeystoreConfig) {
             setKeystoreConfigProperty((KeystoreConfig) el);
-        } else if (el instanceof SampleTimeout) {
-            setSampleTimeoutProperty((SampleTimeout) el);
-        } 
-          else {
+        }  else {
             super.addTestElement(el);
         }
     }
@@ -984,26 +979,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return (KeystoreConfig) getProperty(KEYSTORE_CONFIG).getObjectValue();
     }
     
-    // private method to allow AsyncSample to reset the value without performing
-    // checks
-    private void setSampleTimeoutProperty(SampleTimeout value) {
-        setProperty(new TestElementProperty(SAMPLE_TIMEOUT, value));
-    }
-    
-    public void setSampleTimeout(SampleTimeout value) {
-        SampleTimeout mgr = getSampleTimeout();
-        if (mgr != null) {
-            if (log.isWarnEnabled()) {
-                log.warn("Existing SampleTimeout {} superseded by {}", mgr.getName(),
-                        value.getName());
-            }
-        }
-        setSampleTimeoutProperty(value);
-    }
-
-    public SampleTimeout getSampleTimeout() {
-        return (SampleTimeout) getProperty(SAMPLE_TIMEOUT).getObjectValue();
-    }
     public void setCacheManager(CacheManager value) {
         CacheManager mgr = getCacheManager();
         if (mgr != null) {

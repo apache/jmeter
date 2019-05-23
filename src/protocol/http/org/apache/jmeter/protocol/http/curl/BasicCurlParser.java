@@ -130,7 +130,7 @@ public class BasicCurlParser {
         private Map<String, String> headers = new LinkedHashMap<>();
         private String method = "GET";
         private String postData;
-        private String connectTimeout = "";
+        private double connectTimeout = -1;
         private String cookie = null;
         private Authorization authorization = new Authorization();
         private String cacert = "";
@@ -138,7 +138,7 @@ public class BasicCurlParser {
         private Map<String, String> formStringData = new LinkedHashMap<>();
         private List<String> dnsServers = new ArrayList<>();
         private boolean isKeepAlive = true;
-        private String maxTime = null;
+        private double maxTime = -1;
         private StringBuilder optionsIgnored = new StringBuilder();
         private Map<String, String> proxyServer = new LinkedHashMap<>();
 
@@ -244,22 +244,6 @@ public class BasicCurlParser {
 
         /**
          * 
-         * @return the max time of the whole operation
-         */
-        public String getMaxTime() {
-            return maxTime;
-        }
-
-        /**
-         * 
-         * @param maxTime set the max time of the whole operation
-         */
-        public void setMaxTime(String maxTime) {
-            this.maxTime = maxTime;
-        }
-
-        /**
-         * 
          * @return the map of proxy server
          */
         public Map<String, String> getProxyServer() {
@@ -340,18 +324,6 @@ public class BasicCurlParser {
             formData.put(key, value);
         }
 
-        /**
-         * 
-         * @return the timeout of connection
-         */
-        public String getConnectTimeout() {
-            return connectTimeout;
-        }
-
-        public void setConnectTimeout(String connectTimeout) {
-            this.connectTimeout = connectTimeout;
-        }
-
         public String getCacert() {
             return cacert;
         }
@@ -363,7 +335,21 @@ public class BasicCurlParser {
         public Authorization getAuthorization() {
             return authorization;
         }
+        public double getConnectTimeout() {
+            return connectTimeout;
+        }
 
+        public void setConnectTimeout(double connectTimeout) {
+            this.connectTimeout = connectTimeout;
+        }
+
+        public double getMaxTime() {
+            return maxTime;
+        }
+
+        public void setMaxTime(double maxTime) {
+            this.maxTime = maxTime;
+        }
         /*
          * (non-Javadoc)
          * 
@@ -551,7 +537,7 @@ public class BasicCurlParser {
                     request.addHeader(name, value);
                 } else if (option.getDescriptor().getId() == CONNECT_TIMEOUT_OPT) {
                     String value = option.getArgument(0);
-                    request.setConnectTimeout(value);
+                    request.setConnectTimeout(Double.valueOf(value)*1000);
                 } else if (option.getDescriptor().getId() == COOKIE_OPT) {
                     String value = option.getArgument(0);
                     request.setCookie(value);
@@ -587,7 +573,7 @@ public class BasicCurlParser {
                     request.setOptionsIgnored("--"+option.getDescriptor().getName()+" ");
                 } else if (option.getDescriptor().getId() == MAX_TIME_OPT) {
                     String value = option.getArgument(0);
-                    request.setMaxTime(value);
+                    request.setMaxTime(Double.valueOf(value)*1000);
                 } else if (IGNORE_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
                     request.setOptionsIgnored("--"+option.getDescriptor().getName()+" ");
                 }

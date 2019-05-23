@@ -190,13 +190,13 @@ public class BasicCurlParserTest {
     @Test
     public void testConnectMax() {
         String cmdLine = "curl 'http://jmeter.apache.org/' -H 'Connection: keep-alive' "
-                + "-H 'Upgrade-Insecure-Requests: 1' --connect-timeout '2000'";
+                + "-H 'Upgrade-Insecure-Requests: 1' --connect-timeout '2'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser', " + "request should contain 'connect-timeout=2000'", "2000",
-                request.getConnectTimeout());
+        Assert.assertEquals("With method 'parser' request should contain 'connect-timeout=2'", "2000.0",
+               String.valueOf( request.getConnectTimeout()));
     }
-
+    
     @Test
     public void testAuthorization() {
         String cmdLine = "curl 'http://jmeter.apache.org/' -u 'arun:12345'";
@@ -470,22 +470,14 @@ public class BasicCurlParserTest {
         Assert.fail(
                 "The method 'translateCommandline shouldn't run when the uri of proxy is not in the correct format");
     }
-    @Test
-    public void testKeepAliveTime() {
-        String cmdLine = "curl 'http://jmeter.apache.org/' --keepalive-time '20'";
-        BasicCurlParser basicCurlParser = new BasicCurlParser();
-        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser', timeout of keep alive should be 20", "timeout=20",
-                request.getHeaders().get("Keep-Alive"));
-    }
 
     @Test
     public void testMaxTime() {
-        String cmdLine = "curl 'http://jmeter.apache.org/' -m '200'";
+        String cmdLine = "curl 'http://jmeter.apache.org/' -m '2'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser', max time of all the operation should be 200", "200",
-                request.getMaxTime());
+        Assert.assertEquals("With method 'parser', max time of all the operation should be 200", "2000.0",
+                String.valueOf( request.getMaxTime()));
     }
 
     @Test
