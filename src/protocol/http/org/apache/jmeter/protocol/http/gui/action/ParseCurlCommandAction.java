@@ -115,7 +115,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private static final Set<String> commands = new HashSet<>();
     public static final String IMPORT_CURL = "import_curl";
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
-    private static final String TYPE_FORM=";type=";
+    private static final String TYPE_FORM = ";type=";
     /** A panel allowing results to be saved. */
     private FilePanel filePanel = null;
     static {
@@ -258,16 +258,16 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         httpSampler.setUseKeepAlive(request.isKeepAlive());
         httpSampler.setFollowRedirects(true);
         httpSampler.setMethod(request.getMethod());
-        double connectTimeout=request.getConnectTimeout();
-        double maxTime= request.getMaxTime();
+        double connectTimeout = request.getConnectTimeout();
+        double maxTime = request.getMaxTime();
         if (connectTimeout >= 0) {
-            httpSampler.setConnectTimeout(String.valueOf((int)request.getConnectTimeout()));
-            if(maxTime>=0) {
-               maxTime=maxTime-connectTimeout;  
+            httpSampler.setConnectTimeout(String.valueOf((int) request.getConnectTimeout()));
+            if (maxTime >= 0) {
+                maxTime = maxTime - connectTimeout;
             }
         }
-        if (maxTime>= 0) {
-            httpSampler.setResponseTimeout(String.valueOf((int)maxTime));
+        if (maxTime >= 0) {
+            httpSampler.setResponseTimeout(String.valueOf((int) maxTime));
         }
         createProxyServer(request, httpSampler);
         if (!"GET".equals(request.getMethod()) && request.getPostData() != null) {
@@ -488,23 +488,32 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * 
      * @param request {@link Request}
      */
-    private void createSSLWarning(Request request) {
-        if (!request.getCacert().isEmpty()) {
-            StringBuilder warning = new StringBuilder();
-            warning.append("<html><p>Configure the certificate file or directory which contains "
-                    + "multiple CA certificates in 'system.properties'</p>");
-            String option = request.getCacert();
-            if (option.equals("cert-status") || option.equals("cert-type")) {
-                warning.append("<p>The option ");
-                warning.append(option);
-                warning.append(" has been ignored</p></html>");
-            } else {
-                warning.append(
-                        "<p>Guide : https://jmeter.apache.org/usermanual/properties_reference.html#ssl_config</p></html>");
-            }
-            statusText.setText(warning.toString());
+    private String createSSLWarning(Request request) {
+        StringBuilder warning = new StringBuilder();
+        warning.append("<p>Configure the certificate file or directory which contains "
+                + "multiple CA certificates in 'system.properties'</p>");
+        String option = request.getCacert();
+        if (option.equals("cert-status") || option.equals("cert-type")) {
+            warning.append("<p>The option ");
+            warning.append(option);
+            warning.append(" has been ignored</p></html>");
+        } else {
+            warning.append("<p>Guide : https://jmeter.apache.org/usermanual/properties_reference.html#ssl_config</p>");
         }
+        return warning.toString();
     }
+
+    private String createIgnoreOptionsWarning(Set<String> ignoreOptions) {
+        StringBuilder ignoreOptionsString = new StringBuilder();
+        ignoreOptionsString.append("<p>");
+        for (String s : ignoreOptions) {
+            ignoreOptionsString.append(s + " ");
+        }
+        ignoreOptionsString.append("are ignored");
+        ignoreOptionsString.append("</p>");
+        return ignoreOptionsString.toString();
+    }
+
     /**
      * 
      * @param request     {@link Request}
@@ -553,6 +562,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     public void actionPerformed(ActionEvent e) {
         statusText.setText("");
         statusText.setForeground(Color.GREEN);
+        StringBuilder statusTextSuccess = new StringBuilder();
+        statusTextSuccess.append("<html><p>" + JMeterUtils.getResString("curl_create_success") + "</p>");
         boolean isReadFromFile = false;
         if (e.getActionCommand().equals(CREATE_REQUEST)) {
             List<String> commandsList = null;
@@ -564,6 +575,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 commandsList = readFromTextPanel(cURLCommandTA.getText().trim());
             }
             try {
+                Set<String> ignoreOptions = new HashSet<>();
                 parseCommands(isReadFromFile, commandsList, requests);
                 Iterator<Request> it = requests.iterator();
                 while (it.hasNext()) {
@@ -587,13 +599,18 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                             addToTestPlan(treeNode, request);
                         }
                     }
-                    if (request.getOptionsIgnored().length() != 0) {
-                        statusText.setText(request.getOptionsIgnored().toString() + "are ignored");
-                    } else {
-                        statusText.setText(JMeterUtils.getResString("curl_create_success"));
+                    if (!request.getOptionsIgnored().isEmpty()) {
+                        ignoreOptions.addAll(request.getOptionsIgnored());
                     }
-                    createSSLWarning(request);
+                    if (!request.getCacert().isEmpty()) {
+                        statusTextSuccess.append(createSSLWarning(request));
+                    }
                 }
+                if (!ignoreOptions.isEmpty()) {
+                    statusTextSuccess.append(createIgnoreOptionsWarning(ignoreOptions));
+                }
+                statusTextSuccess.append("</html>");
+                statusText.setText(statusTextSuccess.toString());
             } catch (Exception ex) {
                 statusText.setText(
                         MessageFormat.format(JMeterUtils.getResString("curl_create_failure"), ex.getMessage()));
@@ -612,10 +629,11 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 LOGGER.info("Parsed CURL command {} into {}", commandsList.get(i), q);
             } catch (IllegalArgumentException ie) {
                 if (isReadFromFile) {
-                    int line =i+1;
+                    int line = i + 1;
                     LOGGER.error("Error creating test plan from line {} of file, command:{}, error:{}", line,
                             commandsList.get(i), ie.getMessage(), ie);
-                    throw new IllegalArgumentException("Error creating tast plan from file in line "+line+", see log file");
+                    throw new IllegalArgumentException(
+                            "Error creating tast plan from file in line " + line + ", see log file");
                 } else {
                     LOGGER.error("Error creating test plan from cURL command:{}, error:{}", commandsList.get(i),
                             ie.getMessage(), ie);

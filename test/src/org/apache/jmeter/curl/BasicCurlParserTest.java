@@ -20,6 +20,7 @@ package org.apache.jmeter.curl;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -506,4 +507,15 @@ public class BasicCurlParserTest {
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser', the file of cookie should be uploaded in CookieManager",
                 file.getAbsolutePath(), request.getCookie());}
+    
+    @Test
+    public void testIgnoreOptions() {
+        String cmdLine = "curl 'https://www.w3schools.com/action_page.php' --head --include --keepalive-time '20'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        List<String> listOptions=request.getOptionsIgnored();
+        Assert.assertTrue("The list of ignored options should contain '--head'", listOptions.contains("--head"));
+        Assert.assertTrue("The list of ignored options should contain '--include'", listOptions.contains("--include"));
+        Assert.assertTrue("The list of ignored options should contain '--keepalive-time'", listOptions.contains("--keepalive-time"));
+    }
 }

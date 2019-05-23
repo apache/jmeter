@@ -123,6 +123,7 @@ public class BasicCurlParser {
         IGNORE_OPTIONS_OPT.add(RAW_OPT);
         IGNORE_OPTIONS_OPT.add(INCLUDE_OPT);
         IGNORE_OPTIONS_OPT.add(HEAD_OPT);
+        IGNORE_OPTIONS_OPT.add(KEEPALIVETILE_OPT);
     }
     public static final class Request {
         private boolean compressed;
@@ -139,13 +140,20 @@ public class BasicCurlParser {
         private List<String> dnsServers = new ArrayList<>();
         private boolean isKeepAlive = true;
         private double maxTime = -1;
-        private StringBuilder optionsIgnored = new StringBuilder();
+        private List<String> optionsIgnored = new ArrayList<>();
         private Map<String, String> proxyServer = new LinkedHashMap<>();
 
         public Request() {
             super();
         }
+        
+        public List<String> getOptionsIgnored() {
+            return optionsIgnored;
+        }
 
+        public void addOptionsIgnored(String option) {
+            this.optionsIgnored.add(option);
+        }
         /**
          * @return the compressed
          */
@@ -232,14 +240,6 @@ public class BasicCurlParser {
          */
         public void setCookie(String cookie) {
             this.cookie = cookie;
-        }
-
-        public StringBuilder getOptionsIgnored() {
-            return optionsIgnored;
-        }
-
-        public void setOptionsIgnored(String option) {
-            this.optionsIgnored.append(option);
         }
 
         /**
@@ -569,13 +569,11 @@ public class BasicCurlParser {
                     request.addHeader("Proxy-Authenticate", "NTLM");
                 } else if (option.getDescriptor().getId() == PROXY_NEGOTIATE_OPT) {
                     request.addHeader("Proxy-Authenticate", "Negotiate");
-                } else if (option.getDescriptor().getId() == KEEPALIVETILE_OPT) {
-                    request.setOptionsIgnored("--"+option.getDescriptor().getName()+" ");
                 } else if (option.getDescriptor().getId() == MAX_TIME_OPT) {
                     String value = option.getArgument(0);
                     request.setMaxTime(Double.valueOf(value)*1000);
                 } else if (IGNORE_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
-                    request.setOptionsIgnored("--"+option.getDescriptor().getName()+" ");
+                    request.addOptionsIgnored("--"+option.getDescriptor().getName());
                 }
             }
             if (isPostToGet) {
