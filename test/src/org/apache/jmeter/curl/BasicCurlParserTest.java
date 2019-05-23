@@ -525,4 +525,12 @@ public class BasicCurlParserTest {
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("The method should be HEAD","HEAD", request.getMethod());
     }
+    
+    @Test
+    public void testInterface() {
+        String cmdLine = "curl 'http://jmeter.apache.org/'   --interface 'etho'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("The interface should to be etho","etho", request.getInterfaceName());
+    }
 }

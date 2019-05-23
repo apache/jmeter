@@ -89,6 +89,7 @@ public class BasicCurlParser {
     private static final int CREATE_DIRS_OPT = "create-dir".hashCode();// $NON-NLS-1$
     private static final int INSECURE_OPT = 'k';// $NON-NLS-1$
     private static final int RAW_OPT = "raw".hashCode();// $NON-NLS-1$
+    private static final int INTERFACE_OPT = "interface".hashCode();// $NON-NLS-1$
     private static final List<Integer> AUTH_OPT = new ArrayList<>();// $NON-NLS-1$
     static {
         AUTH_OPT.add(BASIC_OPT);
@@ -130,6 +131,7 @@ public class BasicCurlParser {
         private Map<String, String> headers = new LinkedHashMap<>();
         private String method = "GET";
         private String postData;
+        private String interfaceName;
         private double connectTimeout = -1;
         private String cookie = null;
         private Authorization authorization = new Authorization();
@@ -141,10 +143,18 @@ public class BasicCurlParser {
         private double maxTime = -1;
         private List<String> optionsIgnored = new ArrayList<>();
         private Map<String, String> proxyServer = new LinkedHashMap<>();
+        
         public Request() {
             super();
         }
         
+        public String getInterfaceName() {
+            return interfaceName;
+        }
+
+        public void setInterfaceName(String interfaceName) {
+            this.interfaceName = interfaceName;
+        }
         public List<String> getOptionsIgnored() {
             return optionsIgnored;
         }
@@ -469,13 +479,15 @@ public class BasicCurlParser {
             CLOptionDescriptor.ARGUMENT_DISALLOWED, RAW_OPT,
             "When used, it disables all internal HTTP decoding of content or transfer encodings "
             + "and instead makes them passed on unaltered raw. ");
+    private static final CLOptionDescriptor D_INTERFACE_OPT = new CLOptionDescriptor("interface",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, INTERFACE_OPT, "Perform an operation using a specified interface");
     private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[] { D_COMPRESSED_OPT, D_HEADER_OPT,
             D_METHOD_OPT, D_DATA_OPT, D_DATA_ASCII_OPT, D_DATA_URLENCODE_OPT, D_DATA_RAW_OPT, D_DATA_BINARY_OPT,
             D_FORM_OPT, D_FORM_STRING_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT, D_USER_OPT,
             D_BASIC_OPT, D_DIGEST_OPT, D_CACERT_OPT, D_CAPATH_OPT, D_CERT_OPT, D_CERT_STATUS_OPT, D_CERT_TYPE_OPT,
             D_CIPHERS_OPT, D_GET_OPT, D_DNS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT, D_LOCATION_OPT, D_INCLUDE_OPT,
             D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT, D_PROXY_NEGOTIATE_OPT,
-            D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_RAW_OPT };
+            D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_RAW_OPT, D_INTERFACE_OPT };
 
     public BasicCurlParser() {
         super();
@@ -574,6 +586,9 @@ public class BasicCurlParser {
                     request.addOptionsIgnored("--" + option.getDescriptor().getName());
                 } else if (option.getDescriptor().getId() == HEAD_OPT) {
                     request.setMethod("HEAD");
+                }else if (option.getDescriptor().getId() == INTERFACE_OPT) {
+                    String value = option.getArgument(0);
+                    request.setInterfaceName(value);
                 }
             }
             if (isPostToGet) {

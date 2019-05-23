@@ -258,17 +258,11 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         httpSampler.setUseKeepAlive(request.isKeepAlive());
         httpSampler.setFollowRedirects(true);
         httpSampler.setMethod(request.getMethod());
-        double connectTimeout = request.getConnectTimeout();
-        double maxTime = request.getMaxTime();
-        if (connectTimeout >= 0) {
-            httpSampler.setConnectTimeout(String.valueOf((int) request.getConnectTimeout()));
-            if (maxTime >= 0) {
-                maxTime = maxTime - connectTimeout;
-            }
+        if(request.getInterfaceName()!=null) {
+            httpSampler.setIpSourceType(1);
+            httpSampler.setIpSource(request.getInterfaceName());
         }
-        if (maxTime >= 0) {
-            httpSampler.setResponseTimeout(String.valueOf((int) maxTime));
-        }
+        configureTimeout(request, httpSampler);
         createProxyServer(request, httpSampler);
         if (!"GET".equals(request.getMethod()) && request.getPostData() != null) {
             Arguments arguments = new Arguments();
@@ -290,6 +284,20 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             httpSampler.addTestElement(keystoreConfig);
         }
         return httpSampler;
+    }
+
+    private void configureTimeout(Request request, HTTPSamplerProxy httpSampler) {
+        double connectTimeout = request.getConnectTimeout();
+        double maxTime = request.getMaxTime();
+        if (connectTimeout >= 0) {
+            httpSampler.setConnectTimeout(String.valueOf((int) request.getConnectTimeout()));
+            if (maxTime >= 0) {
+                maxTime = maxTime - connectTimeout;
+            }
+        }
+        if (maxTime >= 0) {
+            httpSampler.setResponseTimeout(String.valueOf((int) maxTime));
+        }
     }
 
     /**
