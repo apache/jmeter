@@ -626,9 +626,10 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 LOGGER.info("Parsed CURL command {} into {}", commandsList.get(i), q);
             } catch (IllegalArgumentException ie) {
                 if (isReadFromFile) {
-                    LOGGER.error("Error creating test plan from line {} of file, command:{}, error:{}", i + 1,
+                    int line =i+1;
+                    LOGGER.error("Error creating test plan from line {} of file, command:{}, error:{}", line,
                             commandsList.get(i), ie.getMessage(), ie);
-                    throw new IllegalArgumentException("Error creating tast plan from file,see log file");
+                    throw new IllegalArgumentException("Error creating tast plan from file in line "+line+", see log file");
                 } else {
                     LOGGER.error("Error creating test plan from cURL command:{}, error:{}", commandsList.get(i),
                             ie.getMessage(), ie);

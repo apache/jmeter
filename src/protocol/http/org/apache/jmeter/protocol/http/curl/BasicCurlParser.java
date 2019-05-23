@@ -584,8 +584,7 @@ public class BasicCurlParser {
                 } else if (option.getDescriptor().getId() == PROXY_NEGOTIATE_OPT) {
                     request.addHeader("Proxy-Authenticate", "Negotiate");
                 } else if (option.getDescriptor().getId() == KEEPALIVETILE_OPT) {
-                    String value = option.getArgument(0);
-                    request.addHeader("Keep-Alive", "timeout=" + value);
+                    request.setOptionsIgnored("--"+option.getDescriptor().getName()+" ");
                 } else if (option.getDescriptor().getId() == MAX_TIME_OPT) {
                     String value = option.getArgument(0);
                     request.setMaxTime(value);
