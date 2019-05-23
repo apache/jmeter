@@ -510,12 +510,19 @@ public class BasicCurlParserTest {
     
     @Test
     public void testIgnoreOptions() {
-        String cmdLine = "curl 'https://www.w3schools.com/action_page.php' --head --include --keepalive-time '20'";
+        String cmdLine = "curl 'https://www.w3schools.com/action_page.php' --include --keepalive-time '20'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         List<String> listOptions=request.getOptionsIgnored();
-        Assert.assertTrue("The list of ignored options should contain '--head'", listOptions.contains("--head"));
         Assert.assertTrue("The list of ignored options should contain '--include'", listOptions.contains("--include"));
         Assert.assertTrue("The list of ignored options should contain '--keepalive-time'", listOptions.contains("--keepalive-time"));
+    }
+    
+    @Test
+    public void testHead() {
+        String cmdLine = "curl 'https://www.w3schools.com/action_page.php' --head";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("The method should be HEAD","HEAD", request.getMethod());
     }
 }

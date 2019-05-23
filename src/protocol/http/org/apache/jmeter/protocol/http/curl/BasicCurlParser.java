@@ -122,7 +122,6 @@ public class BasicCurlParser {
         IGNORE_OPTIONS_OPT.add(CREATE_DIRS_OPT);
         IGNORE_OPTIONS_OPT.add(RAW_OPT);
         IGNORE_OPTIONS_OPT.add(INCLUDE_OPT);
-        IGNORE_OPTIONS_OPT.add(HEAD_OPT);
         IGNORE_OPTIONS_OPT.add(KEEPALIVETILE_OPT);
     }
     public static final class Request {
@@ -142,7 +141,6 @@ public class BasicCurlParser {
         private double maxTime = -1;
         private List<String> optionsIgnored = new ArrayList<>();
         private Map<String, String> proxyServer = new LinkedHashMap<>();
-
         public Request() {
             super();
         }
@@ -537,7 +535,7 @@ public class BasicCurlParser {
                     request.addHeader(name, value);
                 } else if (option.getDescriptor().getId() == CONNECT_TIMEOUT_OPT) {
                     String value = option.getArgument(0);
-                    request.setConnectTimeout(Double.valueOf(value)*1000);
+                    request.setConnectTimeout(Double.valueOf(value) * 1000);
                 } else if (option.getDescriptor().getId() == COOKIE_OPT) {
                     String value = option.getArgument(0);
                     request.setCookie(value);
@@ -571,9 +569,11 @@ public class BasicCurlParser {
                     request.addHeader("Proxy-Authenticate", "Negotiate");
                 } else if (option.getDescriptor().getId() == MAX_TIME_OPT) {
                     String value = option.getArgument(0);
-                    request.setMaxTime(Double.valueOf(value)*1000);
+                    request.setMaxTime(Double.valueOf(value) * 1000);
                 } else if (IGNORE_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
-                    request.addOptionsIgnored("--"+option.getDescriptor().getName());
+                    request.addOptionsIgnored("--" + option.getDescriptor().getName());
+                } else if (option.getDescriptor().getId() == HEAD_OPT) {
+                    request.setMethod("HEAD");
                 }
             }
             if (isPostToGet) {
