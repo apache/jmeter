@@ -746,18 +746,20 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private String createCommentText(Request request) {
         StringBuilder commentText = new StringBuilder();
         if (!request.getOptionsIgnored().isEmpty()) {
-            StringBuilder ignoreOptionsString = new StringBuilder();
             for (String s : request.getOptionsIgnored()) {
-                ignoreOptionsString.append(s + " ");
+                commentText.append(s + " ");
             }
-            ignoreOptionsString.append("are ignored; ");
-            commentText.append(ignoreOptionsString);
+            commentText.append("ignore; ");
+        }
+        if (!request.getOptionsNoSupport().isEmpty()) {
+            for (String s : request.getOptionsNoSupport()) {
+                commentText.append(s + " ");
+            }
+            commentText.append("not support; ");
         }
         if (!request.getCacert().isEmpty()) {
-            StringBuilder warning = new StringBuilder();
-            warning.append("Configure the SSL file with CA certificates in 'system.properties;");
-            warning.append("Look: https://jmeter.apache.org/usermanual/properties_reference.html#ssl_config");
-            commentText.append(warning);
+            commentText.append("Configure the SSL file with CA certificates in 'system.properties;");
+            commentText.append("Look: https://jmeter.apache.org/usermanual/properties_reference.html#ssl_config");
         }
         return commentText.toString();
     }

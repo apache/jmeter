@@ -129,7 +129,11 @@ public class BasicCurlParser {
         IGNORE_OPTIONS_OPT.add(INCLUDE_OPT);
         IGNORE_OPTIONS_OPT.add(KEEPALIVETILE_OPT);
     }
-
+    private static final List<Integer> NOSUPPORT_OPTIONS_OPT = new ArrayList<>();// $NON-NLS-1$
+    static {
+        NOSUPPORT_OPTIONS_OPT.add(PROXY_NTLM_OPT );
+        NOSUPPORT_OPTIONS_OPT.add(PROXY_NEGOTIATE_OPT );
+    }
     public static final class Request {
         private boolean compressed;
         private String url;
@@ -147,6 +151,7 @@ public class BasicCurlParser {
         private boolean isKeepAlive = true;
         private double maxTime = -1;
         private List<String> optionsIgnored = new ArrayList<>();
+        private List<String> optionsNoSupport = new ArrayList<>();
         private Map<String, String> proxyServer = new LinkedHashMap<>();
 
         public Request() {
@@ -168,7 +173,14 @@ public class BasicCurlParser {
         public void addOptionsIgnored(String option) {
             this.optionsIgnored.add(option);
         }
+        
+        public List<String> getOptionsNoSupport() {
+            return optionsNoSupport;
+        }
 
+        public void addOptionsNoSupport(String option) {
+            this.optionsNoSupport.add(option);
+        }
         /**
          * @return the compressed
          */
@@ -591,16 +603,14 @@ public class BasicCurlParser {
                 } else if (option.getDescriptor().getId() == PROXY_USER_OPT) {
                     String value = option.getArgument(0);
                     setProxyServerUserInfo(request, value);
-                } else if (option.getDescriptor().getId() == PROXY_NTLM_OPT) {
-                    request.addHeader("Proxy-Authenticate", "NTLM");
-                } else if (option.getDescriptor().getId() == PROXY_NEGOTIATE_OPT) {
-                    request.addHeader("Proxy-Authenticate", "Negotiate");
                 } else if (option.getDescriptor().getId() == MAX_TIME_OPT) {
                     String value = option.getArgument(0);
                     request.setMaxTime(Double.valueOf(value) * 1000);
                 } else if (IGNORE_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
                     request.addOptionsIgnored("--" + option.getDescriptor().getName());
-                } else if (option.getDescriptor().getId() == HEAD_OPT) {
+                } else if (NOSUPPORT_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
+                    request.addOptionsNoSupport("--" + option.getDescriptor().getName());
+                }  else if (option.getDescriptor().getId() == HEAD_OPT) {
                     request.setMethod("HEAD");
                 } else if (option.getDescriptor().getId() == INTERFACE_OPT) {
                     String value = option.getArgument(0);
