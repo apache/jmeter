@@ -991,7 +991,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private CloseableHttpClient setupClient(HttpClientKey key, JMeterVariables jMeterVariables, HttpClientContext clientContext) throws GeneralSecurityException {
+    private CloseableHttpClient setupClient(HttpClientKey key, JMeterVariables jMeterVariables,
+            HttpClientContext clientContext) throws GeneralSecurityException {
         Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey =
                 HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY, key);
