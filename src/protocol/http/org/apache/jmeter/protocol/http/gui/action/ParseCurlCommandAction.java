@@ -34,7 +34,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -485,11 +484,19 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private void createDnsResolver(Request request, DNSCacheManager dnsCacheManager) {
         dnsCacheManager.setProperty(TestElement.GUI_CLASS, DNSCachePanel.class.getName());
         dnsCacheManager.setProperty(TestElement.NAME, "DNS Cache Manager");
-        dnsCacheManager.setProperty(TestElement.COMMENTS,
-                "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+
         dnsCacheManager.setCustomResolver(true);
         dnsCacheManager.getHosts().clear();
         String[]resolveParameters=request.getResolverDNS().split(":");
+        int port=Integer.parseInt(resolveParameters[1]);
+        if(port!=443&&port!=80) {
+            dnsCacheManager.setProperty(TestElement.COMMENTS,
+                    "Custom DNS resolver doesn't support port "+port);
+        }
+        else {
+            dnsCacheManager.setProperty(TestElement.COMMENTS,
+                    "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        }
         dnsCacheManager.addHost(resolveParameters[0], resolveParameters[2]);
 
     }
@@ -508,7 +515,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
         return true;
     }
-
     /**
      * Set parameters in http request
      * 
@@ -607,7 +613,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         boolean isReadFromFile = false;
         if (e.getActionCommand().equals(CREATE_REQUEST)) {
             List<String> commandsList = null;
-            List<BasicCurlParser.Request> requests = new ArrayList<>();
             if (!filePanel.getFilename().trim().isEmpty()) {
                 commandsList = readFromFile(filePanel.getFilename().trim());
                 isReadFromFile = true;
@@ -615,32 +620,41 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 commandsList = readFromTextPanel(cURLCommandTA.getText().trim());
             }
             try {
-                parseCommands(isReadFromFile, commandsList, requests);
-                Iterator<Request> it = requests.iterator();
-                while (it.hasNext()) {
-                    BasicCurlParser.Request request = it.next();
-                    String commentText = createCommentText(request);
-                    GuiPackage guiPackage = GuiPackage.getInstance();
-                    guiPackage.updateCurrentNode();
-                    JMeterTreeNode treeNode = findFirstNodeOfType(AbstractThreadGroup.class);
-                    if (treeNode == null) {
-                        LOGGER.info("No AbstractThreadGroup found, potentially empty plan, creating a new plan");
-                        createTestPlan(e, request, commentText);
-                    } else {
-                        JMeterTreeNode currentNode = guiPackage.getCurrentNode();
-                        Object userObject = currentNode.getUserObject();
-                        if (userObject instanceof Controller && !(userObject instanceof ReplaceableController)) {
-                            LOGGER.info("Newly created element will be placed under current selected node {}",
-                                    currentNode.getName());
-                            addToTestPlan(currentNode, request, commentText);
+                List<Request> requests = parseCommands(isReadFromFile, commandsList);
+                for (int i=0;i<requests.size();i++) {
+                    BasicCurlParser.Request request = requests.get(i);
+                    try {
+                        String commentText = createCommentText(request);
+                        GuiPackage guiPackage = GuiPackage.getInstance();
+                        guiPackage.updateCurrentNode();
+                        JMeterTreeNode treeNode = findFirstNodeOfType(AbstractThreadGroup.class);
+                        if (treeNode == null) {
+                            LOGGER.info("No AbstractThreadGroup found, potentially empty plan, creating a new plan");
+                            createTestPlan(e, request, commentText);
                         } else {
-                            LOGGER.info("Newly created element will be placed under first AbstractThreadGroup node {}",
-                                    treeNode.getName());
-                            addToTestPlan(treeNode, request, commentText);
+                            JMeterTreeNode currentNode = guiPackage.getCurrentNode();
+                            Object userObject = currentNode.getUserObject();
+                            if (userObject instanceof Controller && !(userObject instanceof ReplaceableController)) {
+                                LOGGER.info("Newly created element will be placed under current selected node {}",
+                                        currentNode.getName());
+                                addToTestPlan(currentNode, request, commentText);
+                            } else {
+                                LOGGER.info(
+                                        "Newly created element will be placed under first AbstractThreadGroup node {}",
+                                        treeNode.getName());
+                                addToTestPlan(treeNode, request, commentText);
+                            }
+                            statusText.setText(JMeterUtils.getResString("curl_create_success"));
                         }
+                    } catch (Exception ex) {
+                        LOGGER.error("Error creating test plan from cURL command:{}, error:{}", commandsList.get(i),
+                                ex.getMessage(), ex);
+                        statusText.setText(
+                                MessageFormat.format(JMeterUtils.getResString("curl_create_failure"), ex.getMessage()));
+                        statusText.setForeground(Color.RED);
+                        break;
                     }
                 }
-                statusText.setText(JMeterUtils.getResString("curl_create_success"));
             } catch (Exception ex) {
                 statusText.setText(
                         MessageFormat.format(JMeterUtils.getResString("curl_create_failure"), ex.getMessage()));
@@ -650,8 +664,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     }
 
 
-    private void parseCommands(boolean isReadFromFile, List<String> commandsList,
-            List<BasicCurlParser.Request> requests) {
+    private List<Request>  parseCommands(boolean isReadFromFile, List<String> commandsList) {
+        List<Request> requests = new ArrayList<>();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         for (int i = 0; i < commandsList.size(); i++) {
             try {
@@ -672,6 +686,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 }
             }
         }
+        return requests;
     }
 
     private void addToTestPlan(final JMeterTreeNode currentNode, Request request,String statusText) throws MalformedURLException {
