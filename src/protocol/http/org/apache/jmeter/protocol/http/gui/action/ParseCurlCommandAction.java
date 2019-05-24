@@ -78,6 +78,7 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.DNSCacheManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.control.StaticHost;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.curl.BasicCurlParser;
 import org.apache.jmeter.protocol.http.curl.BasicCurlParser.Request;
@@ -175,6 +176,19 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         return treeModel.getNodesOfType(type).stream().filter(JMeterTreeNode::isEnabled).findFirst().orElse(null);
     }
 
+    private DNSCacheManager findNodeOfTypeDnsCacheManagerByType(boolean isCustom) {
+        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+        DNSCacheManager dnsCacheManager=new DNSCacheManager();
+        List<JMeterTreeNode> res = treeModel.getNodesOfType(DNSCacheManager.class);
+        for (JMeterTreeNode jm : res) {
+            dnsCacheManager = (DNSCacheManager) jm.getTestElement();
+            if (dnsCacheManager.isCustomResolver()==isCustom) {
+                return dnsCacheManager;
+            }
+        }
+        return null;
+    }
+
     private void createTestPlan(ActionEvent e, Request request, String statusText)
             throws MalformedURLException, IllegalUserActionException {
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CLOSE));
@@ -207,7 +221,12 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
         if (!request.getDnsServers().isEmpty()) {
             DNSCacheManager dnsCacheManager = new DNSCacheManager();
-            createDnsCacheManager(request, dnsCacheManager);
+            createDnsServer(request, dnsCacheManager);
+            threadGroupHT.add(dnsCacheManager);
+        }
+        if (request.getResolverDNS()!=null) {
+            DNSCacheManager dnsCacheManager = new DNSCacheManager();
+            createDnsResolver(request, dnsCacheManager);
             threadGroupHT.add(dnsCacheManager);
         }
         ResultCollector resultCollector = new ResultCollector();
@@ -437,7 +456,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * @param request {@link Request}
      * @return{@link DnsCacheManager} element
      */
-    private void createDnsCacheManager(Request request, DNSCacheManager dnsCacheManager) {
+    private void createDnsServer(Request request, DNSCacheManager dnsCacheManager) {
         Set<String> dnsServers = request.getDnsServers();
         dnsCacheManager.setProperty(TestElement.GUI_CLASS, DNSCachePanel.class.getName());
         dnsCacheManager.setProperty(TestElement.NAME, "DNS Cache Manager");
@@ -449,7 +468,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
     }
 
-    private boolean canAddDNSCacheManagerInHttpRequest(Request request, DNSCacheManager dnsCacheManager) {
+    private boolean canAddDnsServerInHttpRequest(Request request, DNSCacheManager dnsCacheManager) {
         Set<String> currentDnsServers =new HashSet<>();
         Set<String> newDnsServers = request.getDnsServers();
         for (int i = 0; i < dnsCacheManager.getServers().size(); i++) {
@@ -457,6 +476,39 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
         return !(newDnsServers.size() == currentDnsServers.size() && newDnsServers.containsAll(currentDnsServers));
     }
+    /**
+     * Create DnsCacheManager
+     * 
+     * @param request {@link Request}
+     * @return{@link DnsCacheManager} element
+     */
+    private void createDnsResolver(Request request, DNSCacheManager dnsCacheManager) {
+        dnsCacheManager.setProperty(TestElement.GUI_CLASS, DNSCachePanel.class.getName());
+        dnsCacheManager.setProperty(TestElement.NAME, "DNS Cache Manager");
+        dnsCacheManager.setProperty(TestElement.COMMENTS,
+                "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        dnsCacheManager.setCustomResolver(true);
+        dnsCacheManager.getHosts().clear();
+        String[]resolveParameters=request.getResolverDNS().split(":");
+        dnsCacheManager.addHost(resolveParameters[0], resolveParameters[2]);
+
+    }
+    
+    private boolean canAddDnsResolverInHttpRequest(Request request, DNSCacheManager dnsCacheManager) {
+        if (dnsCacheManager.getHosts().size() != 1) {
+            return true;
+        } else {
+            String[] resolveParameters = request.getResolverDNS().split(":");
+            String host = resolveParameters[0];
+            String address = resolveParameters[2];
+            StaticHost statichost = (StaticHost) dnsCacheManager.getHosts().get(0).getObjectValue();
+            if (statichost.getAddress().equals(address) && statichost.getName().equals(host)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Set parameters in http request
      * 
@@ -628,7 +680,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         JMeterUtils.runSafe(true, () -> {
             try {
                 boolean canAddAuthManagerInHttpRequest = false;
-                boolean canAddDnsCacheManager=false;
+                boolean canAddDnsServer=false;
+                boolean canAddDnsResolver=false;
                 if (!request.getAuthorization().getUser().isEmpty()) {
                     JMeterTreeNode jMeterTreeNodeAuth = findFirstNodeOfType(AuthManager.class);
                     if (jMeterTreeNodeAuth == null) {
@@ -645,14 +698,23 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                     }
                 }
                 if (!request.getDnsServers().isEmpty()) {
-                    JMeterTreeNode jMeterTreeNodeDns = findFirstNodeOfType(DNSCacheManager.class);
-                    DNSCacheManager dnsCacheManager = new DNSCacheManager();
-                    if (jMeterTreeNodeDns == null) {
-                        createDnsCacheManager(request, dnsCacheManager);
+                    DNSCacheManager dnsCacheManager = findNodeOfTypeDnsCacheManagerByType(false);
+                    if ( dnsCacheManager == null) {
+                        dnsCacheManager=new DNSCacheManager();
+                        createDnsServer(request, dnsCacheManager);
                         treeModel.addComponent(dnsCacheManager, currentNode);
                     } else {
-                        dnsCacheManager = (DNSCacheManager) jMeterTreeNodeDns.getTestElement();
-                        canAddDnsCacheManager=canAddDNSCacheManagerInHttpRequest(request, dnsCacheManager);
+                        canAddDnsServer=canAddDnsServerInHttpRequest(request, dnsCacheManager);
+                    }
+                }
+                if (request.getResolverDNS()!=null) {
+                    DNSCacheManager dnsCacheManager = findNodeOfTypeDnsCacheManagerByType(true);
+                    if (dnsCacheManager == null) {
+                        dnsCacheManager=new DNSCacheManager();
+                        createDnsResolver(request, dnsCacheManager);
+                        treeModel.addComponent(dnsCacheManager, currentNode);
+                    } else {
+                        canAddDnsResolver=canAddDnsResolverInHttpRequest(request, dnsCacheManager);
                     }
                 }
                 CookieManager cookieManager = sampler.getCookieManager();
@@ -671,9 +733,14 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                     createAuthManager(request, authManager);
                     treeModel.addComponent(authManager, newNode);
                 }
-                if (canAddDnsCacheManager) {
+                if (canAddDnsServer) {
                     DNSCacheManager dnsCacheManager=new DNSCacheManager();
-                    createDnsCacheManager(request, dnsCacheManager);
+                    createDnsServer(request, dnsCacheManager);
+                    treeModel.addComponent(dnsCacheManager, newNode);
+                }
+                if (canAddDnsResolver) {
+                    DNSCacheManager dnsCacheManager=new DNSCacheManager();
+                    createDnsResolver(request, dnsCacheManager);
                     treeModel.addComponent(dnsCacheManager, newNode);
                 }
             } catch (IllegalUserActionException ex) {

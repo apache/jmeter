@@ -94,6 +94,7 @@ public class BasicCurlParser {
     private static final int INSECURE_OPT = 'k';// $NON-NLS-1$
     private static final int RAW_OPT = "raw".hashCode();// $NON-NLS-1$
     private static final int INTERFACE_OPT = "interface".hashCode();// $NON-NLS-1$
+    private static final int RESOLVER_OPT = "resolve".hashCode();// $NON-NLS-1$
     private static final List<Integer> AUTH_OPT = new ArrayList<>();// $NON-NLS-1$
     static {
         AUTH_OPT.add(BASIC_OPT);
@@ -133,9 +134,10 @@ public class BasicCurlParser {
     }
     private static final List<Integer> NOSUPPORT_OPTIONS_OPT = new ArrayList<>();// $NON-NLS-1$
     static {
-        NOSUPPORT_OPTIONS_OPT.add(PROXY_NTLM_OPT );
-        NOSUPPORT_OPTIONS_OPT.add(PROXY_NEGOTIATE_OPT );
+        NOSUPPORT_OPTIONS_OPT.add(PROXY_NTLM_OPT);
+        NOSUPPORT_OPTIONS_OPT.add(PROXY_NEGOTIATE_OPT);
     }
+
     public static final class Request {
         private boolean compressed;
         private String url;
@@ -149,15 +151,24 @@ public class BasicCurlParser {
         private String cacert = "";
         private Map<String, String> formData = new LinkedHashMap<>();
         private Map<String, String> formStringData = new LinkedHashMap<>();
-        private Set<String>dnsServers = new HashSet<>();
+        private Set<String> dnsServers = new HashSet<>();
         private boolean isKeepAlive = true;
         private double maxTime = -1;
         private List<String> optionsIgnored = new ArrayList<>();
         private List<String> optionsNoSupport = new ArrayList<>();
         private Map<String, String> proxyServer = new LinkedHashMap<>();
+        private String resolverDNS;
 
         public Request() {
             super();
+        }
+
+        public String getResolverDNS() {
+            return resolverDNS;
+        }
+
+        public void setResolverDNS(String resolveDNS) {
+            this.resolverDNS = resolveDNS;
         }
 
         public String getInterfaceName() {
@@ -175,7 +186,7 @@ public class BasicCurlParser {
         public void addOptionsIgnored(String option) {
             this.optionsIgnored.add(option);
         }
-        
+
         public List<String> getOptionsNoSupport() {
             return optionsNoSupport;
         }
@@ -183,6 +194,7 @@ public class BasicCurlParser {
         public void addOptionsNoSupport(String option) {
             this.optionsNoSupport.add(option);
         }
+
         /**
          * @return the compressed
          */
@@ -302,7 +314,7 @@ public class BasicCurlParser {
         public void setKeepAlive(boolean isKeepAlive) {
             this.isKeepAlive = isKeepAlive;
         }
-       
+
         /**
          * 
          * @return the list of DNS server
@@ -510,6 +522,9 @@ public class BasicCurlParser {
                     + "and instead makes them passed on unaltered raw. ");
     private static final CLOptionDescriptor D_INTERFACE_OPT = new CLOptionDescriptor("interface",
             CLOptionDescriptor.ARGUMENT_REQUIRED, INTERFACE_OPT, "Perform an operation using a specified interface");
+    private static final CLOptionDescriptor D_RESOLVER_OPT = new CLOptionDescriptor("resolve",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, RESOLVER_OPT,
+            "Provide a custom address for a specific host and port pair");
     private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[] { D_COMPRESSED_OPT, D_HEADER_OPT,
             D_METHOD_OPT, D_DATA_OPT, D_DATA_ASCII_OPT, D_DATA_URLENCODE_OPT, D_DATA_RAW_OPT, D_DATA_BINARY_OPT,
             D_FORM_OPT, D_FORM_STRING_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT, D_USER_OPT,
@@ -517,7 +532,7 @@ public class BasicCurlParser {
             D_CIPHERS_OPT, D_KEY_OPT, D_KEY_TYPE_OPT, D_GET_OPT, D_DNS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT,
             D_LOCATION_OPT, D_INCLUDE_OPT, D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT,
             D_PROXY_NEGOTIATE_OPT, D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_RAW_OPT,
-            D_INTERFACE_OPT };
+            D_INTERFACE_OPT, D_RESOLVER_OPT };
 
     public BasicCurlParser() {
         super();
@@ -612,11 +627,14 @@ public class BasicCurlParser {
                     request.addOptionsIgnored("--" + option.getDescriptor().getName());
                 } else if (NOSUPPORT_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
                     request.addOptionsNoSupport("--" + option.getDescriptor().getName());
-                }  else if (option.getDescriptor().getId() == HEAD_OPT) {
+                } else if (option.getDescriptor().getId() == HEAD_OPT) {
                     request.setMethod("HEAD");
                 } else if (option.getDescriptor().getId() == INTERFACE_OPT) {
                     String value = option.getArgument(0);
                     request.setInterfaceName(value);
+                }else if (option.getDescriptor().getId() == RESOLVER_OPT) {
+                    String value = option.getArgument(0);
+                    request.setResolverDNS(value);
                 }
             }
             if (isPostToGet) {
