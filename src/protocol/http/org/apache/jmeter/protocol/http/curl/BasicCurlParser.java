@@ -95,6 +95,8 @@ public class BasicCurlParser {
     private static final int RAW_OPT = "raw".hashCode();// $NON-NLS-1$
     private static final int INTERFACE_OPT = "interface".hashCode();// $NON-NLS-1$
     private static final int RESOLVER_OPT = "resolve".hashCode();// $NON-NLS-1$
+    private static final int LIMIT_RATE_OPT = "limit-rate".hashCode();// $NON-NLS-1$
+    private static final int MAX_REDIRS_OPT = "max-redirs".hashCode();// $NON-NLS-1$
     private static final List<Integer> AUTH_OPT = new ArrayList<>();// $NON-NLS-1$
     static {
         AUTH_OPT.add(BASIC_OPT);
@@ -137,6 +139,10 @@ public class BasicCurlParser {
         NOSUPPORT_OPTIONS_OPT.add(PROXY_NTLM_OPT);
         NOSUPPORT_OPTIONS_OPT.add(PROXY_NEGOTIATE_OPT);
     }
+    private static final List<Integer> PROPERTIES_OPT = new ArrayList<>();// $NON-NLS-1$
+    static {
+        PROPERTIES_OPT.add(MAX_REDIRS_OPT);
+    }
 
     public static final class Request {
         private boolean compressed;
@@ -156,11 +162,41 @@ public class BasicCurlParser {
         private double maxTime = -1;
         private List<String> optionsIgnored = new ArrayList<>();
         private List<String> optionsNoSupport = new ArrayList<>();
+        private List<String> optionsInProperties = new ArrayList<>();
         private Map<String, String> proxyServer = new LinkedHashMap<>();
         private String resolverDNS;
+        private int limitRate = 0;
 
         public Request() {
             super();
+        }
+        public List<String> getOptionsInProperties() {
+            return optionsInProperties;
+        }
+
+        public void addOptionsInProperties(String option) {
+            this.optionsInProperties.add(option);
+        }
+
+  
+        public int getLimitRate() {
+            return limitRate;
+        }
+
+        public void setLimitRate(String limitRate) {
+            String unit = limitRate.substring(limitRate.length() - 1, limitRate.length()).toLowerCase();
+            int value = Integer.parseInt(limitRate.substring(0, limitRate.length() - 1).toLowerCase());
+            switch (unit) {
+            case "m":
+                value = value * 1000;
+                break;
+            case "g":
+                value = value * 1000 * 1000;
+                break;
+            default:
+                break;
+            }
+            this.limitRate = value * 1024 / 8;
         }
 
         public String getResolverDNS() {
@@ -525,6 +561,11 @@ public class BasicCurlParser {
     private static final CLOptionDescriptor D_RESOLVER_OPT = new CLOptionDescriptor("resolve",
             CLOptionDescriptor.ARGUMENT_REQUIRED, RESOLVER_OPT,
             "Provide a custom address for a specific host and port pair");
+    private static final CLOptionDescriptor D_LIMIT_RATE_OPT = new CLOptionDescriptor("limit-rate",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, LIMIT_RATE_OPT,
+            "Specify the maximum transfer rate you want curl to use");
+    private static final CLOptionDescriptor D_MAX_REDIRS = new CLOptionDescriptor("max-redirs",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, MAX_REDIRS_OPT, "Set maximum number of redirections");
     private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[] { D_COMPRESSED_OPT, D_HEADER_OPT,
             D_METHOD_OPT, D_DATA_OPT, D_DATA_ASCII_OPT, D_DATA_URLENCODE_OPT, D_DATA_RAW_OPT, D_DATA_BINARY_OPT,
             D_FORM_OPT, D_FORM_STRING_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT, D_USER_OPT,
@@ -532,7 +573,7 @@ public class BasicCurlParser {
             D_CIPHERS_OPT, D_KEY_OPT, D_KEY_TYPE_OPT, D_GET_OPT, D_DNS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT,
             D_LOCATION_OPT, D_INCLUDE_OPT, D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT,
             D_PROXY_NEGOTIATE_OPT, D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_RAW_OPT,
-            D_INTERFACE_OPT, D_RESOLVER_OPT };
+            D_INTERFACE_OPT, D_RESOLVER_OPT, D_LIMIT_RATE_OPT, D_MAX_REDIRS };
 
     public BasicCurlParser() {
         super();
@@ -632,9 +673,14 @@ public class BasicCurlParser {
                 } else if (option.getDescriptor().getId() == INTERFACE_OPT) {
                     String value = option.getArgument(0);
                     request.setInterfaceName(value);
-                }else if (option.getDescriptor().getId() == RESOLVER_OPT) {
+                } else if (option.getDescriptor().getId() == RESOLVER_OPT) {
                     String value = option.getArgument(0);
                     request.setResolverDNS(value);
+                } else if (option.getDescriptor().getId() == LIMIT_RATE_OPT) {
+                    String value = option.getArgument(0);
+                    request.setLimitRate(value);
+                }else if (PROPERTIES_OPT.contains(option.getDescriptor().getId())) {
+                    request.addOptionsInProperties( option.getDescriptor().getName());
                 }
             }
             if (isPostToGet) {

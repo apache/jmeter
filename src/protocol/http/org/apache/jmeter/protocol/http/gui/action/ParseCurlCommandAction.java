@@ -644,8 +644,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                                         treeNode.getName());
                                 addToTestPlan(treeNode, request, commentText);
                             }
-                            statusText.setText(JMeterUtils.getResString("curl_create_success"));
                         }
+                        statusText.setText(JMeterUtils.getResString("curl_create_success"));
                     } catch (Exception ex) {
                         LOGGER.error("Error creating test plan from cURL command:{}, error:{}", commandsList.get(i),
                                 ex.getMessage(), ex);
@@ -846,6 +846,15 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 commentText.append(s + " ");
             }
             commentText.append("ignore; ");
+        }
+        if (!request.getOptionsInProperties().isEmpty()) {
+            for (String s : request.getOptionsInProperties()) {
+                commentText.append(s + " ");
+            }
+            commentText.append("configure in jmeter.properties; ");
+        }
+        if (request.getLimitRate()!=0) {
+            commentText.append("Configure the limit rate in 'jmeter.properties, the value is "+request.getLimitRate()+";");
         }
         if (!request.getOptionsNoSupport().isEmpty()) {
             for (String s : request.getOptionsNoSupport()) {
