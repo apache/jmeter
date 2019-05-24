@@ -25,10 +25,12 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -147,7 +149,7 @@ public class BasicCurlParser {
         private String cacert = "";
         private Map<String, String> formData = new LinkedHashMap<>();
         private Map<String, String> formStringData = new LinkedHashMap<>();
-        private List<String> dnsServers = new ArrayList<>();
+        private Set<String>dnsServers = new HashSet<>();
         private boolean isKeepAlive = true;
         private double maxTime = -1;
         private List<String> optionsIgnored = new ArrayList<>();
@@ -300,12 +302,12 @@ public class BasicCurlParser {
         public void setKeepAlive(boolean isKeepAlive) {
             this.isKeepAlive = isKeepAlive;
         }
-
+       
         /**
          * 
          * @return the list of DNS server
          */
-        public List<String> getDnsServers() {
+        public Set<String> getDnsServers() {
             return dnsServers;
         }
 

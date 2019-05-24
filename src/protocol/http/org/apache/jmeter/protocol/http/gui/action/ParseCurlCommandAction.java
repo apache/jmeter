@@ -263,12 +263,14 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         httpSampler.setUseKeepAlive(request.isKeepAlive());
         httpSampler.setFollowRedirects(true);
         httpSampler.setMethod(request.getMethod());
+        HeaderManager headerManager = createHeaderManager(request);
+        httpSampler.addTestElement(headerManager);
+        configureTimeout(request, httpSampler);
+        createProxyServer(request, httpSampler);
         if (request.getInterfaceName() != null) {
             httpSampler.setIpSourceType(1);
             httpSampler.setIpSource(request.getInterfaceName());
         }
-        configureTimeout(request, httpSampler);
-        createProxyServer(request, httpSampler);
         if (!"GET".equals(request.getMethod()) && request.getPostData() != null) {
             Arguments arguments = new Arguments();
             httpSampler.setArguments(arguments);
@@ -278,8 +280,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             setFormData(request, httpSampler);
             httpSampler.setDoMultipart(true);
         }
-        HeaderManager headerManager = createHeaderManager(request);
-        httpSampler.addTestElement(headerManager);
         if (request.getCookie() != null) {
             CookieManager cookieManager = createCookieManager(request);
             httpSampler.addTestElement(cookieManager);
@@ -401,7 +401,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * @param authManager {@link AuthManager} element
      * @return whether to update Authorization Manager in http request
      */
-    private boolean canUpdateAuthManagerInHttpRequest(Request request, AuthManager authManager) {
+    private boolean canAddAuthManagerInHttpRequest(Request request, AuthManager authManager) {
         Authorization auth = request.getAuthorization();
         for (int i = 0; i < authManager.getAuthObjects().size(); i++) {
             if (auth.getURL().equals(authManager.getAuthObjectAt(i).getURL())
@@ -413,7 +413,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
         return false;
     }
-
+   
     /**
      * Whether to update Authorization Manager in Thread Group
      * 
@@ -438,7 +438,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * @return{@link DnsCacheManager} element
      */
     private void createDnsCacheManager(Request request, DNSCacheManager dnsCacheManager) {
-        List<String> dnsServers = request.getDnsServers();
+        Set<String> dnsServers = request.getDnsServers();
         dnsCacheManager.setProperty(TestElement.GUI_CLASS, DNSCachePanel.class.getName());
         dnsCacheManager.setProperty(TestElement.NAME, "DNS Cache Manager");
         dnsCacheManager.setProperty(TestElement.COMMENTS,
@@ -449,6 +449,14 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
     }
 
+    private boolean canAddDNSCacheManagerInHttpRequest(Request request, DNSCacheManager dnsCacheManager) {
+        Set<String> currentDnsServers =new HashSet<>();
+        Set<String> newDnsServers = request.getDnsServers();
+        for (int i = 0; i < dnsCacheManager.getServers().size(); i++) {
+            currentDnsServers.add(dnsCacheManager.getServers().get(i).getStringValue());
+        }
+        return !(newDnsServers.size() == currentDnsServers.size() && newDnsServers.containsAll(currentDnsServers));
+    }
     /**
      * Set parameters in http request
      * 
@@ -619,7 +627,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         JMeterUtils.runSafe(true, () -> {
             try {
-                boolean canUpdateAuthManagerInHttpRequest = false;
+                boolean canAddAuthManagerInHttpRequest = false;
+                boolean canAddDnsCacheManager=false;
                 if (!request.getAuthorization().getUser().isEmpty()) {
                     JMeterTreeNode jMeterTreeNodeAuth = findFirstNodeOfType(AuthManager.class);
                     if (jMeterTreeNodeAuth == null) {
@@ -631,7 +640,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                         if (canUpdateAuthManagerInThreadGroup(request, authManager)) {
                             createAuthManager(request, authManager);
                         } else {
-                            canUpdateAuthManagerInHttpRequest = canUpdateAuthManagerInHttpRequest(request, authManager);
+                            canAddAuthManagerInHttpRequest = canAddAuthManagerInHttpRequest(request, authManager);
                         }
                     }
                 }
@@ -643,7 +652,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                         treeModel.addComponent(dnsCacheManager, currentNode);
                     } else {
                         dnsCacheManager = (DNSCacheManager) jMeterTreeNodeDns.getTestElement();
-                        createDnsCacheManager(request, dnsCacheManager);
+                        canAddDnsCacheManager=canAddDNSCacheManagerInHttpRequest(request, dnsCacheManager);
                     }
                 }
                 CookieManager cookieManager = sampler.getCookieManager();
@@ -657,10 +666,15 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 if (request.getCacert().equals("cert")) {
                     treeModel.addComponent(keystoreConfig, newNode);
                 }
-                if (canUpdateAuthManagerInHttpRequest) {
+                if (canAddAuthManagerInHttpRequest) {
                     AuthManager authManager = new AuthManager();
                     createAuthManager(request, authManager);
                     treeModel.addComponent(authManager, newNode);
+                }
+                if (canAddDnsCacheManager) {
+                    DNSCacheManager dnsCacheManager=new DNSCacheManager();
+                    createDnsCacheManager(request, dnsCacheManager);
+                    treeModel.addComponent(dnsCacheManager, newNode);
                 }
             } catch (IllegalUserActionException ex) {
                 LOGGER.error("Error placing sampler", ex);
