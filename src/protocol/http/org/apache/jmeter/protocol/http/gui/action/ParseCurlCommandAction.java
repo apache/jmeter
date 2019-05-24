@@ -175,7 +175,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         return treeModel.getNodesOfType(type).stream().filter(JMeterTreeNode::isEnabled).findFirst().orElse(null);
     }
 
-    private void createTestPlan(ActionEvent e, Request request)
+    private void createTestPlan(ActionEvent e, Request request, String statusText)
             throws MalformedURLException, IllegalUserActionException {
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CLOSE));
         GuiPackage guiPackage = GuiPackage.getInstance();
@@ -199,7 +199,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         HashTree tree = new HashTree();
         HashTree testPlanHT = tree.add(testPlan);
         HashTree threadGroupHT = testPlanHT.add(threadGroup);
-        createHttpRequest(request, threadGroupHT);
+        createHttpRequest(request, threadGroupHT,statusText);
         if (!request.getAuthorization().getUser().isEmpty()) {
             AuthManager authManager = new AuthManager();
             createAuthManager(request, authManager);
@@ -228,8 +228,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.EXPAND_ALL));
     }
 
-    private HTTPSamplerProxy createHttpRequest(Request request, HashTree parentHT) throws MalformedURLException {
-        HTTPSamplerProxy httpSampler = createSampler(request);
+    private HTTPSamplerProxy createHttpRequest(Request request, HashTree parentHT, String commentText) throws MalformedURLException {
+        HTTPSamplerProxy httpSampler = createSampler(request,commentText);
         HashTree samplerHT = parentHT.add(httpSampler);
         samplerHT.add(httpSampler.getHeaderManager());
         if (request.getCookie() != null) {
@@ -242,23 +242,28 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     }
 
     /**
-     * @param request {@link Request}
+     * @param request    {@link Request}
+     * @param statusText
      * @return {@link HTTPSamplerProxy}
      * @throws MalformedURLException
      */
-    private HTTPSamplerProxy createSampler(Request request) throws MalformedURLException {
+    private HTTPSamplerProxy createSampler(Request request, String commentText) throws MalformedURLException {
         HTTPSamplerProxy httpSampler = (HTTPSamplerProxy) HTTPSamplerFactory
                 .newInstance(HTTPSamplerFactory.DEFAULT_CLASSNAME);
         httpSampler.setProperty(TestElement.GUI_CLASS, HttpTestSampleGui.class.getName());
         httpSampler.setProperty(TestElement.NAME, "HTTP Request");
-        httpSampler.setProperty(TestElement.COMMENTS,
-                "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)); // NOSONAR
+        if (!commentText.isEmpty()) {
+            httpSampler.setProperty(TestElement.COMMENTS,commentText); // NOSONAR
+        } else {
+            httpSampler.setProperty(TestElement.COMMENTS,
+                    "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        } // NOSONAR
         httpSampler.setProtocol(new URL(request.getUrl()).getProtocol());
         httpSampler.setPath(request.getUrl());
         httpSampler.setUseKeepAlive(request.isKeepAlive());
         httpSampler.setFollowRedirects(true);
         httpSampler.setMethod(request.getMethod());
-        if(request.getInterfaceName()!=null) {
+        if (request.getInterfaceName() != null) {
             httpSampler.setIpSourceType(1);
             httpSampler.setIpSource(request.getInterfaceName());
         }
@@ -491,37 +496,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             httpSampler.setHTTPFiles(httpFileArgs.toArray(new HTTPFileArg[httpFileArgs.size()]));
         }
     }
-
-    /**
-     * 
-     * @param request {@link Request}
-     */
-    private String createSSLWarning(Request request) {
-        StringBuilder warning = new StringBuilder();
-        warning.append("<p>Configure the certificate file or directory which contains "
-                + "multiple CA certificates in 'system.properties'</p>");
-        String option = request.getCacert();
-        if (option.equals("cert-status") || option.equals("cert-type")) {
-            warning.append("<p>The option ");
-            warning.append(option);
-            warning.append(" has been ignored</p></html>");
-        } else {
-            warning.append("<p>Guide : https://jmeter.apache.org/usermanual/properties_reference.html#ssl_config</p>");
-        }
-        return warning.toString();
-    }
-
-    private String createIgnoreOptionsWarning(Set<String> ignoreOptions) {
-        StringBuilder ignoreOptionsString = new StringBuilder();
-        ignoreOptionsString.append("<p>");
-        for (String s : ignoreOptions) {
-            ignoreOptionsString.append(s + " ");
-        }
-        ignoreOptionsString.append("are ignored");
-        ignoreOptionsString.append("</p>");
-        return ignoreOptionsString.toString();
-    }
-
     /**
      * 
      * @param request     {@link Request}
@@ -570,8 +544,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     public void actionPerformed(ActionEvent e) {
         statusText.setText("");
         statusText.setForeground(Color.GREEN);
-        StringBuilder statusTextSuccess = new StringBuilder();
-        statusTextSuccess.append("<html><p>" + JMeterUtils.getResString("curl_create_success") + "</p>");
         boolean isReadFromFile = false;
         if (e.getActionCommand().equals(CREATE_REQUEST)) {
             List<String> commandsList = null;
@@ -583,42 +555,32 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 commandsList = readFromTextPanel(cURLCommandTA.getText().trim());
             }
             try {
-                Set<String> ignoreOptions = new HashSet<>();
                 parseCommands(isReadFromFile, commandsList, requests);
                 Iterator<Request> it = requests.iterator();
                 while (it.hasNext()) {
                     BasicCurlParser.Request request = it.next();
+                    String commentText = createCommentText(request);
                     GuiPackage guiPackage = GuiPackage.getInstance();
                     guiPackage.updateCurrentNode();
                     JMeterTreeNode treeNode = findFirstNodeOfType(AbstractThreadGroup.class);
                     if (treeNode == null) {
                         LOGGER.info("No AbstractThreadGroup found, potentially empty plan, creating a new plan");
-                        createTestPlan(e, request);
+                        createTestPlan(e, request, commentText);
                     } else {
                         JMeterTreeNode currentNode = guiPackage.getCurrentNode();
                         Object userObject = currentNode.getUserObject();
                         if (userObject instanceof Controller && !(userObject instanceof ReplaceableController)) {
                             LOGGER.info("Newly created element will be placed under current selected node {}",
                                     currentNode.getName());
-                            addToTestPlan(currentNode, request);
+                            addToTestPlan(currentNode, request, commentText);
                         } else {
                             LOGGER.info("Newly created element will be placed under first AbstractThreadGroup node {}",
                                     treeNode.getName());
-                            addToTestPlan(treeNode, request);
+                            addToTestPlan(treeNode, request, commentText);
                         }
                     }
-                    if (!request.getOptionsIgnored().isEmpty()) {
-                        ignoreOptions.addAll(request.getOptionsIgnored());
-                    }
-                    if (!request.getCacert().isEmpty()) {
-                        statusTextSuccess.append(createSSLWarning(request));
-                    }
                 }
-                if (!ignoreOptions.isEmpty()) {
-                    statusTextSuccess.append(createIgnoreOptionsWarning(ignoreOptions));
-                }
-                statusTextSuccess.append("</html>");
-                statusText.setText(statusTextSuccess.toString());
+                statusText.setText(JMeterUtils.getResString("curl_create_success"));
             } catch (Exception ex) {
                 statusText.setText(
                         MessageFormat.format(JMeterUtils.getResString("curl_create_failure"), ex.getMessage()));
@@ -626,6 +588,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             }
         }
     }
+
 
     private void parseCommands(boolean isReadFromFile, List<String> commandsList,
             List<BasicCurlParser.Request> requests) {
@@ -651,8 +614,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
     }
 
-    private void addToTestPlan(final JMeterTreeNode currentNode, Request request) throws MalformedURLException {
-        final HTTPSamplerProxy sampler = createSampler(request);
+    private void addToTestPlan(final JMeterTreeNode currentNode, Request request,String statusText) throws MalformedURLException {
+        final HTTPSamplerProxy sampler = createSampler(request,statusText);
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         JMeterUtils.runSafe(true, () -> {
             try {
@@ -779,4 +742,25 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
         return s;
     }
+    
+    private String createCommentText(Request request) {
+        StringBuilder commentText = new StringBuilder();
+        if (!request.getOptionsIgnored().isEmpty()) {
+            StringBuilder ignoreOptionsString = new StringBuilder();
+            for (String s : request.getOptionsIgnored()) {
+                ignoreOptionsString.append(s + " ");
+            }
+            ignoreOptionsString.append("are ignored; ");
+            commentText.append(ignoreOptionsString);
+        }
+        if (!request.getCacert().isEmpty()) {
+            StringBuilder warning = new StringBuilder();
+            warning.append("Configure the SSL file with CA certificates in 'system.properties;");
+            warning.append("Look: https://jmeter.apache.org/usermanual/properties_reference.html#ssl_config");
+            commentText.append(warning);
+        }
+        return commentText.toString();
+    }
+
+    
 }
