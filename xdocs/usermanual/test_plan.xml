@@ -293,7 +293,7 @@ the timers and pauses for that amount of time before executing the samplers to w
 Timers can be added as children of samplers or controllers in order to restrict the samplers to which they are applied.
 </p>
 <p>
-To provide a pause at a single place in a test plan, one can use the <complink name="Test Action"/> Sampler.
+To provide a pause at a single place in a test plan, one can use the <complink name="Flow Control Action"/> Sampler.
 </p>
 </subsection>
 
