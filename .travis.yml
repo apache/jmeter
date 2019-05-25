@@ -16,7 +16,7 @@ install: true
 
 env:
   global:
-  - ANT_OPTS="-Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true"
+  - ANT_OPTS="-Ddisable-svnCheck=true -Djava.awt.headless=true -Drmi_force_localhost=true"
 
 matrix:
   include:
