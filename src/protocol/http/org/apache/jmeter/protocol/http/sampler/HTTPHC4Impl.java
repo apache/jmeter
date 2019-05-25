@@ -708,7 +708,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private void saveProxyAuth(
             MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
             HttpContext localContext) {
-        triple.setMiddle((AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
+        if (triple != null) {
+            triple.setMiddle((AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
+        }
     }
 
     /**
