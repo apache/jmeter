@@ -5,15 +5,15 @@
   <httpSample s="true" lb="HTTP-Request-Java-0" rc="200" rm="OK" dt="text"/>
   <httpSample s="true" lb="HTTP-Request-Java-1" rc="200" rm="OK" dt="text"/>
   <httpSample s="true" lb="HTTP-Request-Java-2" rc="200" rm="OK" dt="bin"/>
-  <httpSample s="true" lb="HTTP-Request-Java-3" rc="200" rm="OK" dt="bin"/>
-  <httpSample s="true" lb="HTTP-Request-Java-4" rc="200" rm="OK" dt="bin"/>
+  <httpSample s="true" lb="HTTP-Request-Java-3" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="HTTP-Request-Java-4" rc="200" rm="OK" dt="text"/>
 </httpSample>
 <httpSample s="true" lb="HTTP-Request-HC4" rc="200" rm="OK" dt="text">
   <httpSample s="true" lb="HTTP-Request-HC4-0" rc="200" rm="OK" dt="text"/>
   <httpSample s="true" lb="HTTP-Request-HC4-1" rc="200" rm="OK" dt="text"/>
   <httpSample s="true" lb="HTTP-Request-HC4-2" rc="200" rm="OK" dt="bin"/>
-  <httpSample s="true" lb="HTTP-Request-HC4-3" rc="200" rm="OK" dt="bin"/>
-  <httpSample s="true" lb="HTTP-Request-HC4-4" rc="200" rm="OK" dt="bin"/>
+  <httpSample s="true" lb="HTTP-Request-HC4-3" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="HTTP-Request-HC4-4" rc="200" rm="OK" dt="text"/>
 </httpSample>
 
 </testResults>
