@@ -180,6 +180,7 @@ to view the last major behaviors with the version 5.1.1.
 <h3>General</h3>
 <ul>
     <li><bug>63394</bug>JMeter should fail with non-zero when test execution fails (due to missing test plan or other reason). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63464</bug>image/svg+xml is wrongly considered as binary</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
