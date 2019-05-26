@@ -555,6 +555,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
             triple =
                     mapHttpClientPerHttpClientKey.get(key);
+            if (log.isDebugEnabled()) {
+                log.debug("Got triple: {} for key {} in map {} on thread {}", triple, key,
+                        mapHttpClientPerHttpClientKey, Thread.currentThread());
+            }
             URI uri = url.toURI();
             httpRequest = createHttpRequest(uri, method, areFollowingRedirect);
             setupRequest(url, httpRequest, res); // can throw IOException
@@ -708,6 +712,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private void saveProxyAuth(
             MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
             HttpContext localContext) {
+        log.debug("Store Proxy Auth: {}", triple);
         if (triple != null) {
             triple.setMiddle((AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
         }
