@@ -180,7 +180,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     
     static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT = "__jmeter.S_R__"; //$NON-NLS-1$
     
-    private static final String CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN = "__jmeter.H_T__";
+    /**
+     * Holds data used by HTTP request if Embedded resource download is enabled
+     */
+    private static final String CONTEXT_ATTRIBUTE_PARENT_SAMPLE_CLIENT_STATE = "__jmeter.H_T__";
 
     private static final String CONTEXT_ATTRIBUTE_CLIENT_KEY = "__jmeter.C_K__";
 
@@ -548,13 +551,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         HttpClientKey key = createHttpClientKey(url);
         MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple;
         try {
-            httpClient = setupClient(key, jMeterVariables, clientContext);
-            // Cache triple for further use
-            Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> 
-                mapHttpClientPerHttpClientKey =
-                    HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
-            triple =
-                    mapHttpClientPerHttpClientKey.get(key);
+            triple = setupClient(key, jMeterVariables, clientContext);
+            httpClient = triple.getLeft();
             URI uri = url.toURI();
             httpRequest = createHttpRequest(uri, method, areFollowingRedirect);
             setupRequest(url, httpRequest, res); // can throw IOException
@@ -695,7 +693,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         } finally {
             JOrphanUtils.closeQuietly(httpResponse);
             currentRequest = null;
-            JMeterContextService.getContext().getSamplerContext().remove(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN);
+            JMeterContextService.getContext().getSamplerContext().remove(CONTEXT_ATTRIBUTE_PARENT_SAMPLE_CLIENT_STATE);
         }
         return res;
     }
@@ -708,21 +706,19 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private void saveProxyAuth(
             MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
             HttpContext localContext) {
-        if (triple != null) {
-            triple.setMiddle((AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
-        }
+        triple.setMiddle((AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
     }
 
     /**
      * Store in localContext Proxy auth state of triple 
-     * @param triple {@link MutableTriple}
+     * @param triple {@link MutableTriple} May be null if first request
      * @param localContext {@link HttpContext}
      */
-    private void setupProxyAuth(MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
+    private void setupProxyAuthState(MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
                                 HttpContext localContext) {
         if (triple != null) {
-            AuthState proxy = triple.getMiddle();
-            localContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, proxy);
+            AuthState proxyAuthState = triple.getMiddle();
+            localContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, proxyAuthState);
         }
     }
 
@@ -993,22 +989,27 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private CloseableHttpClient setupClient(HttpClientKey key, JMeterVariables jMeterVariables,
+    private MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> setupClient(HttpClientKey key, JMeterVariables jMeterVariables,
             HttpClientContext clientContext) throws GeneralSecurityException {
         Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey =
                 HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY, key);
         CloseableHttpClient httpClient = null;
+        MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple = null;
         boolean concurrentDwn = this.testElement.isConcurrentDwn();
+        Map<String, Object> samplerContext = JMeterContextService.getContext().getSamplerContext();
         if(concurrentDwn) {
-            httpClient = (CloseableHttpClient) JMeterContextService.getContext().getSamplerContext().get(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN);
+            triple = (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>) 
+                    samplerContext.get(CONTEXT_ATTRIBUTE_PARENT_SAMPLE_CLIENT_STATE);
         }
-        MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple = 
-                mapHttpClientPerHttpClientKey.get(key);
-        if (httpClient == null) {
-            httpClient = triple != null ? triple.getLeft() : null;
+        if (triple == null) {
+            triple = mapHttpClientPerHttpClientKey.get(key);
         }
-        setupProxyAuth(triple, clientContext);
+        
+        if(triple != null) {
+            httpClient = triple.getLeft();
+        }
+        setupProxyAuthState(triple, clientContext);
         resetStateIfNeeded(triple, jMeterVariables, clientContext, mapHttpClientPerHttpClientKey);
 
         if (httpClient == null) { // One-time init for this client
@@ -1096,7 +1097,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @{} {}", Integer.valueOf(System.identityHashCode(httpClient)), key);
             }
-            mapHttpClientPerHttpClientKey.put(key, MutableTriple.of(httpClient, null, pHCCM)); // save the agent for next time round
+            triple = MutableTriple.of(httpClient, null, pHCCM);
+            mapHttpClientPerHttpClientKey.put(key, triple); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Reusing the HttpClient: @{} {}", Integer.valueOf(System.identityHashCode(httpClient)),key);
@@ -1104,9 +1106,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         if(concurrentDwn) {
-            JMeterContextService.getContext().getSamplerContext().put(CONTEXT_ATTRIBUTE_HTTPCLIENT_TOKEN, httpClient);
+            samplerContext.put(CONTEXT_ATTRIBUTE_PARENT_SAMPLE_CLIENT_STATE, triple);
         }
-        return httpClient;
+        return triple;
     }
 
     protected AuthenticationStrategy getProxyAuthStrategy() {
