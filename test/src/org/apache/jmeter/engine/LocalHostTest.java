@@ -51,10 +51,8 @@ public class LocalHostTest {
                 .list(NetworkInterface.getNetworkInterfaces()).stream()
                 .flatMap(iface -> iface.getInterfaceAddresses().stream())
                 .filter(iface -> iface.getNetworkPrefixLength() <= 32) // hack to prevent checking IPv6
-                .map(addr -> toSubnetInfo(addr))
-                .filter(subnetInfo -> subnetInfo.isInRange(localHost))
-                .findFirst()
-                .isPresent();
+                .map(this::toSubnetInfo)
+                .anyMatch(subnetInfo -> subnetInfo.isInRange(localHost));
         Assert.assertTrue(
                 "localHost: " + localHost + " is bound to an interface",
                 localHostIsBound);
