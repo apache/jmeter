@@ -52,6 +52,7 @@
     <Logger name="org.apache.jmeter.protocol.http" level="debug" />
     -->
     <!-- # For CookieManager, AuthManager etc: -->
+    <Logger name="org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl" level="debug" />
     <!--
     <Logger name="org.apache.jmeter.protocol.http.control" level="debug" />
     <Logger name="org.apache.jmeter.protocol.ftp" level="warn" />
