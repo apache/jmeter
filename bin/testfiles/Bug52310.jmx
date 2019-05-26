@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.2-SNAPSHOT.20190525">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.2-SNAPSHOT.20190526">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="LoadTestsFront" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -51,7 +51,7 @@
           <stringProp name="script">hostAddress = Collections.list(NetworkInterface.networkInterfaces)
         .collect({Collections.list(it.inetAddresses)})
         .flatten()
-        .grep({it.address.size() == 4})[0].hostAddress
+        .grep({ it.address.size() == 4 &amp;&amp; !it.isLoopbackAddress() })[0].hostAddress
 
 vars.put(&quot;IP_ADDR&quot;, hostAddress)</stringProp>
           <stringProp name="scriptLanguage">groovy</stringProp>
