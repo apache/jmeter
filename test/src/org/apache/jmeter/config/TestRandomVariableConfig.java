@@ -22,6 +22,8 @@
      
 package org.apache.jmeter.config;
 
+import java.util.Locale;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -65,14 +67,20 @@ public class TestRandomVariableConfig extends JMeterTestCase {
 
     @Test
     public void testRandomWithFormat() throws Exception {
-        config.setMinimumValue(MAX_VALUE);
-        config.setMaximumValue(MAX_VALUE);
-        config.setOutputFormat("000.00");
-        config.iterationStart(null);
-        String value = threadVars.get(RANDOM_VAR_NAME);
-        Assert.assertNotNull(threadVars.get(RANDOM_VAR_NAME));
-        Assert.assertEquals("010.00", value);
-
+        // 010.00 requires explicit locale
+        Locale prevLocale = Locale.getDefault();
+        try {
+            Locale.setDefault(Locale.US);
+            config.setMinimumValue(MAX_VALUE);
+            config.setMaximumValue(MAX_VALUE);
+            config.setOutputFormat("000.00");
+            config.iterationStart(null);
+            String value = threadVars.get(RANDOM_VAR_NAME);
+            Assert.assertNotNull(threadVars.get(RANDOM_VAR_NAME));
+            Assert.assertEquals("010.00", value);
+        } finally {
+            Locale.setDefault(prevLocale);
+        }
     }
 
     @Test
