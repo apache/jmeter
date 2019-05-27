@@ -47,10 +47,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Basic cURL command parser that handles:
- * -X
- * -H
- * --compressed
- * --data POST with Body data
  * 
  * @since 5.1
  */
@@ -172,17 +168,39 @@ public class BasicCurlParser {
         private String resolverDNS;
         private int limitRate = 0;
         private String noproxy;
-        /**
-         */
+
         public Request() {
             super();
         }
+        
+        public String getMethod() {
+            return method;
+        }
+        
+        /**
+         * @param method the method to set
+         */
+        public void setMethod(String method) {
+            this.method = method;
+        }
+        
+        public void setPostData(String value) {
+            this.postData = value;
+        }
+        /**
+         * @return the postData
+         */
+        public String getPostData() {
+            return postData;
+        }
+        
         /**
          * @return the compressed
          */
         public boolean isCompressed() {
             return compressed;
         }
+        
         /**
          * @param compressed the compressed to set
          */
@@ -193,24 +211,28 @@ public class BasicCurlParser {
         public void addHeader(String name, String value) {
             headers.put(name, value);
         }
+        
         /**
          * @return the url
          */
         public String getUrl() {
             return url;
         }
+        
         /**
          * @param url the url to set
          */
         public void setUrl(String url) {
             this.url = url;
         }
+        
         /**
          * @return the headers
          */
         public Map<String, String> getHeaders() {
             return headers;
         }
+        
         public List<String> getOptionsInProperties() {
             return optionsInProperties;
         }
@@ -278,6 +300,7 @@ public class BasicCurlParser {
         public void addOptionsNoSupport(String option) {
             this.optionsNoSupport.add(option);
         }
+        
         /**
          * @return the cookie
          */
@@ -420,24 +443,7 @@ public class BasicCurlParser {
             builder.append("]");
             return builder.toString();
         }
-        public String getMethod() {
-            return method;
-        }
-        /**
-         * @param method the method to set
-         */
-        public void setMethod(String method) {
-            this.method = method;
-        }
-        public void setPostData(String value) {
-            this.postData = value;
-        }
-        /**
-         * @return the postData
-         */
-        public String getPostData() {
-            return postData;
-        }
+       
     }
     private static final CLOptionDescriptor D_COMPRESSED_OPT =
             new CLOptionDescriptor("compressed", CLOptionDescriptor.ARGUMENT_DISALLOWED, COMPRESSED_OPT,
