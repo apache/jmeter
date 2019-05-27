@@ -483,7 +483,7 @@ public class BasicCurlParserTest {
 
     @Test
     public void testReferer() {
-        String cmdLine = "curl 'https://www.w3schools.com/action_page.php' --referer 'www.baidu.com'";
+        String cmdLine = "curl 'http://jmeter.apache.org/' --referer 'www.baidu.com'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser', the refer page information should be set in http Header",
@@ -510,17 +510,17 @@ public class BasicCurlParserTest {
     
     @Test
     public void testIgnoreOptions() {
-        String cmdLine = "curl 'https://www.w3schools.com/action_page.php' --include --keepalive-time '20'";
+        String cmdLine = "curl 'http://jmeter.apache.org/' --include --keepalive-time '20'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         List<String> listOptions=request.getOptionsIgnored();
-        Assert.assertTrue("The list of ignored options should contain '--include'", listOptions.contains("--include"));
-        Assert.assertTrue("The list of ignored options should contain '--keepalive-time'", listOptions.contains("--keepalive-time"));
+        Assert.assertTrue("The list of ignored options should contain 'include'", listOptions.contains("include"));
+        Assert.assertTrue("The list of ignored options should contain 'keepalive-time'", listOptions.contains("keepalive-time"));
     }
     
     @Test
     public void testHead() {
-        String cmdLine = "curl 'https://www.w3schools.com/action_page.php' --head";
+        String cmdLine = "curl 'http://jmeter.apache.org/' --head";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("The method should be HEAD","HEAD", request.getMethod());
@@ -532,5 +532,55 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("The interface should to be etho","etho", request.getInterfaceName());
+    }
+    
+    @Test
+    public void testResolver() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' --resolve 'moonagic.com:443:127.0.0.2'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("The resolve DNS should be 'moonagic.com:443:127.0.0.2'", "moonagic.com:443:127.0.0.2",
+                request.getResolverDNS());
+    }
+    
+    @Test
+    public void testLimitRate() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' --limit-rate '1g'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertTrue("The limit rate should be 128000000",request.getLimitRate()==128000000);
+        cmdLine = "curl 'http://jmeter.apache.org/' --limit-rate '171k'";
+        request = basicCurlParser.parse(cmdLine);
+        Assert.assertTrue("The limit rate should be 21888",request.getLimitRate()==21888);
+        cmdLine = "curl 'http://jmeter.apache.org/' --limit-rate '54M'";
+        request = basicCurlParser.parse(cmdLine);
+        Assert.assertTrue("The limit rate should be 6912000",request.getLimitRate()==6912000);
+    }
+    
+    @Test
+    public void testNoproxy() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' --noproxy 'localhost'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("No Proxy server should be localhost", "localhost",
+                request.getNoproxy());
+    }
+    
+    @Test
+    public void testConfigureInProperties() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' --max-redirs 'b'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertTrue("Option max-redirs should show warning",
+                request.getOptionsInProperties().contains("max-redirs"));
+    }
+
+    @Test
+    public void testNoSupport() {
+        String cmdLine = "curl 'http://jmeter.apache.org/' -x 'https://aa:bb@example.com:8042' --proxy-ntlm";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertTrue("Option proxy-ntlm should show warning",
+                request.getOptionsNoSupport().contains("proxy-ntlm"));
     }
 }

@@ -97,6 +97,7 @@ public class BasicCurlParser {
     private static final int RESOLVER_OPT = "resolve".hashCode();// $NON-NLS-1$
     private static final int LIMIT_RATE_OPT = "limit-rate".hashCode();// $NON-NLS-1$
     private static final int MAX_REDIRS_OPT = "max-redirs".hashCode();// $NON-NLS-1$
+    private static final int NOPROXY_OPT = "noproxy".hashCode();// $NON-NLS-1$
     private static final List<Integer> AUTH_OPT = new ArrayList<>();// $NON-NLS-1$
     static {
         AUTH_OPT.add(BASIC_OPT);
@@ -166,10 +167,12 @@ public class BasicCurlParser {
         private Map<String, String> proxyServer = new LinkedHashMap<>();
         private String resolverDNS;
         private int limitRate = 0;
+        private String noproxy;
 
         public Request() {
             super();
         }
+
         public List<String> getOptionsInProperties() {
             return optionsInProperties;
         }
@@ -178,7 +181,6 @@ public class BasicCurlParser {
             this.optionsInProperties.add(option);
         }
 
-  
         public int getLimitRate() {
             return limitRate;
         }
@@ -197,6 +199,14 @@ public class BasicCurlParser {
                 break;
             }
             this.limitRate = value * 1024 / 8;
+        }
+
+        public String getNoproxy() {
+            return noproxy;
+        }
+
+        public void setNoproxy(String noproxy) {
+            this.noproxy = noproxy;
         }
 
         public String getResolverDNS() {
@@ -515,7 +525,7 @@ public class BasicCurlParser {
     private static final CLOptionDescriptor D_GET_OPT = new CLOptionDescriptor("get",
             CLOptionDescriptor.ARGUMENT_DISALLOWED, GET_OPT,
             "Put the post data in the url and use get to replace post. ");
-    private static final CLOptionDescriptor D_DNS_OPT = new CLOptionDescriptor("dns-servers",
+    private static final CLOptionDescriptor D_DNS_SERVERS_OPT = new CLOptionDescriptor("dns-servers",
             CLOptionDescriptor.ARGUMENT_REQUIRED, DNS_OPT, "Resolve host name over DOH. ");
     private static final CLOptionDescriptor D_NO_KEEPALIVE_OPT = new CLOptionDescriptor("no-keepalive",
             CLOptionDescriptor.ARGUMENT_DISALLOWED, NO_KEEPALIVE_OPT, "Disabled keep-alive ");
@@ -566,14 +576,17 @@ public class BasicCurlParser {
             "Specify the maximum transfer rate you want curl to use");
     private static final CLOptionDescriptor D_MAX_REDIRS = new CLOptionDescriptor("max-redirs",
             CLOptionDescriptor.ARGUMENT_REQUIRED, MAX_REDIRS_OPT, "Set maximum number of redirections");
+    private static final CLOptionDescriptor D_NOPROXY = new CLOptionDescriptor("noproxy",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, NOPROXY_OPT,
+            "Comma-separated list of hosts which do not use a proxy, if one is specified. ");
     private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[] { D_COMPRESSED_OPT, D_HEADER_OPT,
             D_METHOD_OPT, D_DATA_OPT, D_DATA_ASCII_OPT, D_DATA_URLENCODE_OPT, D_DATA_RAW_OPT, D_DATA_BINARY_OPT,
             D_FORM_OPT, D_FORM_STRING_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT, D_USER_OPT,
             D_BASIC_OPT, D_DIGEST_OPT, D_CACERT_OPT, D_CAPATH_OPT, D_CERT_OPT, D_CERT_STATUS_OPT, D_CERT_TYPE_OPT,
-            D_CIPHERS_OPT, D_KEY_OPT, D_KEY_TYPE_OPT, D_GET_OPT, D_DNS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT,
+            D_CIPHERS_OPT, D_KEY_OPT, D_KEY_TYPE_OPT, D_GET_OPT, D_DNS_SERVERS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT,
             D_LOCATION_OPT, D_INCLUDE_OPT, D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT,
             D_PROXY_NEGOTIATE_OPT, D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_RAW_OPT,
-            D_INTERFACE_OPT, D_RESOLVER_OPT, D_LIMIT_RATE_OPT, D_MAX_REDIRS };
+            D_INTERFACE_OPT, D_RESOLVER_OPT, D_LIMIT_RATE_OPT, D_MAX_REDIRS ,D_NOPROXY };
 
     public BasicCurlParser() {
         super();
@@ -664,10 +677,6 @@ public class BasicCurlParser {
                 } else if (option.getDescriptor().getId() == MAX_TIME_OPT) {
                     String value = option.getArgument(0);
                     request.setMaxTime(Double.valueOf(value) * 1000);
-                } else if (IGNORE_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
-                    request.addOptionsIgnored("--" + option.getDescriptor().getName());
-                } else if (NOSUPPORT_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
-                    request.addOptionsNoSupport("--" + option.getDescriptor().getName());
                 } else if (option.getDescriptor().getId() == HEAD_OPT) {
                     request.setMethod("HEAD");
                 } else if (option.getDescriptor().getId() == INTERFACE_OPT) {
@@ -679,8 +688,15 @@ public class BasicCurlParser {
                 } else if (option.getDescriptor().getId() == LIMIT_RATE_OPT) {
                     String value = option.getArgument(0);
                     request.setLimitRate(value);
-                }else if (PROPERTIES_OPT.contains(option.getDescriptor().getId())) {
-                    request.addOptionsInProperties( option.getDescriptor().getName());
+                } else if (option.getDescriptor().getId() == NOPROXY_OPT) {
+                    String value = option.getArgument(0);
+                    request.setNoproxy(value);
+                } else if (IGNORE_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
+                    request.addOptionsIgnored(option.getDescriptor().getName());
+                } else if (NOSUPPORT_OPTIONS_OPT.contains(option.getDescriptor().getId())) {
+                    request.addOptionsNoSupport(option.getDescriptor().getName());
+                } else if (PROPERTIES_OPT.contains(option.getDescriptor().getId())) {
+                    request.addOptionsInProperties(option.getDescriptor().getName());
                 }
             }
             if (isPostToGet) {

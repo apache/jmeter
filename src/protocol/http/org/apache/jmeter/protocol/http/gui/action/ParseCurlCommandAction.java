@@ -488,8 +488,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         dnsCacheManager.setCustomResolver(true);
         dnsCacheManager.getHosts().clear();
         String[]resolveParameters=request.getResolverDNS().split(":");
-        int port=Integer.parseInt(resolveParameters[1]);
-        if(port!=443&&port!=80) {
+        String port=resolveParameters[1];
+        if(!port.equals("443")&&!port.equals("80")&&!port.equals("*")) {
             dnsCacheManager.setProperty(TestElement.COMMENTS,
                     "Custom DNS resolver doesn't support port "+port);
         }
@@ -843,27 +843,31 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         StringBuilder commentText = new StringBuilder();
         if (!request.getOptionsIgnored().isEmpty()) {
             for (String s : request.getOptionsIgnored()) {
-                commentText.append(s + " ");
+                commentText.append("--"+s + " ");
             }
             commentText.append("ignore; ");
         }
         if (!request.getOptionsInProperties().isEmpty()) {
             for (String s : request.getOptionsInProperties()) {
-                commentText.append(s + " ");
+                commentText.append("--"+s + " ");
             }
             commentText.append("configure in jmeter.properties; ");
         }
         if (request.getLimitRate()!=0) {
-            commentText.append("Configure the limit rate in 'jmeter.properties, the value is "+request.getLimitRate()+";");
+            commentText.append("Please configure the limit rate in 'jmeter.properties, the value is "+request.getLimitRate()+";");
         }
         if (!request.getOptionsNoSupport().isEmpty()) {
             for (String s : request.getOptionsNoSupport()) {
-                commentText.append(s + " ");
+                commentText.append("--"+s + " ");
             }
             commentText.append("not support; ");
         }
+        if (request.getNoproxy()!=null) {
+            commentText.append("Please configure noproxy list in terminal and restart Jmeter. ");
+            commentText.append("Look: https://jmeter.apache.org/usermanual/get-started.html#proxy_server");
+        }
         if (!request.getCacert().isEmpty()) {
-            commentText.append("Configure the SSL file with CA certificates in 'system.properties;");
+            commentText.append("Please configure the SSL file with CA certificates in 'system.properties. ");
             commentText.append("Look: https://jmeter.apache.org/usermanual/properties_reference.html#ssl_config");
         }
         return commentText.toString();
