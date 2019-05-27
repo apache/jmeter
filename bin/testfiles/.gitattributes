@@ -1,0 +1,2 @@
+# JMeter hard-codes resource sizes, so we should stick to single end-of-line setting
+HTMLParserTestFile_2.html        text=auto eol=crlf
