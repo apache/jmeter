@@ -27,6 +27,7 @@ import org.apache.jmeter.threads.TestJMeterContextService;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.ScriptingTestElement;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,11 +92,8 @@ public class ConstantThroughputTimerTest {
 
     @Test
     public void testTimerBSH() throws Exception {
-        if (!BeanShellInterpreter.isInterpreterPresent()){
-            final String msg = "BeanShell jar not present, test ignored";
-            log.warn(msg);
-            return;
-        }
+        Assume.assumeTrue("BeanShell jar should be on the classpath, otherwise the test makes no sense",
+                BeanShellInterpreter.isInterpreterPresent());
         BeanShellTimer timer = new BeanShellTimer();
         
         timer.setScript("\"60\"");
