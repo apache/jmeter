@@ -106,13 +106,8 @@ public final class Converters {
         CONVERTER_MAP.put(Long.class, longConverter);
         CONVERTER_MAP.put(long.class, longConverter);
 
-        StringConverter<Boolean> booleanConverter = new StringConverter<Boolean>() {
+        StringConverter<Boolean> booleanConverter = Boolean::valueOf;
 
-            @Override
-            public Boolean convert(String value) {
-                return Boolean.valueOf(value);
-            }
-        };
         CONVERTER_MAP.put(Boolean.class, booleanConverter);
         CONVERTER_MAP.put(boolean.class, booleanConverter);
 
