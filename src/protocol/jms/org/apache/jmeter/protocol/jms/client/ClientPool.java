@@ -68,8 +68,10 @@ public class ClientPool {
      */
     public static void clearClient() {
         synchronized (CLIENTS) {
-            CLIENTS.forEach(JOrphanUtils::closeQuietly);            
+            CLIENTS.forEach(JOrphanUtils::closeQuietly);
+            // Clear should be inside synchronized block to avoid closing the same client
+            // multiple times when clearClient is called from multiple threads concurrently
+            CLIENTS.clear();
         }
-        CLIENTS.clear();
     }
 }
