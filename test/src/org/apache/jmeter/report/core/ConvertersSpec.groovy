@@ -58,3 +58,4 @@ class ConvertersSpec extends Specification {
      "ä"         | char.class          | 'ä'
     }
 }
+
