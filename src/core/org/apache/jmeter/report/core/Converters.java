@@ -82,7 +82,7 @@ public final class Converters {
             @Override
             public Integer convert(String value) throws ConvertException {
                 try {
-                    return Integer.valueOf(value);
+                    return Integer.valueOf(value.trim());
                 } catch (NumberFormatException ex) {
                     throw new ConvertException(value, Integer.class.getName(),
                             ex);
@@ -97,7 +97,7 @@ public final class Converters {
             @Override
             public Long convert(String value) throws ConvertException {
                 try {
-                    return Long.valueOf(value);
+                    return Long.valueOf(value.trim());
                 } catch (NumberFormatException ex) {
                     throw new ConvertException(value, Long.class.getName(), ex);
                 }
