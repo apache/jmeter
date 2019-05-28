@@ -1389,10 +1389,6 @@ propFloat	1.2</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
       </PostThreadGroup>
       <hashTree>
-        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-          <stringProp name="ConstantTimer.delay">5100</stringProp>
-        </ConstantTimer>
-        <hashTree/>
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="BSS_stopActiveMQ" enabled="true">
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="parameters"></stringProp>
@@ -1403,9 +1399,15 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.commons.io.FileUtils;
 
 BrokerService broker = props.get(&quot;ACTIVEMQ_BROKER&quot;);
-broker.stop();
-
-FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/activemq-data&quot;));
+Thread.start {
+  // The delay is to allow for JMS Publishers to close resources in testEnded event
+  // Note: JMeter warns for non-daemon threads which are active
+  // So the sleep duration should be less than 2sec
+  // Otherwise &quot;The following non-daemon threads are still running&quot; is printed
+  sleep(700)
+  broker.stop()
+  FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/activemq-data&quot;))
+}
 </stringProp>
         </JSR223Sampler>
         <hashTree/>
