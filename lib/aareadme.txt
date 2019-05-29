@@ -123,14 +123,14 @@ javax.activation-1.2.0.jar
 ----------------------
 - used by SMTP Sampler
 
-jackson-annotations-2.9.8 (com.fasterxml.jackson)
+jackson-annotations-2.9.9 (com.fasterxml.jackson)
 ----------------------
 
 Used by JsonExporter in report generator (com.fasterxml.jackson)
 ----------------------
-jackson-annotations-2.9.8 (https://github.com/FasterXML/jackson-annotations)
-jackson-core-2.9.8 (https://github.com/FasterXML/jackson-core)
-jackson-databind-2.9.8 (https://github.com/FasterXML/jackson-databind)
+jackson-annotations-2.9.9 (https://github.com/FasterXML/jackson-annotations)
+jackson-core-2.9.9 (https://github.com/FasterXML/jackson-core)
+jackson-databind-2.9.9 (https://github.com/FasterXML/jackson-databind)
 
 jCharts-0.7.5 (org.jCharts)
 -------------

@@ -126,6 +126,7 @@ to view the last major behaviors with the version 5.1.1.
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li>Updated to tika-core and tika-parsers 1.21 (from 1.21)</li>
+    <li>Updated jackson-annotations, jackson-core and jackson-databind to 2.9.9 (from 2.9.8)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -202,6 +203,7 @@ to view the last major behaviors with the version 5.1.1.
     <li>Sergiy Iampol (sergiy.iampol at playtech.com)</li>
     <li>Brian Tully (brian.tully at acquia.com)</li>
     <li>Amer Ghazal (amerghazal at gmail.com)</li>
+    <li>(stefan at trilobyte-se.de)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
