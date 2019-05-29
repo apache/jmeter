@@ -74,9 +74,9 @@
 	<classpathentry kind="lib" path="lib/httpcore-nio-4.4.11.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.4.11.jar"/>
 	<classpathentry kind="lib" path="lib/httpmime-4.5.8.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-annotations-2.9.8.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-core-2.9.8.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-databind-2.9.8.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-annotations-2.9.9.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core-2.9.9.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-databind-2.9.9.jar"/>
 	<classpathentry kind="lib" path="lib/javax.activation-api-1.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/javax.activation-1.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/jcharts-0.7.5.jar"/>
