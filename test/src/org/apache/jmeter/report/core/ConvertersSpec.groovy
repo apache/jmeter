@@ -54,6 +54,8 @@ class ConvertersSpec extends Specification {
      input       | conversionDestClass | expectedResult
      "FALSE"     | Boolean.class       | Boolean.FALSE
      "true"      | boolean.class       | Boolean.TRUE
+     " true"     | boolean.class       | Boolean.FALSE
+     "fAlSe "    | boolean.class       | Boolean.FALSE
      "a"         | Character.class     | 'a'
      "ä"         | char.class          | 'ä'
     }
