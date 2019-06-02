@@ -72,7 +72,7 @@ public class XPathPanel extends JPanel {
         hbox.add(Box.createHorizontalGlue());
 
         add(JTextScrollPane.getInstance(getXPathField()), BorderLayout.CENTER);
-        add(hbox, BorderLayout.SOUTH);
+        add(hbox, BorderLayout.NORTH);
 
         setDefaultValues();
     }
