@@ -116,17 +116,39 @@ public class XPathAssertionTest extends JMeterTestCase {
         testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure",res.isFailure());
-    }
-
+    }   
     @Test
-    public void testAssertionPath2() throws Exception {
-        assertion.setXPathString("//*[code=2]"); // Not present
+    public void testAssertionPath1Negated() {
+        assertion.setXPathString("//*[code=1]");
+        assertion.setNegated(true);
         AssertionResult res = assertion.getResult(result);
         testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
         testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
+    } 
+
+    @Test
+    public void testAssertionPath2() throws Exception {
+        assertion.setXPathString("//*[code=2]"); // Not present
+        assertion.setNegated(true);
+        AssertionResult res = assertion.getResult(result);
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
+        assertFalse("Should not be an error", res.isError());
+        assertFalse("Should not be a failure",res.isFailure());
     }
+    
+    @Test
+    public void testAssertionPath2Negated() {
+        assertion.setXPathString("//*[code=1]");
+        assertion.setNegated(true);
+        AssertionResult res = assertion.getResult(result);
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
+        assertFalse("Should not be an error", res.isError());
+        assertTrue("Should not be a failure",res.isFailure());
+    } 
 
     @Test
     public void testAssertionBool1() throws Exception {
@@ -137,7 +159,20 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure",res.isFailure());
     }
-
+    
+    @Test
+    public void testAssertionBool1Negated() {
+        assertion.setXPathString("count(//error)=2");
+        assertion.setNegated(true);
+        AssertionResult res = assertion.getResult(result);
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
+        assertFalse("Should not be an error", res.isError());
+        assertTrue("Should not be a failure",res.isFailure());
+        assertEquals("when isNegated is true, when xpath matches, result should fail", 
+                "Nodes Matched for count(//error)=2" , res.getFailureMessage());
+    }
+    
     @Test
     public void testAssertionBool2() throws Exception {
         assertion.setXPathString("count(//*[code=1])=1");
@@ -147,7 +182,20 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure",res.isFailure());
     }
-
+    
+    @Test
+    public void testAssertionBool2Negated() {
+        assertion.setXPathString("count(//*[code=1])=1");
+        assertion.setNegated(true);
+        AssertionResult res = assertion.getResult(result);
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
+        assertFalse("Should not be an error", res.isError());
+        assertTrue("Should be a failure",res.isFailure());
+        assertEquals("Nodes Matched for count(//*[code=1])=1" , res.getFailureMessage());
+        
+    }
+    
     @Test
     public void testAssertionBool3() throws Exception {
         assertion.setXPathString("count(//error)=1"); // wrong
@@ -156,6 +204,17 @@ public class XPathAssertionTest extends JMeterTestCase {
         testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure", res.isFailure());
+        assertEquals("No Nodes Matched for count(//error)=1" , res.getFailureMessage());
+    }
+    @Test
+    public void testAssertionBool3Negated() {
+        assertion.setXPathString("count(//error)=1"); // wrong
+        assertion.setNegated(true);
+        AssertionResult res = assertion.getResult(result);
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
+        assertFalse("Should not be an error", res.isError());
+        assertFalse("Should not be a failure", res.isFailure());
     }
 
     @Test
@@ -167,7 +226,18 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
     }
-
+    
+    @Test
+    public void testAssertionBool4Negated() throws Exception {
+        assertion.setXPathString("count(//*[code=2])=1"); //Wrong
+        AssertionResult res = assertion.getResult(result);
+        assertion.setNegated(true);
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
+        assertFalse("Should not be an error", res.isError());
+        assertTrue("Should be a failure",res.isFailure());
+        assertEquals("No Nodes Matched for count(//*[code=2])=1" , res.getFailureMessage());
+    }
     @Test
     public void testAssertionNumber() throws Exception {
         assertion.setXPathString("count(//error)");// not yet handled
@@ -338,5 +408,6 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
         assertFalse(res.isError());
     }
+    
 
 }
