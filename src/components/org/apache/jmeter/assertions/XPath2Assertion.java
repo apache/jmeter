@@ -37,7 +37,6 @@ public class XPath2Assertion extends AbstractScopedAssertion implements Serializ
     private static final long serialVersionUID = 241L;
     // + JMX file attributes
     private static final String XPATH_KEY = "XPath.xpath"; // $NON-NLS-1$
-    private static final String VALIDATE_KEY = "XPath.validate"; // $NON-NLS-1$
     private static final String NEGATE_KEY = "XPath.negate"; // $NON-NLS-1$
     private static final String NAMESPACES = "XPath.namespaces"; // $NON-NLS-1$
     // - JMX file attributes
@@ -94,26 +93,8 @@ public class XPath2Assertion extends AbstractScopedAssertion implements Serializ
         setProperty(new StringProperty(XPATH_KEY, xpath));
     }
 
-    /**
-     * Set use validation
-     *
-     * @param validate Flag whether validation should be used
-     */
-    public void setValidating(boolean validate) {
-        setProperty(new BooleanProperty(VALIDATE_KEY, validate));
-    }
-
     public void setNegated(boolean negate) {
         setProperty(new BooleanProperty(NEGATE_KEY, negate));
-    }
-
-    /**
-     * Is this validating
-     *
-     * @return boolean
-     */
-    public boolean isValidating() {
-        return getPropertyAsBoolean(VALIDATE_KEY, false);
     }
 
     /**
