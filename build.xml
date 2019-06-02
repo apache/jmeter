@@ -122,7 +122,7 @@
   <property name="findbugs.xslname" value="fancy" />
   <property name="findbugs.outName" value="reports/jmeter-fb" />
   <property name="skip.batchtest" value="false" />
-  <property name="skip.bug52310" value="false" />
+  <property name="skip.bug52310" value="true" />
   <property name="skip.bug60607" value="false" />
   <property name="skip.batchtest_Http4ImplPreemptiveBasicAuth" value="false" />
   <property name="skip.batchtest_SlowCharsFeature" value="false" />
