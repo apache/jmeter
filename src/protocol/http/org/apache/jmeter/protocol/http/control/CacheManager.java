@@ -274,9 +274,9 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         try {
             expiresDate = org.apache.http.client.utils.DateUtils
                     .parseDate(expires);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) { // Exception handled by return
             if (log.isDebugEnabled()) {
-                log.debug("Unable to parse Expires: '{}' {}", expires, e.toString());
+                log.debug("Unable to parse Expires: '{}', exception: {}", expires, e);
             }
             expiresDate = CacheManager.EXPIRED_DATE; // invalid dates must be
                                                      // treated as expired

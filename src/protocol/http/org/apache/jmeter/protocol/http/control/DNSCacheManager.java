@@ -286,8 +286,8 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             for (int i = 0; i < records.length; i++) {
                 addresses[i] = ((ARecord) records[i]).getAddress();
             }
-        } catch (TextParseException tpe) {
-            log.debug("Failed to create Lookup object: {}", tpe.toString());
+        } catch (TextParseException tpe) { // NOSONAR Exception handled
+            log.debug("Failed to create Lookup object for host:{}, error message:{}", host, tpe.toString());
         }
         return addresses;
     }
