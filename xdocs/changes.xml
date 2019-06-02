@@ -103,6 +103,7 @@ to view the last major behaviors with the version 5.1.1.
 <ul>
   <li><bug>62863</bug>Enable PKCS11 keystores for usage with KeyStore Manager. Based on patch by Clifford Harms (clifford.harms at gmail.com).</li>
   <li><pr>457</pr>Slight performance improvement in PoissonRandomTimer by using ThreadLocalRandom. Based on a patch by Xia Li.</li>
+  <li><bug>62787</bug>Add XPath 2 Assertion. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
