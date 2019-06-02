@@ -228,6 +228,7 @@ public class XPath2Panel extends JPanel {
      *            XPath String to validate
      * @param showDialog
      *            weather to show a dialog
+     * @param namespaces Namespaces declaration (set of prefix=value separated by spaces)
      * @return returns true if valid, false otherwise.
      */
     public static boolean validXPath(String xpathString, boolean showDialog,String namespaces) {
@@ -253,8 +254,5 @@ public class XPath2Panel extends JPanel {
                                 : JOptionPane.ERROR_MESSAGE);
         }
         return success;
-
     }
-  
-    
 }
