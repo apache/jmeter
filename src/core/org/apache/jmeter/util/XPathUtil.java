@@ -591,6 +591,7 @@ public class XPathUtil {
     /**
      * 
      * @param document XML Document
+     * @param namespaces String series of prefix/namespace values separateur by line break
      * @return {@link PrefixResolver}
      */
     private static PrefixResolver getPrefixResolverForXPath2(Document document,String namespaces) {
@@ -719,7 +720,7 @@ public class XPathUtil {
                    result.setFailure(isNegated ? resultOfEval : !resultOfEval);
                    result.setFailureMessage(
                            isNegated ? "Nodes Matched for " + xPathQuery : "No Nodes Matched for " + xPathQuery);
-               } catch (ParserConfigurationException | TransformerException e) {
+               } catch (ParserConfigurationException | TransformerException e) { // NOSONAR Exception handled by return
                    result.setError(true);
                    result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage()).append(" for:")
                            .append(xPathQuery).toString());
