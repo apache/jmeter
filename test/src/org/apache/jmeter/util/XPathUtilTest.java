@@ -19,20 +19,27 @@
 package org.apache.jmeter.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.jmeter.assertions.XPath2Assertion;
+import org.apache.jmeter.assertions.gui.XPath2Panel;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -47,13 +54,13 @@ public class XPathUtilTest {
     final String lineSeparator = System.getProperty("line.separator");
 
     final String xmlDoc = JMeterUtils.getResourceFileAsText("XPathUtilTestXml.xml");
-    
+    private XPath2Assertion assertion;
     @Test
     public void testBug63033() throws SaxonApiException {
         Processor p = new Processor(false);
         XPathCompiler c = p.newXPathCompiler();
         c.declareNamespace("age", "http://www.w3.org/2003/01/geo/wgs84_pos#");
-        String xPathQuery="//Employees/Employee[1]/age:ag";;
+        String xPathQuery="//Employees/Employee[1]/age:ag";
         XPathExecutable e = c.compile(xPathQuery);
         XPathSelector selector = e.load();
         selector.setContextItem(p.newDocumentBuilder().build(new StreamSource(new StringReader(xmlDoc))));
@@ -165,4 +172,18 @@ public class XPathUtilTest {
                 .is(XPathUtil.formatXml("No well formed xml here")));
         System.setErr(origErr);
     }
+    
+    @Test()
+    public void testValidateXPath2() throws ParserConfigurationException {
+        Document testDoc=XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
+        Element el = testDoc.createElement("root"); //$NON-NLS-1$
+        testDoc.appendChild(el);
+        String namespaces = "a=http://www.w3.org/2003/01/geo/wgs84_pos# b=http://www.w3.org/2003/01/geo/wgs85_pos#";
+        String xPathQuery = "//Employees/b:Employee[1]/a:ag";
+        assertTrue("When the user give namspaces, the result of validation should be true", XPath2Panel.validXPath(xPathQuery, false, namespaces));
+        namespaces ="a=http://www.w3.org/2003/01/geo/wgs84_pos#";
+        assertFalse("When the user doesn't give namspaces, the result of validation should be false", XPath2Panel.validXPath(xPathQuery, false, namespaces));
+}
+    
+
 }
