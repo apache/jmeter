@@ -117,6 +117,7 @@ to view the last major behaviors with the version 5.1.1.
 
 <h3>Report / Dashboard</h3>
 <ul>
+  <li><bug>63471</bug><code>StringConverter</code>s used for report generation should ignore white space around numbers.</li>
 </ul>
 
 <h3>General</h3>
@@ -176,7 +177,6 @@ to view the last major behaviors with the version 5.1.1.
 
 <h3>Report / Dashboard</h3>
 <ul>
-  <li><bug>63471</bug><code>StringConverter</code>s used for report generation should ignore white space around numbers.</li>
 </ul>
 
 <h3>Documentation</h3>
