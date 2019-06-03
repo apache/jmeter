@@ -122,7 +122,7 @@
   <property name="findbugs.xslname" value="fancy" />
   <property name="findbugs.outName" value="reports/jmeter-fb" />
   <property name="skip.batchtest" value="false" />
-  <property name="skip.bug52310" value="false" />
+  <property name="skip.bug52310" value="true" />
   <property name="skip.bug60607" value="false" />
   <property name="skip.batchtest_Http4ImplPreemptiveBasicAuth" value="false" />
   <property name="skip.batchtest_SlowCharsFeature" value="false" />
@@ -3655,7 +3655,6 @@ run JMeter unless all the JMeter jars are added.
                 <fileset dir="${build.mongodb}"/>
                 <fileset dir="${build.native}"/>
                 <fileset dir="${build.tcp}"/>
-                <fileset dir="${build.test}"/>
             </classfiles>
             <sourcefiles encoding="${encoding}">
                 <fileset dir="${src.components}"/>
@@ -3673,7 +3672,6 @@ run JMeter unless all the JMeter jars are added.
                 <fileset dir="${src.mongodb}"/>
                 <fileset dir="${src.native}"/>
                 <fileset dir="${src.tcp}"/>
-                <fileset dir="${src.test}"/>
             </sourcefiles>
         </structure>
         <html destdir="reports/coverage"/>

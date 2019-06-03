@@ -602,4 +602,12 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
                 throw new IllegalStateException("Unknown CACHED_RESOURCE_MODE");
         }
     }
+    
+    protected final void configureSampleLabel(SampleResult res, URL url) {
+        if (SampleResult.isRenameSampleLabel()) {
+            res.setSampleLabel(this.testElement.getName());
+        } else {
+            res.setSampleLabel(url.toString());
+        }
+    }
 }

@@ -94,7 +94,7 @@ public class Summariser extends AbstractTestElement
     private static final int INTERVAL_WINDOW = 5; // in seconds
 
     /**
-     * Lock used to protect ACCUMULATORS update + INSTANCE_COUNT update
+     * Lock used to protect ACCUMULATORS update + instanceCount update
      */
     private static final Object LOCK = new Object();
 
@@ -103,7 +103,7 @@ public class Summariser extends AbstractTestElement
      */
     private static final Map<String, Totals> ACCUMULATORS = new ConcurrentHashMap<>();
 
-    private static int INSTANCE_COUNT; // number of active tests
+    private static int instanceCount; // number of active tests
 
     /*
      * Cached copy of Totals for this instance.
@@ -127,7 +127,7 @@ public class Summariser extends AbstractTestElement
         super();
         synchronized (LOCK) {
             ACCUMULATORS.clear();
-            INSTANCE_COUNT=0;
+            instanceCount=0;
         }
     }
 
@@ -284,7 +284,7 @@ public class Summariser extends AbstractTestElement
                 myTotals = new Totals();
                 ACCUMULATORS.put(myName, myTotals);
             }
-            INSTANCE_COUNT++;
+            instanceCount++;
         }
     }
 
@@ -298,8 +298,8 @@ public class Summariser extends AbstractTestElement
     public void testEnded(String host) {
         Set<Entry<String, Totals>> totals = null;
         synchronized (LOCK) {
-            INSTANCE_COUNT--;
-            if (INSTANCE_COUNT <= 0){
+            instanceCount--;
+            if (instanceCount <= 0){
                 totals = ACCUMULATORS.entrySet();
             }
         }
@@ -327,7 +327,7 @@ public class Summariser extends AbstractTestElement
                 log.info(formattedMessage);
             }
             if (TOOUT) {
-                System.out.println(formattedMessage);
+                System.out.println(formattedMessage); // NOSONAR Intentional
             }
         }
     }

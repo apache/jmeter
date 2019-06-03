@@ -263,6 +263,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #macro (unknown $node)
 #if($node.getName() == "note")
 #note($node)
+#elseif($node.getName() == "br")
+<br>
 #elseif($node.getName() == "complink")
 #complink($node)
 #elseif($node.getName() == "figure")

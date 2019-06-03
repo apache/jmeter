@@ -65,6 +65,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * 
      */
     public DefaultSamplerCreator() {
+        super();
     }
 
     /**
@@ -218,7 +219,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                         HTTPFileArg [] files = {new HTTPFileArg(out.getPath(),"",contentType)};
                         sampler.setHTTPFiles(files);
                     } catch (IOException e) {
-                        log.warn("Could not create binary file: {}", e.toString());
+                        log.warn("Could not create binary file: {}", e);
                     }
                 } else {
                     // Just put the whole postbody as the value of a parameter
@@ -286,22 +287,22 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         String prefix = request.getPrefix();
         int httpSampleNameMode = request.getHttpSampleNameMode();
         if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
-            if(!StringUtils.isEmpty(prefix)) {
-                if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_PREFIX) {
-                sampler.setName(prefix + incrementRequestNumberAndGet() + " " + sampler.getPath());
-                } else if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_COMPLETE) {
-                    sampler.setName(incrementRequestNumberAndGet() + " " + prefix);
+            if(StringUtils.isNotEmpty(prefix)) {
+                if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
+                    sampler.setName(prefix + sampler.getPath()+ "-" + incrementRequestNumberAndGet());
+                } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+                    sampler.setName(prefix + "-" + incrementRequestNumberAndGet());
                 } else {
                     log.debug("Sampler name naming mode not recognized");
                 }
             } else {
-                sampler.setName(incrementRequestNumberAndGet() + " " + sampler.getPath());
+                sampler.setName(sampler.getPath()+"-"+incrementRequestNumberAndGet());
             }
         } else {
-            if(!StringUtils.isEmpty(prefix)) {
-                if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_PREFIX) {
-                    sampler.setName(prefix+sampler.getPath());
-                } else if (httpSampleNameMode==SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+            if(StringUtils.isNotEmpty(prefix)) {
+                if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
+                    sampler.setName(prefix + sampler.getPath());
+                } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
                     sampler.setName(prefix);
                 } else {
                     log.debug("Sampler name naming mode not recognized");
@@ -345,7 +346,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     protected void computeContentEncoding(HTTPSamplerBase sampler,
             HttpRequestHdr request, Map<String, String> pageEncodings,
             Map<String, String> formEncodings) throws MalformedURLException {
-        URL pageUrl = null;
+        URL pageUrl;
         if(sampler.isProtocolDefaultPort()) {
             pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), request.getPath());
         }
@@ -378,7 +379,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             Map<String, String> pageEncodings,
             Map<String, String> formEncodings, String urlWithoutQuery) {
         // Check if the request itself tells us what the encoding is
-        String contentEncoding = null;
+        String contentEncoding;
         String requestContentEncoding = ConversionUtils.getEncodingFromContentType(
                 request.getContentType());
         if(requestContentEncoding != null) {
@@ -386,21 +387,19 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         }
         else {
             // Check if we know the encoding of the page
-            if (pageEncodings != null) {
-                synchronized (pageEncodings) {
-                    contentEncoding = pageEncodings.get(urlWithoutQuery);
-                }
-            }
+            contentEncoding = pageEncodings.get(urlWithoutQuery);
+            log.debug("Computed encoding:{} for url:{}", contentEncoding, urlWithoutQuery);
             // Check if we know the encoding of the form
-            if (formEncodings != null) {
-                synchronized (formEncodings) {
-                    String formEncoding = formEncodings.get(urlWithoutQuery);
-                    // Form encoding has priority over page encoding
-                    if (formEncoding != null) {
-                        contentEncoding = formEncoding;
-                    }
-                }
+            String formEncoding = formEncodings.get(urlWithoutQuery);
+            // Form encoding has priority over page encoding
+            if (formEncoding != null) {
+                contentEncoding = formEncoding;
+                log.debug("Computed encoding:{} for url:{}", contentEncoding, urlWithoutQuery);
             }
+        }
+        if (contentEncoding == null) {
+            contentEncoding = pageEncodings.get(DEFAULT_ENCODING_KEY);
+            log.debug("Defaulting to encoding:{} for url:{}", contentEncoding, urlWithoutQuery);
         }
         return contentEncoding;
     }

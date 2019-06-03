@@ -226,10 +226,10 @@ The following software is provided under the Apache License V 2.0 (as above):
 * dec-0.1.2.jar
 * groovy-all-2.4.16.jar
 * httpasyncclient-4.1.4.jar
-* httpclient-4.5.7.jar
+* httpclient-4.5.8.jar
 * httpcore-4.4.11.jar
 * httpcore-nio-4.4.11.jar
-* httpmime-4.5.7.jar
+* httpmime-4.5.8.jar
 * jakarta-oro-2.0.8.jar
 * jms-1.1.1.jar
 * log4j-1.2-api-2.11.1.jar
@@ -238,8 +238,8 @@ The following software is provided under the Apache License V 2.0 (as above):
 * log4j-slf4j-impl-2.11.1.jar
 * serializer-2.7.2.jar
 * startbootstrap-sb-admin-2-1.0.7
-* tika-core-1.20.jar
-* tika-parsers-1.20.jar
+* tika-core-1.21.jar
+* tika-parsers-1.21.jar
 * xalan-2.7.2.jar
 * xerces-2.12.0.jar
 * xml-apis-1.4.01.jar
@@ -251,9 +251,9 @@ The following software is provided under the Apache License V 2.0 (as above):
 * caffeine-2.6.2.jar
 * darcula.jar
 * freemarker-2.3.28.jar (AL2.0, see licenses/bin for additional info)
-* jackson-annotations-2.9.8.jar
-* jackson-core-2.9.8.jar
-* jackson-databind-2.9.8.jar
+* jackson-annotations-2.9.9.jar
+* jackson-core-2.9.9.jar
+* jackson-databind-2.9.9.jar
 * json-path-2.4.0.jar
 * json-smart-2.3.jar
 * mongo-java-driver-2.11.3.jar

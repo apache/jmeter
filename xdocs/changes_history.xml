@@ -186,7 +186,7 @@ a results report from a previous CSV/JTL file.
 <h3>General</h3>
 <ul>
     <li><bug>63201</bug>SearchTreeDialog disappears behind master JFrame. Contributed by Benoit Vatan (benoit.vatan at gmail.com)</li>
-    <li><bug></bug><code>Function Helper Dialog</code>, <code>Export transactions for report</code> and <code>Import from cURL</code> disappear being master JFrame. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63220</bug><code>Function Helper Dialog</code>, <code>Export transactions for report</code> and <code>Import from cURL</code> disappear being master JFrame. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63207</bug>java.lang.NullPointerException: null when run Jmeter 5.1 with proxy options</li>
     <li><bug>58183</bug>Rampup may not be respected if thread take time to start leading to threads continuing to start post ramp up time</li>
 </ul>
@@ -855,6 +855,7 @@ this behaviour, set <code>httpclient.reset_state_on_thread_group_iteration=false
   <li><bug>62203</bug>Influxdb BackendListener client: store user tags to annotation and internal transaction. Contributed by Sergey Batalin (sergey_batalin at mail.ru)</li>
   <li><bug>62251</bug>TextGraphiteMetricsSender does not invalidate lost connections in case of network errors </li>
   <li><bug>60705</bug>Fix headers of Aggregate Reports and friends when columns are moved around.</li>
+  <li><bug>62463</bug>Distributed client/server setup: use different RMI ports for the remote objects when using SSL</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>

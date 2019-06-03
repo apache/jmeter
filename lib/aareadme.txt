@@ -123,14 +123,14 @@ javax.activation-1.2.0.jar
 ----------------------
 - used by SMTP Sampler
 
-jackson-annotations-2.9.8 (com.fasterxml.jackson)
+jackson-annotations-2.9.9 (com.fasterxml.jackson)
 ----------------------
 
 Used by JsonExporter in report generator (com.fasterxml.jackson)
 ----------------------
-jackson-annotations-2.9.8 (https://github.com/FasterXML/jackson-annotations)
-jackson-core-2.9.8 (https://github.com/FasterXML/jackson-core)
-jackson-databind-2.9.8 (https://github.com/FasterXML/jackson-databind)
+jackson-annotations-2.9.9 (https://github.com/FasterXML/jackson-annotations)
+jackson-core-2.9.9 (https://github.com/FasterXML/jackson-core)
+jackson-databind-2.9.9 (https://github.com/FasterXML/jackson-databind)
 
 jCharts-0.7.5 (org.jCharts)
 -------------
@@ -214,7 +214,7 @@ junit 4.12
 
 HttpComponents
 - HttpComponents Core 4.4.10
-- HttpComponents Client 4.5.7
+- HttpComponents Client 4.5.8
 - HttpComponents AsyncClient 4.1.4
 - HttpComponents Core NIO 4.4.11
 -----------
@@ -249,7 +249,7 @@ http://www.slf4j.org/
 - json-path
 - jmeter internal logging
 
-tika-1.20
+tika-1.21
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor

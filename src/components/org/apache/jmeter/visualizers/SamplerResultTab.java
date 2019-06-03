@@ -219,7 +219,8 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     @Override
     public void init() {
-        rightSide.addTab(JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel()); // $NON-NLS-1$
+        rightSide.addTab(
+                JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel()); // $NON-NLS-1$
         // Create the panels for the other tabs
         requestPanel = new RequestPanel();
         resultsPane = createResponseDataPanel();
