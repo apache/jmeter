@@ -117,9 +117,9 @@ public class Daemon extends Thread implements Stoppable {
         log.info("Test Script Recorder up and running!");
 
         // Maps to contain page and form encodings
-        // TODO - do these really need to be shared between all Proxy instances?
         Map<String, String> pageEncodings = Collections.synchronizedMap(new HashMap<String, String>());
         Map<String, String> formEncodings = Collections.synchronizedMap(new HashMap<String, String>());
+        pageEncodings.put(AbstractSamplerCreator.DEFAULT_ENCODING_KEY, target.getDefaultEncoding());
 
         try {
             while (running) {

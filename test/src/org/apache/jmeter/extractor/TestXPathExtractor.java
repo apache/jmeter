@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
@@ -273,14 +274,21 @@ public class TestXPathExtractor {
 
         @Test
         public void testInvalidXpath() throws Exception {
-            extractor.setXPathQuery("<");
-            extractor.process();
-            assertEquals(1, result.getAssertionResults().length);
-            assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-            org.junit.Assert.assertTrue(result.getAssertionResults()[0].
-                    getFailureMessage().contains("A location path was expected, but the following token was encountered"));
-            assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("0", vars.get(VAL_NAME_NR));
+            Locale prevLocale = Locale.getDefault();
+            try {
+                // The test fails in other locales for some reason
+                Locale.setDefault(Locale.US);
+                extractor.setXPathQuery("<");
+                extractor.process();
+                assertEquals(1, result.getAssertionResults().length);
+                assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
+                Assert.assertTrue(result.getAssertionResults()[0].
+                        getFailureMessage().contains("A location path was expected, but the following token was encountered"));
+                assertEquals("Default", vars.get(VAL_NAME));
+                assertEquals("0", vars.get(VAL_NAME_NR));
+            } finally {
+                Locale.setDefault(prevLocale);
+            }
         }
 
         @Test

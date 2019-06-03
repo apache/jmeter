@@ -90,6 +90,20 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             "average_bytes",               //$NON-NLS-1$
             };
 
+    private static final Object[][] COLUMNS_PARAMS = {
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+    };
+
     private final String TOTAL_ROW_LABEL
         = JMeterUtils.getResString("aggregate_report_total_label");  //$NON-NLS-1$
 
@@ -296,7 +310,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile());
                     OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))) {
                 CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, FORMATS),writer, 
-                        saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(COLUMNS) : null);
+                        saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(COLUMNS, COLUMNS_PARAMS) : null);
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } 

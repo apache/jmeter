@@ -97,9 +97,6 @@ public class Proxy extends Thread {
         log.info("Proxy will remove the headers: {}", removeList);
     }
 
-    // Use with SSL connection
-    private OutputStream outStreamClient = null;
-
     /** Socket to client. */
     private Socket clientSocket = null;
 
@@ -177,9 +174,10 @@ public class Proxy extends Thread {
                 throw new JMeterException(); // hack to skip processing
             }
             if (isDebug) {
-                log.debug("{} Initial request: {}", port, new String(ba));
+                log.debug("{} Initial request: {}", port, new String(ba)); // NOSONAR False positive
             }
-            outStreamClient = clientSocket.getOutputStream();
+            // Use with SSL connection
+            OutputStream outStreamClient = clientSocket.getOutputStream();
 
             if ((request.getMethod().startsWith(HTTPConstants.CONNECT)) && (outStreamClient != null)) {
                 log.debug("{} Method CONNECT => SSL", port);
@@ -210,7 +208,7 @@ public class Proxy extends Thread {
                     throw new JMeterException(); // hack to skip processing
                 }
                 if (isDebug) {
-                    log.debug("{} Reparse: {}", port, new String(ba));
+                    log.debug("{} Reparse: {}", port, new String(ba)); // NOSONAR False positive
                 }
                 if (ba.length == 0) {
                     log.warn("{} Empty response to http over SSL. Probably waiting for user to authorize the certificate for {}",
@@ -596,14 +594,19 @@ public class Proxy extends Thread {
      */
     private void addFormEncodings(SampleResult result, String pageEncoding) {
         FormCharSetFinder finder = new FormCharSetFinder();
-        if (!result.getContentType().startsWith("text/")){ // TODO perhaps make more specific than this?
+        if (SampleResult.isBinaryType(result.getContentType())) {
+            if (log.isDebugEnabled()) {
+                log.debug("Will not guess encoding of url:{} as it's binary", result.getUrlAsString());
+            }
             return; // no point parsing anything else, e.g. GIF ...
         }
         try {
             finder.addFormActionsAndCharSet(result.getResponseDataAsString(), formEncodings, pageEncoding);
         }
         catch (HTMLParseException parseException) {
-            log.debug("{} Unable to parse response, could not find any form character set encodings", port);
+            if (log.isDebugEnabled()) {
+                log.debug("{} Unable to parse response, could not find any form character set encodings for url:{}", port, result.getUrlAsString());
+            }
         }
     }
 

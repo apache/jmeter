@@ -1,0 +1,14 @@
+# Auto detect text files and perform LF normalization
+*        text=auto
+
+*.java   text
+*.html   text
+*.css    text
+*.js     text
+*.sql    text
+*.q      text
+
+*.sh     text eol=lf
+
+*.bat    text eol=crlf
+*.cmd    text eol=crlf

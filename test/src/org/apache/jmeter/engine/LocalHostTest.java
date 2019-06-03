@@ -21,7 +21,9 @@ package org.apache.jmeter.engine;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -42,18 +44,29 @@ public class LocalHostTest {
                 .map(this::ifaceWithAddresses)
                 .collect(Collectors.joining(", "));
         perr("Interfaces: {" + interfaces + "}");
+        String externInterface = guessExternalIPv4Interface();
+        perr("Choose " + externInterface + " to talk to external services");
         String localHost = getLocalHost().getHostAddress();
         boolean localHostIsBound = Collections
                 .list(NetworkInterface.getNetworkInterfaces()).stream()
                 .flatMap(iface -> iface.getInterfaceAddresses().stream())
                 .filter(iface -> iface.getNetworkPrefixLength() <= 32) // hack to prevent checking IPv6
-                .map(addr -> toSubnetInfo(addr))
-                .filter(subnetInfo -> subnetInfo.isInRange(localHost))
-                .findFirst()
-                .isPresent();
+                .map(this::toSubnetInfo)
+                .anyMatch(subnetInfo -> subnetInfo.isInRange(localHost));
         Assert.assertTrue(
                 "localHost: " + localHost + " is bound to an interface",
                 localHostIsBound);
+    }
+
+    private String guessExternalIPv4Interface() throws SocketException {
+        return Collections.list(NetworkInterface.getNetworkInterfaces()).stream()
+                .map(n -> Collections.list(n.getInetAddresses()))
+                .flatMap(ArrayList<InetAddress>::stream)
+                .filter(i -> !i.isLoopbackAddress())
+                .filter(i -> i.getAddress().length == 4)
+                .map(InetAddress::getHostAddress)
+                .findFirst()
+                .orElse("NO DEVICE");
     }
 
     private SubnetInfo toSubnetInfo(InterfaceAddress addr) {

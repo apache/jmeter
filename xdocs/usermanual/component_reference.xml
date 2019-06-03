@@ -4701,7 +4701,7 @@ Some sample expressions:
 <property name="Ignore Whitespace"  required="If Tidy is not selected">Ignore Element Whitespace.</property>
 <property name="Fetch External DTDs"  required="If Tidy is not selected">If selected, external DTDs are fetched.</property>
 <property name="XPath Assertion"    required="Yes">XPath to match in the document.</property>
-<property name="True if nothing matches"    required="No">True if a XPath expression is not matched</property>
+<property name="Invert assertion(will fail if above conditions met)"    required="No">True if a XPath expression is not matched or returns false</property>
 </properties>
 <note>
 The non-tolerant parser can be quite slow, as it may need to download the DTD etc.
@@ -4722,6 +4722,30 @@ prefix2=http\://toto.apache.org
 </ul>
 </note>
 </component>
+
+<component name="XPath2 Assertion" index="&sect-num;.5.16"  width="871" height="615" screenshot="xpath_assertion.png">
+<description><p>The XPath2 Assertion tests a document for well formedness.  Using "<code>/</code>" will match any well-formed
+document, and is the default XPath2 Expression. 
+The assertion also supports boolean expressions, such as "<code>count(//*error)=2</code>".
+</p>
+Some sample expressions:
+<ul>
+<li><code>//title[text()='Text to match']</code> - matches <code>&lt;title&gt;Text to match&lt;/title&gt;</code> anywhere in the response</li>
+<li><code>/title[text()='Text to match']</code> - matches <code>&lt;title&gt;Text to match&lt;/title&gt;</code> at root level in the response</li>
+</ul>
+</description>
+
+<properties>
+<property name="Namespaces aliases list" required="No">List of namespaces aliases you want to use to parse the document, one line per declaration.
+    You must specify them as follow : <code>prefix=namespace</code>. This implementation makes it easier to
+    use namespaces than with the old XPathExtractor version.</property>
+<property name="XPath2 Assertion"    required="Yes">XPath to match in the document.</property>
+<property name="Invert assertion"    required="No">Will fail if xpath expression returns true or matches, succeed otherwise</property>
+<property name="Namespace aliases list"    required="No">List of namespace aliases prefix=full namespace (one per line)</property>
+</properties>
+</component>
+
+
 <component name="XML Schema Assertion" index="&sect-num;.5.9"  width="472" height="132" screenshot="assertion/XMLSchemaAssertion.png">
 <description><p>The XML Schema Assertion allows the user to validate a response against an XML Schema.</p></description>
 

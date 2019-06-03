@@ -82,7 +82,7 @@ public final class Converters {
             @Override
             public Integer convert(String value) throws ConvertException {
                 try {
-                    return Integer.valueOf(value);
+                    return Integer.valueOf(value.trim());
                 } catch (NumberFormatException ex) {
                     throw new ConvertException(value, Integer.class.getName(),
                             ex);
@@ -97,7 +97,7 @@ public final class Converters {
             @Override
             public Long convert(String value) throws ConvertException {
                 try {
-                    return Long.valueOf(value);
+                    return Long.valueOf(value.trim());
                 } catch (NumberFormatException ex) {
                     throw new ConvertException(value, Long.class.getName(), ex);
                 }
@@ -106,13 +106,8 @@ public final class Converters {
         CONVERTER_MAP.put(Long.class, longConverter);
         CONVERTER_MAP.put(long.class, longConverter);
 
-        StringConverter<Boolean> booleanConverter = new StringConverter<Boolean>() {
+        StringConverter<Boolean> booleanConverter = Boolean::valueOf;
 
-            @Override
-            public Boolean convert(String value) {
-                return Boolean.valueOf(value);
-            }
-        };
         CONVERTER_MAP.put(Boolean.class, booleanConverter);
         CONVERTER_MAP.put(boolean.class, booleanConverter);
 

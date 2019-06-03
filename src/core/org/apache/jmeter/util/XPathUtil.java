@@ -75,7 +75,6 @@ import net.sf.saxon.s9api.XdmValue;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-
 /**
  * This class provides a few utility methods for dealing with XML/XPath.
  */
@@ -590,6 +589,30 @@ public class XPathUtil {
     }
 
     /**
+     * 
+     * @param document XML Document
+     * @param namespaces String series of prefix/namespace values separateur by line break
+     * @return {@link PrefixResolver}
+     */
+    private static PrefixResolver getPrefixResolverForXPath2(Document document,String namespaces) {
+        return new PropertiesBasedPrefixResolverForXpath2(document.getDocumentElement(),namespaces);
+    }
+    /**
+     * Validate xpathString is a valid XPath expression
+     * @param document XML Document
+     * @param xpathString XPATH String
+     * @throws TransformerException if expression fails to evaluate
+     */
+    public static void validateXPath2(Document document, String xpathString,String namespaces) throws TransformerException {
+        if (XPathAPI.eval(document, xpathString, getPrefixResolverForXPath2(document,namespaces)) == null) {
+            // We really should never get here
+            // because eval will throw an exception
+            // if xpath is invalid, but whatever, better
+            // safe
+            throw new IllegalArgumentException("xpath eval of '" + xpathString + "' was null");
+        }
+    }
+    /**
      * Fills result
      * @param result {@link AssertionResult}
      * @param doc XML Document
@@ -625,10 +648,11 @@ public class XPathUtil {
                 }
                 return;
             case XObject.CLASS_BOOLEAN:
-                if (!xObject.bool()){
-                    result.setFailure(!isNegated);
-                    result.setFailureMessage("No Nodes Matched " + xPathExpression);
-                }
+                boolean resultOfEval = xObject.bool();
+                result.setFailure(isNegated ? resultOfEval : !resultOfEval);
+                result.setFailureMessage(isNegated ?
+                        "Nodes Matched for " + xPathExpression
+                        : "No Nodes Matched for " + xPathExpression);
                 return;
             default:
                 result.setFailure(true);
@@ -645,6 +669,75 @@ public class XPathUtil {
                     .toString());
         }
     }
+    
+  
+    /***
+    *
+    * @param result     The result of xpath2 assertion
+    * @param xmlFile
+    * @param xPathQuery
+    * @param namespaces
+    * @throws SaxonApiException
+    * @throws FactoryConfigurationError
+    */
+   public static void computeAssertionResultUsingSaxon(AssertionResult result, String xmlFile, String xPathQuery,
+           String namespaces, Boolean isNegated) throws SaxonApiException, FactoryConfigurationError {
+       // generating the cache key
+       final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
+       // check the cache
+       XPathExecutable xPathExecutable;
+       if (StringUtils.isNotEmpty(xPathQuery)) {
+           xPathExecutable = XPATH_CACHE.get(key);
+       } else {
+           log.warn("Error : {}", JMeterUtils.getResString("xpath2_extractor_empty_query"));
+           return;
+       }
+       try (StringReader reader = new StringReader(xmlFile)) {
+           // We could instanciate it once but might trigger issues in the future
+           // Sharing of a DocumentBuilder across multiple threads is not recommended.
+           // However, in the current implementation sharing a DocumentBuilder (once
+           // initialized)
+           // will only cause problems if a SchemaValidator is used.
+           net.sf.saxon.s9api.DocumentBuilder builder = PROCESSOR.newDocumentBuilder();
+           XdmNode xdmNode = builder.build(new SAXSource(new InputSource(reader)));
+           if (xPathExecutable != null) {
+               XPathSelector selector = null;
+               try {
+                   Document doc;
+                   doc = XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
+                   XObject xObject = XPathAPI.eval(doc, xPathQuery, getPrefixResolverForXPath2(doc, namespaces));
+                   selector = xPathExecutable.load();
+                   selector.setContextItem(xdmNode);
+                   XdmValue nodes = selector.evaluate();
+                   boolean resultOfEval = true;
+                   int length = nodes.size();
+                   // In case we need to extract everything
+                   if (length == 0) {
+                       resultOfEval = false;
+                   } else if (xObject.getType() == XObject.CLASS_BOOLEAN) {
+                       resultOfEval = Boolean.valueOf(nodes.itemAt(0).getStringValue());
+                   }
+                   result.setFailure(isNegated ? resultOfEval : !resultOfEval);
+                   result.setFailureMessage(
+                           isNegated ? "Nodes Matched for " + xPathQuery : "No Nodes Matched for " + xPathQuery);
+               } catch (ParserConfigurationException | TransformerException e) { // NOSONAR Exception handled by return
+                   result.setError(true);
+                   result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage()).append(" for:")
+                           .append(xPathQuery).toString());
+               } finally {
+                   if (selector != null) {
+                       try {
+                           selector.getUnderlyingXPathContext().setContextItem(null);
+                       } catch (Exception e) { // NOSONAR Ignored on purpose
+                           result.setError(true);
+                           result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage())
+                                   .append(" for:").append(xPathQuery).toString());
+                       }
+                   }
+               }
+           }
+       }
+   }
 
     /**
      * Formats XML
