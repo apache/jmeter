@@ -23,23 +23,27 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.jmeter.assertions.XPath2Assertion;
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.assertions.gui.XPath2Panel;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -50,11 +54,10 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmValue;
 
 public class XPathUtilTest {
-    private static final Logger log = LoggerFactory.getLogger(XPathUtil.class);
-    final String lineSeparator = System.getProperty("line.separator");
+    private final String lineSeparator = System.getProperty("line.separator");
 
     final String xmlDoc = JMeterUtils.getResourceFileAsText("XPathUtilTestXml.xml");
-    private XPath2Assertion assertion;
+
     @Test
     public void testBug63033() throws SaxonApiException {
         Processor p = new Processor(false);
@@ -161,7 +164,6 @@ public class XPathUtilTest {
                         "")));
     }
     
-
     @Test()
     public void testFormatXmlInvalid() {
         PrintStream origErr = System.err;
@@ -172,18 +174,124 @@ public class XPathUtilTest {
                 .is(XPathUtil.formatXml("No well formed xml here")));
         System.setErr(origErr);
     }
-    
+
     @Test()
     public void testValidateXPath2() throws ParserConfigurationException {
-        Document testDoc=XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
+        Document testDoc = XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
         Element el = testDoc.createElement("root"); //$NON-NLS-1$
         testDoc.appendChild(el);
         String namespaces = "a=http://www.w3.org/2003/01/geo/wgs84_pos# b=http://www.w3.org/2003/01/geo/wgs85_pos#";
         String xPathQuery = "//Employees/b:Employee[1]/a:ag";
-        assertTrue("When the user give namspaces, the result of validation should be true", XPath2Panel.validXPath(xPathQuery, false, namespaces));
-        namespaces ="a=http://www.w3.org/2003/01/geo/wgs84_pos#";
-        assertFalse("When the user doesn't give namspaces, the result of validation should be false", XPath2Panel.validXPath(xPathQuery, false, namespaces));
-}
-    
+        assertTrue("When the user give namspaces, the result of validation should be true",
+                XPath2Panel.validXPath(xPathQuery, false, namespaces));
+        namespaces = "a=http://www.w3.org/2003/01/geo/wgs84_pos#";
+        assertFalse("When the user doesn't give namspaces, the result of validation should be false",
+                XPath2Panel.validXPath(xPathQuery, false, namespaces));
+    }
 
+    @Test()
+    public void testMakeDocument() throws ParserConfigurationException, SAXException, IOException, TidyException {
+        String responseData = "<book><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
+        Document testDoc = XPathUtil.makeDocument(
+                new ByteArrayInputStream(responseData.getBytes(StandardCharsets.UTF_8)), false, false, false, false,
+                false, false, false, false, false);
+        AssertionResult res = new AssertionResult("test");
+        String xpathquery = "/book";
+        XPathUtil.computeAssertionResult(res, testDoc, xpathquery, false);
+        assertFalse("Should not be an error", res.isError());
+        assertFalse("Should not be a failure", res.isFailure());
+        xpathquery = "/book/error";
+        XPathUtil.computeAssertionResult(res, testDoc, xpathquery, false);
+        assertFalse("Should not be an error", res.isError());
+        assertTrue("Should be a failure", res.isFailure());
+        xpathquery = "count(/book/page)=2";
+        XPathUtil.computeAssertionResult(res, testDoc, xpathquery, false);
+        assertFalse("Should not be an error", res.isError());
+        assertFalse("Should not be a failure", res.isFailure());
+        xpathquery = "count(/book/page)=1";
+        XPathUtil.computeAssertionResult(res, testDoc, xpathquery, false);
+        assertFalse("Should not be an error", res.isError());
+        assertTrue("Should be a failure", res.isFailure());
+        xpathquery = "///book";
+        XPathUtil.computeAssertionResult(res, testDoc, xpathquery, false);
+        assertTrue("Should be an error", res.isError());
+    }
+
+    @Test()
+    public void testMakeDocumentIsnegated()
+            throws ParserConfigurationException, SAXException, IOException, TidyException {
+        String responseData = "<book><preface>zero</preface><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
+        Document testDoc = XPathUtil.makeDocument(
+                new ByteArrayInputStream(responseData.getBytes(StandardCharsets.UTF_8)), false, false, false, false,
+                false, false, false, false, false);
+        AssertionResult res = new AssertionResult("test");
+        String xpathquery = "/book/error";
+        XPathUtil.computeAssertionResult(res, testDoc, xpathquery, true);
+        assertFalse("Should not be an error", res.isError());
+        assertFalse("Should not be a failure", res.isFailure());
+        xpathquery = "/book/preface";
+        XPathUtil.computeAssertionResult(res, testDoc, xpathquery, true);
+        assertFalse("Should not be an error", res.isError());
+        assertTrue("Should be a failure", res.isFailure());
+        XPathUtil.computeAssertionResult(res, testDoc, xpathquery, true);
+        assertFalse("Should not be an error", res.isError());
+        assertTrue("Should be a failure", res.isFailure());
+        xpathquery = "count(/book/page)=1";
+        XPathUtil.computeAssertionResult(res, testDoc, xpathquery, true);
+        assertFalse("Should not be an error", res.isError());
+        assertFalse("Should not be a failure", res.isFailure());
+    }
+
+    @Test()
+    public void testGetNamespaces() throws XMLStreamException, FactoryConfigurationError {
+        String responseData = "<age:ag xmlns:age=\"http://www.w3.org/wgs84_pos#\">\n"
+                + "<hd:head xmlns:hd=\"http://www.w3.org/wgs85_pos#\"><title>test</title></hd:head></age:ag>";
+        List<String[]> res = XPathUtil.getNamespaces(responseData);
+        assertEquals("age", res.get(0)[0]);
+        assertEquals("http://www.w3.org/wgs84_pos#", res.get(0)[1]);
+        assertEquals("hd", res.get(1)[0]);
+        assertEquals("http://www.w3.org/wgs85_pos#", res.get(1)[1]);
+    }
+    
+    @Test()
+    public void testComputeAssertionResultUsingSaxon() throws SaxonApiException, FactoryConfigurationError {
+        //test xpath2 assertion 
+        AssertionResult res = new AssertionResult("test");
+        String responseData = "<book><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
+        String xpathquery = "/book";
+        XPathUtil.computeAssertionResultUsingSaxon(res, responseData, xpathquery, "", false);
+        assertFalse("Should not be an error", res.isError());
+        assertFalse("Should not be a failure", res.isFailure());
+        //test xpath2 assertion 
+        xpathquery = "/b";
+        XPathUtil.computeAssertionResultUsingSaxon(res, responseData, xpathquery, "", false);
+        assertFalse("Should not be an error", res.isError());
+        assertTrue("Should be a failure", res.isFailure());
+        //test xpath2 assertion boolean
+        xpathquery = "count(//page)=2";
+        XPathUtil.computeAssertionResultUsingSaxon(res, responseData, xpathquery, "", false);
+        assertFalse("Should not be an error", res.isError());
+        assertFalse("Should not be a failure", res.isFailure());
+        //test xpath2 assertion boolean
+        xpathquery = "count(//page)=3";
+        XPathUtil.computeAssertionResultUsingSaxon(res, responseData, xpathquery, "", false);
+        assertFalse("Should not be an error", res.isError());
+        assertTrue("Should be a failure", res.isFailure());
+    }
+    @Test()
+    public void testPutValuesForXPathInList() throws ParserConfigurationException, SAXException, IOException, TidyException, TransformerException {
+        String responseData = "<book><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
+        Document testDoc = XPathUtil.makeDocument(
+                new ByteArrayInputStream(responseData.getBytes(StandardCharsets.UTF_8)), false, false, false, false,
+                false, false, false, false, false);
+        String xpathquery = "/book/page";
+        List<String> matchs=new ArrayList<>();
+        XPathUtil.putValuesForXPathInList(testDoc, xpathquery, matchs, true);
+        assertEquals("<page>one</page>", matchs.get(0));
+        assertEquals("<page>two</page>", matchs.get(1));
+        matchs=new ArrayList<>();
+        XPathUtil.putValuesForXPathInList(testDoc, xpathquery, matchs, false); 
+        assertEquals("one", matchs.get(0));
+        assertEquals("two", matchs.get(1));
+    }
 }

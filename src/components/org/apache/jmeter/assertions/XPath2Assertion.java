@@ -18,6 +18,7 @@
 package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
+import java.util.concurrent.CompletionException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
@@ -67,9 +68,10 @@ public class XPath2Assertion extends AbstractScopedAssertion implements Serializ
         try {
             XPathUtil.computeAssertionResultUsingSaxon(result, responseData, getXPathString(),
                     getNamespaces(),isNegated());
-        } catch (SaxonApiException e) { // NOSONAR We handle exception within result failur message
+        } catch (CompletionException|SaxonApiException e) { // NOSONAR We handle exception within result failure message
             result.setError(true);
-            result.setFailureMessage("SaxonApiException occured computing assertion with XPath:" + getXPathString() + ", error:" + e.getMessage());
+            // CompletionException happens if caching fails
+            result.setFailureMessage("Exception occured computing assertion with XPath:" + getXPathString() + ", error:" + e.getMessage());
             return result;
         }
         return result;
