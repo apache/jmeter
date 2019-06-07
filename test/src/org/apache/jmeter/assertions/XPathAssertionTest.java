@@ -409,5 +409,63 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse(res.isError());
     }
     
+    @Test
+    public void testScope(){
+        String data = "<html><head><title>testtitle</title></head><body>"
+                + "<p><i><b>invalid tag nesting</i></b><hr></body></html>";
+        assertion.setScopeVariable("testScope");
+        vars = new JMeterVariables();
+        vars.put("testScope", data);
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(result);
+        assertion.setXPathString("/html/head/title");
+        assertion.setValidating(true);
+        assertion.setTolerant(true);
+        AssertionResult res = assertion.getResult(result);
+        log.debug("failureMessage: {}", res.getFailureMessage());
+        assertFalse("When xpath conforms to xml, the result of assertion "
+                + "should be true ",res.isFailure());
+        assertFalse(res.isError());            
+    }
+    @Test
+    public void testScopeFailure(){
+        String data = "<html><head><title>testtitle</title></head><body>"
+                + "<p><i><b>invalid tag nesting</i></b><hr></body></html>";
+        assertion.setScopeVariable("testScope");
+        vars = new JMeterVariables();
+        vars.put("testScope", data);
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(result);
+        assertion.setXPathString("/html/head/tit");
+        assertion.setValidating(true);
+        assertion.setTolerant(true);
+        AssertionResult res = assertion.getResult(result);
+        log.debug("failureMessage: {}", res.getFailureMessage());
+        assertTrue("When xpath doesn't conforms to xml, the result "
+                + "of assertion should be false ",res.isFailure());
+        assertFalse(res.isError());
+    }
 
+    @Test
+    public void testWrongXpathMethod() {
+        assertion.setXPathString("cou(//error)=1"); // wrong
+        assertion.setNegated(true);
+        AssertionResult res = assertion.getResult(result);
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
+        assertTrue("Should not be an error", res.isError());
+        assertTrue("Un transformerException should be throw",
+                res.getFailureMessage().contains("TransformerException"));
+    }
+    @Test
+    public void testWithoutSuitableNamespaces() {
+        setAlternateResponseData();
+        assertion.setNamespace(true);
+        assertion.setXPathString("//b:row/value[@field = 'alias']");
+        AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
+        log.debug(" res {}", res.isError());
+        log.debug(" failure {}", res.getFailureMessage());
+        assertTrue("When the user give namspaces, un transformerException should be throw",
+                res.getFailureMessage().contains("TransformerException"));
+    }
 }
