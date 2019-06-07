@@ -613,13 +613,16 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         boolean isReadFromFile = false;
         if (e.getActionCommand().equals(CREATE_REQUEST)) {
             List<String> commandsList = null;
-            if (!filePanel.getFilename().trim().isEmpty()) {
-                commandsList = readFromFile(filePanel.getFilename().trim());
-                isReadFromFile = true;
-            } else {
-                commandsList = readFromTextPanel(cURLCommandTA.getText().trim());
-            }
             try {
+                if (!filePanel.getFilename().trim().isEmpty() && cURLCommandTA.getText().trim().isEmpty()) {
+                    commandsList = readFromFile(filePanel.getFilename().trim());
+                    isReadFromFile = true;
+                } else if (filePanel.getFilename().trim().isEmpty() && !cURLCommandTA.getText().trim().isEmpty()) {
+                    commandsList = readFromTextPanel(cURLCommandTA.getText().trim());
+                } else {
+                    throw new IllegalArgumentException(
+                            "Error creating tast plan ,Please select one between reading file and directly fill in the panel");
+                }
                 List<Request> requests = parseCommands(isReadFromFile, commandsList);
                 for (int i=0;i<requests.size();i++) {
                     BasicCurlParser.Request request = requests.get(i);
