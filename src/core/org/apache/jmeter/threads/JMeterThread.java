@@ -220,8 +220,7 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     private void stopSchedulerIfNeeded() {
         long now = System.currentTimeMillis();
-        long delay = now - endTime;
-        if (delay >= 0) {
+        if (now >= endTime) {
             running = false;
             log.info("Stopping because end time detected by thread: {}", threadName);
         }
