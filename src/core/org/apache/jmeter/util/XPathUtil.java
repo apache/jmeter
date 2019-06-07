@@ -601,6 +601,7 @@ public class XPathUtil {
      * Validate xpathString is a valid XPath expression
      * @param document XML Document
      * @param xpathString XPATH String
+     * @param namespaces Space separated set of prefix=namespace
      * @throws TransformerException if expression fails to evaluate
      */
     public static void validateXPath2(Document document, String xpathString,String namespaces) throws TransformerException {
@@ -673,10 +674,11 @@ public class XPathUtil {
   
     /***
     *
-    * @param result     The result of xpath2 assertion
-    * @param xmlFile
-    * @param xPathQuery
-    * @param namespaces
+    * @param result The result of xpath2 assertion
+    * @param xmlFile XML data
+    * @param xPathQuery XPath Query
+    * @param namespaces Space separated set of prefix=namespace
+    * @param isNegated invert result
     * @throws SaxonApiException
     * @throws FactoryConfigurationError
     */
