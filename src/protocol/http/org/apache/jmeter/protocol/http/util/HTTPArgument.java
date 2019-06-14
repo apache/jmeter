@@ -20,10 +20,11 @@ package org.apache.jmeter.protocol.http.util;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.net.URLCodec;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -146,19 +147,21 @@ public class HTTPArgument extends Argument implements Serializable {
             try {
                 // We assume the name is always encoded according to spec
                 if(log.isDebugEnabled()) {
-                    log.debug("Decoding name, calling URLDecoder.decode with '{}' and contentEncoding: '{}'", name,
-                            EncoderCache.URL_ARGUMENT_ENCODING);
+                    log.debug("Decoding name, calling URLDecoder.decode with '"+name+"' and contentEncoding:"+EncoderCache.URL_ARGUMENT_ENCODING);
                 }
-                name = URLDecoder.decode(name, EncoderCache.URL_ARGUMENT_ENCODING);
+                URLCodec urlCodec = new URLCodec(contentEncoding);
+                name = urlCodec.decode(name, EncoderCache.URL_ARGUMENT_ENCODING);
                 // The value is encoded in the specified encoding
                 if(log.isDebugEnabled()) {
-                    log.debug("Decoding value, calling URLDecoder.decode with '{}' and contentEncoding: '{}'", value,
-                            contentEncoding);
+                    log.debug("Decoding value, calling URLDecoder.decode with '"+value+"' and contentEncoding:"+contentEncoding);
                 }
-                value = URLDecoder.decode(value, contentEncoding);
+                value = urlCodec.decode(value, contentEncoding);
             } catch (UnsupportedEncodingException e) {
-                log.error("{} encoding not supported!", contentEncoding);
+                log.error(contentEncoding + " encoding not supported!");
                 throw new Error(e.toString(), e);
+            } catch (DecoderException e) {
+                log.error(contentEncoding + " exception in decoder!");
+                throw new IllegalArgumentException(e.toString(), e);
             }
         }
         setName(name);
