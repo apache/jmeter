@@ -497,7 +497,9 @@
     <pathelement location="${lib.dir}/${commons-net.jar}"/>
     <pathelement location="${lib.dir}/${commons-pool2.jar}"/>
     <pathelement location="${lib.dir}/${commons-text.jar}"/>
+<!--
     <pathelement location="${lib.dir}/${darcula.jar}"/>
+-->
     <pathelement location="${lib.dir}/${dnsjava.jar}"/>
     <pathelement location="${lib.dir}/${freemarker.jar}"/>
     <pathelement location="${lib.dir}/${groovy-all.jar}"/>
