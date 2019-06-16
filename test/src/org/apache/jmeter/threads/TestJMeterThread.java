@@ -61,12 +61,15 @@ public class TestJMeterThread {
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
+            if (this == obj) {
                 return true;
-            if (!super.equals(obj))
+            }
+            if (!super.equals(obj)) {
                 return false;
-            if (getClass() != obj.getClass())
+            }
+            if (getClass() != obj.getClass()) {
                 return false;
+            }
             DummySampler other = (DummySampler) obj;
             return called == other.called;
         }
@@ -97,9 +100,9 @@ public class TestJMeterThread {
             } else {
                 throw new RuntimeException("Throw for Bug TestJMeterThread");
             }
-        }   
+        }
     }
-    
+
     @Test(expected=NoClassDefFoundError.class)
     public void testBug61661OnError(){
         HashTree hashTree =new HashTree();
@@ -108,8 +111,7 @@ public class TestJMeterThread {
                 new JMeterThread.ThreadListenerTraverser(true);
         hashTree.traverse(traverser);
     }
-    
-    
+
     @Test
     public void testBug61661OnException(){
         HashTree hashTree =new HashTree();
@@ -136,7 +138,7 @@ public class TestJMeterThread {
 
         ThreadGroup threadGroup = new ThreadGroup();
         threadGroup.setNumThreads(1);
-        long maxDuration = 2000l;
+        long maxDuration = 2000L;
         threadGroup.setDuration(maxDuration);
 
         JMeterThread jMeterThread = new JMeterThread(testTree, threadGroup, null);
