@@ -188,6 +188,7 @@ to view the last major behaviors with the version 5.1.1.
 <ul>
     <li><bug>63394</bug>JMeter should fail with non-zero when test execution fails (due to missing test plan or other reason). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63464</bug>image/svg+xml is wrongly considered as binary</li>
+    <li><bug>63490</bug>At end of scheduler duration lots of Samplers gets executed at the same time</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

@@ -935,6 +935,15 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
+    /**
+     * Run all configured timers and sleep the total amount of time.
+     * <p>
+     * If the amount of time would amount to an ending after endTime, then
+     * end the current thread by setting {@code running} to {@code false} and
+     * return immediately.
+     *
+     * @param timers to be used for calculating the delay
+     */
     private void delay(List<Timer> timers) {
         long totalDelay = 0;
         for (Timer timer : timers) {
@@ -955,6 +964,11 @@ public class JMeterThread implements Runnable, Interruptible {
                     // We reduce pause to ensure end of test is not delayed by a sleep ending after test scheduled end
                     // See Bug 60049
                     totalDelay = TIMER_SERVICE.adjustDelay(totalDelay, endTime);
+                    if (totalDelay < 0) {
+                        log.debug("The delay would be longer than the scheduled period, so stop thread now.");
+                        running = false;
+                        return;
+                    }
                 }
                 TimeUnit.MILLISECONDS.sleep(totalDelay);
             } catch (InterruptedException e) {
