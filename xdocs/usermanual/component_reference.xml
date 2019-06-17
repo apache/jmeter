@@ -1159,7 +1159,9 @@ props.put("PROP1","1234");</source>
     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
     <property name="Scripting Language" required="Yes">Name of the JSR223 scripting language to be used.
       <note>There are other languages supported than those that appear in the drop-down list.
-        Others may be available if the appropriate jar is installed in the JMeter lib directory.
+        Others may be available if the appropriate jar is installed in the JMeter lib directory.<p>
+        Notice that some languages such as Velocity may use a different syntax for JSR223 variables,
+        e.g. <source>$log.debug("Hello " + $vars.get("a"));</source> for Velocity.
       </note>
     </property>
     <property name="Script File" required="No">Name of a file to be used as a JSR223 script, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
