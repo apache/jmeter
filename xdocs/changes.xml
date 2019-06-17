@@ -182,6 +182,7 @@ to view the last major behaviors with the version 5.1.1.
 
 <h3>Documentation</h3>
 <ul>
+    <li><bug>63513</bug>Add MariaDB examples to JDBC documentation. Contributed by Ori Marko (orimarko at gmail.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -202,6 +203,7 @@ to view the last major behaviors with the version 5.1.1.
   <li>Xia Li</li>
   <li>Naveen Nandwani (naveen.nandwani at india.nec.com)</li>
   <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
+  <li>Ori Marko (orimarko at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

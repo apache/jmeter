@@ -4060,6 +4060,15 @@ If the database server is not running or is not accessible, then JMeter will rep
       <dd><code>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</code></dd>
     </dl>
   </dd>
+  <dt>MariaDB</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>org.mariadb.jdbc.Driver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:mariadb://host[:port]/dbname[;URLAttributes=value[;&hellip;]]</code></dd>
+    </dl>
+  </dd>
 </dl>
 <note>The above may not be correct - please check the relevant JDBC driver documentation.</note>
 </component>
