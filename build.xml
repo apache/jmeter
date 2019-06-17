@@ -2484,6 +2484,7 @@ run JMeter unless all the JMeter jars are added.
   This should be done before regenerating the documents for a release so that any obsolete files are detected.
   -->
   <target name="clean-docs">
+    <mkdir dir="${dest.docs}" />
     <delete>
       <fileset dir="${dest.docs}" excludes=".svn/** api/**"/>
     </delete>
