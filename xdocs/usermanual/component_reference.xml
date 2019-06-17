@@ -3956,7 +3956,7 @@ instead. (see figures 12 and 13).</p>
               <dt>hsqldb</dt><dd><code>select 1 from INFORMATION_SCHEMA.SYSTEM_USERS</code></dd>
               <dt>Oracle</dt><dd><code>select 1 from dual</code></dd>
               <dt>DB2</dt><dd><code>select 1 from sysibm.sysdummy1</code></dd>
-              <dt>MySQL</dt><dd><code>select 1</code></dd>
+              <dt>MySQL or MariaDB</dt><dd><code>select 1</code></dd>
               <dt>Microsoft SQL Server (MS JDBC driver)</dt><dd><code>select 1</code></dd>
               <dt>PostgreSQL</dt><dd><code>select 1</code></dd>
               <dt>Ingres</dt><dd><code>select 1</code></dd>
