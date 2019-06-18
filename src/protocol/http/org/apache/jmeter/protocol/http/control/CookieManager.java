@@ -40,6 +40,8 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.JMeterException;
@@ -61,6 +63,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     private static final String COOKIES = "CookieManager.cookies";// $NON-NLS-1$
     private static final String POLICY = "CookieManager.policy"; //$NON-NLS-1$
     private static final String IMPLEMENTATION = "CookieManager.implementation"; //$NON-NLS-1$
+    private static final String CONTROLLED_BY_THREADGROUP = "CookieManager.controlledByThreadGroup";// $NON-NLS-1$
     //-- JMX tag values
 
     private static final String TAB = "\t"; //$NON-NLS-1$
@@ -148,6 +151,13 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     public void setClearEachIteration(boolean clear) {
         setProperty(new BooleanProperty(CLEAR, clear));
+    }
+    public boolean getControlledByThread() {
+        return getPropertyAsBoolean(CONTROLLED_BY_THREADGROUP);
+    }
+
+    public void setControlledByThread(boolean control) {
+        setProperty(new BooleanProperty(CONTROLLED_BY_THREADGROUP, control));
     }
 
     public String getImplementation() {
@@ -428,7 +438,9 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     /** {@inheritDoc} */
     @Override
     public void testIterationStart(LoopIterationEvent event) {
-        if (getClearEachIteration()) {
+        JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
+        if ((getControlledByThread() && !jMeterVariables.isSameUser()) 
+                || getClearEachIteration()) {
             log.debug("Initialise cookies from pre-defined list");
             // No need to call clear
             setProperty(initialCookies.clone());

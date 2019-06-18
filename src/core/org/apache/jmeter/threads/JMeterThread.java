@@ -95,7 +95,7 @@ public class JMeterThread implements Runnable, Interruptible {
     private final TestCompiler compiler;
 
     private final JMeterThreadMonitor monitor;
-
+    
     private final JMeterVariables threadVars;
 
     // Note: this is only used to implement TestIterationListener#testIterationStart
@@ -123,8 +123,10 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private long endTime = 0;
 
-    private boolean scheduler = false;
+    private boolean isSameUser = false;
+
     // based on this scheduler is enabled or disabled
+    private boolean scheduler = false;
 
     // Gives access to parent thread threadGroup
     private AbstractThreadGroup threadGroup;
@@ -148,7 +150,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private final ReentrantLock interruptLock = new ReentrantLock(); // ensure that interrupt cannot overlap with shutdown
 
-    public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note) {
+    public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note,Boolean isSameUser) {
         this.monitor = monitor;
         threadVars = new JMeterVariables();
         testTree = test;
@@ -162,6 +164,7 @@ public class JMeterThread implements Runnable, Interruptible {
         sampleMonitors = sampleMonitorSearcher.getSearchResults();
         notifier = note;
         running = true;
+        this.isSameUser = isSameUser;
     }
 
     public void setInitialContext(JMeterContext context) {
@@ -237,13 +240,11 @@ public class JMeterThread implements Runnable, Interruptible {
     public void setThreadName(String threadName) {
         this.threadName = threadName;
     }
-
     @Override
     public void run() {
         // threadContext is not thread-safe, so keep within thread
         JMeterContext threadContext = JMeterContextService.getContext();
         LoopIterationListener iterationListener = null;
-
         try {
             iterationListener = initRun(threadContext);
             while (running) {
@@ -687,6 +688,7 @@ public class JMeterThread implements Runnable, Interruptible {
      * @return the iteration listener
      */
     private IterationListener initRun(JMeterContext threadContext) {
+        threadVars.putObject(JMeterVariables.VAR_IS_SAME_USER_KEY, isSameUser);
         threadContext.setVariables(threadVars);
         threadContext.setThreadNum(getThreadNum());
         threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
