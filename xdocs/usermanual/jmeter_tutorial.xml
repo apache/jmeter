@@ -188,7 +188,7 @@ So, you've extended the appropriate GUI class, what's left to do? Follow these s
 </p>
 
 <ol>
-  <li>Implement <code>getResourceLabel()</code>
+  <li>Implement <code>getLabelResource()</code>
     <ol>
       <li>This method should return the name of the resource that represents the title/name of the
 component. The resource will have to be entered into JMeters <code>messages.properties</code> file
