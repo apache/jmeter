@@ -184,7 +184,7 @@ to view the last major behaviors with the version 5.1.1.
 <ul>
     <li><bug>63513</bug>Add MariaDB examples to JDBC documentation. Contributed by Ori Marko (orimarko at gmail.com)</li>
     <li><bug>63484</bug>Add notes to use Apache Velocity as JSR223 script language. Based on a patch by Ori Marko (orimarko at gmail.com)</li>
-    <li><bug>63519</bug><pr>471</pr>Use correct method <code>getLabelResource()</code> in JMeter tutorial. Contributed by buzzerrookie (buzzerrookie at hotmail.com>)</li>
+    <li><bug>63519</bug><pr>471</pr>Use correct method <code>getLabelResource()</code> in JMeter tutorial. Contributed by Sun Tao (buzzerrookie at hotmail.com>)</li>
 </ul>
 
 <h3>General</h3>
@@ -206,7 +206,7 @@ to view the last major behaviors with the version 5.1.1.
   <li>Naveen Nandwani (naveen.nandwani at india.nec.com)</li>
   <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
   <li>Ori Marko (orimarko at gmail.com)</li>
-  <li>buzzerrookie (buzzerrookie at hotmail.com)</li>
+  <li>Sun Tao (buzzerrookie at hotmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
