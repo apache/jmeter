@@ -1159,7 +1159,9 @@ props.put("PROP1","1234");</source>
     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
     <property name="Scripting Language" required="Yes">Name of the JSR223 scripting language to be used.
       <note>There are other languages supported than those that appear in the drop-down list.
-        Others may be available if the appropriate jar is installed in the JMeter lib directory.
+        Others may be available if the appropriate jar is installed in the JMeter lib directory.<br/>
+        Notice that some languages such as Velocity may use a different syntax for JSR223 variables,
+        e.g. <source>$log.debug("Hello " + $vars.get("a"));</source> for Velocity.
       </note>
     </property>
     <property name="Script File" required="No">Name of a file to be used as a JSR223 script, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
@@ -3954,7 +3956,7 @@ instead. (see figures 12 and 13).</p>
               <dt>hsqldb</dt><dd><code>select 1 from INFORMATION_SCHEMA.SYSTEM_USERS</code></dd>
               <dt>Oracle</dt><dd><code>select 1 from dual</code></dd>
               <dt>DB2</dt><dd><code>select 1 from sysibm.sysdummy1</code></dd>
-              <dt>MySQL</dt><dd><code>select 1</code></dd>
+              <dt>MySQL or MariaDB</dt><dd><code>select 1</code></dd>
               <dt>Microsoft SQL Server (MS JDBC driver)</dt><dd><code>select 1</code></dd>
               <dt>PostgreSQL</dt><dd><code>select 1</code></dd>
               <dt>Ingres</dt><dd><code>select 1</code></dd>
@@ -4058,6 +4060,15 @@ If the database server is not running or is not accessible, then JMeter will rep
       <dd><code>org.apache.derby.jdbc.ClientDriver</code></dd>
       <dt>Database URL</dt>
       <dd><code>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</code></dd>
+    </dl>
+  </dd>
+  <dt>MariaDB</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>org.mariadb.jdbc.Driver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:mariadb://host[:port]/dbname[;URLAttributes=value[;&hellip;]]</code></dd>
     </dl>
   </dd>
 </dl>

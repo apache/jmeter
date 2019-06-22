@@ -182,12 +182,16 @@ to view the last major behaviors with the version 5.1.1.
 
 <h3>Documentation</h3>
 <ul>
+    <li><bug>63513</bug>Add MariaDB examples to JDBC documentation. Contributed by Ori Marko (orimarko at gmail.com)</li>
+    <li><bug>63484</bug>Add notes to use Apache Velocity as JSR223 script language. Based on a patch by Ori Marko (orimarko at gmail.com)</li>
+    <li><bug>63519</bug><pr>471</pr>Use correct method <code>getLabelResource()</code> in JMeter tutorial. Contributed by Sun Tao (buzzerrookie at hotmail.com>)</li>
 </ul>
 
 <h3>General</h3>
 <ul>
     <li><bug>63394</bug>JMeter should fail with non-zero when test execution fails (due to missing test plan or other reason). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63464</bug>image/svg+xml is wrongly considered as binary</li>
+    <li><bug>63490</bug>At end of scheduler duration lots of Samplers gets executed at the same time</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -201,6 +205,8 @@ to view the last major behaviors with the version 5.1.1.
   <li>Xia Li</li>
   <li>Naveen Nandwani (naveen.nandwani at india.nec.com)</li>
   <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
+  <li>Ori Marko (orimarko at gmail.com)</li>
+  <li>Sun Tao (buzzerrookie at hotmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

@@ -30,8 +30,21 @@ public class TimerServiceTest {
     public void testBigInitialDelay() {
         long now = System.currentTimeMillis();
         long adjustedDelay = sut.adjustDelay(Long.MAX_VALUE, now + 1000L);
-        // As #adjustDelay uses System#currentTimeMillis we can't be sure, that the value is exact 1000L
-        Assert.assertThat(Math.abs(adjustedDelay - 1000L) < 150L, CoreMatchers.is(true));
+        Assert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
+                Long.valueOf(adjustedDelay), CoreMatchers.is(Long.valueOf(-1)));
+    }
+
+    @Test
+    public void testSmallInitialDelay() {
+        long now = System.currentTimeMillis();
+        Assert.assertThat("TimerService should not change the delay as the end time is far away",
+                Long.valueOf(sut.adjustDelay(1000L, now + 20000L)), CoreMatchers.is(Long.valueOf(1000L)));
+    }
+
+    @Test
+    public void testNegativeEndTime() {
+        Assert.assertThat("TimerService should not change the delay as the indicated end time is far away",
+                Long.valueOf(sut.adjustDelay(1000L, -1)), CoreMatchers.is(Long.valueOf(1000L)));
     }
 
 }
