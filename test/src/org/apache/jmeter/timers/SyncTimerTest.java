@@ -95,7 +95,7 @@ public class SyncTimerTest {
     private void setupScheduledThread(long schedulerDuration) {
         ListedHashTree hashTree = new ListedHashTree();
         hashTree.add(new LoopController());
-        JMeterThread thread = new JMeterThread(hashTree, null, null,false);
+        JMeterThread thread = new JMeterThread(hashTree, null, null);
         JMeterContextService.getContext().setThread(thread);
         thread.setEndTime(System.currentTimeMillis() + schedulerDuration);
     }

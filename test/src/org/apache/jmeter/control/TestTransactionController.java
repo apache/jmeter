@@ -82,7 +82,7 @@ public class TestTransactionController extends JMeterTestCase {
 
         ListenerNotifier notifier = new ListenerNotifier();
 
-        JMeterThread thread = new JMeterThread(hashTree, threadGroup, notifier,false);
+        JMeterThread thread = new JMeterThread(hashTree, threadGroup, notifier);
         thread.setThreadGroup(threadGroup);
         thread.setOnErrorStopThread(true);
         thread.run();

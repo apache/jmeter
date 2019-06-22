@@ -150,6 +150,10 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private final ReentrantLock interruptLock = new ReentrantLock(); // ensure that interrupt cannot overlap with shutdown
 
+    public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note) {
+        this(test, monitor, note, false);
+    }
+    
     public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note,Boolean isSameUser) {
         this.monitor = monitor;
         threadVars = new JMeterVariables();

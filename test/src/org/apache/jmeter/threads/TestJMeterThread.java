@@ -141,7 +141,7 @@ public class TestJMeterThread {
         long maxDuration = 2000L;
         threadGroup.setDuration(maxDuration);
 
-        JMeterThread jMeterThread = new JMeterThread(testTree, threadGroup, null, false);
+        JMeterThread jMeterThread = new JMeterThread(testTree, threadGroup, null);
         jMeterThread.setScheduled(true);
         jMeterThread.setEndTime(System.currentTimeMillis() + maxDuration);
         jMeterThread.setThreadGroup(threadGroup);
