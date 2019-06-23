@@ -61,9 +61,10 @@ public class CacheManagerGui extends AbstractConfigGui implements ActionListener
     public void configure(TestElement element) {
         super.configure(element);
         final CacheManager cacheManager = (CacheManager)element;
-        clearEachIteration.setSelected(cacheManager.getClearEachIteration());
         useExpires.setSelected(cacheManager.getUseExpires());
         maxCacheSize.setText(Integer.toString(cacheManager.getMaxSize()));
+        controlledByThreadGroup.setSelected(cacheManager.getControlledByThread());
+        clearEachIteration.setSelected(cacheManager.getClearEachIteration());
     }
 
     @Override
@@ -141,7 +142,7 @@ public class CacheManagerGui extends AbstractConfigGui implements ActionListener
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         if (action.equals(CONTROLLED_BY_THREADGROUP)) {
-          clearEachIteration.setEnabled(!controlledByThreadGroup.isSelected());
+            clearEachIteration.setEnabled(!controlledByThreadGroup.isSelected());
         }
     }
 }
