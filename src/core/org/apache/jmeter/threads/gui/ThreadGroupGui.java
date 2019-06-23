@@ -252,7 +252,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         scheduler = new JCheckBox(JMeterUtils.getResString("scheduler")); // $NON-NLS-1$
         scheduler.addItemListener(this);
         threadPropsPanel.add(scheduler);
-
         VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("scheduler_configuration"))); // $NON-NLS-1$
