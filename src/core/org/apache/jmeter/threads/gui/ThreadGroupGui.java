@@ -107,7 +107,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         tg.setProperty(new BooleanProperty(ThreadGroup.SCHEDULER, scheduler.isSelected()));
         tg.setProperty(ThreadGroup.DURATION, duration.getText());
         tg.setProperty(ThreadGroup.DELAY, delay.getText());
-        tg.setProperty(ThreadGroup.IS_SAME_USER,sameUserBox.isSelected());
+        tg.setProperty(AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION,sameUserBox.isSelected());
     }
 
     @Override
@@ -125,7 +125,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
         duration.setText(tg.getPropertyAsString(ThreadGroup.DURATION));
         delay.setText(tg.getPropertyAsString(ThreadGroup.DELAY));
-        final boolean isSameUser = tg.getPropertyAsBoolean(ThreadGroup.IS_SAME_USER, false);
+        final boolean isSameUser = tg.getPropertyAsBoolean(AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION, false);
         if (isSameUser){
             sameUserBox.setSelected(true);
         } else {

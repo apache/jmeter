@@ -174,7 +174,10 @@ public class JMeterVariables {
         return Collections.unmodifiableMap(variables).entrySet();
     }
 
-    public boolean isSameUser() {
+    /**
+     * @return boolean true if user is the same on next iteration of Thread loop, false otherwise
+     */
+    public boolean isSameUserOnNextIteration() {
         return Boolean.TRUE.equals(variables.get(VAR_IS_SAME_USER_KEY));
     }
 }

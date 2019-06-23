@@ -1791,7 +1791,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 + "with config(httpclient.reset_state_on_thread_group_iteration={})",
                 Boolean.valueOf(RESET_STATE_ON_THREAD_GROUP_ITERATION));
         JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
-        if (jMeterVariables.isSameUser()) {
+        if (jMeterVariables.isSameUserOnNextIteration()) {
             log.debug("Thread Group is configured to simulate a returning visitor on each iteration, ignoring property value {}", 
                     RESET_STATE_ON_THREAD_GROUP_ITERATION);
             resetStateOnThreadGroupIteration.set(false);

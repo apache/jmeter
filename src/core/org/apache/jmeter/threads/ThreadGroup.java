@@ -69,9 +69,6 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     /** Scheduler start delay, overrides start time */
     public static final String DELAY = "ThreadGroup.delay";
-    
-    /** The same user or different users */
-    public static final String IS_SAME_USER = "ThreadGroup.sameuser";
     //- JMX entries
 
     private transient Thread threadStarter;
@@ -177,29 +174,6 @@ public class ThreadGroup extends AbstractThreadGroup {
     public int getRampUp() {
         return getPropertyAsInt(ThreadGroup.RAMP_TIME);
     }
-    /**
-     * Set the kind of user
-     *
-     * @param isSameUser
-     *            true is the same user
-     *            false is the different users          
-     */
-    public void setIsSameUser(boolean isSameUser) {
-        setProperty(new BooleanProperty(IS_SAME_USER, isSameUser));
-    }
-
-    /**
-     * Get kind of user:
-     * <ul>
-     *  <li>true means same user running multiple iterations</li>
-     *  <li>false means a different user for each iteration</li>
-     * </ul>
-     * @return the kind of user.
-     */
-    public boolean isSameUser() {
-        return getPropertyAsBoolean(ThreadGroup.IS_SAME_USER);
-    }
-    
 
     private boolean isDelayedStartup() {
         return getPropertyAsBoolean(DELAYED_START);
@@ -241,7 +215,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         this.threadGroupTree = threadGroupTree;
         int numThreads = getNumThreads();
         int rampUpPeriodInSeconds = getRampUp();
-        boolean isSameUser = isSameUser();
+        boolean isSameUser = isSameUserOnNextIteration();
         delayedStartup = isDelayedStartup(); // Fetch once; needs to stay constant
         log.info("Starting thread group... number={} threads={} ramp-up={} delayedStart={}", groupNumber,
                 numThreads, rampUpPeriodInSeconds, delayedStartup);
@@ -265,8 +239,8 @@ public class ThreadGroup extends AbstractThreadGroup {
                     log.debug("Computed delayForNextThreadInMillis:{} for thread:{}", delayForNextThreadInMillis);
                 }
                 lastThreadStartInMillis = nowInMillis;
-                startNewThread(notifier, threadGroupTree, engine, threadNum, context, nowInMillis,
-                        Math.max(0, delayForNextThreadInMillis), isSameUser);
+                startNewThread(notifier, threadGroupTree, engine, threadNum, context, 
+                        nowInMillis, Math.max(0, delayForNextThreadInMillis), isSameUser);
             }
         }
         log.info("Started thread group number {}", groupNumber);
@@ -281,11 +255,12 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param context {@link JMeterContext}
      * @param now Nom in milliseconds
      * @param delay int delay in milliseconds
+     * @param isSameUserOnNextIteration boolean indicating a next iteration will simulate a new or returning user
      * @return {@link JMeterThread} newly created
      */
     private JMeterThread startNewThread(ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine,
-            int threadNum, final JMeterContext context, long now, int delay,Boolean isSameUser) {
-        JMeterThread jmThread = makeThread(notifier, threadGroupTree, engine, threadNum, context,isSameUser);
+            int threadNum, final JMeterContext context, long now, int delay,Boolean isSameUserOnNextIteration) {
+        JMeterThread jmThread = makeThread(notifier, threadGroupTree, engine, threadNum, context, isSameUserOnNextIteration);
         scheduleThread(jmThread, now); // set start and end time
         jmThread.setInitialDelay(delay);
         Thread newThread = new Thread(jmThread, jmThread.getThreadName());
@@ -323,13 +298,13 @@ public class ThreadGroup extends AbstractThreadGroup {
     private JMeterThread makeThread(
             ListenerNotifier notifier, ListedHashTree threadGroupTree,
             StandardJMeterEngine engine, int threadNumber, 
-            JMeterContext context,Boolean isSameUser) { // N.B. Context needs to be fetched in the correct thread
+            JMeterContext context,Boolean isSameUserOnNextIteration) { // N.B. Context needs to be fetched in the correct thread
         boolean onErrorStopTest = getOnErrorStopTest();
         boolean onErrorStopTestNow = getOnErrorStopTestNow();
         boolean onErrorStopThread = getOnErrorStopThread();
         boolean onErrorStartNextLoop = getOnErrorStartNextLoop();
         String groupName = getName();
-        final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), this, notifier,isSameUser);
+        final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), this, notifier,isSameUserOnNextIteration);
         jmeterThread.setThreadNum(threadNumber);
         jmeterThread.setThreadGroup(this);
         jmeterThread.setInitialContext(context);
@@ -355,7 +330,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             numThreads = getNumThreads();
             setNumThreads(numThreads + 1);
         }
-        newJmThread = startNewThread(notifier, threadGroupTree, engine, numThreads, context, now, delay, isSameUser());
+        newJmThread = startNewThread(notifier, threadGroupTree, engine, numThreads, context, now, delay, isSameUserOnNextIteration());
         JMeterContextService.addTotalThreads( 1 );
         log.info("Started new thread in group {}", groupNumber);
         return newJmThread;
@@ -622,7 +597,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 final int numThreads = getNumThreads();
                 final float rampUpOriginInMillis = (float) getRampUp() * 1000;
                 final long startTimeInMillis = System.currentTimeMillis();
-                final boolean isSameUser=isSameUser();
+                final boolean isSameUser = isSameUserOnNextIteration();
                 for (int threadNumber = 0; running && threadNumber < numThreads; threadNumber++) {
                     if (threadNumber > 0) {
                         long elapsedInMillis = System.currentTimeMillis() - startTimeInMillis; 
