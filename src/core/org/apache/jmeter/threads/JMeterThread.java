@@ -123,7 +123,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private long endTime = 0;
 
-    private boolean isSameUserOnNextIteration = false;
+    private final boolean isSameUserOnNextIteration;
 
     // based on this scheduler is enabled or disabled
     private boolean scheduler = false;
