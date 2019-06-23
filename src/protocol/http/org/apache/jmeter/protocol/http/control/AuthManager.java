@@ -45,9 +45,12 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.TestStateListener;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -69,6 +72,8 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     private static final String CLEAR = "AuthManager.clearEachIteration";// $NON-NLS-1$
 
     private static final String AUTH_LIST = "AuthManager.auth_list"; //$NON-NLS-1$
+
+    private static final String CONTROLLED_BY_THREADGROUP = "AuthManager.controlledByThreadGroup";// $NON-NLS-1$
 
     private static final String[] COLUMN_RESOURCE_NAMES = {
         "auth_base_url", //$NON-NLS-1$
@@ -549,8 +554,18 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     /** {@inheritDoc} */
     @Override
     public void testIterationStart(LoopIterationEvent event) {
-        if (getClearEachIteration()) {
+        JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
+        if ((getControlledByThread() && !jMeterVariables.isSameUserOnNextIteration()) 
+                || getClearEachIteration()) {
             kerberosManager.clearSubjects();
         }
+    }
+    
+    public boolean getControlledByThread() {
+        return getPropertyAsBoolean(CONTROLLED_BY_THREADGROUP);
+    }
+
+    public void setControlledByThread(boolean control) {
+        setProperty(new BooleanProperty(CONTROLLED_BY_THREADGROUP, control));
     }
 }
