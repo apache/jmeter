@@ -622,7 +622,6 @@ public class ThreadGroup extends AbstractThreadGroup {
             } catch (Exception ex) {
                 log.error("An error occurred scheduling delay start of threads for Thread Group: {}", getName(), ex);
             }
-            
         }
     }
 }
