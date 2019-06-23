@@ -95,7 +95,7 @@ public class JMeterThread implements Runnable, Interruptible {
     private final TestCompiler compiler;
 
     private final JMeterThreadMonitor monitor;
-    
+
     private final JMeterVariables threadVars;
 
     // Note: this is only used to implement TestIterationListener#testIterationStart
