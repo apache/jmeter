@@ -440,7 +440,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     public void testIterationStart(LoopIterationEvent event) {
         JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
         if ((getControlledByThread() && !jMeterVariables.isSameUserOnNextIteration()) 
-                || getClearEachIteration()) {
+                || (getClearEachIteration()&&!getControlledByThread())) {
             log.debug("Initialise cookies from pre-defined list");
             // No need to call clear
             setProperty(initialCookies.clone());

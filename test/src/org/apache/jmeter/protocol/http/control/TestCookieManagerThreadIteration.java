@@ -102,11 +102,15 @@ public class TestCookieManagerThreadIteration {
         assertTrue("After the iteration, the quantity of cookies should be 1",
                 cookieManagerDynamic.getCookies().size() == 1);
         // Controlled by CookieManager
+        jmvars.putObject(SAME_USER, true);
+        jmctx.setVariables(jmvars);
+        cookieManagerDynamic.setThreadContext(jmctx);
         cookieManagerDynamic.getCookies().clear();
         cookieManagerDynamic.testStarted();
         cookieDynamic.setName(DYNAMIC_COOKIE);
         cookieManagerDynamic.getCookies().addItem(cookieDynamic);
         cookieManagerDynamic.setClearEachIteration(true);
+        cookieManagerDynamic.setControlledByThread(false);
         cookieManagerStatic.getCookies().clear();
         cookieManagerStatic.getCookies().addItem(cookieStatic);
         initialCookies = cookieManagerStatic.getCookies();
@@ -154,6 +158,9 @@ public class TestCookieManagerThreadIteration {
                 cookieManagerDynamic.getCookies().size() == 1);
         
         // Controlled by CookieManager
+        jmvars.putObject(SAME_USER, false);
+        jmctx.setVariables(jmvars);
+        cookieManagerDynamic.setControlledByThread(false);
         cookieManagerDynamic.getCookies().clear();
         cookieManagerDynamic.testStarted();
         cookieDynamic.setName(DYNAMIC_COOKIE);

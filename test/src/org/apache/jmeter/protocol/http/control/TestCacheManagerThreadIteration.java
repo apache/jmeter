@@ -370,12 +370,16 @@ public class TestCacheManagerThreadIteration {
         assertFalse("After iterantion, should not find valid entry", this.cacheManager.inCache(url, headers));
         
         //Controlled by cacheManager
+        jmvars.putObject(SAME_USER, true);
+        jmctx.setVariables(jmvars);
+        this.cacheManager.setThreadContext(jmctx);
         start = System.currentTimeMillis();
         setExpires(makeDate(new Date(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
         assertNotNull("Before iternation, should find entry", getThreadCacheEntry(LOCAL_HOST));
         assertTrue("Before iternation, should find valid entry", this.cacheManager.inCache(url, headers));
+        this.cacheManager.setControlledByThread(false);
         this.cacheManager.setClearEachIteration(true);
         this.cacheManager.testIterationStart(null);
         assertNull("After iterantion, should not find entry", getThreadCacheEntry(LOCAL_HOST));
@@ -404,12 +408,16 @@ public class TestCacheManagerThreadIteration {
         assertNotNull("After iteration, should find entry", getThreadCacheEntry(LOCAL_HOST));
         assertTrue("After iteration, should find valid entry", this.cacheManager.inCache(url, headers));
         // Controlled by cacheManager
+        jmvars.putObject(SAME_USER, false);
+        jmctx.setVariables(jmvars);
+        this.cacheManager.setThreadContext(jmctx);
         start = System.currentTimeMillis();
         setExpires(makeDate(new Date(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
         assertNotNull("Before iteration, should find entry", getThreadCacheEntry(LOCAL_HOST));
         assertTrue("Before iteration, should find valid entry", this.cacheManager.inCache(url, headers));
+        this.cacheManager.setControlledByThread(false);
         this.cacheManager.setClearEachIteration(false);
         this.cacheManager.testIterationStart(null);
         assertNotNull("After iteration, should find entry", getThreadCacheEntry(LOCAL_HOST));
