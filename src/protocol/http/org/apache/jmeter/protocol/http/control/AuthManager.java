@@ -556,7 +556,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     public void testIterationStart(LoopIterationEvent event) {
         JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
         if ((getControlledByThread() && !jMeterVariables.isSameUserOnNextIteration())
-                || (getClearEachIteration() && !getControlledByThread())) {
+                || (!getControlledByThread() && getClearEachIteration())) {
             kerberosManager.clearSubjects();
         }
     }

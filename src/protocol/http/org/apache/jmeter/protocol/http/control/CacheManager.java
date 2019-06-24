@@ -634,7 +634,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     public void testIterationStart(LoopIterationEvent event) {
         JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
         if ((getControlledByThread() && !jMeterVariables.isSameUserOnNextIteration()) 
-                ||(!getControlledByThread()&&getClearEachIteration())) {
+                || (!getControlledByThread() && getClearEachIteration())) {
             clearCache();
         }
         useExpires = getUseExpires(); // cache the value
