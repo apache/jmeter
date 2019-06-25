@@ -256,10 +256,23 @@ public class TestJorphanUtils {
     }
     
     @Test
+    public void testGetByteArraySlice() throws Exception {
+        Assert.assertArrayEquals(new byte[] {1, 2},
+              JOrphanUtils.getByteArraySlice(new byte[]{0, 1, 2, 3}, 1, 2));
+    }
+
+    @Test
     public void testbaToHexString(){
         assertEquals("",JOrphanUtils.baToHexString(new byte[]{}));
         assertEquals("00",JOrphanUtils.baToHexString(new byte[]{0}));
         assertEquals("0f107f8081ff",JOrphanUtils.baToHexString(new byte[]{15,16,127,-128,-127,-1}));
+    }
+
+    @Test
+    public void testBaToHexStringSeparator(){
+        assertEquals("", JOrphanUtils.baToHexString(new byte[]{}, '-'));
+        assertEquals("00", JOrphanUtils.baToHexString(new byte[]{0}, '-'));
+        assertEquals("0f-10-7f-80-81-ff", JOrphanUtils.baToHexString(new byte[]{15,16,127,-128,-127,-1}, '-'));
     }
 
     @Test
@@ -278,6 +291,13 @@ public class TestJorphanUtils {
     }
     
     @Test
+    public void testNullifyIfEmptyTrimmed() {
+        Assert.assertNull(JOrphanUtils.nullifyIfEmptyTrimmed(null));
+        Assert.assertNull(JOrphanUtils.nullifyIfEmptyTrimmed("\u0001"));
+        assertEquals("1234", JOrphanUtils.nullifyIfEmptyTrimmed("1234"));
+    }
+
+    @Test
     public void testIsBlank() {
         assertTrue(JOrphanUtils.isBlank(""));
         assertTrue(JOrphanUtils.isBlank(null));
@@ -295,6 +315,24 @@ public class TestJorphanUtils {
         assertEquals("baulpismuth", JOrphanUtils.rightAlign(in, 6).toString());
         in = new StringBuilder("A");
         assertEquals("       A", JOrphanUtils.rightAlign(in, 8).toString());
+        assertEquals("                                 foo",
+            JOrphanUtils.rightAlign(new StringBuilder("foo"), 39).toString());
+    }
+
+    @Test
+    public void testLeftAlign() {
+      assertEquals("foo  ",
+            JOrphanUtils.leftAlign(new StringBuilder("foo"), 5).toString());
+      assertEquals("foo",
+            JOrphanUtils.leftAlign(new StringBuilder("foo"), 2).toString());
+      assertEquals("foo                                 ",
+            JOrphanUtils.leftAlign(new StringBuilder("foo"), 39).toString());
+    }
+
+    @Test
+    public void testBooleanToSTRING() {
+        assertEquals("TRUE", JOrphanUtils.booleanToSTRING(true));
+        assertEquals("FALSE", JOrphanUtils.booleanToSTRING(false));
     }
 
     @Test
@@ -356,5 +394,12 @@ public class TestJorphanUtils {
     @Test(expected = NullPointerException.class)
     public void testReplaceValueWithNullSetterThatGetsCalled() {
         JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", null);
+    }
+
+    @Test
+    public void testUnsplit() {
+        assertEquals("", JOrphanUtils.unsplit(new Object[] {null, null}, 0));
+        assertEquals("11", JOrphanUtils.unsplit(new Object[] {null, 1}, 1));
+        assertEquals("-26738698", JOrphanUtils.unsplit(new Object[] {-26_738_698}, 1));
     }
 }
