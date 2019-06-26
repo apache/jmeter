@@ -83,11 +83,11 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
    */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        HashMap<String, GroupInfo> groupInfos = new HashMap<>();
         if(!CONNECT_TIME_SAVED) {
             return Collections.emptyMap();
         }
 
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>();
         groupInfos.put("aggregate_rpt_pct2", //$NON-NLS-1$
                 createPercentileGroupInfo("aggregate_rpt_pct2", 95, //$NON-NLS-1$
                         String.format(
