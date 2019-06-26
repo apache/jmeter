@@ -88,11 +88,6 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
             return Collections.emptyMap();
         }
 
-//        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-  //              new MeanAggregatorFactory(), new NameSeriesSelector(),
-                // We ignore Transaction Controller results
-    //            new ConnectTimeValueSelector(false), false, false));
-
         groupInfos.put("aggregate_rpt_pct2", //$NON-NLS-1$
                 createPercentileGroupInfo("aggregate_rpt_pct2", 95, //$NON-NLS-1$
                         String.format(
