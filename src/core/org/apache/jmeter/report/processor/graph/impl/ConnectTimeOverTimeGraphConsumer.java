@@ -21,15 +21,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.ConnectTimeValueSelector;
-import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
+
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 import org.apache.jmeter.util.JMeterUtils;
-
+import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 /**
  * The class ConnectTimeOverTimeGraphConsumer provides a graph to visualize Connection time
  * per time period (defined by granularity)
