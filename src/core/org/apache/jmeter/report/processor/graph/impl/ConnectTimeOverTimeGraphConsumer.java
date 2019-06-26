@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.processor.MeanAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.ConnectTimeValueSelector;
@@ -89,10 +88,10 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
             return Collections.emptyMap();
         }
 
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new MeanAggregatorFactory(), new NameSeriesSelector(),
+//        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
+  //              new MeanAggregatorFactory(), new NameSeriesSelector(),
                 // We ignore Transaction Controller results
-                new ConnectTimeValueSelector(false), false, false));
+    //            new ConnectTimeValueSelector(false), false, false));
 
         groupInfos.put("aggregate_rpt_pct2", //$NON-NLS-1$
                 createPercentileGroupInfo("aggregate_rpt_pct2", 95, //$NON-NLS-1$
