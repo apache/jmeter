@@ -162,7 +162,7 @@ public class HTTPArgument extends Argument implements Serializable {
                 log.error("{} encoding not supported!", contentEncoding);
                 throw new Error(e.toString(), e);
             } catch (DecoderException e) {
-                log.error(contentEncoding + " exception in decoder!");
+                throw new IllegalArgumentException(e.toString(), e);
             }
         }
         setName(name);
