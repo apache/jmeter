@@ -60,13 +60,13 @@ public class TimerService {
      * Adjust delay so that initialDelay does not exceed end of test
      * @param initialDelay initial delay in millis
      * @param endTime End time of JMeterThread
-     * @return initialDelay or adjusted delay
+     * @return initialDelay or {@code -1} if delay is too long
      */
     public long adjustDelay(final long initialDelay, long endTime) {
         if (endTime > 0) {
             long now = System.currentTimeMillis();
             if (initialDelay > endTime - now) {
-                return endTime - now;
+                return -1;
             }
         }
         return initialDelay;

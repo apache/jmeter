@@ -2,8 +2,8 @@
 <h4 align="center">Open Source application designed to load test applications and measure performance. By The Apache Software Foundation</h4>
 <br>
 
-[![Build Status](https://api.travis-ci.org/apache/jmeter.svg?branch=trunk)](https://travis-ci.org/apache/jmeter/)
-[![codecov](https://codecov.io/gh/apache/jmeter/branch/trunk/graph/badge.svg)](https://codecov.io/gh/apache/jmeter)
+[![Build Status](https://api.travis-ci.org/apache/jmeter.svg?branch=master)](https://travis-ci.org/apache/jmeter/)
+[![codecov](https://codecov.io/gh/apache/jmeter/branch/master/graph/badge.svg)](https://codecov.io/gh/apache/jmeter)
 [![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![Stack Overflow](https://img.shields.io/:stack%20overflow-jmeter-brightgreen.svg)](https://stackoverflow.com/questions/tagged/jmeter)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
@@ -15,7 +15,7 @@
 Apache JMeter may be used to test performance both on static and dynamic resources, Web dynamic applications.
 It can be used to simulate a heavy load on a server, group of servers, network or object to test its strength or to analyze overall performance under different load types.
 
-![Image of JMeter 4.0](https://raw.githubusercontent.com/apache/jmeter/trunk/xdocs/images/screenshots/JMETER_4.0.png)
+![Image of JMeter 4.0](https://raw.githubusercontent.com/apache/jmeter/master/xdocs/images/screenshots/JMETER_4.0.png)
 
 Apache JMeter features include:
 
@@ -37,11 +37,11 @@ Full featured Test IDE that allows fast Test Plan **recording (from Browsers or 
 
 A complete and [**ready to present dynamic HTML report**](http://jmeter.apache.org/usermanual/generating-dashboard.html)
 
-![Dashboard screenshot](https://raw.githubusercontent.com/apache/jmeter/trunk/xdocs/images/screenshots/dashboard/response_time_percentiles_over_time.png)
+![Dashboard screenshot](https://raw.githubusercontent.com/apache/jmeter/master/xdocs/images/screenshots/dashboard/response_time_percentiles_over_time.png)
 
 [**Live reporting**](http://jmeter.apache.org/usermanual/realtime-results.html) into 3rd party databases like InfluxDB or Graphite
 
-![Live report](https://raw.githubusercontent.com/apache/jmeter/trunk/xdocs/images/screenshots/grafana_dashboard.png)
+![Live report](https://raw.githubusercontent.com/apache/jmeter/master/xdocs/images/screenshots/grafana_dashboard.png)
 
 Easy correlation through ability to extract data from most popular response formats, [**HTML**](http://jmeter.apache.org/usermanual/component_reference.html#CSS/JQuery_Extractor), [**JSON**](http://jmeter.apache.org/usermanual/component_reference.html#JSON_Extractor), [**XML**](http://jmeter.apache.org/usermanual/component_reference.html#XPath_Extractor) or [**any textual format**](http://jmeter.apache.org/usermanual/component_reference.html#Regular_Expression_Extractor)
 
@@ -199,9 +199,10 @@ does not have a suitable GUI display.
 
 Building and contributing is explained in details at https://jmeter.apache.org/building.html
 
-The code is maintained in SVN at https://svn.apache.org/repos/asf/jmeter/trunk
+The code is maintained at GitHub: 
 
-There is a read-only mirror at GitHub: https://github.com/apache/jmeter
+- https://github.com/apache/jmeter
+- https://gitbox.apache.org/repos/asf/jmeter.git
 
 ## Licensing and legal information
 

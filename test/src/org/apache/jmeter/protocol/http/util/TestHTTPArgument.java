@@ -45,7 +45,7 @@ public class TestHTTPArgument {
             assertEquals("name.%3F", clone.getEncodedName());
             assertEquals("value_+here", clone.getEncodedValue());
             assertEquals("name.?", clone.getName());
-            assertEquals("value_+here", clone.getValue());
+            assertEquals("value_ here", clone.getValue());
         }
 
         @Test
@@ -81,7 +81,7 @@ public class TestHTTPArgument {
             assertEquals("value_ here", arg.getValue());
             assertEquals("name.%3F", arg.getEncodedName());
             assertEquals("value_+here", arg.getEncodedValue());
-            arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch
+            arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch 
             assertEquals("name.?", arg.getEncodedName());
             assertEquals("value_ here", arg.getEncodedValue());
             
@@ -135,11 +135,10 @@ public class TestHTTPArgument {
 
         @Test
         public void testWithShift_JIS_Encoding() throws Exception {
-        	
+            
             String encodedValue = "%8F%89%8A%FA%92l%91%E5%8D%E3%8Es";
-            byte[] data = new byte[] { -17, -66, -126, -26, -72, -119, -27, -113, -81, -25, -108, -104, -17, -67, -70, -17,
-                    -66, -126, -27, -128, -92, -17, -66, -126, -27, -90, -91, -17, -67, -91, -17, -66, -126, -27, -126, -84,
-                    -17, -67, -93, -17, -66, -126, -27, -72, -126 };
+            byte[] data = new byte[] {-27, -120, -99, -26, -100, -97, -27, -128, -92, -27, -92, -89, -23, -104, -86, -27,
+                    -72, -126};
 
             String value = new String(data, StandardCharsets.UTF_8);
 
@@ -147,7 +146,7 @@ public class TestHTTPArgument {
             // Passing real encoded value of Japanese character as
             // %8F%89%8A%FA%92l%91%E5%8D%E3%8Es and try to decode with Shift_JIS encoding
             arg = new HTTPArgument("name.?", encodedValue, true, "Shift_JIS");
-            assertEquals("arg.getValue() should be equal to " + value, value, arg.getValue());
+            assertEquals("HTTPArgument(\"name.?\", encodedValue, true, \"Shift_JIS\").getValue()", value, arg.getValue());
         }
 
         @Test
@@ -155,9 +154,8 @@ public class TestHTTPArgument {
 
             String encodedValue = "%8F%89%8A%FA%92l%91%E5%8D%E3%8Es";
 
-            byte[] data = new byte[] { -17, -66, -126, -26, -72, -119, -27, -113, -81, -25, -108, -104, -17, -67, -70, -17,
-                    -66, -126, -27, -128, -92, -17, -66, -126, -27, -90, -91, -17, -67, -91, -17, -66, -126, -27, -126, -84,
-                    -17, -67, -93, -17, -66, -126, -27, -72, -126 };
+            byte[] data = new byte[] {-27, -120, -99, -26, -100, -97, -27, -128, -92, -27, -92, -89, -23, -104, -86, -27,
+                    -72, -126};
 
             String value = new String(data, StandardCharsets.UTF_8);
 
@@ -165,16 +163,16 @@ public class TestHTTPArgument {
             // Passing real encoded value of Japanese character as
             // %8F%89%8A%FA%92l%91%E5%8D%E3%8Es and try to decode with UTF-8 encoding
             arg = new HTTPArgument("name.?", encodedValue, true, "UTF-8");
-            assertNotEquals("arg.getValue() should not be equal to " + value, value, arg.getValue());
+            assertNotEquals("HTTPArgument(\"name.?\", encodedValue, true, \"UTF-8\").getValue()", value, arg.getValue());
         }
 
         private void testEncodings(String encoding) {
             HTTPArgument arg;
             arg = new HTTPArgument("name.?", "value_ here", false, encoding);
-            assertEquals("arg.getName() should be equal to name.?", "name.?", arg.getName());
-            assertEquals("arg.getValue() should be equal to value_here", "value_ here", arg.getValue());
-            assertEquals("arg.getEncodedName() should be equal to name.%3F", "name.%3F", arg.getEncodedName());
-            assertEquals("arg.getValue() should be equal to value_+here", "value_+here", arg.getEncodedValue());
+            assertEquals("HTTPArgument(\"name.?\", \"value_ here\", false, encoding).getName()", "name.?", arg.getName());
+            assertEquals("HTTPArgument(\"name.?\", \"value_ here\", false, encoding).getValue()", "value_ here", arg.getValue());
+            assertEquals("HTTPArgument(\"name.?\", \"value_ here\", false, encoding).getEncodedName()", "name.%3F", arg.getEncodedName());
+            assertEquals("HTTPArgument(\"name.?\", \"value_ here\", false, encoding).getValue()", "value_+here", arg.getEncodedValue());
             // Show that can bypass encoding:
             arg.setAlwaysEncoded(false);
             assertEquals("arg.getEncodedName() should be equal to name.?", "name.?", arg.getEncodedName());
@@ -185,20 +183,20 @@ public class TestHTTPArgument {
             // In real encoded value for "name.?" is "name.%3F" and the encoded value for
             // "value_here" is "value_+here"
             arg = new HTTPArgument("name.?", "value_ here", true, encoding);
-            assertEquals("arg.getName() should be equal to name.?", "name.?", arg.getName());
-            assertEquals("arg.getValue() should be equal to value_here", "value_ here", arg.getValue());
-            assertEquals("arg.getEncodedName() should be equal to name.%3F", "name.%3F", arg.getEncodedName());
-            assertEquals("arg.getValue() should be equal to value_+here", "value_+here", arg.getEncodedValue());
+            assertEquals("HTTPArgument(\"name.?\", \"value_ here\", true, encoding).getName()", "name.?", arg.getName());
+            assertEquals("HTTPArgument(\"name.?\", \"value_ here\", true, encoding).getValue()", "value_ here", arg.getValue());
+            assertEquals("HTTPArgument(\"name.?\", \"value_ here\", true, encoding).getEncodedName()", "name.%3F", arg.getEncodedName());
+            assertEquals("HTTPArgument(\"name.?\", \"value_ here\", true, encoding).getValue()", "value_+here", arg.getEncodedValue());
             arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch
             assertEquals("arg.getEncodedName() should be equal to name.?", "name.?", arg.getEncodedName());
             assertEquals("arg.getValue should() be equal to value_here", "value_ here", arg.getEncodedValue());
 
             // Try a real encoded argument
             arg = new HTTPArgument("name.%3F", "value_+here", true, encoding);
-            assertEquals("arg.getName() should be equal to name.?", "name.?", arg.getName());
-            assertEquals("arg.getValue() should be equal to value_here", "value_ here", arg.getValue());
-            assertEquals("arg.getEncodedName() should be equal to name.%3F", "name.%3F", arg.getEncodedName());
-            assertEquals("arg.getValue() should be equal to value_+here", "value_+here", arg.getEncodedValue());
+            assertEquals("HTTPArgument(\"name.%3F\", \"value_+here\", true, encoding).getName()", "name.?", arg.getName());
+            assertEquals("HTTPArgument(\"name.%3F\", \"value_+here\", true, encoding).getValue()", "value_ here", arg.getValue());
+            assertEquals("HTTPArgument(\"name.%3F\", \"value_+here\", true, encoding).getEncodedName()", "name.%3F", arg.getEncodedName());
+            assertEquals("HTTPArgument(\"name.%3F\", \"value_+here\", true, encoding).getValue()", "value_+here", arg.getEncodedValue());
             // Show that can bypass encoding:
             arg.setAlwaysEncoded(false);
             assertEquals("arg.getEncodedName() should be equal to name.?", "name.?", arg.getEncodedName());

@@ -148,6 +148,14 @@ Check that patch does not break JUnit tests by running:
     <li>Create a PR and link it in the bugzilla issue</li>
 </ul>
 
+<note>We have added a <code>.gitattributes</code> file to configure line endings of the files under version control.
+  Those settings can lead to strange looking <em>changes</em> on some newly checked out files, e.g. JavaScript or CSS files,
+  where the only change is the line ending.<br/>
+  To get rid of those problems set <code>core.autocrlf</code> to <code>input</code> before you clone the repository using
+  the following command:
+  <source>git config --global core.autocrlf input</source>
+</note>
+
 <h3>Create a PR using Patch</h3>
 <ul>
     <li>Open a bugzilla issue, see <a target="_blank" href="issues.html">Issues page</a></li>
