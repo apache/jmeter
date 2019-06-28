@@ -30,7 +30,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Test if a JMeter variable is defined
- * 
+ *
  * @since 4.0
  */
 public class IsVarDefined extends AbstractFunction {

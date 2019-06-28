@@ -13,13 +13,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /**
- * Package to test FileServer methods 
+ * Package to test FileServer methods
  */
-     
+
 package org.apache.jmeter.config;
 
 import java.util.Locale;

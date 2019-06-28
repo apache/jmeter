@@ -166,7 +166,7 @@ public class AssertionResult implements Serializable, Searchable {
     public String toString() {
         return getName() != null ? getName() : super.toString();
     }
-    
+
     @Override
     public List<String> getSearchableTokens() throws Exception {
         List<String> datasToSearch = new ArrayList<>(2);

@@ -126,7 +126,7 @@ public class SampleEvent implements Serializable {
     public SampleEvent(SampleResult result, String threadGroup, String hostname) {
        this(result, threadGroup, hostname, false);
     }
-    
+
     private SampleEvent(SampleResult result, String threadGroup, String hostname, boolean isTransactionSampleEvent) {
         this.result = result;
         this.threadGroup = threadGroup;
@@ -159,7 +159,7 @@ public class SampleEvent implements Serializable {
 
     /**
      * Get the number of defined variables
-     * 
+     *
      * @return the number of variables defined
      */
     public static int getVarCount(){
@@ -168,7 +168,7 @@ public class SampleEvent implements Serializable {
 
     /**
      * Get the nth variable name (zero-based)
-     * 
+     *
      * @param i
      *            specifies which variable name should be returned (zero-based)
      * @return the variable name of the nth variable
@@ -179,7 +179,7 @@ public class SampleEvent implements Serializable {
 
     /**
      * Get the nth variable value (zero-based)
-     * 
+     *
      * @param i
      *            specifies which variable value should be returned (zero-based)
      * @return the value of the nth variable
@@ -196,7 +196,7 @@ public class SampleEvent implements Serializable {
 
     /**
      * Get the {@link SampleResult} associated with this event
-     * 
+     *
      * @return the associated {@link SampleResult}
      */
     public SampleResult getResult() {
@@ -205,7 +205,7 @@ public class SampleEvent implements Serializable {
 
     /**
      * Get the name of the thread group for which this event was recorded
-     * 
+     *
      * @return the name of the thread group
      */
     public String getThreadGroup() {
@@ -214,7 +214,7 @@ public class SampleEvent implements Serializable {
 
     /**
      * Get the name of the host for which this event was recorded
-     * 
+     *
      * @return the name of the host
      */
     public String getHostname() {

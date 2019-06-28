@@ -64,17 +64,17 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     private static final long serialVersionUID = 240L;
 
     private static final int TAB_PARAMETERS = 0;
-    
+
     private int tabRawBodyIndex = 1;
-    
+
     private int tabFileUploadIndex = 2;
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
-    
+
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private HTTPArgumentsPanel argsPanel;
-    
+
     private HTTPFileArgsPanel filesPanel;
 
     private JLabeledTextField domain;
@@ -98,10 +98,10 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     private JCheckBox useBrowserCompatibleMultipartMode;
 
     private JLabeledChoice method;
-    
+
     // set this false to suppress some items for use in HTTP Request defaults
     private final boolean notConfigOnly;
-    
+
     // Body data
     private JSyntaxTextArea postBodyContent;
 
@@ -138,7 +138,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     public UrlConfigGui(boolean showSamplerFields, boolean showRawBodyPane) {
         this(showSamplerFields, showRawBodyPane, false);
     }
-    
+
     /**
      * @param showSamplerFields
      *            flag whether sampler fields should be shown
@@ -276,7 +276,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         boolean useRaw = el.getPropertyAsBoolean(HTTPSamplerBase.POST_BODY_RAW, HTTPSamplerBase.POST_BODY_RAW_DEFAULT);
         if(useRaw) {
             String postBody = computePostBody(arguments, true); // Convert CRLF to CR, see modifyTestElement
-            postBodyContent.setInitialText(postBody); 
+            postBodyContent.setInitialText(postBody);
             postBodyContent.setCaretPosition(0);
             argsPanel.clear();
             postContentTabbedPane.setSelectedIndex(tabRawBodyIndex, false);
@@ -334,7 +334,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      *
      * @return the panel
      */
-    protected final JPanel getWebServerPanel() {        
+    protected final JPanel getWebServerPanel() {
         // PROTOCOL
         protocol = new JLabeledTextField(JMeterUtils.getResString("protocol"), 4); // $NON-NLS-1$
         port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"), 7); // $NON-NLS-1$
@@ -422,14 +422,14 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         postContentTabbedPane = new ValidationTabbedPane();
         argsPanel = new HTTPArgumentsPanel();
         postContentTabbedPane.add(JMeterUtils.getResString("post_as_parameters"), argsPanel);// $NON-NLS-1$
-        
+
         int indx = TAB_PARAMETERS;
         if(showRawBodyPane) {
             tabRawBodyIndex = ++indx;
             postBodyContent = JSyntaxTextArea.getInstance(30, 50);// $NON-NLS-1$
             postContentTabbedPane.add(JMeterUtils.getResString("post_body"), JTextScrollPane.getInstance(postBodyContent));// $NON-NLS-1$
         }
-        
+
         if(showFileUploadPane) {
             tabFileUploadIndex = ++indx;
             filesPanel = new HTTPFileArgsPanel();
@@ -439,21 +439,21 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     /**
-     * 
+     *
      */
     class ValidationTabbedPane extends JTabbedPane {
 
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 7014311238367882880L;
 
-        
+
         @Override
         public void setSelectedIndex(int index) {
             setSelectedIndex(index, true);
         }
-        
+
         /**
          * Apply some check rules if check is true
          *
@@ -472,7 +472,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             }
             // We're moving to Raw or Parameters
             else if(index != oldSelectedIndex) {
-                // If the Parameter data can be converted (i.e. no names) 
+                // If the Parameter data can be converted (i.e. no names)
                 // we switch
                 if(index == tabRawBodyIndex) {
                     if(canSwitchToRawBodyPane()) {
@@ -492,8 +492,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
                     }
                 }
             }
-        }   
-        
+        }
+
         /**
          * @return false if one argument has a name
          */
@@ -506,7 +506,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             }
             return true;
         }
-        
+
         /**
          * @return true if postBodyContent is empty
          */
@@ -514,7 +514,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             return postBodyContent.getText().isEmpty();
         }
     }
-    
+
     // autoRedirects and followRedirects cannot both be selected
     @Override
     public void stateChanged(ChangeEvent e) {
@@ -535,6 +535,6 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         if(postBodyContent.getText().isEmpty()) {
             postBodyContent.setInitialText(computePostBody((Arguments)argsPanel.createTestElement()));
             postBodyContent.setCaretPosition(0);
-        } 
+        }
     }
 }

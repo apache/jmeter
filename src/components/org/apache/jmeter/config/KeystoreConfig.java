@@ -42,7 +42,7 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
     private String endIndex;
     private String preload;
     private String clientCertAliasVarName;
-    
+
     public KeystoreConfig() {
         super();
     }
@@ -54,7 +54,7 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
 
     @Override
     public void testEnded(String host) {
-        log.info("Destroying Keystore");         
+        log.info("Destroying Keystore");
         SSLManager.getInstance().destroyKeystore();
     }
 
@@ -71,7 +71,7 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
         }
         int startIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_START_INDEX, 0);
         int endIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, -1);
-        
+
         if(!StringUtils.isEmpty(this.startIndex)) {
             try {
                 startIndexAsInt = Integer.parseInt(this.startIndex);
@@ -79,8 +79,8 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
                 log.warn("Failed parsing startIndex: {}, will default to: {}, error message: {}", this.startIndex,
                         startIndexAsInt, e, e);
             }
-        } 
-        
+        }
+
         if(!StringUtils.isEmpty(this.endIndex)) {
             try {
                 endIndexAsInt = Integer.parseInt(this.endIndex);
@@ -88,7 +88,7 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
                 log.warn("Failed parsing endIndex: {}, will default to: {}, error message: {}", this.endIndex,
                         endIndexAsInt, e, e);
             }
-        } 
+        }
         if(endIndexAsInt != -1 && startIndexAsInt>endIndexAsInt) {
             throw new JMeterStopTestException("Keystore Config error : Alias start index must be lower than Alias end index");
         }
@@ -97,7 +97,7 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
                 preload, startIndexAsInt, endIndexAsInt, clientCertAliasVarName);
 
         SSLManager.getInstance().configureKeystore(Boolean.parseBoolean(preload),
-                startIndexAsInt, 
+                startIndexAsInt,
                 endIndexAsInt,
                 clientCertAliasVarName);
     }

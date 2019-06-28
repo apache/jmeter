@@ -84,7 +84,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#startConsuming
      * ()
@@ -107,7 +107,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSampleConsumer#setConsumedMetadata
      * (org.apache.jmeter.report.core.SampleMetadata, int)
@@ -124,7 +124,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#consume
      * (org.apache.jmeter.report.core.Sample, int)
@@ -140,7 +140,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#stopConsuming
      * ()
@@ -156,7 +156,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
      * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
      */
@@ -301,7 +301,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see
          * org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.
          * jmeter.report.core.Sample, int)

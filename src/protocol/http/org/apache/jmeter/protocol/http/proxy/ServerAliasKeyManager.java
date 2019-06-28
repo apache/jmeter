@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.proxy;
@@ -37,7 +37,7 @@ class ServerAliasKeyManager implements X509KeyManager {
 
     /**
      * Create a wrapper class that always returns the specified server alias
-     * 
+     *
      * @param km the key manager to wrap
      * @param serverAlias the server alias which {@link #chooseServerAlias(String, Principal[], Socket)} will return
      */

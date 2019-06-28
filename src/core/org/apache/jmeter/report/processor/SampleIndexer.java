@@ -25,7 +25,7 @@ import org.apache.jmeter.report.core.Sample;
  *
  * @param <TIndex>
  *            the type of the index
- * 
+ *
  * @since 3.0
  */
 public interface SampleIndexer<TIndex> {

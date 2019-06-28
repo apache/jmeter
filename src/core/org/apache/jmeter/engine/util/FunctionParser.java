@@ -47,7 +47,7 @@ class FunctionParser {
      * Calls {@link #makeFunction(StringReader)} if it detects an unescaped "${".
      *
      * Removes escapes from '$', ',' and '\'.
-     * 
+     *
      * @param value string containing the function / variable references (if any)
      *
      * @return list of Strings or Objects representing functions
@@ -169,7 +169,7 @@ class FunctionParser {
     /**
      * Compile a String into a list of parameters, each made into a
      * CompoundVariable.
-     * 
+     *
      * Parses strings of the following form:
      * <ul>
      * <li>text)</li>

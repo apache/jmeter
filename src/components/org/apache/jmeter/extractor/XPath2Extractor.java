@@ -220,8 +220,8 @@ PostProcessor, Serializable {
      * @param matchNumber int Match Number
      * @param responseData String that contains the entire Document
      * @throws SaxonApiException
-     * @throws XMLStreamException 
-     * @throws FactoryConfigurationError 
+     * @throws XMLStreamException
+     * @throws FactoryConfigurationError
      */
     private void getValuesForXPath(String query, List<String> matchStrings, int matchNumber, String responseData)
             throws SaxonApiException, XMLStreamException, FactoryConfigurationError {

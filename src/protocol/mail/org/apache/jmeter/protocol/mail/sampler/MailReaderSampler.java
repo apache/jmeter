@@ -190,7 +190,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                 }
                 if (isUseSSL() || isUseStartTLS()) {
                     // Requires JavaMail 1.4.2+
-                    props.put(mailProp(serverProtocol, "ssl.socketFactory"),   // $NON-NLS-1$ 
+                    props.put(mailProp(serverProtocol, "ssl.socketFactory"),   // $NON-NLS-1$
                             new LocalTrustStoreSSLSocketFactory(truststore));
                     props.put(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
                 }

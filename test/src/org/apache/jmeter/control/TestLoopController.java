@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -84,7 +84,7 @@ public class TestLoopController extends JMeterTestCase {
                         Integer value = (Integer) variables.getObject(
                                 JMeterUtils.formatJMeterExportedVariableName(lcName+LoopController.INDEX_VAR_NAME_SUFFIX));
                         assertNotNull(value);
-                        assertEquals(Integer.valueOf(loopControl++), value);                        
+                        assertEquals(Integer.valueOf(loopControl++), value);
                     }
                 }
 
@@ -131,7 +131,7 @@ public class TestLoopController extends JMeterTestCase {
                 assertEquals(Integer.valueOf(i), value);
             }
         }
-            
+
         @Test
         public void testBug54467() throws Exception {
             JMeterContext jmctx = JMeterContextService.getContext();
@@ -145,7 +145,7 @@ public class TestLoopController extends JMeterTestCase {
             StringProperty prop = new StringProperty(LoopController.LOOPS,"${__Random(1,12,)}");
             JMeterProperty newProp = transformer.transformValue(prop);
             newProp.setRunningVersion(true);
-            
+
             loop.setProperty(newProp);
             loop.addTestElement(new TestSampler("random run"));
             loop.setRunningVersion(true);
@@ -159,6 +159,6 @@ public class TestLoopController extends JMeterTestCase {
                 assertNotNull(value);
                 assertEquals(Integer.valueOf(i), value);
             }
-            assertNull(loop.next());    
+            assertNull(loop.next());
         }
 }

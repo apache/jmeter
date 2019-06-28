@@ -34,14 +34,14 @@ public class SlowHCPlainConnectionSocketFactory extends PlainConnectionSocketFac
     private final int charactersPerSecond; // Characters per second to emulate
 
     /**
-     * Create a factory 
+     * Create a factory
      * @param cps - characters per second
      */
     public SlowHCPlainConnectionSocketFactory(final int cps) {
         super();
         this.charactersPerSecond = cps;
     }
-    
+
     @Override
     public Socket createSocket(final HttpContext context) throws IOException {
         return new SlowSocket(charactersPerSecond);

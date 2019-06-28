@@ -112,7 +112,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 
     final void resetValue() {
         setValue(defaultValue);
-        lastValidValue = getAsText();        
+        lastValidValue = getAsText();
     }
 
     private void initialize() {

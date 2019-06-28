@@ -110,7 +110,7 @@ public class SwitchController extends GenericController implements Serializable 
 
     /**
      * @param sel controller name
-     * @return index of controller named sel if present, otherwise index of default if found, otherwise {@link Integer#MAX_VALUE} 
+     * @return index of controller named sel if present, otherwise index of default if found, otherwise {@link Integer#MAX_VALUE}
      */
     private int scanControllerNames(String sel) {
         int i = 0;

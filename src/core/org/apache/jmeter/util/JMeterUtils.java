@@ -100,7 +100,7 @@ public class JMeterUtils implements UnitTestManager {
     public static final String RES_KEY_PFX = "[res_key="; // $NON-NLS-1$
 
     private static final String EXPERT_MODE_PROPERTY = "jmeter.expertMode"; // $NON-NLS-1$
-    
+
     private static final String ENGLISH_LANGUAGE = Locale.ENGLISH.getLanguage();
 
     private static volatile Properties appProperties;
@@ -115,7 +115,7 @@ public class JMeterUtils implements UnitTestManager {
     private static String localHostIP = null;
     private static String localHostName = null;
     private static String localHostFullName = null;
-    
+
     // TODO needs to be synch? Probably not changed after threads have started
     private static String jmDir; // JMeter Home directory (excludes trailing separator)
     private static String jmBin; // JMeter bin directory (excludes trailing separator)
@@ -330,7 +330,7 @@ public class JMeterUtils implements UnitTestManager {
      * The output array always starts with
      * JMETER_HOME/lib/ext
      * and is followed by any paths obtained from the "search_paths" JMeter property.
-     * 
+     *
      * @return array of path strings
      */
     public static String[] getSearchPaths() {
@@ -458,7 +458,7 @@ public class JMeterUtils implements UnitTestManager {
     public static String getResString(String key) {
         return getResStringDefault(key, RES_KEY_PFX + key + "]"); // $NON-NLS-1$
     }
-    
+
     /**
      * Gets the resource string for this key in Locale.
      *
@@ -473,7 +473,7 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static String getResString(String key, Locale forcedLocale) {
         return getResStringDefault(key, RES_KEY_PFX + key + "]", // $NON-NLS-1$
-                forcedLocale); 
+                forcedLocale);
     }
 
     /**
@@ -521,7 +521,7 @@ public class JMeterUtils implements UnitTestManager {
             if (forcedLocale != null || bundle == null) {
                 bundle = getBundle(forcedLocale);
             }
-            
+
             if (bundle.containsKey(resKey)) {
                 resString = bundle.getString(resKey);
             } else {
@@ -552,7 +552,7 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * Try to get a {@link ResourceBundle} for the given {@code forcedLocale}.
      * If none is found try to fallback to the bundle for the set {@link Locale}
-     * 
+     *
      * @param forcedLocale the {@link Locale} which should be used first
      * @return the resolved {@link ResourceBundle} or {@code null}, if none could be found
      */
@@ -588,7 +588,7 @@ public class JMeterUtils implements UnitTestManager {
 
     /**
      * To get I18N label from properties file
-     * 
+     *
      * @param key
      *            in messages.properties
      * @return I18N label without (if exists) last colon ':' and spaces
@@ -601,7 +601,7 @@ public class JMeterUtils implements UnitTestManager {
             return null;
         }
     }
-    
+
     /**
      * Get the locale name as a resource.
      * Does not log an error if the resource does not exist.
@@ -620,10 +620,10 @@ public class JMeterUtils implements UnitTestManager {
     }
     /**
      * This gets the currently defined appProperties. It can only be called
-     * after the {@link #getProperties(String)} or {@link #loadJMeterProperties(String)} 
+     * after the {@link #getProperties(String)} or {@link #loadJMeterProperties(String)}
      * method has been called.
      *
-     * @return The JMeterProperties value, 
+     * @return The JMeterProperties value,
      *         may be null if {@link #loadJMeterProperties(String)} has not been called
      * @see #getProperties(String)
      * @see #loadJMeterProperties(String)
@@ -648,7 +648,7 @@ public class JMeterUtils implements UnitTestManager {
                 return new ImageIcon(url); // $NON-NLS-1$
             } else {
                 log.warn("no icon for {}", name);
-                return null;                
+                return null;
             }
         } catch (NoClassDefFoundError | InternalError e) {// Can be returned by headless hosts
             log.info("no icon for {} {}", name, e.getMessage());
@@ -687,7 +687,7 @@ public class JMeterUtils implements UnitTestManager {
                             .collect(Collectors.joining(lineEnd, "", lineEnd));
                 }
             } else {
-                return ""; // $NON-NLS-1$                
+                return ""; // $NON-NLS-1$
             }
         } catch (IOException e) {
             return ""; // $NON-NLS-1$
@@ -760,7 +760,7 @@ public class JMeterUtils implements UnitTestManager {
         }
         return ans;
     }
-    
+
     /**
      * Get a float value with default if not present.
      *
@@ -792,7 +792,7 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static String getPropDefault(String propName, String defaultVal) {
         String ans = defaultVal;
-        try 
+        try
         {
             String value = appProperties.getProperty(propName, defaultVal);
             if(value != null) {
@@ -804,7 +804,7 @@ public class JMeterUtils implements UnitTestManager {
         }
         return ans;
     }
-    
+
     /**
      * Get the value of a JMeter property.
      *
@@ -846,7 +846,7 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
-     * Report an error through a dialog box in GUI mode 
+     * Report an error through a dialog box in GUI mode
      * or in logs and stdout in Non GUI mode
      *
      * @param errorMsg - the error message.
@@ -867,7 +867,7 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
-     * Report an error through a dialog box in GUI mode 
+     * Report an error through a dialog box in GUI mode
      * or in logs and stdout in Non GUI mode
      *
      * @param errorMsg - the error message.
@@ -898,9 +898,9 @@ public class JMeterUtils implements UnitTestManager {
             log.warn("reportErrorToUser(\"{}\") caused", errorMsg, e);
         }
     }
-    
+
     /**
-     * Report an information through a dialog box in GUI mode 
+     * Report an information through a dialog box in GUI mode
      *
      * @param msg - the information message.
      * @param titleMsg - title string
@@ -980,7 +980,7 @@ public class JMeterUtils implements UnitTestManager {
         }
         return retVal.toString();
     }
-    
+
     /**
      * @return true if test is running
      */
@@ -1104,10 +1104,10 @@ public class JMeterUtils implements UnitTestManager {
         localHostName=localHost.getHostName();
         localHostFullName=localHost.getCanonicalHostName();
     }
-    
+
     /**
      * Split line into name/value pairs and remove colon ':'
-     * 
+     *
      * @param headers
      *            multi-line string headers
      * @return a map name/value for each header
@@ -1171,7 +1171,7 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
-     * Hack to make matcher clean the two internal buffers it keeps in memory which size is equivalent to 
+     * Hack to make matcher clean the two internal buffers it keeps in memory which size is equivalent to
      * the unzipped page size
      * @param matcher {@link Perl5Matcher}
      * @param pattern Pattern
@@ -1214,7 +1214,7 @@ public class JMeterUtils implements UnitTestManager {
 
     /**
      * Return delimiterValue handling the TAB case
-     * @param delimiterValue Delimited value 
+     * @param delimiterValue Delimited value
      * @return String delimited modified to handle correctly tab
      * @throws JMeterError if delimiterValue has a length different from 1
      */
@@ -1238,7 +1238,7 @@ public class JMeterUtils implements UnitTestManager {
         }
         applyScaleOnFonts((float) getHiDPIScaleFactor());
     }
-    
+
     /**
      * Apply HiDPI scale factor on fonts
      * @param scale float scale to apply
@@ -1291,10 +1291,10 @@ public class JMeterUtils implements UnitTestManager {
         xstream.addPermission(NoTypePermission.NONE);
         // We reapply very permissive policy
         // See https://groups.google.com/forum/#!topic/xstream-user/wiKfdJPL8aY
-        // TODO : How much are we concerned by CVE-2013-7285 
+        // TODO : How much are we concerned by CVE-2013-7285
         xstream.addPermission(AnyTypePermission.ANY);
     }
-    
+
     /**
      * @param elementName String elementName
      * @return variable name for index following JMeter convention
@@ -1307,7 +1307,7 @@ public class JMeterUtils implements UnitTestManager {
                 .toString();
     }
 
-    /** 
+    /**
      * @return {@link XStream} XStream instance following JMeter security policy
      */
     public static final XStream createXStream() {

@@ -35,7 +35,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 
 /**
- * Move a node up/down/left/right 
+ * Move a node up/down/left/right
  *
  */
 public class Move extends AbstractAction {

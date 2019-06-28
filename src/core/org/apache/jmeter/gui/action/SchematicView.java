@@ -53,19 +53,19 @@ import org.slf4j.LoggerFactory;
  */
 public class SchematicView extends AbstractAction implements MenuCreator {
     private static final Logger log = LoggerFactory.getLogger(SchematicView.class);
-    private static final String DEFAULT_XSL_FILE = 
+    private static final String DEFAULT_XSL_FILE =
             JMeterUtils.getProperty("docgeneration.schematic_xsl"); //$NON-NLS-1$
 
     private static final MessageFormat GENERATION_SUCCESS_MSG = new MessageFormat(JMeterUtils.getResString("schematic_view_generation_ok"));
-    
+
     @FunctionalInterface
     public interface SchematicViewGenerator {
         void generate(HashTree testPlan, File testPlanFile, OutputStream outputStream) throws Exception;
     }
-    
+
     private static final class XslSchematicViewGenerator implements SchematicViewGenerator {
         @Override
-        public void generate(HashTree testPlan, File testPlanFile, OutputStream outputStream) 
+        public void generate(HashTree testPlan, File testPlanFile, OutputStream outputStream)
                 throws Exception {
             TransformerFactory factory = TransformerFactory.newInstance(
                     "net.sf.saxon.BasicTransformerFactory", Thread.currentThread().getContextClassLoader());
@@ -80,9 +80,9 @@ public class SchematicView extends AbstractAction implements MenuCreator {
             Source text = new StreamSource(testPlanFile);
             transformer.transform(text, new StreamResult(outputStream));
         }
-        
+
     }
-        
+
     private static final Set<String> commands = new HashSet<>();
 
     static {
@@ -121,7 +121,7 @@ public class SchematicView extends AbstractAction implements MenuCreator {
                     }
                     try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
                             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream)) {
-                        new XslSchematicViewGenerator().generate(GuiPackage.getInstance().getCurrentSubTree(), 
+                        new XslSchematicViewGenerator().generate(GuiPackage.getInstance().getCurrentSubTree(),
                             new File(updateFile), bufferedOutputStream);
                     }
                     JMeterUtils.reportInfoToUser(
@@ -148,7 +148,7 @@ public class SchematicView extends AbstractAction implements MenuCreator {
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
         if (location == MENU_LOCATION.TOOLS) {
-            
+
             JMenuItem menuItem = new JMenuItem(
                     JMeterUtils.getResString("schematic_view_menu"), KeyEvent.VK_UNDEFINED);
             menuItem.setName(ActionNames.SCHEMATIC_VIEW);

@@ -75,7 +75,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
             pop.add(createMenuItem("run_threadgroup_no_timers", ActionNames.RUN_TG_NO_TIMERS));
             pop.add(createMenuItem("validate_threadgroup", ActionNames.VALIDATE_TG));
         }
-        
+
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop, false);
         return pop;
@@ -130,7 +130,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         box.add(createOnErrorPanel());
         add(box, BorderLayout.NORTH);
     }
-    
+
     private void initGui() {
         continueBox.setSelected(true);
     }
@@ -207,7 +207,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         super.configure(tg);
         setSampleErrorBoxes((AbstractThreadGroup) tg);
     }
-    
+
    @Override
     protected void configureTestElement(TestElement tg) {
         super.configureTestElement(tg);

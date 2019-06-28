@@ -29,7 +29,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Test if a JMeter property is defined
- * 
+ *
  * @since 4.0
  */
 public class IsPropDefined extends AbstractFunction {

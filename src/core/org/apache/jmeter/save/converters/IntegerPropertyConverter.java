@@ -31,7 +31,7 @@ public class IntegerPropertyConverter implements Converter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
-     * 
+     *
      * @return the version of this converter
      */
     public static String getVersion() {

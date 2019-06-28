@@ -73,9 +73,9 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     public static final Set<String> NO_ENCODING = Collections
             .unmodifiableSet(new LinkedHashSet<>(Arrays.asList(RAW_DATA, DEFAULT_ENCODING)));
 
-    /** 
+    /**
      * Init available encoding using constants, then JVM standard ones
-     * @return Array of String containing supported encodings 
+     * @return Array of String containing supported encodings
      */
     public static String[] getSupportedEncodings() {
         // Only get JVM standard charsets
@@ -172,7 +172,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
 
     /**
      * initialize the Publisher client.
-     * 
+     *
      * @throws JMSException
      * @throws NamingException
      *
@@ -266,7 +266,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * Fills in result and decide wether to reconnect or not depending on
      * checkForReconnect and underlying {@link JMSException#getErrorCode()}
-     * 
+     *
      * @param result
      *            {@link SampleResult}
      * @param e
@@ -340,7 +340,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
 
     /**
      * Specified if value must be parsed or not.
-     * 
+     *
      * @return <code>true</code> if value must be sent as-is.
      */
     private boolean isRaw() {
@@ -534,7 +534,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
 
     /**
      * Gets file encoding to use. If {@link #RAW_DATA}, content isn't parsed.
-     * 
+     *
      * @return File encoding.
      * @see #RAW_DATA
      * @see #DEFAULT_ENCODING
@@ -546,7 +546,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
 
     /**
      * Sets file encoding to use. If {@link #RAW_DATA}, content isn't parsed.
-     * 
+     *
      * @param fileEncoding
      *            File encoding.
      * @see #RAW_DATA

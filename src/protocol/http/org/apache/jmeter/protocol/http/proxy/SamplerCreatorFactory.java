@@ -42,15 +42,15 @@ public class SamplerCreatorFactory {
     public SamplerCreatorFactory() {
         init();
     }
-    
+
     /**
      * Initialize factory from classpath
      */
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
-                    JMeterUtils.getSearchPaths(), 
-                    new Class[] {SamplerCreator.class }); 
+                    JMeterUtils.getSearchPaths(),
+                    new Class[] {SamplerCreator.class });
             for (String strClassName : listClasses) {
                 try {
                     if(log.isDebugEnabled()) {
@@ -65,15 +65,15 @@ public class SamplerCreatorFactory {
                         String[] contentTypes = creator.getManagedContentTypes();
                         for (String contentType : contentTypes) {
                             if(log.isDebugEnabled()) {
-                                log.debug("Registering samplerCreator {} for content type:{}", 
+                                log.debug("Registering samplerCreator {} for content type:{}",
                                         commandClass.getName(), contentType);
                             }
                             SamplerCreator oldSamplerCreator = samplerCreatorMap.put(contentType, creator);
                             if(oldSamplerCreator!=null) {
-                                log.warn("A sampler creator was already registered for:{}, class:{}, it will be replaced", 
+                                log.warn("A sampler creator was already registered for:{}, class:{}, it will be replaced",
                                         contentType, oldSamplerCreator.getClass());
                             }
-                        }                        
+                        }
                     }
                 } catch (Exception e) {
                     log.error("Exception registering {} with implementation:{}",

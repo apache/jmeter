@@ -60,7 +60,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     private static final Logger log = LoggerFactory.getLogger(RenderAsJsonRenderer.class);
     private static final String NO_MATCH = "NO MATCH"; //$NON-NLS-1$
     private static final String TAB_SEPARATOR = "    "; //$NON-NLS-1$
-    
+
     private static final String JSONPATH_TESTER_COMMAND = "jsonpath_tester"; // $NON-NLS-1$
 
     private JPanel jsonWithJSonPathPanel;
@@ -139,7 +139,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
             return "Exception: " + e.getMessage(); //$NON-NLS-1$
         }
     }
-    
+
     private List<Object> extractWithJSonPath(String textToParse, String expression) throws ParseException {
         JSONManager jsonManager = new JSONManager();
         return jsonManager.extractWithJsonPath(textToParse, expression);
@@ -185,7 +185,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         jsonDataField.setLanguage(SyntaxConstants.SYNTAX_STYLE_JSON);
         jsonDataField.setLineWrap(true);
         jsonDataField.setWrapStyleWord(true);
-        
+
 
         JScrollPane jsonDataPane = JTextScrollPane.getInstance(jsonDataField, true);
         jsonDataPane.setPreferredSize(new Dimension(100, 200));

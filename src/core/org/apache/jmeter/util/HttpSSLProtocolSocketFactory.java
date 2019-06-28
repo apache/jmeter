@@ -47,15 +47,15 @@ public class HttpSSLProtocolSocketFactory
 
     private static final String CIPHER_LIST =
             JMeterUtils.getPropDefault("https.cipherSuites", ""); // $NON-NLS-1$ $NON-NLS-2$
-    
+
     private static final String[] ciphers = CIPHER_LIST.split(", *"); // $NON-NLS-1$
-    
+
     static {
         if (!PROTOCOL_LIST.isEmpty()) {
             log.info("Using protocol list:{} and cipher list: {}", PROTOCOL_LIST, CIPHER_LIST);
         }
     }
-    
+
     private final int CPS; // Characters per second to emulate
 
     public HttpSSLProtocolSocketFactory() {

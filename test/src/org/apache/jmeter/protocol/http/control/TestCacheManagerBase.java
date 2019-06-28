@@ -113,7 +113,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
         assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
     }
-    
+
     @Test
     public void testExpires() throws Exception {
         this.cacheManager.setUseExpires(true);
@@ -344,7 +344,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
         assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
     }
-    
+
     @Test
     public void testGetClearEachIteration() throws Exception {
         assertFalse("Should default not to clear after each iteration.", this.cacheManager.getClearEachIteration());
@@ -432,6 +432,6 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
     protected CacheManager.CacheEntry getThreadCacheEntry(String url) throws Exception {
         return getThreadCache().get(url);
     }
-    
+
 
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -115,7 +115,7 @@ public class StringFromFileFunctionTest extends JMeterTestCase {
             // expected
         }
     }
-    
+
     // Create the StringFromFile function and set its parameters.
     private static StringFromFile SFFParams(String p1, String p2, String p3, String p4) throws Exception {
         StringFromFile sff = new StringFromFile();

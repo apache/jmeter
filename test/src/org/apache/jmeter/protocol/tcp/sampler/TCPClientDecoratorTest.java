@@ -17,7 +17,7 @@
  */
 
 /*
- * Test class for TCPClientDecorator utility methods.  
+ * Test class for TCPClientDecorator utility methods.
  *
  */
 package org.apache.jmeter.protocol.tcp.sampler;
@@ -29,7 +29,7 @@ import org.junit.Test;
 
 public class TCPClientDecoratorTest {
 
-    
+
     @Test
     public void testIntToByteArray() throws Exception {
         byte[] ba;
@@ -63,18 +63,18 @@ public class TCPClientDecoratorTest {
         assertEquals(len, ba.length);
         assertEquals(127, ba[0]);
         assertEquals(-1, ba[1]);
-        
+
         ba = TCPClientDecorator.intToByteArray(Short.MIN_VALUE, len);
         assertEquals(len, ba.length);
         assertEquals(-128, ba[0]);
         assertEquals(0, ba[1]);
-        
+
         try {
             ba = TCPClientDecorator.intToByteArray(Short.MIN_VALUE-1, len);
             fail();
         } catch (IllegalArgumentException iae) {
         }
-        
+
         try {
             ba = TCPClientDecorator.intToByteArray(Short.MAX_VALUE+1, len);
             fail();
@@ -194,7 +194,7 @@ public class TCPClientDecoratorTest {
 
         ba = new byte[] { 0, 1, 0, 0 };
         assertEquals(65536, TCPClientDecorator.byteArrayToInt(ba));
-        
+
         ba = new byte[] { 0, 0, 0, 0 };
         assertEquals(0, TCPClientDecorator.byteArrayToInt(ba));
 
@@ -242,12 +242,12 @@ public class TCPClientDecoratorTest {
 
     }
 
-    
+
     @Test
     public void testLoopBack() throws Exception {
-        assertEquals(Short.MIN_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Short.MIN_VALUE, 2)));      
-        assertEquals(Short.MAX_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Short.MAX_VALUE, 2)));      
-        assertEquals(Integer.MIN_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Integer.MIN_VALUE, 4)));      
-        assertEquals(Integer.MAX_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Integer.MAX_VALUE, 4)));      
+        assertEquals(Short.MIN_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Short.MIN_VALUE, 2)));
+        assertEquals(Short.MAX_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Short.MAX_VALUE, 2)));
+        assertEquals(Integer.MIN_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Integer.MIN_VALUE, 4)));
+        assertEquals(Integer.MAX_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Integer.MAX_VALUE, 4)));
     }
 }

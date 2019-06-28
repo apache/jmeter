@@ -56,15 +56,15 @@ import freemarker.template.TemplateExceptionHandler;
 /**
  * The class HtmlTemplateExporter provides a data exporter that generates and
  * processes template files using freemarker.
- * 
+ *
  * @since 3.0
  */
 public class HtmlTemplateExporter extends AbstractDataExporter {
-    private static final FileFilter HTML_REPORT_FILE_FILTER = 
-        file -> 
-            (file.isFile() && 
+    private static final FileFilter HTML_REPORT_FILE_FILTER =
+        file ->
+            (file.isFile() &&
                     "index.html".equals(file.getName()))
-                    || (file.isDirectory() && 
+                    || (file.isDirectory() &&
                             ("content".equals(file.getName()) ||
                                     file.getName().startsWith("sbadmin2-")));
     private static final String CUSTOM_GRAPH_PREFIX = "custom_";
@@ -129,7 +129,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         /**
          * Sets the extra options to inject in the result data
-         * 
+         *
          * @param extraOptions to inject
          */
         public final void setExtraOptions(SubConfiguration extraOptions) {
@@ -138,7 +138,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.apache.jmeter.report.dashboard.HtmlTemplateExporter.
          * ResultCustomizer#customizeResult(org.apache.jmeter.report.processor.
          * ResultData)
@@ -192,7 +192,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         /**
          * Instantiates a new EmptyGraphChecker.
-         * 
+         *
          * @param filtersOnlySampleSeries flag to control filter for samples
          * @param showControllerSeriesOnly flag to control visibility of controller
          * @param filterPattern to use
@@ -206,7 +206,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see
          * org.apache.jmeter.report.dashboard.HtmlTemplateExporter.ResultChecker
          * #checkResult( org.apache.jmeter.report.core.DataContext dataContext, org.apache.jmeter.report.processor.ResultData)
@@ -276,8 +276,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                                             && !supportsControllerDiscrimination.booleanValue();
                                     if(log.isDebugEnabled()) {
                                         log.debug("name:{} does not match pattern:{}, filtersOnlySampleSeries:{},"
-                                            + " supportsControllerDiscrimination:{}", 
-                                            name, filterPattern.pattern(), 
+                                            + " supportsControllerDiscrimination:{}",
+                                            name, filterPattern.pattern(),
                                             filtersOnlySampleSeries,
                                             supportsControllerDiscrimination);
                                     }
@@ -333,7 +333,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.dashboard.DataExporter#Export(org.apache.jmeter
      * .report.processor.SampleContext,
@@ -372,7 +372,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         if(!StringUtils.isEmpty(globallyDefinedOutputDir)) {
             outputDir = new File(globallyDefinedOutputDir);
         }
-        
+
         JOrphanUtils.canSafelyWriteToFolder(outputDir, HTML_REPORT_FILE_FILTER);
 
         if (log.isInfoEnabled()) {

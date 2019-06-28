@@ -143,9 +143,9 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     public InetAddress[] resolve(String host) throws UnknownHostException {
         InetAddress[] result = cache.get(host);
         // cache may contain null.
-        // A return value of null does not necessarily 
-        // indicate that the map contains no mapping 
-        // for the key; it's also possible that the map 
+        // A return value of null does not necessarily
+        // indicate that the map contains no mapping
+        // for the key; it's also possible that the map
         // explicitly maps the key to null
         // https://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html
         if (result != null || cache.containsKey(host)) {

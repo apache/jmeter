@@ -109,7 +109,7 @@ abstract class JMeterSpec extends Specification {
         }
         return file
     }
-    
+
     protected static boolean isHeadless() {
         System.properties['java.awt.headless'] == 'true'
     }

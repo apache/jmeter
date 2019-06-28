@@ -72,7 +72,7 @@ public class TimeStampKeysSelector implements GraphKeysSelector {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.core.SampleSelector#select(org.apache.jmeter
      * .report.core.Sample)

@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * https://github.com/BrightcoveOS/metrics-graphite-pickle/blob/master/src/main/java/com/brightcove/metrics/reporting/GraphitePickleReporter.java
  * as per license
  * https://github.com/BrightcoveOS/metrics-graphite-pickle/blob/master/LICENSE.txt
- * 
+ *
  * @since 2.13
  */
 class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
@@ -51,7 +51,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private static final char TUPLE = 't';
     private static final char QUOTE = '\'';
     private static final char LF = '\n';
-        
+
     private String prefix;
 
     private final Object lock = new Object();
@@ -67,7 +67,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     PickleGraphiteMetricsSender() {
         super();
     }
-    
+
     /**
      * @param graphiteHost Graphite Host
      * @param graphitePort Graphite Port
@@ -82,10 +82,10 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         log.info("Created PickleGraphiteMetricsSender with host: {}, port: {}, prefix: {}", graphiteHost, graphitePort,
                 prefix);
     }
-    
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
      * addMetric(long, java.lang.String, java.lang.String, java.lang.String)
@@ -107,14 +107,14 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#writeAndSendMetrics()
      */
     @Override
-    public void writeAndSendMetrics() {    
+    public void writeAndSendMetrics() {
         List<MetricTuple> tempMetrics;
         synchronized (lock) {
             if(metrics.isEmpty()) {
                 return;
             }
             tempMetrics = metrics;
-            metrics = new LinkedList<>();            
+            metrics = new LinkedList<>();
         }
         final List<MetricTuple> copyMetrics = tempMetrics;
         if (!copyMetrics.isEmpty()) {
@@ -143,7 +143,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
                 }
                 log.error("Error writing to Graphite: {}", e.getMessage());
             }
-            
+
             // if there was an error, we might miss some data. for now, drop those on the floor and
             // try to keep going.
             if (log.isDebugEnabled()) {
@@ -182,7 +182,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
 
             // timestamp is a long
             pickled.append(LONG).append(tuple.timestamp)
-            // the trailing L is to match python's repr(long(1234))             
+            // the trailing L is to match python's repr(long(1234))
                 .append(LONG).append(LF);
 
             // and the value is a string.

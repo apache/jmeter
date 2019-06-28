@@ -149,11 +149,11 @@ public final class RmiUtils {
     }
 
     /**
-     * 
+     *
      * @return port of RMI Registry
      */
     public static int getRmiRegistryPort() {
-        return DEFAULT_RMI_REGISTRY_PORT == 0 ? 
+        return DEFAULT_RMI_REGISTRY_PORT == 0 ?
                 RmiUtils.DEFAULT_RMI_PORT : DEFAULT_RMI_REGISTRY_PORT;
     }
 }

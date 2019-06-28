@@ -115,7 +115,7 @@ public class BeanShellInterpreter {
         } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
             log.error("Can't instantiate BeanShell", e);
             throw new ClassNotFoundException("Can't instantiate BeanShell", e);
-        } 
+        }
          if (logger != null) {// Do this before starting the script
             try {
                 set("log", logger);//$NON-NLS-1$

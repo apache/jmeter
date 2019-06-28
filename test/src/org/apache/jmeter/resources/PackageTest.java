@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.resources;
@@ -51,19 +51,19 @@ import junit.framework.TestSuite;
 
 /*
  * Created on Nov 29, 2003
- * 
+ *
  * Test the composition of the messages*.properties files
  * - properties files exist
  * - properties files don't have duplicate keys
  * - non-default properties files don't have any extra keys.
- * 
+ *
  * N.B. If there is a default resource, ResourceBundle does not detect missing
  * resources, i.e. the presence of messages.properties means that the
  * ResourceBundle for Locale "XYZ" would still be found, and have the same keys
  * as the default. This makes it not very useful for checking properties files.
- * 
+ *
  * This is why the tests use Class.getResourceAsStream() etc
- * 
+ *
  * The tests don't quite follow the normal JUnit test strategy of one test per
  * possible failure. This was done in order to make it easier to report exactly
  * why the tests failed.
@@ -80,9 +80,9 @@ public class PackageTest extends TestCase {
 
     private static PropertyResourceBundle messagePRB; // messages.properties
 
-    private static final CharsetEncoder ASCII_ENCODER = 
+    private static final CharsetEncoder ASCII_ENCODER =
         Charset.forName("US-ASCII").newEncoder(); // Ensure properties files don't use special characters
-    
+
     private static boolean isPureAscii(String v) {
       return ASCII_ENCODER.canEncode(v);
     }
@@ -164,7 +164,7 @@ public class PackageTest extends TestCase {
 
     /*
      * perform the checks on the resources
-     * 
+     *
      */
     private void check(String resname, boolean checkUnexpected) throws Exception {
         ArrayList<String> alf = new ArrayList<>(500);// holds keys from file
@@ -192,7 +192,7 @@ public class PackageTest extends TestCase {
             }
         } else if (checkUnexpected) {
             // Check all the keys are in the default props file
-            PropertyResourceBundle prb = getRAS(res); 
+            PropertyResourceBundle prb = getRAS(res);
             if (prb == null){
                 return;
             }
@@ -241,7 +241,7 @@ public class PackageTest extends TestCase {
     /**
      * Find resources matching filenameFiler and adds them to set removing
      * everything before "/org"
-     * 
+     *
      * @param file
      *            directory in which the files reside
      * @param set
@@ -265,7 +265,7 @@ public class PackageTest extends TestCase {
             }
         }
     }
-    
+
     /*
      * Use a suite to ensure that the default is done first
     */
@@ -294,11 +294,11 @@ public class PackageTest extends TestCase {
         ts.addTest(new PackageTest("checkResourceReferences", ""));
         return ts;
     }
-   
+
     private List<String> failures = new ArrayList<>();
 
     private final String lang;
-    
+
     private final String resourcePrefix; // e.g. "/org/apache/jmeter/resources/messages"
 
     public PackageTest(String testName, String _lang) {
@@ -326,7 +326,7 @@ public class PackageTest extends TestCase {
             messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(prefix.substring(1)+".properties"));
             checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,prefix.substring(1), lang);
         }
-        
+
         assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
     }
 
@@ -346,7 +346,7 @@ public class PackageTest extends TestCase {
             return;
         }
         messagesFr.load(inputStream);
-    
+
         Map<String, String> missingLabels = new TreeMap<>();
         for (Map.Entry<Object, Object> entry : messages.entrySet()) {
             String key = (String) entry.getKey();
@@ -428,7 +428,7 @@ public class PackageTest extends TestCase {
                 } finally {
                     JOrphanUtils.closeQuietly(fileReader);
                 }
-                 
+
                 }
                 return file.isDirectory();
             }

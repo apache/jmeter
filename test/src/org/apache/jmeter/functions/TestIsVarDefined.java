@@ -33,9 +33,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 
+ *
  * Test {@link IsVarDefined} Function
- * 
+ *
  * @see IsVarDefined
  *
  */
@@ -98,7 +98,7 @@ public class TestIsVarDefined extends JMeterTestCase {
         isVarDefined.setParameters(params);
         isVarDefined.execute(result, null);
     }
-    
+
     @Test
     public void testNoVariablesDefined() throws Exception {
         jmctx.setVariables(null);

@@ -25,13 +25,13 @@ package org.apache.jmeter.threads;
 public interface RemoteThreadsLifeCycleListener {
 
     /**
-     * 
+     *
      * @param numberOfThreads number of active threads
      */
     void threadNumberIncreased(int numberOfThreads);
 
     /**
-     * 
+     *
      * @param numberOfThreads number of active threads
      */
     void threadNumberDecreased(int numberOfThreads);

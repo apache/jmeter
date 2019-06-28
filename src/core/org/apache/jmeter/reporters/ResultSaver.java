@@ -75,7 +75,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     public static final String ADD_TIMESTAMP = "FileSaver.addTimstamp"; // $NON-NLS-1$
 
     public static final String NUMBER_PAD_LENGTH = "FileSaver.numberPadLen"; // $NON-NLS-1$
-    
+
     public static final String IGNORE_TC = "FileSaver.ignoreTC"; // $NON-NLS-1$
 
     //- JMX property names
@@ -101,7 +101,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     }
 
     /**
-     * Constructor for use during startup (intended for non-GUI use) 
+     * Constructor for use during startup (intended for non-GUI use)
      * @param name of summariser
      */
     public ResultSaver(String name) {
@@ -116,7 +116,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
         synchronized(LOCK) {
             return ++sequenceNumber;
         }
-    }    
+    }
 
     @Override
     public void testStarted() {
@@ -223,7 +223,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     }
 
     /**
-     * Create path hierarchy to parentFile 
+     * Create path hierarchy to parentFile
      * @param parentFile
      */
     private void createFoldersIfNeeded(File parentFile) {
@@ -326,15 +326,15 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     public int getNumberPadLen() {
         return getPropertyAsInt(NUMBER_PAD_LENGTH, 0);
     }
-    
+
     public boolean getIgnoreTC() {
         return getPropertyAsBoolean(IGNORE_TC, true);
     }
-    
+
     public void setIgnoreTC(boolean value) {
         setProperty(IGNORE_TC, value, true);
     }
-    
+
     public void setFilename(String value) {
         setProperty(FILENAME, value);
     }

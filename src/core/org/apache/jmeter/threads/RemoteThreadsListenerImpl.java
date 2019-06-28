@@ -43,11 +43,11 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
     private final List<RemoteThreadsLifeCycleListener> listeners = new ArrayList<>();
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     /**
-     * 
+     *
      */
     private static final int DEFAULT_LOCAL_PORT = addOffset(
             JMeterUtils.getPropDefault("client.rmi.localport", 0), 1); // $NON-NLS-1$
@@ -59,8 +59,8 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         super(DEFAULT_LOCAL_PORT, RmiUtils.createClientSocketFactory(), RmiUtils.createServerSocketFactory());
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
-                    JMeterUtils.getSearchPaths(), 
-                    new Class[] {RemoteThreadsLifeCycleListener.class }); 
+                    JMeterUtils.getSearchPaths(),
+                    new Class[] {RemoteThreadsLifeCycleListener.class });
             for (String strClassName : listClasses) {
                 try {
                     log.debug("Loading class: {}", strClassName);
@@ -88,7 +88,7 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
     }
 
     /**
-     * 
+     *
      * @see RemoteThreadsListener#threadStarted()
      */
     @Override

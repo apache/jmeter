@@ -65,7 +65,7 @@ public class BeanShellPreProcessor extends BeanShellTestElement
             }
         }
     }
-    
+
     @Override
     public Object clone() {
         return super.clone();

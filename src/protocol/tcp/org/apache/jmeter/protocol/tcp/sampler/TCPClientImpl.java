@@ -75,7 +75,7 @@ public class TCPClientImpl extends AbstractTCPClient {
         if(log.isDebugEnabled()) {
             log.debug("WriteS: {}", showEOL(s));
         }
-        os.write(s.getBytes(CHARSET)); 
+        os.write(s.getBytes(CHARSET));
         os.flush();
     }
 
@@ -98,7 +98,7 @@ public class TCPClientImpl extends AbstractTCPClient {
     public String read(InputStream is) throws ReadException {
         return read(is, new SampleResult());
     }
-    
+
     /**
      * Reads data until the defined EOL byte is reached.
      * If there is no EOL byte defined, then reads until

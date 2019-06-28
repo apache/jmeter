@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.math;
@@ -49,7 +49,7 @@ public class TestStatCalculator {
         assertEquals(10, calc.getCount());
         assertEquals(9, calc.getPercentPoint(0.8999999).intValue());
     }
-    
+
     @Test
     @Ignore
     // Disabled due to in progress Bug 61071
@@ -63,11 +63,11 @@ public class TestStatCalculator {
             statistics.addValue(l);
         }
         assertEquals(9, calc.getPercentPoint(0.8999999).intValue());
-        // 
-        assertEquals(Math.round(statistics.getPercentile(90)), 
+        //
+        assertEquals(Math.round(statistics.getPercentile(90)),
                 calc.getPercentPoint(0.9).intValue());
     }
-    
+
     @Test
     public void testCalculation() {
         assertEquals(Long.MIN_VALUE, calc.getMax().longValue());
@@ -91,7 +91,7 @@ public class TestStatCalculator {
 
     @Test
     @Ignore
-    // Disabled due to in progress Bug 61071 
+    // Disabled due to in progress Bug 61071
     public void testMedianBug61071() {
         long[] values = new long[] {
             10L, 20L, 30L, 40L, 50L, 60L, 80L, 90L
@@ -104,7 +104,7 @@ public class TestStatCalculator {
         }
         assertEquals((int) statistics.getPercentile(50), calc.getMedian().intValue());
     }
-    
+
     @Test
     public void testLong(){
         calc.addValue(0L);
@@ -118,7 +118,7 @@ public class TestStatCalculator {
         assertTrue(map.containsKey(long0));
         assertTrue(map.containsKey(long2));
     }
-    
+
     @Test
     public void testInteger(){
         StatCalculatorInteger calci = new StatCalculatorInteger();
@@ -133,7 +133,7 @@ public class TestStatCalculator {
         assertTrue(map.containsKey(Integer.valueOf(0)));
         assertTrue(map.containsKey(Integer.valueOf(2)));
     }
-    
+
     @Test
     public void testBug52125_1(){ // No duplicates when adding
         calc.addValue(1L);

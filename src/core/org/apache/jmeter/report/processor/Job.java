@@ -20,8 +20,8 @@ package org.apache.jmeter.report.processor;
 /**
  * A Job that can be used to execute an operation that produce a result that we
  * want to get in the future when it is ready.
- * 
- * 
+ *
+ *
  * @param <T>
  *            The result type
  * @since 3.0

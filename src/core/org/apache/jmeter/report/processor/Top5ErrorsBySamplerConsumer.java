@@ -23,14 +23,14 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * The class Top5ErrorsBySamplerConsumer provides a consumer that calculates
  * the TOP5 of errors by sampler.
- * 
+ *
  * @since 3.1
  */
 public class Top5ErrorsBySamplerConsumer extends
         AbstractSummaryConsumer<Top5ErrorsSummaryData> {
 
     static final int MAX_NUMBER_OF_ERRORS_IN_TOP = 5;
-    
+
     private boolean ignoreTCFromTop5ErrorsBySampler;
 
     public Top5ErrorsBySamplerConsumer() {
@@ -78,7 +78,7 @@ public class Top5ErrorsBySamplerConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createDataResult
      * (java.lang.String)
@@ -91,7 +91,7 @@ public class Top5ErrorsBySamplerConsumer extends
             result.addResult(new ValueResultData(
                     key != null ? key : JMeterUtils.getResString("reportgenerator_top5_total")));
             long total = data.getTotal();
-            
+
             result.addResult(new ValueResultData(Long.valueOf(total)));
             result.addResult(new ValueResultData(Long.valueOf(errors)));
             Object[][] top5 = data.getTop5ErrorsMetrics();
@@ -104,7 +104,7 @@ public class Top5ErrorsBySamplerConsumer extends
             }
             for (int i = numberOfValues; i < MAX_NUMBER_OF_ERRORS_IN_TOP; i++) {
                 result.addResult(new ValueResultData(""));
-                result.addResult(new ValueResultData(""));   
+                result.addResult(new ValueResultData(""));
             }
         }
         return result;
@@ -112,7 +112,7 @@ public class Top5ErrorsBySamplerConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
      * (org.apache.jmeter.report.core.Sample)
@@ -124,7 +124,7 @@ public class Top5ErrorsBySamplerConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
      * ()
@@ -142,7 +142,7 @@ public class Top5ErrorsBySamplerConsumer extends
             titles.addResult(new ValueResultData(
                     JMeterUtils.getResString("reportgenerator_top5_error_label")));
             titles.addResult(new ValueResultData(
-                    JMeterUtils.getResString("reportgenerator_top5_error_count")));            
+                    JMeterUtils.getResString("reportgenerator_top5_error_count")));
         }
         return titles;
     }

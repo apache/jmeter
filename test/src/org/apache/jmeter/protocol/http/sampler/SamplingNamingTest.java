@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -35,18 +35,18 @@ public class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTe
     private static final String JMETER_HOME_PAGE = "https://jmeter.apache.org";
     private static final String LABEL = "JMeter-HP";
     private String implementation;
-    
+
     public SamplingNamingTest(String implementation) {
         this.implementation = implementation;
     }
-    
+
     @Parameters(name = "Run {index}: implementation:{0}")
     public static final String[] getImplementations() {
         return new String[]{
                 HTTPSamplerFactory.IMPL_HTTP_CLIENT4,
                 HTTPSamplerFactory.IMPL_JAVA};
     }
-    
+
     @Test
     @Parameters(name = "getImplementations")
     public void testBug63364() {

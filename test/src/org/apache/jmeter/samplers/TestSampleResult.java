@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -271,7 +271,7 @@ public class TestSampleResult implements JMeterSerialTest {
             long overallTime = parent.currentTimeInMillis() - beginTest;
 
             long sumSamplesTimes = parentElapsed + child1Elapsed + actualPause + child2Elapsed;
-            
+
             /*
              * Parent elapsed total should be no smaller than the sum of the individual samples.
              * It may be greater by the timer granularity.
@@ -371,7 +371,7 @@ public class TestSampleResult implements JMeterSerialTest {
                 plan.setFunctionalMode(prevValue);
             }
         }
-        
+
         @Test
         public void testBug63433() {
             SampleResult firstResult = new SampleResult();

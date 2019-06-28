@@ -37,7 +37,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 public class JMSProperties extends AbstractTestElement implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -2896138201054314563L;
     /** The name of the property used to store the JmsProperties. */

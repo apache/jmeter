@@ -64,13 +64,13 @@ import org.slf4j.LoggerFactory;
 public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener, ClearGui {
     private static final Logger log = LoggerFactory.getLogger(TableEditor.class);
 
-    /** 
+    /**
      * attribute name for class name of a table row;
      * value must be java.lang.String, or a class which supports set and get/is methods for the property name.
      */
     public static final String CLASSNAME = "tableObject.classname"; // $NON-NLS-1$
 
-    /** 
+    /**
      * attribute name for table headers, value must be a String array.
      * If {@link #CLASSNAME} is java.lang.String, there must be only a single entry.
      */
@@ -157,7 +157,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         } else {
             model.clearData();
         }
-        
+
         if(model.getRowCount()>0) {
             removeButton.setEnabled(true);
             clearButton.setEnabled(true);
@@ -165,7 +165,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
             removeButton.setEnabled(false);
             clearButton.setEnabled(false);
         }
-        
+
         if(model.getRowCount()>1) {
             upButton.setEnabled(true);
             downButton.setEnabled(true);
@@ -173,7 +173,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
             upButton.setEnabled(false);
             downButton.setEnabled(false);
         }
-        
+
         this.firePropertyChange();
     }
 
@@ -299,7 +299,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         public void actionPerformed(ActionEvent e) {
             try {
                 model.addRow(clazz.getDeclaredConstructor().newInstance());
-                
+
                 removeButton.setEnabled(true);
                 clearButton.setEnabled(true);
             } catch(Exception err) {
@@ -307,7 +307,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
             }
         }
     }
-    
+
     private class ClipListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -322,7 +322,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
                     String[] columns = clipboardLine.split("\t"); // $NON-NLS-1$
 
                     model.addRow(clazz.getDeclaredConstructor().newInstance());
-                    
+
                     for (int i=0; i < columns.length; i++) {
                         model.setValueAt(columns[i], model.getRowCount() - 1, i);
                     }
@@ -348,7 +348,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
             for(int i=0; i<rows.length; i++){
               model.removeRow(rows[i]-i);
             }
-            
+
             if(model.getRowCount()>1) {
                 upButton.setEnabled(true);
                 downButton.setEnabled(true);
@@ -363,12 +363,12 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         @Override
         public void actionPerformed(ActionEvent e) {
             model.clearData();
-            
+
             upButton.setEnabled(false);
             downButton.setEnabled(false);
         }
     }
-    
+
     private class UpListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -383,15 +383,15 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
                 for (int rowSelected : rowsSelected) {
                     table.addRowSelectionInterval(rowSelected - 1, rowSelected - 1);
                 }
-            }            
+            }
         }
     }
-    
+
     private class DownListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             GuiUtils.cancelEditing(table);
-            
+
             int[] rowsSelected = table.getSelectedRows();
             if (rowsSelected.length > 0 && rowsSelected[rowsSelected.length - 1] < table.getRowCount() - 1) {
                 table.clearSelection();
@@ -410,5 +410,5 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     public void clearGui() {
         this.model.clearData();
     }
-    
+
 }

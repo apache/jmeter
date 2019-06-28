@@ -133,7 +133,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
      * </ul>
      * @param bsh the interpreter, not {@code null}
      * @return the result of the script, may be {@code null}
-     * 
+     *
      * @throws JMeterException when working with the bsh fails
      */
     protected Object processFileOrScript(BeanShellInterpreter bsh) throws JMeterException{

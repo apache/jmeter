@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util.accesslog;
@@ -34,7 +34,7 @@ public class OrderPreservingLogParser extends SharedTCLogParser {
      * parse a set number of lines from the access log. Keep in mind the number
      * of lines parsed will depend the filter and number of lines in the log.
      * The method returns the actual lines parsed.
-     * 
+     *
      * @param count number of max lines to read
      * @return lines parsed
      */

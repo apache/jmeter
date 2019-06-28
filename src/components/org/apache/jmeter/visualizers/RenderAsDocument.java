@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 public class RenderAsDocument extends SamplerResultTab implements ResultRenderer {
 
     private static final Logger log = LoggerFactory.getLogger(RenderAsDocument.class);
-    
+
     /** {@inheritDoc} */
     @Override
     public void renderResult(SampleResult sampleResult) {

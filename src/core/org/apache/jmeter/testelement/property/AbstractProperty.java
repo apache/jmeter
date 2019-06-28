@@ -288,7 +288,7 @@ public abstract class AbstractProperty implements JMeterProperty {
 
     /**
      * Convert a collection of objects into JMeterProperty objects.
-     * 
+     *
      * @param coll Collection of any type of object
      * @return Collection of JMeterProperty objects
      */

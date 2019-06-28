@@ -239,11 +239,11 @@ public final class NewDriver {
         } else {
             Thread.currentThread().setContextClassLoader(loader);
 
-            
+
             setLoggingProperties(args);
 
             try {
-                // Only set property if it has not been set explicitely 
+                // Only set property if it has not been set explicitely
                 if(System.getProperty(HEADLESS_MODE_PROPERTY) == null && shouldBeHeadless(args)) {
                     System.setProperty(HEADLESS_MODE_PROPERTY, "true");
                 }
@@ -267,7 +267,7 @@ public final class NewDriver {
         for (Exception exception : exceptionsInInit) {
             StringWriter stringWriter = new StringWriter();
             PrintWriter printWriter = new PrintWriter(stringWriter);
-            exception.printStackTrace(printWriter); // NOSONAR 
+            exception.printStackTrace(printWriter); // NOSONAR
             builder.append(stringWriter.toString())
                 .append("\r\n");
         }

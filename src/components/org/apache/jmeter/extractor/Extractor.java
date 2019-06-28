@@ -27,9 +27,9 @@ import java.util.List;
  */
 public interface Extractor extends Serializable {
     /**
-     * 
+     *
      * @param expression Expression used for extraction of nodes
-     * @param attribute Attribute name to return 
+     * @param attribute Attribute name to return
      * @param matchNumber Match number
      * @param inputString Page or excerpt
      * @param result List of results
@@ -40,8 +40,8 @@ public interface Extractor extends Serializable {
     int extract(
             String expression,
             String attribute,
-            int matchNumber, 
-            String inputString, 
+            int matchNumber,
+            String inputString,
             List<String> result,
             int found,
             String cacheKey);

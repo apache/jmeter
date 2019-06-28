@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /**
@@ -21,7 +21,7 @@
  * and matches it with the MD5 hex provided.
  * The assertion will fail when the expected hex is different from the <br/>
  * one calculated from the response OR when the expected hex is left empty.
- * 
+ *
  */
 package org.apache.jmeter.assertions;
 

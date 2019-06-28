@@ -231,7 +231,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             }
         }
         catch (Throwable t) { // NOSONAR We handle correctly Error case in function
-            handleError(t); 
+            handleError(t);
         }
         finally {
             Context.exit();

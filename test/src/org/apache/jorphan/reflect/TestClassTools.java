@@ -31,7 +31,7 @@ public class TestClassTools {
 
     /**
      * Test that a class can be constructed using the default constructor
-     * 
+     *
      * @throws JMeterException
      *             when something fails during object construction
      */
@@ -45,7 +45,7 @@ public class TestClassTools {
     /**
      * Test that a class can be constructed using an constructor with an integer
      * parameter
-     * 
+     *
      * @throws JMeterException
      *             when something fails during object construction
      */
@@ -59,7 +59,7 @@ public class TestClassTools {
     /**
      * Test that a class can be constructed using an constructor with an string
      * parameter
-     * 
+     *
      * @throws JMeterException
      *             when something fails during object construction
      */
@@ -73,7 +73,7 @@ public class TestClassTools {
 
     /**
      * Test that a simple method can be invoked on an object
-     * 
+     *
      * @throws SecurityException
      *             when the method can not be used because of security concerns
      * @throws IllegalArgumentException

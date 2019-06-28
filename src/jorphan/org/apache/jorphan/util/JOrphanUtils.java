@@ -267,7 +267,7 @@ public final class JOrphanUtils {
         if(indexOf == -1) {
             return source;
         }
-        
+
         int offset = 0;
         char[] chars = source.toCharArray();
         StringBuilder sb = new StringBuilder(source.length()+20);
@@ -278,7 +278,7 @@ public final class JOrphanUtils {
             indexOf = source.indexOf(search, offset);
         }
         sb.append(chars, offset, chars.length- offset);
-        
+
         return sb.toString();
     }
 
@@ -588,7 +588,7 @@ public final class JOrphanUtils {
     }
 
     /**
-     * Check whether we can write to a folder. 
+     * Check whether we can write to a folder.
      * A folder can be written to if if does not contain any file or folder
      * Throw {@link IllegalArgumentException} if folder cannot be written to either:
      * <ul>
@@ -602,10 +602,10 @@ public final class JOrphanUtils {
     public static void canSafelyWriteToFolder(File folder) {
         canSafelyWriteToFolder(folder, false, file -> true);
     }
-    
-    
+
+
     /**
-     * Check whether we can write to a folder. 
+     * Check whether we can write to a folder.
      * A folder can be written to if folder.listFiles(exporterFileFilter) does not return any file or folder.
      * Throw {@link IllegalArgumentException} if folder cannot be written to either:
      * <ul>
@@ -613,18 +613,18 @@ public final class JOrphanUtils {
      *  <li>Because it exists but is not empty using folder.listFiles(exporterFileFilter)</li>
      *  <li>Because it does not exist but cannot be created</li>
      * </ul>
-     * @param folder to check 
+     * @param folder to check
      * @param fileFilter  used to filter listing of folder
      * @throws IllegalArgumentException when folder can't be written to
      */
     public static void canSafelyWriteToFolder(File folder, FileFilter fileFilter) {
         canSafelyWriteToFolder(folder, false, fileFilter);
     }
-    
+
     /**
      * Check whether we can write to a folder. If {@code deleteFolderContent} is {@code true} the folder or file with
      * the same name will be emptied or deleted.
-     * @param folder to check 
+     * @param folder to check
      * @param deleteFolderContent flag whether the folder should be emptied or a file with the same name deleted
      * @throws IllegalArgumentException when folder can't be written to
      * Throw IllegalArgumentException if folder cannot be written
@@ -633,7 +633,7 @@ public final class JOrphanUtils {
         canSafelyWriteToFolder(folder, deleteFolderContent, file -> true);
     }
 
-    
+
     /**
      * Check whether we can write to a folder.
      *
@@ -686,7 +686,7 @@ public final class JOrphanUtils {
     }
 
     /**
-     * Replace in source all matches of regex by replacement taking 
+     * Replace in source all matches of regex by replacement taking
      * into account case if caseSensitive is true
      * @param source Source text
      * @param regex Regular expression
@@ -696,8 +696,8 @@ public final class JOrphanUtils {
      */
     public static Object[] replaceAllWithRegex(
             String source, String regex, String replacement, boolean caseSensitive) {
-        java.util.regex.Pattern pattern = caseSensitive ? 
-                java.util.regex.Pattern.compile(regex) :  
+        java.util.regex.Pattern pattern = caseSensitive ?
+                java.util.regex.Pattern.compile(regex) :
                 java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
         final String replacementQuoted = Matcher.quoteReplacement(replacement);
         Matcher matcher = pattern.matcher(source);
@@ -738,7 +738,7 @@ public final class JOrphanUtils {
         setter.accept((String) result[0]);
         return nbReplaced;
     }
-    
+
     /**
      * Takes an array of strings and a tokenizer character, and returns a string
      * of all the strings concatenated with the tokenizer string in between each

@@ -17,7 +17,7 @@
  */
 
 /*
- * Test class for BinaryTCPClientImpl utility methods.  
+ * Test class for BinaryTCPClientImpl utility methods.
  *
  */
 package org.apache.jmeter.protocol.tcp.sampler;

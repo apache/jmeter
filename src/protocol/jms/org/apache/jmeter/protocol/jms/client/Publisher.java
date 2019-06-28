@@ -49,9 +49,9 @@ public class Publisher implements Closeable {
     private final Session session;
 
     private final MessageProducer producer;
-    
+
     private final Context ctx;
-    
+
     private final boolean staticDest;
 
     /**
@@ -81,15 +81,15 @@ public class Publisher implements Closeable {
      * @throws NamingException
      *             when creation of the publisher fails
      */
-    public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
+    public Publisher(boolean useProps, String initialContextFactory, String providerUrl,
             String connfactory, String destinationName, boolean useAuth,
             String securityPrincipal, String securityCredentials) throws JMSException, NamingException {
         this(useProps, initialContextFactory, providerUrl, connfactory,
                 destinationName, useAuth, securityPrincipal,
                 securityCredentials, true);
     }
-    
-    
+
+
     /**
      * Create a publisher using either the jndi.properties file or the provided
      * parameters
@@ -118,14 +118,14 @@ public class Publisher implements Closeable {
      * @throws NamingException
      *             when creation of the publisher fails
      */
-    public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
+    public Publisher(boolean useProps, String initialContextFactory, String providerUrl,
             String connfactory, String destinationName, boolean useAuth,
             String securityPrincipal, String securityCredentials,
             boolean staticDestination) throws JMSException, NamingException {
         super();
         boolean initSuccess = false;
         try{
-            ctx = InitialContextFactory.getContext(useProps, initialContextFactory, 
+            ctx = InitialContextFactory.getContext(useProps, initialContextFactory,
                     providerUrl, useAuth, securityPrincipal, securityCredentials);
             connection = Utils.getConnection(ctx, connfactory);
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -143,27 +143,27 @@ public class Publisher implements Closeable {
             }
         }
     }
-    
+
     public Message publish(String text, String destinationName, Map<String, Object> properties, int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         TextMessage msg = session.createTextMessage(text);
         return setPropertiesAndSend(destinationName, properties, msg, deliveryMode, priority, expiration);
     }
-    
+
     public Message publish(Serializable contents, String destinationName, Map<String, Object> properties, int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         ObjectMessage msg = session.createObjectMessage(contents);
         return setPropertiesAndSend(destinationName, properties, msg, deliveryMode, priority, expiration);
     }
-    
+
     public Message publish(byte[] bytes, String destinationName, Map<String, Object> properties, int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         BytesMessage msg = session.createBytesMessage();
         msg.writeBytes(bytes);
         return setPropertiesAndSend(destinationName, properties, msg, deliveryMode, priority, expiration);
     }
-    
-    public MapMessage publish(Map<String, Object> map, String destinationName, Map<String, Object> properties, 
+
+    public MapMessage publish(Map<String, Object> map, String destinationName, Map<String, Object> properties,
             int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         MapMessage msg = session.createMapMessage();
@@ -174,7 +174,7 @@ public class Publisher implements Closeable {
     }
 
     /**
-     * @param destinationName 
+     * @param destinationName
      * @param properties Map<String, String>
      * @param msg Message
      * @param deliveryMode

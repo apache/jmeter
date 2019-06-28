@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.control;
@@ -92,7 +92,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
             man.add(new Cookie("id", "value", ".apache.org", "/", false, 9999999999L));
             HTTPSamplerBase sampler = new HTTPNullSampler();
             sampler.setDomain("jakarta.apache.org");
-            
+
             sampler.setPath("/index.html");
             sampler.setMethod(HTTPConstants.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
@@ -121,8 +121,8 @@ public class TestHC4CookieManager extends JMeterTestCase {
             man.addCookieFromHeader(headerLine, url);
             Assert.assertEquals(1, man.getCookieCount());
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
-            List<org.apache.http.cookie.Cookie> cookies = 
-                    cookieHandler.getCookiesForUrl(man.getCookies(), url, 
+            List<org.apache.http.cookie.Cookie> cookies =
+                    cookieHandler.getCookiesForUrl(man.getCookies(), url,
                     CookieManager.ALLOW_VARIABLE_COOKIES);
 
             for (org.apache.http.cookie.Cookie cookie : cookies) {
@@ -130,11 +130,11 @@ public class TestHC4CookieManager extends JMeterTestCase {
                 Assert.assertEquals("bt.com", cookie.getDomain());
                 Assert.assertTrue( ((BasicClientCookie)cookie).containsAttribute(ClientCookie.DOMAIN_ATTR));
             }
-            
+
             // we check that CookieManager returns the cookies for the main domain
             URL urlMainDomain = new URL("https://www.bt.com/page");
-            cookies = 
-                    cookieHandler.getCookiesForUrl(man.getCookies(), urlMainDomain, 
+            cookies =
+                    cookieHandler.getCookiesForUrl(man.getCookies(), urlMainDomain,
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             Assert.assertEquals(1, cookies.size());
             for (org.apache.http.cookie.Cookie cookie : cookies) {
@@ -154,8 +154,8 @@ public class TestHC4CookieManager extends JMeterTestCase {
             man.addCookieFromHeader(headerLine, url);
             Assert.assertEquals(1, man.getCookieCount());
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
-            List<org.apache.http.cookie.Cookie> cookies = 
-                    cookieHandler.getCookiesForUrl(man.getCookies(), url, 
+            List<org.apache.http.cookie.Cookie> cookies =
+                    cookieHandler.getCookiesForUrl(man.getCookies(), url,
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             Assert.assertEquals(1, cookies.size());
             for (org.apache.http.cookie.Cookie cookie : cookies) {
@@ -163,11 +163,11 @@ public class TestHC4CookieManager extends JMeterTestCase {
                 Assert.assertEquals("subdomain.bt.com", cookie.getDomain());
                 Assert.assertFalse( ((BasicClientCookie)cookie).containsAttribute(ClientCookie.DOMAIN_ATTR));
             }
-            
+
             // we check that CookieManager returns the cookies for the main domain
             URL urlMainDomain = new URL("https://www.bt.com/page");
-            cookies = 
-                    cookieHandler.getCookiesForUrl(man.getCookies(), urlMainDomain, 
+            cookies =
+                    cookieHandler.getCookiesForUrl(man.getCookies(), urlMainDomain,
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             Assert.assertEquals(0, cookies.size());
         }
@@ -180,13 +180,13 @@ public class TestHC4CookieManager extends JMeterTestCase {
             URL url = new URL("https://www.bt.com/page");
             String headerLine = "SMTRYNO=1; path=/; domain=.bt.com";
             man.addCookieFromHeader(headerLine, url);
-            
+
             Assert.assertEquals(1, man.getCookieCount());
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
             URL urlSubDomain = new URL("https://subdomain.bt.com/page");
-            
-            List<org.apache.http.cookie.Cookie> cookies = 
-                    cookieHandler.getCookiesForUrl(man.getCookies(), urlSubDomain, 
+
+            List<org.apache.http.cookie.Cookie> cookies =
+                    cookieHandler.getCookiesForUrl(man.getCookies(), urlSubDomain,
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             Assert.assertEquals(1, cookies.size());
             for (org.apache.http.cookie.Cookie cookie : cookies) {
@@ -205,13 +205,13 @@ public class TestHC4CookieManager extends JMeterTestCase {
             String headerLine = "test=value;Max-age=120;path=/;Version=1";
             man.setCookiePolicy(CookieSpecs.STANDARD);
             man.addCookieFromHeader(headerLine, url);
-            
+
             Assert.assertEquals(1, man.getCookieCount());
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
             URL urlSameDomainDifferentPort = new URL("http://remote.com:10001/test/me");
-            
-            List<org.apache.http.cookie.Cookie> cookies = 
-                    cookieHandler.getCookiesForUrl(man.getCookies(), urlSameDomainDifferentPort, 
+
+            List<org.apache.http.cookie.Cookie> cookies =
+                    cookieHandler.getCookiesForUrl(man.getCookies(), urlSameDomainDifferentPort,
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             Assert.assertEquals(1, cookies.size());
             for (org.apache.http.cookie.Cookie cookie : cookies) {
@@ -220,7 +220,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
                 Assert.assertEquals("test", cookie.getName());
             }
         }
-        
+
         @Test
         public void testCrossDomainHandling() throws Exception {
             URL url = new URL("http://jakarta.apache.org/");
@@ -287,7 +287,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertNotNull(s);
             assertEquals("test=1", s);
         }
-        
+
         // Test HttpOnly cookie is parsed correctly
         @Test
         public void testHttpOnlyCookie() throws Exception {
@@ -341,7 +341,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertNotNull(s);
             assertEquals("test1=1; test2=2", s);
         }
-        
+
         @Test
         public void testCookies2() throws Exception {
             URL url = new URL("https://a.b.c.d/testCookies2");
@@ -349,14 +349,14 @@ public class TestHC4CookieManager extends JMeterTestCase {
             //standard (RFC 2109 and RFC 2965) cookies. Therefore it is parsed as
             //Netscape style cookie in which case comma is not considered a valid
             //header element delimiter and is treated as normal character.
-            
+
             man.addCookieFromHeader("test1=1;secure, test2=2;secure", url);
             assertEquals(1,man.getCookieCount());
             String s = man.getCookieHeaderForURL(url);
             assertNotNull(s);
             assertEquals("test1=1", s);
         }
-        
+
         @Test
         public void testCookies3() throws Exception {
             man.setCookiePolicy(CookieSpecs.DEFAULT);
@@ -397,9 +397,9 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertEquals("test2=a; test=2; test3=b", s);// Assumes some kind of list is use
             // If not using a list that retains the order, then the asserts would need to change
         }
-        
-         
-        /** Tests missing cookie path for a trivial URL fetch from the domain 
+
+
+        /** Tests missing cookie path for a trivial URL fetch from the domain
          *  Note that this fails prior to a fix for BUG 38256
          *
          * @throws Exception if something fails
@@ -412,8 +412,8 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertNotNull(s);
             assertEquals("test=moo", s);
         }
-        
-        /** Tests missing cookie path for a non-trivial URL fetch from the 
+
+        /** Tests missing cookie path for a non-trivial URL fetch from the
          *  domain.  Note that this fails prior to a fix for BUG 38256
          *
          * @throws Exception if something fails
@@ -426,7 +426,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertNotNull(s);
             assertEquals("test=moo", s);
         }
-        
+
         /** Tests explicit root path with a trivial URL fetch from the domain
          *
          * @throws Exception if something fails
@@ -439,7 +439,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertNotNull(s);
             assertEquals("test=moo", s);
         }
-        
+
         /** Tests explicit root path with a non-trivial URL fetch from the domain
          *
          * @throws Exception if something fails
@@ -452,7 +452,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertNotNull(s);
             assertEquals("test=moo", s);
         }
-        
+
         // Test cookie matching
         @Test
         public void testCookieMatching() throws Exception {
@@ -465,15 +465,15 @@ public class TestHC4CookieManager extends JMeterTestCase {
             url = new URL("http://a.b.c:8080/other.jsp");
             s=man.getCookieHeaderForURL(url);
             assertNull(s);
-            
+
             url = new URL("http://a.b.c:8080/TopDir/suub/another.jsp");
             s=man.getCookieHeaderForURL(url);
             assertNotNull(s);
-            
+
             url = new URL("http://a.b.c:8080/TopDir");
             s=man.getCookieHeaderForURL(url);
             assertNotNull(s);
-            
+
             url = new URL("http://a.b.d/");
             s=man.getCookieHeaderForURL(url);
             assertNull(s);
@@ -490,7 +490,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
             String s = man.getCookieHeaderForURL(url);
             assertNotNull(s);
             //Cookies like "test1=moo1;path=/" are invalid from the standpoint of RFC 2109 and RFC 2965 as they lack mandatory version attribute.
-            // The default policy treats such cookies as Netscape draft compatible.  And the Netscape draft does not define any particular order 
+            // The default policy treats such cookies as Netscape draft compatible.  And the Netscape draft does not define any particular order
             // for cookies in the cookie header.
             // see https://issues.apache.org/jira/browse/HTTPCLIENT-1705
             // assertEquals("test2=moo2; test1=moo1; test2=moo3", s);
@@ -509,8 +509,8 @@ public class TestHC4CookieManager extends JMeterTestCase {
             String s = man.getCookieHeaderForURL(url);
             assertNotNull(s);
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
-            List<org.apache.http.cookie.Cookie> c = 
-                    cookieHandler.getCookiesForUrl(man.getCookies(), url, 
+            List<org.apache.http.cookie.Cookie> c =
+                    cookieHandler.getCookiesForUrl(man.getCookies(), url,
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             assertEquals("/sub1",c.get(0).getPath());
             assertFalse(((BasicClientCookie)c.get(0)).containsAttribute(ClientCookie.PATH_ATTR));
@@ -519,7 +519,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertEquals("/",c.get(2).getPath());
             assertEquals("test1=moo1; test2=moo2; test2=moo3", s);
         }
-        
+
         @SuppressWarnings("deprecation") // test of deprecated item
         @Test
         public void testCookiePolicy2109() throws Exception {
@@ -536,8 +536,8 @@ public class TestHC4CookieManager extends JMeterTestCase {
             String s = man.getCookieHeaderForURL(url);
             assertNotNull(s);
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
-            List<org.apache.http.cookie.Cookie> c = 
-                    cookieHandler.getCookiesForUrl(man.getCookies(), url, 
+            List<org.apache.http.cookie.Cookie> c =
+                    cookieHandler.getCookiesForUrl(man.getCookies(), url,
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             assertEquals("/sub1",c.get(0).getPath());
             assertFalse(((BasicClientCookie)c.get(0)).containsAttribute(ClientCookie.PATH_ATTR));
@@ -563,9 +563,9 @@ public class TestHC4CookieManager extends JMeterTestCase {
             String s = man.getCookieHeaderForURL(url);
             assertNotNull(s);
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
-           
-            List<org.apache.http.cookie.Cookie> c = 
-                    cookieHandler.getCookiesForUrl(man.getCookies(), url, 
+
+            List<org.apache.http.cookie.Cookie> c =
+                    cookieHandler.getCookiesForUrl(man.getCookies(), url,
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             assertEquals("/sub1",c.get(0).getPath());
             assertFalse(((BasicClientCookie)c.get(0)).containsAttribute(ClientCookie.PATH_ATTR));
@@ -597,14 +597,14 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertEquals("/sub1",man.get(1).getPath());
             assertEquals("/",man.get(2).getPath());
             String s = man.getCookieHeaderForURL(url);
-            
-            // With ignore policy, s is null as no match will occur, 
-            // getCookieHeaderForURL will return null 
+
+            // With ignore policy, s is null as no match will occur,
+            // getCookieHeaderForURL will return null
             assertNull(s);
-            
+
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
-            List<org.apache.http.cookie.Cookie> c = 
-                    cookieHandler.getCookiesForUrl(man.getCookies(), url, 
+            List<org.apache.http.cookie.Cookie> c =
+                    cookieHandler.getCookiesForUrl(man.getCookies(), url,
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             assertNotNull(c); // Make sure variable is used
             // see https://issues.apache.org/jira/browse/HTTPCLIENT-1704

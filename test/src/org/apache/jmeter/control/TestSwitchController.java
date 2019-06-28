@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -195,8 +195,8 @@ public class TestSwitchController extends JMeterTestCase {
         }
 
         /*
-         * Test: 
-         * Before 
+         * Test:
+         * Before
          * Selection Controller
          *  - zero (default)
          *  - simple controller 1
@@ -208,8 +208,8 @@ public class TestSwitchController extends JMeterTestCase {
          *  - five
          *  - six
          * After
-         * 
-         * cond  = Switch condition 
+         *
+         * cond  = Switch condition
          * exp[] = expected results
          */
         private void runTest2(String cond, String[] exp) throws Exception {
@@ -252,7 +252,7 @@ public class TestSwitchController extends JMeterTestCase {
             }
             assertNull("Loops:" + loops, nextName(controller));
         }
-        
+
         /*
          * N.B. Requires ApacheJMeter_functions.jar to be on the classpath,
          * otherwise the function cannot be resolved.
@@ -268,7 +268,7 @@ public class TestSwitchController extends JMeterTestCase {
             StringProperty prop = new StringProperty(SwitchController.SWITCH_VALUE,"${__counter(TRUE,VAR)}");
             JMeterProperty newProp = transformer.transformValue(prop);
             newProp.setRunningVersion(true);
-            
+
             GenericController controller = new GenericController();
 
             SwitchController switch_cont = new SwitchController();
@@ -287,7 +287,7 @@ public class TestSwitchController extends JMeterTestCase {
             controller.initialize();
 
             assertEquals("100",jmvars.get("VAR"));
-            
+
             for (int i = 1; i <= 3; i++) {
                 assertEquals("Loop " + i, "before", nextName(controller));
                 assertEquals("Loop " + i, ""+i, nextName(controller));

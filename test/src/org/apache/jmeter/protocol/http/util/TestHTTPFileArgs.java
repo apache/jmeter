@@ -119,7 +119,7 @@ public class TestHTTPFileArgs {
         files.addHTTPFileArg("file3");
         assertEquals("path:'file1'|param:''|mimetype:''\n"
                     +"path:'file2'|param:''|mimetype:''\n"
-                    +"path:'file3'|param:''|mimetype:''", 
+                    +"path:'file3'|param:''|mimetype:''",
                     files.toString());
     }
 }

@@ -31,7 +31,7 @@ public interface Sampler extends Serializable, TestElement {
     /**
      * Obtains statistics about the given Entry, and packages the information
      * into a SampleResult.
-     * 
+     *
      * @param e
      *            the Entry (TODO seems to be unused)
      * @return information about the sample

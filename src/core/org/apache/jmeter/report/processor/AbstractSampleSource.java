@@ -35,7 +35,7 @@ public abstract class AbstractSampleSource implements SampleSource {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Runnable#run()
      */
     @Override
@@ -43,7 +43,7 @@ public abstract class AbstractSampleSource implements SampleSource {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.SampleSource#getSampleContext()
      */
     @Override
@@ -53,7 +53,7 @@ public abstract class AbstractSampleSource implements SampleSource {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.SampleSource#setSampleContext(org.
      * apache.jmeter.report.processor.SampleContext)
@@ -65,7 +65,7 @@ public abstract class AbstractSampleSource implements SampleSource {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.SampleSource#addSampleConsumers(java
      * .util.List)
@@ -75,7 +75,7 @@ public abstract class AbstractSampleSource implements SampleSource {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.SampleSource#addSampleConsumer(org
      * .apache.jmeter.report.processor.SampleConsumer)
@@ -85,7 +85,7 @@ public abstract class AbstractSampleSource implements SampleSource {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.SampleSource#removeSampleConsumer(
      * org.apache.jmeter.report.processor.SampleConsumer)

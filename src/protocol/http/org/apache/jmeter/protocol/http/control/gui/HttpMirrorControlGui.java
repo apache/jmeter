@@ -194,7 +194,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
         HorizontalPanel panel = new HorizontalPanel();
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("httpmirror_settings"))); // $NON-NLS-1$
-        
+
         panel.add(label);
         panel.add(portField);
 
@@ -203,7 +203,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
 
         panel.add(mqsLabel);
         panel.add(maxQueueSizeField);
-        
+
         panel.add(Box.createHorizontalStrut(10));
 
         return panel;
@@ -215,14 +215,14 @@ public class HttpMirrorControlGui extends LogicControllerGui
         portField.setText(HttpMirrorControl.DEFAULT_PORT_S);
         maxPoolSizeField.setText(Integer.toString(HttpMirrorControl.DEFAULT_MAX_POOL_SIZE));
     }
-    
+
     /**
      * Redefined to remove change parent and inserrt parent menu
      * @see org.apache.jmeter.control.gui.AbstractControllerGui#createPopupMenu()
      */
     @Override
     public JPopupMenu createPopupMenu() {
-        JPopupMenu pop = new JPopupMenu();        
+        JPopupMenu pop = new JPopupMenu();
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;

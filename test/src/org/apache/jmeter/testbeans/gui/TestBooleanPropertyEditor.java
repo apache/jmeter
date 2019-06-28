@@ -31,7 +31,7 @@ import org.junit.Test;
  * Also checks that BooleanPropertyEditor behaves in the same way.
  */
 public class TestBooleanPropertyEditor {
- 
+
     /*
      * N.B.
      * These values are NOT the same as Boolean.FALSE|TRUE.toString()
@@ -60,7 +60,7 @@ public class TestBooleanPropertyEditor {
         assertEquals(2,tags.length);
         assertEquals(TRUE,tags[0]);
         assertEquals(FALSE,tags[1]);
-        
+
         propertyEditor.setValue(Boolean.FALSE);
         assertEquals(FALSE,propertyEditor.getAsText());
         propertyEditor.setAsText(FALSE);
@@ -71,7 +71,7 @@ public class TestBooleanPropertyEditor {
         assertEquals(FALSE,propertyEditor.getAsText());
         propertyEditor.setAsText("FALSE");
         assertEquals(FALSE,propertyEditor.getAsText());
-        
+
         propertyEditor.setValue(Boolean.TRUE);
         assertEquals(TRUE,propertyEditor.getAsText());
         propertyEditor.setAsText(TRUE);

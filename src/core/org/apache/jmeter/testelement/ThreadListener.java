@@ -27,7 +27,7 @@ public interface ThreadListener {
      * Called for each thread before starting sampling.
      * WARNING: this is called before any Config test elements are processed,
      * so any properties they define will not have been merged in yet.
-     * 
+     *
      * See org.apache.jmeter.threads.JMeterThread#threadStarted()
      *
      */

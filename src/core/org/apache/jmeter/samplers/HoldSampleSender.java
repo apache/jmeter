@@ -50,7 +50,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
 
     HoldSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.warn("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // client        
+        log.warn("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // client
     }
 
     @Override
@@ -65,7 +65,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
         } catch (Error | RuntimeException ex) { // NOSONAR We want to have errors logged in log file
             log.error("testEnded(host)", ex);
             throw ex;
-        } catch (Exception ex) { 
+        } catch (Exception ex) {
             log.error("testEnded(host)", ex);
         }
 
@@ -84,7 +84,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
      *             never
      */
     protected Object readResolve() throws ObjectStreamException{
-        log.warn("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // server        
+        log.warn("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // server
         return this;
     }
 }

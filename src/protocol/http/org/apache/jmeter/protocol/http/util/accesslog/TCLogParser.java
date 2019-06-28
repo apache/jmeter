@@ -78,7 +78,7 @@ public class TCLogParser implements LogParser {
     /*
      * TODO should these fields be public?
      * They don't appear to be used externally.
-     * 
+     *
      * Also, are they any different from HTTPConstants.GET etc. ?
      * In some cases they seem to be used as the method name from the Tomcat log.
      * However the RMETHOD field is used as the value for HTTPSamplerBase.METHOD,
@@ -309,7 +309,7 @@ public class TCLogParser implements LogParser {
     }
 
     /**
-     * @param line single line of which the url should be extracted 
+     * @param line single line of which the url should be extracted
      * @param el {@link TestElement} into which the url will be added
      */
     private void createUrl(String line, TestElement el) {

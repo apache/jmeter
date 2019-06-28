@@ -59,7 +59,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
         }
         private URL url;
     }
-    
+
     private static final class JMeterTagVisitor extends EmptyTagVisitor {
         private HtmlCCommentExpressionMatcher htmlCCommentExpressionMatcher;
         private URLCollection urls;
@@ -85,10 +85,10 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 urls.addURL(normalizedUrl, baseUrl.url);
             }
         }
-        
+
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see jodd.lagarto.EmptyTagVisitor#script(jodd.lagarto.Tag,
          * java.lang.CharSequence)
          */
@@ -102,7 +102,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see jodd.lagarto.EmptyTagVisitor#tag(jodd.lagarto.Tag)
          */
         @Override
@@ -131,8 +131,8 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 } else if (tag.nameEquals(TAG_APPLET)) {
                     extractAttribute(tag, ATT_CODE);
                 } else if (tag.nameEquals(TAG_OBJECT)) {
-                    extractAttribute(tag, ATT_CODEBASE);                
-                    extractAttribute(tag, ATT_DATA);                 
+                    extractAttribute(tag, ATT_CODEBASE);
+                    extractAttribute(tag, ATT_DATA);
                 } else if (tag.nameEquals(TAG_INPUT)) {
                     // we check the input tag type for image
                     CharSequence type = tag.getAttributeValue(ATT_TYPE);
@@ -152,9 +152,9 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 } else if (tag.nameEquals(TAG_LINK)) {
                     CharSequence relAttribute = tag.getAttributeValue(ATT_REL);
                     // Putting the string first means it works even if the attribute is null
-                    if (relAttribute != null && 
+                    if (relAttribute != null &&
                             (CharSequenceUtil.equalsIgnoreCase(STYLESHEET,relAttribute)
-                                    || CharSequenceUtil.equalsIgnoreCase(ICON, relAttribute) 
+                                    || CharSequenceUtil.equalsIgnoreCase(ICON, relAttribute)
                                     || CharSequenceUtil.equalsIgnoreCase(SHORTCUT_ICON, relAttribute))) {
                         extractAttribute(tag, ATT_HREF);
                     }
@@ -209,8 +209,8 @@ public class LagartoBasedHtmlParser extends HTMLParser {
             URLCollection coll, String encoding) throws HTMLParseException {
         try {
             Float ieVersion = extractIEVersion(userAgent);
-            
-            String contents = new String(html,encoding); 
+
+            String contents = new String(html,encoding);
             LagartoParser lagartoParser = new LagartoParser(contents.toCharArray());
             LagartoDomBuilderConfig config = new LagartoDomBuilderConfig();
             config.setCaseSensitive(false);

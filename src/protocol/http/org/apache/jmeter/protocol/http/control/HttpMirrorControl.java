@@ -77,21 +77,21 @@ public class HttpMirrorControl extends AbstractTestElement {
     public String getPortString() {
         return getPropertyAsString(PORT);
     }
-    
+
     /**
      * @return Max Thread Pool size
      */
     public String getMaxPoolSizeAsString() {
         return getPropertyAsString(MAX_POOL_SIZE);
     }
-    
+
     /**
      * @return Max Thread Pool size
      */
     private int getMaxPoolSize() {
         return getPropertyAsInt(MAX_POOL_SIZE, DEFAULT_MAX_POOL_SIZE);
     }
-    
+
     /**
      * @param maxPoolSize Max Thread Pool size
      */
@@ -105,21 +105,21 @@ public class HttpMirrorControl extends AbstractTestElement {
     public String getMaxQueueSizeAsString() {
         return getPropertyAsString(MAX_QUEUE_SIZE);
     }
-    
+
     /**
      * @return Max Queue size
      */
     private int getMaxQueueSize() {
         return getPropertyAsInt(MAX_QUEUE_SIZE, DEFAULT_MAX_QUEUE_SIZE);
     }
-    
+
     /**
      * @param maxQueueSize Max Queue size
      */
     public void setMaxQueueSize(String maxQueueSize) {
         setProperty(MAX_QUEUE_SIZE, maxQueueSize);
     }
-    
+
     public int getDefaultPort() {
         return DEFAULT_PORT;
     }

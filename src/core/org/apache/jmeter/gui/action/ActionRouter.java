@@ -128,7 +128,7 @@ public final class ActionRouter implements ActionListener {
     /**
      * Get the set of {@link Command}s registered under the name
      * <code>actionName</code>
-     * 
+     *
      * @param actionName
      *            The name the {@link Command}s were registered
      * @return a set with all registered {@link Command}s for
@@ -149,7 +149,7 @@ public final class ActionRouter implements ActionListener {
     /**
      * Get the {@link Command} registered under the name <code>actionName</code>,
      * that is of {@link Class} <code>actionClass</code>
-     * 
+     *
      * @param actionName
      *            The name the {@link Command}s were registered
      * @param actionClass
@@ -169,7 +169,7 @@ public final class ActionRouter implements ActionListener {
     /**
      * Get the {@link Command} registered under the name <code>actionName</code>
      * , which class names are equal to <code>className</code>
-     * 
+     *
      * @param actionName
      *            The name the {@link Command}s were registered
      * @param className
@@ -341,7 +341,7 @@ public final class ActionRouter implements ActionListener {
     /**
      * Only for use by the JMeter.startGui.
      * This method must not be called by getInstance() as was done previously.
-     * See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=58790">Bug 58790</a> 
+     * See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=58790">Bug 58790</a>
      */
     public void populateCommandMap() {
         if (!commands.isEmpty()) {

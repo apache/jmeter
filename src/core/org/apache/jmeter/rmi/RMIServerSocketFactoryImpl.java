@@ -42,7 +42,7 @@ public class RMIServerSocketFactoryImpl implements RMIServerSocketFactory, Seria
 
     /**
      * Creates a server socket that listens on localAddress:port
-     * @param port to use for the RMI server socket 
+     * @param port to use for the RMI server socket
      * @see java.rmi.server.RMIServerSocketFactory#createServerSocket(int)
      */
     @Override

@@ -115,20 +115,20 @@ class JTidyHTMLParser extends HTMLParser {
                 urls.addURL(getValue(attrs, "code"), baseUrl);
                 break;
             }
-            
+
             if (name.equalsIgnoreCase(TAG_OBJECT)) {
                 String data = getValue(attrs, "codebase");
                 if(!StringUtils.isEmpty(data)) {
-                    urls.addURL(data, baseUrl);                    
+                    urls.addURL(data, baseUrl);
                 }
-                
+
                 data = getValue(attrs, "data");
                 if(!StringUtils.isEmpty(data)) {
-                    urls.addURL(data, baseUrl);                    
+                    urls.addURL(data, baseUrl);
                 }
                 break;
             }
-            
+
             if (name.equalsIgnoreCase(TAG_INPUT)) {
                 String src = getValue(attrs, ATT_SRC);
                 String typ = getValue(attrs, ATT_TYPE);
@@ -137,7 +137,7 @@ class JTidyHTMLParser extends HTMLParser {
                 }
                 break;
             }
-            if (TAG_LINK.equalsIgnoreCase(name) && 
+            if (TAG_LINK.equalsIgnoreCase(name) &&
                     (STYLESHEET.equalsIgnoreCase(getValue(attrs, ATT_REL))
                             || SHORTCUT_ICON.equalsIgnoreCase(getValue(attrs, ATT_REL))
                             || ICON.equalsIgnoreCase(getValue(attrs, ATT_REL)))) {

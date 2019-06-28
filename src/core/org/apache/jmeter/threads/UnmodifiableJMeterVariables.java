@@ -46,7 +46,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
                 + ((variables == null) ? 0 : variables.hashCode());
         return result;
     }
-    
+
 
     @Override
     public String getThreadName() {
@@ -72,7 +72,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
     public void put(String key, String value) {
         throw new UnsupportedOperationException();
     }
- 
+
     @Override
     public void putObject(String key, Object value) {
         throw new UnsupportedOperationException();
@@ -114,7 +114,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
         }
         return true;
     }
- 
+
     @Override
     public Object getObject(String key) {
         return variables.getObject(key);

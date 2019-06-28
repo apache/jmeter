@@ -25,7 +25,7 @@ import java.rmi.RemoteException;
  * @since 2.10
  */
 public interface RemoteThreadsListener extends java.rmi.Remote {
-    
+
     /**
      * @see org.apache.jmeter.testelement.ThreadListener#threadStarted()
      * @throws RemoteException when remote calling of the method fails

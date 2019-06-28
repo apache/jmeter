@@ -84,7 +84,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         smtpPanel.setIncludeTimestamp(element.getPropertyAsBoolean(SmtpSampler.INCLUDE_TIMESTAMP));
         JMeterProperty headers = element.getProperty(SmtpSampler.HEADER_FIELDS);
         if (headers instanceof CollectionProperty) { // Might be NullProperty
-            smtpPanel.setHeaderFields((CollectionProperty)headers);            
+            smtpPanel.setHeaderFields((CollectionProperty)headers);
         } else {
             smtpPanel.setHeaderFields(new CollectionProperty());
         }
@@ -142,7 +142,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         te.setProperty(SmtpSampler.MESSAGE, smtpPanel.getBody());
         te.setProperty(SmtpSampler.PLAIN_BODY, Boolean.toString(smtpPanel.isPlainBody()));
         te.setProperty(SmtpSampler.ATTACH_FILE, smtpPanel.getAttachments());
-        
+
         SecuritySettingsPanel secPanel = smtpPanel.getSecuritySettingsPanel();
         secPanel.modifyTestElement(te);
 

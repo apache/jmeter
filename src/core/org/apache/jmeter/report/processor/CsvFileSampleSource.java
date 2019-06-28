@@ -80,7 +80,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
     /**
      * Build a sample source from the specified input file and character
      * separator.
-     * 
+     *
      * @param inputFile
      *            The input sample file (CSV file) (must not be {@code null})
      * @param separator
@@ -150,7 +150,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
     /**
      * Get a readable time as hours, minutes and seconds from the specified time
      * in milliseconds
-     * 
+     *
      * @return A readable string that displays the time provided as
      *          milliseconds
      */
@@ -194,7 +194,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSampleSource#addSampleConsumers
      * (java.util.List)
@@ -206,7 +206,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSampleSource#addSampleConsumer
      * (org.apache.jmeter.report.processor.SampleConsumer)
@@ -218,7 +218,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSampleSource#removeSampleConsumer
      * (org.apache.jmeter.report.processor.SampleConsumer)

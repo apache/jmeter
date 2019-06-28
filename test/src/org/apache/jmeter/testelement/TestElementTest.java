@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.testelement;
@@ -34,12 +34,12 @@ import junit.framework.TestSuite;
 public class TestElementTest extends JMeterTestCaseJUnit {
 
     private TestElement testItem;
-    
+
     public TestElementTest(String testName, TestElement te) {
         super(testName);// Save the method name
         testItem = te;
     }
-    
+
     /*
      * Test TestElements - create the suite
      */
@@ -53,7 +53,7 @@ public class TestElementTest extends JMeterTestCaseJUnit {
         }
         return suite;
     }
-    
+
     /*
      * Test TestElements - implement the test case
      */
@@ -67,10 +67,10 @@ public class TestElementTest extends JMeterTestCaseJUnit {
         if (name.equals("org.apache.jmeter.control.TransactionSampler")){
             return; // Not a real sampler
         }
-            
+
         checkElementAlias(testItem);
     }
-    
+
     private static void checkElementCloning(TestElement item) {
         TestElement clonedItem = (TestElement) item.clone();
         cloneTesting(item, clonedItem);
@@ -81,18 +81,18 @@ public class TestElementTest extends JMeterTestCaseJUnit {
             assertTrue(item2 != clonedItem.getProperty(item2.getName()));
         }
     }
-    
+
     private static void cloneTesting(TestElement item, TestElement clonedItem) {
         assertTrue(item != clonedItem);
         assertEquals("CLONE-SAME-CLASS: testing " + item.getClass().getName(), item.getClass().getName(), clonedItem
                 .getClass().getName());
     }
-    
+
     private void checkElementAlias(Object item) throws IOException {
         //FIXME do it only once
         Properties nameMap = SaveService.loadProperties();
         assertNotNull("SaveService nameMap (saveservice.properties) should not be null",nameMap);
-        
+
         String name = item.getClass().getName();
         boolean contains = nameMap.values().contains(name);
         if (!contains){

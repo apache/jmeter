@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.extractor;
@@ -37,7 +37,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestRegexExtractor {
-    
+
         private RegexExtractor extractor;
 
         private SampleResult result;
@@ -110,7 +110,7 @@ public class TestRegexExtractor {
             extractor.process();
             assertEquals("", vars.get("regVal"));
         }
-        
+
         @Test
         public void testNotEmptyDefaultVariable() throws Exception {
             extractor.setRegex("<value name=\"positioncount\">(.+?)</value>");
@@ -120,7 +120,7 @@ public class TestRegexExtractor {
             extractor.process();
             assertNull(vars.get("regVal"));
         }
-        
+
         @Test
         public void testVariableExtraction0() throws Exception {
             extractor.setRegex("<(value) field=\"");

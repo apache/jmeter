@@ -50,7 +50,7 @@ abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
         return new GenericKeyedObjectPool<>(
                 new SocketOutputStreamPoolFactory(SOCKET_CONNECT_TIMEOUT_MS, SOCKET_TIMEOUT), config);
     }
-    
+
     /**
      * Replaces Graphite reserved chars:
      * <ul>
@@ -58,7 +58,7 @@ abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
      * <li>'\\' by '-'</li>
      * <li>'.' by '_'</li>
      * </ul>
-     * 
+     *
      * @param s
      *            text to be sanitized
      * @return the sanitized text
@@ -66,5 +66,5 @@ abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
     static String sanitizeString(String s) {
         // String#replace uses regexp
         return StringUtils.replaceChars(s, "\\ .", "--_");
-    }    
+    }
 }

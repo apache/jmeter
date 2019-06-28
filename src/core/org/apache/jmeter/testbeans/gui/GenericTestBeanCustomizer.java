@@ -123,8 +123,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      */
     public static final String TAGS = "tags"; //$NON-NLS-1$
 
-    /** 
-     * Whether the field must be defined (i.e. is required); 
+    /**
+     * Whether the field must be defined (i.e. is required);
      * Boolean, defaults to FALSE
      */
     public static final String NOT_UNDEFINED = "notUndefined"; //$NON-NLS-1$
@@ -253,7 +253,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                     propertyEditor = PropertyEditorManager.findEditor(c);
                 }
             }
-            
+
             if (propertyEditor == null) {
                 if (log.isWarnEnabled()) {
                     log.warn("No editor for property: {} type: {} in bean: {}", name, descriptor.getPropertyType(),
@@ -311,7 +311,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     /**
      * Validate the descriptor attributes.
-     * 
+     *
      * @param pd the descriptor
      * @param pe the propertyEditor
      */
@@ -336,7 +336,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 if (log.isWarnEnabled()) {
                     log.warn("{} has a DEFAULT of class {}", getDetails(pd), defltClass.getCanonicalName());
                 }
-            }            
+            }
         }
         if (notOther(pd) && pd.getValue(TAGS) == null && pe.getTags() == null) {
             if (log.isWarnEnabled()) {
@@ -360,7 +360,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     /**
      * Identify the property from the descriptor.
-     * 
+     *
      * @param pd
      * @return the property details
      */
@@ -418,7 +418,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     /**
      * Returns true if the property disallows constant values different from the provided tags.
-     * 
+     *
      * @param descriptor the property descriptor
      * @return true if the attribute {@link #NOT_OTHER} is defined and equal to Boolean.TRUE;
      *  otherwise the default is false
@@ -429,7 +429,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     /**
      * Returns true if the property does not allow JMeter expressions.
-     * 
+     *
      * @param descriptor the property descriptor
      * @return true if the attribute {@link #NOT_EXPRESSION} is defined and equal to Boolean.TRUE;
      *  otherwise the default is false
@@ -439,8 +439,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     }
 
     /**
-     * Returns true if the property must be defined (i.e. is required); 
-     * 
+     * Returns true if the property must be defined (i.e. is required);
+     *
      * @param descriptor the property descriptor
      * @return true if the attribute {@link #NOT_UNDEFINED} is defined and equal to Boolean.TRUE;
      *  otherwise the default is false
@@ -451,7 +451,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     /**
      * Returns true if the property default value is not saved
-     * 
+     *
      * @param descriptor the property descriptor
      * @return true if the attribute {@link #DEFAULT_NOT_SAVED} is defined and equal to Boolean.TRUE;
      *  otherwise the default is false

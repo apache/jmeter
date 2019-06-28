@@ -33,7 +33,7 @@ import org.apache.jmeter.save.CSVSaveService;
  * indexes.
  * </p>
  * <br>
- * 
+ *
  * @since 3.0
  */
 public class SampleMetadata {
@@ -52,7 +52,7 @@ public class SampleMetadata {
 
     /**
      * Builds metadata from separator character and a list of column names
-     * 
+     *
      * @param separator
      *            The character used for column separation
      * @param columns
@@ -162,7 +162,7 @@ public class SampleMetadata {
 
     /**
      * Gets the name of the ith column in this metadata
-     * 
+     *
      * @param i
      *            The index of the column for which the name is requested (zero
      *            based)
@@ -177,7 +177,7 @@ public class SampleMetadata {
 
     /**
      * Gets the name of the ith column in this metadata
-     * 
+     *
      * @param i
      *            The index of the column for which the name is requested (zero
      *            based)
@@ -192,7 +192,7 @@ public class SampleMetadata {
 
     /**
      * Returns the index of the column with the specified name.
-     * 
+     *
      * @param col
      *            the column name for which the index is requested
      * @return The index of the requested column or -1 if the requested column
@@ -205,7 +205,7 @@ public class SampleMetadata {
 
     /**
      * Returns the index of the column with the specified name.
-     * 
+     *
      * @param col
      *            the column name for which the index is requested
      * @return The index of the requested column
@@ -223,7 +223,7 @@ public class SampleMetadata {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#toString()
      */
     @Override

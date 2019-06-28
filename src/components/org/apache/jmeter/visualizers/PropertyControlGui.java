@@ -94,7 +94,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
     @Override
     public void actionPerformed(ActionEvent action) {
         String command = action.getActionCommand();
-        
+
         if (SYSTEM.equals(command)){
             setUpData();
             return;
@@ -112,7 +112,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
         modifyTestElement(el);
         return el;
     }
-    
+
     @Override
     public void configure(TestElement element) {
         super.configure(element);
@@ -202,7 +202,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
         add(p, BorderLayout.CENTER);
         table.revalidate();
     }
-    
+
     private void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
                 new Functor[] {

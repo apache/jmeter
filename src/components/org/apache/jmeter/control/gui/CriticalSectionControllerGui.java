@@ -33,13 +33,13 @@ import org.apache.jmeter.util.JMeterUtils;
  * The user interface for a controller which specifies that its subcomponents
  * should be executed while a condition holds. This component can be used
  * standalone or embedded into some other component.
- * 
+ *
  * @since 2.12
  */
 public class CriticalSectionControllerGui extends AbstractControllerGui {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 7177285850634344095L;
 
@@ -65,7 +65,7 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
     /**
      * Create a new CriticalSectionPanel as either a standalone or an embedded
      * component.
-     * 
+     *
      * @param displayName
      *            indicates whether or not this component should display its
      *            name. If true, this is a standalone component. If false, this
@@ -82,7 +82,7 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
      * Element object by calling this method. The component is responsible for
      * querying the Test Element object for the relevant information to display
      * in its GUI.
-     * 
+     *
      * @param element
      *            the TestElement to configure
      */
@@ -155,7 +155,7 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
 
     /**
      * Create a GUI panel containing the lockName
-     * 
+     *
      * @return a GUI panel containing the lock name components
      */
     private JPanel createCriticalSectionPanel() {

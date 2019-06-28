@@ -29,7 +29,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  * ClientPool holds the client instances in an ArrayList. The main purpose of
  * this is to make it easier to clean up all the instances at the end of a test.
  * If we didn't do this, threads might become zombie.
- * 
+ *
  * N.B. This class is thread safe as it is called from sample threads
  * and the thread that runs testEnded() methods.
  */
@@ -40,7 +40,7 @@ public class ClientPool {
     private ClientPool() {
         super();
     }
-    
+
     /**
      * Add a ReceiveClient to the ClientPool. This is so that we can make sure
      * to close all clients and make sure all threads are destroyed.

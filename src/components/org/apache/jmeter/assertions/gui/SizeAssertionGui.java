@@ -42,7 +42,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 public class SizeAssertionGui extends AbstractAssertionGui implements ActionListener {
 
     private static final long serialVersionUID = 241L;
-    
+
     /** Radio button indicating that the body response should be tested. */
     private JRadioButton responseBodyButton;
 
@@ -97,7 +97,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
         SizeAssertion assertion = (SizeAssertion) el;
-        
+
         if (responseHeadersButton.isSelected()) {
             assertion.setTestFieldResponseHeaders();
         } else if (responseBodyButton.isSelected()) {
@@ -126,7 +126,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
         responseBodyButton.setSelected(false);
         responseCodeButton.setSelected(false);
         responseMessageButton.setSelected(false);
-        
+
         size.setText(""); //$NON-NLS-1$
         equalButton.setSelected(true);
         notequalButton.setSelected(false);
@@ -234,7 +234,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
 
         add(sizePanel);
     }
-    
+
     /**
      * Create a panel allowing the user to choose which response field should be
      * tested.

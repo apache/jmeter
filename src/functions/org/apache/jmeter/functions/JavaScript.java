@@ -56,9 +56,9 @@ public class JavaScript extends AbstractFunction {
     private static class LazyHolder {
         public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
     }
- 
-    private final boolean useRhinoEngine = 
-            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, false) || 
+
+    private final boolean useRhinoEngine =
+            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, false) ||
             (getInstance().getEngineByName(JavaScript.NASHORN_ENGINE_NAME) == null);
 
     /**
@@ -109,7 +109,7 @@ public class JavaScript extends AbstractFunction {
     }
 
     /**
-     * 
+     *
      * @param previousResult {@link SampleResult}
      * @param currentSampler {@link Sampler}
      * @param jmctx {@link JMeterContext}
@@ -147,10 +147,10 @@ public class JavaScript extends AbstractFunction {
         } catch (Exception e) {
             log.error("Error processing Javascript: [{}]", script, e);
             throw new InvalidVariableException("Error processing Javascript: [" + script + "]", e);
-        } 
+        }
         return resultStr;
     }
-    
+
     /**
      * @param previousResult {@link SampleResult}
      * @param currentSampler {@link Sampler}

@@ -77,7 +77,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
     private DefaultMutableTreeNode defaultMutableTreeNode;
 
     public SearchTreePanel(DefaultMutableTreeNode defaultMutableTreeNode) {
-        super(); 
+        super();
         init();
         this.defaultMutableTreeNode = defaultMutableTreeNode;
     }
@@ -104,10 +104,10 @@ public class SearchTreePanel extends JPanel implements ActionListener {
             }
         }
     }
-    
+
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(10,10));
-        
+
         searchTF = new JTextField(20); //$NON-NLS-1$
         InputMap im = searchTF
                 .getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -117,7 +117,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
 
         isRegexpCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), false); //$NON-NLS-1$
         isCaseSensitiveCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), false); //$NON-NLS-1$
-        
+
         isRegexpCB.setFont(FONT_SMALL);
         isCaseSensitiveCB.setFont(FONT_SMALL);
 
@@ -127,11 +127,11 @@ public class SearchTreePanel extends JPanel implements ActionListener {
         resetButton.addActionListener(this);
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
+
         searchPanel.add(new JLabel(JMeterUtils.getResString("search_text_field")));
         searchPanel.add(searchTF);
         searchPanel.add(isCaseSensitiveCB);
-        searchPanel.add(isRegexpCB);        
+        searchPanel.add(isRegexpCB);
         searchPanel.add(searchButton);
         searchPanel.add(resetButton);
         add(searchPanel);
@@ -171,8 +171,8 @@ public class SearchTreePanel extends JPanel implements ActionListener {
             return false;
         }
         Searcher searcher = isRegexpCB.isSelected() ?
-            new RegexpSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText()) : 
-            new RawTextSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());        
+            new RegexpSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText()) :
+            new RawTextSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
         return searchInNode(searcher, (SearchableTreeNode)defaultMutableTreeNode);
     }
 
@@ -183,7 +183,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
     private boolean searchInNode(Searcher searcher, SearchableTreeNode node) {
         node.reset();
         Object userObject = node.getUserObject();
-        
+
         try {
             Searchable searchable;
             if(userObject instanceof Searchable) {
@@ -197,7 +197,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
             boolean foundInChildren = false;
             for (int i = 0; i < node.getChildCount(); i++) {
                 searchInNode(searcher, (SearchableTreeNode)node.getChildAt(i));
-                foundInChildren =  
+                foundInChildren =
                         searchInNode(searcher, (SearchableTreeNode)node.getChildAt(i))
                         || foundInChildren; // Must be the last in condition
             }

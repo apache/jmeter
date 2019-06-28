@@ -24,14 +24,14 @@ import java.io.Closeable;
  * <br>
  * Basically a sample writer is able to write samples to an unknown destination
  * and close itself. <br>
- * 
+ *
  * @since 3.0
  */
 abstract public class SampleWriter implements Closeable {
 
     /**
      * Write a sample to the underlying destination
-     * 
+     *
      * @param sample
      *            The sample to be written (Must not be {@code null})
      * @return The number of samples written at this time to the underlying

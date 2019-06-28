@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.control;
@@ -252,7 +252,7 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
         assertEquals("Wrong name in header for " + requestHeader, requestHeader, header.getName());
         assertEquals("Wrong value for header " + header, expectedValue, header.getValue());
     }
-    
+
     @Test
     public void testBug61321() throws Exception {
         this.cacheManager.setUseExpires(false);
@@ -264,7 +264,7 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
         assertFalse("Should find valid entry", this.cacheManager.inCache(url));
         cacheManager.setHeaders(url, httpMethod);
         checkIfModifiedSinceHeader(httpMethod);
-        
+
         this.httpMethod = new HttpPostStub();
         sampleResultOK = getSampleResultWithSpecifiedResponseCode("304");
         setLastModified(null);
@@ -287,8 +287,8 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
     protected void checkIfModifiedSinceHeader(HttpRequestBase httpMethod) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         try {
-            assertEquals("Should have found 1 header "+HTTPConstantsInterface.IF_MODIFIED_SINCE, 
-                    1, 
+            assertEquals("Should have found 1 header "+HTTPConstantsInterface.IF_MODIFIED_SINCE,
+                    1,
                     httpMethod.getHeaders(HTTPConstantsInterface.IF_MODIFIED_SINCE).length);
             Date date = dateFormat.parse(httpMethod.getHeaders(HTTPConstantsInterface.IF_MODIFIED_SINCE)[0].getValue());
             assertNotNull("Should have found a valid entry", date);

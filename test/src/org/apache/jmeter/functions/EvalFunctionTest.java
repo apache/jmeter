@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -35,14 +35,14 @@ public class EvalFunctionTest extends JMeterTestCase {
 
     private JMeterContext jmctx = null;
     private JMeterVariables vars = null;
-    
+
     @Before
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmctx.setVariables(new JMeterVariables());
         vars = jmctx.getVariables();
     }
-    
+
     @Test
     public void evalTest1() throws Exception {
         EvalFunction eval = new EvalFunction();
@@ -51,12 +51,12 @@ public class EvalFunctionTest extends JMeterTestCase {
         vars.put("table","customers");
         Collection<CompoundVariable> parms;
         String s;
-        
+
         parms = makeParams("${query}",null,null);
         eval.setParameters(parms);
         s = eval.execute(null,null);
         assertEquals("select name from customers",s);
-        
+
     }
 
     @Test
@@ -67,7 +67,7 @@ public class EvalFunctionTest extends JMeterTestCase {
         vars.put("table","customers");
         Collection<CompoundVariable> parms;
         String s;
-        
+
         parms = makeParams("query",null,null);
         evalVar.setParameters(parms);
         s = evalVar.execute(null,null);

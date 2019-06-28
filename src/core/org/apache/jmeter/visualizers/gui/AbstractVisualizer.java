@@ -106,7 +106,7 @@ public abstract class AbstractVisualizer
 
     /** Logging. */
     private static final Logger log = LoggerFactory.getLogger(AbstractVisualizer.class);
-    
+
     /** File Extensions */
     private static final String[] EXTS = { ".xml", ".jtl", ".csv" }; // $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
 

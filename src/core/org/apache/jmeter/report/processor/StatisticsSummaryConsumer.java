@@ -36,7 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *      <li>min</li>
  *      <li>max</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public class StatisticsSummaryConsumer extends
@@ -57,7 +57,7 @@ public class StatisticsSummaryConsumer extends
     }
 
     /**
-     * 
+     *
      * @param sample {@link Sample}
      * @param data {@link StatisticsSummaryData}
      * @param isOverall boolean indicating if aggregation concerns the Overall results in which case we ignore Transaction Controller's SampleResult
@@ -89,7 +89,7 @@ public class StatisticsSummaryConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#updateData
      * (org.apache.jmeter.report.processor.AbstractSummaryConsumer.SummaryInfo,
@@ -120,7 +120,7 @@ public class StatisticsSummaryConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createDataResult
      * (java.lang.String)
@@ -150,7 +150,7 @@ public class StatisticsSummaryConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
      * (org.apache.jmeter.report.core.Sample)
@@ -162,7 +162,7 @@ public class StatisticsSummaryConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
      * ()

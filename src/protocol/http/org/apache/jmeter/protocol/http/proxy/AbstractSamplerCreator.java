@@ -39,7 +39,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     protected static final String HTTP = "http"; // $NON-NLS-1$
     protected static final String HTTPS = "https"; // $NON-NLS-1$
     protected static final String DEFAULT_ENCODING_KEY = "__defaultEncoding"; // $NON-NLS-1$
-    
+
     /** FileType to be used for the temporary binary files*/
     private static final String BINARY_FILE_SUFFIX =
         JMeterUtils.getPropDefault("proxy.binary.filesuffix",// $NON-NLS-1$
@@ -60,8 +60,8 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
         JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$
 
     private static AtomicInteger REQUEST_NUMBER = new AtomicInteger(0);// running number
-    
-    
+
+
     static {
         String binaries = JMeterUtils.getPropDefault("proxy.binary.types", // $NON-NLS-1$
                 "application/x-amf,application/x-java-serialized-object,binary/octet-stream"); // $NON-NLS-1$
@@ -75,10 +75,10 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
 
 
     /**
-     * 
+     *
      */
     /**
-     * 
+     *
      */
     public AbstractSamplerCreator() {
         super();
@@ -97,7 +97,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     protected static void incrementRequestNumber() {
         incrementRequestNumberAndGet();
     }
-    
+
     /**
      * Increment request number
      * @return int number for created sampler
@@ -123,7 +123,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
         }
         return BINARY_CONTENT_TYPES.contains(contentType);
     }
-    
+
     /**
      * @return String binary file suffix
      */

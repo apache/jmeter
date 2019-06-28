@@ -68,9 +68,9 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
     private JCheckBox caseChkBox;
 
     private JCheckBox regexpChkBox;
-    
+
     private String lastTextTofind;
-    
+
     private ISearchTextExtensionProvider searchProvider;
 
     private JToolBar toolBar;
@@ -93,7 +93,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                 textToFindField.setBackground(Color.WHITE);
                 textToFindField.setForeground(Color.BLACK);
             }
-            
+
             try {
                 Pattern pattern = createPattern(textToFindField.getText());
                 boolean found = searchProvider.executeAndShowTextFind(pattern);
@@ -109,16 +109,16 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                     textToFindField.setForeground(Color.WHITE);
                 }
             } catch (PatternSyntaxException pse) {
-                JOptionPane.showMessageDialog(null, 
+                JOptionPane.showMessageDialog(null,
                         pse.toString(),// $NON-NLS-1$
                         JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                         JOptionPane.WARNING_MESSAGE);
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @return {@link JToolBar} the search toolbat component
      */
     public JToolBar getSearchToolBar() {
@@ -221,22 +221,22 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
 
     private Pattern createPattern(String textToFind) {
         // desactivate or not specials regexp char
-        String textToFindQ = regexpChkBox.isSelected() ? textToFind : Pattern.quote(textToFind);        
+        String textToFindQ = regexpChkBox.isSelected() ? textToFind : Pattern.quote(textToFind);
         return caseChkBox.isSelected() ? Pattern.compile(textToFindQ) :
             Pattern.compile(textToFindQ, Pattern.CASE_INSENSITIVE);
     }
-    
+
     /**
      * Search provider definition
      * Allow the search extension to search on any component
      */
     public interface ISearchTextExtensionProvider {
-        
+
         /**
          * reset the provider
          */
         void resetTextToFind();
-        
+
         /**
          * Launch find text engine on target component
          * @param pattern text pattern to search
@@ -244,7 +244,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
          */
         boolean executeAndShowTextFind(Pattern pattern);
     }
-    
+
     /**
      * JEditorPane search provider
      * Should probably be moved in its on file
@@ -257,10 +257,10 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         private Highlighter selection;
         private Highlighter.HighlightPainter painter;
         private int lastPosition = LAST_POSITION_DEFAULT;
-        
+
         public JEditorPaneSearchProvider(JEditorPane results) {
             this.results = results;
-            
+
             // prepare highlighter to show text find with search command
             selection = new DefaultHighlighter();
             painter = new DefaultHighlighter.DefaultHighlightPainter(HIGHLIGHT_COLOR);
@@ -308,9 +308,9 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                     log.error("Location exception in text find", ble);// $NON-NLS-1$
                 }
             }
-            
+
             return found;
         }
-        
+
     }
 }

@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * - JSON extractor
  * - CSS Selector extractor
  * - XPath Extractor
- * 
+ *
  * @since 3.1
  */
 public class RandomFromMultipleVars extends AbstractFunction {
@@ -84,7 +84,7 @@ public class RandomFromMultipleVars extends AbstractFunction {
 
             if(!results.isEmpty()) {
                 int randomIndex = ThreadLocalRandom.current().nextInt(0, results.size());
-                outputValue = results.get(randomIndex);                
+                outputValue = results.get(randomIndex);
             } else {
                 if(log.isDebugEnabled()) {
                     log.debug("RandomFromMultiResult didn't find <var>_matchNr in variables :'{}' using separator:'{}', will return empty value",
@@ -94,11 +94,11 @@ public class RandomFromMultipleVars extends AbstractFunction {
 
             if (varName != null) {
                 final String varTrim = varName.execute().trim();
-                if (!varTrim.isEmpty()){ 
+                if (!varTrim.isEmpty()){
                     vars.put(varTrim, outputValue);
                 }
             }
-        }    
+        }
         return outputValue;
 
     }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -87,7 +87,7 @@ public class TestJexl2Function extends JMeterTestCase {
         String ret = function.execute(result, null);
         assertEquals("the quick brown fox", ret);
     }
-    
+
     @Test
     public void testReplace2() throws Exception {
         vars.put("URL", "/query.cgi?s1=1&amp;s2=2&amp;s3=3");

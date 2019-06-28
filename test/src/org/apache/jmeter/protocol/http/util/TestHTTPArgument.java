@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util;
@@ -54,7 +54,7 @@ public class TestHTTPArgument {
             assertEquals("name%24of+property", httpArg.getEncodedName());
             assertEquals("value_.%2B", httpArg.getEncodedValue());
         }
-        
+
         @Test
         public void testEncoding() throws Exception {
             HTTPArgument arg;
@@ -67,17 +67,17 @@ public class TestHTTPArgument {
             arg.setAlwaysEncoded(false);
             assertEquals("name.?", arg.getEncodedName());
             assertEquals("value_ here", arg.getEncodedValue());
-            
+
             // The sample does not use a valid encoding
             arg = new HTTPArgument("name.?", "value_ here", true);
             assertEquals("name.?", arg.getName());
             assertEquals("value_ here", arg.getValue());
             assertEquals("name.%3F", arg.getEncodedName());
             assertEquals("value_+here", arg.getEncodedValue());
-            arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch 
+            arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch
             assertEquals("name.?", arg.getEncodedName());
             assertEquals("value_ here", arg.getEncodedValue());
-            
+
             // Try a real encoded argument
             arg = new HTTPArgument("name.%3F", "value_+here", true);
             assertEquals("name.?", arg.getName());
@@ -88,7 +88,7 @@ public class TestHTTPArgument {
             arg.setAlwaysEncoded(false);
             assertEquals("name.?", arg.getEncodedName());
             assertEquals("value_ here", arg.getEncodedValue());
-            
+
             arg = new HTTPArgument("", "\00\01\07", "", false);
             arg.setAlwaysEncoded(false);
             assertEquals("", arg.getEncodedName());

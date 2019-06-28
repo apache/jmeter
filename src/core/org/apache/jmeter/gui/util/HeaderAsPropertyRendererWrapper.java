@@ -66,13 +66,13 @@ public class HeaderAsPropertyRendererWrapper implements TableCellRenderer {
             tr.setBorder(UIManager.getBorder("TableHeader.cellBorder"));
             tr.setHorizontalAlignment(SwingConstants.CENTER);
         }
-        return delegate.getTableCellRendererComponent(table, 
-                HeaderAsPropertyRenderer.getText(value, row, column, null), 
+        return delegate.getTableCellRendererComponent(table,
+                HeaderAsPropertyRenderer.getText(value, row, column, null),
                 isSelected, hasFocus, row, column);
     }
-    
+
     /**
-     * 
+     *
      * @param table {@link JTable}
      */
     public static void setupDefaultRenderer(JTable table) {

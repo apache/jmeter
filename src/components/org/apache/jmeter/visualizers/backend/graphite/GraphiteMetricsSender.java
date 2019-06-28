@@ -40,11 +40,11 @@ interface GraphiteMetricsSender {
             this.value = value;
         }
     }
-    
+
     /**
      * Convert the metric to a python tuple of the form:
      *      (timestamp, (prefix.contextName.metricName, metricValue))
-     * And add it to the list of metrics. 
+     * And add it to the list of metrics.
      * @param timestamp in Seconds from 1970
      * @param contextName name of the context of this metric
      * @param metricName name of this metric
@@ -54,13 +54,13 @@ interface GraphiteMetricsSender {
             String metricName, String metricValue);
 
     /**
-     * 
+     *
      * @param graphiteHost Host
      * @param graphitePort Port
      * @param prefix Root Data prefix
      */
     void setup(String graphiteHost, int graphitePort, String prefix);
-    
+
     /**
      * Write metrics to Graphite using custom format
      */

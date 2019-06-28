@@ -23,7 +23,7 @@ import org.apache.jmeter.report.core.Sample;
 
 /**
  * The class NameSerieSelector provides a projection of a sample to its name.
- * 
+ *
  * @since 3.0
  */
 public class NameSeriesSelector extends AbstractSeriesSelector {
@@ -34,10 +34,10 @@ public class NameSeriesSelector extends AbstractSeriesSelector {
     public NameSeriesSelector() {
         super(true);
     }
-    
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleSelector#select(org.apache
      * .jmeter.report.csv.core.Sample)

@@ -42,14 +42,14 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     private static final long DEFAULT_TIME_THRESHOLD = 60000L;
 
     // Static fields are resolved on the server
-    private static final int NUM_SAMPLES_THRESHOLD = 
+    private static final int NUM_SAMPLES_THRESHOLD =
         JMeterUtils.getPropDefault("num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD); // $NON-NLS-1$
 
     private static final long TIME_THRESHOLD_MS =
         JMeterUtils.getPropDefault("time_threshold", DEFAULT_TIME_THRESHOLD); // $NON-NLS-1$
 
     // instance fields are copied from the client instance
-    private final int clientConfiguredNumSamplesThreshold = 
+    private final int clientConfiguredNumSamplesThreshold =
             JMeterUtils.getPropDefault("num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD); // $NON-NLS-1$
 
     private final long clientConfiguredTimeThresholdMs =
@@ -147,7 +147,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
             sampleStore.add(e);
             final int sampleCount = sampleStore.size();
 
-            boolean sendNow = false;            
+            boolean sendNow = false;
             if (numSamplesThreshold != -1) {
                 if (sampleCount >= numSamplesThreshold) {
                     sendNow = true;
@@ -176,7 +176,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
                 }
             }
         } // synchronized(sampleStore)
-        
+
         if (clonedStore != null){
             try {
                 log.debug("Firing sample");
@@ -184,10 +184,10 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
                 clonedStore.clear();
             } catch (RemoteException err) {
                 log.error("sampleOccurred", err);
-            }  
+            }
         }
     }
-    
+
     /**
      * Processed by the RMI server code; acts as testStarted().
      *

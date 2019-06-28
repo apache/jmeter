@@ -83,11 +83,11 @@ public class XPathAssertion extends AbstractScopedAssertion implements Serializa
                 String inputString=getThreadContext().getVariables().get(getVariableName());
                 if (!StringUtils.isEmpty(inputString)) {
                     responseData = inputString.getBytes(StandardCharsets.UTF_8);
-                } 
+                }
             } else {
                 responseData = response.getResponseData();
             }
-            
+
             if (responseData == null || responseData.length == 0) {
                 return result.setResultForNull();
             }

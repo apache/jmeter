@@ -99,7 +99,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
     private final String headerOnlyLabel = JMeterUtils.getResString("mail_reader_header_only");// $NON-NLS-1$
 
     private static final String INBOX = "INBOX"; // $NON-NLS-1$
-    
+
     private SecuritySettingsPanel securitySettingsPanel;
 
     public MailReaderSamplerGui() {
@@ -172,7 +172,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         mrs.setHeaderOnly(headerOnlyBox.isSelected());
         mrs.setDeleteMessages(deleteBox.isSelected());
         mrs.setStoreMimeMessage(storeMimeMessageBox.isSelected());
-        
+
         securitySettingsPanel.modifyTestElement(te);
     }
 
@@ -185,12 +185,12 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
 
         JPanel settingsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = getConstraints();
-        
+
         serverTypeBox = new JTextField(20);
         serverTypeBox.addActionListener(this);
         serverTypeBox.addFocusListener(this);
         addField(settingsPanel, serverTypeLabel, serverTypeBox, gbc);
-        
+
         serverBox = new JTextField(20);
         addField(settingsPanel, serverLabel, serverBox, gbc);
 
@@ -235,9 +235,9 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         deleteBox = new JCheckBox(deleteLabel);
 
         storeMimeMessageBox = new JCheckBox(storeMime);
-        
+
         securitySettingsPanel = new SecuritySettingsPanel();
-        
+
         JPanel settings = new VerticalPanel();
         settings.add(Box.createVerticalStrut(5));
         settings.add(settingsPanel);

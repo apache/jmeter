@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.threads;
@@ -107,7 +107,7 @@ public class TestJMeterThread {
     public void testBug61661OnError(){
         HashTree hashTree =new HashTree();
         hashTree.add("Test", new ThrowingThreadListener(true));
-        JMeterThread.ThreadListenerTraverser traverser = 
+        JMeterThread.ThreadListenerTraverser traverser =
                 new JMeterThread.ThreadListenerTraverser(true);
         hashTree.traverse(traverser);
     }
@@ -116,7 +116,7 @@ public class TestJMeterThread {
     public void testBug61661OnException(){
         HashTree hashTree =new HashTree();
         hashTree.add("Test", new ThrowingThreadListener(false));
-        JMeterThread.ThreadListenerTraverser traverser = 
+        JMeterThread.ThreadListenerTraverser traverser =
                 new JMeterThread.ThreadListenerTraverser(true);
         hashTree.traverse(traverser);
     }

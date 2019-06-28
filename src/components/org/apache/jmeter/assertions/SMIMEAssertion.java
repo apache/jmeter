@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -92,7 +92,7 @@ class SMIMEAssertion {
                 log.debug("Getting message number: {}", msgPos);
                 msg = getMessageFromResponse(response, msgPos);
             }
-            
+
             SMIMESignedParser s = null;
             if(log.isDebugEnabled()) {
                 log.debug("Content-type: {}", msg.getContentType());
@@ -259,7 +259,7 @@ class SMIMEAssertion {
                             res.setFailureMessage("Could not read certificate file " + testElement.getSignerCertFile());
                         }
 
-                        
+
                     }
 
                 } else {
@@ -312,7 +312,7 @@ class SMIMEAssertion {
      * Convert the value of <code>serialString</code> into a BigInteger. Strings
      * starting with 0x or 0X are parsed as hex numbers, otherwise as decimal
      * number.
-     * 
+     *
      * @param serialString
      *            the String representation of the serial Number
      * @return the BitInteger representation of the serial Number
@@ -320,13 +320,13 @@ class SMIMEAssertion {
     private static BigInteger readSerialNumber(String serialString) {
         if (serialString.startsWith("0x") || serialString.startsWith("0X")) { // $NON-NLS-1$  // $NON-NLS-2$
             return new BigInteger(serialString.substring(2), 16);
-        } 
+        }
         return new BigInteger(serialString);
     }
 
     /**
      * Extract email addresses from a certificate
-     * 
+     *
      * @param cert the X509 certificate holder
      * @return a List of all email addresses found
      * @throws CertificateException

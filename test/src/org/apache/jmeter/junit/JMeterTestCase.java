@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.junit;
@@ -124,7 +124,7 @@ public abstract class JMeterTestCase {
         }
         func.setParameters(parms);
     }
-    
+
     protected void checkInvalidParameterCounts(AbstractFunction func, int min,
             int max) throws Exception {
         Collection<CompoundVariable> parms = new LinkedList<>();

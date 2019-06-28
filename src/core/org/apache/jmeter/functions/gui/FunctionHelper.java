@@ -78,7 +78,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     private static final Logger log = LoggerFactory.getLogger(ClientJMeterEngine.class);
 
     private static final String GENERATE = "GENERATE";
-    
+
     private static final String RESET_VARS = "RESET_VARS";
 
     private JLabeledChoice functionList;
@@ -86,18 +86,18 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     private ArgumentsPanel parameterPanel;
 
     private JLabeledTextField cutPasteFunction;
-    
+
     private JSyntaxTextArea resultTextArea;
-    
+
     private JSyntaxTextArea variablesTextArea;
-    
+
     private JMeterVariables jMeterVariables = new JMeterVariables();
 
     @VisibleForTesting
     public FunctionHelper() {
         super();
     }
-    
+
     public FunctionHelper(JFrame parent) {
         super(parent, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
         init();
@@ -110,14 +110,14 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     @Override
     protected JRootPane createRootPane() {
         JRootPane rootPane = new JRootPane();
-        javax.swing.Action escapeAction = new AbstractAction("ESCAPE") { 
+        javax.swing.Action escapeAction = new AbstractAction("ESCAPE") {
 
             private static final long serialVersionUID = -4036804004190858925L;
 
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 setVisible(false);
-            } 
+            }
         };
         rootPane.getActionMap().put(escapeAction.getValue(Action.NAME), escapeAction);
         InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -160,11 +160,11 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         variablesTextArea = JSyntaxTextArea.getInstance(10,60);
         variablesPanel.add(new JLabel(JMeterUtils.getResString("function_helper_dialog_variables")));
         variablesPanel.add(JTextScrollPane.getInstance(variablesTextArea));
-        
+
         resultsPanel.add(generatePanel);
         resultsPanel.add(displayPanel);
         resultsPanel.add(variablesPanel);
-        
+
         this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
@@ -225,7 +225,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             ThreadGroup threadGroup = new ThreadGroup();
             threadGroup.setName("FunctionHelper-Dialog-ThreadGroup");
             threadContext.setThreadGroup(threadGroup);
-            
+
             try {
                 resultTextArea.setText(function.execute().trim());
             } catch(Exception ex) {
@@ -234,7 +234,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
                         ExceptionUtils.getStackTrace(ex));
                 resultTextArea.setCaretPosition(0);
             }
-            
+
             variablesTextArea.setText(variablesToString(jMeterVariables));
         } else {
             jMeterVariables = new JMeterVariables();
@@ -324,7 +324,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         this.getContentPane().removeAll(); // so we can add them again in init
         init();
     }
-    
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);

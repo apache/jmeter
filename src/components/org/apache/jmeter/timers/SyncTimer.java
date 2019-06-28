@@ -75,7 +75,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
 
         /**
          * Wait until all threads called await on this timer
-         * 
+         *
          * @return The arrival index of the current thread
          * @throws InterruptedException
          *             when interrupted while waiting, or the interrupted status
@@ -88,10 +88,10 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         public int await() throws InterruptedException, BrokenBarrierException{
             return barrier.await();
         }
-        
+
         /**
          * Wait until all threads called await on this timer
-         * 
+         *
          * @param timeout
          *            The timeout in <code>timeUnit</code> units
          * @param timeUnit
@@ -139,7 +139,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
     private transient BarrierWrapper barrier;
 
     private int groupSize;
-    
+
     private long timeoutInMs;
 
     // Ensure transient object is created by the server

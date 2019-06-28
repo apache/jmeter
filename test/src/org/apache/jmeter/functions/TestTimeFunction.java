@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -48,7 +48,7 @@ public class TestTimeFunction extends JMeterTestCase {
         private JMeterContext jmctx = null;
 
         private String value;
-        
+
         @Before
         public void setUp() {
             jmctx = JMeterContextService.getContext();
@@ -69,7 +69,7 @@ public class TestTimeFunction extends JMeterTestCase {
             long after = System.currentTimeMillis();
             assertTrue(now >= before && now <= after);
         }
-        
+
         @Test
         public void testDefault1() throws Exception {
             params.add(new CompoundVariable());
@@ -80,7 +80,7 @@ public class TestTimeFunction extends JMeterTestCase {
             long after = System.currentTimeMillis();
             assertTrue(now >= before && now <= after);
         }
-        
+
         @Test
         public void testDefault2() throws Exception {
             params.add(new CompoundVariable());
@@ -92,7 +92,7 @@ public class TestTimeFunction extends JMeterTestCase {
             long after = System.currentTimeMillis();
             assertTrue(now >= before && now <= after);
         }
-        
+
         @Test
         public void testDefaultNone() throws Exception {
             long before = System.currentTimeMillis();
@@ -101,7 +101,7 @@ public class TestTimeFunction extends JMeterTestCase {
             long after = System.currentTimeMillis();
             assertTrue(now >= before && now <= after);
         }
-        
+
         @Test
         public void testTooMany() throws Exception {
             params.add(new CompoundVariable("YMD"));
@@ -110,10 +110,10 @@ public class TestTimeFunction extends JMeterTestCase {
             try {
                 variable.setParameters(params);
                 fail("Should have raised InvalidVariableException");
-            } catch (InvalidVariableException ignored){                
+            } catch (InvalidVariableException ignored){
             }
         }
-        
+
         @Test
         public void testYMD() throws Exception {
             params.add(new CompoundVariable("YMD"));
@@ -202,5 +202,5 @@ public class TestTimeFunction extends JMeterTestCase {
             value = variable.execute(result, null);
             assertEquals("/1000 ", value);
         }
-        
+
 }

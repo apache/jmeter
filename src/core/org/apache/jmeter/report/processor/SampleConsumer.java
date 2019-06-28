@@ -57,7 +57,7 @@ public interface SampleConsumer extends SampleProcessor {
     /**
      * Set the metadata of samples that will be consumed on the specified
      * channel.
-     * 
+     *
      * @param sampleMetadata
      *            The sample metadata that are beeing consumed for the
      *            associated channel
@@ -74,7 +74,7 @@ public interface SampleConsumer extends SampleProcessor {
 
     /**
      * Consumes the specified sample ton the specified channel.
-     * 
+     *
      * @param s
      *            The sample to be consumed
      * @param channel

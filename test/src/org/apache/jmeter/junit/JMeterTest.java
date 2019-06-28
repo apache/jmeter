@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.junit;
@@ -75,11 +75,11 @@ public class JMeterTest extends JMeterTestCaseJUnit {
     private static Map<String, Boolean> guiTags;
 
     private static Properties nameMap;
-    
-    private static final Locale TEST_LOCALE = Locale.ENGLISH; 
-    
-    private static final Locale DEFAULT_LOCALE = Locale.getDefault(); 
-    
+
+    private static final Locale TEST_LOCALE = Locale.ENGLISH;
+
+    private static final Locale DEFAULT_LOCALE = Locale.getDefault();
+
     public JMeterTest(String name) {
         super(name);
     }
@@ -88,15 +88,15 @@ public class JMeterTest extends JMeterTestCaseJUnit {
      * The suite() method creates separate test suites for each of the types of
      * test. The suitexxx() methods create a list of items to be tested, and
      * create a new test instance for each.
-     * 
+     *
      * Each test type has its own constructor, which saves the item to be tested
-     * 
+     *
      * Note that the suite() method must be static, and the methods to run the
      * tests must be instance methods so that they can pick up the item value
      * which was saved by the constructor.
-     * 
+     *
      */
-    
+
     // Constructor for Serializable tests
     private Serializable serObj;
 
@@ -125,7 +125,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         JMeterUtils.setLocale(TEST_LOCALE);
         Locale.setDefault(TEST_LOCALE);
         // Needs to be done before any GUI classes are instantiated
-        
+
         suite.addTest(new JMeterTest("readAliases"));
         suite.addTest(new JMeterTest("createTitleSet"));
         suite.addTest(new JMeterTest("createTagSet"));
@@ -133,7 +133,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         suite.addTest(suiteSerializableElements());
         suite.addTest(suiteBeanComponents());
         suite.addTest(new JMeterTest("checkGuiSet"));
-        
+
         suite.addTest(new JMeterTest("resetLocale")); // revert
         return suite;
     }
@@ -158,7 +158,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
                 org.w3c.dom.Element section = (org.w3c.dom.Element) sections.item(i);
                 NodeList components = section.getElementsByTagName("component");
                 for (int j = 0; j < components.getLength(); j++) {
-                    org.w3c.dom.Element comp = (org.w3c.dom.Element) 
+                    org.w3c.dom.Element comp = (org.w3c.dom.Element)
                             components.item(j);
                     String nm = comp.getAttribute("name");
                     if (!nm.equals("SSL Manager")) {// Not a true GUI component
@@ -174,9 +174,9 @@ public class JMeterTest extends JMeterTestCaseJUnit {
     /**
      * @return
      * @throws ParserConfigurationException
-     * @throws IOException 
-     * @throws SAXException 
-     * @throws FileNotFoundException 
+     * @throws IOException
+     * @throws SAXException
+     * @throws FileNotFoundException
      */
     private Element getBodyFromXMLDocument(InputStream stream)
             throws ParserConfigurationException, SAXException, IOException {
@@ -200,12 +200,12 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         try (InputStream stream = new FileInputStream(findTestFile(compref))) {
             org.w3c.dom.Element body = getBodyFromXMLDocument(stream);
             NodeList sections = body.getElementsByTagName("section");
-            
+
             for (int i = 0; i < sections.getLength(); i++) {
                 org.w3c.dom.Element section = (org.w3c.dom.Element) sections.item(i);
                 NodeList components = section.getElementsByTagName("component");
                 for (int j = 0; j < components.getLength(); j++) {
-                    org.w3c.dom.Element comp = (org.w3c.dom.Element) 
+                    org.w3c.dom.Element comp = (org.w3c.dom.Element)
                             components.item(j);
                     String tag = comp.getAttribute("tag");
                     if (!StringUtils.isEmpty(tag)){
@@ -313,7 +313,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
                 && !title.toUpperCase(Locale.ENGLISH).contains("(BETA")
                 && !title.toUpperCase(Locale.ENGLISH).contains("(DEPRECATED")
                 && !title.matches("Example\\d+") // Skip the example samplers ...
-                && !name.startsWith("org.apache.jmeter.examples.")) 
+                && !name.startsWith("org.apache.jmeter.examples."))
             {// No, not a work in progress ...
                 String s = "component_reference.xml needs '" + title + "' anchor for " + name;
                 if (!ct) {
@@ -404,7 +404,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
      * Test serializable elements - test the object
      */
     public void runSerialTest() throws Exception {
-        if (!(serObj instanceof Component)) {// 
+        if (!(serObj instanceof Component)) {//
             try {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 ObjectOutputStream out = new ObjectOutputStream(bytes);
@@ -426,7 +426,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         nameMap = SaveService.loadProperties();
         assertNotNull("SaveService nameMap (saveservice.properties) should not be null",nameMap);
     }
-    
+
     private void checkElementAlias(Object item) {
         String name=item.getClass().getName();
         boolean contains = nameMap.values().contains(name);
@@ -499,7 +499,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
                 } catch (NoSuchMethodException f) {
                     // no luck. Ignore this class
                     if (!Enum.class.isAssignableFrom(c)) { // ignore enums
-                        System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": NoSuchMethodException  " + 
+                        System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": NoSuchMethodException  " +
                             className + ", missing empty Constructor or Constructor with Object parameter");
                     }
                 }
@@ -526,5 +526,5 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         }
         return caught;
     }
-    
+
 }

@@ -184,7 +184,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
     }
 
     /**
-     * 
+     *
      */
     private void configureClassName() {
         String className = classNameLabeledChoice.getText().trim();
@@ -256,14 +256,14 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
         if(!checkContainsClassName(classNameLabeledChoice, className)) {
             classNameLabeledChoice.addValue(className);
         }
-        
+
         warningLabel.setVisible(!classOk(className));
         classNameLabeledChoice.setText(className);
         configureClassName();
     }
 
     /**
-     * 
+     *
      * @param className String class name
      * @return true if class is ok (exist in classpath and instanceof {@link JavaSamplerClient}
      */

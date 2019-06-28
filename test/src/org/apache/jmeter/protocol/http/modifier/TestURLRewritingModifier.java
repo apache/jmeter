@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.modifier;
@@ -111,7 +111,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             Arguments args = sampler.getArguments();
             assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
         }
-        
+
         @Test
         public void testGrabSessionId6() throws Exception {
             String html = "location: http://server.com/index.html" + "?session_id=bonjour+monsieur";
@@ -128,7 +128,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
                     .getValue());
             assertEquals("http://server.com/index.html?" + "session_id=bonjour+monsieur", sampler.toString());
         }
-        
+
         @Test
         public void testGrabSessionId7() throws Exception {
             String html = "location: http://server.com/index.html" + "?session_id=bonjour+monsieur";
@@ -174,11 +174,11 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             mod.process();
             assertEquals("index.html;jsessionid=123456789",sampler.getPath());
         }
-        
+
         @Test
         public void testBug61314() throws Exception { // Bug 50286
             String html = "<url>/some/path;jsessionid=123456789</url>";
-            
+
             response = new SampleResult();
             response.setResponseData(html, null);
             mod.setArgumentName("jsessionid");
@@ -190,11 +190,11 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             mod.process();
             assertEquals("/urlRewrite/index;jsessionid=123456789",sampler.getPath());
         }
-        
+
         @Test
         public void testBug61314WithQuestionMark() throws Exception { // Bug 50286
             String html = "<url>/some/path;jsessionid=123456789</url>";
-            
+
             response = new SampleResult();
             response.setResponseData(html, null);
             mod.setArgumentName("jsessionid");
@@ -256,8 +256,8 @@ public class TestURLRewritingModifier extends JMeterTestCase {
 
         @Test
         public void testGrabSessionIdFromForm() throws Exception {
-            String[] html = new String[] { 
-                    "<input name=\"sid\" value=\"myId\">", 
+            String[] html = new String[] {
+                    "<input name=\"sid\" value=\"myId\">",
                     "<input name='sid' value='myId'>",
                     "<input value=\"myId\" NAME='sid'>",
                     "<input VALUE='myId' name=\"sid\">",
@@ -277,14 +277,14 @@ public class TestURLRewritingModifier extends JMeterTestCase {
                 context.setPreviousResult(response);
                 newMod.process();
                 Arguments args = sampler.getArguments();
-                assertEquals("For case i=" + i, "myId", 
+                assertEquals("For case i=" + i, "myId",
                         ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
             }
         }
 
     @Test
     public void testGrabSessionIdURLinJSON() throws Exception {
-            String html = 
+            String html =
                 "<a href=\"#\" onclick=\"$(\'frame\').src=\'/index?param1=bla&sessionid=xyzxyzxyz\\'";
             response = new SampleResult();
             response.setResponseData(html, null);
@@ -301,8 +301,8 @@ public class TestURLRewritingModifier extends JMeterTestCase {
 
         @Test
         public void testCache() throws Exception {
-            String[] html = new String[] { 
-                    "<input name=\"sid\" value=\"myId\">", 
+            String[] html = new String[] {
+                    "<input name=\"sid\" value=\"myId\">",
                     "<html></html>", // No entry; check it is still present
                     };
             URLRewritingModifier newMod = new URLRewritingModifier();
@@ -318,13 +318,13 @@ public class TestURLRewritingModifier extends JMeterTestCase {
                 context.setPreviousResult(response);
                 newMod.process();
                 Arguments args = sampler.getArguments();
-                assertEquals("For case i=" + i, "myId", 
+                assertEquals("For case i=" + i, "myId",
                         ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
             }
         }
         @Test
         public void testNoCache() throws Exception {
-            String[] html = new String[] { 
+            String[] html = new String[] {
                     "<input name=\"sid\" value=\"myId\">",  "myId",
                     "<html></html>", "",
                     };
@@ -341,7 +341,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
                 context.setPreviousResult(response);
                 newMod.process();
                 Arguments args = sampler.getArguments();
-                assertEquals("For case i=" + i, html[i*2+1], 
+                assertEquals("For case i=" + i, html[i*2+1],
                         ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
             }
         }

@@ -42,7 +42,7 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #createTimeStampKeysSelector()
@@ -56,7 +56,7 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */

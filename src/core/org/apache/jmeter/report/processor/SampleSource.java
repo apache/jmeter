@@ -32,7 +32,7 @@ public interface SampleSource extends Runnable {
      * @return the sampleContext
      */
     SampleContext getSampleContext();
-    
+
     /**
      * Sets the sample context.
      *
@@ -40,7 +40,7 @@ public interface SampleSource extends Runnable {
      *            the sampleContext to set
      */
     void setSampleContext(SampleContext sampleContext);
-    
+
     /**
      * Sets the specified sample consumers that will consume samples produced by
      * this sample source.
@@ -49,7 +49,7 @@ public interface SampleSource extends Runnable {
      *            consumers to be set
      */
     void setSampleConsumers(List<SampleConsumer> consumers);
-    
+
     /**
      * Add a sample consumer to this sample source.
      *
@@ -57,7 +57,7 @@ public interface SampleSource extends Runnable {
      *            consumer to be added
      */
     void addSampleConsumer(SampleConsumer consumer);
-    
+
     /**
      * Remove a sample consumer from this sample source.
      *

@@ -49,7 +49,7 @@ public interface RemoteSampleListener extends java.rmi.Remote {
 
     /**
      * A sample has started and stopped.
-     * 
+     *
      * @param e
      *            the event with data about the completed sample
      * @throws RemoteException when calling the remote method fails
@@ -58,7 +58,7 @@ public interface RemoteSampleListener extends java.rmi.Remote {
 
     /**
      * A sample has started.
-     * 
+     *
      * @param e
      *            the event with data about the started sample
      * @throws RemoteException when calling the remote method fails
@@ -67,7 +67,7 @@ public interface RemoteSampleListener extends java.rmi.Remote {
 
     /**
      * A sample has stopped.
-     * 
+     *
      * @param e
      *            the event with data about the stopped sample
      * @throws RemoteException when calling the remote method fails

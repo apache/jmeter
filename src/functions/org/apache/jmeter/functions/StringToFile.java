@@ -42,10 +42,10 @@ import org.slf4j.LoggerFactory;
 /**
  * FileToString Function to read a complete file into a String.
  *
- * Parameters: 
+ * Parameters:
  * - file name
  * - append (true/false)
- * - file encoding (optional) 
+ * - file encoding (optional)
  *
  * Returns: true if ok , false if an error occured
  *
@@ -76,11 +76,11 @@ public class StringToFile extends AbstractFunction {
     private boolean writeToFile() throws IOException {
         String fileName = ((CompoundVariable) values[0]).execute().trim();
         String content = ((CompoundVariable) values[1]).execute();
-        boolean append = true; 
+        boolean append = true;
         if (values.length >= 3) {
             append = Boolean.parseBoolean(((CompoundVariable) values[2]).execute().toLowerCase().trim());
         }
-        Charset charset = StandardCharsets.UTF_8; 
+        Charset charset = StandardCharsets.UTF_8;
         if (values.length == 4) {
             String charsetParamValue = ((CompoundVariable) values[3]).execute();
             if (StringUtils.isNotEmpty(charsetParamValue)) {
@@ -93,7 +93,7 @@ public class StringToFile extends AbstractFunction {
             return false;
         }
         log.debug("Writing {} to file {} with charset {} and append {}", content, fileName, charset, append);
-        
+
         Lock localLock = new ReentrantLock();
         Lock lock = lockMap.putIfAbsent(fileName, localLock);
         try {

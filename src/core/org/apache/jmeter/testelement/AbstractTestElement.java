@@ -187,7 +187,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
         return prop;
     }
-    
+
     /**
      * Null property are wrapped in a {@link NullProperty}
      * This method avoids this wrapping
@@ -432,12 +432,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             setProperty(new IntegerProperty(name, value));
         }
     }
-    
+
     @Override
     public void setProperty(String name, long value) {
         setProperty(new LongProperty(name, value));
     }
-    
+
     /**
      * Create a long property - but only if it is not the default.
      * This is intended for use when adding new properties to JMeter
@@ -629,7 +629,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
     }
 
-    /** 
+    /**
      * {@inheritDoc}}
      */
     @Override
@@ -637,13 +637,13 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         List<String> result = new ArrayList<>(25);
         PropertyIterator iterator = propertyIterator();
         while(iterator.hasNext()) {
-            JMeterProperty jMeterProperty = iterator.next();    
+            JMeterProperty jMeterProperty = iterator.next();
             result.add(jMeterProperty.getName());
             result.add(jMeterProperty.getStringValue());
         }
         return result;
     }
-    
+
     /**
      * Add to result the values of propertyNames
      * @param result List of values of propertyNames
@@ -657,5 +657,5 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
                 result.add(jMeterProperty.getStringValue());
             }
         }
-    } 
+    }
 }

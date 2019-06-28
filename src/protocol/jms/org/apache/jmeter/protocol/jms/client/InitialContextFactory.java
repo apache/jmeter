@@ -40,7 +40,7 @@ public class InitialContextFactory {
 
     /**
      * Look up the context from the local cache, creating it if necessary.
-     * 
+     *
      * @param initialContextFactory used to set the property {@link Context#INITIAL_CONTEXT_FACTORY}
      * @param providerUrl used to set the property {@link Context#PROVIDER_URL}
      * @param useAuth set <code>true</code> if security is to be used.
@@ -49,7 +49,7 @@ public class InitialContextFactory {
      * @return the context, never <code>null</code>
      * @throws NamingException when creation of the context fails
      */
-    public static Context lookupContext(String initialContextFactory, 
+    public static Context lookupContext(String initialContextFactory,
             String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) throws NamingException {
         String cacheKey = createKey(Thread.currentThread().getId(),initialContextFactory ,providerUrl, securityPrincipal, securityCredentials);
         Context ctx = MAP.get(cacheKey);
@@ -143,8 +143,8 @@ public class InitialContextFactory {
      * @throws NamingException
      *             when creation of the context fails
      */
-    public static Context getContext(boolean useProps, 
-            String initialContextFactory, String providerUrl, 
+    public static Context getContext(boolean useProps,
+            String initialContextFactory, String providerUrl,
             boolean useAuth, String securityPrincipal, String securityCredentials) throws NamingException {
         if (useProps) {
             try {
@@ -156,7 +156,7 @@ public class InitialContextFactory {
             return lookupContext(initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
         }
     }
-    
+
     /**
      * clear all the InitialContext objects.
      */

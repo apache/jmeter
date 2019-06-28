@@ -71,7 +71,7 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
                 AbstractJDBCTestElement.RS_STORE_AS_STRING,
                 AbstractJDBCTestElement.RS_STORE_AS_OBJECT,
                 AbstractJDBCTestElement.RS_COUNT_RECORDS
-                });       
+                });
 
         p = property("resultVariable"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -80,7 +80,7 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
         p = property("queryTimeout"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        
+
         p = property("queryType"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, AbstractJDBCTestElement.SELECT);

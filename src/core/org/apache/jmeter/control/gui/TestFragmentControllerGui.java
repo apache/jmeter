@@ -92,7 +92,7 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
      */
     @Override
     public JPopupMenu createPopupMenu() {
-        JPopupMenu pop = new JPopupMenu();        
+        JPopupMenu pop = new JPopupMenu();
         JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
         addMenu.add(MenuFactory.makeMenu(MenuFactory.CONTROLLERS, ActionNames.ADD));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, ActionNames.ADD));
@@ -109,7 +109,7 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
 
         pop.add(MenuFactory.makeMenuItemRes("apply_naming",// $NON-NLS-1$
                 ActionNames.APPLY_NAMING_CONVENTION));
-        
+
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.save;
@@ -36,7 +36,7 @@ import org.junit.Test;
 public class TestCSVSaveService extends JMeterTestCase {
 
     private void checkSplitString(String input, char delim, String[] expected) throws Exception {
-        String[] out = CSVSaveService.csvSplitString(input, delim);     
+        String[] out = CSVSaveService.csvSplitString(input, delim);
         checkStrings(expected, out);
     }
 
@@ -46,15 +46,15 @@ public class TestCSVSaveService extends JMeterTestCase {
            assertEquals("Incorrect entry returned",expected[i], out[i]);
         }
     }
-    
+
     // This is what JOrphanUtils.split() does
     @Test
     public void testSplitEmpty() throws Exception {
-        checkSplitString("",         ',', new String[]{});    
+        checkSplitString("",         ',', new String[]{});
     }
-    
+
     // These tests should agree with those for JOrphanUtils.split() as far as possible
-    
+
     @Test
     public void testSplitUnquoted() throws Exception {
         checkSplitString("a",         ',', new String[]{"a"});
@@ -67,10 +67,10 @@ public class TestCSVSaveService extends JMeterTestCase {
         checkSplitString("a,bc,,",   ',', new String[]{"a","bc","",""});
         checkSplitString("a,,,",     ',', new String[]{"a","","",""});
         checkSplitString("a,bc,d,\n",',', new String[]{"a","bc","d",""});
-        
+
         // \u00e7 = LATIN SMALL LETTER C WITH CEDILLA
         // \u00e9 = LATIN SMALL LETTER E WITH ACUTE
-        checkSplitString("a,b\u00e7,d,\u00e9", ',', new String[]{"a","b\u00e7","d","\u00e9"}); 
+        checkSplitString("a,b\u00e7,d,\u00e9", ',', new String[]{"a","b\u00e7","d","\u00e9"});
     }
 
     @Test
@@ -90,7 +90,7 @@ public class TestCSVSaveService extends JMeterTestCase {
 
         // \u00e7 = LATIN SMALL LETTER C WITH CEDILLA
         // \u00e9 = LATIN SMALL LETTER E WITH ACUTE
-        checkSplitString("\"a\",\"b\u00e7\",\"d\",\"\u00e9\"", ',', new String[]{"a","b\u00e7","d","\u00e9"}); 
+        checkSplitString("\"a\",\"b\u00e7\",\"d\",\"\u00e9\"", ',', new String[]{"a","b\u00e7","d","\u00e9"});
     }
 
     @Test
@@ -101,7 +101,7 @@ public class TestCSVSaveService extends JMeterTestCase {
         } catch (IOException e) {
         }
     }
-    
+
     @Test
     public void testSplitMultiLine() throws Exception  {
         String line="a,,\"c\nd\",e\n,,f,g,\n\n";
@@ -184,7 +184,7 @@ public class TestCSVSaveService extends JMeterTestCase {
         result.setLatency(12);
         result.setIdleTime(13);
         result.setConnectTime(14);
-        
+
         assertEquals("Result text has changed", RESULT, CSVSaveService.resultToDelimitedString(new SampleEvent(result,"")));
     }
 }

@@ -28,7 +28,7 @@ import org.apache.jmeter.report.core.Sample;
 public class SuccessfulElapsedTimeValueSelector extends ElapsedTimeValueSelector {
 
     /**
-     * 
+     *
      */
     public SuccessfulElapsedTimeValueSelector() {
         super(true);

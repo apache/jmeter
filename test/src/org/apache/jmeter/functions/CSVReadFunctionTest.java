@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class CSVReadFunctionTest extends JMeterTestCase implements JMeterSerialTest {
 
     private static final Logger log = LoggerFactory.getLogger(CSVReadFunctionTest.class);
-    
+
     // Create the CSVRead function and set its parameters.
     private static CSVRead setCSVReadParams(String p1, String p2) throws Exception {
         CSVRead cr = new CSVRead();
@@ -48,7 +48,7 @@ public class CSVReadFunctionTest extends JMeterTestCase implements JMeterSerialT
         cr.setParameters(parms);
         return cr;
     }
-    
+
     @Test
     public void testCSVParamsFail() throws Exception {
         try {
@@ -67,7 +67,7 @@ public class CSVReadFunctionTest extends JMeterTestCase implements JMeterSerialT
         } catch (InvalidVariableException e) {
         }
     }
-    
+
     @Test
     public void testCSVNoFile() throws Exception {
 
@@ -87,7 +87,7 @@ public class CSVReadFunctionTest extends JMeterTestCase implements JMeterSerialT
         log.info("Expecting cannot open file");
         assertEquals("", cr4.execute(null, null));
     }
-    
+
     @Test
     public void testCSValias() throws Exception {
         CSVRead cr1 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "*A");
@@ -108,7 +108,7 @@ public class CSVReadFunctionTest extends JMeterTestCase implements JMeterSerialT
         assertEquals("", cr6.execute(null, null)); // *B next
         assertEquals("c2", cr5.execute(null, null)); // col2, line 2, *B
     }
-    
+
     // Check blank lines are treated as EOF
     @Test
     public void CSVBlankLine() throws Exception {
@@ -122,7 +122,7 @@ public class CSVReadFunctionTest extends JMeterTestCase implements JMeterSerialT
             assertEquals("", csv2.execute(null, null));
         }
     }
-    
+
     @Test
     public void CSVRun() throws Exception {
         CSVRead cr1 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "1");
@@ -131,7 +131,7 @@ public class CSVReadFunctionTest extends JMeterTestCase implements JMeterSerialT
         CSVRead cr4 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "next");
         CSVRead cr5 = setCSVReadParams("", "0");
         CSVRead cr6 = setCSVReadParams("", "next");
-        
+
         assertEquals("b1", cr1.execute(null, null));
         assertEquals("c1", cr2.execute(null, null));
         assertEquals("d1", cr3.execute(null, null));

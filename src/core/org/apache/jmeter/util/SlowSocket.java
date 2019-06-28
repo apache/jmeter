@@ -104,7 +104,7 @@ public class SlowSocket extends Socket {
 
     /**
      * Added for use by SlowHC4SocketFactory.
-     * 
+     *
      * @param cps characters per second
      */
     public SlowSocket(int cps) {

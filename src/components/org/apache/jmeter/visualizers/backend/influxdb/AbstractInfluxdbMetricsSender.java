@@ -31,7 +31,7 @@ abstract class AbstractInfluxdbMetricsSender implements InfluxdbMetricsSender {
     static final String tagToStringValue(String s) {
         return s.trim().replaceAll(" ", "\\\\ ").replaceAll(",", "\\\\,").replaceAll("=", "\\\\=");
     }
-    
+
     /**
      * For field always use a backslash character
      * \ to escape " caractere

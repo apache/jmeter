@@ -45,11 +45,11 @@ import org.slf4j.LoggerFactory;
  */
 public class CompileJSR223TestElements extends AbstractAction implements MenuCreator {
     private static final Logger log = LoggerFactory.getLogger(CompileJSR223TestElements.class);
-    
-    private static final MessageFormat MESSAGE_FORMAT = 
+
+    private static final MessageFormat MESSAGE_FORMAT =
             new MessageFormat(JMeterUtils.getResString("compilation_errors")); // //$NON-NLS-1$
     /**
-     * 
+     *
      */
     private static class JSR223TestElementCompilerVisitor implements HashTreeTraverser {
         private int elementsWithCompilationErrors = 0;
@@ -94,7 +94,7 @@ public class CompileJSR223TestElements extends AbstractAction implements MenuCre
             return elementsWithCompilationErrors;
         }
     }
-    
+
     private static final Set<String> commands = new HashSet<>();
 
     static {
@@ -131,7 +131,7 @@ public class CompileJSR223TestElements extends AbstractAction implements MenuCre
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
         if(location == MENU_LOCATION.TOOLS) {
-            
+
             JMenuItem menuItemIC = new JMenuItem(
                     JMeterUtils.getResString("compile_menu"), KeyEvent.VK_UNDEFINED);
             menuItemIC.setName(ActionNames.COMPILE_JSR223);

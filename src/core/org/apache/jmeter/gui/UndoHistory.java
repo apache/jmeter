@@ -40,13 +40,13 @@ import org.slf4j.LoggerFactory;
 /**
  * This class serves storing Test Tree state and navigating through it
  * to give the undo/redo ability for test plan changes
- * 
+ *
  * @since 2.12
  */
 public class UndoHistory implements TreeModelListener, Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * Interface to be implemented by components interested in UndoHistory
      */
@@ -266,15 +266,15 @@ public class UndoHistory implements TreeModelListener, Serializable {
     public static boolean isEnabled() {
         return HISTORY_SIZE > 0;
     }
-    
+
     /**
-     * Register HistoryListener 
+     * Register HistoryListener
      * @param listener to add to our listeners
      */
     public void registerHistoryListener(HistoryListener listener) {
         listeners.add(listener);
     }
-    
+
     /**
      * Notify listener
      */

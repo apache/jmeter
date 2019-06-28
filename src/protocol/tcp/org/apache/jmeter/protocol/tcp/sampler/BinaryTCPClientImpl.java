@@ -109,7 +109,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
         throw new UnsupportedOperationException(
                 "Method not supported for Length-Prefixed data.");
     }
-    
+
     @Deprecated
     public String read(InputStream is) throws ReadException {
         log.warn("Deprecated method, use read(is, sampleResult) instead");

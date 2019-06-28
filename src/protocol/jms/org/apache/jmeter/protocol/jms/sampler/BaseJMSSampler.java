@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseJMSSampler extends AbstractSampler {
 
     private static final long serialVersionUID = 241L;
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseJMSSampler.class);
 
     //++ These are JMX file attribute names and must not be changed
@@ -402,7 +402,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     }
 
     /**
-     * 
+     *
      */
     protected void configureIsReconnectErrorCode() {
         String regex = StringUtils.trimToEmpty(getReconnectionErrorCodes());

@@ -53,8 +53,8 @@ public class ClientJMeterEngine implements JMeterEngine {
      * Maybe only host or host:port
      */
     private final String hostAndPort;
-    
-    private static RemoteJMeterEngine getEngine(String hostAndPort) 
+
+    private static RemoteJMeterEngine getEngine(String hostAndPort)
             throws RemoteException, NotBoundException {
         final String name = RemoteJMeterEngineImpl.JMETER_ENGINE_RMI_NAME; // $NON-NLS-1$ $NON-NLS-2$
         String host = hostAndPort;
@@ -66,7 +66,7 @@ public class ClientJMeterEngine implements JMeterEngine {
             port = Integer.parseInt(portAsString);
         }
         Registry registry = LocateRegistry.getRegistry(
-               host, 
+               host,
                port,
                RmiUtils.createClientSocketFactory());
         Remote remobj = registry.lookup(name);
@@ -124,7 +124,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     @Override
     public void runTest() throws JMeterEngineException {
         log.info("running clientengine run method");
-        
+
         // See https://bz.apache.org/bugzilla/show_bug.cgi?id=55510
         JMeterContextService.clearTotalThreads();
         HashTree testTree = test;
@@ -142,7 +142,7 @@ public class ClientJMeterEngine implements JMeterEngine {
             JMeterContextService.startTest();
             /*
              * Add fix for Deadlocks, see:
-             * 
+             *
              * See https://bz.apache.org/bugzilla/show_bug.cgi?id=48350
             */
             File baseDirRelative = FileServer.getFileServer().getBaseDirRelative();
@@ -180,7 +180,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     private static final HashMap<String, String> toHashMapOfString(Properties properties) {
         return new HashMap<>(
                 properties.entrySet().stream().collect(Collectors.toMap(
-                        e -> e.getKey().toString(), 
+                        e -> e.getKey().toString(),
                         e -> e.getValue().toString())));
     }
 
@@ -211,9 +211,9 @@ public class ClientJMeterEngine implements JMeterEngine {
             log.warn("Could not perform remote exit: " + e.toString());
         }
     }
-    
+
     private Properties savep;
-    
+
     /** {@inheritDoc} */
     @Override
     public void setProperties(Properties p) {

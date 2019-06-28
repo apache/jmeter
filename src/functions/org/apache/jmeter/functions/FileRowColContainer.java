@@ -74,8 +74,8 @@ public class FileRowColContainer {
     }
 
     private void load() throws IOException, FileNotFoundException {
-        try (BufferedReader myBread = 
-                Files.newBufferedReader(FileServer.getFileServer().getResolvedFile(fileName).toPath(), 
+        try (BufferedReader myBread =
+                Files.newBufferedReader(FileServer.getFileServer().getResolvedFile(fileName).toPath(),
                         Charset.defaultCharset())) {
             String line = myBread.readLine();
             /*

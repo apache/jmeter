@@ -37,11 +37,11 @@ import com.github.benmanes.caffeine.cache.CacheLoader;
  * namespaces.
  */
 public class XPathQueryCacheLoader implements CacheLoader<ImmutablePair<String, String>, XPathExecutable> {
-    
+
     private static final Logger log = LoggerFactory.getLogger(XPathQueryCacheLoader.class);
 
     @Override
-    public XPathExecutable load(ImmutablePair<String, String> key) 
+    public XPathExecutable load(ImmutablePair<String, String> key)
             throws Exception {
         String xPathQuery = key.left;
         String namespacesString = key.right;

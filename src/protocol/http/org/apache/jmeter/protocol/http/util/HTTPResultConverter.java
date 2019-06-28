@@ -112,7 +112,7 @@ public class HTTPResultConverter extends SampleResultConverter {
         return res;
     }
 
-    private void retrieveHTTPItem(HierarchicalStreamReader reader, 
+    private void retrieveHTTPItem(HierarchicalStreamReader reader,
             HTTPSampleResult res, Object subItem) {
         if (subItem instanceof URL) {
             res.setURL((URL) subItem);

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -33,7 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Function to unescape any Java literals found in the String.
  * For example, it will turn a sequence of '\' and 'n' into a newline character,
  * unless the '\' is preceded by another '\'.
- * 
+ *
  * @see StringEscapeUtils#unescapeJava(String)
  * @since 2.3.3
  */

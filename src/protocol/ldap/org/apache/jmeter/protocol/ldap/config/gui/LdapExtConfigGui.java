@@ -75,12 +75,12 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 
     /*
      * N.B. These entry indexes MUST agree with the SearchControls SCOPE_LEVELS, i.e.
-     * 
+     *
      * javax.naming.directory.SearchControls.OBJECT_SCOPE, ONELEVEL_SCOPE, SUBTREE_SCOPE
-     * 
+     *
      * These have the values 0,1,2 so can be used as indexes in the array
      * as well as the value for the search itself.
-     * 
+     *
      * N.B. Although the strings are used to set and get the options, language change
      * does not currently cause a problem, because that always saves the current settings first,
      * and then recreates all the GUI classes.
@@ -132,7 +132,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
     private JCheckBox parseflag = new JCheckBox(JMeterUtils.getResString("ldap_parse_results")); // $NON-NLS-1$
 
     private JCheckBox secure = new JCheckBox(JMeterUtils.getResString("ldap_secure")); // $NON-NLS-1$
-    
+
     private JCheckBox trustAll = new JCheckBox(JMeterUtils.getResString("ldap_trust_all")); // $NON-NLS-1$
 
     private JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("addtest")); // $NON-NLS-1$
@@ -172,7 +172,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 
     /***************************************************************************
      * Constructor for LdapExtConfigGui
-     * 
+     *
      * @param displayName
      *            flag, whether to show the display name of the component.
      **************************************************************************/
@@ -478,7 +478,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 
     /**
      * Create a panel with a label and a text field
-     * 
+     *
      * @param key
      *            to look up the label with
      *            {@link JMeterUtils#getResString(String)}

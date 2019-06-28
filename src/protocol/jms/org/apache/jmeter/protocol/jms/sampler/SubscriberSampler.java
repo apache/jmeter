@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This class implements the JMS Subscriber sampler.
  * It supports both receive and onMessage strategies via the ReceiveSubscriber class.
- * 
+ *
  */
 // TODO: do we need to implement any kind of connection pooling?
 // If so, which connections should be shared?
@@ -72,7 +72,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private transient volatile boolean interrupted = false;
 
     private transient long timeout;
-    
+
     private transient boolean useReceive;
 
     // This will be null if initialization succeeds.
@@ -97,7 +97,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private static final String ERROR_PAUSE_BETWEEN = "jms_error_pause_between"; // $NON-NLS-1$
     private static final String ERROR_PAUSE_BETWEEN_DEFAULT = ""; // $NON-NLS-1$
 
-    
+
     private transient boolean START_ON_SAMPLE = false;
 
     private transient String separator;
@@ -109,8 +109,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * Create the OnMessageSubscriber client and set the sampler as the message
      * listener.
-     * @throws JMSException 
-     * @throws NamingException 
+     * @throws JMSException
+     * @throws NamingException
      *
      */
     private void initListenerClient() throws JMSException, NamingException {
@@ -122,8 +122,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     /**
      * Create the ReceiveSubscriber client for the sampler.
-     * @throws NamingException 
-     * @throws JMSException 
+     * @throws NamingException
+     * @throws JMSException
      */
     private void initReceiveClient() throws NamingException, JMSException {
         SUBSCRIBER = new ReceiveSubscriber(getUseJNDIPropertiesAsBoolean(),
@@ -155,7 +155,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             result.setResponseCode("000");
             result.setResponseMessage(exceptionDuringInit.toString());
             handleErrorAndAddTemporize(true);
-            return result; 
+            return result;
         }
         if (stopBetweenSamples){ // If so, we need to start collection here
             try {
@@ -166,14 +166,14 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         }
         StringBuilder buffer = new StringBuilder();
         StringBuilder propBuffer = new StringBuilder();
-        
+
         int loop = getIterationCount();
         int read = 0;
-        
+
         long until = 0L;
         long now = System.currentTimeMillis();
         if (timeout > 0) {
-            until = timeout + now; 
+            until = timeout + now;
         }
         while (!interrupted
                 && (until == 0 || now < until)
@@ -206,14 +206,14 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         } else if (read < loop) { // Not enough messages found
             result.setResponseCode("500"); // Server error
             result.setSuccessful(false);
-        } else { 
+        } else {
             result.setResponseCodeOK();
             result.setSuccessful(true);
         }
         result.setResponseMessage(read + " message(s) received successfully of " + loop + " expected");
         result.setSamplerData(loop + " messages expected");
         result.setSampleCount(read);
-        
+
         if (stopBetweenSamples){
             try {
                 SUBSCRIBER.stop();
@@ -253,7 +253,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     }
 
     /**
-     * 
+     *
      */
     private void cleanup() {
         IOUtils.closeQuietly(SUBSCRIBER);
@@ -261,7 +261,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     /**
      * Calculate the wait time, will never be more than DEFAULT_WAIT.
-     * 
+     *
      * @param until target end time or 0 if timeouts not active
      * @param now current time
      * @return wait time
@@ -352,7 +352,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         } catch (NamingException | JMSException e) {
             exceptionDuringInit = e;
         }
-        
+
         if (exceptionDuringInit != null) {
             log.error("Could not initialise client", exceptionDuringInit);
         }
@@ -360,7 +360,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     public void threadStarted(boolean wts) {
         if (wts) {
-            START_ON_SAMPLE = true; // listen on sample 
+            START_ON_SAMPLE = true; // listen on sample
         }
         threadStarted();
     }
@@ -376,7 +376,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             cleanup();
         }
     }
-    
+
     public void threadFinished(boolean wts) {
         if (wts) {
             START_ON_SAMPLE = false; // listen on sample
@@ -435,20 +435,20 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     }
 
     public void setTimeout(String timeout){
-        setProperty(TIMEOUT, timeout, TIMEOUT_DEFAULT);        
+        setProperty(TIMEOUT, timeout, TIMEOUT_DEFAULT);
     }
-    
+
     public String getDurableSubscriptionId(){
         return getPropertyAsString(DURABLE_SUBSCRIPTION_ID);
     }
-    
+
     /**
      * @return JMS Client ID
      */
     public String getClientId() {
         return getPropertyAsString(CLIENT_ID, CLIENT_ID_DEFAULT);
     }
-    
+
     /**
      * @return JMS selector
      */
@@ -457,7 +457,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     }
 
     public void setDurableSubscriptionId(String durableSubscriptionId){
-        setProperty(DURABLE_SUBSCRIPTION_ID, durableSubscriptionId, DURABLE_SUBSCRIPTION_ID_DEFAULT);        
+        setProperty(DURABLE_SUBSCRIPTION_ID, durableSubscriptionId, DURABLE_SUBSCRIPTION_ID_DEFAULT);
     }
 
     /**
@@ -466,7 +466,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     public void setClientID(String clientId) {
         setProperty(CLIENT_ID, clientId, CLIENT_ID_DEFAULT);
     }
-   
+
     /**
      * @param jmsSelector JMS Selector
      */
@@ -480,7 +480,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     public String getSeparator() {
         return getPropertyAsString(SEPARATOR, SEPARATOR_DEFAULT);
     }
-    
+
     /**
      * Separator for sampler results
      *
@@ -490,7 +490,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     public void setSeparator(String text) {
         setProperty(SEPARATOR, text, SEPARATOR_DEFAULT);
     }
-    
+
     // This was the old value that was checked for
     private static final String RECEIVE_STR = JMeterUtils.getResString(JMSSubscriberGui.RECEIVE_RSC); // $NON-NLS-1$
 
@@ -499,7 +499,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     }
 
     public void setStopBetweenSamples(boolean selected) {
-        setProperty(STOP_BETWEEN, selected, false);                
+        setProperty(STOP_BETWEEN, selected, false);
     }
 
     public void setPauseBetweenErrors(String pause) {
@@ -547,7 +547,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     }
 
     /**
-     * 
+     *
      */
     private void setupSeparator() {
         separator = getSeparator();

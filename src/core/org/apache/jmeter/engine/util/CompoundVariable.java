@@ -46,7 +46,7 @@ public class CompoundVariable implements Function {
 
     private static final FunctionParser functionParser = new FunctionParser();
 
-    // Created during class init; not modified thereafter 
+    // Created during class init; not modified thereafter
     private static final Map<String, Class<? extends Function>> functions = new HashMap<>();
 
     private boolean hasFunction;
@@ -68,7 +68,7 @@ public class CompoundVariable implements Function {
             if (notContain!=null){
                 log.info("Note: Function class names must not contain the string: '{}'", notContain);
             }
-            
+
             List<String> classes = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
                     new Class[] { Function.class }, true, contain, notContain);
             for (String clazzName : classes) {
@@ -78,7 +78,7 @@ public class CompoundVariable implements Function {
                     functions.put(referenceKey, tempFunc.getClass());
                 }
             }
-            
+
             if (functions.isEmpty()) {
                 log.warn("Did not find any functions");
             } else {
@@ -128,7 +128,7 @@ public class CompoundVariable implements Function {
         if (compiledComponents == null || compiledComponents.isEmpty()) {
             return ""; // $NON-NLS-1$
         }
-        
+
         StringBuilder results = new StringBuilder();
         for (Object item : compiledComponents) {
             if (item instanceof Function) {

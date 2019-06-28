@@ -23,7 +23,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class PercentileAggregator is used to get percentile from samples.
- * 
+ *
  * @since 3.0
  */
 public class PercentileAggregator implements Aggregator {
@@ -56,7 +56,7 @@ public class PercentileAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#getCount()
      */
     @Override
@@ -66,7 +66,7 @@ public class PercentileAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#getResult()
      */
     @Override
@@ -76,7 +76,7 @@ public class PercentileAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#addValue(double)
      */
     @Override
@@ -86,7 +86,7 @@ public class PercentileAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#reset()
      */
     @Override

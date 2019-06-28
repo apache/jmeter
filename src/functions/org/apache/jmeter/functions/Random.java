@@ -45,7 +45,7 @@ public class Random extends AbstractFunction {
         desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
     }
 
-    private CompoundVariable varName; 
+    private CompoundVariable varName;
     private CompoundVariable minimum;
     private CompoundVariable maximum;
 

@@ -66,9 +66,9 @@ public class RequestViewHTTP implements RequestView {
     private static final Logger log = LoggerFactory.getLogger(RequestViewHTTP.class);
 
     private static final String KEY_LABEL = "view_results_table_request_tab_http"; //$NON-NLS-1$
-    
+
     private static final String CHARSET_DECODE = StandardCharsets.ISO_8859_1.name();
-    
+
     private static final String PARAM_CONCATENATE = "&"; //$NON-NLS-1$
 
     private JPanel paneParsed;
@@ -80,7 +80,7 @@ public class RequestViewHTTP implements RequestView {
     private ObjectTableModel headersModel = null;
 
     private static final String[] COLUMNS_REQUEST = new String[] {
-            " ", // one space for blank header // $NON-NLS-1$ 
+            " ", // one space for blank header // $NON-NLS-1$
             " " }; // one space for blank header  // $NON-NLS-1$
 
     private static final String[] COLUMNS_PARAMS = new String[] {
@@ -201,7 +201,7 @@ public class RequestViewHTTP implements RequestView {
                 requestModel.addRow(new RowResult(
                         JMeterUtils.getResString("view_results_table_request_http_path"), //$NON-NLS-1$
                         hUrl.getPath()));
-    
+
                 String queryGet = hUrl.getQuery() == null ? "" : hUrl.getQuery(); //$NON-NLS-1$
                 boolean isMultipart = isMultipart(lhm);
 
@@ -213,7 +213,7 @@ public class RequestViewHTTP implements RequestView {
                     }
                     queryGet += queryPost;
                 }
-                
+
                 if (StringUtils.isNotBlank(queryGet)) {
                     Set<Entry<String, String[]>> keys = RequestViewHTTP.getQueryMap(queryGet).entrySet();
                     for (Entry<String, String[]> entry : keys) {
@@ -228,14 +228,14 @@ public class RequestViewHTTP implements RequestView {
                     String boundaryString = extractBoundary(contentType);
                     MultipartUrlConfig urlconfig = new MultipartUrlConfig(boundaryString);
                     urlconfig.parseArguments(queryPost);
-                    
+
                     for(JMeterProperty prop : urlconfig.getArguments()) {
                         Argument arg = (Argument) prop.getObjectValue();
                         paramsModel.addRow(new RowResult(arg.getName(), arg.getValue()));
                     }
                 }
             }
-            
+
             // Display cookie in headers table (same location on http protocol)
             String cookie = sampleResult.getCookies();
             if (cookie != null && cookie.length() > 0) {
@@ -267,7 +267,7 @@ public class RequestViewHTTP implements RequestView {
         }
         return boundaryString;
     }
-    
+
     /**
      * check if the request is multipart
      * @param headers the http request headers
@@ -296,7 +296,7 @@ public class RequestViewHTTP implements RequestView {
                 map.put(" ", new String[] {query}); //blank name // $NON-NLS-1$
                 return map;
             }
-            
+
             // the post payload is not key=value
             if((param.startsWith("=") && paramSplit.length == 1) || paramSplit.length > 2) {
                 map.put(" ", new String[] {query}); //blank name // $NON-NLS-1$
@@ -307,7 +307,7 @@ public class RequestViewHTTP implements RequestView {
             if(paramSplit.length>1) {
                 value = decodeQuery(paramSplit[1]);
             }
-            
+
             String[] known = map.get(name);
             if(known == null) {
                 known = new String[] {value};
@@ -320,13 +320,13 @@ public class RequestViewHTTP implements RequestView {
             }
             map.put(name, known);
         }
-        
+
         return map;
     }
 
     /**
      * Decode a query string
-     * 
+     *
      * @param query
      *            to decode
      * @return the decoded query string, if it can be url-decoded. Otherwise the original
@@ -353,7 +353,7 @@ public class RequestViewHTTP implements RequestView {
 
     /**
      * Create a pane with three tables (request, params, headers)
-     * 
+     *
      * @return Pane to display request data
      */
     private Component createRequestPane() {
@@ -362,11 +362,11 @@ public class RequestViewHTTP implements RequestView {
         JMeterUtils.applyHiDPI(tableRequest);
         tableRequest.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableRequest.addMouseListener(new TextBoxDoubleClick(tableRequest));
-        
+
         setFirstColumnPreferredAndMaxWidth(tableRequest);
         RendererUtils.applyRenderers(tableRequest, RENDERERS_REQUEST);
 
-        // Set up the 2nd table 
+        // Set up the 2nd table
         tableParams = new JTable(paramsModel);
         JMeterUtils.applyHiDPI(tableParams);
         tableParams.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
@@ -376,7 +376,7 @@ public class RequestViewHTTP implements RequestView {
         tableParams.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         RendererUtils.applyRenderers(tableParams, RENDERERS_PARAMS);
 
-        // Set up the 3rd table 
+        // Set up the 3rd table
         tableHeaders = new JTable(headersModel);
         JMeterUtils.applyHiDPI(tableHeaders);
         tableHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
@@ -419,14 +419,14 @@ public class RequestViewHTTP implements RequestView {
     public String getLabel() {
         return JMeterUtils.getResString(KEY_LABEL);
     }
-    
+
     /**
      * Search implementation for the http parameter table
      */
     private class RequestViewHttpSearchProvider implements ISearchTextExtensionProvider {
 
         private int lastPosition = -1;
-        
+
         @Override
         public void resetTextToFind() {
             lastPosition = -1;
@@ -456,13 +456,13 @@ public class RequestViewHTTP implements RequestView {
                         }
                     }
                 }
-                
+
                 if(!found) {
                     resetTextToFind();
                 }
             }
             return found;
         }
-        
+
     }
 }

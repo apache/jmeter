@@ -157,7 +157,7 @@ public class Proxy extends Thread {
     public void run() {
         // Check which HTTPSampler class we should use
         String httpSamplerName = target.getSamplerTypeName();
-        
+
         HttpRequestHdr request = new HttpRequestHdr(target.getPrefixHTTPSampleName(), httpSamplerName,target.getHTTPSampleNamingMode());
         SampleResult result = null;
         HeaderManager headers = null;
@@ -191,7 +191,7 @@ public class Proxy extends Thread {
                     log.debug("{} Start to negotiate SSL connection, host: {}", port ,param[0]);
                     clientSocket = startSSL(clientSocket, param[0]);
                 } else {
-                    // Should not happen, but if it does we don't want to continue 
+                    // Should not happen, but if it does we don't want to continue
                     log.error("In SSL request, unable to find host and port in CONNECT request: {}", request.getUrl());
                     throw new JMeterException(); // hack to skip processing
                 }
@@ -231,7 +231,7 @@ public class Proxy extends Thread {
             if (isDebug) {
                 log.debug("{} Execute sample: {} and url {}",port, sampler.getMethod(), sampler.getUrl());
             }
-            
+
             result = sampler.sample();
 
             // Find the page encoding and possibly encodings for forms in the page
@@ -283,7 +283,7 @@ public class Proxy extends Thread {
                 }
                 if(samplerCreator != null) {
                     children.addAll(samplerCreator.createChildren(sampler, result));
-                } 
+                }
                 target.deliverSampler(sampler,
                          children
                                 .toArray(new TestElement[children.size()]),
@@ -377,7 +377,7 @@ public class Proxy extends Thread {
      * @param keyStore the KeyStore to search
      * @param host the hostname to match
      * @return the keystore entry or {@code null} if no match found
-     * @throws KeyStoreException 
+     * @throws KeyStoreException
      */
     private String getDomainMatch(KeyStore keyStore, String host) throws KeyStoreException {
         if (keyStore.containsAlias(host)) {
@@ -385,7 +385,7 @@ public class Proxy extends Thread {
         }
         String[] parts = host.split("\\."); // get the component parts
         // Assume domains must have at least 2 parts, e.g. apache.org
-        // Replace the first part with "*" 
+        // Replace the first part with "*"
         StringBuilder sb = new StringBuilder("*"); // $NON-NLS-1$
         for(int j = 1; j < parts.length ; j++) { // Skip the first part
             sb.append('.');
@@ -522,7 +522,7 @@ public class Proxy extends Thread {
                 if (HTTPConstants.HEADER_CONTENT_ENCODING.equalsIgnoreCase(parts[0])
                     && (HTTPConstants.ENCODING_GZIP.equalsIgnoreCase(parts[1])
                             || HTTPConstants.ENCODING_DEFLATE.equalsIgnoreCase(parts[1])
-                            || HTTPConstants.ENCODING_BROTLI.equalsIgnoreCase(parts[1]) 
+                            || HTTPConstants.ENCODING_BROTLI.equalsIgnoreCase(parts[1])
                             )
                 ){
                     headerLines[i] = null; // We don't want this passed on to browser
@@ -576,7 +576,7 @@ public class Proxy extends Thread {
         try {
             pageEncoding = ConversionUtils.getEncodingFromContentType(result.getContentType());
         } catch(IllegalCharsetNameException ex) {
-            log.warn("Unsupported charset detected in contentType:'{}', will continue processing with default charset", 
+            log.warn("Unsupported charset detected in contentType:'{}', will continue processing with default charset",
                     result.getContentType(), ex);
         }
         if (pageEncoding != null) {

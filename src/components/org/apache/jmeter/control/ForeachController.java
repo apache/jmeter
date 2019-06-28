@@ -158,7 +158,7 @@ public class ForeachController extends GenericController implements Serializable
         JMeterContext context = getThreadContext();
         StringBuilder builder = new StringBuilder(
                 getInputVal().length()+getSeparator().length()+3);
-        String inputVariable = 
+        String inputVariable =
                 builder.append(getInputVal())
                 .append(getSeparator())
                 .append(Integer.toString(loopCount+1)).toString();
@@ -184,13 +184,13 @@ public class ForeachController extends GenericController implements Serializable
         String inputVariable = getInputVal() + getSeparator() + (loopCount + 1);
         if (context.getVariables().getObject(inputVariable) != null) {
             if(log.isDebugEnabled()) {
-                log.debug("{} : Found in vars:{}, not end of Arguments", 
+                log.debug("{} : Found in vars:{}, not end of Arguments",
                         getName(), inputVariable);
             }
             return false;
         }
         if(log.isDebugEnabled()) {
-            log.debug("{} : Did not find in vars:{}, End of Arguments reached", 
+            log.debug("{} : Did not find in vars:{}, End of Arguments reached",
                     getName(), inputVariable);
         }
         return true;
@@ -223,7 +223,7 @@ public class ForeachController extends GenericController implements Serializable
 
         StringBuilder builder = new StringBuilder(
                 getInputVal().length()+getSeparator().length()+3);
-        String inputVariable = 
+        String inputVariable =
                 builder.append(getInputVal())
                 .append(getSeparator())
                 .append(Integer.toString(loopCount+1)).toString();
@@ -231,7 +231,7 @@ public class ForeachController extends GenericController implements Serializable
             return false;
         }
         if (log.isDebugEnabled()) {
-            log.debug("{} No entries found - null first entry: {}", 
+            log.debug("{} No entries found - null first entry: {}",
                     getName(), inputVariable);
         }
         return true;

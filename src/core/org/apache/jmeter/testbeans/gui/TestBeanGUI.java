@@ -200,7 +200,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         try {
             TestElement element = (TestElement) testBeanClass.getDeclaredConstructor().newInstance();
             // In other GUI component, clearGUI resets the value to defaults one as there is one GUI per Element
-            // With TestBeanGUI as it's shared, its default values are only known here, we must call setValues with 
+            // With TestBeanGUI as it's shared, its default values are only known here, we must call setValues with
             // element (as it holds default values)
             // otherwise we will get values as computed by customizer reset and not default ones
             if (initialized) {
@@ -303,9 +303,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         setValues(element);
         initialized = true;
     }
-    
+
     /**
-     * Get values from element to fill propertyMap and setup customizer 
+     * Get values from element to fill propertyMap and setup customizer
      * @param element TestElement
      */
     private void setValues(TestElement element) {
@@ -314,7 +314,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             JMeterProperty jprop = jprops.next();
             propertyMap.put(jprop.getName(), jprop.getObjectValue());
         }
-        
+
         if (customizer != null) {
             customizer.setObject(propertyMap);
         } else {
@@ -345,7 +345,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         if (menuCategories.isEmpty()) {
             log.error("Could not assign GUI class to {}", testBeanClass);
         } else if (menuCategories.size() > 1) {
-            // A TestBean implementation might implement 
+            // A TestBean implementation might implement
             // different TestElement interfaces without being a problem
             log.info("More than 1 GUI class found for {}", testBeanClass);
         }
@@ -360,7 +360,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     public int setupGuiClasses() {
         return setupGuiClassesList().size();
     }
-    
+
     /**
      * Setup GUI class
      *

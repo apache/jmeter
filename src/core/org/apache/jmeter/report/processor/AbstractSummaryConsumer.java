@@ -204,7 +204,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.SampleConsumer#startConsuming()
      */
     @Override
@@ -220,7 +220,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.
      * jmeter.report.core.Sample, int)
@@ -242,7 +242,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
      */
     @Override

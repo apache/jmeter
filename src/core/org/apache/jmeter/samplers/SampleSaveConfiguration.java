@@ -179,7 +179,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     // Save bytes read
     private static final String SAVE_BYTES_PROP = "jmeter.save.saveservice.bytes"; // $NON_NLS-1$
-    
+
     // Save bytes written
     private static final String SAVE_SENT_BYTES_PROP = "jmeter.save.saveservice.sent_bytes"; // $NON_NLS-1$
 
@@ -221,7 +221,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private static final String SAVE_SAMPLE_COUNT    = "jmeter.save.saveservice.sample_count"; // $NON_NLS-1$
 
     private static final String SAVE_IDLE_TIME       = "jmeter.save.saveservice.idle_time"; // $NON_NLS-1$
-    
+
     // Defaults from properties:
     private static final boolean TIME;
     private static final boolean TIMESTAMP;
@@ -259,7 +259,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private static final boolean PRINT_MILLISECONDS;
 
     private static final boolean BYTES;
-    
+
     private static final boolean SENT_BYTES;
 
     private static final boolean URL;
@@ -329,7 +329,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         THREAD_NAME = TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
 
         BYTES = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, TRUE));
-        
+
         SENT_BYTES = TRUE.equalsIgnoreCase(props.getProperty(SAVE_SENT_BYTES_PROP, TRUE));
 
         URL = TRUE.equalsIgnoreCase(props.getProperty(SAVE_URL_PROP, TRUE));
@@ -388,7 +388,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     // for test code only
     static final String CONFIG_GETTER_PREFIX = "save";  // $NON-NLS-1$
-    
+
     // for test code only
     static final String CONFIG_SETTER_PREFIX = "set";  // $NON-NLS-1$
 
@@ -475,14 +475,14 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     private transient String dateFormat = DATE_FORMAT;
 
-    /** A formatter for the time stamp. 
+    /** A formatter for the time stamp.
      * Make transient as we don't want to save the FastDateFormat class
      * Also, there's currently no way to change the value via the GUI, so changing it
      * later means editing the JMX, or recreating the Listener.
      */
     private transient FastDateFormat timestampFormatter =
         dateFormat != null ? FastDateFormat.getInstance(dateFormat) : null;
-    
+
     // Don't save this, as not settable via GUI
     private String delimiter = DELIMITER;
 
@@ -529,7 +529,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         url = value;
         xml = value;
     }
-    
+
     public int getVarCount() { // Only for use by CSVSaveService
         return varCount;
     }
@@ -542,7 +542,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     public static SampleSaveConfiguration staticConfig() {
         return STATIC_SAVE_CONFIGURATION;
     }
-    
+
     /**
      * Convert a config name to the method name of the getter.
      * The getter method returns a boolean.
@@ -890,7 +890,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     public void setBytes(boolean save) {
         this.bytes = save;
     }
-    
+
     public boolean saveSentBytes() {
         return sentBytes;
     }
@@ -933,7 +933,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     ///////////////// End of standard field accessors /////////////////////
 
-    
+
     /**
      * Intended for use by CsvSaveService (and test cases)
      * @param fmt
@@ -959,15 +959,15 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             return null;
         }
     }
-    
+
     /**
      * @return {@link FastDateFormat} Thread safe lenient formatter
      */
     public FastDateFormat threadSafeLenientFormatter() {
-        // When restored by XStream threadSafeLenientFormatter may not have 
+        // When restored by XStream threadSafeLenientFormatter may not have
         // been initialized
         if(timestampFormatter == null) {
-            timestampFormatter = 
+            timestampFormatter =
                     dateFormat != null ? FastDateFormat.getInstance(dateFormat) : null;
         }
         return timestampFormatter;

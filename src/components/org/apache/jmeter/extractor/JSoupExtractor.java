@@ -51,7 +51,7 @@ public class JSoupExtractor implements Extractor {
             String cacheKey) {
         Document document;
         if (cacheKey != null) {
-            document = (Document) 
+            document = (Document)
                     JMeterContextService.getContext().getSamplerContext().get(CACHE_KEY_PREFIX+cacheKey);
             if(document==null) {
                 document = Jsoup.parse(inputString);
@@ -71,10 +71,10 @@ public class JSoupExtractor implements Extractor {
         }
         return found;
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param attribute Attribute to extract
      * @param element Element
      * @return String value

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.extractor;
@@ -41,7 +41,7 @@ public class TestXPathExtractor {
         private SampleResult result;
 
         private String data;
-        
+
         private JMeterVariables vars;
 
 
@@ -49,7 +49,7 @@ public class TestXPathExtractor {
 
         private static final String VAL_NAME = "value";
         private static final String VAL_NAME_NR = "value_matchNr";
-        
+
         @Before
         public void setUp() throws UnsupportedEncodingException {
             jmctx = JMeterContextService.getContext();
@@ -94,7 +94,7 @@ public class TestXPathExtractor {
             assertEquals("0", vars.get(VAL_NAME_NR));
             assertNull(vars.get(VAL_NAME+"_1"));
         }
-        
+
         @Test
         public void testVariableExtraction() throws Exception {
             extractor.setXPathQuery("/book/preface");
@@ -103,7 +103,7 @@ public class TestXPathExtractor {
             assertEquals("1", vars.get(VAL_NAME_NR));
             assertEquals("zero", vars.get(VAL_NAME+"_1"));
             assertNull(vars.get(VAL_NAME+"_2"));
-            
+
             extractor.setXPathQuery("/book/page");
             extractor.process();
             assertEquals("one", vars.get(VAL_NAME));
@@ -111,7 +111,7 @@ public class TestXPathExtractor {
             assertEquals("one", vars.get(VAL_NAME+"_1"));
             assertEquals("two", vars.get(VAL_NAME+"_2"));
             assertNull(vars.get(VAL_NAME+"_3"));
-            
+
             // Test match 1
             extractor.setXPathQuery("/book/page");
             extractor.setMatchNumber(1);
@@ -121,7 +121,7 @@ public class TestXPathExtractor {
             assertEquals("one", vars.get(VAL_NAME+"_1"));
             assertNull(vars.get(VAL_NAME+"_2"));
             assertNull(vars.get(VAL_NAME+"_3"));
-            
+
             // Test match Random
             extractor.setXPathQuery("/book/page");
             extractor.setMatchNumber(0);
@@ -131,10 +131,10 @@ public class TestXPathExtractor {
             Assert.assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME+"_1")));
             assertNull(vars.get(VAL_NAME+"_2"));
             assertNull(vars.get(VAL_NAME+"_3"));
-            
+
             // Put back default value
             extractor.setMatchNumber(-1);
-            
+
             extractor.setXPathQuery("/book/page[2]");
             extractor.process();
             assertEquals("two", vars.get(VAL_NAME));
@@ -210,7 +210,7 @@ public class TestXPathExtractor {
             assertEquals("zero", vars.get(VAL_NAME));
             assertEquals("1", vars.get(VAL_NAME_NR));
             assertEquals("zero", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));            
+            assertNull(vars.get(VAL_NAME+"_2"));
 
             extractor.setScopeChildren(); // There aren't any
             extractor.process();
@@ -223,7 +223,7 @@ public class TestXPathExtractor {
             assertEquals("zero", vars.get(VAL_NAME));
             assertEquals("1", vars.get(VAL_NAME_NR));
             assertEquals("zero", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));            
+            assertNull(vars.get(VAL_NAME+"_2"));
 
             // Try to get data from subresult
             result.sampleStart(); // Needed for addSubResult()
@@ -233,8 +233,8 @@ public class TestXPathExtractor {
             subResult.setResponseData(result.getResponseData());
             subResult.sampleEnd();
             result.addSubResult(subResult);
-            
-            
+
+
             // Get data from both
             extractor.setScopeAll();
             extractor.process();
@@ -251,8 +251,8 @@ public class TestXPathExtractor {
             assertEquals("1", vars.get(VAL_NAME_NR));
             assertEquals("zero", vars.get(VAL_NAME+"_1"));
             assertNull(vars.get(VAL_NAME+"_2"));
-            
-            
+
+
             // get data from child
             extractor.setScopeVariable("result");
             result = new SampleResult();
@@ -262,14 +262,14 @@ public class TestXPathExtractor {
             assertEquals("1", vars.get(VAL_NAME_NR));
             assertEquals("zero", vars.get(VAL_NAME+"_1"));
             assertNull(vars.get(VAL_NAME+"_2"));
-            
+
             // get data from child
             extractor.setScopeVariable("result");
             result = new SampleResult();
             vars.remove("result");
             extractor.process();
             assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("0", vars.get(VAL_NAME_NR));            
+            assertEquals("0", vars.get(VAL_NAME_NR));
         }
 
         @Test
@@ -308,7 +308,7 @@ public class TestXPathExtractor {
             result.setResponseData("<z>", null);
             extractor.setXPathQuery("//test");
             extractor.process();
-            
+
             assertEquals(1, result.getAssertionResults().length);
             assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
             org.junit.Assert.assertThat(result.getAssertionResults()[0].

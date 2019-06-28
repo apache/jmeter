@@ -122,7 +122,7 @@ public class TestBeanHelper {
         // value was not provided, and this is allowed
         else if (jprop instanceof NullProperty &&
                 // use negative condition so missing (null) value is treated as FALSE
-                ! Boolean.TRUE.equals(desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED))) {    
+                ! Boolean.TRUE.equals(desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED))) {
             value=null;
         } else {
             value = Converter.convert(jprop.getStringValue(), type);
@@ -199,9 +199,9 @@ public class TestBeanHelper {
      * @return <code>true</code> if the descriptor should be ignored
      */
     public static boolean isDescriptorIgnored(PropertyDescriptor descriptor) {
-        return descriptor.isHidden() 
+        return descriptor.isHidden()
             || (descriptor.isExpert() && !JMeterUtils.isExpertMode())
-            || descriptor.getReadMethod() == null 
+            || descriptor.getReadMethod() == null
             || descriptor.getWriteMethod() == null;
     }
 }

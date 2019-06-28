@@ -35,11 +35,11 @@ import org.slf4j.LoggerFactory;
  * Syntax : <br>
  * <code>
  * &lt;measurement&gt;[,&lt;tag_key&gt;=&lt;tag_value&gt;[,&lt;tag_key&gt;=&lt;tag_value&gt;]] &lt;field_key&gt;=&lt;field_value&gt;[,&lt;field_key&gt;=
- * &lt;field_value&gt;] [&lt;timestamp&gt;] 
+ * &lt;field_value&gt;] [&lt;timestamp&gt;]
  * </code><br>
- * Each line, separated by the newline character, represents a single point in InfluxDB.<br> 
+ * Each line, separated by the newline character, represents a single point in InfluxDB.<br>
  * Line Protocol is whitespace sensitive.
- * 
+ *
  */
 class UdpMetricsSender extends AbstractInfluxdbMetricsSender {
     private static final Logger log = LoggerFactory.getLogger(UdpMetricsSender.class);

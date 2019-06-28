@@ -136,7 +136,7 @@ class RegexpHTMLParser extends HTMLParser {
             // TODO: find a way to avoid the cost of creating a String here --
             // probably a new PatternMatcherInput working on a byte[] would do
             // better.
-            input.setInput(new String(html, encoding)); 
+            input.setInput(new String(html, encoding));
             pattern=JMeterUtils.getPatternCache().getPattern(
                     REGEXP,
                     Perl5Compiler.CASE_INSENSITIVE_MASK

@@ -25,7 +25,7 @@ import org.apache.jmeter.report.core.SamplePredicate;
  * The class FilterConsumer provides a way to discard samples in a consumer
  * chain. This class uses a predicate for the filtering decision.
  * </p>
- * 
+ *
  * <ul>
  * <li>
  * When reverseFilter is false, samples are discarded if none predicate is
@@ -34,7 +34,7 @@ import org.apache.jmeter.report.core.SamplePredicate;
  * When reverseFilter is true, samples are discarded if a predicate is defined
  * and samples match the predicate.</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public class FilterConsumer extends AbstractSampleConsumer {

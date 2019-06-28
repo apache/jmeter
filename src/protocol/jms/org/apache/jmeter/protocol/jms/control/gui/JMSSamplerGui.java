@@ -73,7 +73,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField providerUrl = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
 
-    private static final String[] JMS_COMMUNICATION_STYLE_LABELS = new String[] { 
+    private static final String[] JMS_COMMUNICATION_STYLE_LABELS = new String[] {
             "request_only", // $NON-NLS-1$
             "request_reply", // $NON-NLS-1$
             "read", // $NON-NLS-1$
@@ -186,8 +186,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
             jmsCommunicationStyle.setSelectedIndex(el.getPropertyAsInt(JMSSampler.JMS_COMMUNICATION_STYLE));
         } else {
             jmsCommunicationStyle.setSelectedIndex(
-                    ((BooleanProperty)oneWay).getBooleanValue() ? 
-                            JMSSampler.COMMUNICATION_STYLE.ONE_WAY.getValue() 
+                    ((BooleanProperty)oneWay).getBooleanValue() ?
+                            JMSSampler.COMMUNICATION_STYLE.ONE_WAY.getValue()
                             : JMSSampler.COMMUNICATION_STYLE.REQUEST_REPLY.getValue());
         }
 
@@ -310,7 +310,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     @Override
     public String getLabelResource() {
-        return "jms_point_to_point"; //$NON-NLS-1$ 
+        return "jms_point_to_point"; //$NON-NLS-1$
     }
 
 }

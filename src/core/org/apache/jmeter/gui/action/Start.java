@@ -60,7 +60,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  */
 public class Start extends AbstractAction {
-    
+
     private static final Logger log = LoggerFactory.getLogger(Start.class);
 
     private enum RunMode {
@@ -70,13 +70,13 @@ public class Start extends AbstractAction {
     }
     private static final Set<String> commands = new HashSet<>();
 
-    private static final String VALIDATION_CLONER_CLASS_PROPERTY_NAME = 
+    private static final String VALIDATION_CLONER_CLASS_PROPERTY_NAME =
             "testplan_validation.tree_cloner_class"; //$NON-NLS-1$
     /**
      * Implementation of {@link TreeCloner} used to clone the tree before running validation
      */
-    private static final String CLONER_FOR_VALIDATION_CLASS_NAME = 
-            JMeterUtils.getPropDefault(VALIDATION_CLONER_CLASS_PROPERTY_NAME, //$NON-NLS-1$ 
+    private static final String CLONER_FOR_VALIDATION_CLASS_NAME =
+            JMeterUtils.getPropDefault(VALIDATION_CLONER_CLASS_PROPERTY_NAME, //$NON-NLS-1$
                     "org.apache.jmeter.validation.ComponentTreeClonerForValidation");
 
     static {
@@ -127,7 +127,7 @@ public class Start extends AbstractAction {
                 GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
                 engine.askThreadsToStop();
             }
-        } else if (e.getActionCommand().equals(ActionNames.RUN_TG) 
+        } else if (e.getActionCommand().equals(ActionNames.RUN_TG)
                 || e.getActionCommand().equals(ActionNames.RUN_TG_NO_TIMERS)
                 || e.getActionCommand().equals(ActionNames.VALIDATE_TG)) {
             popupShouldSave(e);
@@ -151,7 +151,7 @@ public class Start extends AbstractAction {
             else {
                 log.warn("No thread group selected the test will not be started");
             }
-        } 
+        }
     }
 
     /**
@@ -177,8 +177,8 @@ public class Start extends AbstractAction {
     private void startEngine(AbstractThreadGroup[] threadGroupsToRun, RunMode runMode) {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
-        
-        // We need to make this conversion before removing any Thread Group as 1 thread Group running may 
+
+        // We need to make this conversion before removing any Thread Group as 1 thread Group running may
         // reference another one (not running) using ModuleController
         // We don't clone as we'll be doing it later AND we cannot clone before we have removed the unselected ThreadGroups
         HashTree treeToUse = JMeter.convertSubTree(testTree, false);
@@ -198,7 +198,7 @@ public class Start extends AbstractAction {
             try {
                 engine.runTest();
             } catch (JMeterEngineException e) {
-                JOptionPane.showMessageDialog(gui.getMainFrame(), e.getMessage(), 
+                JOptionPane.showMessageDialog(gui.getMainFrame(), e.getMessage(),
                         JMeterUtils.getResString("error_occurred"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
             }
             if (log.isDebugEnabled()) {
@@ -209,7 +209,7 @@ public class Start extends AbstractAction {
     }
 
     /**
-     * 
+     *
      * @return {@link TreeCloner}
      */
     private static TreeCloner createTreeClonerForValidation(boolean honorThreadClone) {
@@ -217,7 +217,7 @@ public class Start extends AbstractAction {
         try {
             clazz = Class.forName(CLONER_FOR_VALIDATION_CLASS_NAME, true, Thread.currentThread().getContextClassLoader());
             return (TreeCloner) clazz.getConstructor(boolean.class).newInstance(honorThreadClone);
-        } catch (InstantiationException | IllegalAccessException 
+        } catch (InstantiationException | IllegalAccessException
                 | ClassNotFoundException | NoSuchMethodException
                 | InvocationTargetException ex) {
             log.error("Error instantiating class:'{}' defined in property:'{}'", CLONER_FOR_VALIDATION_CLASS_NAME,
@@ -244,7 +244,7 @@ public class Start extends AbstractAction {
                         item.setEnabled(false);
                         testTree.remove(item);
                     } finally {
-                        item.setEnabled(true);                        
+                        item.setEnabled(true);
                     }
                 }
                 else {
@@ -256,10 +256,10 @@ public class Start extends AbstractAction {
             }
         }
     }
-    
+
     /**
      * @param item {@link TestElement}
-     * @param threadGroups Array of {@link AbstractThreadGroup} 
+     * @param threadGroups Array of {@link AbstractThreadGroup}
      * @return true if item is in threadGroups array
      */
     private boolean isInThreadGroups(TestElement item, AbstractThreadGroup[] threadGroups) {
@@ -270,12 +270,12 @@ public class Start extends AbstractAction {
         }
         return false;
     }
-    
-    
+
+
     /**
      * Create a Cloner that ignores {@link Timer} if removeTimers is true
      * @param testTree {@link HashTree}
-     * @param runMode {@link RunMode} how plan will be run 
+     * @param runMode {@link RunMode} how plan will be run
      * @return {@link TreeCloner}
      */
     private ListedHashTree cloneTree(HashTree testTree, RunMode runMode) {
@@ -287,7 +287,7 @@ public class Start extends AbstractAction {
             case IGNORING_TIMERS:
                 cloner = new TreeClonerNoTimer(false);
                 break;
-            case AS_IS: 
+            case AS_IS:
             default:
                 cloner = new TreeCloner(false);
                 break;

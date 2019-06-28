@@ -59,7 +59,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         if (rb != null) {
             p.setValue(RESOURCE_BUNDLE, rb);
         }
-        
+
         p.setValue(TAGS, languageTags);
 
         createPropertyGroup("scriptingLanguage", // $NON-NLS-1$
@@ -82,7 +82,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
         /*
          * If we are creating a JSR223 element, add the cache key property.
-         * 
+         *
          * Note that this cannot be done in the JSR223BeanInfoSupport class
          * because that causes problems with the group; its properties are
          * not always set up before they are needed. This cause various
@@ -91,17 +91,17 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
          * - sometimes GUI is completely mangled
          * - field appears at start rather than at end.
          * - the following warning is logged:
-         * jmeter.testbeans.gui.GenericTestBeanCustomizer: 
+         * jmeter.testbeans.gui.GenericTestBeanCustomizer:
          * org.apache.jmeter.util.JSR223TestElement#cacheKey does not appear to have been configured
-         * 
+         *
          * Adding the group here solves these issues, and it's also
          * possible to add the key just before the script panel
          * to which it relates.
-         * 
+         *
          * It's not yet clear why this should be, but it looks as though
          * createPropertyGroup does not work properly if it is called from
          * any subclasses of this class.
-         * 
+         *
          */
         if (JSR223TestElement.class.isAssignableFrom(beanClass) ) {
             p = property("cacheKey"); // $NON-NLS-1$
@@ -121,9 +121,9 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
         createPropertyGroup("scripting", // $NON-NLS-1$
                 new String[] { "script" }); // $NON-NLS-1$
-        
+
     }
-    
+
     public static class JSR223ScriptCacheCheckboxEditor extends PropertyEditorSupport implements ActionListener, ClearGui {
 
         private final JCheckBox checkbox;
@@ -150,7 +150,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
         @Override
         public void setAsText(String value) {
-            initialValue = getBooleanValueAsString(value);            
+            initialValue = getBooleanValueAsString(value);
             checkbox.setSelected(Boolean.parseBoolean(initialValue));
         }
 
@@ -167,7 +167,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
                 throw new IllegalArgumentException();
             }
         }
-        
+
         /**
          * "false" leads to false
          * "true" or any other non "false" value leads to true
@@ -175,13 +175,13 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
          * @return String true/false
          */
         private static String getBooleanValueAsString(String value) {
-            return value == null ? FALSE_AS_STRING : 
+            return value == null ? FALSE_AS_STRING :
                 // We must use this form as:
                 // - "false" leads to false
                 // - "true" or any other non "false" value leads to true
                 Boolean.toString(!FALSE_AS_STRING.equals(value));
         }
-       
+
         @Override
         public Component getCustomEditor() {
             return checkbox;

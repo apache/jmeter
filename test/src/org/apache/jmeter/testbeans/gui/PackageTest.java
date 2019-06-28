@@ -41,10 +41,10 @@ import junit.framework.TestSuite;
  * Find all beans out there and check their resource property files: - Check
  * that non-default property files don't have any extra keys. - Check all
  * necessary properties are defined at least in the default property file,
- * except for beans whose name contains "Experimental" or "Alpha". 
- * 
+ * except for beans whose name contains "Experimental" or "Alpha".
+ *
  * TODO: - Check property files don't have duplicate keys (is this important)
- * 
+ *
  */
 public final class PackageTest extends JMeterTestCaseJUnit {
     private static final Logger log = LoggerFactory.getLogger(PackageTest.class);
@@ -70,7 +70,7 @@ public final class PackageTest extends JMeterTestCaseJUnit {
         this.testLocale = null;
         this.defaultBundle = null;
     }
-    
+
     private BeanInfo beanInfo;
 
     private ResourceBundle bundle;

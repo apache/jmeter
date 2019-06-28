@@ -54,22 +54,22 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     implements Serializable, TestStateListener
 {
     private static final long serialVersionUID = 232L;
-       
+
     private static final Logger logger = LoggerFactory.getLogger(JSR223TestElement.class);
     /**
      * Cache of compiled scripts
      */
     @SuppressWarnings("unchecked") // LRUMap does not support generics (yet)
-    private static final Map<String, CompiledScript> compiledScriptsCache = 
+    private static final Map<String, CompiledScript> compiledScriptsCache =
             Collections.synchronizedMap(
                     new LRUMap(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100)));
 
     /** If not empty then script in ScriptText will be compiled and cached */
     private String cacheKey = "";
-    
+
     /** md5 of the script, used as an unique key for the cache */
     private String scriptMd5 = null;
-    
+
     /**
      * Initialization On Demand Holder pattern
      */
@@ -79,7 +79,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         }
         public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
     }
- 
+
     /**
      * @return ScriptEngineManager singleton
      */
@@ -162,7 +162,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     protected Object processFileOrScript(ScriptEngine scriptEngine, final Bindings pBindings)
             throws IOException, ScriptException {
-        Bindings bindings = pBindings; 
+        Bindings bindings = pBindings;
         if (bindings == null) {
             bindings = scriptEngine.createBindings();
         }
@@ -206,7 +206,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                             + "' does not exist or is unreadable for element:" + getName());
                 }
             } else if (!StringUtils.isEmpty(getScript())) {
-                if (supportsCompilable && 
+                if (supportsCompilable &&
                         !ScriptingBeanInfoSupport.FALSE_AS_STRING.equals(cacheKey)) {
                     computeScriptMD5();
                     CompiledScript compiledScript = compiledScriptsCache.get(this.scriptMd5);
@@ -236,13 +236,13 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             }
         }
     }
-    
+
     /**
      * @return boolean true if element is not compilable or if compilation succeeds
      * @throws IOException if script is missing
      * @throws ScriptException if compilation fails
      */
-    public boolean compile() 
+    public boolean compile()
         throws ScriptException, IOException {
         String lang = getScriptLanguageWithDefault();
         ScriptEngine scriptEngine = getInstance().getEngineByName(lang);
@@ -311,7 +311,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     @Override
     public void testStarted(String host) {
-        // NOOP   
+        // NOOP
     }
 
     /**
@@ -330,7 +330,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         compiledScriptsCache.clear();
         this.scriptMd5 = null;
     }
-    
+
     public String getScriptLanguage() {
         return scriptLanguage;
     }

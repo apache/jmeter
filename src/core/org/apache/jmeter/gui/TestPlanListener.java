@@ -29,7 +29,7 @@ public interface TestPlanListener {
      * Called before current test plan is cleared
      */
     void beforeTestPlanCleared();
-    
+
     /**
      * Called after current test plan has been cleared
      */

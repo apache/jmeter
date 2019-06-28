@@ -58,7 +58,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
 
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 931790497924069705L;
 
@@ -83,7 +83,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
      */
     public RecorderDialog() {
         super();
-        // 
+        //
     }
     public RecorderDialog(ProxyControlGui controlGui) {
         super((JFrame) null, JMeterUtils.getResString("proxy_recorder_dialog"), false); //$NON-NLS-1$
@@ -106,7 +106,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
                 setVisible(false);
             }
         };
-        
+
         ActionMap actionMap = rootPane.getActionMap();
         actionMap.put(escapeAction.getValue(Action.NAME), escapeAction);
         InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -124,7 +124,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         httpSampleNamingMode = new JComboBox<>(choice);
         httpSampleNamingMode.setName(ProxyControlGui.HTTP_SAMPLER_NAMING_MODE);
         httpSampleNamingMode.addItemListener(this);
-        
+
         prefixHTTPSampleName = new JTextField(20);
         prefixHTTPSampleName.addKeyListener(this);
         prefixHTTPSampleName.setName(ProxyControlGui.PREFIX_HTTP_SAMPLER_NAME);
@@ -136,7 +136,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         proxyPauseHTTPSample.setActionCommand(ProxyControlGui.ENABLE_RESTART);
         JLabel labelProxyPause = new JLabel(JMeterUtils.getResString("proxy_pause_http_sampler")); // $NON-NLS-1$
         labelProxyPause.setLabelFor(proxyPauseHTTPSample);
-              
+
         GridBagLayout gridBagLayout = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -164,8 +164,8 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         panel.add(proxyPauseHTTPSample, gbc.clone());
 
         this.getContentPane().add(panel, BorderLayout.CENTER);
-        
-        String iconSize = JMeterUtils.getPropDefault(JMeterToolBar.TOOLBAR_ICON_SIZE, JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE); 
+
+        String iconSize = JMeterUtils.getPropDefault(JMeterToolBar.TOOLBAR_ICON_SIZE, JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE);
         stop = recorderGui.createStopButton(iconSize);
         stop.addActionListener(this);
 

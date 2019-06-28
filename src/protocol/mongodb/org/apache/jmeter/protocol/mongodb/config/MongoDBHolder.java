@@ -37,7 +37,7 @@ public final class MongoDBHolder {
     public static DB getDBFromSource(String varName, String dbName) {
         return getDBFromSource(varName, dbName, null, null);
     }
-    
+
     /**
      * Get access to MongoDB object
      * @param varName String MongoDB source

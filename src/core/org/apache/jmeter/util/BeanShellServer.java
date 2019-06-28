@@ -43,7 +43,7 @@ public class BeanShellServer implements Runnable {
     /**
      * Constructor which sets the port for this server and the path to an
      * optional init file
-     * 
+     *
      * @param port
      *            the port for the server to use
      * @param file

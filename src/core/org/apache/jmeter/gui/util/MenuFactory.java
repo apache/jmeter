@@ -239,7 +239,7 @@ public final class MenuFactory {
 
     /**
      * @param menu JPopupMenu
-     * @param addSaveTestFragmentMenu Add Save as Test Fragment menu if true 
+     * @param addSaveTestFragmentMenu Add Save as Test Fragment menu if true
      */
     public static void addFileMenu(JPopupMenu menu, boolean addSaveTestFragmentMenu) {
         // the undo/redo as a standard goes first in Edit menus
@@ -327,7 +327,7 @@ public final class MenuFactory {
 
         pop.add(MenuFactory.makeMenuItemRes("apply_naming",// $NON-NLS-1$
                 ActionNames.APPLY_NAMING_CONVENTION));
-        
+
         pop.add(makeMenus(new String[]{CONTROLLERS},
                 JMeterUtils.getResString("change_parent"),// $NON-NLS-1$
                 ActionNames.CHANGE_PARENT));
@@ -346,7 +346,7 @@ public final class MenuFactory {
         addDefaultAddMenuToMenu(addMenu, addAction);
         return addMenu;
     }
-    
+
     private static JMenu addDefaultAddMenuToMenu(JMenu addMenu, String addAction) {
         addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, addAction));
         addMenu.addSeparator();

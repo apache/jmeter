@@ -85,14 +85,14 @@ import org.slf4j.LoggerFactory;
  * Opens a popup where user can enter a cURL command line and create a test plan from it
  * @since 5.1
  */
-public class ParseCurlCommandAction extends AbstractAction implements MenuCreator, ActionListener { // NOSONAR 
+public class ParseCurlCommandAction extends AbstractAction implements MenuCreator, ActionListener { // NOSONAR
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ParseCurlCommandAction.class);
     private static final String ACCEPT_ENCODING = "Accept-Encoding";
     private static final Set<String> commands = new HashSet<>();
     public static final String IMPORT_CURL       = "import_curl";
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
-    
+
     static {
         commands.add(IMPORT_CURL);
     }
@@ -101,7 +101,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private JLabel statusText;
 
     /**
-     * 
+     *
      */
     public ParseCurlCommandAction() {
         super();
@@ -111,7 +111,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     public void doAction(ActionEvent e) {
         showInputDialog(e);
     }
-    
+
     /**
      * Show popup where user can import cURL command
      * @param event {@link ActionEvent}
@@ -124,11 +124,11 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         statusText = new JLabel("", JLabel.CENTER);
         statusText.setForeground(Color.RED);
         contentPane.add(statusText, BorderLayout.NORTH);
-        
+
         cURLCommandTA = JSyntaxTextArea.getInstance(10, 80, false);
         cURLCommandTA.setCaretPosition(0);
         contentPane.add(JTextScrollPane.getInstance(cURLCommandTA), BorderLayout.CENTER);
-        
+
         JPanel buttonPanel = new JPanel(new GridLayout(1, 1));
         JButton button = new JButton(JMeterUtils.getResString("curl_create_request"));
         button.setActionCommand(CREATE_REQUEST);
@@ -139,7 +139,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(), messageDialog);
         SwingUtilities.invokeLater(() -> messageDialog.setVisible(true));
     }
-    
+
     /**
      * Finds the first enabled node of a given type in the tree.
      *
@@ -203,7 +203,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         ActionRouter.getInstance().actionPerformed(actionEvent);
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.EXPAND_ALL));
     }
-    
+
     private HTTPSamplerProxy createHttpRequest(Request request, HashTree parentHT) throws MalformedURLException {
         HTTPSamplerProxy httpSampler = createSampler(request);
 
@@ -232,7 +232,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             httpSampler.setArguments(arguments);
             httpSampler.addNonEncodedArgument("", request.getPostData(), "");
         }
-        
+
         HeaderManager headerManager = createHeaderManager(request);
         httpSampler.addTestElement(headerManager);
 
@@ -249,7 +249,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         headerManager.setProperty(TestElement.NAME, "HTTP HeaderManager");
         headerManager.setProperty(TestElement.COMMENTS, "Created from cURL on "+LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
         Map<String, String> map = request.getHeaders();
-        
+
         boolean hasAcceptEncoding = false;
         for (Map.Entry<String, String> header : map.entrySet()) {
             String key = header.getKey();
@@ -334,15 +334,15 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
     }
 
-    private void addToTestPlan(final JMeterTreeNode currentNode, Request request) 
+    private void addToTestPlan(final JMeterTreeNode currentNode, Request request)
             throws MalformedURLException {
         final HTTPSamplerProxy sampler = createSampler(request);
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         JMeterUtils.runSafe(true, () -> {
             try {
-                // We get the HeaderManager before adding component otherwise addComponent would remove it 
+                // We get the HeaderManager before adding component otherwise addComponent would remove it
                 HeaderManager headerManager = sampler.getHeaderManager();
-                // 
+                //
                 final JMeterTreeNode newNode = treeModel.addComponent(sampler, currentNode);
                 treeModel.addComponent(headerManager, newNode);
             } catch (IllegalUserActionException ex) {

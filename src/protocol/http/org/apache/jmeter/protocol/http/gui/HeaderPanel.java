@@ -299,7 +299,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
         JButton loadButton = createButton("load", 'L', LOAD_COMMAND, true); // $NON-NLS-1$
         saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty); // $NON-NLS-1$
         JButton addFromClipboard = createButton("add_from_clipboard", 'C', ADD_FROM_CLIPBOARD, true); // $NON-NLS-1$
-        
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(addButton);
         buttonPanel.add(addFromClipboard);

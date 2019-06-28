@@ -24,7 +24,7 @@ import java.util.Map.Entry;
 
 /**
  * Template Bean
- * @since 2.10 
+ * @since 2.10
  */
 public class Template {
     private boolean isTestPlan;
@@ -85,11 +85,11 @@ public class Template {
     public Map<String, String> getParameters() {
         return parameters;
     }
-    
+
     public void setParameters(Map<String, String> parameters) {
         this.parameters = parameters;
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -102,7 +102,7 @@ public class Template {
         result = prime * result + ((parent == null) ? 0 : parent.hashCode());
         return result;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -148,18 +148,18 @@ public class Template {
         }
         return true;
     }
-    
+
     private boolean mapsEquals(Map<String, String> map1, Map<String, String> map2) {
         if(map1 == null) {
             return map2 == null;
         }else if(map2 == null) {
             return false;
         }
-        
+
         if(map1.size() != map2.size()) {
             return false;
         }
-        
+
         for(Entry<String, String> entry : map1.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -171,7 +171,7 @@ public class Template {
                 return false;
             }
         }
-        
+
         return true;
     }
     /* (non-Javadoc)

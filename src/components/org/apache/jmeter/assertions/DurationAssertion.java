@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -28,7 +28,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Checks if an Sample is sampled within a specified time-frame. If the duration
  * is larger than the timeframe the Assertion is considered a failure.
- * 
+ *
  */
 public class DurationAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
     private static final long serialVersionUID = 241L;
@@ -69,7 +69,7 @@ public class DurationAssertion extends AbstractScopedAssertion implements Serial
     private long getAllowedDuration() {
         return getPropertyAsLong(DURATION_KEY);
     }
-    
+
 
     /**
      * Set duration

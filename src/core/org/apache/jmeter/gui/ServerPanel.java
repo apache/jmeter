@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui;
@@ -66,7 +66,7 @@ public class ServerPanel extends JPanel {
         connectTimeOut.setText("");
         responseTimeOut.setText("");
     }
-    
+
     public String getServer(){
         return domain.getText();
     }
@@ -124,7 +124,7 @@ public class ServerPanel extends JPanel {
 
         JPanel bigPanel = new VerticalPanel();
         bigPanel.add(webServerTimeoutPanel);
-        
+
         add(bigPanel);
     }
 

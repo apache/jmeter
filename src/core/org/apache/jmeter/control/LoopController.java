@@ -34,9 +34,9 @@ import org.slf4j.LoggerFactory;
  * Class that implements the Loop Controller, ie iterate infinitely or a configured number of times
  */
 public class LoopController extends GenericController implements Serializable, IteratingController, LoopIterationListener {
-    
+
     public static final int INFINITE_LOOP_COUNT = -1; // $NON-NLS-1$
-    
+
     public static final String LOOPS = "LoopController.loops"; // $NON-NLS-1$
 
     private static final long serialVersionUID = 7833960784370272300L;
@@ -58,7 +58,7 @@ public class LoopController extends GenericController implements Serializable, I
     private transient int loopCount = 0;
 
     /**
-     * Cached loop value 
+     * Cached loop value
      * see Bug 54467
      */
     private transient Integer nbLoops;
@@ -78,7 +78,7 @@ public class LoopController extends GenericController implements Serializable, I
     }
 
     public int getLoops() {
-        // Evaluation occurs when nbLoops is not yet evaluated 
+        // Evaluation occurs when nbLoops is not yet evaluated
         // or when nbLoops is equal to special value INFINITE_LOOP_COUNT
         if (nbLoops==null || // No evaluated yet
                 nbLoops.intValue()==0 || // Last iteration led to nbLoops == 0,
@@ -137,7 +137,7 @@ public class LoopController extends GenericController implements Serializable, I
             updateIterationIndex(getName(), loopCount);
         }
     }
-    
+
     private boolean endOfLoop() {
         final int loops = getLoops();
         return breakLoop || (loops > INFINITE_LOOP_COUNT) && (loopCount >= loops);
@@ -149,7 +149,7 @@ public class LoopController extends GenericController implements Serializable, I
         nbLoops = null;
         super.setDone(done);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -166,7 +166,7 @@ public class LoopController extends GenericController implements Serializable, I
         }
         return next();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -175,7 +175,7 @@ public class LoopController extends GenericController implements Serializable, I
         super.triggerEndOfLoop();
         resetLoopCount();
     }
-    
+
     protected void incrementLoopCount() {
         loopCount++;
     }
@@ -203,7 +203,7 @@ public class LoopController extends GenericController implements Serializable, I
         incrementLoopCount();
         recoverRunningVersion();
     }
-    
+
     /**
      * Start next iteration
      */

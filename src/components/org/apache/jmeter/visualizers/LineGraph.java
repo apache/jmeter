@@ -189,7 +189,7 @@ public class LineGraph extends JPanel {
     /**
      * Since we only have 4 shapes, the method will start with the first shape
      * and keep cycling through the shapes in order.
-     * 
+     *
      * @param count
      *            The number of shapes to be created
      * @return the first n shapes
@@ -216,7 +216,7 @@ public class LineGraph extends JPanel {
 
     /**
      * Create a given number of {@link Stroke}s
-     * 
+     *
      * @param count
      *            The number of strokes to be created
      * @return the first <code>count</code> strokes
@@ -241,7 +241,7 @@ public class LineGraph extends JPanel {
      * return an array of Paint with different colors. The current
      * implementation will cycle through 12 colors if a line graph has more than
      * 12 entries
-     * 
+     *
      * @param count
      *            The number of {@link Paint}s to be created
      * @return an array of Paint with different colors

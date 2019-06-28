@@ -86,7 +86,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
     public static final Color REDIRECT_COLOR = Color.green;
 
     protected static final String TEXT_COMMAND = "text"; // $NON-NLS-1$
-    
+
     protected static final String REQUEST_VIEW_COMMAND = "change_request_view"; // $NON-NLS-1$
 
     private static final String STYLE_SERVER_ERROR = "ServerError"; // $NON-NLS-1$
@@ -99,10 +99,10 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     /** Response Data pane */
     private JPanel resultsPane;
-    
+
     /** Contains results; contained in resultsPane */
     protected JScrollPane resultsScrollPane;
-    
+
     private JSyntaxTextArea headerData;
     /** Response Data shown here */
     protected JEditorPane results;
@@ -128,9 +128,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
     protected boolean activateSearchExtension = true; // most current subclasses can process text
 
     private Color backGround;
-    
+
     private static final String[] COLUMNS_RESULT = new String[] {
-            " ", // one space for blank header // $NON-NLS-1$ 
+            " ", // one space for blank header // $NON-NLS-1$
             " " }; // one space for blank header  // $NON-NLS-1$
 
     private static final String[] COLUMNS_HEADERS = new String[] {
@@ -156,11 +156,11 @@ public abstract class SamplerResultTab implements ResultRenderer {
     private JTabbedPane tabbedResult = null;
 
     private JScrollPane paneRaw = null;
-    
+
     private JSplitPane paneParsed = null;
-    
+
     // to save last select tab (raw/parsed)
-    private int lastResultTabIndex= 0; 
+    private int lastResultTabIndex= 0;
 
     // Result column renderers
     private static final TableCellRenderer[] RENDERERS_RESULT = new TableCellRenderer[] {
@@ -237,11 +237,11 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 sampleResult = (SampleResult) userObject;
                 // We are displaying a SampleResult
                 setupTabPaneForSampleResult();
-                requestPanel.setSamplerResult(sampleResult);                
+                requestPanel.setSamplerResult(sampleResult);
 
                 final String samplerClass = sampleResult.getClass().getName();
                 String typeResult = samplerClass.substring(1 + samplerClass.lastIndexOf('.'));
-                
+
                 StringBuilder statsBuff = new StringBuilder(200);
                 statsBuff
                         .append(JMeterUtils
@@ -348,7 +348,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                         .append(NL);
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
                 statsBuff = null; // NOSONAR Help gc
-                
+
                 // Tabbed results: fill table
                 resultModel.addRow(new RowResult(
                         JMeterUtils.getParsedLabel("view_results_thread_name"), //$NON-NLS-1$
@@ -395,7 +395,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                         JMeterUtils.getParsedLabel(
                                 "view_results_response_message"), //$NON-NLS-1$
                         responseMsgStr));
-                
+
                 // Parsed response headers
                 LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getResponseHeaders());
                 Set<Entry<String, String>> keySet = lhm.entrySet();
@@ -410,7 +410,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 //not sure needs I18N?
                 resFieldsModel.addRow(new RowResult("ContentType", sampleResult.getContentType())); //$NON-NLS-1$
                 resFieldsModel.addRow(new RowResult("DataEncoding", sampleResult.getDataEncodingNoDefault())); //$NON-NLS-1$
-                
+
                 // Reset search
                 if (activateSearchExtension) {
                     searchTextExtension.resetTextToFind();
@@ -446,9 +446,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     private void setupTabPaneForSampleResult() {
         // restore tabbed pane parsed if needed
-        if (tabbedResult.getTabCount() < 2) { 
+        if (tabbedResult.getTabCount() < 2) {
             tabbedResult.insertTab(JMeterUtils.getResString("view_results_table_result_tab_parsed"), null, paneParsed, null, 1); //$NON-NLS-1$
-            tabbedResult.setSelectedIndex(lastResultTabIndex); // select last tab 
+            tabbedResult.setSelectedIndex(lastResultTabIndex); // select last tab
         }
         // Set the title for the first tab
         rightSide.setTitleAt(0, JMeterUtils.getResString("view_results_tab_sampler")); //$NON-NLS-1$
@@ -464,7 +464,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
             rightSide.setSelectedIndex(lastSelectedTab);
         }
     }
-    
+
     private void setupTabPaneForAssertionResult() {
         // Remove the other (parsed) tab if present
         if (tabbedResult.getTabCount() >= 2) {
@@ -515,7 +515,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         setFirstColumnPreferredSize(tableResult);
         RendererUtils.applyRenderers(tableResult, RENDERERS_RESULT);
 
-        // Set up the 2nd table 
+        // Set up the 2nd table
         tableResHeaders = new JTable(resHeadersModel);
         JMeterUtils.applyHiDPI(tableResHeaders);
         tableResHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
@@ -525,7 +525,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 new HeaderAsPropertyRenderer());
         RendererUtils.applyRenderers(tableResHeaders, RENDERERS_HEADERS);
 
-        // Set up the 3rd table 
+        // Set up the 3rd table
         tableResFields = new JTable(resFieldsModel);
         JMeterUtils.applyHiDPI(tableResFields);
         tableResFields.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
@@ -629,13 +629,13 @@ public abstract class SamplerResultTab implements ResultRenderer {
     public void setBackgroundColor(Color backGround){
         this.backGround = backGround;
     }
-    
+
     private void setFirstColumnPreferredSize(JTable table) {
         TableColumn column = table.getColumnModel().getColumn(0);
         column.setMaxWidth(300);
         column.setPreferredWidth(180);
     }
-    
+
     /**
      * For model table
      */
@@ -679,7 +679,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
             this.value = value;
         }
     }
-    
+
     /**
      * Optimized way to set text based on :
      * http://javatechniques.com/blog/faster-jtextpane-text-insertion-part-i/

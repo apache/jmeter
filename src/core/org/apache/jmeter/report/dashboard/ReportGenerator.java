@@ -64,7 +64,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The class ReportGenerator provides a way to generate all the templated files
  * of the plugin.
- * 
+ *
  * @since 3.0
  */
 public class ReportGenerator {
@@ -173,7 +173,7 @@ public class ReportGenerator {
      * <p>
      * E.g : with key set_granularity, returns setGranularity (camel case)
      * </p>
-     * 
+     *
      * @param propertyKey
      *            the property key
      * @return the name of the property setter
@@ -213,7 +213,7 @@ public class ReportGenerator {
 
         NormalizerSampleConsumer normalizer = new NormalizerSampleConsumer();
         normalizer.setName(NORMALIZER_CONSUMER_NAME);
-        
+
         FilterConsumer dateRangeConsumer = createFilterByDateRange();
         dateRangeConsumer.addSampleConsumer(createBeginDateConsumer());
         dateRangeConsumer.addSampleConsumer(createEndDateConsumer());
@@ -225,9 +225,9 @@ public class ReportGenerator {
         nameFilter.addSampleConsumer(excludeControllerFilter);
 
         dateRangeConsumer.addSampleConsumer(nameFilter);
-        
+
         normalizer.addSampleConsumer(dateRangeConsumer);
-        
+
         source.addSampleConsumer(normalizer);
 
         // Get graph configurations
@@ -281,20 +281,20 @@ public class ReportGenerator {
                 if(configuration.getStartDate() != null) {
                     if(sampleStartTime >= configuration.getStartDate().getTime()) {
                         if(configuration.getEndDate() != null) {
-                            return sampleStartTime <= configuration.getEndDate().getTime();                             
+                            return sampleStartTime <= configuration.getEndDate().getTime();
                         } else {
-                            return true;                            
+                            return true;
                         }
                     }
                     return false;
                 } else {
                     if(configuration.getEndDate() != null) {
-                        return sampleStartTime <= configuration.getEndDate().getTime(); 
+                        return sampleStartTime <= configuration.getEndDate().getTime();
                     } else {
-                        return true;                            
+                        return true;
                     }
                 }
-            });     
+            });
         return dateRangeFilter;
     }
 
@@ -314,7 +314,7 @@ public class ReportGenerator {
             tmpDirCreated = tmpDir.mkdir();
             if (!tmpDirCreated) {
                 String message = String.format(
-                        "Cannot create temporary directory \"%s\", check property \"%s\"", tmpDir.getAbsolutePath(), 
+                        "Cannot create temporary directory \"%s\", check property \"%s\"", tmpDir.getAbsolutePath(),
                         ReportGeneratorConfiguration.REPORT_GENERATOR_KEY_TEMP_DIR);
                 log.error(message);
                 throw new GenerationException(message);
@@ -337,7 +337,7 @@ public class ReportGenerator {
             Object obj = clazz.getDeclaredConstructor().newInstance();
             AbstractGraphConsumer graph = (AbstractGraphConsumer) obj;
             graph.setName(graphName);
-            
+
             // Set the graph title
             graph.setTitle(graphConfiguration.getTitle());
 
@@ -352,7 +352,7 @@ public class ReportGenerator {
                 setProperty(className, obj, methods, propertyName,
                         propertyValue, setterName);
             }
-            graph.initialize(); 
+            graph.initialize();
 
             // Choose which entry point to use to plug the graph
             AbstractSampleConsumer entryPoint = graphConfiguration
@@ -447,7 +447,7 @@ public class ReportGenerator {
                         Long satisfied = entry.getValue()[0];
                         Long tolerated = entry.getValue()[1];
                         if(log.isDebugEnabled()) {
-                            log.debug("Found match for sampleName:{}, Regex:{}, satisfied value:{}, tolerated value:{}", 
+                            log.debug("Found match for sampleName:{}, Regex:{}, satisfied value:{}, tolerated value:{}",
                                     sampleName, entry.getKey(), satisfied, tolerated);
                         }
                         info.setSatisfiedThreshold(satisfied);
@@ -470,9 +470,9 @@ public class ReportGenerator {
                 // Get filtered samples from configuration
                 Pattern filteredSamplesPattern = configuration
                         .getFilteredSamplesPattern();
-                // Sample is kept if no filter is set 
+                // Sample is kept if no filter is set
                 // or if its name matches the filter pattern
-                return filteredSamplesPattern == null 
+                return filteredSamplesPattern == null
                         || filteredSamplesPattern.matcher(sample.getName()).matches();
         });
         nameFilter.addSampleConsumer(createApdexSummaryConsumer());

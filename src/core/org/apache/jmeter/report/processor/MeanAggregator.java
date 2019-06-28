@@ -21,7 +21,7 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
 
 /**
  * The class MeanAggregator is used to get mean from samples.
- * 
+ *
  * @since 3.0
  */
 public class MeanAggregator implements Aggregator {
@@ -30,7 +30,7 @@ public class MeanAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#getCount()
      */
     @Override
@@ -40,7 +40,7 @@ public class MeanAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#getResult()
      */
     @Override
@@ -50,7 +50,7 @@ public class MeanAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#addValue(double)
      */
     @Override
@@ -60,7 +60,7 @@ public class MeanAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#reset()
      */
     @Override

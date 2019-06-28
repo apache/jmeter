@@ -51,7 +51,7 @@ public final class FileWrapper {
     private static final Map<String, FileRowColContainer> fileContainers = new HashMap<>();
 
     /* The cache of file packs - used to improve thread access */
-    private static final ThreadLocal<Map<String, FileWrapper>> filePacks = 
+    private static final ThreadLocal<Map<String, FileWrapper>> filePacks =
         new ThreadLocal<Map<String, FileWrapper>>() {
         @Override
         protected Map<String, FileWrapper> initialValue() {

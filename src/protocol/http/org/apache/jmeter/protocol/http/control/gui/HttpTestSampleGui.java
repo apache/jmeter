@@ -51,12 +51,12 @@ import org.apache.jorphan.gui.JLabeledTextField;
  */
 @GUIMenuSortOrder(1)
 public class HttpTestSampleGui extends AbstractSamplerGui {
-    
+
     private static final long serialVersionUID = 241L;
-    
+
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
-    
+
     private UrlConfigGui urlConfigGui;
     private JCheckBox retrieveEmbeddedResources;
     private JCheckBox concurrentDwn;
@@ -113,7 +113,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             responseTimeOut.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.RESPONSE_TIMEOUT));
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -169,7 +169,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
         // URL CONFIG
         urlConfigGui = new UrlConfigGui(true, true, true);
-        
+
         // HTTP request options
         JPanel httpOptions = new HorizontalPanel();
         httpOptions.add(getImplementationPanel());
@@ -184,9 +184,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             advancedPanel.add(createSourceAddrPanel());
             advancedPanel.add(getProxyServerPanel());
         }
-        
+
         advancedPanel.add(createOptionalTasksPanel());
-        
+
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.add(JMeterUtils
                 .getResString("web_testing_basic"), urlConfigGui);
@@ -208,7 +208,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         timeOut.add(reqPanel);
         return timeOut;
     }
-    
+
     private JPanel getConnectTimeOutPanel() {
         connectTimeOut = new JTextField(10);
 
@@ -263,7 +263,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         // Embedded URL match regex
         embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),20); // $NON-NLS-1$
         embeddedRsrcPanel.add(embeddedRE);
-        
+
         return embeddedRsrcPanel;
     }
 
@@ -281,7 +281,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         implPanel.add(httpImplementation);
         return implPanel;
     }
-    
+
     protected JPanel createOptionalTasksPanel() {
         // OPTIONAL TASKS
         final JPanel checkBoxPanel = new VerticalPanel();
@@ -294,7 +294,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
         return checkBoxPanel;
     }
-    
+
     protected JPanel createSourceAddrPanel() {
         final JPanel sourceAddrPanel = new HorizontalPanel();
         sourceAddrPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
@@ -316,7 +316,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     public Dimension getPreferredSize() {
         return getMinimumSize();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -343,7 +343,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             responseTimeOut.setText(""); // $NON-NLS-1$
         }
     }
-    
+
     private void enableConcurrentDwn(boolean enable) {
         if (enable) {
             concurrentDwn.setEnabled(true);
@@ -357,7 +357,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             embeddedRE.setEnabled(false);
         }
     }
-    
+
 
     /**
      * Create a panel containing the proxy server details

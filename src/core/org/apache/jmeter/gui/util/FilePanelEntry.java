@@ -52,7 +52,7 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
     private final List<ChangeListener> listeners = new LinkedList<>();
 
     private final String[] filetypes;
-    
+
     private boolean onlyDirectories = false;
 
     // Mainly needed for unit test Serialisable tests
@@ -75,13 +75,13 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
     public FilePanelEntry(String label, ChangeListener listener, String ... exts) {
         this(label, false, listener, exts);
     }
-    
+
     public FilePanelEntry(String label, boolean onlyDirectories, ChangeListener listener, String ... exts) {
         this.label = new JLabel(label);
         if (listener != null) {
             listeners.add(listener);
         }
-        if (exts != null && 
+        if (exts != null &&
           !(exts.length == 1 && exts[0] == null) // String null is converted to String[]{null} NOSONAR it's not code
             ) {
             this.filetypes = new String[exts.length];

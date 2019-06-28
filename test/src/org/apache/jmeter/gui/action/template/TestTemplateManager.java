@@ -58,21 +58,21 @@ public class TestTemplateManager extends JMeterTestCase {
         assertEquals("n 1", testTemplateParameters.get("testKey1"));
         assertEquals("n 2", testTemplateParameters.get("testKey2"));
         assertEquals("n 3", testTemplateParameters.get("testKey3"));
-        
+
         testTemplate = templateMap.get("testTemplateNotTestPlan");
         assertFalse(testTemplate.isTestPlan());
         assertEquals("testTemplateNotTestPlan", testTemplate.getName());
         assertEquals("/bin/templates/testTemplateNotTestPlan.jmx", testTemplate.getFileName());
         assertEquals("testTemplateNotTestPlan desc", testTemplate.getDescription());
         assertNull(testTemplate.getParameters());
-        
+
         testTemplate = templateMap.get("testTemplate");
         assertTrue(testTemplate.isTestPlan());
         assertEquals("testTemplate", testTemplate.getName());
         assertEquals("/bin/templates/testTemplate.jmx", testTemplate.getFileName());
         assertEquals("testTemplate desc", testTemplate.getDescription());
         assertNull(testTemplate.getParameters());
-        
+
     }
 
     /**
@@ -94,7 +94,7 @@ public class TestTemplateManager extends JMeterTestCase {
             TemplateManager templateManager = TemplateManager.getInstance();
             templateManager.parseTemplateFile(templateFile);
         } catch (SAXParseException ex) {
-            assertTrue("Exception did not contains expected message, got:"+ex.getMessage(), 
+            assertTrue("Exception did not contains expected message, got:"+ex.getMessage(),
                     ex.getMessage().indexOf("Element type \"key\" must be declared.")>=0);
         }
     }

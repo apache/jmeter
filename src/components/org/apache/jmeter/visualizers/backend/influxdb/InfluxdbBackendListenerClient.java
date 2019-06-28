@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of {@link AbstractBackendListenerClient} to write in an InfluxDB using 
+ * Implementation of {@link AbstractBackendListenerClient} to write in an InfluxDB using
  * custom schema
  * @since 3.2
  */
@@ -54,7 +54,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
     // Name of the measurement
     private static final String EVENTS_FOR_ANNOTATION = "events";
-    
+
     private static final String TAGS = ",tags=";
     private static final String TEXT = "text=\"";
 
@@ -176,7 +176,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     }
     /**
      * Add request metrics to metrics manager.
-     * 
+     *
      * @param metric
      *            {@link SamplerMetric}
      */
@@ -210,9 +210,9 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         }
     }
 
-    private void addMetric(String transaction, int count, 
+    private void addMetric(String transaction, int count,
             Long sentBytes, Long receivedBytes,
-            String statut, double mean, double minTime, double maxTime, 
+            String statut, double mean, double minTime, double maxTime,
             Collection<Float> pcts, PercentileProvider percentileProvider) {
         if (count > 0) {
             StringBuilder tag = new StringBuilder(95);
@@ -424,14 +424,14 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
      * * @param startOrEnd boolean true for start, false for end
      */
     private void addAnnotation(boolean startOrEnd) {
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, 
+        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION,
                 TAG_APPLICATION + application + ",title=ApacheJMeter"+ userTag +
-                (StringUtils.isNotEmpty(testTags) ? TAGS+ testTags : ""), 
-                TEXT +  
+                (StringUtils.isNotEmpty(testTags) ? TAGS+ testTags : ""),
+                TEXT +
                         AbstractInfluxdbMetricsSender.fieldToStringValue(testTitle +
                                 (startOrEnd ? " started" : " ended")) + "\"" );
     }
-    
+
     @Override
     public Arguments getDefaultParameters() {
         Arguments arguments = new Arguments();
