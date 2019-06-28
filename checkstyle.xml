@@ -37,7 +37,7 @@
   <!-- Miscellaneous -->
   <module name="FileTabCharacter">
     <!-- No tabs allowed! -->
-    <property name="fileExtensions" value="java, groovy, xml, xsd, dtd, htm, html, txt, properties"/>
+    <property name="fileExtensions" value="java, kt, kts, groovy, xml, xsd, dtd, htm, html, txt, properties"/>
   </module>
   <module name="NewlineAtEndOfFile"/>
   <module name="RegexpSingleline">
@@ -47,7 +47,7 @@
   <module name="RegexpMultiline">
     <!-- No more than 2 blank lines allowed. -->
     <property name="format" value="\r?\n[\t ]*\r?\n[\t ]*\r?\n[\t ]*\r?\n"/>
-    <property name="fileExtensions" value="java, groovy, xml, properties"/>
+    <property name="fileExtensions" value="java, kt, kts, groovy, xml, properties"/>
     <property name="message" value="Unnecessary consecutive lines"/>
   </module>
   <!--<module name="RegexpOnFilename">-->
@@ -62,7 +62,7 @@
 
   <!-- Size Violations -->
   <module name="FileLength">
-    <property name="fileExtensions" value="java, groovy"/>
+    <property name="fileExtensions" value="java, kt, kts, groovy"/>
   </module>
 
   <module name="TreeWalker">
