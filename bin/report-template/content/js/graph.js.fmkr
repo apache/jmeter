@@ -669,6 +669,7 @@ var connectTimeOverTimeInfos = {
                 yaxis: {
 
                     axisLabel: "Percentile Connect Time in ms",
+
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
