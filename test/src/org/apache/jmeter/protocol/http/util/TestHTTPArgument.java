@@ -81,7 +81,7 @@ public class TestHTTPArgument {
             assertEquals("value_ here", arg.getValue());
             assertEquals("name.%3F", arg.getEncodedName());
             assertEquals("value_+here", arg.getEncodedValue());
-            arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch 
+            arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch
             assertEquals("name.?", arg.getEncodedName());
             assertEquals("value_ here", arg.getEncodedValue());
             
