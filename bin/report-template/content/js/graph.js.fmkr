@@ -667,7 +667,7 @@ var connectTimeOverTimeInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Average Connect Time in ms",
+                    axisLabel: "95 percentile Connect Time in ms",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',

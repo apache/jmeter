@@ -21,15 +21,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.processor.MeanAggregatorFactory;
-import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
+import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.ConnectTimeValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 import org.apache.jmeter.util.JMeterUtils;
-
 /**
  * The class ConnectTimeOverTimeGraphConsumer provides a graph to visualize Connection time
  * per time period (defined by granularity)
@@ -39,10 +37,11 @@ import org.apache.jmeter.util.JMeterUtils;
 public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer {
     private static final boolean CONNECT_TIME_SAVED =
             JMeterUtils.getPropDefault("jmeter.save.saveservice.connect_time", true); //$NON-NLS-1$
+    private static final String PERCENTILE_FORMAT = "%dth percentile";
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #createTimeStampKeysSelector()
@@ -54,22 +53,43 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
         return keysSelector;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
+    /**
+     * Creates the group info for elapsed time percentile depending on jmeter
+     * properties.
+     *
+     * @param propertyKey
+     *            the property key
+     * @param defaultValue
+     *            the default value
+     * @param serieName Serie name
+     * @return the group info
      */
+    private GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String serieName) {
+        int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
+        PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
+        factory.setPercentileIndex(property);
+
+        return new GroupInfo(factory, new NameSeriesSelector(),
+                new ConnectTimeValueSelector(false), false, false);
+    }
+
+    /*
+   * (non-Javadoc)
+   *
+   * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
+   * createGroupInfos()
+   */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         if(!CONNECT_TIME_SAVED) {
             return Collections.emptyMap();
         }
+
         HashMap<String, GroupInfo> groupInfos = new HashMap<>();
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new MeanAggregatorFactory(), new NameSeriesSelector(),
-                // We ignore Transaction Controller results
-                new ConnectTimeValueSelector(false), false, false));
+        groupInfos.put("aggregate_rpt_pct2", //$NON-NLS-1$
+                createPercentileGroupInfo("aggregate_rpt_pct2", 95, //$NON-NLS-1$
+                        String.format(
+                                PERCENTILE_FORMAT, Integer.valueOf(95))));
         return groupInfos;
     }
 }
