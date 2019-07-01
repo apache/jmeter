@@ -73,7 +73,7 @@ public class Copy extends AbstractAction {
                 return (JMeterTreeNode[]) clipboard.getData(JMeterTreeNodeTransferable.JMETER_TREE_NODE_ARRAY_DATA_FLAVOR);
             } catch (Exception ex) {
                 log.error("Clipboard node read error: {}", ex.getMessage(), ex);
-                JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), 
+                JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
                         JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(),  //$NON-NLS-1$  //$NON-NLS-2$
                         JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
             }
@@ -87,7 +87,7 @@ public class Copy extends AbstractAction {
         cloneChildren(treeNode, node);
         return treeNode;
     }
-    
+
     /**
      * If a child and one of its ancestors are selected : only keep the ancestor
      * @param currentNodes JMeterTreeNode[]
@@ -103,7 +103,7 @@ public class Copy extends AbstractAction {
                     break;
                 }
             }
-            
+
             if(!exclude) {
                 nodes.add(currentNodes[i]);
             }
@@ -120,8 +120,8 @@ public class Copy extends AbstractAction {
             clipboard.setContents(transferable, null);
         } catch (Exception ex) {
             log.error("Clipboard node read error: {}", ex.getMessage(), ex);
-            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), 
-                    JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(), //$NON-NLS-1$ //$NON-NLS-2$ 
+            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(), //$NON-NLS-1$ //$NON-NLS-2$
                     JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
         }
     }

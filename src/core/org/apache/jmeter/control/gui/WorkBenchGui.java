@@ -97,13 +97,13 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
             saveWorkBench.setSelected(tp.getSaveWorkBench());
         }
     }
-    
+
     @Override
     public void clearGui() {
         super.clearGui();
         saveWorkBench.setSelected(true);
     }
-    
+
     /**
      * When a user right-clicks on the component in the test tree, or selects
      * the edit menu when the component is selected, the component will be asked

@@ -47,7 +47,7 @@ public class JSONManager {
     private static final Configuration DEFAULT_CONFIGURATION =
             Configuration.defaultConfiguration().addOptions(Option.ALWAYS_RETURN_LIST);
     /**
-     * This Map can hardly grow above 10 elements as it is used within JSONPostProcessor to 
+     * This Map can hardly grow above 10 elements as it is used within JSONPostProcessor to
      * store the computed JsonPath for the set of JSON Path Expressions.
      * Usually there will be 1 to Maximum 10 elements
      */
@@ -62,13 +62,13 @@ public class JSONManager {
 
         return jsonPath;
     }
-    
+
     public void reset() {
         expressionToJsonPath.clear();
     }
 
     /**
-     * 
+     *
      * @param jsonString JSON String from which data is extracted
      * @param jsonPath JSON-PATH expression
      * @return List of JSON Strings of the extracted data

@@ -95,7 +95,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
-     * 
+     *
      * @return the version of this converter
      */
     public static String getVersion() {
@@ -168,7 +168,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
                 if (SampleResult.TEXT.equals(res.getDataType())){
                     writer.setValue(new String(res.getResponseData(), res.getDataEncodingWithDefault()));
                 } else {
-                    writer.setValue("Non-TEXT response data, cannot record: (" + res.getDataType() + ")");                    
+                    writer.setValue("Non-TEXT response data, cannot record: (" + res.getDataType() + ")");
                 }
                 // Otherwise don't save anything - no point
             } catch (UnsupportedEncodingException e) {
@@ -345,7 +345,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     /**
      * Write a tag with a content of <code>value</code> to the
      * <code>writer</code>
-     * 
+     *
      * @param writer
      *            writer to write the tag into
      * @param tag
@@ -469,7 +469,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             res.setResponseData(outstream.toByteArray());
         } catch (IOException e) {
             log.warn("Failed to read result file.", e);
-        } 
+        }
     }
 
     /**

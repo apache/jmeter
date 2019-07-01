@@ -53,7 +53,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 
     /**
      * Constructor for the JMeterTreeListener object.
-     * 
+     *
      * @param model
      *            The {@link JMeterTreeModel} for this listener
      */

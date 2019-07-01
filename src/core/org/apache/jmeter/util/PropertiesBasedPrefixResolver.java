@@ -52,7 +52,7 @@ public class PropertiesBasedPrefixResolver extends PrefixResolverDefault {
                 if(!pathToNamespaceConfigFile.exists()) {
                     log.error("Cannot find configured file:'{}' in property:'{}', file does not exist",
                             pathToNamespaceConfig, XPATH_NAMESPACE_CONFIG);
-                } else { 
+                } else {
                     if(!pathToNamespaceConfigFile.canRead()) {
                         log.error("Cannot read configured file:'{}' in property:'{}'", pathToNamespaceConfig,
                                 XPATH_NAMESPACE_CONFIG);

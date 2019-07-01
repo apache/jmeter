@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -31,7 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Function to unescape a string containing entity escapes
- * to a string containing the actual Unicode characters corresponding to the escapes. 
+ * to a string containing the actual Unicode characters corresponding to the escapes.
  * Supports HTML 4.0 entities.
  * <p>
  * For example, the string "&amp;lt;Fran&amp;ccedil;ais&amp;gt;" will become "&lt;Fran&ccedil;ais&gt;"

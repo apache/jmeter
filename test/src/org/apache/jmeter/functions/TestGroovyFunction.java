@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -50,7 +50,7 @@ public class TestGroovyFunction extends JMeterTestCase implements JMeterSerialTe
     public void tearDown() {
         JMeterUtils.getJMeterProperties().remove("groovy.utilities");
     }
-    
+
     @Before
     public void setUp() {
         function = new Groovy();
@@ -95,7 +95,7 @@ public class TestGroovyFunction extends JMeterTestCase implements JMeterSerialTe
         String ret = function.execute(result, null);
         assertEquals("the quick brown fox", ret);
     }
-    
+
     @Test
     public void testReplace2() throws Exception {
         vars.put("URL", "/query.cgi?s1=1&amp;s2=2&amp;s3=3");
@@ -106,7 +106,7 @@ public class TestGroovyFunction extends JMeterTestCase implements JMeterSerialTe
         assertEquals("/query.cgi?s1=1&s2=2&s3=3", ret);
         assertEquals(ret,vars.getObject("URL"));
     }
-    
+
     @Test
     public void testFileLoading() throws Exception {
         JMeterUtils.setProperty("groovy.utilities", "bin/utility.groovy");
@@ -115,7 +115,7 @@ public class TestGroovyFunction extends JMeterTestCase implements JMeterSerialTe
         String ret = function.execute(result, null);
         assertEquals("3628800", ret);
     }
-    
+
     @Test(expected=InvalidVariableException.class)
     public void testInvalidFileLoading() throws Exception {
         JMeterUtils.setProperty("groovy.utilities", "bin/missing.groovy");

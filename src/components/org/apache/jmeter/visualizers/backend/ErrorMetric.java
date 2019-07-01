@@ -32,18 +32,18 @@ public class ErrorMetric {
      * Error code of a sample result, by example : "400"
      */
     private String responseCode = ""; // Never return null
-    
+
     /**
      * Error response message of a sample result, , by example : "bad request"
      */
     private String responseMessage = ""; // Never return null
- 
+
     public ErrorMetric() {
     }
 
     public ErrorMetric(SampleResult result) {
-        if (MetricUtils.isSuccessCode(responseCode) || 
-                (StringUtils.isEmpty(responseCode) && 
+        if (MetricUtils.isSuccessCode(responseCode) ||
+                (StringUtils.isEmpty(responseCode) &&
                         !StringUtils.isEmpty(result.getFirstAssertionFailureMessage()))) {
             responseCode = MetricUtils.ASSERTION_FAILED;
             responseMessage = result.getFirstAssertionFailureMessage();
@@ -84,7 +84,7 @@ public class ErrorMetric {
         ErrorMetric otherError = (ErrorMetric) other;
         return getResponseCode().equalsIgnoreCase(otherError.getResponseCode())
                 && getResponseMessage().equalsIgnoreCase(otherError.getResponseMessage());
- 
+
     }
 
     @Override

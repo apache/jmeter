@@ -44,7 +44,7 @@ public abstract class BaseParser implements LinkExtractorParser {
      * Factory method of parsers. Instances might get cached, when
      * {@link LinkExtractorParser#isReusable()} on the newly created instance
      * equals {@code true}.
-     * 
+     *
      * @param parserClassName
      *            name of the class that should be used to create new parsers
      * @return a possibly cached instance of the wanted
@@ -52,7 +52,7 @@ public abstract class BaseParser implements LinkExtractorParser {
      * @throws LinkExtractorParseException
      *             when a new instance could not be instantiated
      */
-    public static LinkExtractorParser getParser(String parserClassName) 
+    public static LinkExtractorParser getParser(String parserClassName)
             throws LinkExtractorParseException {
 
         // Is there a cached parser?
@@ -84,7 +84,7 @@ public abstract class BaseParser implements LinkExtractorParser {
 
         return parser;
     }
-    
+
     /**
      * Parsers should over-ride this method if the parser class is re-usable, in
      * which case the class will be cached for the next getParser() call.

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -142,12 +142,12 @@ public class TestOnceOnlyController extends JMeterTestCase {
         // Sample in inner loop
         sub_2.addTestElement(new TestSampler("seven"));
         controller.addTestElement(sub_2);
-        
+
         // Compute the expected sample names
         String[] onlyOnceOrder = new String[] { "one", "two" };
         String[] order = new String[] { "three", "four", "five", "six", "seven", "four", "five", "six",
                 "seven", "four", "five", "six", "seven" };
-        // Outer only once + ("three" + ("four" + "five" + "six" + "seven") * innerLoopCount) * outerLoopCount;  
+        // Outer only once + ("three" + ("four" + "five" + "six" + "seven") * innerLoopCount) * outerLoopCount;
         int expectedNoSamples = 2 + (1 + (3 + 1) * innerLoopCount) * outerLoopCount;
         String[] expectedSamples = new String[expectedNoSamples];
         // The only once samples
@@ -164,12 +164,12 @@ public class TestOnceOnlyController extends JMeterTestCase {
         sub_2.setRunningVersion(true);
         sub_3.setRunningVersion(true);
         controller.initialize();
-        
+
         int counter = 0;
         TestElement sampler = null;
         while ((sampler = controller.next()) != null) {
             assertEquals(expectedSamples[counter], sampler.getPropertyAsString(TestElement.NAME));
-            
+
             counter++;
         }
         assertEquals(expectedNoSamples, counter);
@@ -209,7 +209,7 @@ public class TestOnceOnlyController extends JMeterTestCase {
         // Compute the expected sample names
         String[] onlyOnceOrder = new String[] { "one", "two" };
         String[] order = new String[] { "three", "four", "five", "six", "seven", "four", "seven", "four", "seven" };
-        // Outer only once + ("three" + "only once five and six" + ("four" + "seven") * innerLoopCount) * outerLoopCount;  
+        // Outer only once + ("three" + "only once five and six" + ("four" + "seven") * innerLoopCount) * outerLoopCount;
         int expectedNoSamples = 2 + (1 + 2 + (1 + 1) * innerLoopCount) * outerLoopCount;
         String[] expectedSamples = new String[expectedNoSamples];
         // The only once samples
@@ -220,19 +220,19 @@ public class TestOnceOnlyController extends JMeterTestCase {
         for(int i = 0; i < order.length * outerLoopCount; i++) {
             expectedSamples[onceOnlySamples + i] = order[i % order.length];
         }
-        
+
         // Execute the test pan
         controller.setRunningVersion(true);
         sub_1.setRunningVersion(true);
         sub_2.setRunningVersion(true);
         sub_3.setRunningVersion(true);
         controller.initialize();
-        
+
         int counter = 0;
         TestElement sampler = null;
         while ((sampler = controller.next()) != null) {
             assertEquals(expectedSamples[counter], sampler.getPropertyAsString(TestElement.NAME));
-            
+
             counter++;
         }
         assertEquals(expectedNoSamples, counter);

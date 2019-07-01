@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -116,7 +116,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure",res.isFailure());
-    }   
+    }
     @Test
     public void testAssertionPath1Negated() {
         assertion.setXPathString("//*[code=1]");
@@ -126,7 +126,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
-    } 
+    }
 
     @Test
     public void testAssertionPath2() throws Exception {
@@ -138,7 +138,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure",res.isFailure());
     }
-    
+
     @Test
     public void testAssertionPath2Negated() {
         assertion.setXPathString("//*[code=1]");
@@ -148,7 +148,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should not be a failure",res.isFailure());
-    } 
+    }
 
     @Test
     public void testAssertionBool1() throws Exception {
@@ -159,7 +159,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure",res.isFailure());
     }
-    
+
     @Test
     public void testAssertionBool1Negated() {
         assertion.setXPathString("count(//error)=2");
@@ -169,10 +169,10 @@ public class XPathAssertionTest extends JMeterTestCase {
         testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should not be a failure",res.isFailure());
-        assertEquals("when isNegated is true, when xpath matches, result should fail", 
+        assertEquals("when isNegated is true, when xpath matches, result should fail",
                 "Nodes Matched for count(//error)=2" , res.getFailureMessage());
     }
-    
+
     @Test
     public void testAssertionBool2() throws Exception {
         assertion.setXPathString("count(//*[code=1])=1");
@@ -182,7 +182,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure",res.isFailure());
     }
-    
+
     @Test
     public void testAssertionBool2Negated() {
         assertion.setXPathString("count(//*[code=1])=1");
@@ -193,9 +193,9 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
         assertEquals("Nodes Matched for count(//*[code=1])=1" , res.getFailureMessage());
-        
+
     }
-    
+
     @Test
     public void testAssertionBool3() throws Exception {
         assertion.setXPathString("count(//error)=1"); // wrong
@@ -226,7 +226,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
     }
-    
+
     @Test
     public void testAssertionBool4Negated() throws Exception {
         assertion.setXPathString("count(//*[code=2])=1"); //Wrong
@@ -408,7 +408,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
         assertFalse(res.isError());
     }
-    
+
     @Test
     public void testScope(){
         String data = "<html><head><title>testtitle</title></head><body>"
@@ -425,7 +425,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         log.debug("failureMessage: {}", res.getFailureMessage());
         assertFalse("When xpath conforms to xml, the result of assertion "
                 + "should be true ",res.isFailure());
-        assertFalse(res.isError());            
+        assertFalse(res.isError());
     }
     @Test
     public void testScopeFailure(){

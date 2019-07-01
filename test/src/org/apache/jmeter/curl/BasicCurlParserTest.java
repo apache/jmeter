@@ -28,12 +28,12 @@ import org.junit.Test;
 public class BasicCurlParserTest {
 
     /**
-     * 
+     *
      */
     public BasicCurlParserTest() {
         super();
     }
-    
+
     @Test
     public void testFFParsing() {
         String cmdLine = "curl 'http://jmeter.apache.org/' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0' "
@@ -46,8 +46,8 @@ public class BasicCurlParserTest {
         Assert.assertEquals(6, request.getHeaders().size());
         Assert.assertTrue(request.isCompressed());
         Assert.assertEquals("GET", request.getMethod());
-    }   
-    
+    }
+
     @Test
     public void testChromeParsing() {
         String cmdLine = "curl 'https://jmeter.apache.org/' -H 'Proxy-Connection: keep-alive' "
@@ -63,7 +63,7 @@ public class BasicCurlParserTest {
         Assert.assertTrue(request.isCompressed());
         Assert.assertEquals("GET", request.getMethod());
     }
-    
+
     @Test
     public void testChromeParsingNotCompressed() {
         String cmdLine = "curl 'https://jmeter.apache.org/' -H 'Proxy-Connection: keep-alive' "
@@ -80,7 +80,7 @@ public class BasicCurlParserTest {
         Assert.assertFalse(request.isCompressed());
         Assert.assertEquals("GET", request.getMethod());
     }
-    
+
     @Test
     public void testChromeParsingNoHeaders() {
         String cmdLine = "curl 'https://jmeter.apache.org/'";
@@ -91,7 +91,7 @@ public class BasicCurlParserTest {
         Assert.assertFalse(request.isCompressed());
         Assert.assertEquals("GET", request.getMethod());
     }
-    
+
     @Test
     public void testPost() {
         String cmdLine = "curl 'https://jmeter.apache.org/test' "
@@ -107,7 +107,7 @@ public class BasicCurlParserTest {
         Assert.assertTrue(request.isCompressed());
         Assert.assertEquals("POST", request.getMethod());
     }
-    
+
     @Test(expected=IllegalArgumentException.class)
     public void testError() {
         String cmdLine = "curl 'https://jmeter.apache.org/' -u -H 'Proxy-Connection: keep-alive' "

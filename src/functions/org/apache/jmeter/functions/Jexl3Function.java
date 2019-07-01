@@ -107,7 +107,7 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
         }
         return str;
     }
-    
+
     /**
      * Get JexlEngine from ThreadLocal
      * @return JexlEngine
@@ -128,7 +128,7 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
         }
         return engine;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public List<String> getArgumentDesc()

@@ -201,7 +201,7 @@ public class SmtpSampler extends AbstractSampler {
         // process the sampler result
         try (InputStream is = message.getInputStream()) {
             return IOUtils.toByteArray(is);
-        }        
+        }
     }
 
     private List<File> getAttachmentFiles() {

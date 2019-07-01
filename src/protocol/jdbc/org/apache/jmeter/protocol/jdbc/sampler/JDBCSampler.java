@@ -43,9 +43,9 @@ import org.apache.jorphan.util.JOrphanUtils;
 public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, TestBean, ConfigMergabilityIndicator {
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
-    
+
     private static final long serialVersionUID = 234L;
-    
+
     /**
      * Creates a JDBCSampler.
      */

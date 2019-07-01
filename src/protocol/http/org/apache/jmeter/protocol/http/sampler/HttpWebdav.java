@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -32,11 +32,11 @@ public final class HttpWebdav extends HttpEntityEnclosingRequestBase {
     // A HTTP method can be a token as specified in
     // https://tools.ietf.org/html/rfc7230#section-3.2.6
     private static final Pattern WEBDAV_METHOD_PATTERN = Pattern.compile("(?i)[\\da-z!#$%&'*+\\-.^_`|~]+"); // only used in .matches(), no need for anchors
-    
+
     private final String davMethod;
 
     /**
-     * 
+     *
      * @param davMethod
      *            method to use (has to be a Webdav method as identified by
      *            {@link #isWebdavMethod(String)})

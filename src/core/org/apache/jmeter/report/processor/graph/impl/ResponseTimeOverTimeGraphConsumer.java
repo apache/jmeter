@@ -29,7 +29,7 @@ import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
- * The class ResponseTimeOverTimeGraphConsumer provides a graph to visualize mean 
+ * The class ResponseTimeOverTimeGraphConsumer provides a graph to visualize mean
  * response time per time period (defined by granularity)
  *
  * @since 3.0
@@ -39,7 +39,7 @@ public class ResponseTimeOverTimeGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #createTimeStampKeysSelector()
@@ -53,7 +53,7 @@ public class ResponseTimeOverTimeGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */

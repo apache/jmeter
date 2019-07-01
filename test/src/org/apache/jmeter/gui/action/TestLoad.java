@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -30,7 +30,7 @@ import org.apache.jorphan.collections.HashTree;
 import junit.framework.TestSuite;
 
 /**
- * 
+ *
  * Test JMX files to check that they can be loaded OK.
  */
 public class TestLoad extends JMeterTestCaseJUnit {
@@ -38,9 +38,9 @@ public class TestLoad extends JMeterTestCaseJUnit {
     private static final String basedir = new File(System.getProperty("user.dir")).getParent();
     private static final File testfiledir = new File(basedir,"bin/testfiles");
     private static final File demofiledir = new File(basedir,"xdocs/demos");
-    
+
     private static final Set<String> notTestPlan = new HashSet<>();// not full test plans
-    
+
     static{
         notTestPlan.add("load_bug_list.jmx");// used by TestAnchorModifier
         notTestPlan.add("Load_JMeter_Page.jmx");// used by TestAnchorModifier
@@ -56,7 +56,7 @@ public class TestLoad extends JMeterTestCaseJUnit {
 
     private final File testFile;
     private final String parent;
-    
+
     public TestLoad(String name) {
         super(name);
         testFile=null;
@@ -83,7 +83,7 @@ public class TestLoad extends JMeterTestCaseJUnit {
             suite.addTest(new TestLoad("checkTestFile", file, dir));
         }
     }
-    
+
     public void checkTestFile() throws Exception{
         HashTree tree = null;
         try {
@@ -93,12 +93,12 @@ public class TestLoad extends JMeterTestCaseJUnit {
         }
         assertTree(tree);
     }
-    
+
     private void assertTree(HashTree tree) throws Exception {
         assertNotNull(parent+": "+ testFile.getName()+" caused null tree: ",tree);
         final Object object = tree.getArray()[0];
         final String name = testFile.getName();
-        
+
         if (! (object instanceof org.apache.jmeter.testelement.TestPlan) && !notTestPlan.contains(name)){
             fail(parent+ ": " +name+" tree should be TestPlan, but is "+object.getClass().getName());
         }

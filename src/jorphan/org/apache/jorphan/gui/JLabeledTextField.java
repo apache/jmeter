@@ -89,7 +89,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
     public JLabeledTextField(String pLabel, Color bk) {
         this(pLabel, 20, bk, true);
     }
-       
+
     /**
      * Size defaults to 20
      * @param pLabel
@@ -269,7 +269,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
             mChangeListener.stateChanged(ce);
         }
     }
-    
+
     @Override
     public boolean requestFocusInWindow() {
         return mTextField.requestFocusInWindow();

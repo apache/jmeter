@@ -32,19 +32,19 @@ import org.slf4j.LoggerFactory;
 /**
  * Consume samples using the JMeter timestamp property (defaulting to {@link SampleSaveConfiguration#MILLISECONDS}) and reproduce them as a long
  * value (for faster treatment later in the consuming chain).
- * 
+ *
  * @since 3.0
  */
 public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(NormalizerSampleConsumer.class);
 
-    private static final String TIMESTAMP_FORMAT = 
+    private static final String TIMESTAMP_FORMAT =
             JMeterUtils.getPropDefault(
                     "jmeter.save.saveservice.timestamp_format", // $NON-NLS-1$
                     SampleSaveConfiguration.MILLISECONDS);
 
-    private static final String PARSE_TIMESTAMP_EXCEPTION_MESSAGE = 
+    private static final String PARSE_TIMESTAMP_EXCEPTION_MESSAGE =
             "Could not parse timeStamp <%s> using format defined by property jmeter.save.saveservice.timestamp_format=%s on sample %s ";
 
     /**
@@ -56,7 +56,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
      * is format ms
      */
     private boolean isMillisFormat;
-    
+
     /**
      * null if format is isMillisFormat is true
      */
@@ -81,13 +81,13 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
             throw new SampleException("'none' format for 'jmeter.save.saveservice.timestamp_format' property is not accepted for report generation");
         }
         log.info("Using format, '{}', to parse timeStamp field", TIMESTAMP_FORMAT);
-        
+
         isMillisFormat = SampleSaveConfiguration.MILLISECONDS.equalsIgnoreCase(TIMESTAMP_FORMAT);
         SimpleDateFormat formatter = null;
         // Prepare for a pretty date
         if (!isMillisFormat) {
             formatter = new SimpleDateFormat(TIMESTAMP_FORMAT);
-        } 
+        }
         return formatter;
     }
 
@@ -99,7 +99,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
             if(isMillisFormat) {
                 date = new Date(Long.parseLong(tStr));
             } else {
-                date = dateFormat.parse(tStr);                    
+                date = dateFormat.parse(tStr);
             }
         } catch (Exception e) {
             throw new SampleException(String.format(

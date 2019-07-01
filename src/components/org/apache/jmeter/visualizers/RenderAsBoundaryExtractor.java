@@ -51,7 +51,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
     private JPanel boundaryExtractorPane;
 
     private JTextArea boundaryExtractorDataField;
-    
+
     private JLabeledTextField boundaryExtractorFieldLeft;
 
     private JLabeledTextField boundaryExtractorFieldRight;
@@ -61,7 +61,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
     private JTabbedPane rightSide;
 
     private SampleResult sampleResult = null;
-    
+
     /**
      * Display the response as text or as rendered HTML. Change the text on the
      * button appropriate to the current display.
@@ -76,7 +76,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
             executeAndShowBoundaryExtractorTester(response);
         }
     }
-    
+
     /**
      * Launch boundaryExtractor engine to parse a input text
      * @param textToParse
@@ -89,8 +89,8 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
             this.boundaryExtractorResultField.setCaretPosition(0); // go to first line
         }
     }
-    
-    
+
+
     private String process(String textToParse) {
 
         BoundaryExtractor extractor = new BoundaryExtractor();
@@ -149,7 +149,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
         pane.add(mainSplit, BorderLayout.CENTER);
         return pane;
     }
-    
+
     /**
      * Create the boundaryExtractor task pane
      *
@@ -164,7 +164,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
         boundaryExtractorActionPanel.add(boundaryExtractorFieldLeft, BorderLayout.WEST);
         boundaryExtractorFieldRight = new JLabeledTextField(JMeterUtils.getResString("boundaryextractor_rightboundary_field")); // $NON-NLS-1$
         boundaryExtractorActionPanel.add(boundaryExtractorFieldRight, BorderLayout.WEST);
-        
+
         JButton boundaryExtractorTester = new JButton(JMeterUtils.getResString("boundaryextractor_tester_button_test")); // $NON-NLS-1$
         boundaryExtractorTester.setActionCommand(BOUNDARY_EXTRACTOR_TESTER_COMMAND);
         boundaryExtractorTester.addActionListener(this);
@@ -181,7 +181,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
 
         return boundaryExtractorTasksPanel;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public void setupTabPane() {
@@ -194,7 +194,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
 
     @Override
     public void setLastSelectedTab(int index) {
-        // nothing to do    
+        // nothing to do
     }
 
     /** {@inheritDoc} */
@@ -225,7 +225,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
     public String toString() {
         return JMeterUtils.getResString("boundaryextractor_tester_title"); // $NON-NLS-1$
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public void renderImage(SampleResult sampleResult) {

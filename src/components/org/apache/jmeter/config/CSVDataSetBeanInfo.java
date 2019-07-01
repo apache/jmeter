@@ -49,15 +49,15 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
     static {
         SHARE_TAGS[SHARE_ALL]    = "shareMode.all"; //$NON-NLS-1$
         SHARE_TAGS[SHARE_GROUP]  = "shareMode.group"; //$NON-NLS-1$
-        SHARE_TAGS[SHARE_THREAD] = "shareMode.thread"; //$NON-NLS-1$        
+        SHARE_TAGS[SHARE_THREAD] = "shareMode.thread"; //$NON-NLS-1$
     }
 
     public CSVDataSetBeanInfo() {
         super(CSVDataSet.class);
 
         createPropertyGroup("csv_data",             //$NON-NLS-1$
-                new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES, 
-                        IGNORE_FIRST_LINE, DELIMITER, QUOTED_DATA, 
+                new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES,
+                        IGNORE_FIRST_LINE, DELIMITER, QUOTED_DATA,
                         RECYCLE, STOPTHREAD, SHAREMODE });
 
         PropertyDescriptor p = property(FILENAME);

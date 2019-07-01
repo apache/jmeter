@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.parser;
@@ -99,7 +99,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
         public String userAgent;
 
         /**
-         * 
+         *
          * @param htmlFileName HTML File with content
          * @param baseUrl Base URL
          * @param expectedSet Set of expected URLs
@@ -110,7 +110,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
             this(htmlFileName, baseUrl, expectedList, expectedList, DEFAULT_UA);
         }
         /**
-         * 
+         *
          * @param htmlFileName HTML File with content
          * @param baseUrl Base URL
          * @param expectedSet Set of expected URLs
@@ -127,11 +127,11 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
 
     }
 
-    private static final String DEFAULT_JMETER_PARSER = 
+    private static final String DEFAULT_JMETER_PARSER =
             "org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser";
 
     // List of parsers to test. Should probably be derived automatically
-    private static final String[] PARSERS = { 
+    private static final String[] PARSERS = {
         "org.apache.jmeter.protocol.http.parser.JTidyHTMLParser",
         "org.apache.jmeter.protocol.http.parser.RegexpHTMLParser",
         DEFAULT_JMETER_PARSER,
@@ -143,16 +143,16 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
                     "http://localhost/mydir/myfile.html",
                     "testfiles/HTMLParserTestCase.set",
                     "testfiles/HTMLParserTestCase.all"),
-            new TestData("testfiles/HTMLParserTestCaseWithBaseHRef.html", 
+            new TestData("testfiles/HTMLParserTestCaseWithBaseHRef.html",
                     "http://localhost/mydir/myfile.html",
-                    "testfiles/HTMLParserTestCaseBase.set", 
+                    "testfiles/HTMLParserTestCaseBase.set",
                     "testfiles/HTMLParserTestCaseBase.all"),
-            new TestData("testfiles/HTMLParserTestCaseWithBaseHRef2.html", 
+            new TestData("testfiles/HTMLParserTestCaseWithBaseHRef2.html",
                     "http://localhost/mydir/myfile.html",
-                     "testfiles/HTMLParserTestCaseBase.set", 
+                     "testfiles/HTMLParserTestCaseBase.set",
                      "testfiles/HTMLParserTestCaseBase.all"),
             new TestData("testfiles/HTMLParserTestCaseWithMissingBaseHRef.html",
-                    "http://localhost/mydir/images/myfile.html", 
+                    "http://localhost/mydir/images/myfile.html",
                     "testfiles/HTMLParserTestCaseBase.set",
                     "testfiles/HTMLParserTestCaseBase.all"),
             new TestData("testfiles/HTMLParserTestCase2.html",
@@ -170,7 +170,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
             new TestData("testfiles/HTMLParserTestFrames.html",
                     "http://localhost/",
                     "testfiles/HTMLParserTestFrames.all",
-                    "testfiles/HTMLParserTestFrames.all"), 
+                    "testfiles/HTMLParserTestFrames.all"),
             // Relative filenames
             new TestData("testfiles/HTMLParserTestFile_2.html",
                     "file:HTMLParserTestFile_2.html",

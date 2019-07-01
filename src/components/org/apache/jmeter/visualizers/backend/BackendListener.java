@@ -48,13 +48,13 @@ import org.slf4j.LoggerFactory;
  * @since 2.13
  */
 public class BackendListener extends AbstractTestElement
-    implements Backend, Serializable, SampleListener, 
+    implements Backend, Serializable, SampleListener,
         TestStateListener, NoThreadClone, Remoteable {
 
     private static final class ListenerClientData {
         private BackendListenerClient client;
         private BlockingQueue<SampleResult> queue;
-        private LongAdder queueWaits; // how many times we had to wait to queue a SampleResult        
+        private LongAdder queueWaits; // how many times we had to wait to queue a SampleResult
         private LongAdder queueWaitTime; // how long we had to wait (nanoSeconds)
         // @GuardedBy("LOCK")
         private int instanceCount; // number of active tests
@@ -219,7 +219,7 @@ public class BackendListener extends AbstractTestElement
                         }
                         // try to process as many as possible
                         // The == comparison is not a mistake
-                        while (!(endOfLoop = sampleResult == FINAL_SAMPLE_RESULT) && sampleResult != null ) { 
+                        while (!(endOfLoop = sampleResult == FINAL_SAMPLE_RESULT) && sampleResult != null ) {
                             sampleResults.add(sampleResult);
                             if (isDebugEnabled) {
                                 log.debug("Thread: {} polling from queue: {}", Thread.currentThread().getName(),
@@ -311,7 +311,7 @@ public class BackendListener extends AbstractTestElement
             myName = getName();
             listenerClientData = queuesByTestElementName.get(myName);
             if (listenerClientData == null){
-                // We need to do this to ensure in Distributed testing 
+                // We need to do this to ensure in Distributed testing
                 // that only 1 instance of BackendListenerClient is used
                 clientClass = initClass(); // may be null
                 BackendListenerClient backendListenerClient = createBackendListenerClientImpl(clientClass);
@@ -440,7 +440,7 @@ public class BackendListener extends AbstractTestElement
      */
     public void setArguments(Arguments args) {
         // Bug 59173 - don't save new default argument
-        args.removeArgument(GraphiteBackendListenerClient.USE_REGEXP_FOR_SAMPLERS_LIST, 
+        args.removeArgument(GraphiteBackendListenerClient.USE_REGEXP_FOR_SAMPLERS_LIST,
                 GraphiteBackendListenerClient.USE_REGEXP_FOR_SAMPLERS_LIST_DEFAULT);
         setProperty(new TestElementProperty(ARGUMENTS, args));
     }

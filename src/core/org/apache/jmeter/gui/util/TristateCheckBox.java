@@ -56,7 +56,7 @@ public final class TristateCheckBox extends JCheckBox {
     // Listener on model changes to maintain correct focusability
     private final class TSCBChangeListener implements ChangeListener, Serializable {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = -3718373200229708535L;
 
@@ -123,10 +123,10 @@ public final class TristateCheckBox extends JCheckBox {
             this.setSelected(jmp.getBooleanValue());
         }
     }
-    
+
     /**
      * Sets a boolean property from a tristate checkbox.
-     * 
+     *
      * @param element the test element
      * @param propName the property name
      */
@@ -137,7 +137,7 @@ public final class TristateCheckBox extends JCheckBox {
             element.setProperty(propName, isSelected());
         }
     }
-    
+
     // Next two methods implement new API by delegation to model
     public void setIndeterminate() {
         getTristateModel().setIndeterminate();

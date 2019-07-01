@@ -50,7 +50,7 @@ public class SearchTreeCommand extends AbstractAction {
      * If no parent if found, then we give up and build a search dialog with no
      * parent.
      * </p>
-     * 
+     *
      * @param source The source object that originated the display of the dialog
      * @return A freshly created search dialog with the parent frame that could be
      *         found, or no parent otherwise.
@@ -60,7 +60,7 @@ public class SearchTreeCommand extends AbstractAction {
         return new SearchTreeDialog(parent);
     }
 
-    
+
     /**
      * @see Command#doAction(ActionEvent)
      */

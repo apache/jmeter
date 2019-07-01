@@ -116,7 +116,7 @@ public class HttpMirrorServer extends Thread implements Stoppable, NonTestElemen
     public HttpMirrorServer(int port) {
        this(port, HttpMirrorControl.DEFAULT_MAX_POOL_SIZE, HttpMirrorControl.DEFAULT_MAX_QUEUE_SIZE);
     }
-    
+
     /**
      * Create a new Daemon with the specified port and target.
      *
@@ -146,7 +146,7 @@ public class HttpMirrorServer extends Thread implements Stoppable, NonTestElemen
             final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(
                     maxQueueSize);
             threadPoolExecutor = new ThreadPoolExecutor(
-                    maxThreadPoolSize/2, 
+                    maxThreadPoolSize/2,
                     maxThreadPoolSize, KEEP_ALIVE_TIME, TimeUnit.SECONDS, queue);
             threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
         }

@@ -138,7 +138,7 @@ public class DataSourceElement extends AbstractTestElement
         DataSourceElement el = (DataSourceElement) super.clone();
         synchronized (this) {
             el.dbcpDataSource = dbcpDataSource;
-            el.perThreadPoolSet = perThreadPoolSet;            
+            el.perThreadPoolSet = perThreadPoolSet;
         }
         return el;
     }
@@ -174,7 +174,7 @@ public class DataSourceElement extends AbstractTestElement
      * </li>
      * <li>allows the pool storage mechanism to be changed if necessary</li>
      * </ul>
-     * 
+     *
      * @param poolName
      *            name of the pool to get a connection from
      * @return a possible cached connection from the pool
@@ -183,20 +183,20 @@ public class DataSourceElement extends AbstractTestElement
      *             pool
      */
     public static Connection getConnection(String poolName) throws SQLException{
-        Object poolObject = 
+        Object poolObject =
                 JMeterContextService.getContext().getVariables().getObject(poolName);
         if (poolObject == null) {
             throw new SQLException("No pool found named: '" + poolName + "', ensure Variable Name matches Variable Name of JDBC Connection Configuration");
         } else {
             if(poolObject instanceof DataSourceComponentImpl) {
                 DataSourceComponentImpl pool = (DataSourceComponentImpl) poolObject;
-                return pool.getConnection();    
+                return pool.getConnection();
             } else {
                 String errorMsg = "Found object stored under variable:'" + poolName + "' with class:"
                         + poolObject.getClass().getName() + " and value: '" + poolObject
                         + " but it's not a DataSourceComponent, check you're not already using this name as another variable";
                 log.error(errorMsg);
-                throw new SQLException(errorMsg); 
+                throw new SQLException(errorMsg);
             }
         }
     }
@@ -340,7 +340,7 @@ public class DataSourceElement extends AbstractTestElement
                     log.debug("Setting transaction isolation: {}@{}",
                             isolation, System.identityHashCode(dsc));
                 } catch (SQLException ex) {
-                    log.error("Could not set transaction isolation: {}@{}", 
+                    log.error("Could not set transaction isolation: {}@{}",
                             isolation, System.identityHashCode(dsc), ex);
                 }
             }
@@ -418,7 +418,7 @@ public class DataSourceElement extends AbstractTestElement
     public void setDataSource(String dataSource) {
         this.dataSource = dataSource;
     }
-    
+
     private String getDataSourceName() {
         return getDataSource();
     }

@@ -33,14 +33,14 @@ class ReportGeneratorSpec extends JMeterSpec{
     /**
      * Combine the given path parts to one path with the correct path separator of the current platform.
      * The current JMeter bin directory will be prepended to the path.
-     * 
+     *
      * @param paths to be combined (should contain no path separators)
      * @return combined path as string
      */
     def combine(String... paths) {
        Paths.get(JMeterUtils.getJMeterBinDir(), paths).toString()
     }
-    
+
     def "check that report generation succeeds and statistics.json are generated"(){
         setup:
             File testDirectory = new File(combine("testfiles", "testReport"))
@@ -65,7 +65,7 @@ class ReportGeneratorSpec extends JMeterSpec{
             File statistics = new File(combine("testfiles", "testReport", "statistics.json"))
             JsonNode actualRoot = null;
             if (statistics.exists()) {
-                statistics.withReader { jsonFileReader -> 
+                statistics.withReader { jsonFileReader ->
                     actualRoot = mapper.readTree(jsonFileReader)
                 }
             }
@@ -80,7 +80,7 @@ class ReportGeneratorSpec extends JMeterSpec{
                 }
             }
     }
-    
+
     def "check that report generation fails when format does not match and error is reported"(){
         setup:
             File testDirectory = new File(combine("testfiles", "testReportThatShouldBeEmpty"))

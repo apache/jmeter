@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.extractor;
@@ -111,7 +111,7 @@ public class TestJSONPostProcessor {
         assertThat(vars.get("varname_1"), CoreMatchers.is(CoreMatchers.nullValue()));
         assertThat(vars.get("varname_2"), CoreMatchers.is(CoreMatchers.nullValue()));
     }
-    
+
     @Test
     public void testCaseEmptyVarBug62860() {
         JMeterContext context = JMeterContextService.getContext();
@@ -126,7 +126,7 @@ public class TestJSONPostProcessor {
         processor.process();
         assertThat(vars.get("varname"), CoreMatchers.is("NONE"));
         assertThat(vars.get("varname_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
-        
+
         vars.put("contentvar", "");
         processor.process();
         assertThat(vars.get("varname"), CoreMatchers.is("NONE"));

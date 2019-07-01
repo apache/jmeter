@@ -65,7 +65,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
 
     /**
      * Creates a new SessionFilter, but re-uses the given collections
-     * 
+     *
      * @param cookieManagers
      *            {@link CookieManager}s to be used for the different IPs
      * @param managersInUse

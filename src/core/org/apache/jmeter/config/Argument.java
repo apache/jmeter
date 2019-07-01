@@ -88,7 +88,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      *            the argument value
      * @param metadata
      *            the argument metadata
-     * @param description 
+     * @param description
      *            the argument description
      */
     public Argument(String name, String value, String metadata, String description) {
@@ -105,7 +105,7 @@ public class Argument extends AbstractTestElement implements Serializable {
             setProperty(DESCRIPTION, description, DFLT_DESCRIPTION);
         }
     }
-    
+
     /**
      * Set the name of the Argument.
      *
@@ -164,7 +164,7 @@ public class Argument extends AbstractTestElement implements Serializable {
     public String getDescription() {
         return getPropertyAsString(DESCRIPTION, DFLT_DESCRIPTION);
     }
-    
+
     /**
      * Sets the Meta Data attribute of the Argument.
      *
@@ -190,7 +190,7 @@ public class Argument extends AbstractTestElement implements Serializable {
         if (DFLT_DESCRIPTION.equals(desc)) {
             return getName() + getMetaData() + getValue();
         } else {
-            return getName() + getMetaData() + getValue() + " //" + getDescription();            
+            return getName() + getMetaData() + getValue() + " //" + getDescription();
         }
     }
 

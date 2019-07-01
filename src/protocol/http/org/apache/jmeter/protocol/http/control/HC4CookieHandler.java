@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -55,9 +55,9 @@ public class HC4CookieHandler implements CookieHandler {
     private static final Logger log = LoggerFactory.getLogger(HC4CookieHandler.class);
 
     // Needed by CookiePanel
-    public static final String DEFAULT_POLICY_NAME = CookieSpecs.STANDARD; // NOSONAR 
+    public static final String DEFAULT_POLICY_NAME = CookieSpecs.STANDARD; // NOSONAR
 
-    private static final String[] AVAILABLE_POLICIES = new String[]{ 
+    private static final String[] AVAILABLE_POLICIES = new String[]{
         DEFAULT_POLICY_NAME,
         CookieSpecs.STANDARD_STRICT,
         CookieSpecs.IGNORE_COOKIES,
@@ -70,9 +70,9 @@ public class HC4CookieHandler implements CookieHandler {
     };
 
     private final transient CookieSpec cookieSpec;
-    
+
     private static final PublicSuffixMatcher publicSuffixMatcher = PublicSuffixMatcherLoader.getDefault();
-    private static Registry<CookieSpecProvider> registry  = 
+    private static Registry<CookieSpecProvider> registry  =
             RegistryBuilder.<CookieSpecProvider>create()
             // case is ignored bug registry as it converts to lowerCase(Locale.US)
             .register(CookieSpecs.BEST_MATCH, new DefaultCookieSpecProvider(publicSuffixMatcher))
@@ -93,7 +93,7 @@ public class HC4CookieHandler implements CookieHandler {
     public HC4CookieHandler() {
         this(DEFAULT_POLICY_NAME);
     }
-    
+
     public HC4CookieHandler(String policy) {
         super();
         if (policy.equalsIgnoreCase("default")) { // tweak diff HC3 vs HC4
@@ -117,7 +117,7 @@ public class HC4CookieHandler implements CookieHandler {
             boolean isSecure=HTTPSamplerBase.isSecure(protocol);
 
             List<org.apache.http.cookie.Cookie> cookies = null;
-            
+
             CookieOrigin cookieOrigin = new CookieOrigin(host, port, path, isSecure);
             BasicHeader basicHeader = new BasicHeader(HTTPConstants.HEADER_SET_COOKIE, cookieHeader);
 
@@ -174,9 +174,9 @@ public class HC4CookieHandler implements CookieHandler {
     @Override
     public String getCookieHeaderForURL(CollectionProperty cookiesCP, URL url,
             boolean allowVariableCookie) {
-        List<org.apache.http.cookie.Cookie> c = 
+        List<org.apache.http.cookie.Cookie> c =
                 getCookiesForUrl(cookiesCP, url, allowVariableCookie);
-        
+
         boolean debugEnabled = log.isDebugEnabled();
         if (debugEnabled){
             log.debug("Found {} cookies for {}", c.size(), url);
@@ -185,7 +185,7 @@ public class HC4CookieHandler implements CookieHandler {
             return null;
         }
         List<Header> lstHdr = cookieSpec.formatCookies(c);
-        
+
         StringBuilder sbHdr = new StringBuilder();
         for (Header header : lstHdr) {
             sbHdr.append(header.getValue());
@@ -235,7 +235,7 @@ public class HC4CookieHandler implements CookieHandler {
 
         return cookiesValid;
     }
-    
+
     /**
      * Create an HttpClient cookie from a JMeter cookie
      */
@@ -256,10 +256,10 @@ public class HC4CookieHandler implements CookieHandler {
         }
         return ret;
     }
-    
+
     @Override
     public String getDefaultPolicy() {
-        return DEFAULT_POLICY_NAME; 
+        return DEFAULT_POLICY_NAME;
     }
 
     @Override

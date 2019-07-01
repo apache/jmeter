@@ -104,7 +104,7 @@ public abstract class SSLManager {
             Security.addProvider(provider);
         }
     }
-    
+
     /**
      * Opens and initializes the KeyStore. If the password for the KeyStore is
      * not set, this method will prompt you to enter it. Unfortunately, there is
@@ -289,7 +289,7 @@ public abstract class SSLManager {
 
     /**
      * Configure Keystore
-     * 
+     *
      * @param preload
      *            flag whether the keystore should be opened within this method,
      *            or the opening should be delayed

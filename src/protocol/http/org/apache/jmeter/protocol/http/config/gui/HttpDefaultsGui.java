@@ -106,7 +106,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     public void modifyTestElement(TestElement config) {
         ConfigTestElement cfg = (ConfigTestElement) config;
         ConfigTestElement el = (ConfigTestElement) urlConfigGui.createTestElement();
-        cfg.clear(); 
+        cfg.clear();
         cfg.addConfigElement(el);
         super.configureTestElement(config);
         if (retrieveEmbeddedResources.isSelected()) {
@@ -140,7 +140,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         } else {
             config.removeProperty(HTTPSamplerBase.EMBEDDED_URL_RE);
         }
-        
+
         if(!StringUtils.isEmpty(sourceIpAddr.getText())) {
             config.setProperty(new StringProperty(HTTPSamplerBase.IP_SOURCE,
                     sourceIpAddr.getText()));
@@ -240,10 +240,10 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         emptyPanel.setMaximumSize(new Dimension());
 
         add(makeTitlePanel(), BorderLayout.NORTH);
-        add(tabbedPane, BorderLayout.CENTER);        
+        add(tabbedPane, BorderLayout.CENTER);
         add(emptyPanel, BorderLayout.SOUTH);
     }
-    
+
     private JPanel getTimeOutPanel() {
         JPanel timeOut = new HorizontalPanel();
         timeOut.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
@@ -254,7 +254,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         timeOut.add(reqPanel);
         return timeOut;
     }
-    
+
     private JPanel getConnectTimeOutPanel() {
         connectTimeOut = new JTextField(10);
 
@@ -280,7 +280,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 
         return panel;
     }
-    
+
     protected JPanel createEmbeddedRsrcPanel() {
         // retrieve Embedded resources
         retrieveEmbeddedResources = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
@@ -305,14 +305,14 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         embeddedRsrcPanel.add(retrieveEmbeddedResources);
         embeddedRsrcPanel.add(concurrentDwn);
         embeddedRsrcPanel.add(concurrentPool);
-        
+
         // Embedded URL match regex
         embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),20); // $NON-NLS-1$
-        embeddedRsrcPanel.add(embeddedRE); 
-        
+        embeddedRsrcPanel.add(embeddedRE);
+
         return embeddedRsrcPanel;
     }
-    
+
     protected JPanel createSourceAddrPanel() {
         final JPanel sourceAddrPanel = new HorizontalPanel();
         sourceAddrPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
@@ -325,7 +325,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         sourceAddrPanel.add(sourceIpAddr);
         return sourceAddrPanel;
     }
-    
+
     protected JPanel createOptionalTasksPanel() {
         // OPTIONAL TASKS
         final JPanel checkBoxPanel = new VerticalPanel();
@@ -344,7 +344,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     public Dimension getPreferredSize() {
         return getMinimumSize();
     }
-    
+
     private void enableConcurrentDwn(final boolean enable) {
         if (enable) {
             concurrentDwn.setEnabled(true);
@@ -358,7 +358,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
             embeddedRE.setEnabled(false);
         }
     }
-    
+
     /**
      * Create a panel containing the implementation details
      *

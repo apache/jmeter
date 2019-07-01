@@ -114,7 +114,7 @@ public class JsoupBasedHtmlParser extends HTMLParser {
             } else if (tagName.equals(TAG_LINK)) {
                 String relAttr = tag.attr(ATT_REL);
                 // Putting the string first means it works even if the attribute is null
-                if (STYLESHEET.equalsIgnoreCase(relAttr) || ICON.equalsIgnoreCase(relAttr) 
+                if (STYLESHEET.equalsIgnoreCase(relAttr) || ICON.equalsIgnoreCase(relAttr)
                         || SHORTCUT_ICON.equalsIgnoreCase(relAttr)) {
                     extractAttribute(tag, ATT_HREF);
                 }

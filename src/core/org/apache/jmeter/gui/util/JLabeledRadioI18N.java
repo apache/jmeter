@@ -114,7 +114,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
             }
         }
     }
-    
+
     /**
      * Method is responsible for removing current JRadioButtons of ButtonGroup and
      * add creating the JRadioButtons and adding them to

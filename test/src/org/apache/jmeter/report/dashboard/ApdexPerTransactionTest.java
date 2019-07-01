@@ -35,11 +35,11 @@ import org.junit.Test;
 import jodd.props.Props;
 
 public class ApdexPerTransactionTest extends JMeterTestCase {
-    
+
     // prop in the file mixes comma, semicolon and spans several lines.
-    // it also includes hardcoded sample names mixed with regexes 
+    // it also includes hardcoded sample names mixed with regexes
     private static final String apdexString = "sample(\\d+):1000|2000;samples12:3000|4000;scenar01-12:5000|6000";
-    
+
     @Test
     public void testgetApdexPerTransactionProperty() throws Exception {
         final Props props = new Props();
@@ -47,22 +47,22 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         final char KEY_DELIMITER = '.';
         final String REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION = REPORT_GENERATOR_KEY_PREFIX
                 + KEY_DELIMITER + "apdex_per_transaction";
-        
+
         props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
-        final String apdexPerTransaction = getOptionalProperty(props, 
+        final String apdexPerTransaction = getOptionalProperty(props,
                 REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION);
         assertEquals(apdexString, apdexPerTransaction);
     }
-    
+
     @Test
     public void testgetApdexPerTransactionPropertySimple() throws Exception {
         final Props props = new Props();
         props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
-        final String title = getOptionalProperty(props, 
+        final String title = getOptionalProperty(props,
                 "jmeter.reportgenerator.graph.responseTimePercentiles.title");
         assertNotNull("title should not be null", title);
     }
-    
+
     @Test
     public void testGetApdexPerTransactionParts() {
         Map<String, Long[]> apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts(apdexString);
@@ -84,37 +84,37 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         assertTrue(keys.contains("sample(\\d+)"));
         assertArrayEquals(new Long[] {1000L,  2000L}, apdex.get("sample(\\d+)"));
     }
-   
+
    @Test
    public void testGetApdexPerTransactionNoValue() {
        Map<String, Long[]> apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts("");
        assertNotNull("map should not be null", apdex);
        assertEquals(0, apdex.size());
-       
+
        apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts(" ");
        assertNotNull("map should not be null", apdex);
        assertEquals(0, apdex.size());
    }
-   
+
    @Test
    public void testGetApdexPerTransactionWrongFormat() {
-       Map<String, Long[]> apdex = 
+       Map<String, Long[]> apdex =
                ReportGeneratorConfiguration.getApdexPerTransactionParts("sample1|123:434");
        assertNotNull("map should not be null", apdex);
        assertEquals(0, apdex.size());
    }
-    
+
     @Test
     public void testSampleNameMatching() {
-        /* matching pairs : 
+        /* matching pairs :
          * sample(\d+) sample2
          * sample(\d+) sample12
          * scenar01-12 scenar01-12
          * samples12 samples12
          * */
-        
+
         String[] sampleNames = {"sample2","sample12", "scenar01-12", "samples12"};
-        
+
         Map<String, Long[]> apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts(apdexString);
         for (String sampleName : sampleNames) {
             boolean hasMatched = false;
@@ -127,13 +127,13 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
             }
             assertTrue(hasMatched);
         }
-        
+
     }
-    
+
     private static String getOptionalProperty(Props props, String key) {
         return getProperty(props, key, null);
     }
-    
+
     private static String getProperty(Props props, String key, String defaultValue) {
         String value = props.getValue(key);
         if (value == null) {

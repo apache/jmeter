@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.parser;
@@ -61,7 +61,7 @@ public final class TestHtmlParsingUtils extends JMeterTestCase {
             argp = new Argument("test", "a.*e");
             assertFalse(HtmlParsingUtils.isArgumentMatched(arg, argp));
         }
-        
+
         @Test
         public void testIsAnchorMatched() throws Exception {
             HTTPSamplerBase target=new HTTPNullSampler();
@@ -74,29 +74,29 @@ public final class TestHtmlParsingUtils extends JMeterTestCase {
 
             pattern.setProtocol(".*");
             assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
-            
+
             target.setDomain("a.b.c");
             assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
 
             pattern.setDomain(".*");
             assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
-            
+
             target.setPath("/abc");
             assertFalse(HtmlParsingUtils.isAnchorMatched(target, pattern));
 
             pattern.setPath(".*");
             assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
-            
+
             target.addArgument("param2", "value2", "=");
             assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
-            
+
             pattern.addArgument("param1", ".*", "=");
             assertFalse(HtmlParsingUtils.isAnchorMatched(target, pattern));
-            
+
             target.addArgument("param1", "value1", "=");
             assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
         }
-        
+
         @Test
         public void testisEqualOrMatches() throws Exception {
             assertTrue(HtmlParsingUtils.isEqualOrMatches("http:","http:"));

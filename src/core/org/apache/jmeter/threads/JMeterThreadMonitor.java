@@ -19,7 +19,7 @@
 package org.apache.jmeter.threads;
 
 /**
- * Interface used to listen to {@link JMeterThread} end of thread  
+ * Interface used to listen to {@link JMeterThread} end of thread
  */
 public interface JMeterThreadMonitor {
     void threadFinished(JMeterThread thread);

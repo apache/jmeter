@@ -36,7 +36,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
             noExceptionThrown()
             sut.jsonWithJSonPathPanel != null;
     }
-    
+
     @IgnoreIf({ JMeterSpec.isHeadless() })
     def "render image"() {
         given:
@@ -57,7 +57,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
         then:
             sut.jsonDataField.getText() == ""
     }
-    
+
     @IgnoreIf({ JMeterSpec.isHeadless() })
     def "render '#input' as JSON Response to '#output'"() {
         given:
@@ -70,14 +70,14 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
             output == sut.jsonDataField.getText()
         where:
             input               |   output
-            "This is not json"  |   "This is not json" 
+            "This is not json"  |   "This is not json"
             "{name:\"Ludwig\",age: 23,city: \"Bonn\"}" | '''{
     "city": "Bonn",
     "name": "Ludwig",
     "age": 23
 }'''
     }
-    
+
     def "execute '#expression' on '#input' results into '#output'"() {
         given:
             sut.init();
@@ -90,10 +90,10 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
         where:
             input               | expression          | output
             "{name:\"Ludwig\",age: 23,city: \"Bonn\"}"   | "\$..name"           | "Result[0]=Ludwig\n"
-            "This is not json"  | "\$..name" | "NO MATCH" 
+            "This is not json"  | "\$..name" | "NO MATCH"
             "{name:\"Ludwig\",age: 23,city: \"Bonn\"}" | "\$.." | "Exception: Path must not end with a '.' or '..'"
     }
-    
+
     def "clearData clears expected fields"() {
         given:
             sut.init()
@@ -118,7 +118,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
             // Investigate why it's failing
             // sut.rightSide.getTabComponentAt(0) == sut.jsonWithJSonPathPanel
     }
-    
+
     def "setupTabPane called twice does not add twice the tab"() {
         given:
             sut.init()

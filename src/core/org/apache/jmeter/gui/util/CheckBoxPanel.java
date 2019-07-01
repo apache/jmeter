@@ -29,9 +29,9 @@ import javax.swing.JCheckBox;
 public class CheckBoxPanel {
 
     private CheckBoxPanel() {
-        // not instantiable    
+        // not instantiable
     }
-    
+
     public static Box wrap(JCheckBox cb) {
         Box b = Box.createHorizontalBox();
         b.add(cb);

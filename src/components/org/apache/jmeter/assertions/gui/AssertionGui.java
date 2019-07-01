@@ -82,10 +82,10 @@ public class AssertionGui extends AbstractAssertionGui {
 
     /** Radio button indicating that the headers should be tested. */
     private JRadioButton responseHeadersButton;
-    
+
     /** Radio button indicating that the request headers should be tested. */
     private JRadioButton requestHeadersButton;
-    
+
     /** Radio button indicating that the request data should be tested. */
     private JRadioButton requestDataButton;
 
@@ -122,7 +122,7 @@ public class AssertionGui extends AbstractAssertionGui {
      * patterns.
      */
     private JCheckBox notBox;
-    
+
     /**
      * Add new OR checkbox.
      */
@@ -136,7 +136,7 @@ public class AssertionGui extends AbstractAssertionGui {
 
     /** Table model for the pattern table. */
     private PowerTableModel tableModel;
-    
+
     private JSyntaxTextArea alternativeFailureMessage;
 
     /**
@@ -352,7 +352,7 @@ public class AssertionGui extends AbstractAssertionGui {
         group.add(requestHeadersButton);
         group.add(responseHeadersButton);
         group.add(requestDataButton);
-        
+
         responseStringButton.setSelected(true);
 
         assumeSuccess = new JCheckBox(JMeterUtils.getResString("assertion_assume_success")); //$NON-NLS-1$
@@ -379,13 +379,13 @@ public class AssertionGui extends AbstractAssertionGui {
         addField(panel, requestDataButton, gbc);
         return panel;
     }
-    
+
     private void addField(JPanel panel, JToggleButton button, GridBagConstraints gbc) {
         panel.add(button, gbc.clone());
         gbc.gridx++;
         gbc.fill=GridBagConstraints.HORIZONTAL;
     }
-    
+
     // Next line
     private void resetContraints(GridBagConstraints gbc) {
         gbc.gridx = 0;
@@ -472,7 +472,7 @@ public class AssertionGui extends AbstractAssertionGui {
 
         return panel;
     }
-    
+
     private JPanel createCustomAssertionMessagePanel() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_custom_message"))); //$NON-NLS-1$
@@ -489,7 +489,7 @@ public class AssertionGui extends AbstractAssertionGui {
     private JPanel createButtonPanel() {
         JButton addPattern = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
         addPattern.addActionListener(new AddPatternListener());
-        
+
         JButton addFromClipboardPattern = new JButton(JMeterUtils.getResString("add_from_clipboard")); //$NON-NLS-1$
         addFromClipboardPattern.addActionListener(new AddFromClipboardListener());
 
@@ -512,7 +512,7 @@ public class AssertionGui extends AbstractAssertionGui {
         @Override
         public void actionPerformed(ActionEvent e) {
             GuiUtils.cancelEditing(stringTable);
-            
+
             int[] rowsSelected = stringTable.getSelectedRows();
             stringTable.clearSelection();
             if (rowsSelected.length > 0) {
@@ -545,7 +545,7 @@ public class AssertionGui extends AbstractAssertionGui {
             tableModel.fireTableDataChanged();
         }
     }
-    
+
     /**
      * An ActionListener for pasting from clipboard
      */
@@ -584,7 +584,7 @@ public class AssertionGui extends AbstractAssertionGui {
             tableModel.fireTableDataChanged();
         }
     }
-    
+
     protected void checkButtonsStatus() {
         // Disable DELETE if there are no rows in the table to delete.
         if (tableModel.getRowCount() == 0) {

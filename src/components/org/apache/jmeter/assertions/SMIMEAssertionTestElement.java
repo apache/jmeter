@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -143,11 +143,11 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     public String getSpecificMessagePosition() {
         return getPropertyAsString(MESSAGE_POSITION);
     }
-    
+
     public int getSpecificMessagePositionAsInt() {
         return getPropertyAsInt(MESSAGE_POSITION, 0);
     }
-    
+
     public void setSpecificMessagePosition(String position) {
         setProperty(MESSAGE_POSITION, position);
     }

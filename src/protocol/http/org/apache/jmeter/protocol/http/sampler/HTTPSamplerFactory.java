@@ -40,7 +40,7 @@ public final class HTTPSamplerFactory {
     public static final String IMPL_HTTP_CLIENT4 = "HttpClient4";  // $NON-NLS-1$
 
     public static final String IMPL_HTTP_CLIENT3_1 = "HttpClient3.1"; // $NON-NLS-1$
-    
+
     public static final String IMPL_JAVA = "Java"; // $NON-NLS-1$
     //- JMX
 

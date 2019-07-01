@@ -67,7 +67,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
     private static final Logger log = LoggerFactory.getLogger(XPathExtractor.class);
 
     private static final long serialVersionUID = 242L;
-    
+
     private static final int DEFAULT_VALUE = -1;
     public static final String DEFAULT_VALUE_AS_STRING = Integer.toString(DEFAULT_VALUE);
 
@@ -346,7 +346,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
     public boolean isDownloadDTDs() {
         return getPropertyAsBoolean(DOWNLOAD_DTDS, false);
     }
-    
+
     /**
      * Set which Match to use. This can be any positive number, indicating the
      * exact match to use, or <code>0</code>, which is interpreted as meaning random.

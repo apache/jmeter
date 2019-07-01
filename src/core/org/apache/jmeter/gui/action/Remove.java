@@ -62,9 +62,9 @@ public class Remove extends AbstractAction {
 
     @Override
     public void doAction(ActionEvent e) {
-        
-        int isConfirm = SKIP_CONFIRM ? JOptionPane.YES_OPTION : 
-            JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
+
+        int isConfirm = SKIP_CONFIRM ? JOptionPane.YES_OPTION :
+            JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
                 JMeterUtils.getResString("remove_confirm_msg"),// $NON-NLS-1$
                 JMeterUtils.getResString("remove_confirm_title"), // $NON-NLS-1$
                 JOptionPane.YES_NO_OPTION,

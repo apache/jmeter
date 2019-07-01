@@ -54,13 +54,13 @@ public class StatisticalSampleResult extends SampleResult implements
 
     /**
      * Create a statistical sample result from an ordinary sample result.
-     * 
-     * @param res the sample result 
+     *
+     * @param res the sample result
      */
     public StatisticalSampleResult(SampleResult res) {
         // Copy data that is shared between samples (i.e. the key items):
         setSampleLabel(res.getSampleLabel());
-        
+
         setThreadName(res.getThreadName());
 
         setSuccessful(true); // Assume result is OK

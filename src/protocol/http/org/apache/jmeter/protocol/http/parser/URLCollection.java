@@ -89,7 +89,7 @@ public class URLCollection implements Iterable<URL> {
             if(log.isDebugEnabled()) {
                 log.debug("Error occurred building relative url for: {}, message: {}", url, mfue.getMessage());
             }
-            // No point in adding the URL as String as it will result in null 
+            // No point in adding the URL as String as it will result in null
             // returned during iteration, see URLString
             // See https://bz.apache.org/bugzilla/show_bug.cgi?id=55092
             return false;

@@ -63,7 +63,7 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
         try (FileWriter fw = new FileWriter(temp); BufferedWriter out = new BufferedWriter(fw)) {
             out.write(testPlan);
         }
-        
+
         try {
             JMeter jmeter = new JMeter();
             jmeter.runNonGui(temp.getAbsolutePath(), null, false, null, false);

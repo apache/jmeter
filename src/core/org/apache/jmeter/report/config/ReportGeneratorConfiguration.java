@@ -48,10 +48,10 @@ public class ReportGeneratorConfiguration {
 
     public static final char KEY_DELIMITER = '.';
     public static final String REPORT_GENERATOR_KEY_PREFIX = "jmeter.reportgenerator";
-    
+
     public static final String REPORT_GENERATOR_KEY_RANGE_DATE_FORMAT = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "date_format";
-    
+
     public static final String REPORT_GENERATOR_GRAPH_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "graph";
     public static final String REPORT_GENERATOR_EXPORTER_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
@@ -72,7 +72,7 @@ public class ReportGeneratorConfiguration {
     private static final String REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "apdex_tolerated_threshold";
     private static final Long REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT = Long.valueOf(1500L);
-    
+
     // Apdex per transaction Thresholds
     private static final String REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "apdex_per_transaction";
@@ -88,11 +88,11 @@ public class ReportGeneratorConfiguration {
     // report title
     private static final String REPORT_GENERATOR_KEY_REPORT_TITLE = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "report_title";
-    
+
     // start date for which report must be generated
     private static final String REPORT_GENERATOR_KEY_START_DATE = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "start_date";
-    
+
     // end date for which report must be generated
     private static final String REPORT_GENERATOR_KEY_END_DATE = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "end_date";
@@ -361,7 +361,7 @@ public class ReportGeneratorConfiguration {
     public final void setApdexToleratedThreshold(long apdexToleratedThreshold) {
         this.apdexToleratedThreshold = apdexToleratedThreshold;
     }
-    
+
     /**
      * Gets the apdex per transaction map
      *
@@ -515,11 +515,11 @@ public class ReportGeneratorConfiguration {
     /**
      * * Initialize sub configuration items. This function iterates over
      * properties and find each direct sub properties with the specified prefix
-     * 
+     *
      * <p>
      * E.g. :
      * </p>
-     * 
+     *
      * <p>
      * With properties :
      * <ul>
@@ -531,7 +531,7 @@ public class ReportGeneratorConfiguration {
      * <p>
      * And prefix : jmeter.reportgenerator.graph
      * </p>
-     * 
+     *
      * <p>
      * The function creates 2 sub configuration items : graph1 and graph2
      * </p>
@@ -637,20 +637,20 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT,
                 long.class).longValue();
         configuration.setApdexToleratedThreshold(apdexToleratedThreshold);
-        
+
         // Load apdex per transactions, overridden by user
-        final String apdexPerTransaction = getOptionalProperty(props, 
-                REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION, 
+        final String apdexPerTransaction = getOptionalProperty(props,
+                REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION,
                 String.class);
         configuration.setApdexPerTransaction(getApdexPerTransactionParts(apdexPerTransaction));
 
         final boolean ignoreTCFromTop5ErrorsBySampler = getRequiredProperty(
-                props, 
+                props,
                 REPORT_GENERATOR_KEY_EXCLUDE_TC_FROM_TOP5_ERRORS_BY_SAMPLER,
                 Boolean.TRUE,
                 Boolean.class).booleanValue();
         configuration.setIgnoreTCFromTop5ErrorsBySampler(ignoreTCFromTop5ErrorsBySampler);
-        
+
         // Load sample filter
         final String sampleFilter = getOptionalProperty(props,
                 REPORT_GENERATOR_KEY_SAMPLE_FILTER, String.class);
@@ -691,7 +691,7 @@ public class ReportGeneratorConfiguration {
             log.error("Error parsing property {} with value: {} using format: {}", REPORT_GENERATOR_KEY_END_DATE,
                     endDateValue, rangeDateFormat, e);
         }
-        
+
         log.info("Will use date range start date: {}, end date: {}", startDateValue, endDateValue);
 
         // Find graph identifiers and load a configuration for each
@@ -720,7 +720,7 @@ public class ReportGeneratorConfiguration {
 
         return configuration;
     }
-    
+
     /**
      * Parses a string coming from properties to fill a map containing
      * sample names as keys and an array of 2 longs [satisfied, tolerated] as values.
@@ -730,7 +730,7 @@ public class ReportGeneratorConfiguration {
      */
     public static Map<String, Long[]> getApdexPerTransactionParts(String apdexPerTransaction) {
         Map <String, Long[]> specificApdexes = new HashMap<>();
-        if (StringUtils.isEmpty(apdexPerTransaction) || 
+        if (StringUtils.isEmpty(apdexPerTransaction) ||
                 apdexPerTransaction.trim().length()==0) {
             log.info(
                     "apdex_per_transaction : {} is empty, not APDEX per transaction customization");

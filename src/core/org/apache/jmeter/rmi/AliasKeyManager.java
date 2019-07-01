@@ -45,7 +45,7 @@ public class AliasKeyManager implements X509KeyManager {
      * Wraps the first found {@link X509KeyManager} that has a private key for
      * the given {@code alias} as an {@link AliasKeyManager} and returns it as
      * the only element in a newly created array.
-     * 
+     *
      * @param kms
      *            the KeyManagers to be searched for the {@code alias}
      * @param alias

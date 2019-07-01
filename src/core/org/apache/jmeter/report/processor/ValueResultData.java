@@ -19,7 +19,7 @@ package org.apache.jmeter.report.processor;
 
 /**
  * This provides a value result from samples processing.
- * 
+ *
  * @since 3.0
  */
 public class ValueResultData implements ResultData {
@@ -43,7 +43,7 @@ public class ValueResultData implements ResultData {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.ResultData#accept(org.apache.jmeter
      * .report.processor.ResultDataVisitor)

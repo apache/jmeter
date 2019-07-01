@@ -125,7 +125,7 @@ public final class CSVSaveService {
 
     /**
      * Read Samples from a file; handles quoted strings.
-     * 
+     *
      * @param filename
      *            input file
      * @param visualizer
@@ -182,18 +182,18 @@ public final class CSVSaveService {
 
     /**
      * Make a SampleResult given a set of tokens
-     * 
+     *
      * @param parts
      *            tokens parsed from the input
      * @param saveConfig
      *            the save configuration (may be updated)
      * @param lineNumber the line number (for error reporting)
      * @return the sample result
-     * 
+     *
      * @throws JMeterError
      */
     private static SampleEvent makeResultFromDelimitedString(
-            final String[] parts, 
+            final String[] parts,
             final SampleSaveConfiguration saveConfig, // may be updated
             final long lineNumber) {
 
@@ -383,7 +383,7 @@ public final class CSVSaveService {
 
     /**
      * Generates the field names for the output file
-     * 
+     *
      * @return the field names as a string
      */
     public static String printableFieldNamesToString() {
@@ -392,7 +392,7 @@ public final class CSVSaveService {
 
     /**
      * Generates the field names for the output file
-     * 
+     *
      * @param saveConfig
      *            the configuration of what is to be saved
      * @return the field names as a string
@@ -491,7 +491,7 @@ public final class CSVSaveService {
 
     /**
      * Parse a CSV header line
-     * 
+     *
      * @param headerLine
      *            from CSV file
      * @param filename
@@ -583,7 +583,7 @@ public final class CSVSaveService {
     /**
      * Check if the label is a variable name, i.e. is it enclosed in
      * double-quotes?
-     * 
+     *
      * @param label
      *            column name from CSV file
      * @return if the label is enclosed in double-quotes
@@ -598,7 +598,7 @@ public final class CSVSaveService {
      * sure if it should go in the newer SaveService instead of here. if we ever
      * decide to get rid of this class, we'll need to move this method to the
      * new save service.
-     * 
+     *
      * @param data
      *            List of data rows
      * @param writer
@@ -616,7 +616,7 @@ public final class CSVSaveService {
      * sure if it should go in the newer SaveService instead of here. if we ever
      * decide to get rid of this class, we'll need to move this method to the
      * new save service.
-     * 
+     *
      * @param data
      *            List of data rows
      * @param writer
@@ -656,7 +656,7 @@ public final class CSVSaveService {
      * Method saves aggregate statistics (with header names) as CSV from a table
      * model. Same as {@link #saveCSVStats(List, Writer, String[])} except
      * that there is no need to create a List containing the data.
-     * 
+     *
      * @param model
      *            table model containing the data
      * @param writer
@@ -673,7 +673,7 @@ public final class CSVSaveService {
      * Method saves aggregate statistics as CSV from a table model. Same as
      * {@link #saveCSVStats(List, Writer, String[])} except that there is no
      * need to create a List containing the data.
-     * 
+     *
      * @param model
      *            table model containing the data
      * @param writer
@@ -713,7 +713,7 @@ public final class CSVSaveService {
     /**
      * Convert a result into a string, where the fields of the result are
      * separated by the default delimiter.
-     * 
+     *
      * @param event
      *            the sample event to be converted
      * @return the separated value representation of the result
@@ -722,7 +722,7 @@ public final class CSVSaveService {
         return resultToDelimitedString(event, event.getResult().getSaveConfig()
                 .getDelimiter());
     }
-    
+
     /*
      * Class to handle generating the delimited string. - adds the delimiter
      * if not the first call - quotes any strings that require it
@@ -780,11 +780,11 @@ public final class CSVSaveService {
             return sb.toString();
         }
     }
-    
+
     /**
      * Convert a result into a string, where the fields of the result are
      * separated by a specified String.
-     * 
+     *
      * @param event
      *            the sample event to be converted
      * @param delimiter
@@ -795,11 +795,11 @@ public final class CSVSaveService {
             final String delimiter) {
         return resultToDelimitedString(event, event.getResult(), event.getResult().getSaveConfig(), delimiter);
     }
-    
+
     /**
      * Convert a result into a string, where the fields of the result are
      * separated by a specified String.
-     * 
+     *
      * @param event
      *            the sample event to be converted
      * @param sample {@link SampleResult} to log
@@ -925,24 +925,24 @@ public final class CSVSaveService {
     /**
      * <p> Returns a <code>String</code> value for a character-delimited column
      * value enclosed in the quote character, if required. </p>
-     * 
+     *
      * <p> If the value contains a special character, then the String value is
      * returned enclosed in the quote character. </p>
-     * 
+     *
      * <p> Any quote characters in the value are doubled up. </p>
-     * 
+     *
      * <p> If the value does not contain any special characters, then the String
      * value is returned unchanged. </p>
-     * 
+     *
      * <p> N.B. The list of special characters includes the quote character.
      * </p>
-     * 
+     *
      * @param input the input column String, may be null (without enclosing
      * delimiters)
-     * 
+     *
      * @param specialChars special characters; second one must be the quote
      * character
-     * 
+     *
      * @return the input String, enclosed in quote characters if the value
      * contains a special character, <code>null</code> for null string input
      */
@@ -1081,9 +1081,9 @@ public final class CSVSaveService {
     /**
      * Reads from String and splits into strings according to the delimiter,
      * taking note of quoted strings.
-     * 
+     *
      * Handles DOS (CRLF), Unix (LF), and Mac (CR) line-endings equally.
-     * 
+     *
      * @param line
      *            input line - not {@code null}
      * @param delim
@@ -1106,7 +1106,7 @@ public final class CSVSaveService {
         String delimiter = saveConfiguration.getDelimiter();
         String savee = resultToDelimitedString(event, event.getResult(), saveConfiguration, delimiter);
         out.println(savee);
-        
+
         if(saveConfiguration.saveSubresults()) {
             SampleResult result = event.getResult();
             for (SampleResult subResult : result.getSubResults()) {

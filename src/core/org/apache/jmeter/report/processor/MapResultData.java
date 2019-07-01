@@ -25,7 +25,7 @@ import java.util.Set;
 /**
  * The class MapResultData provides a hash map of results from samples
  * processing.
- * 
+ *
  * @since 3.0
  */
 public class MapResultData implements ResultData {
@@ -34,7 +34,7 @@ public class MapResultData implements ResultData {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.ResultData#accept(org.apache.jmeter
      * .report.processor.ResultDataVisitor)

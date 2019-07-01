@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
 public class GraphiteBackendListenerClient extends AbstractBackendListenerClient implements Runnable {
 
     //+ Argument names
-    // These are stored in the JMX file, so DO NOT CHANGE ANY VALUES 
+    // These are stored in the JMX file, so DO NOT CHANGE ANY VALUES
     private static final String GRAPHITE_METRICS_SENDER = "graphiteMetricsSender"; //$NON-NLS-1$
     private static final String GRAPHITE_HOST = "graphiteHost"; //$NON-NLS-1$
     private static final String GRAPHITE_PORT = "graphitePort"; //$NON-NLS-1$
@@ -76,7 +76,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final String METRIC_MEAN_ACTIVE_THREADS = "meanAT"; //$NON-NLS-1$
     private static final String METRIC_STARTED_THREADS = "startedT"; //$NON-NLS-1$
     private static final String METRIC_FINISHED_THREADS = "endedT"; //$NON-NLS-1$
-    
+
     // Response time Metrics
     private static final String METRIC_SEPARATOR = "."; //$NON-NLS-1$
     private static final String METRIC_OK_PREFIX = "ok"; //$NON-NLS-1$
@@ -85,14 +85,14 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final String METRIC_HITS_PREFIX = "h"; //$NON-NLS-1$
     private static final String METRIC_SENT_BYTES_PREFIX = "sb"; //$NON-NLS-1$
     private static final String METRIC_RECEIVED_BYTES_PREFIX = "rb"; //$NON-NLS-1$
-    
+
     private static final String METRIC_BYTES = "bytes"; //$NON-NLS-1$
     private static final String METRIC_COUNT = "count"; //$NON-NLS-1$
     private static final String METRIC_MIN_RESPONSE_TIME = "min"; //$NON-NLS-1$
     private static final String METRIC_MAX_RESPONSE_TIME = "max"; //$NON-NLS-1$
     private static final String METRIC_AVG_RESPONSE_TIME = "avg"; //$NON-NLS-1$
     private static final String METRIC_PERCENTILE = "pct"; //$NON-NLS-1$
-    
+
     private static final String METRIC_OK_COUNT             = METRIC_OK_PREFIX+METRIC_SEPARATOR+METRIC_COUNT;
     private static final String METRIC_OK_MIN_RESPONSE_TIME = METRIC_OK_PREFIX+METRIC_SEPARATOR+METRIC_MIN_RESPONSE_TIME;
     private static final String METRIC_OK_MAX_RESPONSE_TIME = METRIC_OK_PREFIX+METRIC_SEPARATOR+METRIC_MAX_RESPONSE_TIME;
@@ -131,18 +131,18 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private Map<String, Float> okPercentiles;
     private Map<String, Float> koPercentiles;
     private Map<String, Float> allPercentiles;
-    
+
 
     private GraphiteMetricsSender graphiteMetricsManager;
 
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> timerHandle;
-    
+
     private Pattern pattern;
 
     public GraphiteBackendListenerClient() {
         super();
-    }    
+    }
 
     @Override
     public void run() {
@@ -162,12 +162,12 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                 if(key.equals(CUMULATED_METRICS)) {
                     addMetrics(timestampInSeconds, ALL_CONTEXT_NAME, metric);
                 } else {
-                    addMetrics(timestampInSeconds, AbstractGraphiteMetricsSender.sanitizeString(key), metric);                
+                    addMetrics(timestampInSeconds, AbstractGraphiteMetricsSender.sanitizeString(key), metric);
                 }
                 // We are computing on interval basis so cleanup
                 metric.resetForTimeInterval();
             }
-        }        
+        }
         UserMetric userMetric = getUserMetrics();
         graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME,
                 METRIC_MIN_ACTIVE_THREADS,
@@ -199,7 +199,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private void addMetrics(long timestampInSeconds, String contextName, SamplerMetric metric) {
 
         // See https://bz.apache.org/bugzilla/show_bug.cgi?id=57350
-        if(metric.getTotal() > 0) { 
+        if(metric.getTotal() > 0) {
             graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
                     METRIC_OK_COUNT, Integer.toString(metric.getSuccesses()));
             graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
@@ -223,11 +223,11 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                         contextName, METRIC_OK_AVG_RESPONSE_TIME,
                         Double.toString(metric.getOkMean()));
                 for (Map.Entry<String, Float> entry : okPercentiles.entrySet()) {
-                    graphiteMetricsManager.addMetric(timestampInSeconds, contextName, 
-                            entry.getKey(), 
+                    graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                            entry.getKey(),
                             Double.toString(metric.getOkPercentile(entry.getValue().floatValue())));
                 }
-            } 
+            }
             if(metric.getFailures()>0) {
                 graphiteMetricsManager.addMetric(timestampInSeconds,
                         contextName, METRIC_KO_MIN_RESPONSE_TIME,
@@ -239,10 +239,10 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                         contextName, METRIC_KO_AVG_RESPONSE_TIME,
                         Double.toString(metric.getKoMean()));
                 for (Map.Entry<String, Float> entry : koPercentiles.entrySet()) {
-                    graphiteMetricsManager.addMetric(timestampInSeconds, contextName, 
-                            entry.getKey(), 
+                    graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                            entry.getKey(),
                             Double.toString(metric.getKoPercentile(entry.getValue().floatValue())));
-                }   
+                }
             }
             graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
                     METRIC_ALL_MIN_RESPONSE_TIME,
@@ -254,8 +254,8 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                     METRIC_ALL_AVG_RESPONSE_TIME,
                     Double.toString(metric.getAllMean()));
             for (Map.Entry<String, Float> entry : allPercentiles.entrySet()) {
-                graphiteMetricsManager.addMetric(timestampInSeconds, contextName, 
-                        entry.getKey(), 
+                graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                        entry.getKey(),
                         Double.toString(metric.getAllPercentile(entry.getValue().floatValue())));
             }
         }
@@ -283,13 +283,13 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             UserMetric userMetrics = getUserMetrics();
             for (SampleResult sampleResult : sampleResults) {
                 userMetrics.add(sampleResult);
-                
+
                 if(!summaryOnly) {
                     if (useRegexpForSamplersList) {
                         Matcher matcher = pattern.matcher(sampleResult.getSampleLabel());
                         samplersToFilterMatch = matcher.matches();
                     } else {
-                        samplersToFilterMatch = samplersToFilter.contains(sampleResult.getSampleLabel()); 
+                        samplersToFilterMatch = samplersToFilter.contains(sampleResult.getSampleLabel());
                     }
                     if (samplersToFilterMatch) {
                         SamplerMetric samplerMetric = getSamplerMetric(sampleResult.getSampleLabel());
@@ -305,7 +305,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public void setupTest(BackendListenerContext context) throws Exception {
         String graphiteMetricsSenderClass = context.getParameter(GRAPHITE_METRICS_SENDER);
-        
+
         graphiteHost = context.getParameter(GRAPHITE_HOST);
         graphitePort = context.getIntParameter(GRAPHITE_PORT, DEFAULT_PLAINTEXT_PROTOCOL_PORT);
         summaryOnly = context.getBooleanParameter(SUMMARY_ONLY, true);

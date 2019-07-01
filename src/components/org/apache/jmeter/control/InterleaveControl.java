@@ -29,11 +29,11 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
  * Alternate among each of the children controllers or samplers for each loop iteration
  */
 public class InterleaveControl extends GenericController implements Serializable {
-    
+
     private static final long serialVersionUID = 234L;
 
     private static final String STYLE = "InterleaveControl.style";// $NON-NLS-1$
-    
+
     private static final String ACCROSS_THREADS = "InterleaveControl.accrossThreads";// $NON-NLS-1$
 
     public static final int IGNORE_SUB_CONTROLLERS = 0;
@@ -76,7 +76,7 @@ public class InterleaveControl extends GenericController implements Serializable
     public int getStyle() {
         return getPropertyAsInt(STYLE);
     }
-    
+
     public void setInterleaveAccrossThreads(boolean accrossThreads) {
         setProperty(new BooleanProperty(ACCROSS_THREADS, accrossThreads));
     }

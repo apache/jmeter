@@ -31,7 +31,7 @@ public class Junit4AnnotationsTest {
 
     @BeforeClass
     public static void beforeClass(){
-        System.out.println("beforeClass");        
+        System.out.println("beforeClass");
     }
     @Before
     public void before(){
@@ -50,6 +50,6 @@ public class Junit4AnnotationsTest {
 
     @AfterClass
     public static void afterClass(){
-        System.out.println("afterClass");        
+        System.out.println("afterClass");
     }
 }

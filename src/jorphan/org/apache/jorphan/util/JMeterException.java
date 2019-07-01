@@ -20,7 +20,7 @@ package org.apache.jorphan.util;
 
 /**
  * Custom JMeter Exception
- * 
+ *
  */
 public class JMeterException extends Exception {
 

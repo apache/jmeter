@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * Base class for sample consumer implementations.<br>
  * Every sample consumer should extends this class to support basic consumer
  * features.
- * 
+ *
  * @since 3.0
  */
 public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
@@ -127,7 +127,7 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
 
     /**
      * Sets the consumers
-     * 
+     *
      * @param consumers
      *            for the samples (must not be {@code null})
      */

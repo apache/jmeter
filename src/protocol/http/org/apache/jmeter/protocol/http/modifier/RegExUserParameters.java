@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.modifier;
@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This component allows you to specify reference name of a regular expression that extracts names and values of HTTP request parameters. 
+ * This component allows you to specify reference name of a regular expression that extracts names and values of HTTP request parameters.
  * Regular expression group numbers must be specified for parameter's name and also for parameter's value.
  * Replacement will only occur for parameters in the Sampler that uses this RegEx User Parameters which name matches
  */
@@ -43,7 +43,7 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
     private static final String MATCH_NR = "matchNr";
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 5486502839185386121L;
 
@@ -98,14 +98,14 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
         JMeterVariables jmvars = getThreadContext().getVariables();
         // verify if regex groups exists
         if(jmvars.get(regExRefName + MATCH_NR) == null
-                || jmvars.get(regExRefName + 1 + REGEX_GROUP_SUFFIX + grNames) == null 
+                || jmvars.get(regExRefName + 1 + REGEX_GROUP_SUFFIX + grNames) == null
                 || jmvars.get(regExRefName + 1 + REGEX_GROUP_SUFFIX + grValues) == null){
             return null;
         }
         int n = Integer.parseInt(jmvars.get(regExRefName + MATCH_NR));
         Map<String, String> map = new HashMap<>(n);
         for(int i=1; i<=n; i++){
-            map.put(jmvars.get(regExRefName + i + REGEX_GROUP_SUFFIX + grNames), 
+            map.put(jmvars.get(regExRefName + i + REGEX_GROUP_SUFFIX + grNames),
                     jmvars.get(regExRefName + i + REGEX_GROUP_SUFFIX + grValues));
         }
         return map;
@@ -121,7 +121,7 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
         RegExUserParameters up = (RegExUserParameters) super.clone();
         return up;
     }
-    
+
     public void setRegExRefName(String str) {
         setProperty(REG_EX_REF_NAME, str);
     }

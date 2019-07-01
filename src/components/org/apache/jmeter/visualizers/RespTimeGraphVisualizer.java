@@ -96,7 +96,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     public static final String SERIES_SELECTION_CASE_SENSITIVE = "RespTimeGraph.seriesselectioncasesensitive"; // $NON-NLS-1$
 
     public static final String SERIES_SELECTION_REGEXP = "RespTimeGraph.seriesselectionregexp"; // $NON-NLS-1$
-    
+
     public static final String GRAPH_TITLE = "RespTimeGraph.graphtitle"; // $NON-NLS-1$
 
     public static final String GRAPH_TITLE_FONT_NAME = "RespTimeGraph.graphtitlefontname"; // $NON-NLS-1$
@@ -136,31 +136,31 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     public static final int DEFAULT_INTERVAL = 10000; // in milli-seconds // TODO: properties?
 
     public static final boolean DEFAULT_SERIES_SELECTION = false;
-    
+
     public static final boolean DEFAULT_CASE_SENSITIVE = false;
-    
+
     public static final boolean DEFAULT_REGEXP = true;
-    
+
     public static final int DEFAULT_TITLE_FONT_NAME = 0; // default: sans serif
-    
+
     public static final int DEFAULT_TITLE_FONT_SIZE = 6; // default: 16
 
     public static final int DEFAULT_TITLE_FONT_STYLE = 1; // default: bold
 
     public static final int DEFAULT_STROKE_WIDTH_LIST = 4; // default: 3.0f
-    
+
     public static final int DEFAULT_LINE_SHAPE_POINT = 0; // default: circle
 
     public static final boolean DEFAULT_DYNAMIC_GRAPH_SIZE = true; // default: true
 
     public static final String DEFAULT_XAXIS_TIME_FORMAT = "HH:mm:ss"; // $NON-NLS-1$
-    
+
     public static final boolean DEFAULT_NUMBER_SHOW_GROUPING = true;
-    
+
     public static final int DEFAULT_LEGEND_PLACEMENT = 0; // default: bottom
 
     public static final int DEFAULT_LEGEND_FONT = 0; // default: sans serif
-    
+
     public static final int DEFAULT_LEGEND_SIZE = 2; // default: 10
 
     public static final int DEFAULT_LEGEND_STYLE = 0; // default: normal
@@ -185,9 +185,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private RespTimeGraphChart graphPanel = null;
 
     private final JTabbedPane tabbedGraph = new JTabbedPane(SwingConstants.TOP);
-    
+
     private boolean saveGraphToFile = false;
-    
+
     private int intervalValue = DEFAULT_INTERVAL;
 
     private final JLabeledTextField intervalField =
@@ -197,7 +197,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final JButton displayButton =
             new JButton(JMeterUtils.getResString("aggregate_graph_display")); //$NON-NLS-1$
-    
+
     private final JButton saveGraph =
             new JButton(JMeterUtils.getResString("aggregate_graph_save")); //$NON-NLS-1$
 
@@ -224,7 +224,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private final JComboBox<String> fontStyleList = new JComboBox<>(keys(StatGraphProperties.getFontStyleMap()));
 
     private final JComboBox<String> legendPlacementList = new JComboBox<>(keys(StatGraphProperties.getPlacementNameMap()));
-    
+
     private final JComboBox<String> pointShapeLine = new JComboBox<>(keys(StatGraphProperties.getPointShapeMap()));
 
     private final JComboBox<String> strokeWidthList = new JComboBox<>(StatGraphProperties.getStrokeWidth());
@@ -272,7 +272,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private final Map<String, Map<Long, StatCalculatorLong>> pList = new LinkedHashMap<>();
 
     private long durationTest = 0;
-    
+
     private int colorIdx = 0;
 
     private Pattern pattern = null;
@@ -318,7 +318,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                         }
                         // Generate x-axis label and associated color
                         if (!seriesNames.containsKey(sampleLabel)) {
-                            seriesNames.put(sampleLabel, 
+                            seriesNames.put(sampleLabel,
                                     new RespTimeGraphLineBean(sampleLabel, listColors.get(colorIdx++)));
                             // reset colors index
                             if (colorIdx >= listColors.size()) {
@@ -499,7 +499,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
         tabbedGraph.addTab(JMeterUtils.getResString("aggregate_graph_tab_settings"), settingsPane); //$NON-NLS-1$
         tabbedGraph.addTab(JMeterUtils.getResString("aggregate_graph_tab_graph"), graphPanel); //$NON-NLS-1$
-        
+
         // If clic on the Graph tab, make the graph (without apply interval or filter)
         ChangeListener changeListener = new ChangeListener() {
             @Override
@@ -544,7 +544,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 forceReloadData = true;
             }
         }
-        // Not 'else if' because forceReloadData 
+        // Not 'else if' because forceReloadData
         if (eventSource == applyFilterBtn || eventSource == intervalButton || forceReloadData) {
             if (eventSource == intervalButton) {
                 intervalValue = Integer.parseInt(intervalField.getText());
@@ -575,7 +575,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                     }
                 }
             }
-        } 
+        }
     }
 
     private void actionMakeGraph() {
@@ -636,7 +636,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         fontNameList.setSelectedIndex(te.getPropertyAsInt(LEGEND_FONT, DEFAULT_LEGEND_FONT));
         fontSizeList.setSelectedIndex(te.getPropertyAsInt(LEGEND_SIZE, DEFAULT_LEGEND_SIZE));
         fontStyleList.setSelectedIndex(te.getPropertyAsInt(LEGEND_STYLE, DEFAULT_LEGEND_STYLE));
-        
+
         enableSamplerSelection(samplerSelection.isSelected());
         enableDynamicGraph(dynamicGraphSize.isSelected());
     }
@@ -666,7 +666,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         te.setProperty(LEGEND_FONT, fontNameList.getSelectedIndex(), DEFAULT_LEGEND_FONT);
         te.setProperty(LEGEND_SIZE, fontSizeList.getSelectedIndex(), DEFAULT_LEGEND_SIZE);
         te.setProperty(LEGEND_STYLE, fontStyleList.getSelectedIndex(), DEFAULT_LEGEND_STYLE);
-        
+
         // Update sub-element visibility and data reload if need
         enableSamplerSelection(samplerSelection.isSelected());
         enableDynamicGraph(dynamicGraphSize.isSelected());
@@ -719,7 +719,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     }
 
     public String[] getXAxisLabels() {
-        SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText()); //$NON-NLS-1$ 
+        SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText()); //$NON-NLS-1$
         String[] xAxisLabels = new String[(int) durationTest]; // Test can't have a duration more than 2^31 secs (cast from long to int)
         for (int j = 0; j < durationTest; j++) {
             xAxisLabels[j] = formatter.format(new Date((minStartTime + j) * intervalValue));
@@ -763,12 +763,12 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         settingsPane.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("graph_resp_time_settings_pane"))); // $NON-NLS-1$
-        
+
         JPanel intervalPane = new JPanel();
         intervalPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         intervalField.setText(String.valueOf(DEFAULT_INTERVAL));
         intervalPane.add(intervalField);
-        
+
         // Button
         intervalButton.setFont(FONT_SMALL);
         intervalButton.addActionListener(this);
@@ -836,7 +836,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         return titlePane;
     }
 
-    private JPanel createLinePane() {       
+    private JPanel createLinePane() {
         JPanel lineStylePane = new JPanel();
         lineStylePane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         lineStylePane.setBorder(BorderFactory.createTitledBorder(
@@ -949,7 +949,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         }
         return pattern;
     }
-    
+
     private void enableDynamicGraph(boolean enable) {
         // if use dynamic graph size is checked, we disable the dimension fields
         if (enable) {

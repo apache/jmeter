@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.reporters;
@@ -50,7 +50,7 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
         sampleResult = new SampleResult();
         sampleResult.setResponseData(data, null);
     }
-    
+
     @Test
     public void testSuccess() {
         sampleResult.setSuccessful(true);
@@ -64,7 +64,7 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
         Assert.assertTrue(file.exists());
         Assert.assertTrue(file.delete());
     }
-    
+
     @Test
     public void testSuccessWithVariable() {
         sampleResult.setSuccessful(true);
@@ -80,7 +80,7 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
         Assert.assertTrue(file.delete());
         Assert.assertEquals("00001.unknown", vars.get("myVar"));
     }
-    
+
     @Test
     public void testSuccessSaveErrorsOnly() {
         sampleResult.setSuccessful(true);
@@ -93,7 +93,7 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
         Assert.assertEquals("", fileName);
         Assert.assertNull(vars.get("myVar"));
     }
-    
+
     @Test
     public void testFailureSaveErrorsOnly() {
         sampleResult.setSuccessful(true);
@@ -111,7 +111,7 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
         Assert.assertTrue(file.delete());
         Assert.assertEquals("00001.unknown", vars.get("myVar"));
     }
-    
+
     @Test
     public void testMakeFileName() {
         resultSaver.setProperty(ResultSaver.FILENAME, "test");
@@ -121,17 +121,17 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
         Assert.assertEquals("test", resultSaver.makeFileName("text/plain", true, true));
         resultSaver.testStarted();
         Assert.assertEquals("test", resultSaver.makeFileName("text/plain;charset=utf8", true, true));
-        
+
         Assert.assertEquals("test1.plain", resultSaver.makeFileName("text/plain", false, false));
         resultSaver.testStarted();
         Assert.assertEquals("test.plain", resultSaver.makeFileName("text/plain", true, false));
         resultSaver.testStarted();
         Assert.assertEquals("test1", resultSaver.makeFileName("text/plain", false, true));
         Assert.assertEquals("test2", resultSaver.makeFileName("text/plain", false, true));
-        
+
         resultSaver.testStarted();
         Assert.assertEquals("test.plain", resultSaver.makeFileName("text/plain;charset=UTF-8", true, false));
-        
+
         resultSaver.testStarted();
         Assert.assertEquals("test.unknown", resultSaver.makeFileName(null, true, false));
 

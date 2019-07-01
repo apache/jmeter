@@ -196,7 +196,7 @@ public class ThroughputController
     @Override
     public boolean isDone() {
         return subControllersAndSamplers.isEmpty()
-                || 
+                ||
                 (
                         (getStyle() == BYNUMBER
                             && (

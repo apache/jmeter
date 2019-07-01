@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -35,21 +35,21 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
     private static final long serialVersionUID = 1L;
 
     private transient HTTPAbstractImpl impl;
-    
+
     public HTTPSamplerProxy(){
         super();
     }
-    
+
     /**
      * Convenience method used to initialise the implementation.
-     * 
+     *
      * @param impl the implementation to use.
      */
     public HTTPSamplerProxy(String impl){
         super();
         setImplementation(impl);
     }
-        
+
     /** {@inheritDoc} */
     @Override
     protected HTTPSampleResult sample(URL u, String method, boolean areFollowingRedirect, int depth) {

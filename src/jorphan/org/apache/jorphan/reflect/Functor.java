@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * o = f.invoke(object); // - OR -
  * o = f.invoke(object, params);
  * </pre>
- * 
+ *
  * <pre>
  * f2 = new Functor(object, "methodName");
  * o = f2.invoke(); // - OR -
@@ -370,7 +370,7 @@ public class Functor {
 
     /**
      * Check if a read Functor method is valid.
-     * 
+     *
      * @param _invokee
      *            instance on which the method should be tested
      *
@@ -391,7 +391,7 @@ public class Functor {
 
     /**
      * Check if a write Functor method is valid.
-     * 
+     *
      * @param _invokee
      *            instance on which the method should be tested
      * @param c

@@ -22,7 +22,7 @@ package org.apache.jmeter.threads;
 /**
  * SetupThreadGroup.java is a special type of ThreadGroup that can be used for
  * setting up of a test before the bulk of the test executes later.
- * 
+ *
  */
 public class SetupThreadGroup extends ThreadGroup {
     private static final long serialVersionUID = 240L;

@@ -228,9 +228,9 @@ public class JavaSamplerContext {
             return defaultValue;
         }
     }
-    
+
     /**
-     * 
+     *
      * @return {@link JMeterContext}
      */
     public JMeterContext getJMeterContext() {
@@ -242,13 +242,13 @@ public class JavaSamplerContext {
     public final JMeterVariables getJMeterVariables() {
         return JMeterContextService.getContext().getVariables();
     }
-    
+
     /**
-     * 
+     *
      * @return {@link Properties} JMeter properties
      */
     public final Properties getJMeterProperties() {
         return JMeterUtils.getJMeterProperties();
     }
-    
+
 }

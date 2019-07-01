@@ -48,7 +48,7 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
 
     public ConstantPoissonProcessGenerator(
             ThroughputProvider throughput, int batchSize, int batchThreadDelay,
-            DurationProvider duration, int exactLimit, double allowedThroughputSurplus, 
+            DurationProvider duration, int exactLimit, double allowedThroughputSurplus,
             Long seed, boolean logFirstSamples) {
         this.throughputProvider = throughput;
         this.batchSize = batchSize;

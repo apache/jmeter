@@ -46,7 +46,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     static final String JMETER_ENGINE_RMI_NAME = "JMeterEngine"; // $NON-NLS-1$
 
     private transient JMeterEngine backingEngine;
-    
+
     private transient Thread ownerThread;
 
     // Should we create our own copy of the RMI registry?
@@ -64,15 +64,15 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
 
     private RemoteJMeterEngineImpl(int localPort, int rmiRegistryPort) throws RemoteException {
         // Create this object using the specified port (0 means anonymous)
-        super(localPort, RmiUtils.createClientSocketFactory(), RmiUtils.createServerSocketFactory()); 
+        super(localPort, RmiUtils.createClientSocketFactory(), RmiUtils.createServerSocketFactory());
         this.rmiRegistryPort = rmiRegistryPort;
         System.out.println("Created remote object: "+this.getRef().remoteToString());
     }
 
     public static void startServer(int rmiRegistryPort) throws RemoteException {
-        RemoteJMeterEngineImpl engine = 
+        RemoteJMeterEngineImpl engine =
                 new RemoteJMeterEngineImpl(
-                RmiUtils.DEFAULT_LOCAL_PORT, 
+                RmiUtils.DEFAULT_LOCAL_PORT,
                 rmiRegistryPort);
         engine.init();
     }
@@ -90,8 +90,8 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         if (CREATE_SERVER){
             log.info("Creating RMI registry (server.rmi.create=true)");
             try {
-                reg = LocateRegistry.createRegistry(this.rmiRegistryPort, 
-                        RmiUtils.createClientSocketFactory(), 
+                reg = LocateRegistry.createRegistry(this.rmiRegistryPort,
+                        RmiUtils.createClientSocketFactory(),
                         RmiUtils.createServerSocketFactory());
                 log.debug("Created registry: {}", reg);
             } catch (RemoteException e){
@@ -185,7 +185,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
 
     /*
      * Called by:
-     * - ClientJMeterEngine.exe() which is called on remoteStop 
+     * - ClientJMeterEngine.exe() which is called on remoteStop
      */
     @Override
     public void rexit() throws RemoteException {
@@ -200,7 +200,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         Registry reg = LocateRegistry.getRegistry(
                 RmiUtils.getRmiHost().getHostName(),
                 this.rmiRegistryPort,
-                RmiUtils.createClientSocketFactory());        
+                RmiUtils.createClientSocketFactory());
         try {
             reg.unbind(JMETER_ENGINE_RMI_NAME);
         } catch (NotBoundException e) {

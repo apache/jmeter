@@ -34,7 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * The class is not thread-safe - it is only intended for use within a single thread.
  */
 public class JMeterContext {
-    
+
     public enum TestLogicalAction {
         CONTINUE,
         START_NEXT_ITERATION_OF_THREAD,
@@ -80,16 +80,16 @@ public class JMeterContext {
 
     /**
      * Gives access to the JMeter variables for the current thread.
-     * 
+     *
      * @return a pointer to the JMeter variables.
      */
     public JMeterVariables getVariables() {
         // If context variable is null ( Client side ) return client variables
-        return (variables != null) ? 
-                variables : 
+        return (variables != null) ?
+                variables :
                 JMeterContextService.getClientSideVariables();
     }
-    
+
     /**
      * @return a pointer to the JMeter Properties.
      */
@@ -99,7 +99,7 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
-     * 
+     *
      * @param vars JMeterVariables
      */
     public void setVariables(JMeterVariables vars) {
@@ -112,7 +112,7 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
-     * 
+     *
      * @param result SampleResult
      */
     public void setPreviousResult(SampleResult result) {
@@ -125,7 +125,7 @@ public class JMeterContext {
 
     /**
      * Internally called by JMeter, never call it directly
-     * 
+     *
      * @param sampler Sampler
      */
     public void setCurrentSampler(Sampler sampler) {
@@ -160,7 +160,7 @@ public class JMeterContext {
     public JMeterThread getThread() {
         return this.thread;
     }
-    
+
     /**
      * Internally called by JMeter, never call it directly
      * @param thread to use
@@ -204,7 +204,7 @@ public class JMeterContext {
     public void setSamplingStarted(boolean b) {
         samplingStarted = b;
     }
-    
+
 
     /**
      * @param actionOnExecution action to take for next iteration of current loop in which this component is present
@@ -219,7 +219,7 @@ public class JMeterContext {
     public TestLogicalAction getTestLogicalAction() {
         return testLogicalAction;
     }
-    
+
     /**
      * @param restartNextLoop if set to <code>true</code> a restart of the loop will occur
      * @deprecated use {@link JMeterContext#setTestLogicalAction(TestLogicalAction)}
@@ -232,7 +232,7 @@ public class JMeterContext {
             this.testLogicalAction = TestLogicalAction.CONTINUE;
         }
     }
-    
+
     /**
      * @return {@code true} when current loop iteration of Thread Group will be interrupted and JMeter will go to next iteration of the Thread Group loop
      * @deprecated use {@link JMeterContext#getTestLogicalAction()}
@@ -241,9 +241,9 @@ public class JMeterContext {
     public boolean isStartNextThreadLoop() {
         return this.testLogicalAction == TestLogicalAction.START_NEXT_ITERATION_OF_THREAD;
     }
-    
+
     /**
-     * if set to <code>true</code> current loop iteration will be interrupted and 
+     * if set to <code>true</code> current loop iteration will be interrupted and
      * JMeter will go to next iteration
      * @param restartNextLoop flag whether to restart
      *

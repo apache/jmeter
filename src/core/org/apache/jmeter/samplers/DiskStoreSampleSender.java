@@ -102,7 +102,7 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
                 } else {
                     log.error("Unexpected object type found in data file. {}", obj.getClass());
                 }
-            }                    
+            }
         } catch (EOFException err) {
             // expected
         } catch (IOException | ClassNotFoundException err) {

@@ -19,13 +19,13 @@ package org.apache.jmeter.report.core;
 
 /**
  * Thrown when some sample processing occurred
- * 
+ *
  * @since 3.0
  */
 public class SampleException extends RuntimeException {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6186024584671619389L;
 

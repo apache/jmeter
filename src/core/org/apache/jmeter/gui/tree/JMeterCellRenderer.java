@@ -35,7 +35,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class JMeterCellRenderer extends DefaultTreeCellRenderer {
     private static final long serialVersionUID = 241L;
-    
+
     private static final int DEFAULT_LENGTH = 15;
 
     private static final String BLANK = StringUtils.repeat(' ', DEFAULT_LENGTH);
@@ -50,7 +50,7 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
             boolean leaf, int row, boolean p_hasFocus) {
         JMeterTreeNode node = (JMeterTreeNode) value;
         super.getTreeCellRendererComponent(tree,
-                JOrphanUtils.isBlank(node.getName()) ? BLANK : node.getName(), 
+                JOrphanUtils.isBlank(node.getName()) ? BLANK : node.getName(),
                         sel, expanded, leaf, row, p_hasFocus);
         boolean enabled = node.isEnabled();
         ImageIcon ic = node.getIcon(enabled);

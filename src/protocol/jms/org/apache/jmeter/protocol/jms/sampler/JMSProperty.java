@@ -31,7 +31,7 @@ public class JMSProperty extends AbstractTestElement implements Serializable {
 
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 6371090992800805753L;
 
@@ -79,7 +79,7 @@ public class JMSProperty extends AbstractTestElement implements Serializable {
         setProperty(new StringProperty(PROP_VALUE, value));
         setProperty(new StringProperty(PROP_TYPE, type));
     }
-    
+
     /**
      * Set the name of the JmsProperty.
      *
@@ -119,7 +119,7 @@ public class JMSProperty extends AbstractTestElement implements Serializable {
     public String getValue() {
         return getPropertyAsString(PROP_VALUE);
     }
-    
+
     /**
      * Sets the Meta Data attribute of the JmsProperty.
      *
@@ -147,7 +147,7 @@ public class JMSProperty extends AbstractTestElement implements Serializable {
     public Object getValueAsObject() {
         String type = getType();
         String value = getValue();
-        
+
         if(type.equals(Boolean.class.getName())) { //NOSONAR
             return Boolean.valueOf(value);
         } else if(type.equals(Byte.class.getName())) {//NOSONAR

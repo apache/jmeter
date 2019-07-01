@@ -29,7 +29,7 @@ import java.lang.annotation.RetentionPolicy;
  * The <code>visibility</code> argument can be used to specific what the original
  * visibility should have been if it had not been made public or package-private for testing.
  * The default is to consider the element private.
- * 
+ *
  * Copy of this class under ASL license:
  * https://github.com/aosp-mirror/platform_frameworks_base/blob/master/core/java/com/android/internal/annotations/VisibleForTesting.java
  */

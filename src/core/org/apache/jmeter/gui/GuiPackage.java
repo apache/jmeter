@@ -75,7 +75,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     private static final String SBR_PREFS_KEY = "save_before_run";
 
     private static final String SAVE_BEFORE_RUN_PROPERTY = "save_automatically_before_run"; // $NON-NLS-1$
-    
+
     private static final boolean SAVE_BEFORE_RUN_PROPERTY_DEFAULT_VALUE = true;
 
     private static final Preferences PREFS = Preferences.userNodeForPackage(GuiPackage.class);
@@ -123,13 +123,13 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /** The main JMeter toolbar. */
     private JToolBar toolbar;
-    
+
     /** The LoggerPanel menu item */
     private JCheckBoxMenuItem menuItemLoggerPanel;
 
     /** The LoggerPanel menu item */
     private JCheckBoxMenuItem menuItemSaveBeforeRunPanel;
-    
+
     /** Logger Panel reference */
     private LoggerPanel loggerPanel;
 
@@ -162,7 +162,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     public static GuiPackage getInstance() {
         return guiPack;
     }
-    
+
     /**
      * Register as listener of:
      * - UndoHistory
@@ -189,7 +189,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         guiPack.undoHistory.add(treeModel, "Created");
         GuiPackage.guiPack = guiPack;
     }
-   
+
 
     /**
      * Get a JMeterGUIComponent for the specified test element. If the GUI has
@@ -421,8 +421,8 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     }
 
     /**
-     * Refresh GUI from node state. 
-     * This method does not update the current node from GUI at the 
+     * Refresh GUI from node state.
+     * This method does not update the current node from GUI at the
      * difference of {@link GuiPackage#updateCurrentGui()}
      */
     public void refreshCurrentGui() {
@@ -786,7 +786,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     public void setMenuItemLoggerPanel(JCheckBoxMenuItem menuItemLoggerPanel) {
         this.menuItemLoggerPanel = menuItemLoggerPanel;
     }
-        
+
     /**
      * Get the menu item LoggerPanel.
      *
@@ -795,10 +795,10 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     public JCheckBoxMenuItem getMenuItemLoggerPanel() {
         return menuItemLoggerPanel;
     }
-    
+
     /**
      * Set the menu item SaveBeforeRunPanel.
-     * 
+     *
      * @param menuItemSaveBeforeRunPanel
      *            The menu item SaveBeforeRunPanel
      */
@@ -904,7 +904,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     public TreeNodeNamingPolicy getNamingPolicy() {
         if (namingPolicy == null) {
             final String namingPolicyImplementation =
-                    JMeterUtils.getPropDefault("naming_policy.impl", //$NON-NLS-1$ 
+                    JMeterUtils.getPropDefault("naming_policy.impl", //$NON-NLS-1$
                             DefaultTreeNodeNamingPolicy.class.getName());
 
             try {
@@ -940,8 +940,8 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     public void endUndoTransaction() {
         undoHistory.endUndoTransaction();
     }
-    
-    
+
+
     /**
      * Should Save Before Run by Preference Only
      * @return boolean
@@ -950,7 +950,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         return Boolean.TRUE.toString().
                 equalsIgnoreCase(PREFS.get(SBR_PREFS_KEY, null));
     }
-    
+
     /**
      * Should Save Before Run by Preference Only
      * @param saveBeforeRun boolean
@@ -958,19 +958,19 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     public void setSaveBeforeRunByPreference(boolean saveBeforeRun) {
         PREFS.put(SBR_PREFS_KEY, Boolean.toString(saveBeforeRun)); // $NON-NLS-1$ // $NON-NLS-2$
     }
-    
+
     /**
-     * Should Save Before Run 
+     * Should Save Before Run
      * Decide by Preference and if not exists by Property
-     * 
+     *
      * @return boolean Should Save Before Run
      */
     public boolean shouldSaveBeforeRun() {
         String sbr = PREFS.get(SBR_PREFS_KEY, null);
         if (sbr == null) {
             // use property if no preference
-            return JMeterUtils.getPropDefault(SAVE_BEFORE_RUN_PROPERTY, 
-                    SAVE_BEFORE_RUN_PROPERTY_DEFAULT_VALUE);         
+            return JMeterUtils.getPropDefault(SAVE_BEFORE_RUN_PROPERTY,
+                    SAVE_BEFORE_RUN_PROPERTY_DEFAULT_VALUE);
         } else {
             return shouldSaveBeforeRunByPreference();
         }

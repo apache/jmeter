@@ -21,7 +21,7 @@ import org.apache.jmeter.report.processor.AggregatorFactory;
 
 /**
  * The class GroupInfo stores information about the series group of a graph.
- * 
+ *
  * @since 3.0
  */
 public class GroupInfo {

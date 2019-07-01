@@ -220,7 +220,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         addField(panel, matchNumberField, gbc);
         resetContraints(gbc);
         gbc.weighty = 1;
-        
+
         defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field")); //$NON-NLS-1$
         List<JComponent> item = defaultField.getComponentList();
         panel.add(item.get(0), gbc.clone());
@@ -233,13 +233,13 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
             }
             defaultField.setEnabled(!emptyDefaultValue.isSelected());
         });
-        
+
         p.add(emptyDefaultValue, BorderLayout.CENTER);
         gbc.gridx++;
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(p, gbc.clone());
-        
+
         return panel;
     }
 

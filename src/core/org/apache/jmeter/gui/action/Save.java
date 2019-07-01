@@ -68,28 +68,28 @@ public class Save extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(Save.class);
 
     private static final List<File> EMPTY_FILE_LIST = Collections.emptyList();
-    
+
     private static final String JMX_BACKUP_ON_SAVE = "jmeter.gui.action.save.backup_on_save"; // $NON-NLS-1$
 
     private static final String JMX_BACKUP_DIRECTORY = "jmeter.gui.action.save.backup_directory"; // $NON-NLS-1$
-    
+
     private static final String JMX_BACKUP_MAX_HOURS = "jmeter.gui.action.save.keep_backup_max_hours"; // $NON-NLS-1$
-    
+
     private static final String JMX_BACKUP_MAX_COUNT = "jmeter.gui.action.save.keep_backup_max_count"; // $NON-NLS-1$
-    
+
     public static final String JMX_FILE_EXTENSION = ".jmx"; // $NON-NLS-1$
 
     private static final String DEFAULT_BACKUP_DIRECTORY = JMeterUtils.getJMeterHome() + "/backups"; //$NON-NLS-1$
-    
+
     // Whether we should keep backups for save JMX files. Default is to enable backup
     private static final boolean BACKUP_ENABLED = JMeterUtils.getPropDefault(JMX_BACKUP_ON_SAVE, true);
-    
+
     // Path to the backup directory
     private static final String BACKUP_DIRECTORY = JMeterUtils.getPropDefault(JMX_BACKUP_DIRECTORY, DEFAULT_BACKUP_DIRECTORY);
-    
+
     // Backup files expiration in hours. Default is to never expire (zero value).
     private static final int BACKUP_MAX_HOURS = JMeterUtils.getPropDefault(JMX_BACKUP_MAX_HOURS, 0);
-    
+
     // Max number of backup files. Default is to limit to 10 backups max.
     private static final int BACKUP_MAX_COUNT = JMeterUtils.getPropDefault(JMX_BACKUP_MAX_COUNT, 10);
 
@@ -158,7 +158,7 @@ public class Save extends AbstractAction {
         }
 
         String updateFile = GuiPackage.getInstance().getTestPlanFile();
-        if (!ActionNames.SAVE.equals(e.getActionCommand()) // Saving existing plan 
+        if (!ActionNames.SAVE.equals(e.getActionCommand()) // Saving existing plan
                 // New File
                 || updateFile == null) {
             boolean isNewFile = updateFile == null;
@@ -170,9 +170,9 @@ public class Save extends AbstractAction {
                 GuiPackage.getInstance().setTestPlanFile(updateFile);
             }
         }
-        
+
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
-        backupAndSave(e, subTree, fullSave, updateFile); 
+        backupAndSave(e, subTree, fullSave, updateFile);
 
         GuiPackage.getInstance().updateCurrentGui();
     }
@@ -237,7 +237,7 @@ public class Save extends AbstractAction {
      */
     void backupAndSave(ActionEvent e, HashTree subTree, boolean fullSave, String newFile)
             throws IllegalUserActionException {
-        // 
+        //
         List<File> expiredBackupFiles = EMPTY_FILE_LIST;
         if (GuiPackage.getInstance().isDirty()) {
             File fileToBackup = new File(newFile);
@@ -248,7 +248,7 @@ public class Save extends AbstractAction {
                 log.error("Failed to create a backup for {}", fileToBackup, ex); //$NON-NLS-1$
             }
         }
-        
+
         try {
             convertSubTree(subTree);
         } catch (Exception err) {
@@ -264,7 +264,7 @@ public class Save extends AbstractAction {
                 subTree = GuiPackage.getInstance().getTreeModel().getTestPlan(); // refetch, because convertSubTree affects it
                 ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
             }
-            
+
             // delete expired backups : here everything went right so we can
             // proceed to deletion
             expiredBackupFiles.forEach(FileUtils::deleteQuietly);
@@ -275,7 +275,7 @@ public class Save extends AbstractAction {
             throw new IllegalUserActionException("Couldn't save test plan to file: " + newFile, ex);
         }
     }
-    
+
     /**
      * <p>
      * Create a backup copy of the specified file whose name will be
@@ -329,7 +329,7 @@ public class Save extends AbstractAction {
      * </tr>
      * </table>
      * </p>
-     * 
+     *
      * @param fileToBackup
      *            The file to create a backup from
      * @return A list of expired backup files selected according to the above
@@ -390,10 +390,10 @@ public class Save extends AbstractAction {
 
         return backupFilesToDelete(backupFiles);
     }
-    
+
     /**
      * Find highest version number
-     * 
+     *
      * @param backupPattern
      *            {@link Pattern}
      * @param backupFiles
@@ -404,10 +404,10 @@ public class Save extends AbstractAction {
                 .filter(matcher -> matcher.find() && matcher.groupCount() > 0)
                 .mapToInt(matcher -> Integer.parseInt(matcher.group(1))).max().orElse(0);
     }
-    
+
     /**
      * Filters list of backup files to those which are candidates for deletion.
-     * 
+     *
      * @param backupFiles
      *            list of all backup files
      * @return list of files to be deleted based upon properties described
@@ -427,8 +427,8 @@ public class Save extends AbstractAction {
         return filesToDelete.stream().distinct() // ensure no duplicates
                 .collect(Collectors.toList());
     }
-    
-    
+
+
     /**
      * @param backupFiles {@link List} of {@link File} to filter
      * @return {@link List} of {@link File} that are expired
@@ -444,7 +444,7 @@ public class Save extends AbstractAction {
 
     /**
      * Check nodes does not contain a node of type TestPlan or ThreadGroup
-     * 
+     *
      * @param nodes
      *            the nodes to check for TestPlans or ThreadGroups
      */
@@ -462,27 +462,27 @@ public class Save extends AbstractAction {
             tree.replaceKey(item, testElement);
         }
     }
-    
+
     private static class PrivatePatternFileFilter implements IOFileFilter {
-        
+
         private Pattern pattern;
-        
+
         public PrivatePatternFileFilter(Pattern pattern) {
             if(pattern == null) {
                 throw new IllegalArgumentException("pattern cannot be null !"); //$NON-NLS-1$
             }
             this.pattern = pattern;
         }
-        
+
         @Override
         public boolean accept(File dir, String fileName) {
             return pattern.matcher(fileName).matches();
         }
-        
+
         @Override
         public boolean accept(File file) {
             return accept(file.getParentFile(), file.getName());
         }
     }
-    
+
 }

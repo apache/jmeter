@@ -104,7 +104,7 @@ public class TransactionSampler extends AbstractSampler {
     public void addSubSamplerResult(SampleResult res) {
         // Another subsample for the transaction
         calls++;
-        
+
         // Set Response code of transaction
         if (noFailingSamples == 0) {
             transactionSampleResult.setResponseCode(res.getResponseCode());

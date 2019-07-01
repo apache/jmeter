@@ -74,7 +74,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             this.config = sampleSaveConfiguration;
         }
     }
-    
+
     private static final class ShutdownHook implements Runnable {
 
         @Override
@@ -84,7 +84,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 finalizeFileOutput();
             }
             log.info("Shutdown hook ended");
-        }     
+        }
     }
     private static final Logger log = LoggerFactory.getLogger(ResultCollector.class);
 
@@ -150,7 +150,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     /** the summarizer to which this result collector will forward the samples */
     private volatile Summariser summariser;
-    
+
     /**
      * No-arg constructor.
      */
@@ -186,7 +186,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     /**
      * Get the filename of the file this collector uses
-     * 
+     *
      * @return The name of the file
      */
     public String getFilename() {
@@ -195,7 +195,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     /**
      * Get the state of error logging
-     * 
+     *
      * @return Flag whether errors should be logged
      */
     public boolean isErrorLogging() {
@@ -204,7 +204,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     /**
      * Sets error logging flag
-     * 
+     *
      * @param errorLogging
      *            The flag whether errors should be logged
      */
@@ -214,7 +214,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     /**
      * Sets the flag whether only successful samples should be logged
-     * 
+     *
      * @param value
      *            The flag whether only successful samples should be logged
      */
@@ -228,7 +228,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     /**
      * Get the state of successful only logging
-     * 
+     *
      * @return Flag whether only successful samples should be logged
      */
     public boolean isSuccessOnlyLogging() {
@@ -369,7 +369,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         String filename = getFilename();
         File file = new File(filename);
         if (file.exists()) {
-            try ( FileReader fr = new FileReader(file); 
+            try ( FileReader fr = new FileReader(file);
                     BufferedReader dataReader = new BufferedReader(fr, 300)){
                 // Get the first line, and see if it is XML
                 String line = dataReader.readLine();
@@ -591,7 +591,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             out.flush();
         }
     }
-    
+
     private static void finalizeFileOutput() {
         for(Map.Entry<String, ResultCollector.FileEntry> me : files.entrySet()) {
             String key = me.getKey();

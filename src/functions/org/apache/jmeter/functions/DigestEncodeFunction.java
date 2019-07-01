@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * <a href=
  * "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html"
  * >StandardNames</a>
- * 
+ *
  * @since 4.0
  */
 public class DigestEncodeFunction extends AbstractFunction {
@@ -97,7 +97,7 @@ public class DigestEncodeFunction extends AbstractFunction {
 
     /**
      * Upper case value if optional parameter value is true
-     * 
+     *
      * @param encodedString
      * @param index
      * @return

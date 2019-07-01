@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.modifier.gui;
@@ -39,7 +39,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 public class RegExUserParametersGui extends AbstractPreProcessorGui {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3080808672311046276L;
 
@@ -82,7 +82,7 @@ public class RegExUserParametersGui extends AbstractPreProcessorGui {
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * 
+     *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     @Override
@@ -95,18 +95,18 @@ public class RegExUserParametersGui extends AbstractPreProcessorGui {
             regExUserParams.setRegExParamValuesGrNr(paramValuesGrNrField.getText());
         }
     }
-    
+
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     @Override
     public void clearGui() {
         super.clearGui();
-        
+
         paramNamesGrNrField.setText(""); //$NON-NLS-1$
         paramValuesGrNrField.setText(""); //$NON-NLS-1$
         refRegExRefNameField.setText(""); //$NON-NLS-1$
-    }    
+    }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());

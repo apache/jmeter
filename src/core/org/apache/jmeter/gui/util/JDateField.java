@@ -81,7 +81,7 @@ public class JDateField extends JTextField {
 
     /**
      * Create a DateField with the specified date.
-     * 
+     *
      * @param date
      *            The {@link Date} to be used
      */
@@ -100,7 +100,7 @@ public class JDateField extends JTextField {
 
     /**
      * Set the date to the Date mask control.
-     * 
+     *
      * @param date
      *            The {@link Date} to be set
      */
@@ -110,7 +110,7 @@ public class JDateField extends JTextField {
 
     /**
      * Get the date from the Date mask control.
-     * 
+     *
      * @return The currently set date
      */
     public Date getDate() {

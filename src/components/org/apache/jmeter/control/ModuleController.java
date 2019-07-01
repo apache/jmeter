@@ -71,7 +71,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
             this.restoreSelected();
         }
         // TODO Should we clone instead the selectedNode?
-        clone.selectedNode = selectedNode; 
+        clone.selectedNode = selectedNode;
         return clone;
     }
 

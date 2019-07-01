@@ -32,19 +32,19 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 3.2
  */
 public class DefaultThinkTimeCreator implements ThinkTimeCreator {
-    private static final String DEFAULT_TIMER_IMPLEMENTATION = 
+    private static final String DEFAULT_TIMER_IMPLEMENTATION =
             JMeterUtils.getPropDefault(
-                    "think_time_creator.default_timer_implementation", 
+                    "think_time_creator.default_timer_implementation",
                     UniformRandomTimerGui.class.getName());
 
-    private static final String DEFAULT_PAUSE = 
+    private static final String DEFAULT_PAUSE =
             JMeterUtils.getPropDefault(
-                    "think_time_creator.default_constant_pause", 
+                    "think_time_creator.default_constant_pause",
                     "1000");
 
-    private static final String DEFAULT_RANGE = 
+    private static final String DEFAULT_RANGE =
             JMeterUtils.getPropDefault(
-                    "think_time_creator.default_range", 
+                    "think_time_creator.default_range",
                     "100");
 
     /**
@@ -54,20 +54,20 @@ public class DefaultThinkTimeCreator implements ThinkTimeCreator {
     }
 
     @Override
-    public JMeterTreeNode[] createThinkTime(GuiPackage guiPackage, JMeterTreeNode parentNode) 
+    public JMeterTreeNode[] createThinkTime(GuiPackage guiPackage, JMeterTreeNode parentNode)
             throws IllegalUserActionException {
         TestAction testAction = (TestAction) guiPackage.createTestElement(TestActionGui.class.getName());
         testAction.setAction(TestAction.PAUSE);
         testAction.setDuration("0");
         JMeterTreeNode thinkTimeNode = new JMeterTreeNode(testAction, guiPackage.getTreeModel());
         thinkTimeNode.setName("Think Time");
-        RandomTimer randomTimer = (RandomTimer) 
+        RandomTimer randomTimer = (RandomTimer)
                 guiPackage.createTestElement(DEFAULT_TIMER_IMPLEMENTATION);
         randomTimer.setDelay(DEFAULT_PAUSE);
         randomTimer.setRange(DEFAULT_RANGE);
         randomTimer.setName("Pause");
-        
-        JMeterTreeNode urtNode = new JMeterTreeNode(randomTimer, guiPackage.getTreeModel());        
+
+        JMeterTreeNode urtNode = new JMeterTreeNode(randomTimer, guiPackage.getTreeModel());
         return new JMeterTreeNode[] {
                 thinkTimeNode,
                 urtNode

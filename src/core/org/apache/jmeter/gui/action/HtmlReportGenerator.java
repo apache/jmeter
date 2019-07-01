@@ -65,7 +65,7 @@ public class HtmlReportGenerator {
         if (!errorMessageList.isEmpty()) {
             return errorMessageList;
         }
-        
+
         ByteArrayOutputStream commandExecutionOutput = new ByteArrayOutputStream();
         int resultCode = -1;
         List<String> generationCommand = createGenerationCommand();
@@ -92,7 +92,7 @@ public class HtmlReportGenerator {
     /**
      * create the command for html report generation with all the directories /
      * file
-     * 
+     *
      * @return the list of arguments for SystemCommand execution
      */
     private List<String> createGenerationCommand() {
@@ -117,7 +117,7 @@ public class HtmlReportGenerator {
 
     /**
      * test that all arguments are correct and send a message to the user if not
-     * 
+     *
      * @return whether or not the files are correct
      */
     private List<String> checkArguments() {
@@ -142,7 +142,7 @@ public class HtmlReportGenerator {
 
     /**
      * Check if a file is correct for report generation
-     * 
+     *
      * @param fileToCheck
      *            the directory to check
      * @return the error message or null if the file is ok
@@ -157,7 +157,7 @@ public class HtmlReportGenerator {
 
     /**
      * Check if a directory is fine for report generation
-     * 
+     *
      * @param directoryToCheck
      *            the directory to check
      * @return the error message or an empty string if the directory is fine

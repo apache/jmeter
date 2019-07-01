@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -32,7 +32,7 @@ public class StringUtilitiesTest {
         assertNotNull(bshs);
         // Not sure we can test anything else here
     }
-    
+
     @Test
     public void testSub1() throws Exception {
         String input = "http://jakarta.apache.org/jmeter/index.html";

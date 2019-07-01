@@ -33,9 +33,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 
+ *
  * Test {@link IsPropDefined} Function
- * 
+ *
  * @see IsPropDefined
  *
  */

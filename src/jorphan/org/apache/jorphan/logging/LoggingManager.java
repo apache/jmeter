@@ -98,7 +98,7 @@ public final class LoggingManager {
 
     /**
      * Removes the standard prefix, i.e. "org.apache.".
-     * 
+     *
      * @param name from which to remove the prefix
      * @return the name with the prefix removed
      * @deprecated since 3.2, use SLF4J for logging
@@ -124,7 +124,7 @@ public final class LoggingManager {
 
     /**
      * Get the Logger for a class.
-     * 
+     *
      * @param category - the full name of the logger category
      *
      * @return Logger
@@ -135,7 +135,7 @@ public final class LoggingManager {
 
     /**
      * Get the Logger for a class.
-     * 
+     *
      * @param category - the full name of the logger category, this will have the prefix removed.
      *
      * @return Logger
@@ -148,7 +148,7 @@ public final class LoggingManager {
 
     /**
      * Set the logging priority for a category.
-     * 
+     *
      * @param priority - string containing the priority name, e.g. "INFO", "WARN", "DEBUG", "FATAL_ERROR"
      * @param category - string containing the category
      * @deprecated since 3.2, use SLF4J for logging
@@ -160,7 +160,7 @@ public final class LoggingManager {
 
     /**
      * Set the logging priority for a category.
-     * 
+     *
      * @param priority - priority, e.g. DEBUG, INFO
      * @param fullName - e.g. org.apache.jmeter.etc, will have the prefix removed.
      * @deprecated since 3.2, use SLF4J for logging
@@ -172,7 +172,7 @@ public final class LoggingManager {
 
     /**
      * Set the logging priority for a category.
-     * 
+     *
      * @param priority - e.g. Priority.DEBUG
      * @param category - string containing the category
      * @deprecated since 3.2, use SLF4J for logging
@@ -184,7 +184,7 @@ public final class LoggingManager {
 
     /**
      * Set the logging priority.
-     * 
+     *
      * @param priority - e.g. Priority.DEBUG
      * @deprecated since 3.2, use SLF4J for logging
      */
@@ -195,7 +195,7 @@ public final class LoggingManager {
 
     /**
      * Set the default logging priority.
-     * 
+     *
      * @param priority e.g. Priority.DEBUG
      * @deprecated since 3.2, use SLF4J for logging
      */
@@ -206,7 +206,7 @@ public final class LoggingManager {
 
     /**
      * Set the logging target for a category.
-     * 
+     *
      * @param target the LogTarget
      * @param category the category name
      * @deprecated since 3.2, use SLF4J for logging

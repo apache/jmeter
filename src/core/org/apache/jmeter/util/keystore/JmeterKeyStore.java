@@ -201,7 +201,7 @@ public final class JmeterKeyStore {
 
     /**
      * Get the next or only alias.
-     * 
+     *
      * @return the next or only alias.
      * @throws IllegalArgumentException
      *             if {@link JmeterKeyStore#clientCertAliasVarName
@@ -259,7 +259,7 @@ public final class JmeterKeyStore {
 
     /**
      * Create a keystore which returns a range of aliases (if available)
-     * 
+     *
      * @param type
      *            store type (e.g. JKS)
      * @param startIndex
@@ -282,7 +282,7 @@ public final class JmeterKeyStore {
 
     /**
      * Create a keystore which returns the first alias only.
-     * 
+     *
      * @param type
      *            of the store e.g. JKS
      * @return the keystore
@@ -313,7 +313,7 @@ public final class JmeterKeyStore {
      *
      * @param keyType the key algorithm type name (RSA, DSA, etc.)
      * @param issuers  the CA certificates we are narrowing our selection on.
-     * 
+     *
      * @return the array of aliases; may be empty
      */
     public String[] getClientAliases(String keyType, Principal[] issuers) {

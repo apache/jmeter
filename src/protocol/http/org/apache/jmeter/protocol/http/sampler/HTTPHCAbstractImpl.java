@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -35,9 +35,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Common parent class for HttpClient implementations.
- * 
+ *
  * Includes system property settings that are handled internally by the Java HTTP implementation,
- * but which need to be explicitly configured in HttpClient implementations. 
+ * but which need to be explicitly configured in HttpClient implementations.
  */
 public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
@@ -70,7 +70,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     protected static final int NON_PROXY_HOST_SUFFIX_SIZE;
 
     protected static final int CPS_HTTP = JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0);
-    
+
     /**
      * @deprecated Not used
      */
@@ -78,16 +78,16 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     protected static final int CPS_HTTPS = JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0);
 
     protected static final boolean USE_LOOPBACK = JMeterUtils.getPropDefault("httpclient.loopback", false);
-    
+
     protected static final String HTTP_VERSION = JMeterUtils.getPropDefault("httpclient.version", "1.1");
 
     // -1 means not defined
     protected static final int SO_TIMEOUT = JMeterUtils.getPropDefault("httpclient.timeout", -1);
-    
+
     /**
      * Reset HTTP State when starting a new Thread Group iteration
      */
-    protected static final boolean RESET_STATE_ON_THREAD_GROUP_ITERATION = 
+    protected static final boolean RESET_STATE_ON_THREAD_GROUP_ITERATION =
             JMeterUtils.getPropDefault("httpclient.reset_state_on_thread_group_iteration", true);//$NON-NLS-1$
 
     /**
@@ -95,16 +95,16 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @deprecated use httpclient.reset_state_on_thread_group_iteration instead
      */
     @Deprecated
-    protected static final boolean USE_CACHED_SSL_CONTEXT = 
+    protected static final boolean USE_CACHED_SSL_CONTEXT =
             JMeterUtils.getPropDefault("https.use.cached.ssl.context", false);//$NON-NLS-1$
 
     /**
      *  Whether SSL State/Context should be reset
-     *  Shared state for any HC based implementation, because SSL contexts are the same 
+     *  Shared state for any HC based implementation, because SSL contexts are the same
      */
     protected static final ThreadLocal<Boolean> resetStateOnThreadGroupIteration =
             ThreadLocal.withInitial(() -> Boolean.FALSE);
-    
+
     static {
         if(!StringUtils.isEmpty(JMeterUtils.getProperty("httpclient.timeout"))) { //$NON-NLS-1$
             log.warn("You're using property 'httpclient.timeout' that will soon be deprecated for HttpClient3.1, you should either set "
@@ -167,19 +167,19 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @return {@code true} iff both ProxyPort and ProxyHost are defined.
      */
     protected boolean isDynamicProxy(String proxyHost, int proxyPort){
-        return !JOrphanUtils.isBlank(proxyHost) && proxyPort > 0;        
+        return !JOrphanUtils.isBlank(proxyHost) && proxyPort > 0;
     }
 
     /**
      * Is a static proxy defined?
-     * 
+     *
      * @param host to check against non-proxy hosts
      * @return {@code true} iff a static proxy has been defined.
      */
     protected static boolean isStaticProxy(String host){
         return PROXY_DEFINED && !isNonProxy(host);
     }
-    
+
     /**
      * @param value String value to test
      * @return true if value is null or empty trimmed

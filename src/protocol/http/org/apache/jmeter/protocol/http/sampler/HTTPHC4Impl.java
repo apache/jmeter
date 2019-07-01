@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -177,9 +177,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final String CONTEXT_ATTRIBUTE_AUTH_MANAGER = "__jmeter.A_M__";
 
     private static final String JMETER_VARIABLE_USER_TOKEN = "__jmeter.U_T__"; //$NON-NLS-1$
-    
+
     static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT = "__jmeter.S_R__"; //$NON-NLS-1$
-    
+
     /**
      * Holds data used by HTTP request if Embedded resource download is enabled
      */
@@ -188,7 +188,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final String CONTEXT_ATTRIBUTE_CLIENT_KEY = "__jmeter.C_K__";
 
     private static final String CONTEXT_ATTRIBUTE_SENT_BYTES = "__jmeter.S_B__";
-        
+
     private static final String CONTEXT_ATTRIBUTE_METRICS = "__jmeter.M__";
 
     private static final boolean DISABLE_DEFAULT_UA = JMeterUtils.getPropDefault("httpclient4.default_user_agent_disabled", false);
@@ -198,7 +198,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final boolean DEFLATE_RELAX_MODE = JMeterUtils.getPropDefault("httpclient4.deflate_relax_mode", false);
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHC4Impl.class);
-    
+
     private static final InputStreamFactory GZIP = new InputStreamFactory() {
         @Override
         public InputStream create(final InputStream instream) throws IOException {
@@ -213,7 +213,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
     };
-    
+
     private static final InputStreamFactory BROTLI = new InputStreamFactory() {
         @Override
         public InputStream create(final InputStream instream) throws IOException {
@@ -257,10 +257,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if(requestURI.isAbsolute()) {
                     url = requestURI.toURL();
                 } else {
-                    url = new URL(targetHost.getSchemeName(), targetHost.getHostName(), targetHost.getPort(), 
+                    url = new URL(targetHost.getSchemeName(), targetHost.getHostName(), targetHost.getPort(),
                             requestURI.getPath());
                 }
-                Authorization authorization = 
+                Authorization authorization =
                         authManager.getAuthForURL(url);
                 CredentialsProvider credentialsProvider = localContext.getCredentialsProvider();
                 if(authorization != null) {
@@ -330,8 +330,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         /* (non-Javadoc)
          * @see org.apache.http.impl.conn.DefaultHttpClientConnectionOperator#connect(
-         *  org.apache.http.conn.ManagedHttpClientConnection, org.apache.http.HttpHost, 
-         *      java.net.InetSocketAddress, int, org.apache.http.config.SocketConfig, 
+         *  org.apache.http.conn.ManagedHttpClientConnection, org.apache.http.HttpHost,
+         *      java.net.InetSocketAddress, int, org.apache.http.config.SocketConfig,
          *      org.apache.http.protocol.HttpContext)
          */
         @Override
@@ -340,32 +340,32 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             try {
                 super.connect(conn, host, localAddress, connectTimeout, socketConfig, context);
             } finally {
-                SampleResult sample = 
+                SampleResult sample =
                         (SampleResult)context.getAttribute(HTTPHC4Impl.CONTEXT_ATTRIBUTE_SAMPLER_RESULT);
                 if (sample != null) {
                     sample.connectEnd();
                 }
             }
-        }    
+        }
     }
-    
+
     /** retry count to be used (default 0); 0 = disable retries */
     private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
-    
+
     /** true if it's OK to retry requests that have been sent */
-    private static final boolean REQUEST_SENT_RETRY_ENABLED = 
+    private static final boolean REQUEST_SENT_RETRY_ENABLED =
             JMeterUtils.getPropDefault("httpclient4.request_sent_retry_enabled", false);
 
     /** Idle timeout to be applied to connections if no Keep-Alive header is sent by the server (default 0 = disable) */
     private static final int IDLE_TIMEOUT = JMeterUtils.getPropDefault("httpclient4.idletimeout", 0);
-    
+
     private static final int VALIDITY_AFTER_INACTIVITY_TIMEOUT = JMeterUtils.getPropDefault("httpclient4.validate_after_inactivity", 1700);
-    
+
     private static final int TIME_TO_LIVE = JMeterUtils.getPropDefault("httpclient4.time_to_live", 2000);
 
     /** Preemptive Basic Auth */
     private static final boolean BASIC_AUTH_PREEMPTIVE = JMeterUtils.getPropDefault("httpclient4.auth.preemptive", true);
-    
+
     private static final Pattern PORT_PATTERN = Pattern.compile("\\d+"); // only used in .matches(), no need for anchors
 
     private static final ConnectionKeepAliveStrategy IDLE_STRATEGY = new DefaultConnectionKeepAliveStrategy(){
@@ -375,15 +375,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (duration <= 0 && IDLE_TIMEOUT > 0) {// none found by the superclass
                 log.debug("Setting keepalive to {}", Integer.valueOf(IDLE_TIMEOUT));
                 return IDLE_TIMEOUT;
-            } 
+            }
             return duration; // return the super-class value
         }
-        
+
     };
 
     private static final String DIGEST_PARAMETERS = DigestParameters.VARIABLE_NAME;
 
-    
+
     private static final HttpRequestInterceptor PREEMPTIVE_AUTH_INTERCEPTOR = new PreemptiveAuthRequestInterceptor();
 
 
@@ -405,7 +405,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return response;
         }
     };
-    
+
     /**
      * Headers to save
      */
@@ -414,9 +414,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     "content-encoding",
                     "content-md5"
             };
-    
+
     /**
-     * Custom implementation that backups headers related to Compressed responses 
+     * Custom implementation that backups headers related to Compressed responses
      * that HC core {@link ResponseContentEncoding} removes after uncompressing
      * See Bug 59401
      */
@@ -425,7 +425,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         public void process(HttpResponse response, HttpContext context)
                 throws HttpException, IOException {
             ArrayList<Header[]> headersToSave = null;
-            
+
             final HttpEntity entity = response.getEntity();
             final HttpClientContext clientContext = HttpClientContext.adapt(context);
             final RequestConfig requestConfig = clientContext.getRequestConfig();
@@ -443,7 +443,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // Now invoke original parent code
             super.process(response, clientContext);
-            // Should this be in a finally ? 
+            // Should this be in a finally ?
             if(headersToSave != null) {
                 for (Header[] headers : headersToSave) {
                     for (Header headerToRestore : headers) {
@@ -456,12 +456,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
         }
     };
-    
+
     /**
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
     private static final ThreadLocal<Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>>
-        HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
+        HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY =
             InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
 
     /**
@@ -480,7 +480,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             CONNECTION_SOCKET_FACTORY = new SlowHCPlainConnectionSocketFactory(CPS_HTTP);
         } else {
             CONNECTION_SOCKET_FACTORY = PlainConnectionSocketFactory.getSocketFactory();
-        }        
+        }
     }
 
     private volatile HttpUriRequest currentRequest; // Accessed from multiple threads
@@ -488,7 +488,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected HTTPHC4Impl(HTTPSamplerBase testElement) {
         super(testElement);
     }
-    
+
     /**
      * Customize to plug Brotli
      * @return {@link Lookup}
@@ -530,7 +530,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return HTTPConstants.DELETE;
         }
     }
-    
+
     @Override
     protected HTTPSampleResult sample(URL url, String method,
             boolean areFollowingRedirect, int frameDepth) {
@@ -564,7 +564,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         setupClientContextBeforeSample(jMeterVariables, localContext);
-        
+
         res.sampleStart();
 
         final CacheManager cacheManager = getCacheManager();
@@ -578,7 +578,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // store the SampleResult in LocalContext to compute connect time
             localContext.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT, res);
             // perform the sample
-            httpResponse = 
+            httpResponse =
                     executeRequest(httpClient, httpRequest, localContext, url);
             saveProxyAuth(triple, localContext);
             if (log.isDebugEnabled()) {
@@ -587,7 +587,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Needs to be done after execute to pick up all the headers
             final HttpRequest request = (HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
             if (log.isDebugEnabled()) {
-                log.debug("Headers in request after:{}, in localContext#request:{}", 
+                log.debug("Headers in request after:{}, in localContext#request:{}",
                         Arrays.asList(httpRequest.getAllHeaders()),
                         Arrays.asList(request.getAllHeaders()));
             }
@@ -608,7 +608,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (entity != null) {
                 res.setResponseData(readResponse(res, entity.getContent(), entity.getContentLength()));
             }
-            
+
             res.sampleEnd(); // Done with the sampling proper.
             currentRequest = null;
 
@@ -629,7 +629,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
-            long headerBytes = 
+            long headerBytes =
                 (long)res.getResponseHeaders().length()   // condensed length (without \r)
               + (long) httpResponse.getAllHeaders().length // Add \r for each header
               + 1L // Add \r for initial header
@@ -700,7 +700,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /**
      * Associate Proxy state to thread
-     * @param triple {@link MutableTriple} 
+     * @param triple {@link MutableTriple}
      * @param localContext {@link HttpContext}
      */
     private void saveProxyAuth(
@@ -710,7 +710,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * Store in localContext Proxy auth state of triple 
+     * Store in localContext Proxy auth state of triple
      * @param triple {@link MutableTriple} May be null if first request
      * @param localContext {@link HttpContext}
      */
@@ -736,8 +736,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Some servers fail if Content-Length is equal to 0
             // so to avoid this we use HttpGet when there is no body (Content-Length will not be set)
             // otherwise we use HttpGetWithEntity
-            if ( !areFollowingRedirect 
-                    && ((!hasArguments() && getSendFileAsPostBody()) 
+            if ( !areFollowingRedirect
+                    && ((!hasArguments() && getSendFileAsPostBody())
                     || getSendParameterValuesAsPostBody()) ) {
                 result = new HttpGetWithEntity(uri);
             } else {
@@ -775,7 +775,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             log.debug("Extracted from HttpContext user token:{} storing it as JMeter variable:{}", userToken, JMETER_VARIABLE_USER_TOKEN);
             // During recording JMeterContextService.getContext().getVariables() is null
             if (jMeterVariables != null) {
-                jMeterVariables.putObject(JMETER_VARIABLE_USER_TOKEN, userToken); 
+                jMeterVariables.putObject(JMETER_VARIABLE_USER_TOKEN, userToken);
             }
         }
     }
@@ -797,7 +797,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             localContext.setAttribute(HttpClientContext.USER_TOKEN, userToken);
         } else {
             // It would be better to create a ClientSessionManager that would compute this value
-            // for now it can be Thread.currentThread().getName() but must be changed when we would change 
+            // for now it can be Thread.currentThread().getName() but must be changed when we would change
             // the Thread per User model
             String userId = Thread.currentThread().getName();
             log.debug("Storing in HttpContext the user token: {}", userId);
@@ -808,7 +808,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * Setup Body of request if different from GET.
      * Field HTTPSampleResult#queryString of result is modified in the 2 cases
-     * 
+     *
      * @param method
      *            String HTTP method
      * @param result
@@ -842,12 +842,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         configureSampleLabel(res, url);
         res.setHTTPMethod(method);
         res.setURL(url);
-        
+
         return res;
     }
 
     /**
-     * Execute request either as is or under PrivilegedAction 
+     * Execute request either as is or under PrivilegedAction
      * if a Subject is available for url
      * @param httpClient the {@link CloseableHttpClient} to be used to execute the httpRequest
      * @param httpRequest the {@link HttpRequest} to be executed
@@ -889,7 +889,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         private final int proxyPort;
         private final String proxyUser;
         private final String proxyPass;
-        
+
         private final int hashCode; // Always create hash because we will always need it
 
         /**
@@ -914,7 +914,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             this.proxyPass = proxyPass;
             this.hashCode = getHash();
         }
-        
+
         private int getHash() {
             int hash = 17;
             hash = hash*31 + (hasProxy ? 1 : 0);
@@ -931,7 +931,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         // Allow for null strings
         private int getHash(String s) {
-            return s == null ? 0 : s.hashCode(); 
+            return s == null ? 0 : s.hashCode();
         }
 
         @Override
@@ -951,7 +951,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 } else if (!proxyScheme.equals(other.proxyScheme)) {
                     return false;
                 }
-                return 
+                return
                 this.hasProxy == other.hasProxy &&
                 this.proxyPort == other.proxyPort &&
                 this.proxyHost.equals(other.proxyHost) &&
@@ -960,7 +960,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 this.target.equals(other.target);
             }
             // No proxy, so don't check proxy fields
-            return 
+            return
                 this.hasProxy == other.hasProxy &&
                 this.target.equals(other.target);
         }
@@ -999,13 +999,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         boolean concurrentDwn = this.testElement.isConcurrentDwn();
         Map<String, Object> samplerContext = JMeterContextService.getContext().getSamplerContext();
         if(concurrentDwn) {
-            triple = (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>) 
+            triple = (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>)
                     samplerContext.get(CONTEXT_ATTRIBUTE_PARENT_SAMPLE_CLIENT_STATE);
         }
         if (triple == null) {
             triple = mapHttpClientPerHttpClientKey.get(key);
         }
-        
+
         if(triple != null) {
             httpClient = triple.getLeft();
         }
@@ -1021,13 +1021,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     register("https", new LazyLayeredConnectionSocketFactory()).
                     register("http", CONNECTION_SOCKET_FACTORY).
                     build();
-            
+
             // Modern browsers use more connections per host than the current httpclient default (2)
             // when using parallel download the httpclient and connection manager are shared by the downloads threads
             // to be realistic JMeter must set an higher value to DefaultMaxPerRoute
-            PoolingHttpClientConnectionManager pHCCM = 
+            PoolingHttpClientConnectionManager pHCCM =
                     new PoolingHttpClientConnectionManager(
-                            new JMeterDefaultHttpClientConnectionOperator(registry, null, resolver), 
+                            new JMeterDefaultHttpClientConnectionOperator(registry, null, resolver),
                             null, TIME_TO_LIVE, TimeUnit.MILLISECONDS);
             pHCCM.setValidateAfterInactivity(VALIDITY_AFTER_INACTIVITY_TIMEOUT);
 
@@ -1039,12 +1039,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                    // no need to log -> will be done by the sampler
                 }
             }
-            
+
             CookieSpecProvider cookieSpecProvider = new IgnoreSpecProvider();
             Lookup<CookieSpecProvider> cookieSpecRegistry = RegistryBuilder.<CookieSpecProvider>create()
                     .register(CookieSpecs.IGNORE_COOKIES, cookieSpecProvider)
                     .build();
-            
+
             HttpClientBuilder builder = HttpClients.custom().setConnectionManager(pHCCM).
                     setSchemePortResolver(new DefaultSchemePortResolver()).
                     setDnsResolver(resolver).
@@ -1071,7 +1071,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                                 AuthManager.STRIP_PORT, AuthManager.USE_CANONICAL_HOST_NAME))
                         .build();
             builder.setDefaultAuthSchemeRegistry(authSchemeRegistry);
-            
+
             if (IDLE_TIMEOUT > 0) {
                 builder.setKeepAliveStrategy(IDLE_STRATEGY);
             }
@@ -1080,7 +1080,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (key.hasProxy) {
                 HttpHost proxy = new HttpHost(key.proxyHost, key.proxyPort, key.proxyScheme);
                 builder.setProxy(proxy);
-                
+
                 CredentialsProvider credsProvider = new BasicCredentialsProvider();
                 if (!key.proxyUser.isEmpty()) {
                     credsProvider.setCredentials(
@@ -1156,7 +1156,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     private void resetStateIfNeeded(
             MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
-            JMeterVariables jMeterVariables, 
+            JMeterVariables jMeterVariables,
             HttpClientContext clientContext,
             Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
         if (resetStateOnThreadGroupIteration.get().booleanValue()) {
@@ -1195,7 +1195,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * <li>Calls setConnectionHeaders to setup headers</li>
      * <li>Calls setConnectionCookie to setup Cookie</li>
      * </ul>
-     * 
+     *
      * @param url
      *            {@link URL} of the request
      * @param httpRequest
@@ -1214,18 +1214,18 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             rCB.setLocalAddress(inetAddr);
         } else if (localAddress != null){
             rCB.setLocalAddress(localAddress);
-        } 
-    
+        }
+
         int rto = getResponseTimeout();
         if (rto > 0){
             rCB.setSocketTimeout(rto);
         }
-    
+
         int cto = getConnectTimeout();
         if (cto > 0){
             rCB.setConnectTimeout(cto);
         }
-    
+
         rCB.setRedirectsEnabled(getAutoRedirects());
         rCB.setMaxRedirects(HTTPSamplerBase.MAX_REDIRECTS);
         httpRequest.setConfig(rCB.build());
@@ -1238,11 +1238,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         } else {
             httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
         }
-    
+
         setConnectionHeaders(httpRequest, url, getHeaderManager(), getCacheManager());
-    
+
         String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
-    
+
         if (res != null) {
             if(cookies != null && !cookies.isEmpty()) {
                 res.setCookies(cookies);
@@ -1251,9 +1251,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 res.setCookies(getOnlyCookieFromHeaders(httpRequest));
             }
         }
-    
+
     }
-    
+
     /**
      * Set any default request headers to include
      *
@@ -1321,7 +1321,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
         return cookieHeader;
     }
-    
+
     /**
      * Extracts all the required non-cookie headers for that particular URL request and
      * sets them in the <code>HttpMethod</code> passed in
@@ -1403,7 +1403,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private String getAllHeadersExceptCookie(HttpRequest method) {
         return getFromHeadersMatchingPredicate(method, ALL_EXCEPT_COOKIE);
     }
-    
+
     /**
      * Get only Cookie header for the <code>HttpRequest</code>
      *
@@ -1419,7 +1419,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         return "";
     }
 
-    
+
     /**
      * Get only cookies from request headers for the <code>HttpRequest</code>
      *
@@ -1438,7 +1438,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     writeHeader(hdrs, requestHeader);
                 }
             }
-    
+
             return hdrs.toString();
         }
         return ""; ////$NON-NLS-1$
@@ -1447,7 +1447,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // Helper class so we can generate request data without dumping entire file contents
     private static class ViewableFileBody extends FileBody {
         private boolean hideFileData;
-        
+
         public ViewableFileBody(File file, ContentType contentType) {
             super(file, contentType);
             hideFileData = false;
@@ -1487,9 +1487,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             } else {
                 charset = MIME.DEFAULT_CHARSET;
             }
-            
+
             if(log.isDebugEnabled()) {
-                log.debug("Building multipart with:getDoBrowserCompatibleMultipart(): {}, with charset:{}, haveContentEncoding:{}", 
+                log.debug("Building multipart with:getDoBrowserCompatibleMultipart(): {}, with charset:{}, haveContentEncoding:{}",
                         Boolean.valueOf(getDoBrowserCompatibleMultipart()), charset, Boolean.valueOf(haveContentEncoding));
             }
             // Write the request to our own stream
@@ -1518,7 +1518,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             ViewableFileBody[] fileBodies = new ViewableFileBody[files.length];
             for (int i=0; i < files.length; i++) {
                 HTTPFileArg file = files[i];
-                
+
                 File reservedFile = FileServer.getFileServer().getResolvedFile(file.getPath());
                 fileBodies[i] = new ViewableFileBody(reservedFile, ContentType.create(file.getMimeType()));
                 multipartEntityBuilder.addPart(file.getParamName(), fileBodies[i] );
@@ -1611,8 +1611,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @throws IOException
      * @throws UnsupportedEncodingException
      */
-    private void writeEntityToSB(final StringBuilder postedBody, final HttpEntity entity, 
-            final ViewableFileBody[] fileBodies, final String contentEncoding) 
+    private void writeEntityToSB(final StringBuilder postedBody, final HttpEntity entity,
+            final ViewableFileBody[] fileBodies, final String contentEncoding)
                     throws IOException {
         if (entity.isRepeatable()){
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -1641,10 +1641,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * set the request Content-Type header, otherwise we default to whatever
      * header is present from a Header Manager.
      * <p>
-     * If the content charset {@link #getContentEncoding()} is null or empty 
+     * If the content charset {@link #getContentEncoding()} is null or empty
      * we use the HC4 default provided by {@link HTTP#DEF_CONTENT_CHARSET} which is
      * ISO-8859-1.
-     * 
+     *
      * @param entity to be processed, e.g. PUT or PATCH
      * @return the entity content, may be empty
      * @throws  UnsupportedEncodingException for invalid charset name
@@ -1756,7 +1756,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
 
     /**
-     * 
+     *
      * @return the value of {@link #getContentEncoding()}; forced to null if empty
      */
     private String getContentEncodingOrNull() {
@@ -1800,7 +1800,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * 
+     *
      */
     private void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
@@ -1828,5 +1828,5 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
         return request != null;
     }
-    
+
 }

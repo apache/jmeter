@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ThreadGroup holds the settings for a JMeter thread group.
- * 
+ *
  * This class is intended to be ThreadSafe.
  */
 @GUIMenuSortOrder(1)
@@ -46,7 +46,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     private static final long serialVersionUID = 282L;
 
     private static final Logger log = LoggerFactory.getLogger(ThreadGroup.class);
-    
+
     private static final long WAIT_TO_DIE = JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000); // 5 seconds
 
     /** How often to check for shutdown during ramp-up, default 1000ms */
@@ -76,7 +76,7 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     // List of active threads
     private final ConcurrentHashMap<JMeterThread, Thread> allThreads = new ConcurrentHashMap<>();
-    
+
     private transient Object addThreadLock = new Object();
 
     /** Is test (still) running? */
@@ -267,7 +267,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         newThread.start();
         return jmThread;
     }
-    
+
     /*
      * Fix NPE for addThreadLock transient object in remote mode (BZ60829)
      */
@@ -275,7 +275,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         in.defaultReadObject();
         addThreadLock = new Object();
     }
-    
+
     /**
      * Register Thread when it starts
      * @param jMeterThread {@link JMeterThread}
@@ -296,7 +296,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     private JMeterThread makeThread(
             ListenerNotifier notifier, ListedHashTree threadGroupTree,
-            StandardJMeterEngine engine, int threadNumber, 
+            StandardJMeterEngine engine, int threadNumber,
             JMeterContext context) { // N.B. Context needs to be fetched in the correct thread
         boolean onErrorStopTest = getOnErrorStopTest();
         boolean onErrorStopTestNow = getOnErrorStopTestNow();
@@ -307,7 +307,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         jmeterThread.setThreadNum(threadNumber);
         jmeterThread.setThreadGroup(this);
         jmeterThread.setInitialContext(context);
-        String distributedPrefix = 
+        String distributedPrefix =
                 JMeterUtils.getPropDefault(JMeterUtils.THREAD_GROUP_DISTRIBUTED_PREFIX_PROPERTY_NAME, "");
         final String threadName = distributedPrefix + (distributedPrefix.isEmpty() ? "":"-") +groupName + " " + groupNumber + "-" + (threadNumber + 1);
         jmeterThread.setThreadName(threadName);
@@ -357,7 +357,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         }
         return false;
     }
-    
+
     /**
      * Hard Stop JMeterThread thrd and interrupt JVM Thread if interrupt is true
      * @param jmeterThread {@link JMeterThread}
@@ -403,11 +403,11 @@ public class ThreadGroup extends AbstractThreadGroup {
      *  <li>current running samplers</li>
      * </ul>
      * For each thread, invoke:
-     * <ul> 
+     * <ul>
      * <li>{@link JMeterThread#stop()} - set stop flag</li>
      * <li>{@link JMeterThread#interrupt()} - interrupt sampler</li>
      * <li>{@link Thread#interrupt()} - interrupt JVM thread</li>
-     * </ul> 
+     * </ul>
      */
     @Override
     public void tellThreadsToStop() {
@@ -417,9 +417,9 @@ public class ThreadGroup extends AbstractThreadGroup {
     /**
      * This is a clean shutdown.
      * For each thread, invoke:
-     * <ul> 
+     * <ul>
      * <li>{@link JMeterThread#stop()} - set stop flag</li>
-     * </ul> 
+     * </ul>
      */
     @Override
     public void stop() {
@@ -429,7 +429,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 threadStarter.interrupt();
             } catch (Exception e) {
                 log.warn("Exception occurred interrupting ThreadStarter", e);
-            }            
+            }
         }
         allThreads.keySet().forEach(JMeterThread::stop);
     }
@@ -494,8 +494,8 @@ public class ThreadGroup extends AbstractThreadGroup {
          */
         while (!allThreads.isEmpty()) {
             allThreads.values().forEach(this::waitThreadStopped);
-        }   
-      
+        }
+
     }
 
     /**
@@ -575,7 +575,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 }
             }
         }
-        
+
         @Override
         public void run() {
             try {
@@ -599,8 +599,8 @@ public class ThreadGroup extends AbstractThreadGroup {
                 final long startTimeInMillis = System.currentTimeMillis();
                 for (int threadNumber = 0; running && threadNumber < numThreads; threadNumber++) {
                     if (threadNumber > 0) {
-                        long elapsedInMillis = System.currentTimeMillis() - startTimeInMillis; 
-                        final int perThreadDelayInMillis = 
+                        long elapsedInMillis = System.currentTimeMillis() - startTimeInMillis;
+                        final int perThreadDelayInMillis =
                                 Math.round((rampUpOriginInMillis - elapsedInMillis) / (float) (numThreads - threadNumber));
                         pause(Math.max(0, perThreadDelayInMillis)); // ramp-up delay (except first)
                     }

@@ -164,13 +164,13 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
                 BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("auth_manager_options"))); // $NON-NLS-1$
         optionsPane.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
-        clearEachIteration = 
+        clearEachIteration =
                 new JCheckBox(JMeterUtils.getResString("auth_manager_clear_per_iter"), false); //$NON-NLS-1$
         optionsPane.add(clearEachIteration);
         northPanel.add(optionsPane);
         add(northPanel, BorderLayout.NORTH);
 
-        
+
         add(createAuthTablePanel(), BorderLayout.CENTER);
     }
 
@@ -271,7 +271,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 
         TableColumn passwordColumn = authTable.getColumnModel().getColumn(AuthManager.COL_PASSWORD);
         passwordColumn.setCellRenderer(new PasswordCellRenderer());
-        
+
         TableColumn mechanismColumn = authTable.getColumnModel().getColumn(AuthManager.COL_MECHANISM);
         mechanismColumn.setCellEditor(new MechanismCellEditor());
 
@@ -418,11 +418,11 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
             }
         }
     }
-    
+
     private static class MechanismCellEditor extends DefaultCellEditor {
 
         private static final long serialVersionUID = 6085773573067229265L;
-        
+
         public MechanismCellEditor() {
             super(new JComboBox<>(Mechanism.values()));
         }

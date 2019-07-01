@@ -63,7 +63,7 @@ public final class JMeterVersion {
         URL resource = myClass.getResource("JMeterVersion.class");
         // For example:
         // jar:file:/JMeter/lib/ext/ApacheJMeter_core.jar!/org/apache/jmeter/util/JMeterVersion.class
-        // or if using an IDE        
+        // or if using an IDE
         // file:/workspaces/JMeter/build/core/org/apache/jmeter/util/JMeterVersion.class
 
 

@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -50,11 +50,11 @@ public final class JSyntaxSearchToolBar implements ActionListener {
     private JToolBar toolBar;
 
     private JTextField searchField;
-    
+
     private JCheckBox regexCB;
 
     private JCheckBox matchCaseCB;
-    
+
     /**
      * The component where we Search
      */
@@ -67,7 +67,7 @@ public final class JSyntaxSearchToolBar implements ActionListener {
         this.dataField = dataField;
         init();
     }
-    
+
     private void init() {
         this.searchField = new JTextField(30);
         searchField.setFont(FONT_SMALL);
@@ -90,7 +90,7 @@ public final class JSyntaxSearchToolBar implements ActionListener {
         toolBar.add(regexCB);
         searchField.addActionListener(e -> findButton.doClick(0));
     }
-    
+
     public JToolBar getToolBar() {
         return toolBar;
     }
@@ -99,7 +99,7 @@ public final class JSyntaxSearchToolBar implements ActionListener {
     public void actionPerformed(ActionEvent evt) {
         String text = searchField.getText();
         toggleSearchField(searchField, true);
-        
+
         if (!text.isEmpty()) {
             SearchContext context = createSearchContext(
                     text, true, matchCaseCB.isSelected(), regexCB.isSelected());
@@ -120,8 +120,8 @@ public final class JSyntaxSearchToolBar implements ActionListener {
             textToFindField.setForeground(Color.BLACK);
         }
     }
-    
-    private SearchContext createSearchContext(String text, boolean forward, boolean matchCase, 
+
+    private SearchContext createSearchContext(String text, boolean forward, boolean matchCase,
             boolean isRegex) {
         SearchContext context = new SearchContext();
         context.setSearchFor(text);

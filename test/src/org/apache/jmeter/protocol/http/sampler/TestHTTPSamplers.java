@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -145,11 +145,11 @@ public class TestHTTPSamplers {
             res.setRedirectLocation("./");
             config.followRedirects(res , 0);
             assertEquals("http://192.168.0.1/", config.getUrl().toString());
-            
+
             res.setRedirectLocation(".");
             config.followRedirects(res , 0);
             assertEquals("http://192.168.0.1/", config.getUrl().toString());
-            
+
             res.setRedirectLocation("../");
             config.followRedirects(res , 0);
             assertEquals("http://192.168.0.1/", config.getUrl().toString());
@@ -259,7 +259,7 @@ public class TestHTTPSamplers {
             config.setDomain("192.168.0.1");
             assertEquals("http://192.168.0.1/index.html", config.getUrl().toString());
         }
-        
+
         @Test
         public void testFileList(){
             HTTPSamplerBase config = new HTTPNullSampler();
@@ -272,7 +272,7 @@ public class TestHTTPSamplers {
             arg = config.getHTTPFiles();
             assertNotNull(arg);
             assertEquals(0,arg.length);
-            
+
             config.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("","","text/plain")});
             arg = config.getHTTPFiles();
             assertNotNull(arg);
@@ -280,7 +280,7 @@ public class TestHTTPSamplers {
             assertEquals("text/plain",arg[0].getMimeType());
             assertEquals("",arg[0].getPath());
             assertEquals("",arg[0].getParamName());
-            
+
             config.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("/tmp/test123.tmp","test123.tmp","text/plain")});
             arg = config.getHTTPFiles();
             assertNotNull(arg);
@@ -288,9 +288,9 @@ public class TestHTTPSamplers {
             assertEquals("text/plain",arg[0].getMimeType());
             assertEquals("/tmp/test123.tmp",arg[0].getPath());
             assertEquals("test123.tmp",arg[0].getParamName());
-            
+
             HTTPFileArg[] files = {};
-            
+
             // Ignore empty file specs
             config.setHTTPFiles(files);
             arg = config.getHTTPFiles();

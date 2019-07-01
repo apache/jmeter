@@ -246,7 +246,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
             mChangeListener.stateChanged(ce);
         }
     }
-    
+
     public String[] getTextLines() {
         int numLines = mTextArea.getLineCount();
         String[] lines = new String[numLines];

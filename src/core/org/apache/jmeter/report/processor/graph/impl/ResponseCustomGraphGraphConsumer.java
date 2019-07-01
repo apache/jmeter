@@ -29,7 +29,7 @@ import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
- * The class ResponseCustomGraphGraphConsumer provides a graph to visualize mean 
+ * The class ResponseCustomGraphGraphConsumer provides a graph to visualize mean
  * custom value per time period (defined by granularity)
  *
  * @since 5.0
@@ -39,7 +39,7 @@ public class ResponseCustomGraphGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #createTimeStampKeysSelector()
@@ -53,7 +53,7 @@ public class ResponseCustomGraphGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */

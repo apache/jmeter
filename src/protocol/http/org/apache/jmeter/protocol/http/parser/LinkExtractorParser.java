@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.Iterator;
 
 /**
- * Interface specifying contract of content parser that aims to extract links 
+ * Interface specifying contract of content parser that aims to extract links
  * @since 3.0
  */
 public interface LinkExtractorParser {
@@ -47,8 +47,8 @@ public interface LinkExtractorParser {
      * @throws LinkExtractorParseException when extracting the links fails
      */
     Iterator<URL> getEmbeddedResourceURLs(
-            String userAgent, byte[] responseData, URL baseUrl, String encoding) 
+            String userAgent, byte[] responseData, URL baseUrl, String encoding)
                     throws LinkExtractorParseException;
-    
+
     boolean isReusable();
 }

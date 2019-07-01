@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions.gui;
@@ -53,7 +53,7 @@ public class XPathPanel extends JPanel {
     private JButton checkXPath;
 
     /**
-     * 
+     *
      */
     public XPathPanel() {
         super();
@@ -87,7 +87,7 @@ public class XPathPanel extends JPanel {
 
     /**
      * Get the XPath String
-     * 
+     *
      * @return String
      */
     public String getXPath() {
@@ -96,7 +96,7 @@ public class XPathPanel extends JPanel {
 
     /**
      * Set the string that will be used in the xpath evaluation
-     * 
+     *
      * @param xpath The string representing the xpath expression
      */
     public void setXPath(String xpath) {
@@ -105,7 +105,7 @@ public class XPathPanel extends JPanel {
 
     /**
      * Does this negate the xpath results
-     * 
+     *
      * @return boolean
      */
     public boolean isNegated() {
@@ -114,7 +114,7 @@ public class XPathPanel extends JPanel {
 
     /**
      * Set this to true, if you want success when the xpath does not match.
-     * 
+     *
      * @param negated Flag whether xpath match should be negated
      */
     public void setNegated(boolean negated) {
@@ -123,7 +123,7 @@ public class XPathPanel extends JPanel {
 
     /**
      * Negated chechbox
-     * 
+     *
      * @return JCheckBox
      */
     public JCheckBox getNegatedCheckBox() {
@@ -136,7 +136,7 @@ public class XPathPanel extends JPanel {
 
     /**
      * Check XPath button
-     * 
+     *
      * @return JButton
      */
     public JButton getCheckXPathButton() {
@@ -150,7 +150,7 @@ public class XPathPanel extends JPanel {
     /**
      * Returns the current {@link JSyntaxTextArea} for the xpath expression, or
      * creates a new one, if none is found.
-     * 
+     *
      * @return {@link JSyntaxTextArea} for the xpath expression
      */
     public JSyntaxTextArea getXPathField() {
@@ -179,7 +179,7 @@ public class XPathPanel extends JPanel {
     /**
      * Test whether an XPath is valid. It seems the Xalan has no easy way to
      * check, so this creates a dummy test document, then tries to evaluate the xpath against it.
-     * 
+     *
      * @param xpathString
      *            XPath String to validate
      * @param showDialog
@@ -201,7 +201,7 @@ public class XPathPanel extends JPanel {
             ret = e.getLocalizedMessage();
         }
         if (showDialog) {
-            JOptionPane.showMessageDialog(null, 
+            JOptionPane.showMessageDialog(null,
                     success ? JMeterUtils.getResString("xpath_assertion_valid") : ret, //$NON-NLS-1$
                     success ? JMeterUtils.getResString("xpath_assertion_valid") : //$NON-NLS-1$
                         JMeterUtils.getResString("xpath_assertion_failed"), //$NON-NLS-1$

@@ -66,18 +66,18 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
             final String key = me.getKey();
             CONSTANT_LANGUAGE_NAMES[i][0] = key;
             final ScriptEngineFactory fact = me.getValue();
-            CONSTANT_LANGUAGE_NAMES[i++][1] = key + 
+            CONSTANT_LANGUAGE_NAMES[i++][1] = key +
                     "     (" // $NON-NLS-1$
                     + fact.getLanguageName() + " " + fact.getLanguageVersion()  // $NON-NLS-1$
                     + " / "  // $NON-NLS-1$
                     + fact.getEngineName() + " " + fact.getEngineVersion() // $NON-NLS-1$
                     + ")";   // $NON-NLS-1$
         }
-        
+
         LANGUAGE_NAMES = getLanguageNames(); // NOSONAR Kept for backward compatibility
     }
 
-    private static final ResourceBundle NAME_BUNDLE = new ListResourceBundle() {            
+    private static final ResourceBundle NAME_BUNDLE = new ListResourceBundle() {
         @Override
         protected Object[][] getContents() {
             return CONSTANT_LANGUAGE_NAMES;
@@ -87,9 +87,9 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
     protected JSR223BeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass, LANGUAGE_TAGS, NAME_BUNDLE);
     }
-    
+
     /**
-     * @return String array of 2 columns array containing Script engine short name / Script Language details 
+     * @return String array of 2 columns array containing Script engine short name / Script Language details
      */
     public static final String[][] getLanguageNames() {
         return CONSTANT_LANGUAGE_NAMES.clone();

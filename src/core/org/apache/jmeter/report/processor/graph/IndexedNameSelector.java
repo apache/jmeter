@@ -44,7 +44,7 @@ public class IndexedNameSelector implements GraphKeysSelector {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleSelector#select(org.apache
      * .jmeter.report.csv.core.Sample)

@@ -24,7 +24,7 @@ import java.beans.Customizer;
  * <p>
  * The interface is equivalent to Customizer -- the only difference is that
  * setElement can be called multiple times to change the element it works on.
- * 
+ *
  */
 public interface SharedCustomizer extends Customizer {
 }

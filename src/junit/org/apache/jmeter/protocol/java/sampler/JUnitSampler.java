@@ -288,7 +288,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
      * if the sample shouldn't call setup/teardown, the
      * method returns true. It's meant for onetimesetup
      * and onetimeteardown.
-     * 
+     *
      * @return flag whether setup/teardown methods should not be called
      */
     public boolean getDoNotSetUpTearDown(){
@@ -329,7 +329,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
      * If append exception is not set, by default it is set to <code>false</code>.
      * Users have to explicitly set it to <code>true</code> to see the exceptions
      * in the result tree.
-     * 
+     *
      * @return flag whether exceptions should be appended to the result tree
      */
     public boolean getAppendException() {
@@ -467,8 +467,8 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
             sresult.setSuccessful(false);
             // this should be externalized to the properties
             sresult.setResponseMessage("Failed to create an instance of the class:"+getClassname()
-                    +", reasons may be missing both empty constructor and one " 
-                    + "String constructor or failure to instantiate constructor," 
+                    +", reasons may be missing both empty constructor and one "
+                    + "String constructor or failure to instantiate constructor,"
                     + " check warning messages in jmeter log file");
             sresult.setResponseCode(getErrorCode());
         }
@@ -641,9 +641,9 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         className = getClassname();
         protectable = null;
         if(!getCreateOneInstancePerSample()) {
-            // NO NEED TO INITIALIZE WHEN getCreateOneInstancePerSample 
+            // NO NEED TO INITIALIZE WHEN getCreateOneInstancePerSample
             // is true cause it will be done in sample
-            initializeTestObject();            
+            initializeTestObject();
         }
     }
 
@@ -705,7 +705,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     }
 
     /**
-     * 
+     *
      * @param createOneInstancePerSample
      *            flag whether a new instance for each call should be created
      */
@@ -714,7 +714,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     }
 
     /**
-     * 
+     *
      * @return boolean create New Instance For Each Call
      */
     public boolean getCreateOneInstancePerSample() {

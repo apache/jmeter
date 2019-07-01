@@ -48,7 +48,7 @@ public class PreCompiler implements HashTreeTraverser {
 //   as only these are relevant to the client, and updating
 //   other elements causes all sorts of problems.
     private final boolean isClientSide; // skip certain processing for remote tests
-    
+
     private JMeterVariables clientSideVariables;
 
     public PreCompiler() {
@@ -91,19 +91,19 @@ public class PreCompiler implements HashTreeTraverser {
                     log.error("invalid variables in node {}", ((TestElement)node).getName(), e);
                 }
             }
-            
+
             if (node instanceof TestPlan) {
                 JMeterVariables vars = createVars((TestPlan)node);
                 JMeterContextService.getContext().setVariables(vars);
             }
-            
+
             if (node instanceof Arguments) {
                 Map<String, String> args = createArgumentsMap((Arguments) node);
                 JMeterContextService.getContext().getVariables().putAll(args);
             }
         }
     }
-    
+
     /**
      * Create Map of Arguments
      * @param arguments {@link Arguments}

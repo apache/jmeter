@@ -32,7 +32,7 @@ public interface Timer extends Serializable {
      * @return the computed delay value.
      */
     long delay();
-    
+
     /**
      * @return true if factor can be applied to it
      */

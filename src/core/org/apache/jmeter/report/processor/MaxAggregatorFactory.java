@@ -27,7 +27,7 @@ public class MaxAggregatorFactory extends AbstractAggregatorFactory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.core.AbstractAggregatorFactory#createAggregator
      * ()

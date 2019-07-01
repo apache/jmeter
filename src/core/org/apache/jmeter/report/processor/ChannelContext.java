@@ -21,7 +21,7 @@ import java.util.TreeMap;
 
 /**
  * Define a context associated to a sample consumer/producer channel
- * 
+ *
  * @since 3.0
  */
 public class ChannelContext extends TreeMap<String, Object> {

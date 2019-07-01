@@ -84,7 +84,7 @@ public class LookAndFeelCommand extends AbstractAction {
     public static String getJMeterLaf(){
         String laf = PREFS.get(USER_PREFS_KEY, null);
         if (laf != null) {
-            return checkLafName(laf);            
+            return checkLafName(laf);
         }
 
         String osName = System.getProperty("os.name") // $NON-NLS-1$

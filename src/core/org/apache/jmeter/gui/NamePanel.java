@@ -78,12 +78,12 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
          * Null check is needed because some implementations of JPanel end up calling
          * getName(). This is a bug, which has been reported as:
          * http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8175888
-         * 
+         *
          * See also
          * https://www.securecoding.cert.org/confluence/display/java/MET05-J.+Ensure+that+constructors+do+not+call+overridable+methods
          * https://dev.eclipse.org/sonar/coding_rules#rule_key=squid%3AS1699
          */
-        if (nameField != null) { // NOSONAR suppress warning as the null check is needed as per above 
+        if (nameField != null) { // NOSONAR suppress warning as the null check is needed as per above
             return nameField.getText();
         }
         return ""; // $NON-NLS-1$

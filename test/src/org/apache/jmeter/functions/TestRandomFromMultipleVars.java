@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -36,9 +36,9 @@ import org.junit.Test;
 
 public class TestRandomFromMultipleVars extends JMeterTestCase {
     private SampleResult result;
-    
+
     private AbstractFunction function;
-    
+
     private Collection<CompoundVariable> params;
 
     private JMeterVariables vars;
@@ -62,24 +62,24 @@ public class TestRandomFromMultipleVars extends JMeterTestCase {
     public void testParameterCount() throws Exception {
         checkInvalidParameterCounts(function, 1, 2);
     }
-    
+
     @Test
     public void testExtractionFromMultipleVars() throws Exception {
         String existingVarName1 = "var1";
         String existingVarName2 = "var2";
         vars.put(existingVarName1+"_matchNr", "1");
         vars.put(existingVarName1+"_1", "var1_value");
-        
+
         vars.put(existingVarName2+"_matchNr", "2");
         vars.put(existingVarName2+"_1", "var2_value1");
         vars.put(existingVarName2+"_2", "var2_value2");
-        
+
         params.add(new CompoundVariable("var1|var2"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        Assert.assertThat(returnValue, 
-                CoreMatchers.anyOf(CoreMatchers.is("var1_value"), 
-                        CoreMatchers.is("var2_value1"), 
+        Assert.assertThat(returnValue,
+                CoreMatchers.anyOf(CoreMatchers.is("var1_value"),
+                        CoreMatchers.is("var2_value1"),
                         CoreMatchers.is("var2_value2")));
         Assert.assertNull(vars.get("outputVar"));
     }

@@ -27,7 +27,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * {@link AbstractAction} implementation that check no test is running 
+ * {@link AbstractAction} implementation that check no test is running
  * before calling {@link AbstractActionWithNoRunningTest#doActionAfterCheck(ActionEvent)}
  * @since 3.1
  */

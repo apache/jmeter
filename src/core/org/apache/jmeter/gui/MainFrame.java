@@ -145,14 +145,14 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /** The test tree. */
     private JTree tree;
 
-    private final String iconSize = JMeterUtils.getPropDefault(JMeterToolBar.TOOLBAR_ICON_SIZE, JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE); 
+    private final String iconSize = JMeterUtils.getPropDefault(JMeterToolBar.TOOLBAR_ICON_SIZE, JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE);
 
     /** An image which is displayed when a test is running. */
     private final ImageIcon runningIcon = JMeterUtils.getImage("status/" + iconSize +"/user-online-2.png");// $NON-NLS-1$
 
     /** An image which is displayed when a test is not currently running. */
     private final ImageIcon stoppedIcon = JMeterUtils.getImage("status/" + iconSize +"/user-offline-2.png");// $NON-NLS-1$
-    
+
     /** An image which is displayed to indicate FATAL, ERROR or WARNING. */
     private final ImageIcon warningIcon = JMeterUtils.getImage("status/" + iconSize +"/pictogram-din-w000-general.png");// $NON-NLS-1$
 
@@ -177,13 +177,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     /** LogTarget that receives ERROR or FATAL */
     private transient ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
-    
-    private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000, 
+
+    private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000,
             this::computeTestDuration);
-    
+
     public AtomicInteger errorOrFatal = new AtomicInteger(0);
 
-    private javax.swing.Timer refreshErrorsTimer = new javax.swing.Timer(1000, 
+    private javax.swing.Timer refreshErrorsTimer = new javax.swing.Timer(1000,
             this::refreshErrors);
 
     /**
@@ -249,7 +249,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             warnIndicator.setText(Integer.toString(errorOrFatal.get()));
         }
     }
-    
+
     protected void computeTestDuration(ActionEvent evt) {
         long startTime = JMeterContextService.getTestStartTime();
         if (startTime > 0) {

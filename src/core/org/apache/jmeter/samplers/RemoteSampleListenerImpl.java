@@ -28,7 +28,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Implementation of remote sampler listener, also supports TestStateListener
  */
-public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObject 
+public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObject
     implements RemoteSampleListener, SampleListener, TestStateListener {
 
     private static final long serialVersionUID = 240L;
@@ -36,7 +36,7 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
     private final TestStateListener testListener;
 
     private final SampleListener sampleListener;
-    
+
     private static final int DEFAULT_LOCAL_PORT = addOffset(
         JMeterUtils.getPropDefault("client.rmi.localport", 0), 2); // $NON-NLS-1$
 
@@ -101,7 +101,7 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
     public void processBatch(List<SampleEvent> samples) {
         if (samples != null && sampleListener != null) {
             for (SampleEvent e : samples) {
-                sampleListener.sampleOccurred(e);                
+                sampleListener.sampleOccurred(e);
             }
         }
     }

@@ -28,7 +28,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 5.0
  */
 public interface IteratingController extends LoopIterationListener {
-    
+
     /**
      * Start next iteration ("continue" keyword equivalent in loops)
      */
@@ -38,7 +38,7 @@ public interface IteratingController extends LoopIterationListener {
      * Break loop ("break" keyword equivalent)
      */
     public void breakLoop();
-    
+
     /**
      * @param elementName Test Element
      * @param iterCount iteration count
@@ -50,5 +50,5 @@ public interface IteratingController extends LoopIterationListener {
                     JMeterUtils.formatJMeterExportedVariableName(elementName+GenericController.INDEX_VAR_NAME_SUFFIX), iterCount);
         }
     }
-    
+
 }

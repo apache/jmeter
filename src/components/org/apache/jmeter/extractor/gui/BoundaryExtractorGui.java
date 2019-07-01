@@ -51,7 +51,7 @@ public class BoundaryExtractorGui extends AbstractPostProcessorGui {
     private JLabeledTextField leftBoundaryField;
 
     private JLabeledTextField rightBoundaryField;
-    
+
     private JLabeledTextField defaultField;
 
     private JLabeledTextField matchNumberField;
@@ -59,7 +59,7 @@ public class BoundaryExtractorGui extends AbstractPostProcessorGui {
     private JLabeledTextField refNameField;
 
     private JCheckBox emptyDefaultValue;
-    
+
     private JRadioButton useBody;
 
     private JRadioButton useUnescapedBody;
@@ -77,7 +77,7 @@ public class BoundaryExtractorGui extends AbstractPostProcessorGui {
     private JRadioButton useMessage;
 
     private ButtonGroup group;
-    
+
     public BoundaryExtractorGui() {
         super();
         init();
@@ -148,10 +148,10 @@ public class BoundaryExtractorGui extends AbstractPostProcessorGui {
     @Override
     public void clearGui() {
         super.clearGui();
-        
+
         useBody.setSelected(true);
-        
-        leftBoundaryField.setText(""); //$NON-NLS-1$        
+
+        leftBoundaryField.setText(""); //$NON-NLS-1$
         rightBoundaryField.setText(""); //$NON-NLS-1$
         defaultField.setText(""); //$NON-NLS-1$
         refNameField.setText(""); //$NON-NLS-1$
@@ -217,8 +217,8 @@ public class BoundaryExtractorGui extends AbstractPostProcessorGui {
 
         return panel;
     }
-    
-    private JPanel makeParameterPanel() {        
+
+    private JPanel makeParameterPanel() {
         leftBoundaryField = new JLabeledTextField(JMeterUtils.getResString("boundaryextractor_leftboundary_field")); //$NON-NLS-1$
         rightBoundaryField = new JLabeledTextField(JMeterUtils.getResString("boundaryextractor_rightboundary_field")); //$NON-NLS-1$
         refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field")); //$NON-NLS-1$
@@ -236,7 +236,7 @@ public class BoundaryExtractorGui extends AbstractPostProcessorGui {
         addField(panel, matchNumberField, gbc);
         resetContraints(gbc);
         gbc.weighty = 1;
-        
+
         defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field")); //$NON-NLS-1$
         List<JComponent> item = defaultField.getComponentList();
         panel.add(item.get(0), gbc.clone());
@@ -254,7 +254,7 @@ public class BoundaryExtractorGui extends AbstractPostProcessorGui {
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(p, gbc.clone());
-        
+
         return panel;
     }
 

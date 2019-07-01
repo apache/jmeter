@@ -40,7 +40,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
     private final JLabel mLabel = new JLabel();
 
     private final JComboBox<String> choiceList;
-    
+
     private final boolean withButtons;
 
     private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<>(3);

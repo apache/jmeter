@@ -37,7 +37,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * percentiles of response time for each sample name.
  * NOT USED FOR NOW as of 3.0
  * @since 3.0
- * 
+ *
  */
 public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 
@@ -57,7 +57,7 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createKeysSelector()
      */
@@ -91,7 +91,7 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */
@@ -113,7 +113,7 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
      * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
      */

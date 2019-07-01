@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * __groovy function 
+ * __groovy function
  * Provides a Groovy interpreter
  * @since 3.1
  */
@@ -51,7 +51,7 @@ public class Groovy extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(Groovy.class);
 
     private static final String GROOVY_ENGINE_NAME = "groovy";
-    
+
     private static final List<String> DESCRIPTION = new LinkedList<>();
 
     private static final String KEY = "__groovy"; //$NON-NLS-1$
@@ -70,7 +70,7 @@ public class Groovy extends AbstractFunction {
     public Groovy() {
         super();
     }
-    
+
     /**
      * Populate variables to be passed to scripts
      * @param bindings Bindings
@@ -98,7 +98,7 @@ public class Groovy extends AbstractFunction {
 
             // Pass in some variables
             if (currentSampler != null) {
-                bindings.put("sampler", currentSampler); // $NON-NLS-1$ 
+                bindings.put("sampler", currentSampler); // $NON-NLS-1$
             }
 
             if (previousResult != null) {
@@ -116,13 +116,13 @@ public class Groovy extends AbstractFunction {
             // For use in debugging:
             bindings.put("OUT", System.out); // $NON-NLS-1$ (this name is fixed)
 
-            
+
             // Execute the script
             Object out = scriptEngine.eval(script, bindings);
             if (out != null) {
                 resultStr = out.toString();
             }
-            
+
             if (varName.length() > 0 && vars != null) {// vars will be null on TestPlan
                 vars.put(varName, resultStr);
             }

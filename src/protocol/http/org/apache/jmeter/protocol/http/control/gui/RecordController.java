@@ -38,19 +38,19 @@ import org.slf4j.LoggerFactory;
 
 public class RecordController extends LogicControllerGui implements ActionListener {
     private static final long serialVersionUID = 241L;
-    
+
     private static final Logger log = LoggerFactory.getLogger(RecordController.class);
 
     /**
      * Clear the recorded samples
      */
     private JButton clearButton;
-    
+
     public RecordController() {
         super();
         init();
     }
-    
+
     @Override
     public String getLabelResource() {
         return "record_controller_title"; // $NON-NLS-1$
@@ -62,16 +62,16 @@ public class RecordController extends LogicControllerGui implements ActionListen
         super.configureTestElement(con);
         return con;
     }
-    
+
     private void init() {
-       
+
         JPanel panel = new JPanel();
-        
+
         clearButton = new JButton(JMeterUtils.getResString("record_controller_clear_samples")); //$NON-NLS-1$
         clearButton.addActionListener(this);
         panel.add(clearButton);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        
+
         add(panel);
     }
 
@@ -84,7 +84,7 @@ public class RecordController extends LogicControllerGui implements ActionListen
                 Toolkit.getDefaultToolkit().beep();
                 return;
             }
-            
+
             try {
                 guiPackage.updateCurrentNode();
                 JMeterTreeModel treeModel = guiPackage.getTreeModel();

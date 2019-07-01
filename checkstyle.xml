@@ -40,6 +40,10 @@
     <property name="fileExtensions" value="java, groovy, xml, xsd, dtd, htm, html, txt, properties"/>
   </module>
   <module name="NewlineAtEndOfFile"/>
+  <module name="RegexpSingleline">
+    <property name="message" value="Trailing whitespace"/>
+    <property name="format" value="\s$"/>
+  </module>
   <module name="RegexpMultiline">
     <!-- No more than 2 blank lines allowed. -->
     <property name="format" value="\r?\n[\t ]*\r?\n[\t ]*\r?\n[\t ]*\r?\n"/>

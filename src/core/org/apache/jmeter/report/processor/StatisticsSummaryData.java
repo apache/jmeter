@@ -20,7 +20,7 @@ package org.apache.jmeter.report.processor;
 /**
  * The class ApdexSummaryData provides information for
  * StatisticsSummaryConsumer.
- * 
+ *
  * @since 3.0
  *
  */
@@ -237,7 +237,7 @@ public class StatisticsSummaryData {
     public void incBytes(long value) {
         bytes += value;
     }
-    
+
 
     /**
      * Increment sent bytes
@@ -246,7 +246,7 @@ public class StatisticsSummaryData {
     public void incSentBytes(long value) {
         sentBytes += value;
     }
-    
+
 
     public void incErrors() {
         errors++;
@@ -265,7 +265,7 @@ public class StatisticsSummaryData {
     public long getSentBytes() {
         return sentBytes;
     }
-    
+
     /**
      * Gets the sent bytes per second.
      *

@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * Base for sample processor implementations<br>
  * Implements basic logic for setting sample context and handling channel
  * attributes. <br>
- * 
+ *
  * @since 3.0
  */
 public class AbstractSampleProcessor implements SampleProcessor {
@@ -34,7 +34,7 @@ public class AbstractSampleProcessor implements SampleProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleProcessor#getSampleContext()
      */
@@ -45,7 +45,7 @@ public class AbstractSampleProcessor implements SampleProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleProcessor#setSampleContext
      * (org.apache.jmeter.report.csv.processor.SampleContext)
@@ -59,7 +59,7 @@ public class AbstractSampleProcessor implements SampleProcessor {
      * Get the ChannelContext associated to the specified channel. If the
      * specified channel does not have a context associated to it then one will
      * be created and associated.
-     * 
+     *
      * @param channel
      *            The channel number whose context is to be returned
      * @return The channel context associated to the specified channel.
@@ -73,7 +73,7 @@ public class AbstractSampleProcessor implements SampleProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleProcessor#setChannelAttribute
      * (int, java.lang.String, java.lang.Object)
@@ -85,7 +85,7 @@ public class AbstractSampleProcessor implements SampleProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleProcessor#getChannelAttribute
      * (int, java.lang.String)

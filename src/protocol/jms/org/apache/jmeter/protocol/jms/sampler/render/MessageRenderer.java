@@ -23,7 +23,7 @@ public interface MessageRenderer<T> {
 
     /**
      * Convert text to expected type
-     * 
+     *
      * @param text
      *            Text representing the type
      * @return the constructed object
@@ -33,7 +33,7 @@ public interface MessageRenderer<T> {
     /**
      * Read text from file, eventually replace variables, then convert it.
      * Cached content depends if variabilisation is active or not.
-     * 
+     *
      * @param filename
      *            name of the file to get the value from
      * @param encoding

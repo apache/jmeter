@@ -28,6 +28,7 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 import org.apache.jmeter.util.JMeterUtils;
+
 /**
  * The class ConnectTimeOverTimeGraphConsumer provides a graph to visualize Connection time
  * per time period (defined by granularity)

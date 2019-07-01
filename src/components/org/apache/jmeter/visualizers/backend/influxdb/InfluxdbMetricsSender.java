@@ -19,7 +19,7 @@
 package org.apache.jmeter.visualizers.backend.influxdb;
 
 /**
- * InfluxDB Sender interface 
+ * InfluxDB Sender interface
  * @since 3.2
  *
  */

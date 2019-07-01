@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.threads;
@@ -39,7 +39,7 @@ public class TestJMeterContextService {
         assertEquals(54,JMeterContextService.getTotalThreads());
         assertEquals(0,JMeterContextService.getNumberOfThreads());
     }
-    
+
     // Give access to the method for test code
     public static void incrNumberOfThreads(){
         JMeterContextService.incrNumberOfThreads();

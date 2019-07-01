@@ -194,7 +194,7 @@ implements ChangeListener, ActionListener, ItemListener
                     }
                 }
             }
-            
+
             ClassFilter filter = new ClassFilter();
             filter.setPackges(JOrphanUtils.split(filterpkg.getText(),",")); //$NON-NLS-1$
             // change the classname drop down

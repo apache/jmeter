@@ -96,7 +96,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     public static final String CROSS_PLATFORM_LAF = "CrossPlatform"; // $NON-NLS-1$
     public static final String DARCULA_LAF = "Darcula"; // $NON-NLS-1$
     public static final String DARCULA_LAF_CLASS = "com.bulenkov.darcula.DarculaLaf"; // $NON-NLS-1$
-    
+
     public JMeterMenuBar() {
         // List for recent files menu items
         fileLoadRecentFiles = new LinkedList<>();
@@ -245,7 +245,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem whatClass = makeMenuItemRes("help_node", 'W', ActionNames.WHAT_CLASS, KeyStrokes.WHAT_CLASS);//$NON-NLS-1$
         JMenuItem setDebug = makeMenuItemRes("debug_on", ActionNames.DEBUG_ON, KeyStrokes.DEBUG_ON);//$NON-NLS-1$
         JMenuItem resetDebug = makeMenuItemRes("debug_off", ActionNames.DEBUG_OFF, KeyStrokes.DEBUG_OFF);//$NON-NLS-1$
-        
+
         JMenu usefulLinks = makeMenuRes("useful_links");//$NON-NLS-1$
         usefulLinks.add(makeMenuItemRes("link_release_notes", ActionNames.LINK_RELEASE_NOTES));
         usefulLinks.add(makeMenuItemRes("link_bug_tracker", ActionNames.LINK_BUG_TRACKER));
@@ -262,7 +262,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         helpMenu.add(resetDebug);
 
         addPluginsMenuItems(helpMenu, menuCreators, MENU_LOCATION.HELP);
-        
+
         helpMenu.addSeparator();
         helpMenu.add(usefulLinks);
         helpMenu.addSeparator();
@@ -408,11 +408,11 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void makeRunMenu() {
         runMenu = makeMenuRes("run",'R'); //$NON-NLS-1$
-        
+
         runStart = makeMenuItemRes("start", 'S', ActionNames.ACTION_START, KeyStrokes.ACTION_START); //$NON-NLS-1$
 
         runStartNoTimers = makeMenuItemRes("start_no_timers", 'N', ActionNames.ACTION_START_NO_TIMERS); //$NON-NLS-1$
-        
+
         runStop = makeMenuItemRes("stop", 'T', ActionNames.ACTION_STOP, KeyStrokes.ACTION_STOP); //$NON-NLS-1$
         runStop.setEnabled(false);
 
@@ -428,7 +428,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         runMenu.add(runStop);
         runMenu.add(runShut);
         runMenu.addSeparator();
-        
+
         if (remoteStart != null) {
             runMenu.add(remoteStart);
         }
@@ -558,7 +558,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
             Arrays.stream(menuItems).forEachOrdered(menu::add);
         }
     }
-    
+
     public void setRunning(boolean running, String host) {
         log.info("setRunning({}, {})", running, host);
         if (org.apache.jmeter.gui.MainFrame.LOCAL.equals(host)) {
@@ -658,7 +658,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     /**
      * Get a list of all installed LAFs plus CrossPlatform and System.
-     * 
+     *
      * @return The list of available {@link LookAndFeelInfo}s
      */
     // This is also used by LookAndFeelCommand
@@ -812,7 +812,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         menuItem.addActionListener(ActionRouter.getInstance());
         return menuItem;
     }
-    
+
     private static JCheckBoxMenuItem makeCheckBoxMenuItemRes(String resource, String actionCommand) {
         return makeCheckBoxMenuItemRes(resource, actionCommand, null);
     }

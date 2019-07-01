@@ -24,14 +24,14 @@ import org.apache.jmeter.report.core.Sample;
 /**
  * The class CodeSeriesSelector provides a projection of a sample to its code
  * response.
- * 
+ *
  * @since 3.0
  */
 public class CodeSeriesSelector extends AbstractSeriesSelector {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleSelector#select(org.apache
      * .jmeter.report.csv.core.Sample)

@@ -30,7 +30,7 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 
 /**
- * The Class ResponseTimePercentilesGraphConsumer computes percentile 
+ * The Class ResponseTimePercentilesGraphConsumer computes percentile
  * graph for each samples
  *
  * @since 3.0
@@ -51,7 +51,7 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createKeysSelector()
      */
@@ -68,7 +68,7 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */
@@ -86,7 +86,7 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
      * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
      */

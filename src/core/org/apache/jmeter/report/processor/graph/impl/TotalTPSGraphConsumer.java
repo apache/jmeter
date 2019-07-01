@@ -92,7 +92,7 @@ public class TotalTPSGraphConsumer extends AbstractOverTimeGraphConsumer {
     public void setGranularity(long granularity) {
         super.setGranularity(granularity);
     }
-    
+
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         super.initializeExtraResults(parentResult);
@@ -101,7 +101,7 @@ public class TotalTPSGraphConsumer extends AbstractOverTimeGraphConsumer {
         };
         initializeSeries(parentResult, seriesLabels);
     }
-    
+
     @Override
     public void initialize() {
         super.initialize();
@@ -109,7 +109,7 @@ public class TotalTPSGraphConsumer extends AbstractOverTimeGraphConsumer {
         ((TimeRateAggregatorFactory) getGroupInfos().get(AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
         .setGranularity(getGranularity());
     }
-    
+
 
     private void initializeSeries(MapResultData parentResult, String[] series) {
         ListResultData listResultData = (ListResultData) parentResult.getResult("series");
@@ -117,12 +117,12 @@ public class TotalTPSGraphConsumer extends AbstractOverTimeGraphConsumer {
             listResultData.addResult(create(series[i]));
         }
     }
-    
+
     private MapResultData create(String serie) {
         GroupInfo groupInfo = getGroupInfos().get(AbstractGraphConsumer.DEFAULT_GROUP);
-        SeriesData seriesData = new SeriesData(groupInfo.getAggregatorFactory(), 
+        SeriesData seriesData = new SeriesData(groupInfo.getAggregatorFactory(),
                 groupInfo.enablesAggregatedKeysSeries(), false,
-                groupInfo.enablesOverallSeries()); 
+                groupInfo.enablesOverallSeries());
         return createSerieResult(serie, seriesData);
     }
 }

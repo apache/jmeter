@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -350,7 +350,7 @@ public class TestRegexFunction extends JMeterTestCase {
             String match = variable.execute(result, null);
             assertEquals("_pinposition2", match);
         }
-        
+
         @Test
         public void testExtractionIndexTooHigh() throws Exception {
             params = new LinkedList<>();
@@ -363,7 +363,7 @@ public class TestRegexFunction extends JMeterTestCase {
             String match = variable.execute(result, null);
             assertEquals("No Value Found", match);
         }
-        
+
         @Test
         public void testRandomExtraction() throws Exception {
             params = new LinkedList<>();
@@ -382,8 +382,8 @@ public class TestRegexFunction extends JMeterTestCase {
                     + " field=\"pinposition3\">6</value><value" + " field=\"pinpositionvalue3\"></value>"
                     + "</row>", match);
         }
-        
-        
+
+
         @Test(expected=NumberFormatException.class)
         public void testExtractionIndexNotNumeric() throws Exception {
             params = new LinkedList<>();

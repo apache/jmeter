@@ -77,7 +77,7 @@ public interface TCPClient {
     String read(InputStream is) throws ReadException;
 
     /**
-     * 
+     *
      * @param is -
      *            InputStream for socket
      * @param sampleResult {@link SampleResult}
@@ -91,7 +91,7 @@ public interface TCPClient {
      * @return Returns the eolByte.
      */
     byte getEolByte();
-    
+
 
     /**
      * Get the charset.

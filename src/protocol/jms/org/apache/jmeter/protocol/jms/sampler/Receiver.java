@@ -66,7 +66,7 @@ public final class Receiver implements Runnable {
             conn = factory.createConnection(principal, credentials);
         }else{
             log.info("creating receiver without authorisation credentials. UseResMsgId={}", useResMsgIdAsCorrelId);
-            conn = factory.createConnection(); 
+            conn = factory.createConnection();
         }
         session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
         log.debug("Receiver - ctor. Creating consumer with JMS Selector:{}", jmsSelector);
@@ -125,7 +125,7 @@ public final class Receiver implements Runnable {
                     if (useResMsgIdAsCorrelId){
                         messageKey = reply.getJMSMessageID();
                         synchronized (admin) {// synchronize with FixedQueueExecutor
-                            admin.putReply(messageKey, reply);                            
+                            admin.putReply(messageKey, reply);
                         }
                     } else {
                         messageKey = reply.getJMSCorrelationID();

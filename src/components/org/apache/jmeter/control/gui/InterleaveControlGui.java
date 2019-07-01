@@ -30,7 +30,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
     private static final long serialVersionUID = 240L;
 
     private JCheckBox style;
-    
+
     private JCheckBox accrossThreads;
 
     public InterleaveControlGui() {
@@ -70,7 +70,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
         } else {
             controller.setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
         }
-        
+
         controller.setInterleaveAccrossThreads(accrossThreads.isSelected());
     }
 
@@ -97,7 +97,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
 
         style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers")); // $NON-NLS-1$
         add(CheckBoxPanel.wrap(style));
-        
+
         accrossThreads = new JCheckBox(JMeterUtils.getResString("interleave_accross_threads")); // $NON-NLS-1$
         add(CheckBoxPanel.wrap(accrossThreads));
     }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -35,14 +35,14 @@ public class VariableTest extends JMeterTestCase {
 
     private JMeterContext jmctx = null;
     private JMeterVariables vars = null;
-    
+
     @Before
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmctx.setVariables(new JMeterVariables());
         vars = jmctx.getVariables();
     }
-    
+
     @Test
     public void variableTest1() throws Exception {
         Variable r = new Variable();
@@ -53,47 +53,47 @@ public class VariableTest extends JMeterTestCase {
         vars.put("V","A");
         Collection<CompoundVariable> parms;
         String s;
-        
+
         parms = makeParams("V",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("A",s);        
-        
+        assertEquals("A",s);
+
         parms = makeParams("V","DEFAULT",null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("A",s);        
-        
+        assertEquals("A",s);
+
         parms = makeParams("EMPTY","DEFAULT",null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("DEFAULT",s);
-        
+
         parms = makeParams("X",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("X",s);
-        
+
         parms = makeParams("A${X}",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("A${X}",s);
-        
+
         parms = makeParams("A_1",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("a1",s);
-        
+
         parms = makeParams("A_2",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("a2",s);
-        
+
         parms = makeParams("A_${two}",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("a2",s);
-        
+
         parms = makeParams("${V}_${one}",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);

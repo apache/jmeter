@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
  package org.apache.jmeter.extractor
 
 import org.apache.jmeter.samplers.SampleResult

@@ -121,7 +121,7 @@ public class KerberosManager implements Serializable {
             }
         }
     }
-    
+
     public String getKrb5Conf() {
         return System.getProperty("java.security.krb5.conf"); //$NON-NLS-1$
     }
@@ -133,7 +133,7 @@ public class KerberosManager implements Serializable {
     public String getJaasConf() {
         return System.getProperty("java.security.auth.login.config"); //$NON-NLS-1$
     }
-    
+
     @Override
     public String toString() {
         return "KerberosManager[jaas: " + getJaasConf() + ", krb5: " + getKrb5Conf() + ", debug: " + getKrb5Debug() +"]";

@@ -71,7 +71,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * Construct a {@link FileEditor} using the properties of the given
      * {@link PropertyDescriptor}
-     * 
+     *
      * @param descriptor
      *            the {@link PropertyDescriptor} to be used. Must not be <code>null</code>
      * @throws IllegalArgumentException

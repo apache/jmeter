@@ -82,7 +82,7 @@ public class HttpRequestHdr {
     private String firstLine; // saved copy of first line for error reports
 
     private String prefix;
-    
+
     private int httpSampleNameMode;
 
     public HttpRequestHdr() {
@@ -95,7 +95,7 @@ public class HttpRequestHdr {
     public HttpRequestHdr(String httpSamplerName) {
         this("", httpSamplerName);
     }
-    
+
     /**
      * @param prefix Sampler prefix
      * @param httpSamplerName the http sampler name
@@ -166,7 +166,7 @@ public class HttpRequestHdr {
         rawPostData = line.toByteArray();
 
         if (log.isDebugEnabled()){
-            log.debug("rawPostData in default JRE encoding: {}, Request: '{}'", 
+            log.debug("rawPostData in default JRE encoding: {}, Request: '{}'",
                     new String(rawPostData, Charset.defaultCharset()),
                     clientRequest.toString().replaceAll("\r\n", CRLF));
         }
@@ -457,7 +457,7 @@ public class HttpRequestHdr {
     public String getPrefix() {
         return prefix;
     }
-    
+
     /**
      * @return the httpSampleNameMode
      */
