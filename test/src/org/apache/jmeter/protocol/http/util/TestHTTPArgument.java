@@ -135,13 +135,10 @@ public class TestHTTPArgument {
 
         @Test
         public void testWithShift_JIS_Encoding() throws Exception {
-            
             String encodedValue = "%8F%89%8A%FA%92l%91%E5%8D%E3%8Es";
             byte[] data = new byte[] {-27, -120, -99, -26, -100, -97, -27, -128, -92, -27, -92, -89, -23, -104, -86, -27,
                     -72, -126};
-
             String value = new String(data, StandardCharsets.UTF_8);
-
             HTTPArgument arg;
             // Passing real encoded value of Japanese character as
             // %8F%89%8A%FA%92l%91%E5%8D%E3%8Es and try to decode with Shift_JIS encoding
@@ -151,14 +148,10 @@ public class TestHTTPArgument {
 
         @Test
         public void testWithUTF_Encoding() throws Exception {
-
             String encodedValue = "%8F%89%8A%FA%92l%91%E5%8D%E3%8Es";
-
             byte[] data = new byte[] {-27, -120, -99, -26, -100, -97, -27, -128, -92, -27, -92, -89, -23, -104, -86, -27,
                     -72, -126};
-
             String value = new String(data, StandardCharsets.UTF_8);
-
             HTTPArgument arg;
             // Passing real encoded value of Japanese character as
             // %8F%89%8A%FA%92l%91%E5%8D%E3%8Es and try to decode with UTF-8 encoding
