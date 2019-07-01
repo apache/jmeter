@@ -168,8 +168,10 @@ public class TestHTTPArgument {
             assertEquals("HTTPArgument(\"name.?\", \"value_ here\", false, encoding).getValue()", "value_+here", arg.getEncodedValue());
             // Show that can bypass encoding:
             arg.setAlwaysEncoded(false);
-            assertEquals("arg.getEncodedName() should be equal to name.?", "name.?", arg.getEncodedName());
-            assertEquals("arg.getValue() should be equal to value_here", "value_ here", arg.getEncodedValue());
+            assertEquals("setAlwaysEncoded=false => HTTPArgument(\"name.?\", \"value_ here\", false, encoding).getEncodedName()"
+                + " should not be encoded", "name.?", arg.getEncodedName());
+            assertEquals("setAlwaysEncoded=false => HTTPArgument(\"name.?\", \"value_ here\", false, encoding).getValue()"
+                + " should not be encoded", "value_ here", arg.getEncodedValue());
 
             // When the name and value parameter does not have valid encoded value (Encoded
             // and Decoded values are same)
@@ -181,8 +183,10 @@ public class TestHTTPArgument {
             assertEquals("HTTPArgument(\"name.?\", \"value_ here\", true, encoding).getEncodedName()", "name.%3F", arg.getEncodedName());
             assertEquals("HTTPArgument(\"name.?\", \"value_ here\", true, encoding).getValue()", "value_+here", arg.getEncodedValue());
             arg.setAlwaysEncoded(false); // by default, name/value are encoded on fetch
-            assertEquals("arg.getEncodedName() should be equal to name.?", "name.?", arg.getEncodedName());
-            assertEquals("arg.getValue should() be equal to value_here", "value_ here", arg.getEncodedValue());
+            assertEquals("setAlwaysEncoded=false => HTTPArgument(\"name.?\", \"value_ here\", true, encoding).getEncodedName()"
+                + " should not be encoded", "name.?", arg.getEncodedName());
+            assertEquals("setAlwaysEncoded=false => HTTPArgument(\"name.?\", \"value_ here\", true, encoding).getValue()"
+                + " should not be encoded", "value_ here", arg.getEncodedValue());
 
             // Try a real encoded argument
             arg = new HTTPArgument("name.%3F", "value_+here", true, encoding);
@@ -192,13 +196,17 @@ public class TestHTTPArgument {
             assertEquals("HTTPArgument(\"name.%3F\", \"value_+here\", true, encoding).getValue()", "value_+here", arg.getEncodedValue());
             // Show that can bypass encoding:
             arg.setAlwaysEncoded(false);
-            assertEquals("arg.getEncodedName() should be equal to name.?", "name.?", arg.getEncodedName());
-            assertEquals("arg.getValue() should be equal to value_here", "value_ here", arg.getEncodedValue());
+            assertEquals("setAlwaysEncoded=false => HTTPArgument(\"name.%3F\", \"value_+here\", true, encoding).getEncodedName()"
+                + " should not be encoded", "name.?", arg.getEncodedName());
+            assertEquals("setAlwaysEncoded=false => HTTPArgument(\"name.%3F\", \"value_+here\", true, encoding).getValue()"
+                + "should not be encoded", "value_ here", arg.getEncodedValue());
 
             arg = new HTTPArgument("", "\00\01\07", "", false, encoding);
             arg.setAlwaysEncoded(false);
-            assertEquals("arg.getEncodedName() should be empty string", "", arg.getEncodedName());
-            assertEquals("arg.getValue() should be \\00\\01\\07", "\00\01\07", arg.getEncodedValue());
+            assertEquals("setAlwaysEncoded=false => HTTPArgument(\"\", \"\00\01\07\", \"\", false, encoding).getEncodedName()"
+                + " should not be encoded", "", arg.getEncodedName());
+            assertEquals("setAlwaysEncoded=false => HTTPArgument(\"\", \"\00\01\07\", \"\", false, encoding).getValue()"
+                + " should not be encoded", "\00\01\07", arg.getEncodedValue());
         }
 
 } 
