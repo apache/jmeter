@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.gui;
@@ -67,7 +67,7 @@ public final class GuiUtils {
 
     /**
      * Fix the size of a column according to the header text.
-     * 
+     *
      * @param column to be resized
      * @param table containing the column
      */
@@ -82,9 +82,9 @@ public final class GuiUtils {
         int width = c.getPreferredSize().width+10;
         column.setMaxWidth(width);
         column.setPreferredWidth(width);
-        column.setResizable(false);        
+        column.setResizable(false);
     }
-    
+
     /**
      * Create a GUI component JLabel + JComboBox with a left and right margin (5px)
      * @param label the label
@@ -128,7 +128,7 @@ public final class GuiUtils {
             cellEditor.cancelCellEditing();
         }
     }
-    
+
     /**
      * Get pasted text from clipboard
      *

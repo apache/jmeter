@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -71,7 +71,7 @@ public class TestFileToString extends JMeterTestCase {
         String returnValue = function.execute(result, null);
         assertEquals("**ERR**", returnValue);
     }
-    
+
     @Test
     public void testRead() throws Exception {
         File file = new File(JMeterUtils.getJMeterBinDir(), "jmeter.properties");
@@ -79,8 +79,8 @@ public class TestFileToString extends JMeterTestCase {
         function.setParameters(params);
         String returnValue = function.execute(result, null);
         Assert.assertTrue(returnValue.indexOf("language=")>0);
-    }   
-    
+    }
+
     @Test
     public void testReadWithEncoding() throws Exception {
         File file = new File(JMeterUtils.getJMeterBinDir(), "jmeter.properties");
@@ -90,7 +90,7 @@ public class TestFileToString extends JMeterTestCase {
         String returnValue = function.execute(result, null);
         Assert.assertTrue(returnValue.indexOf("language=")>0);
     }
-    
+
     @Test
     public void testReadWithEncodingAndVar() throws Exception {
         File file = new File(JMeterUtils.getJMeterBinDir(), "jmeter.properties");
@@ -101,5 +101,5 @@ public class TestFileToString extends JMeterTestCase {
         String returnValue = function.execute(result, null);
         Assert.assertTrue(returnValue.indexOf("language=")>0);
         Assert.assertTrue(vars.get("MY_FILE_AS_TEXT").indexOf("language=")>0);
-    } 
+    }
 }

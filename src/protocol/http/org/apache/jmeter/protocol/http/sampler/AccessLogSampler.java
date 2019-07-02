@@ -273,7 +273,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     public void setPortString(String port) {
         super.setProperty(HTTPSamplerBase.PORT, port);
     }
-    
+
     /**
      * Sets the scheme, with default
      * @param value the protocol
@@ -282,7 +282,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     public void setProtocol(String value) {
         setProperty(PROTOCOL, value.toLowerCase(java.util.Locale.ENGLISH));
     }
-    
+
     /**
      * Gets the protocol, with default.
      *

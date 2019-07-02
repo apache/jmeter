@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * HashTreeTraverser implementation that stores in a Stack all 
+ * HashTreeTraverser implementation that stores in a Stack all
  * the Test Elements on the path to a particular node.
  */
 public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
@@ -63,7 +63,7 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
         if(node == nodeToFind) {
             this.stopRecording = true;
         }
-        stack.addLast((TestElement) node);        
+        stack.addLast((TestElement) node);
     }
 
     /** {@inheritDoc} */
@@ -75,7 +75,7 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
         if (log.isDebugEnabled()) {
             log.debug("Subtracting node, stack size = {}", stack.size());
         }
-        stack.removeLast();        
+        stack.removeLast();
     }
 
     /** {@inheritDoc} */

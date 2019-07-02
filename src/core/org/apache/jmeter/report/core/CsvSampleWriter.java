@@ -32,7 +32,7 @@ import org.apache.jmeter.save.CSVSaveService;
  * This class handles csv header writing with the <code>writeHeader</code>
  * method. This method has to be called by user for the header to be written.
  * </p>
- * 
+ *
  * @since 3.0
  */
 public class CsvSampleWriter extends AbstractSampleWriter {
@@ -53,7 +53,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
      * Constructor for a CsvSampleWriter.<br>
      * The newly created instance has to be supplied with a Writer to work
      * properly.
-     * 
+     *
      * @param metadata
      *            the description for data that this writer will write. (
      *            {@code metadata} must not be {@code null}.)
@@ -68,7 +68,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 
     /**
      * Constructor for a CsvSampleWriter.
-     * 
+     *
      * @param output
      *            the writer to write data to. (Must not be {@code null})
      * @param metadata
@@ -82,7 +82,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 
     /**
      * Constructor for a CsvSampleWriter.
-     * 
+     *
      * @param output
      *            the output stream to write data to. (Must not be {@code null})
      * @param metadata
@@ -96,7 +96,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 
     /**
      * Constructor for a CsvSampleWriter.
-     * 
+     *
      * @param output
      *            the output file to write data to. (Must not be {@code null})
      * @param metadata
@@ -110,7 +110,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 
     /**
      * Set the char to use for separation of data in a line.
-     * 
+     *
      * @param separator
      *            to use
      */

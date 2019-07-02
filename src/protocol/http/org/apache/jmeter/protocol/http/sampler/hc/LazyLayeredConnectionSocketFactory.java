@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler.hc;
@@ -46,15 +46,15 @@ public final class LazyLayeredConnectionSocketFactory implements LayeredConnecti
     private static final String CIPHER_LIST =
             JMeterUtils.getPropDefault("https.socket.ciphers", ""); // $NON-NLS-1$ $NON-NLS-2$
 
-    private static final String[] SUPPORTED_PROTOCOL_LIST = 
-            PROTOCOL_LIST.isEmpty() ? 
+    private static final String[] SUPPORTED_PROTOCOL_LIST =
+            PROTOCOL_LIST.isEmpty() ?
                     null: PROTOCOL_LIST.split(" "); // $NON-NLS-1$
-    private static final String[] SUPPORTED_CIPHER_LIST = 
-            CIPHER_LIST.isEmpty() ? 
+    private static final String[] SUPPORTED_CIPHER_LIST =
+            CIPHER_LIST.isEmpty() ?
                     null : CIPHER_LIST.split(" "); // $NON-NLS-1$
 
     private static class AdapteeHolder { // IODH idiom
-        private static final LayeredConnectionSocketFactory ADAPTEE = checkAndInit();  
+        private static final LayeredConnectionSocketFactory ADAPTEE = checkAndInit();
 
         /**
          * @throws SSLInitializationException
@@ -72,9 +72,9 @@ public final class LazyLayeredConnectionSocketFactory implements LayeredConnecti
             return ADAPTEE;
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public LazyLayeredConnectionSocketFactory() {
         super();

@@ -39,9 +39,9 @@ public abstract class OnErrorTestElement extends AbstractTestElement {
     public static final int ON_ERROR_STOPTEST_NOW = 3;
 
     public static final int ON_ERROR_START_NEXT_THREAD_LOOP = 4;
-    
+
     public static final int ON_ERROR_START_NEXT_ITERATION_OF_CURRENT_LOOP = 5;
-    
+
     public static final int ON_ERROR_BREAK_CURRENT_LOOP = 6;
 
     /* Property name */
@@ -82,7 +82,7 @@ public abstract class OnErrorTestElement extends AbstractTestElement {
     public boolean isStartNextIterationOfCurrentLoop() {
         return getErrorAction() == ON_ERROR_START_NEXT_ITERATION_OF_CURRENT_LOOP;
     }
-    
+
     public boolean isBreakCurrentLoop() {
         return getErrorAction() == ON_ERROR_BREAK_CURRENT_LOOP;
     }

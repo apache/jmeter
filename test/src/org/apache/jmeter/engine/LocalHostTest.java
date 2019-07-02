@@ -33,7 +33,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Try to establish why some batchtestserver runs fail 
+ * Try to establish why some batchtestserver runs fail
  */
 public class LocalHostTest {
 
@@ -90,7 +90,7 @@ public class LocalHostTest {
         showAddress(InetAddress.getByName("localhost"));
         for (InetAddress a : InetAddress.getAllByName(InetAddress.getLocalHost().getHostName())) {
             perr("====================");
-            showAddress(a);            
+            showAddress(a);
         }
     }
 

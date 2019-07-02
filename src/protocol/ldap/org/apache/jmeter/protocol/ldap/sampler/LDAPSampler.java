@@ -61,7 +61,7 @@ public class LDAPSampler extends AbstractSampler {
                     "org.apache.jmeter.protocol.ldap.config.gui.LdapConfigGui",
                     "org.apache.jmeter.config.gui.SimpleConfigGui"
             ));
-    
+
     public static final String SERVERNAME = "servername"; //$NON-NLS-1$
 
     public static final String PORT = "port"; //$NON-NLS-1$
@@ -478,7 +478,7 @@ public class LDAPSampler extends AbstractSampler {
         res.setSuccessful(isSuccessful);
         return res;
     }
-    
+
     /**
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */

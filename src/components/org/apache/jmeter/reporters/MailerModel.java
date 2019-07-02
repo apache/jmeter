@@ -161,7 +161,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             while (next.hasMoreTokens()) {
                 String theToken = next.nextToken().trim();
 
-                if (theToken.indexOf('@') > 0) { //NOSONAR $NON-NLS-1$ 
+                if (theToken.indexOf('@') > 0) { //NOSONAR $NON-NLS-1$
                     addressList.add(theToken);
                 } else {
                     log.warn("Ignored unexpected e-mail address: {}", theToken);

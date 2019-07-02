@@ -29,7 +29,7 @@ import org.apache.jmeter.testelement.TestElement;
  * Factory of sampler
  */
 public interface SamplerCreator {
-    
+
     /**
      * @return String[] array of Content types managed by Factory
      */
@@ -59,8 +59,8 @@ public interface SamplerCreator {
                     throws Exception;
 
     /**
-     * Post process sampler 
-     * Called after sampling 
+     * Post process sampler
+     * Called after sampling
      * @param sampler HTTPSamplerBase
      * @param result SampleResult
      * @since 2.9
@@ -86,7 +86,7 @@ public interface SamplerCreator {
 
     /**
      * Create sampler children.
-     * This method can be used to add PostProcessor or ResponseAssertions by 
+     * This method can be used to add PostProcessor or ResponseAssertions by
      * implementations of {@link SamplerCreator}.
      * Return empty list if nothing to create
      * @param sampler {@link HTTPSamplerBase}

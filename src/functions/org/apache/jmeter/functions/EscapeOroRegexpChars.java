@@ -52,7 +52,7 @@ public class EscapeOroRegexpChars extends AbstractFunction {
     private static final int MAX_PARAM_COUNT = 2;
 
     private static final int MIN_PARAM_COUNT = 1;
-    
+
     private static final int PARAM_NAME = 2;
 
     /**
@@ -67,15 +67,15 @@ public class EscapeOroRegexpChars extends AbstractFunction {
     public String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
-        String valueToEscape = values[0].execute();       
-        
+        String valueToEscape = values[0].execute();
+
         String varName = "";//$NON-NLS-1$
         if (values.length >= PARAM_NAME) {
             varName = values[PARAM_NAME - 1].execute().trim();
         }
 
         String escapedValue = Perl5Compiler.quotemeta(valueToEscape);
-         
+
         if (varName.length() > 0) {
             JMeterVariables vars = getVariables();
             if (vars != null) {// Can be null if called from Config item testEnded() method

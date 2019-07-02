@@ -26,25 +26,25 @@ import org.apache.jmeter.threads.JMeterThread;
  * @since 3.2
  */
 public class TimerService {
-    
+
     private TimerService() {
         super();
     }
-    
+
     /**
      * Initialization On Demand Holder pattern
      */
     private static class TimerServiceHolder {
         public static final TimerService INSTANCE = new TimerService();
     }
- 
+
     /**
      * @return ScriptEngineManager singleton
      */
     public static TimerService getInstance() {
         return TimerServiceHolder.INSTANCE;
     }
-    
+
     /**
      * Adjust delay so that initialDelay does not exceed end of test
      * @param initialDelay initial delay in millis

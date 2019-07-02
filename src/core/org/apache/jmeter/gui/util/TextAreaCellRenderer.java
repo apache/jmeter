@@ -26,7 +26,7 @@ import javax.swing.table.TableCellRenderer;
 
 public class TextAreaCellRenderer implements TableCellRenderer {
 
-    private JSyntaxTextArea rend = createRenderer(""); //$NON-NLS-1$ 
+    private JSyntaxTextArea rend = createRenderer(""); //$NON-NLS-1$
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,

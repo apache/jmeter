@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -44,18 +44,18 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
     private static transient final SampleEvent FINAL_EVENT = new SampleEvent();
 
     private static final int DEFAULT_QUEUE_SIZE = 100;
-    
+
     private static final int SERVER_CONFIGURED_CAPACITY = JMeterUtils.getPropDefault("asynch.batch.queue.size", DEFAULT_QUEUE_SIZE); // $NON-NLS-1$
-    
+
     private final int clientConfiguredCapacity = JMeterUtils.getPropDefault("asynch.batch.queue.size", DEFAULT_QUEUE_SIZE); // $NON-NLS-1$
 
-    // created by client 
+    // created by client
     private final RemoteSampleListener listener;
 
     private transient BlockingQueue<SampleEvent> queue; // created by server in readResolve method
-    
+
     private transient long queueWaits; // how many times we had to wait to queue a sample
-    
+
     private transient long queueWaitTime; // how long we had to wait (nanoSeconds)
 
     /**
@@ -74,7 +74,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
             log.info("Using Asynch Remote Sampler for this test run, queue size: {}", getCapacity());  // client log file
         }
     }
-    
+
     /**
      * Processed by the RMI server code.
      *
@@ -95,10 +95,10 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
      * @return capacity
      */
     private int getCapacity() {
-        return isClientConfigured() ? 
+        return isClientConfigured() ?
                 clientConfiguredCapacity : SERVER_CONFIGURED_CAPACITY;
     }
-    
+
     @Override
     public void testEnded(String host) {
         log.debug("Test Ended on {}", host);
@@ -129,11 +129,11 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
     }
 
     private static class Worker extends Thread {
-        
+
         private final BlockingQueue<SampleEvent> queue;
-        
+
         private final RemoteSampleListener listener;
-        
+
         private Worker(BlockingQueue<SampleEvent> q, RemoteSampleListener l){
             queue = q;
             listener = l;

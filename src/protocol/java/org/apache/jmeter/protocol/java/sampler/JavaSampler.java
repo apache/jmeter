@@ -60,7 +60,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
      * Set used to register instances which implement tearDownTest.
      * This is used so that the JavaSamplerClient can be notified when the test ends.
      */
-    private static final Set<JavaSampler> TEAR_DOWN_SET = 
+    private static final Set<JavaSampler> TEAR_DOWN_SET =
             Collections.newSetFromMap(new ConcurrentHashMap<JavaSampler,Boolean>());
 
     /**
@@ -102,7 +102,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
      * Create a JavaSampler.
      */
     public JavaSampler() {
-        setArguments(new Arguments());    
+        setArguments(new Arguments());
     }
 
     /*
@@ -127,7 +127,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
         } catch (Exception e) {
             log.error("{}\tException initialising: ", whoAmI(), name, e);
         }
-        
+
     }
 
     /**
@@ -183,7 +183,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
      * @return test SampleResult
      */
     @Override
-    public SampleResult sample(Entry entry) {        
+    public SampleResult sample(Entry entry) {
         Arguments args = getArguments();
         args.addArgument(TestElement.NAME, getName()); // Allow Sampler access
                                                         // to test element name
@@ -226,12 +226,12 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
             if (log.isDebugEnabled()) {
                 log.debug("{}\tCreated:\t{}@{}", whoAmI(), getClassname(), Integer.toHexString(client.hashCode()));
             }
-            
+
             if(isToBeRegistered) {
                 TEAR_DOWN_SET.add(this);
             }
         } catch (Exception e) {
-            if (log.isErrorEnabled()) { 
+            if (log.isErrorEnabled()) {
                 log.error("{}\tException creating: {}", whoAmI(), getClassname(), e);
             }
             client = new ErrorSamplerClient();
@@ -352,7 +352,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
     public boolean interrupt() {
         if (javaClient instanceof Interruptible) {
             return ((Interruptible) javaClient).interrupt();
-            
+
         }
         return false;
     }

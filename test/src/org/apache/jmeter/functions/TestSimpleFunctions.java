@@ -190,7 +190,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
             FileServer.getFileServer().setScriptName(null);
         }
     }
-    
+
     @Test
     public void testThreadGroupNameBug63241() throws Exception {
         AbstractFunctionByKey function = new ThreadGroupName();

@@ -63,7 +63,7 @@ public abstract class RandomTimer extends ConstantTimer implements ModifiableTim
     public double getRange() {
         return this.getPropertyAsDouble(RANGE);
     }
-    
+
     /**
      * @return {@link Random} Thread local Random
      */

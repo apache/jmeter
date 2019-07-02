@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
  * <tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=
  * <field_value>] [<timestamp>] Each line, separated by the newline character,
  * represents a single point in InfluxDB. Line Protocol is whitespace sensitive.
- * 
+ *
  * @since 3.2
  */
 class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
@@ -78,7 +78,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
      * The HTTP API is the primary means of writing data into InfluxDB, by
      * sending POST requests to the /write endpoint. Initiate the HttpClient
      * client with a HttpPost request from influxdb url
-     * 
+     *
      * @param influxdbUrl
      *            example : http://localhost:8086/write?db=myd&rp=one_week
      * @see org.apache.jmeter.visualizers.backend.influxdb.InfluxdbMetricsSender#setup(java.lang.String)
@@ -98,7 +98,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
         // Create a connection manager with custom configuration.
         PoolingNHttpClientConnectionManager connManager = new PoolingNHttpClientConnectionManager(
                 ioReactor);
-        
+
         httpClient = HttpAsyncClientBuilder.create()
                 .setConnectionManager(connManager)
                 .setMaxConnPerRoute(2)
@@ -115,7 +115,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     /**
      * @param url {@link URL} Influxdb Url
      * @return {@link HttpPost}
-     * @throws URISyntaxException 
+     * @throws URISyntaxException
      */
     private HttpPost createRequest(URL url) throws URISyntaxException {
         RequestConfig defaultRequestConfig = RequestConfig.custom()
@@ -123,7 +123,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                 .setSocketTimeout(JMeterUtils.getPropDefault("backend_influxdb.socket_timeout", 3000))
                 .setConnectionRequestTimeout(JMeterUtils.getPropDefault("backend_influxdb.connection_request_timeout", 100))
                 .build();
-        
+
         HttpPost currentHttpRequest = new HttpPost(url.toURI());
         currentHttpRequest.setConfig(defaultRequestConfig);
         log.debug("Created InfluxDBMetricsSender with url: {}", url);
@@ -133,7 +133,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     @Override
     public void addMetric(String mesurement, String tag, String field) {
         synchronized (lock) {
-            metrics.add(new MetricTuple(mesurement, tag, field, System.currentTimeMillis()));            
+            metrics.add(new MetricTuple(mesurement, tag, field, System.currentTimeMillis()));
         }
     }
 
@@ -164,12 +164,12 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                         .append(" ") //$NON-NLS-1$
                         .append(metric.field)
                         .append(" ")
-                        .append(metric.timestamp+"000000") 
+                        .append(metric.timestamp+"000000")
                         .append("\n"); //$NON-NLS-1$
                 }
 
                 StringEntity entity = new StringEntity(sb.toString(), StandardCharsets.UTF_8);
-                
+
                 httpRequest.setEntity(entity);
                 lastRequest = httpClient.execute(httpRequest, new FutureCallback<HttpResponse>() {
                     @Override
@@ -184,7 +184,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                         if (MetricUtils.isSuccessCode(code)) {
                             if(log.isDebugEnabled()) {
                                 log.debug("Success, number of metrics written: {}", copyMetrics.size());
-                            } 
+                            }
                         } else {
                             log.error("Error writing metrics to influxDB Url: {}, responseCode: {}, responseBody: {}", url, code, getBody(response));
                         }
@@ -197,7 +197,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                     public void cancelled() {
                         log.warn("Request to influxDB server was cancelled");
                     }
-                });               
+                });
             }catch (URISyntaxException ex ) {
                 log.error(ex.getMessage());
             } finally {
@@ -206,7 +206,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
             }
         }
     }
-    
+
     /**
      * @param response HttpResponse
      * @return String entity Body if any

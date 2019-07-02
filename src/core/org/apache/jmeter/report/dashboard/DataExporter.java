@@ -25,7 +25,7 @@ import org.apache.jmeter.report.processor.SampleContext;
 /**
  * The Interface DataExporter represents an engine to export data from samples
  * consumption.
- * 
+ *
  * @since 3.0
  */
 public interface DataExporter {

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.modifiers;
@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  * Sample timeout implementation using Executor threads
  * @since 3.0
  */
@@ -49,7 +49,7 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
     private static final String TIMEOUT = "InterruptTimer.timeout"; //$NON-NLS-1$
 
     private ScheduledFuture<?> future;
-    
+
     private final transient ScheduledExecutorService execService;
 
     private static class TPOOLHolder {
@@ -117,7 +117,7 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
         if (timeout <= 0) {
             return;
         }
-        if (!(samp instanceof Interruptible)) { // may be applied to a whole test 
+        if (!(samp instanceof Interruptible)) { // may be applied to a whole test
             return; // Cannot time out in this case
         }
         final Interruptible sampler = (Interruptible) samp;
@@ -137,7 +137,7 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
             }
             return null;
         };
-        // schedule the interrupt to occur and save for possible cancellation 
+        // schedule the interrupt to occur and save for possible cancellation
         future = execService.schedule(call, timeout, TimeUnit.MILLISECONDS);
         if (log.isDebugEnabled()) {
             log.debug("Scheduled timer: @{} {}", System.identityHashCode(future), getInfo(samp));
@@ -170,11 +170,11 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
     }
 
     private String whoAmI(String id, TestElement o) {
-        return id + " @" + System.identityHashCode(o)+ " '"+ o.getName() + "' " + (log.isDebugEnabled() ?  Thread.currentThread().getName() : "");         
+        return id + " @" + System.identityHashCode(o)+ " '"+ o.getName() + "' " + (log.isDebugEnabled() ?  Thread.currentThread().getName() : "");
     }
 
     private String getInfo(TestElement o) {
-        return whoAmI(o.getClass().getSimpleName(), o); 
+        return whoAmI(o.getClass().getSimpleName(), o);
     }
 
     private void cancelTask() {
@@ -186,7 +186,7 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
                 }
             }
             future = null;
-        }        
+        }
     }
 
 }

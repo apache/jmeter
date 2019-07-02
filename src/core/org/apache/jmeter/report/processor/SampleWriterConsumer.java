@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Sample consumed by this consumer are written to a file<br>
  * <br>
- * 
+ *
  * @since 3.0
  */
 public class SampleWriterConsumer extends AbstractSampleConsumer {
@@ -77,7 +77,7 @@ public class SampleWriterConsumer extends AbstractSampleConsumer {
 
     /**
      * Enables the CSV header on the output file (defaults to false)
-     * 
+     *
      * @param writeHeader flag, whether CSV header should be written
      */
     public void setWriteHeader(boolean writeHeader) {

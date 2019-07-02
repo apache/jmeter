@@ -87,7 +87,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     /**
      * used to share the cache between 2 cache managers
-     * @see CacheManager#createCacheManagerProxy() 
+     * @see CacheManager#createCacheManagerProxy()
      * @since 3.0 */
     private transient Map<String, CacheEntry> localCache;
 
@@ -97,7 +97,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         clearCache();
         useExpires = false;
     }
-    
+
     CacheManager(Map<String, CacheEntry> localCache, boolean useExpires) {
         this.localCache = localCache;
         this.useExpires = useExpires;
@@ -246,7 +246,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             final String maxAge = "max-age=";
 
             if(cacheControl != null && cacheControl.contains("no-store")) {
-                // We must not store an CacheEntry, otherwise a 
+                // We must not store an CacheEntry, otherwise a
                 // conditional request may be made
                 return;
             }
@@ -320,7 +320,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                 Date responseDate = DateUtils.parseDate(date);
                 Date lastModifiedAsDate = DateUtils.parseDate(lastModified);
                 // see https://developer.mozilla.org/en/HTTP_Caching_FAQ
-                // see http://www.ietf.org/rfc/rfc2616.txt#13.2.4 
+                // see http://www.ietf.org/rfc/rfc2616.txt#13.2.4
                 return new Date(System.currentTimeMillis() + Math.round(
                         (responseDate.getTime() - lastModifiedAsDate.getTime())
                                 * 0.1));
@@ -328,9 +328,9 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                 // date or lastModified may be null or in bad format
                 if(log.isWarnEnabled()) {
                     log.warn("Failed computing expiration date with following info:"
-                        +lastModified + "," 
+                        +lastModified + ","
                         + cacheControl + ","
-                        + expires + "," 
+                        + expires + ","
                         + etag + ","
                         + url + ","
                         + date);
@@ -359,7 +359,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             return false;
         }
         final String responseCode = res.getResponseCode();
-        return isCacheableMethod(res) 
+        return isCacheableMethod(res)
                 && (("200".compareTo(responseCode) <= 0  // $NON-NLS-1$
                     && "299".compareTo(responseCode) >= 0)  // $NON-NLS-1$
                     || "304".equals(responseCode));  // $NON-NLS-1$
@@ -414,7 +414,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      */
     public void setHeaders(HttpURLConnection conn,
             org.apache.jmeter.protocol.http.control.Header[] headers, URL url) {
-        CacheEntry entry = getEntry(url.toString(), 
+        CacheEntry entry = getEntry(url.toString(),
                 headers != null ? asHeaders(headers) : new Header[0]);
         if (log.isDebugEnabled()){
             log.debug("setHeaders HTTP Method{}(Java) url:{} entry:{}", conn.getRequestMethod(), url.toString(), entry);
@@ -434,7 +434,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     /**
      * Check the cache, if the entry has an expires header and the entry has not
      * expired, return <code>true</code><br>
-     * 
+     *
      * @param url
      *            {@link URL} to look up in cache
      * @return <code>true</code> if entry has an expires header and the entry
@@ -569,7 +569,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     public void setUseExpires(boolean expires) {
         setProperty(new BooleanProperty(USE_EXPIRES, expires));
     }
-    
+
     /**
      * @return int cache max size
      */
@@ -583,7 +583,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     public void setMaxSize(int size) {
         setProperty(MAX_SIZE, size, DEFAULT_MAX_SIZE);
     }
-    
+
 
     @Override
     public void clear(){

@@ -52,10 +52,10 @@ public abstract class AbstractFunction implements Function {
         return execute(previousResult, currentSampler);
     }
 
-    /** 
+    /**
      * Note: This is always called even if no parameters are provided
      * (versions of JMeter after 2.3.1)
-     * 
+     *
      * @see Function#setParameters(Collection)
      */
     @Override
@@ -69,7 +69,7 @@ public abstract class AbstractFunction implements Function {
 
     /**
      * Gives access to the JMeter variables for the current thread.
-     * 
+     *
      * @return a pointer to the JMeter variables.
      */
     protected JMeterVariables getVariables() {
@@ -141,7 +141,7 @@ public abstract class AbstractFunction implements Function {
                    );
         }
     }
-    
+
     /**
      * Utility method to store value in a variable
      * @param value

@@ -49,7 +49,7 @@ public class PropertiesBasedPrefixResolverForXpath2 extends PrefixResolverDefaul
     /**
      * Searches prefix in NAMESPACE_MAP, if it fails to find it defaults to parent
      * implementation
-     * 
+     *
      * @param prefix           Prefix
      * @param namespaceContext Node
      */

@@ -5,13 +5,13 @@
  * licenses this file to You under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -77,14 +77,14 @@ public class RequestPanel {
         if (rawObject != null) {
             listRequestView.addFirst((RequestView) rawObject);
         }
-        
+
         // Prepare the Request tabbed pane
         JTabbedPane tabbedRequest = new JTabbedPane(SwingConstants.BOTTOM);
         for (RequestView requestView : listRequestView) {
             requestView.init();
             tabbedRequest.addTab(requestView.getLabel(), requestView.getPanel());
         }
-        
+
         // Hint to background color on bottom tabs (grey, not blue)
         panel = new JPanel(new BorderLayout());
         panel.add(tabbedRequest);
@@ -101,7 +101,7 @@ public class RequestPanel {
 
     /**
      * Put SamplerResult in all request view
-     * 
+     *
      * @param samplerResult The {@link SampleResult} to be put in all {@link RequestView}s
      */
     public void setSamplerResult(SampleResult samplerResult) {
@@ -109,7 +109,7 @@ public class RequestPanel {
             requestView.setSamplerResult(samplerResult);
         }
     }
-    
+
     /**
      * @return a tabbed panel for view request
      */

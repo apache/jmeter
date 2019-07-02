@@ -26,12 +26,12 @@ import org.apache.jmeter.util.JMeterUtils;
  * The class ApdexSummaryConsumer provides a consumer that calculates Apdex for
  * each sample name.
  * </p>
- * 
+ *
  * <p>
  * T and F thresholds for each sample is defined by the thresholds selector
  * field.
  * </p>
- * 
+ *
  * @since 3.0
  */
 public class ApdexSummaryConsumer extends
@@ -70,7 +70,7 @@ public class ApdexSummaryConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
      * (org.apache.jmeter.report.core.Sample)
@@ -82,7 +82,7 @@ public class ApdexSummaryConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#updateData
      * (org.apache.jmeter.report.processor.AbstractSummaryConsumer.SummaryInfo,
@@ -148,7 +148,7 @@ public class ApdexSummaryConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
      * ()

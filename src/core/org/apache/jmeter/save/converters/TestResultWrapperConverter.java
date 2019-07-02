@@ -76,7 +76,7 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
      * Read test results from JTL files and pass them to the visualiser directly.
      * If the ResultCollector helper object is defined, then pass the samples to that
      * rather than adding them to the test result wrapper.
-     * 
+     *
      * @return the test result wrapper (may be empty)
      *
      * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,

@@ -32,7 +32,7 @@ public interface CookieHandler {
      * @param cookieManager CookieManager on which cookies are added
      * @param checkCookies boolean to indicate if cookies must be validated against spec
      * @param cookieHeader String cookie Header
-     * @param url URL 
+     * @param url URL
      */
     void addCookieFromHeader(CookieManager cookieManager, boolean checkCookies,
             String cookieHeader, URL url);
@@ -53,7 +53,7 @@ public interface CookieHandler {
      * @return Cookie default policy name
      */
     String getDefaultPolicy();
-    
+
     /**
      * @return Supported cookie policies
      */

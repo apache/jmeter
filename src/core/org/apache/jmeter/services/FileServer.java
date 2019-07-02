@@ -67,7 +67,7 @@ public class FileServer {
     /** Default base prefix: {@value} */
     private static final String BASE_PREFIX_DEFAULT = "~/"; // $NON-NLS-1$
 
-    private static final String BASE_PREFIX = 
+    private static final String BASE_PREFIX =
         JMeterUtils.getPropDefault("jmeter.save.saveservice.base_prefix", // $NON-NLS-1$
                 BASE_PREFIX_DEFAULT);
 
@@ -106,7 +106,7 @@ public class FileServer {
      * Sets the current base directory for relative file names from the provided path.
      * If the path does not refer to an existing directory, then its parent is used.
      * Normally the provided path is a file, so using the parent directory is appropriate.
-     * 
+     *
      * @param basedir the path to set, or {@code null} if the GUI is being cleared
      * @throws IllegalStateException if files are still open
      */
@@ -126,7 +126,7 @@ public class FileServer {
      * Sets the current base directory for relative file names from the provided script file.
      * The parameter is assumed to be the path to a JMX file, so the base directory is derived
      * from its parent.
-     * 
+     *
      * @param scriptPath the path of the script file; must be not be {@code null}
      * @throws IllegalStateException if files are still open
      * @throws IllegalArgumentException if scriptPath parameter is null
@@ -142,7 +142,7 @@ public class FileServer {
 
     /**
      * Sets the current base directory for relative file names.
-     * 
+     *
      * @param jmxBase the path of the script file base directory, cannot be null
      * @throws IllegalStateException if files are still open
      * @throws IllegalArgumentException if {@code basepath} is null
@@ -161,7 +161,7 @@ public class FileServer {
      * <p>
      * Caller must ensure that access to the files map is single-threaded as
      * there is a window between checking the files Map and clearing it.
-     * 
+     *
      * @throws IllegalStateException if there are any entries still in use
      */
     private void checkForOpenFiles() throws IllegalStateException {
@@ -182,7 +182,7 @@ public class FileServer {
     /**
      * Calculates the relative path from DEFAULT_BASE to the current base,
      * which must be the same as or a child of the default.
-     * 
+     *
      * @return the relative path, or {@code "."} if the path cannot be determined
      */
     public synchronized File getBaseDirRelative() {
@@ -190,7 +190,7 @@ public class FileServer {
         File parent = new File(DEFAULT_BASE).getAbsoluteFile();
         File f = base.getAbsoluteFile();
         ArrayStack l = new ArrayStack();
-        while (f != null) { 
+        while (f != null) {
             if (f.equals(parent)){
                 if (l.isEmpty()){
                     break;
@@ -202,7 +202,7 @@ public class FileServer {
                 return rel;
             }
             l.push(f.getName());
-            f = f.getParentFile(); 
+            f = f.getParentFile();
         }
         return new File(".");
     }
@@ -332,7 +332,7 @@ public class FileServer {
      * @return String containing the next line in the file (null if EOF reached and not recycle)
      * @throws IOException when reading of the file fails, or the file was not reserved properly
      */
-    public synchronized String readLine(String filename, boolean recycle, 
+    public synchronized String readLine(String filename, boolean recycle,
             boolean ignoreFirstLine) throws IOException {
         FileEntry fileEntry = files.get(filename);
         if (fileEntry != null) {
@@ -360,7 +360,7 @@ public class FileServer {
     }
 
     /**
-     * 
+     *
      * @param alias the file name or alias
      * @param recycle whether the file should be re-started on EOF
      * @param ignoreFirstLine whether the file contains a file header which will be ignored
@@ -535,7 +535,7 @@ public class FileServer {
         private String headerLine;
         private Throwable exception;
         private final File file;
-        private Closeable inputOutputObject; 
+        private Closeable inputOutputObject;
         private final String charSetEncoding;
 
         FileEntry(File f, Closeable o, String e) {
@@ -544,13 +544,13 @@ public class FileServer {
             charSetEncoding = e;
         }
     }
-    
+
     /**
      * Resolve a file name that may be relative to the base directory. If the
      * name begins with the value of the JMeter property
      * "jmeter.save.saveservice.base_prefix" - default "~/" - then the name is
      * assumed to be relative to the basename.
-     * 
+     *
      * @param relativeName
      *            filename that should be checked for
      *            <code>jmeter.save.saveservice.base_prefix</code>

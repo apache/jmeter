@@ -20,7 +20,7 @@ package org.apache.jmeter.report.core;
 /**
  * The interface SamplePredicate represents a predicate to apply to a sample. It
  * can be used in filtering decision.
- * 
+ *
  * @since 3.0
  */
 public interface SamplePredicate {

@@ -57,8 +57,8 @@ public class HTTPSamplerBaseConverter extends TestElementConverter {
     /**
      * Override TestElementConverter; convert HTTPSamplerBase to merge
      * the two means of providing file names into a single list.
-     * 
-     * {@inheritDoc} 
+     *
+     * {@inheritDoc}
      */
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {

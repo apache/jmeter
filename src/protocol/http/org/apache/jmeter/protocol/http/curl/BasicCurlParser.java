@@ -34,7 +34,7 @@ import org.apache.commons.cli.avalon.CLOptionDescriptor;
  * -H
  * --compressed
  * --data POST with Body data
- * 
+ *
  * @since 5.1
  */
 public class BasicCurlParser {
@@ -42,7 +42,7 @@ public class BasicCurlParser {
     private static final int COMPRESSED_OPT      = 'c';// $NON-NLS-1$
     private static final int HEADER_OPT      = 'H';// $NON-NLS-1$
     private static final int DATA_OPT      = 'd';// $NON-NLS-1$
-    
+
     public static final class Request {
         private boolean compressed;
         private String url;
@@ -66,7 +66,7 @@ public class BasicCurlParser {
         public void setCompressed(boolean compressed) {
             this.compressed = compressed;
         }
-        
+
         public void addHeader(String name, String value) {
             headers.put(name, value);
         }
@@ -144,11 +144,11 @@ public class BasicCurlParser {
             D_METHOD_OPT,
             D_DATA_OPT
     };
-    
+
     public BasicCurlParser() {
         super();
     }
-    
+
     public Request parse(String commandLine) {
         String[] args = translateCommandline(commandLine);
         CLArgsParser parser = new CLArgsParser(args, OPTIONS);
@@ -185,7 +185,7 @@ public class BasicCurlParser {
             throw new IllegalArgumentException("Unexpected format for command line:"+commandLine+", error:"+error);
         }
     }
-    
+
     /**
      * Crack a command line.
      * @param toProcess the command line to process.

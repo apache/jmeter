@@ -271,7 +271,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     protected void stopTableEditing() {
         GuiUtils.stopTableEditing(table);
     }
-    
+
     /**
      * Remove the currently selected argument from the table.
      */

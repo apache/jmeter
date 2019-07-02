@@ -38,7 +38,7 @@ public interface TestElement extends Cloneable {
     // N.B. Comments originally only applied to Test Plans, hence the name - which can now not be easily changed
 
     void addTestElement(TestElement child);
-    
+
     /**
      * This method should clear any test element properties that are merged
      * by {@link #addTestElement(TestElement)}.
@@ -76,7 +76,7 @@ public interface TestElement extends Cloneable {
 
     /**
      * Returns true or false whether the element is the running version.
-     * 
+     *
      * @return <code>true</code> if the element is the running version
      */
     boolean isRunningVersion();
@@ -152,7 +152,7 @@ public interface TestElement extends Cloneable {
      * @return the value of the property
      */
     int getPropertyAsInt(String key);
-    
+
     /**
      * Return a property as an int value or a default value if no property
      * could be found.

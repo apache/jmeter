@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -32,7 +32,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.junit.Test;
 
 // Extends JMeterTest case because it needs access to JMeter properties
-public class TestSampleSaveConfiguration extends JMeterTestCase {    
+public class TestSampleSaveConfiguration extends JMeterTestCase {
 
     @Test
     public void testClone() throws Exception {
@@ -54,21 +54,21 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertTrue(a.equals(cloneA));
         assertTrue(cloneA.equals(a));
         assertEquals(a.hashCode(), cloneA.hashCode());
-        
+
         // Change the original
         a.setUrl(true);
         assertFalse(a.equals(cloneA));
         assertFalse(cloneA.equals(a));
         assertFalse(a.hashCode() == cloneA.hashCode());
-        
+
         // Change the original back again
         a.setUrl(false);
         assertEquals(a, cloneA);
         assertTrue(a.equals(cloneA));
         assertTrue(cloneA.equals(a));
-        assertEquals(a.hashCode(), cloneA.hashCode());        
+        assertEquals(a.hashCode(), cloneA.hashCode());
     }
-    
+
     @Test
     public void testEqualsAndHashCode() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration();
@@ -83,7 +83,7 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         b.setDefaultDelimiter();
         b.setDefaultTimeStampFormat();
         b.setDataType(true);
-        
+
         // a and b should be equal
         assertEquals(a, b);
         assertTrue(a.equals(b));
@@ -93,7 +93,7 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertPrimitiveEquals(a.saveAssertions(), b.saveAssertions());
         assertEquals(a.getDelimiter(), b.getDelimiter());
         assertPrimitiveEquals(a.saveDataType(), b.saveDataType());
-        
+
         a.setAssertions(false);
         // a and b should not be equal
         assertFalse(a.equals(b));

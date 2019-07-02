@@ -95,7 +95,7 @@ public class SplitFunction extends AbstractFunction {
         String[] parts = JOrphanUtils.split(stringToSplit, splitString, "?");// $NON-NLS-1$
 
         vars.put(varNamePrefix, stringToSplit);
-        vars.put(varNamePrefix + "_n", Integer.toString(parts.length));// $NON-NLS-1$ 
+        vars.put(varNamePrefix + "_n", Integer.toString(parts.length));// $NON-NLS-1$
         for (int i = 1; i <= parts.length; i++) {
             if (log.isDebugEnabled()){
                 log.debug(parts[i-1]);

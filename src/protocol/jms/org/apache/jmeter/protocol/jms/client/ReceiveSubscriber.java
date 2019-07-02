@@ -108,13 +108,13 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * @throws NamingException
      *             when lookup of context or destination fails
      */
-    public ReceiveSubscriber(boolean useProps, 
+    public ReceiveSubscriber(boolean useProps,
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
-            String durableSubscriptionId, String clientId, String jmsSelector, boolean useAuth, 
+            String durableSubscriptionId, String clientId, String jmsSelector, boolean useAuth,
             String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
-        this(0, useProps, 
+        this(0, useProps,
                 initialContextFactory, providerUrl, connfactory, destinationName,
-                durableSubscriptionId, clientId, jmsSelector, useAuth, 
+                durableSubscriptionId, clientId, jmsSelector, useAuth,
                 securityPrincipal, securityCredentials, false);
     }
 
@@ -163,17 +163,17 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * @throws NamingException
      *             when lookup of context or destination fails
      */
-    public ReceiveSubscriber(int queueSize, boolean useProps, 
+    public ReceiveSubscriber(int queueSize, boolean useProps,
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
-            String durableSubscriptionId, String clientId, String jmsSelector, boolean useAuth, 
+            String durableSubscriptionId, String clientId, String jmsSelector, boolean useAuth,
             String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
-        this(queueSize,  useProps, 
+        this(queueSize,  useProps,
              initialContextFactory, providerUrl, connfactory, destinationName,
-             durableSubscriptionId, clientId, jmsSelector, useAuth, 
+             durableSubscriptionId, clientId, jmsSelector, useAuth,
              securityPrincipal,  securityCredentials, true);
     }
-    
-    
+
+
     /**
      * Constructor takes the necessary JNDI related parameters to create a
      * connection and create an onMessageListener to prepare to begin receiving
@@ -222,13 +222,13 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * @throws NamingException
      *             when lookup of context or destination fails
      */
-    private ReceiveSubscriber(int queueSize, boolean useProps, 
+    private ReceiveSubscriber(int queueSize, boolean useProps,
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
-            String durableSubscriptionId, String clientId, String jmsSelector, boolean useAuth, 
+            String durableSubscriptionId, String clientId, String jmsSelector, boolean useAuth,
             String securityPrincipal, String securityCredentials, boolean useMessageListener) throws NamingException, JMSException {
         boolean initSuccess = false;
         try{
-            Context ctx = InitialContextFactory.getContext(useProps, 
+            Context ctx = InitialContextFactory.getContext(useProps,
                     initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
             connection = Utils.getConnection(ctx, connfactory);
             if(!isEmpty(clientId)) {
@@ -256,22 +256,22 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             }
         }
     }
-    
+
     /**
      * Return a simple MessageConsumer or a TopicSubscriber (as a durable subscription)
      * @param session
      *                 JMS session
      * @param destination
      *                 JMS destination, can be either topic or queue
-     * @param durableSubscriptionId 
-     *                 If neither empty nor null, this means that a durable 
+     * @param durableSubscriptionId
+     *                 If neither empty nor null, this means that a durable
      *                 subscription will be used
      * @param jmsSelector JMS Selector
      * @return the message consumer
      * @throws JMSException
      */
-    private MessageConsumer createSubscriber(Session session, 
-            Destination destination, String durableSubscriptionId, 
+    private MessageConsumer createSubscriber(Session session,
+            Destination destination, String durableSubscriptionId,
             String jmsSelector) throws JMSException {
         if (isEmpty(durableSubscriptionId)) {
             if(isEmpty(jmsSelector)) {
@@ -281,9 +281,9 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             }
         } else {
             if(isEmpty(jmsSelector)) {
-                return session.createDurableSubscriber((Topic) destination, durableSubscriptionId); 
+                return session.createDurableSubscriber((Topic) destination, durableSubscriptionId);
             } else {
-                return session.createDurableSubscriber((Topic) destination, durableSubscriptionId, jmsSelector, false);                 
+                return session.createDurableSubscriber((Topic) destination, durableSubscriptionId, jmsSelector, false);
             }
         }
     }
@@ -312,10 +312,10 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * Get the next message or <code>null</code>.
      * <p>
      * Never blocks for longer than the specified timeout.
-     * 
+     *
      * @param timeout in milliseconds
      * @return the next message or <code>null</code>
-     * 
+     *
      * @throws JMSException when receiving the message fails
      */
     public Message getMessage(long timeout) throws JMSException {
@@ -323,7 +323,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
         if (queue != null) { // Using onMessage Listener
             try {
                 if (timeout < 10) { // Allow for short/negative times
-                    message = queue.poll();                    
+                    message = queue.poll();
                 } else {
                     message = queue.poll(timeout, TimeUnit.MILLISECONDS);
                 }
@@ -334,14 +334,14 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             return message;
         }
         if (timeout < 10) { // Allow for short/negative times
-            message = subscriber.receiveNoWait();                
+            message = subscriber.receiveNoWait();
         } else {
             message = subscriber.receive(timeout);
         }
         return message;
     }
     /**
-     * close() will stop the connection first. 
+     * close() will stop the connection first.
      * Then it closes the subscriber, session and connection.
      */
     @Override
@@ -370,11 +370,11 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             log.warn("Could not add message to queue");
         }
     }
-    
-    
+
+
     /**
      * Checks whether string is empty
-     * 
+     *
      * @param s1
      * @return True if input is null, an empty string, or a white space-only string
      */

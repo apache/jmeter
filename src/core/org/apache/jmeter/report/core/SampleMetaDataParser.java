@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 /**
  * Simple parser to get a {@link SampleMetadata} instance<br>
- * 
+ *
  * @since 3.0
  */
 public class SampleMetaDataParser {

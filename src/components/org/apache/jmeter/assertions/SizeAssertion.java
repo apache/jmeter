@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -30,7 +30,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Checks if the results of a Sample matches a particular size.
- * 
+ *
  */
 public class SizeAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
 
@@ -53,7 +53,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     private static final String SIZE_KEY = "SizeAssertion.size"; // $NON-NLS-1$
 
     private static final String OPERATOR_KEY = "SizeAssertion.operator"; // $NON-NLS-1$
-    
+
     private static final String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
 
     private static final String RESPONSE_NETWORK_SIZE = "SizeAssertion.response_network_size"; // $NON-NLS-1$
@@ -67,7 +67,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     private static final String RESPONSE_MESSAGE = "SizeAssertion.response_message"; // $NON-NLS-1$
 
     /**
-     * Returns the result of the Assertion. 
+     * Returns the result of the Assertion.
      * Here it checks the Sample responseData length.
      */
     @Override
@@ -134,7 +134,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     }
 
     /**
-     * Returns the operator to be asserted. 
+     * Returns the operator to be asserted.
      * <dl>
      * <dt>EQUAL</dt><dd>1</dd>
      * <dt>NOTEQUAL</dt><dd>2</dd>
@@ -152,8 +152,8 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
 
     /**
      * Set the size that shall be asserted.
-     * 
-     * @param size a number of bytes. 
+     *
+     * @param size a number of bytes.
      */
     public void setAllowedSize(String size) {
             setProperty(SIZE_KEY, size);
@@ -170,10 +170,10 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     /**
      * Compares the size of a return result to the set allowed size using a
      * logical comparator set in setLogicalComparator().
-     * 
+     *
      * Possible values are: equal, not equal, greater than, less than, greater
      * than equal, less than equal.
-     * 
+     *
      */
     private String compareSize(long resultSize) {
         String comparatorErrorMessage;
@@ -212,7 +212,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         }
         return result ? "" : comparatorErrorMessage;
     }
-    
+
     private void setTestField(String testField) {
         setProperty(TEST_FIELD, testField);
     }
@@ -220,19 +220,19 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     public void setTestFieldNetworkSize(){
         setTestField(RESPONSE_NETWORK_SIZE);
     }
-    
+
     public void setTestFieldResponseHeaders(){
         setTestField(RESPONSE_HEADERS);
     }
-    
+
     public void setTestFieldResponseBody(){
         setTestField(RESPONSE_BODY);
     }
-    
+
     public void setTestFieldResponseCode(){
         setTestField(RESPONSE_CODE);
     }
-    
+
     public void setTestFieldResponseMessage(){
         setTestField(RESPONSE_MESSAGE);
     }
@@ -248,7 +248,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     public boolean isTestFieldResponseHeaders(){
         return RESPONSE_HEADERS.equals(getTestField());
     }
-    
+
     public boolean isTestFieldResponseBody(){
         return RESPONSE_BODY.equals(getTestField());
     }

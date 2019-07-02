@@ -134,7 +134,7 @@ public class DistributedRunner {
                     log.warn(HOST_NOT_FOUND_MESSAGE, address);
                 }
             } catch (IllegalStateException | JMeterEngineException e) { // NOSONAR already reported to user
-                JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$  
+                JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
             }
         }
         println("Remote engines have been started");

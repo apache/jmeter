@@ -78,11 +78,11 @@ import freemarker.template.TemplateException;
 public class SelectTemplatesDialog extends JDialog implements ChangeListener, ActionListener, HyperlinkListener { // NOSONAR Ignore inheritence warning
 
     private static final long serialVersionUID = 1;
-    
+
     // Minimal dimensions for dialog box
     private static final int MINIMAL_BOX_WIDTH = 500;
     private static final int MINIMAL_BOX_HEIGHT = 300;
-    
+
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
 
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
@@ -98,13 +98,13 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
     private final JButton applyTemplateButton = new JButton();
 
     private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
-    
+
     private final JButton previous = new JButton(JMeterUtils.getResString("previous")); //$NON-NLS-1$
-    
+
     private final JButton validateButton = new JButton();
-    
+
     private Map<String, JLabeledTextField> parametersTextFields = new LinkedHashMap<>();
-    
+
     private JPanel actionBtnBar = new JPanel(new FlowLayout());
 
     public SelectTemplatesDialog() {
@@ -146,10 +146,10 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
         return rootPane;
     }
-    
+
     /**
-     * Check if existing Test Plan has been modified and ask user 
-     * what he wants to do if test plan is dirty. 
+     * Check if existing Test Plan has been modified and ask user
+     * what he wants to do if test plan is dirty.
      * Also ask user for parameters in case of customizable templates.
      * @param actionEvent {@link ActionEvent}
      */
@@ -161,7 +161,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
             return;
         }
         templateList.setValues(TemplateManager.getInstance().getTemplateNames()); // reload the templates before loading
-        
+
         final boolean isTestPlan = template.isTestPlan();
         // Check if the user wants to drop any changes
         if (isTestPlan && !checkDirty(actionEvent)) {
@@ -169,7 +169,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         }
         ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.STOP_THREAD));
         final File parent = template.getParent();
-        File fileToCopy = parent != null 
+        File fileToCopy = parent != null
               ? new File(parent, template.getFileName())
               : new File(JMeterUtils.getJMeterHome(), template.getFileName());
         replaceTemplateParametersAndLoad(actionEvent, template, isTestPlan, fileToCopy);
@@ -210,7 +210,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
     /**
      * @param actionEvent {@link ActionEvent}
-     * @return true if plan is not dirty or has been saved 
+     * @return true if plan is not dirty or has been saved
      */
     private boolean checkDirty(final ActionEvent actionEvent) {
         ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.CHECK_DIRTY));
@@ -232,7 +232,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         }
         return true;
     }
-    
+
     private Map<String, String> getUserParameters(){
         Map<String, String> userParameters = new LinkedHashMap<>();
         for (Entry<String, JLabeledTextField> entry : parametersTextFields.entrySet()) {
@@ -253,7 +253,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         cancelButton.addActionListener(this);
         previous.addActionListener(this);
         validateButton.addActionListener(this);
-        
+
         // allow to reset the JDialog if the user click on the close button while
         // it was displaying templates parameters
         this.addWindowListener(new WindowAdapter(){
@@ -270,10 +270,10 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         ComponentUtil.centerComponentInWindow(this, 50); // center position and 50% of screen size
         populateTemplatePage();
     }
-    
+
     private JPanel templateSelectionPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        
+
         JScrollPane scroller = new JScrollPane();
         scroller.setViewportView(helpDoc);
         JPanel templateBar = new JPanel(new BorderLayout());
@@ -285,11 +285,11 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         // Bottom buttons bar
         actionBtnBar.add(applyTemplateButton);
         actionBtnBar.add(cancelButton);
-        
+
         panel.add(templateBar, BorderLayout.NORTH);
         panel.add(scroller, BorderLayout.CENTER);
         panel.add(actionBtnBar, BorderLayout.SOUTH);
-        
+
         return panel;
     }
 
@@ -314,28 +314,28 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
             }
         } else if (source == reloadTemplateButton) {
             resetJDialog(true);
-        } else if (source == previous) { 
+        } else if (source == previous) {
             resetJDialog(false);
         } else if (source == validateButton) {
             checkDirtyAndLoad(e);
             resetJDialog(false);
         }
     }
-    
+
     /**
-     * 
+     *
      * @param template {@link Template}
-     * @return true if template has not parameter 
+     * @return true if template has not parameter
      */
     private boolean hasParameters(Template template) {
         return !(template.getParameters() == null || template.getParameters().isEmpty());
     }
-    
+
     @Override
     public void stateChanged(ChangeEvent event) {
         populateTemplatePage();
     }
-    
+
     private void resetJDialog(boolean reloadTemplates) {
         if(reloadTemplates) {
             TemplateManager.getInstance().reset();
@@ -349,10 +349,10 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         String selectedTemplate = templateList.getText();
         Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);
         helpDoc.setText(template.getDescription());
-        applyTemplateButton.setText(template.isTestPlan() 
+        applyTemplateButton.setText(template.isTestPlan()
                 ? JMeterUtils.getResString("template_create_from")
                 : JMeterUtils.getResString("template_merge_from") );
-        validateButton.setText(template.isTestPlan() 
+        validateButton.setText(template.isTestPlan()
                 ? JMeterUtils.getResString("template_create_from")
                 : JMeterUtils.getResString("template_merge_from") );
     }
@@ -363,19 +363,19 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
      */
     private JPanel configureParametersPanel(Map<String, String> parameters) {
         JPanel panel = new JPanel(new BorderLayout());
-        
-        JPanel northPanel = new JPanel(new FlowLayout()); 
+
+        JPanel northPanel = new JPanel(new FlowLayout());
         JLabel label = new JLabel(JMeterUtils.getResString("template_fill_parameters"));
         label.setPreferredSize(new Dimension(150,35));
         northPanel.add(label);
         panel.add(northPanel, BorderLayout.NORTH);
-        
+
         parametersTextFields.clear();
-        
+
         GridBagConstraints gbc = new GridBagConstraints();
         initConstraints(gbc);
         int parameterCount = 0;
-        
+
         JPanel gridbagpanel = new JPanel(new GridBagLayout());
         for (Entry<String, String> entry : parameters.entrySet()) {
             String key = entry.getKey();
@@ -391,19 +391,19 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
             gridbagpanel.add(listedParamLabel.get(1), gbc.clone());
             gbc.gridx = 0;
         }
-        
+
         JPanel actionBtnBarParameterPanel = new JPanel(new FlowLayout());
         actionBtnBarParameterPanel.add(validateButton);
         actionBtnBarParameterPanel.add(cancelButton);
         actionBtnBarParameterPanel.add(previous);
-        
+
         JScrollPane scroller = new JScrollPane(gridbagpanel);
         panel.add(scroller, BorderLayout.CENTER);
         panel.add(actionBtnBarParameterPanel, BorderLayout.SOUTH);
-        
+
         return panel;
     }
-    
+
     private void initConstraints(GridBagConstraints gbc) {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0,0,5,0);
@@ -423,7 +423,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
                 java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
             } catch (Exception ex) {
                 log.error("Error opening URL in browser: {}", e.getURL());
-            } 
+            }
         }
     }
 }

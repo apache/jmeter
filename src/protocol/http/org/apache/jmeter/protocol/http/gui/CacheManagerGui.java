@@ -125,7 +125,7 @@ public class CacheManagerGui extends AbstractConfigGui implements ActionListener
         northPanel.add(clearEachIteration);
         northPanel.add(controlledByThreadGroup);
         northPanel.add(useExpires);
-        
+
         JLabel label = new JLabel(JMeterUtils.getResString("cache_manager_size")); //$NON-NLS-1$
 
         maxCacheSize = new JTextField(20);

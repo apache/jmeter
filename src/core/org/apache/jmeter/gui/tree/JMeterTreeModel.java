@@ -98,7 +98,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
     /**
      * Adds the sub tree at the given node. Returns a boolean indicating whether
      * the added sub tree was a full test plan.
-     * 
+     *
      * @param subTree
      *            The {@link HashTree} which is to be inserted into
      *            <code>current</code>
@@ -209,7 +209,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
 
     /**
      * Get the current sub tree for a {@link JMeterTreeNode}
-     * @param node The {@link JMeterTreeNode} from which the sub tree is to be taken 
+     * @param node The {@link JMeterTreeNode} from which the sub tree is to be taken
      * @return newly copied sub tree
      */
     public HashTree getCurrentSubTree(JMeterTreeNode node) {
@@ -316,7 +316,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
      *  <li>Mirror Server</li>
      *  <li>Property Display</li>
      * </ul>
-     * @param node 
+     * @param node
      */
     private boolean isNonTestElement(Object node) {
         JMeterTreeNode treeNode = new JMeterTreeNode((TestElement) node, null);

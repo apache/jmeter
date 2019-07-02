@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * (samplers/controllers, etc) under named lock.
  * <p>
  * In a programming world - this is equivalent of :
- * 
+ *
  * <pre>
  * try {
  *          named_lock.lock();
@@ -43,9 +43,9 @@ import org.slf4j.LoggerFactory;
  *          named_lock.unlock();
  * }
  * </pre>
- * 
+ *
  * In JMeter you may have :
- * 
+ *
  * <pre>
  * Thread-Group (set to loop a number of times or indefinitely,
  *    ... Samplers ... (e.g. Counter )
@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
  *       ...
  *    ... Other Controllers /Samplers }
  * </pre>
- * 
+ *
  * @since 2.12
  */
 public class CriticalSectionController extends GenericController implements
@@ -96,9 +96,9 @@ public class CriticalSectionController extends GenericController implements
     }
 
     /**
-     * If lock exists returns it, otherwise creates one, puts it in LOCK_MAP 
+     * If lock exists returns it, otherwise creates one, puts it in LOCK_MAP
      * then returns it
-     * 
+     *
      * @return {@link ReentrantLock}
      */
     private ReentrantLock getOrCreateLock() {
@@ -149,7 +149,7 @@ public class CriticalSectionController extends GenericController implements
 
     /**
      * Called after execution of last child of the controller We release lock
-     * 
+     *
      * @see org.apache.jmeter.control.GenericController#reInitialize()
      */
     @Override

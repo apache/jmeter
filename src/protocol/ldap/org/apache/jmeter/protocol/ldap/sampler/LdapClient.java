@@ -50,7 +50,7 @@ public class LdapClient {
 
     /**
      * Connect to server.
-     * 
+     *
      * @param host
      *            name of the ldap server
      * @param port

@@ -30,7 +30,7 @@ public interface SampleSender {
 
     /**
      * The test ended.
-     * 
+     *
      * This will be called from the engine thread.
      *
      * @param host
@@ -40,7 +40,7 @@ public interface SampleSender {
 
     /**
      * A sample occurred.
-     * 
+     *
      * This method will be called from the sampler thread.
      *
      * @param e

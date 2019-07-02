@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -64,14 +64,14 @@ public class TestSamplerNameFunction extends JMeterTestCase {
         value = variable.execute(result, sampler);
         assertEquals("UnitTestSampler", value);
     }
-    
+
     @Test
     public void testSamplerNameWithVar() throws Exception {
         variable.setParameters(params);
         TestSampler sampler = new TestSampler("UnitTestSampler");
         variable.setParameters(FunctionTestHelper.makeParams("var1", null, null));
         value = variable.execute(result, sampler);
-        
+
         assertEquals("UnitTestSampler", value);
         assertEquals("UnitTestSampler", vars.get("var1"));
     }

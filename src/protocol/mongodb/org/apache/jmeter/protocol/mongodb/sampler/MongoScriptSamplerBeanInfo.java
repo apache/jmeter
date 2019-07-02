@@ -57,7 +57,7 @@ public class MongoScriptSamplerBeanInfo
         p = property("source");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-       
+
         p = property("script", TypeEditor.TextAreaEditor);
         p.setValue(NOT_UNDEFINED, Boolean.FALSE);
         p.setValue(DEFAULT, "");

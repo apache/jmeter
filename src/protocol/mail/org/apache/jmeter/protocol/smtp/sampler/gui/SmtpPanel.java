@@ -520,9 +520,9 @@ public class SmtpPanel extends JPanel {
     }
 
     public void setMailReplyTo(String replyTo) {
-        tfMailReplyTo.setText(replyTo);        
+        tfMailReplyTo.setText(replyTo);
     }
-    
+
 
     /**
      * Main method of class, builds all gui-components for SMTP-sampler.
@@ -562,7 +562,7 @@ public class SmtpPanel extends JPanel {
         taMessage = new JTextArea(5, 20);
 
         cbPlainBody = new JCheckBox(JMeterUtils.getResString("smtp_plainbody")); // $NON-NLS-1$
-        
+
         cbSuppressSubject = new JCheckBox(JMeterUtils.getResString("smtp_suppresssubj")); // $NON-NLS-1$
         cbSuppressSubject.addChangeListener(this::emptySubjectActionPerformed);
 
@@ -603,7 +603,7 @@ public class SmtpPanel extends JPanel {
         JPanel panelServerSettings = new VerticalPanel();
         panelServerSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_server_settings"))); // $NON-NLS-1$
-        
+
         JPanel panelMailServer = new JPanel(new BorderLayout(5, 0));
         panelMailServer.add(jlMailServer, BorderLayout.WEST);
         panelMailServer.add(tfMailServer, BorderLayout.CENTER);
@@ -611,21 +611,21 @@ public class SmtpPanel extends JPanel {
         panelMailServerPort.add(jlMailServerPort, BorderLayout.WEST);
         panelMailServerPort.add(tfMailServerPort, BorderLayout.CENTER);
         panelMailServerPort.add(jlDutPortStandard, BorderLayout.EAST);
-        
+
         panelServerSettings.add(panelMailServer, BorderLayout.CENTER);
         panelServerSettings.add(panelMailServerPort, BorderLayout.SOUTH);
 
         JPanel panelServerTimeoutsSettings = new VerticalPanel();
         panelServerTimeoutsSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_server_timeouts_settings"))); // $NON-NLS-1$
-        
+
         JPanel panelMailServerConnectionTimeout = new JPanel(new BorderLayout(5, 0));
         panelMailServerConnectionTimeout.add(jlMailServerConnectionTimeout, BorderLayout.WEST);
         panelMailServerConnectionTimeout.add(tfMailServerConnectionTimeout, BorderLayout.CENTER);
         JPanel panelMailServerTimeout = new JPanel(new BorderLayout(5, 0));
         panelMailServerTimeout.add(jlMailServerTimeout, BorderLayout.WEST);
         panelMailServerTimeout.add(tfMailServerTimeout, BorderLayout.CENTER);
-        
+
         panelServerTimeoutsSettings.add(panelMailServerConnectionTimeout, BorderLayout.CENTER);
         panelServerTimeoutsSettings.add(panelMailServerTimeout, BorderLayout.SOUTH);
 
@@ -812,7 +812,7 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panelMessageSettings.add(taMessage, gridBagConstraints);
-        
+
         cbPlainBody.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbPlainBody.setMargin(new java.awt.Insets(0, 0, 0, 0));
         gridBagConstraints.gridx = 2;
@@ -1079,7 +1079,7 @@ public class SmtpPanel extends JPanel {
             validate();
         }
     }
-    
+
     private void emptySubjectActionPerformed(ChangeEvent evt) { // NOSONAR This method is used through lambda
         final Object source = evt.getSource();
         if(source instanceof JCheckBox){

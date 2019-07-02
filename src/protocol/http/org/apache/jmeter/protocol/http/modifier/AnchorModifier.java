@@ -138,7 +138,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
     public void addConfigElement(ConfigElement config) {
     }
 
-    private void addFormUrls(Document html, HTTPSampleResult result, HTTPSamplerBase config, 
+    private void addFormUrls(Document html, HTTPSampleResult result, HTTPSamplerBase config,
             List<HTTPSamplerBase> potentialLinks) {
         NodeList rootList = html.getChildNodes();
         List<HTTPSamplerBase> urls = new LinkedList<>();
@@ -157,7 +157,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         }
     }
 
-    private void addAnchorUrls(Document html, HTTPSampleResult result, HTTPSamplerBase config, 
+    private void addAnchorUrls(Document html, HTTPSampleResult result, HTTPSamplerBase config,
             List<HTTPSamplerBase> potentialLinks) {
         String base = "";
         NodeList baseList = html.getElementsByTagName("base"); // $NON-NLS-1$

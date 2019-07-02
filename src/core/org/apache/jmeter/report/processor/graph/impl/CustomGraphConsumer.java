@@ -47,38 +47,38 @@ import org.apache.jmeter.save.CSVSaveService;
  */
 
 public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implements SampleConsumer{
-    
+
     public static final String RESULT_Y_AXIS = "Y_Axis"; //$NON-NLS-1$
     public static final String RESULT_X_AXIS = "X_Axis"; //$NON-NLS-1$
     public static final String RESULT_SAMPLE_VARIABLE_NAME = "sample_Metric_Name"; //$NON-NLS-1$
     public static final String RESULT_CONTENT_MESSAGE = "content_Message"; //$NON-NLS-1$
     public static final String REPORT_GENERATOR_PROPERTIES = "jmeter.reportgenerator.graph.customGraph.property"; //$NON-NLS-1$
 
-    private static final Set<String> NATIVE_VARIABLES = 
-            new HashSet<>(Arrays.asList(CSVSaveService.DATA_TYPE, 
-                    CSVSaveService.FAILURE_MESSAGE, CSVSaveService.LABEL, 
+    private static final Set<String> NATIVE_VARIABLES =
+            new HashSet<>(Arrays.asList(CSVSaveService.DATA_TYPE,
+                    CSVSaveService.FAILURE_MESSAGE, CSVSaveService.LABEL,
                     CSVSaveService.RESPONSE_CODE, CSVSaveService.RESPONSE_MESSAGE,
-                    CSVSaveService.SUCCESSFUL, CSVSaveService.THREAD_NAME, 
-                    CSVSaveService.TIME_STAMP, CSVSaveService.CSV_ELAPSED, 
+                    CSVSaveService.SUCCESSFUL, CSVSaveService.THREAD_NAME,
+                    CSVSaveService.TIME_STAMP, CSVSaveService.CSV_ELAPSED,
                     CSVSaveService.CSV_BYTES, CSVSaveService.CSV_SENT_BYTES,
-                    CSVSaveService.CSV_THREAD_COUNT1, CSVSaveService.CSV_THREAD_COUNT2, 
+                    CSVSaveService.CSV_THREAD_COUNT1, CSVSaveService.CSV_THREAD_COUNT2,
                     CSVSaveService.CSV_SAMPLE_COUNT, CSVSaveService.CSV_ERROR_COUNT,
                     CSVSaveService.CSV_URL, CSVSaveService.CSV_FILENAME,
                     CSVSaveService.CSV_LATENCY, CSVSaveService.CSV_CONNECT_TIME,
                     CSVSaveService.CSV_ENCODING, CSVSaveService.CSV_HOSTNAME,
                     CSVSaveService.CSV_IDLETIME));
-    
+
     private String yAxis;
     private String xAxis;
     private String contentMessage;
     private String sampleVariableName;
     private boolean isNativeSampleVariableName = false;
-    
+
     /**
      * Only used for junit tests.
-     * Indicates if the sampleVariableName 
+     * Indicates if the sampleVariableName
      * is native
-     * 
+     *
      * @return the nativeSampleVariableName
      */
     public boolean getIsNativeSampleVariableName() {
@@ -93,7 +93,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
     public String getYAxis() {
         return yAxis;
     }
-    
+
     /**
      * Gets the X Axis.
      *
@@ -112,7 +112,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
     public void setYAxis(String axis) {
         yAxis=axis;
     }
-    
+
     /**
      * Sets the xAxis.
      *
@@ -122,7 +122,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
     public void setXAxis(String axis) {
         xAxis=axis;
     }
-    
+
     /**
      * Sets the contentMessage.
      *
@@ -132,7 +132,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
     public void setContentMessage(String message) {
         contentMessage=message;
     }
-    
+
     /**
      * Gets the content message.
      *
@@ -141,7 +141,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
     public String getContentMessage() {
         return contentMessage;
     }
-    
+
     /**
      * Gets the sampleVariableName.
      *
@@ -150,7 +150,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
     public String getSampleVariableName() {
         return sampleVariableName;
     }
-    
+
     /**
      * Sets the sampleVariableName.
      * Sets the boolean isNativesSampleVariableName
@@ -160,10 +160,10 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
      */
     public void setSampleVariableName(String sampleVarName) {
         sampleVariableName = sampleVarName;
-        isNativeSampleVariableName = NATIVE_VARIABLES.contains(sampleVarName); 
+        isNativeSampleVariableName = NATIVE_VARIABLES.contains(sampleVarName);
     }
-    
-        
+
+
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(Long.valueOf(getGranularity())));
@@ -172,10 +172,10 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
         parentResult.setResult(RESULT_SAMPLE_VARIABLE_NAME, new ValueResultData(getSampleVariableName()));
         parentResult.setResult(RESULT_CONTENT_MESSAGE, new ValueResultData(getContentMessage()));
     }
-    
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #createTimeStampKeysSelector()
@@ -189,17 +189,17 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        
-        HashMap<String, GroupInfo> groupInfos = new HashMap<>(); 
+
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>();
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP,
                 new GroupInfo(
-                new MeanAggregatorFactory(), 
+                new MeanAggregatorFactory(),
                 new AbstractSeriesSelector() {
                     private final Iterable<String> values = Arrays.asList(sampleVariableName);
 

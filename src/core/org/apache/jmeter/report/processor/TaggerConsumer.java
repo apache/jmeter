@@ -30,7 +30,7 @@ import org.apache.jmeter.report.core.SampleMetadata;
  *
  * @param <TIndex>
  *            the generic type
- * 
+ *
  * @since 3.0
  */
 public class TaggerConsumer<TIndex> extends AbstractSampleConsumer {

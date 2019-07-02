@@ -55,9 +55,9 @@ public class MongoScriptRunner {
         db.requestStart();
         try {
             db.requestEnsureConnection();
-    
+
             Object result = db.eval(script);
-    
+
             if(log.isDebugEnabled()) {
                 log.debug("Result : " + result);
             }

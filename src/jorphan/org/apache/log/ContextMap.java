@@ -37,7 +37,7 @@ import java.util.Hashtable;
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @author Peter Donald
- * @deprecated Will be dropped in 3.3 
+ * @deprecated Will be dropped in 3.3
  */
 @Deprecated
 @SuppressWarnings({"unchecked","rawtypes"}) // will be dropped in 3.3
@@ -186,7 +186,7 @@ public final class ContextMap
         {
             return null;
         }
-            
+
         final Object result = m_map.get( key );
 
         if( null == result && null != m_parent )

@@ -69,7 +69,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     private static final String CUSTOM_MESSAGE = "Assertion.custom_message"; // $NON-NLS-1$
 
     /**
-     * Mask values for TEST_TYPE 
+     * Mask values for TEST_TYPE
      * they are mutually exclusive
      */
     private static final int MATCH = 1; // 1 << 0; // NOSONAR We want this comment
@@ -132,11 +132,11 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     public void setTestFieldResponseHeaders(){
         setTestField(RESPONSE_HEADERS);
     }
-    
+
     public void setTestFieldRequestHeaders() {
         setTestField(REQUEST_HEADERS);
     }
-    
+
     public void setTestFieldRequestData() {
         setTestField(REQUEST_DATA);
     }
@@ -144,11 +144,11 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     public void setCustomFailureMessage(String customFailureMessage) {
         setProperty(CUSTOM_MESSAGE, customFailureMessage);
     }
-    
+
     public String getCustomFailureMessage() {
         return getPropertyAsString(CUSTOM_MESSAGE);
     }
-    
+
     public boolean isTestFieldURL(){
         return SAMPLE_URL.equals(getTestField());
     }
@@ -176,11 +176,11 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     public boolean isTestFieldRequestHeaders(){
         return REQUEST_HEADERS.equals(getTestField());
     }
-    
+
     public boolean isTestFieldRequestData(){
         return REQUEST_DATA.equals(getTestField());
     }
-    
+
     private void setTestType(int testType) {
         setProperty(new IntegerProperty(TEST_TYPE, testType));
     }
@@ -238,7 +238,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     public boolean isNotType() {
         return (getTestType() & NOT) != 0;
     }
-    
+
     public boolean isOrType() {
         return (getTestType() & OR) != 0;
     }
@@ -266,7 +266,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     public void unsetNotType() {
         setTestType(getTestType() & ~NOT);
     }
-    
+
     public void setToOrType() {
         setTestType(getTestType() | OR);
     }
@@ -299,7 +299,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         String toCheck = getStringToCheck(response);
 
         result.setFailure(false);
-        result.setError(false); 
+        result.setError(false);
         boolean notTest = (NOT & getTestType()) > 0;
         boolean orTest = (OR & getTestType()) > 0;
         boolean contains = isContainsType(); // do it once outside loop

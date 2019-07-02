@@ -57,7 +57,7 @@ public class RandomVariableConfig extends ConfigTestElement
     private boolean perThread;
 
     private int range;
-    
+
     private long minimum;
 
     // This class is not cloned per thread, so this is shared
@@ -189,14 +189,14 @@ public class RandomVariableConfig extends ConfigTestElement
     public synchronized String getRandomSeed() {
         return randomSeed;
     }
-    
+
     private Random createRandom() {
         if (randomSeed.length()>0){
             Long seed = getRandomSeedAsLong();
             if(seed != null) {
                 return new Random(seed.longValue());
             }
-        } 
+        }
         return new Random();
     }
 

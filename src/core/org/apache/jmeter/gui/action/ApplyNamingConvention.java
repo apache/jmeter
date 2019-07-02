@@ -41,7 +41,7 @@ public class ApplyNamingConvention extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(ApplyNamingConvention.class);
 
     private static final Set<String> commands = new HashSet<>();
-    
+
 
     static {
         commands.add(ActionNames.APPLY_NAMING_CONVENTION);
@@ -80,7 +80,7 @@ public class ApplyNamingConvention extends AbstractAction {
      * @param guiPackage {@link GuiPackage}
      * @param currentNode Parent node of elements on which we apply naming policy
      */
-    private void applyNamingPolicyToCurrentNode(GuiPackage guiPackage, 
+    private void applyNamingPolicyToCurrentNode(GuiPackage guiPackage,
             JMeterTreeNode currentNode) {
         TreeNodeNamingPolicy namingPolicy = guiPackage.getNamingPolicy();
         guiPackage.updateCurrentNode();

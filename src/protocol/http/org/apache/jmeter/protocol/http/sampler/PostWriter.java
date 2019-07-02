@@ -415,7 +415,7 @@ public class PostWriter {
         InputStream in = new BufferedInputStream(new FileInputStream(filename));
         int read;
         boolean noException = false;
-        try { 
+        try {
             while ((read = in.read(buf)) > 0) {
                 out.write(buf, 0, read);
             }
@@ -434,7 +434,7 @@ public class PostWriter {
     /**
      * Writes form data in multipart format.
      */
-    private void writeFormMultipart(OutputStream out, String name, String value, String charSet, 
+    private void writeFormMultipart(OutputStream out, String name, String value, String charSet,
             boolean browserCompatibleMultipart)
         throws IOException {
         writeln(out, "Content-Disposition: form-data; name=\"" + name + "\""); // $NON-NLS-1$ // $NON-NLS-2$

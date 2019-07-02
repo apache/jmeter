@@ -49,13 +49,13 @@ public class TransactionController extends GenericController implements SampleLi
     static final String NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX = "Number of samples in transaction : ";
 
     private static final long serialVersionUID = 234L;
-    
+
     private static final String TRUE = Boolean.toString(true); // i.e. "true"
 
     private static final String GENERATE_PARENT_SAMPLE = "TransactionController.parent";// $NON-NLS-1$
 
     private static final String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
-    
+
     private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
 
     private static final boolean DEFAULT_VALUE_FOR_INCLUDE_TIMERS = true; // default true for compatibility
@@ -64,7 +64,7 @@ public class TransactionController extends GenericController implements SampleLi
      * Only used in parent Mode
      */
     private transient TransactionSampler transactionSampler;
-    
+
     /**
      * Only used in NON parent Mode
      */
@@ -74,12 +74,12 @@ public class TransactionController extends GenericController implements SampleLi
      * Only used in NON parent Mode
      */
     private transient SampleResult res;
-    
+
     /**
      * Only used in NON parent Mode
      */
     private transient int calls;
-    
+
     /**
      * Only used in NON parent Mode
      */
@@ -231,13 +231,13 @@ public class TransactionController extends GenericController implements SampleLi
 
         return returnValue;
     }
-    
+
     /**
      * @param res {@link SampleResult}
      * @return true if res is the ParentSampler transactions
      */
     public static boolean isFromTransactionController(SampleResult res) {
-        return res.getResponseMessage() != null && 
+        return res.getResponseMessage() != null &&
                 res.getResponseMessage().startsWith(
                         TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX);
     }
@@ -262,8 +262,8 @@ public class TransactionController extends GenericController implements SampleLi
             Sampler subSampler = transactionSampler.getSubSampler();
             // See Bug 56811
             // triggerEndOfLoop is called when error occurs to end Main Loop
-            // in this case normal workflow doesn't happen, so we need 
-            // to notify the childs of TransactionController and 
+            // in this case normal workflow doesn't happen, so we need
+            // to notify the childs of TransactionController and
             // update them with SubSamplerResult
             if(subSampler instanceof TransactionSampler) {
                 TransactionSampler tc = (TransactionSampler) subSampler;

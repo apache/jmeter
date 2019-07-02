@@ -29,11 +29,11 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class UserMetric {
     private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_window", 100); //$NON-NLS-1$
-    
-    // Limit to sliding window of SLIDING_WINDOW_SIZE values 
+
+    // Limit to sliding window of SLIDING_WINDOW_SIZE values
     private DescriptiveStatistics usersStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
     /**
-     * 
+     *
      */
     public UserMetric() {
         super();
@@ -46,7 +46,7 @@ public class UserMetric {
     public synchronized void add(SampleResult result) {
         usersStats.addValue(JMeterContextService.getThreadCounts().activeThreads);
     }
-    
+
     /**
      * Reset metric except for percentile related data
      */
@@ -55,7 +55,7 @@ public class UserMetric {
     }
 
     /**
-     * @return the max number of active threads for this test run 
+     * @return the max number of active threads for this test run
      *          using a sliding window of SLIDING_WINDOW_SIZE
      */
     public int getMaxActiveThreads() {
@@ -69,7 +69,7 @@ public class UserMetric {
     public int getMeanActiveThreads() {
         return (int) usersStats.getMean();
     }
-    
+
     /**
      * @return the min number of active threads for this test run
      *          using a sliding window of SLIDING_WINDOW_SIZE
@@ -91,7 +91,7 @@ public class UserMetric {
     public int getStartedThreads() {
         return JMeterContextService.getThreadCounts().startedThreads;
     }
-    
+
     /**
      * Clear stats
      */

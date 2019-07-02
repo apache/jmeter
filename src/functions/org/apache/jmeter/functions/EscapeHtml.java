@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -33,7 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  * <p>
  * For example:
- * </p> 
+ * </p>
  * <p><code>"bread" &amp; "butter"</code></p>
  * becomes:
  * <p>
@@ -43,7 +43,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * <p>Supports all known HTML 4.0 entities.
  * Note that the commonly used apostrophe escape character (&amp;apos;)
  * is not a legal entity and so is not supported). </p>
- * 
+ *
  * @see StringEscapeUtils#escapeHtml4(String) (Commons Lang)
  * @since 2.3.3
  */

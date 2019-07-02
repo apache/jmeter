@@ -29,7 +29,7 @@ class HTTPSampler3 extends HTTPSamplerBase implements Interruptible {
     private static final long serialVersionUID = 241L;
 
     private final transient HTTPHC4Impl hc;
-    
+
     public HTTPSampler3(){
         hc = new HTTPHC4Impl(this);
     }

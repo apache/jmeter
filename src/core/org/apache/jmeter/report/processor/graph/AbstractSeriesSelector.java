@@ -47,7 +47,7 @@ public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.graph.GraphSeriesSelector#
      * supportsControllersDiscrimination()
      */

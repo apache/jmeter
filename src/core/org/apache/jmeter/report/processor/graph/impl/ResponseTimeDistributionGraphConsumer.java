@@ -61,7 +61,7 @@ public class ResponseTimeDistributionGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createKeysSelector()
      */
@@ -79,7 +79,7 @@ public class ResponseTimeDistributionGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */
@@ -97,7 +97,7 @@ public class ResponseTimeDistributionGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
      * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
      */

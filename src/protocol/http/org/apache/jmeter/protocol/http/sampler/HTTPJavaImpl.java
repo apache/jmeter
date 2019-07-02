@@ -181,7 +181,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // with the last request to an HTTP server. Instead, most browsers
         // leave it to the server to close the connection after their
         // timeout period. Leave it to the JMeter user to decide.
-        // Ensure System property "sun.net.http.allowRestrictedHeaders=true" is set to true to allow headers 
+        // Ensure System property "sun.net.http.allowRestrictedHeaders=true" is set to true to allow headers
         // such as "Host" and "Connection" to be passed through.
         // See http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6996110
         if (getUseKeepAlive()) {
@@ -209,7 +209,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             } else {
                 // During recording Cookie Manager doesn't handle cookies
                 res.setCookies(getOnlyCookieFromHeaders(conn, securityHeaders));
-                
+
             }
         }
 
@@ -361,7 +361,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *            for this <code>UrlConfig</code>
      * @param cacheManager the CacheManager (may be null)
      */
-    private void setConnectionHeaders(HttpURLConnection conn, URL u, 
+    private void setConnectionHeaders(HttpURLConnection conn, URL u,
             HeaderManager headerManager, CacheManager cacheManager) {
         // Add all the headers from the HeaderManager
         Header[] arrayOfHeaders = null;
@@ -400,7 +400,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
         return "";
     }
-    
+
     /**
      * Get all the headers for the <code>HttpURLConnection</code> passed in
      *
@@ -413,7 +413,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     private String getAllHeadersExceptCookie(HttpURLConnection conn, Map<String, String> securityHeaders) {
         return getFromConnectionHeaders(conn, securityHeaders, ALL_EXCEPT_COOKIE, true);
     }
-    
+
     /**
      * Get all the headers for the <code>HttpURLConnection</code> passed in
      *
@@ -421,7 +421,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *            <code>HttpUrlConnection</code> which represents the URL
      *            request
      * @param securityHeaders Map of security Header
-     * @param predicate {@link Predicate} 
+     * @param predicate {@link Predicate}
      * @return the headers as a string
      */
     private String getFromConnectionHeaders(HttpURLConnection conn, Map<String, String> securityHeaders,
@@ -471,7 +471,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             if (auth != null) {
                 String headerValue = auth.toBasicHeader();
                 conn.setRequestProperty(HTTPConstants.HEADER_AUTHORIZATION, headerValue);
-                // Java hides request properties so we have to 
+                // Java hides request properties so we have to
                 // keep trace of it
                 Map<String, String> map = new HashMap<>(1);
                 map.put(HTTPConstants.HEADER_AUTHORIZATION, headerValue);
@@ -617,16 +617,16 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             if (res.isRedirect()) {
                 res.setRedirectLocation(conn.getHeaderField(HTTPConstants.HEADER_LOCATION));
             }
-            
+
             // record headers size to allow HTTPSampleResult.getBytes() with different options
             res.setHeadersSize(responseHeaders.replaceAll("\n", "\r\n") // $NON-NLS-1$ $NON-NLS-2$
-                    .length() + 2); // add 2 for a '\r\n' at end of headers (before data) 
+                    .length() + 2); // add 2 for a '\r\n' at end of headers (before data)
             if (log.isDebugEnabled()) {
                 log.debug("Response headersSize={}, bodySize={}, Total={}",
                         res.getHeadersSize(),  res.getBodySizeAsLong(),
                         res.getHeadersSize() + res.getBodySizeAsLong());
             }
-            
+
             // If we redirected automatically, the URL may have changed
             if (getAutoRedirects()){
                 res.setURL(conn.getURL());

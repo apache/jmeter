@@ -90,7 +90,7 @@ public class WhileController extends GenericController implements Serializable, 
         }
         return next();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -124,7 +124,7 @@ public class WhileController extends GenericController implements Serializable, 
     protected void resetLoopCount() {
         resetIterCount();
     }
-    
+
     /**
      * @param string
      *            the condition to save

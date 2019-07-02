@@ -25,7 +25,7 @@ import java.net.URI;
  * <p>
  * Basically holds the CSV separator
  * </p>
- * 
+ *
  * @since 3.0
  */
 public class CsvFile extends File {

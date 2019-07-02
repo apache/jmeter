@@ -146,7 +146,7 @@ public class HttpMirrorThread implements Runnable {
             }
 
             final boolean verbose = parameters.containsKey(VERBOSE);
-            
+
             if (verbose) {
                 System.out.println(firstLine); // NOSONAR
                 log.info(firstLine);

@@ -17,7 +17,7 @@
  */
 
 /*
- * Test class for BinaryTCPClientImpl utility methods.  
+ * Test class for BinaryTCPClientImpl utility methods.
  *
  */
 package org.apache.jmeter.protocol.tcp.sampler;
@@ -40,11 +40,11 @@ public class BinaryTCPClientImplTest {
         byte [] ba;
         ba = BinaryTCPClientImpl.hexStringToByteArray("");
         assertEquals(0, ba.length);
- 
+
         ba = BinaryTCPClientImpl.hexStringToByteArray("00");
         assertEquals(1, ba.length);
         assertEquals(0, ba[0]);
- 
+
         ba = BinaryTCPClientImpl.hexStringToByteArray("0f107F8081ff");
         assertEquals(6, ba.length);
         assertEquals(15,   ba[0]);
@@ -69,7 +69,7 @@ public class BinaryTCPClientImplTest {
 
     @Test
     public void testLoopBack() throws Exception {
-        assertEquals("0f107f8081ff", JOrphanUtils.baToHexString(BinaryTCPClientImpl.hexStringToByteArray("0f107f8081ff")));      
+        assertEquals("0f107f8081ff", JOrphanUtils.baToHexString(BinaryTCPClientImpl.hexStringToByteArray("0f107f8081ff")));
     }
 
     @Test

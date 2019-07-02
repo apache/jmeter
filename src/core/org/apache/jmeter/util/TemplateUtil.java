@@ -36,13 +36,13 @@ import freemarker.template.TemplateExceptionHandler;
  * @since 5.1
  */
 public final class TemplateUtil {
-    
+
     private static Configuration templateConfiguration = init();
-    
+
     private TemplateUtil() {
         super();
     }
-    
+
     private static Configuration init() {
         Configuration templateConfiguration = new Configuration(Configuration.getVersion());
         templateConfiguration.setDefaultEncoding(StandardCharsets.UTF_8.name());
@@ -58,10 +58,10 @@ public final class TemplateUtil {
     public static Configuration getTemplateConfig() {
         return templateConfiguration;
     }
-    
+
     /**
      * Process a given freemarker template and put its result in a new folder.
-     * 
+     *
      * @param template file that contains the freemarker template to process
      * @param outputFile {@link File} created from template
      * @param templateConfig Configuration of the template
@@ -69,11 +69,11 @@ public final class TemplateUtil {
      * @throws IOException if an I/O exception occurs during writing to the writer
      * @throws TemplateException if an exception occurs during template processing
      */
-    public static void processTemplate(File template, 
+    public static void processTemplate(File template,
             File outputFile,
-            Configuration templateConfig, Map<String, String> data) 
+            Configuration templateConfig, Map<String, String> data)
                     throws IOException, TemplateException {
-        
+
         templateConfig.setDirectoryForTemplateLoading(template.getParentFile());
         freemarker.template.Template temp = templateConfig.getTemplate(template.getName());
         try (FileOutputStream stream = new FileOutputStream(outputFile);

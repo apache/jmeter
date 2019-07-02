@@ -258,7 +258,7 @@ public class JMeterThread implements Runnable, Interruptible {
                     threadContext.cleanAfterSample();
 
                     boolean lastSampleInError = TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK));
-                    // restart of the next loop 
+                    // restart of the next loop
                     // - was requested through threadContext
                     // - or the last sample failed AND the onErrorStartNextLoop option is enabled
                     if (threadContext.getTestLogicalAction() != TestLogicalAction.CONTINUE
@@ -338,10 +338,10 @@ public class JMeterThread implements Runnable, Interruptible {
     /**
      * Trigger break/continue/switch to next thread Loop  depending on consumer implementation
      * @param sampler Sampler Base sampler
-     * @param threadContext 
-     * @param consumer Consumer that will process the tree of elements up to root node 
+     * @param threadContext
+     * @param consumer Consumer that will process the tree of elements up to root node
      */
-    private void triggerLoopLogicalActionOnParentControllers(Sampler sampler, JMeterContext threadContext, 
+    private void triggerLoopLogicalActionOnParentControllers(Sampler sampler, JMeterContext threadContext,
             Consumer<FindTestElementsUpToRootTraverser> consumer) {
         TransactionSampler transactionSampler = null;
         if (sampler instanceof TransactionSampler) {
@@ -362,7 +362,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
         // bug 52968
         // When using Start Next Loop option combined to TransactionController.
-        // if an error occurs in a Sample (child of TransactionController) 
+        // if an error occurs in a Sample (child of TransactionController)
         // then we still need to report the Transaction in error (and create the sample result)
         if (transactionSampler != null) {
             SamplePackage transactionPack = compiler.configureTransactionSampler(transactionSampler);
@@ -372,7 +372,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     /**
      * Executes a continue of current loop, equivalent of "continue" in algorithm.
-     * As a consequence it ends the first loop it finds on the path to root 
+     * As a consequence it ends the first loop it finds on the path to root
      * @param pathToRootTraverser {@link FindTestElementsUpToRootTraverser}
      */
     private static void continueOnCurrentLoop(FindTestElementsUpToRootTraverser pathToRootTraverser) {
@@ -389,10 +389,10 @@ public class JMeterThread implements Runnable, Interruptible {
             }
         }
     }
-    
+
     /**
      * Executes a break of current loop, equivalent of "break" in algorithm.
-     * As a consequence it ends the first loop it finds on the path to root 
+     * As a consequence it ends the first loop it finds on the path to root
      * @param pathToRootTraverser {@link FindTestElementsUpToRootTraverser}
      */
     private static void breakOnCurrentLoop(FindTestElementsUpToRootTraverser pathToRootTraverser) {
@@ -412,7 +412,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     /**
      * Executes a restart of Thread loop, equivalent of "continue" in algorithm but on Thread Loop.
-     * As a consequence it ends all loop on the path to root 
+     * As a consequence it ends all loop on the path to root
      * @param pathToRootTraverser {@link FindTestElementsUpToRootTraverser}
      */
     private static void continueOnThreadLoop(FindTestElementsUpToRootTraverser pathToRootTraverser) {
@@ -429,8 +429,8 @@ public class JMeterThread implements Runnable, Interruptible {
 
     /**
      * Find the Real sampler (Not TransactionSampler) that really generated an error
-     * The Sampler provided is not always the "real" one, it can be a TransactionSampler, 
-     * if there are some other controllers (SimpleController or other implementations) between this TransactionSampler and the real sampler, 
+     * The Sampler provided is not always the "real" one, it can be a TransactionSampler,
+     * if there are some other controllers (SimpleController or other implementations) between this TransactionSampler and the real sampler,
      * triggerEndOfLoop will not be called for those controllers leaving them in "ugly" state.
      * the following method will try to find the sampler that really generate an error
      * @return {@link Sampler}
@@ -715,7 +715,7 @@ public class JMeterThread implements Runnable, Interruptible {
          * it does not seem to help with the listeners)
          */
         threadContext.setSamplingStarted(true);
-        
+
         threadGroupLoopController.initialize();
         IterationListener iterationListener = new IterationListener();
         threadGroupLoopController.addIterationListener(iterationListener);
@@ -857,7 +857,7 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     /**
-     * Clean Exit of current thread 
+     * Clean Exit of current thread
      */
     private void stopThread() {
         running = false;
@@ -1035,7 +1035,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 try {
                     TimeUnit.MILLISECONDS.sleep(pause); // delay between checks
                 } catch (InterruptedException e) {
-                    if (running) { // NOSONAR running may have been changed from another thread 
+                    if (running) { // NOSONAR running may have been changed from another thread
                         log.warn("{} delay for {} was interrupted. Waited {} milli-seconds out of {}", type, threadName,
                                 now - start, delay);
                     }

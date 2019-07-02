@@ -50,13 +50,13 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
     private JLabeledTextField refNamesField;
     private JLabeledTextField matchNumbersField;
     private JCheckBox computeConcatenationField;
-    
+
     public JSONPostProcessorGui() {
         super();
         init();
     }
 
-    
+
     @Override
     public String getLabelResource() {
         return "json_post_processor_title";//$NON-NLS-1$
@@ -73,7 +73,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
         defaultValuesField.setText(config.getDefaultValues());
         computeConcatenationField.setSelected(config.getComputeConcatenation());
     }
-    
+
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
@@ -117,7 +117,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        
+
         setLayout(new BorderLayout());
         setBorder(makeBorder());
 
@@ -128,7 +128,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
         add(makeParameterPanel(), BorderLayout.CENTER);
 
     }
-    
+
     private JPanel makeParameterPanel() {
         refNamesField = new JLabeledTextField(JMeterUtils.getResString("jsonpp_variable_names"));//$NON-NLS-1$
         jsonPathExpressionsField = new JLabeledTextField(JMeterUtils.getResString("jsonpp_json_path_expressions"));//$NON-NLS-1$
@@ -150,7 +150,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
         addField(panel, defaultValuesField, gbc);
         return panel;
     }
-    
+
     private void addField(JPanel panel, JLabeledTextField field, GridBagConstraints gbc) {
         List<JComponent> item = field.getComponentList();
         panel.add(item.get(0), gbc.clone());
@@ -159,7 +159,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(item.get(1), gbc.clone());
     }
-    
+
     private void addField(JPanel panel, JLabel label, JCheckBox checkBox, GridBagConstraints gbc) {
         panel.add(label, gbc.clone());
         gbc.gridx++;

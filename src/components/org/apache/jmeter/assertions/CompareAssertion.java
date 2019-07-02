@@ -116,7 +116,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
                     appendResultDetails(buf, prevResult);
                     buf.append(prevContent);
                     result.addToBaseResult(buf.toString());
-                    buf.setLength(0);                    
+                    buf.setLength(0);
                     appendResultDetails(buf, sResult);
                     buf.append(currentContent);
                     result.addToSecondaryResult(buf.toString());

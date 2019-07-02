@@ -51,10 +51,10 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     private static final Logger log = LoggerFactory.getLogger(SystemSamplerGui.class);
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -2413845772703695934L;
-    
+
     private JCheckBox checkReturnCode;
     private JLabeledTextField desiredReturnCode;
     private final FilePanelEntry stdin = new FilePanelEntry(JMeterUtils.getResString("system_sampler_stdin")); // $NON-NLS-1$
@@ -65,7 +65,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     private JLabeledTextField timeout;
     private ArgumentsPanel argsPanel;
     private ArgumentsPanel envPanel;
-    
+
     /**
      * Constructor for JavaTestSamplerGui
      */
@@ -93,7 +93,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
 
         add(makeTitlePanel(), BorderLayout.NORTH);
         add(makeCommandPanel(), BorderLayout.CENTER);
-        
+
         JPanel streamsCodePane = new JPanel(new BorderLayout());
         streamsCodePane.add(makeStreamsPanel(), BorderLayout.NORTH);
         streamsCodePane.add(makeReturnCodePanel(), BorderLayout.CENTER);
@@ -136,7 +136,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
             } catch (NumberFormatException e) {
                 log.error("Error parsing timeout field value:"+timeout.getText(), e);
             }
-        } 
+        }
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
@@ -177,7 +177,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         checkReturnCode.setSelected(true);
         return panel;
     }
-    
+
     /**
      * @return JPanel timeout config
      */
@@ -192,11 +192,11 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         panel.add(timeout);
         return panel;
     }
-    
+
     /**
      * @return JPanel Command + directory
      */
-    private JPanel makeCommandPanel() {       
+    private JPanel makeCommandPanel() {
         JPanel cmdPanel = new JPanel();
         cmdPanel.setLayout(new BoxLayout(cmdPanel, BoxLayout.X_AXIS));
 
@@ -215,7 +215,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         return panel;
     }
 
-    
+
     /**
      * @return JPanel Arguments Panel
      */
@@ -230,7 +230,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
                         new Class[] {String.class }));
         return argsPanel;
     }
-    
+
     /**
      * @return JPanel Environment Panel
      */

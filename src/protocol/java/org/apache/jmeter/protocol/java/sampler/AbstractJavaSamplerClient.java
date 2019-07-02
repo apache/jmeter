@@ -79,7 +79,7 @@ public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
      * (jmeter.protocol.java).
      *
      * @return a Logger instance which can be used for logging
-     * @deprecated Will be removed in 3.3, use {@link AbstractJavaSamplerClient#getNewLogger()} 
+     * @deprecated Will be removed in 3.3, use {@link AbstractJavaSamplerClient#getNewLogger()}
      */
     @Deprecated
     protected org.apache.log.Logger getLogger() {

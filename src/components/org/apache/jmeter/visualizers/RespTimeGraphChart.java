@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -59,19 +59,19 @@ public class RespTimeGraphChart extends JPanel {
     private static final Logger log = LoggerFactory.getLogger(RespTimeGraphChart.class);
 
     protected double[][] data;
-    
+
     protected String title;
-    
+
     protected String xAxisTitle;
-    
+
     protected String yAxisTitle;
-    
+
     protected String yAxisLabel;
-    
+
     protected String[] xAxisLabels;
-    
+
     protected int width;
-    
+
     protected int height;
 
     protected int incrYAxisScale;
@@ -103,7 +103,7 @@ public class RespTimeGraphChart extends JPanel {
 
     /**
      * Constructor
-     * 
+     *
      * @param layout
      *            The {@link LayoutManager} to be used
      */
@@ -113,7 +113,7 @@ public class RespTimeGraphChart extends JPanel {
 
     /**
      * Constructor
-     * 
+     *
      * @param layout
      *            The {@link LayoutManager} to be used
      * @param isDoubleBuffered
@@ -279,10 +279,10 @@ public class RespTimeGraphChart extends JPanel {
     }
 
     private void drawSample(String _title, String[] _xAxisLabels,
-            String _yAxisTitle, String[] _legendLabels, 
+            String _yAxisTitle, String[] _legendLabels,
             double[][] _data, int _width, int _height, int _incrScaleYAxis,
             Color[] _color, Font legendFont, Graphics g) {
-        
+
         double max = maxYAxisScale > 0 ? maxYAxisScale : getTopValue(findMax(_data), BigDecimal.ROUND_UP); // define max scale y axis
         try {
             // if the title graph is empty, we can assume some default
@@ -306,7 +306,7 @@ public class RespTimeGraphChart extends JPanel {
             // Lines colors
             Paint[] paints = new Paint[_color.length];
             System.arraycopy(_color, 0, paints, 0, _color.length);
-            
+
             // Define chart type (line)
             AxisChartDataSet axisChartDataSet =
                 new AxisChartDataSet( _data, _legendLabels, paints, ChartType.LINE, lineChartProperties );
@@ -335,7 +335,7 @@ public class RespTimeGraphChart extends JPanel {
                 if (_incrScaleYAxis == 0) {
                     incrTopValue = getTopValue(incrYAxis, BigDecimal.ROUND_HALF_UP);
                 }
-                if (incrTopValue < 1) { 
+                if (incrTopValue < 1) {
                     incrTopValue = 1.0d; // Increment cannot be < 1
                 }
                 yaxis.setUserDefinedScale(0, incrTopValue);
@@ -388,7 +388,7 @@ public class RespTimeGraphChart extends JPanel {
     public void paintComponent(Graphics graphics) {
         if (data != null && this.title != null && this.xAxisLabels != null &&
                 this.yAxisLabel != null && this.yAxisTitle != null) {
-            drawSample(this.title, this.xAxisLabels, 
+            drawSample(this.title, this.xAxisLabels,
                     this.yAxisTitle, this.legendLabels,
                     this.data, this.width, this.height, this.incrYAxisScale, this.color,
                     this.legendFont, graphics);

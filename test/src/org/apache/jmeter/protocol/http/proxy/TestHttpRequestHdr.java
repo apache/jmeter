@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.proxy;
@@ -46,7 +46,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         String url = "http://localhost/matrix.html";
         // A HTTP GET request
         String contentEncoding = "UTF-8";
-        String testGetRequest = 
+        String testGetRequest =
             "GET " + url
             + "?update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=&d= "
             + "HTTP/1.0\r\n\r\n";
@@ -117,7 +117,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         arguments = s.getArguments();
         assertEquals(1, arguments.getArgumentCount());
         checkArgument((HTTPArgument)arguments.getArgument(0), "", postBody, postBody, contentEncoding, false);
-        
+
         // A HTTP POST request, with content-type text/plain; charset=UTF-8
         // The encoding should be picked up from the header we send with the request
         contentEncoding = "UTF-8";
@@ -139,7 +139,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         arguments = s.getArguments();
         assertEquals(1, arguments.getArgumentCount());
         checkArgument((HTTPArgument)arguments.getArgument(0), "", postBody, postBody, contentEncoding, false);
-        
+
         // A HTTP POST request, with content-type text/plain; charset=UTF-8
         // The encoding should be picked up from the header we send with the request
         contentEncoding = "UTF-8";
@@ -193,8 +193,8 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         String url = "http://localhost/matrix.html";
         testEncodedArguments(url);
     }
-     
-    
+
+
     @Test
     public void testEncodedArgumentsIPv6() throws Exception {
         String url = "http://[::1]:8080/matrix.html";
@@ -202,9 +202,9 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     }
 
     private void testEncodedArguments(String url) throws Exception {
-        // A HTTP GET request, with encoding not known 
+        // A HTTP GET request, with encoding not known
         String contentEncoding = "";
-        String queryString = "abc%3FSPACE=a+b&space=a%20b&query=What%3F"; 
+        String queryString = "abc%3FSPACE=a+b&space=a%20b&query=What%3F";
         String testGetRequest = "GET " + url
             + "?" + queryString
             + " HTTP/1.1\r\n\r\n";
@@ -223,9 +223,9 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         checkArgument((HTTPArgument)arguments.getArgument(1), "space", "a%20b", "a%20b", contentEncoding, false);
         checkArgument((HTTPArgument)arguments.getArgument(2), "query", "What%3F", "What%3F", contentEncoding, false);
 
-        // A HTTP GET request, with UTF-8 encoding 
+        // A HTTP GET request, with UTF-8 encoding
         contentEncoding = "UTF-8";
-        queryString = "abc%3FSPACE=a+b&space=a%20b&query=What%3F"; 
+        queryString = "abc%3FSPACE=a+b&space=a%20b&query=What%3F";
         testGetRequest = "GET " + url
             + "?" + queryString
             + " HTTP/1.1\r\n\r\n";
@@ -241,7 +241,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         checkArgument((HTTPArgument)arguments.getArgument(0), "abc?SPACE", "a b", "a+b", contentEncoding, true);
         checkArgument((HTTPArgument)arguments.getArgument(1), "space", "a b", "a+b", contentEncoding, true);
         checkArgument((HTTPArgument)arguments.getArgument(2), "query", "What?", "What%3F", contentEncoding, true);
-        
+
         // A HTTP POST request, with unknown encoding
         contentEncoding = "";
         String postBody = "abc%3FSPACE=a+b&space=a%20b&query=What%3F";
@@ -258,7 +258,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals(queryString, s.getQueryString());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertFalse(s.getDoMultipartPost());
-        
+
         // Check arguments
         arguments = s.getArguments();
         assertEquals(3, arguments.getArgumentCount());
@@ -282,7 +282,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals(expectedQueryString, s.getQueryString());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertFalse(s.getDoMultipartPost());
-        
+
         // Check arguments
         arguments = s.getArguments();
         assertEquals(3, arguments.getArgumentCount());
@@ -290,24 +290,24 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         checkArgument((HTTPArgument)arguments.getArgument(1), "space", "a b", "a+b", contentEncoding, true);
         checkArgument((HTTPArgument)arguments.getArgument(2), "query", "What?", "What%3F", contentEncoding, true);
     }
-    
+
     @Test
     public void testGetRequestEncodings() throws Exception {
         testGetRequestEncodings("http://localhost/matrix.html");
     }
-    
+
     @Test
     public void testGetRequestEncodingsIPv6() throws Exception {
         testGetRequestEncodings("http://[::1]:8080/matrix.html");
     }
-    
+
     private void testGetRequestEncodings(String url) throws Exception {
         // A HTTP GET request, with encoding not known
         String contentEncoding = "";
         String param1Value = "yes";
         String param2Value = "0+5 -\u00c5\uc385%C3%85";
         String param2ValueEncoded = URLEncoder.encode(param2Value,"UTF-8");
-        String testGetRequest = 
+        String testGetRequest =
             "GET " + url
             + "?param1=" + param1Value + "&param2=" + param2ValueEncoded + " "
             + "HTTP/1.1\r\n\r\n";
@@ -328,7 +328,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         param1Value = "yes";
         param2Value = "0+5 -\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85";
         param2ValueEncoded = URLEncoder.encode(param2Value, contentEncoding);
-        testGetRequest = 
+        testGetRequest =
             "GET " + url
             + "?param1=" + param1Value + "&param2=" + param2ValueEncoded + " "
             + "HTTP/1.1\r\n\r\n";
@@ -346,7 +346,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         param1Value = "yes";
         param2Value = "0+5 -\u00c5%C3%85";
         param2ValueEncoded = URLEncoder.encode(param2Value, contentEncoding);
-        testGetRequest = 
+        testGetRequest =
             "GET " + url
             + "?param1=" + param1Value + "&param2=" + param2ValueEncoded + " "
             + "HTTP/1.1\r\n\r\n";
@@ -368,15 +368,15 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         String param1Value = "yes";
         String param2Value = "0+5 -\u00c5%C3%85";
         String param2ValueEncoded = URLEncoder.encode(param2Value,"UTF-8");
-        String postBody = "param1=" + param1Value + "&param2=" + param2ValueEncoded + "\r\n"; 
-        String testPostRequest = 
+        String postBody = "param1=" + param1Value + "&param2=" + param2ValueEncoded + "\r\n";
+        String testPostRequest =
             "POST " + url + " HTTP/1.1\r\n"
             + "Content-type: "
             + HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
             + "Content-length: " + getBodyLength(postBody, contentEncoding) + "\r\n"
             + "\r\n"
             + postBody;
-        
+
         // Use null for url and contentEncoding, to simulate that HttpRequestHdr do not
         // know the encoding for the page
         HTTPSamplerBase s = getSamplerForRequest(null, testPostRequest, null);
@@ -394,8 +394,8 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         param1Value = "yes";
         param2Value = "0+5 -\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85";
         param2ValueEncoded = URLEncoder.encode(param2Value, contentEncoding);
-        postBody = "param1=" + param1Value + "&param2=" + param2ValueEncoded + "\r\n"; 
-        testPostRequest = 
+        postBody = "param1=" + param1Value + "&param2=" + param2ValueEncoded + "\r\n";
+        testPostRequest =
             "POST " + url + " HTTP/1.1\r\n"
             + "Content-type: "
             + HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
@@ -417,8 +417,8 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         param1Value = "yes";
         param2Value = "0+5 -\u00c5%C3%85";
         param2ValueEncoded = URLEncoder.encode(param2Value, contentEncoding);
-        postBody = "param1=" + param1Value + "&param2=" + param2ValueEncoded + "\r\n"; 
-        testPostRequest = 
+        postBody = "param1=" + param1Value + "&param2=" + param2ValueEncoded + "\r\n";
+        testPostRequest =
             "POST " + url + " HTTP/1.1\r\n"
             + "Content-type: "
             + HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
@@ -452,13 +452,13 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertTrue(s.getDoMultipartPost());
-        
+
         // Check arguments
         Arguments arguments = s.getArguments();
         assertEquals(2, arguments.getArgumentCount());
         checkArgument((HTTPArgument)arguments.getArgument(0), "title", titleValue, titleValue, contentEncoding, false);
         checkArgument((HTTPArgument)arguments.getArgument(1), "description", descriptionValue, descriptionValue, contentEncoding, false);
-        
+
         // A HTTP POST request, multipart/form-data, simple values,
         // with \r\n as end of line, which is according to spec,
         // and with more headers in each multipart
@@ -472,7 +472,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertTrue(s.getDoMultipartPost());
-        
+
         // Check arguments
         arguments = s.getArguments();
         assertEquals(2, arguments.getArgumentCount());
@@ -492,13 +492,13 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertTrue(s.getDoMultipartPost());
-        
+
         // Check arguments
         arguments = s.getArguments();
         assertEquals(2, arguments.getArgumentCount());
         checkArgument((HTTPArgument)arguments.getArgument(0), "title", titleValue, titleValue, contentEncoding, false);
         checkArgument((HTTPArgument)arguments.getArgument(1), "description", descriptionValue, descriptionValue, contentEncoding, false);
-        
+
         // A HTTP POST request, multipart/form-data, with value that will change
         // if they are url encoded
         // Values are similar to __VIEWSTATE parameter that .net uses
@@ -512,7 +512,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertTrue(s.getDoMultipartPost());
-        
+
         // Check arguments
         arguments = s.getArguments();
         assertEquals(2, arguments.getArgumentCount());
@@ -534,7 +534,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals("name",header.getName());
         assertEquals("value",header.getValue());
     }
-    
+
 
     @Test
     public void testParse2() throws Exception {// spaces after :
@@ -564,7 +564,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         String fileContent = "somedummycontent\n\ndfgdfg\r\nfgdgdg\nContent-type:dfsfsfds";
         String postBody = createMultipartFileUploadBody(fileFieldValue, fileName, mimeType, fileContent, boundary, endOfLine);
         String testPostRequest = createMultipartFormRequest(url, postBody, contentEncoding, boundary, endOfLine);
-        
+
         HTTPSamplerBase s = getSamplerForRequest(url, testPostRequest, contentEncoding);
         assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
@@ -578,7 +578,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals(fileFieldValue, hfa.getParamName());
         assertEquals(fileName, hfa.getPath());
         assertEquals(mimeType, hfa.getMimeType());
-    }        
+    }
 
     private String createMultipartFormBody(String titleValue, String descriptionValue,
             String contentEncoding, boolean includeExtraHeaders,
@@ -618,7 +618,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
             + "--" + boundary + "--" + endOfLine;
         return postBody;
     }
-    
+
     private String createMultipartFormRequest(String url, String postBody, String contentEncoding, String boundary, String endOfLine)
             throws IOException {
         String postRequest = "POST " + url + " HTTP/1.1" + endOfLine
@@ -637,7 +637,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         ByteArrayInputStream bis = null;
         if(contentEncoding != null) {
             bis = new ByteArrayInputStream(request.getBytes(contentEncoding));
-            
+
         }
         else {
             // Most browsers use ISO-8859-1 as default encoding, even if spec says UTF-8
@@ -656,7 +656,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         creator.populateSampler(sampler, req, pageEncodings, formEncodings);
         return sampler;
     }
-    
+
     private void checkArgument(
             HTTPArgument arg,
             String expectedName,
@@ -675,10 +675,10 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         }
         assertPrimitiveEquals(expectedEncoded, arg.isAlwaysEncoded());
     }
-    
+
     private int getBodyLength(String postBody, String contentEncoding) throws IOException {
         if(contentEncoding != null && contentEncoding.length() > 0) {
-            return postBody.getBytes(contentEncoding).length;            
+            return postBody.getBytes(contentEncoding).length;
         }
         else {
             // Most browsers use ISO-8859-1 as default encoding, even if spec says UTF-8

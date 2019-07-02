@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -108,7 +108,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         LocalDate tomorrowFromFunction = LocalDate.parse(value);
         assertThat(tomorrowFromFunction, sameDay(tomorrow));
     }
-    
+
     @Test
     public void testNowWithComplexPeriod() throws Exception {
         Collection<CompoundVariable> params = makeParams("yyyy-MM-dd'T'HH:mm:ss", "", "P10DT-1H-5M5S", "");
@@ -118,14 +118,14 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
         assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
     }
-    
+
     @Test
     public void testPotentialBugWithComplexPeriod() throws Exception {
         Collection<CompoundVariable> params = makeParams("yyyy-MM-dd'T'HH:mm:ss", "2017-12-21T12:00:00", "P10DT-1H-5M5S", "");
         function.setParameters(params);
         value = function.execute(result, null);
         LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
-        
+
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm:ss");
         LocalDateTime baseDate = LocalDateTime.parse("2017-12-21 12:00:00", dateFormat);
         LocalDateTime futureDate = baseDate.plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
@@ -154,8 +154,8 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         value = function.execute(result, null);
         assertThat(value, is(equalTo("")));
     }
-    
-    
+
+
     @Test
     public void testRandomPeriod() throws Exception {
         Random r = new Random();
@@ -173,10 +173,10 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         randomFutureDate = LocalDateTime.parse(value);
         checkFutureDate = LocalDateTime.now().plusMinutes(randomInt);
         assertThat(randomFutureDate, within(5, ChronoUnit.SECONDS, checkFutureDate) );
-        
+
     }
-    
-    
+
+
     @Test
     public void testNowPlusOneDayWithLocale() throws Exception {
         Collection<CompoundVariable> params = makeParams("yyyy-MMMM-dd", "2017-juillet-01", "P1D", "fr_FR", "");
@@ -196,5 +196,5 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         value = function.execute(result, null);
         assertThat(value, is(equalTo("2017-Juli-02")));
     }
-   
+
 }

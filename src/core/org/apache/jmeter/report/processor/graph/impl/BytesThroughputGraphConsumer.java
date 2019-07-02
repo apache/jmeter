@@ -31,7 +31,7 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
- * The class HitsPerSecondGraphConsumer provides a graph to visualize bytes throughput 
+ * The class HitsPerSecondGraphConsumer provides a graph to visualize bytes throughput
  * per time period (defined by granularity)
  *
  * @since 3.0
@@ -43,7 +43,7 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #createTimeStampKeysSelector()
@@ -57,7 +57,7 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */
@@ -93,7 +93,7 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #setGranularity(long)

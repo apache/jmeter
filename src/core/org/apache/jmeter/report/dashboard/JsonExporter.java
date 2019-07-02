@@ -44,16 +44,16 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 /**
  * Implementation of {@link DataExporter} that exports statistics to JSON
- * 
+ *
  * @since 5.1
  */
 public class JsonExporter extends AbstractDataExporter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonExporter.class);
     public static final String OUTPUT_FILENAME = "statistics.json";
-    private static final FileFilter JSON_FILE_FILTER = 
+    private static final FileFilter JSON_FILE_FILTER =
             file -> file.isFile() && file.getName().equals(OUTPUT_FILENAME);
 
-    
+
     public JsonExporter() {
         super();
     }
@@ -69,11 +69,11 @@ public class JsonExporter extends AbstractDataExporter {
             MapResultData overallData = (MapResultData) result.getResult("overall");
             LOGGER.info("Creating statistics for overall");
             createStatistic(statistics, overallData);
-            
+
             ListResultData itemsData = (ListResultData) result.getResult("items");
             LOGGER.info("Creating statistics for other transactions");
             itemsData.forEach(r -> createStatistic(statistics, (MapResultData)r));
-            
+
             LOGGER.info("Checking output folder");
             File outputDir = checkAndGetOutputFolder(reportGeneratorConfiguration);
 
@@ -105,7 +105,7 @@ public class JsonExporter extends AbstractDataExporter {
         if(!StringUtils.isEmpty(globallyDefinedOutputDir)) {
             outputDir = new File(globallyDefinedOutputDir);
         }
-        
+
         JOrphanUtils.canSafelyWriteToFolder(outputDir, JSON_FILE_FILTER);
         try {
             FileUtils.forceMkdir(outputDir);

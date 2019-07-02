@@ -41,15 +41,15 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
     private static final Logger log = LoggerFactory.getLogger(DataStrippingSampleSender.class);
 
     private static final boolean DEFAULT_STRIP_ALSO_ON_ERROR = true;
-    
-    private static final boolean SERVER_CONFIGURED_STRIP_ALSO_ON_ERROR = 
+
+    private static final boolean SERVER_CONFIGURED_STRIP_ALSO_ON_ERROR =
             JMeterUtils.getPropDefault("sample_sender_strip_also_on_error", DEFAULT_STRIP_ALSO_ON_ERROR); // $NON-NLS-1$
 
     // instance fields are copied from the client instance
-    private final boolean clientConfiguredStripAlsoOnError = 
+    private final boolean clientConfiguredStripAlsoOnError =
             JMeterUtils.getPropDefault("sample_sender_strip_also_on_error", DEFAULT_STRIP_ALSO_ON_ERROR); // $NON-NLS-1$
-    
-    
+
+
     private final RemoteSampleListener listener;
     private final SampleSender decoratedSender;
     // Configuration items, set up by readResolve
@@ -82,7 +82,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
     @Override
     public void testEnded(String host) {
         log.info("Test Ended on {}", host);
-        if(decoratedSender != null) { 
+        if(decoratedSender != null) {
             decoratedSender.testEnded(host);
         }
     }
@@ -96,7 +96,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
             stripResponse(result);
             // see Bug 57449
             for (SampleResult subResult : result.getSubResults()) {
-                stripResponse(subResult);                
+                stripResponse(subResult);
             }
         }
         if(decoratedSender == null)

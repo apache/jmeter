@@ -106,7 +106,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
                     + File.separator + headFile);
         }
         try ( FileWriter fw = new FileWriter(file);
-                PrintWriter writer = new PrintWriter(fw);) { // TODO Charset ? 
+                PrintWriter writer = new PrintWriter(fw);) { // TODO Charset ?
             writer.println("# JMeter generated Header file");// $NON-NLS-1$
             final CollectionProperty hdrs = getHeaders();
             for (int i = 0; i < hdrs.size(); i++) {
@@ -222,7 +222,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
 
     /**
      * Merge the attributes with a another HeaderManager's attributes.
-     * 
+     *
      * @param element
      *            The object to be merged with
      * @param preferLocalValues Not used
@@ -230,17 +230,17 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      * @throws IllegalArgumentException
      *             if <code>element</code> is not an instance of
      *             {@link HeaderManager}
-     *             
+     *
      * @deprecated since 3.2, use {@link HeaderManager#merge(TestElement)} as this method will be removed in a future version
      */
     @Deprecated
     public HeaderManager merge(TestElement element, boolean preferLocalValues) {
         return merge(element);
     }
-        
+
     /**
      * Merge the attributes with a another HeaderManager's attributes.
-     * 
+     *
      * @param element
      *            The object to be merged with
      * @return merged HeaderManager

@@ -23,7 +23,7 @@ import org.apache.jmeter.report.core.Sample;
 
 /**
  * The class StaticSeriesSelector provides always the same series name.
- * 
+ *
  * @since 3.0
  */
 public class StaticSeriesSelector extends AbstractSeriesSelector {
@@ -51,7 +51,7 @@ public class StaticSeriesSelector extends AbstractSeriesSelector {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.SampleSelector#select(org.apache
      * .jmeter.report.csv.core.Sample)

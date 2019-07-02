@@ -19,7 +19,7 @@ package org.apache.jmeter.report.processor;
 
 /**
  * The class TimeRateAggregator is used to get samples rate by second.
- * 
+ *
  * @since 3.0
  */
 public class TimeRateAggregator implements Aggregator {
@@ -45,7 +45,7 @@ public class TimeRateAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#getCount()
      */
     @Override
@@ -55,7 +55,7 @@ public class TimeRateAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#getResult()
      */
     @Override
@@ -65,7 +65,7 @@ public class TimeRateAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#addValue(double)
      */
     @Override
@@ -76,7 +76,7 @@ public class TimeRateAggregator implements Aggregator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregator#reset()
      */
     @Override

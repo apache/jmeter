@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.jms;
@@ -117,7 +117,7 @@ public final class Utils {
         }
         return sb;
     }
-    
+
     public static StringBuilder requestHeaders(StringBuilder sb, Message msg){
         try {
             sb.append("JMSCorrelationId ").append(msg.getJMSCorrelationID()).append('\n');
@@ -177,12 +177,12 @@ public final class Utils {
             // Some JNDI implementation can return this
             log.warn("context.getEnvironment() not supported by implementation ");
             return null;
-        }        
+        }
     }
 
     /**
      * Obtain the queue connection from the context and factory name.
-     * 
+     *
      * @param ctx
      *            context to use
      * @param factoryName
@@ -204,7 +204,7 @@ public final class Utils {
             String username = getFromEnvironment(ctx, Context.SECURITY_PRINCIPAL);
             if(username != null) {
                 String password = getFromEnvironment(ctx, Context.SECURITY_CREDENTIALS);
-                return ((javax.jms.ConnectionFactory) objfac).createConnection(username, password);                
+                return ((javax.jms.ConnectionFactory) objfac).createConnection(username, password);
             }
             else {
                 return ((javax.jms.ConnectionFactory) objfac).createConnection();
@@ -212,7 +212,7 @@ public final class Utils {
         }
         throw new NamingException("Expected javax.jms.ConnectionFactory, found "+(objfac != null ? objfac.getClass().getName(): "null"));
     }
-    
+
     /**
      * Set JMS Properties to msg
      * @param msg Message to operate on

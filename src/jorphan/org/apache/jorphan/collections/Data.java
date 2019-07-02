@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * reading CSV files.
  *
  * WARNING: the class assumes that column names are unique, but does not enforce this.
- * 
+ *
  */
 public class Data implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(Data.class);
@@ -48,7 +48,7 @@ public class Data implements Serializable {
     private List<String> header;
 
     // saves current position in data List
-    private int currentPos; 
+    private int currentPos;
     private int size;
 
     /**

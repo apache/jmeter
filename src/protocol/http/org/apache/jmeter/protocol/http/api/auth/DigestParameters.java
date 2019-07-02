@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.api.auth;
@@ -21,7 +21,7 @@ package org.apache.jmeter.protocol.http.api.auth;
 /**
  * Allows digest customization as per:
  * https://en.wikipedia.org/wiki/Digest_access_authentication
- * 
+ *
  * @since 5.0
  */
 public class DigestParameters {

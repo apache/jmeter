@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.math;
@@ -33,7 +33,7 @@ public class StatCalculatorInteger extends StatCalculator<Integer> {
 
     /**
      * Update the calculator with the value for an aggregated sample.
-     * 
+     *
      * @param val the aggregate value
      * @param sampleCount the number of samples contributing to the aggregate value
      */

@@ -35,7 +35,7 @@ public interface MenuCreator {
         SEARCH,
         TOOLS
     }
-    
+
     /**
      * MenuItems to be added in location menu
      * @param location in top menu

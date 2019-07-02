@@ -69,7 +69,7 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
             p.setValue(DEFAULT, AccessLogSampler.DEFAULT_CLASS);
             p.setValue(NOT_OTHER, Boolean.TRUE);
             p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-            
+
             log.debug("found parsers: {}", LOG_PARSER_CLASSES);
             p.setValue(TAGS, LOG_PARSER_CLASSES.toArray(new String[LOG_PARSER_CLASSES.size()]));
 

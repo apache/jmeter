@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  *          }
  * </pre>
  * In JMeter you may have :
- * <pre> 
+ * <pre>
  * Thread-Group (set to loop a number of times or indefinitely,
  *    ... Samplers ... (e.g. Counter )
  *    ... Other Controllers ....
@@ -73,27 +73,27 @@ public class IfController extends GenericController implements Serializable, Thr
     private static final String EVALUATE_ALL = "IfController.evaluateAll"; //$NON-NLS-1$
 
     private static final String USE_EXPRESSION = "IfController.useExpression"; //$NON-NLS-1$
-    
+
     private static final String USE_RHINO_ENGINE_PROPERTY = "javascript.use_rhino"; //$NON-NLS-1$
 
-    private static final boolean USE_RHINO_ENGINE = 
+    private static final boolean USE_RHINO_ENGINE =
             JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, false) ||
             getInstance().getEngineByName(NASHORN_ENGINE_NAME) == null;
 
-    
+
     private static final ThreadLocal<ScriptEngine> NASHORN_ENGINE = new ThreadLocal<ScriptEngine>() {
 
         @Override
         protected ScriptEngine initialValue() {
             return getInstance().getEngineByName("nashorn");//$NON-NLS-N$
         }
-    
+
     };
 
     private interface JsEvaluator {
         boolean evaluate(String testElementName, String condition);
     }
-    
+
     private static class RhinoJsEngine implements JsEvaluator {
         @Override
         public boolean evaluate(String testElementName, String condition) {
@@ -114,7 +114,7 @@ public class IfController extends GenericController implements Serializable, Thr
             return result;
         }
     }
-    
+
     private static class NashornJsEngine implements JsEvaluator {
         @Override
         public boolean evaluate(String testElementName, String condition) {
@@ -129,16 +129,16 @@ public class IfController extends GenericController implements Serializable, Thr
             return false;
         }
     }
-        
+
     private static JsEvaluator JAVASCRIPT_EVALUATOR = USE_RHINO_ENGINE ? new RhinoJsEngine() : new NashornJsEngine();
-    
+
     /**
      * Initialization On Demand Holder pattern
      */
     private static class LazyHolder {
         public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
     }
- 
+
     /**
      * @return ScriptEngineManager singleton
      */
@@ -207,8 +207,8 @@ public class IfController extends GenericController implements Serializable, Thr
         log.debug("    >> evaluate Condition -  [{}] results is  [{}]", condition, result);
         return result;
     }
-    
-    
+
+
     private static boolean evaluateExpression(String cond) {
         return cond.equalsIgnoreCase("true"); // $NON-NLS-1$
     }
@@ -216,8 +216,8 @@ public class IfController extends GenericController implements Serializable, Thr
     @Override
     public boolean isDone() {
         // bug 26672 : the isDone result should always be false and not based on the expression evaluation
-        // if an IfController ever gets evaluated to false it gets removed from the test tree. 
-        // The problem is that the condition might get evaluated to true the next iteration, 
+        // if an IfController ever gets evaluated to false it gets removed from the test tree.
+        // The problem is that the condition might get evaluated to true the next iteration,
         // which we don't get the opportunity for
         return false;
     }
@@ -233,7 +233,7 @@ public class IfController extends GenericController implements Serializable, Thr
         // so then we just pass the control to the next item inside the if control
         boolean result = true;
         if(isEvaluateAll() || isFirst()) {
-            result = isUseExpression() ? 
+            result = isUseExpression() ?
                     evaluateExpression(getCondition())
                     :
                     evaluateCondition(getCondition());
@@ -250,7 +250,7 @@ public class IfController extends GenericController implements Serializable, Thr
             return null;
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -275,10 +275,10 @@ public class IfController extends GenericController implements Serializable, Thr
     public void setUseExpression(boolean selected) {
         setProperty(USE_EXPRESSION, selected, false);
     }
-    
+
     @Override
     public void threadStarted() {}
-    
+
     @Override
     public void threadFinished() {
        NASHORN_ENGINE.remove();

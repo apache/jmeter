@@ -47,7 +47,7 @@ public class HTTPArgument extends Argument implements Serializable {
     private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
 
     private static final String USE_EQUALS = "HTTPArgument.use_equals";
-    
+
     private static final String CONTENT_TYPE = "HTTPArgument.content_type";
 
     private static final EncoderCache cache = new EncoderCache(1000);
@@ -95,7 +95,7 @@ public class HTTPArgument extends Argument implements Serializable {
     public String getContentType() {
         return getPropertyAsString(CONTENT_TYPE, HTTPArgument.DEFAULT_CONTENT_TYPE);
     }
-    
+
     public void setAlwaysEncoded(boolean ae) {
         setProperty(new BooleanProperty(ALWAYS_ENCODE, ae));
     }
@@ -262,7 +262,7 @@ public class HTTPArgument extends Argument implements Serializable {
 
     /**
      * Converts all {@link Argument} entries in the collection to {@link HTTPArgument} entries.
-     * 
+     *
      * @param args collection of {@link Argument} and/or {@link HTTPArgument} entries
      */
     public static void convertArgumentsToHTTP(Arguments args) {

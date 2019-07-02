@@ -28,7 +28,7 @@ import javax.jms.Message;
 public interface QueueExecutor {
     /**
      * Sends and receives a message.
-     * 
+     *
      * @param request the message to send
      * @param deliveryMode the delivery mode to use
      * @param priority the priority for this message
@@ -38,8 +38,8 @@ public interface QueueExecutor {
      *             in case of an exception from the messaging system
      */
     Message sendAndReceive(Message request,
-            int deliveryMode, 
-            int priority, 
+            int deliveryMode,
+            int priority,
             long expiration) throws JMSException;
 
     /**

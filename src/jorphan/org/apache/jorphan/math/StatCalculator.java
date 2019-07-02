@@ -55,7 +55,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     private T max;
 
     private long bytes = 0;
-    
+
     private long sentBytes = 0;
 
     private final T ZERO;
@@ -122,7 +122,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     public long getTotalBytes() {
         return bytes;
     }
-    
+
     public long getTotalSentBytes() {
         return sentBytes;
     }
@@ -224,7 +224,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     /**
      * Update the calculator with the values for a set of samples.
-     * 
+     *
      * @param val the common value, normally the elapsed time
      * @param sampleCount the number of samples with the same value
      */
@@ -240,7 +240,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     /**
      * Update the calculator with the value for an aggregated sample.
-     * 
+     *
      * @param val the aggregate value, normally the elapsed time
      * @param sampleCount the number of samples contributing to the aggregate value
      */
@@ -274,7 +274,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     /**
      * Add a single value (normally elapsed time)
-     * 
+     *
      * @param val the value to add, which should correspond with a single sample
      * @see #addValue(Number, long)
      */

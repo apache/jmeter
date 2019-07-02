@@ -65,7 +65,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                     "org.apache.jmeter.protocol.ftp.config.gui.FtpConfigGui",
                     "org.apache.jmeter.config.gui.SimpleConfigGui"
             ));
-    
+
     public static final String SERVER = "FTPSampler.server"; // $NON-NLS-1$
 
     public static final String PORT = "FTPSampler.port"; // $NON-NLS-1$
@@ -221,7 +221,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                     } else {
                         final boolean saveResponse = isSaveResponse();
                         ByteArrayOutputStream baos=null; // No need to close this
-                        OutputStream target=null; 
+                        OutputStream target=null;
                         OutputStream output = null;
                         try {
                             if (saveResponse){
@@ -331,7 +331,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
         }
         return client != null;
     }
-    
+
     /**
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */

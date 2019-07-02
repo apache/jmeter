@@ -71,18 +71,18 @@ public class LdapExtClient {
      *            "com.sun.jndi.ldap.connect.timeout"
      * @param secure
      *            flag whether ssl should be used
-     * @param trustAll flag whether we should trust all certificates 
+     * @param trustAll flag whether we should trust all certificates
      * @return newly created {@link DirContext}
      * @exception NamingException
      *                when creating the {@link DirContext} fails
      */
     public static DirContext connect(String host,
-            String port, 
-            String rootdn, 
+            String port,
+            String rootdn,
             String username,
-            String password, 
-            String connTimeOut, 
-            boolean secure, 
+            String password,
+            String connTimeOut,
+            boolean secure,
             boolean trustAll)
             throws NamingException {
         DirContext dirContext;
@@ -141,7 +141,7 @@ public class LdapExtClient {
 
     /**
      * Filter the data in the ldap directory for the given search base
-     * 
+     *
      * @param dirContext
      *            context to perform the search on
      *
@@ -170,15 +170,15 @@ public class LdapExtClient {
      * @throws NamingException
      *             when searching fails
      **/
-    public static NamingEnumeration<SearchResult> searchTest(  
-            DirContext dirContext, 
-            String searchBase, 
-            String searchFilter, 
-            int scope, 
+    public static NamingEnumeration<SearchResult> searchTest(
+            DirContext dirContext,
+            String searchBase,
+            String searchFilter,
+            int scope,
             long countlim,
-            int timelim, 
-            String[] attrs, 
-            boolean retobj, 
+            int timelim,
+            String[] attrs,
+            boolean retobj,
             boolean deref) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);

@@ -88,7 +88,7 @@ public class RegexFunction extends AbstractFunction {
             throws InvalidVariableException {
         String valueIndex = ""; //$NON-NLS-1$
         String defaultValue = ""; //$NON-NLS-1$
-        String between = ""; //$NON-NLS-1$ 
+        String between = ""; //$NON-NLS-1$
         String name = ""; //$NON-NLS-1$
         String inputVariable = ""; //$NON-NLS-1$
         Pattern searchPattern;
@@ -159,7 +159,7 @@ public class RegexFunction extends AbstractFunction {
                 MatchResult match = matcher.getMatch();
                 if(match != null) {
                     collectAllMatches.add(match);
-                } 
+                }
             }
         } finally {
             if (name.length() > 0){

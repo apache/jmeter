@@ -46,18 +46,18 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 /**
  * RandomDate Function generates a date in a specific range
  *
- * Parameters: 
+ * Parameters:
  * <ul>
  *  <li>Time format @see <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
  *      (optional - defaults to yyyy-MM-dd)</li>
  *  <li>Start date formated as first param (optional - defaults to now)</li>
  *  <li>End date</li>
- *  <li>Locale for the format (optional)</li> 
+ *  <li>Locale for the format (optional)</li>
  *  <li>variable name (optional)</li>
  * </ul>
  * Returns a formatted date with the specified number of (days, month, year)
  * Value is also saved in the variable for later re-use.
- * 
+ *
  * @since 3.3
  */
 public class RandomDate extends AbstractFunction {
@@ -186,7 +186,7 @@ public class RandomDate extends AbstractFunction {
         } catch (DateTimeParseException | NumberFormatException ex) {
             log.error("Failed to parse End date '{}'", dateEnd, ex); // $NON-NLS-1$
         }
-        
+
         // Generate the random date
         String dateString = "";
         if (localEndDate < localStartDate) {

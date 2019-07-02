@@ -188,7 +188,7 @@ public class Summariser extends AbstractTestElement
          * Need to allow for a margin of error, otherwise can miss the slot.
          * Also need to check we've not hit the window already
          */
-        
+
         synchronized (myTotals) {
             if (s != null) {
                 myTotals.delta.addSample(s);

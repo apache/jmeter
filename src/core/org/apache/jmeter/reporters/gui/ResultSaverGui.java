@@ -49,7 +49,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable { /
     private JLabeledTextField filename;
 
     private JLabeledTextField variableName;
-    
+
     private JLabeledTextField numberPadLength;
 
     private JCheckBox errorsOnly;
@@ -92,7 +92,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable { /
         skipSuffix.setSelected(resultSaver.getSkipSuffix());
         variableName.setText(resultSaver.getVariableName());
         addTimestamp.setSelected(resultSaver.getAddTimeStamp());
-        numberPadLength.setText(resultSaver.getNumberPadLen() == 0 ? 
+        numberPadLength.setText(resultSaver.getNumberPadLen() == 0 ?
                 "" : Integer.toString(resultSaver.getNumberPadLen()));
     }
 
@@ -147,7 +147,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable { /
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
         setBorder(makeBorder());
-        
+
         Box box = Box.createVerticalBox();
         box.add(makeTitlePanel());
         box.add(createSaveConditionsPanel());
@@ -199,7 +199,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable { /
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("resultsaver_save_conditions"))); //$NON-NLS-1$
         GridBagConstraints gbc = new GridBagConstraints();
         initConstraints(gbc);
-        
+
         addField(panel, successOnly, gbc);
         resetContraints(gbc);
         addField(panel, errorsOnly, gbc);
@@ -209,7 +209,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable { /
 
         return panel;
     }
-    
+
     // Needed to avoid Class cast error in Clear.java
     @Override
     public void clearData() {
@@ -221,7 +221,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable { /
         gbc.fill=GridBagConstraints.HORIZONTAL;
         panel.add(field, gbc.clone());
     }
-    
+
     private void addField(JPanel panel, JLabeledTextField field, GridBagConstraints gbc) {
         List<JComponent> item = field.getComponentList();
         panel.add(item.get(0), gbc.clone());

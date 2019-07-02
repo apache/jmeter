@@ -122,7 +122,7 @@ public class Jexl2Function extends AbstractFunction implements ThreadListener {
         }
         return engine;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public List<String> getArgumentDesc()

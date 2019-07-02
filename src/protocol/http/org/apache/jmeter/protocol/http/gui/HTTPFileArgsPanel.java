@@ -72,7 +72,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
 
     /** A button for removing files from the table. */
     private JButton delete;
-    
+
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
 
@@ -143,7 +143,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
             base.setHTTPFiles(files);
         }
     }
-    
+
     public boolean hasData() {
         return tableModel.iterator().hasNext();
     }
@@ -253,7 +253,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         } else if (BROWSE.equals(command)) {
             String path = browseAndGetFilePath();
             if(StringUtils.isNotBlank(path)) {
-                tableModel.setValueAt(path, rowSelected, 0);                
+                tableModel.setValueAt(path, rowSelected, 0);
             }
         }
     }
@@ -300,7 +300,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     protected void stopTableEditing() {
         GuiUtils.stopTableEditing(table);
     }
-    
+
     /**
      * Create the main GUI panel which contains the file table.
      *

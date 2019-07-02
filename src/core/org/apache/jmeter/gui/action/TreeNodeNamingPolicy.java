@@ -25,14 +25,14 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  * <li>on creation through {@link TreeNodeNamingPolicy#nameOnCreation(JMeterTreeNode)}</li>
  * <li>By applying naming policy on Controller child nodes through {@link TreeNodeNamingPolicy#resetState(JMeterTreeNode)}
     and {@link TreeNodeNamingPolicy#rename(JMeterTreeNode, JMeterTreeNode, int)}</li>
- * </ul> 
+ * </ul>
  * @since 3.2
  */
 public interface TreeNodeNamingPolicy {
 
     /**
      * Called by Apply Naming Policy popup menu on TransactionController nodes
-     * Rename childNode based on custom policy 
+     * Rename childNode based on custom policy
      * @param parentNode Parent node
      * @param childNode Child node
      * @param index index of child node
@@ -40,12 +40,12 @@ public interface TreeNodeNamingPolicy {
     void rename(JMeterTreeNode parentNode, JMeterTreeNode childNode, int index);
 
     /**
-     * Called within Apply Naming Policy popup menu on TransactionController nodes to 
-     * init the naming process. 
+     * Called within Apply Naming Policy popup menu on TransactionController nodes to
+     * init the naming process.
      * @param parentNode {@link JMeterTreeNode} Parent of nodes that will be renamed
      */
     void resetState(JMeterTreeNode parentNode);
-    
+
     /**
      * @param node {@link JMeterTreeNode} node that has been added to JMeter Tree node
      */

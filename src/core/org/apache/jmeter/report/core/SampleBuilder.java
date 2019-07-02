@@ -31,7 +31,7 @@ import java.util.Locale;
  * following :<br>
  * <code>"#########0.00#"</code>
  * </p>
- * 
+ *
  * @since 3.0
  */
 public class SampleBuilder {

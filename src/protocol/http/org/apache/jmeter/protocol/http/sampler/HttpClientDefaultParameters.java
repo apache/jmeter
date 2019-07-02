@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Utility class to set up default HttpClient parameters from a file.
- * 
+ *
  * Supports Apache HttpClient.
  * @deprecated since 5.0
  */
@@ -51,11 +51,11 @@ public class HttpClientDefaultParameters {
 
     /**
      * Loads a property file and converts parameters as necessary.
-     * 
+     *
      * @param file the file to load
      * @param params Apache HttpClient parameter instance
      */
-    public static void load(String file, 
+    public static void load(String file,
             final org.apache.http.params.HttpParams params){
         load(file,
                 new GenericHttpParams() {
@@ -80,7 +80,7 @@ public class HttpClientDefaultParameters {
 
     private static void load(String file, GenericHttpParams params){
         log.info("Trying httpclient parameters from "+file);
-        File f = new File(file);        
+        File f = new File(file);
         if(! (f.exists() && f.canRead())) {
             f = new File(NewDriver.getJMeterDir() + File.separator
                     + "bin" + File.separator + file); // $NON-NLS-1$

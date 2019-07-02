@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.config.gui;
@@ -28,15 +28,15 @@ import org.junit.Test;
  * A GUI panel allowing the user to enter name-value argument pairs. These
  * arguments (or parameters) are usually used to provide configuration values
  * for some other component.
- * 
+ *
  */
 public class TestArgumentsPanel {
-        
+
 
         /**
          * Test that adding an argument to the table results in an appropriate
          * TestElement being created.
-         * 
+         *
          * @throws Exception
          *             if an exception occurred during the test
          */

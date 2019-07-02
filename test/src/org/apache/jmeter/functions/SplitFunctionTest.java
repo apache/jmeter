@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -37,14 +37,14 @@ public class SplitFunctionTest extends JMeterTestCase {
 
     private JMeterContext jmctx = null;
     private JMeterVariables vars = null;
-    
+
     @Before
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmctx.setVariables(new JMeterVariables());
         vars = jmctx.getVariables();
     }
-    
+
     @Test
     public void splitTest1() throws Exception {
         String src = "";
@@ -65,7 +65,7 @@ public class SplitFunctionTest extends JMeterTestCase {
         assertEquals("b", vars.get("VAR1_2"));
         assertEquals("c", vars.get("VAR1_3"));
         assertNull(vars.get("VAR1_4"));
-        
+
         split = splitParams(src, "VAR1", "");
         assertEquals(src, split.execute());
         assertEquals(src, vars.get("VAR1"));
@@ -74,7 +74,7 @@ public class SplitFunctionTest extends JMeterTestCase {
         assertEquals("b", vars.get("VAR1_2"));
         assertEquals("c", vars.get("VAR1_3"));
         assertNull(vars.get("VAR1_4"));
-        
+
         split = splitParams(src, "VAR2", ",");
         assertEquals(src, split.execute());
         assertEquals(src, vars.get("VAR2"));
@@ -134,7 +134,7 @@ public class SplitFunctionTest extends JMeterTestCase {
         assertEquals("?", vars.get("VAR5_4"));
         assertNull(vars.get("VAR5_5"));
     }
-    
+
     // Create the SplitFile function and set its parameters.
     private static SplitFunction splitParams(String p1, String p2, String p3) throws Exception {
         SplitFunction split = new SplitFunction();

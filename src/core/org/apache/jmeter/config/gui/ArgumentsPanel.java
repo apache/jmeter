@@ -93,13 +93,13 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /** Button to move an argument down*/
     private JButton down;
-    
+
     /** Button to show the detail of an argument*/
     private JButton showDetail;
 
     /** Enable Up and Down buttons */
     private final boolean enableUpDown;
-    
+
     /** Disable buttons :Detail, Add, Add from Clipboard, Delete, Up and Down*/
     private final boolean disableButtons;
 
@@ -150,7 +150,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     public ArgumentsPanel(String label) {
         this(label, null, true, false);
     }
-    
+
     /**
      * Create a new ArgumentsPanel as an embedded component, using the specified
      * title.
@@ -162,12 +162,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     public ArgumentsPanel(String label, boolean enableUpDown) {
         this(label, null, enableUpDown, false);
     }
-    
+
     /**
      * Create a new ArgumentsPanel as an embedded component, using the specified
      * title.
-     * 
-     * @param disableButtons Remove Edit all buttons 
+     *
+     * @param disableButtons Remove Edit all buttons
      * @param label the title for the component.
      */
     public ArgumentsPanel(boolean disableButtons, String label) {
@@ -182,7 +182,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     public ArgumentsPanel(String label, Color bkg) {
         this(label, bkg, true, false);
     }
-    
+
     /**
      * Create a new ArgumentsPanel with a border and color background
      * @param label text for label
@@ -213,7 +213,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @param enableUpDown Add up/down buttons
      * @param standalone is standalone
      * @param model the table model to use
-     * @param disableButtons Remove all buttons 
+     * @param disableButtons Remove all buttons
      */
     public ArgumentsPanel(String label, Color bkg, boolean enableUpDown, boolean standalone, ObjectTableModel model, boolean disableButtons) {
         tableLabel = new JLabel(label);
@@ -329,8 +329,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      */
     protected JButton getAddButton() {
         return add;
-    }    
-    
+    }
+
     protected void checkButtonsStatus() {
         if (!disableButtons) {
             // Disable DELETE if there are no rows in the table to delete.
@@ -352,7 +352,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 }
             }
         }
-        
+
     }
 
     @Override
@@ -396,7 +396,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     }
 
-    
+
     /**
      * Move a row down
      */
@@ -405,7 +405,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         // or the selected rows will be unselected
         int[] rowsSelected = table.getSelectedRows();
         GuiUtils.stopTableEditing(table);
-        
+
         if (rowsSelected.length > 0 && rowsSelected[rowsSelected.length - 1] < table.getRowCount() - 1) {
             table.clearSelection();
             for (int i = rowsSelected.length - 1; i >= 0; i--) {
@@ -415,12 +415,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             for (int rowSelected : rowsSelected) {
                 table.addRowSelectionInterval(rowSelected + 1, rowSelected + 1);
             }
-            
+
             scrollToRowIfNotVisible(rowsSelected[0]+1);
         }
     }
 
-    
+
     /**
      * ensure that a row is visible in the viewport
      * @param rowIndx row index
@@ -439,7 +439,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             }
         }
     }
-    
+
     /**
      * @param table {@link JTable}
      * @return number of visible rows
@@ -459,17 +459,17 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         // or the selected rows will be unselected
         int[] rowsSelected = table.getSelectedRows();
         GuiUtils.stopTableEditing(table);
-        
+
         if (rowsSelected.length > 0 && rowsSelected[0] > 0) {
             table.clearSelection();
             for (int rowSelected : rowsSelected) {
                 tableModel.moveRow(rowSelected, rowSelected + 1, rowSelected - 1);
             }
-            
+
             for (int rowSelected : rowsSelected) {
                 table.addRowSelectionInterval(rowSelected - 1, rowSelected - 1);
             }
-            
+
             scrollToRowIfNotVisible(rowsSelected[0]-1);
         }
     }
@@ -482,14 +482,14 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         // or the selected will be unselected
         int[] rowsSelected = table.getSelectedRows();
         GuiUtils.stopTableEditing(table);
-        
+
         if (rowsSelected.length == 1) {
             table.clearSelection();
             RowDetailDialog detailDialog = new RowDetailDialog(tableModel, rowsSelected[0]);
             detailDialog.setVisible(true);
-        } 
+        }
     }
-    
+
     /**
      * Remove the currently selected argument from the table.
      */
@@ -512,7 +512,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 }
                 table.setRowSelectionInterval(anchorSelection, anchorSelection);
             }
-            
+
             checkButtonsStatus();
         }
     }
@@ -528,7 +528,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         tableModel.addRow(makeNewArgument());
 
         checkButtonsStatus();
-        
+
         // Highlight (select) and scroll to the appropriate row.
         int rowToSelect = tableModel.getRowCount() - 1;
         table.setRowSelectionInterval(rowToSelect, rowToSelect);
@@ -608,7 +608,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     protected void stopTableEditing() {
         GuiUtils.stopTableEditing(table);
     }
-    
+
     /**
      * Initialize the table model used for the arguments table.
      */

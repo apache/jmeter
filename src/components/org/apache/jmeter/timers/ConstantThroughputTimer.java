@@ -162,7 +162,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     /**
      * Calculate the target time by adding the result of private method
      * <code>calculateDelay()</code> to the given <code>currentTime</code>
-     * 
+     *
      * @param currentTime
      *            time in ms
      * @return new Target time
@@ -320,12 +320,12 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     public void testEnded(String host) {
         //NOOP
     }
-    
+
     // For access from test code
     Mode getMode() {
         return mode;
     }
-    
+
     // For access from test code
     void setMode(Mode newMode) {
         mode = newMode;

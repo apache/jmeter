@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * As pre- and post-processors essentially do the same this class provides the implementation.
  */
 public abstract class AbstractJDBCProcessor extends AbstractJDBCTestElement {
-    
+
     private static final Logger log = LoggerFactory.getLogger(AbstractJDBCProcessor.class);
 
     private static final long serialVersionUID = 233L;

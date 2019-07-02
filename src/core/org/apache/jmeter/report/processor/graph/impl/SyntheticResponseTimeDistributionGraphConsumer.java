@@ -83,7 +83,7 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     }
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createKeysSelector()
      */
@@ -111,7 +111,7 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */
@@ -137,7 +137,7 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
                 FAILED_LABEL
         };
         String[] colors = new String[]{
-                SATISFIED_COLOR, TOLERATED_COLOR, UNTOLERATED_COLOR, FAILED_COLOR 
+                SATISFIED_COLOR, TOLERATED_COLOR, UNTOLERATED_COLOR, FAILED_COLOR
         };
         for (int i = 0; i < seriesLabels.length; i++) {
             ListResultData array = new ListResultData();
@@ -155,12 +155,12 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
             listResultData.addResult(create(series[i], colors[i]));
         }
     }
-    
+
     private MapResultData create(String serie, String color) {
         GroupInfo groupInfo = getGroupInfos().get(AbstractGraphConsumer.DEFAULT_GROUP);
-        SeriesData seriesData = new SeriesData(groupInfo.getAggregatorFactory(), 
+        SeriesData seriesData = new SeriesData(groupInfo.getAggregatorFactory(),
                 groupInfo.enablesAggregatedKeysSeries(), false,
-                groupInfo.enablesOverallSeries()); 
+                groupInfo.enablesOverallSeries());
         MapResultData seriesResult = createSerieResult(serie, seriesData);
         seriesResult.setResult(SERIE_COLOR_PROPERTY, new ValueResultData(color));
         return seriesResult;

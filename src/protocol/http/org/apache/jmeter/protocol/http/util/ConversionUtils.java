@@ -43,12 +43,12 @@ public class ConversionUtils {
 
     private static final String CHARSET_EQ = "charset="; // $NON-NLS-1$
     private static final int CHARSET_EQ_LEN = CHARSET_EQ.length();
-    
+
     private static final String SLASHDOTDOT = "/.."; // $NON-NLS-1$
     private static final String DOTDOT = ".."; // $NON-NLS-1$
     private static final String SLASH = "/"; // $NON-NLS-1$
     private static final String COLONSLASHSLASH = "://"; // $NON-NLS-1$
-    
+
     /**
      * Match /../[../] etc.
      */
@@ -109,7 +109,7 @@ public class ConversionUtils {
      */
     public static URL makeRelativeURL(URL baseURL, String location) throws MalformedURLException{
         URL initial = new URL(baseURL,location);
-        
+
         // skip expensive processing if it cannot apply
         if (!location.startsWith("../")){// $NON-NLS-1$
             return initial;
@@ -124,7 +124,7 @@ public class ConversionUtils {
         }
         return initial;
     }
-    
+
     /**
      * @param url String Url to escape
      * @return String cleaned up url
@@ -138,7 +138,7 @@ public class ConversionUtils {
                 urlString.getQuery(), urlString.getRef());
         return uri.toString();
     }
-    
+
     /**
      * Checks a URL and encodes it if necessary,
      * i.e. if it is not currently correctly encoded.
@@ -167,7 +167,7 @@ public class ConversionUtils {
      * <code>http://host/path1/../path2</code> to <code>http://host/path2</code>
      * or <code>/one/two/../three</code> to
      * <code>/one/three</code>
-     * 
+     *
      * @param url in which the '/..'s should be removed
      * @return collapsed URL
      * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=49083">Bug 49083 - collapse /.. in redirect URLs</a>
@@ -177,12 +177,12 @@ public class ConversionUtils {
         if (url == null) {
             return url;
         }
-        
+
         url = url.trim();
         if(url.length() < 4 || !url.contains(SLASHDOTDOT)) {
             return url;
         }
-        
+
         /**
          * http://auth@host:port/path1/path2/path3/?query#anchor
          */

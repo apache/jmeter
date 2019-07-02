@@ -41,7 +41,7 @@ public class MongoDB {
     public MongoDB(
             List<ServerAddress> serverAddresses,
             MongoClientOptions mongoOptions) {
-        mongo = new MongoClient(serverAddresses, mongoOptions);   
+        mongo = new MongoClient(serverAddresses, mongoOptions);
     }
 
     public DB getDB(String database, String username, String password) {

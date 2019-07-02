@@ -110,7 +110,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private static final Logger log = LoggerFactory.getLogger(StatGraphVisualizer.class);
 
-    private static final String[] COLUMNS = { 
+    private static final String[] COLUMNS = {
             "sampler_label",                        //$NON-NLS-1$
             "aggregate_report_count",               //$NON-NLS-1$
             "average",                              //$NON-NLS-1$
@@ -258,7 +258,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private Color colorBarGraph = Color.YELLOW;
 
     private Color colorForeGraph = Color.BLACK;
-    
+
     private int nbColToGraph = 1;
 
     private Pattern pattern = null;
@@ -292,7 +292,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                                         "aggregate_report_xx_pct2_line"),
                                 PCT2_LABEL),
                         false, yellow));
-        
+
         eltList.add(
                 new BarGraph(
                         MessageFormat.format(
@@ -310,8 +310,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         init();
     }
 
-    static final Object[][] getColumnsMsgParameters() { 
-        return new Object[][] { null, 
+    static final Object[][] getColumnsMsgParameters() {
+        return new Object[][] { null,
             null,
             null,
             null,
@@ -352,7 +352,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     }
 
     /**
-     * Creates that Table model 
+     * Creates that Table model
      * @return ObjectTableModel
      */
     static ObjectTableModel createObjectTableModel() {
@@ -376,7 +376,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 new Functor("getKBPerSecond"),                 //$NON-NLS-1$
                 new Functor("getSentKBPerSecond") },            //$NON-NLS-1$
                 new Functor[] { null, null, null, null, null, null, null, null, null, null, null, null, null },
-                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
+                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class,
                             Long.class, Long.class, Long.class, Long.class, Double.class,
                             Double.class, Double.class, Double.class});
     }
@@ -399,7 +399,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             new DecimalFormat("#0.00")    // pageSize   //$NON-NLS-1$
         };
     }
-    
+
     // Column renderers
     static final TableCellRenderer[] getRenderers() {
         return new TableCellRenderer[]{
@@ -420,7 +420,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     }
 
     /**
-     * 
+     *
      * @param keys I18N keys
      * @param columnMsgParams parameters to use to format the keys labels
      * @return labels
@@ -643,7 +643,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     public double[][] getData() {
         if (model.getRowCount() > 1) {
             int count = model.getRowCount() -1;
-            
+
             int size = nbColToGraph;
             double[][] data = new double[size][count];
             int s = 0;
@@ -731,14 +731,14 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             if (chooser == null) {
                 return;
             }
-            try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile()); 
-                    OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){ 
+            try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile());
+                    OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){
                 CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),
                         writer,
                         saveHeaders.isSelected() ? getLabels(COLUMNS, getColumnsMsgParameters()) : null);
             } catch (IOException e) { // NOSONAR Error is reported in GUI
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
-            } 
+            }
         } else if (eventSource == chooseForeColor) {
             Color color = JColorChooser.showDialog(
                     null,
@@ -773,7 +773,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 forceReloadData = true;
             }
         }
-        // Not 'else if' because forceReloadData 
+        // Not 'else if' because forceReloadData
         if (eventSource == applyFilterBtn || forceReloadData) {
             if (columnSelection.isSelected() && columnMatchLabel.getText() != null
                     && columnMatchLabel.getText().length() > 0) {
@@ -797,9 +797,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                         bar.setBackColor(color);
                         btn.setBackground(bar.getBackColor());
                     }
-                } catch (NumberFormatException nfe) { 
+                } catch (NumberFormatException nfe) {
                     // nothing to do
-                } 
+                }
             }
         }
     }
@@ -819,7 +819,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     public JComponent getPrintableComponent() {
         if (saveGraphToFile) {
             saveGraphToFile = false;
-            
+
             // (re)draw the graph first to take settings into account (Bug 58329)
             if (model.getRowCount() > 1) {
                 makeGraph();
@@ -871,7 +871,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         optionsPanel.add(drawOutlinesBar);
         optionsPanel.add(numberShowGrouping);
         optionsPanel.add(valueLabelsVertical);
-        
+
         JPanel barPane = new JPanel(new BorderLayout());
         barPane.add(colPanel, BorderLayout.NORTH);
         barPane.add(Box.createRigidArea(new Dimension(0,3)), BorderLayout.CENTER);
@@ -883,7 +883,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         columnPane.add(barPane, BorderLayout.NORTH);
         columnPane.add(Box.createRigidArea(new Dimension(0,3)), BorderLayout.CENTER);
         columnPane.add(createGraphSelectionSubPane(), BorderLayout.SOUTH);
-        
+
         return columnPane;
     }
 
@@ -932,7 +932,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         syncWithName.setFont(new Font("SansSerif", Font.PLAIN, 10));
         titleNamePane.add(graphTitle, BorderLayout.CENTER);
         titleNamePane.add(syncWithName, BorderLayout.EAST);
-        
+
         JPanel titleStylePane = new JPanel();
         titleStylePane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 5));
         titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_font"), //$NON-NLS-1$
@@ -953,7 +953,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         return titlePane;
     }
 
-    private JPanel createGraphFontValuePane() {       
+    private JPanel createGraphFontValuePane() {
         JPanel fontValueStylePane = new JPanel();
         fontValueStylePane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         fontValueStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_value_font"), //$NON-NLS-1$

@@ -57,7 +57,7 @@ public class Variable extends AbstractFunction {
 
     private Object[] values;
 
-    public Variable() { 
+    public Variable() {
         //used for test
     }
 

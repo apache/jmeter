@@ -54,7 +54,7 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
     private static final String JSON_CONCATENATION_SEPARATOR = ","; //$NON-NLS-1$
     private static final String SEPARATOR = ";"; // $NON-NLS-1$
     public static final boolean COMPUTE_CONCATENATION_DEFAULT_VALUE = false;
-    
+
     private static final ThreadLocal<JSONManager> localMatcher = new ThreadLocal<JSONManager>() {
         @Override
         protected JSONManager initialValue() {
@@ -232,9 +232,9 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
     }
 
     public void setComputeConcatenation(boolean computeConcatenation) {
-        setProperty(COMPUTE_CONCATENATION, computeConcatenation, COMPUTE_CONCATENATION_DEFAULT_VALUE); 
+        setProperty(COMPUTE_CONCATENATION, computeConcatenation, COMPUTE_CONCATENATION_DEFAULT_VALUE);
     }
-    
+
     @Override
     public void threadStarted() {
         // NOOP
@@ -254,13 +254,13 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
     }
 
     public int[] getMatchNumbersAsInt(int arraySize) {
-        
+
         String matchNumbersAsString = getMatchNumbers();
         int[] result = new int[arraySize];
         if (JOrphanUtils.isBlank(matchNumbersAsString)) {
             Arrays.fill(result, 0);
         } else {
-            String[] matchNumbersAsStringArray = 
+            String[] matchNumbersAsStringArray =
                     matchNumbersAsString.split(SEPARATOR);
             for (int i = 0; i < matchNumbersAsStringArray.length; i++) {
                 result[i] = Integer.parseInt(matchNumbersAsStringArray[i].trim());

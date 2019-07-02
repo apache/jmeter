@@ -83,7 +83,7 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
         this.cssJqueryDataField.setText(""); // $NON-NLS-1$
         this.cssJqueryResultField.setText(""); // $NON-NLS-1$
         // don't set cssJqueryField to empty to keep it
-        // don't set attribute to empty to keep it 
+        // don't set attribute to empty to keep it
         // don't change impl
     }
 
@@ -206,7 +206,7 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
     private JPanel createCssJqueryTasksPanel() {
         GridBagLayout g = new GridBagLayout();
         GridBagConstraints c = new GridBagConstraints();
-        
+
         JPanel cssJqueryActionPanel = new JPanel();
         cssJqueryActionPanel.setLayout(g);
         Border margin = new EmptyBorder(5, 5, 0, 5);
@@ -216,15 +216,15 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
         c.gridx=0;
         c.gridy=0;
         cssJqueryActionPanel.add(cssJqueryField, c);
-        
+
         cssJqueryLabeledChoice = new JLabeledChoice(
                 JMeterUtils.getResString("cssjquery_impl"), // $NON-NLS-1$
-                getImplementations()); 
+                getImplementations());
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx=1;
         c.gridy=0;
         cssJqueryActionPanel.add(cssJqueryLabeledChoice, c);
-                
+
         attributeField = new JLabeledTextField(JMeterUtils.getResString("cssjquery_attribute")); // $NON-NLS-1$
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx=0;
@@ -239,7 +239,7 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
         c.gridy=1;
         cssJqueryActionPanel.add(cssJqueryTester, c);
 
-        
+
         cssJqueryResultField = new JTextArea();
         cssJqueryResultField.setEditable(false);
         cssJqueryResultField.setLineWrap(true);

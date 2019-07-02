@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.listeners;
@@ -48,7 +48,7 @@ public class TestResultAction extends JMeterTestCase {
         sampleResult = new SampleResult();
         sampleResult.setResponseData(data, null);
     }
-    
+
     @Test
     public void testSuccess() {
         sampleResult.setSuccessful(true);
@@ -56,7 +56,7 @@ public class TestResultAction extends JMeterTestCase {
         resultAction.sampleOccurred(new SampleEvent(sampleResult, "JUnit-TG"));
         Assert.assertFalse(sampleResult.isStopTest());
     }
-    
+
     @Test
     public void testOnFailureStopTest() {
         sampleResult.setSuccessful(false);
@@ -67,7 +67,7 @@ public class TestResultAction extends JMeterTestCase {
         Assert.assertFalse(sampleResult.isStopThread());
         Assert.assertFalse(sampleResult.isStartNextThreadLoop());
     }
-    
+
     @Test
     public void testOnFailureStopTestNow() {
         sampleResult.setSuccessful(false);
@@ -78,7 +78,7 @@ public class TestResultAction extends JMeterTestCase {
         Assert.assertFalse(sampleResult.isStopThread());
         Assert.assertFalse(sampleResult.isStartNextThreadLoop());
     }
-    
+
     @Test
     public void testOnFailureStopThread() {
         sampleResult.setSuccessful(false);

@@ -31,14 +31,14 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 public class TestCssParser extends JMeterTestCase {
-    
+
     private static final String CSS_IN_ERROR = "@-webkit-keyframes \"introjspulse\"{"
             + "0%{-webkit-transform:scale(0);opacity:.0}"
             + "25%{-webkit-transform:scale(0);opacity:.1}"
             + "50%{-webkit-transform:scale(0.1);opacity:.3}"
             + "75%{-webkit-transform:scale(0.5);opacity:.5}"
             + "100%{-webkit-transform:scale(1);opacity:.0}}";
-    
+
     private final CssParser parser = new CssParser();
 
     @Test
@@ -54,7 +54,7 @@ public class TestCssParser extends JMeterTestCase {
         result = extractUrls("@import url(http://example.com/abc.css);");
         assertThat(result.isEmpty(), CoreMatchers.is(false));
     }
-    
+
     @Test(expected=LinkExtractorParseException.class)
     public void testExtractUrlsFromBrokenData() throws Exception {
         extractUrls(CSS_IN_ERROR);

@@ -113,7 +113,7 @@ public class SamplingStatCalculator {
     public double getKBPerSecond() {
         return getBytesPerSecond() / 1024; // 1024=bytes per kb
     }
-    
+
     /**
      * Sent Throughput in bytes / second
      *
@@ -124,7 +124,7 @@ public class SamplingStatCalculator {
     }
 
     /**
-     * @param value long 
+     * @param value long
      * @return rate per second
      */
     private double getRatePerSecond(long value) {

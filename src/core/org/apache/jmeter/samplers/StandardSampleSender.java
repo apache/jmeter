@@ -48,7 +48,7 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
 
     StandardSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using StandardSampleSender for this test run");        
+        log.info("Using StandardSampleSender for this test run");
     }
 
     @Override
@@ -81,7 +81,7 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
      *             never
      */
     private Object readResolve() throws ObjectStreamException{
-        log.info("Using StandardSampleSender for this test run");        
+        log.info("Using StandardSampleSender for this test run");
         return this;
     }
 }

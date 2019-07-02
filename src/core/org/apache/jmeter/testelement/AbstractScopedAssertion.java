@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.testelement;
@@ -23,7 +23,7 @@ package org.apache.jmeter.testelement;
  * Super-class for all Assertions that can be applied to main sample, sub-samples or both.
  * Test elements merely need to extend this class to support scoping.
  * </p>
- * 
+ *
  * <p>
  * Their corresponding GUI classes need to add the AssertionScopePanel to the GUI
  * using the AbstractAssertionGui methods:

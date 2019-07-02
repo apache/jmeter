@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -135,7 +135,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         value = function.execute(result, null);
         assertThat(value, is(equalTo("29 mars 2111")));
     }
-    
+
     @Test
     public void testEmptyFormatDate() throws Exception {
         String startDate = "2111-03-29";
@@ -147,7 +147,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         value = function.execute(result, null);
         assertThat(value, is(equalTo("2111-03-29")));
     }
-    
+
     @Test
     public void testEndDateBeforeStartDate() throws Exception {
         String startDate = "2111-03-29";
@@ -159,7 +159,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         value = function.execute(result, null);
         assertThat(value, is(equalTo("")));
     }
-    
+
     @Test
     public void testEndDateBeforeStartDateNullVariable() throws Exception {
         String startDate = "2111-03-29";
@@ -171,7 +171,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         value = function.execute(result, null);
         assertThat(value, is(equalTo("2111-03-29")));
     }
-    
+
     @Test
     public void testEndDateBeforeStartDateWithVariable() throws Exception {
         String startDate = "2111-03-29";
@@ -184,7 +184,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         assertThat(value, is(equalTo("2111-03-29")));
         assertThat(vars.get("MY_VAR"), is(equalTo("2111-03-29")));
     }
-    
+
     @Test
     public void testInvalidFormat() throws Exception {
         String startDate = "2111-03-29";
@@ -196,7 +196,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         value = function.execute(result, null);
         assertThat(value, is(equalTo("")));
     }
-    
+
     @Test
     public void testInvalidStartDateFormat() throws Exception {
         String startDate = "23-2111-03";
@@ -208,7 +208,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         value = function.execute(result, null);
         assertThat(value, is(equalTo("")));
     }
-    
+
     @Test
     public void testInvalidEndDateFormat() throws Exception {
         String startDate = "2011-03-30";

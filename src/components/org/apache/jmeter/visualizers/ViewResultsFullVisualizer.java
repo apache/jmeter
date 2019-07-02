@@ -170,7 +170,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             if (!dataChanged) {
                 return;
             }
-            
+
             final Enumeration<TreePath> expandedElements = jTree.getExpandedDescendants(new TreePath(root));
             oldExpandedElements = extractExpandedObjects(expandedElements);
             oldSelectedElement = getSelectedObject();
@@ -246,7 +246,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             TreePath defaultPath, DefaultMutableTreeNode extensionNode) {
         TreePath result = defaultPath;
         if (oldSelectedObject == item) {
-            result = toTreePath(path, extensionNode); 
+            result = toTreePath(path, extensionNode);
         }
         if (oldExpandedObjects.contains(item)) {
             newExpandedPaths.add(toTreePath(path, extensionNode));
@@ -347,7 +347,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSide, rightSide);
         mainSplit.setOneTouchExpandable(true);
 
-        JSplitPane searchAndMainSP = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
+        JSplitPane searchAndMainSP = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 new SearchTreePanel(root), mainSplit);
         searchAndMainSP.setOneTouchExpandable(true);
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, makeTitlePanel(), searchAndMainSP);
@@ -576,7 +576,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             } else {
                 this.setIcon(imageSuccess);
             }
-            
+
             // Handle search related rendering
             SearchableTreeNode node = (SearchableTreeNode) value;
             if(node.isNodeHasMatched()) {

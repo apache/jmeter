@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.engine;
@@ -35,7 +35,7 @@ import org.apache.jorphan.collections.ListedHashTree;
 import org.junit.Test;
 
 public class TestTreeCloner extends JMeterTestCase {
-        
+
         @Test
         public void testCloning() throws Exception {
             ListedHashTree original = new ListedHashTree();

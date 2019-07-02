@@ -40,7 +40,7 @@ public class MenuInfo {
     public MenuInfo(JMeterGUIComponent item, String classFullName) {
         this(item.getStaticLabel(), item, classFullName);
     }
-    
+
     public MenuInfo(String label, JMeterGUIComponent item, String classFullName) {
         this.label = label;
         guiComp = item;

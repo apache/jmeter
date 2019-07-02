@@ -80,14 +80,14 @@ public class ChangeParent extends AbstractAction {
     }
 
     private void changeParent(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
-        
+
         // keep the old name if it was not the default one
         Controller currentController = (Controller) currentNode.getUserObject();
         JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
         String defaultName = JMeterUtils.getResString(currentGui.getLabelResource());
-        if(StringUtils.isNotBlank(currentController.getName()) 
+        if(StringUtils.isNotBlank(currentController.getName())
                 && !currentController.getName().equals(defaultName)){
-            newParent.setName(currentController.getName());            
+            newParent.setName(currentController.getName());
         }
 
         JMeterTreeModel treeModel = guiPackage.getTreeModel();

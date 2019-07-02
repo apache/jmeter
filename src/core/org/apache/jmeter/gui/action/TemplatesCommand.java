@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Open Templates 
+ * Open Templates
  * @since 2.10
  */
 public class TemplatesCommand extends AbstractActionWithNoRunningTest {
@@ -33,7 +33,7 @@ public class TemplatesCommand extends AbstractActionWithNoRunningTest {
     // Ensure the dialog is only created when it is first needed
     // In turn this avoids scanning the templates until first needed
     static class IODH {
-        private static final SelectTemplatesDialog dialog = new SelectTemplatesDialog();        
+        private static final SelectTemplatesDialog dialog = new SelectTemplatesDialog();
     }
 
     static {

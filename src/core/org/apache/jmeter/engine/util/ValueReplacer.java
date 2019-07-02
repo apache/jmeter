@@ -70,7 +70,7 @@ public class ValueReplacer {
 
     /**
      * Replaces TestElement StringProperties containing functions with their Function properties equivalent, example:
-     * ${__time()}_${__threadNum()}_${__machineName()} will become a FunctionProperty of 
+     * ${__time()}_${__threadNum()}_${__machineName()} will become a FunctionProperty of
      * a CompoundVariable containing  3 functions
      * @param el {@link TestElement} in which the values should be replaced
      * @throws InvalidVariableException when transforming of the variables goes awry and
@@ -90,7 +90,7 @@ public class ValueReplacer {
     }
 
     /**
-     * Transforms strings into variable references 
+     * Transforms strings into variable references
      * @param el {@link TestElement} in which the we will look for strings, that can be replaced by variable references
      * @throws InvalidVariableException  when transforming of the strings goes awry and
      * the used transformer throws an {@link InvalidVariableException}

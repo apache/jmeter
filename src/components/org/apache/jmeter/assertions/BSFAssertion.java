@@ -56,7 +56,7 @@ public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion
         }
         return result;
     }
-    
+
     @Override
     public Object clone() {
         return super.clone();

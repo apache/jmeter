@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Change Case Function
- * 
+ *
  * Support String manipulations of:
  * <ul>
  * <li>upper case</li>
@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * <li>capitalize</li>
  * <li></li>
  * </ul>
- * 
+ *
  * @since 4.0
  *
  */
@@ -115,10 +115,10 @@ public class ChangeCase extends AbstractFunction {
     public List<String> getArgumentDesc() {
         return DESC;
     }
-    
+
     /**
      * ChangeCase Modes
-     * 
+     *
      * Modes for different cases
      *
      */
@@ -136,7 +136,7 @@ public class ChangeCase extends AbstractFunction {
 
         /**
          * Get ChangeCaseMode by mode
-         * 
+         *
          * @param mode Change new case mode
          * @return relevant ChangeCaseMode
          */

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.engine.util;
@@ -165,7 +165,7 @@ public class TestValueReplacer extends JMeterTestCase {
          * This test should be compared with the one above.
          * Here, the string contains a valid variable reference, so all
          * backslashes are also processed.
-         * 
+         *
          * See https://bz.apache.org/bugzilla/show_bug.cgi?id=53534
          */
         @Test

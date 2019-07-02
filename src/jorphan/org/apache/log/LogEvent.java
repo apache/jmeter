@@ -27,7 +27,7 @@ import java.io.Serializable;
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @author Peter Donald
- * @deprecated Will be dropped in 3.3 
+ * @deprecated Will be dropped in 3.3
  */
 @Deprecated
 public final class LogEvent

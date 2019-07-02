@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private static final Logger log = LoggerFactory.getLogger(TextGraphiteMetricsSender.class);
-        
+
     private String prefix;
 
     private final Object lock = new Object();
@@ -63,7 +63,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         log.info("Created TextGraphiteMetricsSender with host: {}, port: {}, prefix: {}", graphiteHost, graphitePort,
                 prefix);
     }
-    
+
     /* (non-Javadoc)
      * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#addMetric(long, java.lang.String, java.lang.String, java.lang.String)
      */
@@ -76,7 +76,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
             .append(".")
             .append(metricName);
         synchronized (lock) {
-            metrics.add(new MetricTuple(sb.toString(), timestamp, metricValue));            
+            metrics.add(new MetricTuple(sb.toString(), timestamp, metricValue));
         }
     }
 
@@ -91,7 +91,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
                 return;
             }
             tempMetrics = metrics;
-            metrics = new ArrayList<>(tempMetrics.size());            
+            metrics = new ArrayList<>(tempMetrics.size());
         }
         final List<MetricTuple> copyMetrics = tempMetrics;
         if (!copyMetrics.isEmpty()) {

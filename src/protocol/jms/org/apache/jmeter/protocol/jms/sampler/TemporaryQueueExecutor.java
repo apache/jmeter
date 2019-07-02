@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Request/reply executor with a temporary reply queue. <br>
- * 
+ *
  * Used by JMS Sampler (Point to Point)
  */
 public class TemporaryQueueExecutor implements QueueExecutor {
@@ -60,11 +60,11 @@ public class TemporaryQueueExecutor implements QueueExecutor {
      * {@inheritDoc}
      */
     @Override
-    public Message sendAndReceive(Message request, 
-            int deliveryMode, 
-            int priority, 
+    public Message sendAndReceive(Message request,
+            int deliveryMode,
+            int priority,
             long expiration) throws JMSException {
-        LOGGER.debug("Sending message and waiting for response in Temporary queue with timeout {} ms (0==infinite)", 
+        LOGGER.debug("Sending message and waiting for response in Temporary queue with timeout {} ms (0==infinite)",
                 timeout);
         return requestor.request(request, timeout);
     }

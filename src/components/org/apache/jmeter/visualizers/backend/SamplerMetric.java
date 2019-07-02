@@ -65,9 +65,9 @@ public class SamplerMetric {
     private long sentBytes;
     private long receivedBytes;
 
-    
+
     /**
-     * 
+     *
      */
     public SamplerMetric() {
         // Limit to sliding window of SLIDING_WINDOW_SIZE values for FIXED mode
@@ -96,7 +96,7 @@ public class SamplerMetric {
             failures+=result.getErrorCount();
             ErrorMetric error = new ErrorMetric(result);
             errors.put(error, errors.getOrDefault(error, 0) + result.getErrorCount() );
-        }       
+        }
         long time = result.getTime();
         allResponsesStats.addValue(time);
         pctResponseStats.addValue(time);
@@ -126,7 +126,7 @@ public class SamplerMetric {
      * Compute hits from res
      * @param res {@link SampleResult}
      */
-    private void addHits(SampleResult res) {     
+    private void addHits(SampleResult res) {
         SampleResult[] subResults = res.getSubResults();
         if (!TransactionController.isFromTransactionController(res)) {
             hits += 1;
@@ -135,14 +135,14 @@ public class SamplerMetric {
             addHits(subResult);
         }
     }
-    
+
     /**
      * Reset metric except for percentile related data
      */
     public synchronized void resetForTimeInterval() {
         switch (WINDOW_MODE) {
         case FIXED:
-            // We don't clear responsesStats nor usersStats as it will slide as per my understanding of 
+            // We don't clear responsesStats nor usersStats as it will slide as per my understanding of
             // http://commons.apache.org/proper/commons-math/userguide/stat.html
             break;
         case TIMED:
@@ -150,7 +150,7 @@ public class SamplerMetric {
                 stat.clear();
             }
             break;
-        default: 
+        default:
             // This cannot happen
         }
         errors.clear();
@@ -163,16 +163,16 @@ public class SamplerMetric {
 
     /**
      * Get the number of total requests for the current time slot
-     * 
+     *
      * @return number of total requests
      */
     public int getTotal() {
         return successes+failures;
     }
-    
+
     /**
      * Get the number of successful requests for the current time slot
-     * 
+     *
      * @return number of successful requests
      */
     public int getSuccesses() {
@@ -181,7 +181,7 @@ public class SamplerMetric {
 
     /**
      * Get the number of failed requests for the current time slot
-     * 
+     *
      * @return number of failed requests
      */
     public int getFailures() {
@@ -190,7 +190,7 @@ public class SamplerMetric {
 
     /**
      * Get the maximal elapsed time for requests within sliding window
-     * 
+     *
      * @return the maximal elapsed time, or <code>0</code> if no requests have
      *         been added yet
      */
@@ -200,26 +200,26 @@ public class SamplerMetric {
 
     /**
      * Get the minimal elapsed time for requests within sliding window
-     * 
+     *
      * @return the minTime, or {@link Long#MAX_VALUE} if no requests have been
      *         added yet
      */
     public double getOkMinTime() {
         return okResponsesStats.getMin();
     }
-    
+
     /**
      * Get the arithmetic mean of the stored values
-     * 
+     *
      * @return The arithmetic mean of the stored values
      */
     public double getOkMean() {
         return okResponsesStats.getMean();
     }
-    
+
     /**
      * Returns an estimate for the requested percentile of the stored values.
-     * 
+     *
      * @param percentile
      *            the requested percentile (scaled from 0 - 100)
      * @return Returns an estimate for the requested percentile of the stored
@@ -231,7 +231,7 @@ public class SamplerMetric {
 
     /**
      * Get the maximal elapsed time for requests within sliding window
-     * 
+     *
      * @return the maximal elapsed time, or <code>0</code> if no requests have
      *         been added yet
      */
@@ -241,26 +241,26 @@ public class SamplerMetric {
 
     /**
      * Get the minimal elapsed time for requests within sliding window
-     * 
+     *
      * @return the minTime, or {@link Long#MAX_VALUE} if no requests have been
      *         added yet
      */
     public double getKoMinTime() {
         return koResponsesStats.getMin();
     }
-    
+
     /**
      * Get the arithmetic mean of the stored values
-     * 
+     *
      * @return The arithmetic mean of the stored values
      */
     public double getKoMean() {
         return koResponsesStats.getMean();
     }
-    
+
     /**
      * Returns an estimate for the requested percentile of the stored values.
-     * 
+     *
      * @param percentile
      *            the requested percentile (scaled from 0 - 100)
      * @return Returns an estimate for the requested percentile of the stored
@@ -269,10 +269,10 @@ public class SamplerMetric {
     public double getKoPercentile(double percentile) {
         return koResponsesStats.getPercentile(percentile);
     }
-    
+
     /**
      * Get the maximal elapsed time for requests within sliding window
-     * 
+     *
      * @return the maximal elapsed time, or <code>0</code> if no requests have
      *         been added yet
      */
@@ -282,26 +282,26 @@ public class SamplerMetric {
 
     /**
      * Get the minimal elapsed time for requests within sliding window
-     * 
+     *
      * @return the minTime, or {@link Long#MAX_VALUE} if no requests have been
      *         added yet
      */
     public double getAllMinTime() {
         return allResponsesStats.getMin();
     }
-    
+
     /**
      * Get the arithmetic mean of the stored values
-     * 
+     *
      * @return The arithmetic mean of the stored values
      */
     public double getAllMean() {
         return allResponsesStats.getMean();
     }
-    
+
     /**
      * Returns an estimate for the requested percentile of the stored values.
-     * 
+     *
      * @param percentile
      *            the requested percentile (scaled from 0 - 100)
      * @return Returns an estimate for the requested percentile of the stored
@@ -318,7 +318,7 @@ public class SamplerMetric {
     public int getHits() {
         return hits;
     }
-    
+
     /**
      * Returns by type ( response code and message ) the count of errors occurs
      * @return errors

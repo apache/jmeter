@@ -35,7 +35,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
-     * 
+     *
      * @return the version of this converter
      */
     public static String getVersion() {
@@ -52,7 +52,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         MultiProperty prop = (MultiProperty) arg0;
-        
+
         writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
         for (JMeterProperty jMeterProperty : prop) {
             writeItem(jMeterProperty, context, writer);

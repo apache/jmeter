@@ -24,7 +24,7 @@ import org.apache.jmeter.report.core.SampleSelector;
 /**
  * The Class AggregateConsumer provides a consumer that can aggregate samples to
  * provide a result
- * 
+ *
  * @since 3.0
  */
 public class AggregateConsumer extends AbstractSampleConsumer {
@@ -74,7 +74,7 @@ public class AggregateConsumer extends AbstractSampleConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.SampleConsumer#startConsuming()
      */
     @Override
@@ -90,7 +90,7 @@ public class AggregateConsumer extends AbstractSampleConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.
      * jmeter.report.core.Sample, int)
@@ -103,7 +103,7 @@ public class AggregateConsumer extends AbstractSampleConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
      */
     @Override

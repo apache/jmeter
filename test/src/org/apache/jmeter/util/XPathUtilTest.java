@@ -71,7 +71,7 @@ public class XPathUtilTest {
         XdmItem item = nodes.itemAt(0);
         assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",item.toString());
     }
-    
+
     @Test
     public void testputValuesForXPathInListUsingSaxon() throws SaxonApiException, FactoryConfigurationError{
 
@@ -125,19 +125,19 @@ public class XPathUtilTest {
         List<String[]> test = XPathUtil.namespacesParse(namespaces);
         assertEquals("donald",test.get(0)[0]);
         assertEquals("duck",test.get(0)[1]);
-        
+
         namespaces = "donald=duck\nmickey=mouse";
         test = XPathUtil.namespacesParse(namespaces);
         assertEquals("donald",test.get(0)[0]);
         assertEquals("duck",test.get(0)[1]);
         assertEquals("mickey",test.get(1)[0]);
         assertEquals("mouse",test.get(1)[1]);
-        
+
         namespaces = "donald=duck\n\n\nmickey=mouse";
         test = XPathUtil.namespacesParse(namespaces);
         assertEquals("mickey",test.get(1)[0]);
         assertEquals("mouse",test.get(1)[1]);
-        
+
         namespaces = "geo=patate\n       \n   \n\nmickey=mouse\n\n      \n";
         test = XPathUtil.namespacesParse(namespaces);
         assertEquals("mickey",test.get(1)[0]);
@@ -163,7 +163,7 @@ public class XPathUtilTest {
                         "  </three>...</one>",
                         "")));
     }
-    
+
     @Test()
     public void testFormatXmlInvalid() {
         PrintStream origErr = System.err;
@@ -252,17 +252,17 @@ public class XPathUtilTest {
         assertEquals("hd", res.get(1)[0]);
         assertEquals("http://www.w3.org/wgs85_pos#", res.get(1)[1]);
     }
-    
+
     @Test()
     public void testComputeAssertionResultUsingSaxon() throws SaxonApiException, FactoryConfigurationError {
-        //test xpath2 assertion 
+        //test xpath2 assertion
         AssertionResult res = new AssertionResult("test");
         String responseData = "<book><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
         String xpathquery = "/book";
         XPathUtil.computeAssertionResultUsingSaxon(res, responseData, xpathquery, "", false);
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure", res.isFailure());
-        //test xpath2 assertion 
+        //test xpath2 assertion
         xpathquery = "/b";
         XPathUtil.computeAssertionResultUsingSaxon(res, responseData, xpathquery, "", false);
         assertFalse("Should not be an error", res.isError());
@@ -290,7 +290,7 @@ public class XPathUtilTest {
         assertEquals("<page>one</page>", matchs.get(0));
         assertEquals("<page>two</page>", matchs.get(1));
         matchs=new ArrayList<>();
-        XPathUtil.putValuesForXPathInList(testDoc, xpathquery, matchs, false); 
+        XPathUtil.putValuesForXPathInList(testDoc, xpathquery, matchs, false);
         assertEquals("one", matchs.get(0));
         assertEquals("two", matchs.get(1));
     }

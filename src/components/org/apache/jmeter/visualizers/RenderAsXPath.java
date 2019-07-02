@@ -5,13 +5,13 @@
  * licenses this file to You under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -80,7 +80,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
     private JTabbedPane rightSide;
 
     private SampleResult sampleResult = null;
-    
+
     // Should we return fragment as text, rather than text of fragment?
     private final JCheckBox getFragment =
         new JCheckBox(JMeterUtils.getResString("xpath_tester_fragment"));//$NON-NLS-1$
@@ -143,13 +143,13 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
             builder.append("Match count: ").append(nbFound).append("\n");
             for (int i = 0; i < nbFound; i++) {
                 builder.append("Match[").append(i+1).append("]=").append(matchStrings.get(i)).append("\n");
-            }                
+            }
             return builder.toString();
         } catch (Exception e) {
             return "Exception:"+ ExceptionUtils.getStackTrace(e);
         }
     }
-    
+
     /*================= internal business =================*/
     /**
      * Converts (X)HTML response to DOM object Tree.
@@ -242,24 +242,24 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
      */
     private JPanel createXpathExtractorTasksPanel() {
         Box xpathActionPanel = Box.createVerticalBox();
-        
+
         Box selectorAndButton = Box.createHorizontalBox();
 
         Border margin = new EmptyBorder(5, 5, 0, 5);
         xpathActionPanel.setBorder(margin);
         xpathExpressionField = new JLabeledTextField(JMeterUtils.getResString("xpath_tester_field")); // $NON-NLS-1$
-        
+
         JButton xpathTester = new JButton(JMeterUtils.getResString("xpath_tester_button_test")); // $NON-NLS-1$
         xpathTester.setActionCommand(XPATH_TESTER_COMMAND);
         xpathTester.addActionListener(this);
-        
+
         selectorAndButton.add(xpathExpressionField);
         selectorAndButton.add(xpathTester);
-        
+
         xpathActionPanel.add(selectorAndButton);
         xpathActionPanel.add(xmlConfPanel);
         xpathActionPanel.add(getFragment);
-        
+
         xpathResultField = new JTextArea();
         xpathResultField.setEditable(false);
         xpathResultField.setLineWrap(true);

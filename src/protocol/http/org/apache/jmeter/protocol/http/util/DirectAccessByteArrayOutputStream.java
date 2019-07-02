@@ -22,7 +22,7 @@ import java.util.Arrays;
 /**
  * this is a non thread-safe specialization of java {@link ByteArrayOutputStream}
  * it returns the internal buffer if its size matches the byte count
- * 
+ *
  * @since 3.1
  */
 public class DirectAccessByteArrayOutputStream extends ByteArrayOutputStream {
@@ -39,8 +39,8 @@ public class DirectAccessByteArrayOutputStream extends ByteArrayOutputStream {
         if(this.count == this.buf.length) {
             return this.buf;
         }
-        
+
         return Arrays.copyOf(buf, count);
     }
-    
+
 }

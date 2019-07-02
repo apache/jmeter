@@ -72,9 +72,9 @@ public class AxisGraph extends JPanel {
     protected String[] xAxisLabels;
     protected int width;
     protected int height;
-    
+
     protected String[] legendLabels = { JMeterUtils.getResString("aggregate_graph_legend") }; // $NON-NLS-1$
-    
+
     protected int maxYAxisScale;
 
     protected Font titleFont;
@@ -92,7 +92,7 @@ public class AxisGraph extends JPanel {
     protected boolean outlinesBarFlag = false;
 
     protected boolean showGrouping = true;
-    
+
     protected boolean valueOrientation = true;
 
     protected int legendPlacement = LegendAreaProperties.BOTTOM;
@@ -312,7 +312,7 @@ public class AxisGraph extends JPanel {
         if (data != null && this.title != null && this.xAxisLabels != null &&
                 this.yAxisLabel != null &&
                 this.yAxisTitle != null) {
-            drawSample(this.title, this.maxLength, this.xAxisLabels, 
+            drawSample(this.title, this.maxLength, this.xAxisLabels,
                     this.yAxisTitle, this.legendLabels,
                     this.data, this.width, this.height, this.color,
                     this.legendFont, graphics);
@@ -379,7 +379,7 @@ public class AxisGraph extends JPanel {
 
             Paint[] paints = new Paint[_color.length];
             System.arraycopy(_color, 0, paints, 0, paints.length);
-            
+
             AxisChartDataSet axisChartDataSet =
                 new AxisChartDataSet(
                         _data, _legendLabels, paints, ChartType.BAR_CLUSTERED, clusteredBarChartProperties );

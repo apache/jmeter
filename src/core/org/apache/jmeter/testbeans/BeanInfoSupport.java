@@ -203,7 +203,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
      * @param enumClass the enum class that is to be used by the editor
      * @return descriptor for a property of that name, or null if there's none
      */
-    protected PropertyDescriptor property(final String name, 
+    protected PropertyDescriptor property(final String name,
             final Class<? extends Enum<?>> enumClass) {
         PropertyDescriptor property = property(name);
         if (property != null) {

@@ -72,7 +72,7 @@ public class HtmlReportUI implements ActionListener {
     private JButton outputDirectoryButton;
     private JButton userPropertiesFileButton;
     private String lastJFCDirectory;
-    private final String iconSize = JMeterUtils.getPropDefault(JMeterToolBar.TOOLBAR_ICON_SIZE, JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE); 
+    private final String iconSize = JMeterUtils.getPropDefault(JMeterToolBar.TOOLBAR_ICON_SIZE, JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE);
 
     private static final String GENERATE_REPORT_LABEL = JMeterUtils.getResString("generate_report_ui.html_report_request");
     private static final String GENERATING_REPORT_LABEL = JMeterUtils.getResString("generate_report_ui.html_report_processing");
@@ -176,7 +176,7 @@ public class HtmlReportUI implements ActionListener {
         protected List<String> doInBackground() throws Exception {
             HtmlReportGenerator htmlReportAction = new HtmlReportGenerator(csvFilePathTextField.getText(),
                     userPropertiesFilePathTextField.getText(), outputDirectoryPathTextField.getText());
-            SwingUtilities.invokeAndWait(() -> { 
+            SwingUtilities.invokeAndWait(() -> {
                 reportLaunchButton.setEnabled(false);
                 reportLaunchButton.setIcon(runningIcon);
                 reportLaunchButton.setText(GENERATING_REPORT_LABEL);
@@ -251,7 +251,7 @@ public class HtmlReportUI implements ActionListener {
 
     /**
      * Show a file chooser to the user
-     * 
+     *
      * @param locationTextField
      *            the textField that will receive the path
      * @param onlyDirectory

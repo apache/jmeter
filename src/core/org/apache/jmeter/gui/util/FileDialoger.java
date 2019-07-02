@@ -77,7 +77,7 @@ public final class FileDialoger {
     public static JFileChooser promptToOpenFile(String existingFileName) {
         return promptToOpenFile(new String[0], existingFileName);
     }
-    
+
     /**
      * Prompts the user to choose a file or a directory from their filesystems for our own
      * devious uses. This method maintains the last directory the user visited
@@ -96,8 +96,8 @@ public final class FileDialoger {
     public static JFileChooser promptToOpenFile(String existingFileName, boolean onlyDirectories) {
         return promptToOpenFile(new String[0], existingFileName, onlyDirectories);
     }
-    
-    
+
+
     /**
      * Prompts the user to choose a file or a directory from their filesystems for our own
      * devious uses. This method maintains the last directory the user visited
@@ -114,7 +114,7 @@ public final class FileDialoger {
     public static JFileChooser promptToOpenFile(String[] exts) {
         return promptToOpenFile(exts, null);
     }
-    
+
     /**
      * Prompts the user to choose a file or a directory from their filesystems for our own
      * devious uses. This method maintains the last directory the user visited
@@ -134,7 +134,7 @@ public final class FileDialoger {
     public static JFileChooser promptToOpenFile(String[] exts, String existingFileName) {
         return promptToOpenFile(exts, existingFileName, false);
     }
-  
+
     /**
     * Prompts the user to choose a file or a directory from their filesystems for our own
     * devious uses. This method maintains the last directory the user visited
@@ -155,7 +155,7 @@ public final class FileDialoger {
     public static JFileChooser promptToOpenFile(String[] exts, String existingFileName, boolean onlyDirectories) {
         return promptToOpenFile(GuiPackage.getInstance().getMainFrame(), exts, existingFileName, onlyDirectories);
     }
-    
+
     /**
     * Prompts the user to choose a file or a directory from their filesystems for our own
     * devious uses. This method maintains the last directory the user visited
@@ -280,17 +280,17 @@ public final class FileDialoger {
         }
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @return The last directory visited by the user while choosing Files
      */
     public static String getLastJFCDirectory() {
         return lastJFCDirectory;
     }
-    
+
     /**
-     * 
+     *
      * @param lastJFCDirectory The last directory visited by the user while choosing Files
      */
     public static void setLastJFCDirectory(String lastJFCDirectory) {

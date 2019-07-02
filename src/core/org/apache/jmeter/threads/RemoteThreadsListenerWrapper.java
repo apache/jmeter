@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * server side wrapper, used to notify RMI client 
+ * server side wrapper, used to notify RMI client
  * @since 2.10
  */
 public class RemoteThreadsListenerWrapper extends AbstractTestElement implements ThreadListener, Serializable,

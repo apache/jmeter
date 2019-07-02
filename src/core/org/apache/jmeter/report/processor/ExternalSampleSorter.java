@@ -75,7 +75,7 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Meanwhile, it is equally important to set a {@link SampleComparator} to
  * define sample ordering </p>
- * 
+ *
  * @since 3.0
  */
 public class ExternalSampleSorter extends AbstractSampleConsumer {
@@ -109,7 +109,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     private SampleMetadata sampleMetadata;
 
     private boolean revertedSort;
-    
+
     private final AtomicInteger sequence = new AtomicInteger();
 
 
@@ -131,7 +131,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * Set the number of samples that will be stored in memory. This
      * defines the number of samples that will be written in each chunk file
      * before merging step as well.
-     * 
+     *
      * @param chunkSize
      *            The number of samples sorted in memory before they are written
      *            to disk. 5000 is the minimum and will be used if given
@@ -146,7 +146,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     /**
      * Set the sample comparator that will define sample ordering
-     * 
+     *
      * @param sampleComparator comparator to define the ordering
      */
     // final because called from ctor
@@ -156,7 +156,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     /**
      * Enabled parallel mode
-     * 
+     *
      * @param parallelize
      *            {@code true} to enable, {@code false} to disable
      */
@@ -177,7 +177,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * The input CSV <b>must</b> have a header otherwise sorting will give
      * unpredictable results
      * </p>
-     * 
+     *
      * @param inputFile
      *            The CSV file to be sorted (must not be {@code null})
      * @param outputFile
@@ -196,18 +196,18 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                     outputFile.getAbsolutePath()
                             + " is a directory. Please provide a valid output sample file path (not a directory)");
         }
-        
+
         try (CsvSampleReader csvReader = new CsvSampleReader(inputFile,
                 inputFile.getSeparator(), false)){
             sort(csvReader, outputFile, writeHeader);
-        } 
+        }
     }
 
     /**
      * Sort an input CSV file whose metadata structure is provided. Use this
      * method when input CSV file has no header : header information is then
      * provided through the sampleMetadata parameter.
-     * 
+     *
      * @param sampleMetadata
      *            The CSV metadata : header information + separator (must not be {@code null})
      * @param inputFile
@@ -241,7 +241,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     /**
      * Sort samples that are read from the provided csv sample reader to the
      * specified output file.
-     * 
+     *
      * @param csvReader
      *            The reader that provides the samples to be sorted (must not be {@code null})
      * @param output
@@ -564,7 +564,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     /**
      * Decides which sample should be written first given the configured
      * {@link SampleComparator} and the sort order.
-     * 
+     *
      * @param leftSample
      *            the <em>left</em> sample
      * @param rightSample

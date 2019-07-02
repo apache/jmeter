@@ -63,7 +63,7 @@ public class JMeterVariables {
     }
 
     /**
-     * @return the name of the currently running thread 
+     * @return the name of the currently running thread
      */
     public String getThreadName() {
         return Thread.currentThread().getName();
@@ -85,9 +85,9 @@ public class JMeterVariables {
 
     /**
      * Remove a variable.
-     * 
+     *
      * @param key the variable name to remove
-     * 
+     *
      * @return the variable value, or {@code null} if there was no such variable
      */
     public Object remove(String key) {
@@ -96,7 +96,7 @@ public class JMeterVariables {
 
     /**
      * Creates or updates a variable with a String value.
-     * 
+     *
      * @param key the variable name
      * @param value the variable value
      */
@@ -106,7 +106,7 @@ public class JMeterVariables {
 
     /**
      * Creates or updates a variable with a value that does not have to be a String.
-     * 
+     *
      * @param key the variable name
      * @param value the variable value
      */
@@ -132,7 +132,7 @@ public class JMeterVariables {
 
     /**
      * Gets the value of a variable, converted to a String.
-     * 
+     *
      * @param key the name of the variable
      * @return the value of the variable or a toString called on it if it's non String, or {@code null} if it does not exist
      */
@@ -149,7 +149,7 @@ public class JMeterVariables {
 
     /**
      * Gets the value of a variable (not converted to String).
-     * 
+     *
      * @param key the name of the variable
      * @return the value of the variable, or {@code null} if it does not exist
      */
@@ -159,7 +159,7 @@ public class JMeterVariables {
 
     /**
      * Gets a read-only Iterator over the variables.
-     * 
+     *
      * @return the iterator
      */
     public Iterator<Entry<String, Object>> getIterator(){

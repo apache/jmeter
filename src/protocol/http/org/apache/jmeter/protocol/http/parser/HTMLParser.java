@@ -180,13 +180,13 @@ public abstract class HTMLParser extends BaseParser {
      * @throws HTMLParseException when parsing the <code>html</code> fails
      */
     public Iterator<URL> getEmbeddedResourceURLs(
-            String userAgent, byte[] html, URL baseUrl, Collection<URLString> coll, String encoding) 
+            String userAgent, byte[] html, URL baseUrl, Collection<URLString> coll, String encoding)
                     throws HTMLParseException {
         return getEmbeddedResourceURLs(userAgent, html, baseUrl, new URLCollection(coll), encoding);
     }
-    
+
     /**
-     * 
+     *
      * @param ieVersion Float IE version
      * @return true if IE version &lt; IE v10
      */
@@ -195,9 +195,9 @@ public abstract class HTMLParser extends BaseParser {
         // http://msdn.microsoft.com/en-us/library/ie/hh801214%28v=vs.85%29.aspx
         return ieVersion != null && ieVersion.floatValue() < IE_10;
     }
-    
+
     /**
-     * 
+     *
      * @param userAgent User Agent
      * @return version null if not IE or the version after MSIE
      */

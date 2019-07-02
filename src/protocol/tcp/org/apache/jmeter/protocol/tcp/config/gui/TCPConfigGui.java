@@ -47,7 +47,7 @@ public class TCPConfigGui extends AbstractConfigGui {
     private static final long serialVersionUID = 240L;
 
     private ServerPanel serverPanel;
-    
+
     private JLabeledTextField classname;
 
     private JCheckBox reUseConnection;
@@ -188,7 +188,7 @@ public class TCPConfigGui extends AbstractConfigGui {
     }
 
     private JPanel createSoLingerOption() {
-        JLabel label = new JLabel(JMeterUtils.getResString("solinger")); //$NON-NLS-1$ 
+        JLabel label = new JLabel(JMeterUtils.getResString("solinger")); //$NON-NLS-1$
 
         soLinger = new JTextField(5); // 5 columns size
         soLinger.setMaximumSize(new Dimension(soLinger.getPreferredSize()));
@@ -201,7 +201,7 @@ public class TCPConfigGui extends AbstractConfigGui {
     }
 
     private JPanel createEolBytePanel() {
-        JLabel label = new JLabel(JMeterUtils.getResString("eolbyte")); //$NON-NLS-1$ 
+        JLabel label = new JLabel(JMeterUtils.getResString("eolbyte")); //$NON-NLS-1$
 
         eolByte = new JTextField(3); // 3 columns size
         eolByte.setMaximumSize(new Dimension(eolByte.getPreferredSize()));
@@ -231,7 +231,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         setLayout(new BorderLayout(0, 5));
 
         serverPanel = new ServerPanel();
-        
+
         if (displayName) {
             setBorder(makeBorder());
             add(makeTitlePanel(), BorderLayout.NORTH);
@@ -241,7 +241,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         classname = new JLabeledTextField(JMeterUtils.getResString("tcp_classname")); // $NON-NLS-1$
         mainPanel.add(classname);
         mainPanel.add(serverPanel);
-        
+
         HorizontalPanel optionsPanel = new HorizontalPanel();
         optionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder()));
         optionsPanel.add(createClosePortPanel());

@@ -38,7 +38,7 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #createTimeStampKeysSelector()
@@ -52,7 +52,7 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */
@@ -68,7 +68,7 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #setGranularity(long)
@@ -76,7 +76,7 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
     @Override
     public void setGranularity(long granularity) {
         super.setGranularity(granularity);
-        
+
     }
 
     @Override
@@ -94,7 +94,7 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.AbstractSampleConsumer#setName
      * (java.lang.String)

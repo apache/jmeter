@@ -43,11 +43,11 @@ import org.slf4j.LoggerFactory;
  * Processes sample events. <br>
  * The current implementation processes events in the calling thread
  * using {@link #notifyListeners(SampleEvent, List)} <br>
- * Thread safe class 
+ * Thread safe class
  */
 public class ListenerNotifier implements Serializable {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -4861457279068497917L;
     private static final Logger log = LoggerFactory.getLogger(ListenerNotifier.class);

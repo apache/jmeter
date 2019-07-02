@@ -57,7 +57,7 @@ public class SystemCommand {
     }
 
     /**
-     * 
+     *
      * @param env Environment variables appended to environment (may be null)
      * @param directory File working directory (may be null)
      * @param timeoutMillis timeout in Milliseconds
@@ -91,7 +91,7 @@ public class SystemCommand {
     }
 
     /**
-     * 
+     *
      * @param env Environment variables appended to environment (may be null)
      * @param directory File working directory (may be null)
      * @param timeoutMillis timeout in Milliseconds
@@ -158,7 +158,7 @@ public class SystemCommand {
 
             final StreamCopier swout = new StreamCopier(procIn, out);
             swout.start();
-            
+
             final StreamCopier swin;
             if (in != null) {
                 swin = new StreamCopier(in, procOut);
@@ -194,7 +194,7 @@ public class SystemCommand {
 
     /**
      * Pipe the output of one command into another
-     * 
+     *
      * @param arguments1 first command to run
      * @param arguments2 second command to run
      * @return exit status

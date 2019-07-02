@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -54,7 +54,7 @@ public class XmlAssertionTest extends JMeterTestCase {
         Assert.assertFalse(result.isError());
         Assert.assertNull(result.getFailureMessage());
     }
-    
+
     @Test
     public void testInvalidXML() throws Exception {
         sampleResult.setResponseData(invalidXml, null);
@@ -63,7 +63,7 @@ public class XmlAssertionTest extends JMeterTestCase {
         Assert.assertTrue(result.isError());
         Assert.assertNotNull(result.getFailureMessage());
     }
-    
+
     @Test
     public void testNoXML() throws Exception {
         sampleResult.setResponseData(noXml, null);

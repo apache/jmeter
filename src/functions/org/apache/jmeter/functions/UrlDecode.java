@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -33,13 +33,13 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Function to decode a application/x-www-form-urlencoded string.
- * 
+ *
  * @since 2.10
  */
 public class UrlDecode extends AbstractFunction {
 
     private static final String CHARSET_ENCODING = StandardCharsets.UTF_8.name();
-    
+
     private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__urldecode"; //$NON-NLS-1$

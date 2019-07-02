@@ -54,7 +54,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     private static final String DEFAULT_EMPTY_VALUE = "HtmlExtractor.default_empty_value"; // $NON-NLS-1$
 
     private Extractor extractor;
-    
+
     /**
      * Get the possible extractor implementations
      * @return Array containing the names of the possible extractors.
@@ -81,20 +81,20 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         }
         // Fetch some variables
         JMeterVariables vars = context.getVariables();
-        
+
         String refName = getRefName();
         String expression = getExpression();
         String attribute = getAttribute();
         int matchNumber = getMatchNumber();
         final String defaultValue = getDefaultValue();
-        
+
         if (defaultValue.length() > 0  || isEmptyDefaultValue()) {
             // Only replace default if it is provided or empty default value is explicitly requested
             vars.put(refName, defaultValue);
         }
-        
-        try {            
-            List<String> matches = 
+
+        try {
+            List<String> matches =
                     extractMatchingStrings(vars, expression, attribute, matchNumber, previousResult);
             int prevCount = 0;
             String prevString = vars.get(refName + REF_MATCH_NR);
@@ -114,7 +114,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 match = getCorrectMatch(matches, matchNumber);
                 if (match != null) {
                     vars.put(refName, match);
-                } 
+                }
             } else // < 0 means we save all the matches
             {
                 matchCount = matches.size();
@@ -175,7 +175,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                             getVariableName(), getName());
                 }
                 return Collections.emptyList();
-            } 
+            }
         } else {
             List<SampleResult> sampleList = getSampleList(previousResult);
             int i=0;
@@ -191,7 +191,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         }
         return result;
     }
-    
+
     /**
      * @param impl Extractor implementation
      * @return Extractor
@@ -206,18 +206,18 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
             throw new IllegalArgumentException("Extractor implementation:"+ impl+" is unknown");
         }
     }
-    
+
     private Extractor getExtractorImpl() {
         if (extractor == null) {
             extractor = getExtractorImpl(getExtractor());
         }
         return extractor;
     }
-    
+
     /**
      * Set the extractor. Has to be one of the list that can be obtained by
      * {@link HtmlExtractor#getImplementations()}
-     * 
+     *
      * @param attribute The name of the extractor to be used
      */
     public void setExtractor(String attribute) {
@@ -291,7 +291,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     public void setDefaultEmptyValue(boolean defaultEmptyValue) {
         setProperty(DEFAULT_EMPTY_VALUE, defaultEmptyValue);
     }
-    
+
     /**
      * Get the default value for the variable if no matches are found
      * @return The default value for the variable
@@ -299,7 +299,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     public String getDefaultValue() {
         return getPropertyAsString(DEFAULT);
     }
-    
+
     /**
      * @return boolean set value to "" if not found
      */

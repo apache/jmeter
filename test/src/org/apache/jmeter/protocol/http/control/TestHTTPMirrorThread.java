@@ -73,7 +73,7 @@ public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
     /**
      * Utility method to handle starting the HttpMirrorServer for testing. Also
      * used by TestHTTPSamplersAgainstHttpMirrorServer
-     * 
+     *
      * @param port
      *            port on which the mirror should be started
      * @return newly created http mirror server

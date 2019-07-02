@@ -72,7 +72,7 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
     protected JPanel createScopePanel(boolean enableVariable) {
         return createScopePanel(enableVariable, true, true);
     }
-    
+
     /**
      * Create the scope settings panel.
      * @param enableVariable set true to enable the variable panel
@@ -114,7 +114,7 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
     protected void showScopeSettings(AbstractScopedTestElement testElement) {
         showScopeSettings(testElement, false);
     }
-    
+
     /**
      * Show the scope settings from the test element with variable scope
      *

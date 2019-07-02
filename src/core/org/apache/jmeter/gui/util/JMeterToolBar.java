@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -46,9 +46,9 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
-    
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -58,7 +58,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
 
     private static final String TOOLBAR_PROP_NAME = "toolbar"; //$NON-NLS-1$
 
-    // protected fields: JMeterToolBar class can be use to create another toolbar (plugin, etc.)    
+    // protected fields: JMeterToolBar class can be use to create another toolbar (plugin, etc.)
     protected static final String DEFAULT_TOOLBAR_PROPERTY_FILE = "org/apache/jmeter/images/toolbar/icons-toolbar.properties"; //$NON-NLS-1$
 
     protected static final String USER_DEFINED_TOOLBAR_PROPERTY_FILE = "jmeter.toolbar.icons"; //$NON-NLS-1$
@@ -66,12 +66,12 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     public static final String TOOLBAR_ICON_SIZE = "jmeter.toolbar.icons.size"; //$NON-NLS-1$
 
     public static final String DEFAULT_TOOLBAR_ICON_SIZE = "22x22"; //$NON-NLS-1$
-    
+
     protected static final String TOOLBAR_LIST = "jmeter.toolbar";
-    
+
     /**
      * Create the default JMeter toolbar
-     * 
+     *
      * @param visible
      *            Flag whether toolbar should be visible
      * @return the newly created {@link JMeterToolBar}
@@ -102,7 +102,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
                         if(ActionNames.UNDO.equalsIgnoreCase(iconToolbarBean.getActionName())
                                         || ActionNames.REDO.equalsIgnoreCase(iconToolbarBean.getActionName())) {
                             if(UndoHistory.isEnabled()) {
-                                toolBar.add(makeButtonItemRes(iconToolbarBean));                                
+                                toolBar.add(makeButtonItemRes(iconToolbarBean));
                             }
                         } else {
                             toolBar.add(makeButtonItemRes(iconToolbarBean));
@@ -117,7 +117,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
             toolBar.initButtonsState();
         }
     }
-    
+
     /**
      * Generate a button component from icon bean
      * @param iconBean contains I18N key, ActionNames, icon path, optional icon path pressed
@@ -136,7 +136,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         button.setActionCommand(iconBean.getActionNameResolve());
         return button;
     }
-    
+
     /**
      * Parse icon set file.
      * @return List of icons/action definition
@@ -145,14 +145,14 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         // Get the standard toolbar properties
         Properties defaultProps = JMeterUtils.loadProperties(DEFAULT_TOOLBAR_PROPERTY_FILE);
         if (defaultProps == null) {
-            JOptionPane.showMessageDialog(null, 
+            JOptionPane.showMessageDialog(null,
                     JMeterUtils.getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
                     JMeterUtils.getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
                     JOptionPane.WARNING_MESSAGE);
             return null;
         }
         Properties p;
-        String userProp = JMeterUtils.getProperty(USER_DEFINED_TOOLBAR_PROPERTY_FILE); 
+        String userProp = JMeterUtils.getProperty(USER_DEFINED_TOOLBAR_PROPERTY_FILE);
         if (userProp != null){
             p = JMeterUtils.loadProperties(userProp, defaultProps);
         } else {
@@ -163,7 +163,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
 
         if (order == null) {
             log.warn("Could not find toolbar definition list");
-            JOptionPane.showMessageDialog(null, 
+            JOptionPane.showMessageDialog(null,
                     JMeterUtils.getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
                     JMeterUtils.getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
                     JOptionPane.WARNING_MESSAGE);
@@ -171,8 +171,8 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         }
 
         String[] oList = order.split(TOOLBAR_ENTRY_SEP);
-        
-        String iconSize = JMeterUtils.getPropDefault(TOOLBAR_ICON_SIZE, DEFAULT_TOOLBAR_ICON_SIZE); 
+
+        String iconSize = JMeterUtils.getPropDefault(TOOLBAR_ICON_SIZE, DEFAULT_TOOLBAR_ICON_SIZE);
 
         List<IconToolbarBean> listIcons = new ArrayList<>();
         for (String key : oList) {
@@ -209,7 +209,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     }
 
     /**
-     * 
+     *
      * @return Current state (enabled/disabled) of Toolbar button
      */
     private Map<String, Boolean> getCurrentButtonsStates() {
@@ -240,10 +240,10 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         buttonStates.put(ActionNames.REMOTE_SHUT_ALL, Boolean.FALSE);
         updateButtons(buttonStates);
     }
-    
+
     /**
      * Change state of buttons on local test
-     * 
+     *
      * @param started
      *            Flag whether local test is started
      */
@@ -255,10 +255,10 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         buttonStates.put(ActionNames.ACTION_SHUTDOWN, Boolean.valueOf(started));
         updateButtons(buttonStates);
     }
-    
+
     /**
      * Change state of buttons on remote test
-     * 
+     *
      * @param started
      *            Flag whether the test is started
      */
@@ -272,7 +272,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
 
     /**
      * Change state of buttons after undo or redo
-     * 
+     *
      * @param canUndo
      *            Flag whether the button corresponding to
      *            {@link ActionNames#UNDO} should be enabled
@@ -289,7 +289,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
 
     /**
      * Set buttons to a given state
-     * 
+     *
      * @param buttonStates
      *            {@link Map} of button names and their states
      */

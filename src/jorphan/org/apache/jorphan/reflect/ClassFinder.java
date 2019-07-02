@@ -486,7 +486,7 @@ public final class ClassFinder {
 
     /**
      * Run {@link ClassFilter#accept(String)} on className and add to listClasses if accept returns true
-     * In case of Throwable, className will not be added 
+     * In case of Throwable, className will not be added
      * @param classesSet Set of class names
      * @param filter {@link ClassFilter}
      * @param className Full class name

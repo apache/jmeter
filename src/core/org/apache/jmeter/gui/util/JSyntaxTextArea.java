@@ -42,7 +42,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final long serialVersionUID = 211L;
     private static final Logger log              = LoggerFactory.getLogger(JSyntaxTextArea.class);
 
-    private static final Theme DARCULA_THEME = initTheme(); 
+    private static final Theme DARCULA_THEME = initTheme();
 
     private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$
 
@@ -63,7 +63,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * <li>setLineWrap(true)</li>
      * <li>setWrapStyleWord(true)</li>
      * </ul>
-     * 
+     *
      * @param rows
      *            The number of rows for the text area
      * @param cols
@@ -128,7 +128,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * <li>setLineWrap(true)</li>
      * <li>setWrapStyleWord(true)</li>
      * </ul>
-     * 
+     *
      * @param rows
      *            The number of rows for the text area
      * @param cols
@@ -159,7 +159,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * <li>setLineWrap(true)</li>
      * <li>setWrapStyleWord(true)</li>
      * </ul>
-     * 
+     *
      * @param rows
      *            The number of rows for the text area
      * @param cols
@@ -180,7 +180,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * <li>setLineWrap(true)</li>
      * <li>setWrapStyleWord(true)</li>
      * </ul>
-     * 
+     *
      * @param rows
      *            The number of rows for the text area
      * @param cols
@@ -215,7 +215,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
 
     /**
      * Sets the language of the text area.
-     * 
+     *
      * @param language
      *            The language to be set
      */
@@ -251,7 +251,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
 
     /**
      * Sets initial text resetting undo history
-     * 
+     *
      * @param string
      *            The initial text to be set
      */
@@ -259,7 +259,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         setText(string);
         discardAllEdits();
     }
-    
+
 
     private static final Theme initTheme() {
         try {

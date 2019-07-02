@@ -227,7 +227,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         policy.setText(DEFAULT_POLICY);
         configureButtonsState();
     }
-    
+
     /**
      * update buttons state
      */
@@ -281,7 +281,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      */
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         tableModel = new PowerTableModel(COLUMN_RESOURCE_NAMES, columnClasses);
-        clearEachIteration = 
+        clearEachIteration =
             new JCheckBox(JMeterUtils.getResString("clear_cookies_per_iter"), false); //$NON-NLS-1$
         controlledByThreadGroup = 
                 new JCheckBox(JMeterUtils.getResString("cookie_clear_controlled_by_threadgroup"), false); //$NON-NLS-1$

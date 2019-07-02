@@ -49,7 +49,7 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
     public static final String INVERT = "INVERT";
     public static final String ISREGEX = "ISREGEX";
 
-    private static ThreadLocal<DecimalFormat> decimalFormatter = 
+    private static ThreadLocal<DecimalFormat> decimalFormatter =
             ThreadLocal.withInitial(JSONPathAssertion::createDecimalFormat);
 
     private static DecimalFormat createDecimalFormat() {

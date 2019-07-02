@@ -21,7 +21,7 @@ package org.apache.jmeter.report.processor;
  * <p>
  * A factory for creating AbstractAggregator objects.
  * </p>
- * 
+ *
  * <p>
  * This abstract class creates the same kind of aggregator for each create
  * method.
@@ -41,7 +41,7 @@ public abstract class AbstractAggregatorFactory implements AggregatorFactory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregatorFactory#
      * createValueAggregator(double)
      */
@@ -52,7 +52,7 @@ public abstract class AbstractAggregatorFactory implements AggregatorFactory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.core.GraphAggregatorFactory#createKeyAggregator
      * ()
@@ -64,7 +64,7 @@ public abstract class AbstractAggregatorFactory implements AggregatorFactory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.core.GraphAggregatorFactory#
      * createAggregatedKeyValueAggregator()
      */

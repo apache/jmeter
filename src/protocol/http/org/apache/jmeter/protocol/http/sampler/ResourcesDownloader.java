@@ -37,26 +37,26 @@ import org.slf4j.LoggerFactory;
  * Manages the parallel http resources download.<br>
  * A shared thread pool is used by all the sample.<br>
  * A sampler will usually do the following
- * <pre> {@code 
+ * <pre> {@code
  *   // list of AsynSamplerResultHolder to download
  *   List<Callable<AsynSamplerResultHolder>> list = ...
- *   
+ *
  *   // max parallel downloads
  *   int maxConcurrentDownloads = ...
- *   
+ *
  *   // get the singleton instance
  *   ResourcesDownloader resourcesDownloader = ResourcesDownloader.getInstance();
- *   
+ *
  *   // schedule the downloads and wait for the completion
  *   List<Future<AsynSamplerResultHolder>> retExec = resourcesDownloader.invokeAllAndAwaitTermination(maxConcurrentDownloads, list);
- *   
+ *
  * }</pre>
- * 
+ *
  * the call to invokeAllAndAwaitTermination will block until the downloads complete or get interrupted<br>
  * the Future list only contains task that have been scheduled in the threadpool.<br>
  * The status of those futures are either done or cancelled<br>
  * <br>
- *  
+ *
  *  Future enhancements :
  *  <ul>
  *  <li>this implementation should be replaced with a NIO async download
@@ -67,27 +67,27 @@ import org.slf4j.LoggerFactory;
 public class ResourcesDownloader {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourcesDownloader.class);
-    
+
     /** this is the maximum time that excess idle threads will wait for new tasks before terminating */
     private static final long THREAD_KEEP_ALIVE_TIME = JMeterUtils.getPropDefault("httpsampler.parallel_download_thread_keepalive_inseconds", 60L);
-    
+
     private static final int MIN_POOL_SIZE = 1;
     private static final int MAX_POOL_SIZE = Integer.MAX_VALUE;
-    
+
     private static final ResourcesDownloader INSTANCE = new ResourcesDownloader();
-    
+
     public static ResourcesDownloader getInstance() {
         return INSTANCE;
     }
-    
-    
+
+
     private ThreadPoolExecutor concurrentExecutor = null;
 
     private ResourcesDownloader() {
         init();
     }
-    
-    
+
+
     private void init() {
         LOG.info("Creating ResourcesDownloader with keepalive_inseconds : {}", THREAD_KEEP_ALIVE_TIME);
         concurrentExecutor = new ThreadPoolExecutor(
@@ -102,7 +102,7 @@ public class ResourcesDownloader {
 
         };
     }
-    
+
     /**
      * this method will try to shrink the thread pool size as much as possible
      * it should be called at the end of a test
@@ -125,21 +125,21 @@ public class ResourcesDownloader {
                     }
                 }
             }
-            
+
             // this will force the release of the extra threads that are idle
             // the remaining extra threads will be released with the keepAliveTime of the thread
             concurrentExecutor.setMaximumPoolSize(MIN_POOL_SIZE);
-            
+
             // do not immediately restore the MaximumPoolSize as it will block the release of the threads
         }
     }
-    
+
     // probablyTheBestMethodNameInTheUniverseYeah!
     /**
      * This method will block until the downloads complete or it get interrupted
      * the Future list returned by this method only contains tasks that have been scheduled in the threadpool.<br>
      * The status of those futures are either done or cancelled
-     * 
+     *
      * @param maxConcurrentDownloads max concurrent downloads
      * @param list list of resources to download
      * @return list tasks that have been scheduled
@@ -148,22 +148,22 @@ public class ResourcesDownloader {
     public List<Future<AsynSamplerResultHolder>> invokeAllAndAwaitTermination(int maxConcurrentDownloads,
             List<Callable<AsynSamplerResultHolder>> list) throws InterruptedException {
         List<Future<AsynSamplerResultHolder>> submittedTasks = new ArrayList<>();
-        
+
         // paranoid fast path
         if(list.isEmpty()) {
             return submittedTasks;
         }
-        
+
         // restore MaximumPoolSize original value
         concurrentExecutor.setMaximumPoolSize(MAX_POOL_SIZE);
-        
+
         if(LOG.isDebugEnabled()) {
             LOG.debug("PoolSize={} LargestPoolSize={}", concurrentExecutor.getPoolSize(), concurrentExecutor.getLargestPoolSize());
         }
-        
+
         CompletionService<AsynSamplerResultHolder> completionService = new ExecutorCompletionService<>(concurrentExecutor);
         int remainingTasksToTake = list.size();
-        
+
         try {
             // push the task in the threadpool until <maxConcurrentDownloads> is reached
             int i = 0;
@@ -171,7 +171,7 @@ public class ResourcesDownloader {
                 Callable<AsynSamplerResultHolder> task = list.get(i);
                 submittedTasks.add(completionService.submit(task));
             }
-            
+
             // push the remaining tasks but ensure we use at most <maxConcurrentDownloads> threads
             // wait for a previous download to finish before submitting a new one
             for (; i < list.size(); i++) {
@@ -180,7 +180,7 @@ public class ResourcesDownloader {
                 remainingTasksToTake--;
                 submittedTasks.add(completionService.submit(task));
             }
-            
+
             // all the resources downloads are in the thread pool queue
             // wait for the completion of all downloads
             while (remainingTasksToTake > 0) {
@@ -199,18 +199,18 @@ public class ResourcesDownloader {
                 }
             }
         }
-        
+
         return submittedTasks;
     }
-    
-    
+
+
     /**
      * Holder of AsynSampler result
      */
     public static class AsynSamplerResultHolder {
         private final HTTPSampleResult result;
         private final CollectionProperty cookies;
-        
+
         /**
          * @param result {@link HTTPSampleResult} to hold
          * @param cookies cookies to hold
@@ -220,14 +220,14 @@ public class ResourcesDownloader {
             this.result = result;
             this.cookies = cookies;
         }
-        
+
         /**
          * @return the result
          */
         public HTTPSampleResult getResult() {
             return result;
         }
-        
+
         /**
          * @return the cookies
          */
@@ -235,5 +235,5 @@ public class ResourcesDownloader {
             return cookies;
         }
     }
-    
+
 }

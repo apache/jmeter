@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.math;
@@ -29,7 +29,7 @@ public class StatCalculatorLong extends StatCalculator<Long> {
 
     /**
      * Add a single value (normally elapsed time)
-     * 
+     *
      * @param val the value to add, which should correspond with a single sample
      */
     public void addValue(long val){
@@ -38,7 +38,7 @@ public class StatCalculatorLong extends StatCalculator<Long> {
 
     /**
      * Update the calculator with the value for an aggregated sample.
-     * 
+     *
      * @param val the aggregate value, normally the elapsed time
      * @param sampleCount the number of samples contributing to the aggregate value
      */

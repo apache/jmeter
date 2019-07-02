@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * @since 3.0
  */
 public class TreeClonerForValidation extends TreeCloner {
-    
+
     private static final Logger log = LoggerFactory.getLogger(TreeClonerForValidation.class);
 
     /**
@@ -55,7 +55,7 @@ public class TreeClonerForValidation extends TreeCloner {
      * Number of iterations to run during a Thread Group validation
      */
     protected static final int VALIDATION_ITERATIONS = JMeterUtils.getPropDefault("testplan_validation.number_iterations", 1); //$NON-NLS-1$
-    
+
     static {
         log.info("Running validation with number of threads:{}, ignoreTimers:{}, number of iterations:{}",
                 VALIDATION_NUMBER_OF_THREADS, VALIDATION_IGNORE_TIMERS, VALIDATION_ITERATIONS);
@@ -74,7 +74,7 @@ public class TreeClonerForValidation extends TreeCloner {
      */
     @Override
     protected Object addNodeToTree(Object node) {
-        if((VALIDATION_IGNORE_TIMERS && node instanceof Timer) || 
+        if((VALIDATION_IGNORE_TIMERS && node instanceof Timer) ||
                 (VALIDATION_IGNORE_BACKENDS && node instanceof Backend)) {
             return node; // don't add timer or backend
         } else {

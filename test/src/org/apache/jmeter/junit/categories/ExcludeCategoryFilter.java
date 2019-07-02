@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.junit.categories;
@@ -29,7 +29,7 @@ import org.junit.runner.manipulation.Filter;
 public class ExcludeCategoryFilter extends Filter {
 
     private Class<?> excludedClass;
-    
+
     public ExcludeCategoryFilter(Class<?> excludedClass) {
         super();
         this.excludedClass = excludedClass;
@@ -50,9 +50,9 @@ public class ExcludeCategoryFilter extends Filter {
                 if(excludedClass.isAssignableFrom(class1)) {
                     return false;
                 }
-            }            
+            }
         }
-        
+
         return true;
     }
 

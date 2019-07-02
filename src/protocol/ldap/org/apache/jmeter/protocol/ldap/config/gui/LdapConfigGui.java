@@ -333,7 +333,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 
     /**
      * Create a panel with the text field and a label
-     * 
+     *
      * @param key
      *            to look up the label by using
      *            {@link JMeterUtils#getResString(String)}

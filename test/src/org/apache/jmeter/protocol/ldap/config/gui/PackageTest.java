@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.ldap.config.gui;
@@ -23,11 +23,11 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class PackageTest {
-        
+
         /**
          * Test that adding an argument to the table results in an appropriate
          * TestElement being created.
-         * 
+         *
          * @throws Exception
          *             if an exception occurred during the test
          */

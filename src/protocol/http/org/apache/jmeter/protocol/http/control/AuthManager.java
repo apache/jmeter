@@ -108,16 +108,16 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         /**
          * @deprecated (use {@link Mechanism#BASIC})
          */
-        @Deprecated 
+        @Deprecated
         BASIC_DIGEST,
         /**
          * Basic Auth
          */
-        BASIC, 
+        BASIC,
         /**
          * Digest Auth
          */
-        DIGEST, 
+        DIGEST,
         /**
          * Kerberos Auth
          */
@@ -135,7 +135,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             return null;
         }
     }
-    
+
     private KerberosManager kerberosManager = new KerberosManager();
 
     /**
@@ -284,7 +284,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     public boolean hasAuthForURL(URL url) {
         return getAuthForURL(url) != null;
     }
-    
+
     /**
      * Get a {@link Subject} for a given URL, if available
      *
@@ -440,7 +440,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
 
     /**
      *
-     * @return true if kerberos auth must be cleared on each mail loop iteration 
+     * @return true if kerberos auth must be cleared on each mail loop iteration
      */
     public boolean getClearEachIteration() {
         return getPropertyAsBoolean(CLEAR, DEFAULT_CLEAR_VALUE);
@@ -463,8 +463,8 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     static boolean isSupportedProtocol(URL url) {
         String protocol = url.getProtocol().toLowerCase(java.util.Locale.ENGLISH);
         return protocol.equals(HTTPConstants.PROTOCOL_HTTP) || protocol.equals(HTTPConstants.PROTOCOL_HTTPS);
-    }    
-    
+    }
+
     /**
      * Configure credentials and auth scheme on client if an authorization is
      * @param auth information about the authorization to use
@@ -473,8 +473,8 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
      * @param credentialsProvider provider which should be set up
      * @param localhost name of the workstation to be used for {@link NTCredentials}
      */
-    public void setupCredentials(Authorization auth, URL url, 
-            HttpClientContext localContext, 
+    public void setupCredentials(Authorization auth, URL url,
+            HttpClientContext localContext,
             CredentialsProvider credentialsProvider,
             String localhost) {
         String username = auth.getUser();
@@ -484,7 +484,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             log.debug("{} > D={} R={} M={}", username, domain, realm, auth.getMechanism());
         }
         if(Mechanism.KERBEROS.equals(auth.getMechanism())) {
-            localContext.setAttribute(DynamicKerberosSchemeFactory.CONTEXT_ATTRIBUTE_STRIP_PORT, 
+            localContext.setAttribute(DynamicKerberosSchemeFactory.CONTEXT_ATTRIBUTE_STRIP_PORT,
                     Boolean.valueOf(isStripPort(url)));
             credentialsProvider.setCredentials(new AuthScope(null, -1, null), USE_JAAS_CREDENTIALS);
         } else {
@@ -532,7 +532,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     public void testStarted() {
         kerberosManager.clearSubjects();
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public void testEnded() {

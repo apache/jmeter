@@ -53,7 +53,7 @@ public final class JMeterContextService {
 
     /**
      * Gives access to the current thread context.
-     * 
+     *
      * @return the current thread Context
      */
     public static JMeterContext getContext() {
@@ -166,7 +166,7 @@ public final class JMeterContextService {
      * Get all variables accessible for JMeter client in a distributed test
      * (only test plan and user defined variables)
      * Note this is a read-only collection
-     * @return {@link JMeterVariables} available for JMeter client 
+     * @return {@link JMeterVariables} available for JMeter client
      */
     public static JMeterVariables getClientSideVariables() {
         return variables;
@@ -194,9 +194,9 @@ public final class JMeterContextService {
     public static void initClientSideVariables(JMeterVariables clientSideVariables) {
         JMeterContextService.variables = new UnmodifiableJMeterVariables(clientSideVariables);
     }
-    
+
     /**
-     * Reset client side variables in a distributed mode 
+     * Reset client side variables in a distributed mode
      */
     public static void resetClientSideVariables() {
         JMeterContextService.variables = null;

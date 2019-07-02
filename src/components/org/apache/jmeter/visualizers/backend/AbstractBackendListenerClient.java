@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * implementation provides default implementations of most of the methods in the
  * interface, as well as some convenience methods, in order to simplify
  * development of BackendListenerClient implementations.
- * 
+ *
  * While it may be necessary to make changes to the BackendListenerClient interface
  * from time to time (therefore requiring changes to any implementations of this
  * interface), we intend to make this abstract class provide reasonable
@@ -59,7 +59,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     private static final org.apache.log.Logger oldLogger = org.apache.jorphan.logging.LoggingManager.getLoggerForClass();
 
     private UserMetric userMetrics = new UserMetric();
-    
+
     private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
 
     /* Implements BackendListenerClient.setupTest(BackendListenerContext) */
@@ -93,7 +93,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
      * As this class is designed to be subclassed this is useful.
      *
      * @return a Logger instance which can be used for logging
-     * @deprecated Will be removed in 3.3, use {@link AbstractBackendListenerClient#getNewLogger()} 
+     * @deprecated Will be removed in 3.3, use {@link AbstractBackendListenerClient#getNewLogger()}
      */
     @Deprecated
     protected org.apache.log.Logger getLogger() {
@@ -133,7 +133,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
         }
         return samplerMetric;
     }
-    
+
     /**
      * @return Map where key is SampleLabel and {@link SamplerMetric} is the metrics of this Sample
      */

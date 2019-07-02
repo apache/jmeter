@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -72,7 +72,7 @@ public class TestMachineIPName extends JMeterTestCase {
         String ret = function.execute(result, null);
         assertEquals(JMeterUtils.getLocalHostName(), ret);
     }
-    
+
     @Test
     public void testMachineNameWithVar() throws Exception {
         function = new MachineName();
@@ -89,9 +89,9 @@ public class TestMachineIPName extends JMeterTestCase {
         function.setParameters(params);
         String ret = function.execute(result, null);
         assertEquals(JMeterUtils.getLocalHostIP(), ret);
-        
+
     }
-    
+
     @Test
     public void testMachineIPWithVar() throws Exception {
         function = new MachineIP();

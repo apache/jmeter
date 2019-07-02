@@ -86,7 +86,7 @@ public class AboutCommand extends AbstractAction {
         JFrame mainFrame = GuiPackage.getInstance().getMainFrame();
         JDialog dialog = initDialog(mainFrame);
 
-        // NOTE: these lines center the about dialog in the current window. 
+        // NOTE: these lines center the about dialog in the current window.
         Point p = mainFrame.getLocationOnScreen();
         Dimension d1 = mainFrame.getSize();
         Dimension d2 = dialog.getSize();

@@ -54,15 +54,15 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class DefaultSamplerCreator extends AbstractSamplerCreator {
     private static final Logger log = LoggerFactory.getLogger(DefaultSamplerCreator.class);
-    
+
     /*
     * Must be the same order than in org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui class in createHTTPSamplerPanel method
     */
     private static final int SAMPLER_NAME_NAMING_MODE_PREFIX = 0;  // $NON-NLS-1$
     private static final int SAMPLER_NAME_NAMING_MODE_COMPLETE = 1;  // $NON-NLS-1$
- 
+
     /**
-     * 
+     *
      */
     public DefaultSamplerCreator() {
         super();
@@ -77,7 +77,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     }
 
     /**
-     * 
+     *
      * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#createSampler(org.apache.jmeter.protocol.http.proxy.HttpRequestHdr,
      *      java.util.Map, java.util.Map)
      */
@@ -132,18 +132,18 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             HttpRequestHdr request, Map<String, String> pageEncodings,
             Map<String, String> formEncodings) throws Exception {
         computeDomain(sampler, request);
-        
+
         computeMethod(sampler, request);
-        
+
         computePort(sampler, request);
-        
+
         computeProtocol(sampler, request);
 
         computeContentEncoding(sampler, request,
                 pageEncodings, formEncodings);
 
         computePath(sampler, request);
-        
+
         computeSamplerName(sampler, request);
     }
 
@@ -173,15 +173,15 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                     log.debug("No encoding found, using JRE default encoding for request body");
                 }
             }
-            
-            
+
+
             if (!StringUtils.isEmpty(contentEncoding)) {
                 postData = new String(request.getRawPostData(), contentEncoding);
             } else {
                 // Use default encoding
                 postData = new String(request.getRawPostData(), PostWriter.ENCODING);
             }
-            
+
             if (urlConfig != null) {
                 urlConfig.parseArguments(postData);
                 // Tell the sampler to do a multipart post
@@ -199,12 +199,12 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 sampler.setHTTPFiles(urlConfig.getHTTPFileArgs().asArray());
                 sampler.setDoBrowserCompatibleMultipart(true); // we are parsing browser input here
             // used when postData is pure xml (eg. an xml-rpc call) or for PUT
-            } else if (postData.trim().startsWith("<?") 
+            } else if (postData.trim().startsWith("<?")
                     || HTTPConstants.PUT.equals(sampler.getMethod())
                     || isPotentialXml(postData)) {
                 sampler.addNonEncodedArgument("", postData, "");
-            } else if (contentType == null || 
-                    (contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) && 
+            } else if (contentType == null ||
+                    (contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) &&
                             !isBinaryContent(contentType))) {
                 // It is the most common post request, with parameter name and values
                 // We also assume this if no content type is present, to be most backwards compatible,
@@ -249,7 +249,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             return false;
         }
     }
-    
+
     private static final class ErrorDetectionHandler extends DefaultHandler {
         private boolean errorDetected = false;
         public ErrorDetectionHandler() {
@@ -351,7 +351,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), request.getPath());
         }
         else {
-            pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), 
+            pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(),
                     sampler.getPort(), request.getPath());
         }
         String urlWithoutQuery = request.getUrlWithoutQuery(pageUrl);
@@ -359,15 +359,15 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
 
         String contentEncoding = computeContentEncoding(request, pageEncodings,
                 formEncodings, urlWithoutQuery);
-        
+
         // Set the content encoding
         if(!StringUtils.isEmpty(contentEncoding)) {
             sampler.setContentEncoding(contentEncoding);
-        } 
+        }
     }
-    
+
     /**
-     * Computes content encoding from request and if not found uses pageEncoding 
+     * Computes content encoding from request and if not found uses pageEncoding
      * and formEncoding to see if URL was previously computed with a content type
      * @param request {@link HttpRequestHdr}
      * @param pageEncodings Map of page encodings

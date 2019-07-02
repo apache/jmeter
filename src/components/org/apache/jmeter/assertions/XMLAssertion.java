@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -34,7 +34,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * Checks if the result is a well-formed XML content using {@link XMLReader}
- * 
+ *
  */
 public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion, ThreadListener {
     private static final Logger log = LoggerFactory.getLogger(XMLAssertion.class);
@@ -48,16 +48,16 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
             try {
                 return XMLReaderFactory.createXMLReader();
             } catch (SAXException e) {
-                log.error("Error initializing XMLReader in XMLAssertion", e); 
+                log.error("Error initializing XMLReader in XMLAssertion", e);
                 return null;
             }
         }
     };
 
     /**
-     * Returns the result of the Assertion. 
-     * Here it checks whether the Sample data is XML. 
-     * If so an AssertionResult containing a FailureMessage will be returned. 
+     * Returns the result of the Assertion.
+     * Here it checks whether the Sample data is XML.
+     * If so an AssertionResult containing a FailureMessage will be returned.
      * Otherwise the returned AssertionResult will reflect the success of the Sample.
      */
     @Override

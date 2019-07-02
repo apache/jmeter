@@ -77,7 +77,7 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.nio.file.SimpleFileVisitor#preVisitDirectory(java.lang.Object,
      * java.nio.file.attribute.BasicFileAttributes)
      */
@@ -97,7 +97,7 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.nio.file.SimpleFileVisitor#visitFile(java.lang.Object,
      * java.nio.file.attribute.BasicFileAttributes)
      */

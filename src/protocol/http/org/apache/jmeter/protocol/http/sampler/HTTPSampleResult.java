@@ -124,11 +124,11 @@ public class HTTPSampleResult extends SampleResult {
             }
         }
         // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-        // If the 307 status code is received in response to a request other than GET or HEAD, 
+        // If the 307 status code is received in response to a request other than GET or HEAD,
         // the user agent MUST NOT automatically redirect the request unless it can be confirmed by the user,
         // since this might change the conditions under which the request was issued.
         // See Bug 54119
-        return HTTPConstants.SC_TEMPORARY_REDIRECT.equals(code) && 
+        return HTTPConstants.SC_TEMPORARY_REDIRECT.equals(code) &&
                 (HTTPConstants.GET.equals(getHTTPMethod()) || HTTPConstants.HEAD.equals(getHTTPMethod()));
     }
 
@@ -225,7 +225,7 @@ public class HTTPSampleResult extends SampleResult {
         }
         return defaultEncoding;
     }
-    
+
     /**
      * Overrides the method from SampleResult - so the encoding can be extracted from
      * the Meta content-type if necessary.
