@@ -227,5 +227,26 @@ Figure &sect-num;.8. Sample HTTP login request</figure>
 
 </section>
 
+<section name="&sect-num;.7 choose the same user or different users" anchor="choose_users">
+<p>
+When creating a Test Plan, on each Thread Group iteration, we can choose to simulate the same user running multiple iterations, 
+or different users running one iteration.
+You can configure this behaviour on Thread Group element, and have HTTP Cache Manager, HTTP Cookie Manager, HTTP Authorization Manager
+controlled by this setting. 
+</p>
+<figure image="webtest/threadgroup3.png">
+Figure &sect-num;.9. Choose the same user or different users</figure>
+<p>
+You can choose to clear the cookies/cache content/authorization in the CookieManager/CacheManager/Authorization Manager,
+ or choose to be controlled by the Thread Group.
+</p>
+<figure image="webtest/threadgroup4.png">
+Figure &sect-num;.10. Use Thread Group to control CookieManager</figure>
+<figure image="webtest/threadgroup5.png">
+Figure &sect-num;.11. Use Thread Group to control CacheManager</figure>
+<figure image="webtest/threadgroup6.png">
+Figure &sect-num;.12. Use Thread Group to control Authorization Manager</figure>
+</section>
+
 </body>
 </document>

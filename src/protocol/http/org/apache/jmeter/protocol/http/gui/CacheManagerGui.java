@@ -19,6 +19,8 @@
 package org.apache.jmeter.protocol.http.gui;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -36,13 +38,15 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * The GUI for the HTTP Cache Manager {@link CacheManager}
  */
 @GUIMenuSortOrder(4)
-public class CacheManagerGui extends AbstractConfigGui {
+public class CacheManagerGui extends AbstractConfigGui implements ActionListener {
 
     private static final long serialVersionUID = 240L;
+    private static final String CONTROLLED_BY_THREADGROUP = "controlled_By_ThreadGroup"; //$NON-NLS-1$
 
     private JCheckBox clearEachIteration;
     private JCheckBox useExpires;
     private JTextField maxCacheSize;
+    private JCheckBox controlledByThreadGroup;
 
     public CacheManagerGui() {
         init();
@@ -57,15 +61,18 @@ public class CacheManagerGui extends AbstractConfigGui {
     public void configure(TestElement element) {
         super.configure(element);
         final CacheManager cacheManager = (CacheManager)element;
-        clearEachIteration.setSelected(cacheManager.getClearEachIteration());
         useExpires.setSelected(cacheManager.getUseExpires());
         maxCacheSize.setText(Integer.toString(cacheManager.getMaxSize()));
+        controlledByThreadGroup.setSelected(cacheManager.getControlledByThread());
+        clearEachIteration.setSelected(cacheManager.getClearEachIteration());
     }
 
     @Override
     public TestElement createTestElement() {
         CacheManager element = new CacheManager();
         modifyTestElement(element);
+        controlledByThreadGroup.setSelected(element.getControlledByThread());
+        clearEachIteration.setEnabled(!element.getControlledByThread());
         return element;
     }
 
@@ -75,6 +82,7 @@ public class CacheManagerGui extends AbstractConfigGui {
         final CacheManager cacheManager = (CacheManager)element;
         cacheManager.setClearEachIteration(clearEachIteration.isSelected());
         cacheManager.setUseExpires(useExpires.isSelected());
+        cacheManager.setControlledByThread(controlledByThreadGroup.isSelected());
         try {
             cacheManager.setMaxSize(Integer.parseInt(maxCacheSize.getText()));
         } catch (NumberFormatException ignored) {
@@ -91,6 +99,7 @@ public class CacheManagerGui extends AbstractConfigGui {
         clearEachIteration.setSelected(false);
         useExpires.setSelected(true);
         maxCacheSize.setText(""); //$NON-NLS-1$
+        controlledByThreadGroup.setSelected(false);
     }
 
     /**
@@ -102,12 +111,19 @@ public class CacheManagerGui extends AbstractConfigGui {
         setBorder(makeBorder());
 
         clearEachIteration = new JCheckBox(JMeterUtils.getResString("clear_cache_per_iter"), false); // $NON-NLS-1$
+        
+        controlledByThreadGroup = 
+                new JCheckBox(JMeterUtils.getResString("cache_clear_controlled_by_threadgroup"), false); //$NON-NLS-1$
+        controlledByThreadGroup.setActionCommand(CONTROLLED_BY_THREADGROUP);
+        controlledByThreadGroup.addActionListener(this);
+        
         useExpires = new JCheckBox(JMeterUtils.getResString("use_expires"), false); // $NON-NLS-1$
 
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
         northPanel.add(makeTitlePanel());
         northPanel.add(clearEachIteration);
+        northPanel.add(controlledByThreadGroup);
         northPanel.add(useExpires);
 
         JLabel label = new JLabel(JMeterUtils.getResString("cache_manager_size")); //$NON-NLS-1$
@@ -122,4 +138,11 @@ public class CacheManagerGui extends AbstractConfigGui {
         add(northPanel, BorderLayout.NORTH);
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String action = e.getActionCommand();
+        if (action.equals(CONTROLLED_BY_THREADGROUP)) {
+            clearEachIteration.setEnabled(!controlledByThreadGroup.isSelected());
+        }
+    }
 }

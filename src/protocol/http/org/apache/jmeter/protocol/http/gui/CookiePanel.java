@@ -69,6 +69,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     private static final String DELETE_COMMAND = "Delete"; //$NON-NLS-1$
     private static final String LOAD_COMMAND = "Load"; //$NON-NLS-1$
     private static final String SAVE_COMMAND = "Save"; //$NON-NLS-1$
+    private static final String CONTROLLED_BY_THREADGROUP = "Controlled_By_ThreadGroup"; //$NON-NLS-1$
     //--
 
     private static final String DEFAULT_POLICY = HC4CookieHandler.DEFAULT_POLICY_NAME;
@@ -90,6 +91,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     private JTable cookieTable;
     private PowerTableModel tableModel;
     private JCheckBox clearEachIteration;
+    private JCheckBox controlledByThreadGroup;
     private JButton addButton;
     private JButton deleteButton;
     private JButton loadButton;
@@ -108,6 +110,9 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
+        if (action.equals(CONTROLLED_BY_THREADGROUP)) {
+          clearEachIteration.setEnabled(!controlledByThreadGroup.isSelected());
+        }
 
         if (action.equals(DELETE_COMMAND)) {
             if (tableModel.getRowCount() > 0) {
@@ -204,6 +209,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
                 cookieManager.add(cookie);
             }
             cookieManager.setClearEachIteration(clearEachIteration.isSelected());
+            cookieManager.setControlledByThread(controlledByThreadGroup.isSelected());
             cookieManager.setCookiePolicy(policy.getText());
         }
     }
@@ -217,6 +223,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
         tableModel.clearData();
         clearEachIteration.setSelected(false);
+        controlledByThreadGroup.setSelected(false);
         policy.setText(DEFAULT_POLICY);
         configureButtonsState();
     }
@@ -265,6 +272,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         clearEachIteration.setSelected(cookieManager.getClearEachIteration());
         // must set policy after setting handler (which may change the policy)
         policy.setText(cookieManager.getPolicy());
+        controlledByThreadGroup.setSelected(cookieManager.getControlledByThread());
+        clearEachIteration.setEnabled(!cookieManager.getControlledByThread());
     }
 
     /**
@@ -274,6 +283,10 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         tableModel = new PowerTableModel(COLUMN_RESOURCE_NAMES, columnClasses);
         clearEachIteration =
             new JCheckBox(JMeterUtils.getResString("clear_cookies_per_iter"), false); //$NON-NLS-1$
+        controlledByThreadGroup = 
+                new JCheckBox(JMeterUtils.getResString("cookie_clear_controlled_by_threadgroup"), false); //$NON-NLS-1$
+        controlledByThreadGroup.setActionCommand(CONTROLLED_BY_THREADGROUP);
+        controlledByThreadGroup.addActionListener(this);
         policy = new JLabeledChoice(
                 JMeterUtils.getResString("cookie_manager_policy"), //$NON-NLS-1$
                 new HC4CookieHandler().getPolicies());
@@ -288,6 +301,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
                 JMeterUtils.getResString("cookie_options"))); // $NON-NLS-1$
         optionsPane.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
         optionsPane.add(clearEachIteration);
+        optionsPane.add(controlledByThreadGroup);
         JPanel policyTypePane = new JPanel();
         policyTypePane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         policyTypePane.add(policy);

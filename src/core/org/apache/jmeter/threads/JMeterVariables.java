@@ -44,6 +44,8 @@ public class JMeterVariables {
       "TESTSTART.MS", // $NON-NLS-1$
     };
 
+    static final String VAR_IS_SAME_USER_KEY = "__jmv_SAME_USER";
+
     /**
      * Constructor, that preloads the variables from the JMeter properties
      */
@@ -170,5 +172,12 @@ public class JMeterVariables {
      */
     public Set<Entry<String, Object>> entrySet(){
         return Collections.unmodifiableMap(variables).entrySet();
+    }
+
+    /**
+     * @return boolean true if user is the same on next iteration of Thread loop, false otherwise
+     */
+    public boolean isSameUserOnNextIteration() {
+        return Boolean.TRUE.equals(variables.get(VAR_IS_SAME_USER_KEY));
     }
 }
