@@ -30,7 +30,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class TestHTTPArgument {
- 
+
         @Rule
         public final ExpectedException exception = ExpectedException.none();
 
@@ -210,4 +210,4 @@ public class TestHTTPArgument {
                 + " should not be encoded", "\00\01\07", arg.getEncodedValue());
         }
 
-} 
+}
