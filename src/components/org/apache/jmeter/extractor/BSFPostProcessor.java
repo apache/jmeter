@@ -48,7 +48,7 @@ public class BSFPostProcessor extends BSFTestElement implements Cloneable, PostP
             }
         }
     }
-    
+
     @Override
     public Object clone() {
         return super.clone();

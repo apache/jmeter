@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -64,7 +64,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
     public static final String FILENAME_KEY = "html_assertion_filename"; //$NON-NLS-1$
 
     /**
-     * 
+     *
      */
     public HTMLAssertion() {
         log.debug("HTMLAssertion(): called");
@@ -184,7 +184,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Writes the output of tidy to file.
-     * 
+     *
      * @param inOutput The String to write to file
      */
     private void writeOutput(String inOutput) {
@@ -204,7 +204,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Gets the doctype
-     * 
+     *
      * @return the document type
      */
     public String getDoctype() {
@@ -213,7 +213,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Check if errors will be reported only
-     * 
+     *
      * @return boolean - report errors only?
      */
     public boolean isErrorsOnly() {
@@ -222,7 +222,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Gets the threshold setting for errors
-     * 
+     *
      * @return long error threshold
      */
     public long getErrorThreshold() {
@@ -231,7 +231,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Gets the threshold setting for warnings
-     * 
+     *
      * @return long warning threshold
      */
     public long getWarningThreshold() {
@@ -240,7 +240,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Sets the doctype setting
-     * 
+     *
      * @param inDoctype
      *            The doctype to be set. If <code>doctype</code> is
      *            <code>null</code> or a blank string, {@link HTMLAssertion#DEFAULT_DOCTYPE} will be
@@ -256,7 +256,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Sets if errors should be tracked only
-     * 
+     *
      * @param inErrorsOnly Flag whether only errors should be tracked
      */
     public void setErrorsOnly(boolean inErrorsOnly) {
@@ -272,7 +272,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Sets the threshold on error level
-     * 
+     *
      * @param inErrorThreshold
      *            The max number of parse errors which are to be tolerated
      * @throws IllegalArgumentException
@@ -287,7 +287,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Sets the threshold on warning level
-     * 
+     *
      * @param inWarningThreshold
      *            The max number of warnings which are to be tolerated
      * @throws IllegalArgumentException
@@ -309,7 +309,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Check if html validation mode is set
-     * 
+     *
      * @return boolean
      */
     public boolean isHTML() {
@@ -325,7 +325,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Check if xhtml validation mode is set
-     * 
+     *
      * @return boolean
      */
     public boolean isXHTML() {
@@ -341,7 +341,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Check if xml validation mode is set
-     * 
+     *
      * @return boolean
      */
     public boolean isXML() {
@@ -350,7 +350,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Sets the name of the file where tidy writes the output to
-     * 
+     *
      * @return name of file
      */
     public String getFilename() {
@@ -359,7 +359,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
     /**
      * Sets the name of the tidy output file
-     * 
+     *
      * @param inName The name of the file tidy will put its output to
      */
     public void setFilename(String inName) {

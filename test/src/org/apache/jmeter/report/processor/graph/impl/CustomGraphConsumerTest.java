@@ -38,7 +38,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CustomGraphConsumerTest {
-    
+
     private CustomGraphConsumer customGraphConsumer;
     private MapResultData resultData;
     private TimeStampKeysSelector keysSelector;
@@ -46,9 +46,9 @@ public class CustomGraphConsumerTest {
     // data array can't be initialized in the init()
     private String[] data = {"1527089951383", "0", "Read-compute", "200", "OK", "setupRegion 1-1", "true", "", "492", "0", "1", "1",
             "null", "0", "0", "0", "/stream1a/master.m3u8?e=0&h=56345c61b7b415e0260c19963a153092", "null", "5500000", "null",
-            "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null"}; 
+            "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null"};
     private SampleMetadata sampleMetaData = createTestMetaData();
-    
+
     @Before
     public void init() {
         customGraphConsumer = new CustomGraphConsumer();
@@ -58,9 +58,9 @@ public class CustomGraphConsumerTest {
         customGraphConsumer.setYAxis("Y axis name");
         customGraphConsumer.setContentMessage("content message");
         customGraphConsumer.setSampleVariableName("ulp_lag_ratio");
-        
+
         map = customGraphConsumer.createGroupInfos();
-        
+
         resultData = new MapResultData();
     }
 
@@ -72,22 +72,22 @@ public class CustomGraphConsumerTest {
         assertThat(customGraphConsumer.getContentMessage(), equalTo("content message"));
         assertThat(customGraphConsumer.getSampleVariableName(), equalTo("ulp_lag_ratio"));
         assertThat(customGraphConsumer.getIsNativeSampleVariableName(), equalTo(false));
-        
+
         // bytes is one of the native sample variables names
         customGraphConsumer.setSampleVariableName(CSVSaveService.CSV_BYTES);
         assertThat(customGraphConsumer.getIsNativeSampleVariableName(), equalTo(true));
     }
-    
-    
+
+
     @Test
     public void testInitializeExtraResults() {
         customGraphConsumer.initializeExtraResults(resultData);
-        
+
         JsonizerVisitor jsonizer = new JsonizerVisitor();
         for(Entry<String, ResultData> entrySet : resultData.entrySet()) {
             Object testedValue = entrySet.getValue().accept(jsonizer);
             String key = entrySet.getKey();
-            
+
             if(key.equals("granularity")) {
                 assertThat(testedValue, equalTo("60000"));
             }else if(key.equals("X_Axis")) {
@@ -101,36 +101,36 @@ public class CustomGraphConsumerTest {
             }
         }
     }
-    
+
     @Test
     public void testCreateTimeStampKeysSelector() {
         keysSelector = new TimeStampKeysSelector();
         keysSelector.setSelectBeginTime(false);
         assertThat(customGraphConsumer.createTimeStampKeysSelector().getGranularity(), equalTo(keysSelector.getGranularity()));
     }
-    
+
     @Test
     public void testCreateGroupInfos() {
         // Testing defaults values
         assertThat(map.containsKey("Generic group"), equalTo(true));
         assertThat(map.containsKey("foo"), equalTo(false));
-        assertThat(map.get("Generic group").getAggregatorFactory().getClass(), 
+        assertThat(map.get("Generic group").getAggregatorFactory().getClass(),
                 equalTo(org.apache.jmeter.report.processor.MeanAggregatorFactory.class));
         GroupData groupData = map.get("Generic group").getGroupData();
         assertThat(groupData.getOverallSeries(), equalTo(null));
         assertThat(groupData.getSeriesInfo(), equalTo(new HashMap<String, SeriesData>()));
-        
+
         // Testing native sample variable
         customGraphConsumer.setSampleVariableName("bytes");
         Sample sample = new Sample(0, sampleMetaData, data);
         Double testedValue = map.get("Generic group").getValueSelector().select("bytes", sample);
         assertThat(testedValue, equalTo((Double) 492.0));
-        
+
         // Testing non-native sample variable
         customGraphConsumer.setSampleVariableName("mm-miss");
         testedValue = map.get("Generic group").getValueSelector().select("mm-miss", sample);
         assertThat(testedValue, equalTo(null));
-        
+
         // Testing empty data value, the change between data and data2
         // is on the last value that switchs from "null" to ""
         String[] data2 = {"1527089951383", "0", "Read-compute", "200", "OK", "setupRegion 1-1", "true", "", "492", "0", "1", "1",
@@ -146,18 +146,18 @@ public class CustomGraphConsumerTest {
     public void testCreateGroupInfosExceptions() {
         Sample sample = new Sample(0, sampleMetaData, data);
         customGraphConsumer.setSampleVariableName("label");
-        
+
         // The following line is giving the exception
         map.get("Generic group").getValueSelector().select("label", sample);
     }
-    
+
     @Test
     public void testSelectMetric() {
         Sample sample = new Sample(0, sampleMetaData, data);
         String testString = map.get("Generic group").getSeriesSelector().select(sample).toString();
         assertThat(testString, equalTo("[ulp_lag_ratio]"));
     }
-    
+
     // Create a static SampleMetadatObject
     private SampleMetadata createTestMetaData() {
         String columnsString = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,success,failureMessage,bytes,sentBytes,"
@@ -178,5 +178,5 @@ public class CustomGraphConsumerTest {
         }
         return new SampleMetadata(',',columns);
     }
-    
+
 }

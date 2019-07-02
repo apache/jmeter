@@ -43,7 +43,7 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.ResultDataVisitor#visitListResult(
      * org.apache.jmeter.report.processor.ListResultData)
@@ -64,7 +64,7 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.ResultDataVisitor#visitMapResult(org
      * .apache.jmeter.report.processor.MapResultData)
@@ -84,7 +84,7 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.ResultDataVisitor#visitValueResult
      * (org.apache.jmeter.report.processor.ValueResultData)

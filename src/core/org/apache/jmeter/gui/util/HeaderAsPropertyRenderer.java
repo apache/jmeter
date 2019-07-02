@@ -36,12 +36,12 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 241L;
 
     /**
-     * 
+     *
      */
     public HeaderAsPropertyRenderer() {
         this(null);
     }
-    
+
     /**
      * @param columnsMsgParameters ignored
      * @deprecated don't use {@code columnsMgsParameters} as they are
@@ -81,7 +81,7 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
     protected String getText(Object value, int row, int column) {
         return getText(value, row, column, null);
     }
-    
+
     /**
      * Get the text for the value as the translation of the resource name.
      *

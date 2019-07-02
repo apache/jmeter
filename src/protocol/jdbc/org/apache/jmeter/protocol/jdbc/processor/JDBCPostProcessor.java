@@ -32,5 +32,5 @@ public class JDBCPostProcessor extends AbstractJDBCProcessor implements TestBean
     public void process() {
         super.process();
     }
-    
+
 }

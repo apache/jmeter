@@ -73,7 +73,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
         getTestElement().setEnabled(enabled);
         treeModel.ifPresent(tm -> tm.nodeChanged(this));
     }
-    
+
     /**
      * Return nodes to level 2
      * @return {@link List} of {@link JMeterTreeNode}s
@@ -88,7 +88,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
                 .filter(node -> node.getLevel() >= TEST_PLAN_LEVEL)
                 .collect(Collectors.toList());
     }
-    
+
     /**
      * One of the children of this node have matched a search
      * @param tagged true if we must tag
@@ -119,7 +119,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 
         treeModel.ifPresent(tm -> tm.nodeChanged(this));
     }
-    
+
     /**
      * Node is markedBySearch by a search
      * @return true if marked by search
@@ -127,7 +127,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     public boolean isMarkedBySearch() {
         return this.markedBySearch;
     }
-    
+
     /**
      * Node has children marked by search
      * @return boolean are children marked by search

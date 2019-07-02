@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 public class TreeClonerNoTimer extends TreeCloner{
     private static final Logger log = LoggerFactory.getLogger(TreeClonerNoTimer.class);
-    
+
     public TreeClonerNoTimer() {
         super();
     }

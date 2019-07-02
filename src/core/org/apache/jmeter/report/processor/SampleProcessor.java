@@ -26,7 +26,7 @@ package org.apache.jmeter.report.processor;
  * <li>SampleConsumer : sample consumers are sample processors meant to consume
  * samples</li> <li>SampleProducer : sample producers are sample processors
  * meant to produce samples</li> </ul>
- * 
+ *
  * @since 3.0
  */
 public interface SampleProcessor {
@@ -49,7 +49,7 @@ public interface SampleProcessor {
     /**
      * Associate an attribute to the specified channel for this sample processor<br>
      * If the attribute already exist, it is replaced.
-     * 
+     *
      * @param channel
      *            The channel number to associate the attribute on
      * @param key
@@ -62,7 +62,7 @@ public interface SampleProcessor {
     /**
      * Return an attribute value associated on a channel on this sample
      * processor
-     * 
+     *
      * @param channel
      *            The channel on which the attribute is associated
      * @param key

@@ -60,18 +60,18 @@ import org.slf4j.LoggerFactory;
  */
 public class ExportTransactionAndSamplerNames extends AbstractAction implements MenuCreator {
     private static final Logger log = LoggerFactory.getLogger(ExportTransactionAndSamplerNames.class);
-    
-    private static final String TRANSACTIONS_REGEX_PATTERN = 
-            JMeterUtils.getPropDefault("jmeter.reportgenerator.exported_transactions_pattern", 
+
+    private static final String TRANSACTIONS_REGEX_PATTERN =
+            JMeterUtils.getPropDefault("jmeter.reportgenerator.exported_transactions_pattern",
                     "[a-zA-Z0-9_ \\-{}\\$\\.]*["+DefaultTreeNodeNamingPolicy.TRANSACTION_CHILDREN_SEPARATOR+"][0-9]*");
-    
-    private static final Pattern TRANSACTIONS_REGEX = 
+
+    private static final Pattern TRANSACTIONS_REGEX =
             Pattern.compile(TRANSACTIONS_REGEX_PATTERN);
-    
+
     private static final Set<String> commands = new HashSet<>();
 
     private static final String EXPORT_NAMES = "export_transactions_names_action";
-    
+
 
     static {
         commands.add(EXPORT_NAMES);
@@ -89,9 +89,9 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
         public void addNode(Object object, HashTree subTree) {
             JMeterTreeNode treeNode = (JMeterTreeNode) object;
             Object userObject = treeNode.getUserObject();
-            
+
             if (userObject instanceof TransactionController
-                    || (userObject instanceof Sampler && !(userObject instanceof TestAction) 
+                    || (userObject instanceof Sampler && !(userObject instanceof TestAction)
                             && !(userObject instanceof DebugSampler))) {
                 Matcher matcher = TRANSACTIONS_REGEX.matcher(((TestElement)userObject).getName());
                 if(!matcher.matches()) {
@@ -143,20 +143,20 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
             }
             builder.setLength(builder.length()-1);
             String result = builder.toString();
-            log.info("Exported transactions: jmeter.reportgenerator.exporter.html.series_filter=^({})(-success|-failure)?$", 
+            log.info("Exported transactions: jmeter.reportgenerator.exporter.html.series_filter=^({})(-success|-failure)?$",
                     result);
 
             showResult(e, "jmeter.reportgenerator.exporter.html.series_filter=^("
                     +result
                     +")(-success|-failure)?$");
-            
+
         }
     }
 
     /**
      * Display result in popup
      * @param event {@link ActionEvent}
-     * @param result String 
+     * @param result String
      */
     private final void showResult(ActionEvent event, String result) {
         EscapeDialog messageDialog = new EscapeDialog(getParentFrame(event),
@@ -164,7 +164,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
         Container contentPane = messageDialog.getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(new JLabel(
-                JMeterUtils.getResString("export_transactions_exported_property"), 
+                JMeterUtils.getResString("export_transactions_exported_property"),
                 SwingConstants.CENTER), BorderLayout.NORTH);//$NON-NLS-1$
         JSyntaxTextArea syntaxTextArea = JSyntaxTextArea.getInstance(10, 80, true);
         syntaxTextArea.setText(result);
@@ -187,7 +187,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
         if(location == MENU_LOCATION.TOOLS) {
-            
+
             JMenuItem menuItemIC = new JMenuItem(
                     JMeterUtils.getResString("export_transactions_menu"), KeyEvent.VK_UNDEFINED);
             menuItemIC.setName(ExportTransactionAndSamplerNames.EXPORT_NAMES);

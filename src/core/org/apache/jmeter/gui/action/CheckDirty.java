@@ -103,7 +103,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
                 removeMode = false;
             }
         }
-        
+
         // If we are merging in another test plan, we know the test plan is dirty now
         if(action.equals(ActionNames.SUB_TREE_MERGED)) {
             dirty = true;
@@ -121,7 +121,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
             try {
                 HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
                 wholeTree.traverse(this);
-                
+
             } finally {
                 checkMode = false;
             }

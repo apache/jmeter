@@ -34,16 +34,16 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class SearchableTreeNode extends DefaultMutableTreeNode {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 5222625456347899544L;
 
     private boolean nodeHasMatched;
-    
+
     private boolean childrenNodesHaveMatched;
 
     private transient DefaultTreeModel treeModel;
-    
+
     public SearchableTreeNode() {
         this((SampleResult) null, null);
     }
@@ -52,12 +52,12 @@ public class SearchableTreeNode extends DefaultMutableTreeNode {
         super(userObj);
         this.treeModel = treeModel;
     }
-    
+
     public SearchableTreeNode(AssertionResult userObj, DefaultTreeModel treeModel) {
         super(userObj);
         this.treeModel = treeModel;
     }
-    
+
     public void reset() {
         nodeHasMatched = false;
         childrenNodesHaveMatched = false;

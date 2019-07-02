@@ -23,9 +23,9 @@ import java.util.Collection;
 import org.apache.jmeter.engine.util.CompoundVariable;
 
 /**
- * 
+ *
  * Abstract Function initialized by key and parameters count
- * 
+ *
  * @since 5.0
  *
  */
@@ -52,7 +52,7 @@ abstract class AbstractFunctionByKey extends AbstractFunction {
     public String getReferenceKey() {
         return key;
     }
-    
+
     protected final Object[] getParameterValues() {
         return values;
     }

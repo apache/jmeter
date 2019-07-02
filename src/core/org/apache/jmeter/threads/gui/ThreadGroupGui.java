@@ -47,7 +47,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     private static final String THREAD_NAME = "Thread Field";
 
     private static final String RAMP_NAME = "Ramp Up Field";
-    
+
     private JTextField threadInput;
 
     private JTextField rampInput;
@@ -125,7 +125,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
             toggleSchedulerFields(scheduler.isSelected());
         }
     }
-    
+
     /**
      * @param enable boolean used to enable/disable fields related to scheduler
      */
@@ -241,7 +241,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
                 JMeterUtils.getResString("scheduler_configuration"))); // $NON-NLS-1$
 
         ImageIcon warningImg = JMeterUtils.getImage("warning.png");
-        JLabel warningLabel = new JLabel(JMeterUtils.getResString("thread_group_scheduler_warning"), 
+        JLabel warningLabel = new JLabel(JMeterUtils.getResString("thread_group_scheduler_warning"),
                 warningImg, SwingConstants.CENTER); // $NON-NLS-1$
         mainPanel.add(warningLabel);
         mainPanel.add(createDurationPanel());

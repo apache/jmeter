@@ -72,7 +72,7 @@ public class LongSum extends AbstractFunction {
             sum += Long.parseLong(varName);
             varName = null; // there is no variable name
         } catch(NumberFormatException ignored) {
-            // varName keeps its value and sum has not taken 
+            // varName keeps its value and sum has not taken
             // into account non numeric or overflowing number
         }
 

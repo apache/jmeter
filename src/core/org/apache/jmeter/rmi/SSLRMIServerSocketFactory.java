@@ -157,7 +157,7 @@ public class SSLRMIServerSocketFactory implements RMIServerSocketFactory, Serial
 
     @Override
     public String toString() {
-        return "SSLRMIServerSocketFactory(host=" + localAddress 
+        return "SSLRMIServerSocketFactory(host=" + localAddress
                 + ", keyStoreLocation=" + this.keyStoreLocation + ", type="
                 + this.keyStoreType +", trustStoreLocation=" + this.trustStoreLocation + ", type="
                 + this.trustStoreType + ", alias=" + this.alias + ')';

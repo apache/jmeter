@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>StringFromFile Function to read a String from a text file.</p>
- * 
+ *
  * Parameters:
  * <ul>
  *   <li>file name</li>
@@ -144,14 +144,14 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         } catch (IOException e) {
             log.error("closeFile() error: {}", e.toString(), e);//$NON-NLS-1$
         }
-        
+
         try {
             myFileReader.close();
         } catch (IOException e) {
             log.error("closeFile() error: {}", e.toString(), e);//$NON-NLS-1$
         }
     }
-    
+
     private synchronized void openFile() {
         String tn = Thread.currentThread().getName();
         fileName = ((CompoundVariable) values[0]).execute();

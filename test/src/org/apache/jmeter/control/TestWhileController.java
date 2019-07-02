@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -39,7 +39,7 @@ public class TestWhileController extends JMeterTestCase {
 
         private JMeterContext jmctx;
         private JMeterVariables jmvars;
-        
+
         @Before
         public void setUp() {
             jmctx = JMeterContextService.getContext();
@@ -317,7 +317,7 @@ public class TestWhileController extends JMeterTestCase {
             while_cont.addTestElement(sub);
             sub.addTestElement(new TestSampler("2"));
             sub.addTestElement(new TestSampler("3"));
-            
+
             controller.addTestElement(new TestSampler("4"));
 
             setLastSampleStatus(true);

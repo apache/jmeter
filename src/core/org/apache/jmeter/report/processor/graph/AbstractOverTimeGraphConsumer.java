@@ -69,7 +69,7 @@ public abstract class AbstractOverTimeGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createKeysSelector()
      */
@@ -82,7 +82,7 @@ public abstract class AbstractOverTimeGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
      * createGroupInfos()
      */
@@ -91,7 +91,7 @@ public abstract class AbstractOverTimeGraphConsumer extends
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
      * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
      */
@@ -100,7 +100,7 @@ public abstract class AbstractOverTimeGraphConsumer extends
         parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(
                 Long.valueOf(granularity)));
     }
-    
+
     @Override
     public void initialize() {
         super.initialize();

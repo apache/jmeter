@@ -42,7 +42,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class TimeFunction extends AbstractFunction {
 
     private static final String KEY = "__time"; // $NON-NLS-1$
-    
+
     private static final Pattern DIVISOR_PATTERN = Pattern.compile("/\\d+");
 
     private static final List<String> desc = new LinkedList<>();

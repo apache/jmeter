@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -49,19 +49,19 @@ import org.apache.jorphan.gui.GuiUtils;
  *
  */
 public class TextBoxDialoger implements ActionListener {
-    
+
     private static final String CANCEL_COMMAND = "cancel_dialog"; // $NON-NLS-1$
-    
+
     private static final String SAVE_CLOSE_COMMAND = "save_close_dialog"; // $NON-NLS-1$
-    
+
     private static final String CLOSE_COMMAND = "close_dialog"; // $NON-NLS-1$
-    
+
     private JDialog dialog;
-    
+
     private JEditorPane textBox;
-    
+
     private String originalText;
-    
+
     private boolean editable = false;
 
     /**
@@ -71,7 +71,7 @@ public class TextBoxDialoger implements ActionListener {
         // Empty box
         init(""); //$NON-NLS-1$
     }
-    
+
     /**
      * Dialog text box
      * @param text - text to display in a box
@@ -79,7 +79,7 @@ public class TextBoxDialoger implements ActionListener {
     public TextBoxDialoger(String text) {
         init(text);
     }
-    
+
     /**
      * Dialog text box
      * @param text - text to display in a box
@@ -89,13 +89,13 @@ public class TextBoxDialoger implements ActionListener {
         this.editable = editable;
         init(text);
     }
-    
+
     private void init(String text) {
         createDialogBox();
         setTextBox(text);
         dialog.setVisible(true);
     }
-    
+
     private void createDialogBox() {
         JFrame mainFrame = GuiPackage.getInstance().getMainFrame();
         String title = editable ? JMeterUtils.getResString("textbox_title_edit") //$NON-NLS-1$
@@ -109,9 +109,9 @@ public class TextBoxDialoger implements ActionListener {
 
         textBox = new JEditorPane();
         textBox.setEditable(editable);
-        
+
         JScrollPane textBoxScrollPane = GuiUtils.makeScrollPane(textBox);
-        
+
         JPanel btnBar = new JPanel();
         btnBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
         if (editable) {
@@ -128,7 +128,7 @@ public class TextBoxDialoger implements ActionListener {
             JButton closeBtn = new JButton(JMeterUtils.getResString("textbox_close")); //$NON-NLS-1$
             closeBtn.setActionCommand(CLOSE_COMMAND);
             closeBtn.addActionListener(this);
-            
+
             btnBar.add(closeBtn);
         }
 
@@ -137,7 +137,7 @@ public class TextBoxDialoger implements ActionListener {
         dialog.setMinimumSize(new Dimension(400, 250));
         panel.add(textBoxScrollPane, BorderLayout.CENTER);
         panel.add(btnBar, BorderLayout.SOUTH);
-        
+
         // determine location on screen
         Point p = mainFrame.getLocationOnScreen();
         Dimension d1 = mainFrame.getSize();
@@ -145,7 +145,7 @@ public class TextBoxDialoger implements ActionListener {
         dialog.setLocation(p.x + (d1.width - d2.width) / 2, p.y + (d1.height - d2.height) / 2);
         dialog.pack();
     }
-    
+
     private void closeDialog() {
         dialog.setVisible(false);
     }
@@ -161,27 +161,27 @@ public class TextBoxDialoger implements ActionListener {
             // must be CLOSE or SAVE_CLOSE COMMANDS
             closeDialog();
         }
-        
+
     }
-    
+
     public void setTextBox(String text) {
         originalText = text; // text backup
         textBox.setText(text);
     }
-    
+
     public String getTextBox() {
         return textBox.getText();
     }
-    
+
     /**
      * Class to display a dialog box and cell's content
      * when double click on a table's cell
      *
      */
     public static class TextBoxDoubleClick extends MouseAdapter {
-        
+
         private JTable table = null;
-        
+
         public TextBoxDoubleClick(JTable table) {
             super();
             this.table = table;
@@ -203,9 +203,9 @@ public class TextBoxDialoger implements ActionListener {
      *
      */
     public static class TextBoxDoubleClickPressed extends MouseAdapter {
-        
+
         private JTable table = null;
-        
+
         public TextBoxDoubleClickPressed(JTable table) {
             super();
             this.table = table;
@@ -218,7 +218,7 @@ public class TextBoxDialoger implements ActionListener {
                 Object value = tm.getValueAt(table.getSelectedRow(), table.getSelectedColumn());
                 if (value instanceof String) {
                     if (table.getCellEditor() != null) {
-                        table.getCellEditor().cancelCellEditing(); // in main table (evt mousePressed because cell is editable) 
+                        table.getCellEditor().cancelCellEditing(); // in main table (evt mousePressed because cell is editable)
                     }
                     TextBoxDialoger tbd = new TextBoxDialoger(value.toString(), true);
                     tm.setValueAt(tbd.getTextBox(), table.getSelectedRow(), table.getSelectedColumn());

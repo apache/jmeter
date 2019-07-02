@@ -69,7 +69,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 @GUIMenuSortOrder(1)
-public class CSVDataSet extends ConfigTestElement 
+public class CSVDataSet extends ConfigTestElement
     implements TestBean, LoopIterationListener, NoConfigMerge {
     private static final Logger log = LoggerFactory.getLogger(CSVDataSet.class);
 
@@ -97,7 +97,7 @@ public class CSVDataSet extends ConfigTestElement
     private transient String alias;
 
     private transient String shareMode;
-    
+
     private boolean firstLineIsNames = false;
 
     private boolean ignoreFirstLine = false;
@@ -111,7 +111,7 @@ public class CSVDataSet extends ConfigTestElement
      * Override the setProperty method in order to convert
      * the original String shareMode property.
      * This used the locale-dependent display value, so caused
-     * problems when the language was changed. 
+     * problems when the language was changed.
      * If the "shareMode" value matches a resource value then it is converted
      * into the resource key.
      * To reduce the need to look up resources, we only attempt to
@@ -135,7 +135,7 @@ public class CSVDataSet extends ConfigTestElement
                                 }
                                 ((StringProperty) property).setValue(resKey); // reset the value
                                 super.setProperty(property);
-                                return;                                        
+                                return;
                             }
                         }
                         // This could perhaps be a variable name
@@ -146,7 +146,7 @@ public class CSVDataSet extends ConfigTestElement
                 }
             }
         }
-        super.setProperty(property);        
+        super.setProperty(property);
     }
 
     @Override
@@ -193,16 +193,16 @@ public class CSVDataSet extends ConfigTestElement
             }
             trimVarNames(vars);
         }
-           
+
         // TODO: fetch this once as per vars above?
         JMeterVariables threadVars = context.getVariables();
         String[] lineValues = {};
         try {
             if (getQuotedData()) {
-                lineValues = server.getParsedLine(alias, recycle, 
+                lineValues = server.getParsedLine(alias, recycle,
                         firstLineIsNames || ignoreFirstLine, delim.charAt(0));
             } else {
-                String line = server.readLine(alias, recycle, 
+                String line = server.readLine(alias, recycle,
                         firstLineIsNames || ignoreFirstLine);
                 lineValues = JOrphanUtils.split(line, delim, false);
             }

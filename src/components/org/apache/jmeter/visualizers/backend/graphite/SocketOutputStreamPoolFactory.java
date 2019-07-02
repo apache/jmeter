@@ -31,8 +31,8 @@ import org.apache.jorphan.util.JOrphanUtils;
  * Pool Factory of {@link SocketOutputStream}
  * @since 2.13
  */
-public class SocketOutputStreamPoolFactory 
-    extends BaseKeyedPooledObjectFactory<SocketConnectionInfos, SocketOutputStream> 
+public class SocketOutputStreamPoolFactory
+    extends BaseKeyedPooledObjectFactory<SocketConnectionInfos, SocketOutputStream>
     implements KeyedPooledObjectFactory<SocketConnectionInfos, SocketOutputStream> {
 
     private final int socketTimeoutInMillis;

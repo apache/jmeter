@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -58,18 +58,18 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * Should we add to POST request content-type header if missing:
      * Content-Type: application/x-www-form-urlencoded
      */
-    protected static final boolean ADD_CONTENT_TYPE_TO_POST_IF_MISSING = 
+    protected static final boolean ADD_CONTENT_TYPE_TO_POST_IF_MISSING =
             JMeterUtils.getPropDefault("http.post_add_content_type_if_missing", //$NON-NLS-1$
                     false);
 
     /**
-     * If true create a SampleResult with empty content and 204 response code 
+     * If true create a SampleResult with empty content and 204 response code
      */
-    private static final CachedResourceMode CACHED_RESOURCE_MODE = 
+    private static final CachedResourceMode CACHED_RESOURCE_MODE =
             CachedResourceMode.valueOf(
                     JMeterUtils.getPropDefault("cache_manager.cached_resource_mode", //$NON-NLS-1$
                     CachedResourceMode.RETURN_NO_SAMPLE.toString()));
-    
+
     /**
      * SampleResult message when resource was in cache and mode is RETURN_200_CACHE
      */
@@ -79,17 +79,17 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     /**
      * Custom response code for cached resource
      */
-    private static final String RETURN_CUSTOM_STATUS_CODE = 
+    private static final String RETURN_CUSTOM_STATUS_CODE =
             JMeterUtils.getProperty("RETURN_CUSTOM_STATUS.code");//$NON-NLS-1$
 
     protected static final Predicate<String> ALL_EXCEPT_COOKIE = s -> !HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(s);
-    
+
     protected static final Predicate<String> ONLY_COOKIE = s -> HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(s);
 
     /**
      * Custom response message for cached resource
      */
-    private static final String RETURN_CUSTOM_STATUS_MESSAGE = 
+    private static final String RETURN_CUSTOM_STATUS_MESSAGE =
             JMeterUtils.getProperty("RETURN_CUSTOM_STATUS.message"); //$NON-NLS-1$
 
     protected final HTTPSamplerBase testElement;
@@ -109,14 +109,14 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     // Provide access to HTTPSamplerBase methods
-    
+
     /**
      * Populates the provided HTTPSampleResult with details from the Exception.
      * Does not create a new instance, so should not be used directly to add a
      * subsample.
      * <p>
      * See {@link HTTPSamplerBase#errorResult(Throwable, HTTPSampleResult)}
-     * 
+     *
      * @param t
      *            Exception representing the error.
      * @param res
@@ -200,7 +200,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     /**
-     * 
+     *
      * Get the collection of files as a list.
      * The list is built up from the filename/filefield/mimetype properties,
      * plus any additional entries saved in the FILE_ARGS property.
@@ -226,7 +226,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Gets the IP source address (IP spoofing) if one has been provided.
-     * 
+     *
      * @return the IP source address to use (or <code>null</code>, if none provided or the device address could not be found)
      * @throws UnknownHostException if the hostname/ip for {@link #getIpSource()} could not be resolved or not interface was found for it
      * @throws SocketException if an I/O error occurs
@@ -324,7 +324,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     /**
      * Determine whether to send a file as the entire body of an
      * entity enclosing request such as POST, PUT or PATCH.
-     * 
+     *
      * Invokes {@link HTTPSamplerBase#getSendFileAsPostBody()}
      *
      * @return flag whether to send a file as POST, PUT or PATCH
@@ -336,7 +336,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     /**
      * Determine whether to send concatenated parameters as the entire body of an
      * entity enclosing request such as POST, PUT or PATCH.
-     * 
+     *
      * Invokes {@link HTTPSamplerBase#getSendParameterValuesAsPostBody()}
      *
      * @return flag whether to send concatenated parameters as the entire body
@@ -368,14 +368,14 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     protected boolean getUseMultipartForPost() {
         return testElement.getUseMultipartForPost();
     }
-    
+
     /**
      * Determine if we should use <code>multipart/form-data</code> or
      * <code>application/x-www-form-urlencoded</code> for the method
      * <p>
      * Invokes {@link HTTPSamplerBase#getUseMultipart()}
      *
-     * @return <code>true</code> if <code>multipart/form-data</code> should be used 
+     * @return <code>true</code> if <code>multipart/form-data</code> should be used
      */
     protected boolean getUseMultipart() {
         return testElement.getUseMultipart();
@@ -435,7 +435,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * <p>
      * Invokes
      * {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
-     * 
+     *
      * @param res
      *            sample to store information about the response into
      * @param instream
@@ -461,7 +461,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * <p>
      * Invokes
      * {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
-     * 
+     *
      * @param res
      *            sample to store information about the response into
      * @param instream
@@ -487,7 +487,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * Closes the inputStream
      * <p>
      * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
-     * 
+     *
      * @param res
      *            sample to store information about the response into
      * @param in
@@ -504,7 +504,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
             int contentLength) throws IOException {
         return testElement.readResponse(res, in, contentLength);
     }
-    
+
     /**
      * Read response from the input stream, converting to MD5 digest if the
      * useMD5 property is set.
@@ -515,7 +515,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * Closes the inputStream
      * <p>
      * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
-     * 
+     *
      * @param res
      *            sample to store information about the response into
      * @param in
@@ -567,7 +567,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Called by testIterationStart if the SSL Context was reset.
-     * 
+     *
      * This implementation does nothing.
      * @deprecated ** unused since r1489189. **
      */
@@ -575,7 +575,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     protected void notifySSLContextWasReset() {
         // NOOP
     }
-    
+
     /**
      * Update HTTPSampleResult for a resource in cache
      * @param res {@link HTTPSampleResult}
@@ -602,7 +602,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
                 throw new IllegalStateException("Unknown CACHED_RESOURCE_MODE");
         }
     }
-    
+
     protected final void configureSampleLabel(SampleResult res, URL url) {
         if (SampleResult.isRenameSampleLabel()) {
             res.setSampleLabel(this.testElement.getName());

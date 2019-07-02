@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Provides a RandomString function which returns a random String of length (first argument) 
+ * Provides a RandomString function which returns a random String of length (first argument)
  * using characters (second argument)
  * @since 2.6
  */
@@ -55,7 +55,7 @@ public class RandomString extends AbstractFunction {
     private static final int MAX_PARAM_COUNT = 3;
 
     private static final int MIN_PARAM_COUNT = 1;
-    
+
     private static final int CHARS = 2;
 
     private static final int PARAM_NAME = 3;
@@ -93,7 +93,7 @@ public class RandomString extends AbstractFunction {
         } else {
             myValue = RandomStringUtils.random(length, charsToUse);
         }
- 
+
         if (myName.length() > 0) {
             JMeterVariables vars = getVariables();
             if (vars != null) {// Can be null if called from Config item testEnded() method

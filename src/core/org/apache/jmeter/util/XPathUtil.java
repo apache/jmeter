@@ -90,7 +90,7 @@ public class XPathUtil {
     }
 
     /**
-     * 
+     *
      */
     private static final Processor PROCESSOR = new Processor(false);
 
@@ -202,7 +202,7 @@ public class XPathUtil {
      * @throws TidyException if a ParseError is detected and <code>report_errors</code> is <code>true</code>
      */
     public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
-            boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml, boolean downloadDTDs, 
+            boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml, boolean downloadDTDs,
             OutputStream tidyOut)
                     throws ParserConfigurationException, SAXException, IOException, TidyException {
         Document doc;
@@ -359,7 +359,7 @@ public class XPathUtil {
      * @param fragment return fragment
      * @throws TransformerException when the internally used xpath engine fails
      */
-    public static void putValuesForXPathInList(Document document, 
+    public static void putValuesForXPathInList(Document document,
             String xPathQuery,
             List<String> matchStrings, boolean fragment) throws TransformerException {
         putValuesForXPathInList(document, xPathQuery, matchStrings, fragment, -1);
@@ -385,7 +385,7 @@ public class XPathUtil {
             int indexToMatch = matchNumber;
             if(matchNumber == 0 && length>0) {
                 indexToMatch = JMeterUtils.getRandomInt(length)+1;
-            } 
+            }
             for (int i = 0 ; i < length; i++) {
                 Node match = matches.item(i);
                 if(indexToMatch >= 0 && indexToMatch != (i+1)) {
@@ -415,8 +415,8 @@ public class XPathUtil {
     }
 
     public static void putValuesForXPathInListUsingSaxon(
-            String xmlFile, String xPathQuery, 
-            List<String> matchStrings, boolean fragment, 
+            String xmlFile, String xPathQuery,
+            List<String> matchStrings, boolean fragment,
             int matchNumber, String namespaces)
             throws SaxonApiException, FactoryConfigurationError {
 
@@ -434,13 +434,13 @@ public class XPathUtil {
         }
 
         try (StringReader reader = new StringReader(xmlFile)) {
-            // We could instanciate it once but might trigger issues in the future 
-            // Sharing of a DocumentBuilder across multiple threads is not recommended. 
-            // However, in the current implementation sharing a DocumentBuilder (once initialized) 
+            // We could instanciate it once but might trigger issues in the future
+            // Sharing of a DocumentBuilder across multiple threads is not recommended.
+            // However, in the current implementation sharing a DocumentBuilder (once initialized)
             // will only cause problems if a SchemaValidator is used.
             net.sf.saxon.s9api.DocumentBuilder builder = PROCESSOR.newDocumentBuilder();
             XdmNode xdmNode = builder.build(new SAXSource(new InputSource(reader)));
-            
+
             if(xPathExecutable!=null) {
                 XPathSelector selector = null;
                 try {
@@ -463,7 +463,7 @@ public class XPathUtil {
                         if(indexToMatch <= length) {
                             if(matchNumber == 0 && length>0) {
                                 indexToMatch = JMeterUtils.getRandomInt(length)+1;
-                            } 
+                            }
                             XdmItem item = nodes.itemAt(indexToMatch-1);
                             matchStrings.add(fragment ? item.toString() : item.getStringValue());
                         } else {
@@ -543,7 +543,7 @@ public class XPathUtil {
 
     private static void addToList(XMLStreamReader reader, List<String[]> res) {
         boolean isInList = false;
-        int namespaceCount = reader.getNamespaceCount(); 
+        int namespaceCount = reader.getNamespaceCount();
         if (namespaceCount > 0) {
             for (int nsIndex = 0; nsIndex < namespaceCount; nsIndex++) {
                 String nsPrefix = reader.getNamespacePrefix(nsIndex);
@@ -564,7 +564,7 @@ public class XPathUtil {
     }
 
     /**
-     * 
+     *
      * @param document XML Document
      * @return {@link PrefixResolver}
      */
@@ -589,7 +589,7 @@ public class XPathUtil {
     }
 
     /**
-     * 
+     *
      * @param document XML Document
      * @param namespaces String series of prefix/namespace values separateur by line break
      * @return {@link PrefixResolver}
@@ -621,7 +621,7 @@ public class XPathUtil {
      * @param isNegated flag whether a non-match should be considered a success
      */
     public static void computeAssertionResult(AssertionResult result,
-            Document doc, 
+            Document doc,
             String xPathExpression,
             boolean isNegated) {
         try {
@@ -631,7 +631,7 @@ public class XPathUtil {
                 NodeList nodeList = xObject.nodelist();
                 final int len = (nodeList != null) ? nodeList.getLength() : 0;
                 log.debug("nodeList length {}", len);
-                // length == 0 means nodelist is null 
+                // length == 0 means nodelist is null
                 if (len == 0) {
                     log.debug("nodeList is null or empty. No match by xpath expression: {}", xPathExpression);
                     result.setFailure(!isNegated);
@@ -670,8 +670,8 @@ public class XPathUtil {
                     .toString());
         }
     }
-    
-  
+
+
     /***
     *
     * @param result The result of xpath2 assertion

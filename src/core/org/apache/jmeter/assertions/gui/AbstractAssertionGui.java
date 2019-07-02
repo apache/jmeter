@@ -26,7 +26,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
 
 /**
  * This is the base class for JMeter GUI components which manage assertions.
- * 
+ *
  * Assertions which can be applied to different scopes (parent, children or both)
  * need to use the createScopePanel() to add the panel to the GUI, and they also
  * need to use saveScopeSettings() and showScopeSettings() to keep the test element

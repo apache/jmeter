@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  */
 public class RemoteSampleListenerWrapper extends AbstractTestElement implements SampleListener, Serializable,
         NoThreadClone {

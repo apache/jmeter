@@ -65,8 +65,8 @@ public class SamplePackage {
             List<ConfigTestElement> configs,
             List<SampleListener> listeners,
             List<Timer> timers,
-            List<Assertion> assertions, 
-            List<PostProcessor> postProcessors, 
+            List<Assertion> assertions,
+            List<PostProcessor> postProcessors,
             List<PreProcessor> preProcessors,
             List<Controller> controllers) {
         this.configs = configs;
@@ -81,7 +81,7 @@ public class SamplePackage {
     /**
      * Make the SamplePackage the running version, or make it no longer the
      * running version. This tells to each element of the SamplePackage that it's current state must
-     * be retrievable by a call to recoverRunningVersion(). 
+     * be retrievable by a call to recoverRunningVersion().
      * @param running boolean
      * @see TestElement#setRunningVersion(boolean)
      */
@@ -149,7 +149,7 @@ public class SamplePackage {
         return timers;
     }
 
-    
+
     /**
      * Add Post processor
      * @param ex {@link PostProcessor}

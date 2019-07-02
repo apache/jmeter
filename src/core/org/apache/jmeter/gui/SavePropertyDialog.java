@@ -115,7 +115,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         this.getContentPane().add(exit, BorderLayout.SOUTH);
         exit.addActionListener(e -> dispose());
     }
-    
+
     @Override
     protected JRootPane createRootPane() {
         JRootPane rootPane = new JRootPane();

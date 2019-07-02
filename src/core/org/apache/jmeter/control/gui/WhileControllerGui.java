@@ -142,7 +142,7 @@ public class WhileControllerGui extends AbstractControllerGui {
         theCondition.setName(CONDITION);
         conditionLabel.setLabelFor(theCondition);
         conditionPanel.add(JTextScrollPane.getInstance(theCondition), BorderLayout.CENTER);
-        
+
         conditionPanel.add(Box.createHorizontalGlue(), BorderLayout.NORTH);
 
         return conditionPanel;

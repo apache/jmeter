@@ -48,12 +48,12 @@ public abstract class AbstractAction implements Command {
         ASK
     }
 
-    private static final ActionOnFile actionOnFile = 
+    private static final ActionOnFile actionOnFile =
             ActionOnFile.valueOf(
                     JMeterUtils.getPropDefault(
-                            "resultcollector.action_if_file_exists", 
+                            "resultcollector.action_if_file_exists",
                             ActionOnFile.ASK.name()));
-    
+
     /**
      * @see Command#doAction(ActionEvent)
      */
@@ -63,7 +63,7 @@ public abstract class AbstractAction implements Command {
 
     /**
      * Check if we should save before run
-     * 
+     *
      * @param e
      *            the event that led to the call of this method
      */
@@ -80,7 +80,7 @@ public abstract class AbstractAction implements Command {
             ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
         }
     }
-    
+
     /**
      * @param tree where check if listener has existing file
      * @return true if continue test, false otherwise
@@ -141,9 +141,9 @@ public abstract class AbstractAction implements Command {
         }
         return true;
     }
-    
+
     /**
-     * @param event {@link ActionEvent} 
+     * @param event {@link ActionEvent}
      * @return parent Window
      */
     protected final JFrame getParentFrame(ActionEvent event) {

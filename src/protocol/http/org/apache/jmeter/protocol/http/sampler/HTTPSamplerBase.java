@@ -197,7 +197,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final int MAX_BYTES_TO_STORE_PER_REQUEST =
             JMeterUtils.getPropDefault("httpsampler.max_bytes_to_store_per_request", 0); // $NON-NLS-1$ // default value: 0 don't truncate
 
-    private static final int MAX_BUFFER_SIZE = 
+    private static final int MAX_BUFFER_SIZE =
             JMeterUtils.getPropDefault("httpsampler.max_buffer_size", 65 * 1024); // $NON-NLS-1$
 
     private static final boolean IGNORE_FAILED_EMBEDDED_RESOURCES =
@@ -296,12 +296,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private static final String RESPONSE_PARSERS = // list of parsers
             JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
-    
+
     // Bug 49083
     /** Whether to remove '/pathsegment/..' from redirects; default true */
     private static final boolean REMOVESLASHDOTDOT =
             JMeterUtils.getPropDefault("httpsampler.redirect.removeslashdotdot", true);
-    
+
     private static final String HTTP_PREFIX = HTTPConstants.PROTOCOL_HTTP+"://"; // $NON-NLS-1$
     private static final String HTTPS_PREFIX = HTTPConstants.PROTOCOL_HTTPS+"://"; // $NON-NLS-1$
 
@@ -331,7 +331,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
         }
     }
-    
+
     ////////////////////// Code ///////////////////////////
 
     public HTTPSamplerBase() {
@@ -413,7 +413,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return HTTPConstants.POST.equals(getMethod())
                 && (getDoMultipart() || (files.length > 0 && hasNoMissingFile(files) && !getSendFileAsPostBody()));
     }
-    
+
     /**
      * Determine if we should use multipart/form-data or
      * application/x-www-form-urlencoded for the post
@@ -436,7 +436,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         return true;
     }
-    
+
     public void setProtocol(String value) {
         setProperty(PROTOCOL, value.toLowerCase(java.util.Locale.ENGLISH));
     }
@@ -591,7 +591,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
-     * @return boolean 
+     * @return boolean
      * @deprecated since 3.2 always returns false
      */
     @Deprecated
@@ -607,7 +607,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public boolean isMonitor() {
         return false;
     }
-    
+
     public void setImplementation(String value) {
         this.setProperty(IMPLEMENTATION, value);
     }
@@ -659,7 +659,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         if (nonEmptyEncoding) {
             try {
                 valueEncoded = arg.getEncodedValue(contentEncoding);
-            } catch (UnsupportedEncodingException e) { // NOSONAR 
+            } catch (UnsupportedEncodingException e) { // NOSONAR
                 log.warn("Unable to get encoded value using encoding {}", contentEncoding);
                 valueEncoded = arg.getEncodedValue();
             }
@@ -755,7 +755,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         if(portAsString == null || portAsString.isEmpty()) {
             return UNSPECIFIED_PORT;
         }
-        
+
         try {
             return Integer.parseInt(portAsString.trim());
         } catch (NumberFormatException e) {
@@ -1032,7 +1032,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         pathAndQuery.append(path);
 
         // Add the query string if it is a HTTP GET or DELETE request
-        if (HTTPConstants.GET.equals(method) 
+        if (HTTPConstants.GET.equals(method)
                 || HTTPConstants.DELETE.equals(method)
                 || HTTPConstants.OPTIONS.equals(method)) {
             // Get the query string encoded in specified encoding
@@ -1074,7 +1074,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return the QueryString value
      */
     public String getQueryString(final String contentEncoding) {
-        
+
         CollectionProperty arguments = getArguments().getArguments();
         // Optimisation : avoid building useless objects if empty arguments
         if(arguments.isEmpty()) {
@@ -1086,7 +1086,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // We use the encoding which should be used according to the HTTP spec, which is UTF-8
             lContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
         }
-        
+
         StringBuilder buf = new StringBuilder(arguments.size() * 15);
         PropertyIterator iter = arguments.iterator();
         boolean first = true;
@@ -1426,7 +1426,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         return null;
     }
-    
+
     /**
      * @param url URL to escape
      * @return escaped url
@@ -1674,7 +1674,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 wasRedirected = true;
             }
         }
-        
+
         if (res.isSuccessful() && SampleResult.TEXT.equals(res.getDataType()) && isImageParser() ) {
             if (frameDepth > MAX_FRAME_DEPTH) {
                 HTTPSampleResult errSubResult = new HTTPSampleResult(res);
@@ -1820,7 +1820,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @throws IOException if reading the result fails
      */
     public byte[] readResponse(SampleResult sampleResult, InputStream in, long length) throws IOException {
-        
+
         OutputStream w = null;
         try { // NOSONAR No try with resource as performance is critical here
             byte[] readBuffer = new byte[8192]; // 8kB is the (max) size to have the latency ('the first packet')
@@ -1841,8 +1841,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     bufferSize = (int) Math.min(MAX_BUFFER_SIZE, length);
                 }
             }
-            
-            
+
+
             int bytesReadInBuffer = 0;
             long totalBytes = 0;
             boolean first = true;
@@ -1860,7 +1860,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         }
                     }
                 }
-                
+
                 if (md == null) {
                     if(storeInBOS) {
                         if(MAX_BYTES_TO_STORE_PER_REQUEST <= 0 ||
@@ -1878,20 +1878,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 }
                 totalBytes += bytesReadInBuffer;
             }
-            
+
             if (first) { // Bug 46838 - if there was no data, still need to set latency
                 sampleResult.latencyEnd();
                 return new byte[0];
             }
-            
+
             if (md == null) {
                 return toByteArray(w);
             } else {
                 byte[] md5Result = md.digest();
                 sampleResult.setBytes(totalBytes);
-                return JOrphanUtils.baToHexBytes(md5Result);                
+                return JOrphanUtils.baToHexBytes(md5Result);
             }
-            
+
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(w);
@@ -1907,13 +1907,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         if(w instanceof DirectAccessByteArrayOutputStream) {
             return ((DirectAccessByteArrayOutputStream) w).toByteArray();
         }
-        
+
         if(w instanceof org.apache.commons.io.output.ByteArrayOutputStream) {
             return ((org.apache.commons.io.output.ByteArrayOutputStream) w).toByteArray();
         }
-        
+
         log.warn("Unknown stream type {}", w.getClass());
-        
+
         return null;
     }
 

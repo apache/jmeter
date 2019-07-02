@@ -150,7 +150,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             new NumberRenderer("#0.00"),  // sent kB/sec //$NON-NLS-1$
             new NumberRenderer("#.0"),    // avg. pageSize //$NON-NLS-1$
         };
-    
+
     // Column formats
     private static final Format[] FORMATS =
         new Format[]{
@@ -185,7 +185,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
                     new Functor("getAvgPageBytes"),       //$NON-NLS-1$
                 },
                 new Functor[] { null, null, null, null, null, null, null, null , null, null, null },
-                new Class[] { String.class, Integer.class, Long.class, Long.class, Long.class, 
+                new Class[] { String.class, Integer.class, Long.class, Long.class, Long.class,
                         Double.class, Double.class, Double.class, Double.class, Double.class, Double.class });
         clearData();
         init();
@@ -309,11 +309,11 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             }
             try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile());
                     OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))) {
-                CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, FORMATS),writer, 
+                CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, FORMATS),writer,
                         saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(COLUMNS, COLUMNS_PARAMS) : null);
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
-            } 
+            }
         }
     }
 }

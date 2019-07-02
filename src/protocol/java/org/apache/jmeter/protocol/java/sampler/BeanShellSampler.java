@@ -45,7 +45,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
 {
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
-    
+
     private static final Logger log = LoggerFactory.getLogger(BeanShellSampler.class);
 
     private static final long serialVersionUID = 4;
@@ -61,7 +61,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
     public static final String RESET_INTERPRETER = "BeanShellSampler.resetInterpreter"; //$NON-NLS-1$
 
     private transient volatile BeanShellInterpreter savedBsh = null;
-    
+
     @Override
     protected String getInitFileProperty() {
         return INIT_FILE;

@@ -39,7 +39,7 @@ public class TreeCloner implements HashTreeTraverser {
 
     /**
      * Clone the test tree, honouring NoThreadClone markers.
-     * 
+     *
      */
     public TreeCloner() {
         this(true);
@@ -47,7 +47,7 @@ public class TreeCloner implements HashTreeTraverser {
 
     /**
      * Clone the test tree.
-     * 
+     *
      * @param honourNoThreadClone set false to clone NoThreadClone nodes as well
      */
     public TreeCloner(boolean honourNoThreadClone) {
@@ -81,7 +81,7 @@ public class TreeCloner implements HashTreeTraverser {
             return node;
         }
     }
-    
+
     /**
      * add node to objects LinkedList
      * @param node Object

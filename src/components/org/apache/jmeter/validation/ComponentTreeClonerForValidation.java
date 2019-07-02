@@ -27,7 +27,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 3.1
  */
 public class ComponentTreeClonerForValidation extends TreeClonerForValidation {
-    
+
     /**
      * For 100% on ThroughputController
      */

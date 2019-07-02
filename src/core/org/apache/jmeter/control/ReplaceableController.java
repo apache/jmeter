@@ -32,7 +32,7 @@ public interface ReplaceableController {
      * Used to replace the test execution tree (usually by adding the
      * subelements of the TestElement that is replacing the
      * ReplaceableController.
-     * 
+     *
      * @return The replaced sub tree
      *
      * @see org.apache.jorphan.collections.HashTree

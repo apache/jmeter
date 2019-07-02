@@ -78,7 +78,7 @@ public class TestDateTimeConvertFunction extends JMeterTestCase implements JMete
         String returnValue = dateConvert.execute(result, null);
         assertEquals("02-01-2017 09:00", returnValue);
     }
-    
+
     @Test
     public void testDateTimeConvertEpochTime() throws Exception {
         TimeZone initialTZ = TimeZone.getDefault();
@@ -91,7 +91,7 @@ public class TestDateTimeConvertFunction extends JMeterTestCase implements JMete
         assertEquals("17/05/2018 16:34", returnValue);
         TimeZone.setDefault(initialTZ);
     }
-    
+
     @Test
     public void testDateConvert() throws Exception {
         params.add(new CompoundVariable("2017-01-02"));
@@ -129,7 +129,7 @@ public class TestDateTimeConvertFunction extends JMeterTestCase implements JMete
         dateConvert.setParameters(params);
         assertEquals(dateConvert.execute(result, null), "");
     }
-    
+
     @Test
     public void testDateConvertDateError() throws Exception {
         params.add(new CompoundVariable("a2017-01-02"));

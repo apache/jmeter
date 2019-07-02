@@ -90,7 +90,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
-    
+
     @Override
     public Object clone() {
         return super.clone();

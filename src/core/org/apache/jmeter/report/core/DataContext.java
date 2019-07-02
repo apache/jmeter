@@ -21,7 +21,7 @@ import java.util.TreeMap;
 
 /**
  * The class DataContext provides a map to store data for reports generation.
- * 
+ *
  * @since 3.0
  */
 public class DataContext extends TreeMap<String, Object> {

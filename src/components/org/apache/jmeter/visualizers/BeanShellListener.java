@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 @GUIMenuSortOrder(Integer.MAX_VALUE)
 public class BeanShellListener extends BeanShellTestElement
     implements Cloneable, SampleListener, TestBean, Visualizer, UnsharedComponent  {
-    
+
     private static final Logger log = LoggerFactory.getLogger(BeanShellListener.class);
 
     private static final long serialVersionUID = 4;

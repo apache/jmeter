@@ -34,11 +34,11 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  * @since 2.9
  */
 public class JMeterTreeNodeTransferable implements Transferable {
-    
+
     public final static DataFlavor JMETER_TREE_NODE_ARRAY_DATA_FLAVOR = new DataFlavor(JMeterTreeNode[].class, JMeterTreeNode[].class.getName());
-    
+
     private final static DataFlavor[] DATA_FLAVORS = new DataFlavor[]{JMETER_TREE_NODE_ARRAY_DATA_FLAVOR};
-    
+
     private byte[] data = null;
 
     @Override
@@ -76,7 +76,7 @@ public class JMeterTreeNodeTransferable implements Transferable {
         }
         return null;
     }
-    
+
     public void setTransferData(JMeterTreeNode[] nodes) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = null;

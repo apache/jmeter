@@ -13,11 +13,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /**
- * Package to test JOrphanUtils methods 
+ * Package to test JOrphanUtils methods
  */
 package org.apache.jorphan.exec;
 
@@ -55,7 +55,7 @@ public class TestKeyToolUtils {
 
     /*
      * Check the assumption that a missing executable will generate
-     * either an IOException or status which is neither 0 nor 1 
+     * either an IOException or status which is neither 0 nor 1
      *
      */
     @Test

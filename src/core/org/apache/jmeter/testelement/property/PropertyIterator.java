@@ -21,7 +21,7 @@ package org.apache.jmeter.testelement.property;
 import java.util.Iterator;
 
 public interface PropertyIterator extends Iterator<JMeterProperty> {
-    
+
     @Override
     boolean hasNext();
 

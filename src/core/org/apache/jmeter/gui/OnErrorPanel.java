@@ -61,13 +61,13 @@ public class OnErrorPanel extends JPanel {
         stopTestBox = addRadioButton("sampler_on_error_stop_test", group, panel); //$NON-NLS-1$
         stopTestNowBox = addRadioButton("sampler_on_error_stop_test_now", group, panel); //$NON-NLS-1$
         stopThrdBox = addRadioButton("sampler_on_error_stop_thread", group, panel); //$NON-NLS-1$
-        
+
         continueBox.setSelected(true);
         return panel;
     }
 
     private JRadioButton addRadioButton(String labelKey, ButtonGroup group, JPanel panel) {
-        JRadioButton radioButton = new JRadioButton(JMeterUtils.getResString(labelKey)); 
+        JRadioButton radioButton = new JRadioButton(JMeterUtils.getResString(labelKey));
         group.add(radioButton);
         panel.add(radioButton);
         return radioButton;

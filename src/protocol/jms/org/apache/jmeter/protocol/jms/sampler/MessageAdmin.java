@@ -37,35 +37,35 @@ public class MessageAdmin {
     private static final class PlaceHolder {
         private final CountDownLatch latch;
         private final Object request;
-    
+
         private Object reply;
-    
+
         PlaceHolder(Object original, CountDownLatch latch) {
             this.request = original;
             this.latch = latch;
         }
-    
+
         void setReply(Object reply) {
             this.reply = reply;
         }
-    
+
         public Object getReply() {
             return reply;
         }
-    
+
         public Object getRequest() {
             return request;
         }
-    
+
         boolean hasReply() {
             return reply != null;
         }
-    
+
         @Override
         public String toString() {
             return "request=" + request + ", reply=" + reply;
         }
-    
+
         /**
          * @return the latch
          */
@@ -85,7 +85,7 @@ public class MessageAdmin {
 
     /**
      * Get the singleton MessageAdmin object
-     * 
+     *
      * @return singleton instance
      */
     public static MessageAdmin getAdmin() {
@@ -114,7 +114,7 @@ public class MessageAdmin {
      * Try to associate a reply to a previously stored request. If a matching
      * request is found, the owner of the request will be notified with the
      * registered {@link CountDownLatch}
-     * 
+     *
      * @param id
      *            id of the request
      * @param reply

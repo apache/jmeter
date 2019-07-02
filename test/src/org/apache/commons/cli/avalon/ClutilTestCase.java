@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -29,7 +29,7 @@ import java.util.List;
 import org.junit.Test;
 
 /**
- * 
+ *
  */
 public final class ClutilTestCase {
     private static final String[] ARGLIST1 = new String[] { "--you", "are", "--all", "-cler", "kid" };
@@ -99,27 +99,27 @@ public final class ClutilTestCase {
             CLOptionDescriptor.ARGUMENT_DISALLOWED,
             ALL_OPT, "all", new CLOptionDescriptor[] { BLEE });
 
-    private static final CLOptionDescriptor FILE = new CLOptionDescriptor("file", 
+    private static final CLOptionDescriptor FILE = new CLOptionDescriptor("file",
             CLOptionDescriptor.ARGUMENT_REQUIRED, FILE_OPT, "the build file.");
 
     private static final CLOptionDescriptor TAINT = new CLOptionDescriptor("taint",
             CLOptionDescriptor.ARGUMENT_OPTIONAL, TAINT_OPT, "turn on tainting checks (optional level).");
 
     private static final CLOptionDescriptor [] OPTIONS = new CLOptionDescriptor [] {
-            new CLOptionDescriptor("none", 
+            new CLOptionDescriptor("none",
                     CLOptionDescriptor.ARGUMENT_DISALLOWED | CLOptionDescriptor.DUPLICATES_ALLOWED,
                     '0', "no parameter"),
 
-            new CLOptionDescriptor("optional", 
-                    CLOptionDescriptor.ARGUMENT_OPTIONAL | CLOptionDescriptor.DUPLICATES_ALLOWED, 
+            new CLOptionDescriptor("optional",
+                    CLOptionDescriptor.ARGUMENT_OPTIONAL | CLOptionDescriptor.DUPLICATES_ALLOWED,
                     '?', "optional parameter"),
-            
-            new CLOptionDescriptor("one", 
-                    CLOptionDescriptor.ARGUMENT_REQUIRED | CLOptionDescriptor.DUPLICATES_ALLOWED, 
+
+            new CLOptionDescriptor("one",
+                    CLOptionDescriptor.ARGUMENT_REQUIRED | CLOptionDescriptor.DUPLICATES_ALLOWED,
                     '1', "one parameter"),
-            
-            new CLOptionDescriptor("two", 
-                    CLOptionDescriptor.ARGUMENTS_REQUIRED_2 | CLOptionDescriptor.DUPLICATES_ALLOWED, 
+
+            new CLOptionDescriptor("two",
+                    CLOptionDescriptor.ARGUMENTS_REQUIRED_2 | CLOptionDescriptor.DUPLICATES_ALLOWED,
                     '2', "two parameters")
     };
 
@@ -920,10 +920,10 @@ public final class ClutilTestCase {
         final String lineSeparator = System.getProperty("line.separator");
         assertEquals("Testing display of null description", "\t-n, --nulltest" + lineSeparator, sb.toString());
     }
-    
+
     @Test
     public void testCombinations() throws Exception {
-        check(new String [] {},"");    
+        check(new String [] {},"");
         check(new String [] {"--none",
                              "-0"
                              },
@@ -934,11 +934,11 @@ public final class ClutilTestCase {
                              "-1=c",
                              "-1","d"
                              },
-                             "-1=[a] -1=[A] -1=[b] -1=[c] -1=[d]");    
+                             "-1=[a] -1=[A] -1=[b] -1=[c] -1=[d]");
         check(new String [] {"-2n=v",
                              "-2","N=V"
                              },
-                             "-2=[n, v] -2=[N, V]");    
+                             "-2=[n, v] -2=[N, V]");
         check(new String [] {"--two=n=v",
                              "--two","N=V"
                              },
@@ -950,14 +950,14 @@ public final class ClutilTestCase {
                              "-?C",
                              "-?"
                             },
-                             "-? [A] -?=[B] -?=[C] -?");    
+                             "-? [A] -?=[B] -?=[C] -?");
         check(new String [] {"--optional=A", // OK
                              "--optional","B", // should treat B as separate
                              "--optional" // Should have no arg
                              },
-                             "-?=[A] -? [B] -?");    
+                             "-?=[A] -? [B] -?");
     }
-    
+
     private void check(String[] args, String canon){
         final CLArgsParser parser = new CLArgsParser(args, OPTIONS);
 
@@ -970,7 +970,7 @@ public final class ClutilTestCase {
             if (i>0) {
                 sb.append(" ");
             }
-            sb.append(clOptions.get(i).toShortString());    
+            sb.append(clOptions.get(i).toShortString());
         }
         assertEquals("Canonical form ("+size+")",canon,sb.toString());
     }

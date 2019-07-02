@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -103,7 +103,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
         xpath.addTest(new PackageTest("XPathNoFile"));
 
         allsuites.addTest(xpath);
-        
+
         allsuites.addTest(new PackageTest("XPathSetup1"));
         TestSuite par2 = new ActiveTestSuite("ParallelXPath1");
         par2.addTest(new PackageTest("XPathThread1"));
@@ -288,7 +288,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
 
 
     // XPathFileContainer tests
-    
+
     public void XPathtestNull() throws Exception {
         try {
             new XPathFileContainer("nosuch.xml", "/");
@@ -334,7 +334,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
         assertEquals("install", f.getXPathString(0));
 
     }
-    
+
     public void XPathEmpty() throws Exception{
         XPath xp = setupXPath("","");
         String val=xp.execute();
@@ -344,7 +344,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
         val=xp.execute();
         assertEquals("",val);
     }
-    
+
     public void XPathNoFile() throws Exception{
         XPath xp = setupXPath("no-such-file","");
         String val=xp.execute();
@@ -354,14 +354,14 @@ public class PackageTest extends JMeterTestCaseJUnit {
     public void XPathFile() throws Exception{
         XPath xp = setupXPath("testfiles/XPathTest2.xml","note/body");
         assertEquals("Don't forget me this weekend!",xp.execute());
-        
+
         xp = setupXPath("testfiles/XPathTest2.xml","//note2");
         assertEquals("", xp.execute());
-        
+
         xp = setupXPath("testfiles/XPathTest2.xml","//note/to");
         assertEquals("Tove", xp.execute());
     }
-    
+
     public void XPathFile1() throws Exception{
         XPath xp = setupXPath("testfiles/XPathTest.xml","//user/@username");
         assertEquals("u1",xp.execute());
@@ -371,7 +371,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
         assertEquals("u5",xp.execute());
         assertEquals("u1",xp.execute());
     }
-    
+
     public void XPathFile2() throws Exception{
         XPath xp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
         XPath xp1a = setupXPath("testfiles/XPathTest.xml","//user/@username");
@@ -386,7 +386,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
         assertEquals("p3",xp2a.execute());
 
     }
-    
+
     private static XPath sxp1;
     private static XPath sxp2;
     // Use same XPath for both threads
@@ -434,7 +434,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
         parms.add(new CompoundVariable(expr));
         XPath xp = new XPath();
         xp.setParameters(parms);
-        return xp;        
+        return xp;
     }
 
 }

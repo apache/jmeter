@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.util;
@@ -40,7 +40,7 @@ public class JTextScrollPane extends RTextScrollPane {
             return new JTextScrollPane(scriptField, foldIndicatorEnabled);
         } catch (NullPointerException npe) { // for headless unit testing
             if ("true".equals(System.getProperty("java.awt.headless"))) { // $NON-NLS-1$ $NON-NLS-2$
-                return new JTextScrollPane();                
+                return new JTextScrollPane();
             } else {
                 throw npe;
             }
@@ -52,7 +52,7 @@ public class JTextScrollPane extends RTextScrollPane {
             return new JTextScrollPane(scriptField);
         } catch (NullPointerException npe) { // for headless unit testing
             if ("true".equals(System.getProperty("java.awt.headless"))) { // $NON-NLS-1$ $NON-NLS-2$
-                return new JTextScrollPane();                
+                return new JTextScrollPane();
             } else {
                 throw npe;
             }
@@ -69,7 +69,7 @@ public class JTextScrollPane extends RTextScrollPane {
     }
 
     /**
-     * 
+     *
      * @param scriptField syntax text are to wrap
      * @param foldIndicatorEnabled flag, whether fold indicator should be enabled
      * @deprecated use {@link #getInstance(JSyntaxTextArea, boolean)} instead

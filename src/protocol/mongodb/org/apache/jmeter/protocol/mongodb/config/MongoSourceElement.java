@@ -40,7 +40,7 @@ public class MongoSourceElement
         implements TestStateListener, TestBean {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 2100L;
 
@@ -62,7 +62,7 @@ public class MongoSourceElement
     private int writeOperationNumberOfServers;
     private int writeOperationTimeout;
     private boolean continueOnInsertError;
-    
+
     public String getTitle() {
         return this.getName();
     }
@@ -123,7 +123,7 @@ public class MongoSourceElement
                 .socketTimeout(getSocketTimeout())
                 .threadsAllowedToBlockForConnectionMultiplier(
                         getThreadsAllowedToBlockForConnectionMultiplier());
-     
+
         if(getSafe()) {
             builder.writeConcern(WriteConcern.SAFE);
         } else {

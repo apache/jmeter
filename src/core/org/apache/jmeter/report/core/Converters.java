@@ -119,7 +119,7 @@ public final class Converters {
             }
         });
     }
-    
+
     private Converters() {
         // OK, we don't want anyone to instantiate this class.
     }
@@ -141,7 +141,7 @@ public final class Converters {
 
     /**
      * Converts the specified value to the destination type
-     * 
+     *
      * @param <T>
      *            the target type
      * @param clazz

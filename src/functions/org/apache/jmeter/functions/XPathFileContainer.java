@@ -76,7 +76,7 @@ public class XPathFileContainer {
                 | ParserConfigurationException | IOException e) {
             log.warn(e.toString());
             throw e;
-        } 
+        }
         return nl;
     }
 

@@ -34,7 +34,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
     /**
      * Combine the given path parts to one path with the correct path separator of the current platform.
      * The current JMeter bin directory will be prepended to the path.
-     * 
+     *
      * @param paths to be combined (should contain no path separators)
      * @return combined path as string
      */
@@ -66,7 +66,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
                 JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath)
             ]
     }
-    
+
     def "check that report generation succeeds and statistic are generated"(){
         setup:
             File testDirectory = new File(combine("testfiles", "testReport"))
@@ -86,13 +86,13 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
                     combine("testfiles", "HTMLReportTestFile.csv"),
-                    combine("user.properties"), 
+                    combine("user.properties"),
                     testDirectory.toString())
             List<String> resultList = htmlReportGenerator.run()
             File statistics = new File(combine("testfiles", "testReport", "statistics.json"))
             JsonNode actualRoot = null;
             if (statistics.exists()) {
-                statistics.withReader { jsonFileReader -> 
+                statistics.withReader { jsonFileReader ->
                     actualRoot = mapper.readTree(jsonFileReader)
                 }
             }
@@ -108,7 +108,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
                 }
             }
     }
-    
+
     def "check that report generation fails when format does not match and error is reported"(){
         setup:
             File testDirectory = new File(combine("testfiles", "testReportThatShouldBeEmpty"))
@@ -122,7 +122,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
                 combine("testfiles", "HTMLReportFalseTestFile.csv"),
-                combine("user.properties"), 
+                combine("user.properties"),
                 testDirectory.toString())
             List<String> resultList = htmlReportGenerator.run()
         then:

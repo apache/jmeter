@@ -59,7 +59,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
 
     private final JLabeledTextField jmsDestination =
         new JLabeledTextField(JMeterUtils.getResString("jms_topic")); // $NON-NLS-1$
-    
+
     private final JLabeledTextField jmsDurableSubscriptionId =
         new JLabeledTextField(JMeterUtils.getResString("jms_durable_subscription_id")); // $NON-NLS-1$
 
@@ -84,7 +84,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     private final JCheckBox storeResponse =
         new JCheckBox(JMeterUtils.getResString("jms_store_response"), true); // $NON-NLS-1$
 
-    private final JLabeledTextField timeout = 
+    private final JLabeledTextField timeout =
         new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
 
     private final JLabeledTextField jmsErrorPauseBetween =
@@ -93,7 +93,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     private final JLabeledTextField jmsErrorReconnectOnCodes =
         new JLabeledTextField(JMeterUtils.getResString("jms_error_reconnect_on_codes")); // $NON-NLS-1$
 
-    private final JLabeledTextField separator = 
+    private final JLabeledTextField separator =
         new JLabeledTextField(JMeterUtils.getResString("jms_separator")); //$NON-NLS-1$
 
     //++ Do not change these strings; they are used in JMX files to record the button settings
@@ -110,7 +110,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
 
     private final JCheckBox stopBetweenSamples =
         new JCheckBox(JMeterUtils.getResString("jms_stop_between_samples"), true); // $NON-NLS-1$
-    
+
     // These are the names of properties used to define the labels
     private static final String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
 
@@ -120,7 +120,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
 
     private final JLabeledRadioI18N destSetup =
         new JLabeledRadioI18N("jms_dest_setup", DEST_SETUP_ITEMS, DEST_SETUP_STATIC); // $NON-NLS-1$
-    
+
     public JMSSubscriberGui() {
         init();
     }
@@ -182,7 +182,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
 
         JPanel mainPanel = new VerticalPanel();
         add(mainPanel, BorderLayout.CENTER);
-        
+
         jndiICF.setToolTipText(Context.INITIAL_CONTEXT_FACTORY);
         urlField.setToolTipText(Context.PROVIDER_URL);
         jmsUser.setToolTipText(Context.SECURITY_PRINCIPAL);
@@ -202,13 +202,13 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
 
         mainPanel.add(storeResponse);
         mainPanel.add(timeout);
-        
+
         JPanel choice = new HorizontalPanel();
         choice.add(clientChoice);
         choice.add(stopBetweenSamples);
         mainPanel.add(choice);
         mainPanel.add(separator);
-        
+
         mainPanel.add(jmsErrorReconnectOnCodes);
         mainPanel.add(jmsErrorPauseBetween);
 
@@ -290,7 +290,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
             jmsPwd.setEnabled(useAuth.isSelected()  && useAuth.isEnabled());
         }
     }
-    
+
     private JPanel createDestinationPane() {
         JPanel pane = new JPanel(new BorderLayout(3, 0));
         pane.add(jmsDestination, BorderLayout.CENTER);

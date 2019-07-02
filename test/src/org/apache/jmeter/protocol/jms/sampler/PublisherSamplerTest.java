@@ -40,7 +40,7 @@ public class PublisherSamplerTest {
         JMeterUtils.setLocale(new Locale("ignoreResources"));
     }
 
-    @After  
+    @After
     public void resetJMeter() {
         JMeterUtils.setLocale(Locale.ENGLISH);
     }

@@ -47,7 +47,7 @@ public class RunningSample {
     private long runningSum;
 
     private long max;
-    
+
     private long min;
 
     private long errorCount;
@@ -217,7 +217,7 @@ public class RunningSample {
      */
     public void addSample(SampleResult res) {
         long aTimeInMillis = res.getTime();
-        
+
         counter+=res.getSampleCount();
         errorCount += res.getErrorCount();
 

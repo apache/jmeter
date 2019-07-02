@@ -13,16 +13,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.engine.util;
 
 import org.apache.jmeter.threads.TestCompiler;
 
 /**
- * Implement this method-less interface to indicate that this ConfigElement should not be merged. 
+ * Implement this method-less interface to indicate that this ConfigElement should not be merged.
  * Otherwise, the default behavior is to merge the element with every sampler in scope.
- * 
+ *
  * @see TestCompiler#configureSampler(org.apache.jmeter.samplers.Sampler)
  * @since 2.7
  */

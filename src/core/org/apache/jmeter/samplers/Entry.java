@@ -67,7 +67,7 @@ public class Entry {
     /**
      * Add a config element as a specific class. Usually this is done to add a
      * subclass as one of it's parent classes.
-     * 
+     *
      * @param config
      *            the {@link ConfigElement} to be added
      * @param asClass

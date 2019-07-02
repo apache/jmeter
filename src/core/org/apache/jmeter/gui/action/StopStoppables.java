@@ -37,9 +37,9 @@ public class StopStoppables extends AbstractAction implements ActionListener {
     static {
         commands.add(ActionNames.STOP_THREAD);
     }
-    
+
     /**
-     * 
+     *
      */
     public StopStoppables() {
         super();
@@ -58,7 +58,7 @@ public class StopStoppables extends AbstractAction implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+
     }
 
     /* (non-Javadoc)

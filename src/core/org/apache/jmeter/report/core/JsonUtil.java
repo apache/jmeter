@@ -23,7 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * The class JsonUtil provides helper functions to generate Json.
- * 
+ *
  * @since 3.0
  */
 public final class JsonUtil {

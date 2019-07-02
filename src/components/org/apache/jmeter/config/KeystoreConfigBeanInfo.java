@@ -40,7 +40,7 @@ public class KeystoreConfigBeanInfo extends BeanInfoSupport {
     public KeystoreConfigBeanInfo() {
         super(KeystoreConfig.class);
 
-        createPropertyGroup(ALIASES_GROUP, new String[] { 
+        createPropertyGroup(ALIASES_GROUP, new String[] {
                 PRELOAD, CLIENT_CERT_ALIAS_VAR_NAME, ALIAS_START_INDEX, ALIAS_END_INDEX });
 
         PropertyDescriptor p = property(PRELOAD);

@@ -25,7 +25,7 @@ package org.apache.jmeter.visualizers.backend.graphite;
 public class SocketConnectionInfos {
     private String host;
     private int port;
-    
+
     /**
      * @param host the name of the host to connect to
      * @param port the port to connect to
@@ -35,7 +35,7 @@ public class SocketConnectionInfos {
         this.host = host;
         this.port = port;
     }
-    
+
     /**
      * @return the host
      */

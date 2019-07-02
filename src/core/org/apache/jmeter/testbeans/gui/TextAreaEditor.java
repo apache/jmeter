@@ -79,7 +79,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     /**
      * Construct a {@link TextAreaEditor} using the properties of a given
      * {@link PropertyDescriptor}
-     * 
+     *
      * @param descriptor
      *            to be used for the editor. Must not be <code>null</code>
      */

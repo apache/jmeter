@@ -99,7 +99,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      */
     @Deprecated
     public static final String IS_ONE_WAY = "JMSSampler.isFireAndForget"; // $NON-NLS-1$ // NOSONAR
-    
+
     private static final String JMS_NUMBEROFSAMPLES = "JMSSampler.jmsNumberOfSamplesToAggregate"; // $NON-NLS-1$
 
     private static final String JMS_NUMBEROFSAMPLES_DEFAULT = "1"; // $NON-NLS-1$
@@ -128,19 +128,19 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                                                                             // applied
 
     public enum COMMUNICATION_STYLE {
-        ONE_WAY(0), 
-        REQUEST_REPLY(1), 
-        READ(2), 
-        BROWSE(3), 
+        ONE_WAY(0),
+        REQUEST_REPLY(1),
+        READ(2),
+        BROWSE(3),
         CLEAR(4);
 
         private final int value;
         COMMUNICATION_STYLE(int value) {
             this.value = value;
         }
-        
-        public int getValue() { 
-            return value; 
+
+        public int getValue() {
+            return value;
         }
     }
 
@@ -317,9 +317,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         }
     }
 
-    private String browseQueueForConsumption(Queue queue, 
-            String jmsSelector, 
-            SampleResult res, 
+    private String browseQueueForConsumption(Queue queue,
+            String jmsSelector,
+            SampleResult res,
             StringBuilder buffer,
             StringBuilder propBuffer) {
         String retVal = null;
@@ -564,7 +564,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     /**
      * Which request field to use for correlation?
-     * 
+     *
      * @return true if correlation should use the request JMSMessageID rather
      *         than JMSCorrelationID
      */
@@ -574,7 +574,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     /**
      * Which response field to use for correlation?
-     * 
+     *
      * @return true if correlation should use the response JMSMessageID rather
      *         than JMSCorrelationID
      */
@@ -602,11 +602,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     public void setCommunicationstyle(int communicationStyle) {
         setProperty(new IntegerProperty(JMS_COMMUNICATION_STYLE, communicationStyle));
     }
-    
+
     public void setIsOneway(boolean isOneway) {
-        setProperty(new IntegerProperty(JMS_COMMUNICATION_STYLE, 
-                isOneway ? 
-                        COMMUNICATION_STYLE.ONE_WAY.value : 
+        setProperty(new IntegerProperty(JMS_COMMUNICATION_STYLE,
+                isOneway ?
+                        COMMUNICATION_STYLE.ONE_WAY.value :
                             COMMUNICATION_STYLE.REQUEST_REPLY.value));
     }
 

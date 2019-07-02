@@ -104,7 +104,7 @@ public class ConversionHelp {
 
     /**
      * Decode a string if {@link #inVersion} equals <code>1.0</code>
-     * 
+     *
      * @param p
      *            the string to be decoded
      * @return the newly decoded string
@@ -128,7 +128,7 @@ public class ConversionHelp {
     /**
      * Embed an array of bytes as a string with <code>encoding</code> in a
      * xml-cdata section
-     * 
+     *
      * @param chars
      *            bytes to be encoded and embedded
      * @param encoding
@@ -204,7 +204,7 @@ public class ConversionHelp {
 
     /**
      * Check whether <code>name</code> specifies a <em>special</em> property
-     * 
+     *
      * @param name
      *            the name of the property to be checked
      * @return <code>true</code> if <code>name</code> is the name of a special
@@ -218,39 +218,39 @@ public class ConversionHelp {
      * Get the property name, updating it if necessary using {@link NameUpdater}.
      * @param reader where to read the name attribute
      * @param context the unmarshalling context
-     * 
+     *
      * @return the property name, may be null if the property has been deleted.
      * @see #getUpgradePropertyName(String, UnmarshallingContext)
      */
     public static String getPropertyName(HierarchicalStreamReader reader, UnmarshallingContext context) {
         String name = ConversionHelp.decode(reader.getAttribute(ATT_NAME));
         return getUpgradePropertyName(name, context);
-        
+
     }
 
     /**
      * Get the property value, updating it if necessary using {@link NameUpdater}.
-     * 
+     *
      * Do not use for GUI_CLASS or TEST_CLASS.
-     * 
+     *
      * @param reader where to read the value
      * @param context the unmarshalling context
      * @param name the name of the property
-     * 
+     *
      * @return the property value, updated if necessary.
      * @see #getUpgradePropertyValue(String, String, UnmarshallingContext)
      */
     public static String getPropertyValue(HierarchicalStreamReader reader, UnmarshallingContext context, String name) {
         String value = ConversionHelp.decode(reader.getValue());
         return getUpgradePropertyValue(name, value, context);
-        
+
     }
 
     /**
      * Update a property name using {@link NameUpdater}.
      * @param name the original property name
      * @param context the unmarshalling context
-     * 
+     *
      * @return the property name, may be null if the property has been deleted.
      */
     public static String getUpgradePropertyName(String name, UnmarshallingContext context) {
@@ -265,13 +265,13 @@ public class ConversionHelp {
 
     /**
      * Update a property value using {@link NameUpdater#getCurrentName(String, String, String)}.
-     * 
+     *
      * Do not use for GUI_CLASS or TEST_CLASS.
-     * 
+     *
      * @param name the original property name
      * @param value the original property value
      * @param context the unmarshalling context
-     * 
+     *
      * @return the property value, updated if necessary
      */
     public static String getUpgradePropertyValue(String name, String value, UnmarshallingContext context) {
@@ -288,7 +288,7 @@ public class ConversionHelp {
      * <li>TestElement.NAME</li>
      * <li>TestElement.ENABLED</li>
      * </ul>
-     * 
+     *
      * @param testElement
      *            element for which the special properties should be saved
      * @param writer
@@ -310,7 +310,7 @@ public class ConversionHelp {
      * <li>TestElement.NAME</li>
      * <li>TestElement.ENABLED</li>
      * </ul>
-     * 
+     *
      * @param testElement
      *            in which the special properties should be restored
      * @param reader

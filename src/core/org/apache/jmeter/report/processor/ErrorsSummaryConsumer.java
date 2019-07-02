@@ -29,17 +29,17 @@ import org.apache.jmeter.util.JMeterUtils;
  * The class ErrorSummaryConsumer provides a consumer that calculates error
  * statistics.
  * </p>
- * 
+ *
  * @since 3.0
  */
 public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
-    static final boolean ASSERTION_RESULTS_FAILURE_MESSAGE = 
+    static final boolean ASSERTION_RESULTS_FAILURE_MESSAGE =
             JMeterUtils
                 .getPropDefault(
                         SampleSaveConfiguration.ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
                         true);
-            
+
     private static final Long ZERO = Long.valueOf(0);
     private long errorCount = 0L;
 
@@ -52,7 +52,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createDataResult
      * (java.lang.String)
@@ -71,7 +71,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
      * (org.apache.jmeter.report.core.Sample)
@@ -83,15 +83,15 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
     /**
      * @param sample {@link Sample}
-     * @return String Error key for sample 
+     * @return String Error key for sample
      */
     static String getErrorKey(Sample sample) {
         String responseCode = sample.getResponseCode();
         String responseMessage = sample.getResponseMessage();
-        String key = responseCode + (!StringUtils.isEmpty(responseMessage) ? 
+        String key = responseCode + (!StringUtils.isEmpty(responseMessage) ?
                  "/" + StringEscapeUtils.escapeJson(StringEscapeUtils.escapeHtml4(responseMessage)) : "");
-        if (MetricUtils.isSuccessCode(responseCode) || 
-                (StringUtils.isEmpty(responseCode) && 
+        if (MetricUtils.isSuccessCode(responseCode) ||
+                (StringUtils.isEmpty(responseCode) &&
                         !StringUtils.isEmpty(sample.getFailureMessage()))) {
             key = MetricUtils.ASSERTION_FAILED;
             if (ASSERTION_RESULTS_FAILURE_MESSAGE) {
@@ -105,7 +105,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
     }
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#updateData
      * (org.apache.jmeter.report.processor.AbstractSummaryConsumer.SummaryInfo,
@@ -135,7 +135,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
      */
     @Override
@@ -148,7 +148,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
      * ()

@@ -110,7 +110,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     static {
         boolean hsp = false;
-        log.debug("Status prefix={}, suffix={}, properties={}", 
+        log.debug("Status prefix={}, suffix={}, properties={}",
                 STATUS_PREFIX, STATUS_SUFFIX, STATUS_PROPERTIES); //$NON-NLS-1$
         if (STATUS_PROPERTIES.length() > 0) {
             File f = new File(STATUS_PROPERTIES);
@@ -133,7 +133,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             ThreadLocal.withInitial(HashMap::new);
 
     private transient TCPClient protocolHandler;
-    
+
     private transient boolean firstSample; // Are we processing the first sample?
 
     private transient volatile Socket currentSocket; // used for handling interrupt
@@ -178,9 +178,9 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 log.warn("Could not create socket for {}", getLabel(), e); //$NON-NLS-1$
                 cp.put(ERRKEY, e.toString());
                 return null;
-            }     
+            }
         }
-        // (re-)Define connection params - Bug 50977 
+        // (re-)Define connection params - Bug 50977
         try {
             con.setSoTimeout(getTimeout());
             con.setTcpNoDelay(getNoDelay());
@@ -236,15 +236,15 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     public int getSoLinger() {
         return getPropertyAsInt(SO_LINGER);
     }
-    
+
     public void setEolByte(String eol) {
         this.setProperty(EOL_BYTE, eol, "");
     }
-    
+
     public int getEolByte() {
         return getPropertyAsInt(EOL_BYTE);
     }
-    
+
 
     public void setPort(String newFilename) {
         this.setProperty(PORT, newFilename);
@@ -376,7 +376,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         sb.append(" EOL: ").append(getEolByte()); // $NON-NLS-1$
         sb.append(" noDelay: ").append(getNoDelay()); // $NON-NLS-1$
         sb.append("]"); // $NON-NLS-1$
-        res.setSamplerData(sb.toString()); 
+        res.setSamplerData(sb.toString());
         res.sampleStart();
         try {
             Socket sock;
@@ -434,10 +434,10 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
      * @return boolean if sample is considered as successful
      */
     private boolean setupSampleResult(SampleResult sampleResult,
-            String readResponse, 
+            String readResponse,
             Exception exception,
             TCPClient protocolHandler) {
-        sampleResult.setResponseData(readResponse, 
+        sampleResult.setResponseData(readResponse,
                 protocolHandler != null ? protocolHandler.getCharset() : null);
         sampleResult.setDataType(SampleResult.TEXT);
         if(exception==null) {
@@ -542,7 +542,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         cp.clear();
         tp.remove();
     }
-    
+
     /**
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */

@@ -46,10 +46,10 @@ import org.slf4j.LoggerFactory;
 public class TestAction extends AbstractSampler implements Interruptible {
 
     private static final Logger log = LoggerFactory.getLogger(TestAction.class);
-    
+
     private static final String MSG_STOP_CURRENT_THREAD = "Stopping current thread from element {}";
 
-    private static final TimerService TIMER_SERVICE = TimerService.getInstance(); 
+    private static final TimerService TIMER_SERVICE = TimerService.getInstance();
 
     private static final long serialVersionUID = 242L;
 
@@ -113,7 +113,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
                     context.getThread().stop();
                     if(log.isInfoEnabled()) {
                         log.info("Stopping all threads now from element {}", getName());
-                    } 
+                    }
                     context.getEngine().stopTest();
                 } else {
                     if(log.isInfoEnabled()) {

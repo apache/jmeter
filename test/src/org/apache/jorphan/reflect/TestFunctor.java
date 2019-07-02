@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.reflect;
@@ -33,14 +33,14 @@ import org.junit.Test;
 
 /*
  * Unit tests for classes that use Functors
- * 
+ *
  */
 public class TestFunctor extends JMeterTestCase {
 
     interface HasName {
         String getName();
     }
-    
+
     interface HasString {
         String getString(String s);
     }
@@ -90,7 +90,7 @@ public class TestFunctor extends JMeterTestCase {
             return s;
         }
     }
-    
+
     @Before
     public void setUp(){
         Configurator.setAllLevels(Functor.class.getName(), Level.FATAL);
@@ -109,7 +109,7 @@ public class TestFunctor extends JMeterTestCase {
             f1.invoke(t2);
             fail("Should have generated error");
         } catch (JMeterError e){
-            
+
         }
         assertEquals("t2",f2.invoke(t2));
         assertEquals("1a:aa.",f1a.invoke(t1a));
@@ -117,12 +117,12 @@ public class TestFunctor extends JMeterTestCase {
             f1a.invoke(t1);// can't call invoke using super class
             fail("Should have generated error");
         } catch (JMeterError e){
-            
+
         }
-        // OK (currently) to invoke using sub-class 
+        // OK (currently) to invoke using sub-class
         assertEquals("1a:aa.",f1.invoke(t1a));
     }
-    
+
     @Test
     public void testNameTypes() throws Exception{
         Functor f = new Functor("getString",new Class[]{String.class});
@@ -149,7 +149,7 @@ public class TestFunctor extends JMeterTestCase {
         assertEquals("t1",f1.invoke(t1));
         assertEquals("t1",f1.invoke(t2)); // should use original object
     }
-    
+
     // Check how Class definition behaves
     @Test
     public void testClass() throws Exception{
@@ -164,7 +164,7 @@ public class TestFunctor extends JMeterTestCase {
             f1.invoke();
             fail("Should have failed");
         } catch (IllegalStateException ok){
-            
+
         }
         Functor f2 = new Functor(HasString.class,"getString");
         assertEquals("xyz",f2.invoke(t2,new String[]{"xyz"}));
@@ -172,11 +172,11 @@ public class TestFunctor extends JMeterTestCase {
             f2.invoke(t1,new String[]{"xyz"});
             fail("Should have failed");
         } catch (JMeterError ok){
-            
+
         }
         Functor f3 = new Functor(t2,"getString");
         assertEquals("xyz",f3.invoke(t2,new Object[]{"xyz"}));
-        
+
         Properties p = new Properties();
         p.put("Name","Value");
         Functor fk = new Functor(Map.Entry.class,"getKey");
@@ -185,7 +185,7 @@ public class TestFunctor extends JMeterTestCase {
         assertEquals("Name",fk.invoke(o));
         assertEquals("Value",fv.invoke(o));
     }
-    
+
     @Test
     public void testBadParameters() throws Exception{
         try {
@@ -223,10 +223,10 @@ public class TestFunctor extends JMeterTestCase {
         try {
             f.invoke();
             fail("should have generated IllegalStateException;");
-        } catch (IllegalStateException ok){}        
+        } catch (IllegalStateException ok){}
         try {
             f.invoke(new Object[]{});
             fail("should have generated IllegalStateException;");
-        } catch (IllegalStateException ok){}        
+        } catch (IllegalStateException ok){}
     }
 }

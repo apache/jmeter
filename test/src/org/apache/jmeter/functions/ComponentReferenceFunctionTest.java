@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -46,21 +46,21 @@ import junit.framework.TestSuite;
 public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
 
     private static final Logger log = LoggerFactory.getLogger(ComponentReferenceFunctionTest.class);
-    
+
     private static Map<String, Boolean> funcTitles;
-    
+
     // Constructor for Function tests
     private Function funcItem;
-    
+
     public ComponentReferenceFunctionTest(String name) {
         super(name);
     }
-    
+
     public ComponentReferenceFunctionTest(String testName, Function fi) {
         super(testName);// Save the method name
         funcItem = fi;
     }
-    
+
     /*
      * Test Functions - create the suite of tests
      */
@@ -77,7 +77,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
         }
         return suite;
     }
-    
+
     private Element getBodyFromXMLDocument(InputStream stream)
             throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -89,7 +89,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
         org.w3c.dom.Element body = (org.w3c.dom.Element) root.getElementsByTagName("body").item(0);
         return body;
     }
-    
+
     /*
      * Extract titles from functions.xml
      */
@@ -103,22 +103,22 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
             for (int i = 0; i < subSections.getLength(); i++) {
                 NodeList components = ((Element)subSections.item(i)).getElementsByTagName("component");
                 for (int j = 0; j < components.getLength(); j++) {
-                    org.w3c.dom.Element comp = (org.w3c.dom.Element) 
+                    org.w3c.dom.Element comp = (org.w3c.dom.Element)
                             components.item(j);
                     funcTitles.put(comp.getAttribute("name"), Boolean.FALSE);
                     String tag = comp.getAttribute("tag");
                     if (!StringUtils.isEmpty(tag)){
-                        funcTitles.put(tag, Boolean.FALSE);                    
+                        funcTitles.put(tag, Boolean.FALSE);
                     }
                 }
             }
         }
     }
-    
+
     public void checkFunctionSet() throws Exception {
         assertEquals("Should not have any names left over", 0, JMeterTest.scanprintMap(funcTitles, "Function"));
     }
-    
+
     /*
      * run the function test
      */
@@ -140,7 +140,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
             }
         }
     }
-    
+
     /*
      * Check that function descriptions are OK
      */
@@ -150,7 +150,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
             assertFalse("Description must not start with [refkey", ((String) o).startsWith("[refkey"));
         }
     }
-    
+
     /*
      * Use a suite to allow the tests to be generated at run-time
      */

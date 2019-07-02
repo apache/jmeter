@@ -66,9 +66,9 @@ public class FixedQueueExecutor implements QueueExecutor {
      * {@inheritDoc}
      */
     @Override
-    public Message sendAndReceive(Message request, 
-            int deliveryMode, 
-            int priority, 
+    public Message sendAndReceive(Message request,
+            int deliveryMode,
+            int priority,
             long expiration) throws JMSException {
         String id = request.getJMSCorrelationID();
         if(id == null && !useReqMsgIdAsCorrelId){
@@ -84,14 +84,14 @@ public class FixedQueueExecutor implements QueueExecutor {
                 admin.putRequest(id, request, countDownLatch);
             }
         } else {
-            admin.putRequest(id, request, countDownLatch);            
+            admin.putRequest(id, request, countDownLatch);
             producer.send(request, deliveryMode, priority, expiration);
         }
 
         try {
-            log.debug("{} will wait for reply {} started on {}", 
+            log.debug("{} will wait for reply {} started on {}",
                     Thread.currentThread().getName(), id, System.currentTimeMillis());
-            
+
             // This used to be request.wait(timeout_ms), where 0 means forever
             // However 0 means return immediately for the latch
             if (timeout == 0){
@@ -103,7 +103,7 @@ public class FixedQueueExecutor implements QueueExecutor {
                 }
             }
             log.debug("{} done waiting for {} on {} ended on {}",
-                    Thread.currentThread().getName(), 
+                    Thread.currentThread().getName(),
                     id, request, System.currentTimeMillis());
         } catch (InterruptedException e) {
             log.warn("Interrupt exception caught", e);

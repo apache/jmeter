@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Defines the context in which {@link SampleConsumer}, {@link SampleProducer}
  * will operate
- * 
+ *
  * @since 3.0
  */
 public class SampleContext {
@@ -37,7 +37,7 @@ public class SampleContext {
      * intermediate work.<br>
      * SampleConsumers are encourage to create their own work directories
      * beneath this root work directory
-     * 
+     *
      * @return A file pointing to an existing directory
      */
     public final File getWorkingDirectory() {

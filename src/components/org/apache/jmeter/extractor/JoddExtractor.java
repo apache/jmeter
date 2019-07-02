@@ -66,7 +66,7 @@ public class JoddExtractor implements Extractor {
             String cacheKey) {
         NodeSelector nodeSelector;
         if (cacheKey != null) {
-            nodeSelector = (NodeSelector) 
+            nodeSelector = (NodeSelector)
                     JMeterContextService.getContext().getSamplerContext().get(CACHE_KEY_PREFIX+cacheKey);
             if(nodeSelector==null) {
                 LagartoDOMBuilder domBuilder = new LagartoDOMBuilder();
@@ -79,7 +79,7 @@ public class JoddExtractor implements Extractor {
             jodd.lagarto.dom.Document doc = domBuilder.parse(inputString);
             nodeSelector = new NodeSelector(doc);
         }
-        
+
         List<List<CssSelector>> cssSelectors = CSS_SELECTOR_CACHE.get(expression);
         List<Node> elements = nodeSelector.select(cssSelectors);
         for (Node element : elements) {
@@ -90,11 +90,11 @@ public class JoddExtractor implements Extractor {
                 break;
             }
         }
-        
+
         return found;
     }
-    
-    
+
+
     private String extractValue(String attribute, Node element) {
         if (!JOrphanUtils.isBlank(attribute)) {
             return element.getAttribute(attribute);

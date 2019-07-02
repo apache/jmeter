@@ -81,7 +81,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     public HashTree(Object key) {
         this(new HashMap<Object, HashTree>(), key);
     }
-    
+
     /**
      * Uses the new HashTree if not null and adds the given object as a
      * top-level node if not null
@@ -858,7 +858,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
 
     protected HashTree getTreePath(Collection<?> treePath) {
         HashTree tree = this;
-        for (Object aTreePath : treePath) {            
+        for (Object aTreePath : treePath) {
             tree = tree.getTree(aTreePath);
             if (tree == null) {
                 return null;

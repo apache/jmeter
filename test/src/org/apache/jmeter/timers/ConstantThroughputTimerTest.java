@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.timers;
@@ -49,7 +49,7 @@ public class ConstantThroughputTimerTest {
         // which case the calculated delay should be shorter.
         // Since the test aims at 1 per second, the delay should be 1000 - elapsed.
         // The test currently assumes elapsed is 500.
-       
+
         Thread.sleep(500);
         long elapsed = System.currentTimeMillis() - start;
         long expected = 1000-elapsed; // 1 second less what has already elapsed
@@ -95,33 +95,33 @@ public class ConstantThroughputTimerTest {
         Assume.assumeTrue("BeanShell jar should be on the classpath, otherwise the test makes no sense",
                 BeanShellInterpreter.isInterpreterPresent());
         BeanShellTimer timer = new BeanShellTimer();
-        
+
         timer.setScript("\"60\"");
         assertEquals(60, timer.delay());
-        
+
         timer.setScript("60");
         assertEquals(60, timer.delay());
-        
+
         timer.setScript("5*3*4");
         assertEquals(60,timer.delay());
     }
-    
+
     @Test
     public void testTimerJSR223Timer() throws Exception {
         JSR223Timer timer = new JSR223Timer();
         timer.setScriptLanguage(ScriptingTestElement.DEFAULT_SCRIPT_LANGUAGE);
         timer.setCacheKey(UUID.randomUUID().toString());
-        
+
         timer.setScript("\"60\"");
         assertEquals(60, timer.delay());
-        
+
         timer.setScript("60");
         assertEquals(60, timer.delay());
-        
+
         timer.setScript("5*3*4");
         assertEquals(60,timer.delay());
     }
-    
+
     @Test
     public void testUniformRandomTimer() throws Exception {
         UniformRandomTimer timer = new UniformRandomTimer();
@@ -131,7 +131,7 @@ public class ConstantThroughputTimerTest {
         long delay = timer.delay();
         Assert.assertTrue("delay:"+delay +" is not in expected range", delay >= 1000 && delay <=1100);
     }
-    
+
     @Test
     public void testConstantTimer() throws Exception {
         ConstantTimer timer = new ConstantTimer();
@@ -139,7 +139,7 @@ public class ConstantThroughputTimerTest {
         timer.iterationStart(null);
         assertEquals(1000, timer.delay());
     }
-    
+
     @Test
     public void testPoissonRandomTimerRangeHigherThan30() throws Exception {
         PoissonRandomTimer timer = new PoissonRandomTimer();
@@ -149,7 +149,7 @@ public class ConstantThroughputTimerTest {
         long delay = timer.delay();
         Assert.assertTrue("delay:"+delay +" is not in expected range", delay >= 356 && delay <=457);
     }
-    
+
     @Test
     public void testPoissonRandomTimerRangeLowerThan30() throws Exception {
         PoissonRandomTimer timer = new PoissonRandomTimer();

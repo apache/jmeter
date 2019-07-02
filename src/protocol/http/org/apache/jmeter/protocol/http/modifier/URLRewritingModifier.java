@@ -239,7 +239,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     }
 
     public boolean encode() {
-        return getPropertyAsBoolean(ENCODE, false);        
+        return getPropertyAsBoolean(ENCODE, false);
     }
     public void setEncode(boolean b) {
         setProperty(new BooleanProperty(ENCODE, b));

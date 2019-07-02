@@ -32,7 +32,7 @@ public class ExporterConfiguration extends InstanceConfiguration {
     private boolean filtersOnlySampleSeries;
     private String seriesFilter;
     private boolean showControllerSeriesOnly;
-    
+
     /**
      * Gets the extra configurations for graphs.
      *
@@ -43,7 +43,7 @@ public class ExporterConfiguration extends InstanceConfiguration {
     }
 
     /**
-     * Indicates whether series filter apply only on sample series 
+     * Indicates whether series filter apply only on sample series
      *
      * @return true if series filter apply only on sample series; false otherwise
      */
@@ -59,7 +59,7 @@ public class ExporterConfiguration extends InstanceConfiguration {
     public final void filtersOnlySampleSeries(boolean filtersOnlySampleSeries) {
         this.filtersOnlySampleSeries = filtersOnlySampleSeries;
     }
-    
+
     /**
      * Gets the series filter.
      *

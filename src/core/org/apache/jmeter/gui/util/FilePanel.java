@@ -35,7 +35,7 @@ public class FilePanel extends FilePanelEntry {
     public FilePanel(String title) {
         this(title, (String) null);
     }
-    
+
     public FilePanel(String title, boolean onlyDirectories) {
         this(title, (String) null, onlyDirectories);
     }
@@ -43,7 +43,7 @@ public class FilePanel extends FilePanelEntry {
     public FilePanel(String title, String filetype) {
         this(title, filetype, false);
     }
-    
+
     public FilePanel(String title, String filetype, boolean onlyDirectories) {
         super(JMeterUtils.getResString("file_visualizer_filename"), onlyDirectories, filetype); // $NON-NLS-1$
         this.title = title;
@@ -59,7 +59,7 @@ public class FilePanel extends FilePanelEntry {
         this.title = title;
         init();
     }
-    
+
     public FilePanel(String resString, String[] exts) {
         super(JMeterUtils.getResString("file_visualizer_filename"), exts); // $NON-NLS-1$
         title = resString;

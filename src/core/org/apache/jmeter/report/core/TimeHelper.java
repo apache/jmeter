@@ -24,7 +24,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class TimeHelper provides helper functions to ease time displaying.
- * 
+ *
  * @since 3.0
  */
 public class TimeHelper {

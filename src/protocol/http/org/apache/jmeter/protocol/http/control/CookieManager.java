@@ -84,8 +84,8 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
         JMeterUtils.getPropDefault("CookieManager.check.cookies", true);// $NON-NLS-1$
 
     static {
-        log.info("Settings: Delete null: {} Check: {} Allow variable: {} Save: {} Prefix: {}", 
-                DELETE_NULL_COOKIES, CHECK_COOKIES, ALLOW_VARIABLE_COOKIES, 
+        log.info("Settings: Delete null: {} Check: {} Allow variable: {} Save: {} Prefix: {}",
+                DELETE_NULL_COOKIES, CHECK_COOKIES, ALLOW_VARIABLE_COOKIES,
                 SAVE_COOKIES, COOKIE_NAME_PREFIX);
     }
 
@@ -96,17 +96,17 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
      * Defines the policy that is assumed when the JMX file does not contain an entry for it
      * MUST NOT BE CHANGED otherwise JMX files will not be correctly interpreted
      * <p>
-     * The default policy for new CookieManager elements is defined by 
+     * The default policy for new CookieManager elements is defined by
      * {@link org.apache.jmeter.protocol.http.gui.CookiePanel#DEFAULT_POLICY CookiePanel#DEFAULT_POLICY}
      *
      */
     private static final String DEFAULT_POLICY = CookieSpecs.STANDARD;
-    
+
     /**
      * Defines the implementation that is assumed when the JMX file does not contain an entry for it
      * MUST NOT BE CHANGED otherwise JMX files will not be correctly interpreted
      * <p>
-     * The default implementation for new CookieManager elements is defined by 
+     * The default implementation for new CookieManager elements is defined by
      * {@link org.apache.jmeter.protocol.http.gui.CookiePanel#DEFAULT_IMPLEMENTATION CookiePanel#DEFAULT_IMPLEMENTATION}
      *
      */

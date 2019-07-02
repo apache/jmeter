@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 /**
  * BackendListenerContext is used to provide context information to a
  * BackendListenerClient implementation. This currently consists of the
- * initialization parameters which were specified in the GUI. 
+ * initialization parameters which were specified in the GUI.
  * @since 2.13
  */
 public class BackendListenerContext {

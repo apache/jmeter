@@ -132,7 +132,7 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
     private EventProducer getEventProducer() {
         AbstractThreadGroup tg = getThreadContext().getThreadGroup();
         Long seed = randomSeed == null || randomSeed == 0 ? null : randomSeed;
-        return 
+        return
                 groupEvents.computeIfAbsent(tg, x -> new ConstantPoissonProcessGenerator(
                         () -> PreciseThroughputTimer.this.getThroughput() / throughputPeriod,
                         batchSize, batchThreadDelay, this, exactLimit, allowedThroughputSurplus, seed, true));

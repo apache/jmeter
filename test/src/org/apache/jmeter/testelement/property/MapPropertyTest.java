@@ -39,7 +39,7 @@ public class MapPropertyTest {
         MapProperty props = new MapProperty("foo", new HashMap<Object, Object>());
         assertThat(props.getPropertyType(), CoreMatchers.equalTo(NullProperty.class));
     }
-    
+
     public void testGetPropertyTypeOfStringElements() {
         Map<String, Integer> numberMap = new HashMap<>();
         numberMap.put("One", Integer.valueOf(1));

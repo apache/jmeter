@@ -46,7 +46,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
 
     private final JTextArea textArea;
 
-    // Limit length of log content 
+    // Limit length of log content
     // 0 means unlimited
     private static final int LOGGER_PANEL_MAX_LINES =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.maxlength", 1000); // $NON-NLS-1$

@@ -79,7 +79,7 @@ public class TimeShift extends AbstractFunction {
     private String variableName = ""; //$NON-NLS-1$
     private ZoneId systemDefaultZoneID = ZoneId.systemDefault();
 
-    
+
     private static final class LocaleFormatObject {
 
         private String format;
@@ -121,10 +121,10 @@ public class TimeShift extends AbstractFunction {
         public String toString() {
             return "LocaleFormatObject [format=" + format + ", locale=" + locale + "]";
         }
-        
-        
+
+
     }
-    
+
     /** Date time format cache handler **/
     private Cache<LocaleFormatObject, DateTimeFormatter> dateTimeFormatterCache = null;
 
@@ -161,7 +161,7 @@ public class TimeShift extends AbstractFunction {
                             ZoneId.systemDefault());
                 }
             } catch (DateTimeParseException | NumberFormatException ex) {
-                log.error("Failed to parse the date '{}' to shift with formatter '{}'", 
+                log.error("Failed to parse the date '{}' to shift with formatter '{}'",
                         dateToShift, formatter, ex); // $NON-NLS-1$
             }
         }

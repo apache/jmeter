@@ -45,7 +45,7 @@ public interface JMeterEngine {
         stopTest(true);
     }
     /**
-     * 
+     *
      * @param now boolean that tell wether stop is immediate (interrupt) or not (wait for current sample end)
      */
     void stopTest(boolean now);
@@ -65,7 +65,7 @@ public interface JMeterEngine {
      * Exit engine
      */
     void exit();
-    
+
     /**
      * @return boolean Flag to show whether engine is active (true when test is running). Set to false at end of test
      */

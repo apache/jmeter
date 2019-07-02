@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.modifier;
@@ -142,7 +142,7 @@ public class TestAnchorModifier extends JMeterTestCase {
             parser.process();
             assertEquals("http://www.apache.org/subdir/index.html", config.getUrl().toString());
         }
-        
+
         // Test https works too
         @Test
         public void testSimpleParse1() throws Exception {
@@ -339,7 +339,7 @@ public class TestAnchorModifier extends JMeterTestCase {
         public void testSpecialCharParse() throws Exception {
         String specialChars = "-_.!~*'()%25";// These are some of the special characters
         String htmlEncodedFixture = URLEncoder.encode(specialChars, StandardCharsets.UTF_8.name());
-        
+
         HTTPSamplerBase config = makeUrlConfig(".*index.html");
         config.addArgument("test", ".*");
         config.setMethod(HTTPConstants.POST);
@@ -347,7 +347,7 @@ public class TestAnchorModifier extends JMeterTestCase {
         String responseText = "<html><head><title>Test page</title></head><body>"
             + "<form action=\"index.html\" method=\"POST\">" + "<input type=\"hidden\" name=\"test\""
             + " value=\"" + htmlEncodedFixture + "\">Goto index page</form></body></html>";
-        
+
         HTTPSampleResult result = new HTTPSampleResult();
         result.setResponseData(responseText, null);
         result.setSampleLabel(context.toString());
@@ -360,7 +360,7 @@ public class TestAnchorModifier extends JMeterTestCase {
         assertEquals("test=" + htmlEncodedFixture, config.getQueryString());
       }
 
-        
+
         private HTTPSamplerBase makeContext(String url) throws MalformedURLException {
             URL u = new URL(url);
             HTTPSamplerBase context = new HTTPNullSampler();

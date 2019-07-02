@@ -34,9 +34,9 @@ import org.slf4j.LoggerFactory;
 /**
  * DateConvert function to change date format
  * Can optionally store it in a variable.
- * 
+ *
  * @since 4.0
- * 
+ *
  */
 public class DateTimeConvertFunction extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(DateTimeConvertFunction.class);

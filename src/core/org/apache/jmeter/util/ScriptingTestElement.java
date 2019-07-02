@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -39,9 +39,9 @@ public abstract class ScriptingTestElement extends AbstractTestElement {
     private String script = ""; // script (if file not provided)
 
     protected String scriptLanguage = ""; // BSF/JSR223 language to use
-    
+
     public final static String DEFAULT_SCRIPT_LANGUAGE = "groovy"; // if no language is chosen in GUI
-    
+
     //-- For TestBean implementations only
 
     public ScriptingTestElement() {
@@ -91,7 +91,7 @@ public abstract class ScriptingTestElement extends AbstractTestElement {
      * @return true if Throwable is an Exception that impacts test state
      */
     protected boolean isStopCondition(Throwable rootCause) {
-        return rootCause instanceof JMeterStopTestNowException 
+        return rootCause instanceof JMeterStopTestNowException
                 || rootCause instanceof JMeterStopTestException
                 || rootCause instanceof JMeterStopThreadException;
     }

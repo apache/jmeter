@@ -49,8 +49,8 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     private static final String ENCODE_OR_NOT = "encode?"; //$NON-NLS-1$
 
     private static final String INCLUDE_EQUALS = "include_equals"; //$NON-NLS-1$
-    
-    private static final String CONTENT_TYPE = "content_type"; 
+
+    private static final String CONTENT_TYPE = "content_type";
 
     /** When pasting from the clipboard, split lines on linebreak or '&' */
     private static final String CLIPBOARD_LINE_DELIMITERS = "\n|&"; //$NON-NLS-1$
@@ -112,7 +112,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     /**
      * Convert the argument panel contents to an {@link Arguments} collection.
-     * 
+     *
      * @return a collection of {@link HTTPArgument} entries
      */
     public Arguments getParameters() {
@@ -162,12 +162,12 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         argument.setName(clipboardCols[0]);
         if (clipboardCols.length > 1) {
             argument.setValue(clipboardCols[1]);
-            
+
             if (clipboardCols.length > 2) {
-                
+
                 // default to false if the string is not a boolean
                 argument.setAlwaysEncoded(Boolean.parseBoolean(clipboardCols[2].trim()));
-                
+
                 if (clipboardCols.length > 3) {
                     Boolean useEqual = BooleanUtils.toBooleanObject(clipboardCols[3].trim());
                     // default to true if the string is not a boolean
@@ -175,12 +175,12 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
                 }
             }
         }
-        
+
         return argument;
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        
+
         // register the right click menu
         JTable table = getTable();
         final JPopupMenu popupMenu = new JPopupMenu();
@@ -189,10 +189,10 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         popupMenu.add(variabilizeItem);
         table.setComponentPopupMenu(popupMenu);
     }
-    
-    /** 
-     * replace the argument value of the selection with a variable 
-     * the variable name is derived from the parameter name 
+
+    /**
+     * replace the argument value of the selection with a variable
+     * the variable name is derived from the parameter name
      */
     private void transformNameIntoVariable() {
         int[] rowsSelected = getTable().getSelectedRows();
@@ -207,5 +207,5 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
             }
         }
     }
-    
+
 }

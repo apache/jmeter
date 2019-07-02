@@ -28,7 +28,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
     private static final long serialVersionUID = 241L;
 
     private final transient HTTPJavaImpl hc;
-    
+
     public HTTPSampler(){
         hc = new HTTPJavaImpl(this);
     }

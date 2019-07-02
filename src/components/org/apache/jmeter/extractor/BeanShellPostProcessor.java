@@ -37,7 +37,7 @@ public class BeanShellPostProcessor extends BeanShellTestElement
     private static final Logger log = LoggerFactory.getLogger(BeanShellPostProcessor.class);
 
     private static final long serialVersionUID = 5;
-    
+
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.postprocessor.init"; //$NON-NLS-1$
 
@@ -70,7 +70,7 @@ public class BeanShellPostProcessor extends BeanShellTestElement
             }
         }
     }
-     
+
     @Override
     public Object clone() {
         return super.clone();

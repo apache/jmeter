@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler.hc;
@@ -25,16 +25,16 @@ import java.io.InputStream;
 import org.apache.http.client.entity.DeflateInputStream;
 
 /**
- * {@link DeflateInputStream} subclass that has a flag to accept 
- * "edgy streams" that signal end of stream with {@link EOFException} 
+ * {@link DeflateInputStream} subclass that has a flag to accept
+ * "edgy streams" that signal end of stream with {@link EOFException}
  * which seems to be rather frequent
- * 
+ *
  * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=61058">Bugzilla 61058</a>
  * @since 5.0
  */
 public class LaxDeflateInputStream extends DeflateInputStream {
     private final boolean relax;
-    
+
     /**
      * @param wrapped the InputStream that should be wrapped
      * @param relax flag to enable relaxed mode
@@ -74,7 +74,7 @@ public class LaxDeflateInputStream extends DeflateInputStream {
             return handleRelaxMode(ex, relax);
         }
     }
-    
+
     /**
      * @param ex EOFException
      * @param relaxMode relax mode enabled

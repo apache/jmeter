@@ -99,7 +99,7 @@ public class SaveService {
             }
             // Translate to alias and then delegate to wrapped class
             @Override
-            public String serializedClass(@SuppressWarnings("rawtypes") // superclass does not use types 
+            public String serializedClass(@SuppressWarnings("rawtypes") // superclass does not use types
                     Class type) {
                 if (type == null) {
                     return super.serializedClass(null); // was type, but that caused FindBugs warning
@@ -127,7 +127,7 @@ public class SaveService {
 
     // Property name used to define file name
     private static final String SAVESERVICE_PROPERTIES = "saveservice_properties"; // $NON-NLS-1$
-    
+
     // Define file format versions
     private static final String VERSION_2_2 = "2.2";  // $NON-NLS-1$
 
@@ -147,7 +147,7 @@ public class SaveService {
 
     // This is written to JMX files by ScriptWrapperConverter
     private static String propertiesVersion = "";// read from properties file; written to JMX files
-    
+
     // Must match _version property value in saveservice.properties
     // used to ensure saveservice.properties and SaveService are updated simultaneously
     static final String PROPVERSION = "5.0";// Expected version $NON-NLS-1$
@@ -156,7 +156,7 @@ public class SaveService {
     private static String fileVersion = ""; // computed from saveservice.properties file// $NON-NLS-1$
     // Must match the sha1 checksum of the file saveservice.properties (without newline character),
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String FILEVERSION = "822c168ccf18e482d4be1915456c0b503b6f3d75"; // Expected value $NON-NLS-1$
+    static final String FILEVERSION = "890bb3bbf003d8f127c3eea786294b65a44f9b19"; // Expected value $NON-NLS-1$
 
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
@@ -189,7 +189,7 @@ public class SaveService {
         }
         throw new IllegalStateException("Could not find file configured in saveservice_properties property set to:"+saveServiceProps);
     }
-    
+
     public static Properties loadProperties() throws IOException{
         Properties nameMap = new Properties();
         File saveServiceFile = getSaveServiceFile();
@@ -205,7 +205,7 @@ public class SaveService {
             throws NoSuchAlgorithmException, IOException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         File saveServiceFile = getSaveServiceFile();
-        try (BufferedReader reader = 
+        try (BufferedReader reader =
                 Files.newBufferedReader(saveServiceFile.toPath(), Charset.defaultCharset())) {
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -355,7 +355,7 @@ public class SaveService {
     }
 
     /**
-     * 
+     *
      * @param result SampleResult
      * @return String debugging information
      */
@@ -417,7 +417,7 @@ public class SaveService {
         JTLSAVER.unmarshal(new XppDriver().createReader(reader), null, dh);
         inputStreamReader.close();
     }
-    
+
     /**
      * Load a Test tree (JMX file)
      * @param file the JMX file
@@ -427,15 +427,15 @@ public class SaveService {
     public static HashTree loadTree(File file) throws IOException {
         log.info("Loading file: {}", file);
         try (InputStream inputStream = new FileInputStream(file);
-                BufferedInputStream bufferedInputStream = 
+                BufferedInputStream bufferedInputStream =
                     new BufferedInputStream(inputStream)){
             return readTree(bufferedInputStream, file);
         }
     }
 
     /**
-     * 
-     * @param inputStream {@link InputStream} 
+     *
+     * @param inputStream {@link InputStream}
      * @param file the JMX file used only for debug, can be null
      * @return the loaded tree
      * @throws IOException if there is a problem reading the file or processing it
@@ -499,7 +499,7 @@ public class SaveService {
             return Charset.forName(fileEncoding);
         }
         else {
-            
+
             // We use the default character set encoding of the JRE
             log.info("fileEncoding not defined - using JRE default");
             return Charset.defaultCharset();

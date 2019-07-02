@@ -85,7 +85,7 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
 
         if (browserPanel == null) {
             browserPanel = initComponents(html);
-        } 
+        }
         browserPanel.setVisible(true);
         resultsScrollPane.setViewportView(browserPanel);
         Platform.runLater(() -> engine.loadContent(html));

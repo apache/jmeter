@@ -27,7 +27,7 @@ import org.apache.jmeter.testelement.ThreadListener;
  * @since 2.10
  */
 public class RemoteThreadsListenerTestElement implements Remoteable, ThreadListener {
-    
+
     @Override
     public void threadStarted() {
         // NOOP
@@ -38,6 +38,6 @@ public class RemoteThreadsListenerTestElement implements Remoteable, ThreadListe
      */
     @Override
     public void threadFinished() {
-        // NOOP        
+        // NOOP
     }
 }

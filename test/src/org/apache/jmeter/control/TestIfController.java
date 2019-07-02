@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -38,7 +38,7 @@ public class TestIfController extends JMeterTestCase {
 
     /**
      * See Bug 56160
-     * 
+     *
      * @throws Exception
      *             if something fails
      */
@@ -78,7 +78,7 @@ public class TestIfController extends JMeterTestCase {
 
     /**
      * See Bug 53768
-     * 
+     *
      * @throws Exception
      *             if something fails
      */
@@ -185,7 +185,7 @@ public class TestIfController extends JMeterTestCase {
         }
         assertEquals(counter, 6);
     }
-    
+
     @Test
     public void testProcessingTrueWithExpression() throws Exception {
         LoopController controller = new LoopController();
@@ -217,7 +217,7 @@ public class TestIfController extends JMeterTestCase {
 
     /**
      * Test false return on sample3 (sample4 doesn't execute)
-     * 
+     *
      * @throws Exception
      *             if something fails
      */
@@ -256,7 +256,7 @@ public class TestIfController extends JMeterTestCase {
 
     /**
      * test 2 loops with a sub generic controller (sample4 doesn't execute)
-     * 
+     *
      * @throws Exception
      *             if something fails
      */

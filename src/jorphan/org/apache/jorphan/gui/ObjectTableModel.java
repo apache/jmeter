@@ -49,7 +49,7 @@ public class ObjectTableModel extends DefaultTableModel {
     private transient ArrayList<Functor> writeFunctors = new ArrayList<>();
 
     private transient Class<?> objectClass = null; // if provided
-    
+
     private transient boolean cellEditable = true;
 
     /**
@@ -66,7 +66,7 @@ public class ObjectTableModel extends DefaultTableModel {
         this(headers, readFunctors, writeFunctors, editorClasses);
         this.objectClass=_objClass;
     }
-    
+
     /**
      * The ObjectTableModel is a TableModel whose rows are objects;
      * columns are defined as Functors on the object.
@@ -78,7 +78,7 @@ public class ObjectTableModel extends DefaultTableModel {
      * @param editorClasses - class for each column
      * @param cellEditable - if cell must editable (false to allow double click on cell)
      */
-    public ObjectTableModel(String[] headers, Class<?> _objClass, Functor[] readFunctors, 
+    public ObjectTableModel(String[] headers, Class<?> _objClass, Functor[] readFunctors,
             Functor[] writeFunctors, Class<?>[] editorClasses, boolean cellEditable) {
         this(headers, readFunctors, writeFunctors, editorClasses);
         this.objectClass=_objClass;
@@ -273,9 +273,9 @@ public class ObjectTableModel extends DefaultTableModel {
                     status=false;
                     log.warn("{} is attempting to use nonexistent {}", caller.getName(), setMethod);
             }
-            
+
             Functor getMethod = readFunctors.get(i);
-            if (getMethod != null 
+            if (getMethod != null
                  && !getMethod.checkMethod(value)) {
                     status=false;
                     log.warn("{} is attempting to use nonexistent {}", caller.getName(), getMethod);
@@ -291,11 +291,11 @@ public class ObjectTableModel extends DefaultTableModel {
     public Object getObjectList() { // used by TableEditor
         return objects;
     }
-    
+
     /**
      * @return List of Object
      */
-    public List<Object> getObjectListAsList() { 
+    public List<Object> getObjectListAsList() {
         return objects;
     }
 

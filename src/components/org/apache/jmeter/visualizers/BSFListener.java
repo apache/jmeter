@@ -81,7 +81,7 @@ public class BSFListener extends BSFTestElement
     public boolean isStats() {
         return false;
     }
-    
+
     @Override
     public Object clone() {
         return super.clone();

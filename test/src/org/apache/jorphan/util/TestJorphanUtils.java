@@ -13,13 +13,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /**
- * Package to test JOrphanUtils methods 
+ * Package to test JOrphanUtils methods
  */
-     
+
 package org.apache.jorphan.util;
 
 import static org.junit.Assert.assertEquals;
@@ -76,7 +76,7 @@ public class TestJorphanUtils {
     }
 
     // Note: the split tests should agree as far as possible with CSVSaveService.csvSplitString()
-    
+
     // Tests for split(String,String,boolean)
     @Test
     public void testSplitStringStringTrueWithTrailingSplitChars() {
@@ -106,7 +106,7 @@ public class TestJorphanUtils {
         assertThat("Include leading split chars", JOrphanUtils.split(",,a,bc", ",", false),
                 CoreMatchers.equalTo(new String[] { "", "", "a", "bc" }));
     }
-    
+
     @Test
     public void testSplit3() {
         String in = "a,bc,,"; // Test ignore trailing split characters
@@ -128,7 +128,7 @@ public class TestJorphanUtils {
         assertThat(JOrphanUtils.split(" , ,a ,bc", " ,", false),
                 CoreMatchers.equalTo(new String[] { "", "", "a", "bc" }));
     }
-    
+
     @Test
     public void testSplitStringStringTrueTruncate() throws Exception
     {
@@ -155,7 +155,7 @@ public class TestJorphanUtils {
     {
         assertThat(JOrphanUtils.split("a;;b;;;;;;d;;e;;;;f", ";;", false),
                 CoreMatchers.equalTo(new String[] { "a", "b", "", "", "d", "e", "", "f" }));
-        
+
     }
 
     // Empty string
@@ -254,7 +254,7 @@ public class TestJorphanUtils {
         assertEquals("",JOrphanUtils.trim("  ", " ;"));
         assertEquals("abc",JOrphanUtils.trim("abc ;", " ;"));
     }
-    
+
     @Test
     public void testbaToHexString(){
         assertEquals("",JOrphanUtils.baToHexString(new byte[]{}));
@@ -276,7 +276,7 @@ public class TestJorphanUtils {
             assertEquals("values must be the same for index: "+i,expected[i],actual[i]);
         }
     }
-    
+
     @Test
     public void testIsBlank() {
         assertTrue(JOrphanUtils.isBlank(""));
@@ -284,7 +284,7 @@ public class TestJorphanUtils {
         assertTrue(JOrphanUtils.isBlank("    "));
         assertFalse(JOrphanUtils.isBlank(" zdazd dzd "));
     }
-    
+
     @Test
     public void testRightAlign() {
         StringBuilder in = new StringBuilder("AZE");
@@ -306,7 +306,7 @@ public class TestJorphanUtils {
 
     @Test
     public void testReplaceAllWithRegex() {
-        Assert.assertArrayEquals(new Object[] {"toto", 0}, 
+        Assert.assertArrayEquals(new Object[] {"toto", 0},
                 JOrphanUtils.replaceAllWithRegex("toto","ti", "ta", true));
         Assert.assertArrayEquals(new Object[] {"toto", 0},
                 JOrphanUtils.replaceAllWithRegex("toto","TO", "TI", true));
@@ -326,10 +326,10 @@ public class TestJorphanUtils {
                 JOrphanUtils.replaceAllWithRegex("TO1232a123ti","[0-9]", "TI", true));
         Assert.assertArrayEquals(new Object[] {"TOTIaTIti", 2},
                 JOrphanUtils.replaceAllWithRegex("TO1232a123ti","[0-9]+", "TI", true));
-        
+
         Assert.assertArrayEquals(new Object[] {"TO${var}2a${var}ti", 2},
                 JOrphanUtils.replaceAllWithRegex("TO1232a123ti","123", "${var}", true));
-        
+
         Assert.assertArrayEquals(new Object[] {"TO${var}2a${var}ti${var2}", 2},
                 JOrphanUtils.replaceAllWithRegex("TO1232a123ti${var2}","123", "${var}", true));
 

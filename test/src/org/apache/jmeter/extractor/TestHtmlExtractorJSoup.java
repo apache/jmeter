@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.extractor;
@@ -110,7 +110,7 @@ public class TestHtmlExtractorJSoup {
         extractor.process();
         assertNull(vars.get("regVal"));
     }
-    
+
     @Test
     public void testNotEmptyDefaultValue() throws Exception {
         extractor.setExpression("p.missing");
@@ -120,7 +120,7 @@ public class TestHtmlExtractorJSoup {
         extractor.process();
         assertEquals("nv_value", vars.get("regVal"));
     }
-    
+
     @Test
     public void testVariableExtraction0() throws Exception {
         extractor.setExpression("p.single");
@@ -136,7 +136,7 @@ public class TestHtmlExtractorJSoup {
         extractor.process();
         assertEquals("example2", vars.get("regVal"));
     }
-    
+
     @Test
     public void testVariableExtractionWithAttribute2() throws Exception {
         extractor.setExpression("a");
@@ -145,7 +145,7 @@ public class TestHtmlExtractorJSoup {
         extractor.process();
         assertEquals("http://example2.com/", vars.get("regVal"));
     }
-    
+
     @Test
     public void testMultipleVariableExtraction() throws Exception {
         extractor.setExpression("a");
@@ -156,7 +156,7 @@ public class TestHtmlExtractorJSoup {
         assertEquals("http://example.com/", vars.get("regVal_1"));
         assertEquals("http://example2.com/", vars.get("regVal_2"));
     }
-    
+
     @Test
     public void testMultipleVariableExtractionWithAttribute() throws Exception {
         extractor.setExpression("b");
@@ -166,7 +166,7 @@ public class TestHtmlExtractorJSoup {
         assertEquals("example1", vars.get("regVal_1"));
         assertEquals("example2", vars.get("regVal_2"));
     }
-    
+
     @Test
     public void testMultipleVariableExtractionNoMatch() throws Exception {
         extractor.setExpression("c");
@@ -176,29 +176,29 @@ public class TestHtmlExtractorJSoup {
         assertNull(vars.get("regVal"));
         assertNull(vars.get("regVal_1"));
     }
-    
+
     @Test
     public void testPreviousVarsAreCleanedUp() throws Exception {
         testMultipleVariableExtractionWithAttribute();
         testMultipleVariableExtractionNoMatch();
         assertNull(vars.get("regVal_2"));
     }
-    
+
     @Test
     public void testUnknownExtractor() throws Exception {
         extractor.setExtractor("UNKNOWN");
         extractor.setExpression("c");
         extractor.setMatchNumber(-1);
-        extractor.process();        
+        extractor.process();
         assertNull(vars.get("regVal_matchNr"));
     }
-    
+
     @Test
     public void testNoPrevious() throws Exception {
         jmctx.setPreviousResult(null);
         extractor.setExpression("b");
         extractor.setMatchNumber(-1);
-        extractor.process();        
+        extractor.process();
         assertNull(vars.get("regVal_matchNr"));
     }
 }

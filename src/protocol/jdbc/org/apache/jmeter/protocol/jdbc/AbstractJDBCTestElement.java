@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A base class for all JDBC test elements handling the basics of a SQL request.
- * 
+ *
  */
 public abstract class AbstractJDBCTestElement extends AbstractTestElement implements TestStateListener{
     private static final long serialVersionUID = 235L;
@@ -125,7 +125,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     private String queryArguments = ""; // $NON-NLS-1$
     private String queryArgumentsTypes = ""; // $NON-NLS-1$
     private String variableNames = ""; // $NON-NLS-1$
-    private String resultSetHandler = RS_STORE_AS_STRING; 
+    private String resultSetHandler = RS_STORE_AS_STRING;
     private String resultVariable = ""; // $NON-NLS-1$
     private String queryTimeout = ""; // $NON-NLS-1$
 
@@ -144,7 +144,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      * @return the result of the execute command
      * @throws SQLException if a database error occurs
      * @throws IOException when I/O error occurs
-     * @throws UnsupportedOperationException if the user provided incorrect query type 
+     * @throws UnsupportedOperationException if the user provided incorrect query type
      */
     protected byte[] execute(Connection conn) throws SQLException, IOException, UnsupportedOperationException { // NOSONAR
         return execute(conn,  new SampleResult());
@@ -286,7 +286,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     String name = varnames[i].trim();
                     if (name.length()>0){ // Save the value in the variable if present
                         Object o = outputValues.get(i);
-                        if( o instanceof java.sql.ResultSet ) { 
+                        if( o instanceof java.sql.ResultSet ) {
                             putIntoVar(jmvars, name, (java.sql.ResultSet) o);
                         } else if (o instanceof java.sql.Clob) {
                             putIntoVar(jmvars, name, (java.sql.Clob) o);
@@ -499,7 +499,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         setQueryTimeout(pstmt, getIntegerQueryTimeout());
         return pstmt;
     }
-    
+
     /**
      * @param stmt {@link Statement} Statement for which we want to set timeout
      * @param timeout int timeout value in seconds, if < 0 setQueryTimeout will not be called
@@ -534,7 +534,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 sb.append('\t');
             }
         }
-        
+
 
         JMeterVariables jmvars = getThreadContext().getVariables();
         String[] varNames = getVariableNames().split(COMMA);
@@ -622,8 +622,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         } catch (SQLException e) {
             log.warn("Error closing ResultSet", e);
         }
-    }    
-    
+    }
+
     /**
      * @return the integer representation queryTimeout
      */
@@ -766,10 +766,10 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      */
     public void setResultVariable(String resultVariable) {
         this.resultVariable = resultVariable;
-    }    
+    }
 
 
-    /** 
+    /**
      * {@inheritDoc}
      * @see org.apache.jmeter.testelement.TestStateListener#testStarted()
      */

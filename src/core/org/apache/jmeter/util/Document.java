@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
 
 public class Document {
-    
+
     private static final Logger log = LoggerFactory.getLogger(Document.class);
-    
+
     // Maximum size to convert a document to text (default 10Mb)
     private static final int MAX_DOCUMENT_SIZE =
         JMeterUtils.getPropDefault("document.max_size", 10 * 1024 * 1024); // $NON-NLS-1$
@@ -64,7 +64,7 @@ public class Document {
             log.warn("Error document parsing.", e);
         } catch (NoClassDefFoundError e) {
             // put a warning if tika-app.jar missing (or some dependencies in only tika-core|parsers packages are using)
-            if (!System.getProperty("java.class.path").contains("tika-app")) { // $NON-NLS-1$ $NON-NLS-2$ 
+            if (!System.getProperty("java.class.path").contains("tika-app")) { // $NON-NLS-1$ $NON-NLS-2$
                 log.warn(errMissingTika);
             } else {
                 log.warn(errMissingTika, e);

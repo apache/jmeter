@@ -160,7 +160,7 @@ public class MultipartUrlConfig implements Serializable {
             }
         }
     }
-    
+
     private static String getHeaderValue(String headerName, String multiPart) {
         String regularExpression = headerName + "\\s*:\\s*(.*)$"; //$NON-NLS-1$
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();

@@ -287,7 +287,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
         public String toString() {
             return propValue;
         }
-        
+
         @Override
         public boolean equals(Object other) {
             if (this == other) {
@@ -298,7 +298,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
             }
             return false;
         }
-        
+
         @Override
         public int hashCode() {
             return propKey.hashCode();
@@ -309,7 +309,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
     public void clearGui() {
         setAsText(initialEditValue);
     }
-    
+
     // Replace a string with its translation, if one exists
     private String translate(String input) {
         if (validTranslations != null) {

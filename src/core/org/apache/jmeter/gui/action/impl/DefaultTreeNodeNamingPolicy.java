@@ -33,8 +33,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class DefaultTreeNodeNamingPolicy implements TreeNodeNamingPolicy {
     public static final char TRANSACTION_CHILDREN_SEPARATOR = '-';
-    private static final String PREFIX = JMeterUtils.getPropDefault("naming_policy.prefix", ""); 
-    private static final String SUFFIX = JMeterUtils.getPropDefault("naming_policy.suffix", ""); 
+    private static final String PREFIX = JMeterUtils.getPropDefault("naming_policy.prefix", "");
+    private static final String SUFFIX = JMeterUtils.getPropDefault("naming_policy.suffix", "");
     private int index;
     private DecimalFormat formatter;
 

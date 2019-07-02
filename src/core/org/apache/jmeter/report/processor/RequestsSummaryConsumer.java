@@ -24,7 +24,7 @@ import org.apache.jmeter.report.core.Sample;
  * The class GrapherConsumer provides a consumer that count succeeded and failed
  * samples.
  * </p>
- * 
+ *
  * @since 3.0
  */
 public class RequestsSummaryConsumer extends AbstractSampleConsumer {
@@ -65,7 +65,7 @@ public class RequestsSummaryConsumer extends AbstractSampleConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
      */
     @Override

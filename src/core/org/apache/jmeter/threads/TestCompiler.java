@@ -305,7 +305,7 @@ public class TestCompiler implements HashTreeTraverser {
     private void configureWithConfigElements(Sampler sam, List<ConfigTestElement> configs) {
         sam.clearTestElementChildren();
         for (ConfigTestElement config  : configs) {
-            if (!(config instanceof NoConfigMerge)) 
+            if (!(config instanceof NoConfigMerge))
             {
                 if(sam instanceof ConfigMergabilityIndicator) {
                     if(((ConfigMergabilityIndicator)sam).applies(config)) {

@@ -46,8 +46,8 @@ import org.slf4j.LoggerFactory;
 public class Restart extends AbstractActionWithNoRunningTest implements MenuCreator {
     private static final Logger log = LoggerFactory.getLogger(Restart.class);
 
-    /** 
-     * Sun property pointing the main class and its arguments. 
+    /**
+     * Sun property pointing the main class and its arguments.
      * Might not be defined on non Hotspot VM implementations.
      */
     public static final String SUN_JAVA_COMMAND = "sun.java.command";
@@ -67,7 +67,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
             GuiPackage guiPackage = GuiPackage.getInstance();
             ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
             if (guiPackage.isDirty()) {
-                int chosenOption = 
+                int chosenOption =
                         JOptionPane.showConfirmDialog(guiPackage.getMainFrame(), JMeterUtils
                                 .getResString("cancel_exit_to_save"), // $NON-NLS-1$
                                 JMeterUtils.getResString("save?"), // $NON-NLS-1$
@@ -85,7 +85,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
             }
         } catch (Exception ex) {
             log.error("Error trying to restart: {}", ex.getMessage(), ex);
-            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), 
+            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
                     JMeterUtils.getResString("restart_error")+":\n" + ex.getLocalizedMessage(),  //$NON-NLS-1$  //$NON-NLS-2$
                     JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 
@@ -94,14 +94,14 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
 
     /**
      * Restart the current Java application
-     * 
+     *
      * @param runBeforeRestart
      *            some custom code to be run before restarting
      */
     public static void restartApplication(Runnable runBeforeRestart) {
         String javaCommand = System.getProperty(SUN_JAVA_COMMAND);
         if(StringUtils.isEmpty(javaCommand)) {
-            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), 
+            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
                     JMeterUtils.getResString("restart_error")+":\n This command is only supported on Open JDK or Oracle JDK" ,  //$NON-NLS-1$  //$NON-NLS-2$
                     JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
             return;
@@ -170,7 +170,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
         if(location == MENU_LOCATION.FILE) {
-            
+
             JMenuItem menuItemIC = new JMenuItem(
                     JMeterUtils.getResString(ActionNames.RESTART), KeyEvent.VK_UNDEFINED);
             menuItemIC.setName(ActionNames.RESTART);
@@ -183,7 +183,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
         return new JMenuItem[0];
     }
     /**
-     * 
+     *
      */
     public Restart() {
         super();

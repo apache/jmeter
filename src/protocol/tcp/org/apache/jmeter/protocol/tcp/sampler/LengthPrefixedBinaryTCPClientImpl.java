@@ -62,7 +62,7 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
         if(log.isDebugEnabled()) {
             log.debug("Wrote: " + s.length()/2 + " bytes");
         }
-        this.tcpClient.write(os, s);        
+        this.tcpClient.write(os, s);
     }
 
     /**
@@ -78,7 +78,7 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
         log.warn("Deprecated method, use read(is, sampleResult) instead");
         return read(is, new SampleResult());
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -97,13 +97,13 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
                     log.warn("Incomplete message read, expected: {} got: {}", msgLen, bytes);
                 }
             }
-    
+
             String buffer = JOrphanUtils.baToHexString(msg);
             if(log.isDebugEnabled()) {
                 log.debug("Read: " + msgLen + "\n" + buffer);
             }
             return buffer;
-        } 
+        }
         catch(IOException e) {
             throw new ReadException("", e, JOrphanUtils.baToHexString(msg));
         }

@@ -189,7 +189,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
     * contains path, parameter name and mime type information.
     * This is only intended for use by methods which need to store information
     * temporarily whilst creating the HTTP body.
-    * 
+    *
     * @param newHeader
     *  the new Header value
     */

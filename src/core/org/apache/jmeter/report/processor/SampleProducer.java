@@ -49,7 +49,7 @@ public interface SampleProducer extends SampleProcessor {
 
     /**
      * Set the metadata associated with the specified channel
-     * 
+     *
      * @param metadata
      *            The metadata to be associated to the specified channel
      * @param channel
@@ -65,7 +65,7 @@ public interface SampleProducer extends SampleProcessor {
 
     /**
      * Produce a single sample on the specified channel
-     * 
+     *
      * @param s
      *            The sample produced
      * @param channel

@@ -83,7 +83,7 @@ public class Calculator {
     /**
      * Add the value for (possibly multiple) samples.
      * Updates the count, sum, min, max, sumOfSquares, mean and deviation.
-     * 
+     *
      * @param newValue the total value for all the samples.
      * @param sampleCount number of samples included in the value
      */
@@ -124,7 +124,7 @@ public class Calculator {
         }
         elapsedTime = Math.max(elapsedTime, res.getEndTime()-startTime);
     }
-    
+
     /**
      * add received bytes
      * @param newValue received bytes
@@ -200,7 +200,7 @@ public class Calculator {
      * @return throughput associated to this sampler in requests per second
      */
     public double getRate() {
-        return getRatePerSecond(count); 
+        return getRatePerSecond(count);
     }
 
     /**
@@ -224,7 +224,7 @@ public class Calculator {
     public double getBytesPerSecond() {
         return getRatePerSecond(bytes);
     }
-    
+
     /**
      * Sent Throughput in kilobytes / second
      *
@@ -233,7 +233,7 @@ public class Calculator {
     public double getKBPerSecond() {
         return getBytesPerSecond() / 1024; // 1024=bytes per kb
     }
-    
+
     /**
      * Sent bytes / second
      *
@@ -242,7 +242,7 @@ public class Calculator {
     public double getSentBytesPerSecond() {
         return getRatePerSecond(sentBytes);
     }
-    
+
     /**
      * Sent bytes throughput in kilobytes / second
      *
@@ -253,7 +253,7 @@ public class Calculator {
     }
 
     /**
-     * 
+     *
      * @param value value for which we compute rate
      * @return double rate
      */

@@ -38,7 +38,7 @@ import javax.net.ssl.X509TrustManager;
 public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
 
     private final SSLSocketFactory factory;
-    
+
     // Empty arrays are immutable
     private static final X509Certificate[] EMPTY_X509Certificate = new X509Certificate[0];
 

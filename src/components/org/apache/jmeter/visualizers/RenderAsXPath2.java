@@ -5,13 +5,13 @@
  * licenses this file to You under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -57,7 +57,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     private static final Logger log = LoggerFactory.getLogger(RenderAsXPath.class);
 
     private static final String XPATH_TESTER_COMMAND = "xpath_tester"; // $NON-NLS-1$
-    
+
     private static final String XPATH_NAMESPACES_COMMAND = "xpath_namespaces"; // $NON-NLS-1$
 
     private JPanel xmlWithXPathPane;
@@ -71,11 +71,11 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     private JTabbedPane rightSide;
 
     private SampleResult sampleResult = null;
-    
+
     // Should we return fragment as text, rather than text of fragment?
     private final JCheckBox getFragment =
         new JCheckBox(JMeterUtils.getResString("xpath_tester_fragment"));//$NON-NLS-1$
-    
+
     private JSyntaxTextArea namespacesTA;
 
     /** {@inheritDoc} */
@@ -142,8 +142,8 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
             return "Exception:"+ ExceptionUtils.getStackTrace(e);
         }
     }
-    
-    
+
+
     private String getDocumentNamespaces(String textToParse) {
         StringBuilder result = new StringBuilder();
         try {
@@ -159,7 +159,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
             return "Exception:"+ ExceptionUtils.getStackTrace(e);
         }
     }
-    
+
     /*================= internal business =================*/
     /** {@inheritDoc} */
     @Override
@@ -289,7 +289,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
         gbc.weightx = 1;
         gbc.weighty = 1;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public synchronized void setRightSide(JTabbedPane side) {

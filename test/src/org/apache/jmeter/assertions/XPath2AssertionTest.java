@@ -99,7 +99,7 @@ public class XPath2AssertionTest {
         assertFalse("When xpath2 doesn't conform to xml, the result of assertion should be true ", res.isFailure());
         assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
     }
-    
+
     @Test
     public void testXPath2AssertionBool1() throws FactoryConfigurationError {
         String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
@@ -146,7 +146,7 @@ public class XPath2AssertionTest {
         assertFalse("When xpath2 doesn't conforms to xml, the result of assertion should be true ",res.isFailure());
         assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
     }
-      
+
     @Test
     public void testScope(){
         assertion.setThreadContext(jmctx);// This would be done by the run command
@@ -160,7 +160,7 @@ public class XPath2AssertionTest {
         AssertionResult res = assertion.getResult(result);
         assertFalse("When xpath conforms to xml, the result of assertion "
                 + "should be true ",res.isFailure());
-        assertFalse(res.isError());            
+        assertFalse(res.isError());
     }
     @Test
     public void testScopeFailure(){
@@ -180,7 +180,7 @@ public class XPath2AssertionTest {
     @Test
     public void testResponseDataIsEmpty(){
         assertion.setThreadContext(jmctx);// This would be done by the run command
-        SampleResult result = new SampleResult();   
+        SampleResult result = new SampleResult();
         assertion.setScopeVariable("testScope");
         vars.put("testScope", null);
         jmctx.setVariables(vars);
@@ -204,7 +204,7 @@ public class XPath2AssertionTest {
         assertTrue("When format of xpath is wrong, the test should failed",res.isError());
         assertTrue(res.getFailureMessage().contains("Exception occured computing assertion with XPath"));
     }
-    
+
     @Test
     public void testXPath2AssertionPathWithoutNamespace() throws FactoryConfigurationError {
         String data = "<html><head><title>testtitle</title></head></html>";

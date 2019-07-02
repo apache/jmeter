@@ -110,7 +110,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     private final JSyntaxTextArea textMessage = JSyntaxTextArea.getInstance(10, 50); // $NON-NLS-1$
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
-    
+
     private JLabeledChoice fileEncoding;
 
     private final JCheckBox useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
@@ -163,7 +163,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     /**
      * Initialize the provided {@link PublisherSampler} with all the values as configured in the GUI.
-     * 
+     *
      * @param sampler {@link PublisherSampler} instance
      */
     private void setupSamplerProperties(final PublisherSampler sampler) {
@@ -187,7 +187,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
       sampler.setIterations(iterations.getText());
       sampler.setUseAuth(useAuth.isSelected());
       sampler.setUseNonPersistentDelivery(useNonPersistentDelivery.isSelected());
-     
+
       JMSProperties args = (JMSProperties) jmsPropertiesPanel.createTestElement();
       sampler.setJMSProperties(args);
     }
@@ -203,7 +203,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
         JPanel mainPanel = new VerticalPanel();
         add(mainPanel, BorderLayout.CENTER);
-        
+
         mainPanel.add(useProperties);
         mainPanel.add(jndiICF);
         mainPanel.add(urlField);
@@ -344,7 +344,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     private void updateChoice(String command) {
         String oldChoice = configChoice.getText();
         if (BYTES_MSG_RSC.equals(command)) {
-            String newChoice = USE_TEXT_RSC.equals(oldChoice) ? 
+            String newChoice = USE_TEXT_RSC.equals(oldChoice) ?
                     USE_FILE_RSC : oldChoice;
             configChoice.resetButtons(CONFIG_ITEMS_BYTES_MSG, newChoice);
             textMessage.setEnabled(false);
@@ -377,7 +377,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         }
         updateFileEncoding();
     }
-    
+
     /**
      * @return JPanel that contains destination infos
      */
@@ -389,7 +389,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         pane.add(useNonPersistentDelivery, BorderLayout.EAST);
         return pane;
     }
-    
+
     /**
      * @return JPanel Panel with checkbox to choose auth , user and password
      */

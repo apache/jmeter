@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -54,7 +54,7 @@ public class DurationAssertionTest extends JMeterTestCase {
         Assert.assertFalse(result.isFailure());
         Assert.assertNull(result.getFailureMessage());
     }
-    
+
     @Test
     public void testDurationEquals() throws Exception {
         sampleResult.setStampAndTime(0, 1000);
@@ -64,7 +64,7 @@ public class DurationAssertionTest extends JMeterTestCase {
         Assert.assertFalse(result.isFailure());
         Assert.assertNull(result.getFailureMessage());
     }
-    
+
     @Test
     public void testDurationHigher() throws Exception {
         sampleResult.setStampAndTime(0, 1200);
@@ -74,7 +74,7 @@ public class DurationAssertionTest extends JMeterTestCase {
         Assert.assertTrue(result.isFailure());
         Assert.assertNotNull(result.getFailureMessage());
     }
-    
+
     @Test
     public void testDurationZero() throws Exception {
         sampleResult.setStampAndTime(0, 0);

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -46,7 +46,7 @@ public class RandomFunctionTest extends JMeterTestCase {
     public void tearDown() {
         JMeterContextService.getContext().clear();
     }
-    
+
     @Test
     public void randomTest1() throws Exception {
         Random r = new Random();
@@ -55,7 +55,7 @@ public class RandomFunctionTest extends JMeterTestCase {
         String s = r.execute(null,null);
         long l = Long.parseLong(s);
         assertTrue(l>=0 && l<=10000000000L);
-        
+
         parms = makeParams("1","1","VAR");
         r.setParameters(parms);
         s = r.execute(null,null);
@@ -64,7 +64,7 @@ public class RandomFunctionTest extends JMeterTestCase {
         String varValue = JMeterContextService.getContext().getVariables().get("VAR");
         assertEquals("1", varValue);
     }
-    
+
     @Test
     public void randomStringTest1() throws Exception {
         RandomString r = new RandomString();
@@ -74,24 +74,24 @@ public class RandomFunctionTest extends JMeterTestCase {
         Assert.assertNotNull(s);
         assertEquals(10, s.length());
         assertTrue("Random String contains unexpected character", stringOnlyContainsChars(s, "abcdefghijklmnopqrstuvwxyz"));
-        
+
         String varValue = JMeterContextService.getContext().getVariables().get("VAR");
         assertEquals(s, varValue);
-        
+
         parms = makeParams("5","", "VAR2");
         r.setParameters(parms);
         s = r.execute(null,null);
         Assert.assertNotNull(s);
         assertEquals(5, s.length());
-        
+
         varValue = JMeterContextService.getContext().getVariables().get("VAR2");
         assertEquals(s, varValue);
     }
-    
+
     private boolean stringOnlyContainsChars(String value, String allowedChars) {
         Set<Character> allowedCharsAsSet = allowedChars.chars()
                 .mapToObj(i -> (char) i)
-                .collect(Collectors.toCollection(HashSet::new));        
+                .collect(Collectors.toCollection(HashSet::new));
         return value.chars().allMatch(c -> allowedCharsAsSet.contains((char)c));
     }
 }

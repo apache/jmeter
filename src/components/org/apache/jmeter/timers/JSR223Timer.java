@@ -50,7 +50,7 @@ public class JSR223Timer extends JSR223TestElement implements Cloneable, Timer, 
         }
         return delay;
     }
-    
+
     @Override
     public Object clone() {
         return super.clone();

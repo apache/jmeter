@@ -93,7 +93,7 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * Create a JMeter Cookie.
-     * 
+     *
      * @param name name of the cookie
      * @param value value of the cookie
      * @param domain domain for which the cookie is valid

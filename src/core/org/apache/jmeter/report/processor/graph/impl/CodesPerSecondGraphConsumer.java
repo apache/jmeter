@@ -30,7 +30,7 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
  * The class CodesPerSecondGraphConsumer provides a graph to visualize response codes rate
- * per second 
+ * per second
  *
  * @since 3.0
  */
@@ -38,7 +38,7 @@ public class CodesPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #createTimeStampKeysSelector()
@@ -52,7 +52,7 @@ public class CodesPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
      * createGroupInfos()
      */
@@ -77,7 +77,7 @@ public class CodesPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #setGranularity(long)

@@ -64,11 +64,11 @@ public class SendMailCommand {
     // local vars
     private static final Logger logger = LoggerFactory.getLogger(SendMailCommand.class);
     private static final String MAIL_PROPERTY_PREFIX = "mail.";
-    
+
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
     private static final String FALSE = Boolean.FALSE.toString();
-    
+
     private boolean useSSL = false;
     private boolean useStartTLS = false;
     private boolean trustAllCerts = false;
@@ -138,7 +138,7 @@ public class SendMailCommand {
         props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".host", smtpServer);
         props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".port", getPort());
         props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".auth", Boolean.toString(useAuthentication));
-        
+
         // set timeout
         props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".timeout", getTimeout());
         props.setProperty(MAIL_PROPERTY_PREFIX + protocol + ".connectiontimeout", getConnectionTimeout());
@@ -160,7 +160,7 @@ public class SendMailCommand {
         configureCertificateTrust(props);
 
         session = Session.getInstance(props, null);
-        
+
         Message message = buildMessage();
         message.saveChanges();
         return message;
@@ -182,7 +182,7 @@ public class SendMailCommand {
             // handle body and attachments
             Multipart multipart = new MimeMultipart();
             final int attachmentCount = attachments.size();
-            if (plainBody && 
+            if (plainBody &&
                (attachmentCount == 0 ||  (mailBody.length() == 0 && attachmentCount == 1))) {
                 if (attachmentCount == 1) { // i.e. mailBody is empty
                     File first = attachments.get(0);
@@ -220,7 +220,7 @@ public class SendMailCommand {
         if(null != subject) {
             message.setSubject(subject);
         }
-        
+
         if (receiverTo != null) {
             InternetAddress[] to = new InternetAddress[receiverTo.size()];
             receiverTo.toArray(to);
@@ -319,7 +319,7 @@ public class SendMailCommand {
                 listener = new SynchronousTransportListener();
                 tr.addTransportListener(listener);
             }
-    
+
             if (useAuthentication) {
                 tr.connect(smtpServer, username, password);
             } else {
@@ -858,7 +858,7 @@ public class SendMailCommand {
     public void setMailBody(String body){
         mailBody = body;
     }
-    
+
     /**
      * Set whether to send a plain body (i.e. not multipart/mixed)
      *

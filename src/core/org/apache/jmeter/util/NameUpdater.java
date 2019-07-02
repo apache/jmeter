@@ -40,7 +40,7 @@ public final class NameUpdater {
 
     private static final Logger log = LoggerFactory.getLogger(NameUpdater.class);
 
-    private static final String NAME_UPDATER_PROPERTIES = 
+    private static final String NAME_UPDATER_PROPERTIES =
             "META-INF/resources/org.apache.jmeter.nameupdater.properties"; // $NON-NLS-1$
 
     static {
@@ -100,9 +100,9 @@ public final class NameUpdater {
     }
 
     /**
-     * Looks up the class name; if that does not exist in the map, 
+     * Looks up the class name; if that does not exist in the map,
      * then defaults to the input name.
-     * 
+     *
      * @param className the classname from the script file
      * @return the class name to use, possibly updated.
      */
@@ -154,7 +154,7 @@ public final class NameUpdater {
     /**
      * Looks up class name . property name / value combination;
      * if that does not exist in the map, returns the original value.
-     * 
+     *
      * @param value the value to be checked
      * @param propertyName the name of the property
      * @param className the class containing the propery.
@@ -177,10 +177,10 @@ public final class NameUpdater {
     }
 
     /**
-     * Check if a key is in the map; intended for use by 
+     * Check if a key is in the map; intended for use by
      * {@link org.apache.jmeter.save.SaveService#checkClasses() SaveService#checkClasses()}
      * only.
-     * 
+     *
      * @param key name of the key to check
      * @return true if the key is in the map
      */

@@ -179,7 +179,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
             // Highlight (select) the appropriate row.
             int rowToSelect = tableModel.getRowCount() - 1;
             jmsPropertiesTable.setRowSelectionInterval(rowToSelect, rowToSelect);
-        } 
+        }
     }
 
     public JPanel createPropertiesPanel() {
@@ -190,7 +190,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
         jmsPropertiesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jmsPropertiesTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-        
+
         TableColumn mechanismColumn = jmsPropertiesTable.getColumnModel().getColumn(COL_TYPE);
         mechanismColumn.setCellEditor(new TypeCellEditor());
 
@@ -216,7 +216,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
 
         addButton = createButton("add", 'A', ADD_COMMAND, true); //$NON-NLS-1$
         deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty); //$NON-NLS-1$
-       
+
         // Button Panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(addButton);
@@ -327,11 +327,11 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
             }
         }
     }
-    
+
     private static class TypeCellEditor extends DefaultCellEditor {
 
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

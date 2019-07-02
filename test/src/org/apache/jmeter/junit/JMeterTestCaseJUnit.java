@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.junit;
@@ -50,7 +50,7 @@ public abstract class JMeterTestCaseJUnit extends TestCase {
     /*
      * If not running under AllTests.java, make sure that the properties (and
      * log file) are set up correctly.
-     * 
+     *
      * N.B. This assumes the JUnit test are executed in the
      * project root, bin directory or one level down, and all the JMeter jars
      * (plus any others needed at run-time) need to be on the classpath.

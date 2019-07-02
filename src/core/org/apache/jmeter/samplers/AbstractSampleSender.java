@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -24,7 +24,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Base class for SampleSender implementations
  */
 public abstract class AbstractSampleSender implements SampleSender {
-    
+
     // Note: this is an instance field (and is not transient), so is created by the JMeter client
     // and propagated to the server instance by RMI.
     // [a static field would be recreated on the server, and would pick up the server properties]
@@ -40,7 +40,7 @@ public abstract class AbstractSampleSender implements SampleSender {
     }
 
     /**
-     * 
+     *
      */
     public AbstractSampleSender() {
         super();

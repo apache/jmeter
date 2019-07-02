@@ -44,27 +44,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A sampler for executing a System function. 
+ * A sampler for executing a System function.
  */
 public class SystemSampler extends AbstractSampler {
 
     private static final int POLL_INTERVAL = JMeterUtils.getPropDefault("os_sampler.poll_for_timeout", SystemCommand.POLL_INTERVAL);
 
     private static final long serialVersionUID = 1;
-    
+
     // + JMX names, do not change their values
     public static final String COMMAND = "SystemSampler.command";
-    
+
     public static final String DIRECTORY = "SystemSampler.directory";
 
     public static final String ARGUMENTS = "SystemSampler.arguments";
-    
+
     public static final String ENVIRONMENT = "SystemSampler.environment";
 
     public static final String CHECK_RETURN_CODE = "SystemSampler.checkReturnCode";
-    
+
     public static final String EXPECTED_RETURN_CODE = "SystemSampler.expectedReturnCode";
-    
+
     private static final String STDOUT = "SystemSampler.stdout";
 
     private static final String STDERR = "SystemSampler.stderr";
@@ -92,10 +92,10 @@ public class SystemSampler extends AbstractSampler {
     public SystemSampler() {
         super();
     }
-    
+
     /**
      * Performs a test sample.
-     * 
+     *
      * @param entry
      *            the Entry for this sample
      * @return test SampleResult
@@ -105,7 +105,7 @@ public class SystemSampler extends AbstractSampler {
         SampleResult results = new SampleResult();
         results.setDataType(SampleResult.TEXT);
         results.setSampleLabel(getName());
-        
+
         String command = getCommand();
         Arguments args = getArguments();
         Arguments environment = getEnvironmentVariables();
@@ -126,7 +126,7 @@ public class SystemSampler extends AbstractSampler {
             Argument arg = environment.getArgument(i);
             env.put(arg.getName(), arg.getPropertyAsString(Argument.VALUE));
         }
-        
+
         File directory;
         if(StringUtils.isEmpty(getDirectory())) {
             directory = new File(FileServer.getDefaultBase());
@@ -139,7 +139,7 @@ public class SystemSampler extends AbstractSampler {
                 log.debug("Using configured directory:"+directory.getAbsolutePath());
             }
         }
-        
+
         if(log.isDebugEnabled()) {
             log.debug("Will run : "+cmdLine + " using working directory:"+directory.getAbsolutePath()+
                     " with environment: "+env);
@@ -184,10 +184,10 @@ public class SystemSampler extends AbstractSampler {
         if (nativeCommand != null) {
             results.setResponseData(nativeCommand.getOutResult().getBytes()); // default charset is deliberate here
         }
-            
+
         return results;
     }
-    
+
     /**
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
@@ -206,7 +206,7 @@ public class SystemSampler extends AbstractSampler {
 
     /**
      * Set the working directory to use for system commands
-     * 
+     *
      * @param directory
      *            working directory to use for system commands
      */
@@ -216,7 +216,7 @@ public class SystemSampler extends AbstractSampler {
 
     /**
      * Sets the Command attribute of the JavaConfig object
-     * 
+     *
      * @param command
      *            the new Command value
      */
@@ -226,17 +226,17 @@ public class SystemSampler extends AbstractSampler {
 
     /**
      * Gets the Command attribute of the JavaConfig object
-     * 
+     *
      * @return the Command value
      */
     public String getCommand() {
         return getPropertyAsString(COMMAND);
     }
-    
+
     /**
      * Set the arguments (parameters) for the JavaSamplerClient to be executed
      * with.
-     * 
+     *
      * @param args
      *            the new arguments. These replace any existing arguments.
      */
@@ -247,34 +247,34 @@ public class SystemSampler extends AbstractSampler {
     /**
      * Get the arguments (parameters) for the JavaSamplerClient to be executed
      * with.
-     * 
+     *
      * @return the arguments
      */
     public Arguments getArguments() {
         return (Arguments) getProperty(ARGUMENTS).getObjectValue();
     }
-    
+
     /**
      * @param checkit boolean indicates if we check or not return code
      */
     public void setCheckReturnCode(boolean checkit) {
         setProperty(CHECK_RETURN_CODE, checkit);
     }
-    
+
     /**
      * @return boolean indicating if we check or not return code
      */
     public boolean getCheckReturnCode() {
         return getPropertyAsBoolean(CHECK_RETURN_CODE);
     }
-    
+
     /**
      * @param code expected return code
      */
     public void setExpectedReturnCode(int code) {
         setProperty(EXPECTED_RETURN_CODE, Integer.toString(code));
     }
-    
+
     /**
      * @return expected return code
      */
@@ -288,10 +288,10 @@ public class SystemSampler extends AbstractSampler {
     public void setEnvironmentVariables(Arguments arguments) {
         setProperty(new TestElementProperty(ENVIRONMENT, arguments));
     }
-    
+
     /**
      * Get the env variables
-     * 
+     *
      * @return the arguments
      */
     public Arguments getEnvironmentVariables() {

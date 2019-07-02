@@ -25,7 +25,7 @@ package org.apache.jmeter.samplers;
  * Intended for implementation by Listeners.
  */
 public interface Clearable {
-    
+
     /**
      * Clears the current data of the object.
      */

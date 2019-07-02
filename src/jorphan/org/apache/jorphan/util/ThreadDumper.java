@@ -69,7 +69,7 @@ public class ThreadDumper {
     }
 
     /**
-     * Write Thread Dump 
+     * Write Thread Dump
      * @param writer {@link Writer}
      * @throws IOException if file cannot be written
      */

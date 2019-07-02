@@ -29,13 +29,13 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     private static final long serialVersionUID = 240L;
 
     private final long totalSamples;
-    
+
     private final int sampleCount; // number of samples in this entry
 
     private final long startTime;
 
     private final String threadName;
-    
+
     private final String label;
 
     private final long elapsed;
@@ -43,7 +43,7 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     private final boolean success;
 
     private final long bytes;
-    
+
     private final long sentBytes;
 
     private final long latency;
@@ -127,7 +127,7 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     }
 
     // TODO should equals and hashCode depend on field other than count?
-    
+
     @Override
     public boolean equals(Object o){
         return (o instanceof TableSample) &&

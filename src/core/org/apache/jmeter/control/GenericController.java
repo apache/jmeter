@@ -74,12 +74,12 @@ public class GenericController extends AbstractTestElement implements Controller
      * Current iteration
      */
     private transient int iterCount;
-    
+
     /**
      * Controller has ended
      */
     private transient boolean done;
-    
+
     /**
      * First sampler or sub-controller
      */
@@ -96,7 +96,7 @@ public class GenericController extends AbstractTestElement implements Controller
         resetCurrent();
         resetIterCount();
         done = false; // TODO should this use setDone()?
-        first = true; // TODO should this use setFirst()?        
+        first = true; // TODO should this use setFirst()?
         initializeSubControllers();
     }
 
@@ -201,7 +201,7 @@ public class GenericController extends AbstractTestElement implements Controller
     }
 
     /**
-     * If b is true, it means first is reset which means Controller has executed all its children 
+     * If b is true, it means first is reset which means Controller has executed all its children
      * @param b The flag, whether first is reseted
      */
     public void setFirst(boolean b) {
@@ -212,13 +212,13 @@ public class GenericController extends AbstractTestElement implements Controller
      * Called by {@link #next()} if the element is a Controller, and returns the
      * next sampler from the controller. If this is <code>null</code>, then
      * updates the current pointer and makes recursive call to {@link #next()}.
-     * 
+     *
      * @param controller the current <em>next</em> element
      * @return the next sampler
      * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsAController(Controller controller) 
-            throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses 
+    protected Sampler nextIsAController(Controller controller)
+            throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses
         Sampler sampler = controller.next();
         if (sampler == null) {
             currentReturnedNull(controller);
@@ -237,7 +237,7 @@ public class GenericController extends AbstractTestElement implements Controller
      * @return input element
      * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsASampler(Sampler element) 
+    protected Sampler nextIsASampler(Sampler element)
             throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses
         incrementCurrent();
         return element;
@@ -250,12 +250,12 @@ public class GenericController extends AbstractTestElement implements Controller
      * @return null (always, for this class)
      * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsNull() 
+    protected Sampler nextIsNull()
             throws NextIsNullException { // NOSONAR false positive , throws is required by subclasses
         reInitialize();
         return null;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -263,7 +263,7 @@ public class GenericController extends AbstractTestElement implements Controller
     public void triggerEndOfLoop() {
         reInitialize();
     }
-    
+
     /**
      * If the controller is done, remove it from the list,
      * otherwise increment to next entry in list.
@@ -370,7 +370,7 @@ public class GenericController extends AbstractTestElement implements Controller
          */
         iterationListeners.addFirst(lis);
     }
-    
+
     /**
      * Remove listener
      */
@@ -411,7 +411,7 @@ public class GenericController extends AbstractTestElement implements Controller
     protected void resetIterCount() {
         iterCount = 0;
     }
-    
+
     protected Object readResolve(){
         iterationListeners = new LinkedList<>();
         children = new ConcurrentHashMap<>();

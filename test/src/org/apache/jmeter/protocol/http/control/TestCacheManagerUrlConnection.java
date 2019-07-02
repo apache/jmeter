@@ -59,7 +59,7 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
     protected void addRequestHeader(String requestHeader, String value) {
         // no-op
     }
-    
+
     private org.apache.jmeter.protocol.http.control.Header[] asHeaders(Map<String, List<String>> headers) {
         // Java Implementation returns a null header for URL
         return headers.entrySet().stream()
@@ -71,7 +71,7 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
     @Override
     protected void setRequestHeaders() {
         this.cacheManager.setHeaders(
-                (HttpURLConnection)this.urlConnection, 
+                (HttpURLConnection)this.urlConnection,
                 asHeaders(urlConnection.getHeaderFields()),
                 this.url);
     }

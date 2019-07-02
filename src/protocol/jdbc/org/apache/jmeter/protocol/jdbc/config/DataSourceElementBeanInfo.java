@@ -47,13 +47,13 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         TRANSACTION_ISOLATION_MAP.put("TRANSACTION_REPEATABLE_READ", Integer.valueOf(Connection.TRANSACTION_REPEATABLE_READ));
         TRANSACTION_ISOLATION_MAP.put("TRANSACTION_SERIALIZABLE", Integer.valueOf(Connection.TRANSACTION_SERIALIZABLE));
     }
-    
+
     public DataSourceElementBeanInfo() {
         super(DataSourceElement.class);
-    
+
         createPropertyGroup("varName", new String[] { "dataSource" });
 
-        createPropertyGroup("pool", new String[] { "poolMax", "timeout", 
+        createPropertyGroup("pool", new String[] { "poolMax", "timeout",
                 "trimInterval", "autocommit", "transactionIsolation", "initQuery"  });
 
         createPropertyGroup("keep-alive", new String[] { "keepAlive", "connectionAge", "checkQuery" });

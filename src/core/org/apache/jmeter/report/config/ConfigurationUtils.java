@@ -23,7 +23,7 @@ import org.apache.jmeter.report.core.Converters;
 /**
  * The class ConfigurationUtils provides helper method for configuration
  * handling.
- * 
+ *
  * @since 3.0
  */
 public class ConfigurationUtils {

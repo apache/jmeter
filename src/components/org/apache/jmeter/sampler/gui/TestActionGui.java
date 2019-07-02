@@ -50,11 +50,11 @@ public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierar
     private JRadioButton stopNowButton;
 
     private JRadioButton breakLoopButton;
-    
+
     private JRadioButton restartNextThreadLoopButton;
-    
+
     private JRadioButton startNextIterationOfCurrentLoopButton;
-    
+
     private JLabeledTextField durationField;
 
     // State variables
@@ -71,7 +71,7 @@ public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierar
     private static final String TEST_TARGET_LABEL = JMeterUtils.getResString("test_action_target_test"); // $NON-NLS-1$
 
     private static final String ACTION_ON_THREAD_LABEL = JMeterUtils.getResString("test_action_action_thread"); // $NON-NLS-1$
-    
+
     private static final String ACTION_ON_THREAD_TEST_LABEL = JMeterUtils.getResString("test_action_action_test_thread"); // $NON-NLS-1$
 
     private static final String PAUSE_ACTION_LABEL = JMeterUtils.getResString("test_action_pause"); // $NON-NLS-1$
@@ -81,7 +81,7 @@ public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierar
     private static final String STOP_NOW_ACTION_LABEL = JMeterUtils.getResString("test_action_stop_now"); // $NON-NLS-1$
 
     private static final String RESTART_NEXT_THREAD_LOOP_LABEL = JMeterUtils.getResString("test_action_restart_next_loop"); // $NON-NLS-1$
-    
+
     private static final String START_NEXT_ITERATION_CURRENT_LOOP_ACTION = JMeterUtils.getResString("test_action_continue_current_loop"); // $NON-NLS-1$
 
     private static final String BREAK_CURRENT_LOOP_ACTION = JMeterUtils.getResString("test_action_break_current_loop"); // $NON-NLS-1$
@@ -207,7 +207,7 @@ public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierar
                 targetBox.setEnabled(true);
             }
         });
-        
+
         restartNextThreadLoopButton = new JRadioButton(RESTART_NEXT_THREAD_LOOP_LABEL, false);
         restartNextThreadLoopButton.addChangeListener(evt -> {
             if (restartNextThreadLoopButton.isSelected()) {
@@ -217,7 +217,7 @@ public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierar
                 targetBox.setEnabled(false);
             }
         });
-        
+
         startNextIterationOfCurrentLoopButton = new JRadioButton(START_NEXT_ITERATION_CURRENT_LOOP_ACTION, false);
         startNextIterationOfCurrentLoopButton.addChangeListener(evt -> {
             if (startNextIterationOfCurrentLoopButton.isSelected()) {
@@ -227,7 +227,7 @@ public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierar
                 targetBox.setEnabled(false);
             }
         });
-        
+
         breakLoopButton = new JRadioButton(BREAK_CURRENT_LOOP_ACTION, false);
         breakLoopButton.addChangeListener(evt -> {
             if (breakLoopButton.isSelected()) {
@@ -242,7 +242,7 @@ public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierar
         durationField = new JLabeledTextField(DURATION_LABEL, 15);
         durationField.setText(""); // $NON-NLS-1$
 
-        
+
         actionButtons.add(pauseButton);
         actionButtons.add(stopButton);
         actionButtons.add(stopNowButton);
@@ -258,8 +258,8 @@ public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierar
         actionOnThreadPanel.add(restartNextThreadLoopButton);
         actionOnThreadPanel.add(startNextIterationOfCurrentLoopButton);
         actionOnThreadPanel.add(breakLoopButton);
-        
-        
+
+
         // Action
         JPanel actionOnTestOrThreadPanel = new JPanel(new GridLayout(2, 2));
         actionOnTestOrThreadPanel.setBorder(BorderFactory.createTitledBorder(ACTION_ON_THREAD_TEST_LABEL)); //$NON-NLS-1$

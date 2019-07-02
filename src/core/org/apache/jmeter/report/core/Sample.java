@@ -27,7 +27,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Getters with a string parameter are implemented for convenience but should be
  * avoided as they are inefficient
  * </p>
- * 
+ *
  * @since 3.0
  */
 public class Sample {
@@ -35,7 +35,7 @@ public class Sample {
     private static final String ERROR_ON_SAMPLE = "Error in sample at line:";
 
     private static final String CONTROLLER_PATTERN = "Number of samples in transaction";
-    
+
     private static final String EMPTY_CONTROLLER_PATTERN = "Number of samples in transaction : 0";
 
     private final boolean storesStartTimeStamp;
@@ -45,7 +45,7 @@ public class Sample {
 
     /**
      * Build a sample from a string array
-     * 
+     *
      * @param row
      *            the row number in the CSV source from which this sample is
      *            built
@@ -71,7 +71,7 @@ public class Sample {
 
     /**
      * Gets the data stored in the column with the specified rank.
-     * 
+     *
      * @param index
      *            the rank of the column
      * @return the data of the column
@@ -82,7 +82,7 @@ public class Sample {
 
     /**
      * Gets the data stored in the column with the specified name.
-     * 
+     *
      * @param name
      *            the name of the column
      * @return the data of the column
@@ -94,7 +94,7 @@ public class Sample {
     /**
      * Gets the data of the column matching the specified rank and converts it
      * to an alternative type.
-     * 
+     *
      * @param clazz
      *            the target class of the data
      * @param index
@@ -119,7 +119,7 @@ public class Sample {
     /**
      * Gets the data of the column matching the specified name and converts it
      * to an alternative type.
-     * 
+     *
      * @param clazz
      *            the target class of the data
      * @param name
@@ -134,7 +134,7 @@ public class Sample {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#toString()
      */
     @Override
@@ -193,7 +193,7 @@ public class Sample {
      * <li>If the property is false, this method returns the time stamp
      * recorded.</li>
      * </ul>
-     * 
+     *
      * @return the end time
      */
     public long getEndTime() {
@@ -244,7 +244,7 @@ public class Sample {
     public long getLatency() {
         return getData(long.class, CSVSaveService.CSV_LATENCY).longValue();
     }
-    
+
     /**
      * Gets the connect time stored in the sample.
      *
@@ -326,7 +326,7 @@ public class Sample {
         String message = getResponseMessage();
         return message != null && message.startsWith(CONTROLLER_PATTERN);
     }
-    
+
     /**
      * Checks if this sample is an empty controller.
      *

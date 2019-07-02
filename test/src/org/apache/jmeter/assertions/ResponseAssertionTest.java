@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -44,7 +44,7 @@ public class ResponseAssertionTest {
     private ResponseAssertion assertion;
     private SampleResult sample;
     private AssertionResult result;
-    
+
     @Before
     public void setUp() throws MalformedURLException {
         JMeterContext jmctx = JMeterContextService.getContext();
@@ -71,25 +71,25 @@ public class ResponseAssertionTest {
         result = assertion.getResult(sample);
         assertPassed();
     }
-    
+
     @Test
     public void testResponseAssertionEquals() throws Exception{
         assertion.unsetNotType();
         assertion.setToEqualsType();
         assertion.setTestFieldURL();
         assertion.addTestString("Sampler Label");
-        assertion.addTestString("Sampler labelx");      
+        assertion.addTestString("Sampler labelx");
         result = assertion.getResult(sample);
         assertFailed();
 
         assertion.setToNotType();
         assertion.clearTestStrings();
         assertion.addTestString("Sampler LabeL");
-        assertion.addTestString("Sampler Labelx");      
+        assertion.addTestString("Sampler Labelx");
         result = assertion.getResult(sample);
         assertPassed();
     }
-    
+
     @Test
     public void testCustomFailureMessage() throws Exception {
         assertion.unsetNotType();
@@ -101,13 +101,13 @@ public class ResponseAssertionTest {
         result = assertion.getResult(sample);
         assertFailed();
         assertEquals("Custom failure message", result.getFailureMessage());
-        
+
         assertion.setToOrType();
         result = assertion.getResult(sample);
         assertFailed();
         assertEquals("Custom failure message", result.getFailureMessage());
     }
-    
+
     @Test
     public void testMalformedCachePatternException() throws Exception{
         assertion.unsetNotType();
@@ -118,15 +118,15 @@ public class ResponseAssertionTest {
         assertNotNull(result.getFailureMessage());
         assertFalse("Should not be: Response was null","Response was null".equals(result.getFailureMessage()));
         assertTrue("Not expecting error: "+result.getFailureMessage(),result.isError());
-        
+
         assertion.setCustomFailureMessage("Custom failure message");
         result = assertion.getResult(sample);
         assertTrue("Did not get expected error: "+result.getFailureMessage(),result.isError());
-        assertFalse("Failure message must not be custom failure message for error", 
+        assertFalse("Failure message must not be custom failure message for error",
                 "Custom failure message".equals(result.getFailureMessage()));
 
     }
-    
+
     @Test
     public void testResponseAssertionResponseHeaders() throws Exception{
         assertion.unsetNotType();
@@ -142,7 +142,7 @@ public class ResponseAssertionTest {
         result = assertion.getResult(sample);
         assertPassed();
     }
-    
+
     @Test
     public void testResponseAssertionRequestHeaders() throws Exception{
         assertion.unsetNotType();
@@ -158,7 +158,7 @@ public class ResponseAssertionTest {
         result = assertion.getResult(sample);
         assertPassed();
     }
-    
+
     @Test
     public void testResponseAssertionContains() throws Exception{
         assertion.unsetNotType();
@@ -167,12 +167,12 @@ public class ResponseAssertionTest {
         assertion.addTestString("Sampler");
         assertion.addTestString("Label");
         assertion.addTestString(" x");
-        
+
         result = assertion.getResult(sample);
         assertFailed();
-        
+
         assertion.setToNotType();
-        
+
         result = assertion.getResult(sample);
         assertFailed();
 
@@ -183,18 +183,18 @@ public class ResponseAssertionTest {
 
         assertion.unsetNotType();
         assertion.setTestFieldResponseData();
-        
+
         assertion.clearTestStrings();
         assertion.addTestString("line 2");
         result = assertion.getResult(sample);
         assertPassed();
-        
+
         assertion.clearTestStrings();
         assertion.addTestString("line 2");
         assertion.addTestString("NOTINSAMPLEDATA");
         result = assertion.getResult(sample);
         assertFailed();
-        
+
         assertion.clearTestStrings();
         assertion.setToOrType();
         assertion.addTestString("line 2");
@@ -202,7 +202,7 @@ public class ResponseAssertionTest {
         result = assertion.getResult(sample);
         assertPassed();
         assertion.unsetOrType();
-        
+
         assertion.clearTestStrings();
         assertion.setToOrType();
         assertion.addTestString("NOTINSAMPLEDATA");
@@ -210,7 +210,7 @@ public class ResponseAssertionTest {
         result = assertion.getResult(sample);
         assertPassed();
         assertion.unsetOrType();
-        
+
         assertion.clearTestStrings();
         assertion.setToOrType();
         assertion.addTestString("NOTINSAMPLEDATA");
@@ -218,7 +218,7 @@ public class ResponseAssertionTest {
         result = assertion.getResult(sample);
         assertFailed();
         assertion.unsetOrType();
-        
+
         assertion.clearTestStrings();
         assertion.setToOrType();
         assertion.setToNotType();
@@ -229,22 +229,22 @@ public class ResponseAssertionTest {
         assertion.unsetOrType();
         assertion.unsetNotType();
 
-        
+
         assertion.clearTestStrings();
         assertion.setToNotType();
         assertion.addTestString("NOTINSAMPLEDATA");
         result = assertion.getResult(sample);
         assertPassed();
         assertion.unsetNotType();
-        
-        
+
+
         assertion.clearTestStrings();
         assertion.addTestString("(?s)line \\d+.*EOF");
         result = assertion.getResult(sample);
         assertPassed();
 
         assertion.setTestFieldResponseCode();
-        
+
         assertion.clearTestStrings();
         assertion.addTestString("401");
         result = assertion.getResult(sample);
@@ -260,11 +260,11 @@ public class ResponseAssertionTest {
         assertion.setToContainsType();
         assertion.setTestFieldResponseData();
         assertion.addTestString("value=\"\\${ID}\" Group\\$ctl00\\$drpEmails");
-        
+
         result = assertion.getResult(sample);
-        assertPassed();        
+        assertPassed();
     }
-    
+
     @Test
     public void testResponseAssertionSubstring() throws Exception{
         assertion.unsetNotType();
@@ -273,12 +273,12 @@ public class ResponseAssertionTest {
         assertion.addTestString("Sampler");
         assertion.addTestString("Label");
         assertion.addTestString("+(");
-        
+
         result = assertion.getResult(sample);
         assertFailed();
-        
+
         assertion.setToNotType();
-        
+
         result = assertion.getResult(sample);
         assertFailed();
 
@@ -289,7 +289,7 @@ public class ResponseAssertionTest {
 
         assertion.unsetNotType();
         assertion.setTestFieldResponseData();
-        
+
         assertion.clearTestStrings();
         assertion.addTestString("line 2");
         result = assertion.getResult(sample);
@@ -301,7 +301,7 @@ public class ResponseAssertionTest {
         assertPassed();
 
         assertion.setTestFieldResponseCode();
-        
+
         assertion.clearTestStrings();
         assertion.addTestString("401");
         result = assertion.getResult(sample);
@@ -310,20 +310,20 @@ public class ResponseAssertionTest {
     }
 
 //TODO - need a lot more tests
-    
+
     private void assertPassed() throws Exception{
         assertNull(result.getFailureMessage(),result.getFailureMessage());
         assertFalse("Not expecting error: "+result.getFailureMessage(),result.isError());
         assertFalse("Not expecting error",result.isError());
-        assertFalse("Not expecting failure",result.isFailure());        
+        assertFalse("Not expecting failure",result.isFailure());
     }
-    
+
     private void assertFailed() throws Exception{
         assertNotNull(result.getFailureMessage());
         assertFalse("Should not be: Response was null","Response was null".equals(result.getFailureMessage()));
         assertFalse("Not expecting error: "+result.getFailureMessage(),result.isError());
-        assertTrue("Expecting failure",result.isFailure());     
-        
+        assertTrue("Expecting failure",result.isFailure());
+
     }
     private AtomicInteger failed;
 

@@ -105,7 +105,7 @@ public class CsvSampleReader implements Closeable{
         }
         this.file = inputFile;
         try {
-            this.fis = new FileInputStream(file); 
+            this.fis = new FileInputStream(file);
             this.isr = new InputStreamReader(fis, CHARSET);
             this.reader = new BufferedReader(isr, BUF_SIZE);
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {

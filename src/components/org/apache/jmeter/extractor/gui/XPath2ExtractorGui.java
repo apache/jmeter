@@ -57,9 +57,9 @@ public class XPath2ExtractorGui extends AbstractPostProcessorGui{ // NOSONAR Ign
 
     // Should we return fragment as text, rather than text of fragment?
     private JCheckBox getFragment;
-    
+
     private JSyntaxTextArea namespacesTA;
-    
+
     @Override
     public String getLabelResource() {
         return "xpath2_extractor_title"; //$NON-NLS-1$
@@ -127,7 +127,7 @@ public class XPath2ExtractorGui extends AbstractPostProcessorGui{ // NOSONAR Ign
         box.add(makeParameterPanel());
         add(box, BorderLayout.NORTH);
     }
-    
+
     private JPanel makeParameterPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

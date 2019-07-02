@@ -41,7 +41,7 @@ public abstract class AbstractDataExporter implements DataExporter {
     /**
      * Finds a value matching the specified data name in a ResultData tree.
      * Supports only MapResultData walking.
-     * 
+     *
      * @param clazz
      *            the type of the value
      * @param data
@@ -69,7 +69,7 @@ public abstract class AbstractDataExporter implements DataExporter {
     /**
      * Finds a inner ResultData matching the specified data name in a ResultData
      * tree. Supports only MapResultData walking.
-     * 
+     *
      * @param data
      *            the name of the data containing the value
      * @param root
@@ -102,7 +102,7 @@ public abstract class AbstractDataExporter implements DataExporter {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.report.dashboard.DataExporter#getName()
      */
     @Override
@@ -112,7 +112,7 @@ public abstract class AbstractDataExporter implements DataExporter {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.dashboard.DataExporter#setName(java.lang.String)
      */

@@ -32,7 +32,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
-     * 
+     *
      * @return the version of this converter
      */
     public static String getVersion() {

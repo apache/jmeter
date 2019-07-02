@@ -25,12 +25,12 @@ package org.apache.jmeter.protocol.http.parser;
 public class LinkExtractorParseException extends Exception {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 6816968619973437826L;
 
     /**
-     * 
+     *
      */
     public LinkExtractorParseException() {
     }

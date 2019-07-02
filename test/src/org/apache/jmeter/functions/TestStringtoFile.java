@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.functions;
 
@@ -87,7 +87,7 @@ public class TestStringtoFile extends JMeterTestCase {
         String pathname = Paths.get(dir.getAbsolutePath(), FILENAME).toString();
         function.setParameters(functionParams(pathname, STRING_TO_WRITE, "true", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertFalse("This method 'Stringtofile' should fail to run since directory does not exist", 
+        Assert.assertFalse("This method 'Stringtofile' should fail to run since directory does not exist",
                 Boolean.parseBoolean(returnValue));
     }
 
@@ -170,7 +170,7 @@ public class TestStringtoFile extends JMeterTestCase {
         file.deleteOnExit();
         function.setParameters(functionParams(file.getAbsolutePath(), "", "true", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should succeed with empty String to write", 
+        Assert.assertTrue("This method 'Stringtofile' should succeed with empty String to write",
                 Boolean.parseBoolean(returnValue));
     }
 
@@ -207,7 +207,7 @@ public class TestStringtoFile extends JMeterTestCase {
 
     @Test
     public void testDescription() {
-        Assert.assertEquals("Function 'stringtofile' should have successfully reading the configuration file 'messages.properties'", 
+        Assert.assertEquals("Function 'stringtofile' should have successfully reading the configuration file 'messages.properties'",
                 JMeterUtils.getResString("string_to_file_pathname"),
                 function.getArgumentDesc().get(0));
     }
