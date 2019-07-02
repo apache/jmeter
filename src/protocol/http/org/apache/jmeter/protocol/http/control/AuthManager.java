@@ -560,7 +560,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             kerberosManager.clearSubjects();
         }
     }
-    
+
     public boolean getControlledByThread() {
         return getPropertyAsBoolean(CONTROLLED_BY_THREADGROUP);
     }

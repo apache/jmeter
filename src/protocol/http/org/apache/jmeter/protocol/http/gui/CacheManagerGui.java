@@ -111,12 +111,12 @@ public class CacheManagerGui extends AbstractConfigGui implements ActionListener
         setBorder(makeBorder());
 
         clearEachIteration = new JCheckBox(JMeterUtils.getResString("clear_cache_per_iter"), false); // $NON-NLS-1$
-        
-        controlledByThreadGroup = 
+
+        controlledByThreadGroup =
                 new JCheckBox(JMeterUtils.getResString("cache_clear_controlled_by_threadgroup"), false); //$NON-NLS-1$
         controlledByThreadGroup.setActionCommand(CONTROLLED_BY_THREADGROUP);
         controlledByThreadGroup.addActionListener(this);
-        
+
         useExpires = new JCheckBox(JMeterUtils.getResString("use_expires"), false); // $NON-NLS-1$
 
         JPanel northPanel = new JPanel();

@@ -144,7 +144,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     public void configure(TestElement el) {
         super.configure(el);
         tableModel.manager.clear();
-        AuthManager authManager = (AuthManager) el; 
+        AuthManager authManager = (AuthManager) el;
         tableModel.manager.addTestElement((AuthManager) authManager.clone());
         clearEachIteration.setSelected(authManager.getClearEachIteration());
         controlledByThreadGroup.setSelected(authManager.getControlledByThread());
@@ -175,7 +175,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         clearEachIteration =
                 new JCheckBox(JMeterUtils.getResString("auth_manager_clear_per_iter"), false); //$NON-NLS-1$
 
-        controlledByThreadGroup = 
+        controlledByThreadGroup =
                 new JCheckBox(JMeterUtils.getResString("auth_manager_clear_controlled_by_threadgroup"), false); //$NON-NLS-1$
         controlledByThreadGroup.setActionCommand(CONTROLLED_BY_THREADGROUP);
         controlledByThreadGroup.addActionListener(this);
@@ -238,7 +238,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         if (action.equals(CONTROLLED_BY_THREADGROUP)) {
             clearEachIteration.setEnabled(!controlledByThreadGroup.isSelected());
         }
-        
+
         if (action.equals(DELETE_COMMAND)) {
             deleteRows();
         }

@@ -239,8 +239,8 @@ public class ThreadGroup extends AbstractThreadGroup {
                     log.debug("Computed delayForNextThreadInMillis:{} for thread:{}", delayForNextThreadInMillis, Thread.currentThread().getId());
                 }
                 lastThreadStartInMillis = nowInMillis;
-                startNewThread(notifier, threadGroupTree, engine, threadNum, context, 
-                        nowInMillis, Math.max(0, delayForNextThreadInMillis), isSameUserOnNextIteration);
+                startNewThread(notifier, threadGroupTree, engine, threadNum, context, nowInMillis, Math.max(0, delayForNextThreadInMillis),
+                        isSameUserOnNextIteration);
             }
         }
         log.info("Started thread group number {}", groupNumber);
@@ -293,12 +293,12 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param engine {@link StandardJMeterEngine}
      * @param threadNumber int thread number
      * @param context {@link JMeterContext}
-     * @param isSameUserOnNextIteration Boolean 
+     * @param isSameUserOnNextIteration Boolean
      * @return {@link JMeterThread}
      */
     private JMeterThread makeThread(
             ListenerNotifier notifier, ListedHashTree threadGroupTree,
-            StandardJMeterEngine engine, int threadNumber, 
+            StandardJMeterEngine engine, int threadNumber,
             JMeterContext context, Boolean isSameUserOnNextIteration) { // N.B. Context needs to be fetched in the correct thread
         boolean onErrorStopTest = getOnErrorStopTest();
         boolean onErrorStopTestNow = getOnErrorStopTestNow();

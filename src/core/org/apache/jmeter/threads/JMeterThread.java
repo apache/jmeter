@@ -153,7 +153,7 @@ public class JMeterThread implements Runnable, Interruptible {
     public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note) {
         this(test, monitor, note, false);
     }
-    
+
     public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note,Boolean isSameUserOnNextIteration) {
         this.monitor = monitor;
         threadVars = new JMeterVariables();

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.control;
@@ -87,7 +87,7 @@ public class TestCacheManagerThreadIteration {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.apache.http.message.AbstractHttpMessage#getAllHeaders()
          */
         @Override
@@ -97,7 +97,7 @@ public class TestCacheManagerThreadIteration {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see
          * org.apache.http.message.AbstractHttpMessage#addHeader(org.apache.http.Header)
          */
@@ -108,7 +108,7 @@ public class TestCacheManagerThreadIteration {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see
          * org.apache.http.message.AbstractHttpMessage#getFirstHeader(java.lang.String)
          */
@@ -123,7 +123,7 @@ public class TestCacheManagerThreadIteration {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see
          * org.apache.http.message.AbstractHttpMessage#getLastHeader(java.lang.String)
          */
@@ -138,7 +138,7 @@ public class TestCacheManagerThreadIteration {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.apache.http.message.AbstractHttpMessage#getHeaders(java.lang.String)
          */
         @Override
@@ -368,7 +368,7 @@ public class TestCacheManagerThreadIteration {
         this.cacheManager.testIterationStart(null);
         assertNull("After iterantion, should not find entry", getThreadCacheEntry(LOCAL_HOST));
         assertFalse("After iterantion, should not find valid entry", this.cacheManager.inCache(url, headers));
-        
+
         //Controlled by cacheManager
         jmvars.putObject(SAME_USER, true);
         jmctx.setVariables(jmvars);

@@ -73,7 +73,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     public static final String NUM_THREADS = "ThreadGroup.num_threads";
 
     public static final String MAIN_CONTROLLER = "ThreadGroup.main_controller";
-        
+
     /** The same user or different users */
     public static final String IS_SAME_USER_ON_NEXT_ITERATION = "ThreadGroup.same_user_on_next_iteration";
 
@@ -304,7 +304,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     public void breakThreadLoop() {
         ((LoopController) getSamplerController()).breakLoop();
     }
-    
+
     /**
      * Set the kind of user
      *

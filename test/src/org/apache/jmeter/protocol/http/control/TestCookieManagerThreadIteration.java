@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.protocol.http.control;
 
@@ -156,7 +156,7 @@ public class TestCookieManagerThreadIteration {
                 cookieManagerDynamic.getCookies().get(0).getName());
         assertTrue("After the iteration, the quantity of cookies should be 1",
                 cookieManagerDynamic.getCookies().size() == 1);
-        
+
         // Controlled by CookieManager
         jmvars.putObject(SAME_USER, false);
         jmctx.setVariables(jmvars);
