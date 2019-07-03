@@ -61,7 +61,6 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
      *            the property key
      * @param defaultValue
      *            the default value
-
      * @param seriesName Series name
      * @return the group info
      */
