@@ -26,7 +26,9 @@ import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.ElapsedTimeValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
+import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class ResponseTimeOverTimeGraphConsumer provides a graph to visualize mean
@@ -36,6 +38,7 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
  */
 public class ResponseTimeOverTimeGraphConsumer extends
         AbstractOverTimeGraphConsumer {
+    private static final String PERCENTILE_FORMAT = "%dth percentile";
 
     /*
      * (non-Javadoc)
@@ -51,6 +54,26 @@ public class ResponseTimeOverTimeGraphConsumer extends
         return keysSelector;
     }
 
+    /**
+     * Creates the group info for elapsed time percentile depending on jmeter
+     * properties.
+     *
+     * @param propertyKey
+     *            the property key
+     * @param defaultValue
+     *            the default value
+     * @param serieName Serie name
+     * @return the group info
+     */
+    private GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String seriesName) {
+        int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
+        PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
+        factory.setPercentileIndex(property);
+
+        return new GroupInfo(factory, new NameSeriesSelector(),
+                new ElapsedTimeValueSelector(false), false, false);
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -59,11 +82,12 @@ public class ResponseTimeOverTimeGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new MeanAggregatorFactory(), new NameSeriesSelector(),
-                // We include Transaction Controller results
-                new ElapsedTimeValueSelector(false), false, false));
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>();
+
+        groupInfos.put("aggregate_rpt_pct2", //$NON-NLS-1$
+                createPercentileGroupInfo("aggregate_rpt_pct2", 95, //$NON-NLS-1$
+                        String.format(
+                                PERCENTILE_FORMAT, Integer.valueOf(95))));
         return groupInfos;
     }
 }

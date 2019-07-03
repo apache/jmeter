@@ -28,7 +28,6 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 import org.apache.jmeter.util.JMeterUtils;
-
 /**
  * The class ConnectTimeOverTimeGraphConsumer provides a graph to visualize Connection time
  * per time period (defined by granularity)
@@ -62,10 +61,11 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
      *            the property key
      * @param defaultValue
      *            the default value
-     * @param serieName Serie name
+
+     * @param seriesName Series name
      * @return the group info
      */
-    private GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String serieName) {
+    private GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String seriesName) {
         int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
         PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
         factory.setPercentileIndex(property);
