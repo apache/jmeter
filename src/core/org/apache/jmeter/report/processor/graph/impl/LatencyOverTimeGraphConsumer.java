@@ -20,15 +20,13 @@ package org.apache.jmeter.report.processor.graph.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
+import org.apache.jmeter.report.processor.MaxAggregatorFactory;
+import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.LatencyValueSelector;
-import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.StaticSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
-import org.apache.jmeter.report.processor.MaxAggregatorFactory;
-import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -96,10 +94,8 @@ public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer 
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         HashMap<String, GroupInfo> groupInfos = new HashMap<>();
- 
         groupInfos.put("aggregate_report_max", //$NON-NLS-1$
-                createMaxGroupInfo());
-
+            createMaxGroupInfo());
         groupInfos.put("aggregate_rpt_pct2", //$NON-NLS-1$
                 createPercentileGroupInfo("aggregate_rpt_pct2", 95, //$NON-NLS-1$
                         String.format(
