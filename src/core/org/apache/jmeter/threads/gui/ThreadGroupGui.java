@@ -23,15 +23,18 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -61,6 +64,10 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     private JTextField duration;
 
     private JTextField delay; // Relative start-up time
+
+    private JRadioButton sameUserBox;
+
+    private JRadioButton differentUserBox;
 
     public ThreadGroupGui() {
         this(true);
@@ -100,6 +107,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         tg.setProperty(new BooleanProperty(ThreadGroup.SCHEDULER, scheduler.isSelected()));
         tg.setProperty(ThreadGroup.DURATION, duration.getText());
         tg.setProperty(ThreadGroup.DELAY, delay.getText());
+        tg.setProperty(AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION,sameUserBox.isSelected());
     }
 
     @Override
@@ -117,6 +125,12 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
         duration.setText(tg.getPropertyAsString(ThreadGroup.DURATION));
         delay.setText(tg.getPropertyAsString(ThreadGroup.DELAY));
+        final boolean isSameUser = tg.getPropertyAsBoolean(AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION, false);
+        if (isSameUser){
+            sameUserBox.setSelected(true);
+        } else {
+            differentUserBox.setSelected(true);
+        }
     }
 
     @Override
@@ -193,6 +207,8 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         scheduler.setSelected(false);
         delay.setText(""); // $NON-NLS-1$
         duration.setText(""); // $NON-NLS-1$
+        sameUserBox.setSelected(true);
+        differentUserBox.setSelected(false);
     }
 
    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
@@ -228,7 +244,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
         // LOOP COUNT
         threadPropsPanel.add(createControllerPanel());
-
+        threadPropsPanel.add(createUserOptionsPanel());
         if (showDelayedStart) {
             delayedStart = new JCheckBox(JMeterUtils.getResString("delayed_start")); // $NON-NLS-1$
             threadPropsPanel.add(delayedStart);
@@ -252,4 +268,17 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         intgrationPanel.add(mainPanel);
         add(intgrationPanel, BorderLayout.CENTER);
     }
+
+   private JPanel createUserOptionsPanel(){
+       ButtonGroup group = new ButtonGroup();
+       sameUserBox = new JRadioButton(JMeterUtils.getResString("threadgroup_same_user")); //$NON-NLS-1$
+       group.add(sameUserBox);
+       sameUserBox.setSelected(true);
+       differentUserBox = new JRadioButton(JMeterUtils.getResString("threadgroup_different_user")); //$NON-NLS-1$
+       group.add(differentUserBox);
+       JPanel optionsPanel = new HorizontalPanel();
+       optionsPanel.add(sameUserBox);
+       optionsPanel.add(differentUserBox);
+       return optionsPanel;
+   }
 }

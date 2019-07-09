@@ -2,7 +2,7 @@ sudo: false
 language: java
 
 before_script:
-  - test "x$RUN_CHECKSTYLE" != 'x' || ant -Djava.awt.headless=true download_jars install
+  - test "x$RUN_CHECKSTYLE" != 'x' || ant -Djava.awt.headless=true clean download_jars install
   - test "x$RUN_CHECKSTYLE" != 'xtrue' || ant -Djava.awt.headless=true download_checkstyle
 
 before_install:
