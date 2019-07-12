@@ -150,6 +150,7 @@ to view the last major behaviors with the version 5.1.1.
 <h3>Other Samplers</h3>
 <ul>
     <li><bug>63442</bug>Reduce scanning for <code>LogParser</code> implementations in AccessLogSamplerBeanInfo.</li>
+    <li><bug>63563</bug>LdapExtSampler: When sampler fails with exception differing from NamingException, no SampleResult is generated</li>
 </ul>
 
 <h3>Controllers</h3>
