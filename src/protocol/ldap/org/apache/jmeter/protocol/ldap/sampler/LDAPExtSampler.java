@@ -623,11 +623,13 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      *
      **************************************************************************/
     private void addTest(DirContext dirContext, SampleResult res) throws NamingException {
+        DirContext ctx = null;
         try {
             res.sampleStart();
-            DirContext ctx = LdapExtClient.createTest(dirContext, getUserAttributes(), getBaseEntryDN());
-            ctx.close(); // the createTest() method creates an extra context which needs to be closed
+            ctx = LdapExtClient.createTest(dirContext, getUserAttributes(), getBaseEntryDN());
         } finally {
+            // the createTest() method creates an extra context which needs to be closed
+            LdapExtClient.disconnect(ctx);
             res.sampleEnd();
         }
     }
@@ -669,7 +671,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             if(log.isWarnEnabled()) {
                 log.warn("Closing previous context for thread: {}", getThreadName());
             }
-            ctx.close();
+            LdapExtClient.disconnect(ctx);
         }
         try {
             res.sampleStart();
