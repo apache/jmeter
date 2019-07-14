@@ -41,7 +41,7 @@ This tutorial attempts to explain the exact steps for recording HTTP/HTTPS. For 
 <p>
 Since JMeter 2.10, recording has been improved to better handle embedded resources and creation of certificates on the fly.
 To enable these features, JMeter uses <code>keytool</code> utility (available in JRE/JDK) so you need to ensure your
-configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecording210">this wiki page before starting.</a>
+configuration is correct, read <a href="https://cwiki.apache.org/confluence/display/JMETER/TestRecording210">this wiki page before starting.</a>
 </p>
 
 </subsection>
