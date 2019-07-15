@@ -53,7 +53,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
 
         createPropertyGroup("varName", new String[] { "dataSource" });
 
-        createPropertyGroup("pool", new String[] { "poolMax", "timeout", 
+        createPropertyGroup("pool", new String[] { "poolMax", "timeout",
                 "trimInterval", "autocommit", "transactionIsolation", "preinit", "initQuery" });
 
         createPropertyGroup("keep-alive", new String[] { "keepAlive", "connectionAge", "checkQuery" });

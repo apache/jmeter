@@ -300,7 +300,7 @@ public class DataSourceElement extends AbstractTestElement
                 log.error("Error preinitializing the connection pool: {}@{}", getDataSourceName(), System.identityHashCode(dataSource), ex);
             }
         }
-        
+
         log.debug("PoolConfiguration:{}", this.dataSource);
         return dataSource;
     }
