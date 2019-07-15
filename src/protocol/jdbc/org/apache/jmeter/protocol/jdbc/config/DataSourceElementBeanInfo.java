@@ -84,7 +84,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p.setValue(TAGS, modes);
         p = property("preinit");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
         p = property("initQuery", TypeEditor.TextAreaEditor);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");

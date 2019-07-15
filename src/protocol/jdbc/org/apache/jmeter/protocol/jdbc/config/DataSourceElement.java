@@ -291,17 +291,17 @@ public class DataSourceElement extends AbstractTestElement
             dataSource.setPassword(getPassword());
         }
 
-        log.debug("PoolConfiguration:{}", this.dataSource);
-
         if(isPreinit()) {
             // side effect - connection pool init - that is what we want
             try {
                 dataSource.getConnection().close();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                log.debug("Preinitializing the connection pool: {}@{}", getDataSourceName(), System.identityHashCode(dataSource));
+            } catch (SQLException ex) {
+                log.error("Error preinitializing the connection pool: {}@{}", getDataSourceName(), System.identityHashCode(dataSource), ex);
             }
         }
+        
+        log.debug("PoolConfiguration:{}", this.dataSource);
         return dataSource;
     }
 
