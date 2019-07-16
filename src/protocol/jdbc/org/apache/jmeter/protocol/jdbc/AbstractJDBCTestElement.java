@@ -545,15 +545,15 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             results = new ArrayList<>();
             jmvars.putObject(currentResultVariable, results);
         }
-        int j = 0;
-        int k = getIntegerResultSetMaxRows();
-        if (k < 0) {
+        int currentIterationIndex = 0;
+        int resultSetMaxRows = getIntegerResultSetMaxRows();
+        if (resultSetMaxRows < 0) {
             while (rs.next()) {
-                j = processRow(rs, meta, sb, numColumns, jmvars, varNames, results, j);
+                currentIterationIndex = processRow(rs, meta, sb, numColumns, jmvars, varNames, results, currentIterationIndex);
             }
         } else {
-            while (j < k && rs.next()) {
-                j = processRow(rs, meta, sb, numColumns, jmvars, varNames, results, j);
+            while (currentIterationIndex < resultSetMaxRows && rs.next()) {
+                currentIterationIndex = processRow(rs, meta, sb, numColumns, jmvars, varNames, results, currentIterationIndex);
             }
         }
         // Remove any additional values from previous sample
@@ -565,11 +565,11 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 String prevCount = jmvars.get(varCount);
                 if (prevCount != null) {
                     int prev = Integer.parseInt(prevCount);
-                    for (int n = j + 1; n <= prev; n++) {
+                    for (int n = currentIterationIndex + 1; n <= prev; n++) {
                         jmvars.remove(name + UNDERSCORE + n);
                     }
                 }
-                jmvars.put(varCount, Integer.toString(j)); // save the current count
+                jmvars.put(varCount, Integer.toString(currentIterationIndex)); // save the current count
             }
         }
 
@@ -577,10 +577,10 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     }
 
     private int processRow(ResultSet rs, ResultSetMetaData meta, StringBuilder sb, int numColumns,
-            JMeterVariables jmvars, String[] varNames, List<Map<String, Object>> results, int j)
+            JMeterVariables jmvars, String[] varNames, List<Map<String, Object>> results, int currentIterationIndex)
             throws SQLException, UnsupportedEncodingException {
         Map<String, Object> row = null;
-        j++;
+        currentIterationIndex++;
         for (int i = 1; i <= numColumns; i++) {
             Object o = rs.getObject(i);
             if(results != null) {
@@ -602,11 +602,11 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             if (i <= varNames.length) { // i starts at 1
                 String name = varNames[i - 1].trim();
                 if (name.length()>0){ // Save the value in the variable if present
-                    jmvars.put(name+UNDERSCORE+j, o == null ? null : o.toString());
+                    jmvars.put(name+UNDERSCORE+currentIterationIndex, o == null ? null : o.toString());
                 }
             }
         }
-        return j;
+        return currentIterationIndex;
     }
 
     public static void close(Connection c) {
