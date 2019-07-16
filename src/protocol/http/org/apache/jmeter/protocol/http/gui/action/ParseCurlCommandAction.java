@@ -137,15 +137,13 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * @param event {@link ActionEvent}
      */
     private final void showInputDialog(ActionEvent event) {
-        EscapeDialog messageDialog = new EscapeDialog(getParentFrame(event),
-                JMeterUtils.getResString("curl_import"), //$NON-NLS-1$
+        EscapeDialog messageDialog = new EscapeDialog(getParentFrame(event), JMeterUtils.getResString("curl_import"), //$NON-NLS-1$
                 false);
         Container contentPane = messageDialog.getContentPane();
         contentPane.setLayout(new BorderLayout());
         statusText = new JLabel("",JLabel.CENTER);
         statusText.setForeground(Color.RED);
         contentPane.add(statusText, BorderLayout.NORTH);
-
         cURLCommandTA = JSyntaxTextArea.getInstance(20, 80, false);
         cURLCommandTA.setCaretPosition(0);
         contentPane.add(JTextScrollPane.getInstance(cURLCommandTA), BorderLayout.CENTER);
@@ -179,7 +177,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
 
     private DNSCacheManager findNodeOfTypeDnsCacheManagerByType(boolean isCustom) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        DNSCacheManager dnsCacheManager = new DNSCacheManager();
+        DNSCacheManager dnsCacheManager=new DNSCacheManager();
         List<JMeterTreeNode> res = treeModel.getNodesOfType(DNSCacheManager.class);
         for (JMeterTreeNode jm : res) {
             dnsCacheManager = (DNSCacheManager) jm.getTestElement();
@@ -225,7 +223,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             createDnsServer(request, dnsCacheManager);
             threadGroupHT.add(dnsCacheManager);
         }
-        if (request.getResolverDNS()!=null) {
+        if (request.getDNSResolver()!=null) {
             DNSCacheManager dnsCacheManager = new DNSCacheManager();
             createDnsResolver(request, dnsCacheManager);
             threadGroupHT.add(dnsCacheManager);
@@ -255,7 +253,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         HTTPSamplerProxy httpSampler = createSampler(request,commentText);
         HashTree samplerHT = parentHT.add(httpSampler);
         samplerHT.add(httpSampler.getHeaderManager());
-        if (request.getCacert().equals("cert")) {
+        if (request.getCACert().equals("cert")) {
             samplerHT.add(httpSampler.getKeystoreConfig());
         }
         return httpSampler;
@@ -301,7 +299,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             setFormData(request, httpSampler);
             httpSampler.setDoMultipart(true);
         }
-        if (request.getCacert().equals("cert")) {
+        if (request.getCACert().equals("cert")) {
             KeystoreConfig keystoreConfig = createKeystoreConfiguration();
             httpSampler.addTestElement(keystoreConfig);
         }
@@ -485,10 +483,9 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private void createDnsResolver(Request request, DNSCacheManager dnsCacheManager) {
         dnsCacheManager.setProperty(TestElement.GUI_CLASS, DNSCachePanel.class.getName());
         dnsCacheManager.setProperty(TestElement.NAME, "DNS Cache Manager");
-
         dnsCacheManager.setCustomResolver(true);
         dnsCacheManager.getHosts().clear();
-        String[]resolveParameters=request.getResolverDNS().split(":");
+        String[]resolveParameters=request.getDNSResolver().split(":");
         String port=resolveParameters[1];
         if(!port.equals("443")&&!port.equals("80")&&!port.equals("*")) {
             dnsCacheManager.setProperty(TestElement.COMMENTS,
@@ -505,7 +502,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         if (dnsCacheManager.getHosts().size() != 1) {
             return true;
         } else {
-            String[] resolveParameters = request.getResolverDNS().split(":");
+            String[] resolveParameters = request.getDNSResolver().split(":");
             String host = resolveParameters[0];
             String address = resolveParameters[2];
             StaticHost statichost = (StaticHost) dnsCacheManager.getHosts().get(0).getObjectValue();
@@ -726,7 +723,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                         canAddDnsServer=canAddDnsServerInHttpRequest(request, dnsCacheManager);
                     }
                 }
-                if (request.getResolverDNS()!=null) {
+                if (request.getDNSResolver()!=null) {
                     DNSCacheManager dnsCacheManager = findNodeOfTypeDnsCacheManagerByType(true);
                     if (dnsCacheManager == null) {
                         dnsCacheManager=new DNSCacheManager();
@@ -752,7 +749,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 KeystoreConfig keystoreConfig = sampler.getKeystoreConfig();
                 final JMeterTreeNode newNode = treeModel.addComponent(sampler, currentNode);
                 treeModel.addComponent(headerManager, newNode);
-                if (request.getCacert().equals("cert")) {
+                if (request.getCACert().equals("cert")) {
                     treeModel.addComponent(keystoreConfig, newNode);
                 }
                 if (canAddAuthManagerInHttpRequest) {
@@ -841,7 +838,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             commentText.append("Please configure noproxy list in terminal and restart JMeter. ");
             commentText.append("Look: https://jmeter.apache.org/usermanual/get-started.html#proxy_server");
         }
-        if (!request.getCacert().isEmpty()) {
+        if (!request.getCACert().isEmpty()) {
             commentText.append("Please configure the SSL file with CA certificates in 'SSL configuration' of 'system.properties(49 line)'. ");
             commentText.append("Look: https://jmeter.apache.org/usermanual/properties_reference.html#ssl_config");
         }

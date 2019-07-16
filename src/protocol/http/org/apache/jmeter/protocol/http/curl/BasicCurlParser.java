@@ -28,6 +28,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -101,59 +103,19 @@ public class BasicCurlParser {
     private static final int LIMIT_RATE_OPT = "limit-rate".hashCode();// $NON-NLS-1$
     private static final int MAX_REDIRS_OPT = "max-redirs".hashCode();// $NON-NLS-1$
     private static final int NOPROXY_OPT = "noproxy".hashCode();// $NON-NLS-1$
-    private static final List<Integer> AUTH_OPT = new ArrayList<>();// $NON-NLS-1$
-    static {
-        AUTH_OPT.add(BASIC_OPT);
-        AUTH_OPT.add(DIGEST_OPT);
-    }
-    private static final List<Integer> SSL_OPT = new ArrayList<>();// $NON-NLS-1$
-    static {
-        SSL_OPT.add(CAFILE_OPT);
-        SSL_OPT.add(CAPATH_OPT);
-        SSL_OPT.add(CERT_OPT);
-        SSL_OPT.add(CIPHERS_OPT);
-        SSL_OPT.add(CERT_STATUS_OPT);
-        SSL_OPT.add(CERT_TYPE_OPT);
-        SSL_OPT.add(KEY_OPT);
-        SSL_OPT.add(KEY_TYPE_OPT);
-    }
-    private static final List<Integer> DATAS_OPT = new ArrayList<>();// $NON-NLS-1$
-    static {
-        DATAS_OPT.add(DATA_OPT);
-        DATAS_OPT.add(DATA_ASCII_OPT);
-        DATAS_OPT.add(DATA_BINARY_OPT);
-        DATAS_OPT.add(DATA_URLENCODE_OPT);
-        DATAS_OPT.add(DATA_RAW_OPT);
-    }
-    private static final List<Integer> FORMS_OPT = new ArrayList<>();// $NON-NLS-1$
-    static {
-        FORMS_OPT.add(FORM_OPT);
-        FORMS_OPT.add(FORM_STRING_OPT);
-    }
-    private static final List<Integer> IGNORE_OPTIONS_OPT = new ArrayList<>();// $NON-NLS-1$
-    static {
-        IGNORE_OPTIONS_OPT.add(OUTPUT_OPT);
-        IGNORE_OPTIONS_OPT.add(CREATE_DIRS_OPT);
-        IGNORE_OPTIONS_OPT.add(RAW_OPT);
-        IGNORE_OPTIONS_OPT.add(INCLUDE_OPT);
-        IGNORE_OPTIONS_OPT.add(KEEPALIVETILE_OPT);
-    }
-    private static final List<Integer> NOSUPPORT_OPTIONS_OPT = new ArrayList<>();// $NON-NLS-1$
-    static {
-        NOSUPPORT_OPTIONS_OPT.add(PROXY_NTLM_OPT);
-        NOSUPPORT_OPTIONS_OPT.add(PROXY_NEGOTIATE_OPT);
-    }
-    private static final List<Integer> PROPERTIES_OPT = new ArrayList<>();// $NON-NLS-1$
-    static {
-        PROPERTIES_OPT.add(MAX_REDIRS_OPT);
-    }
-    private static final List<String>DYNAMIC_COOKIES = new ArrayList<>();// $NON-NLS-1$
-    static {
-        DYNAMIC_COOKIES.add("PHPSESSID");
-        DYNAMIC_COOKIES.add("JSESSIONID");
-        DYNAMIC_COOKIES.add("ASPSESSIONID");
-        DYNAMIC_COOKIES.add("connect.sid");
-    }
+    private static final List<Integer> AUTH_OPT = Arrays.asList(BASIC_OPT, DIGEST_OPT);// $NON-NLS-1$
+    private static final List<Integer> SSL_OPT = Arrays.asList(CAFILE_OPT, CAPATH_OPT, CERT_OPT, CIPHERS_OPT,
+            CERT_STATUS_OPT, CERT_TYPE_OPT, KEY_OPT, KEY_TYPE_OPT);// $NON-NLS-1$
+    private static final List<Integer> DATAS_OPT = Arrays.asList(DATA_OPT, DATA_ASCII_OPT, DATA_BINARY_OPT,
+            DATA_URLENCODE_OPT, DATA_RAW_OPT);// $NON-NLS-1$
+    private static final List<Integer> FORMS_OPT = Arrays.asList(FORM_OPT, FORM_STRING_OPT);// $NON-NLS-1$
+    private static final List<Integer> IGNORE_OPTIONS_OPT = Arrays.asList(OUTPUT_OPT, CREATE_DIRS_OPT, RAW_OPT,
+            INCLUDE_OPT, KEEPALIVETILE_OPT);// $NON-NLS-1$
+    private static final List<Integer> NOSUPPORT_OPTIONS_OPT = Arrays.asList(PROXY_NTLM_OPT, PROXY_NEGOTIATE_OPT);// $NON-NLS-1$
+    private static final List<Integer> PROPERTIES_OPT = Arrays.asList(MAX_REDIRS_OPT);// $NON-NLS-1$
+    private static final List<String> DYNAMIC_COOKIES = Arrays.asList("PHPSESSID", "JSESSIONID", "ASPSESSIONID",
+            "connect.sid");// $NON-NLS-1$
+
     public static final class Request {
         private boolean compressed;
         private String url;
@@ -166,7 +128,7 @@ public class BasicCurlParser {
         private String cookieInHeaders = "";
         private String filepathCookie="";
         private Authorization authorization = new Authorization();
-        private String cacert = "";
+        private String CACert = "";
         private Map<String, String> formData = new LinkedHashMap<>();
         private Map<String, String> formStringData = new LinkedHashMap<>();
         private Set<String> dnsServers = new HashSet<>();
@@ -176,20 +138,18 @@ public class BasicCurlParser {
         private List<String> optionsNoSupport = new ArrayList<>();
         private List<String> optionsInProperties = new ArrayList<>();
         private Map<String, String> proxyServer = new LinkedHashMap<>();
-        private String resolverDNS;
+        private String dnsresolver;
         private int limitRate = 0;
         private String noproxy;
-        private static final List<String> NOT_ADD_HEADERS = new ArrayList<>();// $NON-NLS-1$
-        static {
-            NOT_ADD_HEADERS.add("Connection");
-            NOT_ADD_HEADERS.add("Host");
-        }
-
+        private static final List<String> HEADERS_TO_IGNORE = Arrays.asList("Connection", "Host");// $NON-NLS-1$
 
         public Request() {
             super();
         }
 
+        /**
+         * @return the method
+         */
         public String getMethod() {
             return method;
         }
@@ -201,6 +161,9 @@ public class BasicCurlParser {
             this.method = method;
         }
 
+        /**
+         * @param value the post data
+         */
         public void setPostData(String value) {
             this.postData = value;
         }
@@ -226,19 +189,23 @@ public class BasicCurlParser {
             this.compressed = compressed;
         }
 
+        /**
+         * @param name the field of Header
+         * @param value the value of Header
+         */
         public void addHeader(String name, String value) {
-            if (name.equalsIgnoreCase("COOKIE")) {
-               this.cookieInHeaders=value;
-            }
-            else if (!NOT_ADD_HEADERS.contains(name)) {
+            if (name != null && name.equalsIgnoreCase("COOKIE")) {
+                this.cookieInHeaders = value;
+            } else if (name != null && !HEADERS_TO_IGNORE.contains(name)) {
                 headers.put(name, value);
             }
         }
+
         /**
          * @return the cookieInHeaders
          */
         public List<Cookie> getCookieInHeaders(String url) {
-            return stringToCookie(cookieInHeaders,url);
+            return Collections.unmodifiableList(stringToCookie(cookieInHeaders, url));
         }
 
         /**
@@ -265,86 +232,130 @@ public class BasicCurlParser {
          * @return the headers
          */
         public Map<String, String> getHeaders() {
-            return headers;
+            return Collections.unmodifiableMap(this.headers);
         }
 
+        /**
+         * @return the list of options which are ignored
+         */
         public List<String> getOptionsInProperties() {
-            return optionsInProperties;
+            return Collections.unmodifiableList(this.optionsInProperties);
         }
 
+        /**
+         * @param option the option
+         */
         public void addOptionsInProperties(String option) {
             this.optionsInProperties.add(option);
         }
 
+        /**
+         * @return the maximum transfer rate
+         */
         public int getLimitRate() {
             return limitRate;
         }
 
+        /**
+         * @param limitRate the maximum transfer rate
+         */
         public void setLimitRate(String limitRate) {
             String unit = limitRate.substring(limitRate.length() - 1, limitRate.length()).toLowerCase();
             int value = Integer.parseInt(limitRate.substring(0, limitRate.length() - 1).toLowerCase());
             switch (unit) {
+            case "k":
+                this.limitRate = value * 128;
+                break;
             case "m":
-                value = value * 1000;
+                this.limitRate = value * 128000;
                 break;
             case "g":
-                value = value * 1000 * 1000;
+                this.limitRate = value * 128000000;
                 break;
             default:
                 break;
             }
-            this.limitRate = value * 1024 / 8;
         }
 
+        /**
+         * @return this list of hosts which don't use proxy
+         */
         public String getNoproxy() {
             return noproxy;
         }
 
+        /**
+         * Set the list of hosts which don't use proxy
+         * @param noproxy
+         */
         public void setNoproxy(String noproxy) {
             this.noproxy = noproxy;
         }
 
-        public String getResolverDNS() {
-            return resolverDNS;
+        /**
+         * @return the DNS resolver
+         */
+        public String getDNSResolver() {
+            return dnsresolver;
         }
 
-        public void setResolverDNS(String resolveDNS) {
-            this.resolverDNS = resolveDNS;
+        /**
+         * set DNS resolver
+         * @param dnsresolver
+         */
+        public void setDNSResolver(String dnsresolver) {
+            this.dnsresolver = dnsresolver;
         }
 
+        /**
+         * @return the interface name to perform an operation
+         */
         public String getInterfaceName() {
             return interfaceName;
         }
 
+        /**
+         * @param interfaceName the name of interface
+         */
         public void setInterfaceName(String interfaceName) {
             this.interfaceName = interfaceName;
         }
 
+        /**
+         * @return the list of options which are ignored
+         */
         public List<String> getOptionsIgnored() {
-            return optionsIgnored;
+            return Collections.unmodifiableList(this.optionsIgnored);
         }
 
+        /**
+         * @param option option is ignored
+         */
         public void addOptionsIgnored(String option) {
             this.optionsIgnored.add(option);
         }
 
+        /**
+         * @return the list of options which are not supported by JMeter
+         */
         public List<String> getOptionsNoSupport() {
-            return optionsNoSupport;
+            return Collections.unmodifiableList(this.optionsNoSupport);
         }
 
+        /**
+         * @param option option is not supported
+         */
         public void addOptionsNoSupport(String option) {
             this.optionsNoSupport.add(option);
         }
         /**
-         *
          * @return the map of proxy server
          */
         public Map<String, String> getProxyServer() {
-            return proxyServer;
+            return Collections.unmodifiableMap(this.proxyServer);
         }
 
         /**
-         *
          * @param proxyServer set the map of proxy server
          */
         public void setProxyServer(String key, String value) {
@@ -352,7 +363,6 @@ public class BasicCurlParser {
         }
 
         /**
-         *
          * @return if the Http request keeps alive
          */
         public boolean isKeepAlive() {
@@ -360,7 +370,6 @@ public class BasicCurlParser {
         }
 
         /**
-         *
          * @param isKeepAlive set if the Http request keeps alive
          */
         public void setKeepAlive(boolean isKeepAlive) {
@@ -368,15 +377,13 @@ public class BasicCurlParser {
         }
 
         /**
-         *
          * @return the list of DNS server
          */
         public Set<String> getDnsServers() {
-            return dnsServers;
+            return Collections.unmodifiableSet(this.dnsServers);
         }
 
         /**
-         *
          * @param dnsServer set the list of DNS server
          */
         public void addDnsServers(String dnsServer) {
@@ -384,15 +391,13 @@ public class BasicCurlParser {
         }
 
         /**
-         *
          * @return the map of form data
          */
         public Map<String, String> getFormStringData() {
-            return formStringData;
+            return Collections.unmodifiableMap(this.formStringData);
         }
 
         /**
-         *
          * @param key   the key of form data
          * @param value the value of form data
          */
@@ -401,15 +406,13 @@ public class BasicCurlParser {
         }
 
         /**
-         *
          * @return the map of form data
          */
         public Map<String, String> getFormData() {
-            return formData;
+            return Collections.unmodifiableMap(this.formData);
         }
 
         /**
-         *
          * @param key   the key of form data
          * @param value the value of form data
          */
@@ -417,30 +420,51 @@ public class BasicCurlParser {
             formData.put(key, value);
         }
 
-        public String getCacert() {
-            return cacert;
+        /**
+         * @return the options which work for SSL
+         */
+        public String getCACert() {
+            return CACert;
         }
 
-        public void setCacert(String cacert) {
-            this.cacert = cacert;
+        /**
+         * the options which work for SSL
+         * @param CACert
+         */
+        public void setCacert(String CACert) {
+            this.CACert = CACert;
         }
 
+        /**
+         * @return the authorization
+         */
         public Authorization getAuthorization() {
             return authorization;
         }
 
+        /**
+         * @return the connection time out
+         */
         public double getConnectTimeout() {
             return connectTimeout;
         }
-
+        /**
+         * @param connectTimeout the connection time out
+         */
         public void setConnectTimeout(double connectTimeout) {
             this.connectTimeout = connectTimeout;
         }
 
+        /**
+         * @return the max time of connection
+         */
         public double getMaxTime() {
             return maxTime;
         }
 
+        /**
+         * @param the max time of connection
+         */
         public void setMaxTime(double maxTime) {
             this.maxTime = maxTime;
         }
@@ -463,7 +487,7 @@ public class BasicCurlParser {
          * @return the cookies
          */
         public List<Cookie> getCookies(String url) {
-            return stringToCookie(cookies, url);
+            return Collections.unmodifiableList(stringToCookie(cookies, url));
         }
 
         /**
@@ -491,7 +515,6 @@ public class BasicCurlParser {
             return builder.toString();
         }
     }
-
     private static final CLOptionDescriptor D_COMPRESSED_OPT =
             new CLOptionDescriptor("compressed", CLOptionDescriptor.ARGUMENT_DISALLOWED, COMPRESSED_OPT,
                     "Request compressed response (using deflate or gzip)");
@@ -629,7 +652,6 @@ public class BasicCurlParser {
         super();
     }
     private static Pattern deleteLinePattern = Pattern.compile("\r|\n|\r\n");
-    private static Pattern cookiePattern = Pattern.compile("(.+)=(.+)(;?)");
     public Request parse(String commandLine) {
         String[] args = translateCommandline(commandLine);
         CLArgsParser parser = new CLArgsParser(args, OPTIONS);
@@ -658,14 +680,14 @@ public class BasicCurlParser {
                 } else if (DATAS_OPT.contains(option.getDescriptor().getId())) {
                     String value = option.getArgument(0);
                     String dataOptionName = option.getDescriptor().getName();
-                    value = getPostDataByDifferentOption(value, dataOptionName);
+                    value = getPostDataByDifferentOption(value.trim(), dataOptionName);
                     request.setMethod("POST");
                     request.setPostData(value);
                 } else if (FORMS_OPT.contains(option.getDescriptor().getId())) {
                     String nameAndValue = option.getArgument(0);
-                    int indexOfSemicolon = nameAndValue.indexOf('=');
-                    String key = nameAndValue.substring(0, indexOfSemicolon).trim();
-                    String value = nameAndValue.substring(indexOfSemicolon + 1).trim();
+                    int indexOfEqual = nameAndValue.indexOf('=');
+                    String key = nameAndValue.substring(0, indexOfEqual).trim();
+                    String value = nameAndValue.substring(indexOfEqual + 1).trim();
                     if (option.getDescriptor().getName().equals("form-string")) {
                         request.addFormStringData(key, value);
                     } else {
@@ -673,20 +695,15 @@ public class BasicCurlParser {
                     }
                     request.setMethod("POST");
                 } else if (option.getDescriptor().getId() == USER_AGENT_OPT) {
-                    String name = "User-Agent";
-                    String value = option.getArgument(0);
-                    request.addHeader(name, value);
+                    request.addHeader("User-Agent", option.getArgument(0));
                 } else if (option.getDescriptor().getId() == REFERER_OPT) {
-                    String name = "Referer";
-                    String value = option.getArgument(0);
-                    request.addHeader(name, value);
+                    request.addHeader("Referer", option.getArgument(0));
                 } else if (option.getDescriptor().getId() == CONNECT_TIMEOUT_OPT) {
                     String value = option.getArgument(0);
                     request.setConnectTimeout(Double.valueOf(value) * 1000);
                 } else if (option.getDescriptor().getId() == COOKIE_OPT) {
                     String value = option.getArgument(0);
-                    Matcher m = cookiePattern.matcher(value);
-                    if (m.matches()) {
+                    if (isValidCookie(value)) {
                         request.setCookies(value);
                     } else {
                         request.setFilepathCookie(value);
@@ -725,7 +742,7 @@ public class BasicCurlParser {
                     request.setInterfaceName(value);
                 } else if (option.getDescriptor().getId() == RESOLVER_OPT) {
                     String value = option.getArgument(0);
-                    request.setResolverDNS(value);
+                    request.setDNSResolver(value);
                 } else if (option.getDescriptor().getId() == LIMIT_RATE_OPT) {
                     String value = option.getArgument(0);
                     request.setLimitRate(value);
@@ -829,8 +846,8 @@ public class BasicCurlParser {
     * @param url              the baseurl of authorization
     * @param authorization    the object of authorization
     */
-   public void setAuthUserPasswd(String authorizationStr, String url, Authorization authorization) {
-       String[] authorizationParameters = authorizationStr.split(":");
+   public void setAuthUserPasswd(String authentication, String url, Authorization authorization) {
+       String[] authorizationParameters = authentication.split(":", 2);
        authorization.setUser(authorizationParameters[0].trim());
        authorization.setPass(authorizationParameters[1].trim());
        authorization.setURL(url);
@@ -844,7 +861,7 @@ public class BasicCurlParser {
     * @param authorization the object of authorization
     */
    private void setAuthMechanism(String mechanism, Authorization authorization) {
-       switch (mechanism) {
+       switch (mechanism.toLowerCase()) {
        case "basic":
            authorization.setMechanism(Mechanism.BASIC);
            break;
@@ -874,9 +891,9 @@ public class BasicCurlParser {
            request.setProxyServer("scheme", uriProxy.getScheme());
            Optional<String> userInfoOptional = Optional.ofNullable(uriProxy.getUserInfo());
            if (userInfoOptional.isPresent()) {
-               String userinfo = userInfoOptional.get();
-               if (userinfo.contains(":")) {
-                   String[] userInfo = userinfo.split(":");
+               String userInfoString = userInfoOptional.get();
+               if (userInfoString.contains(":")) {
+                   String[] userInfo = userInfoString.split(":", 2);
                    request.setProxyServer("username", userInfo[0]);
                    request.setProxyServer("password", userInfo[1]);
                }
@@ -902,9 +919,9 @@ public class BasicCurlParser {
     * @param request               http request
     * @param proxyServerUserPasswd the username and password of proxy server
     */
-   private void setProxyServerUserInfo(Request request, String proxyServerUserPasswd) {
-       if (proxyServerUserPasswd.contains(":")) {
-           String[] userInfo = proxyServerUserPasswd.split(":");
+   private void setProxyServerUserInfo(Request request, String authentication) {
+       if (authentication.contains(":")) {
+           String[] userInfo = authentication.split(":", 2);
            request.setProxyServer("username", userInfo[0]);
            request.setProxyServer("password", userInfo[1]);
        }
@@ -921,10 +938,10 @@ public class BasicCurlParser {
        if (dataOptionName.equals("data-urlencode")) {
            postdata = encodePostdata(postdata);
        } else {
-           if (postdata.contains("@") && !dataOptionName.equals("data-raw")) {
-               postdata = postdata.replace("@", "");
+           if (postdata.charAt(0) == '@' && !dataOptionName.equals("data-raw")) {
+               postdata = postdata.substring(1, postdata.length());
                postdata = readFromFile(postdata);
-               if (!dataOptionName.equals("data-binary")) {
+               if (!dataOptionName.equals("data-binary") && postdata != null) {
                    postdata = deleteLineBreak(postdata);
                }
            }
@@ -939,44 +956,40 @@ public class BasicCurlParser {
     * @return the result of encoding
     *
     */
-   private String encodePostdata(String postdata) {
-       String res = null;
-       if (postdata.contains("@")) {
-           String[] arr = postdata.split("@");
-           try {
-               res = URLEncoder.encode(readFromFile(arr[1]), StandardCharsets.UTF_8.name());
-           } catch (UnsupportedEncodingException e) {
-               LOGGER.error("string '{}' cannot be encoded", readFromFile(arr[1]));// NOSONAR
-           }
-           if (!arr[0].isEmpty()) {
-               res = arr[0] + "=" + res;
-           }
-       } else {
-           if (!postdata.contains("=")) {
-               try {
-                   res = URLEncoder.encode(postdata, StandardCharsets.UTF_8.name());
-               } catch (UnsupportedEncodingException e) {
-                   LOGGER.error("string '{}' cannot be encoded", postdata);
-                   throw new IllegalArgumentException(postdata + " cannot be encoded");
-               }
-           } else {
-               StringBuilder urlAfterEncoding = new StringBuilder();
-               int index = postdata.indexOf('=');
-               urlAfterEncoding.append(postdata.substring(0, index));
-               urlAfterEncoding.append("=");
-               try {
-                   urlAfterEncoding.append(URLEncoder.encode(postdata.substring(index + 1, postdata.length()),
-                           StandardCharsets.UTF_8.name()));
-               } catch (UnsupportedEncodingException e) {
-                   LOGGER.error("string '{}' cannot be encoded", postdata.substring(index + 1, postdata.length()));
-                   throw new IllegalArgumentException(
-                           postdata.substring(index + 1, postdata.length()) + " cannot be encoded");
-               }
-               res = urlAfterEncoding.toString();
-           }
-       }
-       return res;
-   }
+    private String encodePostdata(String postdata) {
+        if (postdata.contains("@")) {
+            String contentFile = null;
+            String[] arr = postdata.split("@", 2);
+            try {
+                contentFile = URLEncoder.encode(readFromFile(arr[1]), StandardCharsets.UTF_8.name());
+            } catch (UnsupportedEncodingException e) {
+                LOGGER.error("string '{}' cannot be encoded", readFromFile(arr[1]));// NOSONAR
+            }
+            if (!arr[0].isEmpty()) {
+                contentFile = arr[0] + "=" + contentFile;
+            }
+            return contentFile;
+        } else {
+            if (!postdata.contains("=")) {
+                try {
+                    return URLEncoder.encode(postdata, StandardCharsets.UTF_8.name());
+                } catch (UnsupportedEncodingException e) {
+                    LOGGER.error("string '{}' cannot be encoded", postdata);
+                    throw new IllegalArgumentException(postdata + " cannot be encoded");
+                }
+            } else {
+                int index = postdata.indexOf('=');
+                try {
+                    return postdata.substring(0, index + 1) + URLEncoder
+                            .encode(postdata.substring(index + 1, postdata.length()), StandardCharsets.UTF_8.name());
+                } catch (UnsupportedEncodingException e) {
+                    LOGGER.error("string '{}' cannot be encoded", postdata.substring(index + 1, postdata.length()));
+                    throw new IllegalArgumentException(
+                            postdata.substring(index + 1, postdata.length()) + " cannot be encoded");
+                }
+            }
+        }
+    }
 
    /**
     * Read the postdata from file
@@ -985,12 +998,11 @@ public class BasicCurlParser {
     * @return the content of file
     */
    private static String readFromFile(String filePath) {
-       String encoding = StandardCharsets.UTF_8.name();
        String content = "";
        File file = new File(filePath.trim());
        if (file.isFile() && file.exists()) {
            try {
-               content = FileUtils.readFileToString(file, encoding);
+               content = FileUtils.readFileToString(file, StandardCharsets.UTF_8.name());
            } catch (IOException e) {
                LOGGER.error("Failed to read from File {}", filePath);
                throw new IllegalArgumentException("Failed to read from File " + filePath);
@@ -1007,29 +1019,39 @@ public class BasicCurlParser {
     * @param postdata the post data
     * @return the string without break line
     */
-   private static String deleteLineBreak(String postdata) {
-       String repl = "";
-       if (postdata != null) {
-           Matcher m = deleteLinePattern.matcher(postdata);
-           repl = m.replaceAll("");
-       }
-       return repl;
-   }
+    private static String deleteLineBreak(String postdata) {
+        Matcher m = deleteLinePattern.matcher(postdata);
+        return m.replaceAll("");
+    }
 
    /**
-    * Convert string to cookie
-    *
-    * @param cookieStr
-    * @param url
-    * @return list of cookies
+    * Verify if the string is cookie or filename
+    * @param str
+    * @return
     */
+    public static boolean isValidCookie(String str) {
+        for (String r : str.split(";")) {
+            if (!r.contains("=")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Convert string to cookie
+     *
+     * @param cookieStr
+     * @param url
+     * @return list of cookies
+     */
    public static List<Cookie> stringToCookie(String cookieStr, String url) {
        List<Cookie> cookies = new ArrayList<>();
        final StringTokenizer tok = new StringTokenizer(cookieStr, "; ", true);
         while (tok.hasMoreTokens()) {
             String nextCookie = tok.nextToken();
             if (nextCookie.contains("=")) {
-                String[] cookieParameters = nextCookie.split("=");
+                String[] cookieParameters = nextCookie.split("=", 2);
                 if (!DYNAMIC_COOKIES.contains(cookieParameters[0])) {
                     Cookie newCookie = new Cookie();
                     newCookie.setName(cookieParameters[0]);

@@ -246,7 +246,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --cacert 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cacert", request.getCacert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cacert", request.getCACert());
     }
 
     @Test
@@ -254,7 +254,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --capath 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "capath", request.getCacert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "capath", request.getCACert());
     }
 
     @Test
@@ -262,7 +262,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' -E 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert", request.getCacert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert", request.getCACert());
     }
 
     @Test
@@ -270,7 +270,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --ciphers 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "ciphers", request.getCacert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "ciphers", request.getCACert());
     }
 
     @Test
@@ -279,7 +279,7 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert-status",
-                request.getCacert());
+                request.getCACert());
     }
 
     @Test
@@ -288,7 +288,7 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert-type",
-                request.getCacert());
+                request.getCACert());
     }
 
     @Test
@@ -362,6 +362,19 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser',the parameters in the file need to be encoded' ", "name=test",
+                request.getPostData());
+    }
+    @Test
+    public void testDataUrlEncodeWith2AtSymbol() throws IOException {
+        String encoding = StandardCharsets.UTF_8.name();
+        File file = tempFolder.newFile("test.txt");
+        FileUtils.writeStringToFile(file, "test@", encoding, true);
+        String pathname = file.getAbsolutePath();
+        String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
+                + "-H 'cache-control: no-cache' --data-urlencode 'name@" + pathname + "' ";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Assert.assertEquals("With method 'parser',the parameters in the file need to be encoded' ", "name=test%40",
                 request.getPostData());
     }
 
@@ -579,7 +592,7 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("The resolve DNS should be 'moonagic.com:443:127.0.0.2'", "moonagic.com:443:127.0.0.2",
-                request.getResolverDNS());
+                request.getDNSResolver());
     }
 
     @Test
@@ -621,5 +634,13 @@ public class BasicCurlParserTest {
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertTrue("Option proxy-ntlm should show warning",
                 request.getOptionsNoSupport().contains("proxy-ntlm"));
+    }
+
+    @Test
+    public void testIsValidCookie() {
+        String str="a=b;c=d";
+        Assert.assertTrue("The string should be cookies",BasicCurlParser.isValidCookie(str));
+        str="test.txt";
+        Assert.assertFalse("The string should be filename",BasicCurlParser.isValidCookie(str));
     }
 }
