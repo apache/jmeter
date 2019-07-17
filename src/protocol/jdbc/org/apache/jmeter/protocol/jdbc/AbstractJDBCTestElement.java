@@ -366,7 +366,14 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      * @return number of rows in resultSet
      * @throws SQLException
      */
-    private static int countRows(ResultSet resultSet) throws SQLException {
+    private int countRows(ResultSet resultSet) throws SQLException {
+        int resultSetMaxRows = getIntegerResultSetMaxRows();
+        if (resultSetMaxRows >= 0) {
+            resultSet.absolute(resultSetMaxRows);
+            if (!resultSet.isAfterLast()) {
+                return resultSet.getRow();
+            }
+        }
         return resultSet.last() ? resultSet.getRow() : 0;
     }
 
