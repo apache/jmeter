@@ -132,6 +132,7 @@ to view the last major behaviors with the version 5.1.1.
     <li>Updated to tika-core and tika-parsers 1.21 (from 1.21)</li>
     <li>Updated jackson-annotations, jackson-core and jackson-databind to 2.9.9 (from 2.9.8)</li>
     <li><bug>63529</bug>Add more unit tests for org.apache.jorphan.util.JOrphanUtils. Contributed by John Bergqvist(John.Bergqvist at diffblue.com)</li>
+    <li>Updated to latest checkstyle (version 8.22)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
