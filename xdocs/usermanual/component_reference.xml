@@ -597,6 +597,7 @@ the additional variables for rows four, five and six will be removed.
         </property>
         <property name="Query timeout(s)" required="No">Set a timeout in seconds for query, empty value means 0 which is infinite. <code>-1</code> means don't set any query timeout
 which might be needed for use case or when certain drivers don't support timeout. Defaults to 0.</property>
+        <property name="Limit ResultSet" required="No">Limits the number of rows to iterate through the ResultSet. Empty value means <code>-1</code>, e.g. no limitation, which is also the default. This can help to reduce the amount of data to be fetched from the database via the JDBC driver, but affects all possible options of <code>Handle ResultSet</code> respectively – e.g. incomplete ResultSet and a record count ≤ the limit.</property>
         <property name="Handle ResultSet" required="No">Defines how ResultSet returned from callable statements be handled:
             <ul>
                 <li><code>Store As String</code> (default) - All variables on Variable Names list are stored as strings, will not iterate through a <code>ResultSet</code> when present on the list. <code>CLOB</code>s will be converted to Strings. <code>BLOB</code>s will be converted to Strings as if they were an UTF-8 encoded byte-array. Both <code>CLOB</code>s and <code>BLOB</code>s will be cut off after <code>jdbcsampler.max_retain_result_size</code> bytes.</li>
