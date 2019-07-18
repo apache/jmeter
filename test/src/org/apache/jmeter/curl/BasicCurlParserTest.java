@@ -246,7 +246,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --cacert 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cacert", request.getCACert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cacert", request.getCaCert());
     }
 
     @Test
@@ -254,7 +254,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --capath 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "capath", request.getCACert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "capath", request.getCaCert());
     }
 
     @Test
@@ -262,7 +262,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' -E 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert", request.getCACert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert", request.getCaCert());
     }
 
     @Test
@@ -270,7 +270,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --ciphers 'test.pem' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "ciphers", request.getCACert());
+        Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "ciphers", request.getCaCert());
     }
 
     @Test
@@ -279,7 +279,7 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert-status",
-                request.getCACert());
+                request.getCaCert());
     }
 
     @Test
@@ -288,7 +288,7 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser',the cacert need to show a warning' ", "cert-type",
-                request.getCACert());
+                request.getCaCert());
     }
 
     @Test
@@ -592,7 +592,7 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("The resolve DNS should be 'moonagic.com:443:127.0.0.2'", "moonagic.com:443:127.0.0.2",
-                request.getDNSResolver());
+                request.getDnsResolver());
     }
 
     @Test

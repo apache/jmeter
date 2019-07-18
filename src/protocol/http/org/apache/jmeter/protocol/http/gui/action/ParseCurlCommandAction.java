@@ -223,7 +223,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             createDnsServer(request, dnsCacheManager);
             threadGroupHT.add(dnsCacheManager);
         }
-        if (request.getDNSResolver()!=null) {
+        if (request.getDnsResolver()!=null) {
             DNSCacheManager dnsCacheManager = new DNSCacheManager();
             createDnsResolver(request, dnsCacheManager);
             threadGroupHT.add(dnsCacheManager);
@@ -253,7 +253,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         HTTPSamplerProxy httpSampler = createSampler(request,commentText);
         HashTree samplerHT = parentHT.add(httpSampler);
         samplerHT.add(httpSampler.getHeaderManager());
-        if (request.getCACert().equals("cert")) {
+        if (request.getCaCert().equals("cert")) {
             samplerHT.add(httpSampler.getKeystoreConfig());
         }
         return httpSampler;
@@ -299,7 +299,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             setFormData(request, httpSampler);
             httpSampler.setDoMultipart(true);
         }
-        if (request.getCACert().equals("cert")) {
+        if (request.getCaCert().equals("cert")) {
             KeystoreConfig keystoreConfig = createKeystoreConfiguration();
             httpSampler.addTestElement(keystoreConfig);
         }
@@ -485,7 +485,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         dnsCacheManager.setProperty(TestElement.NAME, "DNS Cache Manager");
         dnsCacheManager.setCustomResolver(true);
         dnsCacheManager.getHosts().clear();
-        String[]resolveParameters=request.getDNSResolver().split(":");
+        String[]resolveParameters=request.getDnsResolver().split(":");
         String port=resolveParameters[1];
         if(!port.equals("443")&&!port.equals("80")&&!port.equals("*")) {
             dnsCacheManager.setProperty(TestElement.COMMENTS,
@@ -502,7 +502,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         if (dnsCacheManager.getHosts().size() != 1) {
             return true;
         } else {
-            String[] resolveParameters = request.getDNSResolver().split(":");
+            String[] resolveParameters = request.getDnsResolver().split(":");
             String host = resolveParameters[0];
             String address = resolveParameters[2];
             StaticHost statichost = (StaticHost) dnsCacheManager.getHosts().get(0).getObjectValue();
@@ -723,7 +723,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                         canAddDnsServer=canAddDnsServerInHttpRequest(request, dnsCacheManager);
                     }
                 }
-                if (request.getDNSResolver()!=null) {
+                if (request.getDnsResolver()!=null) {
                     DNSCacheManager dnsCacheManager = findNodeOfTypeDnsCacheManagerByType(true);
                     if (dnsCacheManager == null) {
                         dnsCacheManager=new DNSCacheManager();
@@ -749,7 +749,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 KeystoreConfig keystoreConfig = sampler.getKeystoreConfig();
                 final JMeterTreeNode newNode = treeModel.addComponent(sampler, currentNode);
                 treeModel.addComponent(headerManager, newNode);
-                if (request.getCACert().equals("cert")) {
+                if (request.getCaCert().equals("cert")) {
                     treeModel.addComponent(keystoreConfig, newNode);
                 }
                 if (canAddAuthManagerInHttpRequest) {
@@ -838,7 +838,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             commentText.append("Please configure noproxy list in terminal and restart JMeter. ");
             commentText.append("Look: https://jmeter.apache.org/usermanual/get-started.html#proxy_server");
         }
-        if (!request.getCACert().isEmpty()) {
+        if (!request.getCaCert().isEmpty()) {
             commentText.append("Please configure the SSL file with CA certificates in 'SSL configuration' of 'system.properties(49 line)'. ");
             commentText.append("Look: https://jmeter.apache.org/usermanual/properties_reference.html#ssl_config");
         }
