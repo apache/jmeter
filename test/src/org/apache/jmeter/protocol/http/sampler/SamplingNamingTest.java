@@ -52,17 +52,17 @@ public class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTe
     public void testBug63364() {
         TestPlan plan = new TestPlan();
         SampleResult[] subResults = doSample(implementation);
-        Assert.assertTrue("We have at least one sample result",subResults.length>0);
+        Assert.assertTrue("We should have at least one sample result, we had none",subResults.length>0);
         for (int i = 0; i < subResults.length; i++) {
-            assertEquals(LABEL+"-"+i, subResults[i].getSampleLabel());
+            assertEquals("Expected sample label to be "+LABEL+"-"+i, LABEL+"-"+i, subResults[i].getSampleLabel());
         }
         final boolean prevValue = TestPlan.getFunctionalMode();
         plan.setFunctionalMode(true);
         try {
             subResults = doSample(implementation);
-            Assert.assertTrue("We have at least one sample result",subResults.length>0);
+            Assert.assertTrue("We should have at least one sample result, we had none",subResults.length>0);
             for (int i = 0; i < subResults.length; i++) {
-                Assert.assertTrue(subResults[i].getSampleLabel().startsWith(JMETER_HOME_PAGE));
+                Assert.assertTrue("Expected sample label to start with "+JMETER_HOME_PAGE, subResults[i].getSampleLabel().startsWith(JMETER_HOME_PAGE));
             }
         } finally {
             plan.setFunctionalMode(prevValue);
@@ -85,7 +85,7 @@ public class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTe
         // We intentionally keep only resources which start with JMETER_HOME_PAGE
         httpSamplerProxy.setEmbeddedUrlRE(JMETER_HOME_PAGE+".*");
         SampleResult result = httpSamplerProxy.sample();
-        assertEquals(LABEL, result.getSampleLabel());
+        assertEquals("Expected sample label to be "+LABEL, LABEL, result.getSampleLabel());
         SampleResult[] subResults = result.getSubResults();
         return subResults;
     }
