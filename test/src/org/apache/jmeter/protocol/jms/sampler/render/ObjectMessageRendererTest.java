@@ -82,8 +82,13 @@ public class ObjectMessageRendererTest extends MessageRendererTest<Serializable>
         assertObject(object, "eéè€");
         Person p = (Person) object;
         assertEquals("object.name", "eéè€", p.getName());
-        assertEquals("cache", format("<?xml version=\"1.0\" encoding=\"Windows-1252\"?>%n%s", getUnicodeContent()), getFirstCachedValue());
+        Object firstCachedValue = getFirstCachedValue();
+        assertEquals("cache", format("<?xml version=\"1.0\" encoding=\"Windows-1252\"?>%n%s", getUnicodeContent()),
+                convertLineEndingsToSystem(firstCachedValue));
+    }
 
+    private String convertLineEndingsToSystem(Object firstCachedValue) {
+        return firstCachedValue.toString().replaceFirst("[\r\n]+", format("%n"));
     }
 
     private String getUnicodeContent() {

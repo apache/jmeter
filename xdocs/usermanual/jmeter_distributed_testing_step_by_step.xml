@@ -155,7 +155,7 @@ There are some basic limitations for distributed testing. Here's the list of the
 <subsection name="&sect-num;.6 Additional resources" anchor="additional-resources">
 
 <p>
-  <a href="http://wiki.apache.org/jmeter/JMeterFAQ#How_to_do_remote_testing_the_.27proper_way.27.3F">Wiki page on remote testing</a>
+  <a href="https://cwiki.apache.org/confluence/display/JMETER/JMeterFAQ#JMeterFAQ-Howtodoremotetestingthe'properway'?">Wiki page on remote testing</a>
 </p>
 
 <p>

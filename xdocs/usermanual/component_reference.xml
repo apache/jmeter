@@ -6398,7 +6398,7 @@ Behaviour can be modified with some properties by setting in user.properties:
 <description><p>The HTTP(S) Test Script Recorder allows JMeter to intercept and record your actions while you browse your web application
 with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).<br/>
-Ensure you read this <a href="https://wiki.apache.org/jmeter/TestRecording210">wiki page</a> to setup correctly JMeter.
+Ensure you read this <a href="https://cwiki.apache.org/confluence/display/JMETER/TestRecording210">wiki page</a> to setup correctly JMeter.
 </p>
 
 <p>To use the recorder, <i>add</i> the HTTP(S) Test Script Recorder element.

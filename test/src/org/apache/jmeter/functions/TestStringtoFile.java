@@ -29,7 +29,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -70,14 +69,11 @@ public class TestStringtoFile extends JMeterTestCase {
 
     @Test
     public void testWriteToFile() throws Exception {
-        try {
-            function.setParameters(functionParams(FILENAME, STRING_TO_WRITE, "true", ENCODING));
-            String returnValue = function.execute(result, null);
-            Assert.assertTrue("This method 'Stringtofile' should have successfully run",
-                    Boolean.parseBoolean(returnValue));
-        } finally {
-            Files.deleteIfExists(new File(FileServer.resolveBaseRelativeName(FILENAME)).toPath());
-        }
+        File file = tempFolder.newFile();
+        file.deleteOnExit();
+        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", ENCODING));
+        String returnValue = function.execute(result, null);
+        Assert.assertTrue("This method 'Stringtofile' should have successfully run", Boolean.parseBoolean(returnValue));
     }
 
     @Test
@@ -104,26 +100,23 @@ public class TestStringtoFile extends JMeterTestCase {
 
     @Test
     public void testWriteToFileOptParamWayToWriteIsNull() throws Exception {
-        try {
-            function.setParameters(functionParams(FILENAME, STRING_TO_WRITE));
-            String returnValue = function.execute(result, null);
-            Assert.assertTrue("This method 'Stringtofile' should have successfully run with empty append",
-                    Boolean.parseBoolean(returnValue));
-        } finally {
-            Files.deleteIfExists(new File(FileServer.resolveBaseRelativeName(FILENAME)).toPath());
-        }
+        File file = tempFolder.newFile();
+        file.deleteOnExit();
+
+        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE));
+        String returnValue = function.execute(result, null);
+        Assert.assertTrue("This method 'Stringtofile' should have successfully run with empty append",
+                Boolean.parseBoolean(returnValue));
     }
 
     @Test
     public void testWriteToFileOptParamEncodingIsNull() throws Exception {
-        try {
-            function.setParameters(functionParams(FILENAME, STRING_TO_WRITE, "true"));
-            String returnValue = function.execute(result, null);
-            Assert.assertTrue("This method 'Stringtofile' should have successfully run with no charset",
-                    Boolean.parseBoolean(returnValue));
-        } finally {
-            Files.deleteIfExists(new File(FileServer.resolveBaseRelativeName(FILENAME)).toPath());
-        }
+        File file = tempFolder.newFile();
+        file.deleteOnExit();
+        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true"));
+        String returnValue = function.execute(result, null);
+        Assert.assertTrue("This method 'Stringtofile' should have successfully run with no charset",
+                Boolean.parseBoolean(returnValue));
     }
 
     @Test

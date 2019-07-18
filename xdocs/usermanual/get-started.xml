@@ -125,8 +125,8 @@ JMeter because of JRE implementation issues.</p>
 <subsection name="&sect-num;.1.2 Operating Systems" anchor="os">
 <p>JMeter is a 100% Java application and should run correctly on any system
 that has a compliant Java implementation.</p>
-<p>Operating systems tested with JMeter can be viewed on  
-<a href="http://wiki.apache.org/jmeter/JMeterAndOperatingSystemsTested">this page</a>
+<p>Operating systems tested with JMeter can be viewed on
+<a href="https://cwiki.apache.org/confluence/display/JMETER/JMeterAndOperatingSystemsTested">this page</a>
 on JMeter wiki.</p>
 <p>Even if your OS is not listed on the wiki page, JMeter should run on it provided that the JVM is compliant.</p>
 </subsection>
@@ -185,7 +185,7 @@ Make sure the file is a jar file, not a zip.
 <p>
 JMeter now includes the JMS API from Apache Geronimo, so you just need to add the appropriate JMS Client implementation
 jar(s) from the JMS provider. Please refer to their documentation for details.
-There may also be some information on the <a href="http://wiki.apache.org/jmeter/">JMeter Wiki</a>.
+There may also be some information on the <a href="https://cwiki.apache.org/confluence/display/JMETER/Home">JMeter Wiki</a>.
 </p>
 </subsection>
 
