@@ -959,10 +959,11 @@ public class BasicCurlParser {
         if (postdata.contains("@")) {
             String contentFile = null;
             String[] arr = postdata.split("@", 2);
+            String dataToEncode = readFromFile(arr[1]);
             try {
-                contentFile = URLEncoder.encode(readFromFile(arr[1]), StandardCharsets.UTF_8.name());
+                contentFile = URLEncoder.encode(dataToEncode, StandardCharsets.UTF_8.name());
             } catch (UnsupportedEncodingException e) {
-                LOGGER.error("string '{}' cannot be encoded", readFromFile(arr[1]));// NOSONAR
+                LOGGER.error("string '{}' cannot be encoded", dataToEncode);// NOSONAR
             }
             if (!arr[0].isEmpty()) {
                 contentFile = arr[0] + "=" + contentFile;
