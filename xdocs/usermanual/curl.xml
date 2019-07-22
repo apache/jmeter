@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!DOCTYPE document
+[
+<!ENTITY sect-num '24'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+<document id="$Id$" prev="glossary.html" next="history_future.html" >
+
+<properties>
+  <title>User's Manual: Curl</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Curl" anchor="hints">
+<p>This method is to create http requests from curl command. If you want to know more about curl, please click the <a href="https://curl.haxx.se/">
+Curl document</a>. 
+</p>
+<subsection name="&sect-num;.1 How to enter (a) command(s)" anchor="enter_command">
+<p>
+Create a Test Plan From a cURL Command
+</p>
+1. To create an import from a cURL, open the ‘Tools’ menu and click ‘Import from cURL’.
+<figure width="768" height="339" image="curl/choose_curl.png">Figure 1 - The menu where curl is located</figure>
+2.There are two ways to enter the curl command line. Firstly, we can enter it manually. Secondly, we can import a file containing the curl command line. 
+This tool supports input of multiple curl command lines at the same time.
+<figure width="767" height="316" image="curl/enter_command.png">Figure 2.1 - Enter curl command in text panel</figure>
+<figure width="767" height="316" image="curl/enter_command_from_file.png">Figure 2.2 - Enter curl command from file</figure>
+3.Then, click ‘Create HTTP Request’ button and a new HTTP Sample will be added to the Test Plan.
+<figure width="767" height="316" image="curl/result.png">Figure 3 - result of Test Plan</figure>
+</subsection>
+
+<subsection name="&sect-num;.2 Curl options supported" anchor="curl_options">
+
+<p><b>-H, --header&lt;header&gt;</b>:Extra header to use when getting a web page.</p>
+<p><b>-X, --request &lt;command&gt;</b>:Specifies a custom request method to use when communicating with the HTTP server.</p>
+<p><b>--compressed</b>:Request a compressed response using one of the algorithms curl supports, and return the uncompressed document.</p>
+<p><b>-A, --user-agent &lt;agent string &gt;</b>:Specify the User-Agent string to send to the HTTP server.</p>
+<p><b>-b, --cookie &lt;name=data&gt;</b>:Pass the data to the HTTP server as a cookie.</p>
+
+<b>Sends the specified data in a POST request to the HTTP server. If this option is used more than
+ once on the same command line, the data pieces specified will be merged together with a 
+separating "&amp;" character. Thus, using '-d name=daniel -d skill=lousy' would generate a POST
+ chunk that looks like 'name=daniel&amp;skill=lousy'.</b>
+<ul><li>-d,--data &lt;data&gt;  --data-ascii &lt;data&gt;  :use @ to upload the file</li>
+<li> --data-binary &lt;data&gt;  </li><li>--data-raw &lt;data&gt; : This posts data exactly as specified with no extra processing whatsoever.
+If you start the data with the character @, the rest should be a filename. </li>
+<li> --data-urlencode &lt;data&gt; :This posts data, similar to the other --data options with the exception that this performs
+ URL-encoding.</li>
+ <li> --data-raw &lt;data&gt; :This  posts data similarly to --data but without the special interpretation
+of the @ character. </li>
+</ul>
+
+<b>This lets curl emulate a filled-in form in which a user has pressed the submit button.</b>
+<ul><li>-F, --form &lt;name=content&gt; :use @ to upload the file</li>
+<li>--form-string  &lt;name=content&gt;</li>
+</ul>
+<p><b>-u, --user &lt;user:password &gt;</b>:Specify user and password to use for server authentication.</p>
+<p><b>--basic,--digest</b>:Tells curl to use HTTP authentication.</p>
+
+<b>Tells curl to use the specified client certificate file when getting a file with HTTPS</b>
+<ul>
+<li>--cacert &lt;CA certificate&gt;</li>
+<li>--capath  &lt;CA certificate directory&gt;</li>
+<li>--ciphers &lt;list of ciphers&gt; </li>
+<li>--cert-status</li>
+<li>--cert-type &lt;type&gt;</li>
+</ul>
+<p><b>-G, --get</b>:put the post data in the url and use get to replace post.</p>
+<p><b>--no-keepalive</b>:Disables the use of keepalive messages on the TCP connection.</p>
+<p><b>-e, --referer &lt;URL&gt;</b>:Sends the "Referer Page" information to the HTTP server.</p>
+<p><b>-L, --location</b>:If the server reports that the requested page has moved to a different location 
+this option will make curl redo the request on the new place.</p>
+<p><b>-i, --include</b>:Include the HTTP-header in the output.</p>
+<p><b>--connect-timeout &lt;seconds&gt;</b>:Maximum time in seconds that the connection to the server may take.</p>
+<p><b>--keepalive-time &lt;seconds&gt;</b>:This option sets the time a connection needs to remain idle before sending keepalive probes and the time between individual keepalive probes.</p> 
+<p><b>-m, --max-time  &lt;seconds&gt;</b>:Maximum time in seconds that you allow the whole operation to take.</p>
+<p><b>-x, --proxy &lt;[protocol://] [user:password@] proxyhost[:port]&gt; </b>:Use the specified HTTP proxy. If the port number is not specified, it is assumed at port 1080. </p>
+<p><b>-U, --proxy-user  &lt;user:password&gt;</b>:Specify user and password to use for proxy authentication. </p>
+<p><b>-k, --insecure</b>:This option explicitly allows curl to perform "insecure" SSL connections and transfers.</p>
+<p><b>--raw</b>:When used, it disables all internal HTTP decoding of content or transfer encodings and instead makes them passed on unaltered,raw.</p>
+<p><b>-I, --head</b>:Fetch the HTTP-header only. HTTP-servers feature the command HEAD which this uses to get nothing but the header of a document.</p>
+<p><b>--interface &lt;name&gt;</b>:Perform an operation using a specified interface. You can enter interface name, IP address or host name.</p>
+<p><b>--proxy-ntlm/--proxy-negotiate</b>:Tells curl to use HTTP basic/ntlm/Digest authentication when communicating with the given proxy.</p>
+<p><b>--dns-servers &lt;addresses&gt;</b>:Resolve host name over DOH.</p>
+<p><b>--resolve &lt;host:port:address&gt;</b>:Provide a custom address for a specific host and port pair.</p>
+<p><b>--limit-rate &lt;speed&gt;</b>:Specify the maximum transfer rate you want curl to use.</p>
+<p><b>--max-redirs &lt;num&gt;</b>:Set maximum number of redirections which may be followed.</p>
+<p><b>--noproxy &lt;no-proxy-list&gt;</b>:Comma-separated list of hosts which do not use a proxy, if one is specified.</p>
+</subsection>
+
+<subsection name="&sect-num;.3 Warning" anchor="warning">
+<p>
+When the command you entered is ignored or contains warning content, we will display warning in the comment section of Http Request.
+</p>
+<figure width="768" height="339" image="curl/http_request_warning.png">Figure 1 -Warning</figure>
+
+</subsection>
+<subsection name="&sect-num;.4 Examples" anchor="example">
+<p><b>Use cookie :</b>curl -X POST  "https://xxx.com" -b 'username=Tom;password=123456'</p>
+<p><b>Use data :</b>curl -X POST  "https://xxx.com" --data 'fname=a&amp;lname=b'</p>
+<p><b>Use form :</b>curl -X POST  "https://xxx.com" -F 'lname=a'  -F 'fname=b' -F 'c=@C:\Test\test.txt'  </p>
+<p><b>Use proxy :</b>curl 'http://jmeter.apache.org/' -x 'https://aa:bb@example.com:8042'</p>
+<p><b>Use autorization :</b>curl "https://xxx.com" -u 'user:passwd' --basic</p>
+<p><b>Use DNS :</b>curl "https://xxx.com" --dns-servers '0.0.0.0,1.1.1.1'</p>
+</subsection>
+</section>
+
+</body>
+</document>

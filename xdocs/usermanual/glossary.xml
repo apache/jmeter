@@ -19,7 +19,7 @@
 [
 <!ENTITY sect-num '23'>
 ]>
-<document prev="hints_and_tips.html" next="history_future.html" id="$Id$">
+<document prev="hints_and_tips.html" next="curl.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Glossary</title>

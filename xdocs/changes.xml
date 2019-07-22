@@ -125,6 +125,8 @@ to view the last major behaviors with the version 5.1.1.
     <li>Updated to httpclient/httpmime 4.5.8 (from 4.5.7)</li>
     <li><bug>63396</bug>JSR223 Test Elements: Description of Parameters is misleading, same for Script</li>
     <li><bug>63480</bug>XPathAssertion and XPathAssertion2: Improve test coverage for input coming from variable. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63452</bug>Tools / Import from cURL: Complete coverage of all command line options that are valid in JMeter use case. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63419</bug>CURL : Add ability to process a set of CURL commands. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
