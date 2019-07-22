@@ -884,11 +884,11 @@ This will not have any impact on existing Test plans.
          <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
          <property name="Entry name" required="Yes">Distinguished name of the object you want to modify, relative 
            to the given DN in the thread bind operation</property>
-         <property name="Modification test" required="Yes">The attribute-value-opCode triples. The opCode can be any
-           valid LDAP operationCode (<code>add</code>, <code>delete</code>/<code>remove</code> or <code>replace</code>).
-           If you don't specify a value with a <code>delete</code> operation,
-           all values of the given attribute will be deleted. If you do specify a value in a <code>delete</code> operation, only
-           the given value will be deleted. If this value is non-existent, the sampler will fail the test.</property>
+         <property name="Modification test" required="Yes">The attribute-value-opCode triples. <br/>
+            The <code>opCode</code> can be any valid LDAP operationCode (<code>add</code>, <code>delete</code>, <code>remove</code> or <code>replace</code>).<br/>
+           If you don't specify a value with a <code>delete</code> operation, all values of the given attribute will be deleted. <br/>
+           If you do specify a value in a <code>delete</code> operation, only the given value will be deleted. <br/>
+           If this value is non-existent, the sampler will fail the test.</property>
        </properties>
      </dd>
      <dt><b>Compare</b></dt>
