@@ -293,11 +293,18 @@ public class DataSourceElement extends AbstractTestElement
 
         if(isPreinit()) {
             // side effect - connection pool init - that is what we want
+            // see also https://commons.apache.org/proper/commons-dbcp/apidocs/org/apache/commons/dbcp2/BasicDataSource.html#setInitialSize-int-
+            // it says: "The pool is initialized the first time one of the following methods is invoked: getConnection, setLogwriter, setLoginTimeout, getLoginTimeout, getLogWriter."
+            // so we get a connection and close it - which releases it back to the pool (but stays open)
             try {
                 dataSource.getConnection().close();
-                log.debug("Preinitializing the connection pool: {}@{}", getDataSourceName(), System.identityHashCode(dataSource));
+                if (log.isDebugEnabled()) {
+                    log.debug("Preinitializing the connection pool: {}@{}", getDataSourceName(), System.identityHashCode(dataSource));
+                }
             } catch (SQLException ex) {
-                log.error("Error preinitializing the connection pool: {}@{}", getDataSourceName(), System.identityHashCode(dataSource), ex);
+                if (log.isErrorEnabled()) {
+                    log.error("Error preinitializing the connection pool: {}@{}", getDataSourceName(), System.identityHashCode(dataSource), ex);
+                }
             }
         }
 
