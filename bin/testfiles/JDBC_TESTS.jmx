@@ -25,6 +25,7 @@
         <stringProp name="transactionIsolation">DEFAULT</stringProp>
         <stringProp name="trimInterval">60000</stringProp>
         <stringProp name="username">SA</stringProp>
+        <boolProp name="preinit">true</boolProp>
       </JDBCDataSource>
       <hashTree/>
       <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group" enabled="true">
@@ -42,6 +43,36 @@
         <stringProp name="ThreadGroup.delay"></stringProp>
       </SetupThreadGroup>
       <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223_CHECK_POOL_PREINIT" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">//dummy sampler, just needed for the assertion</stringProp>
+        </JSR223Sampler>
+        <hashTree>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223_CHECK_POOL_PREINIT_ASSERTION" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+	    <stringProp name="script">
+import groovy.sql.Sql
+
+def url = &apos;jdbc:hsqldb:mem:mymemdb&apos;
+def user = &apos;SA&apos;
+def password = &apos;&apos;
+def driver = &apos;org.hsqldb.jdbcDriver&apos;
+def sql = Sql.newInstance(url, user, password, driver)
+def row = sql.firstRow(&apos;select count(*) from INFORMATION_SCHEMA.system_sessions&apos;) 
+def sessionNum = row[0]
+assert sessionNum == 2
+
+sql.close()
+</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+        </hashTree>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC_DROP_PROCEDURE" enabled="true">
           <stringProp name="dataSource">dbConfig</stringProp>
           <stringProp name="query">drop PROCEDURE new_user IF EXISTS;

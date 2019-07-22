@@ -1,4 +1,5 @@
 label,responseCode,responseMessage,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
+JSR223_CHECK_POOL_PREINIT,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
 JDBC_DROP_PROCEDURE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
 JDBC_DROP_PROCEDURE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
 JDBC_DROP_TABLE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
