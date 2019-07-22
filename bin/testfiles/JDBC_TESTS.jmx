@@ -56,7 +56,7 @@
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="cacheKey">true</stringProp>
-	    <stringProp name="script">
+            <stringProp name="script">
 import groovy.sql.Sql
 
 def url = &apos;jdbc:hsqldb:mem:mymemdb&apos;
@@ -66,7 +66,13 @@ def driver = &apos;org.hsqldb.jdbcDriver&apos;
 def sql = Sql.newInstance(url, user, password, driver)
 def row = sql.firstRow(&apos;select count(*) from INFORMATION_SCHEMA.system_sessions&apos;) 
 def sessionNum = row[0]
-assert sessionNum == 2
+
+try {
+    assert sessionNum == 2
+} catch (Error err) {
+    AssertionResult.setFailure(true)
+    AssertionResult.setFailureMessage(&quot;Got &quot; + sessionNum + &quot; sessions on the database, but expected 2 sessions. (1 preinitialized session from the connection pool, and 1 from the above jdbc call.)&quot;);
+}
 
 sql.close()
 </stringProp>
