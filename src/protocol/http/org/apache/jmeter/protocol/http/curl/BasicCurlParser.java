@@ -142,7 +142,7 @@ public class BasicCurlParser {
         private int limitRate = 0;
         private String noproxy;
         private static final List<String> HEADERS_TO_IGNORE = Arrays.asList("Connection", "Host");// $NON-NLS-1$
-        private final int ONE_KILOBYTE_IN_CPS = 1024;
+        private static final int ONE_KILOBYTE_IN_CPS = 1024;
         public Request() {
             super();
         }
@@ -641,6 +641,7 @@ public class BasicCurlParser {
             CLOptionDescriptor.ARGUMENT_REQUIRED, NOPROXY_OPT,
             "Comma-separated list of hosts which do not use a proxy, if one is specified. ");
 
+    private static final Pattern deleteLinePattern = Pattern.compile("\r|\n|\r\n");
 
     private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[] {
             D_COMPRESSED_OPT,D_HEADER_OPT, D_METHOD_OPT,D_DATA_OPT, D_DATA_ASCII_OPT, D_DATA_URLENCODE_OPT, D_DATA_RAW_OPT, D_DATA_BINARY_OPT,
@@ -655,7 +656,6 @@ public class BasicCurlParser {
     public BasicCurlParser() {
         super();
     }
-    private static Pattern deleteLinePattern = Pattern.compile("\r|\n|\r\n");
     public Request parse(String commandLine) {
         String[] args = translateCommandline(commandLine);
         CLArgsParser parser = new CLArgsParser(args, OPTIONS);
