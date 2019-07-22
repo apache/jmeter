@@ -692,7 +692,7 @@ public class BasicCurlParser {
                     int indexOfEqual = nameAndValue.indexOf('=');
                     String key = nameAndValue.substring(0, indexOfEqual).trim();
                     String value = nameAndValue.substring(indexOfEqual + 1).trim();
-                    if (option.getDescriptor().getName().equals("form-string")) {
+                    if ("form-string".equals(option.getDescriptor().getName())) {
                         request.addFormStringData(key, value);
                     } else {
                         request.addFormData(key, value);
@@ -934,13 +934,13 @@ public class BasicCurlParser {
     * @return the post data
     */
    private String getPostDataByDifferentOption(String postdata, String dataOptionName) {
-       if (dataOptionName.equals("data-urlencode")) {
+       if ("data-urlencode".equals(dataOptionName)) {
            postdata = encodePostdata(postdata);
        } else {
-           if (postdata.charAt(0) == '@' && !dataOptionName.equals("data-raw")) {
+           if (postdata.charAt(0) == '@' && !"data-raw".equals(dataOptionName)) {
                postdata = postdata.substring(1, postdata.length());
                postdata = readFromFile(postdata);
-               if (!dataOptionName.equals("data-binary")) {
+               if (!"data-binary".equals(dataOptionName)) {
                    postdata = deleteLineBreak(postdata);
                }
            }
