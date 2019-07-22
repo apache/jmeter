@@ -99,7 +99,7 @@ public class BasicCurlParser {
     private static final int INSECURE_OPT = 'k';// $NON-NLS-1$
     private static final int RAW_OPT = "raw".hashCode();// $NON-NLS-1$
     private static final int INTERFACE_OPT = "interface".hashCode();// $NON-NLS-1$
-    private static final int RESOLVER_OPT = "resolve".hashCode();// $NON-NLS-1$
+    private static final int DNS_RESOLVER_OPT = "resolve".hashCode();// $NON-NLS-1$
     private static final int LIMIT_RATE_OPT = "limit-rate".hashCode();// $NON-NLS-1$
     private static final int MAX_REDIRS_OPT = "max-redirs".hashCode();// $NON-NLS-1$
     private static final int NOPROXY_OPT = "noproxy".hashCode();// $NON-NLS-1$
@@ -142,7 +142,7 @@ public class BasicCurlParser {
         private int limitRate = 0;
         private String noproxy;
         private static final List<String> HEADERS_TO_IGNORE = Arrays.asList("Connection", "Host");// $NON-NLS-1$
-
+        private final int ONE_KILOBYTE_IN_CPS = 1024;
         public Request() {
             super();
         }
@@ -194,7 +194,7 @@ public class BasicCurlParser {
          * @param value the value of Header
          */
         public void addHeader(String name, String value) {
-            if (name.equalsIgnoreCase("COOKIE")) {
+            if ("COOKIE".equalsIgnoreCase(name)) {
                 this.cookieInHeaders = value;
             } else if (!HEADERS_TO_IGNORE.contains(name)) {
                 headers.put(name, value);
@@ -257,7 +257,10 @@ public class BasicCurlParser {
         }
 
         /**
-         * Tranform the bandwidth to cps value (Character Per Second), cps = bandwidth*1024/8
+         * Tranform the bandwidth to cps value (byte/s), cps =
+         * bandwidth*1024/8, the unit of bandwidth in JMeter is measured in kbit/s. And
+         * the speed in Curl is measured in bytes/second, so the conversion formula is
+         * cps=limitRate*1024
          * @param limitRate the maximum transfer rate
          */
         public void setLimitRate(String limitRate) {
@@ -265,13 +268,13 @@ public class BasicCurlParser {
             int value = Integer.parseInt(limitRate.substring(0, limitRate.length() - 1).toLowerCase());
             switch (unit) {
             case "k":
-                this.limitRate = value * 1024 / 8;
+                this.limitRate = value * ONE_KILOBYTE_IN_CPS;
                 break;
             case "m":
-                this.limitRate = value * 1024 / 8 * 1000;
+                this.limitRate = value * ONE_KILOBYTE_IN_CPS * 1000;
                 break;
             case "g":
-                this.limitRate = value * 1024 / 8 * 1000000;
+                this.limitRate = value * ONE_KILOBYTE_IN_CPS * 1000000;
                 break;
             default:
                 break;
@@ -626,8 +629,8 @@ public class BasicCurlParser {
                     + "and instead makes them passed on unaltered raw. ");
     private static final CLOptionDescriptor D_INTERFACE_OPT = new CLOptionDescriptor("interface",
             CLOptionDescriptor.ARGUMENT_REQUIRED, INTERFACE_OPT, "Perform an operation using a specified interface");
-    private static final CLOptionDescriptor D_RESOLVER_OPT = new CLOptionDescriptor("resolve",
-            CLOptionDescriptor.ARGUMENT_REQUIRED, RESOLVER_OPT,
+    private static final CLOptionDescriptor D_DNS_RESOLVER_OPT = new CLOptionDescriptor("resolve",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, DNS_RESOLVER_OPT,
             "Provide a custom address for a specific host and port pair");
     private static final CLOptionDescriptor D_LIMIT_RATE_OPT = new CLOptionDescriptor("limit-rate",
             CLOptionDescriptor.ARGUMENT_REQUIRED, LIMIT_RATE_OPT,
@@ -646,7 +649,7 @@ public class BasicCurlParser {
             D_CIPHERS_OPT, D_KEY_OPT, D_KEY_TYPE_OPT, D_GET_OPT, D_DNS_SERVERS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT,
             D_LOCATION_OPT, D_INCLUDE_OPT, D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT,
             D_PROXY_NEGOTIATE_OPT, D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_RAW_OPT,
-            D_INTERFACE_OPT, D_RESOLVER_OPT, D_LIMIT_RATE_OPT, D_MAX_REDIRS ,D_NOPROXY
+            D_INTERFACE_OPT, D_DNS_RESOLVER_OPT, D_LIMIT_RATE_OPT, D_MAX_REDIRS ,D_NOPROXY
     };
 
     public BasicCurlParser() {
@@ -741,7 +744,7 @@ public class BasicCurlParser {
                 } else if (option.getDescriptor().getId() == INTERFACE_OPT) {
                     String value = option.getArgument(0);
                     request.setInterfaceName(value);
-                } else if (option.getDescriptor().getId() == RESOLVER_OPT) {
+                } else if (option.getDescriptor().getId() == DNS_RESOLVER_OPT) {
                     String value = option.getArgument(0);
                     request.setDnsResolver(value);
                 } else if (option.getDescriptor().getId() == LIMIT_RATE_OPT) {

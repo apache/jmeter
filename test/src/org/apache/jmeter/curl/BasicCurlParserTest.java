@@ -534,8 +534,8 @@ public class BasicCurlParserTest {
                  request.getCookies("https://api.imgur.com/3/upload").contains(c1));
         Assert.assertTrue("With method 'parser', the cookie should be set in CookieManager",
                 request.getCookies("https://api.imgur.com/3/upload").contains(c2));
-        Assert.assertTrue("With method 'parser', the cookie should be set in CookieManager",
-                request.getCookies("https://api.imgur.com/3/upload").size()==2);
+        Assert.assertEquals("With method 'parser', the cookie should be set in CookieManager", 2,
+                request.getCookies("https://api.imgur.com/3/upload").size());
     }
     @Test
     public void testCookieFromFile() throws IOException {
@@ -558,7 +558,7 @@ public class BasicCurlParserTest {
         c1.setValue("b");
         c1.setPath("/");
         Assert.assertEquals("Just static cookie in header can be added in CookieManager", c1, cookies.get(0));
-        Assert.assertTrue("Just static cookie in header can be added in CookieManager", cookies.size() == 1);
+        Assert.assertEquals("Just static cookie in header can be added in CookieManager", 1, cookies.size());
     }
     @Test
     public void testIgnoreOptions() {
@@ -600,13 +600,13 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --limit-rate '1g'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Assert.assertTrue("The limit rate should be 128000000",request.getLimitRate()==128000000);
+        Assert.assertEquals("The limit rate should be 1024000000",1024000000,request.getLimitRate());
         cmdLine = "curl 'http://jmeter.apache.org/' --limit-rate '171k'";
         request = basicCurlParser.parse(cmdLine);
-        Assert.assertTrue("The limit rate should be 21888",request.getLimitRate()==21888);
+        Assert.assertEquals("The limit rate should be 175104",175104,request.getLimitRate());
         cmdLine = "curl 'http://jmeter.apache.org/' --limit-rate '54M'";
         request = basicCurlParser.parse(cmdLine);
-        Assert.assertTrue("The limit rate should be 6912000",request.getLimitRate()==6912000);
+        Assert.assertEquals("The limit rate should be 55296000",55296000,request.getLimitRate());
     }
 
     @Test
