@@ -89,6 +89,7 @@ to view the last major behaviors with the version 5.1.1.
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>63406</bug>JDBC connection configuration: new option for pre-initialize to initialize the connection pool. Contributed by Franz Schwab (franz.schwab@exasol.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -213,6 +214,7 @@ to view the last major behaviors with the version 5.1.1.
   <li>Ori Marko (orimarko at gmail.com)</li>
   <li>Sun Tao (buzzerrookie at hotmail.com)</li>
   <li>John Bergqvist (John.Bergqvist at diffblue.com)</li>
+  <li>Franz Schwab (franz.schwab@exasol.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
