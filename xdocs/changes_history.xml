@@ -5330,7 +5330,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
     <li>usage of Compilable interface when available to boost CPU usage</li>
     <li>caching of Compilation when scripts are used as Files</li>
 </ul>
-See <a href="http://wiki.apache.org/jmeter/JMeterPerformance">JMeter Performances across versions</a>
+See <a href="https://cwiki.apache.org/confluence/display/JMETER/JMeterPerformance">JMeter Performances across versions</a>
 </p>
 
 <h4>OS Process Sampler</h4>

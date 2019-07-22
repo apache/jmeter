@@ -153,6 +153,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
     private static final String SEMI_COLON = ";"; // $NON-NLS-1$
 
+    private static final String RETURN_CODE_PREFIX = "LDAP: error code";
+    private static final int ERROR_MSG_START_INDEX = "LDAP: error code 00 -".length();
 
     private static final ConcurrentHashMap<String, DirContext> ldapContexts =
             new ConcurrentHashMap<>();
@@ -530,10 +532,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      **************************************************************************/
     private ModificationItem[] getUserModAttributes() {
         ModificationItem[] mods = new ModificationItem[getLDAPArguments().getArguments().size()];
-        BasicAttribute attr;
         PropertyIterator iter = getLDAPArguments().iterator();
         int count = 0;
         while (iter.hasNext()) {
+            BasicAttribute attr;
             LDAPArgument item = (LDAPArgument) iter.next().getObjectValue();
             if ((item.getValue()).length()==0) {
                 attr = new BasicAttribute(item.getName());
@@ -546,11 +548,11 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 mods[count++] = new ModificationItem(DirContext.ADD_ATTRIBUTE, attr);
             } else if ("delete".equals(opcode) // $NON-NLS-1$
                    ||  "remove".equals(opcode)) { // $NON-NLS-1$
-                    mods[count++] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attr);
+                mods[count++] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attr);
             } else if("replace".equals(opcode)) { // $NON-NLS-1$
-                    mods[count++] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
+                mods[count++] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
             } else {
-                    log.warn("Invalid opCode: {}", opcode);
+                log.warn("Invalid opCode: {}", opcode);
             }
         }
         return mods;
@@ -621,11 +623,13 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      *
      **************************************************************************/
     private void addTest(DirContext dirContext, SampleResult res) throws NamingException {
+        DirContext ctx = null;
         try {
             res.sampleStart();
-            DirContext ctx = LdapExtClient.createTest(dirContext, getUserAttributes(), getBaseEntryDN());
-            ctx.close(); // the createTest() method creates an extra context which needs to be closed
+            ctx = LdapExtClient.createTest(dirContext, getUserAttributes(), getBaseEntryDN());
         } finally {
+            // the createTest() method creates an extra context which needs to be closed
+            LdapExtClient.disconnect(ctx);
             res.sampleEnd();
         }
     }
@@ -664,8 +668,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     private void bindOp(SampleResult res) throws NamingException {
         DirContext ctx = ldapContexts.remove(getThreadName());
         if (ctx != null) {
-            log.warn("Closing previous context for thread: " + getThreadName());
-            ctx.close();
+            if(log.isWarnEnabled()) {
+                log.warn("Closing previous context for thread: {}", getThreadName());
+            }
+            LdapExtClient.disconnect(ctx);
         }
         try {
             res.sampleStart();
@@ -843,20 +849,20 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             }
 
         } catch (NamingException ex) {
-            // TODO: tidy this up
             String returnData = ex.toString();
-            final int indexOfLDAPErrCode = returnData.indexOf("LDAP: error code");
+            final int indexOfLDAPErrCode = returnData.indexOf(RETURN_CODE_PREFIX);
             if (indexOfLDAPErrCode >= 0) {
-                // FIXME What is 21 ?
-                res.setResponseMessage(returnData.substring(indexOfLDAPErrCode + 21, returnData
-                        .indexOf(']'))); // $NON-NLS-1$
-                // 17 is "LDAP: error code".length
-                // Code is on 2 characters ?
-                res.setResponseCode(returnData.substring(indexOfLDAPErrCode + 17, indexOfLDAPErrCode + 19));
+                res.setResponseCode(returnData.substring(indexOfLDAPErrCode + RETURN_CODE_PREFIX.length(), indexOfLDAPErrCode + 19));
+                res.setResponseMessage(returnData.substring(indexOfLDAPErrCode + ERROR_MSG_START_INDEX, returnData.indexOf(']'))); // $NON-NLS-1$
             } else {
                 res.setResponseMessage(returnData);
                 res.setResponseCode("800"); // $NON-NLS-1$
             }
+            isSuccessful = false;
+        }  catch (Exception ex) {
+            String returnData = ex.toString();
+            res.setResponseCode("500");
+            res.setResponseMessage(returnData); // $NON-NLS-1$
             isSuccessful = false;
         } finally {
             xmlBuffer.closeTag("operation"); // $NON-NLS-1$
@@ -1046,7 +1052,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         for (Map.Entry<String, DirContext> entry : ldapContexts.entrySet()) {
             DirContext dc = entry.getValue();
             try {
-                log.warn("Tidying old Context for thread: " + entry.getKey());
+                if (log.isWarnEnabled()) {
+                    log.warn("Tidying old Context for thread: {}", entry.getKey());
+                }
                 dc.close();
             } catch (NamingException ignored) {
                 // ignored

@@ -679,8 +679,8 @@ public class XPathUtil {
     * @param xPathQuery XPath Query
     * @param namespaces Space separated set of prefix=namespace
     * @param isNegated invert result
-    * @throws SaxonApiException
-    * @throws FactoryConfigurationError
+    * @throws SaxonApiException when the parser has problems with the given xml or xpath query
+    * @throws FactoryConfigurationError when the parser can not be instantiated
     */
    public static void computeAssertionResultUsingSaxon(AssertionResult result, String xmlFile, String xPathQuery,
            String namespaces, Boolean isNegated) throws SaxonApiException, FactoryConfigurationError {
@@ -695,7 +695,7 @@ public class XPathUtil {
            return;
        }
        try (StringReader reader = new StringReader(xmlFile)) {
-           // We could instanciate it once but might trigger issues in the future
+           // We could instantiate it once but might trigger issues in the future
            // Sharing of a DocumentBuilder across multiple threads is not recommended.
            // However, in the current implementation sharing a DocumentBuilder (once
            // initialized)

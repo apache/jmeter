@@ -40,8 +40,8 @@
         <item name="Properties Reference"         href="/usermanual/properties_reference.html"/>
         <item name="Change History"              href="/changes_history.html"/>
         <item name="Javadocs"             href="/api/index.html"/>
-        <item name="JMeter Wiki"         href="https://wiki.apache.org/jmeter"/>
-         <item name="FAQ (Wiki)"             href="https://wiki.apache.org/jmeter/JMeterFAQ"/>
+        <item name="JMeter Wiki"         href="https://cwiki.apache.org/confluence/display/JMETER/Home"/>
+         <item name="FAQ (Wiki)"             href="https://cwiki.apache.org/confluence/display/JMETER/JMeterFAQ"/>
      </menu>
      <menu name="Tutorials">
         <item name="Distributed Testing" href="/usermanual/jmeter_distributed_testing_step_by_step.html"/>
@@ -57,7 +57,7 @@
         <item name="Source Repositories"    href="/svnindex.html"/>
         <item name="Building and Contributing"    href="/building.html"/>
         <item name="Project info at Apache" href="https://projects.apache.org/project.html?jmeter"/>
-        <item name="Contributors"        href="https://wiki.apache.org/jmeter/JMeterCommitters"/>
+        <item name="Contributors"        href="https://cwiki.apache.org/confluence/display/JMETER/JMeterCommitters"/>
      </menu>
      <menu name="Foundation">
         <item name="The Apache Software Foundation (ASF)" href="https://www.apache.org/"/>
