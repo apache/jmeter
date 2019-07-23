@@ -76,6 +76,7 @@ public class StringToFile extends AbstractFunction {
     private boolean writeToFile() throws IOException {
         String fileName = ((CompoundVariable) values[0]).execute().trim();
         String content = ((CompoundVariable) values[1]).execute();
+        content = setLineSeparatorByDifferentSystems(content);    
         boolean append = true;
         if (values.length >= 3) {
             append = Boolean.parseBoolean(((CompoundVariable) values[2]).execute().toLowerCase().trim());
@@ -119,6 +120,18 @@ public class StringToFile extends AbstractFunction {
         }
         return true;
     }
+
+	private String setLineSeparatorByDifferentSystems(String content) {
+		String lineSeparator = System.lineSeparator();
+        if ("\r\n".equals(lineSeparator)) {
+        content = content.replaceAll("\\\\r\\\\n", System.lineSeparator());
+        } else if ("\n".equals(lineSeparator)) {
+        content = content.replaceAll("\\\\n", System.lineSeparator());
+        }else if ("\r".equals(lineSeparator)){
+        content = content.replaceAll("\\\\r", System.lineSeparator());
+        }
+		return content;
+	}
 
     /** {@inheritDoc} */
     @Override
