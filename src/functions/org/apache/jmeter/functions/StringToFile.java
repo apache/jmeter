@@ -91,7 +91,7 @@ public class StringToFile extends AbstractFunction {
         }
         if (addLineSeparator) {
             content=content+System.lineSeparator();
-        } 
+        }
         content = content.replaceAll("\\\\n", System.lineSeparator());
         Charset charset = StandardCharsets.UTF_8;
         if (values.length >= 5) {
