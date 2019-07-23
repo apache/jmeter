@@ -42,10 +42,7 @@ import org.slf4j.LoggerFactory;
 /**
  * FileToString Function to read a complete file into a String.
  *
- * Parameters:
- * - file name
- * - append (true/false)
- * - file encoding (optional)
+ * Parameters: - file name - append (true/false) - file encoding (optional)
  *
  * Returns: true if ok , false if an error occured
  *
@@ -60,6 +57,7 @@ public class StringToFile extends AbstractFunction {
         desc.add(JMeterUtils.getResString("string_to_file_pathname"));
         desc.add(JMeterUtils.getResString("string_to_file_content"));//$NON-NLS-1$
         desc.add(JMeterUtils.getResString("string_to_file_way_to_write"));//$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("string_to_file_linebreak"));//$NON-NLS-1$
         desc.add(JMeterUtils.getResString("string_to_file_encoding"));//$NON-NLS-1$
     }
     private Object[] values;
@@ -70,31 +68,40 @@ public class StringToFile extends AbstractFunction {
 
     /**
      * Write to file
+     * 
      * @return boolean true if success , false otherwise
      * @throws IOException
      */
     private boolean writeToFile() throws IOException {
         String fileName = ((CompoundVariable) values[0]).execute().trim();
         String content = ((CompoundVariable) values[1]).execute();
-        content = setLineSeparatorByDifferentSystems(content);    
         boolean append = true;
         if (values.length >= 3) {
-            append = Boolean.parseBoolean(((CompoundVariable) values[2]).execute().toLowerCase().trim());
+            String appendString = ((CompoundVariable) values[2]).execute().toLowerCase().trim();
+            if (!appendString.isEmpty()) {
+                append = Boolean.parseBoolean(appendString);
+            }
         }
+        boolean isLineSperatorWorks = true;
+        if (values.length >= 4) {
+            String addLineBreakString = ((CompoundVariable) values[3]).execute().toLowerCase().trim();
+            if (!addLineBreakString.isEmpty()) {
+                isLineSperatorWorks = Boolean.parseBoolean(addLineBreakString);
+            }
+        }
+        content = (isLineSperatorWorks ? content : setLineSeparatorByDifferentSystems(content));
         Charset charset = StandardCharsets.UTF_8;
-        if (values.length == 4) {
-            String charsetParamValue = ((CompoundVariable) values[3]).execute();
+        if (values.length >= 5) {
+            String charsetParamValue = ((CompoundVariable) values[4]).execute();
             if (StringUtils.isNotEmpty(charsetParamValue)) {
                 charset = Charset.forName(charsetParamValue);
             }
         }
-
         if (fileName.isEmpty()) {
             log.error("File name '{}' is empty", fileName);
             return false;
         }
         log.debug("Writing {} to file {} with charset {} and append {}", content, fileName, charset, append);
-
         Lock localLock = new ReentrantLock();
         Lock lock = lockMap.putIfAbsent(fileName, localLock);
         try {
@@ -121,17 +128,17 @@ public class StringToFile extends AbstractFunction {
         return true;
     }
 
-	private String setLineSeparatorByDifferentSystems(String content) {
-		String lineSeparator = System.lineSeparator();
+    private String setLineSeparatorByDifferentSystems(String content) {
+        String lineSeparator = System.lineSeparator();
         if ("\r\n".equals(lineSeparator)) {
-        content = content.replaceAll("\\\\r\\\\n", System.lineSeparator());
+            content = content.replaceAll("\\\\r\\\\n", System.lineSeparator());
         } else if ("\n".equals(lineSeparator)) {
-        content = content.replaceAll("\\\\n", System.lineSeparator());
-        }else if ("\r".equals(lineSeparator)){
-        content = content.replaceAll("\\\\r", System.lineSeparator());
+            content = content.replaceAll("\\\\n", System.lineSeparator());
+        } else if ("\r".equals(lineSeparator)) {
+            content = content.replaceAll("\\\\r", System.lineSeparator());
         }
-		return content;
-	}
+        return content;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -155,7 +162,7 @@ public class StringToFile extends AbstractFunction {
     /** {@inheritDoc} */
     @Override
     public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
-        checkParameterCount(parameters, 2, 4);
+        checkParameterCount(parameters, 2, 5);
         values = parameters.toArray();
     }
 

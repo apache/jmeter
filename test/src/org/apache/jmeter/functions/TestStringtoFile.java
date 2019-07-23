@@ -49,7 +49,6 @@ public class TestStringtoFile extends JMeterTestCase {
     private static final String FILENAME = "test.txt";
     private static final String STRING_TO_WRITE = "test";
     private static final String ENCODING = StandardCharsets.UTF_8.toString();
-
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
@@ -65,13 +64,13 @@ public class TestStringtoFile extends JMeterTestCase {
 
     @Test
     public void testParameterCount() throws Exception {
-        checkInvalidParameterCounts(function, 2, 4);
+        checkInvalidParameterCounts(function, 2, 5);
     }
 
     @Test
     public void testWriteToFile() throws Exception {
         try {
-            function.setParameters(functionParams(FILENAME, STRING_TO_WRITE, "true", ENCODING));
+            function.setParameters(functionParams(FILENAME, STRING_TO_WRITE, "", "true", ENCODING));
             String returnValue = function.execute(result, null);
             Assert.assertTrue("This method 'Stringtofile' should have successfully run",
                     Boolean.parseBoolean(returnValue));
@@ -85,7 +84,7 @@ public class TestStringtoFile extends JMeterTestCase {
         File dir = tempFolder.newFolder();
         Files.delete(dir.toPath());
         String pathname = Paths.get(dir.getAbsolutePath(), FILENAME).toString();
-        function.setParameters(functionParams(pathname, STRING_TO_WRITE, "true", ENCODING));
+        function.setParameters(functionParams(pathname, STRING_TO_WRITE, "", "true", ENCODING));
         String returnValue = function.execute(result, null);
         Assert.assertFalse("This method 'Stringtofile' should fail to run since directory does not exist",
                 Boolean.parseBoolean(returnValue));
@@ -96,7 +95,7 @@ public class TestStringtoFile extends JMeterTestCase {
         File dir = tempFolder.newFolder();
         dir.deleteOnExit();
         String pathname = Paths.get(dir.getAbsolutePath(), FILENAME).toString();
-        function.setParameters(functionParams(pathname, STRING_TO_WRITE, "true", ENCODING));
+        function.setParameters(functionParams(pathname, STRING_TO_WRITE, "", "true", ENCODING));
         String returnValue = function.execute(result, null);
         Assert.assertTrue("This method 'Stringtofile' should have successfully run if parent directory already exists",
                 Boolean.parseBoolean(returnValue));
@@ -117,7 +116,7 @@ public class TestStringtoFile extends JMeterTestCase {
     @Test
     public void testWriteToFileOptParamEncodingIsNull() throws Exception {
         try {
-            function.setParameters(functionParams(FILENAME, STRING_TO_WRITE, "true"));
+            function.setParameters(functionParams(FILENAME, STRING_TO_WRITE, "", "true"));
             String returnValue = function.execute(result, null);
             Assert.assertTrue("This method 'Stringtofile' should have successfully run with no charset",
                     Boolean.parseBoolean(returnValue));
@@ -130,7 +129,7 @@ public class TestStringtoFile extends JMeterTestCase {
     public void testWriteToFileEncodingNotSupported() throws Exception {
         File file = tempFolder.newFile();
         file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", "UTF-20"));
+        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", "true", "88"));
         String returnValue = function.execute(result, null);
         Assert.assertFalse("This method 'Stringtofile' should have failed to run with wrong charset",
                 Boolean.parseBoolean(returnValue));
@@ -140,7 +139,7 @@ public class TestStringtoFile extends JMeterTestCase {
     public void testWriteToFileEncodingNotLegal() throws Exception {
         File file = tempFolder.newFile();
         file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", "UTFéé"));
+        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", "true", "UTFéé"));
         String returnValue = function.execute(result, null);
         Assert.assertFalse("This method 'Stringtofile' should have failed to run with illegal chars in charset",
                 Boolean.parseBoolean(returnValue));
@@ -159,16 +158,17 @@ public class TestStringtoFile extends JMeterTestCase {
 
     @Test
     public void testWriteToFileRequiredFilePathIsNull() throws Exception {
-        function.setParameters(functionParams(null, STRING_TO_WRITE, "true", ENCODING));
+        function.setParameters(functionParams(null, STRING_TO_WRITE, "", "true", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertFalse("This method 'Stringtofile' should fail to run with null file", Boolean.parseBoolean(returnValue));
+        Assert.assertFalse("This method 'Stringtofile' should fail to run with null file",
+                Boolean.parseBoolean(returnValue));
     }
 
     @Test
     public void testWriteToFileRequiredStringIsNull() throws Exception {
         File file = tempFolder.newFile();
         file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), "", "true", ENCODING));
+        function.setParameters(functionParams(file.getAbsolutePath(), "", "", ENCODING));
         String returnValue = function.execute(result, null);
         Assert.assertTrue("This method 'Stringtofile' should succeed with empty String to write",
                 Boolean.parseBoolean(returnValue));
@@ -178,10 +178,9 @@ public class TestStringtoFile extends JMeterTestCase {
     public void testOverwrite() throws Exception {
         File file = tempFolder.newFile();
         file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "false", ENCODING));
+        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "", "", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should have successfully run",
-                Boolean.parseBoolean(returnValue));
+        Assert.assertTrue("This method 'Stringtofile' should have successfully run", Boolean.parseBoolean(returnValue));
         String res = FileUtils.readFileToString(file, ENCODING).trim();
         Assert.assertEquals("The string should be 'test'", "test", res);
     }
@@ -190,7 +189,7 @@ public class TestStringtoFile extends JMeterTestCase {
     public void testAppend() throws Exception {
         File file = tempFolder.newFile();
         file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", ENCODING));
+        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "", "true", ENCODING));
         Assert.assertTrue("First call to 'Stringtofile' should succeed",
                 Boolean.parseBoolean(function.execute(result, null)));
         Assert.assertTrue("Second call to 'Stringtofile' should succeed",
@@ -200,16 +199,29 @@ public class TestStringtoFile extends JMeterTestCase {
     }
 
     private Collection<CompoundVariable> functionParams(String... args) {
-        return Arrays.asList(args).stream()
-                .map(CompoundVariable::new)
-                .collect(Collectors.toList());
+        return Arrays.asList(args).stream().map(CompoundVariable::new).collect(Collectors.toList());
     }
 
     @Test
     public void testDescription() {
-        Assert.assertEquals("Function 'stringtofile' should have successfully reading the configuration file 'messages.properties'",
-                JMeterUtils.getResString("string_to_file_pathname"),
-                function.getArgumentDesc().get(0));
+        Assert.assertEquals(
+                "Function 'stringtofile' should have successfully reading the configuration file 'messages.properties'",
+                JMeterUtils.getResString("string_to_file_pathname"), function.getArgumentDesc().get(0));
     }
 
+    @Test
+    public void testLineBreak() throws Exception {
+        File file = tempFolder.newFile();
+        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\r\\\\ntest", "false", "true", ENCODING));
+        function.execute();
+        Assert.assertEquals("line break should be saved in file", "test\\r\\ntest",
+                FileUtils.readLines(file, ENCODING).get(0));
+        function.setParameters(
+                functionParams(file.getAbsolutePath(), "test\\\\r\\\\ntest", "false", "false", ENCODING));
+        function.execute();
+        Assert.assertEquals("line break shouldn't be saved in file", FileUtils.readLines(file, ENCODING).get(0),
+                "test");
+        Assert.assertEquals("line break shouldn't be saved in file", FileUtils.readLines(file, ENCODING).get(1),
+                "test");
+    }
 }
