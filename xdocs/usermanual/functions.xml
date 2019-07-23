@@ -1732,8 +1732,8 @@ returns:
     means overwrite.
     </property>
     <property name="Whether to add line break (default true)" required="No">
-    Choose whether line break takes effect. If you want to make line break work,
-    you can insert '\n' in your string, then choose false.
+    Choose whether line break takes effect. 'True' means each time you type a string, it will wrap, 'false' means 
+    Strings will be connected. You can also insert '\n' in your string, strings will wrap too.
     </property>
     <property name="File encoding if not UTF-8" required="No">
     The encoding to be used to write to the file. If not specified, the default encoding is <code>UTF-8</code>.
