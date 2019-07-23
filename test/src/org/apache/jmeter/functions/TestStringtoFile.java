@@ -195,7 +195,7 @@ public class TestStringtoFile extends JMeterTestCase {
         Assert.assertTrue("Second call to 'Stringtofile' should succeed",
                 Boolean.parseBoolean(function.execute(result, null)));
         String res = FileUtils.readFileToString(file, ENCODING).trim();
-        Assert.assertEquals("The string should be 'testtest'", "testtest", res);
+        Assert.assertEquals("The string should be 'test[line break]test'", "test"+System.lineSeparator()+"test", res);
     }
 
     private Collection<CompoundVariable> functionParams(String... args) {
@@ -212,20 +212,29 @@ public class TestStringtoFile extends JMeterTestCase {
     @Test
     public void testLineBreak() throws Exception {
         File file = tempFolder.newFile();
-        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\n", "true", "true", ENCODING));
+        file.deleteOnExit();
+        function.setParameters(functionParams(file.getAbsolutePath(), "test", "true", "true", ENCODING));
         function.execute();
-        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\n", "true", "true", ENCODING));
+        function.setParameters(functionParams(file.getAbsolutePath(), "test", "true", "true", ENCODING));
         function.execute();
-        Assert.assertEquals("line break should be saved in file", "test\\ntest\\n",
-                FileUtils.readLines(file, ENCODING).get(0));
+        String res = FileUtils.readFileToString(file, ENCODING).trim();
+        Assert.assertEquals("line break should be saved in file", "test" + System.lineSeparator() + "test", res);
+        Assert.assertTrue("line break should be saved in file", res.contains(System.lineSeparator()));
         file = tempFolder.newFile();
-        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\n", "true", "false", ENCODING));
+        function.setParameters(functionParams(file.getAbsolutePath(), "test", "true", "false", ENCODING));
         function.execute();
-        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\n", "true", "false", ENCODING));
+        function.setParameters(functionParams(file.getAbsolutePath(), "test", "true", "false", ENCODING));
         function.execute();
-        Assert.assertEquals("line break shouldn't be saved in file", FileUtils.readLines(file, ENCODING).get(0),
-                "test");
-        Assert.assertEquals("line break shouldn't be saved in file", FileUtils.readLines(file, ENCODING).get(1),
-                "test");
+        res = FileUtils.readFileToString(file, ENCODING).trim();
+        Assert.assertEquals("line break shouldn't be saved in file", "testtest", res);
+        Assert.assertFalse("line break shouldn't be saved in file", res.contains(System.lineSeparator()));
+        file = tempFolder.newFile();
+        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\ntest", "true", "false", ENCODING));
+        function.execute();
+        res = FileUtils.readFileToString(file, ENCODING).trim();
+        Assert.assertEquals("When the user type '\n', ine break should be saved in file",
+                "test" + System.lineSeparator() + "test", res);
+        Assert.assertTrue("When the user type '\\n',line break should be saved in file",
+                res.contains(System.lineSeparator()));
     }
 }

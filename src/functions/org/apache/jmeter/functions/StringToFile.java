@@ -89,7 +89,10 @@ public class StringToFile extends AbstractFunction {
                 addLineSeparator = Boolean.parseBoolean(addLineBreakString);
             }
         }
-        content = addLineSeparator ? content : content.replaceAll("\\\\n", System.lineSeparator());
+        if (addLineSeparator) {
+            content=content+System.lineSeparator();
+        } 
+        content = content.replaceAll("\\\\n", System.lineSeparator());
         Charset charset = StandardCharsets.UTF_8;
         if (values.length >= 5) {
             String charsetParamValue = ((CompoundVariable) values[4]).execute();
