@@ -114,6 +114,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     public static final String IMPORT_CURL = "import_curl";
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
     private static final String TYPE_FORM = ";type=";
+    private static final String CERT = "cert";
     /** A panel allowing results to be saved. */
     private FilePanel filePanel = null;
     static {
@@ -177,11 +178,10 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
 
     private DNSCacheManager findNodeOfTypeDnsCacheManagerByType(boolean isCustom) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        DNSCacheManager dnsCacheManager=new DNSCacheManager();
         List<JMeterTreeNode> res = treeModel.getNodesOfType(DNSCacheManager.class);
         for (JMeterTreeNode jm : res) {
-            dnsCacheManager = (DNSCacheManager) jm.getTestElement();
-            if (dnsCacheManager.isCustomResolver()==isCustom) {
+            DNSCacheManager dnsCacheManager = (DNSCacheManager) jm.getTestElement();
+            if (dnsCacheManager.isCustomResolver() == isCustom) {
                 return dnsCacheManager;
             }
         }
@@ -253,7 +253,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         HTTPSamplerProxy httpSampler = createSampler(request,commentText);
         HashTree samplerHT = parentHT.add(httpSampler);
         samplerHT.add(httpSampler.getHeaderManager());
-        if (request.getCaCert().equals("cert")) {
+        if (CERT.equals(request.getCaCert())) {
             samplerHT.add(httpSampler.getKeystoreConfig());
         }
         return httpSampler;
@@ -299,7 +299,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             setFormData(request, httpSampler);
             httpSampler.setDoMultipart(true);
         }
-        if (request.getCaCert().equals("cert")) {
+        if (CERT.equals(request.getCaCert())) {
             KeystoreConfig keystoreConfig = createKeystoreConfiguration();
             httpSampler.addTestElement(keystoreConfig);
         }
@@ -372,7 +372,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 try {
                     cookieManager.addFile(pathfileCookie);
                 } catch (IOException e) {
-                    LOGGER.error("Failed to read from File {}", pathfileCookie);
+                    LOGGER.error("Failed to read from File {}", pathfileCookie, e);
                     throw new IllegalArgumentException("Failed to read from File " + pathfileCookie);
                 }
             } else {
@@ -487,7 +487,9 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         dnsCacheManager.getHosts().clear();
         String[]resolveParameters=request.getDnsResolver().split(":");
         String port=resolveParameters[1];
-        if(!port.equals("443")&&!port.equals("80")&&!port.equals("*")) {
+        if (!"443".equals(port)
+                && !"80".equals(port)
+                && !"*".equals(port)) {
             dnsCacheManager.setProperty(TestElement.COMMENTS,
                     "Custom DNS resolver doesn't support port "+port);
         }
@@ -531,11 +533,11 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         for (Map.Entry<String, String> entry : request.getFormData().entrySet()) {
             String formName = entry.getKey();
             String formValue = entry.getValue();
-            String contentType = "";
-            boolean isContainsFile = formValue.substring(0, 1).equals("@");
+            boolean isContainsFile = "@".equals(formValue.substring(0, 1));
             boolean isContainsContentType = formValue.toLowerCase().contains(TYPE_FORM);
             if (isContainsFile) {
                 formValue = formValue.substring(1, formValue.length());
+                String contentType;
                 if (isContainsContentType) {
                     String[] formValueWithType = formValue.split(TYPE_FORM);
                     formValue = formValueWithType[0];
@@ -548,7 +550,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 if (isContainsContentType) {
                     String[] formValueWithType = formValue.split(TYPE_FORM);
                     formValue = formValueWithType[0];
-                    contentType = formValueWithType[1];
+                    String contentType = formValueWithType[1];
                     httpSampler.addNonEncodedArgument(formName, formValue, "", contentType);
                 } else {
                     httpSampler.addNonEncodedArgument(formName, formValue, "");
@@ -657,6 +659,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                     }
                 }
             } catch (Exception ex) {
+                LOGGER.error("Error creating test plan from cURL command list:{}", commandsList, ex);
                 statusText.setText(
                         MessageFormat.format(JMeterUtils.getResString("curl_create_failure"), ex.getMessage()));
                 statusText.setForeground(Color.RED);
@@ -749,7 +752,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 KeystoreConfig keystoreConfig = sampler.getKeystoreConfig();
                 final JMeterTreeNode newNode = treeModel.addComponent(sampler, currentNode);
                 treeModel.addComponent(headerManager, newNode);
-                if (request.getCaCert().equals("cert")) {
+                if (CERT.equals(request.getCaCert())) {
                     treeModel.addComponent(keystoreConfig, newNode);
                 }
                 if (canAddAuthManagerInHttpRequest) {

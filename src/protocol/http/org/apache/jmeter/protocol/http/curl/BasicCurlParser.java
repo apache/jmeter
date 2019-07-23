@@ -882,10 +882,11 @@ public class BasicCurlParser {
     * Set the parameters of proxy server in http request advanced
     *
     * @param request         http request
-    * @param proxyServerParameters the parameters of proxy server
+    * @param originalProxyServerParameters the parameters of proxy server
     *
     */
-   private void setProxyServer(Request request, String proxyServerParameters) {
+   private void setProxyServer(Request request, String originalProxyServerParameters) {
+       String proxyServerParameters = originalProxyServerParameters;
        if (!proxyServerParameters.contains("://")) {
            proxyServerParameters = "http://" + proxyServerParameters;
        }
@@ -907,8 +908,7 @@ public class BasicCurlParser {
                request.setProxyServer("port", "1080");
            }
        } catch (URISyntaxException e) {
-           LOGGER.error("string '{}' cannot be converted to a URL", proxyServerParameters);
-           throw new IllegalArgumentException(proxyServerParameters + " cannot be converted to a URL");
+           throw new IllegalArgumentException(proxyServerParameters + " cannot be converted to a URL", e);
        }
    }
 
@@ -929,11 +929,12 @@ public class BasicCurlParser {
    /**
     * Get post data by different type of data option
     *
-    * @param postdata       the post data
+    * @param originalPostdata the post data
     * @param dataOptionName the different option of "--data"
     * @return the post data
     */
-   private String getPostDataByDifferentOption(String postdata, String dataOptionName) {
+   private String getPostDataByDifferentOption(final String originalPostdata, String dataOptionName) {
+       String postdata = originalPostdata;
        if ("data-urlencode".equals(dataOptionName)) {
            postdata = encodePostdata(postdata);
        } else {
@@ -963,7 +964,7 @@ public class BasicCurlParser {
             try {
                 contentFile = URLEncoder.encode(dataToEncode, StandardCharsets.UTF_8.name());
             } catch (UnsupportedEncodingException e) {
-                LOGGER.error("string '{}' cannot be encoded", dataToEncode);// NOSONAR
+                throw new IllegalArgumentException(dataToEncode + " cannot be encoded", e);
             }
             if (!arr[0].isEmpty()) {
                 contentFile = arr[0] + "=" + contentFile;
@@ -974,8 +975,7 @@ public class BasicCurlParser {
                 try {
                     return URLEncoder.encode(postdata, StandardCharsets.UTF_8.name());
                 } catch (UnsupportedEncodingException e) {
-                    LOGGER.error("string '{}' cannot be encoded", postdata);
-                    throw new IllegalArgumentException(postdata + " cannot be encoded");
+                    throw new IllegalArgumentException(postdata + " cannot be encoded", e);
                 }
             } else {
                 int index = postdata.indexOf('=');
@@ -983,9 +983,8 @@ public class BasicCurlParser {
                     return postdata.substring(0, index + 1) + URLEncoder
                             .encode(postdata.substring(index + 1, postdata.length()), StandardCharsets.UTF_8.name());
                 } catch (UnsupportedEncodingException e) {
-                    LOGGER.error("string '{}' cannot be encoded", postdata.substring(index + 1, postdata.length()));
                     throw new IllegalArgumentException(
-                            postdata.substring(index + 1, postdata.length()) + " cannot be encoded");
+                            postdata.substring(index + 1, postdata.length()) + " cannot be encoded", e);
                 }
             }
         }
@@ -998,19 +997,17 @@ public class BasicCurlParser {
     * @return the content of file
     */
    private static String readFromFile(String filePath) {
-       String content = "";
        File file = new File(filePath.trim());
        if (file.isFile() && file.exists()) {
            try {
-               content = FileUtils.readFileToString(file, StandardCharsets.UTF_8.name());
+               return FileUtils.readFileToString(file, StandardCharsets.UTF_8.name());
            } catch (IOException e) {
-               LOGGER.error("Failed to read from File {}", filePath);
+               LOGGER.error("Failed to read from File {}", filePath, e);
                throw new IllegalArgumentException("Failed to read from File " + filePath);
            }
        } else {
            throw new IllegalArgumentException(filePath + " is a directory or does not exist");
        }
-       return content;
    }
 
    /**
