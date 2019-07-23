@@ -59,6 +59,7 @@ public class DataSourceElement extends AbstractTestElement
 
     private transient boolean keepAlive;
     private transient boolean autocommit;
+    private transient boolean preinit;
 
     /*
      *  The datasource is set up by testStarted and cleared by testEnded.
@@ -218,6 +219,8 @@ public class DataSourceElement extends AbstractTestElement
             sb.append(getTrimInterval());
             sb.append(" Auto-Commit: ");
             sb.append(isAutocommit());
+            sb.append(" Preinit: ");
+            sb.append(isPreinit());
             log.debug(sb.toString());
         }
         int poolSize = Integer.parseInt(maxPool);
@@ -286,6 +289,24 @@ public class DataSourceElement extends AbstractTestElement
         if (_username.length() > 0){
             dataSource.setUsername(_username);
             dataSource.setPassword(getPassword());
+        }
+
+        if(isPreinit()) {
+            // side effect - connection pool init - that is what we want
+            // see also https://commons.apache.org/proper/commons-dbcp/apidocs/org/apache/commons/dbcp2/BasicDataSource.html#setInitialSize-int-
+            // it says: "The pool is initialized the first time one of the following methods is invoked:
+            // getConnection, setLogwriter, setLoginTimeout, getLoginTimeout, getLogWriter."
+            // so we get a connection and close it - which releases it back to the pool (but stays open)
+            try {
+                dataSource.getConnection().close();
+                if (log.isDebugEnabled()) {
+                    log.debug("Preinitializing the connection pool: {}@{}", getDataSourceName(), System.identityHashCode(dataSource));
+                }
+            } catch (SQLException ex) {
+                if (log.isErrorEnabled()) {
+                    log.error("Error preinitializing the connection pool: {}@{}", getDataSourceName(), System.identityHashCode(dataSource), ex);
+                }
+            }
         }
 
         log.debug("PoolConfiguration:{}", this.dataSource);
@@ -541,6 +562,21 @@ public class DataSourceElement extends AbstractTestElement
      */
     public void setAutocommit(boolean autocommit) {
         this.autocommit = autocommit;
+    }
+
+    /**
+     * @return Returns the preinit.
+     */
+    public boolean isPreinit() {
+        return preinit;
+    }
+
+    /**
+     * @param preinit
+     *            The preinit to set.
+     */
+    public void setPreinit(boolean preinit) {
+        this.preinit = preinit;
     }
 
     /**

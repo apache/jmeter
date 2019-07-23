@@ -54,7 +54,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         createPropertyGroup("varName", new String[] { "dataSource" });
 
         createPropertyGroup("pool", new String[] { "poolMax", "timeout",
-                "trimInterval", "autocommit", "transactionIsolation", "initQuery"  });
+                "trimInterval", "autocommit", "transactionIsolation", "preinit", "initQuery" });
 
         createPropertyGroup("keep-alive", new String[] { "keepAlive", "connectionAge", "checkQuery" });
 
@@ -82,6 +82,9 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         Set<String> modesSet = TRANSACTION_ISOLATION_MAP.keySet();
         String[] modes = modesSet.toArray(new String[modesSet.size()]);
         p.setValue(TAGS, modes);
+        p = property("preinit");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
         p = property("initQuery", TypeEditor.TextAreaEditor);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");

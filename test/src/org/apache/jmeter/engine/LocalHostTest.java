@@ -50,7 +50,7 @@ public class LocalHostTest {
         boolean localHostIsBound = Collections
                 .list(NetworkInterface.getNetworkInterfaces()).stream()
                 .flatMap(iface -> iface.getInterfaceAddresses().stream())
-                .filter(iface -> iface.getNetworkPrefixLength() <= 32) // hack to prevent checking IPv6
+                .filter(iface -> iface.getAddress().getAddress().length == 4) // hack to prevent checking IPv6
                 .map(this::toSubnetInfo)
                 .anyMatch(subnetInfo -> subnetInfo.isInRange(localHost));
         Assert.assertTrue(

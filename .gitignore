@@ -22,7 +22,16 @@
 .pmd
 .project
 .settings
+
+# bin/ folder is used to launch JMeter, so we ignore certain files there
 /bin/ApacheJMeter.jar
+# Below are the results of "batch test" execution
+/bin/*.csv
+/bin/*.jmx
+/bin/*.jtl
+/bin/*.xml
+# We need log4j2.xml even though we want to exclude xml created by batch tests
+!/bin/log4j2.xml
 
 build-local.properties
 jmeter-fb.*

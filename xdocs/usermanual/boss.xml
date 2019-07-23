@@ -163,9 +163,9 @@ and any supplied documentation).
 Some of these are listed on the JMeter Wiki.
 They are listed under several categories:
 <ul>
-<li><a href="http://wiki.apache.org/jmeter/JMeterPlugins">JMeterPlugins</a> - plugins for extending JMeter</li>
-<li><a href="http://wiki.apache.org/jmeter/JMeterAddons">JMeterAddons</a> - addons for use with JMeter, e.g. plugins for browsers, Maven and Jenkins.</li>
-<li><a href="http://wiki.apache.org/jmeter/JMeterServices">JMeterServices</a> - 3<sup>rd</sup> party services, e.g. cloud-based JMeter</li>
+<li><a href="https://cwiki.apache.org/confluence/display/JMETER/JMeterPlugins">JMeterPlugins</a> - plugins for extending JMeter</li>
+<li><a href="https://cwiki.apache.org/confluence/display/JMETER/JMeterAddons">JMeterAddons</a> - addons for use with JMeter, e.g. plugins for browsers, Maven and Jenkins.</li>
+<li><a href="https://cwiki.apache.org/confluence/display/JMETER/JMeterServices">JMeterServices</a> - 3<sup>rd</sup> party services, e.g. cloud-based JMeter</li>
 </ul>
 Note that appearance of these on the Wiki does not imply any endorsement by the Apache JMeter project.
 Any requests for support should be directed to the relevant supplier.

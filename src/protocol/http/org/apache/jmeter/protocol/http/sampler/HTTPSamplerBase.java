@@ -45,6 +45,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.config.KeystoreConfig;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.Replaceable;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -112,7 +113,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     "org.apache.jmeter.protocol.http.gui.DNSCachePanel",
                     "org.apache.jmeter.protocol.http.gui.AuthPanel",
                     "org.apache.jmeter.protocol.http.gui.CacheManagerGui",
-                    "org.apache.jmeter.protocol.http.gui.CookiePanel"
+                    "org.apache.jmeter.protocol.http.gui.CookiePanel",
+                    "org.apache.jmeter.testbeans.gui.TestBeanGUI"
             ));
 
     //+ JMX names - do not change
@@ -121,6 +123,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static final String AUTH_MANAGER = "HTTPSampler.auth_manager"; // $NON-NLS-1$
 
     public static final String COOKIE_MANAGER = "HTTPSampler.cookie_manager"; // $NON-NLS-1$
+
+    public static final String KEYSTORE_CONFIG = "HTTPSampler.keystore_configuration"; // $NON-NLS-1$
+
+    public static final String SAMPLE_TIMEOUT = "HTTPSampler.sample_timeout"; // $NON-NLS-1$
 
     public static final String CACHE_MANAGER = "HTTPSampler.cache_manager"; // $NON-NLS-1$
 
@@ -684,6 +690,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         this.getArguments().addArgument(arg);
     }
 
+    public void addNonEncodedArgument(String name, String value, String metadata, String contentType) {
+        HTTPArgument arg = new HTTPArgument(name, value, metadata, false);
+        arg.setContentType(contentType);
+        arg.setAlwaysEncoded(false);
+        this.getArguments().addArgument(arg);
+    }
+
     public void addArgument(String name, String value) {
         this.getArguments().addArgument(new HTTPArgument(name, value));
     }
@@ -708,7 +721,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             setAuthManager((AuthManager) el);
         } else if (el instanceof DNSCacheManager) {
             setDNSResolver((DNSCacheManager) el);
-        } else {
+        } else if (el instanceof KeystoreConfig) {
+            setKeystoreConfigProperty((KeystoreConfig) el);
+        }  else {
             super.addTestElement(el);
         }
     }
@@ -831,20 +846,40 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return getPropertyAsString(PROXYSCHEME, HTTPHCAbstractImpl.PROXY_SCHEME);
     }
 
+    public void setProxyScheme(String schema) {
+        setProperty(PROXYSCHEME, schema);
+    }
+
     public String getProxyHost() {
         return getPropertyAsString(PROXYHOST);
+    }
+
+    public void setProxyHost(String host) {
+        setProperty(PROXYHOST, host);
     }
 
     public int getProxyPortInt() {
         return getPropertyAsInt(PROXYPORT, 0);
     }
 
+    public void setProxyPortInt(String port) {
+        setProperty(PROXYPORT, port);
+    }
+
     public String getProxyUser() {
         return getPropertyAsString(PROXYUSER);
     }
 
+    public void setProxyUser(String user) {
+        setProperty(PROXYUSER, user);
+    }
+
     public String getProxyPass() {
         return getPropertyAsString(PROXYPASS);
+    }
+
+    public void setProxyPass(String pass) {
+        setProperty(PROXYPASS, pass);
     }
 
     // gets called from ctor, so has to be final
@@ -925,6 +960,21 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     // private method to allow AsyncSample to reset the value without performing checks
     private void setCacheManagerProperty(CacheManager value) {
         setProperty(new TestElementProperty(CACHE_MANAGER, value));
+    }
+    private void setKeystoreConfigProperty(KeystoreConfig value) {
+        setProperty(new TestElementProperty(KEYSTORE_CONFIG, value));
+    }
+
+    public void setKeystoreConfig(KeystoreConfig value) {
+        KeystoreConfig mgr = getKeystoreConfig();
+        if (mgr != null && log.isWarnEnabled()) {
+            log.warn("Existing KeystoreConfig {} superseded by {}", mgr.getName(), value.getName());
+        }
+        setKeystoreConfigProperty(value);
+    }
+
+    public KeystoreConfig getKeystoreConfig() {
+        return (KeystoreConfig) getProperty(KEYSTORE_CONFIG).getObjectValue();
     }
 
     public void setCacheManager(CacheManager value) {

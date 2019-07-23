@@ -20,11 +20,13 @@ package org.apache.jmeter.protocol.http.control
 
 import org.apache.jmeter.junit.spock.JMeterSpec
 import org.xbill.DNS.ExtendedResolver
+import org.xbill.DNS.ResolverConfig
+
 import spock.lang.IgnoreIf
 
 class DNSCacheManagerSpec extends JMeterSpec {
 
-    private static final String VALID_DNS_SERVER = "8.8.8.8"
+    private static final String VALID_DNS_SERVER  = ResolverConfig.getCurrentConfig().servers()[0];
     private static final String INVALID_DNS_SERVER = "512.1.1.1"
 
     static def localDNSResolverFailed() {

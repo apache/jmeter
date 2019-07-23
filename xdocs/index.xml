@@ -84,8 +84,8 @@
 <li><a href="usermanual/functions.html">Functions reference</a> to have detailed information and examples for every function</li>
 <li><a href="usermanual/properties_reference.html">Properties reference</a> for all properties that allow you to customize JMeter</li>
 <li><a href="api/index.html">Javadoc API documentation</a></li>
-<li><a href="https://wiki.apache.org/jmeter/JMeterFAQ">JMeter FAQ (Wiki)</a></li>
-<li><a href="https://wiki.apache.org/jmeter/">JMeter Wiki</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/JMETER/JMeterFAQ">JMeter FAQ (Wiki)</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/JMETER/Home">JMeter Wiki</a></li>
 <li><a href="building.html">Building JMeter and Add-Ons</a> for advanced usage</li>
 </ul>
 
@@ -114,7 +114,7 @@ Nor does it render the HTML pages as a browser does
 <li><a href="https://www.apache.org/licenses/">License</a></li>
 <li><a href="mail.html">Mailing Lists</a></li>
 <li><a href="svnindex.html">Source Repositories</a></li>
-<li><a href="https://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/JMETER/JMeterCommitters">Contributors</a></li>
 </ul>
 </section>
 </body>

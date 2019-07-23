@@ -60,7 +60,8 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
                 + "        <collectionProp name=\"Arguments.arguments\"/>\n" + "      </elementProp>\n"
                 + "      <stringProp name=\"TestPlan.user_define_classpath\"></stringProp></TestPlan>"
                 + "    <hashTree/></hashTree></jmeterTestPlan>";
-        try (FileWriter fw = new FileWriter(temp); BufferedWriter out = new BufferedWriter(fw)) {
+        try (FileWriter fw = new FileWriter(temp);
+                BufferedWriter out = new BufferedWriter(fw)) {
             out.write(testPlan);
         }
 
@@ -102,7 +103,8 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
                 + "          <stringProp name=\"CONNECT\">${__Random(1,5)}</stringProp>\n"
                 + "        </kg.apc.jmeter.samplers.DummySampler></hashTree></hashTree>\n"
                 + "  </hashTree></jmeterTestPlan><hashTree/></hashTree>\n" + "</jmeterTestPlan>";
-        try (FileWriter fw = new FileWriter(temp); BufferedWriter out = new BufferedWriter(fw)) {
+        try (FileWriter fw = new FileWriter(temp);
+                BufferedWriter out = new BufferedWriter(fw)) {
             out.write(testPlan);
         }
         JMeter jmeter = new JMeter();

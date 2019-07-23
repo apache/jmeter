@@ -8,7 +8,15 @@
 *.sql    text
 *.q      text
 
-*.sh     text eol=lf
+# Note: executable is a non-standard attribute, and it is used by the release plugin
+*.sh     text eol=lf executable
+*.cgi    text eol=lf executable
 
 *.bat    text eol=crlf
 *.cmd    text eol=crlf
+
+# Blow files don't have extension, so we mention them explicitly
+/gradlew           text eol=lf executable
+/bin/jmeter        text eol=lf executable
+/bin/jmeter-server text eol=lf executable
+/bin/mirror-server text eol=lf executable
