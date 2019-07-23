@@ -82,14 +82,14 @@ public class StringToFile extends AbstractFunction {
                 append = Boolean.parseBoolean(appendString);
             }
         }
-        boolean isLineSperatorWorks = true;
+        boolean addLineSeparator = true;
         if (values.length >= 4) {
             String addLineBreakString = ((CompoundVariable) values[3]).execute().toLowerCase().trim();
             if (!addLineBreakString.isEmpty()) {
-                isLineSperatorWorks = Boolean.parseBoolean(addLineBreakString);
+                addLineSeparator = Boolean.parseBoolean(addLineBreakString);
             }
         }
-        content = (isLineSperatorWorks ? content : setLineSeparatorByDifferentSystems(content));
+        content = (addLineSeparator ? content : content.replaceAll("\\\\n", System.lineSeparator()));
         Charset charset = StandardCharsets.UTF_8;
         if (values.length >= 5) {
             String charsetParamValue = ((CompoundVariable) values[4]).execute();
@@ -127,19 +127,6 @@ public class StringToFile extends AbstractFunction {
         }
         return true;
     }
-
-    private String setLineSeparatorByDifferentSystems(String content) {
-        String lineSeparator = System.lineSeparator();
-        if ("\r\n".equals(lineSeparator)) {
-            content = content.replaceAll("\\\\r\\\\n", System.lineSeparator());
-        } else if ("\n".equals(lineSeparator)) {
-            content = content.replaceAll("\\\\n", System.lineSeparator());
-        } else if ("\r".equals(lineSeparator)) {
-            content = content.replaceAll("\\\\r", System.lineSeparator());
-        }
-        return content;
-    }
-
     /** {@inheritDoc} */
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {

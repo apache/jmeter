@@ -212,12 +212,16 @@ public class TestStringtoFile extends JMeterTestCase {
     @Test
     public void testLineBreak() throws Exception {
         File file = tempFolder.newFile();
-        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\r\\\\ntest", "false", "true", ENCODING));
+        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\n", "true", "true", ENCODING));
         function.execute();
-        Assert.assertEquals("line break should be saved in file", "test\\r\\ntest",
+        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\n", "true", "true", ENCODING));
+        function.execute();
+        Assert.assertEquals("line break should be saved in file", "test\\ntest\\n",
                 FileUtils.readLines(file, ENCODING).get(0));
-        function.setParameters(
-                functionParams(file.getAbsolutePath(), "test\\\\r\\\\ntest", "false", "false", ENCODING));
+        file = tempFolder.newFile();
+        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\n", "true", "false", ENCODING));
+        function.execute();
+        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\n", "true", "false", ENCODING));
         function.execute();
         Assert.assertEquals("line break shouldn't be saved in file", FileUtils.readLines(file, ENCODING).get(0),
                 "test");
