@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -53,6 +54,7 @@ public class StringToFile extends AbstractFunction {
     private static final List<String> desc = new LinkedList<>();
     private static final String KEY = "__StringToFile";//$NON-NLS-1$
     private static final ConcurrentHashMap<String, Lock> lockMap = new ConcurrentHashMap<>();
+    private static final Pattern NEW_LINE_PATTERN = Pattern.compile("\\\\n");
     static {
         desc.add(JMeterUtils.getResString("string_to_file_pathname"));
         desc.add(JMeterUtils.getResString("string_to_file_content"));//$NON-NLS-1$
@@ -68,7 +70,6 @@ public class StringToFile extends AbstractFunction {
 
     /**
      * Write to file
-     *
      * @return boolean true if success , false otherwise
      * @throws IOException
      */
@@ -89,10 +90,10 @@ public class StringToFile extends AbstractFunction {
                 addLineSeparator = Boolean.parseBoolean(addLineBreakString);
             }
         }
+        content = NEW_LINE_PATTERN.matcher(content).replaceAll(System.lineSeparator());
         if (addLineSeparator) {
-            content=content+System.lineSeparator();
+            content = content + System.lineSeparator();
         }
-        content = content.replaceAll("\\\\n", System.lineSeparator());
         Charset charset = StandardCharsets.UTF_8;
         if (values.length >= 5) {
             String charsetParamValue = ((CompoundVariable) values[4]).execute();
