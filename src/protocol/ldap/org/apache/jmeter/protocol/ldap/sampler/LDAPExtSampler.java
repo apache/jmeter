@@ -859,7 +859,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 res.setResponseCode("800"); // $NON-NLS-1$
             }
             isSuccessful = false;
-        }  catch (Exception ex) {
+        }  catch (Exception ex) { // NOSONAR Exception is reported
             String returnData = ex.toString();
             res.setResponseCode("500");
             res.setResponseMessage(returnData); // $NON-NLS-1$
