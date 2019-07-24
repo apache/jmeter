@@ -1725,15 +1725,12 @@ returns:
     Path to the file name.(The path is absolute)
     </property>
     <property name="String to write" required="Yes">
-    The string to write to the file
+    The string to write to the file. <br/>
+    If you need to insert a line break in your content, use <code>\n</code> in your string.
     </property>
     <property name="Append to file?" required="No">
     The way to write the string, <code>true</code> means append, <code>false</code>
     means overwrite.
-    </property>
-    <property name="Whether to add line break (default true)" required="No">
-    Choose whether to add a line break after content or not. <code>true</code> means add, <code>false</code> means no.<br/>
-    If you need to insert a line break in your content, you can also insert <code>\n</code> in your string.
     </property>
     <property name="File encoding if not UTF-8" required="No">
     The encoding to be used to write to the file. If not specified, the default encoding is <code>UTF-8</code>.

@@ -41,10 +41,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * FileToString Function to read a complete file into a String.
+ * StringToFile Function to write a String to a file
  *
- * Parameters: - file name - append (true/false) - file encoding (optional)
- *
+ * Parameters: 
+ * <ul>
+ *  <li>file name</li>
+ *  <li>content</li>
+ *  <li>append (true/false)(optional)</li>
+ *  <li>file encoding (optional)</li>
+ * </ul>
  * Returns: true if ok , false if an error occured
  *
  * @since 5.2
@@ -59,7 +64,6 @@ public class StringToFile extends AbstractFunction {
         desc.add(JMeterUtils.getResString("string_to_file_pathname"));
         desc.add(JMeterUtils.getResString("string_to_file_content"));//$NON-NLS-1$
         desc.add(JMeterUtils.getResString("string_to_file_way_to_write"));//$NON-NLS-1$
-        desc.add(JMeterUtils.getResString("string_to_file_linebreak"));//$NON-NLS-1$
         desc.add(JMeterUtils.getResString("string_to_file_encoding"));//$NON-NLS-1$
     }
     private Object[] values;
@@ -83,20 +87,11 @@ public class StringToFile extends AbstractFunction {
                 append = Boolean.parseBoolean(appendString);
             }
         }
-        boolean addLineSeparator = true;
-        if (values.length >= 4) {
-            String addLineBreakString = ((CompoundVariable) values[3]).execute().toLowerCase().trim();
-            if (!addLineBreakString.isEmpty()) {
-                addLineSeparator = Boolean.parseBoolean(addLineBreakString);
-            }
-        }
         content = NEW_LINE_PATTERN.matcher(content).replaceAll(System.lineSeparator());
-        if (addLineSeparator) {
-            content = content + System.lineSeparator();
-        }
+
         Charset charset = StandardCharsets.UTF_8;
-        if (values.length >= 5) {
-            String charsetParamValue = ((CompoundVariable) values[4]).execute();
+        if (values.length == 4) {
+            String charsetParamValue = ((CompoundVariable) values[3]).execute();
             if (StringUtils.isNotEmpty(charsetParamValue)) {
                 charset = Charset.forName(charsetParamValue);
             }
@@ -153,7 +148,7 @@ public class StringToFile extends AbstractFunction {
     /** {@inheritDoc} */
     @Override
     public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
-        checkParameterCount(parameters, 2, 5);
+        checkParameterCount(parameters, 2, 4);
         values = parameters.toArray();
     }
 
