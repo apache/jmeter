@@ -48,7 +48,6 @@ public class TestStringtoFile extends JMeterTestCase {
     private static final String FILENAME = "test.txt";
     private static final String STRING_TO_WRITE = "test";
     private static final String ENCODING = StandardCharsets.UTF_8.toString();
-
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
@@ -154,7 +153,8 @@ public class TestStringtoFile extends JMeterTestCase {
     public void testWriteToFileRequiredFilePathIsNull() throws Exception {
         function.setParameters(functionParams(null, STRING_TO_WRITE, "true", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertFalse("This method 'Stringtofile' should fail to run with null file", Boolean.parseBoolean(returnValue));
+        Assert.assertFalse("This method 'Stringtofile' should fail to run with null file",
+                Boolean.parseBoolean(returnValue));
     }
 
     @Test
@@ -173,8 +173,7 @@ public class TestStringtoFile extends JMeterTestCase {
         file.deleteOnExit();
         function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "false", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should have successfully run",
-                Boolean.parseBoolean(returnValue));
+        Assert.assertTrue("This method 'Stringtofile' should have successfully run", Boolean.parseBoolean(returnValue));
         String res = FileUtils.readFileToString(file, ENCODING).trim();
         Assert.assertEquals("The string should be 'test'", "test", res);
     }
@@ -193,16 +192,26 @@ public class TestStringtoFile extends JMeterTestCase {
     }
 
     private Collection<CompoundVariable> functionParams(String... args) {
-        return Arrays.asList(args).stream()
-                .map(CompoundVariable::new)
-                .collect(Collectors.toList());
+        return Arrays.asList(args).stream().map(CompoundVariable::new).collect(Collectors.toList());
     }
 
     @Test
     public void testDescription() {
-        Assert.assertEquals("Function 'stringtofile' should have successfully reading the configuration file 'messages.properties'",
-                JMeterUtils.getResString("string_to_file_pathname"),
-                function.getArgumentDesc().get(0));
+        Assert.assertEquals(
+                "Function 'stringtofile' should have successfully reading the configuration file 'messages.properties'",
+                JMeterUtils.getResString("string_to_file_pathname"), function.getArgumentDesc().get(0));
     }
 
+    @Test
+    public void testLineBreak() throws Exception {
+        File file = tempFolder.newFile();
+        file.deleteOnExit();
+        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\ntest", "true", ENCODING));
+        function.execute();
+        String res = FileUtils.readFileToString(file, ENCODING).trim();
+        Assert.assertEquals("When the user type '\n', ine break should be saved in file",
+                "test" + System.lineSeparator() + "test", res);
+        Assert.assertTrue("When the user type '\\n',line break should be saved in file",
+                res.contains(System.lineSeparator()));
+    }
 }

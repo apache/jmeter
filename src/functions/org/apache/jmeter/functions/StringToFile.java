@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,13 +41,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * FileToString Function to read a complete file into a String.
+ * StringToFile Function to write a String to a file
  *
- * Parameters:
- * - file name
- * - append (true/false)
- * - file encoding (optional)
- *
+ * Parameters: 
+ * <ul>
+ *  <li>file name</li>
+ *  <li>content</li>
+ *  <li>append (true/false)(optional)</li>
+ *  <li>file encoding (optional)</li>
+ * </ul>
  * Returns: true if ok , false if an error occured
  *
  * @since 5.2
@@ -56,6 +59,7 @@ public class StringToFile extends AbstractFunction {
     private static final List<String> desc = new LinkedList<>();
     private static final String KEY = "__StringToFile";//$NON-NLS-1$
     private static final ConcurrentHashMap<String, Lock> lockMap = new ConcurrentHashMap<>();
+    private static final Pattern NEW_LINE_PATTERN = Pattern.compile("\\\\n");
     static {
         desc.add(JMeterUtils.getResString("string_to_file_pathname"));
         desc.add(JMeterUtils.getResString("string_to_file_content"));//$NON-NLS-1$
@@ -78,8 +82,13 @@ public class StringToFile extends AbstractFunction {
         String content = ((CompoundVariable) values[1]).execute();
         boolean append = true;
         if (values.length >= 3) {
-            append = Boolean.parseBoolean(((CompoundVariable) values[2]).execute().toLowerCase().trim());
+            String appendString = ((CompoundVariable) values[2]).execute().toLowerCase().trim();
+            if (!appendString.isEmpty()) {
+                append = Boolean.parseBoolean(appendString);
+            }
         }
+        content = NEW_LINE_PATTERN.matcher(content).replaceAll(System.lineSeparator());
+
         Charset charset = StandardCharsets.UTF_8;
         if (values.length == 4) {
             String charsetParamValue = ((CompoundVariable) values[3]).execute();
@@ -87,13 +96,11 @@ public class StringToFile extends AbstractFunction {
                 charset = Charset.forName(charsetParamValue);
             }
         }
-
         if (fileName.isEmpty()) {
             log.error("File name '{}' is empty", fileName);
             return false;
         }
         log.debug("Writing {} to file {} with charset {} and append {}", content, fileName, charset, append);
-
         Lock localLock = new ReentrantLock();
         Lock lock = lockMap.putIfAbsent(fileName, localLock);
         try {
@@ -119,7 +126,6 @@ public class StringToFile extends AbstractFunction {
         }
         return true;
     }
-
     /** {@inheritDoc} */
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
