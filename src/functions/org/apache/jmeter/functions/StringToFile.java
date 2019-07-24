@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 /**
  * StringToFile Function to write a String to a file
  *
- * Parameters: 
+ * Parameters:
  * <ul>
  *  <li>file name</li>
  *  <li>content</li>
