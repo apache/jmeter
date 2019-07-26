@@ -90,6 +90,7 @@ to view the last major behaviors with the version 5.1.1.
 <h3>Other samplers</h3>
 <ul>
     <li><bug>63406</bug>JDBC connection configuration: new option for pre-initialize to initialize the connection pool. Contributed by Franz Schwab (franz.schwab@exasol.com)</li>
+    <li><bug>63561</bug>JDBC Request: Allow to only fetch a certain number of rows. Contributed by Franz Schwab (franz.schwab@exasol.com)</li>
 </ul>
 
 <h3>Controllers</h3>
