@@ -143,7 +143,7 @@ public class JMeterContext {
     }
 
     /**
-     * @return the threadNum starting from one
+     * @return the threadNum starting from zero (0)
      */
     public int getThreadNum() {
         return threadNum;
