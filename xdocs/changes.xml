@@ -149,13 +149,14 @@ to view the last release notes of version 5.1.1.
     <li><bug>63364</bug>When setting <code>subresults.disable_renaming=true</code>, sub results are still renamed using their parent SampleLabel while they shouldn't. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63129</bug>JMeter can not identify encoding during first time page submission. Based partly on analysis and PR made by Naveen Nandwani (naveen.nandwani at india.nec.com)</li>
     <li><bug>62672</bug>HTTP Request sends double requests when using proxy with authentication. Based on patch by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
-    <li><bug>63469</bug>JMSPublisher: Race condition in jms.client.ClientPool#clearClient</li>
+    <li><bug>63574</bug>HTTP Cache Manager does not cache resource if <code>Cache-Control</code> header is missing.</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
     <li><bug>63442</bug>Reduce scanning for <code>LogParser</code> implementations in AccessLogSamplerBeanInfo.</li>
     <li><bug>63563</bug>LdapExtSampler: When sampler fails with exception differing from NamingException, no SampleResult is generated</li>
+    <li><bug>63469</bug>JMSPublisher: Race condition in jms.client.ClientPool#clearClient</li>
 </ul>
 
 <h3>Controllers</h3>

@@ -264,6 +264,28 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
         assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
     }
+    
+    @Test
+    public void testNoCacheControlNoMaxAgeNoExpireNoCacheControl() throws Exception {
+        this.cacheManager.setUseExpires(true);
+        this.cacheManager.testIterationStart(null);
+        assertNull("Should not find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+        // No Cache-Control
+        // Expires is not set, however RFC recommends to use
+        // response_is_fresh = (freshness_lifetime > current_age)
+        // We set "currentAge == X seconds", thus response will considered to
+        // be fresh for the next 10% of X seconds == 0.1*X seconds
+        long start = System.currentTimeMillis();
+        long age = 30 * 1000; // 30 seconds
+        setLastModified(makeDate(new Date(start - age)));
+        cacheResult(sampleResultOK);
+        assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertTrue("Should find valid entry", this.cacheManager.inCache(url));
+        sleepTill(start + age / 10 + 10);
+        assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+    }
 
     @Test
     public void testPrivateCacheNoMaxAgeNoExpire() throws Exception {

@@ -254,7 +254,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                 expiresDate = extractExpiresDateFromExpires(expires);
             }
             // if no-cache is present, ensure that expiresDate remains null, which forces revalidation
-            if(cacheControl != null && !cacheControl.contains("no-cache")) {
+            if(cacheControl == null || !cacheControl.contains("no-cache")) {
                 expiresDate = extractExpiresDateFromCacheControl(lastModified,
                         cacheControl, expires, etag, url, date, maxAge, expiresDate);
                 // else expiresDate computed in (expires!=null) condition is used
@@ -298,7 +298,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String cacheControl, String expires, String etag, String url,
             String date, final String maxAge, Date defaultExpiresDate) {
         // the max-age directive overrides the Expires header,
-        if (cacheControl.contains(maxAge)) {
+        if (cacheControl != null && cacheControl.contains(maxAge)) {
             long maxAgeInSecs = Long.parseLong(cacheControl
                     .substring(cacheControl.indexOf(maxAge) + maxAge.length())
                     .split("[, ]")[0] // Bug 51932 - allow for optional trailing
