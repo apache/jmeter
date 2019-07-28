@@ -2183,9 +2183,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         By default, the condition is evaluated only once on initial entry, but you have the option to have it evaluated for every runnable element contained in the controller.
         </p>
         <p>
-        If Controller will internally use javascript to evaluate the condition but this can have a performance penalty.
-        <figure width="819" height="265" image="if_controller_javascript.png">If Controller using javascript</figure>
-        A better option (default one) is to check <code>Interpret Condition as Variable Expression?</code>, then in the condition field you have 2 options:
+        The best option (default one) is to check <code>Interpret Condition as Variable Expression?</code>, then in the condition field you have 2 options:
         <ul>
             <li>Option 1 : Use a variable that contains <code>true</code> or <code>false</code>
             <note>If you want to test if last sample was successful, you can use <code>${JMeterThread.last_sample_ok}</code>
@@ -2196,7 +2194,6 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
             <figure width="815" height="260" image="if_controller_expression.png">If Controller using expression</figure>
             </li>
         </ul>
-        
         For example, previously one could use the condition:
         <code>${__jexl3(${VAR} == 23)}</code> and this would be evaluated as <code>true</code>/<code>false</code>, the result would then be passed to JavaScript
         which would then return <code>true</code>/<code>false</code>. If the Variable Expression option is selected, then the expression is evaluated
@@ -2209,6 +2206,9 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         <source>"${myVar}" != "\${myVar}"</source>
         to test if a variable is defined and is not null.
         </note>
+        If you uncheck <code>Interpret Condition as Variable Expression?</code>, <code>If Controller</code> will internally use javascript to evaluate the condition 
+        which has a performance penalty that can be very big and make your test less scalable.
+        <figure width="819" height="265" image="if_controller_javascript.png">If Controller using javascript</figure>
     </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
