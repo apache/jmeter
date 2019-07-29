@@ -360,7 +360,8 @@ public class BasicCurlParser {
         }
 
         /**
-         * @param proxyServer set the map of proxy server
+         * @param key key
+         * @param value value
          */
         public void setProxyServer(String key, String value) {
             this.proxyServer.put(key, value);
@@ -467,7 +468,7 @@ public class BasicCurlParser {
         }
 
         /**
-         * @param the max time of connection
+         * @param maxTime max time of connection
          */
         public void setMaxTime(double maxTime) {
             this.maxTime = maxTime;
