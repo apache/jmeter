@@ -4887,7 +4887,7 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
         <p>
             This component allows you to perform validations of JSON documents.
             First, it will parse the JSON and fail if the data is not JSON.
-            Second, it will search for specified path, using syntax from <a href="https://github.com/jayway/JsonPath" > Jayway JsonPath 1.2.0</a>. If the path is not found, it will fail.
+            Second, it will search for specified path, using syntax from <a href="https://github.com/json-path/JsonPath" >Jayway JsonPath 1.2.0</a>. If the path is not found, it will fail.
             Third, if JSON path was found in the document, and validation against expected value was requested, it will perform validation. For the <code>null</code> value there is special checkbox in the GUI.
             Note that if the path will return array object, it will be iterated and if expected value is found, the assertion will succeed. To validate empty array use <code>[]</code> string. Also, if patch will return dictionary object, it will be converted to string before comparison.
         </p>
@@ -6118,8 +6118,7 @@ In the linked test plan, "<code>JDBC PostProcessor</code>" JDBC PostProcessor ca
 <p>
 The JSON PostProcessor enables you extract data from JSON responses using JSON-PATH syntax. This post processor is very similar to Regular expression extractor.
 It must be placed as a child of HTTP Sampler or any other sampler that has responses.
-It will allow you to extract in a very easy way text content, see <a href="http://goessner.net/articles/JsonPath/" >JSON Path syntax</a>.
-
+It will allow you to extract in a very easy way text content, see <a href="https://github.com/json-path/JsonPath">JSON Path syntax</a>.
 </p>
 </description>
 <properties>
