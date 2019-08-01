@@ -140,6 +140,7 @@ public class CsvSampleReader implements Closeable{
             SampleMetadata result;
             // Read first line
             String line = reader.readLine();
+            this.row++;
             if (line == null) {
                 throw new IllegalArgumentException("File is empty");
             }
@@ -185,15 +186,26 @@ public class CsvSampleReader implements Closeable{
             data = CSVSaveService.csvReadFile(reader, separator);
             Sample sample = null;
             if (data.length > 0) {
-                if (data.length != columnCount+numberOfSampleVariablesInCsv) {
-                    throw new SampleException("Mismatch between expected number of columns:"+columnCount+" and columns in CSV file:"+data.length+
-                            ", check your jmeter.save.saveservice.* configuration or check line is complete");
-                }
+                assertCorrectColumns(data);
                 sample = new Sample(row++, metadata, data);
             }
             return sample;
         } catch (IOException e) {
             throw new SampleException("Could not read sample <" + row + ">", e);
+        }
+    }
+
+    private void assertCorrectColumns(String[] data) {
+        if (data.length != columnCount + numberOfSampleVariablesInCsv) {
+            if (log.isWarnEnabled()) {
+                log.warn("Short CSV read around line {} of file '{}'. Could only read {} elements of {} expected. Data is [{}]",
+                        Long.valueOf(row + 2), file, Integer.valueOf(data.length), Integer.valueOf(columnCount),
+                        String.join(", ", data));
+            }
+            throw new SampleException(
+                    "Mismatch between expected number of columns:" + columnCount + " and columns in CSV file:"
+                            + data.length + ", check your jmeter.save.saveservice.* configuration or check if line "
+                            + (row + 2) + " in '" + file + "' is complete");
         }
     }
 
