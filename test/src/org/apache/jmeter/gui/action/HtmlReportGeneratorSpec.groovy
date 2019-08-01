@@ -127,7 +127,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
             List<String> resultList = htmlReportGenerator.run()
         then:
             testDirectory.list().length == 0
-            resultList.get(0).contains("An error occurred: Error while processing samples:Consumer failed with message")
+            resultList.get(0).contains("An error occurred: Error while processing samples: Consumer failed with message")
         cleanup:
             if(testDirectory.exists()) {
                 if (testDirectory.list().length>0) {
