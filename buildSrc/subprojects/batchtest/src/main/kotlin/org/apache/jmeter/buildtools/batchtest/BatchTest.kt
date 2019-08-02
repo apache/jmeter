@@ -22,6 +22,7 @@ import org.eclipse.jgit.diff.DiffAlgorithm
 import org.eclipse.jgit.diff.DiffFormatter
 import org.eclipse.jgit.diff.RawText
 import org.eclipse.jgit.diff.RawTextComparator
+import org.eclipse.jgit.util.io.AutoCRLFInputStream
 import org.gradle.api.GradleException
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.*
@@ -128,12 +129,15 @@ open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
         project.delete(csvFile, xmlFile, logFile, jtlFile, errFile)
     }
 
+    private fun File.readAsCrLf() =
+        inputStream().use { AutoCRLFInputStream(it, false).readBytes() }
+
     fun compareFiles(summary: MutableList<String>, actualFile: File): Boolean {
-        val actual = actualFile.readText()
+        val actual = actualFile.readAsCrLf()
         val fileName = actualFile.name
         val expectedFile = inputDirectory.file(fileName).get().asFile
-        val expected = expectedFile.readText()
-        if (expected == actual) {
+        val expected = expectedFile.readAsCrLf()
+        if (expected.contentEquals(actual)) {
             return true
         }
 
@@ -142,8 +146,8 @@ open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
         println("  - expected ${expectedFile.length()} bytes, $expectedFile")
         println("  + actual ${actualFile.length()} bytes, $actualFile")
 
-        val e = RawText(expectedFile)
-        val a = RawText(actualFile)
+        val e = RawText(expected)
+        val a = RawText(actual)
         val diffAlgorithm = DiffAlgorithm.getAlgorithm(DiffAlgorithm.SupportedAlgorithm.HISTOGRAM)
         val edits = diffAlgorithm.diff(RawTextComparator.DEFAULT, e, a)
         DiffFormatter(System.out).format(edits, e, a)
