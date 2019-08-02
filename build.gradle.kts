@@ -74,7 +74,7 @@ val displayVersion by extra {
 
 println("Building JMeter $version")
 
-fun reportsForHumans() = !(System.getenv()["CI"]?.toBoolean() ?: false)
+fun reportsForHumans() = !(System.getenv()["CI"]?.toBoolean() ?: boolProp("CI") ?: false)
 
 val lastEditYear by extra {
     file("$rootDir/NOTICE")
