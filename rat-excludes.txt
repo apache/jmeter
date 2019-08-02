@@ -35,3 +35,6 @@ test/resources/**
 #**/*.log
 **/download_jmeter.cgi
 xdocs/extending/HTML_REPORT_README.TXT
+# Rat should automatically detect below files as binary, however it fails
+**/*.sxi
+**/*.sxw
