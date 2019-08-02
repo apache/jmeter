@@ -1,0 +1,19 @@
+root = true
+
+[*]
+trim_trailing_whitespace = true
+insert_final_newline = true
+charset = utf-8
+indent_style = space
+
+[{*cp1252.txt,*cp1252.xml}]
+charset = latin1
+
+[{*.sh,gradlew}]
+end_of_line = lf
+
+[{*.bat,*.cmd}]
+end_of_line = crlf
+
+[{*.kts,*.kt}]
+ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
