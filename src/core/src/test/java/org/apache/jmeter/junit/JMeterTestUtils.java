@@ -28,7 +28,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class JMeterTestUtils {
     // Used by findTestFile
-    private static String filePrefix;
+    private static volatile String filePrefix;
     private JMeterTestUtils() {
         super();
     }
@@ -37,7 +37,7 @@ public class JMeterTestUtils {
      * @return file prefix which is path from jmeter home to jmeter.properties
      */
     public static String setupJMeterHome() {
-        if (JMeterUtils.getJMeterProperties() == null) {
+        if (filePrefix == null) {
             String prefix = ".";
             for (int i = 0; i < 5 && !new File(prefix, "bin/jmeter.properties").canRead(); i++) {
                 prefix = "../" + prefix;
