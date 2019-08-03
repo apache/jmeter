@@ -358,6 +358,7 @@ allprojects {
             withType<Test>().configureEach {
                 testLogging {
                     exceptionFormat = TestExceptionFormat.FULL
+                    showStandardStreams = true
                 }
                 // Pass the property to tests
                 systemProperty("java.awt.headless", System.getProperty("java.awt.headless"))

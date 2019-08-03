@@ -38,7 +38,6 @@ public class JMeterTestUtils {
      */
     public static String setupJMeterHome() {
         if (JMeterUtils.getJMeterProperties() == null) {
-            String file = "jmeter.properties";
             String prefix = ".";
             for (int i = 0; i < 5 && !new File(prefix, "bin/jmeter.properties").canRead(); i++) {
                 prefix = "../" + prefix;
