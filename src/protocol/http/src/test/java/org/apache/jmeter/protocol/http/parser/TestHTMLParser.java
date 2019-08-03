@@ -439,7 +439,6 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
             // testfiles/HTMLParserTestFile_2 is shared between unit tests and batch tests,
             // so the file is located in root/bin/testfiles/...
             String path = "../../../bin/" + file;
-            System.out.println(new File(path).getAbsolutePath());
             try {
                 return new FileInputStream(path);
             } catch (FileNotFoundException e) {
