@@ -202,7 +202,10 @@ public class BasicCurlParser {
         }
 
         /**
-         * @return the cookieInHeaders
+         * <em>Note that {@link #setCookieInHeaders(String)} will have to be called first to set the cookies from headers.</em>
+         *
+         * @param url to extract domain and port for the cookie from
+         * @return the extracted cookies in the earlier set headers
          */
         public List<Cookie> getCookieInHeaders(String url) {
             return Collections.unmodifiableList(stringToCookie(cookieInHeaders, url));
@@ -290,7 +293,7 @@ public class BasicCurlParser {
 
         /**
          * Set the list of hosts which don't use proxy
-         * @param noproxy
+         * @param noproxy list of hosts that should not be used through the proxy
          */
         public void setNoproxy(String noproxy) {
             this.noproxy = noproxy;
@@ -305,7 +308,7 @@ public class BasicCurlParser {
 
         /**
          * set DNS resolver
-         * @param dnsResolver
+         * @param dnsResolver name of the DNS resolver to use
          */
         public void setDnsResolver(String dnsResolver) {
             this.dnsResolver = dnsResolver;
@@ -434,7 +437,7 @@ public class BasicCurlParser {
 
         /**
          * the options which work for SSL
-         * @param caCert
+         * @param caCert cert of the CA
          */
         public void setCacert(String caCert) {
             this.caCert = caCert;
@@ -489,6 +492,8 @@ public class BasicCurlParser {
         }
 
         /**
+         * <em>Note that {@link #setCookies(String)} will have to be called first to set the cookies</em>
+         * @param url to extract domain and port from
          * @return the cookies
          */
         public List<Cookie> getCookies(String url) {
@@ -1024,7 +1029,7 @@ public class BasicCurlParser {
 
    /**
     * Verify if the string is cookie or filename
-    * @param str
+    * @param str the cookie to check
     * @return Whether the format of the string is cookie
     */
     public static boolean isValidCookie(String str) {
@@ -1039,8 +1044,8 @@ public class BasicCurlParser {
     /**
      * Convert string to cookie
      *
-     * @param cookieStr
-     * @param url
+     * @param cookieStr the cookie as a string
+     * @param url to extract domain and path for the cookie from
      * @return list of cookies
      */
    public static List<Cookie> stringToCookie(String cookieStr, String url) {
