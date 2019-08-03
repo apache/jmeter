@@ -435,7 +435,7 @@ public class Save extends AbstractAction {
      */
     private List<File> expiredBackupFiles(List<File> backupFiles) {
         if (BACKUP_MAX_HOURS > 0) {
-            final long expiryMillis = System.currentTimeMillis() - (BACKUP_MAX_HOURS * MS_PER_HOUR);
+            final long expiryMillis = System.currentTimeMillis() - (1L * BACKUP_MAX_HOURS * MS_PER_HOUR);
             return backupFiles.stream().filter(file -> file.lastModified() < expiryMillis).collect(Collectors.toList());
         } else {
             return EMPTY_FILE_LIST;
