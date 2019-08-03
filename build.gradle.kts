@@ -307,6 +307,9 @@ allprojects {
 
     plugins.withType<JavaPlugin> {
         // This block is executed right after `java` plugin is added to a project
+        java {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+        }
 
         repositories {
             jcenter()
@@ -413,10 +416,6 @@ allprojects {
                     }
                 }
             }
-        }
-
-        configure<JavaPluginConvention> {
-            sourceCompatibility = JavaVersion.VERSION_1_8
         }
     }
 }
