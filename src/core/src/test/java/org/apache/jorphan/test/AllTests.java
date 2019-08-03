@@ -176,20 +176,22 @@ public final class AllTests {
         logprop("os.arch");
         logprop("java.class.version");
 
-        String cp = System.getProperty("java.class.path");
-        String[] cpe = JOrphanUtils.split(cp, java.io.File.pathSeparator);
-        StringBuilder sb = new StringBuilder(3000);
-        sb.append("java.class.path=");
-        for (String path : cpe) {
-            sb.append("\n");
-            sb.append(path);
-            if (new File(path).exists()) {
-                sb.append(" - OK");
-            } else {
-                sb.append(" - ??");
+        if (Boolean.getBoolean("jmeter.test.log.classpath")) {
+            String cp = System.getProperty("java.class.path");
+            String[] cpe = JOrphanUtils.split(cp, java.io.File.pathSeparator);
+            StringBuilder sb = new StringBuilder(3000);
+            sb.append("java.class.path=");
+            for (String path : cpe) {
+                sb.append("\n");
+                sb.append(path);
+                if (new File(path).exists()) {
+                    sb.append(" - OK");
+                } else {
+                    sb.append(" - ??");
+                }
             }
+            log.info(sb.toString());
         }
-        log.info(sb.toString());
 
         try {
             int maxKeyLen = Cipher.getMaxAllowedKeyLength("AES");
