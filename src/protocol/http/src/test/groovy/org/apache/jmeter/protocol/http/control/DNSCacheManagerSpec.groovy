@@ -99,7 +99,7 @@ class DNSCacheManagerSpec extends JMeterSpec {
         given:
             sut.addServer(VALID_DNS_SERVER)
             sut.setCustomResolver(true)
-            sut.setTimeoutMs(100)
+            sut.setTimeoutMs(5000)
         when:
             sut.resolve("jmeter.apache.org")
         then:
@@ -112,7 +112,7 @@ class DNSCacheManagerSpec extends JMeterSpec {
         given:
             sut.addServer(VALID_DNS_SERVER)
             sut.setCustomResolver(true)
-            sut.setTimeoutMs(100)
+            sut.setTimeoutMs(5000)
         when:
             sut.cache.put("jmeter.apache.org", new InetAddress[0])
         then:
@@ -128,7 +128,7 @@ class DNSCacheManagerSpec extends JMeterSpec {
     def "set custom resolver but without an address should use system resolver"() {
         given:
             sut.setCustomResolver(true)
-            sut.setTimeoutMs(100)
+            sut.setTimeoutMs(5000)
         when:
             // This will use Default System DNS resolver
             sut.resolve("jmeter.apache.org")
@@ -142,7 +142,7 @@ class DNSCacheManagerSpec extends JMeterSpec {
             sut.setCustomResolver(true)
             sut.addServer(INVALID_DNS_SERVER)
             DNSCacheManager clone = (DNSCacheManager) sut.clone()
-            clone.setTimeoutMs(100)
+            clone.setTimeoutMs(5000)
         when:
             clone.resolve("jmeter.apache.org")
         then:
