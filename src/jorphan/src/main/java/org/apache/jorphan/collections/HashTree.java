@@ -628,7 +628,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     }
 
     /**
-     * Create a clone of this HashTree. This is not a deep clone (ie, the
+     * Create a clone of this HashTree. This is not a deep clone (i.e., the
      * contents of the tree are not cloned).
      *
      */
