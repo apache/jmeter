@@ -19,7 +19,6 @@
 package org.apache.jmeter.protocol.http.parser;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
