@@ -181,6 +181,20 @@ sonarqube {
     }
 }
 
+if (enableSpotBugs) {
+    // By default sonarqube does not depend on spotbugs
+    val sonarqubeTask = tasks.sonarqube
+
+    allprojects {
+        sonarqubeTask {
+            dependsOn(tasks.withType<SpotBugsTask>().matching {
+                // We don't send spotbugs for test classes
+                !it.name.endsWith("Test")
+            })
+        }
+    }
+}
+
 allprojects {
     group = "org.apache.jmeter"
     // JMeter ClassFinder parses "class.path" and tries to find jar names there,
