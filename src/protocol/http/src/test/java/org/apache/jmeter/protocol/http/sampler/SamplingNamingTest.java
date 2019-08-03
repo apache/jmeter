@@ -86,7 +86,6 @@ public class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTe
         httpSamplerProxy.setEmbeddedUrlRE(JMETER_HOME_PAGE+".*");
         SampleResult result = httpSamplerProxy.sample();
         assertEquals("Expected sample label to be "+LABEL, LABEL, result.getSampleLabel());
-        SampleResult[] subResults = result.getSubResults();
-        return subResults;
+        return result.getSubResults();
     }
 }
