@@ -665,10 +665,12 @@ public final class JOrphanUtils {
                     if(deleteFolderIfExists) {
                         try {
                             FileUtils.deleteDirectory(folder);
-                            folder.mkdir();
                         } catch(IOException ex) {
-                            throw new IllegalArgumentException("Cannot write to '"
-                                    +folder.getAbsolutePath()+"' as folder is not empty and cleanup failed with error:"+ex.getMessage(), ex);
+                            throw new IllegalArgumentException("Cannot write to '" + folder.getAbsolutePath()
+                                    + "' as folder is not empty and cleanup failed with error:" + ex.getMessage(), ex);
+                        }
+                        if (!folder.mkdir()) {
+                            throw new IllegalArgumentException("Cannot create folder " + folder.getAbsolutePath());
                         }
                     } else {
                         throw new IllegalArgumentException("Cannot write to '"
