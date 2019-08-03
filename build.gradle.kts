@@ -140,6 +140,10 @@ val enableSpotBugs by extra {
     boolProp("spotbugs") ?: false
 }
 
+val ignoreSpotBugsFailures by extra {
+    boolProp("ignoreSpotBugsFailures") ?: false
+}
+
 val skipCheckstyle by extra {
     boolProp("skipCheckstyle") ?: false
 }
@@ -203,6 +207,7 @@ allprojects {
 
         spotbugs {
             toolVersion = "spotbugs".v
+            isIgnoreFailures = ignoreSpotBugsFailures
         }
     }
 
