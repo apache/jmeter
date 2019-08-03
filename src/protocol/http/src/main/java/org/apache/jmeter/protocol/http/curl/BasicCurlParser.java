@@ -439,7 +439,7 @@ public class BasicCurlParser {
          * the options which work for SSL
          * @param caCert cert of the CA
          */
-        public void setCacert(String caCert) {
+        public void setCaCert(String caCert) {
             this.caCert = caCert;
         }
 
@@ -725,7 +725,7 @@ public class BasicCurlParser {
                     String authOption = option.getDescriptor().getName();
                     setAuthMechanism(authOption, request.getAuthorization());
                 } else if (SSL_OPT.contains(option.getDescriptor().getId())) {
-                    request.setCacert(option.getDescriptor().getName());
+                    request.setCaCert(option.getDescriptor().getName());
                 } else if (option.getDescriptor().getId() == GET_OPT) {
                     isPostToGet = true;
                 } else if (option.getDescriptor().getId() == DNS_OPT) {
