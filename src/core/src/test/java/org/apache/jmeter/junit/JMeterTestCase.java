@@ -80,7 +80,9 @@ public abstract class JMeterTestCase {
             logprop("os.name");
             logprop("os.version");
             logprop("os.arch");
-            logprop("java.class.path");
+            if (Boolean.getBoolean("jmeter.test.log.classpath")) {
+                logprop("java.class.path");
+            }
         } else {
             filePrefix = JMeterTestUtils.setupJMeterHome();
         }
