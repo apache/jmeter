@@ -59,7 +59,6 @@ public class PropertiesBasedPrefixResolver extends PrefixResolverDefault {
                     } else {
                         inputStream = new BufferedInputStream(new FileInputStream(pathToNamespaceConfigFile));
                         properties.load(inputStream);
-                        properties.entrySet();
                         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
                             NAMESPACE_MAP.put((String) entry.getKey(), (String) entry.getValue());
                         }
