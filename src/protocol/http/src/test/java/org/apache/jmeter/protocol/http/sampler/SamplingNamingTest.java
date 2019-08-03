@@ -79,8 +79,8 @@ public class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTe
     private SampleResult[] doSample(String implementation) {
         HTTPSamplerProxy httpSamplerProxy = new HTTPSamplerProxy(implementation);
         httpSamplerProxy.setName(LABEL);
-        httpSamplerProxy.setConnectTimeout("500");
-        httpSamplerProxy.setResponseTimeout("1000");
+        httpSamplerProxy.setConnectTimeout("15000");
+        httpSamplerProxy.setResponseTimeout("10000");
         httpSamplerProxy.setImageParser(true);
         httpSamplerProxy.setMethod("GET");
         httpSamplerProxy.setPath(JMETER_HOME_PAGE);
