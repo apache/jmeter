@@ -140,14 +140,17 @@ but won't be used at run-time.
 _This is useful for testing what happens if the optional jars are not
 downloaded by other JMeter users._
 
-If you are behind a proxy, you can set a few build properties in `build-local.properties` for ant to use the proxy:
+If you are behind a proxy, you can set a few build properties in `~/.gradle/gradle.properties` for gradle to use the proxy:
 
 ```properties
-proxy.use=true
-proxy.host=proxy.example.invalid
-proxy.port=8080
-proxy.user=your_user_name
-proxy.pass=your_password
+systemProp.http.proxyHost=proxy.example.invalid
+systemProp.http.proxyPort=8080
+systemProp.http.proxyUser=your_user_name
+systemProp.http.proxyPassword=your_password
+systemProp.https.proxyHost=proxy.example.invalid
+systemProp.https.proxyPort=8080
+systemProp.https.proxyUser=your_user_name
+systemProp.https.proxyPassword=your_password
 ```
 
 You might also want to skip some tests - that are failing without proper access to the internet - by adding some more
