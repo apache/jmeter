@@ -3,9 +3,10 @@
 Want to show Apache JMeter some love? Help out by contributing!
 
 ## :beetle: Found a bug
+
 Log it in our bugzilla:
 
-* *https://jmeter.apache.org/issues.html*
+* *<https://jmeter.apache.org/issues.html>*
 * or send a note to the *user mailing list*.
 Be sure to include all relevant information, like the versions of JMeter you’re using as long as Java version.
 A Test plan  that caused the issue as well as any error messages are also very helpful.
