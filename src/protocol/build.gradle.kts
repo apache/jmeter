@@ -81,7 +81,6 @@ project("http") {
 
 project("java") {
     dependencies {
-        implementation("org.apache.commons:commons-dbcp2:2.5.0")
         implementation("org.apache.commons:commons-lang3") {
             because("ArrayUtils")
         }
@@ -143,6 +142,9 @@ project("ldap") {
     dependencies {
         implementation("org.apache.commons:commons-text") {
             because("StringEscapeUtils")
+        }
+        implementation("org.apache.commons:commons-lang3") {
+            because("StringUtils")
         }
     }
 }
