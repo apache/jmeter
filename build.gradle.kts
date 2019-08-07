@@ -169,7 +169,8 @@ sonarqube {
         property("sonar.sourceEncoding", "UTF-8")
         val projectName = "JMeter"
         property("sonar.projectName", projectName)
-        property("sonar.projectKey", "org.apache.jmeter:$projectName")
+        property("sonar.projectKey", System.getenv()["SONAR_PROJECT_KEY"] ?: projectName)
+        property("sonar.organization", System.getenv()["SONAR_ORGANIZATION"] ?: "apache")
         property("sonar.projectVersion", project.version.toString())
         property("sonar.host.url", System.getenv()["SONAR_HOST_URL"] ?: "http://localhost:9000")
         property("sonar.login", System.getenv()["SONAR_LOGIN"] ?: "")
