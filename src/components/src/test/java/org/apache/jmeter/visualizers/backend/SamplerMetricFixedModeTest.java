@@ -31,20 +31,10 @@ public class SamplerMetricFixedModeTest {
 
     private static final int DEFAULT_ELAPSED_TIME = 1_000;
 
-    /**
-     * Method to change a static final field
-     */
-    static void setFinalStatic(Field field, Object newValue) throws Exception {
-        field.setAccessible(true);
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, newValue);
-    }
-
     @Before
     public void initMode() throws Exception {
-        setFinalStatic(SamplerMetric.class.getDeclaredField("WINDOW_MODE"), WindowMode.FIXED);
+        //noinspection deprecation
+        SamplerMetric.setDefaultWindowMode(WindowMode.FIXED);
     }
 
     @Test

@@ -27,6 +27,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.documentation.VisibleForTesting;
 
 /**
  * Sampler metric
@@ -36,7 +37,7 @@ public class SamplerMetric {
     private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_window", 100);
     private static final int LARGE_SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_large_window", 5000);
 
-    private static final WindowMode WINDOW_MODE = WindowMode.get();
+    private static volatile WindowMode WINDOW_MODE = WindowMode.get();
 
     /**
      * Response times for OK samples
@@ -76,6 +77,16 @@ public class SamplerMetric {
                 stat.setWindowSize(SLIDING_WINDOW_SIZE);
             }
         }
+    }
+
+    /**
+     * Set {@link WindowMode} to use for newly created metrics.
+     * @param windowMode new visibility mode
+     */
+    @Deprecated
+    @VisibleForTesting(visibility = VisibleForTesting.Visibility.PRIVATE)
+    public static void setDefaultWindowMode(WindowMode windowMode) {
+        WINDOW_MODE = windowMode;
     }
 
     /**

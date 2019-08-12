@@ -31,17 +31,10 @@ public class SamplerMetricTimedModeTest {
 
     private static final int DEFAULT_ELAPSED_TIME = 1_000;
 
-    static void setFinalStatic(Field field, Object newValue) throws Exception {
-        field.setAccessible(true);
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, newValue);
-    }
-
     @Before
     public void initMode() throws Exception {
-        setFinalStatic(SamplerMetric.class.getDeclaredField("WINDOW_MODE"), WindowMode.TIMED);
+        //noinspection deprecation
+        SamplerMetric.setDefaultWindowMode(WindowMode.TIMED);
     }
 
     @Test
