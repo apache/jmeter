@@ -192,31 +192,24 @@ fun SonarQubeProperties.add(name: String, value: String) {
 }
 
 if (jacocoEnabled) {
-    val sonarqubeTask = tasks.sonarqube
+    val mergedCoverage = jacocoReport.get().reports.xml.destination.toString()
 
-    val overallReport = jacocoReport.get().reports.xml.destination.toString()
-
+    // For every module we pass merged coverage report
+    // That enables to see ":src:core" lines covered even in case they are covered from
+    // "batch tests"
     subprojects {
         if (File(projectDir, "src/main").exists()) {
             apply(plugin = "org.sonarqube")
             sonarqube {
                 properties {
-                    property("sonar.coverage.jacoco.xmlReportPaths", overallReport)
+                    property("sonar.coverage.jacoco.xmlReportPaths", mergedCoverage)
                 }
             }
         }
     }
 
-    sonarqubeTask {
+    tasks.sonarqube {
         dependsOn(jacocoReport)
-        doFirst {
-            println("doFirst: ${properties}")
-        }
-    }
-    sonarqubeTask {
-        allprojects {
-            dependsOn(tasks.withType<JacocoReport>())
-        }
     }
 }
 
@@ -224,23 +217,26 @@ if (enableSpotBugs) {
     // By default sonarqube does not depend on spotbugs
     val sonarqubeTask = tasks.sonarqube
 
+    // See https://jira.sonarsource.com/browse/SONARGRADL-59
+    // Unfortunately, report paths must be specified manually for now
     allprojects {
+        if (!File(projectDir, "src/main").exists()) {
+            return@allprojects
+        }
         val spotBugTasks = tasks.withType<SpotBugsTask>().matching {
             // We don't send spotbugs for test classes
             !it.name.endsWith("Test")
         }
-        if (File(projectDir, "src/main").exists()) {
-            apply(plugin = "org.sonarqube")
-            sonarqube {
-                properties {
-                    spotBugTasks.configureEach {
-                        add("sonar.java.spotbugs.reportPaths", reports.xml.destination.toString())
-                    }
-                }
-            }
-        }
         sonarqubeTask {
             dependsOn(spotBugTasks)
+        }
+        apply(plugin = "org.sonarqube")
+        sonarqube {
+            properties {
+                spotBugTasks.configureEach {
+                    add("sonar.java.spotbugs.reportPaths", reports.xml.destination.toString())
+                }
+            }
         }
     }
 }
