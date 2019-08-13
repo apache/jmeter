@@ -20,9 +20,6 @@ package org.apache.jmeter.visualizers.backend;
 
 import static org.junit.Assert.assertEquals;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
 import org.apache.jmeter.samplers.SampleResult;
 import org.junit.Before;
 import org.junit.Test;
