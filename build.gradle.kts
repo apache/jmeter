@@ -26,6 +26,7 @@ import com.github.vlsi.gradle.git.dsl.gitignore
 import com.github.vlsi.gradle.release.RepositoryType
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.sonarqube.gradle.SonarQubeProperties
 
 plugins {
     java
@@ -182,16 +183,64 @@ sonarqube {
     }
 }
 
+fun SonarQubeProperties.add(name: String, value: String) {
+    properties.getOrPut(name) { mutableSetOf<String>() }
+        .also {
+            @Suppress("UNCHECKED_CAST")
+            (it as MutableCollection<String>).add(value)
+        }
+}
+
+if (jacocoEnabled) {
+    val sonarqubeTask = tasks.sonarqube
+
+    val overallReport = jacocoReport.get().reports.xml.destination.toString()
+
+    subprojects {
+        if (File(projectDir, "src/main").exists()) {
+            apply(plugin = "org.sonarqube")
+            sonarqube {
+                properties {
+                    property("sonar.coverage.jacoco.xmlReportPaths", overallReport)
+                }
+            }
+        }
+    }
+
+    sonarqubeTask {
+        dependsOn(jacocoReport)
+        doFirst {
+            println("doFirst: ${properties}")
+        }
+    }
+    sonarqubeTask {
+        allprojects {
+            dependsOn(tasks.withType<JacocoReport>())
+        }
+    }
+}
+
 if (enableSpotBugs) {
     // By default sonarqube does not depend on spotbugs
     val sonarqubeTask = tasks.sonarqube
 
     allprojects {
+        val spotBugTasks = tasks.withType<SpotBugsTask>().matching {
+            // We don't send spotbugs for test classes
+            !it.name.endsWith("Test")
+        }
+        if (File(projectDir, "src/main").exists()) {
+            apply(plugin = "org.sonarqube")
+            sonarqube {
+                properties {
+                    spotBugTasks.configureEach {
+                        add("sonar.java.spotbugs.reportPaths", reports.xml.destination.toString())
+                    }
+                }
+            }
+        }
         sonarqubeTask {
-            dependsOn(tasks.withType<SpotBugsTask>().matching {
-                // We don't send spotbugs for test classes
-                !it.name.endsWith("Test")
-            })
+            dependsOn(spotBugTasks)
         }
     }
 }
@@ -394,6 +443,8 @@ allprojects {
                 reports {
                     html.isEnabled = reportsForHumans()
                     xml.isEnabled = !reportsForHumans()
+                    // This is for Sonar
+                    xml.isWithMessages = true
                 }
                 enabled = enableSpotBugs
             }
