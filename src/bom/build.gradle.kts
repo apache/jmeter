@@ -63,7 +63,7 @@ dependencies {
         apiv("cglib:cglib-nodep")
         apiv("com.fasterxml.jackson.core:jackson-annotations", "jackson")
         apiv("com.fasterxml.jackson.core:jackson-core", "jackson")
-        apiv("com.fasterxml.jackson.core:jackson-databind", "jackson")
+        apiv("com.fasterxml.jackson.core:jackson-databind", "jackson-databind")
         apiv("com.fifesoft:rsyntaxtextarea")
         apiv("com.github.ben-manes.caffeine:caffeine")
         apiv("com.helger:ph-commons")
