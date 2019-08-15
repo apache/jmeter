@@ -68,12 +68,10 @@ public class RandomVariableConfig extends ConfigTestElement
     private transient ThreadLocal<Random> perThreadRandom = initThreadLocal();
 
     private ThreadLocal<Random> initThreadLocal() {
-        return new ThreadLocal<Random>() {
-                @Override
-                protected Random initialValue() {
-                    init();
-                    return createRandom();
-                }};
+        return ThreadLocal.withInitial(() -> {
+            init();
+            return createRandom();
+        });
     }
 
     private Object readResolve(){
