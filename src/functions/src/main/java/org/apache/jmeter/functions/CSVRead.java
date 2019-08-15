@@ -121,7 +121,7 @@ public class CSVRead extends AbstractFunction {
                     FileWrapper.getCurrentRow(fileName), e.toString());
         }
 
-        log.debug("execute value: {}");
+        log.debug("execute value: {}", myValue);
 
         return myValue;
     }

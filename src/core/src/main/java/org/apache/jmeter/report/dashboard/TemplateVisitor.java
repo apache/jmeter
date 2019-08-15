@@ -89,8 +89,9 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
         try {
             Files.copy(file, newDir);
         } catch (FileAlreadyExistsException ex) {
-            LOGGER.info("Copying folder from '{}' to '{}', got message:{}, found non empty folder with following content {}, will be ignored",
-                    file, newDir, newDir.toFile().listFiles());
+            LOGGER.info("Copying folder from '{}' to '{}', got message: " +
+                            "{}, found non empty folder with following content {}, will be ignored",
+                    file, newDir, ex.getMessage(), newDir.toFile().listFiles());
         }
         return FileVisitResult.CONTINUE;
     }

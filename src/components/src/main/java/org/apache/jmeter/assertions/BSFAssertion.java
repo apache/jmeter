@@ -43,9 +43,7 @@ public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion
             processFileOrScript(mgr);
             result.setError(false);
         } catch (BSFException e) {
-            if (log.isWarnEnabled()) {
-                log.warn("Problem in BSF script {}", e.toString());
-            }
+            log.warn("Problem in BSF script", e);
             result.setFailure(true);
             result.setError(true);
             result.setFailureMessage(e.toString());

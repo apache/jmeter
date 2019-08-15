@@ -112,7 +112,7 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
             result.setError(false);
         }
         catch (NoClassDefFoundError ex) { // NOSONAR explicitly trap this error to make tests work better
-            log.error("BeanShell Jar missing? " + ex.toString());
+            log.error("BeanShell Jar missing?", ex);
             result.setError(true);
             result.setFailureMessage("BeanShell Jar missing? " + ex.toString());
             response.setStopThread(true); // No point continuing
@@ -120,9 +120,7 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
         {
             result.setError(true);
             result.setFailureMessage(ex.toString());
-            if (log.isWarnEnabled()) {
-                log.warn(ex.toString());
-            }
+            log.warn("Error in BeanShellAssertion", ex);
         }
 
         return result;
