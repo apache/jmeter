@@ -730,9 +730,8 @@ public class ReportGeneratorConfiguration {
     public static Map<String, Long[]> getApdexPerTransactionParts(String apdexPerTransaction) {
         Map <String, Long[]> specificApdexes = new HashMap<>();
         if (StringUtils.isEmpty(apdexPerTransaction) ||
-                apdexPerTransaction.trim().length()==0) {
-            log.info(
-                    "apdex_per_transaction : {} is empty, not APDEX per transaction customization");
+                apdexPerTransaction.trim().length() == 0) {
+            log.info("apdex_per_transaction is empty, not APDEX per transaction customization");
         } else {
             // data looks like : sample(\d+):1000|2000;samples12:3000|4000;scenar01-12:5000|6000
             String[] parts = apdexPerTransaction.split("[;]");
