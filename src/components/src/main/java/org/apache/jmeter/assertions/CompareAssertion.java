@@ -65,66 +65,70 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
     }
 
     private void compareTime(CompareAssertionResult result) {
-        if (compareTime >= 0) {
-            long prevTime = -1;
-            SampleResult prevResult = null;
-            boolean success = true;
-            StringBuilder buf = new StringBuilder();
-            for(SampleResult sResult : responses) {
-                long currentTime = sResult.getTime();
-                if (prevTime != -1) {
-                    success = Math.abs(prevTime - currentTime) <= compareTime;
-                    prevResult = sResult;
-                }
-                if (!success) {
-                    result.setFailure(true);
-                    buf.setLength(0);
-                    appendResultDetails(buf, prevResult);
-                    buf.append(JMeterUtils.getResString("comparison_response_time")).append(prevTime); //$NON-NLS-1$
-                    result.addToBaseResult(buf.toString());
-                    buf.setLength(0);
-                    appendResultDetails(buf, sResult);
-                    buf.append(JMeterUtils.getResString("comparison_response_time")).append(currentTime); //$NON-NLS-1$
-                    result.addToSecondaryResult(buf.toString());
-                   result.setFailureMessage(
-                           JMeterUtils.getResString("comparison_differ_time")+ //$NON-NLS-1$
-                           compareTime+
-                           JMeterUtils.getResString("comparison_unit")); //$NON-NLS-1$
-                    break;
-                }
+        if (compareTime < 0) {
+            return;
+        }
+        long prevTime = -1;
+        SampleResult prevResult = null;
+        boolean success = true;
+        StringBuilder buf = new StringBuilder();
+        for (SampleResult sResult : responses) {
+            long currentTime = sResult.getTime();
+            if (prevTime != -1) {
+                success = Math.abs(prevTime - currentTime) <= compareTime;
+                prevResult = sResult;
+            }
+            if (success) {
                 prevResult = sResult;
                 prevTime = currentTime;
+            } else {
+                result.setFailure(true);
+                buf.setLength(0);
+                appendResultDetails(buf, prevResult);
+                buf.append(JMeterUtils.getResString("comparison_response_time")).append(prevTime); //$NON-NLS-1$
+                result.addToBaseResult(buf.toString());
+                buf.setLength(0);
+                appendResultDetails(buf, sResult);
+                buf.append(JMeterUtils.getResString("comparison_response_time")).append(currentTime); //$NON-NLS-1$
+                result.addToSecondaryResult(buf.toString());
+                result.setFailureMessage(
+                        JMeterUtils.getResString("comparison_differ_time") + //$NON-NLS-1$
+                                compareTime +
+                                JMeterUtils.getResString("comparison_unit")); //$NON-NLS-1$
+                break;
             }
         }
     }
 
     private void compareContent(CompareAssertionResult result) {
-        if (compareContent) {
-            String prevContent = null;
-            SampleResult prevResult = null;
-            boolean success = true;
-            StringBuilder buf = new StringBuilder();
-            for (SampleResult sResult : responses) {
-                String currentContent = sResult.getResponseDataAsString();
-                currentContent = filterString(currentContent);
-                if (prevContent != null) {
-                    success = prevContent.equals(currentContent);
-                }
-                if (!success) {
-                    result.setFailure(true);
-                    buf.setLength(0);
-                    appendResultDetails(buf, prevResult);
-                    buf.append(prevContent);
-                    result.addToBaseResult(buf.toString());
-                    buf.setLength(0);
-                    appendResultDetails(buf, sResult);
-                    buf.append(currentContent);
-                    result.addToSecondaryResult(buf.toString());
-                    result.setFailureMessage(JMeterUtils.getResString("comparison_differ_content")); //$NON-NLS-1$
-                    break;
-                }
+        if (!compareContent) {
+            return;
+        }
+        String prevContent = null;
+        SampleResult prevResult = null;
+        boolean success = true;
+        StringBuilder buf = new StringBuilder();
+        for (SampleResult sResult : responses) {
+            String currentContent = sResult.getResponseDataAsString();
+            currentContent = filterString(currentContent);
+            if (prevContent != null) {
+                success = prevContent.equals(currentContent);
+            }
+            if (success) {
                 prevResult = sResult;
                 prevContent = currentContent;
+            } else {
+                result.setFailure(true);
+                buf.setLength(0);
+                appendResultDetails(buf, prevResult);
+                buf.append(prevContent);
+                result.addToBaseResult(buf.toString());
+                buf.setLength(0);
+                appendResultDetails(buf, sResult);
+                buf.append(currentContent);
+                result.addToSecondaryResult(buf.toString());
+                result.setFailureMessage(JMeterUtils.getResString("comparison_differ_content")); //$NON-NLS-1$
+                break;
             }
         }
     }
@@ -145,15 +149,19 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
     private String filterString(final String content) {
         if (stringsToSkip == null || stringsToSkip.isEmpty()) {
             return content;
-        } else {
-            String result = content;
-            for (SubstitutionElement regex : stringsToSkip) {
-                emptySub.setSubstitution(regex.getSubstitute());
-                result = Util.substitute(JMeterUtils.getMatcher(), JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
-                        emptySub, result, Util.SUBSTITUTE_ALL);
-            }
-            return result;
         }
+
+        String result = content;
+        for (SubstitutionElement regex : stringsToSkip) {
+            emptySub.setSubstitution(regex.getSubstitute());
+            result = Util.substitute(
+                    JMeterUtils.getMatcher(),
+                    JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
+                    emptySub,
+                    result,
+                    Util.SUBSTITUTE_ALL);
+        }
+        return result;
     }
 
     @Override

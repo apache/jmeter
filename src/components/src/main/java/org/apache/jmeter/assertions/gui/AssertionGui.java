@@ -301,11 +301,8 @@ public class AssertionGui extends AbstractAssertionGui {
             tableModel.addRow(new Object[] { jMeterProperty.getStringValue() });
         }
 
-        if (model.getTestStrings().size() == 0) {
-            deletePattern.setEnabled(false);
-        } else {
-            deletePattern.setEnabled(true);
-        }
+        boolean testStringsPresent = model.getTestStrings().size() != 0;
+        deletePattern.setEnabled(testStringsPresent);
 
         tableModel.fireTableDataChanged();
     }
