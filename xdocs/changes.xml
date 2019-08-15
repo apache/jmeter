@@ -106,6 +106,8 @@ to view the last release notes of version 5.1.1.
   <li><bug>62863</bug>Enable PKCS11 keystores for usage with KeyStore Manager. Based on patch by Clifford Harms (clifford.harms at gmail.com).</li>
   <li><pr>457</pr>Slight performance improvement in PoissonRandomTimer by using ThreadLocalRandom. Based on a patch by Xia Li.</li>
   <li><bug>62787</bug>New <code>XPath2 Assertion</code> supporting XPath2 with better performances than <code>XPath Assertion</code>. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  <li><bug>63643</bug>Skip BOM on files opened through <code>FileServer</code> and use the BOM to detect the character encoding,
+      if none is given explicitly. Reported by Havlicek Honza (havlicek.honza at gmail.com)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -224,6 +226,7 @@ to view the last release notes of version 5.1.1.
     <li>Brian Tully (brian.tully at acquia.com)</li>
     <li>Amer Ghazal (amerghazal at gmail.com)</li>
     <li>Stefan Seide (stefan at trilobyte-se.de)</li>
+    <li>Havlicek Honza (havlicek.honza at gmail.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.

@@ -27,6 +27,7 @@ class FileServerSpec extends JMeterSpec {
 
     def testFile = getResourceFilePath("testfiles/unit/FileServerSpec.csv")
     def emptyFile = getResourceFilePath("testfiles/empty.csv")
+    def bomFile = getResourceFilePath("testfiles/bomData.csv")
 
 
     def setup() {
@@ -214,4 +215,12 @@ class FileServerSpec extends JMeterSpec {
                     .getCanonicalFile() == testFile.getCanonicalFile()
     }
 
+    def "skip bom at start of file and set correct encoding"() {
+        given:
+            sut.reserveFile(bomFile)
+        when:
+            def header = sut.readLine(bomFile)
+        then:
+            header == '"äöü"'
+    }
 }
