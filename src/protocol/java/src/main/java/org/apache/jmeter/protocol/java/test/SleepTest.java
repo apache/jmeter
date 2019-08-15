@@ -63,9 +63,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      */
     public static final long DEFAULT_SLEEP_MASK = 0x3ff;
 
-    /**
-     * The base number of milliseconds to sleep during each sample.
-     */
+    /** The base number of milliseconds to sleep during each sample. */
     private long sleepTime;
 
     /**

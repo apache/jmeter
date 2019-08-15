@@ -38,7 +38,9 @@ import org.slf4j.LoggerFactory;
  * JSON-PATH based extractor
  * @since 3.0
  */
-public class JSONPostProcessor extends AbstractScopedTestElement implements Serializable, PostProcessor, ThreadListener{
+public class JSONPostProcessor
+        extends AbstractScopedTestElement
+        implements Serializable, PostProcessor, ThreadListener {
 
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(JSONPostProcessor.class);

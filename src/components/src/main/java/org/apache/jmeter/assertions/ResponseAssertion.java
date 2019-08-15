@@ -368,7 +368,9 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 result.setFailure(true);
                 String customMsg = getCustomFailureMessage();
                 if (StringUtils.isEmpty(customMsg)) {
-                    result.setFailureMessage(allCheckMessage.stream().collect(Collectors.joining("\t", "", "\t")));
+                    result.setFailureMessage(
+                            allCheckMessage.stream()
+                                    .collect(Collectors.joining("\t", "", "\t")));
                 } else {
                     result.setFailureMessage(customMsg);
                 }
@@ -512,7 +514,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 break;
             }
         }
-        final String            startingEqSeq;
+        final String startingEqSeq;
         if (firstDiff == 0) {
             startingEqSeq = "";
         } else {
@@ -534,8 +536,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         if (endingEqSeq.length() == 0) {
             recDeltaSeq = trunc(true, received.substring(firstDiff, recLength));
             compDeltaSeq = trunc(true, comparison.substring(firstDiff, compLength));
-        }
-        else {
+        } else {
             recDeltaSeq = trunc(true, received.substring(firstDiff, lastRecDiff + 1));
             compDeltaSeq = trunc(true, comparison.substring(firstDiff, lastCompDiff + 1));
         }

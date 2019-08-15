@@ -97,7 +97,6 @@ public class ReportGeneratorConfiguration {
     private static final String REPORT_GENERATOR_KEY_END_DATE = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "end_date";
 
-
     // Required graph properties
     // Exclude controllers
     public static final String GRAPH_KEY_EXCLUDE_CONTROLLERS = "exclude_controllers";

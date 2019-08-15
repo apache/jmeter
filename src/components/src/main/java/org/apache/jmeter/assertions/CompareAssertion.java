@@ -131,12 +131,12 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
     private void appendResultDetails(StringBuilder buf, SampleResult result) {
         final String samplerData = result.getSamplerData();
-        if (samplerData != null){
+        if (samplerData != null) {
             buf.append(samplerData.trim());
         }
         buf.append("\n"); //$NON-NLS-1$
         final String requestHeaders = result.getRequestHeaders();
-        if (requestHeaders != null){
+        if (requestHeaders != null) {
             buf.append(requestHeaders);
         }
         buf.append("\n\n"); //$NON-NLS-1$
