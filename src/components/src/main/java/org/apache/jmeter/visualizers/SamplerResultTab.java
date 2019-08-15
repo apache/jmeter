@@ -73,7 +73,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class SamplerResultTab implements ResultRenderer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RenderAsText.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SamplerResultTab.class);
     // N.B. these are not multi-threaded, so don't make it static
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
 

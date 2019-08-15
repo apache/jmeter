@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.protocol.java.test.JavaTest;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -51,7 +50,7 @@ public class JavaSamplerContext {
      */
 
     /** Logging */
-    private static final Logger log = LoggerFactory.getLogger(JavaTest.class);
+    private static final Logger log = LoggerFactory.getLogger(JavaSamplerContext.class);
 
     /**
      * Map containing the initialization parameters for the JavaSamplerClient.

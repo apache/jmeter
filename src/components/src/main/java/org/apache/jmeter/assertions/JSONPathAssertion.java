@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Map;
 
-import org.apache.jmeter.extractor.json.jsonpath.JSONPostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -40,7 +39,7 @@ import com.jayway.jsonpath.JsonPath;
  * @since 4.0
  */
 public class JSONPathAssertion extends AbstractTestElement implements Serializable, Assertion {
-    private static final Logger log = LoggerFactory.getLogger(JSONPostProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(JSONPathAssertion.class);
     private static final long serialVersionUID = 1L;
     public static final String JSONPATH = "JSON_PATH";
     public static final String EXPECTEDVALUE = "EXPECTED_VALUE";
