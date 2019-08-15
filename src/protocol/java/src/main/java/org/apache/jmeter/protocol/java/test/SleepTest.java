@@ -53,15 +53,11 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
 
     private static final long serialVersionUID = 240L;
 
-    /**
-     * The default value of the SleepTime parameter, in milliseconds.
-     */
-    public static final long DEFAULT_SLEEP_TIME = 1000;
+    /** The default value of the SleepTime parameter, in milliseconds. */
+    private static final long DEFAULT_SLEEP_TIME = 1000;
 
-    /**
-     * The default value of the SleepMask parameter.
-     */
-    public static final long DEFAULT_SLEEP_MASK = 0x3ff;
+    /** The default value of the SleepMask parameter. */
+    private static final long DEFAULT_SLEEP_MASK = 0x3ff;
 
     /** The base number of milliseconds to sleep during each sample. */
     private long sleepTime;
