@@ -170,7 +170,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 
         private static final Logger log = LoggerFactory.getLogger(TimeCountConsumer.class);
 
-        private class FileInfo {
+        private static class FileInfo {
             private final File file;
             private final CsvSampleWriter writer;
 
