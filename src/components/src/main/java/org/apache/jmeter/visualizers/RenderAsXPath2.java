@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RenderAsXPath2 implements ResultRenderer, ActionListener {
 
-    private static final Logger log = LoggerFactory.getLogger(RenderAsXPath.class);
+    private static final Logger log = LoggerFactory.getLogger(RenderAsXPath2.class);
 
     private static final String XPATH_TESTER_COMMAND = "xpath_tester"; // $NON-NLS-1$
 

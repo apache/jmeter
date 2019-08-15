@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DNSCacheManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DNSCachePanel.class);
 
     private static final long serialVersionUID = 2120L;
 

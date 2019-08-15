@@ -27,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.protocol.java.test.JavaTest;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
@@ -46,7 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JavaSampler extends AbstractSampler implements TestStateListener, Interruptible {
 
-    private static final Logger log = LoggerFactory.getLogger(JavaTest.class);
+    private static final Logger log = LoggerFactory.getLogger(JavaSampler.class);
 
     private static final long serialVersionUID = 233L; // Remember to change this when the class changes ...
 

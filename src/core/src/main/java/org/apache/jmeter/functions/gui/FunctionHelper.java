@@ -45,7 +45,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
-import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.action.ActionNames;
@@ -75,7 +74,7 @@ import org.slf4j.LoggerFactory;
 public class FunctionHelper extends JDialog implements ActionListener, ChangeListener, LocaleChangeListener {
     private static final long serialVersionUID = 240L;
 
-    private static final Logger log = LoggerFactory.getLogger(ClientJMeterEngine.class);
+    private static final Logger log = LoggerFactory.getLogger(FunctionHelper.class);
 
     private static final String GENERATE = "GENERATE";
 

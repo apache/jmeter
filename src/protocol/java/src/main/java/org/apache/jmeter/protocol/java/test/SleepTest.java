@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SleepTest extends AbstractJavaSamplerClient implements Serializable, Interruptible {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JavaTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SleepTest.class);
 
     private static final long serialVersionUID = 240L;
 
