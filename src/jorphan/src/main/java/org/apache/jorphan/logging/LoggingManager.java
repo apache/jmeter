@@ -91,7 +91,7 @@ public final class LoggingManager {
     }
 
     /**
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     private static final String PACKAGE_PREFIX = "org.apache."; //$NON_NLS-1$

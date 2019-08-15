@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLStreamException;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.processor.PostProcessor;
@@ -221,11 +220,10 @@ public class XPath2Extractor
      * @param matchNumber int Match Number
      * @param responseData String that contains the entire Document
      * @throws SaxonApiException
-     * @throws XMLStreamException
      * @throws FactoryConfigurationError
      */
     private void getValuesForXPath(String query, List<String> matchStrings, int matchNumber, String responseData)
-            throws SaxonApiException, XMLStreamException, FactoryConfigurationError {
+            throws SaxonApiException, FactoryConfigurationError {
         XPathUtil.putValuesForXPathInListUsingSaxon(responseData, query, matchStrings, getFragment(), matchNumber, getNamespaces());
     }
 
