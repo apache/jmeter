@@ -18,6 +18,7 @@
 package org.apache.jmeter.services
 
 import org.apache.jmeter.junit.spock.JMeterSpec
+
 import spock.lang.Unroll
 
 @Unroll
@@ -223,4 +224,15 @@ class FileServerSpec extends JMeterSpec {
         then:
             header == '"äöü"'
     }
+
+    def "fail to read a line from a directory"() {
+        given:
+            def directory = new File(bomFile).parent
+            sut.reserveFile(directory)
+        when:
+            sut.readLine(directory)
+        then:
+            thrown(IllegalArgumentException)
+    }
+
 }
