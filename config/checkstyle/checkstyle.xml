@@ -50,12 +50,12 @@
     <property name="fileExtensions" value="java, kt, kts, groovy, xml, properties"/>
     <property name="message" value="Unnecessary consecutive lines"/>
   </module>
-  <!--<module name="RegexpOnFilename">-->
-    <!--<property name="folderPattern" value="[\\/]src[\\/]\w+[\\/]java[\\/]"/>-->
-    <!--<property name="fileNamePattern" value="\.java$"/>-->
-    <!--<property name="match" value="false"/>-->
-    <!--<message key="regexp.filepath.mismatch" value="Only java files should be located in the ''src/*/java'' folders."/>-->
-  <!--</module>-->
+  <module name="RegexpOnFilename">
+    <property name="folderPattern" value="[\\/]src[\\/]\w+[\\/]java[\\/]"/>
+    <property name="fileNamePattern" value="\.java$"/>
+    <property name="match" value="false"/>
+    <message key="regexp.filepath.mismatch" value="Only java files should be located in the ''src/*/java'' folders."/>
+  </module>
   <module name="UniqueProperties">
     <property name="fileExtensions" value="properties"/>
   </module>
