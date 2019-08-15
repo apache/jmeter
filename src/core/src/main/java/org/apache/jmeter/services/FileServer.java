@@ -424,7 +424,7 @@ public class FileServer {
         if (!fileEntry.file.canRead() || !fileEntry.file.isFile()) {
             throw new IllegalArgumentException("File "+ fileEntry.file.getName()+ " must exist and be readable");
         }
-        BOMInputStream fis = new BOMInputStream(new FileInputStream(fileEntry.file));
+        BOMInputStream fis = new BOMInputStream(new FileInputStream(fileEntry.file)); //NOSONAR
         InputStreamReader isr = null;
         // If file encoding is specified, read using that encoding, otherwise use default platform encoding
         String charsetName = fileEntry.charSetEncoding;
