@@ -48,7 +48,6 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Implement ResultsRender for XPath tester
  */

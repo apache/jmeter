@@ -404,7 +404,6 @@ public class AssertionGui extends AbstractAssertionGui {
         gbc.weighty = 1;
     }
 
-
     /**
      * Create a panel allowing the user to choose what type of test should be
      * performed.

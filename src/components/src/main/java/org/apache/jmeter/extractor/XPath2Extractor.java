@@ -54,9 +54,11 @@ import net.sf.saxon.s9api.SaxonApiException;
  * </dl>
   see org.apache.jmeter.extractor.TestXPathExtractor for unit tests
  */
-public class XPath2Extractor extends AbstractScopedTestElement implements
-PostProcessor, Serializable {
-    private static final Logger log = LoggerFactory.getLogger(XPathExtractor.class);
+public class XPath2Extractor
+        extends AbstractScopedTestElement
+        implements PostProcessor, Serializable {
+
+    private static final Logger log = LoggerFactory.getLogger(XPath2Extractor.class);
 
     private static final long serialVersionUID = 242L;
 
@@ -81,7 +83,6 @@ PostProcessor, Serializable {
     private String concat(String s1, int i){
         return s1 + "_" + i; // $NON-NLS-1$
     }
-
 
     /**
      * Do the job - extract value from (X)HTML response using XPath Query.
