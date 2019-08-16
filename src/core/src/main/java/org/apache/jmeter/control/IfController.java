@@ -81,9 +81,8 @@ public class IfController extends GenericController implements Serializable, Thr
             getInstance().getEngineByName(NASHORN_ENGINE_NAME) == null;
 
 
-    private static final ThreadLocal<ScriptEngine> NASHORN_ENGINE = ThreadLocal.withInitial(() -> {
-        return getInstance().getEngineByName("nashorn");//$NON-NLS-N$
-    });
+    private static final ThreadLocal<ScriptEngine> NASHORN_ENGINE = ThreadLocal
+            .withInitial(() -> getInstance().getEngineByName(NASHORN_ENGINE_NAME));
 
     private interface JsEvaluator {
         boolean evaluate(String testElementName, String condition);
