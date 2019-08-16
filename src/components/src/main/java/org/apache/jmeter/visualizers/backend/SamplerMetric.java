@@ -37,7 +37,7 @@ public class SamplerMetric {
     private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_window", 100);
     private static final int LARGE_SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_large_window", 5000);
 
-    private static volatile WindowMode WINDOW_MODE = WindowMode.get();
+    private static volatile WindowMode globalWindowMode = WindowMode.get();
 
     /**
      * Response times for OK samples
@@ -72,7 +72,7 @@ public class SamplerMetric {
      */
     public SamplerMetric() {
         // Limit to sliding window of SLIDING_WINDOW_SIZE values for FIXED mode
-        if (WINDOW_MODE == WindowMode.FIXED) {
+        if (globalWindowMode == WindowMode.FIXED) {
             for (DescriptiveStatistics stat : windowedStats) {
                 stat.setWindowSize(SLIDING_WINDOW_SIZE);
             }
@@ -82,11 +82,12 @@ public class SamplerMetric {
     /**
      * Set {@link WindowMode} to use for newly created metrics.
      * @param windowMode new visibility mode
+     * @deprecated only used for internal testing
      */
     @Deprecated
     @VisibleForTesting(visibility = VisibleForTesting.Visibility.PRIVATE)
     public static void setDefaultWindowMode(WindowMode windowMode) {
-        WINDOW_MODE = windowMode;
+        globalWindowMode = windowMode;
     }
 
     /**
@@ -151,7 +152,7 @@ public class SamplerMetric {
      * Reset metric except for percentile related data
      */
     public synchronized void resetForTimeInterval() {
-        switch (WINDOW_MODE) {
+        switch (globalWindowMode) {
         case FIXED:
             // We don't clear responsesStats nor usersStats as it will slide as per my understanding of
             // http://commons.apache.org/proper/commons-math/userguide/stat.html
