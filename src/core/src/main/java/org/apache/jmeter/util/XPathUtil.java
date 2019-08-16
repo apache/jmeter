@@ -662,12 +662,7 @@ public class XPathUtil {
             }
         } catch (TransformerException e) {
             result.setError(true);
-            result.setFailureMessage(
-                    new StringBuilder("TransformerException: ")
-                    .append(e.getMessage())
-                    .append(" for:")
-                    .append(xPathExpression)
-                    .toString());
+            result.setFailureMessage("TransformerException: " + e.getMessage() + " for: " + xPathExpression);
         }
     }
 
