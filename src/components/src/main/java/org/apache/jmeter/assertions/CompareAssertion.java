@@ -71,32 +71,37 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         long prevTime = -1;
         SampleResult prevResult = null;
         boolean success = true;
-        for (SampleResult sResult : responses) {
-            long currentTime = sResult.getTime();
+        for (SampleResult currentResult : responses) {
+            long currentTime = currentResult.getTime();
             if (prevTime != -1) {
                 success = Math.abs(prevTime - currentTime) <= compareTime;
-                prevResult = sResult;
+                prevResult = currentResult;
             }
             if (success) {
-                prevResult = sResult;
+                prevResult = currentResult;
                 prevTime = currentTime;
-            } else {
-                result.setFailure(true);
-                StringBuilder sb = new StringBuilder();
-                appendResultDetails(sb, prevResult);
-                sb.append(JMeterUtils.getResString("comparison_response_time")).append(prevTime); //$NON-NLS-1$
-                result.addToBaseResult(sb.toString());
-                sb.setLength(0);
-                appendResultDetails(sb, sResult);
-                sb.append(JMeterUtils.getResString("comparison_response_time")).append(currentTime); //$NON-NLS-1$
-                result.addToSecondaryResult(sb.toString());
-                result.setFailureMessage(
-                        JMeterUtils.getResString("comparison_differ_time") + //$NON-NLS-1$
-                                compareTime +
-                                JMeterUtils.getResString("comparison_unit")); //$NON-NLS-1$
-                break;
+                continue;
             }
+            markTimeFailure(result, prevResult, prevTime, currentResult, currentTime);
+            return;
         }
+    }
+
+    private void markTimeFailure(CompareAssertionResult result, SampleResult prevResult, long prevTime,
+            SampleResult currentResult, long currentTime) {
+        result.setFailure(true);
+        StringBuilder sb = new StringBuilder();
+        appendResultDetails(sb, prevResult);
+        sb.append(JMeterUtils.getResString("comparison_response_time")).append(prevTime); //$NON-NLS-1$
+        result.addToBaseResult(sb.toString());
+        sb.setLength(0);
+        appendResultDetails(sb, currentResult);
+        sb.append(JMeterUtils.getResString("comparison_response_time")).append(currentTime); //$NON-NLS-1$
+        result.addToSecondaryResult(sb.toString());
+        result.setFailureMessage(
+                JMeterUtils.getResString("comparison_differ_time") + //$NON-NLS-1$
+                        compareTime +
+                        JMeterUtils.getResString("comparison_unit")); //$NON-NLS-1$
     }
 
     private void compareContent(CompareAssertionResult result) {
@@ -106,29 +111,34 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         String prevContent = null;
         SampleResult prevResult = null;
         boolean success = true;
-        for (SampleResult sResult : responses) {
-            String currentContent = sResult.getResponseDataAsString();
+        for (SampleResult currentResult : responses) {
+            String currentContent = currentResult.getResponseDataAsString();
             currentContent = filterString(currentContent);
             if (prevContent != null) {
                 success = prevContent.equals(currentContent);
             }
             if (success) {
-                prevResult = sResult;
+                prevResult = currentResult;
                 prevContent = currentContent;
-            } else {
-                result.setFailure(true);
-                StringBuilder sb = new StringBuilder();
-                appendResultDetails(sb, prevResult);
-                sb.append(prevContent);
-                result.addToBaseResult(sb.toString());
-                sb.setLength(0);
-                appendResultDetails(sb, sResult);
-                sb.append(currentContent);
-                result.addToSecondaryResult(sb.toString());
-                result.setFailureMessage(JMeterUtils.getResString("comparison_differ_content")); //$NON-NLS-1$
-                break;
+                continue;
             }
+            markContentFailure(result, prevContent, prevResult, currentResult, currentContent);
+            return;
         }
+    }
+
+    private void markContentFailure(CompareAssertionResult result, String prevContent, SampleResult prevResult,
+            SampleResult currentResult, String currentContent) {
+        result.setFailure(true);
+        StringBuilder sb = new StringBuilder();
+        appendResultDetails(sb, prevResult);
+        sb.append(prevContent);
+        result.addToBaseResult(sb.toString());
+        sb.setLength(0);
+        appendResultDetails(sb, currentResult);
+        sb.append(currentContent);
+        result.addToSecondaryResult(sb.toString());
+        result.setFailureMessage(JMeterUtils.getResString("comparison_differ_content")); //$NON-NLS-1$
     }
 
     private void appendResultDetails(StringBuilder buf, SampleResult result) {
