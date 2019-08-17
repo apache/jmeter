@@ -122,12 +122,7 @@ public class JMeterUtils implements UnitTestManager {
 
     private static volatile boolean ignoreResorces = false; // Special flag for use in debugging resources
 
-    private static final ThreadLocal<Perl5Matcher> localMatcher = new ThreadLocal<Perl5Matcher>() {
-        @Override
-        protected Perl5Matcher initialValue() {
-            return new Perl5Matcher();
-        }
-    };
+    private static final ThreadLocal<Perl5Matcher> localMatcher = ThreadLocal.withInitial(Perl5Matcher::new);
 
     /**
      * Gets Perl5Matcher for this thread.

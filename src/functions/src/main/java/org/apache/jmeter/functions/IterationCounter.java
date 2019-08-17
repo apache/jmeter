@@ -49,12 +49,7 @@ public class IterationCounter extends AbstractFunction {
        synchronized(this){
            globalCounter=0;
        }
-       perThreadInt = new ThreadLocal<Integer>(){
-            @Override
-            protected Integer initialValue() {
-                return Integer.valueOf(0);
-            }
-        };
+        perThreadInt = ThreadLocal.withInitial(() -> Integer.valueOf(0));
     }
 
     static {

@@ -68,18 +68,8 @@ public class CounterConfig extends AbstractTestElement
     private static final Logger log = LoggerFactory.getLogger(CounterConfig.class);
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        perTheadNumber = new ThreadLocal<Long>() {
-            @Override
-            protected Long initialValue() {
-                return Long.valueOf(getStart());
-            }
-        };
-        perTheadLastIterationNumber = new ThreadLocal<Long>() {
-            @Override
-            protected Long initialValue() {
-                return Long.valueOf(1);
-            }
-        };
+        perTheadNumber = ThreadLocal.withInitial(()-> Long.valueOf(getStart()));
+        perTheadLastIterationNumber = ThreadLocal.withInitial(() -> Long.valueOf(1));
     }
 
 

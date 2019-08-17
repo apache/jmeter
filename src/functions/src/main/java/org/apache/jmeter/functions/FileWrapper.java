@@ -52,12 +52,7 @@ public final class FileWrapper {
 
     /* The cache of file packs - used to improve thread access */
     private static final ThreadLocal<Map<String, FileWrapper>> filePacks =
-        new ThreadLocal<Map<String, FileWrapper>>() {
-        @Override
-        protected Map<String, FileWrapper> initialValue() {
-            return new HashMap<>();
-        }
-    };
+        ThreadLocal.withInitial(HashMap::new);
 
     private final FileRowColContainer container;
 

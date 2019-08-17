@@ -52,12 +52,7 @@ final class XPathWrapper {
 
     /* The cache of file packs - for faster local access */
     private static final ThreadLocal<Map<String, XPathFileContainer>> filePacks =
-        new ThreadLocal<Map<String, XPathFileContainer>>() {
-        @Override
-        protected Map<String, XPathFileContainer> initialValue() {
-            return new HashMap<>();
-        }
-    };
+        ThreadLocal.withInitial(HashMap::new);
 
     private XPathWrapper() {// Prevent separate instantiation
         super();
