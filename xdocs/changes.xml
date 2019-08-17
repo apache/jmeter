@@ -113,6 +113,7 @@ to view the last release notes of version 5.1.1.
 <h3>Functions</h3>
 <ul>
   <li><bug>63219</bug>New function <code>__StringToFile</code> to save/append a string into a file. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  <li>Use <code>AtomicInteger</code> for <code>__counter</code> instead of synchronization on our own</li>
 </ul>
 
 <h3>I18N</h3>

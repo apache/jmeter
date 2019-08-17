@@ -21,6 +21,7 @@ package org.apache.jmeter.functions;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -39,26 +40,15 @@ public class IterationCounter extends AbstractFunction {
 
     private static final String KEY = "__counter"; //$NON-NLS-1$
 
-    private ThreadLocal<Integer> perThreadInt;
-
     private Object[] variables;
 
-    private int globalCounter;//MAXINT = 2,147,483,647
+    private AtomicInteger globalCounter = new AtomicInteger();
 
-    private void init(){ // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-       synchronized(this){
-           globalCounter=0;
-       }
-        perThreadInt = ThreadLocal.withInitial(() -> Integer.valueOf(0));
-    }
+    private ThreadLocal<AtomicInteger> perThreadInt = ThreadLocal.withInitial(AtomicInteger::new);
 
     static {
         desc.add(JMeterUtils.getResString("iteration_counter_arg_1")); //$NON-NLS-1$
         desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
-    }
-
-    public IterationCounter() {
-        init();
     }
 
     /** {@inheritDoc} */
@@ -78,15 +68,9 @@ public class IterationCounter extends AbstractFunction {
         String counterString = ""; //$NON-NLS-1$
 
         if (perThread) {
-            int threadCounter;
-            threadCounter = perThreadInt.get().intValue() + 1;
-            perThreadInt.set(Integer.valueOf(threadCounter));
-            counterString = String.valueOf(threadCounter);
+            counterString = String.valueOf(perThreadInt.get().addAndGet(1));
         } else {
-            synchronized (this) {
-                globalCounter++;
-                counterString = String.valueOf(globalCounter);
-            }
+            counterString = String.valueOf(globalCounter.addAndGet(1));
         }
 
         // vars will be null on Test Plan
