@@ -70,20 +70,17 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         }
         long prevTime = -1;
         SampleResult prevResult = null;
-        boolean success = true;
         for (SampleResult currentResult : responses) {
             long currentTime = currentResult.getTime();
             if (prevTime != -1) {
-                success = Math.abs(prevTime - currentTime) <= compareTime;
-                prevResult = currentResult;
+                boolean failure = Math.abs(prevTime - currentTime) > compareTime;
+                if (failure) {
+                    markTimeFailure(result, prevResult, prevTime, currentResult, currentTime);
+                    return;
+                }
             }
-            if (success) {
-                prevResult = currentResult;
-                prevTime = currentTime;
-                continue;
-            }
-            markTimeFailure(result, prevResult, prevTime, currentResult, currentTime);
-            return;
+            prevResult = currentResult;
+            prevTime = currentTime;
         }
     }
 
@@ -110,20 +107,18 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         }
         String prevContent = null;
         SampleResult prevResult = null;
-        boolean success = true;
         for (SampleResult currentResult : responses) {
             String currentContent = currentResult.getResponseDataAsString();
             currentContent = filterString(currentContent);
             if (prevContent != null) {
-                success = prevContent.equals(currentContent);
+                boolean failure = !prevContent.equals(currentContent);
+                if (failure) {
+                    markContentFailure(result, prevContent, prevResult, currentResult, currentContent);
+                    return;
+                }
             }
-            if (success) {
-                prevResult = currentResult;
-                prevContent = currentContent;
-                continue;
-            }
-            markContentFailure(result, prevContent, prevResult, currentResult, currentContent);
-            return;
+            prevResult = currentResult;
+            prevContent = currentContent;
         }
     }
 

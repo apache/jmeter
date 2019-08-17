@@ -139,6 +139,7 @@ to view the last release notes of version 5.1.1.
     <li>Updated jackson-annotations, jackson-core and jackson-databind to 2.9.9/2.9.9.3 (from 2.9.8)</li>
     <li><bug>63529</bug>Add more unit tests for org.apache.jorphan.util.JOrphanUtils. Contributed by John Bergqvist(John.Bergqvist at diffblue.com)</li>
     <li>Updated to latest checkstyle (version 8.22)</li>
+    <li>Clean-up of code in <code>CompareAssertion</code> and other locations. Based on patch by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -219,6 +220,7 @@ to view the last release notes of version 5.1.1.
   <li>Sun Tao (buzzerrookie at hotmail.com)</li>
   <li>John Bergqvist (John.Bergqvist at diffblue.com)</li>
   <li>Franz Schwab (franz.schwab@exasol.com)</li>
+  <li>Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
