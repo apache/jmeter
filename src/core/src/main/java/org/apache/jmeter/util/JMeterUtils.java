@@ -699,14 +699,12 @@ public class JMeterUtils implements UnitTestManager {
      * @return The PropDefault value
      */
     public static int getPropDefault(String propName, int defaultVal) {
-        int ans;
         try {
-            ans = Integer.parseInt(appProperties.getProperty(propName, Integer.toString(defaultVal)).trim());
+            return Integer.parseInt(appProperties.getProperty(propName, Integer.toString(defaultVal)).trim());
         } catch (Exception e) {
             log.warn("Exception '{}' occurred when fetching int property:'{}', defaulting to: {}", e.getMessage() , propName, defaultVal);
-            ans = defaultVal;
         }
-        return ans;
+        return defaultVal;
     }
 
     /**
@@ -719,21 +717,19 @@ public class JMeterUtils implements UnitTestManager {
      * @return The PropDefault value
      */
     public static boolean getPropDefault(String propName, boolean defaultVal) {
-        boolean ans;
         try {
             String strVal = appProperties.getProperty(propName, Boolean.toString(defaultVal)).trim();
             if ("true".equalsIgnoreCase(strVal) || "t".equalsIgnoreCase(strVal)) { // $NON-NLS-1$  // $NON-NLS-2$
-                ans = true;
+                return true;
             } else if ("false".equalsIgnoreCase(strVal) || "f".equalsIgnoreCase(strVal)) { // $NON-NLS-1$  // $NON-NLS-2$
-                ans = false;
+                return false;
             } else {
-                ans = Integer.parseInt(strVal) == 1;
+                return Integer.parseInt(strVal) == 1;
             }
         } catch (Exception e) {
             log.warn("Exception '{}' occurred when fetching boolean property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
-            ans = defaultVal;
         }
-        return ans;
+        return defaultVal;
     }
 
     /**
@@ -746,14 +742,12 @@ public class JMeterUtils implements UnitTestManager {
      * @return The PropDefault value
      */
     public static long getPropDefault(String propName, long defaultVal) {
-        long ans;
         try {
-            ans = Long.parseLong(appProperties.getProperty(propName, Long.toString(defaultVal)).trim());
+            return Long.parseLong(appProperties.getProperty(propName, Long.toString(defaultVal)).trim());
         } catch (Exception e) {
             log.warn("Exception '{}' occurred when fetching long property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
-            ans = defaultVal;
         }
-        return ans;
+        return defaultVal;
     }
 
     /**
@@ -766,14 +760,12 @@ public class JMeterUtils implements UnitTestManager {
      * @return The PropDefault value
      */
     public static float getPropDefault(String propName, float defaultVal) {
-        float ans;
         try {
-            ans = Float.parseFloat(appProperties.getProperty(propName, Float.toString(defaultVal)).trim());
+            return Float.parseFloat(appProperties.getProperty(propName, Float.toString(defaultVal)).trim());
         } catch (Exception e) {
             log.warn("Exception '{}' occurred when fetching float property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
-            ans = defaultVal;
         }
-        return ans;
+        return defaultVal;
     }
 
     /**
@@ -786,18 +778,15 @@ public class JMeterUtils implements UnitTestManager {
      * @return The PropDefault value applying a trim on it
      */
     public static String getPropDefault(String propName, String defaultVal) {
-        String ans = defaultVal;
-        try
-        {
+        try {
             String value = appProperties.getProperty(propName, defaultVal);
             if(value != null) {
-                ans = value.trim();
+                return value.trim();
             }
         } catch (Exception e) {
             log.warn("Exception '{}' occurred when fetching String property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
-            ans = defaultVal;
         }
-        return ans;
+        return defaultVal;
     }
 
     /**
@@ -805,17 +794,15 @@ public class JMeterUtils implements UnitTestManager {
      *
      * @param propName
      *            the name of the property.
-     * @return the value of the JMeter property, or null if not defined
+     * @return the value of the JMeter property, or {@code null} if not defined
      */
     public static String getProperty(String propName) {
-        String ans = null;
         try {
-            ans = appProperties.getProperty(propName);
+            return appProperties.getProperty(propName);
         } catch (Exception e) {
             log.warn("Exception '{}' occurred when fetching String property:'{}'", e.getMessage(), propName);
-            ans = null;
         }
-        return ans;
+        return null;
     }
 
     /**
