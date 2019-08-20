@@ -485,33 +485,29 @@ public class XPathUtil {
         }
     }
 
-
     public static List<String[]> namespacesParse(String namespaces) {
         List<String[]> res = new ArrayList<>();
         int length = namespaces.length();
         int startWord = 0;
         boolean afterEqual = false;
         int positionLastKey = -1;
-        for(int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
             char actualChar = namespaces.charAt(i);
-            if(actualChar=='=' && !afterEqual) {
-                String [] tmp = new String[2];
+            if (actualChar == '=' && !afterEqual) {
+                String[] tmp = new String[2];
                 tmp[0] = namespaces.substring(startWord, i);
                 res.add(tmp);
                 afterEqual = true;
-                startWord = i+1;
+                startWord = i + 1;
                 positionLastKey++;
-            }
-            else if(namespaces.charAt(i)=='\n' && afterEqual) {
+            } else if (namespaces.charAt(i) == '\n' && afterEqual) {
                 afterEqual = false;
-                res.get(positionLastKey)[1]= namespaces.substring(startWord, i);
-                startWord = i+1;
-            }
-            else if(namespaces.charAt(i)=='\n') {
-                startWord = i+1;
-            }
-            else if(i==length-1 && afterEqual) {
-                res.get(positionLastKey)[1]= namespaces.substring(startWord, i+1);
+                res.get(positionLastKey)[1] = namespaces.substring(startWord, i);
+                startWord = i + 1;
+            } else if (namespaces.charAt(i) == '\n') {
+                startWord = i + 1;
+            } else if (i == length - 1 && afterEqual) {
+                res.get(positionLastKey)[1] = namespaces.substring(startWord, i + 1);
             }
         }
         return res;
