@@ -38,6 +38,10 @@ public class SampleSenderFactory {
     private static final String MODE_DISKSTORE = "DiskStore"; // $NON-NLS-1$
     private static final String MODE_STRIPPED_DISKSTORE = "StrippedDiskStore"; // $NON-NLS-1$
 
+    private SampleSenderFactory() {
+        // this is a singleton, so don't let anyone instantiate us
+    }
+
     /**
      * Checks for the JMeter property mode and returns the required class.
      *
