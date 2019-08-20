@@ -434,7 +434,7 @@ public class XPathUtil {
         }
 
         try (StringReader reader = new StringReader(xmlFile)) {
-            // We could instanciate it once but might trigger issues in the future
+            // We could instantiate it once but might trigger issues in the future
             // Sharing of a DocumentBuilder across multiple threads is not recommended.
             // However, in the current implementation sharing a DocumentBuilder (once initialized)
             // will only cause problems if a SchemaValidator is used.
