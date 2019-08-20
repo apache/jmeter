@@ -500,11 +500,11 @@ public class XPathUtil {
                 afterEqual = true;
                 startWord = i + 1;
                 positionLastKey++;
-            } else if (namespaces.charAt(i) == '\n' && afterEqual) {
+            } else if (actualChar == '\n' && afterEqual) {
                 afterEqual = false;
                 res.get(positionLastKey)[1] = namespaces.substring(startWord, i);
                 startWord = i + 1;
-            } else if (namespaces.charAt(i) == '\n') {
+            } else if (actualChar == '\n') {
                 startWord = i + 1;
             } else if (i == length - 1 && afterEqual) {
                 res.get(positionLastKey)[1] = namespaces.substring(startWord, i + 1);
