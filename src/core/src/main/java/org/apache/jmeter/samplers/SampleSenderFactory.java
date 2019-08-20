@@ -76,7 +76,7 @@ public class SampleSenderFactory {
             try {
                 Class<?> clazz = Class.forName(type);
                 Constructor<?> cons = clazz.getConstructor(RemoteSampleListener.class);
-                s = (SampleSender) cons.newInstance(new Object[]{listener});
+                s = (SampleSender) cons.newInstance(listener);
             } catch (Exception e) {
                 // houston we have a problem !!
                 log.error(
