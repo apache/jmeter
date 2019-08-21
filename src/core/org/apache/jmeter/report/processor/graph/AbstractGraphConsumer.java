@@ -28,7 +28,12 @@ import org.apache.jmeter.report.processor.Aggregator;
 import org.apache.jmeter.report.processor.AggregatorFactory;
 import org.apache.jmeter.report.processor.ListResultData;
 import org.apache.jmeter.report.processor.MapResultData;
+import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.ValueResultData;
+import org.apache.jmeter.report.processor.graph.AbstractGraphValueSelector;
+import org.apache.jmeter.report.processor.graph.AbstractSeriesSelector;
+import org.apache.jmeter.util.JMeterUtils;
+
 
 /**
  * <p>
@@ -230,6 +235,27 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                         value.doubleValue())));
     }
 
+ /**
+     * Creates the group info for elapsed time percentile depending on jmeter
+     * properties.
+     *
+     * @param propertyKey
+     *            the property key
+     * @param defaultValue
+     *            the default value
+     * @param seriesName Series name
+     * @return the group info
+     */
+    protected final GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String seriesName,AbstractGraphValueSelector valueSelector,AbstractSeriesSelector seriesSelector) {
+        int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
+        PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
+        factory.setPercentileIndex(property);
+
+
+        return new GroupInfo(factory, seriesSelector,
+                valueSelector, false, false);
+
+  }  
     /**
      * Adds a value map build from specified parameters to the result map.
      *

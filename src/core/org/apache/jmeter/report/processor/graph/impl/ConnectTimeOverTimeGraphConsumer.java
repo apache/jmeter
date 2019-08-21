@@ -38,6 +38,7 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
     private static final boolean CONNECT_TIME_SAVED =
             JMeterUtils.getPropDefault("jmeter.save.saveservice.connect_time", true); //$NON-NLS-1$
     private static final String PERCENTILE_FORMAT = "%dth percentile";
+    private static final String PERCENTILE_PROPERTY = "aggregate_rpt_pct2";
 
     /*
      * (non-Javadoc)
@@ -52,28 +53,8 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
         keysSelector.setSelectBeginTime(false);
         return keysSelector;
     }
-
-    /**
-     * Creates the group info for elapsed time percentile depending on jmeter
-     * properties.
-     *
-     * @param propertyKey
-     *            the property key
-     * @param defaultValue
-     *            the default value
-     * @param seriesName Series name
-     * @return the group info
-     */
-    private GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String seriesName) {
-        int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
-        PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
-        factory.setPercentileIndex(property);
-
-        return new GroupInfo(factory, new NameSeriesSelector(),
-                new ConnectTimeValueSelector(false), false, false);
-    }
-
-    /*
+  
+  /*
    * (non-Javadoc)
    *
    * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
@@ -85,11 +66,14 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
             return Collections.emptyMap();
         }
 
+        ConnectTimeValueSelector valueSelector = new ConnectTimeValueSelector(false);
+        NameSeriesSelector seriesSelector = new NameSeriesSelector();
+
         HashMap<String, GroupInfo> groupInfos = new HashMap<>();
-        groupInfos.put("aggregate_rpt_pct2", //$NON-NLS-1$
-                createPercentileGroupInfo("aggregate_rpt_pct2", 95, //$NON-NLS-1$
+        groupInfos.put(PERCENTILE_PROPERTY, //$NON-NLS-1$
+                createPercentileGroupInfo(PERCENTILE_PROPERTY, 95, //$NON-NLS-1$
                         String.format(
-                                PERCENTILE_FORMAT, Integer.valueOf(95))));
+                                PERCENTILE_FORMAT, Integer.valueOf(95)),valueSelector,seriesSelector));
         return groupInfos;
     }
 }

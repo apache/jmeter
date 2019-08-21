@@ -37,6 +37,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer {
     private static final String PERCENTILE_FORMAT = "%dth percentile";
+    private static final String PERCENTILE_PROPERTY = "aggregate_rpt_pct2";
     /*
     /*
      * (non-Javadoc)
@@ -50,28 +51,6 @@ public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer 
         TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
         keysSelector.setSelectBeginTime(false);
         return keysSelector;
-    }
-
-    /**
-     * Creates the group info for elapsed time percentile depending on jmeter
-     * properties.
-     *
-     * @param propertyKey
-     *            the property key
-     * @param defaultValue
-     *            the default value
-     * @param serieName Serie name
-     * @return the group info
-     */
-    private GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String serieName) {
-        int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
-        PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
-        factory.setPercentileIndex(property);
-        StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
-        seriesSelector.setSeriesName(serieName);
-
-        return new GroupInfo(factory, seriesSelector,
-                new LatencyValueSelector(false), false, false);
     }
 
     /**
@@ -96,10 +75,15 @@ public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer 
         HashMap<String, GroupInfo> groupInfos = new HashMap<>();
         groupInfos.put("aggregate_report_max", //$NON-NLS-1$
             createMaxGroupInfo());
-        groupInfos.put("aggregate_rpt_pct2", //$NON-NLS-1$
-                createPercentileGroupInfo("aggregate_rpt_pct2", 95, //$NON-NLS-1$
-                        String.format(
-                                PERCENTILE_FORMAT, Integer.valueOf(95))));
+
+        LatencyValueSelector valueSelector = new LatencyValueSelector(false);
+        StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
+        String seriesName = String.format(PERCENTILE_FORMAT, Integer.valueOf(95));
+        seriesSelector.setSeriesName(seriesName);
+
+        groupInfos.put(PERCENTILE_PROPERTY, //$NON-NLS-1$
+                createPercentileGroupInfo(PERCENTILE_PROPERTY, 95, //$NON-NLS-1$
+                        seriesName,valueSelector,seriesSelector));
         return groupInfos;
     }
 }

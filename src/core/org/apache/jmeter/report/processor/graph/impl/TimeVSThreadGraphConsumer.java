@@ -38,7 +38,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
     private static final String PERCENTILE_FORMAT = "%dth percentile";
-
+    private static final String PERCENTILE_PROPERTY = "aggregate_rpt_pct2";
     /*
      * (non-Javadoc)
      *
@@ -56,25 +56,6 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
         };
     }
 
-    /**
-     * Creates the group info for elapsed time percentile depending on jmeter
-     * properties.
-     *
-     * @param propertyKey
-     *            the property key
-     * @param defaultValue
-     *            the default value
-     * @param serieName Serie name
-     * @return the group info
-     */
-    private GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String serieName) {
-        int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
-        PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
-        factory.setPercentileIndex(property);
-
-        return new GroupInfo(factory, new NameSeriesSelector(),
-                new ElapsedTimeValueSelector(false), false, false);
-    }
 
     /*
      * (non-Javadoc)
@@ -86,10 +67,12 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
     protected Map<String, GroupInfo> createGroupInfos() {
         HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
 
+        NameSeriesSelector seriesSelector = new NameSeriesSelector();
+        ElapsedTimeValueSelector valueSelector = new ElapsedTimeValueSelector(false);
+        String seriesName = String.format(PERCENTILE_FORMAT, Integer.valueOf(95));
+
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, //$NON-NLS-1$
-            createPercentileGroupInfo("aggregate_rpt_pct2", 95, //$NON-NLS-1$
-                    String.format(
-                        PERCENTILE_FORMAT, Integer.valueOf(95))));
+            createPercentileGroupInfo(PERCENTILE_PROPERTY, 95, seriesName,valueSelector,seriesSelector));
 
         return groupInfos;
     }
