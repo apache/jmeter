@@ -667,7 +667,6 @@ var connectTimeOverTimeInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-
                     axisLabel: "Percentile Connect Time in ms",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
