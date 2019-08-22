@@ -124,7 +124,7 @@ class ConverterSpec extends Specification {
             value                  | expected
             ""                     | new Date()
             new Date(30000)   | new Date(30000)
-            toLocalDateFormat("08/20/2019", DateFormat.SHORT) | new Date(1566252000L * 1000)
+            toLocalDateFormat("08/20/2019", DateFormat.SHORT) | toLocalDate("08/20/2019", DateFormat.SHORT)
     }
 
     def "Convert to Calendar from '#value'"() {
@@ -135,16 +135,21 @@ class ConverterSpec extends Specification {
             value                  | expected
             ""                     | new Date()
             new Date(30000)   | new Date(30000)
-            toLocalDateFormat("08/20/2019", DateFormat.SHORT) | new Date(1566252000L * 1000)
+            toLocalDateFormat("08/20/2019", DateFormat.SHORT) | toLocalDate("08/20/2019", DateFormat.SHORT)
     }
 
     def toLocalDateFormat(String dateString, int format) {
-        def date = DateFormat
-                .getDateInstance(DateFormat.SHORT, Locale.forLanguageTag("en_US"))
-                .parse(dateString)
+        def date = toLocalDate(dateString, format)
         return DateFormat.getDateInstance(format).format(date)
     }
-    
+
+    def toLocalDate(String dateString, int format) {
+        def date = DateFormat
+                .getDateInstance(format, Locale.forLanguageTag("en_US"))
+                .parse(dateString)
+        return date
+    }
+
     def "line breaks should be replaced in '#source' to '#expected'"() {
         expect:
            Converter.insertLineBreaks(source, "foo") == expected
