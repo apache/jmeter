@@ -73,7 +73,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
     /** A panel allowing the user to set arguments for this test. */
     private ArgumentsPanel argsPanel;
 
-    /** The current className of the Backend listenenr **/
+    /** The current className of the Backend listener **/
     private String className;
 
 

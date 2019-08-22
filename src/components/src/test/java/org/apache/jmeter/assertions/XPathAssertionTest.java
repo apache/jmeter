@@ -465,7 +465,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         log.debug(" res {}", res.isError());
         log.debug(" failure {}", res.getFailureMessage());
-        assertTrue("When the user give namspaces, un transformerException should be throw",
+        assertTrue("When the user give namespaces, un transformerException should be throw",
                 res.getFailureMessage().contains("TransformerException"));
     }
 }

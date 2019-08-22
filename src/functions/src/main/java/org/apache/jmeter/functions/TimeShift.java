@@ -71,7 +71,7 @@ public class TimeShift extends AbstractFunction {
             JMeterUtils.getResString("date_to_shift"), JMeterUtils.getResString("value_to_shift"), JMeterUtils.getResString("locale_format"),
             JMeterUtils.getResString("function_name_paropt"));
 
-    // Ensure that these are set, even if no paramters are provided
+    // Ensure that these are set, even if no parameters are provided
     private String format = ""; //$NON-NLS-1$
     private CompoundVariable dateToShiftCompound; // $NON-NLS-1$
     private CompoundVariable amountToShiftCompound; // $NON-NLS-1$

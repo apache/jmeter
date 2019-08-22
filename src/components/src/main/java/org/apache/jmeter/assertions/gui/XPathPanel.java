@@ -122,7 +122,7 @@ public class XPathPanel extends JPanel {
     }
 
     /**
-     * Negated chechbox
+     * Negated checkbox
      *
      * @return JCheckBox
      */

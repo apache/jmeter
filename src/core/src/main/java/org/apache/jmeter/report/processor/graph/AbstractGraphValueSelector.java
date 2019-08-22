@@ -21,7 +21,7 @@ import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
- * Base class allowing to select wether we ignore or not TC Sample Results
+ * Base class allowing to select whether we ignore or not TC Sample Results
  */
 abstract class AbstractGraphValueSelector implements GraphValueSelector {
     private boolean ignoreTransactionController;

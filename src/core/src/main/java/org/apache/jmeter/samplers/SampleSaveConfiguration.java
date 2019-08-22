@@ -372,7 +372,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             IS_XML = true;
         } else {
             if (!CSV.equals(howToSave)) {
-                log.warn("{} has unexepected value: '{}' - assuming 'csv' format", OUTPUT_FORMAT_PROP, howToSave);
+                log.warn("{} has unexpected value: '{}' - assuming 'csv' format", OUTPUT_FORMAT_PROP, howToSave);
             }
             IS_XML = false;
         }

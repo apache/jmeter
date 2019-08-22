@@ -361,7 +361,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     /**
-     * Hard Stop JMeterThread thrd and interrupt JVM Thread if interrupt is true
+     * Hard Stop JMeterThread third and interrupt JVM Thread if interrupt is true
      * @param jmeterThread {@link JMeterThread}
      * @param jvmThread {@link Thread}
      * @param interrupt Interrupt thread or not

@@ -64,7 +64,7 @@ public class Summariser extends AbstractTestElement
 
     /*
      * N.B. NoThreadClone is used to ensure that the testStarted() methods will share the same
-     * instance as the sampleOccured() methods, so the testStarted() method can fetch the
+     * instance as the sampleOccurred() methods, so the testStarted() method can fetch the
      * Totals accumulator object for the samples to be stored in.
      */
 

@@ -65,7 +65,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
      */
     public static final int RESTART_NEXT_LOOP = 3;
     /**
-     * Start next iteration of Current Looop
+     * Start next iteration of Current Loop
      */
     public static final int START_NEXT_ITERATION_CURRENT_LOOP = 4;
     /**

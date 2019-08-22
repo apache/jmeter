@@ -86,7 +86,7 @@ public class TransactionController extends GenericController implements SampleLi
     private transient int noFailingSamples;
 
     /**
-     * Cumulated pause time to excluse timer and post/pre processor times
+     * Cumulated pause time to exclude timer and post/pre processor times
      * Only used in NON parent Mode
      */
     private transient long pauseTime;
@@ -263,7 +263,7 @@ public class TransactionController extends GenericController implements SampleLi
             // See Bug 56811
             // triggerEndOfLoop is called when error occurs to end Main Loop
             // in this case normal workflow doesn't happen, so we need
-            // to notify the childs of TransactionController and
+            // to notify the child of TransactionController and
             // update them with SubSamplerResult
             if(subSampler instanceof TransactionSampler) {
                 TransactionSampler tc = (TransactionSampler) subSampler;
@@ -292,7 +292,7 @@ public class TransactionController extends GenericController implements SampleLi
         } else {
             SampleEvent event = new SampleEvent(res, threadContext.getThreadGroup().getName(),threadVars, true);
             // We must set res to null now, before sending the event for the transaction,
-            // so that we can ignore that event in our sampleOccured method
+            // so that we can ignore that event in our sampleOccurred method
             res = null;
             lnf.notifyListeners(event, pack.getSampleListeners());
         }

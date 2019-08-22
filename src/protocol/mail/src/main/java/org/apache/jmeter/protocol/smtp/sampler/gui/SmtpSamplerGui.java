@@ -41,7 +41,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
     private SmtpPanel smtpPanel;
 
     /**
-     * Creates new SmtpSamplerGui, standard constructer. Calls init();
+     * Creates new SmtpSamplerGui, standard constructor. Calls init();
      */
     public SmtpSamplerGui() {
         init();

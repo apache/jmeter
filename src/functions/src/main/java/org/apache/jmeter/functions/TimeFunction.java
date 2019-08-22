@@ -68,7 +68,7 @@ public class TimeFunction extends AbstractFunction {
                 JMeterUtils.getPropDefault("time.USER2","")); //$NON-NLS-1$
     }
 
-    // Ensure that these are set, even if no paramters are provided
+    // Ensure that these are set, even if no parameters are provided
     private String format   = ""; //$NON-NLS-1$
     private String variable = ""; //$NON-NLS-1$
 
