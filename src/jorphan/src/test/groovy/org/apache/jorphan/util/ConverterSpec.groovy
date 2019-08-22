@@ -62,19 +62,25 @@ class ConverterSpec extends Specification {
         expect:
             Converter.convert(value, type) == expected
         where:
-            value | type          | expected
-            23f   | float.class   | 23f
-            42f   | Float.class   | 42f
-            "42"  | Float.class   | 42f
-            23f   | double.class  | 23d
-            42f   | Double.class  | 42d
-            "42"  | Double.class  | 42d
-            23L   | int.class     | 23
-            42    | Integer.class | 42
-            "42"  | Integer.class | 42
-            23L   | long.class    | 23L
-            42    | Long.class    | 42L
-            "42"  | Long.class    | 42L
+            value     | type          | expected
+            23f       | float.class   | 23f
+            42f       | Float.class   | 42f
+            "42"      | Float.class   | 42f
+            23f       | double.class  | 23d
+            42f       | Double.class  | 42d
+            "42"      | Double.class  | 42d
+            23L       | int.class     | 23
+            42        | Integer.class | 42
+            "42"      | Integer.class | 42
+            23L       | long.class    | 23L
+            42        | Long.class    | 42L
+            "42"      | Long.class    | 42L
+            "invalid" | Float.class   | 0f
+            "invalid" | float.class   | 0f
+            "invalid" | double.class  | 0d
+            "invalid" | Double.class  | 0d
+            "invalid" | int.class     | 0
+            "invalid" | Integer.class | 0
     }
 
     def "Convert #value to Class gives #expected"() {
@@ -105,6 +111,10 @@ class ConverterSpec extends Specification {
             "c"                  | char.class      | 'c'
             "char"               | char.class      | 'c'
             65                   | char.class      | 'A'
+            ''                   | char.class      | ' '
+            Character.valueOf((char) 65)       | char.class | 'A'
+            Byte.valueOf((byte)65)             | char.class | 'A'
+            new Object() { String toString() {1/0}} | char.class | ' '
     }
 
     def "Convert to date from '#value'"() {
