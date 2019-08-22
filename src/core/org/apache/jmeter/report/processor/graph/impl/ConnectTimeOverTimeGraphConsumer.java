@@ -39,6 +39,7 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
             JMeterUtils.getPropDefault("jmeter.save.saveservice.connect_time", true); //$NON-NLS-1$
     private static final String PERCENTILE_FORMAT = "%dth percentile";
     private static final String PERCENTILE_PROPERTY = "aggregate_rpt_pct2";
+
     /*
      * (non-Javadoc)
      *
@@ -52,6 +53,8 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
         keysSelector.setSelectBeginTime(false);
         return keysSelector;
     }
+  
+  /*
    * (non-Javadoc)
    *
    * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
@@ -62,6 +65,7 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
         if(!CONNECT_TIME_SAVED) {
             return Collections.emptyMap();
         }
+
         ConnectTimeValueSelector valueSelector = new ConnectTimeValueSelector(false);
         NameSeriesSelector seriesSelector = new NameSeriesSelector();
 
