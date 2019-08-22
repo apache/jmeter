@@ -401,7 +401,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                         String pass = tokens[2];
                         String domain;
                         String realm;
-                        if (tokens.length > 3){ // Allow for old format file without the extra columnns
+                        if (tokens.length > 3){ // Allow for old format file without the extra columns
                             domain = tokens[3];
                             realm = tokens[4];
                         } else {

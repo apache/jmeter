@@ -44,7 +44,7 @@ public class SearchTreeCommand extends AbstractAction {
      * This method tries to find a JFrame ancestor from the specified source in
      * order to be the parent of the search dialog.<br>
      * With no parent set the search dialog might be hidden by the main JFrame when
-     * focus is transfered to that JFrame.
+     * focus is transferred to that JFrame.
      * </p>
      * <p>
      * If no parent if found, then we give up and build a search dialog with no

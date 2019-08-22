@@ -168,7 +168,7 @@ public class SampleMetadata {
      *            based)
      * @return The column name of the ith column
      * @throws IndexOutOfBoundsException
-     *             If the requested columln does not exist (&lt; 0 or &gt;
+     *             If the requested column does not exist (&lt; 0 or &gt;
      *             <code>getColumnCount()</code>)
      */
     public String getColumnName(int i) {

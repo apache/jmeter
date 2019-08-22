@@ -59,10 +59,10 @@ public interface SampleConsumer extends SampleProcessor {
      * channel.
      *
      * @param sampleMetadata
-     *            The sample metadata that are beeing consumed for the
+     *            The sample metadata that are being consumed for the
      *            associated channel
      * @param channel
-     *            The channel whose sample metadata are beeing defined
+     *            The channel whose sample metadata are being defined
      */
     void setConsumedMetadata(SampleMetadata sampleMetadata, int channel);
 

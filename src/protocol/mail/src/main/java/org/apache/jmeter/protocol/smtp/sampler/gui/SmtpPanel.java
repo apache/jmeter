@@ -110,7 +110,7 @@ public class SmtpPanel extends JPanel {
     private SecuritySettingsPanel securitySettingsPanel;
 
     /**
-     * Creates new form SmtpPanel, standard constructer. Calls
+     * Creates new form SmtpPanel, standard constructor. Calls
      * initComponents();.
      */
     public SmtpPanel() {

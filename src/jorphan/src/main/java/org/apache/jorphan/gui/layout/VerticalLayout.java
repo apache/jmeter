@@ -98,7 +98,7 @@ public class VerticalLayout implements LayoutManager, Serializable {
      * to the top with the specified vgap.
      *
      * @param vgap
-     *            an int value indicating the vertical seperation of the
+     *            an int value indicating the vertical separation of the
      *            components
      */
     public VerticalLayout(int vgap) {
@@ -110,7 +110,7 @@ public class VerticalLayout implements LayoutManager, Serializable {
      * specified vgap and horizontal alignment.
      *
      * @param vgap
-     *            an int value indicating the vertical seperation of the
+     *            an int value indicating the vertical separation of the
      *            components
      * @param alignment
      *            an int value which is one of <code>RIGHT, LEFT,
@@ -126,7 +126,7 @@ public class VerticalLayout implements LayoutManager, Serializable {
      * alignment and anchoring
      *
      * @param vgap
-     *            an int value indicating the vertical seperation of the
+     *            an int value indicating the vertical separation of the
      *            components
      * @param alignment
      *            an int value which is one of <code>RIGHT, LEFT, CENTER,

@@ -58,7 +58,7 @@ public class TimeoutEnabledQueueRequestor {
      * <code>DUPS_OK_ACKNOWLEDGE</code>.
      *
      * @param session the <code>QueueSession</code> the queue belongs to, session will not be closed by {@link TimeoutEnabledQueueRequestor}
-     * @param queue the queue to performthe request/reply call on
+     * @param queue the queue to perform the request/reply call on
      *
      * @exception JMSException
      *                if the JMS provider fails to create the

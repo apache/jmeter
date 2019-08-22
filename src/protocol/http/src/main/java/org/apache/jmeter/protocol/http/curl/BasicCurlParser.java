@@ -260,7 +260,7 @@ public class BasicCurlParser {
         }
 
         /**
-         * Tranform the bandwidth to cps value (byte/s), cps =
+         * Transform the bandwidth to cps value (byte/s), cps =
          * bandwidth*1024/8, the unit of bandwidth in JMeter is measured in kbit/s. And
          * the speed in Curl is measured in bytes/second, so the conversion formula is
          * cps=limitRate*1024

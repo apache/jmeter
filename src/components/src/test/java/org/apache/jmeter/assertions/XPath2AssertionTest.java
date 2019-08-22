@@ -207,7 +207,7 @@ public class XPath2AssertionTest {
         response.setResponseData(xmlDoc, "UTF-8");
         AssertionResult res = assertion.getResult(response);
         assertTrue("When format of xpath is wrong, the test should failed",res.isError());
-        assertTrue(res.getFailureMessage().contains("Exception occured computing assertion with XPath"));
+        assertTrue(res.getFailureMessage().contains("Exception occurred computing assertion with XPath"));
     }
 
     @Test

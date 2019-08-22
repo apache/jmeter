@@ -71,7 +71,7 @@ public class XPath2Assertion extends AbstractScopedAssertion implements Serializ
         } catch (CompletionException|SaxonApiException e) { // NOSONAR We handle exception within result failure message
             result.setError(true);
             // CompletionException happens if caching fails
-            result.setFailureMessage("Exception occured computing assertion with XPath:" + getXPathString() + ", error:" + e.getMessage());
+            result.setFailureMessage("Exception occurred computing assertion with XPath:" + getXPathString() + ", error:" + e.getMessage());
             return result;
         }
         return result;

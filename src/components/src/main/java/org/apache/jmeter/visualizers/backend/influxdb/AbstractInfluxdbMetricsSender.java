@@ -34,7 +34,7 @@ abstract class AbstractInfluxdbMetricsSender implements InfluxdbMetricsSender {
 
     /**
      * For field always use a backslash character
-     * \ to escape " caractere
+     * \ to escape " character
      */
     static final String fieldToStringValue(String s) {
         return s.trim().replaceAll("\"", "\\\\\"");
