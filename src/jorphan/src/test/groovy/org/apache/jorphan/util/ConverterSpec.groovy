@@ -144,4 +144,14 @@ class ConverterSpec extends Specification {
                 .parse(dateString)
         return DateFormat.getDateInstance(format).format(date)
     }
+    
+    def "line breaks should be replaced in '#source' to '#expected'"() {
+        expect:
+           Converter.insertLineBreaks(source, "foo") == expected
+        where:
+           source | expected
+           null   | ""
+           "bar"  | "bar"
+           "\nbar"| "foobar"
+    }
 }
