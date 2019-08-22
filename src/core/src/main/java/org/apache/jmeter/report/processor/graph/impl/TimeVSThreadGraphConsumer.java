@@ -22,12 +22,13 @@ import java.util.Map;
 
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.MapResultData;
-import org.apache.jmeter.report.processor.MeanAggregatorFactory;
+import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.ElapsedTimeValueSelector;
 import org.apache.jmeter.report.processor.graph.GraphKeysSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class TimeVSThreadGraphConsumer provides a graph to visualize average response time
@@ -36,7 +37,8 @@ import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
  * @since 3.0
  */
 public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
-
+    private static final String PERCENTILE_FORMAT = "%dth percentile";
+    private static final String PERCENTILE_PROPERTY = "aggregate_rpt_pct2";
     /*
      * (non-Javadoc)
      *
@@ -54,6 +56,7 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
         };
     }
 
+
     /*
      * (non-Javadoc)
      *
@@ -64,10 +67,12 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
     protected Map<String, GroupInfo> createGroupInfos() {
         HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
 
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new MeanAggregatorFactory(), new NameSeriesSelector(),
-                // We include Transaction Controller results
-                new ElapsedTimeValueSelector(false), false, true));
+        NameSeriesSelector seriesSelector = new NameSeriesSelector();
+        ElapsedTimeValueSelector valueSelector = new ElapsedTimeValueSelector(false);
+        String seriesName = String.format(PERCENTILE_FORMAT, Integer.valueOf(95));
+
+        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, //$NON-NLS-1$
+            createPercentileGroupInfo(PERCENTILE_PROPERTY, 95, seriesName,valueSelector,seriesSelector));
 
         return groupInfos;
     }

@@ -20,13 +20,14 @@ package org.apache.jmeter.report.processor.graph.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.processor.MeanAggregatorFactory;
-import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
+import org.apache.jmeter.report.processor.MaxAggregatorFactory;
+import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.LatencyValueSelector;
-import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
+import org.apache.jmeter.report.processor.graph.StaticSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class LatencyOverTimeGraphConsumer provides a graph to visualize latency
@@ -35,7 +36,9 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
  * @since 3.0
  */
 public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer {
-
+    private static final String PERCENTILE_FORMAT = "%dth percentile";
+    private static final String PERCENTILE_PROPERTY = "aggregate_rpt_pct2";
+    /*
     /*
      * (non-Javadoc)
      *
@@ -50,6 +53,17 @@ public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer 
         return keysSelector;
     }
 
+    /**
+     * Creates the group info for max elapsed time
+     * @return the group info
+     */
+    private GroupInfo createMaxGroupInfo() {
+        StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
+        seriesSelector.setSeriesName("Max");
+        return new GroupInfo(new MaxAggregatorFactory(), seriesSelector,
+                new LatencyValueSelector(false), false, false);
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -59,10 +73,17 @@ public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer 
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         HashMap<String, GroupInfo> groupInfos = new HashMap<>();
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new MeanAggregatorFactory(), new NameSeriesSelector(),
-                // We ignore Transaction Controller results
-                new LatencyValueSelector(false), false, false));
+        groupInfos.put("aggregate_report_max", //$NON-NLS-1$
+            createMaxGroupInfo());
+
+        LatencyValueSelector valueSelector = new LatencyValueSelector(false);
+        StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
+        String seriesName = String.format(PERCENTILE_FORMAT, Integer.valueOf(95));
+        seriesSelector.setSeriesName(seriesName);
+
+        groupInfos.put(PERCENTILE_PROPERTY, //$NON-NLS-1$
+                createPercentileGroupInfo(PERCENTILE_PROPERTY, 95, //$NON-NLS-1$
+                        seriesName,valueSelector,seriesSelector));
         return groupInfos;
     }
 }

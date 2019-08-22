@@ -667,7 +667,8 @@ var connectTimeOverTimeInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Average Connect Time in ms",
+
+                    axisLabel: "Percentile Connect Time in ms",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -899,7 +900,7 @@ var latenciesVsRequestInfos = {
                 axisLabelPadding: 20,
             },
             yaxis: {
-                axisLabel: "Median Latency in ms",
+                axisLabel: "Percentile Latency in ms",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
                 axisLabelFontFamily: 'Verdana, Arial',
@@ -914,7 +915,7 @@ var latenciesVsRequestInfos = {
             },
             tooltip: true,
             tooltipOpts: {
-                content: "%s : Median Latency time at %x req/s was %y ms"
+                content: "%s : Percentile Latency time at %x req/s was %y ms"
             },
             colors: ["#9ACD32", "#FF6347"]
         };

@@ -20,13 +20,13 @@ package org.apache.jmeter.report.processor.graph.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.processor.MeanAggregatorFactory;
-import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
+import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.ElapsedTimeValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class ResponseTimeOverTimeGraphConsumer provides a graph to visualize mean
@@ -36,6 +36,8 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
  */
 public class ResponseTimeOverTimeGraphConsumer extends
         AbstractOverTimeGraphConsumer {
+    private static final String PERCENTILE_FORMAT = "%dth percentile";
+    private static final String PERCENTILE_PROPERTY = "aggregate_rpt_pct2";
 
     /*
      * (non-Javadoc)
@@ -59,11 +61,15 @@ public class ResponseTimeOverTimeGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new MeanAggregatorFactory(), new NameSeriesSelector(),
-                // We include Transaction Controller results
-                new ElapsedTimeValueSelector(false), false, false));
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>();
+
+        ElapsedTimeValueSelector valueSelector = new ElapsedTimeValueSelector(false);
+        NameSeriesSelector seriesSelector = new NameSeriesSelector();
+        String seriesName = String.format(PERCENTILE_FORMAT, Integer.valueOf(95));
+
+        groupInfos.put(PERCENTILE_PROPERTY, //$NON-NLS-1$
+                createPercentileGroupInfo(PERCENTILE_PROPERTY, 95, //$NON-NLS-1$
+                        seriesName,valueSelector,seriesSelector));
         return groupInfos;
     }
 }
