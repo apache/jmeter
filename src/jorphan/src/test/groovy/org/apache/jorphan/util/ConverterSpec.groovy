@@ -18,6 +18,8 @@
 package org.apache.jorphan.util
 
 
+import java.text.DateFormat
+
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -84,7 +86,7 @@ class ConverterSpec extends Specification {
             "not.a.valid.class" | "not.a.valid.class"
     }
 
-    def "Convert #value to #type"() {
+    def "Convert '#value' to #type"() {
         expect:
             Converter.convert(value, type) == expected
         where:
@@ -103,5 +105,33 @@ class ConverterSpec extends Specification {
             "c"                  | char.class      | 'c'
             "char"               | char.class      | 'c'
             65                   | char.class      | 'A'
+    }
+
+    def "Convert to date from '#value'"() {
+        expect:
+            Math.abs(Converter.convert(value, Date.class).getTime() - expected.getTime()) < 1000
+        where:
+            value                  | expected
+            ""                     | new Date()
+            new Date(30000)   | new Date(30000)
+            toLocalDateFormat("08/20/2019", DateFormat.SHORT) | new Date(1566252000L * 1000)
+    }
+
+    def "Convert to Calendar from '#value'"() {
+        expect:
+            Math.abs(
+                Converter.convert(value, Calendar.class).getTime().getTime() - expected.getTime()) < 1000
+        where:
+            value                  | expected
+            ""                     | new Date()
+            new Date(30000)   | new Date(30000)
+            toLocalDateFormat("08/20/2019", DateFormat.SHORT) | new Date(1566252000L * 1000)
+    }
+
+    def toLocalDateFormat(String dateString, int format) {
+        def date = DateFormat
+                .getDateInstance(DateFormat.SHORT, Locale.forLanguageTag("en_US"))
+                .parse(dateString)
+        return DateFormat.getDateInstance(format).format(date)
     }
 }
