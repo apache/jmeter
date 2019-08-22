@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
@@ -139,8 +140,8 @@ public class ObjectTableSorterTest {
 
     @Test
     public void customKeyOrder() {
-        HashMap<String, Integer> customKeyOrder = asList("a", "c", "b", "d")
-                .stream().reduce(new HashMap<String, Integer>(), (map, key) -> {
+        HashMap<String, Integer> customKeyOrder = Stream.of("a", "c", "b", "d")
+                .reduce(new HashMap<String, Integer>(), (map, key) -> {
                     map.put(key, map.size());
                     return map;
                 }, (a, b) -> a);

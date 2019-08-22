@@ -21,7 +21,7 @@ import java.net.Socket;
 import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.X509KeyManager;
@@ -56,11 +56,12 @@ public class AliasKeyManager implements X509KeyManager {
      *             if no valid KeyManager is found
      */
     public static AliasKeyManager[] wrap(KeyManager[] kms, String alias) {
-        AliasKeyManager validManager = Arrays.asList(kms).stream()
+        AliasKeyManager validManager = Stream.of(kms)
                 .filter(m -> m instanceof X509KeyManager)
                 .map(m -> (X509KeyManager) m)
                 .filter(m -> m.getPrivateKey(alias) != null)
-                .map(m -> new AliasKeyManager(m, alias)).findFirst()
+                .map(m -> new AliasKeyManager(m, alias))
+                .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
                         "No key found for alias '" + alias + "'"));
         return new AliasKeyManager[] { validManager };

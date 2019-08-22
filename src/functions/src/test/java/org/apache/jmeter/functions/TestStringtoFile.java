@@ -21,9 +21,9 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -192,7 +192,7 @@ public class TestStringtoFile extends JMeterTestCase {
     }
 
     private Collection<CompoundVariable> functionParams(String... args) {
-        return Arrays.asList(args).stream().map(CompoundVariable::new).collect(Collectors.toList());
+        return Stream.of(args).map(CompoundVariable::new).collect(Collectors.toList());
     }
 
     @Test
