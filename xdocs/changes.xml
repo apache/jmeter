@@ -173,6 +173,7 @@ to view the last release notes of version 5.1.1.
     <li><bug>63423</bug>Selection of table rows in Aggregate Graph gets lost too often</li>
     <li><bug>63347</bug>View result tree: The search field is so small that even a single character is not visible on Windows 7</li>
     <li><bug>63433</bug>ListenerNotifier: Detected problem in Listener NullPointerException if filename is null. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63674</bug>Strip results with subresults deeper in their hierarchy when DataStripping is enabled</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -230,6 +231,7 @@ to view the last release notes of version 5.1.1.
     <li>Amer Ghazal (amerghazal at gmail.com)</li>
     <li>Stefan Seide (stefan at trilobyte-se.de)</li>
     <li>Havlicek Honza (havlicek.honza at gmail.com)</li>
+    <li>Pierre Astruc (pierre.astruc at evertest.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.

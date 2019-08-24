@@ -92,12 +92,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
         //Strip the response data before writing, but only for a successful request.
         SampleResult result = event.getResult();
         if(stripAlsoOnError || result.isSuccessful()) {
-            // Compute bytes before stripping
-            stripResponse(result);
-            // see Bug 57449
-            for (SampleResult subResult : result.getSubResults()) {
-                stripResponse(subResult);
-            }
+            stripContent(result, 3);
         }
         if(decoratedSender == null)
         {
@@ -110,6 +105,18 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
         else
         {
             decoratedSender.sampleOccurred(event);
+        }
+    }
+
+    private void stripContent(SampleResult result, int level) {
+        if (level < 0) {
+            return;
+        }
+        // Compute bytes before stripping
+        stripResponse(result);
+        // see Bug 57449 and 63674
+        for (SampleResult subResult : result.getSubResults()) {
+            stripContent(subResult, level - 1);
         }
     }
 
@@ -129,7 +136,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
      * @throws ObjectStreamException
      *             never
      */
-    private Object readResolve() throws ObjectStreamException{
+    protected Object readResolve() throws ObjectStreamException{
         if (isClientConfigured()) {
             stripAlsoOnError = clientConfiguredStripAlsoOnError;
         } else {
