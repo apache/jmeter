@@ -145,7 +145,7 @@ class ConverterSpec extends Specification {
 
     def toLocalDate(String dateString, int format) {
         def date = DateFormat
-                .getDateInstance(format, Locale.forLanguageTag("en_US"))
+                .getDateInstance(format, Locale.forLanguageTag("en-US"))
                 .parse(dateString)
         return date
     }
