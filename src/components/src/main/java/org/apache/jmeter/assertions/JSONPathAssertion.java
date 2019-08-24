@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.Pattern;
 import org.slf4j.Logger;
@@ -38,9 +39,9 @@ import com.jayway.jsonpath.JsonPath;
  * previous sample result using JSON path expression
  * @since 4.0
  */
-public class JSONPathAssertion extends AbstractTestElement implements Serializable, Assertion {
+public class JSONPathAssertion extends AbstractTestElement implements Serializable, Assertion, ThreadListener {
     private static final Logger log = LoggerFactory.getLogger(JSONPathAssertion.class);
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     public static final String JSONPATH = "JSON_PATH";
     public static final String EXPECTEDVALUE = "EXPECTED_VALUE";
     public static final String JSONVALIDATION = "JSONVALIDATION";
@@ -216,5 +217,15 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
             str = subj.toString();
         }
         return str;
+    }
+
+    @Override
+    public void threadStarted() {
+        // nothing to do on thread start
+    }
+
+    @Override
+    public void threadFinished() {
+        decimalFormatter.remove();
     }
 }
