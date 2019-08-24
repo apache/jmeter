@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -34,7 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * or globally.
  * @since 1.X
  */
-public class IterationCounter extends AbstractFunction {
+public class IterationCounter extends AbstractFunction implements ThreadListener {
 
     private static final List<String> desc = new LinkedList<>();
 
@@ -97,5 +98,15 @@ public class IterationCounter extends AbstractFunction {
     @Override
     public List<String> getArgumentDesc() {
         return desc;
+    }
+
+    @Override
+    public void threadStarted() {
+        // Nothing to do on thread start
+    }
+
+    @Override
+    public void threadFinished() {
+        perThreadInt.remove();
     }
 }
