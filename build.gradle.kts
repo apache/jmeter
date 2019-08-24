@@ -454,6 +454,7 @@ allprojects {
                     docTitle = "Apache JMeter ${project.name} API"
                     windowTitle = "Apache JMeter ${project.name} API"
                     header = "<b>Apache JMeter</b>"
+                    addStringOption("source", "8")
                     bottom =
                         "Copyright © 1998-$lastEditYear Apache Software Foundation. All Rights Reserved."
                     if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {
