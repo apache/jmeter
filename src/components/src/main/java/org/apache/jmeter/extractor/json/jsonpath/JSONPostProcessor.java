@@ -239,7 +239,7 @@ public class JSONPostProcessor
 
     @Override
     public void threadFinished() {
-        localMatcher.get().reset();
+        localMatcher.remove();
     }
 
     public void setMatchNumbers(String matchNumber) {
