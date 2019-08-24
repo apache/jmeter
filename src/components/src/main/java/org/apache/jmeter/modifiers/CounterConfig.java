@@ -25,6 +25,7 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -36,9 +37,9 @@ import org.slf4j.LoggerFactory;
  * Provides a counter per-thread(user) or per-thread group.
  */
 public class CounterConfig extends AbstractTestElement
-    implements Serializable, LoopIterationListener, NoThreadClone {
+    implements Serializable, LoopIterationListener, NoThreadClone, ThreadListener {
 
-    private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 235L;
 
     private static final String START = "CounterConfig.start"; // $NON-NLS-1$
 
@@ -226,5 +227,16 @@ public class CounterConfig extends AbstractTestElement
 
     public String getFormat() {
         return getPropertyAsString(FORMAT);
+    }
+
+    @Override
+    public void threadStarted() {
+        // nothing to do on thread start
+    }
+
+    @Override
+    public void threadFinished() {
+        perTheadLastIterationNumber.remove();
+        perTheadNumber.remove();
     }
 }
