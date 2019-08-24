@@ -27,17 +27,18 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.engine.util.NoConfigMerge;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RandomVariableConfig extends ConfigTestElement
-    implements TestBean, LoopIterationListener, NoThreadClone, NoConfigMerge
+    implements TestBean, LoopIterationListener, NoThreadClone, NoConfigMerge, ThreadListener
 {
     private static final Logger log = LoggerFactory.getLogger(RandomVariableConfig.class);
 
-    private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 235L;
 
     /*
      *  N.B. this class is shared between threads (NoThreadClone) so all access to variables
@@ -244,6 +245,16 @@ public class RandomVariableConfig extends ConfigTestElement
      */
     public synchronized void setOutputFormat(String outputFormat) {
         this.outputFormat = outputFormat;
+    }
+
+    @Override
+    public void threadStarted() {
+        // nothing to do on thread start
+    }
+
+    @Override
+    public void threadFinished() {
+        perThreadRandom.remove();
     }
 
 }
