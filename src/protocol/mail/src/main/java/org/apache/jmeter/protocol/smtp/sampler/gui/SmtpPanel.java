@@ -52,7 +52,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class SmtpPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     // local vars
     private JTextField tfMailFrom;
@@ -71,22 +71,6 @@ public class SmtpPanel extends JPanel {
     private JTextField tfEmlMessage;
     private JTextArea taMessage;
     private JCheckBox cbPlainBody;
-
-    private JLabel jlAddressFrom;
-    private JLabel jlAddressReplyTo;
-    private JLabel jlAddressTo;
-    private JLabel jlAddressToCC;
-    private JLabel jlAddressToBCC;
-    private JLabel jlMailServerPort;
-    private JLabel jlMailServerTimeout;
-    private JLabel jlMailServerConnectionTimeout;
-    private JLabel jlMailServer;
-    private JLabel jlAttachFile;
-    private JLabel jlDutPortStandard;
-    private JLabel jlPassword;
-    private JLabel jlSubject;
-    private JLabel jlUsername;
-    private JLabel jlMessage;
 
     private JFileChooser attachmentFileChooser;
     private JFileChooser emlFileChooser;
@@ -528,21 +512,21 @@ public class SmtpPanel extends JPanel {
      * Main method of class, builds all gui-components for SMTP-sampler.
      */
     private void initComponents() {
-        jlAddressReplyTo = new JLabel(JMeterUtils.getResString("smtp_replyto")); // $NON-NLS-1$
-        jlAddressFrom = new JLabel(JMeterUtils.getResString("smtp_from")); // $NON-NLS-1$
-        jlAddressTo = new JLabel(JMeterUtils.getResString("smtp_to")); // $NON-NLS-1$
-        jlAddressToCC = new JLabel(JMeterUtils.getResString("smtp_cc")); // $NON-NLS-1$
-        jlAddressToBCC = new JLabel(JMeterUtils.getResString("smtp_bcc")); // $NON-NLS-1$
-        jlMailServerPort = new JLabel(JMeterUtils.getResString("smtp_server_port")); // $NON-NLS-1$
-        jlMailServer = new JLabel(JMeterUtils.getResString("smtp_server")); // $NON-NLS-1$
-        jlMailServerTimeout = new JLabel(JMeterUtils.getResString("smtp_server_timeout")); // $NON-NLS-1$
-        jlMailServerConnectionTimeout = new JLabel(JMeterUtils.getResString("smtp_server_connection_timeout")); // $NON-NLS-1$
-        jlAttachFile = new JLabel(JMeterUtils.getResString("smtp_attach_file")); // $NON-NLS-1$
-        jlDutPortStandard = new JLabel(JMeterUtils.getResString("smtp_default_port")); // $NON-NLS-1$
-        jlUsername = new JLabel(JMeterUtils.getResString("smtp_username")); // $NON-NLS-1$
-        jlPassword = new JLabel(JMeterUtils.getResString("smtp_password")); // $NON-NLS-1$
-        jlSubject = new JLabel(JMeterUtils.getResString("smtp_subject")); // $NON-NLS-1$
-        jlMessage = new JLabel(JMeterUtils.getResString("smtp_message")); // $NON-NLS-1$
+        JLabel jlAddressReplyTo = new JLabel(JMeterUtils.getResString("smtp_replyto")); // $NON-NLS-1$
+        JLabel jlAddressFrom = new JLabel(JMeterUtils.getResString("smtp_from")); // $NON-NLS-1$
+        JLabel jlAddressTo = new JLabel(JMeterUtils.getResString("smtp_to")); // $NON-NLS-1$
+        JLabel jlAddressToCC = new JLabel(JMeterUtils.getResString("smtp_cc")); // $NON-NLS-1$
+        JLabel jlAddressToBCC = new JLabel(JMeterUtils.getResString("smtp_bcc")); // $NON-NLS-1$
+        JLabel jlMailServerPort = new JLabel(JMeterUtils.getResString("smtp_server_port")); // $NON-NLS-1$
+        JLabel jlMailServer = new JLabel(JMeterUtils.getResString("smtp_server")); // $NON-NLS-1$
+        JLabel jlMailServerTimeout = new JLabel(JMeterUtils.getResString("smtp_server_timeout")); // $NON-NLS-1$
+        JLabel jlMailServerConnectionTimeout = new JLabel(JMeterUtils.getResString("smtp_server_connection_timeout")); // $NON-NLS-1$
+        JLabel jlAttachFile = new JLabel(JMeterUtils.getResString("smtp_attach_file")); // $NON-NLS-1$
+        JLabel jlDutPortStandard = new JLabel(JMeterUtils.getResString("smtp_default_port")); // $NON-NLS-1$
+        JLabel jlUsername = new JLabel(JMeterUtils.getResString("smtp_username")); // $NON-NLS-1$
+        JLabel jlPassword = new JLabel(JMeterUtils.getResString("smtp_password")); // $NON-NLS-1$
+        JLabel jlSubject = new JLabel(JMeterUtils.getResString("smtp_subject")); // $NON-NLS-1$
+        JLabel jlMessage = new JLabel(JMeterUtils.getResString("smtp_message")); // $NON-NLS-1$
 
         tfMailServer = new JTextField(30);
         tfMailServerPort = new JTextField(6);
