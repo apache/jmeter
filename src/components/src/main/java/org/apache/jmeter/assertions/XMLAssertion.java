@@ -94,6 +94,6 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
 
     @Override
     public void threadFinished() {
-        XML_READER.remove();;
+        XML_READER.remove();
     }
 }
