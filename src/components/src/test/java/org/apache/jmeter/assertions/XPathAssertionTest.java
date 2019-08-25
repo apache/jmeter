@@ -454,7 +454,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
         testLog.debug("failure message: {}", res.getFailureMessage());
         assertTrue("Should not be an error", res.isError());
-        assertTrue("Un transformerException should be throw",
+        assertTrue("A TransformerException should be thrown",
                 res.getFailureMessage().contains("TransformerException"));
     }
     @Test
@@ -465,7 +465,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         log.debug(" res {}", res.isError());
         log.debug(" failure {}", res.getFailureMessage());
-        assertTrue("When the user give namespaces, un transformerException should be throw",
+        assertTrue("When the user activates namespaces, a TransformerException should be thrown",
                 res.getFailureMessage().contains("TransformerException"));
     }
 }
