@@ -205,6 +205,7 @@ to view the last release notes of version 5.1.1.
     <li><bug>63394</bug>JMeter should fail with non-zero when test execution fails (due to missing test plan or other reason). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63464</bug>image/svg+xml is wrongly considered as binary</li>
     <li><bug>63490</bug>At end of scheduler duration lots of Samplers gets executed at the same time</li>
+    <li><pr>480</pr>Fix a few typos in comments and log messages. Based on patch by Anass Benomar (anassbenomar at gmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -223,6 +224,7 @@ to view the last release notes of version 5.1.1.
   <li>John Bergqvist (John.Bergqvist at diffblue.com)</li>
   <li>Franz Schwab (franz.schwab@exasol.com)</li>
   <li>Graham Russell (graham at ham1.co.uk)</li>
+  <li>Anass Benomar (anassbenomar at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

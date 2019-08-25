@@ -119,7 +119,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
 
     /**
      *
-     * @return {@link JToolBar} the search toolbat component
+     * @return {@link JToolBar} the search toolbar component
      */
     public JToolBar getSearchToolBar() {
         return toolBar;
