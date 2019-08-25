@@ -101,10 +101,8 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
             if (vars != null && varName.length() > 0) {// vars will be null on TestPlan
                 vars.put(varName, str);
             }
-        } catch (Exception e)
-        {
-            log.error("An error occurred while evaluating the expression \""
-                    + exp + "\"\n",e);
+        } catch (Exception e) {
+            log.error("An error occurred while evaluating the expression \"{}\"\n", exp, e);
         }
         return str;
     }
