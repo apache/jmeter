@@ -123,7 +123,7 @@ public class TemplateManager {
         return temps;
     }
 
-    public final class LoggingErrorHandler implements ErrorHandler {
+    public static final class LoggingErrorHandler implements ErrorHandler {
         private Logger logger;
         private File file;
 

@@ -124,7 +124,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
      * This class allows to inject graph_options properties to the exported data
      *
      */
-    private class ExtraOptionsResultCustomizer implements ResultCustomizer {
+    private static class ExtraOptionsResultCustomizer implements ResultCustomizer {
         private SubConfiguration extraOptions;
 
         /**
@@ -173,7 +173,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
      * This class allows to detect empty graphs
      *
      */
-    private class EmptyGraphChecker implements ResultChecker {
+    private static class EmptyGraphChecker implements ResultChecker {
 
         private final boolean filtersOnlySampleSeries;
         private final boolean showControllerSeriesOnly;

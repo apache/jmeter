@@ -238,7 +238,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
         produce();
     }
 
-    private class PrivateProducer extends AbstractSampleProcessor implements
+    private static class PrivateProducer extends AbstractSampleProcessor implements
             SampleProducer {
 
         private List<SampleConsumer> sampleConsumers = new ArrayList<>();
