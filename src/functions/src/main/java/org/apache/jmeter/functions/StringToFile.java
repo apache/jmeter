@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  *  <li>append (true/false)(optional)</li>
  *  <li>file encoding (optional)</li>
  * </ul>
- * Returns: true if ok , false if an error occurred
+ * Returns: {@code true} if OK, {@code false} if an error occurred
  *
  * @since 5.2
  */
