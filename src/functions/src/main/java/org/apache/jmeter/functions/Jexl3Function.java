@@ -49,7 +49,8 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
 
     private static final List<String> desc = new LinkedList<>();
 
-    private static final ThreadLocal<JexlEngine> threadLocalJexl = new ThreadLocal<>();
+    private static final ThreadLocal<JexlEngine> threadLocalJexl = ThreadLocal
+            .withInitial(Jexl3Function::createJexlEngine);
 
     static
     {
@@ -91,7 +92,7 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
             jc.set("OUT", System.out);//$NON-NLS-1$
 
             // Now evaluate the script, getting the result
-            JexlScript e = getJexlEngine().createScript(exp);
+            JexlScript e = threadLocalJexl.get().createScript(exp);
             Object o = e.execute(jc);
             if (o != null)
             {
@@ -108,25 +109,16 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
         return str;
     }
 
-    /**
-     * Get JexlEngine from ThreadLocal
-     * @return JexlEngine
-     */
-    private static JexlEngine getJexlEngine() {
-        JexlEngine engine = threadLocalJexl.get();
-        if(engine == null) {
-            engine = new JexlBuilder()
-                    .cache(512)
-                    .silent(true)
-                    .strict(true)
-                    // debug is true by default an impact negatively performances
-                    // by a factory of 10
-                    // Use JexlInfo if necessary
-                    .debug(false)
-                    .create();
-            threadLocalJexl.set(engine);
-        }
-        return engine;
+    private static JexlEngine createJexlEngine() {
+        return new JexlBuilder()
+                .cache(512)
+                .silent(true)
+                .strict(true)
+                // debug is true by default an impact negatively performances
+                // by a factory of 10
+                // Use JexlInfo if necessary
+                .debug(false)
+                .create();
     }
 
     /** {@inheritDoc} */
@@ -154,6 +146,7 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
 
     @Override
     public void threadStarted() {
+        // nothing to do on thread startup
     }
 
     @Override
