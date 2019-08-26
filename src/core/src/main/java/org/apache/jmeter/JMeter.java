@@ -1124,7 +1124,7 @@ public class JMeter implements JMeterPlugin {
      * </ul>
      * THIS IS INTERNAL JMETER API and should be used with care
      * @param tree The {@link HashTree} to convert
-     * @param cloneAtEnd  boolean wether we clone the tree at end
+     * @param cloneAtEnd  boolean whether we clone the tree at end
      * @return HashTree the output {@link HashTree} to use
      */
     public static HashTree convertSubTree(HashTree tree, boolean cloneAtEnd) {

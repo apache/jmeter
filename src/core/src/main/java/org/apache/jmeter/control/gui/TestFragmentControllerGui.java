@@ -87,7 +87,7 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
     }
 
     /**
-     * Redefined to remove change parent and inserrt parent menu
+     * Redefined to remove change parent and insert parent menu
      * @see org.apache.jmeter.control.gui.AbstractControllerGui#createPopupMenu()
      */
     @Override

@@ -264,7 +264,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     }
 
     /**
-     * Fills in result and decide wether to reconnect or not depending on
+     * Fills in result and decide whether to reconnect or not depending on
      * checkForReconnect and underlying {@link JMSException#getErrorCode()}
      *
      * @param result

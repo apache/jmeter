@@ -240,7 +240,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         guiPackage.getMainFrame().getTree()
                 .setSelectionPath(new TreePath(((JMeterTreeNode) newTree.getArray()[0]).getPath()));
         final HashTree subTree = guiPackage.getCurrentSubTree();
-        // Send different event wether we are merging a test plan into another test
+        // Send different event whether we are merging a test plan into another test
         // plan,
         // or loading a testplan from scratch
         ActionEvent actionEvent = new ActionEvent(subTree.get(subTree.getArray()[subTree.size() - 1]), e.getID(),

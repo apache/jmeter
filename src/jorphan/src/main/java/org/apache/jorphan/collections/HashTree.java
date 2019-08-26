@@ -744,7 +744,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     }
 
     /**
-     * Recurses down into the HashTree stucture using each subsequent key in the
+     * Recurses down into the HashTree structure using each subsequent key in the
      * array of keys, and returns the Set of keys of the HashTree object at the
      * end of the recursion. If the HashTree represented a file system, this
      * would be like getting a list of all the files in a directory specified by
@@ -762,7 +762,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     }
 
     /**
-     * Recurses down into the HashTree stucture using each subsequent key in the
+     * Recurses down into the HashTree structure using each subsequent key in the
      * List of keys, and returns the Set of keys of the HashTree object at the
      * end of the recursion. If the HashTree represented a file system, this
      * would be like getting a list of all the files in a directory specified by
@@ -823,7 +823,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     }
 
     /**
-     * Recurses down into the HashTree stucture using each subsequent key in the
+     * Recurses down into the HashTree structure using each subsequent key in the
      * array of keys, and returns an array of keys of the HashTree object at the
      * end of the recursion. If the HashTree represented a file system, this
      * would be like getting a list of all the files in a directory specified by

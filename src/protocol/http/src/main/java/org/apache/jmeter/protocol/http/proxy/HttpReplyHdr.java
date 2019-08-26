@@ -177,7 +177,7 @@ public final class HttpReplyHdr {
      * @return The header in a string;
      */
     public static String formMethod() {
-        return formError("303 Method unseported", "Method unseported");
+        return formError("303 Method unsupported", "Method unsupported");
     }
 
     /**
@@ -195,7 +195,7 @@ public final class HttpReplyHdr {
      * @return The header in a string;
      */
     public static String formUnauthorized() {
-        return formError("401 Unathorized", "Unathorized use of this service");
+        return formError("401 Unauthorized", "Unauthorized use of this service");
     }
 
     /**

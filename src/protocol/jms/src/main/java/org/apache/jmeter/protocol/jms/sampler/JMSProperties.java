@@ -44,14 +44,14 @@ public class JMSProperties extends AbstractTestElement implements Serializable {
     public static final String JMS_PROPERTIES = "JMSProperties.properties"; //$NON-NLS-1$
 
     /**
-     * Create a new JmsPropertys object with no JmsProperties
+     * Create a new JmsProperties object with no JmsProperties
      */
     public JMSProperties() {
         setProperty(new CollectionProperty(JMS_PROPERTIES, new ArrayList<JMSProperty>()));
     }
 
     /**
-     * Get the JmsPropertiess.
+     * Get the JmsProperties.
      *
      * @return the JmsProperties
      */

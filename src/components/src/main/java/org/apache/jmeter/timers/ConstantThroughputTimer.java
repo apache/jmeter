@@ -39,7 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class implements a constant throughput timer. A Constant Throughtput
+ * This class implements a constant throughput timer. A Constant Throughput
  * Timer paces the samplers under its influence so that the total number of
  * samples per unit of time approaches a given constant as much as possible.
  *
@@ -98,7 +98,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     //For calculating throughput across all threads
     private static final ThroughputInfo allThreadsInfo = new ThroughputInfo();
 
-    //For holding the ThrougputInfo objects for all ThreadGroups. Keyed by AbstractThreadGroup objects
+    //For holding the ThroughputInfo objects for all ThreadGroups. Keyed by AbstractThreadGroup objects
     private static final ConcurrentMap<AbstractThreadGroup, ThroughputInfo> threadGroupsInfoMap =
             new ConcurrentHashMap<>();
 
