@@ -120,7 +120,7 @@ public class JMeterUtils implements UnitTestManager {
     private static String jmDir; // JMeter Home directory (excludes trailing separator)
     private static String jmBin; // JMeter bin directory (excludes trailing separator)
 
-    private static volatile boolean ignoreResorces = false; // Special flag for use in debugging resources
+    private static volatile boolean ignoreResources = false; // Special flag for use in debugging resources
 
     private static final ThreadLocal<Perl5Matcher> localMatcher = ThreadLocal.withInitial(Perl5Matcher::new);
 
@@ -381,10 +381,10 @@ public class JMeterUtils implements UnitTestManager {
         }
         if ("ignoreResources".equals(loc.toString())){ // $NON-NLS-1$
             log.warn("Resource bundles will be ignored");
-            ignoreResorces = true;
+            ignoreResources = true;
             // Keep existing settings
         } else {
-            ignoreResorces = false;
+            ignoreResources = false;
             ResourceBundle resBund = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", loc); // $NON-NLS-1$
             resources = resBund;
             locale = loc;
@@ -527,11 +527,11 @@ public class JMeterUtils implements UnitTestManager {
                 }
                 resString = defaultValue;
             }
-            if (ignoreResorces ){ // Special mode for debugging resource handling
+            if (ignoreResources ){ // Special mode for debugging resource handling
                 return "["+key+"]";
             }
         } catch (MissingResourceException mre) { // NOSONAR We handle correctly exception
-            if (ignoreResorces ){ // Special mode for debugging resource handling
+            if (ignoreResources ){ // Special mode for debugging resource handling
                 return "[?"+key+"?]";
             }
             if(defaultValue == null) {
