@@ -337,7 +337,7 @@ public class DataSourceElement extends AbstractTestElement
          * @return String connection information
          */
         public String getConnectionInfo() {
-            BasicDataSource dsc = getConfiguredDatatSource();
+            BasicDataSource dsc = getConfiguredDataSource();
             StringBuilder builder = new StringBuilder(100);
             builder.append("shared:").append(sharedDSC != null)
                 .append(", driver:").append(dsc.getDriverClassName())
@@ -351,7 +351,7 @@ public class DataSourceElement extends AbstractTestElement
          * @throws SQLException if database access error occurred
          */
         public Connection getConnection() throws SQLException {
-            BasicDataSource dsc = getConfiguredDatatSource();
+            BasicDataSource dsc = getConfiguredDataSource();
             Connection conn=dsc.getConnection();
             int isolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
             if (isolation >= 0 && conn.getTransactionIsolation() != isolation) {
@@ -368,7 +368,7 @@ public class DataSourceElement extends AbstractTestElement
             return conn;
         }
 
-        private BasicDataSource getConfiguredDatatSource() {
+        private BasicDataSource getConfiguredDataSource() {
             BasicDataSource dsc;
             if (sharedDSC != null){ // i.e. shared pool
                 dsc = sharedDSC;
