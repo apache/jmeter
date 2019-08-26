@@ -109,8 +109,8 @@ public class DebugSampler extends AbstractSampler implements TestBean {
         return displayJMeterProperties;
     }
 
-    public void setDisplayJMeterProperties(boolean displayJMeterPropterties) {
-        this.displayJMeterProperties = displayJMeterPropterties;
+    public void setDisplayJMeterProperties(boolean displayJMeterProperties) {
+        this.displayJMeterProperties = displayJMeterProperties;
     }
 
     public boolean isDisplaySystemProperties() {
