@@ -125,8 +125,8 @@ public class DebugPostProcessor extends AbstractTestElement implements PostProce
         return displayJMeterProperties;
     }
 
-    public void setDisplayJMeterProperties(boolean displayJMeterPropterties) {
-        this.displayJMeterProperties = displayJMeterPropterties;
+    public void setDisplayJMeterProperties(boolean displayJMeterProperties) {
+        this.displayJMeterProperties = displayJMeterProperties;
     }
 
     public boolean isDisplaySamplerProperties() {
