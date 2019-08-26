@@ -56,12 +56,12 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
 
     /**
      *
-     * @param label_resouce text resource name for group label
+     * @param label_resource text resource name for group label
      * @param item_resources list of resource names for individual buttons
      * @param selectedItem button to be selected (if not null)
      */
-    public JLabeledRadioI18N(String label_resouce, String[] item_resources, String selectedItem) {
-        setLabel(label_resouce);
+    public JLabeledRadioI18N(String label_resource, String[] item_resources, String selectedItem) {
+        setLabel(label_resource);
         init(item_resources, selectedItem);
     }
 
@@ -80,13 +80,13 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      * The resource name is used as the action command for the button model,
      * and the resource value is used to set the button label.
      *
-     * @param resouces list of resource names
+     * @param resources list of resource names
      * @param selected initially selected resource (if not null)
      *
      */
-    private void init(String[] resouces, String selected) {
+    private void init(String[] resources, String selected) {
         this.add(mLabel);
-        initButtonGroup(resouces, selected);
+        initButtonGroup(resources, selected);
     }
 
     /**
@@ -96,12 +96,12 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      * The resource name is used as the action command for the button model,
      * and the resource value is used to set the button label.
      *
-     * @param resouces list of resource names
+     * @param resources list of resource names
      * @param selected initially selected resource (if not null)
      *
      */
-    private void initButtonGroup(String[] resouces, String selected) {
-        for (String resource : resouces) {
+    private void initButtonGroup(String[] resources, String selected) {
+        for (String resource : resources) {
             JRadioButton btn = new JRadioButton(JMeterUtils.getResString(resource));
             btn.setActionCommand(resource);
             btn.addActionListener(this);
@@ -123,11 +123,11 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      * The resource name is used as the action command for the button model,
      * and the resource value is used to set the button label.
      *
-     * @param resouces list of resource names
+     * @param resources list of resource names
      * @param selected initially selected resource (if not null)
      *
      */
-    public void resetButtons(String[] resouces, String selected) {
+    public void resetButtons(String[] resources, String selected) {
         Enumeration<AbstractButton> buttons = bGroup.getElements();
         List<AbstractButton> buttonsToRemove = new ArrayList<>(this.bGroup.getButtonCount());
         while (buttons.hasMoreElements()) {
@@ -142,7 +142,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
         for (AbstractButton abstractButton : buttonsToRemove) {
             this.remove(abstractButton);
         }
-        initButtonGroup(resouces, selected);
+        initButtonGroup(resources, selected);
     }
 
     /**
@@ -158,14 +158,14 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      * The implementation will iterate through the radio buttons and find the
      * match. It then sets it to selected and sets all other radio buttons as
      * not selected.
-     * @param resourcename name of resource whose button is to be selected
+     * @param resourceName name of resource whose button is to be selected
      */
     @Override
-    public void setText(String resourcename) {
+    public void setText(String resourceName) {
         Enumeration<AbstractButton> en = this.bGroup.getElements();
         while (en.hasMoreElements()) {
             ButtonModel model = en.nextElement().getModel();
-            if (model.getActionCommand().equals(resourcename)) {
+            if (model.getActionCommand().equals(resourceName)) {
                 this.bGroup.setSelected(model, true);
             } else {
                 this.bGroup.setSelected(model, false);
