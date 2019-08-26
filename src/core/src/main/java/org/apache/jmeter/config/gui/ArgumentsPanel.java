@@ -423,17 +423,17 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /**
      * ensure that a row is visible in the viewport
-     * @param rowIndx row index
+     * @param rowIndex row index
      */
-    private void scrollToRowIfNotVisible(int rowIndx) {
+    private void scrollToRowIfNotVisible(int rowIndex) {
         if(table.getParent() instanceof JViewport) {
             Rectangle visibleRect = table.getVisibleRect();
             final int cellIndex = 0;
-            Rectangle cellRect = table.getCellRect(rowIndx, cellIndex, false);
+            Rectangle cellRect = table.getCellRect(rowIndex, cellIndex, false);
             if (visibleRect.y > cellRect.y) {
                 table.scrollRectToVisible(cellRect);
             } else {
-                Rectangle rect2 = table.getCellRect(rowIndx + getNumberOfVisibleRows(table), cellIndex, true);
+                Rectangle rect2 = table.getCellRect(rowIndex + getNumberOfVisibleRows(table), cellIndex, true);
                 int width = rect2.y - cellRect.y;
                 table.scrollRectToVisible(new Rectangle(cellRect.x, cellRect.y, cellRect.width, cellRect.height + width));
             }
