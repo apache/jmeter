@@ -19,9 +19,7 @@
 package org.apache.jmeter.report.processor.graph.impl;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,8 +66,8 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     private class SyntheticSeriesSelector extends AbstractSeriesSelector {
         @Override
         public Iterable<String> select(Sample sample) {
-            if(!sample.getSuccess()) {
-                return Arrays.asList(FAILED_LABEL);
+            if (!sample.getSuccess()) {
+                return Collections.singletonList(FAILED_LABEL);
             } else {
                 long elapsedTime = sample.getElapsedTime();
                 if (elapsedTime <= getSatisfiedThreshold()) {
@@ -91,22 +89,18 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-        return new GraphKeysSelector() {
-
-            @Override
-            public Double select(Sample sample) {
-                if(sample.getSuccess()) {
-                    long elapsedTime = sample.getElapsedTime();
-                    if(elapsedTime<=satisfiedThreshold) {
-                        return Double.valueOf(0);
-                    } else if(elapsedTime <= toleratedThreshold) {
-                        return Double.valueOf(1);
-                    } else {
-                        return Double.valueOf(2);
-                    }
+        return sample -> {
+            if (sample.getSuccess()) {
+                long elapsedTime = sample.getElapsedTime();
+                if (elapsedTime <= satisfiedThreshold) {
+                    return Double.valueOf(0);
+                } else if (elapsedTime <= toleratedThreshold) {
+                    return Double.valueOf(1);
                 } else {
-                    return Double.valueOf(3);
+                    return Double.valueOf(2);
                 }
+            } else {
+                return Double.valueOf(3);
             }
         };
     }
@@ -119,14 +113,12 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        Map<String, GroupInfo> groupInfos = new HashMap<>(1);
-        SyntheticSeriesSelector syntheticSeriesSelector = new SyntheticSeriesSelector();
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new SumAggregatorFactory(), syntheticSeriesSelector,
-                // We ignore Transaction Controller results
-                new CountValueSelector(true), false, false));
-
-        return groupInfos;
+        return Collections.singletonMap(
+                AbstractGraphConsumer.DEFAULT_GROUP,
+                new GroupInfo(
+                        new SumAggregatorFactory(), new SyntheticSeriesSelector(),
+                        // We ignore Transaction Controller results
+                        new CountValueSelector(true), false, false));
     }
 
     @Override

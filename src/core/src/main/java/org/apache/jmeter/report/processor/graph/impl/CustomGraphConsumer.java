@@ -19,7 +19,7 @@
 package org.apache.jmeter.report.processor.graph.impl;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -192,42 +192,40 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
+        AbstractSeriesSelector seriesSelector = new AbstractSeriesSelector() {
+            @Override
+            public Iterable<String> select(Sample sample) {
+                return Collections.singletonList(sampleVariableName);
+            }
+        };
 
-        HashMap<String, GroupInfo> groupInfos = new HashMap<>();
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP,
+        GraphValueSelector graphValueSelector = (series, sample) -> {
+            String value;
+            if (isNativeSampleVariableName) {
+                value = sample.getData(sampleVariableName);
+            } else {
+                value = sample.getData(CSVSaveService.VARIABLE_NAME_QUOTE_CHAR
+                        + sampleVariableName
+                        + CSVSaveService.VARIABLE_NAME_QUOTE_CHAR);
+            }
+
+            if (StringUtils.isEmpty(value) || "null".equals(value)) {
+                return null;
+            }
+
+            try {
+                return Converters.convert(Double.class, value);
+            } catch (ConvertException e) {
+                throw new IllegalArgumentException("Double converter failed", e);
+            }
+        };
+
+        return Collections.singletonMap(
+                AbstractGraphConsumer.DEFAULT_GROUP,
                 new GroupInfo(
-                new MeanAggregatorFactory(),
-                new AbstractSeriesSelector() {
-                    private final Iterable<String> values = Arrays.asList(sampleVariableName);
-
-                  @Override
-                  public Iterable<String> select(Sample sample) {
-                      return values;
-                  }
-                },
-                // We ignore Transaction Controller results
-                new GraphValueSelector() {
-                  @Override
-                  public Double select(String series, Sample sample) {
-                      String value;
-                      if(isNativeSampleVariableName) {
-                          value = sample.getData(sampleVariableName);
-                      }else {
-                          value = sample.getData(CSVSaveService.VARIABLE_NAME_QUOTE_CHAR
-                                  + sampleVariableName
-                                  + CSVSaveService.VARIABLE_NAME_QUOTE_CHAR);
-                      }
-                      if(StringUtils.isEmpty(value) || "null".equals(value)) {
-                          return null;
-                      }
-                      else {
-                          try {
-                            return Converters.convert(Double.class, value);
-                        } catch (ConvertException e) {
-                            throw new IllegalArgumentException("Double converter failed : {}",e);
-                        }
-                      }
-              }}, false, false));
-        return groupInfos;
+                        new MeanAggregatorFactory(),
+                        seriesSelector,
+                        // We ignore Transaction Controller results
+                        graphValueSelector, false, false));
     }
 }

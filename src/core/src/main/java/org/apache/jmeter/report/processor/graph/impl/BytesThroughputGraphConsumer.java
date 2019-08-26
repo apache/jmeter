@@ -19,7 +19,7 @@
 package org.apache.jmeter.report.processor.graph.impl;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import org.apache.jmeter.report.core.Sample;
@@ -64,32 +64,32 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        HashMap<String, GroupInfo> groupInfos = new HashMap<>(2);
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new TimeRateAggregatorFactory(), new AbstractSeriesSelector() {
-                    private final Iterable<String> values = Arrays.asList(
-                            RECEIVED_BYTES_SERIES_LABEL,
-                            SENT_BYTES_SERIES_LABEL);
+        AbstractSeriesSelector seriesSelector = new AbstractSeriesSelector() {
+            private final Iterable<String> values = Arrays.asList(
+                    RECEIVED_BYTES_SERIES_LABEL,
+                    SENT_BYTES_SERIES_LABEL);
 
-                    @Override
-                    public Iterable<String> select(Sample sample) {
-                        return values;
-                    }
-                }, new GraphValueSelector() {
+            @Override
+            public Iterable<String> select(Sample sample) {
+                return values;
+            }
+        };
 
-                    @Override
-                    public Double select(String series, Sample sample) {
-                        // We ignore Transaction Controller results
-                        if(!sample.isController()) {
-                            return Double.valueOf(
-                                RECEIVED_BYTES_SERIES_LABEL.equals(series) ? sample
-                                .getReceivedBytes() : sample.getSentBytes());
-                        } else {
-                            return null;
-                        }
-                    }
-                }, false, false));
-        return groupInfos;
+        GraphValueSelector graphValueSelector = (series, sample) -> {
+            // Ignore Transaction Controller results
+            if (sample.isController()) {
+                return null;
+            } else {
+                return Double.valueOf(
+                        RECEIVED_BYTES_SERIES_LABEL.equals(series)
+                                ? sample.getReceivedBytes()
+                                : sample.getSentBytes());
+            }
+        };
+
+        return Collections.singletonMap(
+                AbstractGraphConsumer.DEFAULT_GROUP,
+                new GroupInfo(new TimeRateAggregatorFactory(), seriesSelector, graphValueSelector, false, false));
     }
 
     /*
