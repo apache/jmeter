@@ -46,7 +46,7 @@ public interface JMeterEngine {
     }
     /**
      *
-     * @param now boolean that tell wether stop is immediate (interrupt) or not (wait for current sample end)
+     * @param now boolean that tell whether stop is immediate (interrupt) or not (wait for current sample end)
      */
     void stopTest(boolean now);
 

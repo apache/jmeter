@@ -54,14 +54,14 @@ public class Cookie extends AbstractTestElement implements Serializable {
     private static final int DEFAULT_VERSION = 1;
 
     /**
-     * create the coookie
+     * create the cookie
      */
     public Cookie() {
         this("","","","",false,0,false,false);
     }
 
     /**
-     * create the coookie
+     * create the cookie
      * @param name name of the cookie
      * @param value value of the cookie
      * @param domain domain for which the cookie is valid
@@ -75,7 +75,7 @@ public class Cookie extends AbstractTestElement implements Serializable {
     }
 
     /**
-     * create the coookie
+     * create the cookie
      * @param name name of the cookie
      * @param value value of the cookie
      * @param domain domain for which the cookie is valid

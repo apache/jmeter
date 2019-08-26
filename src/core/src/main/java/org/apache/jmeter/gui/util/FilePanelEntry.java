@@ -55,7 +55,7 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
 
     private boolean onlyDirectories = false;
 
-    // Mainly needed for unit test Serialisable tests
+    // Mainly needed for unit test Serializable tests
     public FilePanelEntry() {
         this(JMeterUtils.getResString("file_visualizer_filename")); //$NON-NLS-1$
     }
