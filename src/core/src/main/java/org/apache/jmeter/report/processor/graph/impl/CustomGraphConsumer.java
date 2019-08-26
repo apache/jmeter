@@ -47,7 +47,7 @@ import org.apache.jmeter.save.CSVSaveService;
  * @since 5.0
  */
 
-public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implements SampleConsumer{
+public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implements SampleConsumer {
 
     public static final String RESULT_Y_AXIS = "Y_Axis"; //$NON-NLS-1$
     public static final String RESULT_X_AXIS = "X_Axis"; //$NON-NLS-1$
@@ -107,31 +107,28 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
     /**
      * Sets the yAxis.
      *
-     * @param axis
-     * the yAxis to set
+     * @param axis the yAxis to set
      */
     public void setYAxis(String axis) {
-        yAxis=axis;
+        yAxis = axis;
     }
 
     /**
      * Sets the xAxis.
      *
-     * @param axis
-     * the xAxis to set
+     * @param axis the xAxis to set
      */
     public void setXAxis(String axis) {
-        xAxis=axis;
+        xAxis = axis;
     }
 
     /**
      * Sets the contentMessage.
      *
-     * @param message
-     * the message to set
+     * @param message the message to set
      */
     public void setContentMessage(String message) {
-        contentMessage=message;
+        contentMessage = message;
     }
 
     /**
@@ -156,8 +153,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
      * Sets the sampleVariableName.
      * Sets the boolean isNativesSampleVariableName
      *
-     * @param sampleVarName
-     * the sampleVariableName to set
+     * @param sampleVarName the sampleVariableName to set
      */
     public void setSampleVariableName(String sampleVarName) {
         sampleVariableName = sampleVarName;

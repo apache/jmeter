@@ -63,7 +63,7 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        if(!CONNECT_TIME_SAVED) {
+        if (!CONNECT_TIME_SAVED) {
             return Collections.emptyMap();
         }
         HashMap<String, GroupInfo> groupInfos = new HashMap<>();

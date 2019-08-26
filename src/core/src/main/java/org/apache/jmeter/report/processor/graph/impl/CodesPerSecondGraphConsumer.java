@@ -71,8 +71,9 @@ public class CodesPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
     public void initialize() {
         super.initialize();
         // Override the granularity of the aggregators factory
-        ((TimeRateAggregatorFactory) getGroupInfos().get(
-                AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
+        ((TimeRateAggregatorFactory) getGroupInfos()
+                .get(AbstractGraphConsumer.DEFAULT_GROUP)
+                .getAggregatorFactory())
                 .setGranularity(getGranularity());
     }
 

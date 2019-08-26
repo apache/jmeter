@@ -72,9 +72,9 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
                 return Arrays.asList(FAILED_LABEL);
             } else {
                 long elapsedTime = sample.getElapsedTime();
-                if(elapsedTime<=getSatisfiedThreshold()) {
+                if (elapsedTime <= getSatisfiedThreshold()) {
                     return satisfiedLabels;
-                } else if(elapsedTime <= getToleratedThreshold()) {
+                } else if (elapsedTime <= getToleratedThreshold()) {
                     return toleratedLabels;
                 } else {
                     return untoleratedLabels;
@@ -82,6 +82,7 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
             }
         }
     }
+
     /*
      * (non-Javadoc)
      *
@@ -132,9 +133,9 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     protected void initializeExtraResults(MapResultData parentResult) {
         ListResultData listResultData = new ListResultData();
         String[] seriesLabels = new String[]{
-                SATISFIED_LABEL.format(new Object[] {Long.valueOf(getSatisfiedThreshold())}),
-                TOLERATED_LABEL.format(new Object[] {Long.valueOf(getSatisfiedThreshold()), Long.valueOf(getToleratedThreshold())}),
-                UNTOLERATED_LABEL.format(new Object[] {Long.valueOf(getToleratedThreshold())}),
+                SATISFIED_LABEL.format(new Object[]{Long.valueOf(getSatisfiedThreshold())}),
+                TOLERATED_LABEL.format(new Object[]{Long.valueOf(getSatisfiedThreshold()), Long.valueOf(getToleratedThreshold())}),
+                UNTOLERATED_LABEL.format(new Object[]{Long.valueOf(getToleratedThreshold())}),
                 FAILED_LABEL
         };
         String[] colors = new String[]{
@@ -198,11 +199,11 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     }
 
     private void formatLabels() {
-        this.satisfiedLabels = Collections
-                .singletonList(SATISFIED_LABEL.format(new Object[] { Long.valueOf(this.satisfiedThreshold) }));
-        this.toleratedLabels = Collections.singletonList(TOLERATED_LABEL
-                .format(new Object[] { Long.valueOf(this.satisfiedThreshold), Long.valueOf(this.toleratedThreshold) }));
-        this.untoleratedLabels = Collections
-                .singletonList(UNTOLERATED_LABEL.format(new Object[] { Long.valueOf(this.toleratedThreshold) }));
+        this.satisfiedLabels = Collections.singletonList(
+                SATISFIED_LABEL.format(new Object[]{Long.valueOf(this.satisfiedThreshold)}));
+        this.toleratedLabels = Collections.singletonList(
+                TOLERATED_LABEL.format(new Object[]{Long.valueOf(this.satisfiedThreshold), Long.valueOf(this.toleratedThreshold)}));
+        this.untoleratedLabels = Collections.singletonList(
+                UNTOLERATED_LABEL.format(new Object[]{Long.valueOf(this.toleratedThreshold)}));
     }
 }
