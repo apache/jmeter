@@ -18,8 +18,7 @@
 
 package org.apache.jmeter.report.processor.graph.impl;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import org.apache.jmeter.report.core.Sample;
@@ -70,17 +69,18 @@ public class TotalTPSGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        Map<String, GroupInfo> groupInfos = new HashMap<>(1);
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP,
-                new GroupInfo(new TimeRateAggregatorFactory(), new AbstractSeriesSelector(true) {
-                    @Override
-                    public Iterable<String> select(Sample sample) {
-                        return Arrays.asList(sample.getSuccess() ? TRANSACTION_SUCCESS_LABEL : TRANSACTION_FAILURE_LABEL);
-                    }
-                },
+        AbstractSeriesSelector seriesSelector = new AbstractSeriesSelector(true) {
+            @Override
+            public Iterable<String> select(Sample sample) {
+                return Collections.singletonList(sample.getSuccess() ? TRANSACTION_SUCCESS_LABEL : TRANSACTION_FAILURE_LABEL);
+            }
+        };
+        return Collections.singletonMap(
+                AbstractGraphConsumer.DEFAULT_GROUP,
+                new GroupInfo(
+                        new TimeRateAggregatorFactory(), seriesSelector,
                         // We include Transaction Controller results
                         new CountValueSelector(false), false, false));
-        return groupInfos;
     }
 
     /*
@@ -115,8 +115,8 @@ public class TotalTPSGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     private void initializeSeries(MapResultData parentResult, String[] series) {
         ListResultData listResultData = (ListResultData) parentResult.getResult("series");
-        for (int i = 0; i < series.length; i++) {
-            listResultData.addResult(create(series[i]));
+        for (String s : series) {
+            listResultData.addResult(create(s));
         }
     }
 

@@ -18,10 +18,9 @@
 
 package org.apache.jmeter.report.processor.graph.impl;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
-import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.SumAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
@@ -58,13 +57,7 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-        return new GraphKeysSelector() {
-
-            @Override
-            public Double select(Sample sample) {
-                return Double.valueOf(sample.getElapsedTime());
-            }
-        };
+        return sample -> Double.valueOf(sample.getElapsedTime());
     }
 
     /*
@@ -75,14 +68,12 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
-
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new SumAggregatorFactory(), new NameSeriesSelector(),
-                // We include Transaction Controller results
-                new CountValueSelector(false), false, false));
-
-        return groupInfos;
+        return Collections.singletonMap(
+                AbstractGraphConsumer.DEFAULT_GROUP,
+                new GroupInfo(
+                        new SumAggregatorFactory(), new NameSeriesSelector(),
+                        // We include Transaction Controller results
+                        new CountValueSelector(false), false, false));
     }
 
     /*
