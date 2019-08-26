@@ -45,14 +45,14 @@ class ClassFilter {
     }
 
     String[] filterArray(List<String> items) {
-        List<String> newlist = new ArrayList<>();
+        List<String> newList = new ArrayList<>();
         for (String item : items) {
             if (include(item)) {
-                newlist.add(item);
+                newList.add(item);
             }
         }
-        if (!newlist.isEmpty()) {
-            return newlist.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+        if (!newList.isEmpty()) {
+            return newList.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
         } else {
             return ArrayUtils.EMPTY_STRING_ARRAY;
         }
