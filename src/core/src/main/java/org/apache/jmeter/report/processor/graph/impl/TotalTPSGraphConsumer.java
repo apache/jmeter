@@ -47,6 +47,7 @@ public class TotalTPSGraphConsumer extends AbstractOverTimeGraphConsumer {
     private static final String FAILURE_SERIES_SUFFIX = "failure";
     private static final String TRANSACTION_SUCCESS_LABEL = String.format(STATUS_SERIES_FORMAT, "Transaction", SUCCESS_SERIES_SUFFIX);
     private static final String TRANSACTION_FAILURE_LABEL = String.format(STATUS_SERIES_FORMAT, "Transaction", FAILURE_SERIES_SUFFIX);
+
     /*
      * (non-Javadoc)
      *
@@ -108,7 +109,7 @@ public class TotalTPSGraphConsumer extends AbstractOverTimeGraphConsumer {
         super.initialize();
         // Override the granularity of the aggregators factory
         ((TimeRateAggregatorFactory) getGroupInfos().get(AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
-        .setGranularity(getGranularity());
+                .setGranularity(getGranularity());
     }
 
 

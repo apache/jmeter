@@ -33,6 +33,7 @@ import org.apache.jmeter.report.processor.graph.StatusSeriesSelector;
 /**
  * The class ResponseTimeVSRequestGraphConsumer provides a graph to visualize
  * response time vs requests
+ *
  * @since 3.0
  */
 public class ResponseTimeVSRequestGraphConsumer extends

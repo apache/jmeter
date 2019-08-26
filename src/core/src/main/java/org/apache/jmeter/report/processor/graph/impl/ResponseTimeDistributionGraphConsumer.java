@@ -53,8 +53,7 @@ public class ResponseTimeDistributionGraphConsumer extends
     }
 
     /**
-     * @param granularity
-     *            the granularity to set
+     * @param granularity the granularity to set
      */
     public final void setGranularity(long granularity) {
         this.granularity = granularity;

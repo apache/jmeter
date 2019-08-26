@@ -37,8 +37,8 @@ import org.apache.jmeter.util.JMeterUtils;
  * The class ResponseTimePerSampleGraphConsumer provides a graph to visualize
  * percentiles of response time for each sample name.
  * NOT USED FOR NOW as of 3.0
- * @since 3.0
  *
+ * @since 3.0
  */
 public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 
@@ -71,10 +71,8 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
      * Creates the group info for elapsed time percentile depending on jmeter
      * properties.
      *
-     * @param propertyKey
-     *            the property key
-     * @param defaultValue
-     *            the default value
+     * @param propertyKey  the property key
+     * @param defaultValue the default value
      * @return the group info
      */
     private GroupInfo createGroupInfo(String propertyKey, int defaultValue) {
@@ -124,8 +122,8 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
         IndexedNameSelector indexedNameSelector = (IndexedNameSelector) getKeysSelector();
         int size = indexedNameSelector.getNames().size();
         for (int i = 0; i < size; i++) {
-            samples.addResult(new ValueResultData(indexedNameSelector
-                    .getNames().get(i)));
+            samples.addResult(
+                    new ValueResultData(indexedNameSelector.getNames().get(i)));
         }
         parentResult.setResult("sampleNames", samples);
     }

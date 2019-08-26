@@ -56,15 +56,11 @@ public class ResponseTimePercentilesOverTimeGraphConsumer
         HashMap<String, GroupInfo> groupInfos = new HashMap<>(8);
 
         groupInfos.put("aggregate_report_min", createMinGroupInfo());
-
         groupInfos.put("aggregate_report_max", createMaxGroupInfo());
-
         groupInfos.put("aggregate_rpt_pct1",
                 createPercentileGroupInfo("aggregate_rpt_pct1", 90));
-
         groupInfos.put("aggregate_rpt_pct2",
                 createPercentileGroupInfo("aggregate_rpt_pct2", 95));
-
         groupInfos.put("aggregate_rpt_pct3",
                 createPercentileGroupInfo("aggregate_rpt_pct3", 99));
 

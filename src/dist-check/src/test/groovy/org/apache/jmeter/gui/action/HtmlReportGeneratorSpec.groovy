@@ -29,7 +29,7 @@ import org.apache.jmeter.util.JMeterUtils
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 
-class HtmlReportGeneratorSpec extends JMeterSpec{
+class HtmlReportGeneratorSpec extends JMeterSpec {
 
     /**
      * Combine the given path parts to one path with the correct path separator of the current platform.
@@ -39,10 +39,10 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
      * @return combined path as string
      */
     def combine(String... paths) {
-       Paths.get(JMeterUtils.getJMeterBinDir(), paths).toString()
+        Paths.get(JMeterUtils.getJMeterBinDir(), paths).toString()
     }
 
-    def "check if generation from csv: '#csvPath' with properties: '#userPropertiesPath' in folder: '#outputDirectoryPath' contains the expected error"(){
+    def "check if generation from csv: '#csvPath' with properties: '#userPropertiesPath' in folder: '#outputDirectoryPath' contains the expected error"() {
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(csvPath, userPropertiesPath, outputDirectoryPath)
             List<String> resultList = htmlReportGenerator.checkArguments()
@@ -109,7 +109,7 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
             }
     }
 
-    def "check that report generation fails when format does not match and error is reported"(){
+    def "report generation fails when format does not match and error is reported"() {
         setup:
             File testDirectory = new File(combine("testfiles", "testReportThatShouldBeEmpty"))
             if(testDirectory.exists()) {
@@ -121,9 +121,9 @@ class HtmlReportGeneratorSpec extends JMeterSpec{
             }
         when:
             HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
-                combine("testfiles", "HTMLReportFalseTestFile.csv"),
-                combine("user.properties"),
-                testDirectory.toString())
+                    combine("testfiles", "HTMLReportFalseTestFile.csv"),
+                    combine("user.properties"),
+                    testDirectory.toString())
             List<String> resultList = htmlReportGenerator.run()
         then:
             testDirectory.list().length == 0

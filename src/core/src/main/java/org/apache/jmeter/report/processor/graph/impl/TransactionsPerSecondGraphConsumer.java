@@ -37,8 +37,7 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
  *
  * @since 3.0
  */
-public class TransactionsPerSecondGraphConsumer extends
-        AbstractOverTimeGraphConsumer {
+public class TransactionsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     private static final String SUCCESS_SERIES_SUFFIX = "success";
     private static final String FAILURE_SERIES_SUFFIX = "failure";
