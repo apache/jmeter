@@ -21,13 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.report.processor.MaxAggregatorFactory;
-import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.LatencyValueSelector;
 import org.apache.jmeter.report.processor.graph.StaticSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class LatencyOverTimeGraphConsumer provides a graph to visualize latency

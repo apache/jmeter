@@ -30,8 +30,6 @@ import org.apache.jmeter.report.processor.ListResultData;
 import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.ValueResultData;
-import org.apache.jmeter.report.processor.graph.AbstractGraphValueSelector;
-import org.apache.jmeter.report.processor.graph.AbstractSeriesSelector;
 import org.apache.jmeter.util.JMeterUtils;
 
 
@@ -244,18 +242,21 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @param defaultValue
      *            the default value
      * @param seriesName Series name
+     * @param valueSelector Graph value selector
+     * @param seriesSelector Graph series selector
      * @return the group info
      */
-    protected final GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String seriesName,AbstractGraphValueSelector valueSelector,AbstractSeriesSelector seriesSelector) {
+    protected final GroupInfo createPercentileGroupInfo(String propertyKey,
+                                                        int defaultValue, String seriesName,
+                                                        AbstractGraphValueSelector valueSelector,
+                                                        AbstractSeriesSelector seriesSelector) {
         int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
         PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
         factory.setPercentileIndex(property);
 
-
         return new GroupInfo(factory, seriesSelector,
                 valueSelector, false, false);
-
-  }  
+  }
     /**
      * Adds a value map build from specified parameters to the result map.
      *

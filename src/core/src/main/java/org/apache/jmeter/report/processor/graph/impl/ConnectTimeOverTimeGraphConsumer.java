@@ -21,8 +21,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.processor.MeanAggregatorFactory;
-import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.ConnectTimeValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
@@ -55,7 +53,6 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
         return keysSelector;
     }
 
-  
   /*
    * (non-Javadoc)
    *
@@ -67,8 +64,6 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
         if(!CONNECT_TIME_SAVED) {
             return Collections.emptyMap();
         }
-
-
         ConnectTimeValueSelector valueSelector = new ConnectTimeValueSelector(false);
         NameSeriesSelector seriesSelector = new NameSeriesSelector();
 

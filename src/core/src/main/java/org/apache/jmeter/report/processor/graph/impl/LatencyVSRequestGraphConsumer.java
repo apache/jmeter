@@ -21,15 +21,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.report.core.Sample;
-import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractVersusRequestsGraphConsumer;
 import org.apache.jmeter.report.processor.graph.GraphKeysSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.LatencyValueSelector;
-import org.apache.jmeter.report.processor.graph.StaticSeriesSelector;
 import org.apache.jmeter.report.processor.graph.StatusSeriesSelector;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class LatencyVSRequestGraphConsumer provides a graph to visualize
