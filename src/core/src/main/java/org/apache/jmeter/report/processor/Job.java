@@ -40,7 +40,7 @@ abstract class Job<T> implements Runnable {
         result = exec();
         synchronized (lock) {
             resultReady = true;
-            lock.notify();
+            lock.notifyAll();
         }
     }
 
