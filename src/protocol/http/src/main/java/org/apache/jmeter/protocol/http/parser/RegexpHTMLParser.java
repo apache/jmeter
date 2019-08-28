@@ -37,8 +37,8 @@ import org.slf4j.LoggerFactory;
 /**
  * HtmlParser implementation using regular expressions.
  * <p>
- * This class will find RLs specified in the following ways (where <b>url</b>
- * represents the RL being found:
+ * This class will find URLs specified in the following ways (where <b>url</b>
+ * represents the URL being found:
  * <ul>
  * <li>&lt;img src=<b>url</b> ... &gt;
  * <li>&lt;script src=<b>url</b> ... &gt;
@@ -147,23 +147,19 @@ class RegexpHTMLParser extends HTMLParser {
                 MatchResult match = matcher.getMatch();
                 String s;
                 if (log.isDebugEnabled()) {
-                    log.debug("match groups " + match.groups() + " " + match.toString());
+                    log.debug("match groups {} {}", match.groups(), match);
                 }
                 // Check for a BASE HREF:
                 for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++) {
                     s = match.group(g);
                     if (s != null) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("new baseUrl: " + s + " - " + baseUrl.toString());
-                        }
+                        log.debug("new baseUrl: {} - {}", s, baseUrl);
                         try {
                             baseUrl = ConversionUtils.makeRelativeURL(baseUrl, s);
                         } catch (MalformedURLException e) {
                             // Doesn't even look like a URL?
                             // Maybe it isn't: Ignore the exception.
-                            if (log.isDebugEnabled()) {
-                                log.debug("Can't build base URL from RL " + s + " in page " + baseUrl, e);
-                            }
+                            log.debug("Can't build base URL from URL {} in page {}", s, baseUrl, e);
                         }
                     }
                 }
@@ -171,7 +167,7 @@ class RegexpHTMLParser extends HTMLParser {
                     s = match.group(g);
                     if (s != null) {
                         if (log.isDebugEnabled()) {
-                            log.debug("group " + g + " - " + match.group(g));
+                            log.debug("group {} - {}", g, match.group(g));
                         }
                         urls.addURL(s, baseUrl);
                     }
