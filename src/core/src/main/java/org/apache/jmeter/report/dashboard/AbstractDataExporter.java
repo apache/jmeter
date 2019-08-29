@@ -32,9 +32,7 @@ public abstract class AbstractDataExporter implements DataExporter {
 
     private String name;
 
-    /**
-     * Instantiates a new abstract data exporter.
-     */
+    /** Instantiates a new abstract data exporter. */
     protected AbstractDataExporter() {
     }
 
@@ -52,8 +50,7 @@ public abstract class AbstractDataExporter implements DataExporter {
      *            type of value to be found
      * @return the value matching the data name
      */
-    protected static <T> T findValue(Class<T> clazz, String data,
-            ResultData root) {
+    protected static <T> T findValue(Class<T> clazz, String data, ResultData root) {
         T value = null;
         ResultData result = findData(data, root);
         if (result instanceof ValueResultData) {
@@ -121,9 +118,9 @@ public abstract class AbstractDataExporter implements DataExporter {
         this.name = name;
     }
 
-    protected <TProperty> TProperty getPropertyFromConfig(SubConfiguration cfg,
-            String property, TProperty defaultValue, Class<TProperty> clazz)
-                    throws ExportException {
+    protected <TProperty> TProperty getPropertyFromConfig(
+            SubConfiguration cfg, String property, TProperty defaultValue, Class<TProperty> clazz)
+            throws ExportException {
         try {
             return cfg.getProperty(property, defaultValue, clazz);
         } catch (ConfigurationException ex) {

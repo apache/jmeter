@@ -144,7 +144,6 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
                 }
                 log.info(sb.toString());
             }
-
         }
         events.flip();
         if (batchSize > 1) {

@@ -32,10 +32,9 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The user interface for a foreach controller which specifies that its
- * subcomponents should be executed some number of times in a loop. This
+ * sub-components should be executed some number of times in a loop. This
  * component can be used standalone or embedded into some other component.
  */
-
 public class ForeachControlPanel extends AbstractControllerGui {
 
     private static final long serialVersionUID = 240L;
@@ -46,14 +45,10 @@ public class ForeachControlPanel extends AbstractControllerGui {
      */
     private JTextField inputVal;
 
-    /**
-     * A field allowing the user to specify the indice start of the loop
-     */
+    /** A field allowing the user to specify the indice start of the loop */
     private JTextField startIndex;
 
-    /**
-     * A field allowing the user to specify the indice end of the loop
-     */
+    /** A field allowing the user to specify the indice end of the loop */
     private JTextField endIndex;
 
     /**
@@ -68,7 +63,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
     /**
      * Boolean indicating whether or not this component should display its name.
      * If true, this is a standalone component. If false, this component is
-     * intended to be used as a subpanel for another component.
+     * intended to be used as a sub-panel for another component.
      */
     private boolean displayName = true;
 
@@ -146,9 +141,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
         }
     }
 
-    /**
-     * Implements JMeterGUIComponent.clearGui
-     */
+    /** Implements JMeterGUIComponent.clearGui */
     @Override
     public void clearGui() {
         super.clearGui();
@@ -160,21 +153,18 @@ public class ForeachControlPanel extends AbstractControllerGui {
         useSeparator.setSelected(true);
     }
 
-
     @Override
     public String getLabelResource() {
         return "foreach_controller_title"; // $NON-NLS-1$
     }
 
-    /**
-     * Initialize the GUI components and layout for this component.
-     */
-    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+    /** Initialize the GUI components and layout for this component. */
+    private void init() {
+        // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         // The Loop Controller panel can be displayed standalone or inside
         // another panel. For standalone, we want to display the TITLE, NAME,
         // etc. (everything). However, if we want to display it within another
-        // panel, we just display the Loop Count fields (not the TITLE and
-        // NAME).
+        // panel, we just display the Loop Count fields (not the TITLE and NAME).
 
         // Standalone
         if (displayName) {

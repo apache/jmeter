@@ -62,11 +62,8 @@ import freemarker.template.TemplateExceptionHandler;
 public class HtmlTemplateExporter extends AbstractDataExporter {
     private static final FileFilter HTML_REPORT_FILE_FILTER =
         file ->
-            (file.isFile() &&
-                    "index.html".equals(file.getName()))
-                    || (file.isDirectory() &&
-                            ("content".equals(file.getName()) ||
-                                    file.getName().startsWith("sbadmin2-")));
+            (file.isFile() && "index.html".equals(file.getName()))
+                    || (file.isDirectory() && ("content".equals(file.getName()) || file.getName().startsWith("sbadmin2-")));
     private static final String CUSTOM_GRAPH_PREFIX = "custom_";
 
     /** Format used for non null check of parameters. */
@@ -114,7 +111,6 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     /**
      * This class allows to customize data before exporting them
-     *
      */
     private interface ResultCustomizer {
         ResultData customizeResult(ResultData result);
@@ -122,7 +118,6 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     /**
      * This class allows to inject graph_options properties to the exported data
-     *
      */
     private static class ExtraOptionsResultCustomizer implements ResultCustomizer {
         private SubConfiguration extraOptions;
@@ -164,7 +159,6 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     /**
      * This class allows to check exported data
-     *
      */
     private interface ResultChecker {
         boolean checkResult(DataContext dataContext, ResultData result);
@@ -172,7 +166,6 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     /**
      * This class allows to detect empty graphs
-     *
      */
     private static class EmptyGraphChecker implements ResultChecker {
 
@@ -205,13 +198,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             this.filterPattern = filterPattern;
         }
 
-        /*
-         * (non-Javadoc)
-         *
-         * @see
-         * org.apache.jmeter.report.dashboard.HtmlTemplateExporter.ResultChecker
-         * #checkResult( org.apache.jmeter.report.core.DataContext dataContext, org.apache.jmeter.report.processor.ResultData)
-         */
+        /** @see ResultChecker#checkResult(DataContext, ResultData) */
         @Override
         public boolean checkResult(DataContext dataContext, ResultData result) {
             boolean supportsControllerDiscrimination = findValue(Boolean.class,
@@ -223,8 +210,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                     && excludesControllers) {
                 // Exporter shows controller series only
                 // whereas the current graph support controller
-                // discrimination and excludes
-                // controllers
+                // discrimination and excludes controllers
                 log.warn("{} is set while the graph {} excludes controllers.",
                         ReportGeneratorConfiguration.EXPORTER_KEY_SHOW_CONTROLLERS_ONLY, graphId);
                 return false;
@@ -333,13 +319,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         return timestamp;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.dashboard.DataExporter#Export(org.apache.jmeter
-     * .report.processor.SampleContext,
-     * org.apache.jmeter.report.config.ReportGeneratorConfiguration)
+    /**
+     * @see DataExporter#export(SampleContext, File, ReportGeneratorConfiguration)
      */
     @Override
     public void export(SampleContext context, File file,
@@ -354,14 +335,18 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         DataContext dataContext = new DataContext();
 
         // Get the configuration of the current exporter
-        final ExporterConfiguration exportCfg = configuration
-                .getExportConfigurations().get(getName());
+        final ExporterConfiguration exportCfg =
+                configuration.getExportConfigurations().get(getName());
 
         // Get template directory property value
-        File templateDirectory = getPropertyFromConfig(exportCfg, TEMPLATE_DIR,
-                new File(JMeterUtils.getJMeterBinDir(), TEMPLATE_DIR_NAME_DEFAULT), File.class);
+        File templateDirectory = getPropertyFromConfig(
+                exportCfg,
+                TEMPLATE_DIR,
+                new File(JMeterUtils.getJMeterBinDir(), TEMPLATE_DIR_NAME_DEFAULT),
+                File.class);
         if (!templateDirectory.isDirectory()) {
-            String message = String.format(INVALID_TEMPLATE_DIRECTORY_FMT,
+            String message = String.format(
+                    INVALID_TEMPLATE_DIRECTORY_FMT,
                     templateDirectory.getAbsolutePath());
             log.error(message);
             throw new ExportException(message);
@@ -381,12 +366,12 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             log.info("Will generate dashboard in folder: {}", outputDir.getAbsolutePath());
         }
 
-        // Add the flag defining whether only sample series are filtered to the
-        // context
-        final boolean filtersOnlySampleSeries = exportCfg
-                .filtersOnlySampleSeries();
-        addToContext(DATA_CTX_FILTERS_ONLY_SAMPLE_SERIES,
-                Boolean.valueOf(filtersOnlySampleSeries), dataContext);
+        // Add a flag defining if only sample series are filtered to the context
+        final boolean filtersOnlySampleSeries = exportCfg.filtersOnlySampleSeries();
+        addToContext(
+                DATA_CTX_FILTERS_ONLY_SAMPLE_SERIES,
+                Boolean.valueOf(filtersOnlySampleSeries),
+                dataContext);
 
         // Add the series filter to the context
         final String seriesFilter = exportCfg.getSeriesFilter();
@@ -401,69 +386,68 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         addToContext(DATA_CTX_SERIES_FILTER, seriesFilter, dataContext);
 
         // Add the flag defining whether only controller series are displayed
-        final boolean showControllerSeriesOnly = exportCfg
-                .showControllerSeriesOnly();
-        addToContext(DATA_CTX_SHOW_CONTROLLERS_ONLY,
-                Boolean.valueOf(showControllerSeriesOnly), dataContext);
+        final boolean showControllerSeriesOnly = exportCfg.showControllerSeriesOnly();
+        addToContext(
+                DATA_CTX_SHOW_CONTROLLERS_ONLY,
+                Boolean.valueOf(showControllerSeriesOnly),
+                dataContext);
 
         JsonizerVisitor jsonizer = new JsonizerVisitor();
         Map<String, Object> storedData = context.getData();
 
         // Add begin date consumer result to the data context
-        addResultToContext(ReportGenerator.BEGIN_DATE_CONSUMER_NAME, storedData,
-                dataContext, jsonizer);
+        addResultToContext(
+                ReportGenerator.BEGIN_DATE_CONSUMER_NAME, storedData, dataContext, jsonizer);
 
         // Add end date summary consumer result to the data context
-        addResultToContext(ReportGenerator.END_DATE_CONSUMER_NAME, storedData,
-                dataContext, jsonizer);
+        addResultToContext(
+                ReportGenerator.END_DATE_CONSUMER_NAME, storedData, dataContext, jsonizer);
 
         // Add Apdex summary consumer result to the data context
-        addResultToContext(ReportGenerator.APDEX_SUMMARY_CONSUMER_NAME,
-                storedData, dataContext, jsonizer);
+        addResultToContext(
+                ReportGenerator.APDEX_SUMMARY_CONSUMER_NAME, storedData, dataContext, jsonizer);
 
         // Add errors summary consumer result to the data context
-        addResultToContext(ReportGenerator.ERRORS_SUMMARY_CONSUMER_NAME,
-                storedData, dataContext, jsonizer);
+        addResultToContext(
+                ReportGenerator.ERRORS_SUMMARY_CONSUMER_NAME, storedData, dataContext, jsonizer);
 
         // Add requests summary consumer result to the data context
-        addResultToContext(ReportGenerator.REQUESTS_SUMMARY_CONSUMER_NAME,
-                storedData, dataContext, jsonizer);
+        addResultToContext(
+                ReportGenerator.REQUESTS_SUMMARY_CONSUMER_NAME, storedData, dataContext, jsonizer);
 
         // Add statistics summary consumer result to the data context
-        addResultToContext(ReportGenerator.STATISTICS_SUMMARY_CONSUMER_NAME,
-                storedData, dataContext, jsonizer);
+        addResultToContext(
+                ReportGenerator.STATISTICS_SUMMARY_CONSUMER_NAME, storedData, dataContext, jsonizer);
 
         // Add Top 5 errors by sampler consumer result to the data context
-        addResultToContext(ReportGenerator.TOP5_ERRORS_BY_SAMPLER_CONSUMER_NAME,
-                storedData, dataContext, jsonizer);
+        addResultToContext(
+                ReportGenerator.TOP5_ERRORS_BY_SAMPLER_CONSUMER_NAME, storedData, dataContext, jsonizer);
 
         // Collect graph results from sample context and transform them into
         // Json strings to inject in the data context
         ExtraOptionsResultCustomizer customizer = new ExtraOptionsResultCustomizer();
-        EmptyGraphChecker checker = new EmptyGraphChecker(
-                filtersOnlySampleSeries, showControllerSeriesOnly,
-                filterPattern);
-        DataContext customGraphs = new DataContext();
+        EmptyGraphChecker checker =
+                new EmptyGraphChecker(filtersOnlySampleSeries, showControllerSeriesOnly, filterPattern);
         Map<String, GraphConfiguration> mapConfiguration = new HashMap<>();
-        for (Map.Entry<String, GraphConfiguration> graphEntry : configuration
-                .getGraphConfigurations().entrySet()) {
+        DataContext customGraphs = new DataContext();
+
+        for (Map.Entry<String, GraphConfiguration> graphEntry : configuration.getGraphConfigurations().entrySet()) {
             final String graphId = graphEntry.getKey();
             final GraphConfiguration graphConfiguration = graphEntry.getValue();
-            final SubConfiguration extraOptions = exportCfg.getGraphExtraConfigurations().get(graphId);
 
             // Initialize customizer and checker
-            customizer.setExtraOptions(extraOptions);
+            customizer.setExtraOptions(exportCfg.getGraphExtraConfigurations().get(graphId));
             checker.setExcludesControllers(
                     graphConfiguration.excludesControllers());
             checker.setGraphId(graphId);
             mapConfiguration.put(graphId, graphConfiguration);
-            if(graphId.startsWith(CUSTOM_GRAPH_PREFIX)) {
-                addResultToContext(graphId, storedData, customGraphs, jsonizer,
-                        customizer, checker);
+            if (graphId.startsWith(CUSTOM_GRAPH_PREFIX)) {
+                addResultToContext(
+                        graphId, storedData, customGraphs, jsonizer, customizer, checker);
             } else {
                 // Export graph data
-                addResultToContext(graphId, storedData, dataContext, jsonizer,
-                    customizer, checker);
+                addResultToContext(
+                        graphId, storedData, dataContext, jsonizer, customizer, checker);
             }
         }
         dataContext.put("graphConfigurations", mapConfiguration);
@@ -479,11 +463,13 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         // Add time zone offset (that matches the begin date) to the context
         TimeZone timezone = TimeZone.getDefault();
-        addToContext(DATA_CTX_TIMEZONE_OFFSET,
-                Integer.valueOf(timezone.getOffset(oldTimestamp)), dataContext);
+        addToContext(
+                DATA_CTX_TIMEZONE_OFFSET,
+                Integer.valueOf(timezone.getOffset(oldTimestamp)),
+                dataContext);
 
         // Add report title to the context
-        if(!StringUtils.isEmpty(configuration.getReportTitle())) {
+        if (StringUtils.isNotEmpty(configuration.getReportTitle())) {
             dataContext.put(DATA_CTX_REPORT_TITLE, StringEscapeUtils.escapeHtml4(configuration.getReportTitle()));
         }
 
@@ -491,22 +477,21 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         addToContext(DATA_CTX_TESTFILE, file.getName(), dataContext);
 
         // Add the overall filter property to the context
-        addToContext(DATA_CTX_OVERALL_FILTER, configuration.getSampleFilter(),
-                dataContext);
+        addToContext(DATA_CTX_OVERALL_FILTER, configuration.getSampleFilter(), dataContext);
 
         // Walk template directory to copy files and process templated ones
-        Configuration templateCfg = new Configuration(
-                Configuration.getVersion());
+        Configuration templateCfg = new Configuration(Configuration.getVersion());
         try {
             templateCfg.setDirectoryForTemplateLoading(templateDirectory);
-            templateCfg.setTemplateExceptionHandler(
-                    TemplateExceptionHandler.RETHROW_HANDLER);
+            templateCfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             if (log.isInfoEnabled()) {
                 log.info("Report will be generated in: {}, creating folder structure", outputDir.getAbsolutePath());
             }
             FileUtils.forceMkdir(outputDir);
             TemplateVisitor visitor = new TemplateVisitor(
-                    templateDirectory.toPath(), outputDir.toPath(), templateCfg,
+                    templateDirectory.toPath(),
+                    outputDir.toPath(),
+                    templateCfg,
                     dataContext);
             Files.walkFileTree(templateDirectory.toPath(), visitor);
         } catch (IOException ex) {
@@ -514,6 +499,5 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         }
 
         log.debug("End of template processing");
-
     }
 }
