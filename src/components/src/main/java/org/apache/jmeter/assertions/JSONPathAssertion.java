@@ -176,9 +176,7 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
             try {
                 doAssert(responseData);
             } catch (Exception e) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Assertion failed", e);
-                }
+                log.debug("Assertion failed", e);
                 result.setFailure(true);
                 result.setFailureMessage(e.getMessage());
             }
@@ -196,9 +194,7 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
                     result.setFailureMessage("Failed that JSONPath not exists: " + getJsonPath());
                 }
             } catch (Exception e) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Assertion failed", e);
-                }
+                log.debug("Assertion failed, as expected", e);
             }
         }
         return result;
