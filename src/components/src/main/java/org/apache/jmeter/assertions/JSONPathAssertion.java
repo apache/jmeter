@@ -109,30 +109,32 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
     private void doAssert(String jsonString) {
         Object value = JsonPath.read(jsonString, getJsonPath());
 
-        if (isJsonValidationBool()) {
-            if (value instanceof JSONArray) {
-                if (arrayMatched((JSONArray) value)) {
-                    return;
-                }
-            } else {
-                if (isExpectNull() && value == null) {
-                    return;
-                } else if (isEquals(value)) {
-                    return;
-                }
-            }
+        if (!isJsonValidationBool()) {
+            return;
+        }
 
-            if (isExpectNull()) {
-                throw new IllegalStateException(String.format("Value expected to be null, but found '%s'", value));
-            } else {
-                String msg;
-                if (isUseRegex()) {
-                    msg="Value expected to match regexp '%s', but it did not match: '%s'";
-                } else {
-                    msg="Value expected to be '%s', but found '%s'";
-                }
-                throw new IllegalStateException(String.format(msg, getExpectedValue(), objectToString(value)));
+        if (value instanceof JSONArray) {
+            if (arrayMatched((JSONArray) value)) {
+                return;
             }
+        } else {
+            if (isExpectNull() && value == null) {
+                return;
+            } else if (isEquals(value)) {
+                return;
+            }
+        }
+
+        if (isExpectNull()) {
+            throw new IllegalStateException(String.format("Value expected to be null, but found '%s'", value));
+        } else {
+            String msg;
+            if (isUseRegex()) {
+                msg = "Value expected to match regexp '%s', but it did not match: '%s'";
+            } else {
+                msg = "Value expected to be '%s', but found '%s'";
+            }
+            throw new IllegalStateException(String.format(msg, getExpectedValue(), objectToString(value)));
         }
     }
 

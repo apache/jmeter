@@ -77,23 +77,23 @@ public abstract class AbstractDataExporter implements DataExporter {
      * @return the ResultData matching the data name
      */
     protected static ResultData findData(String data, ResultData root) {
-        ResultData result = null;
         String[] pathItems = StringUtils.split(data, '.');
-        if (pathItems != null) {
-            if (root instanceof MapResultData) {
-                int count = pathItems.length;
-                int index = 0;
-                MapResultData map = (MapResultData) root;
-                while (index < count && result == null) {
-                    ResultData current = map.getResult(pathItems[index]);
-                    if (index == count - 1) {
-                        result = current;
-                    } else {
-                        if (current instanceof MapResultData) {
-                            map = (MapResultData) current;
-                            index++;
-                        }
-                    }
+        if (pathItems == null || !(root instanceof MapResultData)) {
+            return null;
+        }
+
+        ResultData result = null;
+        int count = pathItems.length;
+        int index = 0;
+        MapResultData map = (MapResultData) root;
+        while (index < count && result == null) {
+            ResultData current = map.getResult(pathItems[index]);
+            if (index == count - 1) {
+                result = current;
+            } else {
+                if (current instanceof MapResultData) {
+                    map = (MapResultData) current;
+                    index++;
                 }
             }
         }

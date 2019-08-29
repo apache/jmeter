@@ -145,20 +145,21 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
          */
         @Override
         public ResultData customizeResult(ResultData result) {
+            if (extraOptions == null) {
+                return new MapResultData();
+            }
+
             MapResultData customizedResult = new MapResultData();
             customizedResult.setResult(DATA_CTX_RESULT, result);
-            if (extraOptions != null) {
-                MapResultData extraResult = new MapResultData();
-                for (Map.Entry<String, String> extraEntry : extraOptions
-                        .getProperties().entrySet()) {
-                    extraResult.setResult(extraEntry.getKey(),
-                            new ValueResultData(extraEntry.getValue()));
-                }
-                customizedResult.setResult(DATA_CTX_EXTRA_OPTIONS, extraResult);
-            }
+
+            MapResultData extraResult = new MapResultData();
+            extraOptions.getProperties()
+                    .forEach((key, value) ->
+                            extraResult.setResult(key, new ValueResultData(value)));
+            customizedResult.setResult(DATA_CTX_EXTRA_OPTIONS, extraResult);
+
             return customizedResult;
         }
-
     }
 
     /**
@@ -213,11 +214,12 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
          */
         @Override
         public boolean checkResult(DataContext dataContext, ResultData result) {
-            Boolean supportsControllerDiscrimination = findValue(Boolean.class,
+            boolean supportsControllerDiscrimination = findValue(Boolean.class,
                     AbstractGraphConsumer.RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
-                    result);
+                    result).booleanValue();
 
-            if (supportsControllerDiscrimination.booleanValue() && showControllerSeriesOnly
+            if (supportsControllerDiscrimination
+                    && showControllerSeriesOnly
                     && excludesControllers) {
                 // Exporter shows controller series only
                 // whereas the current graph support controller
@@ -226,73 +228,73 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                 log.warn("{} is set while the graph {} excludes controllers.",
                         ReportGeneratorConfiguration.EXPORTER_KEY_SHOW_CONTROLLERS_ONLY, graphId);
                 return false;
-            } else {
-                if (filterPattern != null) {
-                    // Detect whether none series matches
-                    // the series filter.
-                    ResultData seriesResult = findData(
-                            AbstractGraphConsumer.RESULT_SERIES, result);
-                    if (seriesResult instanceof ListResultData) {
+            }
 
-                        // Try to find at least one pattern matching
-                        ListResultData seriesList = (ListResultData) seriesResult;
-                        int count = seriesList.getSize();
-                        int index = 0;
-                        boolean matches = false;
-                        while (index < count && !matches) {
-                            ResultData currentResult = seriesList.get(index);
-                            if (currentResult instanceof MapResultData) {
-                                MapResultData seriesData = (MapResultData) currentResult;
-                                String name = findValue(String.class,
-                                        AbstractGraphConsumer.RESULT_SERIES_NAME,
-                                        seriesData);
+            if (filterPattern == null) {
+                return true;
+            }
 
-                                // Is the current series a controller series ?
-                                boolean isController = findValue(Boolean.class,
-                                        AbstractGraphConsumer.RESULT_SERIES_IS_CONTROLLER,
-                                        seriesData).booleanValue();
+            // Detect whether none series matches the series filter.
+            ResultData seriesResult = findData(AbstractGraphConsumer.RESULT_SERIES, result);
+            if (!(seriesResult instanceof ListResultData)) {
+                return true;
+            }
 
-                                matches = filterPattern.matcher(name).matches();
-                                if (matches) {
-                                    // If the name matches pattern, other
-                                    // properties can discard the series
-                                    matches = !filtersOnlySampleSeries
-                                            || !supportsControllerDiscrimination.booleanValue()
-                                            || isController
-                                            || !showControllerSeriesOnly;
-                                    if(log.isDebugEnabled()) {
-                                        log.debug(
-                                                "name:{} matches pattern:{}, supportsControllerDiscrimination:{}, "
-                                                + "isController:{}, showControllerSeriesOnly:{}",
-                                                name, filterPattern.pattern(),
-                                                supportsControllerDiscrimination,
-                                                isController,
-                                                showControllerSeriesOnly);
-                                    }
-                                } else {
-                                    // If the name does not match the pattern,
-                                    // other properties can hold the series
-                                    matches = filtersOnlySampleSeries
-                                            && !supportsControllerDiscrimination.booleanValue();
-                                    if(log.isDebugEnabled()) {
-                                        log.debug("name:{} does not match pattern:{}, filtersOnlySampleSeries:{},"
-                                            + " supportsControllerDiscrimination:{}",
-                                            name, filterPattern.pattern(),
-                                            filtersOnlySampleSeries,
-                                            supportsControllerDiscrimination);
-                                    }
-                                }
-                            }
-                            index++;
+            // Try to find at least one pattern matching
+            ListResultData seriesList = (ListResultData) seriesResult;
+            int count = seriesList.getSize();
+            int index = 0;
+            boolean matches = false;
+            while (index < count && !matches) {
+                ResultData currentResult = seriesList.get(index);
+                if (currentResult instanceof MapResultData) {
+                    MapResultData seriesData = (MapResultData) currentResult;
+                    String name = findValue(String.class,
+                            AbstractGraphConsumer.RESULT_SERIES_NAME,
+                            seriesData);
+
+                    // Is the current series a controller series ?
+                    boolean isController = findValue(Boolean.class,
+                            AbstractGraphConsumer.RESULT_SERIES_IS_CONTROLLER,
+                            seriesData).booleanValue();
+
+                    matches = filterPattern.matcher(name).matches();
+                    if (matches) {
+                        // If the name matches pattern, other
+                        // properties can discard the series
+                        matches = !filtersOnlySampleSeries
+                                || !supportsControllerDiscrimination
+                                || isController
+                                || !showControllerSeriesOnly;
+                        if(log.isDebugEnabled()) {
+                            log.debug(
+                                    "name:{} matches pattern:{}, supportsControllerDiscrimination:{}, "
+                                    + "isController:{}, showControllerSeriesOnly:{}",
+                                    name, filterPattern.pattern(),
+                                    supportsControllerDiscrimination,
+                                    isController,
+                                    showControllerSeriesOnly);
                         }
-                        if (!matches) {
-                            // None series matches the pattern
-                            log.warn("No serie matches the series_filter: {} in graph: {}",
-                                    ReportGeneratorConfiguration.EXPORTER_KEY_SERIES_FILTER, graphId);
-                            return false;
+                    } else {
+                        // If the name does not match the pattern,
+                        // other properties can hold the series
+                        matches = filtersOnlySampleSeries
+                                && !supportsControllerDiscrimination;
+                        if (log.isDebugEnabled()) {
+                            log.debug("name:{} does not match pattern:{}, filtersOnlySampleSeries:{},"
+                                + " supportsControllerDiscrimination:{}",
+                                name, filterPattern.pattern(),
+                                filtersOnlySampleSeries,
+                                supportsControllerDiscrimination);
                         }
                     }
                 }
+                index++;
+            }
+            if (!matches) {
+                log.warn("No series matches the series_filter: {} in graph: {}",
+                        ReportGeneratorConfiguration.EXPORTER_KEY_SERIES_FILTER, graphId);
+                return false;
             }
             return true;
         }
