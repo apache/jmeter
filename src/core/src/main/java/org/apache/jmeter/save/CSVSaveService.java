@@ -1104,14 +1104,14 @@ public final class CSVSaveService {
     public static void saveSampleResult(SampleEvent event, PrintWriter out) {
         SampleSaveConfiguration saveConfiguration = event.getResult().getSaveConfig();
         String delimiter = saveConfiguration.getDelimiter();
-        String save = resultToDelimitedString(event, event.getResult(), saveConfiguration, delimiter);
-        out.println(save);
+        String formattedResult = resultToDelimitedString(event, event.getResult(), saveConfiguration, delimiter);
+        out.println(formattedResult);
 
         if(saveConfiguration.saveSubresults()) {
             SampleResult result = event.getResult();
             for (SampleResult subResult : result.getSubResults()) {
-                save = resultToDelimitedString(event, subResult, saveConfiguration, delimiter);
-                out.println(save);
+                formattedResult = resultToDelimitedString(event, subResult, saveConfiguration, delimiter);
+                out.println(formattedResult);
             }
         }
     }
