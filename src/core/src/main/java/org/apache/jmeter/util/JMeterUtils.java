@@ -527,11 +527,11 @@ public class JMeterUtils implements UnitTestManager {
                 }
                 resString = defaultValue;
             }
-            if (ignoreResources ){ // Special mode for debugging resource handling
+            if (ignoreResources) { // Special mode for debugging resource handling
                 return "["+key+"]";
             }
         } catch (MissingResourceException mre) { // NOSONAR We handle correctly exception
-            if (ignoreResources ){ // Special mode for debugging resource handling
+            if (ignoreResources) { // Special mode for debugging resource handling
                 return "[?"+key+"?]";
             }
             if(defaultValue == null) {
