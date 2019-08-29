@@ -42,8 +42,6 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// @see org.apache.jmeter.extractor.TestRegexExtractor for unit tests
-
 public class RegexExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable {
 
     private static final long serialVersionUID = 242L;
@@ -70,18 +68,12 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     public static final String USE_CODE = "code"; // $NON-NLS-1$
     public static final String USE_MESSAGE = "message"; // $NON-NLS-1$
 
-
-    private static final String REGEX = "RegexExtractor.regex"; // $NON-NLS-1$
-
-    private static final String REFNAME = "RegexExtractor.refname"; // $NON-NLS-1$
-
-    private static final String MATCH_NUMBER = "RegexExtractor.match_number"; // $NON-NLS-1$
-
-    private static final String DEFAULT = "RegexExtractor.default"; // $NON-NLS-1$
-
-    private static final String DEFAULT_EMPTY_VALUE = "RegexExtractor.default_empty_value"; // $NON-NLS-1$
-
-    private static final String TEMPLATE = "RegexExtractor.template"; // $NON-NLS-1$
+    private static final String REGEX_PROP = "RegexExtractor.regex"; // $NON-NLS-1$
+    private static final String REFNAME_PROP = "RegexExtractor.refname"; // $NON-NLS-1$
+    private static final String MATCH_NUMBER_PROP = "RegexExtractor.match_number"; // $NON-NLS-1$
+    private static final String DEFAULT_PROP = "RegexExtractor.default"; // $NON-NLS-1$
+    private static final String DEFAULT_EMPTY_VALUE_PROP = "RegexExtractor.default_empty_value"; // $NON-NLS-1$
+    private static final String TEMPLATE_PROP = "RegexExtractor.template"; // $NON-NLS-1$
 
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
 
@@ -381,7 +373,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @param regex The string representation of the regex
      */
     public void setRegex(String regex) {
-        setProperty(REGEX, regex);
+        setProperty(REGEX_PROP, regex);
     }
 
     /**
@@ -389,7 +381,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @return string representing the regex
      */
     public String getRegex() {
-        return getPropertyAsString(REGEX);
+        return getPropertyAsString(REGEX_PROP);
     }
 
     /**
@@ -397,7 +389,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @param refName prefix of the variables to be used
      */
     public void setRefName(String refName) {
-        setProperty(REFNAME, refName);
+        setProperty(REFNAME_PROP, refName);
     }
 
     /**
@@ -405,7 +397,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @return The prefix of the variables to be used
      */
     public String getRefName() {
-        return getPropertyAsString(REFNAME);
+        return getPropertyAsString(REFNAME_PROP);
     }
 
     /**
@@ -418,19 +410,19 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      *            random match should be used.
      */
     public void setMatchNumber(int matchNumber) {
-        setProperty(new IntegerProperty(MATCH_NUMBER, matchNumber));
+        setProperty(new IntegerProperty(MATCH_NUMBER_PROP, matchNumber));
     }
 
     public void setMatchNumber(String matchNumber) {
-        setProperty(MATCH_NUMBER, matchNumber);
+        setProperty(MATCH_NUMBER_PROP, matchNumber);
     }
 
     public int getMatchNumber() {
-        return getPropertyAsInt(MATCH_NUMBER);
+        return getPropertyAsInt(MATCH_NUMBER_PROP);
     }
 
     public String getMatchNumberAsString() {
-        return getPropertyAsString(MATCH_NUMBER);
+        return getPropertyAsString(MATCH_NUMBER_PROP);
     }
 
     /**
@@ -439,7 +431,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @param defaultValue The default value for the variable
      */
     public void setDefaultValue(String defaultValue) {
-        setProperty(DEFAULT, defaultValue);
+        setProperty(DEFAULT_PROP, defaultValue);
     }
 
     /**
@@ -448,7 +440,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @param defaultEmptyValue The default value for the variable
      */
     public void setDefaultEmptyValue(boolean defaultEmptyValue) {
-        setProperty(DEFAULT_EMPTY_VALUE, defaultEmptyValue, DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE);
+        setProperty(DEFAULT_EMPTY_VALUE_PROP, defaultEmptyValue, DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE);
     }
 
     /**
@@ -458,7 +450,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @return The default value for the variable
      */
     public String getDefaultValue() {
-        return getPropertyAsString(DEFAULT);
+        return getPropertyAsString(DEFAULT_PROP);
     }
 
     /**
@@ -466,15 +458,15 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @return true if we should set default value to "" if variable cannot be extracted
      */
     public boolean isEmptyDefaultValue() {
-        return getPropertyAsBoolean(DEFAULT_EMPTY_VALUE, DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE);
+        return getPropertyAsBoolean(DEFAULT_EMPTY_VALUE_PROP, DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE);
     }
 
     public void setTemplate(String template) {
-        setProperty(TEMPLATE, template);
+        setProperty(TEMPLATE_PROP, template);
     }
 
     public String getTemplate() {
-        return getPropertyAsString(TEMPLATE);
+        return getPropertyAsString(TEMPLATE_PROP);
     }
 
     public boolean useHeaders() {
