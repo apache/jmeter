@@ -19,6 +19,7 @@ package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -143,14 +144,11 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
             return true;
         }
 
-        for (Object subj : value.toArray()) {
-            if ((subj == null && isExpectNull()) ||
-                    isEquals(subj)) {
-                return true;
-            }
-        }
-
-        return isEquals(value);
+        boolean foundMatch = Arrays.stream(value.toArray())
+                .anyMatch(subj ->
+                        (subj == null && isExpectNull())
+                                || isEquals(subj));
+        return foundMatch || isEquals(value);
     }
 
     private boolean isEquals(Object subj) {
