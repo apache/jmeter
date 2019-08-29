@@ -58,7 +58,7 @@ public final class CLOption {
      * @return the argument
      */
     public final String getArgument(final int index) {
-        if (null == this.arguments || index < 0 || index >= this.arguments.length) {
+        if (this.arguments == null || index < 0 || index >= this.arguments.length) {
             return null;
         } else {
             return this.arguments[index];

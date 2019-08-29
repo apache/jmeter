@@ -341,7 +341,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 } else {
                     found = localMatcher.matches(toCheck, pattern);
                 }
-                boolean pass = notTest ? !found : found;
+                boolean pass = notTest != found;
                 if (orTest) {
                     if (!pass) {
                         log.debug("Failed: {}", stringPattern);
@@ -488,7 +488,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         } else if (right) {
             return str.substring(0, EQUALS_SECTION_DIFF_LEN) + EQUALS_DIFF_TRUNC;
         } else {
-            return EQUALS_DIFF_TRUNC + str.substring(str.length() - EQUALS_SECTION_DIFF_LEN, str.length());
+            return EQUALS_DIFF_TRUNC + str.substring(str.length() - EQUALS_SECTION_DIFF_LEN);
         }
     }
 
