@@ -93,26 +93,26 @@ class SMIMEAssertion {
                 msg = getMessageFromResponse(response, msgPos);
             }
 
-            SMIMESignedParser s = null;
+            SMIMESignedParser signedParser = null;
             if(log.isDebugEnabled()) {
                 log.debug("Content-type: {}", msg.getContentType());
             }
             if (msg.isMimeType("multipart/signed")) { // $NON-NLS-1$
                 MimeMultipart multipart = (MimeMultipart) msg.getContent();
-                s = new SMIMESignedParser(new BcDigestCalculatorProvider(), multipart);
+                signedParser = new SMIMESignedParser(new BcDigestCalculatorProvider(), multipart);
             } else if (msg.isMimeType("application/pkcs7-mime") // $NON-NLS-1$
                     || msg.isMimeType("application/x-pkcs7-mime")) { // $NON-NLS-1$
-                s = new SMIMESignedParser(new BcDigestCalculatorProvider(), msg);
+                signedParser = new SMIMESignedParser(new BcDigestCalculatorProvider(), msg);
             }
 
-            if (null != s) {
+            if (null != signedParser) {
                 log.debug("Found signature");
 
                 if (testElement.isNotSigned()) {
                     res.setFailure(true);
                     res.setFailureMessage("Mime message is signed");
                 } else if (testElement.isVerifySignature() || !testElement.isSignerNoCheck()) {
-                    res = verifySignature(testElement, s, name);
+                    res = verifySignature(testElement, signedParser, name);
                 }
 
             } else {

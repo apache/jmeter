@@ -68,16 +68,16 @@ public class ForeachControlPanel extends AbstractControllerGui {
     private boolean displayName = true;
 
     /** The name of the infinite checkbox component. */
-    private static final String INPUTVAL = "Input Field"; // $NON-NLS-1$
+    private static final String INPUT_VAL_NAME = "Input Field"; // $NON-NLS-1$
 
     /** The name of the loops field component. */
-    private static final String RETURNVAL = "Return Field"; // $NON-NLS-1$
+    private static final String RETURN_VAL_NAME = "Return Field"; // $NON-NLS-1$
 
     /** The name of the start index field component. */
-    private static final String START_INDEX = "Start Index Field"; // $NON-NLS-1$
+    private static final String START_INDEX_NAME = "Start Index Field"; // $NON-NLS-1$
 
     /** The name of the end index field component. */
-    private static final String END_INDEX = "End Index Field"; // $NON-NLS-1$
+    private static final String END_INDEX_NAME = "End Index Field"; // $NON-NLS-1$
     /**
      * Create a new LoopControlPanel as a standalone component.
      */
@@ -200,7 +200,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
         // TEXT FIELD
         JPanel inputValSubPanel = new JPanel(new BorderLayout(5, 0));
         inputVal = new JTextField("", 5); // $NON-NLS-1$
-        inputVal.setName(INPUTVAL);
+        inputVal.setName(INPUT_VAL_NAME);
         inputValLabel.setLabelFor(inputVal);
         inputValSubPanel.add(inputValLabel, BorderLayout.WEST);
         inputValSubPanel.add(inputVal, BorderLayout.CENTER);
@@ -208,7 +208,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
         // TEXT FIELD
         JPanel startIndexSubPanel = new JPanel(new BorderLayout(5, 0));
         startIndex = new JTextField("", 5); // $NON-NLS-1$
-        startIndex.setName(START_INDEX);
+        startIndex.setName(START_INDEX_NAME);
         startIndexLabel.setLabelFor(startIndex);
         startIndexSubPanel.add(startIndexLabel, BorderLayout.WEST);
         startIndexSubPanel.add(startIndex, BorderLayout.CENTER);
@@ -216,7 +216,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
         // TEXT FIELD
         JPanel endIndexSubPanel = new JPanel(new BorderLayout(5, 0));
         endIndex = new JTextField("", 5); // $NON-NLS-1$
-        endIndex.setName(END_INDEX);
+        endIndex.setName(END_INDEX_NAME);
         endIndexLabel.setLabelFor(endIndex);
         endIndexSubPanel.add(endIndexLabel, BorderLayout.WEST);
         endIndexSubPanel.add(endIndex, BorderLayout.CENTER);
@@ -224,7 +224,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
         // TEXT FIELD
         JPanel returnValSubPanel = new JPanel(new BorderLayout(5, 0));
         returnVal = new JTextField("", 5); // $NON-NLS-1$
-        returnVal.setName(RETURNVAL);
+        returnVal.setName(RETURN_VAL_NAME);
         returnValLabel.setLabelFor(returnVal);
         returnValSubPanel.add(returnValLabel, BorderLayout.WEST);
         returnValSubPanel.add(returnVal, BorderLayout.CENTER);
