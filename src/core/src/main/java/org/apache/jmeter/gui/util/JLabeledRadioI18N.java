@@ -56,13 +56,13 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
 
     /**
      *
-     * @param label_resource text resource name for group label
-     * @param item_resources list of resource names for individual buttons
+     * @param labelResource text resource name for group label
+     * @param itemResources list of resource names for individual buttons
      * @param selectedItem button to be selected (if not null)
      */
-    public JLabeledRadioI18N(String label_resource, String[] item_resources, String selectedItem) {
-        setLabel(label_resource);
-        init(item_resources, selectedItem);
+    public JLabeledRadioI18N(String labelResource, String[] itemResources, String selectedItem) {
+        setLabel(labelResource);
+        init(itemResources, selectedItem);
     }
 
     /**
@@ -176,11 +176,11 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
     /**
      * Set the group label from the resource name.
      *
-     * @param label_resource The text to be looked up and set
+     * @param labelResource The text to be looked up and set
      */
     @Override
-    public final void setLabel(String label_resource) {
-        this.mLabel.setText(JMeterUtils.getResString(label_resource));
+    public final void setLabel(String labelResource) {
+        this.mLabel.setText(JMeterUtils.getResString(labelResource));
     }
 
     /** {@inheritDoc} */
