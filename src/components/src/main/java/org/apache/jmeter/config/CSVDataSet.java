@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.config;
 
-import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.io.IOException;
