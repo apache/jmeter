@@ -56,7 +56,7 @@ class UdpMetricsSender extends AbstractInfluxdbMetricsSender {
     }
 
     @Override
-    public void setup(String influxdbUrl) throws Exception {
+    public void setup(String influxdbUrl, String influxDBToken) throws Exception {
         try {
             log.debug("Setting up with url:{}", influxdbUrl);
             String[] urlComponents = influxdbUrl.split(":");
