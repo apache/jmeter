@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
@@ -66,7 +67,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
 
     private static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
 
-    private static final byte[] CRLF = { 0x0d, 0x0A };
+    private static final byte[] CRLF = {0x0d, 0x0A};
     private static final int MIRROR_PORT = 8182; // Different from TestHTTPMirrorThread port and standard mirror server
     private static byte[] TEST_FILE_CONTENT;
 
@@ -86,10 +87,10 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     // This is used to emulate @before class and @after class
-    public static Test suite(){
+    public static Test suite() {
         final TestSuite testSuite = new TestSuite(TestHTTPSamplersAgainstHttpMirrorServer.class);
         // Add parameterised tests. For simplicity we assume each has cases 0-10
-        for(int i=0; i<11; i++) {
+        for (int i = 0; i < 11; i++) {
             testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testGetRequest_Parameters", i));
             testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testGetRequest_Parameters3", i));
 
@@ -97,36 +98,35 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testPostRequest_UrlEncoded3", i));
         }
 
-        TestSetup setup = new TestSetup(testSuite){
+        return new TestSetup(testSuite) {
             private HttpMirrorServer httpServer;
+
             @Override
             protected void setUp() throws Exception {
-                    httpServer = TestHTTPMirrorThread.startHttpMirror(MIRROR_PORT);
-                    // Create the test file content
-                    TEST_FILE_CONTENT = "some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85"
-                            .getBytes("UTF-8");
+                httpServer = TestHTTPMirrorThread.startHttpMirror(MIRROR_PORT);
+                // Create the test file content
+                TEST_FILE_CONTENT = "some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85"
+                        .getBytes(StandardCharsets.UTF_8);
 
-                    // create a temporary file to make sure we always have a file to give to the PostWriter
-                    // Whereever we are or Whatever the current path is.
-                    temporaryFile = File.createTempFile("TestHTTPSamplersAgainstHttpMirrorServer", "tmp");
-                    OutputStream output = new FileOutputStream(temporaryFile);
-                    output.write(TEST_FILE_CONTENT);
-                    output.flush();
-                    output.close();
+                // create a temporary file to make sure we always have a file to give to the PostWriter
+                // Wherever we are or whatever the current path is.
+                temporaryFile = File.createTempFile("TestHTTPSamplersAgainstHttpMirrorServer", "tmp");
+                OutputStream output = new FileOutputStream(temporaryFile);
+                output.write(TEST_FILE_CONTENT);
+                output.flush();
+                output.close();
             }
 
             @Override
-            protected void tearDown() throws Exception {
-                    // Shutdown mirror server
-                    httpServer.stopServer();
-                    httpServer = null;
-                    // delete temporay file
-                    if(!temporaryFile.delete()) {
-                        Assert.fail("Could not delete file:"+temporaryFile.getAbsolutePath());
-                    }
+            protected void tearDown() {
+                // Shutdown mirror server
+                httpServer.stopServer();
+                httpServer = null;
+                if (!temporaryFile.delete()) {
+                    Assert.fail("Could not delete file:" + temporaryFile.getAbsolutePath());
+                }
             }
         };
-        return setup;
     }
 
     public void itemised_testPostRequest_UrlEncoded() throws Exception {
@@ -214,7 +214,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         HTTPSampleResult res;
         String contentEncoding;
 
-        switch(test) {
+        switch (test) {
             case 0:
                 // Test sending data with default encoding
                 contentEncoding = "";
@@ -335,7 +335,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             case 10:
                 break;
             default:
-                fail("Unexpected switch value: "+test);
+                fail("Unexpected switch value: " + test);
         }
     }
 
@@ -509,19 +509,18 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
 
         // Test sending data with default encoding
         HTTPSamplerBase sampler = createHttpSampler(samplerType);
-        String contentEncoding = "";
-        setupUrl(sampler, contentEncoding);
+        setupUrl(sampler, "");
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
         ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
         HTTPSampleResult res = executeSampler(sampler);
         String expectedPostBody = titleValue + descriptionValue;
-        checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody,
+        checkPostRequestBody(sampler, res, samplerDefaultEncoding, "", expectedPostBody,
                 CONTENT_TYPE_TEXT_PLAIN);
 
         // Test sending data as ISO-8859-1
         sampler = createHttpSampler(samplerType);
-        contentEncoding = ISO_8859_1;
+        String contentEncoding = ISO_8859_1;
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
@@ -555,7 +554,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
         res = executeSampler(sampler);
         expectedPostBody = titleValue + descriptionValue;
-        checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody,CONTENT_TYPE_TEXT_PLAIN);
+        checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody, CONTENT_TYPE_TEXT_PLAIN);
 
         // Test sending data as UTF-8, with values that will change when urlencoded, and where
         // we tell the sampler to urlencode the parameter value
@@ -567,7 +566,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, true, titleField, titleValue, descriptionField, descriptionValue);
         res = executeSampler(sampler);
         expectedPostBody = URLEncoder.encode(titleValue + descriptionValue, contentEncoding);
-        checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody,CONTENT_TYPE_TEXT_PLAIN);
+        checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody, CONTENT_TYPE_TEXT_PLAIN);
 
         // Test sending data as UTF-8, with values that have been urlencoded
         sampler = createHttpSampler(samplerType);
@@ -649,7 +648,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         res = executeSampler(sampler);
         String expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
         String expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
-        expectedPostBody = expectedTitleValue+ expectedDescriptionValue;
+        expectedPostBody = expectedTitleValue + expectedDescriptionValue;
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody, CONTENT_TYPE_TEXT_PLAIN);
     }
 
@@ -690,7 +689,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         HTTPSampleResult res;
         URL executedUrl;
 
-        switch(test) {
+        switch (test) {
             case 0:
                 // Test sending simple HTTP get
                 // Test sending data with default encoding
@@ -792,9 +791,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 sampler.setRunningVersion(true);
                 executedUrl = sampler.getUrl();
                 sampler.setRunningVersion(false);
-            checkGetRequest_Parameters(sampler, res, contentEncoding,
-                    executedUrl, titleField, expectedTitleValue,
-                    descriptionField, expectedDescriptionValue, false);
+                checkGetRequest_Parameters(sampler, res, contentEncoding,
+                        executedUrl, titleField, expectedTitleValue,
+                        descriptionField, expectedDescriptionValue, false);
                 break;
             case 6:
                 break;
@@ -807,7 +806,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             case 10:
                 break;
             default:
-                fail("Unexpected switch value: "+test);
+                fail("Unexpected switch value: " + test);
         }
     }
 
@@ -830,28 +829,27 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             String descriptionField,
             String descriptionValue,
             boolean valuesAlreadyUrlEncoded) throws IOException {
-        if(contentEncoding == null || contentEncoding.length() == 0) {
+        if (contentEncoding == null || contentEncoding.length() == 0) {
             contentEncoding = samplerDefaultEncoding;
         }
         // Check URL
         assertEquals(sampler.getUrl(), res.getURL());
         String expectedPostBody = null;
-        if(!valuesAlreadyUrlEncoded) {
+        if (!valuesAlreadyUrlEncoded) {
             String expectedTitle = URLEncoder.encode(titleValue, contentEncoding);
             String expectedDescription = URLEncoder.encode(descriptionValue, contentEncoding);
             expectedPostBody = titleField + "=" + expectedTitle + "&" + descriptionField + "=" + expectedDescription;
-        }
-        else {
+        } else {
             expectedPostBody = titleField + "=" + titleValue + "&" + descriptionField + "=" + descriptionValue;
         }
         // Check the request
         checkPostRequestBody(
-            sampler,
-            res,
-            samplerDefaultEncoding,
-            contentEncoding,
-            expectedPostBody,
-            HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
+                sampler,
+                res,
+                samplerDefaultEncoding,
+                contentEncoding,
+                expectedPostBody,
+                HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
     }
 
     private void checkPostRequestFormMultipart(
@@ -863,16 +861,16 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             String titleValue,
             String descriptionField,
             String descriptionValue) throws IOException {
-        if(contentEncoding == null || contentEncoding.length() == 0) {
+        if (contentEncoding == null || contentEncoding.length() == 0) {
             contentEncoding = samplerDefaultEncoding;
         }
         // Check URL
         assertEquals(sampler.getUrl(), res.getURL());
         String boundaryString = getBoundaryStringFromContentType(res.getRequestHeaders());
         assertNotNull(boundaryString);
-        byte[] expectedPostBody = createExpectedFormdataOutput(boundaryString,
+        byte[] expectedPostBody = createExpectedFormDataOutput(boundaryString,
                 contentEncoding, titleField, titleValue, descriptionField,
-                descriptionValue, true, true);
+                descriptionValue, true);
         // Check request headers
         checkHeaderContentType(res.getRequestHeaders(), "multipart/form-data" + "; boundary=" + boundaryString);
         // Check post body from the result query string
@@ -883,15 +881,14 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
         String headersSent = null;
         String bodySent = "";
-        if(posDividerHeadersAndBody >= 0) {
+        if (posDividerHeadersAndBody >= 0) {
             headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
             // Skip the blank line with crlf dividing headers and body
-            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
-        }
-        else {
+            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody + 2);
+        } else {
             fail("No header and body section found");
         }
-         // Check response headers
+        // Check response headers
         checkHeaderContentType(headersSent, "multipart/form-data" + "; boundary=" + boundaryString);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
@@ -913,7 +910,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             File fileValue,
             String fileMimeType,
             byte[] fileContent) throws IOException {
-        if(contentEncoding == null || contentEncoding.length() == 0) {
+        if (contentEncoding == null || contentEncoding.length() == 0) {
             contentEncoding = samplerDefaultEncoding;
         }
         // Check URL
@@ -932,7 +929,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
 
         // Find the data sent to the mirror server, which the mirror server is sending back to us
         String headersSent = getHeadersSent(res.getResponseData());
-        if(headersSent == null) {
+        if (headersSent == null) {
             fail("No header and body section found");
         }
         // Check response headers
@@ -953,18 +950,18 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             String contentEncoding,
             String expectedPostBody,
             String expectedContentType) throws IOException {
-        if(contentEncoding == null || contentEncoding.length() == 0) {
+        if (contentEncoding == null || contentEncoding.length() == 0) {
             contentEncoding = samplerDefaultEncoding;
         }
         // Check URL
         assertEquals(sampler.getUrl(), res.getURL());
         // Check request headers
-        if(sampler instanceof HTTPSampler) {
+        if (sampler instanceof HTTPSampler) {
             checkHeaderContentType(res.getRequestHeaders(), null);
         } else {
             checkHeaderContentType(res.getRequestHeaders(), expectedContentType);
         }
-         // Check post body from the result query string
+        // Check post body from the result query string
         checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding),
                 res.getQueryString().getBytes(contentEncoding), contentEncoding,
                 res);
@@ -974,16 +971,15 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
         String headersSent = null;
         String bodySent = "";
-        if(posDividerHeadersAndBody >= 0) {
+        if (posDividerHeadersAndBody >= 0) {
             headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
             // Skip the blank line with crlf dividing headers and body
-            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
-        }
-        else {
+            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody + 2);
+        } else {
             fail("No header and body section found");
         }
         // Check response headers
-        if(sampler instanceof HTTPSampler) {
+        if (sampler instanceof HTTPSampler) {
             checkHeaderContentType(res.getRequestHeaders(), null);
         } else {
             checkHeaderContentType(headersSent, expectedContentType);
@@ -999,7 +995,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private void checkGetRequest(
             HTTPSamplerBase sampler,
             HTTPSampleResult res
-            ) throws IOException {
+    ) throws IOException {
         // Check URL
         assertEquals(sampler.getUrl(), res.getURL());
         // Check method
@@ -1012,12 +1008,11 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
         String headersSent = null;
         String bodySent = "";
-        if(posDividerHeadersAndBody >= 0) {
+        if (posDividerHeadersAndBody >= 0) {
             headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
             // Skip the blank line with crlf dividing headers and body
-            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
-        }
-        else {
+            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody + 2);
+        } else {
             fail("No header and body section found");
         }
         // No body should have been sent
@@ -1036,7 +1031,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             String descriptionField,
             String descriptionValue,
             boolean valuesAlreadyUrlEncoded) throws IOException {
-        if(contentEncoding == null || contentEncoding.length() == 0) {
+        if (contentEncoding == null || contentEncoding.length() == 0) {
             contentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
         }
         // Check URL
@@ -1047,12 +1042,11 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         // replies without including query string in URL
 
         String expectedQueryString = null;
-        if(!valuesAlreadyUrlEncoded) {
+        if (!valuesAlreadyUrlEncoded) {
             String expectedTitle = URLEncoder.encode(titleValue, contentEncoding);
             String expectedDescription = URLEncoder.encode(descriptionValue, contentEncoding);
             expectedQueryString = titleField + "=" + expectedTitle + "&" + descriptionField + "=" + expectedDescription;
-        }
-        else {
+        } else {
             expectedQueryString = titleField + "=" + titleValue + "&" + descriptionField + "=" + descriptionValue;
         }
 
@@ -1061,13 +1055,12 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
         String headersSent = null;
         String bodySent = "";
-        if(posDividerHeadersAndBody >= 0) {
+        if (posDividerHeadersAndBody >= 0) {
             headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
             // Skip the blank line with crlf dividing headers and body
-            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
-        }
-        else {
-            fail("No header and body section found in: ["+dataSentToMirrorServer+"]");
+            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody + 2);
+        } else {
+            fail("No header and body section found in: [" + dataSentToMirrorServer + "]");
         }
         // No body should have been sent
         assertEquals(bodySent.length(), 0);
@@ -1081,31 +1074,29 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             String expectedPath,
             String expectedQueryString,
             HTTPSampleResult res
-            )
+    )
             throws IOException {
         // Check the Request URI sent to the mirror server, and
         // sent back by the mirror server
         int indexFirstSpace = headersSent.indexOf(' ');
         int indexSecondSpace = headersSent.indexOf(' ', headersSent.length() > indexFirstSpace ? indexFirstSpace + 1 : indexFirstSpace);
-        if(indexFirstSpace <= 0 && indexSecondSpace <= 0 || indexFirstSpace == indexSecondSpace) {
+        if (indexFirstSpace <= 0 && indexSecondSpace <= 0 || indexFirstSpace == indexSecondSpace) {
             fail("Could not find method and URI sent");
         }
         String methodSent = headersSent.substring(0, indexFirstSpace);
         assertEquals(expectedMethod, methodSent);
         String uriSent = headersSent.substring(indexFirstSpace + 1, indexSecondSpace);
         int indexQueryStart = uriSent.indexOf('?');
-        if(expectedQueryString != null && expectedQueryString.length() > 0) {
+        if (expectedQueryString != null && expectedQueryString.length() > 0) {
             // We should have a query string part
-            if(indexQueryStart <= 0 || indexQueryStart == uriSent.length() - 1) {
+            if (indexQueryStart <= 0 || indexQueryStart == uriSent.length() - 1) {
                 fail("Could not find query string in URI");
             }
-        }
-        else {
-            if(indexQueryStart > 0) {
+        } else {
+            if (indexQueryStart > 0) {
                 // We should not have a query string part
                 fail("Query string present in URI");
-            }
-            else {
+            } else {
                 indexQueryStart = uriSent.length();
             }
         }
@@ -1113,7 +1104,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         String pathSent = uriSent.substring(0, indexQueryStart);
         assertEquals(expectedPath, pathSent);
         // Check query
-        if(expectedQueryString != null && expectedQueryString.length() > 0) {
+        if (expectedQueryString != null && expectedQueryString.length() > 0) {
             String queryStringSent = uriSent.substring(indexQueryStart + 1);
             // Is it only the parameter values which are encoded in the specified
             // content encoding, the rest of the query is encoded in UTF-8
@@ -1130,10 +1121,10 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private String getHeadersSent(byte[] responseData) throws IOException {
         // Find the data sent to the mirror server, which the mirror server is sending back to us
         // We assume the headers are in ISO_8859_1, and the body can be in any content encoding.
-        String dataSentToMirrorServer = new String(responseData, ISO_8859_1);
+        String dataSentToMirrorServer = new String(responseData, StandardCharsets.ISO_8859_1);
         int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
         String headersSent = null;
-        if(posDividerHeadersAndBody >= 0) {
+        if (posDividerHeadersAndBody >= 0) {
             headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
         }
         return headersSent;
@@ -1148,15 +1139,14 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         // sent as raw byte data
         byte[] bodySent = null;
         String headersSent = getHeadersSent(responseData);
-        if(headersSent != null) {
+        if (headersSent != null) {
             // Get the content length, it tells us how much data to read
             // TODO : Maybe support chunked encoding, then we cannot rely on content length
             String contentLengthValue = getSentRequestHeaderValue(headersSent, HTTPConstants.HEADER_CONTENT_LENGTH);
             int contentLength = -1;
-            if(contentLengthValue != null) {
+            if (contentLengthValue != null) {
                 contentLength = Integer.parseInt(contentLengthValue);
-            }
-            else {
+            } else {
                 fail("Did not receive any content-length header");
             }
             bodySent = new byte[contentLength];
@@ -1172,12 +1162,12 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     // Java 1.6.0_22+ no longer allows Content-Length to be set, so don't check it.
     // See: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6996110
     private void checkHeaderContentType(String requestHeaders, String contentType) {
-        if(contentType == null) {
-            boolean isPresent = checkRegularExpression(requestHeaders, HTTPConstants.HEADER_CONTENT_TYPE+": .*");
-            assertFalse("Expected no Content-Type in request headers:\n"+ requestHeaders, isPresent);
+        if (contentType == null) {
+            boolean isPresent = checkRegularExpression(requestHeaders, HTTPConstants.HEADER_CONTENT_TYPE + ": .*");
+            assertFalse("Expected no Content-Type in request headers:\n" + requestHeaders, isPresent);
         } else {
             boolean typeOK = isInRequestHeaders(requestHeaders, HTTPConstants.HEADER_CONTENT_TYPE, contentType);
-            assertTrue("Expected type:" + contentType + " in request headers:\n"+ requestHeaders, typeOK);
+            assertTrue("Expected type:" + contentType + " in request headers:\n" + requestHeaders, typeOK);
         }
     }
 
@@ -1188,7 +1178,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 Perl5Compiler.READ_ONLY_MASK
                         | Perl5Compiler.CASE_INSENSITIVE_MASK
                         | Perl5Compiler.SINGLELINE_MASK);
-        if(localMatcher.matches(requestHeaders, pattern)) {
+        if (localMatcher.matches(requestHeaders, pattern)) {
             // The value is in the first group, group 0 is the whole match
             return localMatcher.getMatch().group(1);
         }
@@ -1214,7 +1204,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                         | Perl5Compiler.MULTILINE_MASK);
 
         PatternMatcherInput input = new PatternMatcherInput(stringToCheck);
-        while(localMatcher.contains(input, pattern)) {
+        while (localMatcher.contains(input, pattern)) {
             MatchResult match = localMatcher.getMatch();
             return match.beginOffset(0);
         }
@@ -1229,18 +1219,17 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 Perl5Compiler.READ_ONLY_MASK
                         | Perl5Compiler.CASE_INSENSITIVE_MASK
                         | Perl5Compiler.MULTILINE_MASK);
-        if(localMatcher.contains(requestHeaders, pattern)) {
+        if (localMatcher.contains(requestHeaders, pattern)) {
             MatchResult match = localMatcher.getMatch();
-            String matchString =  match.group(1);
+            String matchString = match.group(1);
             // Header may contain ;charset= , regexp extracts it so computed boundary is wrong
             int indexOf = matchString.indexOf(';');
-            if(indexOf>=0) {
+            if (indexOf >= 0) {
                 return matchString.substring(0, indexOf);
             } else {
                 return matchString;
             }
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -1257,28 +1246,20 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         sampler.setContentEncoding(contentEncoding);
     }
 
-    /**
-     * Setup the form data with specified values
-     *
-     * @param httpSampler
-     */
-    private void setupFormData(HTTPSamplerBase httpSampler, boolean isEncoded, String titleField,
-            String titleValue, String descriptionField, String descriptionValue) {
-        if(isEncoded) {
+    /** Setup the form data with specified values */
+    private void setupFormData(HTTPSamplerBase httpSampler, boolean isEncoded,
+                               String titleField, String titleValue,
+                               String descriptionField, String descriptionValue) {
+        if (isEncoded) {
             httpSampler.addEncodedArgument(titleField, titleValue);
             httpSampler.addEncodedArgument(descriptionField, descriptionValue);
-        }
-        else {
+        } else {
             httpSampler.addArgument(titleField, titleValue);
             httpSampler.addArgument(descriptionField, descriptionValue);
         }
     }
 
-    /**
-     * Setup the form data with specified values, and file to upload
-     *
-     * @param httpSampler
-     */
+    /** Setup the form data with specified values, and file to upload */
     private void setupFileUploadData(
             HTTPSamplerBase httpSampler,
             boolean isEncoded,
@@ -1297,34 +1278,28 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
 
     }
 
-    /**
-     * Check that the two byte arrays have identical content
-     *
-     * @param expected
-     * @param actual
-     * @throws UnsupportedEncodingException
-     */
-    private void checkArraysHaveSameContent(byte[] expected, byte[] actual, String encoding,
-            HTTPSampleResult res) throws UnsupportedEncodingException {
-        if(expected != null && actual != null) {
-            if(expected.length != actual.length) {
+    /** Check that the two byte arrays have identical content */
+    private void checkArraysHaveSameContent(byte[] expected, byte[] actual,
+                                            String encoding, HTTPSampleResult res)
+            throws UnsupportedEncodingException {
+        if (expected != null && actual != null) {
+            if (expected.length != actual.length) {
                 System.out.println("\n>>>>>>>>>>>>>>>>>>>> expected:");
                 System.out.println(new String(expected, encoding));
                 System.out.println("==================== actual:");
                 System.out.println(new String(actual, encoding));
                 System.out.println("<<<<<<<<<<<<<<<<<<<<");
                 if (res != null) {
-                    System.out.println("URL="+res.getUrlAsString());
+                    System.out.println("URL=" + res.getUrlAsString());
                 }
                 fail("arrays have different length, expected is " + expected.length + ", actual is " + actual.length);
-            }
-            else {
-                for(int i = 0; i < expected.length; i++) {
-                    if(expected[i] != actual[i]) {
+            } else {
+                for (int i = 0; i < expected.length; i++) {
+                    if (expected[i] != actual[i]) {
                         System.out.println("\n>>>>>>>>>>>>>>>>>>>> expected:");
-                        System.out.println(new String(expected,0,i+1, encoding));
+                        System.out.println(new String(expected, 0, i + 1, encoding));
                         System.out.println("==================== actual:");
-                        System.out.println(new String(actual,0,i+1, encoding));
+                        System.out.println(new String(actual, 0, i + 1, encoding));
                         System.out.println("<<<<<<<<<<<<<<<<<<<<");
 /*
                         // Useful to when debugging
@@ -1338,16 +1313,15 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                         System.out.println();
 */
                         if (res != null) {
-                            System.out.println("URL="+res.getUrlAsString());
+                            System.out.println("URL=" + res.getUrlAsString());
                         }
                         fail("byte at position " + i + " is different, expected is " + expected[i] + ", actual is " + actual[i]);
                     }
                 }
             }
-        }
-        else {
+        } else {
             if (res != null) {
-                System.out.println("URL="+res.getUrlAsString());
+                System.out.println("URL=" + res.getUrlAsString());
             }
             fail("expected or actual byte arrays were null");
         }
@@ -1360,70 +1334,68 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
      *
      * @param lastMultipart true if this is the last multipart in the request
      */
-    private byte[] createExpectedFormdataOutput(
+    private byte[] createExpectedFormDataOutput(
             String boundaryString,
             String contentEncoding,
             String titleField,
             String titleValue,
             String descriptionField,
             String descriptionValue,
-            boolean firstMultipart,
             boolean lastMultipart) throws IOException {
         // The encoding used for http headers and control information
-        final byte[] DASH_DASH = "--".getBytes(ISO_8859_1);
+        final byte[] DASH_DASH = "--".getBytes(StandardCharsets.ISO_8859_1);
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        if(firstMultipart) {
-            output.write(DASH_DASH);
-            output.write(boundaryString.getBytes(ISO_8859_1));
-            output.write(CRLF);
+
+        // First part multi-part
+        output.write(DASH_DASH);
+        output.write(boundaryString.getBytes(StandardCharsets.ISO_8859_1));
+        output.write(CRLF);
+
+        output.write("Content-Disposition: form-data; name=\"".getBytes(StandardCharsets.ISO_8859_1));
+        output.write(titleField.getBytes(StandardCharsets.ISO_8859_1));
+        output.write("\"".getBytes(StandardCharsets.ISO_8859_1));
+        output.write(CRLF);
+        output.write("Content-Type: text/plain".getBytes(StandardCharsets.ISO_8859_1));
+        if (contentEncoding != null) {
+            output.write("; charset=".getBytes(StandardCharsets.ISO_8859_1));
+            output.write(contentEncoding.getBytes(StandardCharsets.ISO_8859_1));
         }
-        output.write("Content-Disposition: form-data; name=\"".getBytes(ISO_8859_1));
-        output.write(titleField.getBytes(ISO_8859_1));
-        output.write("\"".getBytes(ISO_8859_1));
         output.write(CRLF);
-        output.write("Content-Type: text/plain".getBytes(ISO_8859_1));
-        if(contentEncoding != null) {
-            output.write("; charset=".getBytes(ISO_8859_1));
-            output.write(contentEncoding.getBytes(ISO_8859_1));
-        }
-        output.write(CRLF);
-        output.write("Content-Transfer-Encoding: 8bit".getBytes(ISO_8859_1));
+        output.write("Content-Transfer-Encoding: 8bit".getBytes(StandardCharsets.ISO_8859_1));
         output.write(CRLF);
         output.write(CRLF);
-        if(contentEncoding != null) {
+        if (contentEncoding != null) {
             output.write(titleValue.getBytes(contentEncoding));
-        }
-        else {
+        } else {
             output.write(titleValue.getBytes()); // TODO - charset?
         }
         output.write(CRLF);
         output.write(DASH_DASH);
-        output.write(boundaryString.getBytes(ISO_8859_1));
+        output.write(boundaryString.getBytes(StandardCharsets.ISO_8859_1));
         output.write(CRLF);
-        output.write("Content-Disposition: form-data; name=\"".getBytes(ISO_8859_1));
-        output.write(descriptionField.getBytes(ISO_8859_1));
-        output.write("\"".getBytes(ISO_8859_1));
+        output.write("Content-Disposition: form-data; name=\"".getBytes(StandardCharsets.ISO_8859_1));
+        output.write(descriptionField.getBytes(StandardCharsets.ISO_8859_1));
+        output.write("\"".getBytes(StandardCharsets.ISO_8859_1));
         output.write(CRLF);
-        output.write("Content-Type: text/plain".getBytes(ISO_8859_1));
-        if(contentEncoding != null) {
-            output.write("; charset=".getBytes(ISO_8859_1));
-            output.write(contentEncoding.getBytes(ISO_8859_1));
+        output.write("Content-Type: text/plain".getBytes(StandardCharsets.ISO_8859_1));
+        if (contentEncoding != null) {
+            output.write("; charset=".getBytes(StandardCharsets.ISO_8859_1));
+            output.write(contentEncoding.getBytes(StandardCharsets.ISO_8859_1));
         }
         output.write(CRLF);
-        output.write("Content-Transfer-Encoding: 8bit".getBytes(ISO_8859_1));
+        output.write("Content-Transfer-Encoding: 8bit".getBytes(StandardCharsets.ISO_8859_1));
         output.write(CRLF);
         output.write(CRLF);
-        if(contentEncoding != null) {
+        if (contentEncoding != null) {
             output.write(descriptionValue.getBytes(contentEncoding));
-        }
-        else {
+        } else {
             output.write(descriptionValue.getBytes()); // TODO - charset?
         }
         output.write(CRLF);
         output.write(DASH_DASH);
-        output.write(boundaryString.getBytes(ISO_8859_1));
-        if(lastMultipart) {
+        output.write(boundaryString.getBytes(StandardCharsets.ISO_8859_1));
+        if (lastMultipart) {
             output.write(DASH_DASH);
         }
         output.write(CRLF);
@@ -1434,46 +1406,32 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         return output.toByteArray();
     }
 
-    /**
-     * Create the expected file multipart
-     *
-     * @param lastMultipart true if this is the last multipart in the request
-     */
     private byte[] createExpectedFilepartOutput(
             String boundaryString,
             String fileField,
             File file,
             String mimeType,
-            byte[] fileContent,
-            boolean firstMultipart,
-            boolean lastMultipart) throws IOException {
-        final byte[] DASH_DASH = "--".getBytes(ISO_8859_1);
+            byte[] fileContent) throws IOException {
+        final byte[] DASH_DASH = "--".getBytes(StandardCharsets.ISO_8859_1);
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        if(firstMultipart) {
-            output.write(DASH_DASH);
-            output.write(boundaryString.getBytes(ISO_8859_1));
-            output.write(CRLF);
-        }
         // replace all backslash with double backslash
         String filename = file.getName();
-        output.write("Content-Disposition: form-data; name=\"".getBytes(ISO_8859_1));
-        output.write(fileField.getBytes(ISO_8859_1));
-        output.write(("\"; filename=\"" + filename + "\"").getBytes(ISO_8859_1));
+        output.write("Content-Disposition: form-data; name=\"".getBytes(StandardCharsets.ISO_8859_1));
+        output.write(fileField.getBytes(StandardCharsets.ISO_8859_1));
+        output.write(("\"; filename=\"" + filename + "\"").getBytes(StandardCharsets.ISO_8859_1));
         output.write(CRLF);
-        output.write("Content-Type: ".getBytes(ISO_8859_1));
-        output.write(mimeType.getBytes(ISO_8859_1));
+        output.write("Content-Type: ".getBytes(StandardCharsets.ISO_8859_1));
+        output.write(mimeType.getBytes(StandardCharsets.ISO_8859_1));
         output.write(CRLF);
-        output.write("Content-Transfer-Encoding: binary".getBytes(ISO_8859_1));
+        output.write("Content-Transfer-Encoding: binary".getBytes(StandardCharsets.ISO_8859_1));
         output.write(CRLF);
         output.write(CRLF);
         output.write(fileContent);
         output.write(CRLF);
         output.write(DASH_DASH);
-        output.write(boundaryString.getBytes(ISO_8859_1));
-        if(lastMultipart) {
-            output.write(DASH_DASH);
-        }
+        output.write(boundaryString.getBytes(StandardCharsets.ISO_8859_1));
+        output.write(DASH_DASH); // Last part multi-part
         output.write(CRLF);
 
         output.flush();
@@ -1483,7 +1441,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     /**
-     * Create the expected output post body for form data and file multiparts
+     * Create the expected output post body for form data and file multi-parts
      * with specified values, when request is multipart
      */
     private byte[] createExpectedFormAndUploadOutput(
@@ -1497,12 +1455,12 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             File fileValue,
             String fileMimeType,
             byte[] fileContent) throws IOException {
-        // Create the multiparts
-        byte[] formdataMultipart = createExpectedFormdataOutput(boundaryString,
+        // Create the multi-parts
+        byte[] formdataMultipart = createExpectedFormDataOutput(boundaryString,
                 contentEncoding, titleField, titleValue, descriptionField,
-                descriptionValue, true, false);
+                descriptionValue, false);
         byte[] fileMultipart = createExpectedFilepartOutput(boundaryString,
-                fileField, fileValue, fileMimeType, fileContent, false, true);
+                fileField, fileValue, fileMimeType, fileContent);
 
         // Join the two multiparts
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -1516,14 +1474,13 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     private HTTPSamplerBase createHttpSampler(int samplerType) {
-        switch(samplerType) {
+        switch (samplerType) {
             case HTTP_SAMPLER:
                 return new HTTPSampler();
             case HTTP_SAMPLER3:
                 return new HTTPSampler3();
             default:
-                break;
+                throw new IllegalArgumentException("Unexpected type: " + samplerType);
         }
-        throw new IllegalArgumentException("Unexpected type: "+samplerType);
     }
 }
