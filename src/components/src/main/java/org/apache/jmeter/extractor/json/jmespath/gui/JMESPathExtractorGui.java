@@ -24,12 +24,10 @@ import java.awt.GridBagLayout;
 import java.util.List;
 
 import javax.swing.Box;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.apache.jmeter.extractor.json.jsonpath.JMESExtractor;
+import org.apache.jmeter.extractor.json.jmespath.JMESPathExtractor;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -38,19 +36,18 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * GUI for {@link JMESExtractor}
- * @since 5.0
+ * @since 5.2
  */
 @GUIMenuSortOrder(2)
-public class JMESExtractorGui extends AbstractPostProcessorGui {
+public class JMESPathExtractorGui extends AbstractPostProcessorGui {
 
-    private static final long serialVersionUID = -2845056031828291476L;
-
-    private JLabeledTextField defaultValueField;
-    private JLabeledTextField jsonPathExpressionField;
+	private static final long serialVersionUID = -4825532539405119033L;
+	private JLabeledTextField defaultValueField;
+    private JLabeledTextField jmesPathExpressionField;
     private JLabeledTextField refNameField;
     private JLabeledTextField matchNumberField;
     
-    public JMESExtractorGui() {
+    public JMESPathExtractorGui() {
         super();
         init();
     }
@@ -62,10 +59,10 @@ public class JMESExtractorGui extends AbstractPostProcessorGui {
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        JMESExtractor config = (JMESExtractor) element;
+        JMESPathExtractor config = (JMESPathExtractor) element;
         showScopeSettings(config, true);
         refNameField.setText(config.getRefName());
-        jsonPathExpressionField.setText(config.getJsonPathExpression());
+        jmesPathExpressionField.setText(config.getJmesPathExpression());
         matchNumberField.setText(config.getMatchNumber());
         defaultValueField.setText(config.getDefaultValue());
     }
@@ -75,7 +72,7 @@ public class JMESExtractorGui extends AbstractPostProcessorGui {
      */
     @Override
     public TestElement createTestElement() {
-        JMESExtractor config = new JMESExtractor();
+    	JMESPathExtractor config = new JMESPathExtractor();
         modifyTestElement(config);
         return config;
     }
@@ -88,11 +85,11 @@ public class JMESExtractorGui extends AbstractPostProcessorGui {
     @Override
     public void modifyTestElement(TestElement c) {
         super.configureTestElement(c);
-        if (c instanceof JMESExtractor) {
-            JMESExtractor config = (JMESExtractor) c;
+        if (c instanceof JMESPathExtractor) {
+        	JMESPathExtractor config = (JMESPathExtractor) c;
             saveScopeSettings(config);
             config.setRefName(refNameField.getText());
-            config.setJsonPathExpression(jsonPathExpressionField.getText());
+            config.setJmesPathExpression(jmesPathExpressionField.getText());
             config.setDefaultValue(defaultValueField.getText());
             config.setMatchNumbers(matchNumberField.getText());
         }
@@ -105,7 +102,7 @@ public class JMESExtractorGui extends AbstractPostProcessorGui {
     public void clearGui() {
         super.clearGui();
         refNameField.setText(""); //$NON-NLS-1$
-        jsonPathExpressionField.setText(""); //$NON-NLS-1$
+        jmesPathExpressionField.setText(""); //$NON-NLS-1$
         matchNumberField.setText(""); //$NON-NLS-1$
         defaultValueField.setText(""); //$NON-NLS-1$
     }
@@ -125,7 +122,7 @@ public class JMESExtractorGui extends AbstractPostProcessorGui {
 
     private JPanel makeParameterPanel() {
         refNameField = new JLabeledTextField(JMeterUtils.getResString("jsonpp_variable_names"));//$NON-NLS-1$
-        jsonPathExpressionField = new JLabeledTextField(JMeterUtils.getResString("jmes_path_expressions"));//$NON-NLS-1$
+        jmesPathExpressionField = new JLabeledTextField(JMeterUtils.getResString("jmes_path_expressions"));//$NON-NLS-1$
         matchNumberField = new JLabeledTextField(JMeterUtils.getResString("jsonpp_match_numbers"));//$NON-NLS-1$
         defaultValueField = new JLabeledTextField(JMeterUtils.getResString("jsonpp_default_values"));//$NON-NLS-1$
         JPanel panel = new JPanel(new GridBagLayout());
@@ -133,7 +130,7 @@ public class JMESExtractorGui extends AbstractPostProcessorGui {
         initConstraints(gbc);
         addField(panel, refNameField, gbc);
         nextLine(gbc);
-        addField(panel, jsonPathExpressionField, gbc);
+        addField(panel, jmesPathExpressionField, gbc);
         nextLine(gbc);
         addField(panel, matchNumberField, gbc);
         nextLine(gbc);
@@ -150,14 +147,6 @@ public class JMESExtractorGui extends AbstractPostProcessorGui {
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(item.get(1), gbc.clone());
-    }
-
-    private void addField(JPanel panel, JLabel label, JCheckBox checkBox, GridBagConstraints gbc) {
-        panel.add(label, gbc.clone());
-        gbc.gridx++;
-        gbc.weightx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(checkBox, gbc.clone());
     }
 
     private void nextLine(GridBagConstraints gbc) {

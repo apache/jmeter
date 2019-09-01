@@ -17,6 +17,7 @@
  */
 package org.apache.jmeter.extractor.json.jmespath;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +33,14 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.mongodb.util.JSON;
 
 import io.burt.jmespath.Expression;
 import io.burt.jmespath.JmesPath;
@@ -47,27 +49,34 @@ import io.burt.jmespath.jackson.JacksonRuntime;
 /**
  * JMESPATH based extractor
  * 
- * @since 5.0
+ * @since 5.2
  */
-public class JMESExtractor extends AbstractScopedTestElement implements Serializable, PostProcessor, ThreadListener {
-    private static final long serialVersionUID = 1L;
-    private static final Logger log = LoggerFactory.getLogger(JMESExtractor.class);
-    private static final String JSON_PATH_EXPRESSION = "JMESExtractor.jsonPathExpr"; // $NON-NLS-1$
+public class JMESPathExtractor extends AbstractScopedTestElement implements Serializable, PostProcessor, ThreadListener {
+
+	private static final long serialVersionUID = 3849270294526207081L;
+	
+	private static final Logger log = LoggerFactory.getLogger(JMESPathExtractor.class);
+    private static final String JMES_PATH_EXPRESSION = "JMESExtractor.jmesPathExpr"; // $NON-NLS-1$
     private static final String REFERENCE_NAME = "JMESExtractor.referenceName"; // $NON-NLS-1$
     private static final String DEFAULT_VALUE = "JMESExtractor.defaultValue"; // $NON-NLS-1$
-    private static final String MATCH_NUMBER = "JMESExtractor.match_number"; // $NON-NLS-1$
+    private static final String MATCH_NUMBER = "JMESExtractor.matchNumber"; // $NON-NLS-1$
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
     private static final LoadingCache<String, Expression<JsonNode>> JMES_EXTRACTOR_CACHE;
+    
     static {
         final int cacheSize = JMeterUtils.getPropDefault("JMESExtractor.parser.cache.size", 400);
         JMES_EXTRACTOR_CACHE = Caffeine.newBuilder().maximumSize(cacheSize).build(new JMESCacheLoader());
     }
 
     private static final class JMESCacheLoader implements CacheLoader<String, Expression<JsonNode>> {
+    	final JmesPath<JsonNode> runtime;
+    	public JMESCacheLoader() {
+    		runtime = new JacksonRuntime();
+    	}
+    	
         @Override
-        public Expression<JsonNode> load(String jsonPathExpression) throws Exception {
-            final JmesPath<JsonNode> jmespath = new JacksonRuntime();
-            return jmespath.compile(jsonPathExpression);
+        public Expression<JsonNode> load(String jmesPathExpression) throws Exception {
+            return runtime.compile(jmesPathExpression);
         }
     }
     
@@ -79,7 +88,7 @@ public class JMESExtractor extends AbstractScopedTestElement implements Serializ
         if (isScopeVariable()) {
             jsonResponse = vars.get(getVariableName());
             if (log.isDebugEnabled()) {
-                log.debug("JSON Extractor is using variable: {}, which content is: {}", getVariableName(),
+                log.debug("JMESExtractor is using variable: {}, which content is: {}", getVariableName(),
                         jsonResponse);
             }
         } else {
@@ -89,13 +98,13 @@ public class JMESExtractor extends AbstractScopedTestElement implements Serializ
             }
             jsonResponse = previousResult.getResponseDataAsString();
             if (log.isDebugEnabled()) {
-                log.debug("JSON Extractor {} working on Response: {}", getName(), jsonResponse);
+                log.debug("JMESExtractor {} working on Response: {}", getName(), jsonResponse);
             }
         }
         String refName = getRefName();
         String defaultValue = getDefaultValue();
         int matchNumber = Integer.parseInt(getMatchNumber());
-        final String jsonPathExpression = getJsonPathExpression().trim();
+        final String jsonPathExpression = getJmesPathExpression().trim();
         clearOldRefVars(vars, refName);
         try {
             if (StringUtils.isEmpty(jsonResponse)) {
@@ -162,16 +171,18 @@ public class JMESExtractor extends AbstractScopedTestElement implements Serializ
         }
     }
 
-    public List<String> splitJson(JsonNode jsonNode) {
+    public List<String> splitJson(JsonNode jsonNode) 
+    		throws JsonParseException, JsonMappingException, IOException {
         List<String> splittedJsonElements = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
         if (jsonNode.isArray()) {
             ArrayNode arrayNode = (ArrayNode) jsonNode;
             for (int i = 0; i < arrayNode.size(); i++) {
                 JsonNode individualElement = arrayNode.get(i);
-                splittedJsonElements.add(JSON.parse(individualElement.toString()).toString());
+                splittedJsonElements.add(mapper.writeValueAsString(individualElement));
             }
         } else {
-            splittedJsonElements.add(JSON.parse(jsonNode.toString()).toString());
+            splittedJsonElements.add(mapper.writeValueAsString(jsonNode));
         }
         return splittedJsonElements;
     }
@@ -187,12 +198,12 @@ public class JMESExtractor extends AbstractScopedTestElement implements Serializ
         vars.put(refName, extractedValues.get(matchNr));
     }
 
-    public String getJsonPathExpression() {
-        return getPropertyAsString(JSON_PATH_EXPRESSION);
+    public String getJmesPathExpression() {
+        return getPropertyAsString(JMES_PATH_EXPRESSION);
     }
 
-    public void setJsonPathExpression(String jsonPath) {
-        setProperty(JSON_PATH_EXPRESSION, jsonPath);
+    public void setJmesPathExpression(String jsonPath) {
+        setProperty(JMES_PATH_EXPRESSION, jsonPath);
     }
 
     public String getRefName() {
