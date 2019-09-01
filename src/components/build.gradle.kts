@@ -38,6 +38,8 @@ dependencies {
     compileOnly("javax.activation:javax.activation-api")
 
     implementation("com.github.ben-manes.caffeine:caffeine")
+    implementation("io.burt:jmespath-core")
+    implementation("io.burt:jmespath-jackson")
     implementation("jcharts:jcharts")
     implementation("oro:oro")
     implementation("net.minidev:json-smart")
