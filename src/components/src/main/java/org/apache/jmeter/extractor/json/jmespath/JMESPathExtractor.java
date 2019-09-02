@@ -44,6 +44,8 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import io.burt.jmespath.Expression;
 import io.burt.jmespath.JmesPath;
+import io.burt.jmespath.RuntimeConfiguration;
+import io.burt.jmespath.function.FunctionRegistry;
 import io.burt.jmespath.jackson.JacksonRuntime;
 
 /**
@@ -61,17 +63,18 @@ public class JMESPathExtractor extends AbstractScopedTestElement implements Seri
     private static final String DEFAULT_VALUE = "JMESExtractor.defaultValue"; // $NON-NLS-1$
     private static final String MATCH_NUMBER = "JMESExtractor.matchNumber"; // $NON-NLS-1$
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
-    private static final LoadingCache<String, Expression<JsonNode>> JMES_EXTRACTOR_CACHE;
+    private static final LoadingCache<String, Expression<JsonNode>> JMES_EXTRACTOR_CACHE = 
+    		Caffeine
+    			.newBuilder()
+    			.maximumSize(JMeterUtils.getPropDefault("jmesextractor.parser.cache.size", 400))
+    			.build(new JMESCacheLoader());
     
-    static {
-        final int cacheSize = JMeterUtils.getPropDefault("JMESExtractor.parser.cache.size", 400);
-        JMES_EXTRACTOR_CACHE = Caffeine.newBuilder().maximumSize(cacheSize).build(new JMESCacheLoader());
-    }
-
     private static final class JMESCacheLoader implements CacheLoader<String, Expression<JsonNode>> {
     	final JmesPath<JsonNode> runtime;
     	public JMESCacheLoader() {
-    		runtime = new JacksonRuntime();
+    		runtime = new JacksonRuntime(
+    				new RuntimeConfiguration.Builder().withFunctionRegistry(
+    						FunctionRegistry.defaultRegistry()).build());
     	}
     	
         @Override
