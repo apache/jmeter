@@ -229,8 +229,9 @@ public class LoopController extends GenericController implements Serializable, I
 
     @Override
     public void iterationStart(LoopIterationEvent iterEvent) {
-        if(LOGGER.isInfoEnabled()) {
-            LOGGER.info("iterationStart called on {} with source {} and iteration {}", getName(), iterEvent.getSource(), iterEvent.getIteration());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("iterationStart called on {} with source {} and iteration {}", getName(),
+                    iterEvent.getSource(), iterEvent.getIteration());
         }
         reInitialize();
         resetLoopCount();
