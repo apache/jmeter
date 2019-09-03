@@ -316,6 +316,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     public void setupTest(BackendListenerContext context) throws Exception {
         String influxdbMetricsSender = context.getParameter("influxdbMetricsSender");
         String influxdbUrl = context.getParameter("influxdbUrl");
+        String influxdbToken = context.getParameter("influxdbToken");
         summaryOnly = context.getBooleanParameter("summaryOnly", false);
         samplersRegex = context.getParameter("samplersRegex", "");
         application = AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter("application", ""));
@@ -366,7 +367,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
         Class<?> clazz = Class.forName(influxdbMetricsSender);
         this.influxdbMetricsManager = (InfluxdbMetricsSender) clazz.getDeclaredConstructor().newInstance();
-        influxdbMetricsManager.setup(influxdbUrl);
+        influxdbMetricsManager.setup(influxdbUrl, influxdbToken);
         samplersToFilter = Pattern.compile(samplersRegex);
         addAnnotation(true);
 

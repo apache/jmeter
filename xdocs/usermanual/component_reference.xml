@@ -3395,6 +3395,7 @@ By default, a Graphite implementation is provided.
     <properties>
         <property name="influxdbMetricsSender" required="Yes"><code>org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender</code></property>
         <property name="influxdbUrl" required="Yes">Influx URL (example : http://influxHost:8086/write?db=jmeter)</property>
+        <property name="influxdbToken" required="No">InfluxDB 2 <a href="https://v2.docs.influxdata.com/v2.0/security/">authentication token</a> (example : HE9yIdAPzWJDspH_tCc2UvdKZpX==); since 5.2.</property>
         <property name="application" required="Yes">Name of tested application. This value is stored in the 'events' measurement too as a tag named 'application' </property>
         <property name="measurement" required="Yes">Measurement as per <a href="https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/">Influx Line Protocol Reference</a>. Defaults to "<code>jmeter</code>."</property>
         <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to <code>true</code>.</property>

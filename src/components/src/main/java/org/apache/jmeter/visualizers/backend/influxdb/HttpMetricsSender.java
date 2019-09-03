@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -58,6 +59,9 @@ import org.slf4j.LoggerFactory;
 class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     private static final Logger log = LoggerFactory.getLogger(HttpMetricsSender.class);
 
+    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private static final String AUTHORIZATION_HEADER_VALUE = "Token ";
+
     private final Object lock = new Object();
 
     private List<MetricTuple> metrics = new ArrayList<>();
@@ -67,6 +71,8 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     private CloseableHttpAsyncClient httpClient;
 
     private URL url;
+
+    private String token;
 
     private Future<HttpResponse> lastRequest;
 
@@ -81,10 +87,12 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
      *
      * @param influxdbUrl
      *            example : http://localhost:8086/write?db=myd&rp=one_week
-     * @see org.apache.jmeter.visualizers.backend.influxdb.InfluxdbMetricsSender#setup(java.lang.String)
+     * @param influxDBToken
+     *            example: my-token
+     * @see InfluxdbMetricsSender#setup(String, String)
      */
     @Override
-    public void setup(String influxdbUrl) throws Exception {
+    public void setup(String influxdbUrl, String influxDBToken) throws Exception {
         // Create I/O reactor configuration
         IOReactorConfig ioReactorConfig = IOReactorConfig
                 .custom()
@@ -108,16 +116,18 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                 .disableConnectionState()
                 .build();
         url = new URL(influxdbUrl);
-        httpRequest = createRequest(url);
+        token = influxDBToken;
+        httpRequest = createRequest(url, token);
         httpClient.start();
     }
 
     /**
      * @param url {@link URL} Influxdb Url
+     * @param token Influxdb 2.0 authorization token
      * @return {@link HttpPost}
      * @throws URISyntaxException
      */
-    private HttpPost createRequest(URL url) throws URISyntaxException {
+    private HttpPost createRequest(URL url, String token) throws URISyntaxException {
         RequestConfig defaultRequestConfig = RequestConfig.custom()
                 .setConnectTimeout(JMeterUtils.getPropDefault("backend_influxdb.connection_timeout", 1000))
                 .setSocketTimeout(JMeterUtils.getPropDefault("backend_influxdb.socket_timeout", 3000))
@@ -126,6 +136,9 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
 
         HttpPost currentHttpRequest = new HttpPost(url.toURI());
         currentHttpRequest.setConfig(defaultRequestConfig);
+        if (StringUtils.isNotBlank(token)) {
+            currentHttpRequest.setHeader(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE + token);
+        }
         log.debug("Created InfluxDBMetricsSender with url: {}", url);
         return currentHttpRequest;
     }
@@ -154,7 +167,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
         if (!copyMetrics.isEmpty()) {
             try {
                 if(httpRequest == null) {
-                    httpRequest = createRequest(url);
+                    httpRequest = createRequest(url, token);
                 }
                 StringBuilder sb = new StringBuilder(copyMetrics.size()*35);
                 for (MetricTuple metric : copyMetrics) {
