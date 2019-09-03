@@ -91,6 +91,40 @@ public class HttpMetricsSenderTest {
     }
 
     @Test
+    public void checkEmptyTokenDoesNotPresentInHeader() throws Exception {
+        String influxdbUrl = String.format("http://localhost:%s/api/v2/write", server.getLocalPort());
+        HttpMetricsSender metricsSender = new HttpMetricsSender();
+        metricsSender.setup(influxdbUrl, "");
+        metricsSender.addMetric("measurement", "location=west", "size=10");
+        metricsSender.writeAndSendMetrics();
+
+        do {
+            Thread.sleep(100);
+        } while (request == null);
+
+        assertNull(
+                "The authorization header shouldn't be defined.",
+                request.getFirstHeader("Authorization"));
+    }
+
+    @Test
+    public void checkEmptyOnlyWhitespaceTokenDoesNotPresentInHeader() throws Exception {
+        String influxdbUrl = String.format("http://localhost:%s/api/v2/write", server.getLocalPort());
+        HttpMetricsSender metricsSender = new HttpMetricsSender();
+        metricsSender.setup(influxdbUrl, "  ");
+        metricsSender.addMetric("measurement", "location=west", "size=10");
+        metricsSender.writeAndSendMetrics();
+
+        do {
+            Thread.sleep(100);
+        } while (request == null);
+
+        assertNull(
+                "The authorization header shouldn't be defined.",
+                request.getFirstHeader("Authorization"));
+    }
+
+    @Test
     public void checkTokenPresentInHeader() throws Exception {
         String influxdbUrl = String.format("http://localhost:%s/api/v2/write", server.getLocalPort());
         HttpMetricsSender metricsSender = new HttpMetricsSender();
