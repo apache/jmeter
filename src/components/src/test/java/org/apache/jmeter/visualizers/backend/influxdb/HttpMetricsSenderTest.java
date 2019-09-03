@@ -22,12 +22,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
 import org.apache.http.impl.bootstrap.HttpServer;
 import org.apache.http.impl.bootstrap.ServerBootstrap;
+import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,15 +41,31 @@ public class HttpMetricsSenderTest {
     private HttpRequest request;
 
     @Before
-    public void startServer() throws IOException {
-        server = ServerBootstrap.bootstrap()
-                .setListenerPort(8183)
-                .registerHandler("*", (request, response, context) -> {
-                    HttpMetricsSenderTest.this.request = request;
-                    response.setStatusCode(HttpStatus.SC_NO_CONTENT);
+    public void startServer() {
+
+        HttpRequestHandler requestHandler = (request, response, context) -> {
+            HttpMetricsSenderTest.this.request = request;
+            response.setStatusCode(HttpStatus.SC_NO_CONTENT);
+        };
+
+        // Start HttpServer on free port
+        server = IntStream
+                .range(8183, 8283)
+                .mapToObj(port -> {
+                    HttpServer httpServer = ServerBootstrap.bootstrap()
+                            .setListenerPort(8183)
+                            .registerHandler("*", requestHandler)
+                            .create();
+                    try {
+                        httpServer.start();
+                        return httpServer;
+                    } catch (IOException e) {
+                        return null;
+                    }
                 })
-                .create();
-        server.start();
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Cannot start HttpServer"));
     }
 
     @After
@@ -56,8 +75,9 @@ public class HttpMetricsSenderTest {
 
     @Test
     public void checkTokenDoesNotPresentInHeader() throws Exception {
+        String influxdbUrl = String.format("http://localhost:%s/api/v2/write", server.getLocalPort());
         HttpMetricsSender metricsSender = new HttpMetricsSender();
-        metricsSender.setup("http://localhost:8183/api/v2/write", null);
+        metricsSender.setup(influxdbUrl, null);
         metricsSender.addMetric("measurement", "location=west", "size=10");
         metricsSender.writeAndSendMetrics();
 
@@ -72,8 +92,9 @@ public class HttpMetricsSenderTest {
 
     @Test
     public void checkTokenPresentInHeader() throws Exception {
+        String influxdbUrl = String.format("http://localhost:%s/api/v2/write", server.getLocalPort());
         HttpMetricsSender metricsSender = new HttpMetricsSender();
-        metricsSender.setup("http://localhost:8183", "my-token");
+        metricsSender.setup(influxdbUrl, "my-token");
         metricsSender.addMetric("measurement", "location=west", "size=10");
         metricsSender.writeAndSendMetrics();
 
