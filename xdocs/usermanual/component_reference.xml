@@ -5985,7 +5985,7 @@ by:
 where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</code>" namespace.(not applicable if Tidy is selected)
 </component>
 
-<component name="JMESExtractor" index="&sect-num;.8.4"  width="729" height="317" screenshot="jmes_extractor.png">
+<component name="JMESPath Extractor" index="&sect-num;.8.4"  width="729" height="317" screenshot="jmes_extractor.png">
     <description>This test element allows the user to extract value(s) from 
         structured response - XML or (X)HTML - using JMESPath
         query language.
