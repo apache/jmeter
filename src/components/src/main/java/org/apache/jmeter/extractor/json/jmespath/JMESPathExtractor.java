@@ -50,39 +50,38 @@ import io.burt.jmespath.jackson.JacksonRuntime;
 
 /**
  * JMESPATH based extractor
- * 
+ *
  * @since 5.2
  */
-public class JMESPathExtractor extends AbstractScopedTestElement implements Serializable, PostProcessor, ThreadListener {
+public class JMESPathExtractor extends AbstractScopedTestElement
+        implements Serializable, PostProcessor, ThreadListener {
 
-	private static final long serialVersionUID = 3849270294526207081L;
-	
-	private static final Logger log = LoggerFactory.getLogger(JMESPathExtractor.class);
+    private static final long serialVersionUID = 3849270294526207081L;
+
+    private static final Logger log = LoggerFactory.getLogger(JMESPathExtractor.class);
     private static final String JMES_PATH_EXPRESSION = "JMESExtractor.jmesPathExpr"; // $NON-NLS-1$
     private static final String REFERENCE_NAME = "JMESExtractor.referenceName"; // $NON-NLS-1$
     private static final String DEFAULT_VALUE = "JMESExtractor.defaultValue"; // $NON-NLS-1$
     private static final String MATCH_NUMBER = "JMESExtractor.matchNumber"; // $NON-NLS-1$
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
-    private static final LoadingCache<String, Expression<JsonNode>> JMES_EXTRACTOR_CACHE = 
-    		Caffeine
-    			.newBuilder()
-    			.maximumSize(JMeterUtils.getPropDefault("jmesextractor.parser.cache.size", 400))
-    			.build(new JMESCacheLoader());
-    
+    private static final LoadingCache<String, Expression<JsonNode>> JMES_EXTRACTOR_CACHE = Caffeine.newBuilder()
+            .maximumSize(JMeterUtils.getPropDefault("jmesextractor.parser.cache.size", 400))
+            .build(new JMESCacheLoader());
+
     private static final class JMESCacheLoader implements CacheLoader<String, Expression<JsonNode>> {
-    	final JmesPath<JsonNode> runtime;
-    	public JMESCacheLoader() {
-    		runtime = new JacksonRuntime(
-    				new RuntimeConfiguration.Builder().withFunctionRegistry(
-    						FunctionRegistry.defaultRegistry()).build());
-    	}
-    	
+        final JmesPath<JsonNode> runtime;
+
+        public JMESCacheLoader() {
+            runtime = new JacksonRuntime(new RuntimeConfiguration.Builder()
+                    .withFunctionRegistry(FunctionRegistry.defaultRegistry()).build());
+        }
+
         @Override
         public Expression<JsonNode> load(String jmesPathExpression) throws Exception {
             return runtime.compile(jmesPathExpression);
         }
     }
-    
+
     @Override
     public void process() {
         JMeterContext context = getThreadContext();
@@ -91,8 +90,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement implements Seri
         if (isScopeVariable()) {
             jsonResponse = vars.get(getVariableName());
             if (log.isDebugEnabled()) {
-                log.debug("JMESExtractor is using variable: {}, which content is: {}", getVariableName(),
-                        jsonResponse);
+                log.debug("JMESExtractor is using variable: {}, which content is: {}", getVariableName(), jsonResponse);
             }
         } else {
             SampleResult previousResult = context.getPreviousResult();
@@ -174,8 +172,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement implements Seri
         }
     }
 
-    public List<String> splitJson(JsonNode jsonNode) 
-    		throws JsonParseException, JsonMappingException, IOException {
+    public List<String> splitJson(JsonNode jsonNode) throws JsonParseException, JsonMappingException, IOException {
         List<String> splittedJsonElements = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         if (jsonNode.isArray()) {

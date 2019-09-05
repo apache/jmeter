@@ -36,21 +36,23 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * GUI for {@link JMESExtractor}
+ *
  * @since 5.2
  */
 @GUIMenuSortOrder(2)
 public class JMESPathExtractorGui extends AbstractPostProcessorGui {
 
-	private static final long serialVersionUID = -4825532539405119033L;
-	private JLabeledTextField defaultValueField;
+    private static final long serialVersionUID = -4825532539405119033L;
+    private JLabeledTextField defaultValueField;
     private JLabeledTextField jmesPathExpressionField;
     private JLabeledTextField refNameField;
     private JLabeledTextField matchNumberField;
-    
+
     public JMESPathExtractorGui() {
         super();
         init();
     }
+
     @Override
     public String getLabelResource() {
         return "jmes_extractor_title";//$NON-NLS-1$
@@ -72,7 +74,7 @@ public class JMESPathExtractorGui extends AbstractPostProcessorGui {
      */
     @Override
     public TestElement createTestElement() {
-    	JMESPathExtractor config = new JMESPathExtractor();
+        JMESPathExtractor config = new JMESPathExtractor();
         modifyTestElement(config);
         return config;
     }
@@ -86,7 +88,7 @@ public class JMESPathExtractorGui extends AbstractPostProcessorGui {
     public void modifyTestElement(TestElement c) {
         super.configureTestElement(c);
         if (c instanceof JMESPathExtractor) {
-        	JMESPathExtractor config = (JMESPathExtractor) c;
+            JMESPathExtractor config = (JMESPathExtractor) c;
             saveScopeSettings(config);
             config.setRefName(refNameField.getText());
             config.setJmesPathExpression(jmesPathExpressionField.getText());
@@ -107,7 +109,8 @@ public class JMESPathExtractorGui extends AbstractPostProcessorGui {
         defaultValueField.setText(""); //$NON-NLS-1$
     }
 
-    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or
+                          // final)
 
         setLayout(new BorderLayout());
         setBorder(makeBorder());
