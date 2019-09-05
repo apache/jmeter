@@ -53,7 +53,7 @@ public class HttpMetricsSenderTest {
                 .range(8183, 8283)
                 .mapToObj(port -> {
                     HttpServer httpServer = ServerBootstrap.bootstrap()
-                            .setListenerPort(8183)
+                            .setListenerPort(port)
                             .registerHandler("*", requestHandler)
                             .create();
                     try {
