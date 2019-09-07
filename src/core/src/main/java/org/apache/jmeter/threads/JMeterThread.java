@@ -494,6 +494,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 // checks the scheduler to stop the iteration
                 stopSchedulerIfNeeded();
             }
+
         } catch (JMeterStopTestException e) { // NOSONAR
             if (log.isInfoEnabled()) {
                 log.info("Stopping Test: {}", e.toString());
@@ -969,7 +970,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 if (scheduler) {
                     // We reduce pause to ensure end of test is not delayed by a sleep ending after test scheduled end
                     // See Bug 60049
-                    totalDelay = TIMER_SERVICE.adjustDelay(totalDelay, endTime);
+                    totalDelay = TIMER_SERVICE.adjustDelay(totalDelay, endTime, false);
                     if (totalDelay < 0) {
                         log.debug("The delay would be longer than the scheduled period, so stop thread now.");
                         running = false;

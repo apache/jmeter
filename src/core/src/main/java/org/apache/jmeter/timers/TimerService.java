@@ -47,28 +47,64 @@ public class TimerService {
 
     /**
      * Adjust delay so that initialDelay does not exceed end of test
-     * @param initialDelay initial delay in millis
+     * @param initialDelay initial delay in milliseconds
      * @return initialDelay or adjusted delay
      */
     public long adjustDelay(final long initialDelay) {
-        JMeterThread thread = JMeterContextService.getContext().getThread();
-        long endTime = thread != null ? thread.getEndTime() : 0;
-        return adjustDelay(initialDelay, endTime);
+        return adjustDelay(initialDelay, true);
     }
 
     /**
-     * Adjust delay so that initialDelay does not exceed end of test
-     * @param initialDelay initial delay in millis
+     * Adjust delay so that initialDelay does not exceed end of test<br>
+     * If {@code runTillEnd} is {@code false} the delay will be shortened
+     * to {@code -1} if the delay would be longer than the remaining run time.
+     *
+     * @param initialDelay initial delay in milliseconds
+     * @param runTillEnd adjust delay to match the scheduled end
+     * @return initialDelay or adjusted delay
+     */
+    public long adjustDelay(final long initialDelay, boolean runTillEnd) {
+        JMeterThread thread = JMeterContextService.getContext().getThread();
+        long endTime = thread != null ? thread.getEndTime() : 0;
+        return adjustDelay(initialDelay, endTime, runTillEnd);
+    }
+
+
+    /**
+     * Adjust delay so that initialDelay does not exceed end of test<
+     *
+     * @param initialDelay initial delay in milliseconds
      * @param endTime End time of JMeterThread
-     * @return initialDelay or {@code -1} if delay is too long
+     * @return initialDelay or a shortened delay if delay is longer than the test is
+     *         scheduled
      */
     public long adjustDelay(final long initialDelay, long endTime) {
+        return adjustDelay(initialDelay, endTime, true);
+    }
+
+    /**
+     * Adjust delay so that initialDelay does not exceed end of test<br>
+     * If {@code runTillEnd} is {@code false} the delay will be shortened
+     * to {@code -1} if the delay would be longer than the remaining run time.
+     *
+     * @param initialDelay initial delay in milliseconds
+     * @param endTime End time of JMeterThread
+     * @param runTillEnd adjust delay to match the scheduled end
+     * @return initialDelay or a shortened delay if delay is longer than the test is
+     *         scheduled
+     */
+    public long adjustDelay(final long initialDelay, long endTime, boolean runTillEnd) {
         if (endTime > 0) {
             long now = System.currentTimeMillis();
             if (initialDelay > endTime - now) {
+                if (runTillEnd) {
+                    // shorten the delay to match endTime
+                    return endTime - now;
+                }
                 return -1;
             }
         }
         return initialDelay;
     }
+
 }

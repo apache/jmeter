@@ -18,7 +18,9 @@
 
 package org.apache.jmeter.timers;
 
+import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Description;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,11 +29,38 @@ public class TimerServiceTest {
     TimerService sut = TimerService.getInstance();
 
     @Test
-    public void testBigInitialDelay() {
+    public void testBigInitialDelayAndDontWait() {
+        long now = System.currentTimeMillis();
+        long adjustedDelay = sut.adjustDelay(Long.MAX_VALUE, now + 1000L, false);
+        Assert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
+                Long.valueOf(adjustedDelay), CoreMatchers.is(Long.valueOf(-1)));
+    }
+
+    @Test
+    public void testBigInitialDelayAndWait() {
         long now = System.currentTimeMillis();
         long adjustedDelay = sut.adjustDelay(Long.MAX_VALUE, now + 1000L);
         Assert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
-                Long.valueOf(adjustedDelay), CoreMatchers.is(Long.valueOf(-1)));
+                Long.valueOf(adjustedDelay), isAlmost(1000L, 200L));
+    }
+
+    private BaseMatcher<Long> isAlmost(long value, long precision) {
+        return new BaseMatcher<Long>() {
+
+            @Override
+            public boolean matches(Object item) {
+                if (item instanceof Long) {
+                    Long other = (Long) item;
+                    return Math.abs(other.longValue() - value) < precision;
+                }
+                return false;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("the number is within a precision of " + precision + " near " + value);
+            }
+      };
     }
 
     @Test
