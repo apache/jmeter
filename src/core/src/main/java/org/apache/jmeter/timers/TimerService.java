@@ -71,7 +71,7 @@ public class TimerService {
 
 
     /**
-     * Adjust delay so that initialDelay does not exceed end of test<
+     * Adjust delay so that initialDelay does not exceed end of test
      *
      * @param initialDelay initial delay in milliseconds
      * @param endTime End time of JMeterThread
