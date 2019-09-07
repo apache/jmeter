@@ -69,7 +69,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
      */
     public static final int START_NEXT_ITERATION_CURRENT_LOOP = 4;
     /**
-     * Break Current Looop
+     * Break Current Loop
      */
     public static final int BREAK_CURRENT_LOOP = 5;
 
@@ -143,11 +143,11 @@ public class TestAction extends AbstractSampler implements Interruptible {
     private void pause(String timeInMillis) {
         long millis;
         try {
-            if(!StringUtils.isEmpty(timeInMillis)) {
-                millis=Long.parseLong(timeInMillis);
+            if (!StringUtils.isEmpty(timeInMillis)) {
+                millis = Long.parseLong(timeInMillis);
             } else {
                 log.warn("Duration value is empty, defaulting to 0");
-                millis=0L;
+                millis = 0L;
             }
         } catch (NumberFormatException e){
             log.warn("Could not parse number: '{}'", timeInMillis);
@@ -155,12 +155,19 @@ public class TestAction extends AbstractSampler implements Interruptible {
         }
         try {
             pauseThread = Thread.currentThread();
-            if(millis>0) {
-                TimeUnit.MILLISECONDS.sleep(TIMER_SERVICE.adjustDelay(millis));
-            } else if(millis<0) {
-                throw new IllegalArgumentException("Configured sleep is negative:"+millis);
+            if (millis > 0) {
+                long adjustDelay = TIMER_SERVICE.adjustDelay(millis);
+                if (log.isDebugEnabled()) {
+                    log.debug("Sleeping in Flow Control Action for {} ms (asked for {} ms)",
+                            Long.valueOf(adjustDelay),
+                            Long.valueOf(millis));
+                }
+                TimeUnit.MILLISECONDS.sleep(adjustDelay);
+            } else if (millis < 0) {
+                throw new IllegalArgumentException("Configured sleep is negative:" + millis);
             } // else == 0 we do nothing
         } catch (InterruptedException e) {
+            log.debug("Flow Control Action got interrupted");
             Thread.currentThread().interrupt();
         } finally {
             pauseThread = null;
