@@ -324,7 +324,7 @@ that are used for general usage around JMeter, like:
 <ul>
 <li>A JSON file containing summary of a load test statistics is now generated when using <code>-e</code> or <code>-g</code> options.</li>
 <li>Percentiles computing graphed over time algorithm has been modified to restart for  each time slot</li>
-<li>More user-friendly behaviour when reporting folder does not exist or is not empty through <code>-f</code> commmand line option</li>
+<li>More user-friendly behaviour when reporting folder does not exist or is not empty through <code>-f</code> command line option</li>
 </ul>
 <!--
 <ch_title>Functions</ch_title>
