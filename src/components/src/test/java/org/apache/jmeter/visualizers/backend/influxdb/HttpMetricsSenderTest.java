@@ -138,7 +138,7 @@ public class HttpMetricsSenderTest {
 
         assertEquals(
                 "The authorization header should be: 'Token my-token'",
-                request.getFirstHeader("Authorization").getValue(),
-                "Token my-token");
+                "Token my-token",
+                request.getFirstHeader("Authorization").getValue());
     }
 }
