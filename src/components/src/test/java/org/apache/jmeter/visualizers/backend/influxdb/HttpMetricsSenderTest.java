@@ -23,6 +23,8 @@ import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
@@ -38,13 +40,13 @@ import org.junit.Test;
 public class HttpMetricsSenderTest {
 
     private HttpServer server;
-    private HttpRequest request;
+    private BlockingDeque<HttpRequest> resultQueue = new LinkedBlockingDeque<>();
 
     @Before
     public void startServer() {
 
         HttpRequestHandler requestHandler = (request, response, context) -> {
-            HttpMetricsSenderTest.this.request = request;
+            HttpMetricsSenderTest.this.resultQueue.add(request);
             response.setStatusCode(HttpStatus.SC_NO_CONTENT);
         };
 
@@ -75,70 +77,56 @@ public class HttpMetricsSenderTest {
 
     @Test
     public void checkTokenDoesNotPresentInHeader() throws Exception {
-        String influxdbUrl = String.format("http://localhost:%s/api/v2/write", server.getLocalPort());
-        HttpMetricsSender metricsSender = new HttpMetricsSender();
-        metricsSender.setup(influxdbUrl, null);
-        metricsSender.addMetric("measurement", "location=west", "size=10");
-        metricsSender.writeAndSendMetrics();
+        String influxdbUrl = getInfluxDbUrl();
+        setupSenderAndSendMetric(influxdbUrl, null);
 
-        do {
-            Thread.sleep(100);
-        } while (request == null);
-
-        assertNull(
-                "The authorization header shouldn't be defined.",
-                request.getFirstHeader("Authorization"));
+        assertNoAuthHeader(resultQueue.take());
     }
+
 
     @Test
     public void checkEmptyTokenDoesNotPresentInHeader() throws Exception {
-        String influxdbUrl = String.format("http://localhost:%s/api/v2/write", server.getLocalPort());
-        HttpMetricsSender metricsSender = new HttpMetricsSender();
-        metricsSender.setup(influxdbUrl, "");
-        metricsSender.addMetric("measurement", "location=west", "size=10");
-        metricsSender.writeAndSendMetrics();
+        String influxdbUrl = getInfluxDbUrl();
+        setupSenderAndSendMetric(influxdbUrl, "");
 
-        do {
-            Thread.sleep(100);
-        } while (request == null);
-
-        assertNull(
-                "The authorization header shouldn't be defined.",
-                request.getFirstHeader("Authorization"));
+        assertNoAuthHeader(resultQueue.take());
     }
 
     @Test
     public void checkEmptyOnlyWhitespaceTokenDoesNotPresentInHeader() throws Exception {
-        String influxdbUrl = String.format("http://localhost:%s/api/v2/write", server.getLocalPort());
-        HttpMetricsSender metricsSender = new HttpMetricsSender();
-        metricsSender.setup(influxdbUrl, "  ");
-        metricsSender.addMetric("measurement", "location=west", "size=10");
-        metricsSender.writeAndSendMetrics();
+        String influxdbUrl = getInfluxDbUrl();
+        setupSenderAndSendMetric(influxdbUrl, "  ");
 
-        do {
-            Thread.sleep(100);
-        } while (request == null);
-
-        assertNull(
-                "The authorization header shouldn't be defined.",
-                request.getFirstHeader("Authorization"));
+        assertNoAuthHeader(resultQueue.take());
     }
 
     @Test
     public void checkTokenPresentInHeader() throws Exception {
-        String influxdbUrl = String.format("http://localhost:%s/api/v2/write", server.getLocalPort());
-        HttpMetricsSender metricsSender = new HttpMetricsSender();
-        metricsSender.setup(influxdbUrl, "my-token");
-        metricsSender.addMetric("measurement", "location=west", "size=10");
-        metricsSender.writeAndSendMetrics();
+        String influxdbUrl = getInfluxDbUrl();
+        setupSenderAndSendMetric(influxdbUrl, "my-token");
 
-        do {
-            Thread.sleep(100);
-        } while (request == null);
-
+        HttpRequest request = resultQueue.take();
         assertEquals(
                 "The authorization header should be: 'Token my-token'",
                 "Token my-token",
                 request.getFirstHeader("Authorization").getValue());
     }
+
+    private void setupSenderAndSendMetric(String influxdbUrl, String influxDBToken) throws Exception {
+        HttpMetricsSender metricsSender = new HttpMetricsSender();
+        metricsSender.setup(influxdbUrl, influxDBToken);
+        metricsSender.addMetric("measurement", "location=west", "size=10");
+        metricsSender.writeAndSendMetrics();
+    }
+
+    private void assertNoAuthHeader(HttpRequest request) {
+        assertNull(
+                "The authorization header shouldn't be defined.",
+                request.getFirstHeader("Authorization"));
+    }
+
+    private String getInfluxDbUrl() {
+        return String.format("http://localhost:%s/api/v2/write", Integer.valueOf(server.getLocalPort()));
+    }
+
 }
