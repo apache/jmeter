@@ -18,7 +18,6 @@
 package org.apache.jmeter.report.dashboard;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -60,10 +59,6 @@ import freemarker.template.TemplateExceptionHandler;
  * @since 3.0
  */
 public class HtmlTemplateExporter extends AbstractDataExporter {
-    private static final FileFilter HTML_REPORT_FILE_FILTER =
-        file ->
-            (file.isFile() && "index.html".equals(file.getName()))
-                    || (file.isDirectory() && ("content".equals(file.getName()) || file.getName().startsWith("sbadmin2-")));
     private static final String CUSTOM_GRAPH_PREFIX = "custom_";
 
     /** Format used for non null check of parameters. */
@@ -140,33 +135,28 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
          */
         @Override
         public ResultData customizeResult(ResultData result) {
-            if (extraOptions == null) {
-                return new MapResultData();
-            }
-
             MapResultData customizedResult = new MapResultData();
             customizedResult.setResult(DATA_CTX_RESULT, result);
 
+            if (extraOptions == null) {
+                return customizedResult;
+            }
+
             MapResultData extraResult = new MapResultData();
-            extraOptions.getProperties()
-                    .forEach((key, value) ->
-                            extraResult.setResult(key, new ValueResultData(value)));
+            extraOptions.getProperties().forEach((key, value) ->
+                    extraResult.setResult(key, new ValueResultData(value)));
             customizedResult.setResult(DATA_CTX_EXTRA_OPTIONS, extraResult);
 
             return customizedResult;
         }
     }
 
-    /**
-     * This class allows to check exported data
-     */
+    /** This class allows to check exported data */
     private interface ResultChecker {
         boolean checkResult(DataContext dataContext, ResultData result);
     }
 
-    /**
-     * This class allows to detect empty graphs
-     */
+    /** This class allows to detect empty graphs */
     private static class EmptyGraphChecker implements ResultChecker {
 
         private final boolean filtersOnlySampleSeries;
@@ -286,37 +276,12 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         }
     }
 
-    private <TVisit> void addResultToContext(String resultKey,
-            Map<String, Object> storage, DataContext dataContext,
-            ResultDataVisitor<TVisit> visitor) {
-        addResultToContext(resultKey, storage, dataContext, visitor, null,
-                null);
-    }
+    private boolean htmlReportFileFilter(File file) {
+        String fileName = file.getName();
+        boolean isIndexHtmlFile = file.isFile() && fileName.equals("index.html");
+        boolean isContentOrAdmin = fileName.equals("content") || fileName.startsWith("sbadmin2-");
 
-    private <TVisit> void addResultToContext(String resultKey,
-            Map<String, Object> storage, DataContext dataContext,
-            ResultDataVisitor<TVisit> visitor, ResultCustomizer customizer,
-            ResultChecker checker) {
-        Object data = storage.get(resultKey);
-        if (data instanceof ResultData) {
-            ResultData result = (ResultData) data;
-            if (checker != null) {
-                checker.checkResult(dataContext, result);
-            }
-            if (customizer != null) {
-                result = customizer.customizeResult(result);
-            }
-            dataContext.put(resultKey, result.accept(visitor));
-        }
-    }
-
-    private long formatTimestamp(String key, DataContext context) {
-        // FIXME Why convert to double then long (rounding ?)
-        double result = Double.parseDouble((String) context.get(key));
-        long timestamp = (long) result;
-        // Quote the string to respect Json spec.
-        context.put(key, '"' + TimeHelper.formatTimeStamp(timestamp) + '"');
-        return timestamp;
+        return isIndexHtmlFile || (file.isDirectory() && isContentOrAdmin);
     }
 
     /**
@@ -360,7 +325,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             outputDir = new File(globallyDefinedOutputDir);
         }
 
-        JOrphanUtils.canSafelyWriteToFolder(outputDir, HTML_REPORT_FILE_FILTER);
+        JOrphanUtils.canSafelyWriteToFolder(outputDir, this::htmlReportFileFilter);
 
         if (log.isInfoEnabled()) {
             log.info("Will generate dashboard in folder: {}", outputDir.getAbsolutePath());
@@ -437,8 +402,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
             // Initialize customizer and checker
             customizer.setExtraOptions(exportCfg.getGraphExtraConfigurations().get(graphId));
-            checker.setExcludesControllers(
-                    graphConfiguration.excludesControllers());
+            checker.setExcludesControllers(graphConfiguration.excludesControllers());
             checker.setGraphId(graphId);
             mapConfiguration.put(graphId, graphConfiguration);
             if (graphId.startsWith(CUSTOM_GRAPH_PREFIX)) {
@@ -453,8 +417,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         dataContext.put("graphConfigurations", mapConfiguration);
         dataContext.put("customsGraphsData", customGraphs);
 
-        // Replace the begin date with its formatted string and store the old
-        // timestamp
+        // Replace the begin date with its formatted string and store the old timestamp
         long oldTimestamp = formatTimestamp(
                 ReportGenerator.BEGIN_DATE_CONSUMER_NAME, dataContext);
 
@@ -499,5 +462,36 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         }
 
         log.debug("End of template processing");
+    }
+
+    private <TVisit> void addResultToContext(
+            String resultKey, Map<String, Object> storage,
+            DataContext dataContext, ResultDataVisitor<TVisit> visitor) {
+        addResultToContext(resultKey, storage, dataContext, visitor, null, null);
+    }
+
+    private <TVisit> void addResultToContext(
+            String resultKey, Map<String, Object> storage, DataContext dataContext,
+            ResultDataVisitor<TVisit> visitor, ResultCustomizer customizer, ResultChecker checker) {
+        Object data = storage.get(resultKey);
+        if (data instanceof ResultData) {
+            ResultData result = (ResultData) data;
+            if (checker != null) {
+                checker.checkResult(dataContext, result);
+            }
+            if (customizer != null) {
+                result = customizer.customizeResult(result);
+            }
+            dataContext.put(resultKey, result.accept(visitor));
+        }
+    }
+
+    private long formatTimestamp(String key, DataContext context) {
+        // FIXME Why convert to double then long (rounding ?)
+        double result = Double.parseDouble((String) context.get(key));
+        long timestamp = (long) result;
+        // Quote the string to respect Json spec.
+        context.put(key, '"' + TimeHelper.formatTimeStamp(timestamp) + '"');
+        return timestamp;
     }
 }
