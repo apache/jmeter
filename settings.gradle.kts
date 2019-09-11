@@ -32,6 +32,7 @@ include(
         "src:generator",
         "src:jorphan",
         "src:licenses",
+        "src:protocol:bolt",
         "src:protocol:ftp",
         "src:protocol:http",
         "src:protocol:java",
