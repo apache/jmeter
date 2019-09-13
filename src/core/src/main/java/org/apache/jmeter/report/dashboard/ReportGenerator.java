@@ -361,7 +361,6 @@ public class ReportGenerator {
             entryPoint.addSampleConsumer(graph);
         } catch (ClassCastException | IllegalArgumentException |  ReflectiveOperationException | SecurityException ex) {
             String error = String.format(INVALID_CLASS_FMT, className);
-            log.error(error, ex);
             throw new GenerationException(error, ex);
         }
     }
