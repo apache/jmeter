@@ -18,11 +18,10 @@
 
 package org.apache.jmeter.config;
 
+import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
@@ -125,35 +124,33 @@ public class CSVDataSet extends ConfigTestElement
             super.setProperty(property);
             return;
         }
+
         final String propName = property.getName();
         if (!"shareMode".equals(propName)) {
             super.setProperty(property);
             return;
         }
+
         final String propValue = property.getStringValue();
-        // variables are unlikely to contain spaces, so most likely a translation
-        if (!propValue.contains(" ")) {
-            super.setProperty(property);
-            return;
-        }
-        try {
-            ResourceBundle rb = (ResourceBundle) Introspector
-                    .getBeanInfo(this.getClass())
-                    .getBeanDescriptor()
-                    .getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
-
-            Optional<String> first = Arrays.stream(CSVDataSetBeanInfo.getShareTags())
-                    .filter(resKey -> propValue.equals(rb.getString(resKey)))
-                    .findFirst();
-
-            if (first.isPresent()) {
-                ((StringProperty) property).setValue(first.get()); // reset the value
-            } else {
+        if (propValue.contains(" ")) { // variables are unlikely to contain spaces, so most likely a translation
+            try {
+                final BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
+                final ResourceBundle rb = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
+                for (String resKey : CSVDataSetBeanInfo.getShareTags()) {
+                    if (propValue.equals(rb.getString(resKey))) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Converted {}={} to {} using Locale: {}", propName, propValue, resKey, rb.getLocale());
+                        }
+                        ((StringProperty) property).setValue(resKey); // reset the value
+                        super.setProperty(property);
+                        return;
+                    }
+                }
                 // This could perhaps be a variable name
                 log.warn("Could not translate {}={} using Locale: {}", propName, propValue, rb.getLocale());
+            } catch (IntrospectionException e) {
+                log.error("Could not find BeanInfo; cannot translate shareMode entries", e);
             }
-        } catch (IntrospectionException e) {
-            log.error("Could not find BeanInfo; cannot translate shareMode entries", e);
         }
         super.setProperty(property);
     }
