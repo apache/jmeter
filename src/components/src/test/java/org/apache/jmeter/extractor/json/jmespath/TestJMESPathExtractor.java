@@ -22,6 +22,7 @@ import static org.junit.Assert.assertThat;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -38,13 +39,22 @@ public class TestJMESPathExtractor {
     private static final String REFERENCE_NAME = "varname"; // $NON-NLS-1$
     private static final String REFERENCE_NAME_MATCH_NUMBER = "varname_matchNr"; // $NON-NLS-1$
 
-    private static JMESPathExtractor setupProcessor(JMeterContext context, String matchNumbers) {
+    private static JMESPathExtractor setupProcessor(JMeterVariables vars, SampleResult sampleResult, String data, boolean isSourceVars, String matchNumbers) {
+        JMeterContext jmctx = JMeterContextService.getContext();
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(sampleResult);
         JMESPathExtractor processor = new JMESPathExtractor();
-        processor.setThreadContext(context);
+        processor.setThreadContext(jmctx);
         processor.setRefName(REFERENCE_NAME);
         processor.setMatchNumber(matchNumbers);
         processor.setDefaultValue(DEFAULT_VALUE);
-        processor.setScopeVariable("contentvar");
+        if (isSourceVars) {
+            vars.put("contentvar", data);
+            processor.setScopeVariable("contentvar");
+        } else {
+            sampleResult.setResponseData(data, null);
+            processor.setScopeAll();
+        }
         return processor;
     }
 
@@ -65,25 +75,32 @@ public class TestJMESPathExtractor {
             });
         }
 
-        private String varContent;
+        private String data;
         private String jmesPath;
         private String expectedResult;
         private String expectedMatchNumber;
 
-        public OneMatchOnAllExtractedValues(String varContent, String jmesPath, String expectedResult, String expectedMatchNumber) {
-            this.varContent = varContent;
+        public OneMatchOnAllExtractedValues(String data, String jmesPath, String expectedResult, String expectedMatchNumber) {
+            this.data = data;
             this.jmesPath = jmesPath;
             this.expectedResult = expectedResult;
             this.expectedMatchNumber = expectedMatchNumber;
         }
 
         @Test
-        public void test() {
-            JMeterContext context = JMeterContextService.getContext();
-            JMESPathExtractor processor = setupProcessor(context, "-1");
+        public void testFromVars() {
+            test(true);
+        }
+
+        @Test
+        public void testFromSampleResult() {
+            test(false);
+        }
+
+        public void test(boolean fromVars) {
             JMeterVariables vars = new JMeterVariables();
-            context.setVariables(vars);
-            vars.put("contentvar", varContent);
+            SampleResult sampleResult = new SampleResult();
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, data, fromVars, "-1");
             processor.setJmesPathExpression(jmesPath);
             processor.process();
             assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(CoreMatchers.nullValue()));
@@ -107,27 +124,34 @@ public class TestJMESPathExtractor {
             });
         }
 
-        private String varContent;
+        private String data;
         private String jmesPath;
         private String[] expectedResults;
         private String expectedMatchNumber;
 
-        public MultipleMatchesOnAllExtractedValues(String varContent, String jmesPath, String[] expectedResults, String expectedMatchNumber) {
-            this.varContent = varContent;
+        public MultipleMatchesOnAllExtractedValues(String data, String jmesPath, String[] expectedResults, String expectedMatchNumber) {
+            this.data = data;
             this.jmesPath = jmesPath;
             this.expectedResults = expectedResults;
             this.expectedMatchNumber = expectedMatchNumber;
         }
 
         @Test
-        public void test() {
-            JMeterContext context = JMeterContextService.getContext();
-            JMESPathExtractor processor = setupProcessor(context, "-1");
+        public void testFromVars() {
+            test(true);
+        }
+
+        @Test
+        public void testFromSampleResult() {
+            test(false);
+        }
+
+        public void test(boolean fromVars) {
+            SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            context.setVariables(vars);
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, data, fromVars, "-1");
             // test1
             processor.setJmesPathExpression(jmesPath);
-            vars.put("contentvar", varContent);
             processor.process();
             assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(CoreMatchers.nullValue()));
             for (int i = 0; i < expectedResults.length; i++) {
@@ -157,15 +181,15 @@ public class TestJMESPathExtractor {
             });
         }
 
-        private String varContent;
+        private String data;
         private String jmesPath;
         private String expectedResult;
         private String expectedMatchNumber;
         private String matchNumber;
 
-        public MatchNumberMoreThanZeroOn1ExtractedValue(String varContent, String jmesPath,
+        public MatchNumberMoreThanZeroOn1ExtractedValue(String data, String jmesPath,
                 String matchNumber, String expectedResult, String expectedMatchNumber) {
-            this.varContent = varContent;
+            this.data = data;
             this.jmesPath = jmesPath;
             this.expectedResult = expectedResult;
             this.matchNumber = matchNumber;
@@ -173,13 +197,19 @@ public class TestJMESPathExtractor {
         }
 
         @Test
-        public void test() {
-            JMeterContext context = JMeterContextService.getContext();
-            JMESPathExtractor processor = setupProcessor(context, "1");
+        public void testFromVars() {
+            test(true);
+        }
+
+        @Test
+        public void testFromSampleResult() {
+            test(false);
+        }
+
+        public void test(boolean fromVars) {
+            SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            context.setVariables(vars);
-            vars.put("contentvar",
-                    varContent);
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, data, fromVars, "1");
             processor.setMatchNumber(matchNumber);
             processor.setJmesPathExpression(jmesPath);
             processor.process();
@@ -188,17 +218,25 @@ public class TestJMESPathExtractor {
         }
     }
 
-    public static class NotParameterizedPart {
+    @RunWith(Parameterized.class)
+    public static class SourceVarOrResponse {
+        private boolean fromVariables;
 
+        @Parameters
+        public static Collection<Boolean> data() {
+            return Arrays.asList(new Boolean[] {Boolean.TRUE, Boolean.FALSE} );
+        }
+
+        public SourceVarOrResponse(boolean fromVariables) {
+            this.fromVariables = fromVariables;
+        }
         @Test
         public void testRandomElementOneMatch() {
-            JMeterContext context = JMeterContextService.getContext();
-            JMESPathExtractor processor = setupProcessor(context, "0");
+            SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            context.setVariables(vars);
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", fromVariables, "0");
 
             processor.setJmesPathExpression("a.b.c.d");
-            vars.put("contentvar", "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}");
             processor.process();
             assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("\"value\""));
             assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
@@ -207,12 +245,10 @@ public class TestJMESPathExtractor {
 
         @Test
         public void testRandomElementMultipleMatches() {
-            JMeterContext context = JMeterContextService.getContext();
-            JMESPathExtractor processor = setupProcessor(context, "0");
+            SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            context.setVariables(vars);
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "[\"one\", \"two\"]", fromVariables, "0");
 
-            vars.put("contentvar", "[\"one\", \"two\"]");
             processor.setJmesPathExpression("[*]");
             processor.process();
             assertThat(vars.get(REFERENCE_NAME),
@@ -224,12 +260,10 @@ public class TestJMESPathExtractor {
 
         @Test
         public void testEmptySourceData() {
-            JMeterContext context = JMeterContextService.getContext();
-            JMESPathExtractor processor = setupProcessor(context, "-1");
+            SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            context.setVariables(vars);
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "", fromVariables, "-1");
 
-            vars.put("contentvar", "");
             processor.setJmesPathExpression("[*]");
             processor.process();
             assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
@@ -238,12 +272,10 @@ public class TestJMESPathExtractor {
 
         @Test
         public void testErrorInJMESPath() {
-            JMeterContext context = JMeterContextService.getContext();
-            JMESPathExtractor processor = setupProcessor(context, "-1");
+            SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            context.setVariables(vars);
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", fromVariables, "-1");
 
-            vars.put("contentvar", "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}");
             processor.setJmesPathExpression("$.k");
             processor.process();
             assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
@@ -253,11 +285,10 @@ public class TestJMESPathExtractor {
 
         @Test
         public void testNoMatch() {
-            JMeterContext context = JMeterContextService.getContext();
-            JMESPathExtractor processor = setupProcessor(context, "-1");
+            SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            context.setVariables(vars);
-            vars.put("contentvar", "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}");
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", fromVariables, "-1");
+
             processor.setJmesPathExpression("a.b.c.f");
             processor.process();
             assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
