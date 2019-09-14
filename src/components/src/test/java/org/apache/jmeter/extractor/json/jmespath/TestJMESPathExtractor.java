@@ -64,8 +64,8 @@ public class TestJMESPathExtractor {
         @Parameters
         public static Collection<String[]> data() {
             return Arrays.asList(new String[][] {
-                {"[\"one\"]", "[*]", "\"one\"", "1"},
-                {"{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", "a.b.c.d", "\"value\"", "1"},
+                {"[\"one\"]", "[*]", "one", "1"},
+                {"{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", "a.b.c.d", "value", "1"},
                 {"{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\"},\r\n"
                         + "    {\"first\": \"Jacob\", \"last\": \"e\"},\r\n"
                         + "    {\"first\": \"Jayden\", \"last\": \"f\"},\r\n" + "    {\"missing\": \"different\"}\r\n"
@@ -119,12 +119,12 @@ public class TestJMESPathExtractor {
         @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][] {
-                {"[\"one\", \"two\"]", "[*]", new String[] {"\"one\"", "\"two\""}, "2"},
-                {"[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]", "[0:3]", new String[] {"\"a\"", "\"b\"","\"c\""}, "3"},
+                {"[\"one\", \"two\"]", "[*]", new String[] {"one", "two"}, "2"},
+                {"[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]", "[0:3]", new String[] {"a", "b","c"}, "3"},
                 {"{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\"},\r\n"
                         + "    {\"first\": \"Jacob\", \"last\": \"e\"},\r\n"
                         + "    {\"first\": \"Jayden\", \"last\": \"f\"},\r\n" + "    {\"missing\": \"different\"}\r\n"
-                        + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n" + "}", "people[:2].first", new String[] {"\"James\"", "\"Jacob\""}, "2" },
+                        + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n" + "}", "people[:2].first", new String[] {"James", "Jacob"}, "2" },
             });
         }
 
@@ -177,9 +177,9 @@ public class TestJMESPathExtractor {
         @Parameters
         public static Collection<String[]> data() {
             return Arrays.asList(new String[][] {
-                {TEST_DATA, "people[:3].first", "1", "\"James\"", "3"},
-                {TEST_DATA, "people[:3].first", "2", "\"Jacob\"", "3"},
-                {TEST_DATA, "people[:3].first", "3", "\"Jayden\"", "3"},
+                {TEST_DATA, "people[:3].first", "1", "James", "3"},
+                {TEST_DATA, "people[:3].first", "2", "Jacob", "3"},
+                {TEST_DATA, "people[:3].first", "3", "Jayden", "3"},
                 {TEST_DATA, "people[:3].age", "3", "30", "3"},
                 {TEST_DATA, "people[:3].first", "4", DEFAULT_VALUE, "3"}
             });
@@ -243,7 +243,7 @@ public class TestJMESPathExtractor {
 
             processor.setJmesPathExpression("a.b.c.d");
             processor.process();
-            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("\"value\""));
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("value"));
             assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
             assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("1"));
         }
@@ -257,7 +257,7 @@ public class TestJMESPathExtractor {
             processor.setJmesPathExpression("[*]");
             processor.process();
             assertThat(vars.get(REFERENCE_NAME),
-                    CoreMatchers.is(CoreMatchers.anyOf(CoreMatchers.is("\"one\""), CoreMatchers.is("\"two\""))));
+                    CoreMatchers.is(CoreMatchers.anyOf(CoreMatchers.is("one"), CoreMatchers.is("two"))));
             assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
             assertThat(vars.get(REFERENCE_NAME + "_2"), CoreMatchers.is(CoreMatchers.nullValue()));
             assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("2"));

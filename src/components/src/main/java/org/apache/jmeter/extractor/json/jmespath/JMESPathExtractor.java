@@ -33,6 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -179,12 +180,20 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         ObjectMapper mapper = new ObjectMapper();
         if (jsonNode.isArray()) {
             for (JsonNode element : (ArrayNode) jsonNode) {
-                splittedJsonElements.add(mapper.writeValueAsString(element));
+                splittedJsonElements.add(writeJsonNode(mapper, element));
             }
         } else {
-            splittedJsonElements.add(mapper.writeValueAsString(jsonNode));
+            splittedJsonElements.add(writeJsonNode(mapper, jsonNode));
         }
         return splittedJsonElements;
+    }
+
+    private static String writeJsonNode(ObjectMapper mapper, JsonNode element) throws JsonProcessingException {
+        if (element.isTextual()) {
+            return element.asText();
+        } else {
+            return mapper.writeValueAsString(element);
+        }
     }
 
     void clearOldRefVars(JMeterVariables vars, String refName) {
