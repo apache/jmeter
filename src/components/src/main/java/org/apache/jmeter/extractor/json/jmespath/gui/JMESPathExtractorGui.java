@@ -93,7 +93,7 @@ public class JMESPathExtractorGui extends AbstractPostProcessorGui {
             config.setRefName(refNameField.getText());
             config.setJmesPathExpression(jmesPathExpressionField.getText());
             config.setDefaultValue(defaultValueField.getText());
-            config.setMatchNumbers(matchNumberField.getText());
+            config.setMatchNumber(matchNumberField.getText());
         }
     }
 

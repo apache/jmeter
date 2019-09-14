@@ -19,219 +19,251 @@ package org.apache.jmeter.extractor.json.jmespath;
 
 import static org.junit.Assert.assertThat;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
+@RunWith(Enclosed.class)
 public class TestJMESPathExtractor {
     private static final String DEFAULT_VALUE = "NONE"; // $NON-NLS-1$
     private static final String REFERENCE_NAME = "varname"; // $NON-NLS-1$
     private static final String REFERENCE_NAME_MATCH_NUMBER = "varname_matchNr"; // $NON-NLS-1$
 
-    private JMESPathExtractor setupProcessor(JMeterContext context, String matchNumbers) {
+    private static JMESPathExtractor setupProcessor(JMeterContext context, String matchNumbers) {
         JMESPathExtractor processor = new JMESPathExtractor();
         processor.setThreadContext(context);
         processor.setRefName(REFERENCE_NAME);
-        processor.setMatchNumbers(matchNumbers);
+        processor.setMatchNumber(matchNumbers);
         processor.setDefaultValue(DEFAULT_VALUE);
         processor.setScopeVariable("contentvar");
         return processor;
     }
 
-    @Test
-    public void testJMESPathExtractorZeroMatch() {
-        // test1
-        JMeterContext context = JMeterContextService.getContext();
-        JMESPathExtractor processor = setupProcessor(context, "-1");
-        JMeterVariables vars = new JMeterVariables();
-        context.setVariables(vars);
-        processor.setJmesPathExpression("a.b.c.f");
-        vars.put("contentvar", "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}");
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("0"));
-    }
-
-    @Test
-    public void testJMESPathExtractorAllElementsOneMatch() {
-        // test1
-        JMeterContext context = JMeterContextService.getContext();
-        JMESPathExtractor processor = setupProcessor(context, "-1");
-        JMeterVariables vars = new JMeterVariables();
-        processor.setJmesPathExpression("[*]");
-        context.setVariables(vars);
-        vars.put("contentvar", "[\"one\"]");
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is("\"one\""));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("1"));
-        // test2
-        processor.setJmesPathExpression("a.b.c.d");
-        context.setVariables(vars);
-        vars.put("contentvar", "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}");
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is("\"value\""));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("1"));
-        // test3
-        vars = new JMeterVariables();
-        processor.setJmesPathExpression("people[2]");
-        context.setVariables(vars);
-        vars.put("contentvar",
-                "{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\"},\r\n"
+    @RunWith(Parameterized.class)
+    public static class OneMatchOnAllExtractedValues {
+        
+        @Parameters
+        public static Collection<String[]> data() {
+            return Arrays.asList(new String[][] {  
+                {"[\"one\"]", "[*]", "\"one\"", "1"},
+                {"{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", "a.b.c.d", "\"value\"", "1"},
+                {"{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\"},\r\n"
                         + "    {\"first\": \"Jacob\", \"last\": \"e\"},\r\n"
                         + "    {\"first\": \"Jayden\", \"last\": \"f\"},\r\n" + "    {\"missing\": \"different\"}\r\n"
-                        + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n" + "}");
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is("{\"first\":\"Jayden\",\"last\":\"f\"}"));
-    }
+                        + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n" + "}", "people[2]",  
+                        "{\"first\":\"Jayden\",\"last\":\"f\"}",
+                        "1"}
+            });
+        }
 
-    @Test
-    public void testJMESPathExtractorAllElementsMultipleMatches() {
-        JMeterContext context = JMeterContextService.getContext();
-        JMESPathExtractor processor = setupProcessor(context, "-1");
-        JMeterVariables vars = new JMeterVariables();
-        // test1
-        processor.setJmesPathExpression("[*]");
-        context.setVariables(vars);
-        vars.put("contentvar", "[\"one\", \"two\"]");
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is("\"one\""));
-        assertThat(vars.get(REFERENCE_NAME + "_2"), CoreMatchers.is("\"two\""));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("2"));
-        // test2
-        context.setVariables(vars);
-        vars = new JMeterVariables();
-        vars.put("contentvar", "[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]");
-        context.setVariables(vars);
-        processor.setJmesPathExpression("[0:3]");
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is("\"a\""));
-        assertThat(vars.get(REFERENCE_NAME + "_2"), CoreMatchers.is("\"b\""));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("3"));
-        // test3
-        processor.setJmesPathExpression("people[:2].first");
-        context.setVariables(vars);
-        vars = new JMeterVariables();
-        vars.put("contentvar",
-                "{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\"},\r\n"
+        private String varContent;
+        private String jmesPath;
+        private String expectedResult;
+        private String expectedMatchNumber;        
+        
+        public OneMatchOnAllExtractedValues(String varContent, String jmesPath, String expectedResult, String expectedMatchNumber) {
+            this.varContent = varContent;
+            this.jmesPath = jmesPath;
+            this.expectedResult = expectedResult;
+            this.expectedMatchNumber = expectedMatchNumber;
+        }
+
+        @Test
+        public void test() {
+            JMeterContext context = JMeterContextService.getContext();
+            JMESPathExtractor processor = setupProcessor(context, "-1");
+            JMeterVariables vars = new JMeterVariables();
+            context.setVariables(vars);
+            vars.put("contentvar", varContent);
+            processor.setJmesPathExpression(jmesPath);
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(CoreMatchers.nullValue()));
+            assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(expectedResult));
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(expectedMatchNumber));
+        }
+    }
+    
+    @RunWith(Parameterized.class)
+    public static class MultipleMatchesOnAllExtractedValues {
+        
+        @Parameters
+        public static Collection<Object[]> data() {
+            return Arrays.asList(new Object[][] {  
+                {"[\"one\", \"two\"]", "[*]", new String[] {"\"one\"", "\"two\""}, "2"},
+                {"[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]", "[0:3]", new String[] {"\"a\"", "\"b\"","\"c\""}, "3"},
+                {"{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\"},\r\n"
                         + "    {\"first\": \"Jacob\", \"last\": \"e\"},\r\n"
                         + "    {\"first\": \"Jayden\", \"last\": \"f\"},\r\n" + "    {\"missing\": \"different\"}\r\n"
-                        + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n" + "}");
-        context.setVariables(vars);
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is("\"James\""));
-        assertThat(vars.get(REFERENCE_NAME + "_2"), CoreMatchers.is("\"Jacob\""));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("2"));
+                        + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n" + "}", "people[:2].first", new String[] {"\"James\"", "\"Jacob\""}, "2" },
+            });
+        }
+
+        private String varContent;
+        private String jmesPath;
+        private String[] expectedResults;
+        private String expectedMatchNumber;        
+        
+        public MultipleMatchesOnAllExtractedValues(String varContent, String jmesPath, String[] expectedResults, String expectedMatchNumber) {
+            this.varContent = varContent;
+            this.jmesPath = jmesPath;
+            this.expectedResults = expectedResults;
+            this.expectedMatchNumber = expectedMatchNumber;
+        }
+   
+        @Test
+        public void test() {
+            JMeterContext context = JMeterContextService.getContext();
+            JMESPathExtractor processor = setupProcessor(context, "-1");
+            JMeterVariables vars = new JMeterVariables();
+            context.setVariables(vars);
+            // test1
+            processor.setJmesPathExpression(jmesPath);
+            vars.put("contentvar", varContent);
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(CoreMatchers.nullValue()));
+            for (int i = 0; i < expectedResults.length; i++) {
+                assertThat(vars.get(REFERENCE_NAME + "_"+(i+1)), CoreMatchers.is(expectedResults[i]));
+            }
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(expectedMatchNumber));
+        }
     }
+    
 
-    @Test
-    public void testMatchNumberMoreThanZeroInJMESPathExtractor() {
-        JMeterContext context = JMeterContextService.getContext();
-        JMESPathExtractor processor = setupProcessor(context, "1");
-        JMeterVariables vars = new JMeterVariables();
-        // test1
-        processor.setJmesPathExpression("people[:3].first");
-        context.setVariables(vars);
-        vars = new JMeterVariables();
-        vars.put("contentvar",
-                "{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\", \"age\":10},\r\n"
-                        + "    {\"first\": \"Jacob\", \"last\": \"e\", \"age\":20},\r\n"
-                        + "    {\"first\": \"Jayden\", \"last\": \"f\", \"age\":30},\r\n"
-                        + "    {\"missing\": \"different\"}\r\n" + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n"
-                        + "}");
-        context.setVariables(vars);
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("\"James\""));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("3"));
-        // test2
-        processor.setMatchNumbers("2");
-        processor.setJmesPathExpression("people[:3].first");
-        context.setVariables(vars);
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("\"Jacob\""));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("3"));
-        // test3
-        processor.setMatchNumbers("3");
-        processor.setJmesPathExpression("people[:3].first");
-        context.setVariables(vars);
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("\"Jayden\""));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("3"));
+    @RunWith(Parameterized.class)
+    public static class MatchNumberMoreThanZeroOn1ExtractedValue {
+        
+        private static final String TEST_DATA = "{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\", \"age\":10},\r\n"
+                + "    {\"first\": \"Jacob\", \"last\": \"e\", \"age\":20},\r\n"
+                + "    {\"first\": \"Jayden\", \"last\": \"f\", \"age\":30},\r\n"
+                + "    {\"missing\": \"different\"}\r\n" + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n"
+                + "}";
 
-        processor.setJmesPathExpression("people[:3].age");
-        context.setVariables(vars);
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("30"));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("3"));
+        @Parameters
+        public static Collection<String[]> data() {
+            return Arrays.asList(new String[][] {  
+                {TEST_DATA, "people[:3].first", "1", "\"James\"", "3"},
+                {TEST_DATA, "people[:3].first", "2", "\"Jacob\"", "3"},
+                {TEST_DATA, "people[:3].first", "3", "\"Jayden\"", "3"},
+                {TEST_DATA, "people[:3].age", "3", "30", "3"},
+                {TEST_DATA, "people[:3].first", "4", DEFAULT_VALUE, "3"}
+            });
+        }
 
-        // test4
-        processor.setMatchNumbers("4");
-        processor.setJmesPathExpression("people[:3].first");
-        context.setVariables(vars);
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("3"));
+        private String varContent;
+        private String jmesPath;
+        private String expectedResult;
+        private String expectedMatchNumber;
+        private String matchNumber;        
+        
+        public MatchNumberMoreThanZeroOn1ExtractedValue(String varContent, String jmesPath, String matchNumber, String expectedResult, String expectedMatchNumber) {
+            this.varContent = varContent;
+            this.jmesPath = jmesPath;
+            this.expectedResult = expectedResult;
+            this.matchNumber = matchNumber;
+            this.expectedMatchNumber = expectedMatchNumber;
+        }
+    
+        @Test
+        public void test() {
+            JMeterContext context = JMeterContextService.getContext();
+            JMESPathExtractor processor = setupProcessor(context, "1");
+            JMeterVariables vars = new JMeterVariables();
+            context.setVariables(vars);
+            vars.put("contentvar",
+                    varContent);
+            processor.setMatchNumber(matchNumber);
+            processor.setJmesPathExpression(jmesPath);
+            processor.process();            
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(expectedResult));
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(expectedMatchNumber));
+        }
     }
+    
+    public static class NotParameterizedPart {
+        
+        @Test
+        public void testRandomElementOneMatch() {
+            JMeterContext context = JMeterContextService.getContext();
+            JMESPathExtractor processor = setupProcessor(context, "0");
+            JMeterVariables vars = new JMeterVariables();
+            context.setVariables(vars);
 
-    @Test
-    public void testJMESPathExtractorRandomElementOneMatches() {
-        JMeterContext context = JMeterContextService.getContext();
-        JMESPathExtractor processor = setupProcessor(context, "0");
-        JMeterVariables vars = new JMeterVariables();
-        processor.setJmesPathExpression("a.b.c.d");
-        processor.setScopeVariable("contentvar");
-        context.setVariables(vars);
-        vars.put("contentvar", "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}");
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("\"value\""));
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("1"));
-    }
+            processor.setJmesPathExpression("a.b.c.d");
+            vars.put("contentvar", "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}");
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("\"value\""));
+            assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("1"));
+        }
+    
+        @Test
+        public void testRandomElementMultipleMatches() {
+            JMeterContext context = JMeterContextService.getContext();
+            JMESPathExtractor processor = setupProcessor(context, "0");
+            JMeterVariables vars = new JMeterVariables();
+            context.setVariables(vars);
 
-    @Test
-    public void testJMESPathExtractorRandomElementMultipleMatches() {
-        JMeterContext context = JMeterContextService.getContext();
-        JMESPathExtractor processor = setupProcessor(context, "0");
-        JMeterVariables vars = new JMeterVariables();
-        processor.setJmesPathExpression("[*]");
-        processor.setScopeVariable("contentvar");
-        context.setVariables(vars);
-        vars.put("contentvar", "[\"one\", \"two\"]");
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME),
-                CoreMatchers.is(CoreMatchers.anyOf(CoreMatchers.is("\"one\""), CoreMatchers.is("\"two\""))));
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME + "_2"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("2"));
-    }
+            vars.put("contentvar", "[\"one\", \"two\"]");
+            processor.setJmesPathExpression("[*]");
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME),
+                    CoreMatchers.is(CoreMatchers.anyOf(CoreMatchers.is("\"one\""), CoreMatchers.is("\"two\""))));
+            assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
+            assertThat(vars.get(REFERENCE_NAME + "_2"), CoreMatchers.is(CoreMatchers.nullValue()));
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("2"));
+        }
+    
+        @Test
+        public void testEmptySourceData() {
+            JMeterContext context = JMeterContextService.getContext();
+            JMESPathExtractor processor = setupProcessor(context, "-1");
+            JMeterVariables vars = new JMeterVariables();
+            context.setVariables(vars);
 
-    @Test
-    public void testEmptyExpression() {
-        JMeterContext context = JMeterContextService.getContext();
-        JMESPathExtractor processor = setupProcessor(context, "-1");
-        JMeterVariables vars = new JMeterVariables();
-        processor.setJmesPathExpression("[*]");
-        vars.put("contentvar", "");
-        context.setVariables(vars);
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
-    }
+            vars.put("contentvar", "");
+            processor.setJmesPathExpression("[*]");
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(CoreMatchers.nullValue()));
+        }
+    
+        @Test
+        public void testErrorInJMESPath() {
+            JMeterContext context = JMeterContextService.getContext();
+            JMESPathExtractor processor = setupProcessor(context, "-1");
+            JMeterVariables vars = new JMeterVariables();
+            context.setVariables(vars);
 
-    @Test
-    public void testErrorJsonPath() {
-        JMeterContext context = JMeterContextService.getContext();
-        JMESPathExtractor processor = setupProcessor(context, "-1");
-        JMeterVariables vars = new JMeterVariables();
-        processor.setJmesPathExpression("k");
-        context.setVariables(vars);
-        vars.put("contentvar", "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}");
-        processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("0"));
+            vars.put("contentvar", "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}");
+            processor.setJmesPathExpression("$.k");
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
+            assertThat(vars.get(REFERENCE_NAME+ "_1"), CoreMatchers.nullValue());
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.nullValue());
+        }
+        
+        @Test
+        public void testNoMatch() {
+            JMeterContext context = JMeterContextService.getContext();
+            JMESPathExtractor processor = setupProcessor(context, "-1");
+            JMeterVariables vars = new JMeterVariables();
+            context.setVariables(vars);
+            
+            vars.put("contentvar", "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}");
+            processor.setJmesPathExpression("a.b.c.f");
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
+            assertThat(vars.get(REFERENCE_NAME+ "_1"), CoreMatchers.nullValue());
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("0"));
+        }
     }
 }

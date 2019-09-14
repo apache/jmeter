@@ -33,8 +33,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -86,34 +84,19 @@ public class JMESPathExtractor extends AbstractScopedTestElement
     public void process() {
         JMeterContext context = getThreadContext();
         JMeterVariables vars = context.getVariables();
-        String jsonResponse;
-        if (isScopeVariable()) {
-            jsonResponse = vars.get(getVariableName());
-            if (log.isDebugEnabled()) {
-                log.debug("JMESExtractor is using variable: {}, which content is: {}", getVariableName(), jsonResponse);
-            }
-        } else {
-            SampleResult previousResult = context.getPreviousResult();
-            if (previousResult == null) {
-                return;
-            }
-            jsonResponse = previousResult.getResponseDataAsString();
-            if (log.isDebugEnabled()) {
-                log.debug("JMESExtractor {} working on Response: {}", getName(), jsonResponse);
-            }
-        }
+        String jsonResponse = getData(vars, context);
         String refName = getRefName();
         String defaultValue = getDefaultValue();
         int matchNumber = Integer.parseInt(getMatchNumber());
         final String jsonPathExpression = getJmesPathExpression().trim();
         clearOldRefVars(vars, refName);
-        try {
-            if (StringUtils.isEmpty(jsonResponse)) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Response or source variable is null or empty for {}", getName());
-                }
-                vars.put(refName, defaultValue);
-            } else {
+        if (StringUtils.isEmpty(jsonResponse)) {
+            if (log.isDebugEnabled()) {
+                log.debug("Response or source variable is null or empty for {}", getName());
+            }
+            vars.put(refName, defaultValue);
+        } else {
+            try {
                 JsonNode result = null;
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode actualObj = mapper.readValue(jsonResponse, JsonNode.class);
@@ -160,26 +143,43 @@ public class JMESPathExtractor extends AbstractScopedTestElement
                     }
                     vars.put(refName + REF_MATCH_NR, Integer.toString(resultList.size()));
                 }
+            } catch (Exception e) {
+                // if something wrong, default value added
+                if (log.isDebugEnabled()) {
+                    log.debug("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage(), e);
+                } else {
+                    log.debug("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage());
+                }
+                vars.put(refName, defaultValue);
             }
-        } catch (Exception e) {
-            // if something wrong, default value added
-            if (log.isDebugEnabled()) {
-                log.debug("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage(), e);
-            } else {
-                log.debug("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage());
-            }
-            vars.put(refName, defaultValue);
         }
     }
 
-    public List<String> splitJson(JsonNode jsonNode) throws JsonParseException, JsonMappingException, IOException {
+    private String getData(JMeterVariables vars, JMeterContext context) {
+        String jsonResponse = null;
+        if (isScopeVariable()) {
+            jsonResponse = vars.get(getVariableName());
+            if (log.isDebugEnabled()) {
+                log.debug("JMESExtractor is using variable: {}, which content is: {}", getVariableName(), jsonResponse);
+            }
+        } else {
+            SampleResult previousResult = context.getPreviousResult();
+            if (previousResult != null) {
+                jsonResponse = previousResult.getResponseDataAsString();
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("JMESExtractor {} working on Response: {}", getName(), jsonResponse);
+            }
+        }
+        return jsonResponse;
+    }
+
+    public List<String> splitJson(JsonNode jsonNode) throws IOException {
         List<String> splittedJsonElements = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         if (jsonNode.isArray()) {
-            ArrayNode arrayNode = (ArrayNode) jsonNode;
-            for (int i = 0; i < arrayNode.size(); i++) {
-                JsonNode individualElement = arrayNode.get(i);
-                splittedJsonElements.add(mapper.writeValueAsString(individualElement));
+            for (JsonNode element : ((ArrayNode) jsonNode)) {
+                splittedJsonElements.add(mapper.writeValueAsString(element));
             }
         } else {
             splittedJsonElements.add(mapper.writeValueAsString(jsonNode));
@@ -232,7 +232,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         JMES_EXTRACTOR_CACHE.cleanUp();
     }
 
-    public void setMatchNumbers(String matchNumber) {
+    public void setMatchNumber(String matchNumber) {
         setProperty(MATCH_NUMBER, matchNumber);
     }
 
