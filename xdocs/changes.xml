@@ -109,6 +109,7 @@ to view the last release notes of version 5.1.1.
   <li><bug>62787</bug>New <code>XPath2 Assertion</code> supporting XPath2 with better performances than <code>XPath Assertion</code>. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
   <li><bug>63643</bug>Skip BOM on files opened through <code>FileServer</code> and use the BOM to detect the character encoding,
       if none is given explicitly. Reported by Havlicek Honza (havlicek.honza at gmail.com)</li>
+  <li><bug>63727</bug>New <code>JMESPath Extractor</code> element to ease extraction from JSON. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>

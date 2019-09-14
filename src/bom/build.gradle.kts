@@ -77,6 +77,8 @@ dependencies {
         apiv("commons-lang:commons-lang")
         apiv("commons-net:commons-net")
         apiv("dnsjava:dnsjava")
+        apiv("io.burt:jmespath-core")
+        apiv("io.burt:jmespath-jackson")
         apiv("javax.activation:javax.activation-api", "javax.activation")
         apiv("javax.mail:mail")
         apiv("jcharts:jcharts")
