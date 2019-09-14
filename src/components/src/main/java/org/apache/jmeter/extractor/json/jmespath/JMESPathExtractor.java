@@ -187,7 +187,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         return splittedJsonElements;
     }
 
-    private void clearOldRefVars(JMeterVariables vars, String refName) {
+    void clearOldRefVars(JMeterVariables vars, String refName) {
         vars.remove(refName + REF_MATCH_NR);
         for (int i = 1; vars.get(refName + "_" + i) != null; i++) {
             vars.remove(refName + "_" + i);

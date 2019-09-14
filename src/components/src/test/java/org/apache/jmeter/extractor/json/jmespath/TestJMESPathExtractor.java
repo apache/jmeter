@@ -106,6 +106,10 @@ public class TestJMESPathExtractor {
             assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(CoreMatchers.nullValue()));
             assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(expectedResult));
             assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(expectedMatchNumber));
+
+            processor.clearOldRefVars(vars, REFERENCE_NAME);
+            assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(CoreMatchers.nullValue()));
         }
     }
 
@@ -230,6 +234,7 @@ public class TestJMESPathExtractor {
         public SourceVarOrResponse(boolean fromVariables) {
             this.fromVariables = fromVariables;
         }
+
         @Test
         public void testRandomElementOneMatch() {
             SampleResult sampleResult = new SampleResult();
