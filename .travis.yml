@@ -30,9 +30,9 @@ matrix:
       jdk: openjdk11
       script:
         - ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle build createDist
-    - name: Tests with OpenJDK EA
-      jdk: openjdk-ea
+    - name: Tests with OpenJDK 12
+      jdk: openjdk12
       script:
         - ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle build createDist
   allow_failures:
-    - jdk: openjdk-ea
+    - jdk: openjdk12
