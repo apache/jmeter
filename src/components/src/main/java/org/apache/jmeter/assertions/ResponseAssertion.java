@@ -341,7 +341,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 } else {
                     found = localMatcher.matches(toCheck, pattern);
                 }
-                boolean pass = notTest != found;
+                boolean pass = notTest ? !found : found;
                 if (orTest) {
                     if (!pass) {
                         log.debug("Failed: {}", stringPattern);
