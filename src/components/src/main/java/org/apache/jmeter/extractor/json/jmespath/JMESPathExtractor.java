@@ -178,7 +178,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         List<String> splittedJsonElements = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         if (jsonNode.isArray()) {
-            for (JsonNode element : ((ArrayNode) jsonNode)) {
+            for (JsonNode element : (ArrayNode) jsonNode) {
                 splittedJsonElements.add(mapper.writeValueAsString(element));
             }
         } else {
