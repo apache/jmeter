@@ -113,7 +113,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
 
     private static final String METRIC_ALL_HITS_COUNT        = METRIC_HITS_PREFIX+METRIC_SEPARATOR+METRIC_COUNT;
     private static final String METRIC_ALL_SENT_BYTES        = METRIC_SENT_BYTES_PREFIX+METRIC_SEPARATOR+METRIC_BYTES;
-    private static final String METRIC_ALL_RECEIVED_BYTES        = METRIC_RECEIVED_BYTES_PREFIX+METRIC_SEPARATOR+METRIC_BYTES;
+    private static final String METRIC_ALL_RECEIVED_BYTES    = METRIC_RECEIVED_BYTES_PREFIX+METRIC_SEPARATOR+METRIC_BYTES;
 
     private static final long SEND_INTERVAL = JMeterUtils.getPropDefault("backend_graphite.send_interval", 1);
     private static final int MAX_POOL_SIZE = 1;
@@ -132,7 +132,6 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private Map<String, Float> koPercentiles;
     private Map<String, Float> allPercentiles;
 
-
     private GraphiteMetricsSender graphiteMetricsManager;
 
     private ScheduledExecutorService scheduler;
@@ -149,9 +148,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         sendMetrics();
     }
 
-    /**
-     * Send metrics to Graphite
-     */
+    /** Send metrics to Graphite */
     protected void sendMetrics() {
         // Need to convert millis to seconds for Graphite
         long timestampInSeconds = TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
@@ -188,13 +185,13 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         graphiteMetricsManager.writeAndSendMetrics();
     }
 
-
     /**
      * Add request metrics to metrics manager.
      * Note if total number of requests is 0, no response time metrics are sent.
+     *
      * @param timestampInSeconds long
-     * @param contextName String
-     * @param metric {@link SamplerMetric}
+     * @param contextName        String
+     * @param metric             {@link SamplerMetric}
      */
     private void addMetrics(long timestampInSeconds, String contextName, SamplerMetric metric) {
 
@@ -261,30 +258,25 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         }
     }
 
-    /**
-     * @return the samplersList
-     */
+    /** @return the samplersList */
     public String getSamplersList() {
         return samplersList;
     }
 
-    /**
-     * @param samplersList the samplersList to set
-     */
+    /** @param samplersList the samplersList to set */
     public void setSamplersList(String samplersList) {
         this.samplersList = samplersList;
     }
 
     @Override
-    public void handleSampleResults(List<SampleResult> sampleResults,
-            BackendListenerContext context) {
+    public void handleSampleResults(List<SampleResult> sampleResults, BackendListenerContext context) {
         boolean samplersToFilterMatch;
         synchronized (LOCK) {
             UserMetric userMetrics = getUserMetrics();
             for (SampleResult sampleResult : sampleResults) {
                 userMetrics.add(sampleResult);
 
-                if(!summaryOnly) {
+                if (!summaryOnly) {
                     if (useRegexpForSamplersList) {
                         Matcher matcher = pattern.matcher(sampleResult.getSampleLabel());
                         samplersToFilterMatch = matcher.matches();

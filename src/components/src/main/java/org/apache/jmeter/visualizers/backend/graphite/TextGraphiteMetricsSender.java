@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * PlainText Graphite sender
+ *
  * @since 2.13
  */
 class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
@@ -52,7 +53,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     /**
      * @param graphiteHost Graphite Host
      * @param graphitePort Graphite Port
-     * @param prefix Common Metrics prefix
+     * @param prefix       Common Metrics prefix
      */
     @Override
     public void setup(String graphiteHost, int graphitePort, String prefix) {

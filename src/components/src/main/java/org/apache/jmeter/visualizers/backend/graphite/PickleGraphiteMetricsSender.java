@@ -39,9 +39,7 @@ import org.slf4j.LoggerFactory;
 class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private static final Logger log = LoggerFactory.getLogger(PickleGraphiteMetricsSender.class);
 
-    /**
-     * Pickle opcodes needed for implementation
-     */
+    /* Pickle opcodes needed for implementation */
     private static final char APPEND = 'a';
     private static final char LIST = 'l';
     private static final char LONG = 'L';
@@ -63,7 +61,6 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
 
     private SocketConnectionInfos socketConnectionInfos;
 
-
     PickleGraphiteMetricsSender() {
         super();
     }
@@ -71,7 +68,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     /**
      * @param graphiteHost Graphite Host
      * @param graphitePort Graphite Port
-     * @param prefix Common Metrics prefix
+     * @param prefix       Common Metrics prefix
      */
     @Override
     public void setup(String graphiteHost, int graphitePort, String prefix) {
@@ -79,8 +76,8 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         this.socketConnectionInfos = new SocketConnectionInfos(graphiteHost, graphitePort);
         this.socketOutputStreamPool = createSocketOutputStreamPool();
 
-        log.info("Created PickleGraphiteMetricsSender with host: {}, port: {}, prefix: {}", graphiteHost, graphitePort,
-                prefix);
+        log.info("Created PickleGraphiteMetricsSender with host: {}, port: {}, prefix: {}",
+                graphiteHost, graphitePort, prefix);
     }
 
     /*
@@ -165,33 +162,28 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      * See: http://readthedocs.org/docs/graphite/en/1.0/feeding-carbon.html
      */
     private static String convertMetricsToPickleFormat(List<MetricTuple> metrics) {
-        StringBuilder pickled = new StringBuilder(metrics.size()*75);
+        StringBuilder pickled = new StringBuilder(metrics.size() * 75);
         pickled.append(MARK).append(LIST);
 
         for (MetricTuple tuple : metrics) {
-            // begin outer tuple
-            pickled.append(MARK);
+            pickled.append(MARK) // begin outer tuple
+                    .append(STRING) // the metric name is a string
+                    // the single quotes are to match python's repr("abcd")
+                    .append(QUOTE).append(tuple.name).append(QUOTE)
+                    .append(LF)
 
-            // the metric name is a string.
-            pickled.append(STRING)
-            // the single quotes are to match python's repr("abcd")
-                .append(QUOTE).append(tuple.name).append(QUOTE).append(LF);
+                    // begin the inner tuple
+                    .append(MARK)
+                    // timestamp is a long
+                    .append(LONG).append(tuple.timestamp)
+                    // the trailing L is to match python's repr(long(1234))
+                    .append(LONG).append(LF)
+                    // and the value is a string.
+                    .append(STRING).append(QUOTE).append(tuple.value).append(QUOTE).append(LF)
+                    .append(TUPLE) // end inner tuple
 
-            // begin the inner tuple
-            pickled.append(MARK);
-
-            // timestamp is a long
-            pickled.append(LONG).append(tuple.timestamp)
-            // the trailing L is to match python's repr(long(1234))
-                .append(LONG).append(LF);
-
-            // and the value is a string.
-            pickled.append(STRING).append(QUOTE).append(tuple.value).append(QUOTE).append(LF);
-
-            pickled.append(TUPLE) // end inner tuple
-                .append(TUPLE); // end outer tuple
-
-            pickled.append(APPEND);
+                    .append(TUPLE) // end outer tuple
+                    .append(APPEND);
         }
 
         // every pickle ends with STOP
