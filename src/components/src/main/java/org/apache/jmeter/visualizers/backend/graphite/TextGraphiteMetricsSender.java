@@ -62,6 +62,15 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
                 graphiteHost, graphitePort, prefix);
     }
 
+    /** Setup used for testing, or if explicit customisation is required. */
+    public void setup(SocketConnectionInfos socketConnectionInfos,
+                      GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool,
+                      String prefix) {
+        this.socketConnectionInfos = socketConnectionInfos;
+        this.socketOutputStreamPool = socketOutputStreamPool;
+        this.prefix = prefix;
+    }
+
     /* (non-Javadoc)
      * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#addMetric(long, java.lang.String, java.lang.String, java.lang.String)
      */
