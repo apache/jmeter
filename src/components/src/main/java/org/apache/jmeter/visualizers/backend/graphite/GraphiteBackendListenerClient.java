@@ -121,10 +121,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
     private static final Object LOCK = new Object();
 
-    private String graphiteHost;
-    private int graphitePort;
     private boolean summaryOnly;
-    private String rootMetricsPrefix;
     private String samplersList = ""; //$NON-NLS-1$
     private boolean useRegexpForSamplersList;
     private Set<String> samplersToFilter;
@@ -286,8 +283,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                         samplerMetric.add(sampleResult);
                     }
                 }
-                SamplerMetric cumulatedMetrics = getSamplerMetric(CUMULATED_METRICS);
-                cumulatedMetrics.add(sampleResult);
+                getSamplerMetric(CUMULATED_METRICS).add(sampleResult);
             }
         }
     }
@@ -296,13 +292,13 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     public void setupTest(BackendListenerContext context) throws Exception {
         String graphiteMetricsSenderClass = context.getParameter(GRAPHITE_METRICS_SENDER);
 
-        graphiteHost = context.getParameter(GRAPHITE_HOST);
-        graphitePort = context.getIntParameter(GRAPHITE_PORT, DEFAULT_PLAINTEXT_PROTOCOL_PORT);
+        String graphiteHost = context.getParameter(GRAPHITE_HOST);
+        int graphitePort = context.getIntParameter(GRAPHITE_PORT, DEFAULT_PLAINTEXT_PROTOCOL_PORT);
         summaryOnly = context.getBooleanParameter(SUMMARY_ONLY, true);
         samplersList = context.getParameter(SAMPLERS_LIST, "");
         useRegexpForSamplersList = context.getBooleanParameter(USE_REGEXP_FOR_SAMPLERS_LIST, false);
-        rootMetricsPrefix = context.getParameter(ROOT_METRICS_PREFIX, DEFAULT_METRICS_PREFIX);
-        String[]  percentilesStringArray = context.getParameter(PERCENTILES, DEFAULT_METRICS_PREFIX).split(SEPARATOR);
+        String rootMetricsPrefix = context.getParameter(ROOT_METRICS_PREFIX, DEFAULT_METRICS_PREFIX);
+        String[] percentilesStringArray = context.getParameter(PERCENTILES, DEFAULT_METRICS_PREFIX).split(SEPARATOR);
         okPercentiles = new HashMap<>(percentilesStringArray.length);
         koPercentiles = new HashMap<>(percentilesStringArray.length);
         allPercentiles = new HashMap<>(percentilesStringArray.length);
