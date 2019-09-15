@@ -50,16 +50,14 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private static final char QUOTE = '\'';
     private static final char LF = '\n';
 
-    private String prefix;
-
     private final Object lock = new Object();
 
     // graphite expects a python-pickled list of nested tuples.
     private List<MetricTuple> metrics = new LinkedList<>();
 
-    private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
-
     private SocketConnectionInfos socketConnectionInfos;
+    private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
+    private String prefix;
 
     PickleGraphiteMetricsSender() {
         super();
@@ -78,6 +76,15 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
 
         log.info("Created PickleGraphiteMetricsSender with host: {}, port: {}, prefix: {}",
                 graphiteHost, graphitePort, prefix);
+    }
+
+    /** Setup used for testing, or if explicit customisation is required. */
+    public void setup(SocketConnectionInfos socketConnectionInfos,
+                      GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool,
+                      String prefix) {
+        this.socketConnectionInfos = socketConnectionInfos;
+        this.socketOutputStreamPool = socketOutputStreamPool;
+        this.prefix = prefix;
     }
 
     /*
