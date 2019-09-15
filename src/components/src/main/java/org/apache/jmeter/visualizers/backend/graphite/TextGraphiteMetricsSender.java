@@ -70,14 +70,14 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      */
     @Override
     public void addMetric(long timestamp, String contextName, String metricName, String metricValue) {
-        StringBuilder sb = new StringBuilder(50);
-        sb
-            .append(prefix)
-            .append(contextName)
-            .append(".")
-            .append(metricName);
+        String name = new StringBuilder(50)
+                .append(prefix)
+                .append(contextName)
+                .append(".")
+                .append(metricName)
+                .toString();
         synchronized (lock) {
-            metrics.add(new MetricTuple(sb.toString(), timestamp, metricValue));
+            metrics.add(new MetricTuple(name, timestamp, metricValue));
         }
     }
 
