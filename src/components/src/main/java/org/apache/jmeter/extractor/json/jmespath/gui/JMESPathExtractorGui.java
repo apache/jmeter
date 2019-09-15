@@ -35,7 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * GUI for {@link JMESExtractor}
+ * GUI for {@link JMESPathExtractor}
  *
  * @since 5.2
  */
