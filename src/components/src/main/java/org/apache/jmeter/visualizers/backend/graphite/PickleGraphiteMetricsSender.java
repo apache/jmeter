@@ -105,48 +105,48 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      */
     @Override
     public void writeAndSendMetrics() {
-        List<MetricTuple> tempMetrics;
+        final List<MetricTuple> currentMetrics;
         synchronized (lock) {
-            if(metrics.isEmpty()) {
+            if (metrics.isEmpty()) {
                 return;
             }
-            tempMetrics = metrics;
+            // keep the current metrics to send outside sync block
+            currentMetrics = metrics;
             metrics = new LinkedList<>();
         }
-        final List<MetricTuple> copyMetrics = tempMetrics;
-        if (!copyMetrics.isEmpty()) {
-            SocketOutputStream out = null;
-            try {
-                String payload = convertMetricsToPickleFormat(copyMetrics);
+        writeMetrics(currentMetrics);
+    }
 
-                int length = payload.length();
-                byte[] header = ByteBuffer.allocate(4).putInt(length).array();
+    private void writeMetrics(List<MetricTuple> currentMetrics) {
+        SocketOutputStream out = null;
+        try {
+            String payload = convertMetricsToPickleFormat(currentMetrics);
 
-                out = socketOutputStreamPool.borrowObject(socketConnectionInfos);
-                out.write(header);
-                // pickleWriter is not closed as it would close the underlying pooled out
-                Writer pickleWriter = new OutputStreamWriter(out, CHARSET_NAME);
-                pickleWriter.write(payload);
-                pickleWriter.flush();
-                socketOutputStreamPool.returnObject(socketConnectionInfos, out);
-            } catch (Exception e) {
-                if(out != null) {
-                    try {
-                        socketOutputStreamPool.invalidateObject(socketConnectionInfos, out);
-                    } catch (Exception e1) {
-                        log.warn("Exception invalidating socketOutputStream connected to graphite server. '{}':{}",
-                                socketConnectionInfos.getHost(), socketConnectionInfos.getPort(), e1);
-                    }
+            int length = payload.length();
+            byte[] header = ByteBuffer.allocate(4).putInt(length).array();
+
+            out = socketOutputStreamPool.borrowObject(socketConnectionInfos);
+            out.write(header);
+            // pickleWriter is not closed as it would close the underlying pooled out
+            Writer pickleWriter = new OutputStreamWriter(out, CHARSET_NAME);
+            pickleWriter.write(payload);
+            pickleWriter.flush();
+            socketOutputStreamPool.returnObject(socketConnectionInfos, out);
+        } catch (Exception e) {
+            // if there was an error, we might miss some data, for now, drop those and try to keep going.
+            if (out != null) {
+                try {
+                    socketOutputStreamPool.invalidateObject(socketConnectionInfos, out);
+                } catch (Exception e1) {
+                    log.warn("Exception invalidating socketOutputStream connected to graphite server {}:{}",
+                            socketConnectionInfos.getHost(), socketConnectionInfos.getPort(), e1);
                 }
-                log.error("Error writing to Graphite: {}", e.getMessage());
             }
+            log.error("Error writing to Graphite: {}", e.getMessage(), e);
+        }
 
-            // if there was an error, we might miss some data. for now, drop those on the floor and
-            // try to keep going.
-            if (log.isDebugEnabled()) {
-                log.debug("Wrote {} metrics", copyMetrics.size());
-            }
-            copyMetrics.clear();
+        if (log.isDebugEnabled()) {
+            log.debug("Wrote {} metrics", currentMetrics.size());
         }
     }
 
