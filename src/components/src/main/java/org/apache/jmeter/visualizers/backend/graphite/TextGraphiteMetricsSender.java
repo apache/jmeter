@@ -28,23 +28,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * PlainText Graphite sender
+ * PlainText Graphite sender.
  *
  * @since 2.13
  */
 class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private static final Logger log = LoggerFactory.getLogger(TextGraphiteMetricsSender.class);
 
-    private String prefix;
-
     private final Object lock = new Object();
 
     private List<MetricTuple> metrics = new ArrayList<>();
 
-    private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
-
     private SocketConnectionInfos socketConnectionInfos;
-
+    private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
+    private String prefix;
 
     TextGraphiteMetricsSender() {
         super();
@@ -57,12 +54,12 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      */
     @Override
     public void setup(String graphiteHost, int graphitePort, String prefix) {
-        this.prefix = prefix;
         this.socketConnectionInfos = new SocketConnectionInfos(graphiteHost, graphitePort);
         this.socketOutputStreamPool = createSocketOutputStreamPool();
+        this.prefix = prefix;
 
-        log.info("Created TextGraphiteMetricsSender with host: {}, port: {}, prefix: {}", graphiteHost, graphitePort,
-                prefix);
+        log.info("Created TextGraphiteMetricsSender with host: {}, port: {}, prefix: {}",
+                graphiteHost, graphitePort, prefix);
     }
 
     /* (non-Javadoc)
