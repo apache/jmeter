@@ -19,6 +19,7 @@
 package org.apache.jmeter.visualizers.backend.graphite;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -302,29 +303,10 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         okPercentiles = new HashMap<>(percentilesStringArray.length);
         koPercentiles = new HashMap<>(percentilesStringArray.length);
         allPercentiles = new HashMap<>(percentilesStringArray.length);
-        DecimalFormat decimalFormat = new DecimalFormat("0.##");
-        for (String percentilesString : percentilesStringArray) {
-            if (!StringUtils.isEmpty(percentilesString.trim())) {
-                try {
-                    Float percentileValue = Float.valueOf(percentilesString.trim());
-                    String sanitizedFormattedPercentile =
-                            AbstractGraphiteMetricsSender.sanitizeString(
-                                    decimalFormat.format(percentileValue));
-                    okPercentiles.put(
-                            METRIC_OK_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
-                            percentileValue);
-                    koPercentiles.put(
-                            METRIC_KO_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
-                            percentileValue);
-                    allPercentiles.put(
-                            METRIC_ALL_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
-                            percentileValue);
-
-                } catch (Exception e) {
-                    log.error("Error parsing percentile: '{}'", percentilesString, e);
-                }
-            }
-        }
+        Arrays.stream(percentilesStringArray)
+                .map(String::trim)
+                .filter(StringUtils::isNotEmpty)
+                .forEach(this::initPercentileMaps);
         Class<?> clazz = Class.forName(graphiteMetricsSenderClass);
         this.graphiteMetricsManager = (GraphiteMetricsSender) clazz.getDeclaredConstructor().newInstance();
         graphiteMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
@@ -338,6 +320,28 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
         // Don't change this as metrics are per second
         this.timerHandle = scheduler.scheduleAtFixedRate(this, SEND_INTERVAL, SEND_INTERVAL, TimeUnit.SECONDS);
+    }
+
+    private void initPercentileMaps(String percentilesString) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.##");
+        try {
+            Float percentileValue = Float.valueOf(percentilesString.trim());
+            String sanitizedFormattedPercentile =
+                    AbstractGraphiteMetricsSender.sanitizeString(
+                            decimalFormat.format(percentileValue));
+            okPercentiles.put(
+                    METRIC_OK_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
+                    percentileValue);
+            koPercentiles.put(
+                    METRIC_KO_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
+                    percentileValue);
+            allPercentiles.put(
+                    METRIC_ALL_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
+                    percentileValue);
+
+        } catch (Exception e) {
+            log.error("Error parsing percentile: '{}'", percentilesString, e);
+        }
     }
 
     @Override
