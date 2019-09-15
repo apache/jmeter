@@ -165,9 +165,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         socketOutputStreamPool.close();
     }
 
-    /**
-     * See: http://readthedocs.org/docs/graphite/en/1.0/feeding-carbon.html
-     */
+    /** See: https://graphite.readthedocs.io/en/1.0.0/feeding-carbon.html */
     private static String convertMetricsToPickleFormat(List<MetricTuple> metrics) {
         StringBuilder pickled = new StringBuilder(metrics.size() * 75);
         pickled.append(MARK).append(LIST);

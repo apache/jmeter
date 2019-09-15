@@ -21,6 +21,8 @@ package org.apache.jmeter.visualizers.backend.graphite
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool
 import spock.lang.Specification
 
+import java.time.Instant
+
 class PickleGraphiteMetricsSenderSpec extends Specification {
 
     def sut = new PickleGraphiteMetricsSender()
@@ -67,7 +69,7 @@ class PickleGraphiteMetricsSenderSpec extends Specification {
         when:
             sut.writeAndSendMetrics()
         then:
-            1 *  objectPoolStub.borrowObject(socketConnInfoMock)
+            1 * objectPoolStub.borrowObject(socketConnInfoMock)
             sut.metrics.isEmpty()
             noExceptionThrown()
     }
@@ -80,9 +82,41 @@ class PickleGraphiteMetricsSenderSpec extends Specification {
         when:
             sut.destroy()
         then:
-            1 *  objectPoolStub.close()
+            1 * objectPoolStub.close()
             // TODO: should destroy also set metrics to null or are we relying on the original reference to be removed after destroy is called?
             sut.metrics.size() == 1
             noExceptionThrown()
+    }
+
+    def static newMetric(String name, long timestamp, String value) {
+        return new GraphiteMetricsSender.MetricTuple(name, timestamp, value)
+    }
+
+    def "convertMetricsToPickleFormat produces expected result for one metric"() {
+        given:
+            def name = "name"
+            def timeStamp = Instant.now().getEpochSecond()
+            def value = "value-1.23"
+            def metric = newMetric(name, timeStamp, value)
+            def metrics = Collections.singletonList(metric)
+        when:
+            def result = sut.convertMetricsToPickleFormat(metrics)
+        then:
+            result == "(l(S'${name}'\n(L${timeStamp}L\nS'${value}'\ntta."
+    }
+
+    def "convertMetricsToPickleFormat produces expected result for multiple metrics"() {
+        given:
+            def name = "name"
+            def timeStamp = Instant.now().getEpochSecond()
+            def value = "value-1.23"
+            def metric = newMetric(name, timeStamp, value)
+            def metrics = Arrays.asList(metric, metric)
+        when:
+            def result = sut.convertMetricsToPickleFormat(metrics)
+        then:
+            result == "(l" +
+                    "(S'${name}'\n(L${timeStamp}L\nS'${value}'\ntta" +
+                    "(S'${name}'\n(L${timeStamp}L\nS'${value}'\ntta."
     }
 }
