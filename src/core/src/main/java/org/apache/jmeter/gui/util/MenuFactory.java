@@ -278,6 +278,8 @@ public final class MenuFactory {
         enabled.setEnabled(!isEnabled);
         menu.add(enabled);
         menu.add(disabled);
+        // add correlation menu
+        menu.add(makeMenuItemRes(JMeterUtils.getResString("correlation"), ActionNames.CORRELATION));
         JMenuItem toggle = makeMenuItemRes("toggle", ActionNames.TOGGLE, KeyStrokes.TOGGLE);// $NON-NLS-1$
         menu.add(toggle);
         addSeparator(menu);

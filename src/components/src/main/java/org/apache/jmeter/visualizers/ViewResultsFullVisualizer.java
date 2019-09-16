@@ -155,6 +155,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         synchronized (buffer) {
             buffer.add(sample);
             dataChanged = true;
+            CorrelationRecorder.buffer = buffer;
         }
     }
 
