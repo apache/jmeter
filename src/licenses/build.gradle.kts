@@ -177,3 +177,7 @@ val renderLicenseForBinary by tasks.registering(Apache2LicenseRenderer::class) {
     metadata.from(gatherBinaryLicenses)
     licenseCategory.put(ExtraLicense.Indiana_University_1_1_1.asExpression(), AsfLicenseCategory.A)
 }
+
+tasks.build.configure {
+  dependsOn(renderLicenseForSource, renderLicenseForBinary)
+}
