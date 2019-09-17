@@ -39,9 +39,7 @@ import org.slf4j.LoggerFactory;
 class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private static final Logger log = LoggerFactory.getLogger(PickleGraphiteMetricsSender.class);
 
-    /**
-     * Pickle opcodes needed for implementation
-     */
+    /* Pickle opcodes needed for implementation */
     private static final char APPEND = 'a';
     private static final char LIST = 'l';
     private static final char LONG = 'L';
@@ -52,17 +50,14 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private static final char QUOTE = '\'';
     private static final char LF = '\n';
 
-    private String prefix;
-
     private final Object lock = new Object();
 
     // graphite expects a python-pickled list of nested tuples.
     private List<MetricTuple> metrics = new LinkedList<>();
 
-    private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
-
     private SocketConnectionInfos socketConnectionInfos;
-
+    private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
+    private String prefix;
 
     PickleGraphiteMetricsSender() {
         super();
@@ -71,7 +66,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     /**
      * @param graphiteHost Graphite Host
      * @param graphitePort Graphite Port
-     * @param prefix Common Metrics prefix
+     * @param prefix       Common Metrics prefix
      */
     @Override
     public void setup(String graphiteHost, int graphitePort, String prefix) {
@@ -79,8 +74,17 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         this.socketConnectionInfos = new SocketConnectionInfos(graphiteHost, graphitePort);
         this.socketOutputStreamPool = createSocketOutputStreamPool();
 
-        log.info("Created PickleGraphiteMetricsSender with host: {}, port: {}, prefix: {}", graphiteHost, graphitePort,
-                prefix);
+        log.info("Created PickleGraphiteMetricsSender with host: {}, port: {}, prefix: {}",
+                graphiteHost, graphitePort, prefix);
+    }
+
+    /** Setup used for testing, or if explicit customisation is required. */
+    public void setup(SocketConnectionInfos socketConnectionInfos,
+                      GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool,
+                      String prefix) {
+        this.socketConnectionInfos = socketConnectionInfos;
+        this.socketOutputStreamPool = socketOutputStreamPool;
+        this.prefix = prefix;
     }
 
     /*
@@ -92,14 +96,14 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      */
     @Override
     public void addMetric(long timestamp, String contextName, String metricName, String metricValue) {
-        StringBuilder sb = new StringBuilder(50);
-        sb
-            .append(prefix)
-            .append(contextName)
-            .append(".")
-            .append(metricName);
+        String name = new StringBuilder(50)
+                .append(prefix)
+                .append(contextName)
+                .append(".")
+                .append(metricName)
+                .toString();
         synchronized (lock) {
-            metrics.add(new MetricTuple(sb.toString(), timestamp, metricValue));
+            metrics.add(new MetricTuple(name, timestamp, metricValue));
         }
     }
 
@@ -108,48 +112,48 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      */
     @Override
     public void writeAndSendMetrics() {
-        List<MetricTuple> tempMetrics;
+        final List<MetricTuple> currentMetrics;
         synchronized (lock) {
-            if(metrics.isEmpty()) {
+            if (metrics.isEmpty()) {
                 return;
             }
-            tempMetrics = metrics;
+            // keep the current metrics to send outside sync block
+            currentMetrics = metrics;
             metrics = new LinkedList<>();
         }
-        final List<MetricTuple> copyMetrics = tempMetrics;
-        if (!copyMetrics.isEmpty()) {
-            SocketOutputStream out = null;
-            try {
-                String payload = convertMetricsToPickleFormat(copyMetrics);
+        writeMetrics(currentMetrics);
+    }
 
-                int length = payload.length();
-                byte[] header = ByteBuffer.allocate(4).putInt(length).array();
+    private void writeMetrics(List<MetricTuple> currentMetrics) {
+        SocketOutputStream out = null;
+        try {
+            String payload = convertMetricsToPickleFormat(currentMetrics);
 
-                out = socketOutputStreamPool.borrowObject(socketConnectionInfos);
-                out.write(header);
-                // pickleWriter is not closed as it would close the underlying pooled out
-                Writer pickleWriter = new OutputStreamWriter(out, CHARSET_NAME);
-                pickleWriter.write(payload);
-                pickleWriter.flush();
-                socketOutputStreamPool.returnObject(socketConnectionInfos, out);
-            } catch (Exception e) {
-                if(out != null) {
-                    try {
-                        socketOutputStreamPool.invalidateObject(socketConnectionInfos, out);
-                    } catch (Exception e1) {
-                        log.warn("Exception invalidating socketOutputStream connected to graphite server. '{}':{}",
-                                socketConnectionInfos.getHost(), socketConnectionInfos.getPort(), e1);
-                    }
+            int length = payload.length();
+            byte[] header = ByteBuffer.allocate(4).putInt(length).array();
+
+            out = socketOutputStreamPool.borrowObject(socketConnectionInfos);
+            out.write(header);
+            // pickleWriter is not closed as it would close the underlying pooled out
+            Writer pickleWriter = new OutputStreamWriter(out, CHARSET_NAME);
+            pickleWriter.write(payload);
+            pickleWriter.flush();
+            socketOutputStreamPool.returnObject(socketConnectionInfos, out);
+        } catch (Exception e) {
+            // if there was an error, we might miss some data, for now, drop those and try to keep going.
+            if (out != null) {
+                try {
+                    socketOutputStreamPool.invalidateObject(socketConnectionInfos, out);
+                } catch (Exception e1) {
+                    log.warn("Exception invalidating socketOutputStream connected to graphite server {}:{}",
+                            socketConnectionInfos.getHost(), socketConnectionInfos.getPort(), e1);
                 }
-                log.error("Error writing to Graphite: {}", e.getMessage());
             }
+            log.error("Error writing to Graphite: {}", e.getMessage(), e);
+        }
 
-            // if there was an error, we might miss some data. for now, drop those on the floor and
-            // try to keep going.
-            if (log.isDebugEnabled()) {
-                log.debug("Wrote {} metrics", copyMetrics.size());
-            }
-            copyMetrics.clear();
+        if (log.isDebugEnabled()) {
+            log.debug("Wrote {} metrics", currentMetrics.size());
         }
     }
 
@@ -161,37 +165,30 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         socketOutputStreamPool.close();
     }
 
-    /**
-     * See: http://readthedocs.org/docs/graphite/en/1.0/feeding-carbon.html
-     */
+    /** See: https://graphite.readthedocs.io/en/1.0.0/feeding-carbon.html */
     private static String convertMetricsToPickleFormat(List<MetricTuple> metrics) {
-        StringBuilder pickled = new StringBuilder(metrics.size()*75);
+        StringBuilder pickled = new StringBuilder(metrics.size() * 75);
         pickled.append(MARK).append(LIST);
 
         for (MetricTuple tuple : metrics) {
-            // begin outer tuple
-            pickled.append(MARK);
+            pickled.append(MARK) // begin outer tuple
+                    .append(STRING) // the metric name is a string
+                    // the single quotes are to match python's repr("abcd")
+                    .append(QUOTE).append(tuple.name).append(QUOTE)
+                    .append(LF)
 
-            // the metric name is a string.
-            pickled.append(STRING)
-            // the single quotes are to match python's repr("abcd")
-                .append(QUOTE).append(tuple.name).append(QUOTE).append(LF);
+                    // begin the inner tuple
+                    .append(MARK)
+                    // timestamp is a long
+                    .append(LONG).append(tuple.timestamp)
+                    // the trailing L is to match python's repr(long(1234))
+                    .append(LONG).append(LF)
+                    // and the value is a string.
+                    .append(STRING).append(QUOTE).append(tuple.value).append(QUOTE).append(LF)
+                    .append(TUPLE) // end inner tuple
 
-            // begin the inner tuple
-            pickled.append(MARK);
-
-            // timestamp is a long
-            pickled.append(LONG).append(tuple.timestamp)
-            // the trailing L is to match python's repr(long(1234))
-                .append(LONG).append(LF);
-
-            // and the value is a string.
-            pickled.append(STRING).append(QUOTE).append(tuple.value).append(QUOTE).append(LF);
-
-            pickled.append(TUPLE) // end inner tuple
-                .append(TUPLE); // end outer tuple
-
-            pickled.append(APPEND);
+                    .append(TUPLE) // end outer tuple
+                    .append(APPEND);
         }
 
         // every pickle ends with STOP

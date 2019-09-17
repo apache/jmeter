@@ -24,9 +24,9 @@ import java.nio.charset.StandardCharsets;
  * @since 2.13
  */
 interface GraphiteMetricsSender {
+
     int SOCKET_CONNECT_TIMEOUT_MS = 1000;
     int SOCKET_TIMEOUT = 1000;
-
 
     String CHARSET_NAME = StandardCharsets.UTF_8.name();
 
@@ -34,6 +34,7 @@ interface GraphiteMetricsSender {
         String name;
         long timestamp;
         String value;
+
         MetricTuple(String name, long timestamp, String value) {
             this.name = name;
             this.timestamp = timestamp;
@@ -43,32 +44,27 @@ interface GraphiteMetricsSender {
 
     /**
      * Convert the metric to a python tuple of the form:
-     *      (timestamp, (prefix.contextName.metricName, metricValue))
+     * (timestamp, (prefix.contextName.metricName, metricValue))
      * And add it to the list of metrics.
-     * @param timestamp in Seconds from 1970
+     *
+     * @param timestamp   in Seconds from 1970
      * @param contextName name of the context of this metric
-     * @param metricName name of this metric
+     * @param metricName  name of this metric
      * @param metricValue value of this metric
      */
-    void addMetric(long timestamp, String contextName,
-            String metricName, String metricValue);
+    void addMetric(long timestamp, String contextName, String metricName, String metricValue);
 
     /**
-     *
      * @param graphiteHost Host
      * @param graphitePort Port
-     * @param prefix Root Data prefix
+     * @param prefix       Root Data prefix
      */
     void setup(String graphiteHost, int graphitePort, String prefix);
 
-    /**
-     * Write metrics to Graphite using custom format
-     */
+    /** Write metrics to Graphite using custom format */
     void writeAndSendMetrics();
 
-    /**
-     * Destroy sender
-     */
+    /** Destroy sender */
     void destroy();
 
 }
