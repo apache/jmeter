@@ -19,6 +19,7 @@
 package org.apache.jmeter.visualizers.backend.graphite;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -113,7 +114,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
 
     private static final String METRIC_ALL_HITS_COUNT        = METRIC_HITS_PREFIX+METRIC_SEPARATOR+METRIC_COUNT;
     private static final String METRIC_ALL_SENT_BYTES        = METRIC_SENT_BYTES_PREFIX+METRIC_SEPARATOR+METRIC_BYTES;
-    private static final String METRIC_ALL_RECEIVED_BYTES        = METRIC_RECEIVED_BYTES_PREFIX+METRIC_SEPARATOR+METRIC_BYTES;
+    private static final String METRIC_ALL_RECEIVED_BYTES    = METRIC_RECEIVED_BYTES_PREFIX+METRIC_SEPARATOR+METRIC_BYTES;
 
     private static final long SEND_INTERVAL = JMeterUtils.getPropDefault("backend_graphite.send_interval", 1);
     private static final int MAX_POOL_SIZE = 1;
@@ -121,17 +122,13 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
     private static final Object LOCK = new Object();
 
-    private String graphiteHost;
-    private int graphitePort;
     private boolean summaryOnly;
-    private String rootMetricsPrefix;
     private String samplersList = ""; //$NON-NLS-1$
     private boolean useRegexpForSamplersList;
     private Set<String> samplersToFilter;
     private Map<String, Float> okPercentiles;
     private Map<String, Float> koPercentiles;
     private Map<String, Float> allPercentiles;
-
 
     private GraphiteMetricsSender graphiteMetricsManager;
 
@@ -149,9 +146,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         sendMetrics();
     }
 
-    /**
-     * Send metrics to Graphite
-     */
+    /** Send metrics to Graphite */
     protected void sendMetrics() {
         // Need to convert millis to seconds for Graphite
         long timestampInSeconds = TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
@@ -159,7 +154,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             for (Map.Entry<String, SamplerMetric> entry : getMetricsPerSampler().entrySet()) {
                 final String key = entry.getKey();
                 final SamplerMetric metric = entry.getValue();
-                if(key.equals(CUMULATED_METRICS)) {
+                if (key.equals(CUMULATED_METRICS)) {
                     addMetrics(timestampInSeconds, ALL_CONTEXT_NAME, metric);
                 } else {
                     addMetrics(timestampInSeconds, AbstractGraphiteMetricsSender.sanitizeString(key), metric);
@@ -188,103 +183,101 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         graphiteMetricsManager.writeAndSendMetrics();
     }
 
-
     /**
      * Add request metrics to metrics manager.
      * Note if total number of requests is 0, no response time metrics are sent.
+     *
      * @param timestampInSeconds long
-     * @param contextName String
-     * @param metric {@link SamplerMetric}
+     * @param contextName        String
+     * @param metric             {@link SamplerMetric}
      */
     private void addMetrics(long timestampInSeconds, String contextName, SamplerMetric metric) {
 
         // See https://bz.apache.org/bugzilla/show_bug.cgi?id=57350
-        if(metric.getTotal() > 0) {
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                    METRIC_OK_COUNT, Integer.toString(metric.getSuccesses()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                    METRIC_KO_COUNT, Integer.toString(metric.getFailures()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                    METRIC_ALL_COUNT, Integer.toString(metric.getTotal()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                    METRIC_ALL_HITS_COUNT, Integer.toString(metric.getHits()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                    METRIC_ALL_SENT_BYTES, Long.toString(metric.getSentBytes()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                    METRIC_ALL_RECEIVED_BYTES, Long.toString(metric.getReceivedBytes()));
-            if(metric.getSuccesses()>0) {
-                graphiteMetricsManager.addMetric(timestampInSeconds,
-                        contextName, METRIC_OK_MIN_RESPONSE_TIME,
-                        Double.toString(metric.getOkMinTime()));
-                graphiteMetricsManager.addMetric(timestampInSeconds,
-                        contextName, METRIC_OK_MAX_RESPONSE_TIME,
-                        Double.toString(metric.getOkMaxTime()));
-                graphiteMetricsManager.addMetric(timestampInSeconds,
-                        contextName, METRIC_OK_AVG_RESPONSE_TIME,
-                        Double.toString(metric.getOkMean()));
-                for (Map.Entry<String, Float> entry : okPercentiles.entrySet()) {
-                    graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                            entry.getKey(),
-                            Double.toString(metric.getOkPercentile(entry.getValue().floatValue())));
-                }
-            }
-            if(metric.getFailures()>0) {
-                graphiteMetricsManager.addMetric(timestampInSeconds,
-                        contextName, METRIC_KO_MIN_RESPONSE_TIME,
-                        Double.toString(metric.getKoMinTime()));
-                graphiteMetricsManager.addMetric(timestampInSeconds,
-                        contextName, METRIC_KO_MAX_RESPONSE_TIME,
-                        Double.toString(metric.getKoMaxTime()));
-                graphiteMetricsManager.addMetric(timestampInSeconds,
-                        contextName, METRIC_KO_AVG_RESPONSE_TIME,
-                        Double.toString(metric.getKoMean()));
-                for (Map.Entry<String, Float> entry : koPercentiles.entrySet()) {
-                    graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                            entry.getKey(),
-                            Double.toString(metric.getKoPercentile(entry.getValue().floatValue())));
-                }
-            }
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                    METRIC_ALL_MIN_RESPONSE_TIME,
-                    Double.toString(metric.getAllMinTime()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                    METRIC_ALL_MAX_RESPONSE_TIME,
-                    Double.toString(metric.getAllMaxTime()));
-            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                    METRIC_ALL_AVG_RESPONSE_TIME,
-                    Double.toString(metric.getAllMean()));
-            for (Map.Entry<String, Float> entry : allPercentiles.entrySet()) {
+        if (metric.getTotal() <= 0) {
+            return;
+        }
+
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                METRIC_OK_COUNT, Integer.toString(metric.getSuccesses()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                METRIC_KO_COUNT, Integer.toString(metric.getFailures()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                METRIC_ALL_COUNT, Integer.toString(metric.getTotal()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                METRIC_ALL_HITS_COUNT, Integer.toString(metric.getHits()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                METRIC_ALL_SENT_BYTES, Long.toString(metric.getSentBytes()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                METRIC_ALL_RECEIVED_BYTES, Long.toString(metric.getReceivedBytes()));
+
+        if (metric.getSuccesses() > 0) {
+            graphiteMetricsManager.addMetric(timestampInSeconds,
+                    contextName, METRIC_OK_MIN_RESPONSE_TIME,
+                    Double.toString(metric.getOkMinTime()));
+            graphiteMetricsManager.addMetric(timestampInSeconds,
+                    contextName, METRIC_OK_MAX_RESPONSE_TIME,
+                    Double.toString(metric.getOkMaxTime()));
+            graphiteMetricsManager.addMetric(timestampInSeconds,
+                    contextName, METRIC_OK_AVG_RESPONSE_TIME,
+                    Double.toString(metric.getOkMean()));
+            for (Map.Entry<String, Float> entry : okPercentiles.entrySet()) {
                 graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
                         entry.getKey(),
-                        Double.toString(metric.getAllPercentile(entry.getValue().floatValue())));
+                        Double.toString(metric.getOkPercentile(entry.getValue().floatValue())));
             }
+        }
+        if (metric.getFailures() > 0) {
+            graphiteMetricsManager.addMetric(timestampInSeconds,
+                    contextName, METRIC_KO_MIN_RESPONSE_TIME,
+                    Double.toString(metric.getKoMinTime()));
+            graphiteMetricsManager.addMetric(timestampInSeconds,
+                    contextName, METRIC_KO_MAX_RESPONSE_TIME,
+                    Double.toString(metric.getKoMaxTime()));
+            graphiteMetricsManager.addMetric(timestampInSeconds,
+                    contextName, METRIC_KO_AVG_RESPONSE_TIME,
+                    Double.toString(metric.getKoMean()));
+            for (Map.Entry<String, Float> entry : koPercentiles.entrySet()) {
+                graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                        entry.getKey(),
+                        Double.toString(metric.getKoPercentile(entry.getValue().floatValue())));
+            }
+        }
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                METRIC_ALL_MIN_RESPONSE_TIME,
+                Double.toString(metric.getAllMinTime()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                METRIC_ALL_MAX_RESPONSE_TIME,
+                Double.toString(metric.getAllMaxTime()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                METRIC_ALL_AVG_RESPONSE_TIME,
+                Double.toString(metric.getAllMean()));
+        for (Map.Entry<String, Float> entry : allPercentiles.entrySet()) {
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    entry.getKey(),
+                    Double.toString(metric.getAllPercentile(entry.getValue().floatValue())));
         }
     }
 
-    /**
-     * @return the samplersList
-     */
+    /** @return the samplersList */
     public String getSamplersList() {
         return samplersList;
     }
 
-    /**
-     * @param samplersList the samplersList to set
-     */
+    /** @param samplersList the samplersList to set */
     public void setSamplersList(String samplersList) {
         this.samplersList = samplersList;
     }
 
     @Override
-    public void handleSampleResults(List<SampleResult> sampleResults,
-            BackendListenerContext context) {
+    public void handleSampleResults(List<SampleResult> sampleResults, BackendListenerContext context) {
         boolean samplersToFilterMatch;
         synchronized (LOCK) {
             UserMetric userMetrics = getUserMetrics();
             for (SampleResult sampleResult : sampleResults) {
                 userMetrics.add(sampleResult);
 
-                if(!summaryOnly) {
+                if (!summaryOnly) {
                     if (useRegexpForSamplersList) {
                         Matcher matcher = pattern.matcher(sampleResult.getSampleLabel());
                         samplersToFilterMatch = matcher.matches();
@@ -296,8 +289,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                         samplerMetric.add(sampleResult);
                     }
                 }
-                SamplerMetric cumulatedMetrics = getSamplerMetric(CUMULATED_METRICS);
-                cumulatedMetrics.add(sampleResult);
+                getSamplerMetric(CUMULATED_METRICS).add(sampleResult);
             }
         }
     }
@@ -306,39 +298,20 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     public void setupTest(BackendListenerContext context) throws Exception {
         String graphiteMetricsSenderClass = context.getParameter(GRAPHITE_METRICS_SENDER);
 
-        graphiteHost = context.getParameter(GRAPHITE_HOST);
-        graphitePort = context.getIntParameter(GRAPHITE_PORT, DEFAULT_PLAINTEXT_PROTOCOL_PORT);
+        String graphiteHost = context.getParameter(GRAPHITE_HOST);
+        int graphitePort = context.getIntParameter(GRAPHITE_PORT, DEFAULT_PLAINTEXT_PROTOCOL_PORT);
         summaryOnly = context.getBooleanParameter(SUMMARY_ONLY, true);
         samplersList = context.getParameter(SAMPLERS_LIST, "");
         useRegexpForSamplersList = context.getBooleanParameter(USE_REGEXP_FOR_SAMPLERS_LIST, false);
-        rootMetricsPrefix = context.getParameter(ROOT_METRICS_PREFIX, DEFAULT_METRICS_PREFIX);
-        String[]  percentilesStringArray = context.getParameter(PERCENTILES, DEFAULT_METRICS_PREFIX).split(SEPARATOR);
+        String rootMetricsPrefix = context.getParameter(ROOT_METRICS_PREFIX, DEFAULT_METRICS_PREFIX);
+        String[] percentilesStringArray = context.getParameter(PERCENTILES, DEFAULT_METRICS_PREFIX).split(SEPARATOR);
         okPercentiles = new HashMap<>(percentilesStringArray.length);
         koPercentiles = new HashMap<>(percentilesStringArray.length);
         allPercentiles = new HashMap<>(percentilesStringArray.length);
-        DecimalFormat decimalFormat = new DecimalFormat("0.##");
-        for (String percentilesString : percentilesStringArray) {
-            if (!StringUtils.isEmpty(percentilesString.trim())) {
-                try {
-                    Float percentileValue = Float.valueOf(percentilesString.trim());
-                    String sanitizedFormattedPercentile =
-                            AbstractGraphiteMetricsSender.sanitizeString(
-                                    decimalFormat.format(percentileValue));
-                    okPercentiles.put(
-                            METRIC_OK_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
-                            percentileValue);
-                    koPercentiles.put(
-                            METRIC_KO_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
-                            percentileValue);
-                    allPercentiles.put(
-                            METRIC_ALL_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
-                            percentileValue);
-
-                } catch (Exception e) {
-                    log.error("Error parsing percentile: '{}'", percentilesString, e);
-                }
-            }
-        }
+        Arrays.stream(percentilesStringArray)
+                .map(String::trim)
+                .filter(StringUtils::isNotEmpty)
+                .forEach(this::initPercentileMaps);
         Class<?> clazz = Class.forName(graphiteMetricsSenderClass);
         this.graphiteMetricsManager = (GraphiteMetricsSender) clazz.getDeclaredConstructor().newInstance();
         graphiteMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
@@ -352,6 +325,28 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
         // Don't change this as metrics are per second
         this.timerHandle = scheduler.scheduleAtFixedRate(this, SEND_INTERVAL, SEND_INTERVAL, TimeUnit.SECONDS);
+    }
+
+    private void initPercentileMaps(String percentilesString) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.##");
+        try {
+            Float percentileValue = Float.valueOf(percentilesString.trim());
+            String sanitizedFormattedPercentile =
+                    AbstractGraphiteMetricsSender.sanitizeString(
+                            decimalFormat.format(percentileValue));
+            okPercentiles.put(
+                    METRIC_OK_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
+                    percentileValue);
+            koPercentiles.put(
+                    METRIC_KO_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
+                    percentileValue);
+            allPercentiles.put(
+                    METRIC_ALL_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
+                    percentileValue);
+
+        } catch (Exception e) {
+            log.error("Error parsing percentile: '{}'", percentilesString, e);
+        }
     }
 
     @Override
