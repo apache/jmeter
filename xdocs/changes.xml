@@ -143,6 +143,7 @@ to view the last release notes of version 5.1.1.
     <li><bug>63529</bug>Add more unit tests for org.apache.jorphan.util.JOrphanUtils. Contributed by John Bergqvist(John.Bergqvist at diffblue.com)</li>
     <li>Updated to latest checkstyle (version 8.22)</li>
     <li>Clean-up of code in <code>CompareAssertion</code> and other locations. Based on patch by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>491</pr>Increase Graphite metrics coverage. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

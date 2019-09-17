@@ -151,7 +151,9 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         // Need to convert millis to seconds for Graphite
         long timestampInSeconds = TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         synchronized (LOCK) {
-            getMetricsPerSampler().forEach((key, metric) -> {
+            for (Map.Entry<String, SamplerMetric> entry : getMetricsPerSampler().entrySet()) {
+                final String key = entry.getKey();
+                final SamplerMetric metric = entry.getValue();
                 if (key.equals(CUMULATED_METRICS)) {
                     addMetrics(timestampInSeconds, ALL_CONTEXT_NAME, metric);
                 } else {
@@ -159,7 +161,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                 }
                 // We are computing on interval basis so cleanup
                 metric.resetForTimeInterval();
-            });
+            }
         }
         UserMetric userMetric = getUserMetrics();
         graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME,
@@ -219,10 +221,11 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             graphiteMetricsManager.addMetric(timestampInSeconds,
                     contextName, METRIC_OK_AVG_RESPONSE_TIME,
                     Double.toString(metric.getOkMean()));
-            okPercentiles.forEach((key, value) ->
-                    graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                            key,
-                            Double.toString(metric.getOkPercentile(value.floatValue()))));
+            for (Map.Entry<String, Float> entry : okPercentiles.entrySet()) {
+                graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                        entry.getKey(),
+                        Double.toString(metric.getOkPercentile(entry.getValue().floatValue())));
+            }
         }
         if (metric.getFailures() > 0) {
             graphiteMetricsManager.addMetric(timestampInSeconds,
@@ -234,10 +237,11 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             graphiteMetricsManager.addMetric(timestampInSeconds,
                     contextName, METRIC_KO_AVG_RESPONSE_TIME,
                     Double.toString(metric.getKoMean()));
-            koPercentiles.forEach((key, value) ->
-                    graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                            key,
-                            Double.toString(metric.getKoPercentile(value.floatValue()))));
+            for (Map.Entry<String, Float> entry : koPercentiles.entrySet()) {
+                graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                        entry.getKey(),
+                        Double.toString(metric.getKoPercentile(entry.getValue().floatValue())));
+            }
         }
         graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
                 METRIC_ALL_MIN_RESPONSE_TIME,
@@ -248,10 +252,11 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
                 METRIC_ALL_AVG_RESPONSE_TIME,
                 Double.toString(metric.getAllMean()));
-        allPercentiles.forEach((key, value) ->
-                graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
-                        key,
-                        Double.toString(metric.getAllPercentile(value.floatValue()))));
+        for (Map.Entry<String, Float> entry : allPercentiles.entrySet()) {
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
+                    entry.getKey(),
+                    Double.toString(metric.getAllPercentile(entry.getValue().floatValue())));
+        }
     }
 
     /** @return the samplersList */
