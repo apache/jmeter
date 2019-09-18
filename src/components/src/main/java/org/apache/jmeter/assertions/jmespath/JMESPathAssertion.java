@@ -203,7 +203,7 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
 
     @Override
     public void testStarted(String host) {
-        JMESPathCache.getInstance().cleanUp();
+        // NOOP
     }
 
     @Override

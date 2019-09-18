@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
-import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -44,7 +44,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
  * @since 5.2
  */
 public class JMESPathExtractor extends AbstractScopedTestElement
-        implements Serializable, PostProcessor, ThreadListener {
+        implements Serializable, PostProcessor, TestStateListener {
 
     private static final long serialVersionUID = 3849270294526207081L;
 
@@ -205,21 +205,31 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         setProperty(DEFAULT_VALUE, defaultValue, ""); // $NON-NLS-1$
     }
 
-    @Override
-    public void threadStarted() {
-        // NOOP
-    }
-
-    @Override
-    public void threadFinished() {
-        JMESPathCache.getInstance().cleanUp();
-    }
-
     public void setMatchNumber(String matchNumber) {
         setProperty(MATCH_NUMBER, matchNumber);
     }
 
     public String getMatchNumber() {
         return getPropertyAsString(MATCH_NUMBER);
+    }
+
+    @Override
+    public void testStarted() {
+        testStarted("");
+    }
+
+    @Override
+    public void testStarted(String host) {
+        // NOOP
+    }
+
+    @Override
+    public void testEnded() {
+        testEnded("");
+    }
+
+    @Override
+    public void testEnded(String host) {
+        JMESPathCache.getInstance().cleanUp();
     }
 }
