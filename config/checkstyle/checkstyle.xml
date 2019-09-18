@@ -132,7 +132,7 @@
     </module>
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>
-   <module name="ImportOrder">
+    <module name="ImportOrder">
       <property name="groups" value="/^java\./,javax,org,net,com"/>
       <property name="ordered" value="true"/>
       <property name="separated" value="true"/>
