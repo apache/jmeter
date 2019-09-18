@@ -37,15 +37,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.github.benmanes.caffeine.cache.CacheLoader;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-
-import io.burt.jmespath.Expression;
-import io.burt.jmespath.JmesPath;
-import io.burt.jmespath.RuntimeConfiguration;
-import io.burt.jmespath.function.FunctionRegistry;
-import io.burt.jmespath.jackson.JacksonRuntime;
 
 /**
  * JMESPATH based extractor
@@ -63,23 +54,6 @@ public class JMESPathExtractor extends AbstractScopedTestElement
     private static final String DEFAULT_VALUE = "JMESExtractor.defaultValue"; // $NON-NLS-1$
     private static final String MATCH_NUMBER = "JMESExtractor.matchNumber"; // $NON-NLS-1$
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
-    private static final LoadingCache<String, Expression<JsonNode>> JMES_EXTRACTOR_CACHE = Caffeine.newBuilder()
-            .maximumSize(JMeterUtils.getPropDefault("jmesextractor.parser.cache.size", 400))
-            .build(new JMESCacheLoader());
-
-    private static final class JMESCacheLoader implements CacheLoader<String, Expression<JsonNode>> {
-        final JmesPath<JsonNode> runtime;
-
-        public JMESCacheLoader() {
-            runtime = new JacksonRuntime(new RuntimeConfiguration.Builder()
-                    .withFunctionRegistry(FunctionRegistry.defaultRegistry()).build());
-        }
-
-        @Override
-        public Expression<JsonNode> load(String jmesPathExpression) throws Exception {
-            return runtime.compile(jmesPathExpression);
-        }
-    }
 
     @Override
     public void process() {
@@ -101,7 +75,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
                 JsonNode result = null;
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode actualObj = mapper.readValue(jsonResponse, JsonNode.class);
-                result = JMES_EXTRACTOR_CACHE.get(jsonPathExpression).search(actualObj);
+                result = JMESPathCache.getInstance().get(jsonPathExpression).search(actualObj);
                 if (result.isNull()) {
                     vars.put(refName, defaultValue);
                     vars.put(refName + REF_MATCH_NR, "0"); //$NON-NLS-1$
@@ -238,7 +212,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
 
     @Override
     public void threadFinished() {
-        JMES_EXTRACTOR_CACHE.cleanUp();
+        JMESPathCache.getInstance().cleanUp();
     }
 
     public void setMatchNumber(String matchNumber) {

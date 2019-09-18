@@ -15,58 +15,55 @@
  * limitations under the License.
  *
  */
-package org.apache.jmeter.assertions;
+package org.apache.jmeter.assertions.jmespath.gui;
 
-import org.apache.jmeter.assertions.gui.JSONPathAssertionGui;
+import org.apache.jmeter.assertions.jmespath.JMESPathAssertion;
 import org.apache.jmeter.testelement.TestElement;
 import org.junit.Test;
 
-
-public class TestJSONPathAssertionGui {
-
+public class JMESPathAssertionGuiTest {
 
     @Test
     public void testInit() {
-        JSONPathAssertionGui instance = new JSONPathAssertionGui();
-        instance.init();
+        JMESPathAssertionGui instance = new JMESPathAssertionGui();
         instance.stateChanged(null);
     }
 
     @Test
     public void testClearGui() {
-        JSONPathAssertionGui instance = new JSONPathAssertionGui();
+        JMESPathAssertionGui instance = new JMESPathAssertionGui();
         instance.clearGui();
     }
 
     @Test
     public void testCreateTestElement() {
-        JSONPathAssertionGui instance = new JSONPathAssertionGui();
+        JMESPathAssertionGui instance = new JMESPathAssertionGui();
         instance.createTestElement();
     }
 
     @Test
     public void testGetLabelResource() {
-        JSONPathAssertionGui instance = new JSONPathAssertionGui();
+        JMESPathAssertionGui instance = new JMESPathAssertionGui();
         instance.getLabelResource();
     }
 
     @Test
     public void testGetStaticLabel() {
-        JSONPathAssertionGui instance = new JSONPathAssertionGui();
+        JMESPathAssertionGui instance = new JMESPathAssertionGui();
         instance.getStaticLabel();
     }
 
     @Test
     public void testModifyTestElement() {
-        TestElement element = new JSONPathAssertion();
-        JSONPathAssertionGui instance = new JSONPathAssertionGui();
+        TestElement element = new JMESPathAssertion();
+        JMESPathAssertionGui instance = new JMESPathAssertionGui();
         instance.modifyTestElement(element);
     }
 
     @Test
     public void testConfigure() {
-        TestElement element = new JSONPathAssertion();
-        JSONPathAssertionGui instance = new JSONPathAssertionGui();
+        TestElement element = new JMESPathAssertion();
+        JMESPathAssertionGui instance = new JMESPathAssertionGui();
         instance.configure(element);
     }
 }
