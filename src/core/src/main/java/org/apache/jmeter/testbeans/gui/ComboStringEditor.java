@@ -47,7 +47,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * <li>The possibility to write your own value, unless the <b>noEdit</b>
  * property is set.
  * </ul>
- *
  */
 class ComboStringEditor extends PropertyEditorSupport implements ItemListener, ClearGui {
 
@@ -72,13 +71,13 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
      */
     private final Map<String, String> validTranslations;
 
-    private boolean startingEdit = false;
 
-    /*
+    /**
      * True iff we're currently processing an event triggered by the user
      * selecting the "Edit" option. Used to prevent reverting the combo to
      * non-editable during processing of secondary events.
      */
+    private boolean startingEdit = false;
 
     // Needs to be visible to test cases
     final Object UNDEFINED = new UniqueObject("property_undefined"); //$NON-NLS-1$
@@ -91,23 +90,18 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
     // The maximum index of the tags in the combo box
     private final int maxTagIndex;
 
-    @Deprecated // only for use from test code
-    ComboStringEditor() {
-        this(null, false, false);
-    }
-
     ComboStringEditor(PropertyDescriptor descriptor) {
-        this((String[])descriptor.getValue(GenericTestBeanCustomizer.TAGS),
-              GenericTestBeanCustomizer.notExpression(descriptor),
-              GenericTestBeanCustomizer.notNull(descriptor),
-              (ResourceBundle) descriptor.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE));
+        this((String[]) descriptor.getValue(GenericTestBeanCustomizer.TAGS),
+                GenericTestBeanCustomizer.notExpression(descriptor),
+                GenericTestBeanCustomizer.notNull(descriptor),
+                (ResourceBundle) descriptor.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE));
     }
 
-    ComboStringEditor(String []tags, boolean noEdit, boolean noUndefined) {
+    ComboStringEditor(String[] tags, boolean noEdit, boolean noUndefined) {
         this(tags, noEdit, noUndefined, null);
     }
 
-    ComboStringEditor(String []pTags, boolean noEdit, boolean noUndefined, ResourceBundle rb) {
+    ComboStringEditor(String[] pTags, boolean noEdit, boolean noUndefined, ResourceBundle rb) {
 
         tags = pTags == null ? ArrayUtils.EMPTY_STRING_ARRAY : pTags.clone();
 
@@ -119,7 +113,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
                 validTranslations.put(tag, rb.getString(tag));
             }
         } else {
-            validTranslations=null;
+            validTranslations = null;
         }
 
         if (!noUndefined) {
@@ -129,11 +123,11 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
             this.minTagIndex = Integer.MAX_VALUE;
             this.maxTagIndex = Integer.MIN_VALUE;
         } else {
-            this.minTagIndex=model.getSize(); // track where tags start ...
+            this.minTagIndex = model.getSize(); // track where tags start ...
             for (String tag : this.tags) {
                 model.addElement(translate(tag));
             }
-            this.maxTagIndex=model.getSize(); // ... and where they end
+            this.maxTagIndex = model.getSize(); // ... and where they end
         }
         if (!noEdit) {
             model.addElement(EDIT);
@@ -181,7 +175,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
         // Check if the entry index corresponds to a tag, if so return the tag
         // This also works if the tags were not translated
         if (item >= minTagIndex && item <= maxTagIndex) {
-            return tags[item-minTagIndex];
+            return tags[item - minTagIndex];
         }
         // Not a tag entry, return the original value
         return (String) value;

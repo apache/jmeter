@@ -19,7 +19,6 @@ package org.apache.jmeter.gui.util;
 
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-
 /**
  * Utility class to handle RSyntaxTextArea code
  * It's not currently possible to instantiate the RTextScrollPane class when running headless.
@@ -29,9 +28,7 @@ public class JTextScrollPane extends RTextScrollPane {
 
     private static final long serialVersionUID = 210L;
 
-    @Deprecated
-    public JTextScrollPane() {
-        // for use by test code only
+    private JTextScrollPane() {
     }
 
     public static JTextScrollPane getInstance(JSyntaxTextArea scriptField, boolean foldIndicatorEnabled) {
@@ -68,8 +65,7 @@ public class JTextScrollPane extends RTextScrollPane {
     }
 
     /**
-     *
-     * @param scriptField syntax text are to wrap
+     * @param scriptField          syntax text are to wrap
      * @param foldIndicatorEnabled flag, whether fold indicator should be enabled
      * @deprecated use {@link #getInstance(JSyntaxTextArea, boolean)} instead
      */

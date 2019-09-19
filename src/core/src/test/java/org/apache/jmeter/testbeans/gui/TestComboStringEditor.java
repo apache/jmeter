@@ -36,8 +36,7 @@ public class TestComboStringEditor {
 
     @Test
     public void testSetGet() throws Exception {
-        @SuppressWarnings("deprecation") // test code, intentional
-        ComboStringEditor e = new ComboStringEditor();
+        ComboStringEditor e = new ComboStringEditor(null, false, false);
 
         testSetGet(e, "any string");
         testSetGet(e, "");
@@ -47,8 +46,7 @@ public class TestComboStringEditor {
 
     @Test
     public void testSetGetAsText() throws Exception {
-        @SuppressWarnings("deprecation") // test code, intentional
-        ComboStringEditor e = new ComboStringEditor();
+        ComboStringEditor e = new ComboStringEditor(null, false, false);
 
         testSetGetAsText(e, "any string");
         testSetGetAsText(e, "");

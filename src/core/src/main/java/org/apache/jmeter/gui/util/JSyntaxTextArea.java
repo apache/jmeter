@@ -138,12 +138,6 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         return getInstance(rows, cols, false);
     }
 
-    @Deprecated
-    public JSyntaxTextArea() {
-        // For use by test code only
-        this(30, 50, false);
-    }
-
     // for use by headless tests only
     private JSyntaxTextArea(boolean dummy) {
         disableUndo = dummy;
@@ -260,7 +254,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     }
 
 
-    private static final Theme initTheme() {
+    private static Theme initTheme() {
         try {
             return Theme.load(JSyntaxTextArea.class.getClassLoader().getResourceAsStream(
                     "org/apache/jmeter/gui/util/theme/darcula_theme.xml"));

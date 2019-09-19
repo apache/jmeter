@@ -71,7 +71,7 @@
   <module name="TreeWalker">
 
     <!-- Annotations -->
-    <!--<module name="MissingDeprecated"/>-->
+    <module name="MissingDeprecated"/>
     <module name="MissingOverride"/>
 
     <!-- Block checks -->

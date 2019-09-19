@@ -23,8 +23,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper, implementing <code>org.apache.log.Logger</code> and delegating to the internal SLF4J logger.
+ * @deprecated Logger & Priority will be dropped in 3.3; so should this class
  */
-@Deprecated // Logger & Priority will be dropped in 3.3; so will this class be
+@Deprecated
 class Slf4jLogkitLogger extends org.apache.log.Logger {
 
     private final Logger slf4jLogger;

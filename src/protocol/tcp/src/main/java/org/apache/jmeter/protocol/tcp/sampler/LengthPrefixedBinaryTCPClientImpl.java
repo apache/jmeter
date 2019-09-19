@@ -67,6 +67,9 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
         this.tcpClient.write(os, is);
     }
 
+    /**
+     * @deprecated use {@link #read(InputStream, SampleResult)} instead
+     */
     @Deprecated
     public String read(InputStream is) throws ReadException {
         log.warn("Deprecated method, use read(is, sampleResult) instead");

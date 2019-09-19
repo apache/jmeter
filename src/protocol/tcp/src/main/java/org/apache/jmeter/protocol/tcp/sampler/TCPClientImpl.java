@@ -85,6 +85,9 @@ public class TCPClientImpl extends AbstractTCPClient {
         }
     }
 
+    /**
+     * @deprecated use {@link #read(InputStream, SampleResult)} instead.
+     */
     @Deprecated
     public String read(InputStream is) throws ReadException {
         return read(is, new SampleResult());

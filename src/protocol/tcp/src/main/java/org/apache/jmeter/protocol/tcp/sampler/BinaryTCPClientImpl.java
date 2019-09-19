@@ -66,9 +66,10 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
             for (int i = 0; i < ba.length; i++) {
                 int nibble0 = Character.digit(sc[i * 2], 16);
                 int nibble1 = Character.digit(sc[i * 2 + 1], 16);
-                if (nibble0 == -1 || nibble1 == -1){
+                if (nibble0 == -1 || nibble1 == -1) {
                     throw new IllegalArgumentException(
-                    "Hex-encoded binary string contains an invalid hex digit in '"+sc[i * 2]+sc[i * 2 + 1]+"'");
+                            String.format("Hex-encoded binary string contains an invalid hex digit in '%s%s'",
+                                    sc[i * 2], sc[i * 2 + 1]));
                 }
                 ba[i] = (byte) ((nibble0 << 4) | nibble1);
             }
@@ -82,14 +83,15 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
 
     /**
      * Input (hex) string is converted to binary and written to the output stream.
-     * @param os output stream
+     *
+     * @param os               output stream
      * @param hexEncodedBinary hex-encoded binary
      */
     @Override
-    public void write(OutputStream os, String hexEncodedBinary) throws IOException{
+    public void write(OutputStream os, String hexEncodedBinary) throws IOException {
         os.write(hexStringToByteArray(hexEncodedBinary));
         os.flush();
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("Wrote: " + hexEncodedBinary);
         }
     }
@@ -103,6 +105,9 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
                 "Method not supported for Length-Prefixed data.");
     }
 
+    /**
+     * @deprecated use {@link #read(InputStream, SampleResult)} instead
+     */
     @Deprecated
     public String read(InputStream is) throws ReadException {
         log.warn("Deprecated method, use read(is, sampleResult) instead");
@@ -114,6 +119,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
      * If there is no EOM byte defined, then reads until
      * the end of the stream is reached.
      * Response data is converted to hex-encoded binary
+     *
      * @return hex-encoded binary string
      * @throws ReadException when reading fails
      */
@@ -137,7 +143,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
 
             IOUtils.closeQuietly(w); // For completeness
             final String hexString = JOrphanUtils.baToHexString(w.toByteArray());
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 log.debug("Read: " + w.size() + "\n" + hexString);
             }
             return hexString;
