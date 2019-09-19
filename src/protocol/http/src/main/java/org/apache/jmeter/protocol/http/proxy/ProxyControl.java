@@ -1244,7 +1244,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @param configurations ConfigTestElements in descending priority.
      */
     private void removeValuesFromSampler(HTTPSamplerBase sampler, Collection<ConfigTestElement> configurations) {
-        for (PropertyIterator props = sampler.propertyIterator(); props.hasNext(); ) {
+        PropertyIterator props = sampler.propertyIterator();
+        while (props.hasNext()) {
             JMeterProperty prop = props.next();
             String name = prop.getName();
             String value = prop.getStringValue();
