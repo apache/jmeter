@@ -27,7 +27,6 @@ import org.apache.jorphan.math.StatCalculatorLong;
  * Aggregate sample data container. Just instantiate a new instance of this
  * class, and then call {@link #addSample(SampleResult)} a few times, and pull
  * the stats out with whatever methods you prefer.
- *
  */
 public class SamplingStatCalculator {
     private final StatCalculatorLong calculator = new StatCalculatorLong();
@@ -58,7 +57,6 @@ public class SamplingStatCalculator {
 
     /**
      * Clear the counters (useful for differential stats)
-     *
      */
     public synchronized void clear() {
         init();
@@ -171,10 +169,8 @@ public class SamplingStatCalculator {
     /**
      * Records a sample.
      *
-     * @param res
-     *            the sample to record
+     * @param res the sample to record
      * @return newly created sample with current statistics
-     *
      */
     public Sample addSample(SampleResult res) {
         long rtime;
@@ -253,32 +249,22 @@ public class SamplingStatCalculator {
         return rval;
     }
 
-    /**
-     * For debugging purposes, only.
-     */
     @Override
     public String toString() {
-        StringBuilder mySB = new StringBuilder();
-
-        mySB.append("Samples: " + this.getCount() + "  ");
-        mySB.append("Avg: " + this.getMean() + "  ");
-        mySB.append("Min: " + this.getMin() + "  ");
-        mySB.append("Max: " + this.getMax() + "  ");
-        mySB.append("Error Rate: " + this.getErrorPercentage() + "  ");
-        mySB.append("Sample Rate: " + this.getRate());
-        return mySB.toString();
+        return "Samples: " + this.getCount() + "  " +
+                "Avg: " + this.getMean() + "  " +
+                "Min: " + this.getMin() + "  " +
+                "Max: " + this.getMax() + "  " +
+                "Error Rate: " + this.getErrorPercentage() + "  " +
+                "Sample Rate: " + this.getRate();
     }
 
-    /**
-     * @return errorCount
-     */
+    /** @return errorCount */
     public long getErrorCount() {
         return getCurrentSample().getErrorCount();
     }
 
-    /**
-     * @return Returns the maxThroughput.
-     */
+    /** @return Returns the maxThroughput. */
     public double getMaxThroughput() {
         return maxThroughput;
     }

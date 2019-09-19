@@ -176,7 +176,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
      * @param num number to append to variable (if >0)
      */
     private void saveSample(SampleResult s, int num) {
-        if(ignoreSampler(s)) {
+        if (ignoreSampler(s)) {
             if (log.isDebugEnabled()) {
                 log.debug("Ignoring SampleResult from Sampler {}", s.getSampleLabel());
             }
@@ -189,11 +189,9 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
         }
         s.setResultFileName(fileName);// Associate sample with file name
         String variable = getVariableName();
-        if (variable.length()>0){
+        if (variable.length() > 0) {
             if (num > 0) {
-                StringBuilder sb = new StringBuilder(variable);
-                sb.append(num);
-                variable=sb.toString();
+                variable = variable + num;
             }
             JMeterContextService.getContext().getVariables().put(variable, fileName);
         }
@@ -210,7 +208,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     }
 
     /**
-     * @param s {@link SamplerResult}
+     * @param s {@link SampleResult}
      * @return true if we should ignore SampleResult
      */
     private boolean ignoreSampler(SampleResult s) {

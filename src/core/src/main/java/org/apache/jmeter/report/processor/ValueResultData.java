@@ -58,11 +58,7 @@ public class ValueResultData implements ResultData {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ValueResultData [value=");
-        builder.append(value);
-        builder.append("]");
-        return builder.toString();
+        return "ValueResultData [value=" + value + "]";
     }
 
 }

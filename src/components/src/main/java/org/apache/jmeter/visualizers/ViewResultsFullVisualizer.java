@@ -540,11 +540,11 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             // he's ready to wait.
             int len = res.getResponseDataAsString().length();
             if (MAX_DISPLAY_SIZE > 0 && len > MAX_DISPLAY_SIZE) {
-                StringBuilder builder = new StringBuilder(MAX_DISPLAY_SIZE+100);
+                StringBuilder builder = new StringBuilder(MAX_DISPLAY_SIZE + 100);
                 builder.append(JMeterUtils.getResString("view_results_response_too_large_message")) //$NON-NLS-1$
                     .append(len).append(" > Max: ").append(MAX_DISPLAY_SIZE)
                     .append(", ").append(JMeterUtils.getResString("view_results_response_partial_message")) // $NON-NLS-1$
-                    .append("\n").append(res.getResponseDataAsString().substring(0, MAX_DISPLAY_SIZE)).append("\n...");
+                    .append("\n").append(res.getResponseDataAsString(), 0, MAX_DISPLAY_SIZE).append("\n...");
                 response = builder.toString();
             } else {
                 response = res.getResponseDataAsString();

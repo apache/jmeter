@@ -351,25 +351,18 @@ public class RunningSample {
         return errorFormatter.format(myErrorPercentage);
     }
 
-    /**
-     * For debugging purposes, mainly.
-     */
     @Override
     public String toString() {
-        StringBuilder mySB = new StringBuilder();
 
-        mySB.append("Samples: " + this.getNumSamples() + "  ");
-        mySB.append("Avg: " + this.getAverage() + "  ");
-        mySB.append("Min: " + this.getMin() + "  ");
-        mySB.append("Max: " + this.getMax() + "  ");
-        mySB.append("Error Rate: " + this.getErrorPercentageString() + "  ");
-        mySB.append("Sample Rate: " + this.getRateString());
-        return mySB.toString();
+        return "Samples: " + this.getNumSamples() + "  " +
+                "Avg: " + this.getAverage() + "  " +
+                "Min: " + this.getMin() + "  " +
+                "Max: " + this.getMax() + "  " +
+                "Error Rate: " + this.getErrorPercentageString() + "  " +
+                "Sample Rate: " + this.getRateString();
     }
 
-    /**
-     * @return errorCount
-     */
+    /** @return errorCount */
     public long getErrorCount() {
         return errorCount;
     }

@@ -715,16 +715,14 @@ public class XPathUtil {
                            isNegated ? "Nodes Matched for " + xPathQuery : "No Nodes Matched for " + xPathQuery);
                } catch (ParserConfigurationException | TransformerException e) { // NOSONAR Exception handled by return
                    result.setError(true);
-                   result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage()).append(" for:")
-                           .append(xPathQuery).toString());
+                   result.setFailureMessage("Exception: " + e.getMessage() + " for:" + xPathQuery);
                } finally {
                    if (selector != null) {
                        try {
                            selector.getUnderlyingXPathContext().setContextItem(null);
                        } catch (Exception e) { // NOSONAR Ignored on purpose
                            result.setError(true);
-                           result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage())
-                                   .append(" for:").append(xPathQuery).toString());
+                           result.setFailureMessage("Exception: " + e.getMessage() + " for:" + xPathQuery);
                        }
                    }
                }

@@ -20,7 +20,6 @@ package org.apache.commons.cli.avalon;
 
 /**
  * Token handles tokenizing the CLI arguments
- *
  */
 class Token {
     /** Type for a separator token */
@@ -36,10 +35,8 @@ class Token {
     /**
      * New Token object with a type and value
      *
-     * @param type
-     *            type of the token
-     * @param value
-     *            value of the token
+     * @param type  type of the token
+     * @param value value of the token
      */
     Token(final int type, final String value) {
         this.type = type;
@@ -64,15 +61,8 @@ class Token {
         return this.type;
     }
 
-    /**
-     * Convert to a string
-     */
     @Override
     public final String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(this.type);
-        sb.append(":");
-        sb.append(this.value);
-        return sb.toString();
+        return this.type + ":" + this.value;
     }
 }

@@ -138,10 +138,7 @@ public class ConversionHelp {
      *             when the bytes can not be encoded using <code>encoding</code>
      */
     public static String cdata(byte[] chars, String encoding) throws UnsupportedEncodingException {
-        StringBuilder buf = new StringBuilder("<![CDATA[");
-        buf.append(new String(chars, encoding));
-        buf.append("]]>");
-        return buf.toString();
+        return "<![CDATA[" + new String(chars, encoding) + "]]>";
     }
 
     /**

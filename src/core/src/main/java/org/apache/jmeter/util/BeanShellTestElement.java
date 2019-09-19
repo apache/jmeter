@@ -182,8 +182,8 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
         try {
             bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
+        } catch (JMeterException e) {
+            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
         }
     }
 
@@ -194,8 +194,8 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
         try {
             bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
+        } catch (JMeterException e) {
+            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
         }
     }
 
@@ -206,8 +206,8 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
         try {
             bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
+        } catch (JMeterException e) {
+            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
         }
     }
 
@@ -217,12 +217,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
             return;
         }
         try {
-            bshInterpreter.eval((new StringBuilder("testEnded(\"")) // $NON-NLS-1$
-                    .append(host)
-                    .append("\")") // $NON-NLS-1$
-                    .toString()); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
+            bshInterpreter.eval("testEnded(\"" + host + "\")");
+        } catch (JMeterException e) {
+            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
         }
     }
 
@@ -233,8 +230,8 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
         try {
             bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
+        } catch (JMeterException e) {
+            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
         }
     }
 
@@ -244,12 +241,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
             return;
         }
         try {
-            bshInterpreter.eval((new StringBuilder("testStarted(\"")) // $NON-NLS-1$
-                    .append(host)
-                    .append("\")") // $NON-NLS-1$
-                    .toString()); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
+            bshInterpreter.eval("testStarted(\"" + host + "\")");
+        } catch (JMeterException e) {
+            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
         }
     }
 

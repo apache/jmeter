@@ -584,8 +584,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public String getSampleLabel(boolean includeGroup) {
         if (includeGroup) {
-            StringBuilder sb = new StringBuilder(threadName.substring(0,threadName.lastIndexOf(' '))); //$NON-NLS-1$
-            return sb.append(":").append(label).toString(); //$NON-NLS-1$
+            return threadName.substring(0, threadName.lastIndexOf(' ')) + ":" + label;
         }
         return label;
     }
@@ -628,7 +627,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * see https://bz.apache.org/bugzilla/show_bug.cgi?id=63055
      * @return true if TestPlan is in functional mode or property subresults.disable_renaming is true
      */
-    public static final boolean isRenameSampleLabel() {
+    public static boolean isRenameSampleLabel() {
         return !(TestPlan.getFunctionalMode() || DISABLE_SUBRESULTS_RENAMING);
     }
 
