@@ -143,13 +143,7 @@ public class XPathUtil {
         DocumentBuilder builder = makeDocumentBuilderFactory(validate, whitespace, namespace).newDocumentBuilder();
         builder.setErrorHandler(new MyErrorHandler(validate, false));
         if (!downloadDTDs){
-            EntityResolver er = new EntityResolver(){
-                @Override
-                public InputSource resolveEntity(String publicId, String systemId)
-                        throws SAXException, IOException {
-                    return new InputSource(new ByteArrayInputStream(new byte[]{}));
-                }
-            };
+            EntityResolver er = (publicId, systemId) -> new InputSource(new ByteArrayInputStream(new byte[]{}));
             builder.setEntityResolver(er);
         }
         return builder;
