@@ -174,11 +174,8 @@ public class HttpMirrorThread implements Runnable {
             out.write(CRLF);
 
             if (parameters.containsKey(REDIRECT)) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(HTTPConstants.HEADER_LOCATION);
-                sb.append(": "); //$NON-NLS-1$
-                sb.append(parameters.get(REDIRECT));
-                final String redirectLocation = sb.toString();
+                final String redirectLocation =
+                        HTTPConstants.HEADER_LOCATION + ": " + parameters.get(REDIRECT);
                 if (verbose) {
                     System.out.println(redirectLocation); // NOSONAR
                     log.info(redirectLocation);

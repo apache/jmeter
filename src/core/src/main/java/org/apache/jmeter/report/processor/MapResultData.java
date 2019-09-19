@@ -94,10 +94,6 @@ public class MapResultData implements ResultData {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("MapResultData [map=");
-        builder.append(map);
-        builder.append("]");
-        return builder.toString();
+        return "MapResultData [map=" + map + "]";
     }
 }

@@ -365,18 +365,15 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
         res.setSampleLabel(getName());// Use the test element name for the label
-        StringBuilder sb = new StringBuilder();
-        sb.append("Host: ").append(getServer()); // $NON-NLS-1$
-        sb.append(" Port: ").append(getPort()); // $NON-NLS-1$
-        sb.append("\n"); // $NON-NLS-1$
-        sb.append("Reuse: ").append(reUseConnection); // $NON-NLS-1$
-        sb.append(" Close: ").append(closeConnection); // $NON-NLS-1$
-        sb.append("\n["); // $NON-NLS-1$
-        sb.append("SOLINGER: ").append(getSoLinger()); // $NON-NLS-1$
-        sb.append(" EOL: ").append(getEolByte()); // $NON-NLS-1$
-        sb.append(" noDelay: ").append(getNoDelay()); // $NON-NLS-1$
-        sb.append("]"); // $NON-NLS-1$
-        res.setSamplerData(sb.toString());
+        String sb = "Host: " + getServer() +
+                " Port: " + getPort() + "\n" +
+                "Reuse: " + reUseConnection +
+                " Close: " + closeConnection + "\n[" +
+                "SOLINGER: " + getSoLinger() +
+                " EOL: " + getEolByte() +
+                " noDelay: " + getNoDelay() +
+                "]";
+        res.setSamplerData(sb);
         res.sampleStart();
         try {
             Socket sock;

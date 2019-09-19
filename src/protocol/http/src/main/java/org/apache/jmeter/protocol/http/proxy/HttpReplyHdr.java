@@ -94,15 +94,13 @@ public final class HttpReplyHdr {
     /**
      * builds an http document describing an error.
      *
-     * @param error
-     *            Error name.
-     * @param description
-     *            Errors description.
+     * @param error       Error name.
+     * @param description Errors description.
      * @return A string with the HTML description body
      */
     private static String formError(String error, String description) {
         /*
-         * A HTTP RESPONSE HEADER LOOKS ALOT LIKE:
+         * A HTTP RESPONSE HEADER LOOKS LIKE:
          *
          * HTTP/1.0 200 OK Date: Wednesday, 02-Feb-94 23:04:12 GMT Server:
          * NCSA/1.1 MIME-version: 1.0 Last-modified: Monday, 15-Nov-93 23:33:16
@@ -110,19 +108,14 @@ public final class HttpReplyHdr {
          */
 
         String body = formErrorBody(error, description);
-        StringBuilder header = new StringBuilder();
 
-        header.append(HTTP_PROTOCOL).append(" ").append(error).append(CR);
-        header.append("Server: ").append(HTTP_SERVER).append(CR);
-        header.append("MIME-version: 1.0").append(CR);
-        header.append("Content-Type: text/html").append(CR);
-
-        header.append("Content-Length: ").append(body.length()).append(CR);
-
-        header.append(CR);
-        header.append(body);
-
-        return header.toString();
+        return HTTP_PROTOCOL + " " +
+                error + CR +
+                "Server: " + HTTP_SERVER + CR +
+                "MIME-version: 1.0" + CR +
+                "Content-Type: text/html" + CR +
+                "Content-Length: " + body.length() + CR +
+                CR + body;
     }
 
     /**

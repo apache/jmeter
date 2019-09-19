@@ -1282,11 +1282,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return variable name for index following JMeter convention
      */
     public static String formatJMeterExportedVariableName(String elementName) {
-        StringBuilder builder = new StringBuilder(
-                JMETER_VARS_PREFIX.length()+elementName.length());
-        return builder.append(JMETER_VARS_PREFIX)
-                .append(elementName)
-                .toString();
+        return JMETER_VARS_PREFIX + elementName;
     }
 
     /**

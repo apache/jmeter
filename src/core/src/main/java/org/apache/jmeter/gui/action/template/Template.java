@@ -33,42 +33,49 @@ public class Template {
     private String description;
     private transient File parent; // for relative links
     private Map<String, String> parameters;
+
     /**
      * @return the name
      */
     public String getName() {
         return name;
     }
+
     /**
      * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
     }
+
     /**
      * @return the relativeFileName
      */
     public String getFileName() {
         return fileName;
     }
+
     /**
      * @param relativeFileName the relativeFileName to set
      */
     public void setFileName(String relativeFileName) {
         fileName = relativeFileName;
     }
+
     /**
      * @return the description
      */
     public String getDescription() {
         return description;
     }
+
     /**
      * @param description the description to set
      */
     public void setDescription(String description) {
         this.description = description;
     }
+
     public boolean isTestPlan() {
         return isTestPlan;
     }
@@ -150,47 +157,37 @@ public class Template {
     }
 
     private boolean mapsEquals(Map<String, String> map1, Map<String, String> map2) {
-        if(map1 == null) {
+        if (map1 == null) {
             return map2 == null;
-        }else if(map2 == null) {
+        } else if (map2 == null) {
             return false;
         }
 
-        if(map1.size() != map2.size()) {
+        if (map1.size() != map2.size()) {
             return false;
         }
 
-        for(Entry<String, String> entry : map1.entrySet()) {
+        for (Entry<String, String> entry : map1.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            if(map2.containsKey(key)) {
-                if(!map2.get(key).equals(value)) {
+            if (map2.containsKey(key)) {
+                if (!map2.get(key).equals(value)) {
                     return false;
                 }
-            }else {
+            } else {
                 return false;
             }
         }
 
         return true;
     }
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
+
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Template [isTestPlan=");
-        builder.append(isTestPlan);
-        builder.append(", name=");
-        builder.append(name);
-        builder.append(", fileName=");
-        builder.append(fileName);
-        builder.append(", description=");
-        builder.append(description);
-        builder.append(", parameters=");
-        builder.append(parameters);
-        builder.append("]");
-        return builder.toString();
+        return "Template [isTestPlan=" + isTestPlan +
+                ", name=" + name +
+                ", fileName=" + fileName +
+                ", description=" + description +
+                ", parameters=" + parameters + "]";
     }
 }
