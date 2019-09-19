@@ -22,7 +22,7 @@ import java.io.File;
 import org.apache.jmeter.testkit.ResourceLocator;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class JMeterTestUtils {
+public final class JMeterTestUtils {
     // Used by findTestFile
     private static volatile String filePrefix;
     private JMeterTestUtils() {

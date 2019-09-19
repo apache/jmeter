@@ -23,7 +23,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SampleSenderFactory {
+public final class SampleSenderFactory {
 
     private static final Logger log = LoggerFactory.getLogger(SampleSenderFactory.class);
 

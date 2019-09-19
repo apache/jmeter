@@ -90,13 +90,13 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         }
     }
 
-    private class TestClass // Can't instantiate
+    private final class TestClass // Can't instantiate
     {
         private TestClass() {
         }
     }
 
-    private static class TestData {
+    private static final class TestData {
         private String fileName;
 
         private String baseURL;
@@ -113,7 +113,6 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
          * @param baseUrl Base URL
          * @param expectedSet Set of expected URLs
          * @param expectedList List of expected URLs
-         * @param userAgent User Agent
          */
         private TestData(String htmlFileName, String baseUrl, String expectedSet, String expectedList) {
             this(htmlFileName, baseUrl, expectedList, expectedList, DEFAULT_UA);

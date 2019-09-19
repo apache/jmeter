@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * @deprecated since 5.0
  */
 @Deprecated
-public class HttpClientDefaultParameters {
+public final class HttpClientDefaultParameters {
 
     private static final Logger log = LoggerFactory.getLogger(HttpClientDefaultParameters.class);
 

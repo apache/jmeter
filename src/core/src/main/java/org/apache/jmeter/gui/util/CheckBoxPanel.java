@@ -26,7 +26,7 @@ import javax.swing.JCheckBox;
  * See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=58810">Bug 58810</a><br>
  * Note: using a JPanel affects the alignment within the container
  */
-public class CheckBoxPanel {
+public final class CheckBoxPanel {
 
     private CheckBoxPanel() {
         // not instantiable

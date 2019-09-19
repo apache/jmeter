@@ -26,12 +26,10 @@ import javax.jms.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Administration of messages.
- *
  */
-public class MessageAdmin {
+public final class MessageAdmin {
 
     private static final class PlaceHolder {
         private final CountDownLatch latch;
@@ -96,13 +94,10 @@ public class MessageAdmin {
      * associated with this request and the waiting party can be signaled by
      * means of a {@link CountDownLatch}
      *
-     * @param id
-     *            id of the request
-     * @param request
-     *            request object to store under id
-     * @param latch
-     *            communication latch to signal when a reply for this request
-     *            was received
+     * @param id      id of the request
+     * @param request request object to store under id
+     * @param latch   communication latch to signal when a reply for this request
+     *                was received
      */
     public void putRequest(String id, Message request, CountDownLatch latch) {
         log.debug("REQ_ID [{}]", id);
@@ -114,10 +109,8 @@ public class MessageAdmin {
      * request is found, the owner of the request will be notified with the
      * registered {@link CountDownLatch}
      *
-     * @param id
-     *            id of the request
-     * @param reply
-     *            object with the reply
+     * @param id    id of the request
+     * @param reply object with the reply
      */
     public void putReply(String id, Message reply) {
         PlaceHolder holder = table.get(id);
@@ -125,11 +118,11 @@ public class MessageAdmin {
         if (holder != null) {
             holder.setReply(reply);
             CountDownLatch latch = holder.getLatch();
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 log.debug("{} releasing latch : {}", Thread.currentThread().getName(), latch);
             }
             latch.countDown();
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 log.debug("{} released latch : {}", Thread.currentThread().getName(), latch);
             }
         } else {
@@ -142,8 +135,7 @@ public class MessageAdmin {
     /**
      * Get the reply message.
      *
-     * @param id
-     *            the id of the message
+     * @param id the id of the message
      * @return the received message or <code>null</code>
      */
     public Message get(String id) {
@@ -152,6 +144,6 @@ public class MessageAdmin {
         if (holder == null || !holder.hasReply()) {
             log.debug("Message with {} not found.", id);
         }
-        return holder==null ? null : (Message) holder.getReply();
+        return holder == null ? null : (Message) holder.getReply();
     }
 }

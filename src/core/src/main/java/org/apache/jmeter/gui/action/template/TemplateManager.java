@@ -46,7 +46,7 @@ import org.xml.sax.SAXParseException;
  * Manages Test Plan templates
  * @since 2.10
  */
-public class TemplateManager {
+public final class TemplateManager {
     private static final String TEMPLATE_FILES = JMeterUtils.getPropDefault("template.files", // $NON-NLS-1$
             "/bin/templates/templates.xml");
 

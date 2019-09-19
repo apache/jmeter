@@ -79,7 +79,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 /**
  * This class provides a few utility methods for dealing with XML/XPath.
  */
-public class XPathUtil {
+public final class XPathUtil {
 
     private static final Logger log = LoggerFactory.getLogger(XPathUtil.class);
 
@@ -90,9 +90,6 @@ public class XPathUtil {
         XPATH_CACHE = Caffeine.newBuilder().maximumSize(cacheSize).build(new XPathQueryCacheLoader());
     }
 
-    /**
-     *
-     */
     private static final Processor PROCESSOR = new Processor(false);
 
     private XPathUtil() {
@@ -115,9 +112,10 @@ public class XPathUtil {
      *
      * @return javax.xml.parsers.DocumentBuilderFactory
      */
-    private static synchronized DocumentBuilderFactory makeDocumentBuilderFactory(boolean validate, boolean whitespace,
-            boolean namespace) throws ParserConfigurationException {
-        if (XPathUtil.documentBuilderFactory == null || documentBuilderFactory.isValidating() != validate
+    private static synchronized DocumentBuilderFactory makeDocumentBuilderFactory(
+            boolean validate, boolean whitespace, boolean namespace) throws ParserConfigurationException  {
+        if (XPathUtil.documentBuilderFactory == null
+                || documentBuilderFactory.isValidating() != validate
                 || documentBuilderFactory.isNamespaceAware() != namespace
                 || documentBuilderFactory.isIgnoringElementContentWhitespace() != whitespace) {
             // configure the document builder factory

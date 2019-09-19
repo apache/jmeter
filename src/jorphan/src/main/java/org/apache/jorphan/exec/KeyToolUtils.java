@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Utilities for working with Java keytool
  */
-public class KeyToolUtils {
+public final class KeyToolUtils {
     private static final Logger log = LoggerFactory.getLogger(KeyToolUtils.class);
 
     // The DNAME which is used if none is provided

@@ -64,7 +64,7 @@ import org.slf4j.LoggerFactory;
  *  </ul>
  * @since 3.0
  */
-public class ResourcesDownloader {
+public final class ResourcesDownloader {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourcesDownloader.class);
 

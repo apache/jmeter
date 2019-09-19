@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  * server has all support files in a relative-same location) and to package up
  * test plans to execute on unknown boxes that only have Java installed.
  */
-public class FileServer {
+public final class FileServer {
 
     private static final Logger log = LoggerFactory.getLogger(FileServer.class);
 

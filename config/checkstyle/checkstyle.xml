@@ -85,7 +85,7 @@
     <module name="NeedBraces"/>
 
     <!--Class Design-->
-    <!--<module name="FinalClass"/>-->
+    <module name="FinalClass"/>
     <!--<module name="HideUtilityClassConstructor"/>--> <!--need to change 25 class APIs-->
     <module name="InterfaceIsType"/> <!-- Interfaces must be types (not just constants) -->
     <module name="MutableException"/>

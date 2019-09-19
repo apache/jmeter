@@ -24,7 +24,7 @@ import org.apache.jmeter.threads.JMeterThread;
  * Manages logic related to timers and pauses
  * @since 3.2
  */
-public class TimerService {
+public final class TimerService {
 
     private TimerService() {
         super();

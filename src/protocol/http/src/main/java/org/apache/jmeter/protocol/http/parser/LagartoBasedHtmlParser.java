@@ -52,7 +52,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
     /*
      * A dummy class to pass the pointer of URL.
      */
-    private static class URLPointer {
+    private static final class URLPointer {
         private URLPointer(URL newUrl) {
             url = newUrl;
         }

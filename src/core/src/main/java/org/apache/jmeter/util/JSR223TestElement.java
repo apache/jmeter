@@ -72,7 +72,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     /**
      * Initialization On Demand Holder pattern
      */
-    private static class LazyHolder {
+    private static final class LazyHolder {
         private LazyHolder() {
             super();
         }

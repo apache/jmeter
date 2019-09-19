@@ -34,7 +34,7 @@ import javax.management.RuntimeMBeanException;
  * Uses Reflection so that the code compiles on Java 1.5.
  * The code will only work on Sun Java 1.6+.
  */
-public class HeapDumper {
+public final class HeapDumper {
 
     // SingletonHolder idiom for lazy initialisation
     private static class DumperHolder {

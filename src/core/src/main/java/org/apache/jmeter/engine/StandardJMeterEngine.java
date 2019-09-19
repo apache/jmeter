@@ -255,7 +255,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         stopThread.start();
     }
 
-    private class StopTest implements Runnable {
+    private final class StopTest implements Runnable {
         private final boolean now;
 
         private StopTest(boolean b) {

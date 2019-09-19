@@ -87,7 +87,7 @@ public class JMeterUtils implements UnitTestManager {
 
     // Note: cannot use a static variable here, because that would be processed before the JMeter properties
     // have been defined (Bug 52783)
-    private static class LazyPatternCacheHolder {
+    private static final class LazyPatternCacheHolder {
         private LazyPatternCacheHolder() {
             super();
         }
@@ -1292,7 +1292,7 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * @return {@link XStream} XStream instance following JMeter security policy
      */
-    public static final XStream createXStream() {
+    public static XStream createXStream() {
         XStream xstream = new XStream();
         JMeterUtils.setupXStreamSecurityPolicy(xstream);
         return xstream;

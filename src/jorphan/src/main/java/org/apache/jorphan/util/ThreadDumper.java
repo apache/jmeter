@@ -34,7 +34,7 @@ import java.util.Date;
  * Utility class to create a Thread Dump
  * @since 3.2
  */
-public class ThreadDumper {
+public final class ThreadDumper {
 
     // Only invoked by IODH class
     private ThreadDumper() {

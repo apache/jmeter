@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * Based on the work of: author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
  *
  */
-public class LdapExtClient {
+public final class LdapExtClient {
     private static final Logger log = LoggerFactory.getLogger(LdapExtClient.class);
 
     private static final String CONTEXT_IS_NULL = "Context is null";

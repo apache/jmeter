@@ -51,10 +51,11 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
 
     private final transient ScheduledExecutorService execService;
 
-    private static class TPOOLHolder {
+    private final static class TPOOLHolder {
         private TPOOLHolder() {
             // NOOP
         }
+
         static final ScheduledExecutorService EXEC_SERVICE =
                 Executors.newScheduledThreadPool(1,
                         (Runnable r) -> {

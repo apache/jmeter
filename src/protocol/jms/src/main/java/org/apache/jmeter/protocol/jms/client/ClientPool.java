@@ -33,7 +33,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  * N.B. This class is thread safe as it is called from sample threads
  * and the thread that runs testEnded() methods.
  */
-public class ClientPool {
+public final class ClientPool {
 
     private static final List<Closeable> CLIENTS = Collections.synchronizedList(new ArrayList<>());
 

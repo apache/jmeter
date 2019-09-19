@@ -26,7 +26,7 @@ import org.apache.jmeter.report.core.Converters;
  *
  * @since 3.0
  */
-public class ConfigurationUtils {
+public final class ConfigurationUtils {
 
     private static final String NOT_SUPPORTED_CONVERSION_FMT = "Convert \"%s\" to \"%s\" is not supported";
 
