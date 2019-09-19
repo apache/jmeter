@@ -18,6 +18,8 @@ env:
     # Building source and binary distributions takes time, and it does not verify much, so we skip it in CI
     # However we want to validate licenses
     - SKIP_DIST_TASKS="$GRADLE_ARGS -PskipDist :src:licenses:build"
+    - ORG_GRADLE_PROJECT_checksumFailOn=build_finish
+    - ORG_GRADLE_PROJECT_checksumPrint=true
 
 matrix:
   include:
