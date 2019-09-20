@@ -221,7 +221,7 @@ fun createAnakiaTask(taskName: String,
             include(*includes)
             exclude(*excludes)
         })
-        inputs.properties["extension"] = extension
+        inputs.property("extension", extension)
         outputs.dir(outputDir)
         dependsOn(prepareProps)
 
