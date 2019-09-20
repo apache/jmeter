@@ -107,7 +107,7 @@ open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
     init {
         group = BATCH_TESTS_GROUP_NAME
         description = "Runs jmx file via process fork and verifies outputs"
-        configure<BatchTest> {
+        configure {
             workingDir = File(project.rootDir, "bin")
             main = "org.apache.jmeter.NewDriver"
             classpath(jmeterJar)
