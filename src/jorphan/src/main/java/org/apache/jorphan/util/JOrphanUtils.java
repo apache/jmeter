@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import java.util.regex.Matcher;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.RandomStringGenerator;
 
 /**
  * This class contains frequently-used static utility methods.
@@ -46,6 +48,8 @@ import org.apache.commons.lang3.StringUtils;
 public final class JOrphanUtils {
 
     private static final int DEFAULT_CHUNK_SIZE = 4096;
+
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom(new SecureRandom().generateSeed(128));
     /**
      * Private constructor to prevent instantiation.
      */
@@ -764,5 +768,18 @@ public final class JOrphanUtils {
             }
         }
         return retVal.toString();
+    }
+
+    /**
+     * @param length Max length of password
+     * @return String random password
+     */
+    public static String generateRandomAlphanumericPassword(int length) {
+        char[][] pairs = {{'a','z'}, {'A','Z'}, {'0','9'}};
+        RandomStringGenerator pwdGenerator = new RandomStringGenerator.Builder()
+                .usingRandom(max -> SECURE_RANDOM.nextInt(max))
+                .withinRange(pairs)
+                .build();
+        return pwdGenerator.generate(length);
     }
 }

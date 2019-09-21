@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +36,7 @@ import org.junit.Test;
 public class TestKeyToolUtils {
 
     private File keystore;
-    private String password = RandomStringUtils.randomAlphabetic(32);
+    private String password = JOrphanUtils.generateRandomAlphanumericPassword(32);
     private int validity = 1;
 
     @Before

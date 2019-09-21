@@ -402,4 +402,10 @@ public class TestJorphanUtils {
         assertEquals("11", JOrphanUtils.unsplit(new Object[] {null, 1}, 1));
         assertEquals("-26738698", JOrphanUtils.unsplit(new Object[] {-26_738_698}, 1));
     }
+
+    @Test
+    public void testGenerateRandomAlphanumericPassword() {
+        assertTrue("Password should be alphanumeric", JOrphanUtils.generateRandomAlphanumericPassword(20).matches("[A-Za-z0-9]+"));
+        assertEquals("Password should be alphanumeric", 20, JOrphanUtils.generateRandomAlphanumericPassword(20).length());
+    }
 }

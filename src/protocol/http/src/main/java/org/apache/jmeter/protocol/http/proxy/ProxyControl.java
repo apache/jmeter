@@ -46,7 +46,6 @@ import java.util.prefs.Preferences;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.conn.ssl.AbstractVerifier;
 import org.apache.jmeter.assertions.Assertion;
@@ -1498,7 +1497,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
             }
         }
         if (keyStore == null) { // no existing file or not valid
-            storePassword = RandomStringUtils.randomAlphanumeric(20); // Alphanum to avoid issues with command-line quoting
+            storePassword = JOrphanUtils.generateRandomAlphanumericPassword(20); // Alphanum to avoid issues with command-line quoting
             keyPassword = storePassword; // we use same password for both
             setPassword(storePassword);
             log.info(
@@ -1563,7 +1562,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
             }
         }
         if (keyStore == null) { // no existing file or not valid
-            storePassword = RandomStringUtils.randomAlphanumeric(20); // Alphanum to avoid issues with command-line quoting
+            storePassword = JOrphanUtils.generateRandomAlphanumericPassword(20); // Alphanum to avoid issues with command-line quoting
             keyPassword = storePassword; // we use same password for both
             setPassword(storePassword);
             log.info("Generating standard keypair in {}", CERT_PATH_ABS);
