@@ -135,6 +135,7 @@ to view the last release notes of version 5.1.1.
     <li><bug>63452</bug>Tools / Import from cURL: Complete coverage of all command line options that are valid in JMeter use case. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63419</bug>Tools / Import from cURL: Add ability to import a set of cURL commands from a file. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63760</bug>JOrphanUtils: add random alphanumeric password generator</li>
+    <li><bug>63355</bug>View Results Tree: Browser view option is not Available with Java 11, document how to make it available</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
