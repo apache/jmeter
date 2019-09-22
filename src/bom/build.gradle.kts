@@ -65,6 +65,7 @@ dependencies {
         apiv("com.fasterxml.jackson.core:jackson-databind", "jackson-databind")
         apiv("com.fifesoft:rsyntaxtextarea")
         apiv("com.github.ben-manes.caffeine:caffeine")
+        apiv("com.github.tomakehurst:wiremock-jre8")
         apiv("com.helger:ph-commons")
         apiv("com.helger:ph-css")
         apiv("com.jayway.jsonpath:json-path")
