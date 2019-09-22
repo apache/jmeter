@@ -76,7 +76,6 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
         Expression<JsonNode> expression = JMESPathCache.getInstance().get(getJmesPath());
         // get the result from the JMESPath query
         JsonNode currentValue = expression.search(input);
-        // cast JsonNode as String, and remove the extra ' " ' in the String
         log.debug("JMESPath query {} invoked on response {}. Query result is {}. ", expression,
                 responseDataAsJsonString, currentValue);
         checkResult(mapper, currentValue, assertionResult, invert);
@@ -85,28 +84,26 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
     private void checkResult(ObjectMapper mapper, JsonNode jsonNode, AssertionResult result, boolean invert)
             throws JsonProcessingException {
         if (isJsonValidationBool()) {
-            if (jsonNode != null && jsonNode.isArray()) {
+            if (jsonNode.isArray()) {
                 if (arrayMatched(mapper, (ArrayNode) jsonNode)) {
                     if (invert) {
-                        if (isExpectNull()) {
-                            failAssertion(result, "Failed JMESPath " + getJmesPath() + " not to match null");
-                        } else {
-                            failAssertion(result,
-                                    "Failed JMESPath " + getJmesPath() + " not to match " + getExpectedValue());
-                        }
+                        failAssertion(result,
+                                "JMESPath '" + getJmesPath() + "' expected not to match " + getExpectedValue());
                     }
                     return;
                 }
             } else {
-                if (isExpectNull() && (jsonNode instanceof NullNode || jsonNode == null)) {
-                    if (invert) {
-                        failAssertion(result, "Failed JMESPath " + getJmesPath() + " not to match null");
+                if (isExpectNull()) {
+                    if (jsonNode instanceof NullNode) {
+                        return;
                     }
-                    return;
+                    if (invert) {
+                        failAssertion(result, "Failed JMESPath '" + getJmesPath() + "' not to match null");
+                    }
                 } else if (isEquals(mapper, jsonNode)) {
                     if (invert) {
                         failAssertion(result,
-                                "Failed JMESPath " + getJmesPath() + " not to match " + getExpectedValue());
+                                "Failed JMESPath '" + getJmesPath() + "' not to match " + getExpectedValue());
                     }
                     return;
                 }
@@ -130,8 +127,14 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
                 }
             }
         } else {
-            if (invert) {
-                failAssertion(result, "Failed that JMESPath " + getJmesPath() + " not to exist");
+            if (jsonNode instanceof NullNode) {
+                if (!invert) {
+                    failAssertion(result, "JMESPath " + getJmesPath() + " does not exist");
+                }                
+            } else {
+                if (invert) {
+                    failAssertion(result, "JMESPath " + getJmesPath() + " expected not to exist");
+                }
             }
         }
     }
@@ -157,7 +160,7 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
             doAssert(result, responseData, isInvert());
         } catch (Exception e) {
             if (!isInvert()) {
-                result.setFailure(true);
+                result.setError(true);
                 result.setFailureMessage(e.getMessage());
             }
         }
@@ -178,16 +181,22 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
         }
 
         for (JsonNode element : value) {
-            if ((element == null && isExpectNull()) || isEquals(mapper, element)) {
-                return true;
+            if (isExpectNull()) {
+                if (element instanceof NullNode) {
+                    return true;
+                }
+            } else {
+                if (isEquals(mapper, element)) {
+                    return true;
+                }
             }
         }
 
         return isEquals(mapper, value);
     }
 
-    private boolean isEquals(ObjectMapper mapper, JsonNode subj) throws JsonProcessingException {
-        String str = objectToString(mapper, subj);
+    private boolean isEquals(ObjectMapper mapper, JsonNode jsonNode) throws JsonProcessingException {
+        String str = objectToString(mapper, jsonNode);
         if (isUseRegex()) {
             Pattern pattern = JMeterUtils.getPatternCache().getPattern(getExpectedValue());
             return JMeterUtils.getMatcher().matches(str, pattern);
