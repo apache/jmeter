@@ -20,35 +20,45 @@ package org.apache.jmeter.gui.action.template;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-/**
- * Test TemplateManager Class
- */
 public class TestTemplateManager extends JMeterTestCase {
 
-    /**
-     * Test a valid templateFile.
-     */
-    @Test
-    public void testTemplateFile() throws IOException, SAXException, ParserConfigurationException {
-        File xmlTemplate = new File(this.getClass().getResource("validTemplates.xml").getFile());
-        TemplateManager templateManager = TemplateManager.getInstance();
-        Map<String, Template> templateMap = templateManager.parseTemplateFile(xmlTemplate);
+    private Map<String, Template> templateMap;
+
+    @Before
+    public void setup() {
+        templateMap = readTemplateFromFile();
         assertEquals(3, templateMap.size());
+    }
+
+    private Map<String, Template> readTemplateFromFile() {
+        File xmlTemplate = new File(this.getClass().getResource("validTemplates.xml").getFile());
+        try {
+            return TemplateManager.getInstance().parseTemplateFile(xmlTemplate);
+        } catch (IOException | SAXException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void testValidTemplateFile() {
         Template testTemplate = templateMap.get("testTemplateWithParameters");
         assertTrue(testTemplate.isTestPlan());
         assertEquals("testTemplateWithParameters", testTemplate.getName());
@@ -72,18 +82,12 @@ public class TestTemplateManager extends JMeterTestCase {
         assertEquals("/bin/templates/testTemplate.jmx", testTemplate.getFileName());
         assertEquals("testTemplate desc", testTemplate.getDescription());
         assertNull(testTemplate.getParameters());
-
     }
 
-    /**
-     * Check that a wrong xml file throws a FileNotFoundException
-     */
     @Test(expected = FileNotFoundException.class)
-    public void testInvalidTemplateFile() throws Exception {
-        String xmlTemplatePath = "missing.xml";
-        File templateFile = new File(xmlTemplatePath);
-        TemplateManager templateManager = TemplateManager.getInstance();
-        templateManager.parseTemplateFile(templateFile);
+    public void testNonExistantXmlFileThrowsFileNotFoundException() throws Exception {
+        File xmlTemplateFile = new File("missing.xml");
+        TemplateManager.getInstance().parseTemplateFile(xmlTemplateFile);
     }
 
     @Test
@@ -91,11 +95,47 @@ public class TestTemplateManager extends JMeterTestCase {
         try {
             String xmlTemplatePath = this.getClass().getResource("invalidTemplates.xml").getFile();
             File templateFile = new File(xmlTemplatePath);
-            TemplateManager templateManager = TemplateManager.getInstance();
-            templateManager.parseTemplateFile(templateFile);
+            TemplateManager.getInstance().parseTemplateFile(templateFile);
         } catch (SAXParseException ex) {
-            assertTrue("Exception did not contains expected message, got:"+ex.getMessage(),
-                    ex.getMessage().indexOf("Element type \"key\" must be declared.")>=0);
+            assertTrue("Exception did not contains expected message, got:" + ex.getMessage(),
+                    ex.getMessage().contains("Element type \"key\" must be declared."));
         }
+    }
+
+    @Test
+    public void testDifferentTemplatesAreNotEqual() {
+        Template testTemplate1 = templateMap.get("testTemplateWithParameters");
+        Template testTemplate2 = templateMap.get("testTemplateNotTestPlan");
+        Template testTemplate3 = templateMap.get("testTemplate");
+
+        assertNotEquals(testTemplate1, testTemplate2);
+        assertNotEquals(testTemplate1, testTemplate3);
+        assertNotEquals(testTemplate2, testTemplate1);
+        assertNotEquals(testTemplate2, testTemplate3);
+        assertNotEquals(testTemplate3, testTemplate1);
+        assertNotEquals(testTemplate3, testTemplate2);
+
+        assertNotEquals(testTemplate1.hashCode(), testTemplate2.hashCode());
+        assertNotEquals(testTemplate1.hashCode(), testTemplate3.hashCode());
+        assertNotEquals(testTemplate2.hashCode(), testTemplate1.hashCode());
+        assertNotEquals(testTemplate2.hashCode(), testTemplate3.hashCode());
+        assertNotEquals(testTemplate3.hashCode(), testTemplate1.hashCode());
+        assertNotEquals(testTemplate3.hashCode(), testTemplate2.hashCode());
+    }
+
+    @Test
+    public void testSameTemplatesAreEqual() {
+        Template template = templateMap.get("testTemplateWithParameters");
+        assertEquals(template, template);
+        assertEquals(template.hashCode(), template.hashCode());
+    }
+
+    @Test
+    public void testSameButParamsTemplatesAreNotEqual() {
+        Template template1 = readTemplateFromFile().get("testTemplateWithParameters");
+        Template template2 = readTemplateFromFile().get("testTemplateWithParameters");
+        template2.setParameters(Collections.singletonMap("key", "value"));
+        assertNotEquals(template1, template2);
+        assertNotEquals(template1.hashCode(), template2.hashCode());
     }
 }
