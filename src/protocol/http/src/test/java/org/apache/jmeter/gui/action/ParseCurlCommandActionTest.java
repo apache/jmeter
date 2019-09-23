@@ -205,7 +205,7 @@ public class ParseCurlCommandActionTest {
         // test proxy in httpsampler
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
-        Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -x 'https://aa:bb@example.com:8042'");
+        Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org:8443/' -x 'https://aa:bb@example.com:8042'");
         Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
         Class[] classes = new Class[] { Request.class, String.class };
         Method method = parseCurlCommandAction.getDeclaredMethod("createSampler", classes);
@@ -217,6 +217,7 @@ public class ParseCurlCommandActionTest {
         assertTrue("The command line should be parsed in turn", httpSampler.getProxyPortInt() == 8042);
         assertEquals("path should be set in httpsampler", httpSampler.getPath(), "/");
         assertEquals("domain should be set in httpsampler", "jmeter.apache.org", httpSampler.getDomain());
+        assertEquals("port should be set in httpsampler", 8443, httpSampler.getPort());
         assertEquals("method should be set in httpsampler", "GET", httpSampler.getMethod());
 
         // test post data in httpsampler
@@ -309,6 +310,7 @@ public class ParseCurlCommandActionTest {
         HTTPSamplerProxy httpSampler = (HTTPSamplerProxy) method.invoke(p, objs);
         assertEquals("path should be set in httpsampler", httpSampler.getPath(), "/");
         assertEquals("domain should be set in httpsampler", "jmeter.apache.org", httpSampler.getDomain());
+        assertEquals("port should be 80 in httpsampler", 80, httpSampler.getPort());
         assertEquals("method should be set in httpsampler", "GET", httpSampler.getMethod());
     }
 
