@@ -170,7 +170,6 @@ public final class CLOptionDescriptor {
 
     @Override
     public final String toString() {
-        return String.format("[OptionDescriptor %s, %d, %d, %s ]",
-                this.name, this.id, this.flags, this.description);
+        return "[OptionDescriptor " + name + ", " + id + ", " + flags + ", " + description + "]";
     }
 }
