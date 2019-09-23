@@ -562,7 +562,7 @@ public class BasicCurlParser {
             "Sends the 'Referer Page' information to the HTTP server ");
     private static final CLOptionDescriptor D_COOKIE_OPT = new CLOptionDescriptor("cookie",
             CLOptionDescriptor.ARGUMENT_REQUIRED, COOKIE_OPT, "Pass the data to the HTTP server as a cookie");
-    private static final CLOptionDescriptor D_URL_OPT = new CLOptionDescriptor("url", 
+    private static final CLOptionDescriptor D_URL_OPT = new CLOptionDescriptor("url",
             CLOptionDescriptor.ARGUMENT_REQUIRED, URL_OPT, "url");
     private static final CLOptionDescriptor D_USER_OPT = new CLOptionDescriptor("user",
             CLOptionDescriptor.ARGUMENT_REQUIRED, USER_OPT, "User and password to use for server authentication. ");
