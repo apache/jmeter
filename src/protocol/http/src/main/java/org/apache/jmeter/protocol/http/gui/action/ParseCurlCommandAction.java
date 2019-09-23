@@ -197,18 +197,19 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         ThreadGroup threadGroup = new ThreadGroup();
         threadGroup.setProperty(TestElement.GUI_CLASS, ThreadGroupGui.class.getName());
         threadGroup.setProperty(TestElement.NAME, "Thread Group");
-        threadGroup.setNumThreads(10);
-        threadGroup.setRampUp(10);
+        threadGroup.setProperty(ThreadGroup.NUM_THREADS,"${__P(threads,10)}");
+        threadGroup.setProperty(ThreadGroup.RAMP_TIME,"${__P(rampup,30)}");
         threadGroup.setScheduler(true);
-        threadGroup.setDuration(3600);
+        threadGroup.setProperty(ThreadGroup.DURATION,"${__P(duration,3600)}");
         threadGroup.setDelay(5);
         LoopController loopCtrl = new LoopController();
-        loopCtrl.setLoops(-1);
-        loopCtrl.setContinueForever(true);
+        loopCtrl.setProperty(LoopController.LOOPS,"${__P(iterations,-1)}");
+        loopCtrl.setContinueForever(false);
         threadGroup.setSamplerController(loopCtrl);
         TestPlan testPlan = new TestPlan();
         testPlan.setProperty(TestElement.NAME, "Test Plan");
         testPlan.setProperty(TestElement.GUI_CLASS, TestPlanGui.class.getName());
+        testPlan.setComment("You can run me using: jmeter -Jthreads=<Number of threads> -Jrampup=<rampup in seconds> -Jduration=<duration in seconds> -Jiterations=<Number of iterations, -1 means infinite> -e -o <report output folder>");
         HashTree tree = new HashTree();
         HashTree testPlanHT = tree.add(testPlan);
         HashTree threadGroupHT = testPlanHT.add(threadGroup);
@@ -276,9 +277,13 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             httpSampler.setProperty(TestElement.COMMENTS,
                     "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
         } // NOSONAR
-        httpSampler.setProtocol(new URL(request.getUrl()).getProtocol());
-        httpSampler.setPath(new URL(request.getUrl()).getPath());
-        httpSampler.setDomain(new URL(request.getUrl()).getHost());
+        URL url = new URL(request.getUrl());
+        httpSampler.setProtocol(url.getProtocol());
+        if (url.getPort() != -1) {
+            httpSampler.setPort(url.getPort());
+        }
+        httpSampler.setPath(url.getPath());
+        httpSampler.setDomain(url.getHost());
         httpSampler.setUseKeepAlive(request.isKeepAlive());
         httpSampler.setFollowRedirects(true);
         httpSampler.setMethod(request.getMethod());
