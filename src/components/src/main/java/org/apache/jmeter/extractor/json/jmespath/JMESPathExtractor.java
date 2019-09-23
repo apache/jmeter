@@ -54,6 +54,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
     private static final String DEFAULT_VALUE = "JMESExtractor.defaultValue"; // $NON-NLS-1$
     private static final String MATCH_NUMBER = "JMESExtractor.matchNumber"; // $NON-NLS-1$
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Override
     public void process() {
@@ -73,8 +74,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         } else {
             try {
                 JsonNode result = null;
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode actualObj = mapper.readValue(jsonResponse, JsonNode.class);
+                JsonNode actualObj = OBJECT_MAPPER.readValue(jsonResponse, JsonNode.class);
                 result = JMESPathCache.getInstance().get(jsonPathExpression).search(actualObj);
                 if (result.isNull()) {
                     vars.put(refName, defaultValue);
@@ -151,13 +151,12 @@ public class JMESPathExtractor extends AbstractScopedTestElement
 
     public List<String> splitJson(JsonNode jsonNode) throws IOException {
         List<String> splittedJsonElements = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
         if (jsonNode.isArray()) {
             for (JsonNode element : (ArrayNode) jsonNode) {
-                splittedJsonElements.add(writeJsonNode(mapper, element));
+                splittedJsonElements.add(writeJsonNode(OBJECT_MAPPER, element));
             }
         } else {
-            splittedJsonElements.add(writeJsonNode(mapper, jsonNode));
+            splittedJsonElements.add(writeJsonNode(OBJECT_MAPPER, jsonNode));
         }
         return splittedJsonElements;
     }

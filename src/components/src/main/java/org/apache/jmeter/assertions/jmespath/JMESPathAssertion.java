@@ -55,6 +55,7 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
     private static final String EXPECT_NULL = "EXPECT_NULL";
     private static final String INVERT = "INVERT";
     private static final String ISREGEX = "ISREGEX";
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     /**
      * Used to do a JMESPath query and compute result if the expectedValue matches
@@ -66,9 +67,8 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
      */
     private void doAssert(AssertionResult assertionResult, String responseDataAsJsonString, boolean invert)
             throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
         // cast the response data to JsonNode
-        JsonNode input = mapper.readValue(responseDataAsJsonString, JsonNode.class);
+        JsonNode input = OBJECT_MAPPER.readValue(responseDataAsJsonString, JsonNode.class);
         // get the JMESPath expression from the cache
         // if it does not exist, compile it.
         // Expression does not compile if JMESPath expression is empty or null
@@ -77,7 +77,7 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
         JsonNode currentValue = expression.search(input);
         log.debug("JMESPath query {} invoked on response {}. Query result is {}. ", expression,
                 responseDataAsJsonString, currentValue);
-        boolean success = checkResult(mapper, currentValue, assertionResult, invert);
+        boolean success = checkResult(OBJECT_MAPPER, currentValue, assertionResult, invert);
         if (!invert) {
             if (!success) {
                 failAssertion(invert, assertionResult);
