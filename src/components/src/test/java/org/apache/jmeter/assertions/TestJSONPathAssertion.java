@@ -18,6 +18,8 @@
 package org.apache.jmeter.assertions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Locale;
 
@@ -66,7 +68,7 @@ public class TestJSONPathAssertion {
     public void testIsJsonValidationBool() {
         JSONPathAssertion instance = new JSONPathAssertion();
         boolean result = instance.isJsonValidationBool();
-        assertEquals(false, result);
+        assertFalse(result);
     }
 
     @Test
@@ -81,7 +83,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
     }
 
     @Test
@@ -96,11 +98,11 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
 
         samplerResult.setResponseData("{\"myval\": 456}".getBytes());
         AssertionResult result2 = instance.getResult(samplerResult);
-        assertEquals(false, result2.isFailure());
+        assertFalse(result2.isFailure());
     }
 
     @Test
@@ -115,7 +117,7 @@ public class TestJSONPathAssertion {
         instance.setInvert(true);
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
-        assertEquals(true, result.isFailure());
+        assertTrue(result.isFailure());
         assertEquals(expResult.getName(), result.getName());
     }
 
@@ -129,11 +131,11 @@ public class TestJSONPathAssertion {
         instance.setJsonValidationBool(true);
         instance.setExpectedValue("some.+");
         AssertionResult result = instance.getResult(samplerResult);
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
 
         instance.setIsRegex(false);
         AssertionResult result2 = instance.getResult(samplerResult);
-        assertEquals(true, result2.isFailure());
+        assertTrue(result2.isFailure());
     }
 
     @Test
@@ -148,7 +150,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(true, result.isFailure());
+        assertTrue(result.isFailure());
     }
 
     @Test
@@ -163,7 +165,7 @@ public class TestJSONPathAssertion {
         instance.setInvert(true);
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
         assertEquals(expResult.getName(), result.getName());
     }
 
@@ -179,7 +181,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
     }
 
     @Test
@@ -194,7 +196,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(true, result.isFailure());
+        assertTrue(result.isFailure());
     }
 
     @Test
@@ -208,7 +210,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
     }
 
     @Test
@@ -222,7 +224,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(true, result.isFailure());
+        assertTrue(result.isFailure());
     }
 
     @Test
@@ -237,7 +239,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
     }
 
     @Test
@@ -252,7 +254,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(true, result.isFailure());
+        assertTrue(result.isFailure());
     }
 
     @Test
@@ -266,7 +268,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
     }
 
     @Test
@@ -281,7 +283,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
     }
 
     @Test
@@ -296,7 +298,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
     }
 
     @Test
@@ -312,7 +314,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(true, result.isFailure());
+        assertTrue(result.isFailure());
     }
 
     @Test
@@ -330,7 +332,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(true, result.isFailure());
+        assertTrue(result.isFailure());
         assertEquals(
                 "Value expected to match regexp '{headerkey=header value}', but it did not match: '{\"headerkey\":\"header value\"}'",
                 result.getFailureMessage());
@@ -364,7 +366,7 @@ public class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertEquals(false, result.isFailure());
+        assertFalse(result.isFailure());
     }
 
     @Test
@@ -386,7 +388,7 @@ public class TestJSONPathAssertion {
             AssertionResult expResult = new AssertionResult("");
             AssertionResult result = instance.getResult(samplerResult);
             assertEquals(expResult.getName(), result.getName());
-            assertEquals(false, result.isFailure());
+            assertFalse(result.isFailure());
         } finally {
             Locale.setDefault(prevLocale);
         }

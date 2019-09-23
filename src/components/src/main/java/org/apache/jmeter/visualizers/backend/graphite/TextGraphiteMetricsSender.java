@@ -28,22 +28,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * PlainText Graphite sender
+ * PlainText Graphite sender.
+ *
  * @since 2.13
  */
 class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private static final Logger log = LoggerFactory.getLogger(TextGraphiteMetricsSender.class);
 
-    private String prefix;
-
     private final Object lock = new Object();
 
     private List<MetricTuple> metrics = new ArrayList<>();
 
-    private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
-
     private SocketConnectionInfos socketConnectionInfos;
-
+    private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
+    private String prefix;
 
     TextGraphiteMetricsSender() {
         super();
@@ -52,16 +50,25 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     /**
      * @param graphiteHost Graphite Host
      * @param graphitePort Graphite Port
-     * @param prefix Common Metrics prefix
+     * @param prefix       Common Metrics prefix
      */
     @Override
     public void setup(String graphiteHost, int graphitePort, String prefix) {
-        this.prefix = prefix;
         this.socketConnectionInfos = new SocketConnectionInfos(graphiteHost, graphitePort);
         this.socketOutputStreamPool = createSocketOutputStreamPool();
+        this.prefix = prefix;
 
-        log.info("Created TextGraphiteMetricsSender with host: {}, port: {}, prefix: {}", graphiteHost, graphitePort,
-                prefix);
+        log.info("Created TextGraphiteMetricsSender with host: {}, port: {}, prefix: {}",
+                graphiteHost, graphitePort, prefix);
+    }
+
+    /** Setup used for testing, or if explicit customisation is required. */
+    public void setup(SocketConnectionInfos socketConnectionInfos,
+                      GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool,
+                      String prefix) {
+        this.socketConnectionInfos = socketConnectionInfos;
+        this.socketOutputStreamPool = socketOutputStreamPool;
+        this.prefix = prefix;
     }
 
     /* (non-Javadoc)
@@ -69,14 +76,14 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      */
     @Override
     public void addMetric(long timestamp, String contextName, String metricName, String metricValue) {
-        StringBuilder sb = new StringBuilder(50);
-        sb
-            .append(prefix)
-            .append(contextName)
-            .append(".")
-            .append(metricName);
+        String name = new StringBuilder(50)
+                .append(prefix)
+                .append(contextName)
+                .append(".")
+                .append(metricName)
+                .toString();
         synchronized (lock) {
-            metrics.add(new MetricTuple(sb.toString(), timestamp, metricValue));
+            metrics.add(new MetricTuple(name, timestamp, metricValue));
         }
     }
 
@@ -85,49 +92,48 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      */
     @Override
     public void writeAndSendMetrics() {
-        List<MetricTuple> tempMetrics;
+        final List<MetricTuple> currentMetrics;
         synchronized (lock) {
-            if(metrics.isEmpty()) {
+            if (metrics.isEmpty()) {
                 return;
             }
-            tempMetrics = metrics;
-            metrics = new ArrayList<>(tempMetrics.size());
+            // keep the current metrics to send outside sync block
+            currentMetrics = metrics;
+            metrics = new ArrayList<>(currentMetrics.size());
         }
-        final List<MetricTuple> copyMetrics = tempMetrics;
-        if (!copyMetrics.isEmpty()) {
-            SocketOutputStream out = null;
-            try {
-                out = socketOutputStreamPool.borrowObject(socketConnectionInfos);
-                // pw is not closed as it would close the underlying pooled out
-                PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, CHARSET_NAME), false);
-                for (MetricTuple metric: copyMetrics) {
-                    pw.printf("%s %s %d%n", metric.name, metric.value, Long.valueOf(metric.timestamp));
-                }
-                pw.flush();
-                // if there was an error, we might miss some data. for now, drop those on the floor and
-                // try to keep going.
-                if (log.isDebugEnabled()) {
-                    log.debug("Wrote {} metrics", copyMetrics.size());
-                }
-                if(pw.checkError()) {
-                    socketOutputStreamPool.invalidateObject(socketConnectionInfos, out);
-                    log.error("IO Errors writing to Graphite, some data will be lost");
-                } else {
-                    socketOutputStreamPool.returnObject(socketConnectionInfos, out);
-                }
-            } catch (Exception e) {
-                if(out != null) {
-                    try {
-                        socketOutputStreamPool.invalidateObject(socketConnectionInfos, out);
-                    } catch (Exception e1) {
-                        log.warn("Exception invalidating socketOutputStream connected to graphite server '{}':{}",
-                                socketConnectionInfos.getHost(), socketConnectionInfos.getPort(), e1);
-                    }
-                }
-                log.error("Error writing to Graphite: {}", e.getMessage());
+        writeMetrics(currentMetrics);
+    }
+
+    private void writeMetrics(List<MetricTuple> currentMetrics) {
+        SocketOutputStream out = null;
+        try {
+            out = socketOutputStreamPool.borrowObject(socketConnectionInfos);
+            // pw is not closed as it would close the underlying pooled out
+            PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, CHARSET_NAME), false);
+            for (MetricTuple metric : currentMetrics) {
+                pw.printf("%s %s %d%n", metric.name, metric.value, Long.valueOf(metric.timestamp));
             }
-            // We drop metrics in all cases
-            copyMetrics.clear();
+            pw.flush();
+            if (log.isDebugEnabled()) {
+                log.debug("Wrote {} metrics", currentMetrics.size());
+            }
+            if (pw.checkError()) {
+                socketOutputStreamPool.invalidateObject(socketConnectionInfos, out);
+                log.error("IO Errors writing to Graphite, some data will be lost");
+            } else {
+                socketOutputStreamPool.returnObject(socketConnectionInfos, out);
+            }
+        } catch (Exception e) {
+            // if there was an error, we might miss some data. for now, drop those try to keep going.
+            if (out != null) {
+                try {
+                    socketOutputStreamPool.invalidateObject(socketConnectionInfos, out);
+                } catch (Exception e1) {
+                    log.warn("Exception invalidating socketOutputStream connected to graphite server {}:{}",
+                            socketConnectionInfos.getHost(), socketConnectionInfos.getPort(), e1);
+                }
+            }
+            log.error("Error writing to Graphite: {}", e.getMessage(), e);
         }
     }
 

@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='utf-8'?>
+<dependency-verification version='1'>
+  <trust-requirement pgp='GROUP' checksum='NONE' />
+  <ignored-keys />
+  <trusted-keys>
+    <trusted-key id='1c8d5ef0df2b70d4' group='cglib' />
+    <trusted-key id='c9fbaa83a8753994' group='com.fasterxml.jackson.core' />
+    <trusted-key id='4c00043bec5cb7cb' group='com.fifesoft' />
+    <trusted-key id='3c0a8f4744f37328' group='com.github.ben-manes.caffeine' />
+    <trusted-key id='1756b920eecf0e90' group='com.github.spotbugs' />
+    <trusted-key id='59a252fb1199d873' group='com.google.code.findbugs' />
+    <trusted-key id='7a01b0f236e5430f' group='com.google.code.gson' />
+    <trusted-key id='9a259c7ee636c5ed' group='com.google.errorprone' />
+    <trusted-key id='bf935c771a8474f8' group='com.google.errorprone' />
+    <trusted-key id='abe9f3126bb741c1' group='com.google.guava' />
+    <trusted-key id='f6d4a1d411e9d1ae' group='com.google.guava' />
+    <trusted-key id='29579f18fa8fd93b' group='com.google.j2objc' />
+    <trusted-key id='72475fd306b9cab7' group='com.googlecode.javaewah' />
+    <trusted-key id='e57428da9e879e7d' group='com.helger' />
+    <trusted-key id='3684155e9365c30e' group='com.jayway.jsonpath' />
+    <trusted-key id='a50569c7ca7fa1f0' group='com.jcraft' />
+    <trusted-key id='1063fe98bcecb758' group='com.puppycrawl.tools' />
+    <trusted-key id='6425559c47cc79c4' group='com.sun.activation' />
+    <trusted-key id='602ec18d20c4661c' group='com.thoughtworks.xstream' />
+    <trusted-key id='1861c322c56014b2' group='commons-beanutils' />
+    <trusted-key id='411063a3a0ffd119' group='commons-beanutils' />
+    <trusted-key id='9daadc1c9fcc82d0' group='commons-cli' />
+    <trusted-key id='86fdc7e2a11262cb' group='commons-codec' />
+    <trusted-key id='1861c322c56014b2' group='commons-collections' />
+    <trusted-key id='a41f13c999945293' group='commons-collections' />
+    <trusted-key id='86fdc7e2a11262cb' group='commons-io' />
+    <trusted-key id='9daadc1c9fcc82d0' group='commons-io' />
+    <trusted-key id='1241bc872c5e4ec0' group='commons-lang' />
+    <trusted-key id='1861c322c56014b2' group='commons-lang' />
+    <trusted-key id='33cd6733af5ec452' group='commons-logging' />
+    <trusted-key id='a41f13c999945293' group='commons-logging' />
+    <trusted-key id='7a8860944fad5f62' group='commons-net' />
+    <trusted-key id='93391910f494b50c' group='dnsjava' />
+    <trusted-key id='379ce192d401ab61' group='info.picocli' />
+    <trusted-key id='b2ca0dfe9ed21c6e' group='io.burt' />
+    <trusted-key id='5b30d3b10694f057' group='io.codearte.gradle.nexus' />
+    <trusted-key id='6425559c47cc79c4' group='javax.activation' />
+    <trusted-key id='6425559c47cc79c4' group='javax.mail' />
+    <trusted-key id='4044edf1bb73efea' group='jaxen' />
+    <trusted-key id='528dc75aa68f0923' group='jcharts' />
+    <trusted-key id='efe8086f9e93774e' group='junit' />
+    <trusted-key id='f6bc09712c8df6ec' group='net.minidev' />
+    <trusted-key id='d4012dda1f1f0f82' group='net.sf.jtidy' />
+    <trusted-key id='1d185615d0a84648' group='net.sf.saxon' />
+    <trusted-key id='098a31f381819057' group='net.sourceforge.nekohtml' />
+    <trusted-key id='c84125c13bf6f2f2' group='org.ajoberstar.grgit' />
+    <trusted-key id='6b1b008864323b92' group='org.antlr' />
+    <trusted-key id='411063a3a0ffd119' group='org.apache-extras.beanshell' />
+    <trusted-key id='87a7f75a6a8ba5fc' group='org.apache.activemq' />
+    <trusted-key id='86fdc7e2a11262cb' group='org.apache.bcel' />
+    <trusted-key id='3faad2cd5ecbb314' group='org.apache.commons' />
+    <trusted-key id='64a16faaec16a4be' group='org.apache.commons' />
+    <trusted-key id='7a8860944fad5f62' group='org.apache.commons' />
+    <trusted-key id='86fdc7e2a11262cb' group='org.apache.commons' />
+    <trusted-key id='a2115ae15f6b8b72' group='org.apache.commons' />
+    <trusted-key id='f513c419e4b9d0ac' group='org.apache.commons' />
+    <trusted-key id='31474e5e7c6b7034' group='org.apache.ftpserver' />
+    <trusted-key id='cbaebe39a46c4ca1' group='org.apache.geronimo.specs' />
+    <trusted-key id='ecdfea3cb4493b94' group='org.apache.geronimo.specs' />
+    <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents' />
+    <trusted-key id='3595395eb3d8e1ba' group='org.apache.logging.log4j' />
+    <trusted-key id='31474e5e7c6b7034' group='org.apache.mina' />
+    <trusted-key id='9c8c892f91f8e6d1' group='org.apache.rat' />
+    <trusted-key id='4a51a45b944ffd51' group='org.apache.tika' />
+    <trusted-key id='d0eb627d4885ced1' group='org.apache.velocity' />
+    <trusted-key id='a2e92e06ddb37997' group='org.apache.xbean' />
+    <trusted-key id='5b93f1df7cdb6dea' group='org.apache.xmlgraphics' />
+    <trusted-key id='b341ddb020fcb6ab' group='org.bouncycastle' />
+    <trusted-key id='be84d764623a3644' group='org.brotli' />
+    <trusted-key id='b16698a4adf4d638' group='org.checkerframework' />
+    <trusted-key id='41321490758aad6f' group='org.codehaus.groovy' />
+    <trusted-key id='6525fd70cc303655' group='org.codehaus.mojo' />
+    <trusted-key id='873a8e86b4372146' group='org.codehaus.mojo' />
+    <trusted-key id='79e193516be7998f' group='org.dom4j' />
+    <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
+    <trusted-key id='8759d8f56d022006' group='org.exparity' />
+    <trusted-key id='1939a2520bab1d90' group='org.freemarker' />
+    <trusted-key id='9ff25980f5ba7e4f' group='org.fusesource.hawtbuf' />
+    <trusted-key id='a6adfc93ef34893e' group='org.hamcrest' />
+    <trusted-key id='313cba932516c4d3' group='org.hsqldb' />
+    <trusted-key id='cb43338e060cf9fa' group='org.jacoco' />
+    <trusted-key id='8799af90c06efbbd' group='org.jdom' />
+    <trusted-key id='bcf4173966770193' group='org.jetbrains' />
+    <trusted-key id='98fe03a974ce0a0b' group='org.jetbrains.kotlin' />
+    <trusted-key id='379ce192d401ab61' group='org.jetbrains.kotlinx' />
+    <trusted-key id='91ae1504568ec4dd' group='org.jodd' />
+    <trusted-key id='f42e87f9665015c9' group='org.jsoup' />
+    <trusted-key id='82216a03caa86c78' group='org.mongodb' />
+    <trusted-key id='3f36885c24df4b75' group='org.mozilla' />
+    <trusted-key id='7c7d8456294423ba' group='org.objenesis' />
+    <trusted-key id='5f69ad087600b22c' group='org.ow2.asm' />
+    <trusted-key id='2c7b12f2a511e325' group='org.slf4j' />
+    <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.api' />
+    <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.gradle' />
+    <trusted-key id='72fefd1572eb75e1' group='org.spockframework' />
+    <trusted-key id='9a2c7a98e457c53d' group='org.springframework' />
+    <trusted-key id='9ff25980f5ba7e4f' group='xalan' />
+    <trusted-key id='858fc4c4f43856a3' group='xerces' />
+    <trusted-key id='86fdc7e2a11262cb' group='xml-apis' />
+  </trusted-keys>
+  <dependencies>
+    <dependency group='antlr' module='antlr' version='2.7.7'>
+      <sha512>311C3115F9F6651D1711C52D1739E25A70F25456CACB9A2CDDE7627498C30B13D721133CC75B39462AD18812A82472EF1B3B9D64FAB5ABB0377C12BF82043A74</sha512>
+    </dependency>
+    <dependency group='bsf' module='bsf' version='2.4.0'>
+      <sha512>CF2FF6EA53CD13EA842CAD398F1BE24539BEC68A5CBBD088492ADAB50BC782CDE6D9F4C0B6A24DEAEEE537809C90631C43F9A680FF2826C28CCF1B39380954E3</sha512>
+    </dependency>
+    <dependency group='com.github.bulenkov.darcula' module='darcula' version='e208efb96f70e4be9dc362fbb46f6e181ef501dd'>
+      <sha512>80F3335D8EA3FB3FF07A12A79C958C4E3F8BB542511C52825A8B3694AC96F027E24396CE9EDCEFA44EE93B5CBED4E4AED4575E6AAED56F363BAE92C52EE85D22</sha512>
+    </dependency>
+    <dependency group='com.github.vlsi.gradle' module='crlf-plugin' version='1.17.0'>
+      <sha512>473E13699DDDE54F2B7245BB33A47346E907179F7C528751B0BB730005BCAF3FFCDBE3F1333655D635B0EE2683FC8B24F2BD598922F9DA3DA03F8EC25A373AA1</sha512>
+    </dependency>
+    <dependency group='com.github.vlsi.gradle' module='ide-plugin' version='1.17.0'>
+      <sha512>4321949B8201BA4F0E1F0D977397349C34DF84E4632DAFEE6F221F9AFA176FDD9497C9AFBE7F734E3423BE25351DCA7551F93181CC99A99A24EAAEB43BCBD544</sha512>
+    </dependency>
+    <dependency group='com.github.vlsi.gradle' module='license-gather-plugin' version='1.17.0'>
+      <sha512>E1EE1396B2838E03FB7C84667BD473BAB558569EB5F1C4CB9B7C6806FDC5C7DABC41AAB1705A0FE73FBDB11624F11A15D7394232F59AC1039EFA197FCB495E67</sha512>
+    </dependency>
+    <dependency group='com.github.vlsi.gradle' module='stage-vote-release-plugin' version='1.17.0'>
+      <sha512>575A87846F61717B2F220A485B67D253644980A0DD57C8EBD3F07C9D66E9B463115897BFE3364216445CAB4AA09EA4B27070ABA5BE7620A632A95BE3F414D464</sha512>
+    </dependency>
+    <dependency group='commons-logging' module='commons-logging' version='1.0.4'>
+      <sha512>C8D2D39A60ADCC49091D393DAF30473D1776E4B6B09BB86639171F660833A17AFBDC9F3E85843093535DA16FA664CD7CD4CA38F54E141018DD1B78DE681AD668</sha512>
+    </dependency>
+    <dependency group='de.marcphilipp.gradle' module='nexus-publish-plugin' version='0.2.0'>
+      <sha512>36DFDADA6745D7AF5CF2807E197AFD111073C30536CB29C531522F73D4086C2A7AB70756975FEC290657012B8C9090414F76811731A920D8BC4EEC1DEC0AB2DF</sha512>
+    </dependency>
+    <dependency group='gradle.plugin.com.github.spotbugs' module='spotbugs-gradle-plugin' version='1.6.10'>
+      <sha512>E7486B32EF6C9C14FE879814DA5F06CA6ECABF47195063A93E6FC8CD10119244C5A7BC3C71A4760CCE3AFFA9E9736336D345D8ED84EB65153C15683FA6529D92</sha512>
+    </dependency>
+    <dependency group='gradle.plugin.org.jetbrains.gradle.plugin.idea-ext' module='gradle-idea-ext' version='0.5'>
+      <sha512>4A6B7FA6CD8C6FA82A517C396510E408F1C6FAB5FF6D4C68008F80718F05E5943755AA240F329C95661CCB0231114DD0F6D7C38EFBF73EE6B1ECC70850F40F7E</sha512>
+    </dependency>
+    <dependency group='net.jcip' module='jcip-annotations' version='1.0'>
+      <sha512>CB312B3F571D91EF183C119D878F50464FFD97F853B7311CBA386463F295E8B7B3A5A89ED4269A045CACD5AA7CB4C803D4882854A0FDDEFA9BBC28C72AA6C786</sha512>
+    </dependency>
+    <dependency group='net.sf.ezmorph' module='ezmorph' version='1.0.6'>
+      <sha512>16D30BE564723B74F312B4E7D06F349370FB6726B3162778C869CD723ECA2A40C4972C2757B3E107E1820CEC0D70B0BD2B96EFCD466518FC64495F7AEF97967A</sha512>
+    </dependency>
+    <dependency group='net.sf.json-lib' module='json-lib' version='2.3' classifier='jdk15'>
+      <sha512>ED6E95BF555AD3193B527258972DAFABD73745D993DA0CECE486E34A471D080850D201864026F4F41CA0982926C264C6E6CC55D91F000CDFD5D09EE3F306735C</sha512>
+    </dependency>
+    <dependency group='org.codehaus.groovy.modules.http-builder' module='http-builder' version='0.7.1'>
+      <sha512>BC7BC2A514F8CA104A392ECF8736F4A3D316EE988FA91299D33B0AF46134B38E14E4A5061449D17B2DF7A521643E6C02DFA37CC277ED7CAB7CE83C28C00E9719</sha512>
+    </dependency>
+    <dependency group='org.nosphere.apache' module='creadur-rat-gradle' version='0.5.0'>
+      <sha512>45A6A697C4E514893A0AA530D12A61E537FEAA68C2429E959C68541DB08D1BDD52542AF1DE21F4472557551309C54F4E96DF48889F09F77B70C09139352BAA2E</sha512>
+    </dependency>
+    <dependency group='org.ow2.asm' module='asm-analysis' version='6.2.1'>
+      <sha512>BE273F8E886BBCFDA81180917145996AB8FD26A17264EBEB5E1FC2337950A309D64DC8CBD373220009728622A8CBF56B8578E960B5561C22EA66848D296AE44E</sha512>
+    </dependency>
+    <dependency group='org.ow2.asm' module='asm-analysis' version='7.0'>
+      <sha512>1A6CA169E9E2D29256F9C45570D89E5B039EAF7D405CCB3F7F79926552F2A0818975CE2C6ADCE3F1F59E28172E4303A1C790C52AB06263C61C9C8181FF279CEE</sha512>
+    </dependency>
+    <dependency group='org.ow2.asm' module='asm-commons' version='6.2.1'>
+      <sha512>CDF7DDB8E865B1C22C7532FFF68380FE4EC49A00C6FF3188BF265C4769E49E793B51621FC80A39B5BA2D49E703F100BDB7FC9CFF8F488C5153A9339334371411</sha512>
+    </dependency>
+    <dependency group='org.ow2.asm' module='asm-commons' version='7.0'>
+      <sha512>CA97B49EECE30DA774055B58A63C6E4F65A6BC4C0F40A829DCAF7164FBFFDEC10C6B2D9A22DF0A0918FDC83A47EA9906294AA99D3F170B35FD9E0632578C80B2</sha512>
+    </dependency>
+    <dependency group='org.ow2.asm' module='asm-tree' version='6.2.1'>
+      <sha512>20FE687C2F494717CCEB33C97704FAB7C1867EEA1A0F79B70C68BCAA72E7818F34921B6FBA7A3C1ECBBC7256E1D8E1A538F9EC5B4BD3B2A255D412D2BC2CAA4C</sha512>
+    </dependency>
+    <dependency group='org.ow2.asm' module='asm-tree' version='7.0'>
+      <sha512>81A223620DD16340D18ECBA20AB15CFE078F61AB0EC1AEF091AFCD282E3F6047B9800200412116289EC14917B5ECE9414C8009E92CC9A3333C677B5BFEC13BCF</sha512>
+    </dependency>
+    <dependency group='org.ow2.asm' module='asm-util' version='7.0'>
+      <sha512>6B9630AD4C5F6ABC2724F9D85A7C0E81E524F8B0BF25273DD5578EDC20EFC7AB400095CD48E904D2536071181A8E9F39635FF3FEE0986BD078016D2DFF8241B1</sha512>
+    </dependency>
+    <dependency group='org.ow2.asm' module='asm' version='6.2.1'>
+      <sha512>C8D0AB865B628CB5A71C2B8C5FC8AACDA3E286B14662C3287CE50A96E91990E959F1447D439BD7190D9088E69E4368EFBFF5890FA539F98776F514A262D6DA8C</sha512>
+    </dependency>
+    <dependency group='org.ow2.asm' module='asm' version='7.0'>
+      <sha512>B31699F50485DDC4E84466064CF5789A3E61BAFBEC53C4B9CB19FFEF07B36722D3EFDCA8722884FD6D6DEDACA65DB4DD6F71CD886BBA599E8A77971955167A60</sha512>
+    </dependency>
+    <dependency group='org.ow2.asm' module='asm' version='7.1'>
+      <sha512>7EBA7097109389F48FA9142BF22D225F5D3104D68013D3B8E0A6D4054A8CD0EF64614372BDCB38987D68ADB6D33A3804E98DDF112BA84DBB09D448CE702DACC4</sha512>
+    </dependency>
+    <dependency group='oro' module='oro' version='2.0.8'>
+      <sha512>9A98E493C4D771322B1331EC05AB0E363A83D8AC2AF8018D96A44DF2BF5BFC97D33EBE6F6F93E46AB10BF1536F0C29E9D9569318ED49BC18B4E96B1A8B476D37</sha512>
+    </dependency>
+    <dependency group='xerces' module='xercesImpl' version='2.9.1'>
+      <sha512>37A13B129F3536A53F2A553151A53997DA6DE7CE4D7231EFEEFD26A68C92BE309666F2EE1F527D3B8C38BC6ADDC9FCCBBDD0D134759FD88667976B0CFF842435</sha512>
+    </dependency>
+    <dependency group='xml-resolver' module='xml-resolver' version='1.2'>
+      <sha512>ECA19B8A6B04C279B7982B16F1763CA1D49B0081A8D4CA2B7419F057D22A0EC60795EB4D901C5EB25DD4A733248876AA2F522C17A6144A26C8EDE9FB2F84531A</sha512>
+    </dependency>
+    <dependency group='xmlpull' module='xmlpull' version='1.1.3.1'>
+      <sha512>54D1090623497E81270B2AF633268656E8855E1EDCE2217886431039516A391BA9F8D8DB3C21A0B5E51C7F7CB672D63EBE77BE75708B760B06F399486960F261</sha512>
+    </dependency>
+    <dependency group='xpp3' module='xpp3_min' version='1.1.4c'>
+      <sha512>34989289CE8ED861499F31742EE1E7B9DC3C59973CE915A7B561D33D98968E77DB5BB94C1692802CCDBD86D04CAA7DB67748EFAFB1402428B2D6AE3056497618</sha512>
+    </dependency>
+  </dependencies>
+</dependency-verification>

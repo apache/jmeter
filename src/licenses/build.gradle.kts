@@ -27,6 +27,17 @@ plugins {
     id("com.github.vlsi.stage-vote-release")
 }
 
+// See https://docs.gradle.org/current/userguide/troubleshooting_dependency_resolution.html#sub:configuration_resolution_constraints
+// Gradle forbids to resolve configurations from other projects, so
+// we create our own copy of the confiruration which belongs to the current project
+// This is the official recommendation:
+// In most cases, the deprecation warning can be fixed by defining a configuration in
+// the project where the resolution is occurring and setting it to extend from the configuration
+// in the other project.
+val binaryDependencies by configurations.creating() {
+    extendsFrom(project(":src:dist").configurations.runtimeClasspath.get())
+}
+
 val gatherSourceLicenses by tasks.registering(GatherLicenseTask::class) {
     addDependency("org.gradle:gradle-wrapper:5.5.1", SpdxLicense.Apache_2_0)
     addDependency(":bootstrap:3.3.4", SpdxLicense.MIT)
@@ -46,7 +57,7 @@ val gatherSourceLicenses by tasks.registering(GatherLicenseTask::class) {
 }
 
 val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
-    configuration(project(":src:dist").configurations.runtimeClasspath)
+    configuration(binaryDependencies)
     ignoreMissingLicenseFor.add(SpdxLicense.Apache_2_0.asExpression())
     defaultTextFor.add(SpdxLicense.MPL_2_0.asExpression())
     // There are three major cases here:
@@ -176,4 +187,8 @@ val renderLicenseForBinary by tasks.registering(Apache2LicenseRenderer::class) {
     metadata.from(gatherSourceLicenses)
     metadata.from(gatherBinaryLicenses)
     licenseCategory.put(ExtraLicense.Indiana_University_1_1_1.asExpression(), AsfLicenseCategory.A)
+}
+
+tasks.build.configure {
+  dependsOn(renderLicenseForSource, renderLicenseForBinary)
 }

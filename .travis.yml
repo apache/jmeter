@@ -16,7 +16,10 @@ env:
   global:
     - GRADLE_ARGS="-Djava.awt.headless=true"
     # Building source and binary distributions takes time, and it does not verify much, so we skip it in CI
-    - SKIP_DIST_TASKS="$GRADLE_ARGS -PskipDist"
+    # However we want to validate licenses
+    - SKIP_DIST_TASKS="$GRADLE_ARGS -PskipDist :src:licenses:build"
+    - ORG_GRADLE_PROJECT_checksumFailOn=build_finish
+    - ORG_GRADLE_PROJECT_checksumPrint=true
 
 matrix:
   include:
@@ -31,6 +34,7 @@ matrix:
       script:
         - ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle build createDist
     - name: Tests with OpenJDK 12
+      # Might switch to openjdk-ea when https://github.com/gradle/gradle/issues/10248 is fixed
       jdk: openjdk12
       script:
         - ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle build createDist

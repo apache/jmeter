@@ -134,6 +134,8 @@ to view the last release notes of version 5.1.1.
     <li><bug>63480</bug>XPathAssertion and XPathAssertion2: Improve test coverage for input coming from variable. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63452</bug>Tools / Import from cURL: Complete coverage of all command line options that are valid in JMeter use case. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63419</bug>Tools / Import from cURL: Add ability to import a set of cURL commands from a file. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63760</bug>JOrphanUtils: add random alphanumeric password generator</li>
+    <li><bug>63355</bug>View Results Tree: Browser view option is not Available with Java 11, document how to make it available</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -143,6 +145,7 @@ to view the last release notes of version 5.1.1.
     <li><bug>63529</bug>Add more unit tests for org.apache.jorphan.util.JOrphanUtils. Contributed by John Bergqvist(John.Bergqvist at diffblue.com)</li>
     <li>Updated to latest checkstyle (version 8.22)</li>
     <li>Clean-up of code in <code>CompareAssertion</code> and other locations. Based on patch by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>491</pr>Increase Graphite metrics coverage. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -208,6 +211,7 @@ to view the last release notes of version 5.1.1.
     <li><bug>63464</bug>image/svg+xml is wrongly considered as binary</li>
     <li><bug>63490</bug>At end of scheduler duration lots of Samplers gets executed at the same time</li>
     <li><pr>480</pr><pr>482</pr>Fix a few typos in comments and log messages. Based on patch by Anass Benomar (anassbenomar at gmail.com)</li>
+    <li><bug>63751</bug>Correct a typo in Chinese translations. Reported by Jinliang Wang (wjl31802 at 126.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -237,6 +241,7 @@ to view the last release notes of version 5.1.1.
     <li>Stefan Seide (stefan at trilobyte-se.de)</li>
     <li>Havlicek Honza (havlicek.honza at gmail.com)</li>
     <li>Pierre Astruc (pierre.astruc at evertest.com)</li>
+    <li>Jinliang Wang (wjl31802 at 126.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
