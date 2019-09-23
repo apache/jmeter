@@ -209,7 +209,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         TestPlan testPlan = new TestPlan();
         testPlan.setProperty(TestElement.NAME, "Test Plan");
         testPlan.setProperty(TestElement.GUI_CLASS, TestPlanGui.class.getName());
-        testPlan.setComment("You can run me using: jmeter -Jthreads=<Number of threads> -Jrampup=<rampup in seconds> -Jduration=<duration in seconds> -Jiterations=<Number of iterations, -1 means infinite> -e -o <report output folder>");
+        testPlan.setComment("You can run me using: jmeter -Jthreads=<Number of threads> -Jrampup=<rampup in seconds> -Jduration=<duration in seconds> "
+                + "-Jiterations=<Number of iterations, -1 means infinite> -e -o <report output folder>");
         HashTree tree = new HashTree();
         HashTree testPlanHT = tree.add(testPlan);
         HashTree threadGroupHT = testPlanHT.add(threadGroup);
