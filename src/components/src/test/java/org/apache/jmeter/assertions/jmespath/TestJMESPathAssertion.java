@@ -34,42 +34,86 @@ import org.junit.runners.Parameterized.Parameters;
 public class TestJMESPathAssertion {
     @RunWith(Parameterized.class)
     public static class TestAssertion {
-        private static final String JSON_ARRAY = 
-                "{\n" + "  \"people\": [\n" + "    {\n" + "      \"name\": \"b\",\n" + "      \"age\": 30\n"
-                + "    },\n" + "    {\n" + "      \"name\": \"a\",\n" + "      \"age\": 50\n" + "    },\n" + "    {\n"
-                + "      \"name\": \"c\",\n" + "      \"age\": 40\n" + "    }\n" + "  ]\n" + "}";
+        private static final String JSON_ARRAY =
+                "{\"people\": [ {\"name\": \"b\", \"age\": 30},"
+                        + " {\"name\": \"a\", \"age\": 50},"
+                        + " {\"name\": \"c\", \"age\": 40}"
+                        + "  ]"
+                        + "}";
 
         @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][] {
-                // {INVERT,         RESPONSE DATA,                                JMESPATH,     VALIDATION, REGEX,      EXPECT NULL,  RESULT,    FAILURE,         ERROR,      FAILURE_MSG}
-                {Boolean.TRUE, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",                 "[6:6]", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "[]", Boolean.TRUE, Boolean.FALSE, "JMESPath '[6:6]' expected not to match []"},
-                {Boolean.FALSE, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",                 "[6:6]", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "[]", Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.FALSE, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",                 "[6:6]", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "[1]", Boolean.TRUE, Boolean.FALSE, "Value expected to be '[1]', but found '[]'"},
-                {Boolean.FALSE, "{\"one\": \"1\",\"two\": \"2\"}",                 "[one,two]", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "[\"1\",\"2\"]", Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.FALSE, "{\"a\": \"foo\", \"b\": \"bar\", \"c\": \"baz\"}", "a",        Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "foo",     Boolean.FALSE, Boolean.FALSE, "" },
-                {Boolean.FALSE, "{\"a\": \"123\"}",                                 "a",        Boolean.TRUE, Boolean.TRUE,  Boolean.FALSE, "123|456", Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.FALSE, "{\"a\": \"123\"}",                                 "a",        Boolean.TRUE, Boolean.TRUE,  Boolean.FALSE, "789|012", Boolean.TRUE, Boolean.FALSE, "Value expected to match regexp '789|012', but it did not match: '123'"},
-                {Boolean.FALSE, JSON_ARRAY,                 "max_by(people, &age).name", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "a", Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.FALSE, "{\"one\": \"\"}",                                 "two", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, null, Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.FALSE, "{\"one\": \"\"}",                                 "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "", Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.FALSE, "{\"one\": \"\"}",                                 "one", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,  "1", Boolean.TRUE,  Boolean.FALSE, "Value expected to be null, but found ''"},
-                {Boolean.TRUE, "{\"one\": \"1\"}",                                 "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2", Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.TRUE, "{\"one\": \"\"}",                                 "one", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, "", Boolean.TRUE, Boolean.FALSE, "Failed JMESPath 'one' not to match null"},
-                {Boolean.FALSE, "{\"one\": \"1\"}",                                 "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2", Boolean.TRUE, Boolean.FALSE, "Value expected to be '2', but found '1'"},
-                {Boolean.TRUE, "{\"one\": \"1\"}",                                 "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "1", Boolean.TRUE, Boolean.FALSE, "Failed JMESPath 'one' not to match 1"},
-                {Boolean.TRUE, "{'one': '1'}",                                 "one",     Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2", Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.FALSE, "{'one': '1'}",                                 "one",     Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2", Boolean.FALSE, Boolean.TRUE, "Unexpected character (''' (code 39)): was expecting double-quote to start field name\n at [Source: (String)\"{'one': '1'}\"; line: 1, column: 3]"},
-                {Boolean.FALSE, "{\"one\": \"\"}",                                 "one",     Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "1", Boolean.TRUE, Boolean.FALSE, "Value expected to be '1', but found ''"},
-                {Boolean.FALSE, "{\"\":\"\"}",                                 "foo",     Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, null, Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.FALSE, "{\"one\": \"\"}",                                 "one",     Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "", Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.FALSE, "{\"one\": \"\"}",                                 "two",     Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "", Boolean.TRUE, Boolean.FALSE, "JMESPath two does not exist"},            
-                {Boolean.TRUE, "{\"one\": \"\"}",                                 "one",     Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "", Boolean.TRUE, Boolean.FALSE, "JMESPath one expected not to exist"},
-                {Boolean.TRUE, "{\"one\": \"\"}",                                 "two",     Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "", Boolean.FALSE, Boolean.FALSE, ""},
-                {Boolean.FALSE, "",                                             "two",     Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "", Boolean.TRUE, Boolean.FALSE, AssertionResult.RESPONSE_WAS_NULL},
-            });
+                    // {INVERT, RESPONSE DATA, JMESPATH, VALIDATION, REGEX, EXPECT NULL, RESULT,
+                    // FAILURE, ERROR, FAILURE_MSG}
+                    { Boolean.TRUE, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", "[6:6]", Boolean.TRUE, Boolean.FALSE,
+                            Boolean.FALSE, "[]", Boolean.TRUE, Boolean.FALSE, "Value expected not to be equal to []" },
+                    { Boolean.FALSE, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", "[6:6]", Boolean.TRUE, Boolean.FALSE,
+                            Boolean.FALSE, "[]", Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.FALSE, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", "[6:6]", Boolean.TRUE, Boolean.FALSE,
+                            Boolean.FALSE, "[1]", Boolean.TRUE, Boolean.FALSE, "Value expected to be equal to [1]" },
+                    { Boolean.FALSE, "{\"one\": \"1\",\"two\": \"2\"}", "[one,two]", Boolean.TRUE, Boolean.FALSE,
+                            Boolean.FALSE, "[\"1\",\"2\"]", Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.FALSE, "{\"a\": \"foo\", \"b\": \"bar\", \"c\": \"baz\"}", "a", Boolean.TRUE,
+                            Boolean.FALSE, Boolean.FALSE, "foo", Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.FALSE, "{\"a\": \"123\"}", "a", Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, "123|456",
+                            Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.FALSE, "{\"a\": \"123\"}", "a", Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, "789|012",
+                            Boolean.TRUE, Boolean.FALSE, "Value expected to match 789|012" },
+                    { Boolean.TRUE, "{\"a\": \"123\"}", "a", Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, "123|012",
+                            Boolean.TRUE, Boolean.FALSE, "Value expected not to match 123|012" },
+                    { Boolean.FALSE, JSON_ARRAY, "max_by(people, &age).name", Boolean.TRUE, Boolean.FALSE,
+                            Boolean.FALSE, "a", Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.FALSE, "{\"one\": \"\"}", "two", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, null,
+                            Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.FALSE, "{\"one\": \"\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "",
+                            Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.FALSE, "{\"one\": \"\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, "1",
+                            Boolean.TRUE, Boolean.FALSE, "Value expected to be null" },
+                    { Boolean.TRUE, "{\"one\": \"1\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2",
+                            Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.TRUE, "{\"one\": \"\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, "",
+                            Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.TRUE, "{\"one\": \"\"}", "two", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, "",
+                            Boolean.TRUE, Boolean.FALSE, "Value expected not to be null" },
+
+                    { Boolean.FALSE, "{\"one\": \"1\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2",
+                            Boolean.TRUE, Boolean.FALSE, "Value expected to be equal to 2" },
+
+                    { Boolean.TRUE, "{\"one\": \"1\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "1",
+                            Boolean.TRUE, Boolean.FALSE, "Value expected not to be equal to 1" },
+                    { Boolean.TRUE, "{'one': '1'}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2",
+                            Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.FALSE, "{'one': '1'}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2",
+                            Boolean.FALSE, Boolean.TRUE,
+                            "Unexpected character (''' (code 39)): was expecting double-quote to start field name\n at"
+                                    + " [Source: (String)\"{'one': '1'}\"; line: 1, column: 3]" },
+                    { Boolean.FALSE, "{\"one\": \"\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "1",
+                            Boolean.TRUE, Boolean.FALSE, "Value expected to be equal to 1" },
+                    { Boolean.FALSE, "{\"\":\"\"}", "foo", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, null,
+                            Boolean.FALSE, Boolean.FALSE, "" },
+
+                    { Boolean.FALSE, "{\"one\": \"\"}", "one", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "",
+                            Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.FALSE, "{\"one\": \"\"}", "two", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "",
+                            Boolean.TRUE, Boolean.FALSE, "JMESPATH two expected to exist" },
+                    { Boolean.TRUE, "{\"one\": \"\"}", "one", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "",
+                            Boolean.TRUE, Boolean.FALSE, "JMESPATH one expected not to exist" },
+                    { Boolean.TRUE, "{\"one\": \"\"}", "two", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "",
+                            Boolean.FALSE, Boolean.FALSE, "" },
+                    { Boolean.FALSE, "", "two", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "", Boolean.TRUE,
+                            Boolean.FALSE, AssertionResult.RESPONSE_WAS_NULL },
+                    { Boolean.FALSE,
+                            "{\n" + "  \"reservations\": [\n" + "    {\n" + "      \"instances\": [\n"
+                                    + "        {\"state\": \"running\"},\n" + "        {\"state\": \"stopped\"}\n"
+                                    + "      ]\n" + "    },\n" + "    {\n" + "      \"instances\": [\n"
+                                    + "        {\"state\": \"terminated\"},\n" + "        {\"state\": \"running\"}\n"
+                                    + "      ]\n" + "    }\n" + "  ]\n" + "}",
+                            "reservations[*].instances[*].state", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE,
+                            "[[\"running\",\"stopped\"],[\"terminated\",\"running\"]]", Boolean.FALSE, Boolean.FALSE,
+                            "" } });
         }
-    
+
         private Boolean isInverted;
         private String responseData;
         private String jmesPath;
@@ -80,7 +124,7 @@ public class TestJMESPathAssertion {
         private Boolean isFailure;
         private Boolean isError;
         private String failureMessage;
-    
+
         public TestAssertion(Boolean isInverted, String responseData, String jmesPath, Boolean isValidation, Boolean isRegex,
                 Boolean isExpectedNull, String expectedValue, Boolean isFailure, Boolean isError, String failureMessage) {
             super();
@@ -95,7 +139,7 @@ public class TestJMESPathAssertion {
             this.isError = isError;
             this.failureMessage = failureMessage;
         }
-    
+
         @Test
         public void test() {
             SampleResult samplerResult = new SampleResult();

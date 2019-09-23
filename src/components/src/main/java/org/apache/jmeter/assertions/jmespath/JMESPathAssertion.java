@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import io.burt.jmespath.Expression;
@@ -78,70 +77,71 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
         JsonNode currentValue = expression.search(input);
         log.debug("JMESPath query {} invoked on response {}. Query result is {}. ", expression,
                 responseDataAsJsonString, currentValue);
-        checkResult(mapper, currentValue, assertionResult, invert);
-    }
-
-    private void checkResult(ObjectMapper mapper, JsonNode jsonNode, AssertionResult result, boolean invert)
-            throws JsonProcessingException {
-        if (isJsonValidationBool()) {
-            if (jsonNode.isArray()) {
-                if (arrayMatched(mapper, (ArrayNode) jsonNode)) {
-                    if (invert) {
-                        failAssertion(result,
-                                "JMESPath '" + getJmesPath() + "' expected not to match " + getExpectedValue());
-                    }
-                    return;
-                }
-            } else {
-                if (isExpectNull()) {
-                    if (jsonNode instanceof NullNode) {
-                        return;
-                    }
-                    if (invert) {
-                        failAssertion(result, "Failed JMESPath '" + getJmesPath() + "' not to match null");
-                    }
-                } else if (isEquals(mapper, jsonNode)) {
-                    if (invert) {
-                        failAssertion(result,
-                                "Failed JMESPath '" + getJmesPath() + "' not to match " + getExpectedValue());
-                    }
-                    return;
-                }
-            }
-
-            if (isExpectNull()) {
-                if (!invert) {
-                    failAssertion(result, String.format("Value expected to be null, but found '%s'",
-                            objectToString(mapper, jsonNode)));
-                }
-                return;
-            } else {
-                if (!invert) {
-                    String msg;
-                    if (isUseRegex()) {
-                        msg = "Value expected to match regexp '%s', but it did not match: '%s'";
-                    } else {
-                        msg = "Value expected to be '%s', but found '%s'";
-                    }
-                    failAssertion(result, String.format(msg, getExpectedValue(), objectToString(mapper, jsonNode)));
-                }
+        boolean success = checkResult(mapper, currentValue, assertionResult, invert);
+        if (!invert) {
+            if (!success) {
+                failAssertion(invert, assertionResult);
             }
         } else {
-            if (jsonNode instanceof NullNode) {
-                if (!invert) {
-                    failAssertion(result, "JMESPath " + getJmesPath() + " does not exist");
-                }                
-            } else {
-                if (invert) {
-                    failAssertion(result, "JMESPath " + getJmesPath() + " expected not to exist");
-                }
+            if (success) {
+                failAssertion(invert, assertionResult);
             }
         }
     }
 
-    private AssertionResult failAssertion(AssertionResult assertionResult, String message) {
+    private String buildFailureMessage(boolean invert) {
+        StringBuilder message = new StringBuilder();
+
+        if (!isJsonValidationBool()) {
+            message.append("JMESPATH ")
+                .append(getJmesPath())
+                .append(" expected");
+            if (invert) {
+                message.append(" not");
+            }
+            message.append(" to exist");
+        } else {
+            message.append("Value expected");
+            if (isExpectNull()) {
+                if (invert) {
+                    message.append(" not");
+                }
+                message.append(" to be null");
+            } else {
+                if (isUseRegex()) {
+                    if (invert) {
+                        message.append(" not");
+                    }
+                    message.append(" to match ");
+                    message.append(getExpectedValue());
+                } else {
+                    if (invert) {
+                        message.append(" not");
+                    }
+                    message.append(" to be equal to ");
+                    message.append(getExpectedValue());
+                }
+            }
+        }
+        return message.toString();
+    }
+
+    private boolean checkResult(ObjectMapper mapper, JsonNode jsonNode, AssertionResult result, boolean invert)
+            throws JsonProcessingException {
+        if (!isJsonValidationBool()) {
+            return !(jsonNode instanceof NullNode);
+        }
+
+        if (isExpectNull()) {
+            return jsonNode instanceof NullNode;
+        } else {
+            return isEquals(mapper, jsonNode);
+        }
+    }
+
+    private AssertionResult failAssertion(boolean invert, AssertionResult assertionResult) {
         assertionResult.setFailure(true);
-        assertionResult.setFailureMessage(message);
+        assertionResult.setFailureMessage(buildFailureMessage(invert));
         return assertionResult;
     }
 
@@ -175,26 +175,6 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
         }
     }
 
-    private boolean arrayMatched(ObjectMapper mapper, ArrayNode value) throws JsonProcessingException {
-        if (value.size() == 0 && "[]".equals(getExpectedValue())) {
-            return true;
-        }
-
-        for (JsonNode element : value) {
-            if (isExpectNull()) {
-                if (element instanceof NullNode) {
-                    return true;
-                }
-            } else {
-                if (isEquals(mapper, element)) {
-                    return true;
-                }
-            }
-        }
-
-        return isEquals(mapper, value);
-    }
-
     private boolean isEquals(ObjectMapper mapper, JsonNode jsonNode) throws JsonProcessingException {
         String str = objectToString(mapper, jsonNode);
         if (isUseRegex()) {
@@ -224,7 +204,7 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
     public void testEnded(String host) {
         JMESPathCache.getInstance().cleanUp();
     }
-    
+
     /*
      * ------------------------ GETTER/SETTER ------------------------
      */
