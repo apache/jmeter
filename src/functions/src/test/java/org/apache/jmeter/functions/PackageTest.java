@@ -34,7 +34,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import junit.extensions.ActiveTestSuite;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -85,11 +84,6 @@ public class PackageTest extends JMeterTestCaseJUnit {
 
 
         // Reset files
-        allsuites.addTest(new PackageTest("CSVSetup"));
-        TestSuite par = new ActiveTestSuite("Parallel");
-        par.addTest(new PackageTest("CSVThread1"));
-        par.addTest(new PackageTest("CSVThread2"));
-        allsuites.addTest(par);
 
         TestSuite xpath = new TestSuite("XPath");
         xpath.addTest(new PackageTest("XPathtestColumns"));
@@ -103,18 +97,6 @@ public class PackageTest extends JMeterTestCaseJUnit {
         xpath.addTest(new PackageTest("XPathNoFile"));
 
         allsuites.addTest(xpath);
-
-        allsuites.addTest(new PackageTest("XPathSetup1"));
-        TestSuite par2 = new ActiveTestSuite("ParallelXPath1");
-        par2.addTest(new PackageTest("XPathThread1"));
-        par2.addTest(new PackageTest("XPathThread2"));
-        allsuites.addTest(par2);
-
-        allsuites.addTest(new PackageTest("XPathSetup2"));
-        TestSuite par3 = new ActiveTestSuite("ParallelXPath2");
-        par3.addTest(new PackageTest("XPathThread1"));
-        par3.addTest(new PackageTest("XPathThread2"));
-        allsuites.addTest(par3);
 
         return allsuites;
     }
@@ -202,10 +184,6 @@ public class PackageTest extends JMeterTestCaseJUnit {
 
     }
 
-    // Function objects to be tested
-    private static CSVRead cr1;
-    private static CSVRead cr4;
-
     // Helper class used to implement co-routine between two threads
     private static class Baton {
         void pass() {
@@ -224,68 +202,6 @@ public class PackageTest extends JMeterTestCaseJUnit {
     }
 
     private static final Baton BATON = new Baton();
-
-    public void CSVThread1() throws Exception {
-        Thread.currentThread().setName("One");
-        synchronized (BATON) {
-
-            assertEquals("b1", cr1.execute(null, null));
-
-            assertEquals("", cr4.execute(null, null));
-
-            assertEquals("b2", cr1.execute(null, null));
-
-            BATON.pass();
-
-            assertEquals("", cr4.execute(null, null));
-
-            assertEquals("b4", cr1.execute(null, null));
-
-            assertEquals("", cr4.execute(null, null));
-
-            BATON.pass();
-
-            assertEquals("b3", cr1.execute(null, null));
-
-            assertEquals("", cr4.execute(null, null));
-
-            BATON.done();
-        }
-    }
-
-    public void CSVThread2() throws Exception {
-        Thread.currentThread().setName("Two");
-        Thread.sleep(500);// Allow other thread to start
-        synchronized (BATON) {
-
-            assertEquals("b3", cr1.execute(null, null));
-
-            assertEquals("", cr4.execute(null, null));
-
-            BATON.pass();
-
-            assertEquals("b1", cr1.execute(null, null));
-
-            assertEquals("", cr4.execute(null, null));
-
-            assertEquals("b2", cr1.execute(null, null));
-
-            BATON.pass();
-
-            assertEquals("", cr4.execute(null, null));
-
-            assertEquals("b4", cr1.execute(null, null));
-
-            BATON.done();
-        }
-    }
-
-
-    public void CSVSetup() throws Exception {
-        cr1 = setCSVReadParams("testfiles/unit/FunctionsPackageTest.csv", "1");
-        cr4 = setCSVReadParams("testfiles/unit/FunctionsPackageTest.csv", "next");
-    }
-
 
     // XPathFileContainer tests
 
@@ -385,47 +301,6 @@ public class PackageTest extends JMeterTestCaseJUnit {
         assertEquals("u4",xp1.execute());
         assertEquals("p3",xp2a.execute());
 
-    }
-
-    private static XPath sxp1;
-    private static XPath sxp2;
-    // Use same XPath for both threads
-    public void XPathSetup1() throws Exception{
-        sxp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
-        sxp2=sxp1;
-    }
-
-    // Use different XPath for both threads
-    public void XPathSetup2() throws Exception{
-        sxp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
-        sxp2  = setupXPath("testfiles/XPathTest.xml","//user/@username");
-    }
-
-    public void XPathThread1() throws Exception {
-        Thread.currentThread().setName("XPathOne");
-        synchronized (BATON) {
-            assertEquals("u1",sxp1.execute());
-            assertEquals("u2",sxp1.execute());
-            BATON.pass();
-            assertEquals("u5",sxp1.execute());
-            BATON.pass();
-            assertEquals("u2",sxp1.execute());
-            BATON.done();
-        }
-    }
-
-    public void XPathThread2() throws Exception {
-        Thread.currentThread().setName("XPathTwo");
-        Thread.sleep(500);
-        synchronized (BATON) {
-            assertEquals("u3",sxp2.execute());
-            assertEquals("u4",sxp2.execute());
-            BATON.pass();
-            assertEquals("u1",sxp2.execute());
-            BATON.pass();
-            assertEquals("u3",sxp2.execute());
-            BATON.done();
-        }
     }
 
     private XPath setupXPath(String file, String expr) throws Exception{

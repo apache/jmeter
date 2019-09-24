@@ -482,4 +482,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         String name = resourceBundle.getString("displayName");
         return name.replace(' ', '_');
     }
+
+    @Override
+    public String toString() {
+        return "TestBeanGUI:" + (testBeanClass == null ? "" : testBeanClass.getName());
+    }
 }

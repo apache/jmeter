@@ -70,6 +70,7 @@
     <trusted-key id='d0eb627d4885ced1' group='org.apache.velocity' />
     <trusted-key id='a2e92e06ddb37997' group='org.apache.xbean' />
     <trusted-key id='5b93f1df7cdb6dea' group='org.apache.xmlgraphics' />
+    <trusted-key id='85911f425ec61b51' group='org.apiguardian' />
     <trusted-key id='b341ddb020fcb6ab' group='org.bouncycastle' />
     <trusted-key id='be84d764623a3644' group='org.brotli' />
     <trusted-key id='b16698a4adf4d638' group='org.checkerframework' />
@@ -81,6 +82,7 @@
     <trusted-key id='8759d8f56d022006' group='org.exparity' />
     <trusted-key id='1939a2520bab1d90' group='org.freemarker' />
     <trusted-key id='9ff25980f5ba7e4f' group='org.fusesource.hawtbuf' />
+    <trusted-key id='0050076df689fde2' group='org.hamcrest' />
     <trusted-key id='a6adfc93ef34893e' group='org.hamcrest' />
     <trusted-key id='313cba932516c4d3' group='org.hsqldb' />
     <trusted-key id='cb43338e060cf9fa' group='org.jacoco' />
@@ -90,9 +92,13 @@
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.kotlinx' />
     <trusted-key id='91ae1504568ec4dd' group='org.jodd' />
     <trusted-key id='f42e87f9665015c9' group='org.jsoup' />
+    <trusted-key id='85911f425ec61b51' group='org.junit.jupiter' />
+    <trusted-key id='85911f425ec61b51' group='org.junit.platform' />
+    <trusted-key id='85911f425ec61b51' group='org.junit.vintage' />
     <trusted-key id='82216a03caa86c78' group='org.mongodb' />
     <trusted-key id='3f36885c24df4b75' group='org.mozilla' />
     <trusted-key id='7c7d8456294423ba' group='org.objenesis' />
+    <trusted-key id='85911f425ec61b51' group='org.opentest4j' />
     <trusted-key id='5f69ad087600b22c' group='org.ow2.asm' />
     <trusted-key id='2c7b12f2a511e325' group='org.slf4j' />
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.api' />

@@ -424,6 +424,7 @@ allprojects {
                 }
             }
             withType<Test>().configureEach {
+                useJUnitPlatform()
                 testLogging {
                     exceptionFormat = TestExceptionFormat.FULL
                     showStandardStreams = true

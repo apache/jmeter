@@ -26,6 +26,8 @@ import java.util.Set;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jorphan.collections.HashTree;
+import org.junit.runner.Describable;
+import org.junit.runner.Description;
 
 import junit.framework.TestSuite;
 
@@ -33,7 +35,7 @@ import junit.framework.TestSuite;
  *
  * Test JMX files to check that they can be loaded OK.
  */
-public class TestLoad extends JMeterTestCaseJUnit {
+public class TestLoad extends JMeterTestCaseJUnit implements Describable {
 
     private static final String basedir = new File(System.getProperty("user.dir")).getParentFile().getParent();
     private static final File testfiledir = new File(basedir,"bin/testfiles");
@@ -67,6 +69,11 @@ public class TestLoad extends JMeterTestCaseJUnit {
         super(name);
         testFile=file;
         parent=dir;
+    }
+
+    @Override
+    public Description getDescription() {
+        return Description.createTestDescription(getClass(), getName() + " " + testFile + " " + parent);
     }
 
     public static TestSuite suite(){

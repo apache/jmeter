@@ -48,7 +48,6 @@ dependencies {
         // In other words, marking dependency as "runtime" would avoid accidental
         // dependency on it during compilation
         runtimev("org.apache.tika:tika-parsers", "tika")
-        runtimev("org.codehaus.groovy:groovy-all")
         runtimev("org.ow2.asm:asm")
         runtimev("com.github.bulenkov.darcula:darcula")
 
@@ -82,7 +81,12 @@ dependencies {
         apiv("javax.activation:javax.activation-api", "javax.activation")
         apiv("javax.mail:mail")
         apiv("jcharts:jcharts")
-        apiv("junit:junit")
+        apiv("junit:junit", "junit4")
+        apiv("org.codehaus.groovy:groovy-all")
+        apiv("org.junit.jupiter:junit-jupiter-api", "junit5")
+        apiv("org.junit.jupiter:junit-jupiter-params", "junit5")
+        runtimev("org.junit.jupiter:junit-jupiter-engine", "junit5")
+        runtimev("org.junit.vintage:junit-vintage-engine", "junit5")
         apiv("net.minidev:accessors-smart")
         apiv("net.minidev:json-smart")
         apiv("net.sf.jtidy:jtidy")
@@ -119,6 +123,7 @@ dependencies {
         apiv("org.exparity:hamcrest-date")
         apiv("org.freemarker:freemarker")
         apiv("org.hamcrest:hamcrest-core")
+        apiv("org.hamcrest:java-hamcrest")
         apiv("org.hsqldb:hsqldb")
         apiv("org.jdom:jdom")
         apiv("org.jodd:jodd-core", "jodd")

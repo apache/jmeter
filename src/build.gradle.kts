@@ -24,7 +24,8 @@ val skipMavenPublication = setOf(
     ":src:generator",
     ":src:licenses",
     ":src:protocol",
-    ":src:release"
+    ":src:release",
+    ":src:testkit"
 )
 
 subprojects {
@@ -52,7 +53,13 @@ subprojects {
         }
         val testImplementation by configurations
         val testRuntimeOnly by configurations
+        testImplementation("org.junit.jupiter:junit-jupiter-api")
+        testImplementation("org.junit.jupiter:junit-jupiter-params")
+        testImplementation("org.hamcrest:java-hamcrest")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+        testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
         testImplementation("junit:junit")
+        testImplementation(testFixtures(project(":src:testkit")))
         if (groovyUsed) {
             testImplementation("org.spockframework:spock-core")
         }

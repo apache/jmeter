@@ -56,6 +56,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.junit.runner.Describable;
+import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -67,7 +69,7 @@ import org.xml.sax.SAXException;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class JMeterTest extends JMeterTestCaseJUnit {
+public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
     private static final Logger log = LoggerFactory.getLogger(JMeterTest.class);
 
     private static Map<String, Boolean> guiTitles;
@@ -111,6 +113,20 @@ public class JMeterTest extends JMeterTestCaseJUnit {
     public JMeterTest(String testName, JMeterGUIComponent gc) {
         super(testName);// Save the method name
         guiItem = gc;
+    }
+
+    @Override
+    public Description getDescription() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getName());
+        if (guiItem instanceof TestBeanGUI) {
+            sb.append(" ").append(guiItem.toString());
+        } else if (guiItem != null) {
+            sb.append(" ").append(guiItem.getClass().getName());
+        } else if (serObj != null) {
+            sb.append(" ").append(serObj.getClass().getName());
+        }
+        return Description.createTestDescription(getClass(), sb.toString());
     }
 
     private static volatile boolean classPathShown = false;// Only show classpath once

@@ -31,6 +31,8 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.junit.runner.Describable;
+import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +48,7 @@ import junit.framework.TestSuite;
  * TODO: - Check property files don't have duplicate keys (is this important)
  *
  */
-public final class PackageTest extends JMeterTestCaseJUnit {
+public final class PackageTest extends JMeterTestCaseJUnit implements Describable {
     private static final Logger log = LoggerFactory.getLogger(PackageTest.class);
 
     private static final Locale defaultLocale = new Locale("en","");
@@ -69,6 +71,11 @@ public final class PackageTest extends JMeterTestCaseJUnit {
         this.testBeanClass = null;
         this.testLocale = null;
         this.defaultBundle = null;
+    }
+
+    @Override
+    public Description getDescription() {
+        return Description.createTestDescription(getClass(), getName() + " " + testLocale + " " + testBeanClass);
     }
 
     private BeanInfo beanInfo;
@@ -167,6 +174,7 @@ public final class PackageTest extends JMeterTestCaseJUnit {
 
         boolean errorDetected = false;
         JMeterUtils.setLocale(defaultLocale);
+        String defaultLocaleId = defaultLocale.toString();
         for (String className : testBeanClassNames) {
             Class<?> testBeanClass = Class.forName(className);
             ResourceBundle defaultBundle;
@@ -194,9 +202,17 @@ public final class PackageTest extends JMeterTestCaseJUnit {
             for (String lang : languages) {
                 final String[] language = lang.split("_");
                 if (language.length == 1) {
-                    suite.addTest(new PackageTest(testBeanClass, new Locale(language[0]), defaultBundle));
+                    Locale locale = new Locale(language[0]);
+                    if (locale.toString().equals(defaultLocaleId)) {
+                        continue;
+                    }
+                    suite.addTest(new PackageTest(testBeanClass, locale, defaultBundle));
                 } else if (language.length == 2) {
-                    suite.addTest(new PackageTest(testBeanClass, new Locale(language[0], language[1]), defaultBundle));
+                    Locale locale = new Locale(language[0], language[1]);
+                    if (locale.toString().equals(defaultLocaleId)) {
+                        continue;
+                    }
+                    suite.addTest(new PackageTest(testBeanClass, locale, defaultBundle));
                 }
             }
         }

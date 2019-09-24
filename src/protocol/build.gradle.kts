@@ -122,7 +122,7 @@ project("jms") {
 
 project("junit") {
     dependencies {
-        api("junit:junit:4.12")
+        api("junit:junit")
         implementation("org.apache.commons:commons-lang3") {
             because("ArrayUtils")
         }
@@ -134,7 +134,7 @@ project("junit") {
 
 project("junit-sample") {
     dependencies {
-        api("junit:junit:4.12")
+        api("junit:junit")
     }
 }
 

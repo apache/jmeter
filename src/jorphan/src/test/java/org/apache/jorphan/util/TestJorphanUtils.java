@@ -30,6 +30,7 @@ import static org.junit.Assert.assertTrue;
 import java.nio.charset.StandardCharsets;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -404,8 +405,7 @@ public class TestJorphanUtils {
     }
 
     @Test
-    public void testGenerateRandomAlphanumericPassword() {
-        assertTrue("Password should be alphanumeric", JOrphanUtils.generateRandomAlphanumericPassword(20).matches("[A-Za-z0-9]+"));
-        assertEquals("Password should be alphanumeric", 20, JOrphanUtils.generateRandomAlphanumericPassword(20).length());
+    public void testGenerateRandomAlphanumericPassword20() {
+        assertThat(JOrphanUtils.generateRandomAlphanumericPassword(20), Matchers.matchesPattern("[A-Za-z0-9]{20}"));
     }
 }

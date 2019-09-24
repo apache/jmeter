@@ -40,12 +40,14 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.util.JMeterUtils;
+import org.junit.runner.Describable;
+import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import junit.framework.TestSuite;
 
-public class TestHTMLParser extends JMeterTestCaseJUnit {
+public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
     private static final Logger log = LoggerFactory.getLogger(TestHTMLParser.class);
 
     private static final String DEFAULT_UA  = "Apache-HttpClient/4.2.6";
@@ -76,6 +78,11 @@ public class TestHTMLParser extends JMeterTestCaseJUnit {
         super(name);
         testNumber = test;
         parserName = parser;
+    }
+
+    @Override
+    public Description getDescription() {
+        return Description.createTestDescription(getClass(), getName() + " " + testNumber + " " + parserName);
     }
 
     private static class StaticTestClass // Can't instantiate

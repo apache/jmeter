@@ -45,6 +45,7 @@ include(
         "src:protocol:native",
         "src:protocol:tcp",
         "src:release",
+        "src:testkit",
         "src:dist",
         "src:dist-check")
 
