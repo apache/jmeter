@@ -18,6 +18,8 @@
 package org.apache.jmeter.assertions.jmespath;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,6 +34,22 @@ import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Enclosed.class)
 public class TestJMESPathAssertion {
+    private enum InvertType {
+        USE_NO_INVERT, USE_INVERT
+    }
+    private enum ValidationType {
+        USE_NO_VALIDATION, USE_VALIDATION
+    }
+    private enum ComparisonType {
+        USE_NO_REXEG, USE_REGEX
+    }
+    private enum ResultNullity {
+        EXPECT_NOT_NULL, EXPECT_NULL
+    }
+    private enum ResultType {
+        SUCCESS, ERROR, FAILURE
+    }
+
     @RunWith(Parameterized.class)
     public static class TestAssertion {
         private static final String JSON_ARRAY =
@@ -44,89 +62,103 @@ public class TestJMESPathAssertion {
         @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][] {
-                    // {INVERT, RESPONSE DATA, JMESPATH, VALIDATION, REGEX, EXPECT NULL, RESULT,
-                    // FAILURE, ERROR, FAILURE_MSG}
-                    { Boolean.TRUE, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", "[6:6]", Boolean.TRUE, Boolean.FALSE,
-                            Boolean.FALSE, "[]", Boolean.TRUE, Boolean.FALSE, "Value expected not to be equal to []" },
-                    { Boolean.FALSE, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", "[6:6]", Boolean.TRUE, Boolean.FALSE,
-                            Boolean.FALSE, "[]", Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.FALSE, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", "[6:6]", Boolean.TRUE, Boolean.FALSE,
-                            Boolean.FALSE, "[1]", Boolean.TRUE, Boolean.FALSE, "Value expected to be equal to [1]" },
-                    { Boolean.FALSE, "{\"one\": \"1\",\"two\": \"2\"}", "[one,two]", Boolean.TRUE, Boolean.FALSE,
-                            Boolean.FALSE, "[\"1\",\"2\"]", Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.FALSE, "{\"a\": \"foo\", \"b\": \"bar\", \"c\": \"baz\"}", "a", Boolean.TRUE,
-                            Boolean.FALSE, Boolean.FALSE, "foo", Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.FALSE, "{\"a\": \"123\"}", "a", Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, "123|456",
-                            Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.FALSE, "{\"a\": \"123\"}", "a", Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, "789|012",
-                            Boolean.TRUE, Boolean.FALSE, "Value expected to match 789|012" },
-                    { Boolean.TRUE, "{\"a\": \"123\"}", "a", Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, "123|012",
-                            Boolean.TRUE, Boolean.FALSE, "Value expected not to match 123|012" },
-                    { Boolean.FALSE, JSON_ARRAY, "max_by(people, &age).name", Boolean.TRUE, Boolean.FALSE,
-                            Boolean.FALSE, "a", Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.FALSE, "{\"one\": \"\"}", "two", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, null,
-                            Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.FALSE, "{\"one\": \"\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "",
-                            Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.FALSE, "{\"one\": \"\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, "1",
-                            Boolean.TRUE, Boolean.FALSE, "Value expected to be null" },
-                    { Boolean.TRUE, "{\"one\": \"1\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2",
-                            Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.TRUE, "{\"one\": \"\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, "",
-                            Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.TRUE, "{\"one\": \"\"}", "two", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, "",
-                            Boolean.TRUE, Boolean.FALSE, "Value expected not to be null" },
+                    { InvertType.USE_INVERT, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", "[6:6]", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "[]", ResultType.FAILURE,
+                            "Value expected not to be equal to []" },
+                    { InvertType.USE_NO_INVERT, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", "[6:6]",
+                            ValidationType.USE_VALIDATION, ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL,
+                            "[]", ResultType.SUCCESS, "" },
+                    { InvertType.USE_NO_INVERT, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", "[6:6]",
+                            ValidationType.USE_VALIDATION, ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL,
+                            "[1]", ResultType.FAILURE, "Value expected to be equal to [1]" },
+                    { InvertType.USE_NO_INVERT, "{\"one\": \"1\",\"two\": \"2\"}", "[one,two]",
+                            ValidationType.USE_VALIDATION, ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL,
+                            "[\"1\",\"2\"]", ResultType.SUCCESS, "" },
+                    { InvertType.USE_NO_INVERT, "{\"a\": \"foo\", \"b\": \"bar\", \"c\": \"baz\"}", "a",
+                            ValidationType.USE_VALIDATION, ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL,
+                            "foo", ResultType.SUCCESS, "" },
+                    { InvertType.USE_NO_INVERT, "{\"a\": \"123\"}", "a", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_REGEX, ResultNullity.EXPECT_NOT_NULL, "123|456", ResultType.SUCCESS,
+                            "" },
+                    { InvertType.USE_NO_INVERT, "{\"a\": \"123\"}", "a", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_REGEX, ResultNullity.EXPECT_NOT_NULL, "789|012", ResultType.FAILURE,
+                            "Value expected to match 789|012" },
+                    { InvertType.USE_INVERT, "{\"a\": \"123\"}", "a", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_REGEX, ResultNullity.EXPECT_NOT_NULL, "123|012", ResultType.FAILURE,
+                            "Value expected not to match 123|012" },
+                    { InvertType.USE_NO_INVERT, JSON_ARRAY, "max_by(people, &age).name", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "a", ResultType.SUCCESS, "" },
+                    { InvertType.USE_NO_INVERT, "{\"one\": \"\"}", "two", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NULL, null, ResultType.SUCCESS, "" },
+                    { InvertType.USE_NO_INVERT, "{\"one\": \"\"}", "one", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "", ResultType.SUCCESS, "" },
+                    { InvertType.USE_NO_INVERT, "{\"one\": \"\"}", "one", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NULL, "1", ResultType.FAILURE,
+                            "Value expected to be null" },
+                    { InvertType.USE_INVERT, "{\"one\": \"1\"}", "one", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "2", ResultType.SUCCESS, "" },
+                    { InvertType.USE_INVERT, "{\"one\": \"\"}", "one", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NULL, "", ResultType.SUCCESS, "" },
+                    { InvertType.USE_INVERT, "{\"one\": \"\"}", "two", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NULL, "", ResultType.FAILURE,
+                            "Value expected not to be null" },
 
-                    { Boolean.FALSE, "{\"one\": \"1\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2",
-                            Boolean.TRUE, Boolean.FALSE, "Value expected to be equal to 2" },
+                    { InvertType.USE_NO_INVERT, "{\"one\": \"1\"}", "one", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "2", ResultType.FAILURE,
+                            "Value expected to be equal to 2" },
 
-                    { Boolean.TRUE, "{\"one\": \"1\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "1",
-                            Boolean.TRUE, Boolean.FALSE, "Value expected not to be equal to 1" },
-                    { Boolean.TRUE, "{'one': '1'}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2",
-                            Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.FALSE, "{'one': '1'}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "2",
-                            Boolean.FALSE, Boolean.TRUE,
+                    { InvertType.USE_INVERT, "{\"one\": \"1\"}", "one", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "1", ResultType.FAILURE,
+                            "Value expected not to be equal to 1" },
+                    { InvertType.USE_INVERT, "{'one': '1'}", "one", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "2", ResultType.SUCCESS, "" },
+                    { InvertType.USE_NO_INVERT, "{'one': '1'}", "one", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "2", ResultType.ERROR,
                             "Unexpected character (''' (code 39)): was expecting double-quote to start field name\n at"
                                     + " [Source: (String)\"{'one': '1'}\"; line: 1, column: 3]" },
-                    { Boolean.FALSE, "{\"one\": \"\"}", "one", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, "1",
-                            Boolean.TRUE, Boolean.FALSE, "Value expected to be equal to 1" },
-                    { Boolean.FALSE, "{\"\":\"\"}", "foo", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, null,
-                            Boolean.FALSE, Boolean.FALSE, "" },
+                    { InvertType.USE_NO_INVERT, "{\"one\": \"\"}", "one", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "1", ResultType.FAILURE,
+                            "Value expected to be equal to 1" },
+                    { InvertType.USE_NO_INVERT, "{\"\":\"\"}", "foo", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NULL, null, ResultType.SUCCESS, "" },
 
-                    { Boolean.FALSE, "{\"one\": \"\"}", "one", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "",
-                            Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.FALSE, "{\"one\": \"\"}", "two", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "",
-                            Boolean.TRUE, Boolean.FALSE, "JMESPATH two expected to exist" },
-                    { Boolean.TRUE, "{\"one\": \"\"}", "one", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "",
-                            Boolean.TRUE, Boolean.FALSE, "JMESPATH one expected not to exist" },
-                    { Boolean.TRUE, "{\"one\": \"\"}", "two", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "",
-                            Boolean.FALSE, Boolean.FALSE, "" },
-                    { Boolean.FALSE, "", "two", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "", Boolean.TRUE,
-                            Boolean.FALSE, AssertionResult.RESPONSE_WAS_NULL },
-                    { Boolean.FALSE,
+                    { InvertType.USE_NO_INVERT, "{\"one\": \"\"}", "one", ValidationType.USE_NO_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "", ResultType.SUCCESS, "" },
+                    { InvertType.USE_NO_INVERT, "{\"one\": \"\"}", "two", ValidationType.USE_NO_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "", ResultType.FAILURE,
+                            "JMESPATH two expected to exist" },
+                    { InvertType.USE_INVERT, "{\"one\": \"\"}", "one", ValidationType.USE_NO_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "", ResultType.FAILURE,
+                            "JMESPATH one expected not to exist" },
+                    { InvertType.USE_INVERT, "{\"one\": \"\"}", "two", ValidationType.USE_NO_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "", ResultType.SUCCESS, "" },
+                    { InvertType.USE_NO_INVERT, "", "two", ValidationType.USE_NO_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "", ResultType.FAILURE,
+                            AssertionResult.RESPONSE_WAS_NULL },
+                    { InvertType.USE_NO_INVERT,
                             "{\n" + "  \"reservations\": [\n" + "    {\n" + "      \"instances\": [\n"
                                     + "        {\"state\": \"running\"},\n" + "        {\"state\": \"stopped\"}\n"
                                     + "      ]\n" + "    },\n" + "    {\n" + "      \"instances\": [\n"
                                     + "        {\"state\": \"terminated\"},\n" + "        {\"state\": \"running\"}\n"
                                     + "      ]\n" + "    }\n" + "  ]\n" + "}",
-                            "reservations[*].instances[*].state", Boolean.TRUE, Boolean.FALSE, Boolean.FALSE,
-                            "[[\"running\",\"stopped\"],[\"terminated\",\"running\"]]", Boolean.FALSE, Boolean.FALSE,
-                            "" } });
+                            "reservations[*].instances[*].state", ValidationType.USE_VALIDATION,
+                            ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL,
+                            "[[\"running\",\"stopped\"],[\"terminated\",\"running\"]]", ResultType.SUCCESS, "" } });
         }
 
-        private Boolean isInverted;
+
+        private InvertType isInverted;
         private String responseData;
         private String jmesPath;
-        private Boolean isValidation;
-        private Boolean isRegex;
-        private Boolean isExpectedNull;
+        private ValidationType isValidation;
+        private ComparisonType isRegex;
+        private ResultNullity isExpectedNull;
         private String expectedValue;
-        private Boolean isFailure;
-        private Boolean isError;
+        private ResultType resultType;
         private String failureMessage;
 
-        public TestAssertion(Boolean isInverted, String responseData, String jmesPath, Boolean isValidation, Boolean isRegex,
-                Boolean isExpectedNull, String expectedValue, Boolean isFailure, Boolean isError, String failureMessage) {
+        public TestAssertion(InvertType isInverted, String responseData, String jmesPath, ValidationType isValidation, ComparisonType isRegex,
+                ResultNullity isExpectedNull, String expectedValue, ResultType resultType, String failureMessage) {
             super();
             this.isInverted = isInverted;
             this.responseData = responseData;
@@ -135,8 +167,7 @@ public class TestJMESPathAssertion {
             this.isRegex = isRegex;
             this.isExpectedNull = isExpectedNull;
             this.expectedValue = expectedValue;
-            this.isFailure = isFailure;
-            this.isError = isError;
+            this.resultType = resultType;
             this.failureMessage = failureMessage;
         }
 
@@ -146,16 +177,30 @@ public class TestJMESPathAssertion {
             samplerResult.setResponseData(responseData, null);
             JMESPathAssertion instance = new JMESPathAssertion();
             instance.setJmesPath(jmesPath);
-            instance.setJsonValidationBool(isValidation);
-            instance.setInvert(isInverted);
-            instance.setIsRegex(isRegex);
-            instance.setExpectNull(isExpectedNull);
+            instance.setJsonValidationBool(isValidation == ValidationType.USE_VALIDATION);
+            instance.setInvert(isInverted == InvertType.USE_INVERT);
+            instance.setIsRegex(isRegex == ComparisonType.USE_REGEX);
+            instance.setExpectNull(isExpectedNull == ResultNullity.EXPECT_NULL);
             instance.setExpectedValue(expectedValue);
             AssertionResult expResult = new AssertionResult("");
             AssertionResult result = instance.getResult(samplerResult);
             assertEquals(expResult.getName(), result.getName());
-            assertEquals(isFailure, result.isFailure());
-            assertEquals(isError, result.isError());
+            switch (resultType) {
+                case SUCCESS:
+                    assertFalse(result.isError());
+                    assertFalse(result.isFailure());
+                    break;
+                case FAILURE:
+                    assertFalse(result.isError());
+                    assertTrue(result.isFailure());
+                    break;
+                case ERROR:
+                    assertTrue(result.isError());
+                    assertFalse(result.isFailure());
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unexpected type:"+resultType);
+            }
             assertEquals(failureMessage, result.getFailureMessage());
         }
     }
