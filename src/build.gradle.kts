@@ -43,6 +43,9 @@ subprojects {
     apply<JacocoPlugin>()
 
     dependencies {
+        val api by configurations
+        api(platform(project(":src:bom")))
+
         if (!testsPresent) {
             // No tests => no dependencies required
             return@dependencies
