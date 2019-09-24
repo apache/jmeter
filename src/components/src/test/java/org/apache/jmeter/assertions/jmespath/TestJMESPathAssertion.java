@@ -18,8 +18,7 @@
 package org.apache.jmeter.assertions.jmespath;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -59,7 +58,8 @@ public class TestJMESPathAssertion {
                         + "  ]"
                         + "}";
 
-        @Parameters
+        @Parameters(name = "index:{index} => data({1}, jmespath={2}, invert={0}, validation:{3}, regex:{4}, nullability:{5}, "
+                + "expected value:{6}, expected result type:{7}, expected failure message:{8})")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][] {
                     { InvertType.USE_INVERT, "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", "[6:6]", ValidationType.USE_VALIDATION,
@@ -185,21 +185,14 @@ public class TestJMESPathAssertion {
             AssertionResult expResult = new AssertionResult("");
             AssertionResult result = instance.getResult(samplerResult);
             assertEquals(expResult.getName(), result.getName());
-            switch (resultType) {
-                case SUCCESS:
-                    assertFalse(result.isError());
-                    assertFalse(result.isFailure());
-                    break;
-                case FAILURE:
-                    assertFalse(result.isError());
-                    assertTrue(result.isFailure());
-                    break;
-                case ERROR:
-                    assertTrue(result.isError());
-                    assertFalse(result.isFailure());
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unexpected type:"+resultType);
+            if (result.isError() && !result.isFailure()) {
+                assertEquals(resultType, ResultType.ERROR);
+            } else if (result.isFailure() && !result.isError()) {
+                assertEquals(resultType, ResultType.FAILURE);
+            } else if (!result.isError() && !result.isFailure()){
+                assertEquals(resultType, ResultType.SUCCESS);
+            } else {
+                fail("Got unexpected state where AssertionResult is in error and in failure");
             }
             assertEquals(failureMessage, result.getFailureMessage());
         }
