@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
-import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -37,15 +37,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.github.benmanes.caffeine.cache.CacheLoader;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-
-import io.burt.jmespath.Expression;
-import io.burt.jmespath.JmesPath;
-import io.burt.jmespath.RuntimeConfiguration;
-import io.burt.jmespath.function.FunctionRegistry;
-import io.burt.jmespath.jackson.JacksonRuntime;
 
 /**
  * JMESPATH based extractor
@@ -53,7 +44,7 @@ import io.burt.jmespath.jackson.JacksonRuntime;
  * @since 5.2
  */
 public class JMESPathExtractor extends AbstractScopedTestElement
-        implements Serializable, PostProcessor, ThreadListener {
+        implements Serializable, PostProcessor, TestStateListener {
 
     private static final long serialVersionUID = 3849270294526207081L;
 
@@ -63,23 +54,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
     private static final String DEFAULT_VALUE = "JMESExtractor.defaultValue"; // $NON-NLS-1$
     private static final String MATCH_NUMBER = "JMESExtractor.matchNumber"; // $NON-NLS-1$
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
-    private static final LoadingCache<String, Expression<JsonNode>> JMES_EXTRACTOR_CACHE = Caffeine.newBuilder()
-            .maximumSize(JMeterUtils.getPropDefault("jmesextractor.parser.cache.size", 400))
-            .build(new JMESCacheLoader());
-
-    private static final class JMESCacheLoader implements CacheLoader<String, Expression<JsonNode>> {
-        final JmesPath<JsonNode> runtime;
-
-        public JMESCacheLoader() {
-            runtime = new JacksonRuntime(new RuntimeConfiguration.Builder()
-                    .withFunctionRegistry(FunctionRegistry.defaultRegistry()).build());
-        }
-
-        @Override
-        public Expression<JsonNode> load(String jmesPathExpression) throws Exception {
-            return runtime.compile(jmesPathExpression);
-        }
-    }
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Override
     public void process() {
@@ -99,9 +74,8 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         } else {
             try {
                 JsonNode result = null;
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode actualObj = mapper.readValue(jsonResponse, JsonNode.class);
-                result = JMES_EXTRACTOR_CACHE.get(jsonPathExpression).search(actualObj);
+                JsonNode actualObj = OBJECT_MAPPER.readValue(jsonResponse, JsonNode.class);
+                result = JMESPathCache.getInstance().get(jsonPathExpression).search(actualObj);
                 if (result.isNull()) {
                     vars.put(refName, defaultValue);
                     vars.put(refName + REF_MATCH_NR, "0"); //$NON-NLS-1$
@@ -177,13 +151,12 @@ public class JMESPathExtractor extends AbstractScopedTestElement
 
     public List<String> splitJson(JsonNode jsonNode) throws IOException {
         List<String> splittedJsonElements = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
         if (jsonNode.isArray()) {
             for (JsonNode element : (ArrayNode) jsonNode) {
-                splittedJsonElements.add(writeJsonNode(mapper, element));
+                splittedJsonElements.add(writeJsonNode(OBJECT_MAPPER, element));
             }
         } else {
-            splittedJsonElements.add(writeJsonNode(mapper, jsonNode));
+            splittedJsonElements.add(writeJsonNode(OBJECT_MAPPER, jsonNode));
         }
         return splittedJsonElements;
     }
@@ -231,21 +204,31 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         setProperty(DEFAULT_VALUE, defaultValue, ""); // $NON-NLS-1$
     }
 
-    @Override
-    public void threadStarted() {
-        // NOOP
-    }
-
-    @Override
-    public void threadFinished() {
-        JMES_EXTRACTOR_CACHE.cleanUp();
-    }
-
     public void setMatchNumber(String matchNumber) {
         setProperty(MATCH_NUMBER, matchNumber);
     }
 
     public String getMatchNumber() {
         return getPropertyAsString(MATCH_NUMBER);
+    }
+
+    @Override
+    public void testStarted() {
+        testStarted("");
+    }
+
+    @Override
+    public void testStarted(String host) {
+        // NOOP
+    }
+
+    @Override
+    public void testEnded() {
+        testEnded("");
+    }
+
+    @Override
+    public void testEnded(String host) {
+        JMESPathCache.getInstance().cleanUp();
     }
 }
