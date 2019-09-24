@@ -26,13 +26,13 @@ matrix:
     - name: Tests with OpenJDK 8 + code coverage
       jdk: openjdk8
       script:
-        - ./gradlew $GRADLE_ARGS check createDist jacocoReport
+        - ./gradlew $GRADLE_ARGS javadocAggregate check createDist jacocoReport
       after_success:
         - bash <(curl -s https://codecov.io/bash)
     - name: Tests with OpenJDK 11
       jdk: openjdk11
       script:
-        - ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle build createDist
+        - ./gradlew $SKIP_DIST_TASKS javadocAggregate -PskipCheckstyle build createDist
     - name: Tests with OpenJDK 12
       # Might switch to openjdk-ea when https://github.com/gradle/gradle/issues/10248 is fixed
       jdk: openjdk12
