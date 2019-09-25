@@ -39,11 +39,11 @@ import io.burt.jmespath.Expression;
 
 /**
  * This is main class for JSON JMESPath Assertion which verifies assertion on
- * previous sample result using JMESPath expression </br>
+ * previous sample result using JMESPath expression
  * <a href="https://github.com/burtcorp/jmespath-java">JMESPath-java sources and
- * doc</a> </br>
- * <a href="http://jmespath.org/">JMESPath tutorial</a>
+ * doc</a>.
  *
+ * @see <a href="http://jmespath.org/">JMESPath website</a>
  * @since 5.2
  */
 public class JMESPathAssertion extends AbstractTestElement implements Serializable, Assertion, TestStateListener {

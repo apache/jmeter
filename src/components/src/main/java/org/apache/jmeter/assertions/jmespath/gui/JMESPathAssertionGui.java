@@ -28,10 +28,10 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * Java class representing GUI for the {@link JMESPathAssertion} component in
- * JMeter</br>
- * This class extends {@link JSONPathAssertionGui} to avoid code duplication
+ * JMeter.
+ * <p>This class extends {@link JSONPathAssertionGui} to avoid code duplication
  * because they work the same way, except that field names are different and
- * some method that we must {@link Override}.
+ * some method that we must {@link Override}.</p>
  *
  * @since 5.2
  */
