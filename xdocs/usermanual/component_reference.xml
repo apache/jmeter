@@ -2804,6 +2804,9 @@ may download images, style-sheets, etc. referenced by the HTML code.
 <tr><td><code>JSON Path Tester</code></td>
 <td>The <i>JSON Path Tester view</i> will let you test your JSON-PATH expressions and see the extracted data from a particular response.
 <br/></td></tr>
+<tr><td><code>JMESPath Tester</code></td>
+<td>The <i>JMESPath Tester view</i> will let you test your <a href="http://jmespath.org/">JMESPath</a> expressions and see the extracted data from a particular response.
+<br/></td></tr>
 <tr><td><code>Regexp Tester</code></td>
 <td>The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
 The "<code>Test</code>" button allows the user to apply the Regular Expression to the upper panel and the results
