@@ -24,15 +24,18 @@ import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class TestHTTPHC4Impl {
     private JMeterContext jmctx;
     private JMeterVariables jmvars;
     private static final String SAME_USER = "__jmv_SAME_USER";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmvars = new JMeterVariables();

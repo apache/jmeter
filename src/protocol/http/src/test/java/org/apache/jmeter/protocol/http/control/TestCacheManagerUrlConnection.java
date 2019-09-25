@@ -18,8 +18,8 @@
 
 package org.apache.jmeter.protocol.http.control;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.HttpURLConnection;
 import java.util.List;
@@ -78,14 +78,14 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
 
     private static void checkProperty(Map<String, List<String>> properties, String property, String expectedPropertyValue) {
         assertNotNull(
+                properties,
                 "Properties should not be null. Expected to find within it property = "
                         + property + " with expected value = "
-                        + expectedPropertyValue,
-                properties);
+                        + expectedPropertyValue);
         List<String> listOfPropertyValues = properties.get(property);
-        assertNotNull("No property entry found for property " + property, listOfPropertyValues);
-        assertEquals("Did not find single property for property " + property, 1, listOfPropertyValues.size());
-        assertEquals("Unexpected value for property " + property, expectedPropertyValue, listOfPropertyValues.get(0));
+        assertNotNull(listOfPropertyValues, "No property entry found for property " + property);
+        assertEquals(1, listOfPropertyValues.size(), "Did not find single property for property " + property);
+        assertEquals(expectedPropertyValue, listOfPropertyValues.get(0), "Unexpected value for property " + property);
     }
 
 }

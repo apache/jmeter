@@ -437,6 +437,7 @@ allprojects {
                 }
                 // Pass the property to tests
                 systemProperty("java.awt.headless", System.getProperty("java.awt.headless"))
+                systemProperty("junit.jupiter.execution.parallel.enabled", "true")
             }
             withType<SpotBugsTask>().configureEach {
                 group = LifecycleBasePlugin.VERIFICATION_GROUP

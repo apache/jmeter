@@ -18,10 +18,10 @@
 
 package org.apache.jmeter.protocol.http.control;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -43,8 +43,10 @@ import org.apache.http.message.BasicHeader;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link CacheManager} that uses HTTPHC4Impl
@@ -201,6 +203,7 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
     private HttpResponse httpResponse;
 
     @Override
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         this.httpMethod = new HttpPostStub();
@@ -209,6 +212,7 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
     }
 
     @Override
+    @AfterEach
     public void tearDown() throws Exception {
         this.httpMethod = null;
         this.httpResponse = null;
@@ -249,19 +253,20 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
     @Override
     protected void checkRequestHeader(String requestHeader, String expectedValue) {
         org.apache.http.Header header = this.httpMethod.getLastHeader(requestHeader);
-        assertEquals("Wrong name in header for " + requestHeader, requestHeader, header.getName());
-        assertEquals("Wrong value for header " + header, expectedValue, header.getValue());
+        assertEquals(
+                requestHeader + ": " + expectedValue,
+                header.getName() + ": " + header.getValue());
     }
 
     @Test
     public void testBug61321() throws Exception {
         this.cacheManager.setUseExpires(false);
         this.cacheManager.testIterationStart(null);
-        assertNull("Should not find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+        assertNull(getThreadCacheEntry(LOCAL_HOST), "Should not find entry");
+        assertFalse(this.cacheManager.inCache(url), "Should not find valid entry");
         cacheResult(sampleResultOK);
-        assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertFalse("Should find valid entry", this.cacheManager.inCache(url));
+        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
+        assertFalse(this.cacheManager.inCache(url), "Should find valid entry");
         cacheManager.setHeaders(url, httpMethod);
         checkIfModifiedSinceHeader(httpMethod);
 
@@ -269,8 +274,8 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
         sampleResultOK = getSampleResultWithSpecifiedResponseCode("304");
         setLastModified(null);
         cacheResult(sampleResultOK);
-        assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
+        assertFalse(this.cacheManager.inCache(url), "Should not find valid entry");
         cacheManager.setHeaders(url, httpMethod);
         checkIfModifiedSinceHeader(httpMethod);
 
@@ -278,8 +283,8 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
         sampleResultOK = getSampleResultWithSpecifiedResponseCode("304");
         setLastModified(null);
         cacheResult(sampleResultOK);
-        assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
+        assertFalse(this.cacheManager.inCache(url), "Should not find valid entry");
         cacheManager.setHeaders(url, httpMethod);
         checkIfModifiedSinceHeader(httpMethod);
     }
@@ -287,13 +292,13 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
     protected void checkIfModifiedSinceHeader(HttpRequestBase httpMethod) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         try {
-            assertEquals("Should have found 1 header "+HTTPConstantsInterface.IF_MODIFIED_SINCE,
-                    1,
-                    httpMethod.getHeaders(HTTPConstantsInterface.IF_MODIFIED_SINCE).length);
+            assertEquals(1,
+                    httpMethod.getHeaders(HTTPConstantsInterface.IF_MODIFIED_SINCE).length,
+                    "Should have found 1 header "+HTTPConstantsInterface.IF_MODIFIED_SINCE);
             Date date = dateFormat.parse(httpMethod.getHeaders(HTTPConstantsInterface.IF_MODIFIED_SINCE)[0].getValue());
-            assertNotNull("Should have found a valid entry", date);
+            assertNotNull(date, "Should have found a valid entry");
         } catch(ParseException e) {
-            Assert.fail("Invalid header format for:"+ HTTPConstantsInterface.IF_MODIFIED_SINCE);
+            Assertions.fail("Invalid header format for:"+ HTTPConstantsInterface.IF_MODIFIED_SINCE);
         }
     }
 

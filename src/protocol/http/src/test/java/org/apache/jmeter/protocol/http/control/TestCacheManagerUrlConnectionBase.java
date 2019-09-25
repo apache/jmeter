@@ -24,6 +24,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 public abstract class TestCacheManagerUrlConnectionBase extends TestCacheManagerBase {
     protected class URLConnectionStub extends HttpURLConnection {
@@ -79,12 +81,14 @@ public abstract class TestCacheManagerUrlConnectionBase extends TestCacheManager
     protected URLConnection urlConnection;
 
     @Override
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         this.urlConnection = new URLConnectionStub(this.url.openConnection());
     }
 
     @Override
+    @AfterEach
     public void tearDown() throws Exception {
         this.urlConnection = null;
         super.tearDown();
