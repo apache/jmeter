@@ -156,7 +156,6 @@ arrayOf(
     "TestCookieManager",
     "JMS_TESTS",
     "OS_TESTS",
-    "Bug60607",
     "TestKeepAlive",
     "ResponseDecompression",
     "TestSchedulerWithTimer",
