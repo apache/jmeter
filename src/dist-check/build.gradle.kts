@@ -147,7 +147,6 @@ fun createBatchServerTestTask(name: String, suffix: String = "", action: (BatchT
 
 arrayOf(
     "BatchTestLocal",
-    "Bug52310",
     "Bug62239", "Bug52968", "Bug50898",
     "Bug56243",
     // StackOverflowError with ModuleController in Non-GUI mode if its name is the same as the target node

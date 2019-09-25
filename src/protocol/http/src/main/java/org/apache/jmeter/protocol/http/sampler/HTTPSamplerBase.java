@@ -30,13 +30,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -297,7 +297,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     protected static final int MAX_FRAME_DEPTH = JMeterUtils.getPropDefault("httpsampler.max_frame_depth", 5); // $NON-NLS-1$
 
     // Derive the mapping of content types to parsers
-    private static final Map<String, String> PARSERS_FOR_CONTENT_TYPE = new HashMap<>();
+    private static final Map<String, String> PARSERS_FOR_CONTENT_TYPE = new ConcurrentHashMap<>();
     // Not synch, but it is not modified after creation
 
     private static final String RESPONSE_PARSERS = // list of parsers
@@ -327,8 +327,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             if (typeList != null) {
                 String[] types = JOrphanUtils.split(typeList, " ", true);
                 for (final String type : types) {
-                    log.info("Parser for {} is {}", type, classname);
-                    PARSERS_FOR_CONTENT_TYPE.put(type, classname);
+                    registerParser(type, classname);
                 }
             } else {
                 log.warn(
@@ -1458,6 +1457,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
         }
         return res;
+    }
+
+    static void registerParser(String contentType, String className) {
+        log.info("Parser for {} is {}", contentType, className);
+        PARSERS_FOR_CONTENT_TYPE.put(contentType, className);
     }
 
     /**
