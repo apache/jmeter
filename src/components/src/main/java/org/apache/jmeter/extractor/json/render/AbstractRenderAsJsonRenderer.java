@@ -242,7 +242,7 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
     protected abstract String getExpressionLabel();
 
     /**
-     * @param textToParse String of the response to process 
+     * @param textToParse String of the response to process
      * @return the extracted values using the technology
      */
     protected abstract String process(String textToParse);
