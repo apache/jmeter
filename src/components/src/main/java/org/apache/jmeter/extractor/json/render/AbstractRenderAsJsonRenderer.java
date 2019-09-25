@@ -47,8 +47,8 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
 /**
- * Implement ResultsRender for JSON Path tester
- * @since 3.0
+ * Abstract base class for implementation of a ResultsRenderer for a JSON tester
+ * @since 5.2
  */
 abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
@@ -226,12 +226,25 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
         // NOOP
     }
 
+    /**
+     * @return Tab label
+     */
     protected abstract String getTabLabel();
 
+    /**
+     * @return Test button label
+     */
     protected abstract String getTestButtonLabel();
 
+    /**
+     * @return The label for the technology expression
+     */
     protected abstract String getExpressionLabel();
 
+    /**
+     * @param textToParse String of the response to process 
+     * @return the extracted values using the technology
+     */
     protected abstract String process(String textToParse);
 
     /**

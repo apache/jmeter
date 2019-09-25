@@ -30,10 +30,12 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 /**
  * Implement ResultsRender for JMES Path tester
+ * @since 5.2
  */
 public class RenderAsJmesPathRenderer extends AbstractRenderAsJsonRenderer {
     private static final Logger log = LoggerFactory.getLogger(RenderAsJmesPathRenderer.class);
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     @Override
     protected String getTabLabel() {
         return JMeterUtils.getResString("jmespath_tester_title");

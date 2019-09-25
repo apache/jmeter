@@ -27,9 +27,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implement ResultsRender for JSON Path tester
+ * @since 3.0
  */
 public class RenderAsJsonRenderer extends AbstractRenderAsJsonRenderer {
     private static final Logger log = LoggerFactory.getLogger(RenderAsJsonRenderer.class);
+
     @Override
     protected String getTabLabel() {
         return JMeterUtils.getResString("jsonpath_tester_title");
