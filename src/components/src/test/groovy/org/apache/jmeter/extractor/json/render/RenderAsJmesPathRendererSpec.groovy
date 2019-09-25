@@ -18,7 +18,7 @@
 package org.apache.jmeter.extractor.json.render
 
 import org.apache.jmeter.samplers.SampleResult
-import org.apache.jmeter.extractor.json.render.RenderAsJsonRenderer
+import org.apache.jmeter.extractor.json.render.RenderAsJmesPathRenderer
 import org.apache.jmeter.junit.spock.JMeterSpec
 import org.apache.jmeter.util.JMeterUtils
 import javax.swing.JTabbedPane
@@ -26,8 +26,8 @@ import org.apache.jmeter.junit.categories.NeedGuiTests
 import org.junit.experimental.categories.Category
 import spock.lang.IgnoreIf
 
-class RenderAsJsonRendererSpec extends JMeterSpec {
-    def sut = new RenderAsJsonRenderer()
+class RenderAsJmesPathRendererSpec extends JMeterSpec {
+    def sut = new RenderAsJmesPathRenderer()
 
     def "init of component doesn't fail"() {
         when:
@@ -89,9 +89,9 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
             output == sut.resultField.getText()
         where:
             input               | expression          | output
-            "{name:\"Ludwig\",age: 23,city: \"Bonn\"}"   | "\$..name"           | "Result[0]=Ludwig\n"
-            "This is not json"  | "\$..name" | "NO MATCH"
-            "{name:\"Ludwig\",age: 23,city: \"Bonn\"}" | "\$.." | "Exception: Path must not end with a '.' or '..'"
+            "{\"name\":\"Ludwig\",\"age\": 23,\"city\": \"Bonn\"}"   | "name"           | "Result[0]=Ludwig\n"
+            "{\"name\":\"Ludwig\",\"age\": 23,\"city\": \"Bonn\"}"   | "age"           | "Result[0]=23\n"
+            "{\"name\":\"Ludwig\",\"age\": 23,\"city\": \"Bonn\"}" | "name1" | "NO MATCH"
     }
 
     def "clearData clears expected fields"() {

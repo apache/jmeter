@@ -103,7 +103,7 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
      * Launch json path engine to parse a input text
      * @param textToParse
      */
-    private void executeTester(String textToParse) {
+    protected void executeTester(String textToParse) {
         if (textToParse != null && textToParse.length() > 0
                 && this.expressionField.getText().length() > 0) {
             this.resultField.setText(process(textToParse));
@@ -233,4 +233,39 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
     protected abstract String getExpressionLabel();
 
     protected abstract String process(String textToParse);
+
+    /**
+     * @return the rightSide
+     */
+    protected JTabbedPane getRightSide() {
+        return rightSide;
+    }
+
+    /**
+     * @return the jsonWithExtractorPanel
+     */
+    protected JPanel getJsonWithExtractorPanel() {
+        return jsonWithExtractorPanel;
+    }
+
+    /**
+     * @return the jsonDataField
+     */
+    protected JSyntaxTextArea getJsonDataField() {
+        return jsonDataField;
+    }
+
+    /**
+     * @return the expressionField
+     */
+    protected JLabeledTextField getExpressionField() {
+        return expressionField;
+    }
+
+    /**
+     * @return the resultField
+     */
+    protected JTextArea getResultField() {
+        return resultField;
+    }
 }
