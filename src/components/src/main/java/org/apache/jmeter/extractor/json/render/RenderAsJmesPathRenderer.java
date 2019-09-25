@@ -18,50 +18,57 @@
 
 package org.apache.jmeter.extractor.json.render;
 
-import java.util.List;
-
-import org.apache.jmeter.extractor.json.jsonpath.JSONManager;
+import org.apache.jmeter.extractor.json.jmespath.JMESPathCache;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 /**
- * Implement ResultsRender for JSON Path tester
- * @since 3.0
+ * Implement ResultsRender for JMES Path tester
+ * @since 5.2
  */
-public class RenderAsJsonRenderer extends AbstractRenderAsJsonRenderer {
-    private static final Logger log = LoggerFactory.getLogger(RenderAsJsonRenderer.class);
+public class RenderAsJmesPathRenderer extends AbstractRenderAsJsonRenderer {
+    private static final Logger log = LoggerFactory.getLogger(RenderAsJmesPathRenderer.class);
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Override
     protected String getTabLabel() {
-        return JMeterUtils.getResString("jsonpath_tester_title");
+        return JMeterUtils.getResString("jmespath_tester_title");
     }
 
     @Override
     protected String getTestButtonLabel() {
-        return JMeterUtils.getResString("jsonpath_tester_button_test");
+        return JMeterUtils.getResString("jmespath_tester_button_test");
     }
 
     @Override
     protected String getExpressionLabel() {
-        return JMeterUtils.getResString("jsonpath_tester_field");
+        return JMeterUtils.getResString("jmespath_tester_field");
     }
 
+    @Override
     protected String process(String textToParse) {
         String expression = getExpression();
         try {
-            List<Object> matchStrings = extractWithTechnology(textToParse, expression);
-            if (matchStrings.isEmpty()) {
+            JsonNode actualObj = OBJECT_MAPPER.readValue(textToParse, JsonNode.class);
+            JsonNode result = JMESPathCache.getInstance().get(expression).search(actualObj);
+            if (result.isNull()) {
                 return NO_MATCH; //$NON-NLS-1$
             } else {
                 StringBuilder builder = new StringBuilder();
                 int i = 0;
-                for (Object obj : matchStrings) {
-                    String objAsString =
-                            obj != null ? obj.toString() : ""; //$NON-NLS-1$
-                    builder.append("Result[").append(i++).append("]=").append(objAsString).append("\n"); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+                if (result.isArray()) {
+                    for (JsonNode element : (ArrayNode) result) {
+                        builder.append("Result[").append(i++).append("]=").append(writeJsonNode(OBJECT_MAPPER, element)).append("\n");
+                    }
+                } else {
+                    builder.append("Result[").append(i++).append("]=").append(writeJsonNode(OBJECT_MAPPER, result)).append("\n");
                 }
-
                 return builder.toString();
             }
         } catch (Exception e) { // NOSONAR We handle it through return message
@@ -70,14 +77,17 @@ public class RenderAsJsonRenderer extends AbstractRenderAsJsonRenderer {
         }
     }
 
-    private List<Object> extractWithTechnology(String textToParse, String expression) throws Exception {
-        JSONManager jsonManager = new JSONManager();
-        return jsonManager.extractWithJsonPath(textToParse, expression);
+    private static String writeJsonNode(ObjectMapper mapper, JsonNode element) throws JsonProcessingException {
+        if (element.isTextual()) {
+            return element.asText();
+        } else {
+            return mapper.writeValueAsString(element);
+        }
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return JMeterUtils.getResString("jsonpath_renderer"); // $NON-NLS-1$
+        return JMeterUtils.getResString("jmespath_renderer"); // $NON-NLS-1$
     }
 }
