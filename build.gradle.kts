@@ -262,6 +262,12 @@ allprojects {
             checkstyle {
                 toolVersion = "checkstyle".v
             }
+            val sourceSets: SourceSetContainer by project
+            if (sourceSets.isNotEmpty()) {
+                tasks.register("checkstyle") {
+                    dependsOn(sourceSets.names.map { "checkstyle" + it.capitalize() })
+                }
+            }
         }
         apply<SpotBugsPlugin>()
 
