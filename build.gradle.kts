@@ -150,6 +150,10 @@ val skipCheckstyle by extra {
     boolProp("skipCheckstyle") ?: false
 }
 
+val skipSpotless by extra {
+    boolProp("skipSpotless") ?: false
+}
+
 // Allow to skip building source/binary distributions
 val skipDist by extra {
     boolProp("skipDist") ?: false
@@ -267,6 +271,8 @@ allprojects {
             val sourceSets: SourceSetContainer by project
             if (sourceSets.isNotEmpty()) {
                 tasks.register("checkstyle") {
+                    group = LifecycleBasePlugin.VERIFICATION_GROUP
+                    description = "Executes Checkstyle verifications"
                     dependsOn(sourceSets.names.map { "checkstyle" + it.capitalize() })
                 }
             }
@@ -278,26 +284,40 @@ allprojects {
             isIgnoreFailures = ignoreSpotBugsFailures
         }
 
-        apply(plugin = "com.diffplug.gradle.spotless")
-        spotless {
-            java {
-                licenseHeaderFile(licenseHeaderFile)
-                importOrder("static ", "java.", "javax", "org", "net", "com", "")
-                removeUnusedImports()
-                trimTrailingWhitespace()
-                indentWithSpaces(4)
-                endWithNewline()
+        if (!skipSpotless) {
+            apply(plugin = "com.diffplug.gradle.spotless")
+            spotless {
+                java {
+                    licenseHeaderFile(licenseHeaderFile)
+                    importOrder("static ", "java.", "javax", "org", "net", "com", "")
+                    removeUnusedImports()
+                    trimTrailingWhitespace()
+                    indentWithSpaces(4)
+                    endWithNewline()
+                }
+            }
+        }
+        tasks.register("style") {
+            group = LifecycleBasePlugin.VERIFICATION_GROUP
+            description = "Formats code (license header, import order, whitespace at end of line, ...) and executes Checkstyle verifications"
+            if (!skipSpotless) {
+                dependsOn("spotlessApply")
+            }
+            if (!skipCheckstyle) {
+                dependsOn("checkstyle")
             }
         }
     }
     plugins.withId("groovy") {
-        spotless {
-            groovy {
-                licenseHeaderFile(licenseHeaderFile)
-                importOrder("static ", "java.", "javax", "org", "net", "com", "")
-                trimTrailingWhitespace()
-                indentWithSpaces(4)
-                endWithNewline()
+        if (!skipSpotless) {
+            spotless {
+                groovy {
+                    licenseHeaderFile(licenseHeaderFile)
+                    importOrder("static ", "java.", "javax", "org", "net", "com", "")
+                    trimTrailingWhitespace()
+                    indentWithSpaces(4)
+                    endWithNewline()
+                }
             }
         }
     }
