@@ -188,7 +188,6 @@ public final class JmeterKeyStore {
      */
     public String getAlias() {
         if (StringUtils.isNotEmpty(clientCertAliasVarName)) {
-            // We return even if result is null
             String aliasName = JMeterContextService.getContext().getVariables().get(clientCertAliasVarName);
             if (StringUtils.isEmpty(aliasName)) {
                 log.error("No var called '{}' found", clientCertAliasVarName);
@@ -282,18 +281,17 @@ public final class JmeterKeyStore {
      *
      * @param keyType the key algorithm type name (RSA, DSA, etc.)
      * @param issuers the CA certificates we are narrowing our selection on.
-     * @return the array of aliases; may be empty
+     * @return the array of aliases; may be null
      */
     public String[] getClientAliases(String keyType, Principal[] issuers) {
         int count = getAliasCount();
+        if (count == 0) {
+            // API expects null not empty array, see http://docs.oracle.com/javase/7/docs/api/javax/net/ssl/X509KeyManager.html
+            return null;
+        }
         String[] aliases = new String[count];
         System.arraycopy(this.names, 0, aliases, 0, aliases.length);
-        if (aliases.length > 0) {
-            return aliases;
-        } else {
-            // API expects null not empty array, see http://docs.oracle.com/javase/7/docs/api/javax/net/ssl/X509KeyManager.html
-            return null; // NOSONAR
-        }
-    }
+        return aliases;
+}
 
 }
