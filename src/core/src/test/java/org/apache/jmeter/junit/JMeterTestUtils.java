@@ -20,7 +20,7 @@ package org.apache.jmeter.junit;
 
 import java.io.File;
 
-import org.apache.jmeter.testkit.Resources;
+import org.apache.jmeter.testkit.ResourceLocator;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class JMeterTestUtils {
@@ -57,6 +57,6 @@ public class JMeterTestUtils {
      * @return "" when input is "", input resource when resource is not found, or absolute file path of a resource
      */
     public static String getResourceFilePath(Class<?> klass, String resource) {
-        return Resources.getResourceFilePath(klass, resource);
+        return ResourceLocator.getResource(klass, resource);
     }
 }

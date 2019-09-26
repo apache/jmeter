@@ -18,20 +18,28 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.Deque;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 
-public class FunctionTestHelper {
+public interface FunctionTestHelper {
 
-    public static Collection<CompoundVariable> makeParams(String... params) {
-        Collection<CompoundVariable> parms = new LinkedList<>();
-        for (String p : params) {
-            if (p != null) {
-                parms.add(new CompoundVariable(p));
-            }
+    static Collection<CompoundVariable> makeParams(Iterable<Object> params) {
+        Deque<CompoundVariable> res = new ArrayDeque<>();
+        for (Object param : params) {
+            res.add(new CompoundVariable(param == null ? null : String.valueOf(param)));
         }
-        return parms;
+        // Trim null values from the end of the list
+        while (!res.isEmpty() && res.peekLast().getRawParameters() == null) {
+            res.removeLast();
+        }
+        return res;
+    }
+
+    static Collection<CompoundVariable> makeParams(Object...params) {
+        return makeParams(Arrays.asList(params));
     }
 }

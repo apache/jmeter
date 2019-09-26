@@ -18,146 +18,209 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
-import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CSVReadFunctionTest extends JMeterTestCase implements JMeterSerialTest {
-
     private static final Logger log = LoggerFactory.getLogger(CSVReadFunctionTest.class);
 
-    // Create the CSVRead function and set its parameters.
-    private CSVRead setCSVReadParams(String p1, String p2) throws Exception {
+    private static String csvFilePath;
+
+    @BeforeAll
+    public static void prepareCsv(@TempDir Path dir) throws IOException {
+        Path path = dir.resolve("test.csv");
+        Files.write(path, Arrays.asList(
+                "a1,b1,c1,d1",
+                "a2,b2,c2,d2",
+                "a3,b3,c3,d3",
+                "a4,b4,c4,d4"
+        ));
+        csvFilePath = path.toString();
+    }
+
+    private CSVRead createCsvRead(String fileName, String column) throws Exception {
         CSVRead cr = new CSVRead();
-        Collection<CompoundVariable> parms = new LinkedList<>();
-        if (p1 != null) {
-            parms.add(new CompoundVariable(getResourceFilePath(p1)));
-        }
-        if (p2 != null) {
-            parms.add(new CompoundVariable(p2));
-        }
-        cr.setParameters(parms);
+        cr.setParameters(FunctionTestHelper.makeParams(fileName, column));
         return cr;
+    }
+
+    private void eq(CSVRead a, String expected) throws InvalidVariableException {
+        assertEquals(expected, a.execute(null, null));
+    }
+
+    @Test
+    void concurrentRequestsToSameCsv() throws Exception {
+        CSVRead a = createCsvRead(csvFilePath, "1");
+        CSVRead b = createCsvRead(csvFilePath, "next");
+
+        final Synchronizer sync = new Synchronizer();
+
+        synchronized (sync) {
+            // The future is created under synchronized block => it ensures it does not start executing too fast
+            Future<Void> thread2 = CompletableFuture.runAsync(() -> {
+                synchronized (sync) {
+                    try {
+                        eq(a, "b3");
+                        eq(b, "");
+
+                        sync.pass();
+
+                        eq(a, "b1");
+                        eq(b, "");
+                        eq(a, "b2");
+
+                        sync.pass();
+
+                        eq(b, "");
+                        eq(a, "b4");
+                        sync.done();
+                    } catch (Throwable e) {
+                        throw sync.failure(e, "thread2");
+                    }
+                }
+            });
+
+            eq(a, "b1");
+            eq(b, "");
+            eq(a, "b2");
+
+            sync.pass();
+
+            eq(b, "");
+            eq(a, "b4");
+            eq(b, "");
+
+            sync.pass();
+
+            eq(a, "b3");
+            eq(b, "");
+
+            sync.pass();
+
+            // propagate exception if any
+            thread2.get();
+        }
     }
 
     @Test
     public void testCSVParamsFail() throws Exception {
-        try {
-            setCSVReadParams(null, null);
-            fail("Should have failed");
-        } catch (InvalidVariableException e) {
-        }
-        try {
-            setCSVReadParams(null, "");
-            fail("Should have failed");
-        } catch (InvalidVariableException e) {
-        }
-        try {
-            setCSVReadParams("", null);
-            fail("Should have failed");
-        } catch (InvalidVariableException e) {
-        }
+        assertThrows(InvalidVariableException.class, () -> createCsvRead(null, null));
+        assertThrows(InvalidVariableException.class, () -> createCsvRead("", null));
     }
 
     @Test
     public void testCSVNoFile() throws Exception {
 
-        CSVRead cr1 = setCSVReadParams("does/not-exist.csv", "1");
+        CSVRead cr1 = createCsvRead("does/not-exist.csv", "1");
         log.info("Expecting file not found");
-        assertEquals("", cr1.execute(null, null));
+        eq(cr1, "");
 
-        CSVRead cr2 = setCSVReadParams("does/not-exist.csv", "next");
+        CSVRead cr2 = createCsvRead("does/not-exist.csv", "next");
         log.info("Expecting no entry for file");
-        assertEquals("", cr2.execute(null, null));
+        eq(cr2, "");
 
-        CSVRead cr3 = setCSVReadParams("does/not-exist.csv", "*ABC");
+        CSVRead cr3 = createCsvRead("does/not-exist.csv", "*ABC");
         log.info("Expecting file not found");
-        assertEquals("", cr3.execute(null, null));
+        eq(cr3, "");
 
-        CSVRead cr4 = setCSVReadParams("*ABC", "1");
+        CSVRead cr4 = createCsvRead("*ABC", "1");
         log.info("Expecting cannot open file");
-        assertEquals("", cr4.execute(null, null));
+        eq(cr4, "");
     }
 
     @Test
     public void testCSValias() throws Exception {
-        CSVRead cr1 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "*A");
-        CSVRead cr2 = setCSVReadParams("*A", "1");
-        CSVRead cr3 = setCSVReadParams("*A", "next");
+        CSVRead cr1 = createCsvRead(csvFilePath, "*A");
+        CSVRead cr2 = createCsvRead("*A", "1");
+        CSVRead cr3 = createCsvRead("*A", "next");
 
-        CSVRead cr4 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "*B");
-        CSVRead cr5 = setCSVReadParams("*B", "2");
-        CSVRead cr6 = setCSVReadParams("*B", "next");
+        CSVRead cr4 = createCsvRead(csvFilePath, "*B");
+        CSVRead cr5 = createCsvRead("*B", "2");
+        CSVRead cr6 = createCsvRead("*B", "next");
 
-        assertEquals("", cr1.execute(null, null)); // open as *A
-        assertEquals("b1", cr2.execute(null, null)); // col 1, line 1, *A
-        assertEquals("", cr4.execute(null, null)); // open as *B
-        assertEquals("c1", cr5.execute(null, null)); // col2 line 1
-        assertEquals("", cr3.execute(null, null)); // *A next
-        assertEquals("b2", cr2.execute(null, null)); // col 1, line 2, *A
-        assertEquals("c1", cr5.execute(null, null)); // col2, line 1, *B
-        assertEquals("", cr6.execute(null, null)); // *B next
-        assertEquals("c2", cr5.execute(null, null)); // col2, line 2, *B
+        eq(cr1, ""); // open as *A
+        eq(cr2, "b1"); // col 1, line 1, *A
+        eq(cr4, ""); // open as *B
+        eq(cr5, "c1"); // col2 line 1
+        eq(cr3, ""); // *A next
+        eq(cr2, "b2"); // col 1, line 2, *A
+        eq(cr5, "c1"); // col2, line 1, *B
+        eq(cr6, ""); // *B next
+        eq(cr5, "c2"); // col2, line 2, *B
     }
 
     // Check blank lines are treated as EOF
     @Test
-    public void CSVBlankLine() throws Exception {
-        CSVRead csv1 = setCSVReadParams("testfiles/testblank.csv", "1");
-        CSVRead csv2 = setCSVReadParams("testfiles/testblank.csv", "next");
+    public void CSVBlankLine(@TempDir Path tmp) throws Exception {
+        String fileName =
+                Files.write(
+                        tmp.resolve("blank.csv"),
+                        Arrays.asList("a1,b1,c1,d1",
+                                "a2,b2,c2,d2,",
+                                "",
+                                "The previous line is blank, and should be treated as EOF"))
+                        .toString();
+        CSVRead csv1 = createCsvRead(fileName, "1");
+        CSVRead csv2 = createCsvRead(fileName, "next");
 
         for (int i = 1; i <= 2; i++) {
-            assertEquals("b1", csv1.execute(null, null));
-            assertEquals("", csv2.execute(null, null));
-            assertEquals("b2", csv1.execute(null, null));
-            assertEquals("", csv2.execute(null, null));
+            eq(csv1, "b1");
+            eq(csv2, "");
+            eq(csv1, "b2");
+            eq(csv2, "");
         }
     }
 
     @Test
     public void CSVRun() throws Exception {
-        CSVRead cr1 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "1");
-        CSVRead cr2 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "2");
-        CSVRead cr3 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "3");
-        CSVRead cr4 = setCSVReadParams("testfiles/unit/CSVReadFunctionTest.csv", "next");
-        CSVRead cr5 = setCSVReadParams("", "0");
-        CSVRead cr6 = setCSVReadParams("", "next");
+        CSVRead cr1 = createCsvRead(csvFilePath, "1");
+        CSVRead cr2 = createCsvRead(csvFilePath, "2");
+        CSVRead cr3 = createCsvRead(csvFilePath, "3");
+        CSVRead cr4 = createCsvRead(csvFilePath, "next");
+        CSVRead cr5 = createCsvRead("", "0");
+        CSVRead cr6 = createCsvRead("", "next");
 
-        assertEquals("b1", cr1.execute(null, null));
-        assertEquals("c1", cr2.execute(null, null));
-        assertEquals("d1", cr3.execute(null, null));
+        eq(cr1, "b1");
+        eq(cr2, "c1");
+        eq(cr3, "d1");
 
-        assertEquals("", cr4.execute(null, null));
-        assertEquals("b2", cr1.execute(null, null));
-        assertEquals("c2", cr2.execute(null, null));
-        assertEquals("d2", cr3.execute(null, null));
+        eq(cr4, "");
+        eq(cr1, "b2");
+        eq(cr2, "c2");
+        eq(cr3, "d2");
 
-        assertEquals("", cr4.execute(null, null));
-        assertEquals("b3", cr1.execute(null, null));
-        assertEquals("c3", cr2.execute(null, null));
-        assertEquals("d3", cr3.execute(null, null));
+        eq(cr4, "");
+        eq(cr1, "b3");
+        eq(cr2, "c3");
+        eq(cr3, "d3");
 
-        assertEquals("", cr4.execute(null, null));
-        assertEquals("b4", cr1.execute(null, null));
-        assertEquals("c4", cr2.execute(null, null));
-        assertEquals("d4", cr3.execute(null, null));
+        eq(cr4, "");
+        eq(cr1, "b4");
+        eq(cr2, "c4");
+        eq(cr3, "d4");
 
-        assertEquals("", cr4.execute(null, null));
-        assertEquals("b1", cr1.execute(null, null));
-        assertEquals("c1", cr2.execute(null, null));
-        assertEquals("d1", cr3.execute(null, null));
+        eq(cr4, "");
+        eq(cr1, "b1");
+        eq(cr2, "c1");
+        eq(cr3, "d1");
 
-        assertEquals("a1", cr5.execute(null, null));
-        assertEquals("", cr6.execute(null, null));
-        assertEquals("a2", cr5.execute(null, null));
+        eq(cr5, "a1");
+        eq(cr6, "");
+        eq(cr5, "a2");
     }
 }

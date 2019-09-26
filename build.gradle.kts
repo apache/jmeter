@@ -397,8 +397,6 @@ allprojects {
                     include("**/*.dtd")
                     include("**/*.svg")
                     include("**/*.txt")
-                    // Test resources have files in CP1252, and we don't want to parse them as UTF-8
-                    exclude("**/*cp1252*")
                     filteringCharset = "UTF-8"
                     filter(LineEndings.LF)
                 }

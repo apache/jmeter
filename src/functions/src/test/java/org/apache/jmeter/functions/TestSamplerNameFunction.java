@@ -69,7 +69,7 @@ public class TestSamplerNameFunction extends JMeterTestCase {
     public void testSamplerNameWithVar() throws Exception {
         variable.setParameters(params);
         TestSampler sampler = new TestSampler("UnitTestSampler");
-        variable.setParameters(FunctionTestHelper.makeParams("var1", null, null));
+        variable.setParameters(FunctionTestHelper.makeParams("var1"));
         value = variable.execute(result, sampler);
 
         assertEquals("UnitTestSampler", value);

@@ -50,7 +50,7 @@ class BinaryMessageRenderer implements MessageRenderer<byte[]> {
             try {
                 bytes = stringValue.getBytes(encoding);
             } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Unable to read " + filename, e);
             }
         } else {
             bytes = (byte[]) cache.get(filename, _p -> getContent(filename));

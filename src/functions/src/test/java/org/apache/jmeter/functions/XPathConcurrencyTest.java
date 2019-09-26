@@ -27,7 +27,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.testkit.Resources;
+import org.apache.jmeter.testkit.ResourceLocator;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -39,7 +39,7 @@ public class XPathConcurrencyTest {
 
     private static XPath createXPath(String file, String expr) throws Exception {
         Collection<CompoundVariable> parms = new ArrayList<>();
-        parms.add(new CompoundVariable(Resources.getResourceFilePath(XPathConcurrencyTest.class, file)));
+        parms.add(new CompoundVariable(ResourceLocator.getResource(XPathConcurrencyTest.class, file)));
         parms.add(new CompoundVariable(expr));
         XPath xp = new XPath();
         xp.setParameters(parms);

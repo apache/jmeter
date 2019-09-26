@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.test;
+package org.apache.jmeter.testkit;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -23,21 +23,31 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public interface ResourceLocator {
+    default String getResource(String path) {
+        return getResource(this, path);
+    }
 
-    public static String getResource(Object instance, String path) {
+    default String getResourcePath(String path) {
+        return getResource(this, path);
+    }
+
+    static String getResource(Object instance, String path) {
         return getResource(instance.getClass(), path);
     }
 
-    public static String getResource(Class<?> basetype, String path) {
+    static String getResource(Class<?> basetype, String path) {
         Path nioPath = getResourcePath(basetype, path);
+        if (nioPath == null) {
+            return null;
+        }
         return nioPath.toString();
     }
 
-    public static Path getResourcePath(Object instance, String path) {
+    static Path getResourcePath(Object instance, String path) {
         return getResourcePath(instance.getClass(), path);
     }
 
-    public static Path getResourcePath(Class<?> basetype, String path) {
+    static Path getResourcePath(Class<?> basetype, String path) {
         URL url = basetype.getResource(path);
         if (url == null) {
             return null;

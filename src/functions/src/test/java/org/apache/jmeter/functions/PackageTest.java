@@ -21,10 +21,7 @@ package org.apache.jmeter.functions;
 import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
 
 import java.io.FileNotFoundException;
-import java.util.Collection;
-import java.util.LinkedList;
 
-import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -47,21 +44,6 @@ public class PackageTest extends JMeterTestCaseJUnit {
     public PackageTest(String arg0) {
         super(arg0);
     }
-
-    // Create the CSVRead function and set its parameters.
-    private CSVRead setCSVReadParams(String p1, String p2) throws Exception {
-        CSVRead cr = new CSVRead();
-        Collection<CompoundVariable> parms = new LinkedList<>();
-        if (p1 != null) {
-            parms.add(new CompoundVariable(getResourceFilePath(p1)));
-        }
-        if (p2 != null) {
-            parms.add(new CompoundVariable(p2));
-        }
-        cr.setParameters(parms);
-        return cr;
-    }
-
 
     // Create the BeanShell function and set its parameters.
     private static BeanShell BSHFParams(String p1, String p2, String p3) throws Exception {
@@ -304,11 +286,8 @@ public class PackageTest extends JMeterTestCaseJUnit {
     }
 
     private XPath setupXPath(String file, String expr) throws Exception{
-        Collection<CompoundVariable> parms = new LinkedList<>();
-        parms.add(new CompoundVariable(getResourceFilePath(file)));
-        parms.add(new CompoundVariable(expr));
         XPath xp = new XPath();
-        xp.setParameters(parms);
+        xp.setParameters(makeParams(new Object[]{getResourceFilePath(file), expr}));
         return xp;
     }
 

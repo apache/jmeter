@@ -30,12 +30,10 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.testkit.BugId;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterContextExtension;
 import org.apache.jmeter.wiremock.WireMockExtension;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -45,17 +43,8 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 
 @BugId("52310")
 @ExtendWith(WireMockExtension.class)
+@ExtendWith(JMeterContextExtension.class)
 public class ParallelResourcesAndIpSource {
-
-    @BeforeEach
-    public void init() {
-        JMeterContextService.getContext().setVariables(new JMeterVariables());
-    }
-
-    @AfterEach
-    public void cleanup() {
-        JMeterContextService.getContext().clear();
-    }
 
     private void configureStubs(WireMockServer server) {
         server.stubFor(WireMock.get("/index.html")
@@ -72,7 +61,7 @@ public class ParallelResourcesAndIpSource {
 
     @ParameterizedTest
     @MethodSource("org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory#getImplementations")
-    public void test(String httpImplementation, WireMockServer server) throws SocketException {
+    public void test(String httpImplementation, WireMockServer server, JMeterVariables vars) throws SocketException {
         configureStubs(server);
 
         HTTPSamplerBase http = HTTPSamplerFactory.newInstance(httpImplementation);
@@ -94,7 +83,6 @@ public class ParallelResourcesAndIpSource {
             Assertions.fail("Unable to find local IP to use as a source IP");
         }
 
-        JMeterVariables vars = JMeterContextService.getContext().getVariables();
         vars.put("IP_ADDR", localIp.get().getAddress().getHostAddress());
 
         // Typically it is registered with jmeter.properties, however we don't run full JMeter in the test

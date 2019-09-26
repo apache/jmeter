@@ -17,23 +17,26 @@
 
 package org.apache.jmeter.protocol.jms.sampler.render;
 
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.internal.matchers.ThrowableCauseMatcher.hasCause;
+import static org.junit.internal.matchers.ThrowableMessageMatcher.hasMessage;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.nio.charset.UnsupportedCharsetException;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class BinaryMessageRendererTest extends MessageRendererTest<byte[]> {
-
-    @Rule
-    public ExpectedException error = ExpectedException.none();
 
     BinaryMessageRenderer render = RendererFactory.getInstance().getBinary();
     @Override
@@ -41,69 +44,79 @@ public class BinaryMessageRendererTest extends MessageRendererTest<byte[]> {
         return render;
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test
     public void getValueFromText() {
-        render.getValueFromText("");
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> render.getValueFromText(""));
     }
 
-    @Test
-    public void readUTF8File() {
-        assertContent("utf8.txt", "UTF-8");
-    }
+    @ParameterizedTest
+    @ValueSource(strings = {"UTF-8", "Cp1252"})
+    public void testGetContent(String encoding) throws UnsupportedEncodingException, IOException {
+        String value = "éè€";
+        byte[] expected = value.getBytes(encoding);
+        String filename = writeFile(encoding, expected);
 
-    @Test
-    public void readCP1252File() {
-        assertContent("cp1252.txt", "Cp1252");
-    }
-
-    private void assertContent(String resource, String encoding) {
-        String filename = getResourceFile(resource);
+        // The tested method
         byte[] actual = render.getContent(filename);
-        try {
-            assertArrayEquals("éè€".getBytes(encoding), actual);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+
+        assertArrayEquals(expected, actual, "value: " + value);
     }
 
     @Test
     public void readNonExistingContent() {
-        error.expect(RuntimeException.class);
-        error.expectCause(instanceOf(IOException.class));
-        error.expectMessage("Can't read content of __file_that_may_not_exists_else_it_will_fail");
-        render.getContent("__file_that_may_not_exists_else_it_will_fail");
+        RuntimeException ex = Assertions.assertThrows(
+                RuntimeException.class,
+                () -> render.getContent("__file_that_may_not_exists_else_it_will_fail")
+        );
+
+        MatcherAssert.assertThat(ex, allOf(
+                hasMessage(containsString("Can't read content of __file_that_may_not_exists_else_it_will_fail")),
+                hasCause(instanceOf(IOException.class))
+        ));
     }
 
     @Test
-    public void getValueFromFile_withNoVar() {
+    public void getValueFromFile_withNoVar() throws IOException {
         String text = "éè€";
-        assertValueFromFile(text, "utf8.txt", true);
+        String fileName = writeFile("utf8.txt", text);
+        assertValueFromFile(text, fileName, true);
         assertCacheContentInString(text);
     }
 
     @Test
-    public void getValueFromFile_withOneVar() {
+    public void getValueFromFile_withOneVar(JMeterVariables vars) throws IOException {
+        String fileName = writeFile("oneVar.txt", "${oneVar}");
         String value = "éè€";
-        jmeterCtxService.get().getVariables().put("oneVar", value);
-        assertValueFromFile(value, "oneVar.txt", true);
+        vars.put("oneVar", value);
+        assertValueFromFile(value, fileName, true);
         assertCacheContentInString("${oneVar}");
     }
 
     @Test
     public void getValueFromFile_withInvalidEncoding() {
-        error.expect(UnsupportedCharsetException.class);
-        render.getValueFromFile(getResourceFile("utf8.txt"), "banana", true, cache);
+        RuntimeException ex = Assertions.assertThrows(
+                RuntimeException.class,
+                () -> render.getValueFromFile("utf8.txt", "banana", true, cache)
+        );
+        MatcherAssert.assertThat(
+                ex,
+                allOf(
+                        hasMessage(containsString("utf8.txt")),
+                        hasCause(instanceOf(UnsupportedEncodingException.class))
+                )
+        );
     }
 
     @Test
-    public void getValueFromFile_inRawMode() {
+    public void getValueFromFile_inRawMode() throws IOException {
         String text = "${oneVar}";
-        assertValueFromFile(text, "oneVar.txt", false);
+        String fileName = writeFile("oneVar.txt", text);
+        assertValueFromFile(text, fileName, false);
         assertCacheContentInBytes(text);
     }
 
-    protected void assertValueFromFile(String expected, String resource, boolean hasVariable) {
-        assertValueFromFile(actual -> assertBytesEquals(expected, actual), resource, hasVariable);
+    protected void assertValueFromFile(String expected, String fileName, boolean hasVariable) {
+        assertValueFromFile(actual -> assertBytesEquals(expected, actual), fileName, hasVariable);
     }
 
     protected void assertCacheContentInBytes(String expected) {
