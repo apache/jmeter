@@ -166,59 +166,59 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
             copyMetrics = metrics;
             metrics = new ArrayList<>(copyMetrics.size());
         }
-        if (!copyMetrics.isEmpty()) {
-            try {
-                if(httpRequest == null) {
-                    httpRequest = createRequest(url, token);
-                }
-                StringBuilder sb = new StringBuilder(copyMetrics.size()*35);
-                for (MetricTuple metric : copyMetrics) {
-                    // Add TimeStamp in nanosecond from epoch ( default in InfluxDB )
-                    sb.append(metric.measurement)
+        writeAndSendMetrics(copyMetrics);
+    }
+
+    private void writeAndSendMetrics(List<MetricTuple> copyMetrics) {
+        try {
+            if (httpRequest == null) {
+                httpRequest = createRequest(url, token);
+            }
+            StringBuilder sb = new StringBuilder(copyMetrics.size() * 35);
+            for (MetricTuple metric : copyMetrics) {
+                // Add TimeStamp in nanosecond from epoch ( default in InfluxDB )
+                sb.append(metric.measurement)
                         .append(metric.tag)
                         .append(" ") //$NON-NLS-1$
                         .append(metric.field)
                         .append(" ")
-                        .append(metric.timestamp+"000000")
+                        .append(metric.timestamp)
+                        .append("000000")
                         .append("\n"); //$NON-NLS-1$
+            }
+
+            httpRequest.setEntity(new StringEntity(sb.toString(), StandardCharsets.UTF_8));
+            lastRequest = httpClient.execute(httpRequest, new FutureCallback<HttpResponse>() {
+                @Override
+                public void completed(final HttpResponse response) {
+                    int code = response.getStatusLine().getStatusCode();
+                    /*
+                     * If your write request received HTTP
+                     * 204 No Content: it was a success!
+                     * 4xx: InfluxDB could not understand the request.
+                     * 5xx: The system is overloaded or significantly impaired.
+                     */
+                    if (MetricUtils.isSuccessCode(code)) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Success, number of metrics written: {}", copyMetrics.size());
+                        }
+                    } else {
+                        log.error("Error writing metrics to influxDB Url: {}, responseCode: {}, responseBody: {}", url, code, getBody(response));
+                    }
                 }
 
-                StringEntity entity = new StringEntity(sb.toString(), StandardCharsets.UTF_8);
+                @Override
+                public void failed(final Exception ex) {
+                    log.error("failed to send data to influxDB server.", ex);
+                }
 
-                httpRequest.setEntity(entity);
-                lastRequest = httpClient.execute(httpRequest, new FutureCallback<HttpResponse>() {
-                    @Override
-                    public void completed(final HttpResponse response) {
-                        int code = response.getStatusLine().getStatusCode();
-                        /*
-                         * HTTP response summary 2xx: If your write request received
-                         * HTTP 204 No Content, it was a success! 4xx: InfluxDB
-                         * could not understand the request. 5xx: The system is
-                         * overloaded or significantly impaired.
-                         */
-                        if (MetricUtils.isSuccessCode(code)) {
-                            if(log.isDebugEnabled()) {
-                                log.debug("Success, number of metrics written: {}", copyMetrics.size());
-                            }
-                        } else {
-                            log.error("Error writing metrics to influxDB Url: {}, responseCode: {}, responseBody: {}", url, code, getBody(response));
-                        }
-                    }
-                    @Override
-                    public void failed(final Exception ex) {
-                        log.error("failed to send data to influxDB server : {}", ex.getMessage());
-                    }
-                    @Override
-                    public void cancelled() {
-                        log.warn("Request to influxDB server was cancelled");
-                    }
-                });
-            }catch (URISyntaxException ex ) {
-                log.error(ex.getMessage());
-            } finally {
-                // We drop metrics in all cases
-                copyMetrics.clear();
-            }
+                @Override
+                public void cancelled() {
+                    log.warn("Request to influxDB server was cancelled");
+                }
+            });
+        } catch (URISyntaxException ex) {
+            log.error(ex.getMessage(), ex);
         }
     }
 
