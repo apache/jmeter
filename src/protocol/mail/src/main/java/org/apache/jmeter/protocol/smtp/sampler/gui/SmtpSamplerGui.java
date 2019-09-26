@@ -16,7 +16,6 @@
  *
  */
 
-
 package org.apache.jmeter.protocol.smtp.sampler.gui;
 
 import java.awt.BorderLayout;

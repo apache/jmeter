@@ -16,16 +16,6 @@
  *
  */
 
-/*
- * TCP Sampler Client implementation which reads and writes length-prefixed binary data.
- *
- * Input/Output strings are passed as hex-encoded binary strings.
- *
- * 2-Byte or 4-Byte length prefixes are supported.
- *
- * Length prefix is binary of length specified by property "tcp.length.prefix.length".
- *
- */
 package org.apache.jmeter.protocol.tcp.sampler;
 
 import java.io.IOException;
@@ -40,7 +30,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implements binary length-prefixed binary data.
- * This is used in ISO8583 for example.
+ * <p>This is used in ISO8583 for example.
+ * Input/Output strings are passed as hex-encoded binary strings.</p>
+ *
+ * <p>2-Byte or 4-Byte length prefixes are supported.</p>
+ *
+ * <p>Length prefix is binary of length specified by property "tcp.length.prefix.length".</p>
  */
 public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     private static final Logger log = LoggerFactory.getLogger(LengthPrefixedBinaryTCPClientImpl.class);

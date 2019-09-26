@@ -34,6 +34,7 @@ plugins {
     checkstyle
     id("org.jetbrains.gradle.plugin.idea-ext") version "0.5" apply false
     id("org.nosphere.apache.rat") version "0.5.0"
+    id("com.diffplug.gradle.spotless") version "3.24.3"
     id("com.github.spotbugs") version "1.6.10"
     id("org.sonarqube") version "2.7.1"
     id("com.github.vlsi.crlf") version "1.17.0"
@@ -241,6 +242,7 @@ if (enableSpotBugs) {
     }
 }
 
+val licenseHeaderFile = file("config/license.header.java")
 allprojects {
     group = "org.apache.jmeter"
     // JMeter ClassFinder parses "class.path" and tries to find jar names there,
@@ -274,6 +276,29 @@ allprojects {
         spotbugs {
             toolVersion = "spotbugs".v
             isIgnoreFailures = ignoreSpotBugsFailures
+        }
+
+        apply(plugin = "com.diffplug.gradle.spotless")
+        spotless {
+            java {
+                licenseHeaderFile(licenseHeaderFile)
+                importOrder("static ", "java.", "javax", "org", "net", "com", "")
+                removeUnusedImports()
+                trimTrailingWhitespace()
+                indentWithSpaces(4)
+                endWithNewline()
+            }
+        }
+    }
+    plugins.withId("groovy") {
+        spotless {
+            groovy {
+                licenseHeaderFile(licenseHeaderFile)
+                importOrder("static ", "java.", "javax", "org", "net", "com", "")
+                trimTrailingWhitespace()
+                indentWithSpaces(4)
+                endWithNewline()
+            }
         }
     }
 

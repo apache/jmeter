@@ -383,4 +383,3 @@ public class TestSampleResult implements JMeterSerialTest {
             assertTrue("Expected true on second call of markFile with null", secondResult.markFile(null));
         }
 }
-

@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.report.config;
 
 import org.apache.jmeter.report.core.ConvertException;

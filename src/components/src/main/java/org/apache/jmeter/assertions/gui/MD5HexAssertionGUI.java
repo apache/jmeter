@@ -16,10 +16,6 @@
  *
  */
 
-/**
- * GUI class supporting the MD5Hex assertion functionality.
- *
- */
 package org.apache.jmeter.assertions.gui;
 
 import java.awt.BorderLayout;
@@ -34,6 +30,9 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+/**
+ * GUI class supporting the MD5Hex assertion functionality.
+ */
 public class MD5HexAssertionGUI extends AbstractAssertionGui {
 
     private static final long serialVersionUID = 240L;

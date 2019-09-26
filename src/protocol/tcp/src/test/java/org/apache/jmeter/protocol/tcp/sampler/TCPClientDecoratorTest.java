@@ -16,10 +16,6 @@
  *
  */
 
-/*
- * Test class for TCPClientDecorator utility methods.
- *
- */
 package org.apache.jmeter.protocol.tcp.sampler;
 
 import static org.junit.Assert.assertEquals;

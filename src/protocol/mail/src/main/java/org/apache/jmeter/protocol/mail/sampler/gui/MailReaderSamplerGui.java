@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.protocol.mail.sampler.gui;
 
 import java.awt.BorderLayout;

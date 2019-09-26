@@ -13,21 +13,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package org.apache.jmeter.protocol.jdbc.sampler
-
-import org.apache.jmeter.config.ConfigTestElement
-import org.apache.jmeter.samplers.SampleResult
-import org.apache.jmeter.testelement.property.JMeterProperty
-import spock.lang.Specification
-import spock.lang.Unroll
 
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.ResultSetMetaData
 import java.sql.SQLException
 import java.sql.Statement
+
+import org.apache.jmeter.config.ConfigTestElement
+import org.apache.jmeter.samplers.SampleResult
+import org.apache.jmeter.testelement.property.JMeterProperty
+
+import spock.lang.Specification
+import spock.lang.Unroll
 
 @Unroll
 class JDBCSamplerSpec extends Specification {

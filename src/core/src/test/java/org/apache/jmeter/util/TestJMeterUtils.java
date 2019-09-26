@@ -16,10 +16,6 @@
  *
  */
 
-/**
- * Package to test JMeterUtils methods
- */
-
 package org.apache.jmeter.util;
 
 import static org.junit.Assert.assertEquals;

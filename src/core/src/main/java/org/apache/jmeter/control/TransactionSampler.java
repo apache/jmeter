@@ -16,10 +16,6 @@
  *
  */
 
-/*
- *  N.B. Although this is a type of sampler, it is only used by the transaction controller,
- *  and so is in the control package
-*/
 package org.apache.jmeter.control;
 
 

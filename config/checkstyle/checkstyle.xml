@@ -131,6 +131,8 @@
       <property name="allowStaticMemberImports" value="false"/>
     </module>
     <module name="RedundantImport"/>
+    <!--
+      Note: Import order is moved to Spotless. See ./gradlew spotlessCheck; ./gradlew spotlessApply
     <module name="UnusedImports"/>
     <module name="ImportOrder">
       <property name="groups" value="/^java\./,javax,org,net,com"/>
@@ -139,6 +141,7 @@
       <property name="option" value="top"/>
      <property name="sortStaticImportsAlphabetically" value="true"/>
     </module>
+    -->
 
     <!-- JavaDocs -->
 <!--

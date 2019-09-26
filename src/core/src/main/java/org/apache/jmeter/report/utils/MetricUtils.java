@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.report.utils;
 
 import org.apache.commons.lang3.StringUtils;

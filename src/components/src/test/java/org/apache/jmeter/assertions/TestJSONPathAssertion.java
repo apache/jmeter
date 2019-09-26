@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.assertions;
 
 import static org.junit.Assert.assertEquals;

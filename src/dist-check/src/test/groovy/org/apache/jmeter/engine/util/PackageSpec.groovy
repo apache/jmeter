@@ -13,6 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package org.apache.jmeter.engine.util
@@ -22,6 +23,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty
 import org.apache.jmeter.testelement.property.StringProperty
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
+
 import spock.lang.Specification
 import spock.lang.Unroll
 

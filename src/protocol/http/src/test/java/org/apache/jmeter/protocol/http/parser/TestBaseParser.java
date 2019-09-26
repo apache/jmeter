@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.protocol.http.parser;
 
 import static org.junit.Assert.assertNotSame;

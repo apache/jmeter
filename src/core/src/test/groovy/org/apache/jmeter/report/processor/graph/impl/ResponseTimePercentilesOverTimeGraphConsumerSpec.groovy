@@ -13,13 +13,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
- package org.apache.jmeter.report.processor.graph.impl
-
-import org.apache.jmeter.junit.spock.JMeterSpec
+package org.apache.jmeter.report.processor.graph.impl
 
 import java.util.stream.Collectors
+
+import org.apache.jmeter.junit.spock.JMeterSpec
 
 class ResponseTimePercentilesOverTimeGraphConsumerSpec extends JMeterSpec {
 

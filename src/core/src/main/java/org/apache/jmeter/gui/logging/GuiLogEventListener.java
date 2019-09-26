@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.gui.logging;
 
 import java.util.EventListener;

@@ -18,8 +18,8 @@
 
 package org.apache.jmeter.report.dashboard
 
+import java.net.URL
 import java.nio.file.Paths
-import java.net.URL;
 
 import org.apache.commons.io.FileUtils
 import org.apache.jmeter.junit.spock.JMeterSpec

@@ -16,10 +16,6 @@
  *
  */
 
-/*
- * Created on May 16, 2004
- *
- */
 package org.apache.jmeter.protocol.jdbc.sampler;
 
 import org.apache.jmeter.protocol.jdbc.JDBCTestElementBeanInfoSupport;

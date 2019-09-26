@@ -16,9 +16,6 @@
  *
  */
 
-/**
- * Package to test JOrphanUtils methods
- */
 package org.apache.jorphan.exec;
 
 import static org.junit.Assert.fail;

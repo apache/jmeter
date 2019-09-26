@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.protocol.http.sampler;
 
 import static org.junit.Assert.assertFalse;

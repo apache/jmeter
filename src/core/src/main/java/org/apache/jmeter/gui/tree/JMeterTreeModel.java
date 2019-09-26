@@ -35,7 +35,7 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench; // NOSONAR We need this for backward compatibility
+import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 

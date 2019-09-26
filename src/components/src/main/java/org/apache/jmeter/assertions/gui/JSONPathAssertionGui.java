@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.assertions.gui;
 
 import java.awt.BorderLayout;

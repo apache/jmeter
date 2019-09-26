@@ -16,13 +16,12 @@
  *
  */
 
-/*
- * TCP Sampler Client decorator to permit wrapping base client implementations with length prefixes.
- * For example, character data or binary data with character length or binary length
- *
- */
 package org.apache.jmeter.protocol.tcp.sampler;
 
+/**
+ * TCP Sampler Client decorator to permit wrapping base client implementations with length prefixes.
+ * <p>For example, character data or binary data with character length or binary length.</p>
+ */
 public abstract class TCPClientDecorator extends AbstractTCPClient {
 
     protected final TCPClient tcpClient; // the data implementation

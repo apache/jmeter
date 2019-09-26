@@ -3,7 +3,7 @@
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License") you may not use this file except in compliance with
+ * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -13,17 +13,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package org.apache.jmeter.extractor.json.render
 
-import org.apache.jmeter.samplers.SampleResult
-import org.apache.jmeter.extractor.json.render.RenderAsJmesPathRenderer
-import org.apache.jmeter.junit.spock.JMeterSpec
-import org.apache.jmeter.util.JMeterUtils
 import javax.swing.JTabbedPane
+
+import org.apache.jmeter.extractor.json.render.RenderAsJmesPathRenderer
 import org.apache.jmeter.junit.categories.NeedGuiTests
+import org.apache.jmeter.junit.spock.JMeterSpec
+import org.apache.jmeter.samplers.SampleResult
+import org.apache.jmeter.util.JMeterUtils
 import org.junit.experimental.categories.Category
+
 import spock.lang.IgnoreIf
 
 class RenderAsJmesPathRendererSpec extends JMeterSpec {

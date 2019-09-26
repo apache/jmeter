@@ -19,6 +19,7 @@
 package org.apache.jmeter.visualizers.backend.graphite
 
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool
+
 import spock.lang.Specification
 
 class TextGraphiteMetricsSenderSpec extends Specification {

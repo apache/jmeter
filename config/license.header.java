@@ -16,14 +16,3 @@
  *
  */
 
-package org.apache.jmeter.assertions;
-
-import org.apache.jmeter.util.BSFBeanInfoSupport;
-
-public class BSFAssertionBeanInfo extends BSFBeanInfoSupport {
-
-    public BSFAssertionBeanInfo() {
-        super(BSFAssertion.class);
-    }
-
-}

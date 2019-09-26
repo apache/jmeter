@@ -79,4 +79,3 @@ public class TestCssParser extends JMeterTestCase {
         return result;
     }
 }
-

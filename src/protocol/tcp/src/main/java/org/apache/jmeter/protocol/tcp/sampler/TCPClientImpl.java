@@ -16,14 +16,6 @@
  *
  */
 
-/*
- * Basic TCP Sampler Client class
- *
- * Can be used to test the TCP Sampler against an HTTP server
- *
- * The protocol handler class name is defined by the property tcp.handler
- *
- */
 package org.apache.jmeter.protocol.tcp.sampler;
 
 import java.io.ByteArrayOutputStream;

@@ -15,10 +15,12 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.report.processor
 
 import org.apache.jmeter.report.core.Sample
 import org.apache.jmeter.report.core.SampleMetadata
+
 import spock.lang.Specification
 
 class FieldSampleComparatorSpec extends Specification {

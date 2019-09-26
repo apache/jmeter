@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.extractor.json.jmespath;
 
 import com.fasterxml.jackson.databind.JsonNode;

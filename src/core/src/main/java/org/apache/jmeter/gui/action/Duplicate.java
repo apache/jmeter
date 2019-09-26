@@ -16,11 +16,6 @@
  *
  */
 
-/*
- * Created on Apr 9, 2003
- *
- * Clones a JMeterTreeNode
- */
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;

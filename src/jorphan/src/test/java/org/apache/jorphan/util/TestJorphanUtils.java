@@ -16,10 +16,6 @@
  *
  */
 
-/**
- * Package to test JOrphanUtils methods
- */
-
 package org.apache.jorphan.util;
 
 import static org.junit.Assert.assertEquals;

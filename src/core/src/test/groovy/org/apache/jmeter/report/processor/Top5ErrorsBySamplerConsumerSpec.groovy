@@ -13,6 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package org.apache.jmeter.report.processor
@@ -20,6 +21,7 @@ package org.apache.jmeter.report.processor
 
 import org.apache.jmeter.report.core.Sample
 import org.apache.jmeter.report.utils.MetricUtils
+
 import spock.lang.Specification
 
 class Top5ErrorsBySamplerConsumerSpec extends Specification {

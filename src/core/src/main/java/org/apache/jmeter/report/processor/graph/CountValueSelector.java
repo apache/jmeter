@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.report.processor.graph;
 
 import org.apache.jmeter.control.TransactionController;

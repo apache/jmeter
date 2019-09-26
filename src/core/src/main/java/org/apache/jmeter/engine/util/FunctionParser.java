@@ -16,9 +16,6 @@
  *
  */
 
-/*
- * Created on Jul 25, 2003
- */
 package org.apache.jmeter.engine.util;
 
 import java.io.IOException;

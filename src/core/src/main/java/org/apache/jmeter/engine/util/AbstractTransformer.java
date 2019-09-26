@@ -16,9 +16,6 @@
  *
  */
 
-/*
- * Created on May 4, 2003
- */
 package org.apache.jmeter.engine.util;
 
 import java.util.Map;

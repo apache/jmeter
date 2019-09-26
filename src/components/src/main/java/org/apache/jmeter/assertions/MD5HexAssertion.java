@@ -16,13 +16,6 @@
  *
  */
 
-/**
- * MD5HexAssertion class creates an MD5 checksum from the response <br/>
- * and matches it with the MD5 hex provided.
- * The assertion will fail when the expected hex is different from the <br/>
- * one calculated from the response OR when the expected hex is left empty.
- *
- */
 package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
@@ -38,6 +31,12 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * MD5HexAssertion class creates an MD5 checksum from the response
+ * and matches it with the MD5 hex provided.
+ * <p>The assertion will fail when the expected hex is different from the
+ * one calculated from the response OR when the expected hex is left empty.</p>
+ */
 public class MD5HexAssertion extends AbstractTestElement implements Serializable, Assertion {
 
     private static final long serialVersionUID = 241L;

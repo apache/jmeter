@@ -16,9 +16,6 @@
  *
  */
 
-/*
- * Created on Jun 13, 2003
- */
 package org.apache.jmeter.util;
 
 import java.io.File;

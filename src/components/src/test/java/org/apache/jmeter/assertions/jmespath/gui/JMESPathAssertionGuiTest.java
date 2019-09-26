@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.assertions.jmespath.gui;
 
 import org.apache.jmeter.assertions.jmespath.JMESPathAssertion;

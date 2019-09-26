@@ -16,10 +16,6 @@
  *
  */
 
-/*
- * Example Sampler GUI (non-beans version)
- */
-
 package org.apache.jmeter.examples.sampler.gui;
 
 import java.awt.BorderLayout;

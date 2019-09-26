@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.report.processor;
 
 import org.apache.commons.lang3.Validate;
