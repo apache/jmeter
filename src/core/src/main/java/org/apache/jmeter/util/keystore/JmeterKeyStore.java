@@ -34,6 +34,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -110,29 +111,30 @@ public final class JmeterKeyStore {
         this.privateKeyByAlias = new HashMap<>();
         this.certsByAlias = new HashMap<>();
 
-       PrivateKey privateKey = null;
-       int index = 0;
-       Enumeration<String> aliases = store.aliases();
-       while (aliases.hasMoreElements()) {
-          String alias = aliases.nextElement();
-          if (store.isKeyEntry(alias)) {
-                if (isIndexInConfiguredRange(index)) {
-                    privateKey = validateNotNull(
-                            (PrivateKey) store.getKey(alias, pw),
-                            "No key found for alias: " + alias);
-                    Certificate[] chain = validateNotNull(
-                            store.getCertificateChain(alias),
-                            "No certificate chain found for alias" + alias);
-                    aliasesList.add(alias);
-                    privateKeyByAlias.put(alias, privateKey);
-                    certsByAlias.put(alias, toX509Certificates(chain));
-                }
-             index++;
-          }
-       }
+        PrivateKey privateKey = null;
+        int index = 0;
+        Enumeration<String> aliases = store.aliases();
+        while (aliases.hasMoreElements()) {
+            String alias = aliases.nextElement();
+            if (!store.isKeyEntry(alias)) {
+                continue;
+            }
+            if (isIndexInConfiguredRange(index)) {
+                privateKey = Objects.requireNonNull(
+                        (PrivateKey) store.getKey(alias, pw),
+                        "No key found for alias: " + alias);
+                Certificate[] chain = Objects.requireNonNull(
+                        store.getCertificateChain(alias),
+                        "No certificate chain found for alias" + alias);
+                aliasesList.add(alias);
+                privateKeyByAlias.put(alias, privateKey);
+                certsByAlias.put(alias, toX509Certificates(chain));
+            }
+            index++;
+        }
 
-       if (is != null) { // only check for keys, if we were given a file as inputstream
-           validateNotNull(privateKey, "No key(s) found");
+        if (is != null) { // only check for keys, if we were given a file as inputstream
+            Objects.requireNonNull(privateKey, "No key(s) found");
             if (endIndex != -1 && index <= endIndex - startIndex && log.isWarnEnabled()) {
                 log.warn("Did not find as much aliases as configured in indexes Start={}, end={}, found={}", startIndex,
                         endIndex, certsByAlias.size());
@@ -143,13 +145,6 @@ public final class JmeterKeyStore {
          * Note: if is == null and no pkcs11 store is configured, the arrays will be empty
          */
         this.names = aliasesList.toArray(new String[aliasesList.size()]);
-    }
-
-    private <T> T validateNotNull(T object, String message) throws IOException {
-        if (null == object) {
-            throw new IOException(message);
-        }
-        return object;
     }
 
     private X509Certificate[] toX509Certificates(Certificate[] chain) {
@@ -176,16 +171,12 @@ public final class JmeterKeyStore {
      *
      * @param alias the alias for which the certificate chain should be given
      * @return the certificate chain for the alias
-     * @throws IllegalArgumentException
-     *             if no chain could be found for the alias
      */
     public X509Certificate[] getCertificateChain(String alias) {
-        X509Certificate[] result = this.certsByAlias.get(alias);
-        if(result != null) {
-            return result;
-        }
         // API expects null not empty array, see http://docs.oracle.com/javase/7/docs/api/javax/net/ssl/X509KeyManager.html
-        throw new IllegalArgumentException("No certificate found for alias:'"+alias+"'");
+        return Objects.requireNonNull(
+                this.certsByAlias.get(alias),
+                "No certificate found for alias:'" + alias + "'");
     }
 
     /**
