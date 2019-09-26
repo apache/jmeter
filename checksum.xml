@@ -22,6 +22,7 @@
     <trusted-key id='912d2c0eccda55c0' group='com.google.errorprone' />
     <trusted-key id='9a259c7ee636c5ed' group='com.google.errorprone' />
     <trusted-key id='bf935c771a8474f8' group='com.google.errorprone' />
+    <trusted-key id='912d2c0eccda55c0' group='com.google.errorprone' />
     <trusted-key id='9a259c7ee636c5ed' group='com.google.googlejavaformat' />
     <trusted-key id='abe9f3126bb741c1' group='com.google.guava' />
     <trusted-key id='f6d4a1d411e9d1ae' group='com.google.guava' />
