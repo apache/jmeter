@@ -47,9 +47,7 @@ public class HttpMetricsSenderTest {
 
     private MappingBuilder influxRequest(CountDownLatch latch) {
         return WireMock.post(API_URL)
-                .willReturn(
-                        WireMock.aResponse().withStatus(HttpURLConnection.HTTP_NO_CONTENT)
-                )
+                .willReturn(WireMock.aResponse().withStatus(HttpURLConnection.HTTP_NO_CONTENT))
                 .withPostServeAction("countdown", Parameters.one("latch", latch));
     }
 
