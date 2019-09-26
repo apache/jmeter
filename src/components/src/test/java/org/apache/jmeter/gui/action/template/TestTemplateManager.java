@@ -114,13 +114,6 @@ public class TestTemplateManager extends JMeterTestCase {
         assertNotEquals(testTemplate2, testTemplate3);
         assertNotEquals(testTemplate3, testTemplate1);
         assertNotEquals(testTemplate3, testTemplate2);
-
-        assertNotEquals(testTemplate1.hashCode(), testTemplate2.hashCode());
-        assertNotEquals(testTemplate1.hashCode(), testTemplate3.hashCode());
-        assertNotEquals(testTemplate2.hashCode(), testTemplate1.hashCode());
-        assertNotEquals(testTemplate2.hashCode(), testTemplate3.hashCode());
-        assertNotEquals(testTemplate3.hashCode(), testTemplate1.hashCode());
-        assertNotEquals(testTemplate3.hashCode(), testTemplate2.hashCode());
     }
 
     @Test
@@ -136,6 +129,5 @@ public class TestTemplateManager extends JMeterTestCase {
         Template template2 = readTemplateFromFile().get("testTemplateWithParameters");
         template2.setParameters(Collections.singletonMap("key", "value"));
         assertNotEquals(template1, template2);
-        assertNotEquals(template1.hashCode(), template2.hashCode());
     }
 }
