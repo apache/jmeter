@@ -92,6 +92,7 @@ dependencies {
         apiv("net.minidev:json-smart")
         apiv("net.sf.jtidy:jtidy")
         apiv("net.sf.saxon:Saxon-HE")
+        apiv("nl.jqno.equalsverifier:equalsverifier")
         apiv("org.apache-extras.beanshell:bsh")
         apiv("org.apache.commons:commons-dbcp2")
         apiv("org.apache.commons:commons-jexl3")

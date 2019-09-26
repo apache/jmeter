@@ -70,6 +70,7 @@ dependencies {
     testRuntimeOnly("org.bouncycastle:bcmail-jdk15on")
     testRuntimeOnly("org.bouncycastle:bcpkix-jdk15on")
     testRuntimeOnly("org.bouncycastle:bcprov-jdk15on")
+    testImplementation("nl.jqno.equalsverifier:equalsverifier")
 }
 
 fun String?.toBool(nullAs: Boolean, blankAs: Boolean, default: Boolean) =

@@ -60,6 +60,7 @@
     <trusted-key id='d4012dda1f1f0f82' group='net.sf.jtidy' />
     <trusted-key id='1d185615d0a84648' group='net.sf.saxon' />
     <trusted-key id='098a31f381819057' group='net.sourceforge.nekohtml' />
+    <trusted-key id='4a1bac7f1e3b89b3' group='nl.jqno.equalsverifier' />
     <trusted-key id='c84125c13bf6f2f2' group='org.ajoberstar.grgit' />
     <trusted-key id='6b1b008864323b92' group='org.antlr' />
     <trusted-key id='411063a3a0ffd119' group='org.apache-extras.beanshell' />

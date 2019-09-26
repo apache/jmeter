@@ -38,6 +38,9 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+
 public class TestTemplateManager extends JMeterTestCase {
 
     private Map<String, Template> templateMap;
@@ -100,6 +103,15 @@ public class TestTemplateManager extends JMeterTestCase {
             assertTrue("Exception did not contains expected message, got:" + ex.getMessage(),
                     ex.getMessage().contains("Element type \"key\" must be declared."));
         }
+    }
+
+    @Test
+    public void equalsHashCode() {
+        EqualsVerifier.forClass(Template.class)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .suppress(Warning.TRANSIENT_FIELDS)
+                .verify();
     }
 
     @Test
