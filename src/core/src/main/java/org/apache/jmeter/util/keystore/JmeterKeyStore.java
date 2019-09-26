@@ -287,10 +287,8 @@ public final class JmeterKeyStore {
     public String[] getClientAliases(String keyType, Principal[] issuers) {
         int count = getAliasCount();
         String[] aliases = new String[count];
-        for(int i = 0; i < aliases.length; i++) {
-            aliases[i] = this.names[i];
-        }
-        if(aliases.length>0) {
+        System.arraycopy(this.names, 0, aliases, 0, aliases.length);
+        if (aliases.length > 0) {
             return aliases;
         } else {
             // API expects null not empty array, see http://docs.oracle.com/javase/7/docs/api/javax/net/ssl/X509KeyManager.html
