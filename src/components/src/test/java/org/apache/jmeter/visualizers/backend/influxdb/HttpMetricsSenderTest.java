@@ -83,6 +83,7 @@ public class HttpMetricsSenderTest {
         metricsSender.setup(influxdbUrl, influxDBToken);
         metricsSender.addMetric("measurement", "location=west", "size=10");
         metricsSender.writeAndSendMetrics();
+        metricsSender.destroy();
     }
 
     private void assertAuthHeader(WireMockServer server, StringValuePattern authHeader) {
