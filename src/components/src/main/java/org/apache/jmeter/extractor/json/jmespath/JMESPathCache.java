@@ -30,7 +30,7 @@ import io.burt.jmespath.RuntimeConfiguration;
 import io.burt.jmespath.function.FunctionRegistry;
 import io.burt.jmespath.jackson.JacksonRuntime;
 
-public class JMESPathCache {
+public final class JMESPathCache {
     private static final class JMESPathCacheLoader implements CacheLoader<String, Expression<JsonNode>> {
         final JmesPath<JsonNode> runtime;
 
