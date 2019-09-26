@@ -74,7 +74,7 @@ public final class JmeterKeyStore {
      * @param clientCertAliasVarName name for the default key, if empty use the first key available
      * @throws KeyStoreException        when the type of the keystore is not supported
      * @throws IllegalArgumentException when <code>startIndex</code> &lt; 0, <code>endIndex</code>
-     *                                  &lt; 0 or <code>endIndex</code> &lt; </code>startIndex</code>
+     *                                  &lt; -1 or <code>endIndex</code> &lt; </code>startIndex</code>
      */
     private JmeterKeyStore(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws KeyStoreException {
         if (startIndex < 0 || (endIndex != -1 && endIndex < startIndex)) {
@@ -238,13 +238,13 @@ public final class JmeterKeyStore {
      *
      * @param type                   store type (e.g. JKS)
      * @param startIndex             first index (from 0)
-     * @param endIndex               last index (to count -1)
+     * @param endIndex               last index (to count-1)
      * @param clientCertAliasVarName name of the default key to, if empty the first key will be
      *                               used as default key
      * @return the keystore
      * @throws KeyStoreException        when the type of the store is not supported
      * @throws IllegalArgumentException when <code>startIndex</code> &lt; 0, <code>endIndex</code>
-     *                                  &lt; 0, or <code>endIndex</code> &lt; <code>startIndex</code>
+     *                                  &lt; -1, or <code>endIndex</code> &lt; <code>startIndex</code>
      */
     public static JmeterKeyStore getInstance(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws KeyStoreException {
         return new JmeterKeyStore(type, startIndex, endIndex, clientCertAliasVarName);
