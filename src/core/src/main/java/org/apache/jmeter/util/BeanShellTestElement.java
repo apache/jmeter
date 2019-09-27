@@ -183,7 +183,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         try {
             bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
         } catch (JMeterException e) {
-            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            if (log.isDebugEnabled()) {
+                log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            }
         }
     }
 
@@ -195,7 +197,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         try {
             bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
         } catch (JMeterException e) {
-            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            if (log.isDebugEnabled()) {
+                log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            }
         }
     }
 
@@ -207,7 +211,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         try {
             bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
         } catch (JMeterException e) {
-            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            if (log.isDebugEnabled()) {
+                log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            }
         }
     }
 
@@ -219,7 +225,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         try {
             bshInterpreter.eval("testEnded(\"" + host + "\")");
         } catch (JMeterException e) {
-            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            if (log.isDebugEnabled()) {
+                log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            }
         }
     }
 
@@ -231,7 +239,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         try {
             bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
         } catch (JMeterException e) {
-            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            if (log.isDebugEnabled()) {
+                log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            }
         }
     }
 
@@ -243,7 +253,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         try {
             bshInterpreter.eval("testStarted(\"" + host + "\")");
         } catch (JMeterException e) {
-            log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            if (log.isDebugEnabled()) {
+                log.debug(getClass().getName() + " : " + e.getLocalizedMessage()); // $NON-NLS-1$
+            }
         }
     }
 
