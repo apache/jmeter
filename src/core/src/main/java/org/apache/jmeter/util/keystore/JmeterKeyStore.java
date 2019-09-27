@@ -30,6 +30,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -281,17 +282,15 @@ public final class JmeterKeyStore {
      *
      * @param keyType the key algorithm type name (RSA, DSA, etc.)
      * @param issuers the CA certificates we are narrowing our selection on.
-     * @return the array of aliases; may be null
+     * @return the array of aliases; null if none.
+     * @see javax.net.ssl.X509KeyManager#getClientAliases
      */
     public String[] getClientAliases(String keyType, Principal[] issuers) {
-        int count = getAliasCount();
+        int count = this.names.length;
         if (count == 0) {
-            // API expects null not empty array, see http://docs.oracle.com/javase/7/docs/api/javax/net/ssl/X509KeyManager.html
             return null;
         }
-        String[] aliases = new String[count];
-        System.arraycopy(this.names, 0, aliases, 0, aliases.length);
-        return aliases;
-}
+        return Arrays.copyOf(this.names, count);
+    }
 
 }
