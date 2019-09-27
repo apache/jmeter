@@ -304,11 +304,12 @@ public class TestXPathExtractor {
             extractor.process();
             assertEquals(1, result.getAssertionResults().length);
             assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-            org.junit.Assert.assertTrue(result.getAssertionResults()[0].
-                    getFailureMessage().contains("Content is not allowed in prolog"));
+            assertThat(result.getAssertionResults()[0].getFailureMessage(),
+                    containsString("Content is not allowed in prolog"));
             assertEquals("Default", vars.get(VAL_NAME));
             assertEquals("0", vars.get(VAL_NAME_NR));
         }
+
         @Test
         public void testInvalidDocument() throws Exception {
             result.setResponseData("<z>", null);
@@ -317,8 +318,8 @@ public class TestXPathExtractor {
 
             assertEquals(1, result.getAssertionResults().length);
             assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-            org.junit.Assert.assertThat(result.getAssertionResults()[0].
-                    getFailureMessage(), containsString("XML document structures must start and end within the same entity"));
+            assertThat(result.getAssertionResults()[0].getFailureMessage(),
+                    containsString("XML document structures must start and end within the same entity"));
 
             assertEquals("Default", vars.get(VAL_NAME));
             assertEquals("0", vars.get(VAL_NAME_NR));
