@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 
 import junit.framework.TestSuite;
 
-public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
+public final class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
     private static final Logger log = LoggerFactory.getLogger(TestHTMLParser.class);
 
     private static final String DEFAULT_UA = "Apache-HttpClient/4.2.6";
