@@ -31,8 +31,16 @@ matrix:
         - bash <(curl -s https://codecov.io/bash)
     - name: Tests with OpenJDK 11
       jdk: openjdk11
+      addons:
+        apt:
+          packages:
+            - language-pack-fr
+      env:
+        - TZ=Pacific/Chatham # flips between +12:45 and +13:45
+        - LANG=fr_FR.UTF-8
+        - LC_ALL=fr_FR.UTF-8
       script:
-        - ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build javadocAggregate createDist
+        - ./gradlew -Duser.language=fr -Duser.country=FR $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build javadocAggregate createDist
     - name: Tests with OpenJDK 12
       # Might switch to openjdk-ea when https://github.com/gradle/gradle/issues/10248 is fixed
       jdk: openjdk12
