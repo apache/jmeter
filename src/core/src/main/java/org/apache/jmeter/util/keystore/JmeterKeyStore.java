@@ -171,13 +171,11 @@ public final class JmeterKeyStore {
      * Get the ordered certificate chain for a specific alias.
      *
      * @param alias the alias for which the certificate chain should be given
-     * @return the certificate chain for the alias
+     * @return the certificate chain for the alias or null if not found
+     * @see javax.net.ssl.X509KeyManager#getCertificateChain(String)
      */
     public X509Certificate[] getCertificateChain(String alias) {
-        // API expects null not empty array, see http://docs.oracle.com/javase/7/docs/api/javax/net/ssl/X509KeyManager.html
-        return Objects.requireNonNull(
-                this.certsByAlias.get(alias),
-                "No certificate found for alias:'" + alias + "'");
+        return this.certsByAlias.get(alias);
     }
 
     /**
