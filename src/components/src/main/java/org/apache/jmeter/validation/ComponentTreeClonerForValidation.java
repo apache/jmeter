@@ -31,7 +31,8 @@ public class ComponentTreeClonerForValidation extends TreeClonerForValidation {
     /**
      * For 100% on ThroughputController
      */
-    protected static final boolean VALIDATION_TPC_FORCE_100_PERCENT = JMeterUtils.getPropDefault("testplan_validation.tpc_force_100_pct", false); //$NON-NLS-1$
+    protected static final boolean VALIDATION_TPC_FORCE_100_PERCENT =
+            JMeterUtils.getPropDefault("testplan_validation.tpc_force_100_pct", false); //$NON-NLS-1$
 
     public ComponentTreeClonerForValidation() {
         this(false);

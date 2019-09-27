@@ -40,7 +40,8 @@ public class TestJMESPathExtractor {
     private static final String REFERENCE_NAME = "varname"; // $NON-NLS-1$
     private static final String REFERENCE_NAME_MATCH_NUMBER = "varname_matchNr"; // $NON-NLS-1$
 
-    private static JMESPathExtractor setupProcessor(JMeterVariables vars, SampleResult sampleResult, String data, boolean isSourceVars, String matchNumbers) {
+    private static JMESPathExtractor setupProcessor(
+            JMeterVariables vars, SampleResult sampleResult, String data, boolean isSourceVars, String matchNumbers) {
         JMeterContext jmctx = JMeterContextService.getContext();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(sampleResult);
@@ -240,7 +241,8 @@ public class TestJMESPathExtractor {
         public void testRandomElementOneMatch() {
             SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", fromVariables, "0");
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult,
+                    "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", fromVariables, "0");
 
             processor.setJmesPathExpression("a.b.c.d");
             processor.process();
@@ -253,7 +255,8 @@ public class TestJMESPathExtractor {
         public void testRandomElementMultipleMatches() {
             SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "[\"one\", \"two\"]", fromVariables, "0");
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult,
+                    "[\"one\", \"two\"]", fromVariables, "0");
 
             processor.setJmesPathExpression("[*]");
             processor.process();
@@ -280,7 +283,8 @@ public class TestJMESPathExtractor {
         public void testErrorInJMESPath() {
             SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", fromVariables, "-1");
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult,
+                    "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", fromVariables, "-1");
 
             processor.setJmesPathExpression("$.k");
             processor.process();
@@ -293,7 +297,8 @@ public class TestJMESPathExtractor {
         public void testNoMatch() {
             SampleResult sampleResult = new SampleResult();
             JMeterVariables vars = new JMeterVariables();
-            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", fromVariables, "-1");
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult,
+                    "{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", fromVariables, "-1");
 
             processor.setJmesPathExpression("a.b.c.f");
             processor.process();

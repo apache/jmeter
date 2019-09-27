@@ -45,13 +45,9 @@ public class Publisher implements Closeable {
     private static final Logger log = LoggerFactory.getLogger(Publisher.class);
 
     private final Connection connection;
-
     private final Session session;
-
     private final MessageProducer producer;
-
     private final Context ctx;
-
     private final boolean staticDest;
 
     /**
@@ -59,27 +55,17 @@ public class Publisher implements Closeable {
      * parameters. Uses a static destination and persistent messages(for
      * backward compatibility)
      *
-     * @param useProps
-     *            true if a jndi.properties file is to be used
-     * @param initialContextFactory
-     *            the (ignored if useProps is true)
-     * @param providerUrl
-     *            (ignored if useProps is true)
-     * @param connfactory
-     *            name of the object factory to look up in context
-     * @param destinationName
-     *            name of the destination to use
-     * @param useAuth
-     *            (ignored if useProps is true)
-     * @param securityPrincipal
-     *            (ignored if useProps is true)
-     * @param securityCredentials
-     *            (ignored if useProps is true)
-     * @throws JMSException
-     *             if the context could not be initialised, or there was some
-     *             other error
-     * @throws NamingException
-     *             when creation of the publisher fails
+     * @param useProps              true if a jndi.properties file is to be used
+     * @param initialContextFactory the (ignored if useProps is true)
+     * @param providerUrl           (ignored if useProps is true)
+     * @param connfactory           name of the object factory to look up in context
+     * @param destinationName       name of the destination to use
+     * @param useAuth               (ignored if useProps is true)
+     * @param securityPrincipal     (ignored if useProps is true)
+     * @param securityCredentials   (ignored if useProps is true)
+     * @throws JMSException    if the context could not be initialised, or there was some
+     *                         other error
+     * @throws NamingException when creation of the publisher fails
      */
     public Publisher(boolean useProps, String initialContextFactory, String providerUrl,
             String connfactory, String destinationName, boolean useAuth,
@@ -89,34 +75,22 @@ public class Publisher implements Closeable {
                 securityCredentials, true);
     }
 
-
     /**
      * Create a publisher using either the jndi.properties file or the provided
      * parameters
      *
-     * @param useProps
-     *            true if a jndi.properties file is to be used
-     * @param initialContextFactory
-     *            the (ignored if useProps is true)
-     * @param providerUrl
-     *            (ignored if useProps is true)
-     * @param connfactory
-     *            name of the object factory to lookup in context
-     * @param destinationName
-     *            name of the destination to use
-     * @param useAuth
-     *            (ignored if useProps is true)
-     * @param securityPrincipal
-     *            (ignored if useProps is true)
-     * @param securityCredentials
-     *            (ignored if useProps is true)
-     * @param staticDestination
-     *            true if the destination is not to change between loops
-     * @throws JMSException
-     *             if the context could not be initialised, or there was some
-     *             other error
-     * @throws NamingException
-     *             when creation of the publisher fails
+     * @param useProps              true if a jndi.properties file is to be used
+     * @param initialContextFactory the (ignored if useProps is true)
+     * @param providerUrl           (ignored if useProps is true)
+     * @param connfactory           name of the object factory to lookup in context
+     * @param destinationName       name of the destination to use
+     * @param useAuth               (ignored if useProps is true)
+     * @param securityPrincipal     (ignored if useProps is true)
+     * @param securityCredentials   (ignored if useProps is true)
+     * @param staticDestination     true if the destination is not to change between loops
+     * @throws JMSException    if the context could not be initialised, or there was some
+     *                         other error
+     * @throws NamingException when creation of the publisher fails
      */
     public Publisher(boolean useProps, String initialContextFactory, String providerUrl,
             String connfactory, String destinationName, boolean useAuth,
@@ -150,7 +124,8 @@ public class Publisher implements Closeable {
         return setPropertiesAndSend(destinationName, properties, msg, deliveryMode, priority, expiration);
     }
 
-    public Message publish(Serializable contents, String destinationName, Map<String, Object> properties, int deliveryMode, int priority, long expiration)
+    public Message publish(
+            Serializable contents, String destinationName, Map<String, Object> properties, int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         ObjectMessage msg = session.createObjectMessage(contents);
         return setPropertiesAndSend(destinationName, properties, msg, deliveryMode, priority, expiration);

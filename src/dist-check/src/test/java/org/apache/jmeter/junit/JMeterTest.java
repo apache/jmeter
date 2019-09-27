@@ -73,13 +73,10 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
     private static final Logger log = LoggerFactory.getLogger(JMeterTest.class);
 
     private static Map<String, Boolean> guiTitles;
-
     private static Map<String, Boolean> guiTags;
-
     private static Properties nameMap;
 
     private static final Locale TEST_LOCALE = Locale.ENGLISH;
-
     private static final Locale DEFAULT_LOCALE = Locale.getDefault();
 
     public JMeterTest(String name) {
@@ -258,8 +255,9 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         guiTitles.remove("Sample_Result_Save_Configuration");// Ditto, not a sampler
         assertEquals(
                 "Should not have any names left over, check name of components in EN (default) Locale, "
-                + "which must match name attribute of component, check java.awt.HeadlessException errors before, we are running with '-Djava.awt.headless="
-                + System.getProperty("java.awt.headless")+"'",
+                        + "which must match name attribute of component, "
+                        + "check java.awt.HeadlessException errors before, we are running with '-Djava.awt.headless="
+                        + System.getProperty("java.awt.headless") + "'",
                 0, scanprintMap(guiTitles, "GUI"));
     }
 

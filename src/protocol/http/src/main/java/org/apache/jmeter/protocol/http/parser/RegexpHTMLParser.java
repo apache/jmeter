@@ -68,7 +68,6 @@ import org.slf4j.LoggerFactory;
  * <ul>
  * <li>&lt; ... codebase=<b>url</b> ... &gt;
  * </ul>
- *
  */
 class RegexpHTMLParser extends HTMLParser {
     private static final Logger log = LoggerFactory.getLogger(RegexpHTMLParser.class);
@@ -110,9 +109,6 @@ class RegexpHTMLParser extends HTMLParser {
     // Number of capturing groups possibly containing Base HREFs:
     private static final int NUM_BASE_GROUPS = 3;
 
-    /**
-     * Thread-local input:
-     */
     private static final ThreadLocal<PatternMatcherInput> localInput =
             ThreadLocal.withInitial(() -> new PatternMatcherInput(new char[0]));
 
@@ -127,7 +123,9 @@ class RegexpHTMLParser extends HTMLParser {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(
+            String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding)
+            throws HTMLParseException {
         Pattern pattern= null;
         Perl5Matcher matcher = null;
         try {

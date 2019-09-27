@@ -235,25 +235,25 @@ public final class NewDriver {
      */
     public static void main(String[] args) {
         if(!EXCEPTIONS_IN_INIT.isEmpty()) {
-            System.err.println("Configuration error during init, see exceptions:"+exceptionsToString(EXCEPTIONS_IN_INIT)); // NOSONAR Intentional System.err use
+            System.err.println( // NOSONAR Intentional System.err use
+                    "Configuration error during init, see exceptions:" + exceptionsToString(EXCEPTIONS_IN_INIT));
         } else {
             Thread.currentThread().setContextClassLoader(loader);
-
-
             setLoggingProperties(args);
 
             try {
                 // Only set property if it has not been set explicitely
-                if(System.getProperty(HEADLESS_MODE_PROPERTY) == null && shouldBeHeadless(args)) {
+                if (System.getProperty(HEADLESS_MODE_PROPERTY) == null && shouldBeHeadless(args)) {
                     System.setProperty(HEADLESS_MODE_PROPERTY, "true");
                 }
-                Class<?> initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
+                Class<?> initialClass = loader.loadClass("org.apache.jmeter.JMeter"); // $NON-NLS-1$
                 Object instance = initialClass.getDeclaredConstructor().newInstance();
-                Method startup = initialClass.getMethod("start", new Class[] { new String[0].getClass() });// $NON-NLS-1$
+                Method startup = initialClass.getMethod("start", String[].class); // $NON-NLS-1$
                 startup.invoke(instance, new Object[] { args });
             } catch(Throwable e){ // NOSONAR We want to log home directory in case of exception
                 e.printStackTrace(); // NOSONAR No logger at this step
-                System.err.println("JMeter home directory was detected as: "+JMETER_INSTALLATION_DIRECTORY); // NOSONAR Intentional System.err use
+                System.err.println( // NOSONAR Intentional System.err use
+                        "JMeter home directory was detected as: " + JMETER_INSTALLATION_DIRECTORY);
             }
         }
     }
@@ -295,7 +295,9 @@ public final class NewDriver {
         } else if (System.getProperty("log4j.configurationFile") == null) {// $NON-NLS-1$
             logConfFile = new File("log4j2.xml");// $NON-NLS-1$
             if (!logConfFile.isFile()) {
-                logConfFile = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
+                logConfFile = new File(
+                        JMETER_INSTALLATION_DIRECTORY,
+                        "bin" + File.separator + "log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
             }
         }
 
@@ -358,7 +360,8 @@ public final class NewDriver {
                 fromIndex = begin + 1;
                 end = fileName.indexOf('\'', fromIndex);// $NON-NLS-1$
                 if (end == -1) {
-                    throw new IllegalArgumentException("Invalid pairs of single-quotes in the file name: " + fileName);// $NON-NLS-1$
+                    throw new IllegalArgumentException(
+                            "Invalid pairs of single-quotes in the file name: " + fileName);// $NON-NLS-1$
                 }
 
                 format = fileName.substring(begin + 1, end);
@@ -375,7 +378,8 @@ public final class NewDriver {
 
             return builder.toString();
         } catch (Exception ex) {
-            System.err.println("Error replacing date format in file name:"+fileName+", error:"+ex.getMessage()); // NOSONAR
+            System.err.println( // NOSONAR
+                    "Error replacing date format in file name:"+fileName+", error:"+ex.getMessage());
         }
 
         return fileName;

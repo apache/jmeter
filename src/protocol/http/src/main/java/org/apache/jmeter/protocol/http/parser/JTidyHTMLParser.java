@@ -49,7 +49,9 @@ class JTidyHTMLParser extends HTMLParser {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(
+            String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding)
+            throws HTMLParseException {
         Document dom;
         try {
             dom = (Document) getDOM(html, encoding);
@@ -67,13 +69,9 @@ class JTidyHTMLParser extends HTMLParser {
     /**
      * Scan nodes recursively, looking for embedded resources
      *
-     * @param node -
-     *            initial node
-     * @param urls -
-     *            container for URLs
-     * @param baseUrl -
-     *            used to create absolute URLs
-     *
+     * @param node    initial node
+     * @param urls    container for URLs
+     * @param baseUrl used to create absolute URLs
      * @return new base URL
      */
     private URL scanNodes(Node node, URLCollection urls, URL baseUrl) throws HTMLParseException {
@@ -186,7 +184,6 @@ class JTidyHTMLParser extends HTMLParser {
         }
 
         return baseUrl;
-
     }
 
     /*
@@ -224,12 +221,9 @@ class JTidyHTMLParser extends HTMLParser {
     /**
      * Returns a node representing a whole xml given an xml document.
      *
-     * @param text
-     *            an xml document (as a byte array)
+     * @param text an xml document (as a byte array)
      * @return a node representing a whole xml
-     *
-     * @throws SAXException
-     *             indicates an error parsing the xml document
+     * @throws SAXException indicates an error parsing the xml document
      */
     private static Node getDOM(byte[] text, String encoding) throws SAXException {
         log.debug("Start : getDOM");

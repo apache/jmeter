@@ -310,7 +310,9 @@ public final class ActionRouter implements ActionListener {
         }
     }
 
-    private static List<String> findClassesThatExtend(String className, String excluding, String[] searchPath) throws IOException, ClassNotFoundException {
+    private static List<String> findClassesThatExtend(
+            String className, String excluding, String[] searchPath)
+            throws IOException, ClassNotFoundException {
 
         return ClassFinder.findClassesThatExtend(
                 searchPath, // strPathsOrJars - pathNames or jar files to search for classes

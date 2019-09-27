@@ -708,7 +708,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 sampler.setRunningVersion(true);
                 executedUrl = sampler.getUrl();
                 sampler.setRunningVersion(false);
-                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
+                checkGetRequest_Parameters(
+                        sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
                 break;
             case 1:
                 // Test sending data with ISO-8859-1 encoding
@@ -723,7 +724,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 sampler.setRunningVersion(true);
                 executedUrl = sampler.getUrl();
                 sampler.setRunningVersion(false);
-                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
+                checkGetRequest_Parameters(
+                        sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
                 break;
             case 2:
                 // Test sending data with UTF-8 encoding
@@ -738,7 +740,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 sampler.setRunningVersion(true);
                 executedUrl = sampler.getUrl();
                 sampler.setRunningVersion(false);
-                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
+                checkGetRequest_Parameters(
+                        sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
                 break;
             case 3:
                 // Test sending data as UTF-8, with values that changes when urlencoded
@@ -753,7 +756,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 sampler.setRunningVersion(true);
                 executedUrl = sampler.getUrl();
                 sampler.setRunningVersion(false);
-                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
+                checkGetRequest_Parameters(
+                        sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
                 break;
             case 4:
                 // Test sending data as UTF-8, with values that have been urlencoded
@@ -768,7 +772,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 sampler.setRunningVersion(true);
                 executedUrl = sampler.getUrl();
                 sampler.setRunningVersion(false);
-                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, true);
+                checkGetRequest_Parameters(
+                        sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, true);
                 break;
             case 5:
                 // Test sending data as UTF-8, where user defined variables are used

@@ -161,9 +161,6 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     public static final String DEFAULT_GROUP = "";
 
-    @SuppressWarnings("unused") // TODO - use or remove
-    private int scrollerCount = 0;
-
     /**
      * BeanInfo object for the class of the objects being edited.
      */
@@ -238,7 +235,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             } else if (guiType instanceof Class && Enum.class.isAssignableFrom((Class<?>) guiType)) {
                     @SuppressWarnings("unchecked") // we check the class type above
                     final Class<? extends Enum<?>> enumClass = (Class<? extends Enum<?>>) guiType;
-                    propertyEditor = new EnumEditor(descriptor, enumClass, (ResourceBundle) descriptor.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE));
+                    propertyEditor = new EnumEditor(
+                            descriptor, enumClass, (ResourceBundle) descriptor.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE));
             } else {
                 Class<?> editorClass = descriptor.getPropertyEditorClass();
                 log.debug("Property {} has editor class {}", name, editorClass);
@@ -282,6 +280,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 textAreaEditorIndex = i;
             }
             if (propertyEditor.getCustomEditor() instanceof JScrollPane) {
+                // TODO - use or remove
+                int scrollerCount = 0;
                 scrollerCount++;
             }
 

@@ -38,7 +38,9 @@ import org.slf4j.LoggerFactory;
  * @since 4.0
  */
 @GUIMenuSortOrder(3)
-public class PreciseThroughputTimer extends AbstractTestElement implements Cloneable, Timer, TestStateListener, TestBean, ThroughputProvider, DurationProvider {
+public class PreciseThroughputTimer
+        extends AbstractTestElement
+        implements Cloneable, Timer, TestStateListener, TestBean, ThroughputProvider, DurationProvider {
     private static final Logger log = LoggerFactory.getLogger(PreciseThroughputTimer.class);
 
     private static final long serialVersionUID = 3;
@@ -131,11 +133,17 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
 
     private EventProducer getEventProducer() {
         AbstractThreadGroup tg = getThreadContext().getThreadGroup();
-        Long seed = randomSeed == null || randomSeed == 0 ? null : randomSeed;
-        return
-                groupEvents.computeIfAbsent(tg, x -> new ConstantPoissonProcessGenerator(
+        Long seed = randomSeed == 0 ? null : randomSeed;
+        return groupEvents.computeIfAbsent(tg, x ->
+                new ConstantPoissonProcessGenerator(
                         () -> PreciseThroughputTimer.this.getThroughput() / throughputPeriod,
-                        batchSize, batchThreadDelay, this, exactLimit, allowedThroughputSurplus, seed, true));
+                        batchSize,
+                        batchThreadDelay,
+                        this,
+                        exactLimit,
+                        allowedThroughputSurplus,
+                        seed,
+                        true));
     }
 
     /**

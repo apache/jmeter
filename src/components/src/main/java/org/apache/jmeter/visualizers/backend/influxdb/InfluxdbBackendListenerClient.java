@@ -426,7 +426,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
      * Tags are separated by spaces in grafana
      * Tags is put as InfluxdbTag for better query performance on it
      * Never double or single quotes in influxdb except for string field
-     * see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
+     * see:
+     * https://docs.influxdata.com/influxdb/v1.7/write_protocols/line_protocol_reference/#quoting
      *
      * @param isStartOfTest boolean true for start, false for end
      */

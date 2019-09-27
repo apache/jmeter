@@ -39,22 +39,26 @@ public class TreeClonerForValidation extends TreeCloner {
     /**
      * Number of Threads to configure when running a Thread Group during a validation
      */
-    protected static final int VALIDATION_NUMBER_OF_THREADS = JMeterUtils.getPropDefault("testplan_validation.nb_threads_per_thread_group", 1); //$NON-NLS-1$
+    protected static final int VALIDATION_NUMBER_OF_THREADS =
+            JMeterUtils.getPropDefault("testplan_validation.nb_threads_per_thread_group", 1); //$NON-NLS-1$
 
     /**
      * Ignore or not timers during a Thread Group validation
      */
-    protected static final boolean VALIDATION_IGNORE_TIMERS = JMeterUtils.getPropDefault("testplan_validation.ignore_timers", true); //$NON-NLS-1$
+    protected static final boolean VALIDATION_IGNORE_TIMERS =
+            JMeterUtils.getPropDefault("testplan_validation.ignore_timers", true); //$NON-NLS-1$
 
     /**
      * Ignore or not Backend during a Thread Group validation
      */
-    protected static final boolean VALIDATION_IGNORE_BACKENDS = JMeterUtils.getPropDefault("testplan_validation.ignore_backends", true); //$NON-NLS-1$
+    protected static final boolean VALIDATION_IGNORE_BACKENDS =
+            JMeterUtils.getPropDefault("testplan_validation.ignore_backends", true); //$NON-NLS-1$
 
     /**
      * Number of iterations to run during a Thread Group validation
      */
-    protected static final int VALIDATION_ITERATIONS = JMeterUtils.getPropDefault("testplan_validation.number_iterations", 1); //$NON-NLS-1$
+    protected static final int VALIDATION_ITERATIONS =
+            JMeterUtils.getPropDefault("testplan_validation.number_iterations", 1); //$NON-NLS-1$
 
     static {
         log.info("Running validation with number of threads:{}, ignoreTimers:{}, number of iterations:{}",
@@ -74,21 +78,21 @@ public class TreeClonerForValidation extends TreeCloner {
      */
     @Override
     protected Object addNodeToTree(Object node) {
-        if((VALIDATION_IGNORE_TIMERS && node instanceof Timer) ||
+        if ((VALIDATION_IGNORE_TIMERS && node instanceof Timer) ||
                 (VALIDATION_IGNORE_BACKENDS && node instanceof Backend)) {
             return node; // don't add timer or backend
-        } else {
-            Object clonedNode = super.addNodeToTree(node);
-            if(clonedNode instanceof org.apache.jmeter.threads.ThreadGroup) {
-                ThreadGroup tg = (ThreadGroup)clonedNode;
-                tg.setNumThreads(VALIDATION_NUMBER_OF_THREADS);
-                tg.setScheduler(false);
-                tg.setProperty(ThreadGroup.DELAY, 0);
-                if(((AbstractThreadGroup)clonedNode).getSamplerController() instanceof LoopController) {
-                    ((LoopController)((AbstractThreadGroup)clonedNode).getSamplerController()).setLoops(VALIDATION_ITERATIONS);
-                }
-            }
-            return clonedNode;
         }
+
+        Object clonedNode = super.addNodeToTree(node);
+        if (clonedNode instanceof ThreadGroup) {
+            ThreadGroup tg = (ThreadGroup) clonedNode;
+            tg.setNumThreads(VALIDATION_NUMBER_OF_THREADS);
+            tg.setScheduler(false);
+            tg.setProperty(ThreadGroup.DELAY, 0);
+            if (((AbstractThreadGroup) clonedNode).getSamplerController() instanceof LoopController) {
+                ((LoopController) ((AbstractThreadGroup) clonedNode).getSamplerController()).setLoops(VALIDATION_ITERATIONS);
+            }
+        }
+        return clonedNode;
     }
 }

@@ -169,7 +169,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * HTTP Sampler using Apache HttpClient 4.x.
- *
  */
 public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
@@ -963,8 +962,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> setupClient(HttpClientKey key, JMeterVariables jMeterVariables,
-            HttpClientContext clientContext) throws GeneralSecurityException {
+    private MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> setupClient(
+            HttpClientKey key, JMeterVariables jMeterVariables, HttpClientContext clientContext) {
         Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey =
                 HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY, key);
@@ -1124,9 +1123,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      *  <li>Close current Idle or Expired connections that hold SSL State</li>
      *  <li>Remove HttpClientContext.USER_TOKEN from {@link HttpClientContext}</li>
      * </ul>
-     * @param jMeterVariables {@link JMeterVariables}
-     * @param clientContext {@link HttpClientContext}
-     * @param mapHttpClientPerHttpClientKey Map of {@link MutableTriple} holding {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
+     *
+     * @param jMeterVariables               {@link JMeterVariables}
+     * @param clientContext                 {@link HttpClientContext}
+     * @param mapHttpClientPerHttpClientKey Map of {@link MutableTriple} holding
+     *                                      {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
      */
     private void resetStateIfNeeded(
             MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
@@ -1146,9 +1147,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    /**
-     * @param mapHttpClientPerHttpClientKey
-     */
     private void closeCurrentConnections(
             Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
         for (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple :
@@ -1492,7 +1490,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Check if the header manager had a content type header
             // This allows the user to specify their own content-type for a POST request
             Header contentTypeHeader = entityEnclosingRequest.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
-            boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
+            boolean hasContentTypeHeader =
+                    contentTypeHeader != null
+                            && contentTypeHeader.getValue() != null
+                            && contentTypeHeader.getValue().length() > 0;
             // If there are no arguments, we can send a file as the body of the request
             // TODO: needs a multiple file upload scenario
             if(!hasArguments() && getSendFileAsPostBody()) {
@@ -1774,7 +1775,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>
             mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         if (mapHttpClientPerHttpClientKey != null ) {
-            for (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple : mapHttpClientPerHttpClientKey.values() ) {
+            for (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple : mapHttpClientPerHttpClientKey.values()) {
                 JOrphanUtils.closeQuietly(triple.getLeft());
                 JOrphanUtils.closeQuietly(triple.getRight());
             }

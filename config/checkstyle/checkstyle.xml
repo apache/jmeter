@@ -132,15 +132,10 @@
     </module>
     <module name="RedundantImport"/>
     <!--
-      Note: Import order is moved to Spotless. See ./gradlew spotlessCheck; ./gradlew spotlessApply
+      Note: Unused Imports and Import order now checked by to Spotless.
+       See ./gradlew spotlessCheck; ./gradlew spotlessApply
     <module name="UnusedImports"/>
-    <module name="ImportOrder">
-      <property name="groups" value="/^java\./,javax,org,net,com"/>
-      <property name="ordered" value="true"/>
-      <property name="separated" value="true"/>
-      <property name="option" value="top"/>
-     <property name="sortStaticImportsAlphabetically" value="true"/>
-    </module>
+    <module name="ImportOrder"/>
     -->
 
     <!-- JavaDocs -->
@@ -177,7 +172,7 @@
     </module>
     <module name="LineLength">
       <!-- TODO: reduce this to 120 -->
-      <property name="max" value="160"/>
+      <property name="max" value="153"/>
     </module>
 
     <!-- whitespace -->

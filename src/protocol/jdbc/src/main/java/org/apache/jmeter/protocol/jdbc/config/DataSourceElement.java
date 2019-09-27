@@ -189,7 +189,8 @@ public class DataSourceElement extends AbstractTestElement
         Object poolObject =
                 JMeterContextService.getContext().getVariables().getObject(poolName);
         if (poolObject == null) {
-            throw new SQLException("No pool found named: '" + poolName + "', ensure Variable Name matches Variable Name of JDBC Connection Configuration");
+            throw new SQLException(
+                    "No pool found named: '" + poolName + "', ensure Variable Name matches Variable Name of JDBC Connection Configuration");
         } else {
             if(poolObject instanceof DataSourceComponentImpl) {
                 DataSourceComponentImpl pool = (DataSourceComponentImpl) poolObject;

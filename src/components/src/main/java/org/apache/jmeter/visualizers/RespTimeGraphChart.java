@@ -282,14 +282,16 @@ public class RespTimeGraphChart extends JPanel {
             double[][] _data, int _width, int _height, int _incrScaleYAxis,
             Color[] _color, Font legendFont, Graphics g) {
 
-        double max = maxYAxisScale > 0 ? maxYAxisScale : getTopValue(findMax(_data), BigDecimal.ROUND_UP); // define max scale y axis
+        // define max scale y axis
+        double max = maxYAxisScale > 0 ? maxYAxisScale : getTopValue(findMax(_data), BigDecimal.ROUND_UP);
         try {
             // if the title graph is empty, we can assume some default
             if (_title.length() == 0 ) {
                 _title = JMeterUtils.getResString("graph_resp_time_title"); //$NON-NLS-1$
             }
             this.setPreferredSize(new Dimension(_width,_height));
-            DataSeries dataSeries = new DataSeries( _xAxisLabels, null, _yAxisTitle, _title ); // replace _xAxisTitle to null (don't display x axis title)
+            // replace _xAxisTitle to null (don't display x axis title)
+            DataSeries dataSeries = new DataSeries( _xAxisLabels, null, _yAxisTitle, _title );
 
             // Stroke and shape line settings
             Stroke[] strokes = new Stroke[_legendLabels.length];

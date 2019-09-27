@@ -103,7 +103,8 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
         String javaCommand = System.getProperty(SUN_JAVA_COMMAND);
         if(StringUtils.isEmpty(javaCommand)) {
             JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
-                    JMeterUtils.getResString("restart_error")+":\n This command is only supported on Open JDK or Oracle JDK" ,  //$NON-NLS-1$  //$NON-NLS-2$
+                    JMeterUtils.getResString("restart_error") //$NON-NLS-1$
+                            + ":\n This command is only supported on Open JDK or Oracle JDK", //$NON-NLS-1$
                     JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
             return;
         }
@@ -183,9 +184,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
         }
         return new JMenuItem[0];
     }
-    /**
-     *
-     */
+
     public Restart() {
         super();
     }

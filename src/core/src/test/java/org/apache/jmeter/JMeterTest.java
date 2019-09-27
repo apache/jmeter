@@ -74,7 +74,7 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
     }
 
     @Test
-    public void testFailureWithMissingPlugin() throws IOException, ConfigurationException {
+    public void testFailureWithMissingPlugin() throws IOException {
         File temp = File.createTempFile("testPlan", ".jmx");
         String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT.20190506\">\n"
@@ -95,9 +95,12 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
                 + "          <boolProp name=\"SUCCESFULL\">true</boolProp>\n"
                 + "          <stringProp name=\"RESPONSE_CODE\">200</stringProp>\n"
                 + "          <stringProp name=\"RESPONSE_MESSAGE\">OK</stringProp>\n"
-                + "          <stringProp name=\"REQUEST_DATA\">{&quot;email&quot;:&quot;user1&quot;, &quot;password&quot;:&quot;password1&quot;}；"
-                + "</stringProp>\n"
-                + "          <stringProp name=\"RESPONSE_DATA\">{&quot;successful&quot;: true, &quot;account_id&quot;:&quot;0123456789&quot;}</stringProp>\n"
+                + "          <stringProp name=\"REQUEST_DATA\">" +
+                "{&quot;email&quot;:&quot;user1&quot;, &quot;password&quot;:&quot;password1&quot;}；" +
+                "</stringProp>\n"
+                + "          <stringProp name=\"RESPONSE_DATA\">" +
+                "{&quot;successful&quot;: true, &quot;account_id&quot;:&quot;0123456789&quot;}" +
+                "</stringProp>\n"
                 + "          <stringProp name=\"RESPONSE_TIME\">${__Random(50,500)}</stringProp>\n"
                 + "          <stringProp name=\"LATENCY\">${__Random(1,50)}</stringProp>\n"
                 + "          <stringProp name=\"CONNECT\">${__Random(1,5)}</stringProp>\n"

@@ -113,7 +113,7 @@ public final class Utils {
                 sb.append(value).append('\n');
             }
         } catch (JMSException e) {
-            sb.append("\nError: "+e.toString());
+            sb.append("\nError: ").append(e.toString());
         }
         return sb;
     }
@@ -128,7 +128,7 @@ public final class Utils {
             sb.append("JMSPriority      ").append(msg.getJMSPriority()).append('\n');
             sb.append("JMSDestination   ").append(msg.getJMSDestination()).append('\n');
         } catch (JMSException e) {
-            sb.append("\nError: "+e.toString());
+            sb.append("\nError: ").append(e.toString());
         }
         return sb;
     }
@@ -146,10 +146,11 @@ public final class Utils {
      */
     public static Destination lookupDestination(Context context, String name) throws NamingException {
         Object o = context.lookup(name);
-        if (o instanceof Destination){
+        if (o instanceof Destination) {
             return (Destination) o;
         }
-        throw new NamingException("Found: "+name+"; expected Destination, but was: "+(o!=null ? o.getClass().getName() : "null"));
+        String className = o != null ? o.getClass().getName() : "null";
+        throw new NamingException("Found: " + name + "; expected Destination, but was: " + className);
     }
 
     /**
@@ -170,7 +171,8 @@ public final class Utils {
             if(env != null) {
                 return (String) env.get(key);
             } else {
-                log.warn("context.getEnvironment() returned null (should not happen according to javadoc but non compliant implementation can return this)");
+                log.warn("context.getEnvironment() returned null " +
+                        "(should not happen according to javadoc but non compliant implementation can return this)");
                 return null;
             }
         } catch (javax.naming.OperationNotSupportedException ex) {
@@ -194,7 +196,7 @@ public final class Utils {
      *             when lookup in context fails
      */
     public static Connection getConnection(Context ctx, String factoryName) throws JMSException, NamingException {
-        Object objfac = null;
+        Object objfac;
         try {
             objfac = ctx.lookup(factoryName);
         } catch (NoClassDefFoundError e) {
@@ -210,7 +212,8 @@ public final class Utils {
                 return ((javax.jms.ConnectionFactory) objfac).createConnection();
             }
         }
-        throw new NamingException("Expected javax.jms.ConnectionFactory, found "+(objfac != null ? objfac.getClass().getName(): "null"));
+        String objFacName = objfac != null ? objfac.getClass().getName() : "null";
+        throw new NamingException("Expected javax.jms.ConnectionFactory, found "+ objFacName);
     }
 
     /**
@@ -248,10 +251,7 @@ public final class Utils {
      */
     public static JMSProperties convertArgumentsToJmsProperties(Arguments args) {
         JMSProperties jmsProperties = new JMSProperties();
-        Map<String,String>  map = args.getArgumentsAsMap();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            jmsProperties.addJmsProperty(entry.getKey(), entry.getValue());
-        }
+        args.getArgumentsAsMap().forEach(jmsProperties::addJmsProperty);
         return jmsProperties;
     }
 }

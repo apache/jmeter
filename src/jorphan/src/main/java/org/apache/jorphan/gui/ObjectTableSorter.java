@@ -37,7 +37,6 @@ import org.apache.commons.lang3.ObjectUtils;
 /**
  * Implementation of a {@link RowSorter} for {@link ObjectTableModel}
  * @since 3.2
- *
  */
 public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
 
@@ -346,8 +345,10 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
         if (comparator == null) {
             comparator = Stream.concat(
                     Stream.concat(
-                            getPrimaryComparator() != null ? Stream.of(getPrimaryComparator()) : Stream.<Comparator<Row>>empty(),
-                            getSortKeys().stream().filter(sk -> sk != null && sk.getSortOrder() != SortOrder.UNSORTED).map(this::getComparatorFromSortKey)
+                            getPrimaryComparator() != null ? Stream.of(getPrimaryComparator()) : Stream.empty(),
+                            getSortKeys().stream()
+                                    .filter(sk -> sk != null && sk.getSortOrder() != SortOrder.UNSORTED)
+                                    .map(this::getComparatorFromSortKey)
                     ),
                     Stream.of(getFallbackComparator())
             ).reduce(comparator, (result, current) -> result != null ? result.thenComparing(current) : current);

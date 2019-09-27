@@ -46,9 +46,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/*
- * Created on Nov 29, 2003
- *
+/**
  * Test the composition of the messages*.properties files
  * - properties files exist
  * - properties files don't have duplicate keys
@@ -61,14 +59,12 @@ import junit.framework.TestSuite;
  *
  * This is why the tests use Class.getResourceAsStream() etc
  *
- * The tests don't quite follow the normal JUnit test strategy of one test per
+ * The tests doesn't quite follow the normal JUnit test strategy of one test per
  * possible failure. This was done in order to make it easier to report exactly
  * why the tests failed.
  */
-
 public class PackageTest extends TestCase implements Describable {
     // We assume the test starts in "src/core" directory (which is true for Gradle and IDEs)
-    private static final File srcFiledir = new File("src/main/java");
     private static final File resourceFiledir = new File("src/main/resources");
 
     private static final String MESSAGES = "messages";
@@ -107,41 +103,42 @@ public class PackageTest extends TestCase implements Describable {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(ras));) {
             String s;
             while ((s = fileReader.readLine()) != null) {
-                if (s.length() > 0 && !s.startsWith("#") && !s.startsWith("!")) {
-                    int equ = s.indexOf('=');
-                    String key = s.substring(0, equ);
-                    if (resourcePrefix.equals(MESSAGES)){// Only relevant for messages
-                        /*
-                         * JMeterUtils.getResString() converts space to _ and lowercases
-                         * the key, so make sure all keys pass the test
-                         */
-                        if (key.contains(" ") || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
-                            failures.add("Invalid key for JMeterUtils " + key);
-                        }
-                    }
-                    String val = s.substring(equ + 1);
-                    l.add(key); // Store the key
-                    /*
-                     * Now check for invalid message format: if string contains {0}
-                     * and ' there may be a problem, so do a format with dummy
-                     * parameters and check if there is a { in the output. A bit
-                     * crude, but should be enough for now.
-                     */
-                    if (val.contains("{0}") && val.contains("'")) {
-                        String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
-                        if (m.contains("{")) {
-                            failures.add("Incorrect message format ? (input/output) for: " + key +
-                                    ". Output contains {, it seems not all paratemeters were replaced." +
-                                    "Format: " + val + ", message with dummy parameters: " + m);
-                        }
-                    }
-
-                    // We don't need to verify ASCII as build system ensures the final properties will be in ASCII
-                    // The proper test would be to get value of a well-known resource and validate it
-                    //if (!isPureAscii(val)) {
-                    //    failures.add("Message format should be pure ASCII. Actual format is " + val);
-                    //}
+                if (s.length() <= 0 || s.startsWith("#") || s.startsWith("!")) {
+                    continue;
                 }
+                int equ = s.indexOf('=');
+                String key = s.substring(0, equ);
+                if (resourcePrefix.equals(MESSAGES)){// Only relevant for messages
+                    /*
+                     * JMeterUtils.getResString() converts space to _ and lowercases
+                     * the key, so make sure all keys pass the test
+                     */
+                    if (key.contains(" ") || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
+                        failures.add("Invalid key for JMeterUtils " + key);
+                    }
+                }
+                String val = s.substring(equ + 1);
+                l.add(key); // Store the key
+                /*
+                 * Now check for invalid message format: if string contains {0}
+                 * and ' there may be a problem, so do a format with dummy
+                 * parameters and check if there is a { in the output. A bit
+                 * crude, but should be enough for now.
+                 */
+                if (val.contains("{0}") && val.contains("'")) {
+                    String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
+                    if (m.contains("{")) {
+                        failures.add("Incorrect message format ? (input/output) for: " + key +
+                                ". Output contains {, it seems not all paratemeters were replaced." +
+                                "Format: " + val + ", message with dummy parameters: " + m);
+                    }
+                }
+
+                // We don't need to verify ASCII as build system ensures the final properties will be in ASCII
+                // The proper test would be to get value of a well-known resource and validate it
+                //if (!isPureAscii(val)) {
+                //    failures.add("Message format should be pure ASCII. Actual format is " + val);
+                //}
             }
         }
     }
@@ -319,7 +316,6 @@ public class PackageTest extends TestCase implements Describable {
 
     /**
      * Check all messages are available in one language
-     * @throws Exception if something fails
      */
     public void checkI18n() throws Exception {
         Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<>();
@@ -329,7 +325,8 @@ public class PackageTest extends TestCase implements Describable {
             checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,prefix.substring(1), lang);
         }
 
-        assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
+        assertEquals(missingLabelsPerBundle.size() + " missing labels, labels missing:" + printLabels(missingLabelsPerBundle),
+                0, missingLabelsPerBundle.size());
     }
 
     private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle,

@@ -365,10 +365,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             JMeterUtils.reportErrorToUser("Error occurred compiling the tree: - see log file", e);
             return; // no point continuing
         }
-        /**
-         * Notification of test listeners needs to happen after function
-         * replacement, but before setting RunningVersion to true.
-         */
+        // Notification of test listeners needs to happen after function
+        // replacement, but before setting RunningVersion to true.
         SearchByClass<TestStateListener> testListeners = new SearchByClass<>(TestStateListener.class); // TL - S&E
         test.traverse(testListeners);
 
@@ -497,7 +495,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    private void startThreadGroup(AbstractThreadGroup group, int groupCount, SearchByClass<?> searcher, List<?> testLevelElements, ListenerNotifier notifier)
+    private void startThreadGroup(
+            AbstractThreadGroup group, int groupCount, SearchByClass<?> searcher, List<?> testLevelElements, ListenerNotifier notifier)
     {
         try {
             int numThreads = group.getNumThreads();
@@ -525,9 +524,10 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             groups.add(group);
             group.start(groupCount, notifier, threadGroupTree, this);
         } catch (JMeterStopTestException ex) { // NOSONAR Reported by log
-            JMeterUtils.reportErrorToUser("Error occurred starting thread group :" + group.getName()+ ", error message:"+ex.getMessage()
-                +", \r\nsee log file for more details", ex);
-            return; // no point continuing
+            JMeterUtils.reportErrorToUser(
+                    "Error occurred starting thread group :" + group.getName()
+                            + ", error message:" + ex.getMessage()
+                            + ", \r\nsee log file for more details", ex);
         }
     }
 
@@ -536,9 +536,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
      */
     private void waitThreadsStopped() {
         // ConcurrentHashMap does not need synch. here
-        for (AbstractThreadGroup threadGroup : groups) {
-            threadGroup.waitThreadsStopped();
-        }
+        groups.forEach(AbstractThreadGroup::waitThreadsStopped);
     }
 
     /**
@@ -563,15 +561,12 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         if (REMOTE_SYSTEM_EXIT) { // default is false
             log.warn("About to run System.exit(0) on {}", host);
             // Needs to be run in a separate thread to allow RMI call to return OK
-            Thread t = new Thread() {
-                @Override
-                public void run() {
-                    pause(1000); // Allow RMI to complete
-                    log.info("Bye from {}", host);
-                    System.out.println("Bye from "+host); // NOSONAR Intentional
-                    System.exit(0); // NOSONAR Intentional
-                }
-            };
+            Thread t = new Thread(() -> {
+                pause(1000); // Allow RMI to complete
+                log.info("Bye from {}", host);
+                System.out.println("Bye from "+host); // NOSONAR Intentional
+                System.exit(0); // NOSONAR Intentional
+            });
             t.start();
         }
     }

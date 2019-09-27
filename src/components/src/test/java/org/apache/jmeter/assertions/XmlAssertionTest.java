@@ -32,12 +32,23 @@ public class XmlAssertionTest extends JMeterTestCase {
     private XMLAssertion assertion;
     private SampleResult sampleResult;
     private AssertionResult result;
-    private static final String INVALID_XML = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>"
-            + "Don't forget me this weekend!</body></note1>";
-    private static final String VALID_XML = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>";
+    private static final String INVALID_XML = "<note>" +
+            "<to>Tove</to>" +
+            "<from>Jani</from>" +
+            "<heading>Reminder</heading>" +
+            "<body>Don't forget me this weekend!</body>" +
+            "</note1>";
+    private static final String VALID_XML = "<note>" +
+            "<to>Tove</to>" +
+            "<from>Jani</from>" +
+            "<heading>Reminder</heading>" +
+            "<body>Don't forget me</body>" +
+            "</note>";
     private static final String NO_XML = "response Data";
-    private static final String UNSECURE_XML = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" + "<!DOCTYPE foo [\n"
-            + "   <!ENTITY xxe SYSTEM \"file:///etc/passwd\" > ]>\n" + "<foo>&xxe;</foo>";
+    private static final String UNSECURE_XML = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" +
+            "<!DOCTYPE foo [\n" +
+            "   <!ENTITY xxe SYSTEM \"file:///etc/passwd\" > ]>\n" +
+            "<foo>&xxe;</foo>";
 
     @Before
     public void setUp() {
@@ -55,7 +66,8 @@ public class XmlAssertionTest extends JMeterTestCase {
         result = assertion.getResult(sampleResult);
         Assert.assertTrue(result.isFailure());
         Assert.assertTrue(result.isError());
-        Assert.assertEquals("DOCTYPE is disallowed when the feature \"http://apache.org/xml/features/disallow-doctype-decl\" set to true.",
+        Assert.assertEquals(
+                "DOCTYPE is disallowed when the feature \"http://apache.org/xml/features/disallow-doctype-decl\" set to true.",
                     result.getFailureMessage());
     }
 

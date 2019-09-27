@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Check if the TestPlan has been changed since it was last saved
- *
  */
 public class CheckDirty extends AbstractAction implements HashTreeTraverser, ActionListener {
     private static final Logger log = LoggerFactory.getLogger(CheckDirty.class);
@@ -69,7 +68,9 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(ActionNames.EXIT) || e.getActionCommand().equals(ActionNames.UNDO) || e.getActionCommand().equals(ActionNames.REDO)) {
+        if (e.getActionCommand().equals(ActionNames.EXIT)
+                || e.getActionCommand().equals(ActionNames.UNDO)
+                || e.getActionCommand().equals(ActionNames.REDO)) {
             doAction(e);
         }
     }
@@ -128,7 +129,6 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
         }
         GuiPackage.getInstance().setDirty(dirty);
     }
-
 
     /**
      * The tree traverses itself depth-first, calling addNode for each

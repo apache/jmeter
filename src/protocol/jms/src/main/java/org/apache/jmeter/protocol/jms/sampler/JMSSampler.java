@@ -324,7 +324,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             StringBuilder propBuffer) {
         String retVal = null;
         QueueReceiver consumer = null;
-        Message reply = null;
+        Message reply;
         String queueName = null;
         try {
             queueName = queue.getQueueName();
@@ -365,7 +365,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                     }
                 } else if (msg instanceof BytesMessage) {
                     BytesMessage bytesMessage = (BytesMessage) msg;
-                    buffer.append(bytesMessage.getBodyLength() + " bytes received in BytesMessage");
+                    buffer.append(bytesMessage.getBodyLength())
+                            .append(" bytes received in BytesMessage");
                 } else if (msg instanceof MapMessage) {
                     MapMessage mapm = (MapMessage) msg;
                     @SuppressWarnings("unchecked") // MapNames are Strings
@@ -383,7 +384,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 }
                 Utils.messageProperties(propBuffer, msg);
             } catch (JMSException e) {
-                buffer.append("Error extracting content from message:"+e.getMessage());
+                buffer.append("Error extracting content from message:").append(e.getMessage());
                 LOGGER.error("Error extracting content from message", e);
             }
         }
@@ -433,13 +434,13 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     private String clearQueue(Queue queue, SampleResult res) {
-        String retVal = null;
+        String retVal;
         QueueReceiver consumer = null;
         String queueName = null;
         try {
             queueName = queue.getQueueName();
             consumer = session.createReceiver(queue);
-            Message deletedMsg = null;
+            Message deletedMsg;
             long deletedMsgCount = 0;
             do {
                 deletedMsg = consumer.receive(getTimeoutAsInt());
@@ -480,7 +481,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      */
     public JMSProperties getJMSProperties() {
         Object o = getProperty(JMS_PROPERTIES).getObjectValue();
-        JMSProperties jmsProperties = null;
+        JMSProperties jmsProperties;
         // Backward compatibility with versions <= 2.10
         if (o instanceof Arguments) {
             jmsProperties = Utils.convertArgumentsToJmsProperties((Arguments) o);
@@ -736,7 +737,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 }
             } else {
                 LOGGER.warn(
-                        "context.getEnvironment() returned null (should not happen according to javadoc but non compliant implementation can return this)");
+                        "context.getEnvironment() returned null " +
+                                "(should not happen according to javadoc but non compliant implementation can return this)");
             }
         } catch (javax.naming.OperationNotSupportedException ex) {
             // Some JNDI implementation can return this
@@ -863,7 +865,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     private int getNumberOfSamplesToAggregateAsInt() {
-        int val = 1;
+        int val;
         try {
             val = getPropertyAsInt(JMS_NUMBEROFSAMPLES);
         } catch (Exception e) { // NOSONAR

@@ -62,7 +62,6 @@ import org.slf4j.LoggerFactory;
  * This class provides a way to provide Authorization in jmeter requests. The
  * format of the authorization file is: URL user pass where URL is an HTTP URL,
  * user a username to use and pass the appropriate password.
- *
  */
 public class AuthManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
     private static final long serialVersionUID = 235L;
@@ -99,28 +98,22 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     private static final boolean DEFAULT_CLEAR_VALUE = false;
 
     /** Decides whether port should be omitted from SPN for kerberos spnego authentication */
-    public static final boolean STRIP_PORT = JMeterUtils.getPropDefault("kerberos.spnego.strip_port", true);
+    public static final boolean STRIP_PORT =
+            JMeterUtils.getPropDefault("kerberos.spnego.strip_port", true);
 
     /** Decides whether port should be omitted from SPN for kerberos spnego authentication */
-    public static final boolean USE_CANONICAL_HOST_NAME = JMeterUtils.getPropDefault("kerberos.spnego.use_canonical_host_name", true);
+    public static final boolean USE_CANONICAL_HOST_NAME =
+            JMeterUtils.getPropDefault("kerberos.spnego.use_canonical_host_name", true);
 
     public enum Mechanism {
-        /**
-         * @deprecated (use {@link Mechanism#BASIC})
-         */
+        /** @deprecated (use Mechanism.BASIC) */
         @Deprecated
         BASIC_DIGEST,
-        /**
-         * Basic Auth
-         */
+        /** Basic Auth */
         BASIC,
-        /**
-         * Digest Auth
-         */
+        /** Digest Auth */
         DIGEST,
-        /**
-         * Kerberos Auth
-         */
+        /** Kerberos Auth */
         KERBEROS
     }
 
@@ -238,7 +231,9 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         try {
             if (url.getPort() == -1) {
                 // Obtain another URL with an explicit port:
-                int port = url.getProtocol().equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTP) ? HTTPConstants.DEFAULT_HTTP_PORT : HTTPConstants.DEFAULT_HTTPS_PORT;
+                int port = url.getProtocol().equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTP)
+                        ? HTTPConstants.DEFAULT_HTTP_PORT
+                        : HTTPConstants.DEFAULT_HTTPS_PORT;
                 // only http and https are supported
                 url2 = new URL(url.getProtocol(), url.getHost(), port, url.getPath());
             } else if ((url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT && url.getProtocol().equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTP))

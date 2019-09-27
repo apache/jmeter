@@ -275,7 +275,10 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
                 setInt(0xA007); // content-type
                 setString(mt);
             } else {
-                hbuf.append(HTTPConstants.HEADER_CONTENT_TYPE).append(COLON_SPACE).append(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED).append(NEWLINE);
+                hbuf.append(HTTPConstants.HEADER_CONTENT_TYPE)
+                        .append(COLON_SPACE)
+                        .append(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED)
+                        .append(NEWLINE);
                 setInt(0xA007); // content-type
                 setString(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                 StringBuilder sb = new StringBuilder();
