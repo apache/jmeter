@@ -100,8 +100,8 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
     }
 
     /**
-     * Launch json path engine to parse a input text
-     * @param textToParse
+     * Launch JSON path engine to parse a input text
+     * @param textToParse the text that will be parsed
      */
     protected void executeTester(String textToParse) {
         if (textToParse != null && textToParse.length() > 0
