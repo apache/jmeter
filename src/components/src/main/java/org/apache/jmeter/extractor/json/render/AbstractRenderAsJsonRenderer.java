@@ -250,7 +250,7 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
     /**
      * @return the rightSide
      */
-    protected JTabbedPane getRightSide() {
+    protected synchronized JTabbedPane getRightSide() {
         return rightSide;
     }
 
