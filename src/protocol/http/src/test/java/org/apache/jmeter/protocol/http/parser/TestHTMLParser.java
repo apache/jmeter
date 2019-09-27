@@ -49,15 +49,15 @@ import junit.framework.TestSuite;
 public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
     private static final Logger log = LoggerFactory.getLogger(TestHTMLParser.class);
 
-    private static final String DEFAULT_UA  = "Apache-HttpClient/4.2.6";
-    private static final String UA_FF       = "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0";
-    private static final String UA_IE55     = "Mozilla/4.0 (compatible;MSIE 5.5; Windows 98)";
-    private static final String UA_IE6      = "Mozilla/5.0 (Windows; U; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)";
-    private static final String UA_IE7      = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
-    private static final String UA_IE8      = "Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; "
+    private static final String DEFAULT_UA = "Apache-HttpClient/4.2.6";
+    private static final String UA_FF = "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0";
+    private static final String UA_IE55 = "Mozilla/4.0 (compatible;MSIE 5.5; Windows 98)";
+    private static final String UA_IE6 = "Mozilla/5.0 (Windows; U; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)";
+    private static final String UA_IE7 = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
+    private static final String UA_IE8 = "Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; "
             + "GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)";
-    private static final String UA_IE9      = "Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US))";
-    private static final String UA_IE10     = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)";
+    private static final String UA_IE9 = "Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US))";
+    private static final String UA_IE10 = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)";
 
     public TestHTMLParser(String arg0) {
         super(arg0);
@@ -84,7 +84,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         return Description.createTestDescription(getClass(), getName() + " " + testNumber + " " + parserName);
     }
 
-    private static class StaticTestClass // Can't instantiate
+    private static final class StaticTestClass // Can't instantiate
     {
         private StaticTestClass() {
         }
@@ -108,22 +108,21 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         public String userAgent;
 
         /**
-         *
          * @param htmlFileName HTML File with content
-         * @param baseUrl Base URL
-         * @param expectedSet Set of expected URLs
+         * @param baseUrl      Base URL
+         * @param expectedSet  Set of expected URLs
          * @param expectedList List of expected URLs
          */
         private TestData(String htmlFileName, String baseUrl, String expectedSet, String expectedList) {
             this(htmlFileName, baseUrl, expectedList, expectedList, DEFAULT_UA);
         }
+
         /**
-         *
          * @param htmlFileName HTML File with content
-         * @param baseUrl Base URL
-         * @param expectedSet Set of expected URLs
+         * @param baseUrl      Base URL
+         * @param expectedSet  Set of expected URLs
          * @param expectedList List of expected URLs
-         * @param userAgent User Agent
+         * @param userAgent    User Agent
          */
         private TestData(String htmlFileName, String baseUrl, String expectedSet, String expectedList, String userAgent) {
             this.fileName = htmlFileName;
@@ -140,13 +139,13 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
 
     // List of parsers to test. Should probably be derived automatically
     private static final String[] PARSERS = {
-        "org.apache.jmeter.protocol.http.parser.JTidyHTMLParser",
-        "org.apache.jmeter.protocol.http.parser.RegexpHTMLParser",
-        DEFAULT_JMETER_PARSER,
-        "org.apache.jmeter.protocol.http.parser.JsoupBasedHtmlParser"
-        };
+            "org.apache.jmeter.protocol.http.parser.JTidyHTMLParser",
+            "org.apache.jmeter.protocol.http.parser.RegexpHTMLParser",
+            DEFAULT_JMETER_PARSER,
+            "org.apache.jmeter.protocol.http.parser.JsoupBasedHtmlParser"
+    };
 
-    private static final TestData[] TESTS = new TestData[] {
+    private static final TestData[] TESTS = new TestData[]{
             new TestData("testfiles/HTMLParserTestCase.html",
                     "http://localhost/mydir/myfile.html",
                     "testfiles/HTMLParserTestCase.set",
@@ -157,8 +156,8 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
                     "testfiles/HTMLParserTestCaseBase.all"),
             new TestData("testfiles/HTMLParserTestCaseWithBaseHRef2.html",
                     "http://localhost/mydir/myfile.html",
-                     "testfiles/HTMLParserTestCaseBase.set",
-                     "testfiles/HTMLParserTestCaseBase.all"),
+                    "testfiles/HTMLParserTestCaseBase.set",
+                    "testfiles/HTMLParserTestCaseBase.all"),
             new TestData("testfiles/HTMLParserTestCaseWithMissingBaseHRef.html",
                     "http://localhost/mydir/images/myfile.html",
                     "testfiles/HTMLParserTestCaseBase.set",
@@ -184,78 +183,78 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
                     "file:HTMLParserTestFile_2.html",
                     "testfiles/HTMLParserTestFile_2.all",
                     "testfiles/HTMLParserTestFile_2.all"),
-                     };
+    };
 
 
-    private static final TestData[] SPECIFIC_PARSER_TESTS = new TestData[] {
-        new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional1_FF.all",
-                UA_FF),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional1_IE6.all",
-                UA_IE6),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional1_IE7.all",
-                UA_IE7),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional1_IE8.all",
-                UA_IE8),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional1_IE8.all",
-                UA_IE8),
+    private static final TestData[] SPECIFIC_PARSER_TESTS = new TestData[]{
+            new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional1_FF.all",
+                    UA_FF),
+            new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional1_IE6.all",
+                    UA_IE6),
+            new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional1_IE7.all",
+                    UA_IE7),
+            new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional1_IE8.all",
+                    UA_IE8),
+            new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional1_IE8.all",
+                    UA_IE8),
 
-        // FF gets mixed up by nested comments
-        new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional2_FF.all",
-                UA_FF),
+            // FF gets mixed up by nested comments
+            new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional2_FF.all",
+                    UA_FF),
 
-        new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional2_IE7.all",
-                UA_IE7),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional2_IE8.all",
-                UA_IE8),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional2_IE9.all",
-                UA_IE9),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional3_FF.all",
-                UA_FF),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional3_IE10.all",
-                UA_IE10),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional3_IE55.all",
-                UA_IE55),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional3_IE6.all",
-                UA_IE6)
+            new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional2_IE7.all",
+                    UA_IE7),
+            new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional2_IE8.all",
+                    UA_IE8),
+            new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional2_IE9.all",
+                    UA_IE9),
+            new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional3_FF.all",
+                    UA_FF),
+            new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional3_IE10.all",
+                    UA_IE10),
+            new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional3_IE55.all",
+                    UA_IE55),
+            new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
+                    "http://localhost/mydir/myfile.html",
+                    null,
+                    "testfiles/HTMLParserTestCaseWithConditional3_IE6.all",
+                    UA_IE6)
     };
 
     public static junit.framework.Test suite() {
@@ -278,7 +277,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
             suite.addTest(ps);
         }
 
-        TestSuite ps = new TestSuite(DEFAULT_JMETER_PARSER+"_conditional_comments");// Identify subtests
+        TestSuite ps = new TestSuite(DEFAULT_JMETER_PARSER + "_conditional_comments");// Identify subtests
         for (int j = 0; j < SPECIFIC_PARSER_TESTS.length; j++) {
             TestSuite ts = new TestSuite(SPECIFIC_PARSER_TESTS[j].fileName);
             ts.addTest(new TestHTMLParser("testSpecificParserList", DEFAULT_JMETER_PARSER, j));
@@ -379,18 +378,18 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
 
 
     private static void filetest(HTMLParser p, String file, String url, String resultFile, Collection<URLString> c,
-            boolean orderMatters, // Does the order matter?
-            String userAgent)
+                                 boolean orderMatters, // Does the order matter?
+                                 String userAgent)
             throws Exception {
         String parserName = p.getClass().getName().substring("org.apache.jmeter.protocol.http.parser.".length());
-        String fname = file.substring(file.indexOf('/')+1);
+        String fname = file.substring(file.indexOf('/') + 1);
         log.debug("file   {}", file);
         byte[] buffer = IOUtils.toByteArray(getInputStream(file));
         Iterator<URL> result;
         if (c == null) {
             result = p.getEmbeddedResourceURLs(userAgent, buffer, new URL(url), System.getProperty("file.encoding"));
         } else {
-            result = p.getEmbeddedResourceURLs(userAgent, buffer, new URL(url), c,System.getProperty("file.encoding"));
+            result = p.getEmbeddedResourceURLs(userAgent, buffer, new URL(url), c, System.getProperty("file.encoding"));
         }
         /*
          * TODO: Exact ordering is only required for some tests; change the
@@ -416,14 +415,14 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
 
         while (expected.hasNext()) {
             Object next = expected.next();
-            assertTrue(userAgent+"::"+fname+"::"+parserName + "::Expecting another result " + next, result.hasNext());
+            assertTrue(userAgent + "::" + fname + "::" + parserName + "::Expecting another result " + next, result.hasNext());
             try {
-                assertEquals(userAgent+"::"+fname+"::"+parserName + "(next)", next, result.next().toString());
+                assertEquals(userAgent + "::" + fname + "::" + parserName + "(next)", next, result.next().toString());
             } catch (ClassCastException e) {
-                fail(userAgent+"::"+fname+"::"+parserName + "::Expected URL, but got " + e.toString());
+                fail(userAgent + "::" + fname + "::" + parserName + "::Expected URL, but got " + e.toString());
             }
         }
-        assertFalse(userAgent+"::"+fname+"::"+parserName + "::Should have reached the end of the results", result.hasNext());
+        assertFalse(userAgent + "::" + fname + "::" + parserName + "::Should have reached the end of the results", result.hasNext());
     }
 
     // Get expected results as a List
