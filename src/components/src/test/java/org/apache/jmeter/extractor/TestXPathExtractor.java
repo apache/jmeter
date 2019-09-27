@@ -276,21 +276,25 @@ public class TestXPathExtractor {
 
         @Test
         public void testInvalidXpath() throws Exception {
-            Locale prevLocale = Locale.getDefault();
-            try {
-                // The test fails in other locales for some reason
-                Locale.setDefault(Locale.US);
-                extractor.setXPathQuery("<");
-                extractor.process();
-                assertEquals(1, result.getAssertionResults().length);
-                AssertionResult firstResult = result.getAssertionResults()[0];
-                assertEquals(extractor.getName(), firstResult.getName());
-                assertThat(firstResult.getFailureMessage(), containsString("A location path was expected, but the following token was encountered"));
-                assertEquals("Default", vars.get(VAL_NAME));
-                assertEquals("0", vars.get(VAL_NAME_NR));
-            } finally {
-                Locale.setDefault(prevLocale);
+            // The test fails in other locales for some reason
+            extractor.setXPathQuery("<");
+            extractor.process();
+            assertEquals(1, result.getAssertionResults().length);
+            AssertionResult firstResult = result.getAssertionResults()[0];
+            assertEquals(extractor.getName(), firstResult.getName());
+            assertThat(
+                    "'<' is an invalid character in xpath, so it is expected to be present in the error message",
+                    firstResult.getFailureMessage(),
+                    containsString("<")
+            );
+            if (Locale.getDefault().getLanguage().startsWith(Locale.ENGLISH.getLanguage())) {
+                assertThat(
+                        firstResult.getFailureMessage(),
+                        containsString("A location path was expected, but the following token was encountered")
+                );
             }
+            assertEquals("Default", vars.get(VAL_NAME));
+            assertEquals("0", vars.get(VAL_NAME_NR));
         }
 
         @Test

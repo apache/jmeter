@@ -28,6 +28,10 @@ class AssertionGuiSpec extends JMeterSpec {
 
     def sut = new AssertionGui()
 
+    private def langIsEnglish() {
+        return Locale.default.language.startsWith(Locale.ENGLISH.language)
+    }
+
     def "init of new component does not throw an exception"() {
         when:
             sut.init()
@@ -46,7 +50,8 @@ class AssertionGuiSpec extends JMeterSpec {
         when:
             def result = sut.createTestElement()
         then:
-            result.getName() == "Response Assertion"
+            (langIsEnglish() && result.name == "Response Assertion") ||
+                    (!langIsEnglish() && result.getName() != null && !result.getName().empty)
             result.isEnabled()
     }
 
@@ -57,7 +62,8 @@ class AssertionGuiSpec extends JMeterSpec {
         when:
             sut.modifyTestElement(element)
         then:
-            element.getName() == "Response Assertion"
+            (langIsEnglish() && element.name == "Response Assertion") ||
+                    (!langIsEnglish() && element.getName() != null && !element.getName().empty)
             element.isTestFieldResponseData()
             element.getTestStrings().isEmpty()
             !element.getAssumeSuccess()
