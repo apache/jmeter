@@ -19,6 +19,8 @@
 package org.apache.jmeter.extractor;
 
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -26,11 +28,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -281,9 +283,9 @@ public class TestXPathExtractor {
                 extractor.setXPathQuery("<");
                 extractor.process();
                 assertEquals(1, result.getAssertionResults().length);
-                assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-                Assert.assertTrue(result.getAssertionResults()[0].
-                        getFailureMessage().contains("A location path was expected, but the following token was encountered"));
+                AssertionResult firstResult = result.getAssertionResults()[0];
+                assertEquals(extractor.getName(), firstResult.getName());
+                assertThat(firstResult.getFailureMessage(), containsString("A location path was expected, but the following token was encountered"));
                 assertEquals("Default", vars.get(VAL_NAME));
                 assertEquals("0", vars.get(VAL_NAME_NR));
             } finally {
@@ -312,7 +314,7 @@ public class TestXPathExtractor {
             assertEquals(1, result.getAssertionResults().length);
             assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
             org.junit.Assert.assertThat(result.getAssertionResults()[0].
-                    getFailureMessage(), CoreMatchers.containsString("XML document structures must start and end within the same entity"));
+                    getFailureMessage(), containsString("XML document structures must start and end within the same entity"));
 
             assertEquals("Default", vars.get(VAL_NAME));
             assertEquals("0", vars.get(VAL_NAME_NR));

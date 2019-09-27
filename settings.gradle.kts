@@ -46,6 +46,7 @@ include(
         "src:protocol:tcp",
         "src:release",
         "src:testkit",
+        "src:testkit-wiremock",
         "src:dist",
         "src:dist-check")
 

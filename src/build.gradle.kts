@@ -25,7 +25,8 @@ val skipMavenPublication = setOf(
     ":src:licenses",
     ":src:protocol",
     ":src:release",
-    ":src:testkit"
+    ":src:testkit",
+    ":src:testkit-wiremock"
 )
 
 subprojects {

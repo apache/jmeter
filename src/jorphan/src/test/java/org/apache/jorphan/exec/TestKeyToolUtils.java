@@ -22,32 +22,30 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jorphan.util.JOrphanUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class TestKeyToolUtils {
 
-    private File keystore;
-    private String password = JOrphanUtils.generateRandomAlphanumericPassword(32);
-    private int validity = 1;
+    private static File keystore;
+    private static String password;
+    private static final int validity = 1;
 
-    @Before
-    public void setup() throws IOException {
-        keystore = File.createTempFile("dummy-keystore", "jks");
-        keystore.deleteOnExit();
+    @BeforeAll
+    public static void setup(@TempDir Path keystoreDir) throws IOException {
+        keystore = keystoreDir.resolve("dummy-keystore.jks").toFile();
+        password = JOrphanUtils.generateRandomAlphanumericPassword(32);
         KeyToolUtils.generateProxyCA(keystore, password, validity );
-    }
-
-    @After
-    public void cleanup() {
-        if (keystore.exists()) {
-            keystore.delete();
-        }
     }
 
     /*
@@ -60,13 +58,12 @@ public class TestKeyToolUtils {
         SystemCommand sc = new SystemCommand(null, null);
         List<String> arguments = new ArrayList<>();
         arguments.add("xyzqwas"); // should not exist
-        try {
+        Assertions.assertThrows(IOException.class, () -> {
             int status = sc.run(arguments);
-            if (status == 0 || status ==1) {
-                fail("Unexpected status " + status);
+            if (status == 0 || status == 1) {
+                fail("Missing executable should produce exit code of 0 or 1. Actual code is " + status);
             }
-        } catch (IOException expected) {
-        }
+        });
     }
 
     @Test

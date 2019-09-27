@@ -34,10 +34,10 @@ public class WireMockExtension implements BeforeEachCallback, BeforeAllCallback,
             ExtensionContext.Namespace.create(WireMockExtension.class);
 
     @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
+    public void beforeEach(ExtensionContext context) {
         WireMockServer server = getServer(context);
         if (server != null) {
-            server.resetScenarios();
+            server.resetAll();
         }
     }
 
@@ -60,8 +60,12 @@ public class WireMockExtension implements BeforeEachCallback, BeforeAllCallback,
     }
 
     @Override
-    public void beforeAll(ExtensionContext context) throws Exception {
-        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
+    public void beforeAll(ExtensionContext context) {
+        WireMockServer server = new WireMockServer(
+                WireMockConfiguration.wireMockConfig()
+                        .dynamicPort()
+                        .extensions(new RequestCountDown())
+        );
         server.start();
         getStore(context).put("server", server);
     }
