@@ -47,76 +47,100 @@ public class StringFromFileFunctionTest {
         // It is processed by DecimalFormat, and dots in path would result in
         // IllegalArgumentException: Multiple decimal separators in pattern
         StringFromFile sff1 = createSFF("'" + dir.toString().replaceAll("'", "''") + "/SFFTest'#'.'txt", "", "1", "3");
-        assertEquals("uno", sff1.execute());
-        assertEquals("dos", sff1.execute());
-        assertEquals("tres", sff1.execute());
-        assertEquals("cuatro", sff1.execute());
-        assertEquals("cinco", sff1.execute());
-        assertEquals("one", sff1.execute());
-        assertEquals("two", sff1.execute());
-        sff1.execute();
-        sff1.execute();
-        assertEquals("five", sff1.execute());
-        assertEquals("eins", sff1.execute());
-        sff1.execute();
-        sff1.execute();
-        sff1.execute();
-        assertEquals("fuenf", sff1.execute());
-        assertThrows(JMeterStopThreadException.class, sff1::execute);
+        try {
+            assertEquals("uno", sff1.execute());
+            assertEquals("dos", sff1.execute());
+            assertEquals("tres", sff1.execute());
+            assertEquals("cuatro", sff1.execute());
+            assertEquals("cinco", sff1.execute());
+            assertEquals("one", sff1.execute());
+            assertEquals("two", sff1.execute());
+            sff1.execute();
+            sff1.execute();
+            assertEquals("five", sff1.execute());
+            assertEquals("eins", sff1.execute());
+            sff1.execute();
+            sff1.execute();
+            sff1.execute();
+            assertEquals("fuenf", sff1.execute());
+            assertThrows(JMeterStopThreadException.class, sff1::execute);
+        } finally {
+            closeFile(sff1);
+        }
     }
 
     @Test
     public void SFFTest2() throws Exception {
         StringFromFile sff = createSFF(dir.resolve("SFFTest1.txt"), "");
-        assertEquals("uno", sff.execute());
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
-        assertEquals("uno", sff.execute()); // Restarts
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
+        try {
+            assertEquals("uno", sff.execute());
+            assertEquals("dos", sff.execute());
+            assertEquals("tres", sff.execute());
+            assertEquals("cuatro", sff.execute());
+            assertEquals("cinco", sff.execute());
+            assertEquals("uno", sff.execute()); // Restarts
+            assertEquals("dos", sff.execute());
+            assertEquals("tres", sff.execute());
+            assertEquals("cuatro", sff.execute());
+            assertEquals("cinco", sff.execute());
+        } finally {
+            closeFile(sff);
+        }
     }
 
     @Test
     public void SFFTest3() throws Exception {
         StringFromFile sff = createSFF(dir.resolve("SFFTest1.txt"), "", "", "");
-        assertEquals("uno", sff.execute());
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
-        assertEquals("uno", sff.execute()); // Restarts
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
+        try {
+            assertEquals("uno", sff.execute());
+            assertEquals("dos", sff.execute());
+            assertEquals("tres", sff.execute());
+            assertEquals("cuatro", sff.execute());
+            assertEquals("cinco", sff.execute());
+            assertEquals("uno", sff.execute()); // Restarts
+            assertEquals("dos", sff.execute());
+            assertEquals("tres", sff.execute());
+            assertEquals("cuatro", sff.execute());
+            assertEquals("cinco", sff.execute());
+        } finally {
+            closeFile(sff);
+        }
     }
 
     @Test
     public void SFFTest4() throws Exception {
         StringFromFile sff = createSFF(dir.resolve("InvalidFileName.txt"), "", "", "");
-        assertEquals(StringFromFile.ERR_IND, sff.execute());
-        assertEquals(StringFromFile.ERR_IND, sff.execute());
+        try {
+            assertEquals(StringFromFile.ERR_IND, sff.execute());
+            assertEquals(StringFromFile.ERR_IND, sff.execute());
+        } finally {
+            closeFile(sff);
+        }
     }
 
     // Test that only loops twice
     @Test
     public void SFFTest5() throws Exception {
         StringFromFile sff = createSFF(dir.resolve("SFFTest1.txt"), "", "", "2");
-        assertEquals("uno", sff.execute());
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
-        assertEquals("uno", sff.execute());
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
-        assertThrows(JMeterStopThreadException.class, sff::execute);
+        try {
+            assertEquals("uno", sff.execute());
+            assertEquals("dos", sff.execute());
+            assertEquals("tres", sff.execute());
+            assertEquals("cuatro", sff.execute());
+            assertEquals("cinco", sff.execute());
+            assertEquals("uno", sff.execute());
+            assertEquals("dos", sff.execute());
+            assertEquals("tres", sff.execute());
+            assertEquals("cuatro", sff.execute());
+            assertEquals("cinco", sff.execute());
+            assertThrows(JMeterStopThreadException.class, sff::execute);
+        } finally {
+            closeFile(sff);
+        }
+    }
+
+    private void closeFile(StringFromFile sff) {
+        sff.testEnded();
     }
 
     // Create the StringFromFile function and set its parameters.
