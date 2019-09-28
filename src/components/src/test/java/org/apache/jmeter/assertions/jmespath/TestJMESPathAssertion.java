@@ -187,11 +187,11 @@ public class TestJMESPathAssertion {
             AssertionResult result = instance.getResult(samplerResult);
             assertEquals(expResult.getName(), result.getName());
             if (result.isError() && !result.isFailure()) {
-                assertEquals(resultType, ResultType.ERROR);
+                assertEquals(ResultType.ERROR, resultType);
             } else if (result.isFailure() && !result.isError()) {
-                assertEquals(resultType, ResultType.FAILURE);
+                assertEquals(ResultType.FAILURE, resultType);
             } else if (!result.isError() && !result.isFailure()){
-                assertEquals(resultType, ResultType.SUCCESS);
+                assertEquals(ResultType.SUCCESS, resultType);
             } else {
                 fail("Got unexpected state where AssertionResult is in error and in failure");
             }
