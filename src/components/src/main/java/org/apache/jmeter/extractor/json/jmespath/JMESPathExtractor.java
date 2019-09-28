@@ -92,9 +92,9 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         } catch (Exception e) {
             // if something wrong, default value added
             if (log.isDebugEnabled()) {
-                log.debug("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage(), e);
+                log.error("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage(), e);
             } else {
-                log.debug("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage());
+                log.error("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage());
             }
             vars.put(refName, defaultValue);
         }
