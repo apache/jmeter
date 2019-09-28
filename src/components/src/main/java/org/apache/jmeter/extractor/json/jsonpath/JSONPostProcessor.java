@@ -64,9 +64,6 @@ public class JSONPostProcessor
         JMeterContext context = getThreadContext();
         JMeterVariables vars = context.getVariables();
         String jsonResponse = extractJsonResponse(context, vars);
-        if (jsonResponse == null) {
-            return;
-        }
         String[] refNames = getRefNames().split(SEPARATOR);
         String[] jsonPathExpressions = getJsonPathExpressions().split(SEPARATOR);
         String[] defaultValues = getDefaultValues().split(SEPARATOR);
@@ -203,7 +200,7 @@ public class JSONPostProcessor
     }
 
     private String extractJsonResponse(JMeterContext context, JMeterVariables vars) {
-        String jsonResponse = null;
+        String jsonResponse = "";
         if (isScopeVariable()) {
             jsonResponse = vars.get(getVariableName());
             if (log.isDebugEnabled()) {
