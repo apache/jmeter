@@ -40,16 +40,12 @@ import org.apache.commons.text.RandomStringGenerator;
 
 /**
  * This class contains frequently-used static utility methods.
- *
  */
-
-// @see TestJorphanUtils for unit tests
-
 public final class JOrphanUtils {
 
     private static final int DEFAULT_CHUNK_SIZE = 4096;
 
-    private static final SecureRandom SECURE_RANDOM = new SecureRandom(new SecureRandom().generateSeed(128));
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     /**
      * Private constructor to prevent instantiation.
      */
