@@ -106,7 +106,7 @@ public class ParallelResourcesAndIpSource {
 
         SampleResult result = http.sample();
 
-        Assertions.assertEquals(
+        String expected =
                 "url: http://wiremock/index.html\n" +
                         "response: OK\n" +
                         "data.size: 85\n" +
@@ -126,8 +126,9 @@ public class ParallelResourcesAndIpSource {
                         "- url: http://wiremock/index.html\n" +
                         "  response: OK\n" +
                         "  data.size: 85\n" +
-                        "  data: <html><body><img src='image1.png'><img src='image2.png'><img src='image3.png'></body>\n"
-                                .replaceAll("\n", System.lineSeparator()),
+                        "  data: <html><body><img src='image1.png'><img src='image2.png'><img src='image3.png'></body>\n";
+        Assertions.assertEquals(
+                expected.replaceAll("\n", System.lineSeparator()),
                 ResultAsString.toString(result)
                     .replaceAll(server.baseUrl(), "http://wiremock"));
     }
