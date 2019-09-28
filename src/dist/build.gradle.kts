@@ -16,12 +16,13 @@
  *
  */
 
-import com.github.vlsi.gradle.release.ReleaseExtension
 import com.github.vlsi.gradle.crlf.CrLfSpec
 import com.github.vlsi.gradle.crlf.LineEndings
-import com.github.vlsi.gradle.release.dsl.*
 import com.github.vlsi.gradle.git.FindGitAttributes
-import com.github.vlsi.gradle.git.dsl.*
+import com.github.vlsi.gradle.git.dsl.gitignore
+import com.github.vlsi.gradle.release.ReleaseExtension
+import com.github.vlsi.gradle.release.dsl.dependencyLicenses
+import com.github.vlsi.gradle.release.dsl.licensesCopySpec
 import org.gradle.api.internal.TaskOutputsInternal
 
 plugins {
@@ -197,6 +198,9 @@ fun createAnakiaTask(taskName: String,
         val outputProps = "$buildDir/docProps/$taskName/velocity.properties"
         outputs.file(outputProps)
         doLast {
+            // Unfortunately, Velocity does not use Java properties format.
+            // For instance, Properties escape : as \:, however Velocity does not understand that.
+            // Thus it tries to use c\:\path\to\workspace which does not work
             val p = `java.util`.Properties()
             file(velocityProperties).reader().use {
                 p.load(it)
@@ -204,11 +208,18 @@ fun createAnakiaTask(taskName: String,
             p["resource.loader"] = "file"
             p["file.resource.loader.path"] = baseDir
             p["file.resource.loader.class"] = "org.apache.velocity.runtime.resource.loader.FileResourceLoader"
+            val specials = Regex("""([,\\])""")
+            val lines = p.entries
+                .map { (it.key as String) + "=" + ((it.value as String).replace(specials, """\\$1""")) }
+                .sorted()
             file(outputProps).apply {
                 parentFile.run { isDirectory || mkdirs() } || throw IllegalStateException("Unable to create directory $parentFile")
 
                 writer().use {
-                    p.store(it, "Auto-generated from $velocityProperties to pass absolute path to Velocity")
+                    it.appendln("# Auto-generated from $velocityProperties to pass absolute path to Velocity")
+                    for(line in lines) {
+                        it.appendln(line)
+                    }
                 }
             }
         }
