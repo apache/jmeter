@@ -119,8 +119,8 @@ public abstract class AbstractDataExporter implements DataExporter {
         this.name = name;
     }
 
-    protected <TProperty> TProperty getPropertyFromConfig(
-            SubConfiguration cfg, String property, TProperty defaultValue, Class<TProperty> clazz)
+    protected <T> T getPropertyFromConfig(
+            SubConfiguration cfg, String property, T defaultValue, Class<T> clazz)
             throws ExportException {
         try {
             return cfg.getProperty(property, defaultValue, clazz);

@@ -465,15 +465,15 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         log.debug("End of template processing");
     }
 
-    private <TVisit> void addResultToContext(
+    private <T> void addResultToContext(
             String resultKey, Map<String, Object> storage,
-            DataContext dataContext, ResultDataVisitor<TVisit> visitor) {
+            DataContext dataContext, ResultDataVisitor<T> visitor) {
         addResultToContext(resultKey, storage, dataContext, visitor, null, null);
     }
 
-    private <TVisit> void addResultToContext(
+    private <T> void addResultToContext(
             String resultKey, Map<String, Object> storage, DataContext dataContext,
-            ResultDataVisitor<TVisit> visitor, ResultCustomizer customizer, ResultChecker checker) {
+            ResultDataVisitor<T> visitor, ResultCustomizer customizer, ResultChecker checker) {
         Object data = storage.get(resultKey);
         if (data instanceof ResultData) {
             ResultData result = (ResultData) data;
