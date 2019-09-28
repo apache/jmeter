@@ -82,7 +82,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
             }
             List<String> resultList = splitJson(result);
             // if more than one value extracted, suffix with "_index"
-            if (!resultList.isEmpty()) {
+            if (resultList.size() > 1) {
                 handleListResult(vars, refName, defaultValue, matchNumber, resultList);
             } else {
                 // else just one value extracted
