@@ -68,67 +68,85 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         final String jsonPathExpression = getJmesPathExpression().trim();
         clearOldRefVars(vars, refName);
         if (StringUtils.isEmpty(jsonResponse)) {
+            handleEmptyResponse(vars, refName, defaultValue);
+            return;
+        }
+
+        try {
+            JsonNode result = null;
+            JsonNode actualObj = OBJECT_MAPPER.readValue(jsonResponse, JsonNode.class);
+            result = JMESPathCache.getInstance().get(jsonPathExpression).search(actualObj);
+            if (result.isNull()) {
+                handleNullResult(vars, refName, defaultValue, matchNumber);
+                return;
+            }
+            List<String> resultList = splitJson(result);
+            // if more than one value extracted, suffix with "_index"
+            if (!resultList.isEmpty()) {
+                handleListResult(vars, refName, defaultValue, matchNumber, resultList);
+            } else {
+                // else just one value extracted
+                handleSingleResult(vars, refName, matchNumber, resultList);
+            }
+            vars.put(refName + REF_MATCH_NR, Integer.toString(resultList.size()));
+        } catch (Exception e) {
+            // if something wrong, default value added
             if (log.isDebugEnabled()) {
-                log.debug("Response or source variable is null or empty for {}", getName());
+                log.debug("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage(), e);
+            } else {
+                log.debug("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage());
             }
             vars.put(refName, defaultValue);
+        }
+    }
+
+    private void handleSingleResult(JMeterVariables vars, String refName, int matchNumber, List<String> resultList) {
+        String suffix = (matchNumber < 0) ? "_1" : "";
+        placeObjectIntoVars(vars, refName + suffix, resultList, 0);
+    }
+
+    private void handleListResult(JMeterVariables vars, String refName, String defaultValue, int matchNumber,
+            List<String> resultList) {
+        if (matchNumber < 0) {
+            // Extract all
+            int index = 1;
+            for (String extractedString : resultList) {
+                vars.put(refName + "_" + index, extractedString); // $NON-NLS-1$
+                index++;
+            }
+        } else if (matchNumber == 0) {
+            // Random extraction
+            int matchSize = resultList.size();
+            int matchNr = JMeterUtils.getRandomInt(matchSize);
+            placeObjectIntoVars(vars, refName, resultList, matchNr);
         } else {
-            try {
-                JsonNode result = null;
-                JsonNode actualObj = OBJECT_MAPPER.readValue(jsonResponse, JsonNode.class);
-                result = JMESPathCache.getInstance().get(jsonPathExpression).search(actualObj);
-                if (result.isNull()) {
-                    vars.put(refName, defaultValue);
-                    vars.put(refName + REF_MATCH_NR, "0"); //$NON-NLS-1$
-                    if (matchNumber < 0) {
-                        log.debug("No value extracted, storing empty in: {}", refName);
-                    }
-                } else {
-                    List<String> resultList = splitJson(result);
-                    // if more than one value extracted, suffix with "_index"
-                    if (resultList.size() > 1) {
-                        if (matchNumber < 0) {
-                            // Extract all
-                            int index = 1;
-                            for (String extractedString : resultList) {
-                                vars.put(refName + "_" + index, extractedString); // $NON-NLS-1$
-                                index++;
-                            }
-                        } else if (matchNumber == 0) {
-                            // Random extraction
-                            int matchSize = resultList.size();
-                            int matchNr = JMeterUtils.getRandomInt(matchSize);
-                            placeObjectIntoVars(vars, refName, resultList, matchNr);
-                        } else {
-                            // extract at position
-                            if (matchNumber > resultList.size()) {
-                                if (log.isDebugEnabled()) {
-                                    log.debug(
-                                            "matchNumber({}) exceeds number of items found({}), default value will be used",
-                                            matchNumber, resultList.size());
-                                }
-                                vars.put(refName, defaultValue);
-                            } else {
-                                placeObjectIntoVars(vars, refName, resultList, matchNumber - 1);
-                            }
-                        }
-                    } else {
-                        // else just one value extracted
-                        String suffix = (matchNumber < 0) ? "_1" : "";
-                        placeObjectIntoVars(vars, refName + suffix, resultList, 0);
-                    }
-                    vars.put(refName + REF_MATCH_NR, Integer.toString(resultList.size()));
-                }
-            } catch (Exception e) {
-                // if something wrong, default value added
+            // extract at position
+            if (matchNumber > resultList.size()) {
                 if (log.isDebugEnabled()) {
-                    log.debug("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage(), e);
-                } else {
-                    log.debug("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage());
+                    log.debug(
+                            "matchNumber({}) exceeds number of items found({}), default value will be used",
+                            Integer.valueOf(matchNumber), Integer.valueOf(resultList.size()));
                 }
                 vars.put(refName, defaultValue);
+            } else {
+                placeObjectIntoVars(vars, refName, resultList, matchNumber - 1);
             }
         }
+    }
+
+    private void handleNullResult(JMeterVariables vars, String refName, String defaultValue, int matchNumber) {
+        vars.put(refName, defaultValue);
+        vars.put(refName + REF_MATCH_NR, "0"); //$NON-NLS-1$
+        if (matchNumber < 0) {
+            log.debug("No value extracted, storing empty in: {}", refName);
+        }
+    }
+
+    private void handleEmptyResponse(JMeterVariables vars, String refName, String defaultValue) {
+        if (log.isDebugEnabled()) {
+            log.debug("Response or source variable is null or empty for {}", getName());
+        }
+        vars.put(refName, defaultValue);
     }
 
     private String getData(JMeterVariables vars, JMeterContext context) {
