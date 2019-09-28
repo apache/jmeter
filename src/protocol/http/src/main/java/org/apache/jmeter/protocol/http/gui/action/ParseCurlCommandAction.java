@@ -408,7 +408,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * Create Authorization manager
      *
      * @param request {@link Request}
-     * @return {@link AuthManager} element
      */
     private void createAuthManager(Request request, AuthManager authManager) {
         Authorization auth = request.getAuthorization();
