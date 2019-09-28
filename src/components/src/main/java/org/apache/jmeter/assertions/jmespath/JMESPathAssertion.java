@@ -97,34 +97,32 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
             message.append("JMESPATH ")
                 .append(getJmesPath())
                 .append(" expected");
-            if (invert) {
-                message.append(" not");
-            }
+            addNegation(invert, message);
             message.append(" to exist");
         } else {
             message.append("Value expected");
             if (isExpectNull()) {
-                if (invert) {
-                    message.append(" not");
-                }
+                addNegation(invert, message);
                 message.append(" to be null");
             } else {
                 if (isUseRegex()) {
-                    if (invert) {
-                        message.append(" not");
-                    }
+                    addNegation(invert, message);
                     message.append(" to match ");
                     message.append(getExpectedValue());
                 } else {
-                    if (invert) {
-                        message.append(" not");
-                    }
+                    addNegation(invert, message);
                     message.append(" to be equal to ");
                     message.append(getExpectedValue());
                 }
             }
         }
         return message.toString();
+    }
+
+    private void addNegation(boolean invert, StringBuilder message) {
+        if (invert) {
+            message.append(" not");
+        }
     }
 
     private boolean checkResult(ObjectMapper mapper, JsonNode jsonNode, AssertionResult result, boolean invert)
