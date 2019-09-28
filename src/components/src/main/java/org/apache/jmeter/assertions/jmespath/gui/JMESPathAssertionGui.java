@@ -54,6 +54,7 @@ public class JMESPathAssertionGui extends JSONPathAssertionGui {
         super();
     }
 
+    @Override
     protected final void initFields() {
         // get the superclass fields and set their name to current component fields.
         super.jsonPath = new JLabeledTextField(JMeterUtils.getResString(JMES_ASSERTION_PATH));
