@@ -61,13 +61,13 @@ public class RenderAsJmesPathRenderer extends AbstractRenderAsJsonRenderer {
                 return NO_MATCH; //$NON-NLS-1$
             } else {
                 StringBuilder builder = new StringBuilder();
-                int i = 0;
                 if (result.isArray()) {
+                    int i = 0;
                     for (JsonNode element : (ArrayNode) result) {
                         builder.append("Result[").append(i++).append("]=").append(writeJsonNode(OBJECT_MAPPER, element)).append("\n");
                     }
                 } else {
-                    builder.append("Result[").append(i++).append("]=").append(writeJsonNode(OBJECT_MAPPER, result)).append("\n");
+                    builder.append("Result[").append(0).append("]=").append(writeJsonNode(OBJECT_MAPPER, result)).append("\n");
                 }
                 return builder.toString();
             }
