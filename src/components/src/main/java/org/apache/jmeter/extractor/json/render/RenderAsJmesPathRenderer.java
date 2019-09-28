@@ -59,18 +59,16 @@ public class RenderAsJmesPathRenderer extends AbstractRenderAsJsonRenderer {
             JsonNode result = JMESPathCache.getInstance().get(expression).search(actualObj);
             if (result.isNull()) {
                 return NO_MATCH; //$NON-NLS-1$
-            } else {
+            }
+            if (result.isArray()) {
                 StringBuilder builder = new StringBuilder();
-                if (result.isArray()) {
-                    int i = 0;
-                    for (JsonNode element : (ArrayNode) result) {
-                        builder.append("Result[").append(i++).append("]=").append(writeJsonNode(OBJECT_MAPPER, element)).append("\n");
-                    }
-                } else {
-                    builder.append("Result[").append(0).append("]=").append(writeJsonNode(OBJECT_MAPPER, result)).append("\n");
+                int i = 0;
+                for (JsonNode element : (ArrayNode) result) {
+                    builder.append("Result[").append(i++).append("]=").append(writeJsonNode(OBJECT_MAPPER, element)).append("\n");
                 }
                 return builder.toString();
             }
+            return "Result[0]=" + writeJsonNode(OBJECT_MAPPER, result) + "\n";
         } catch (Exception e) { // NOSONAR We handle it through return message
             log.debug("Exception extracting from '{}' with expression '{}'", textToParse, expression);
             return "Exception: " + e.getMessage(); //$NON-NLS-1$
