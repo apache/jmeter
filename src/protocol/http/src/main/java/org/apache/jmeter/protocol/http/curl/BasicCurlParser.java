@@ -778,8 +778,7 @@ public class BasicCurlParser {
                 }
             }
             if (isPostToGet) {
-                String url = request.getUrl();
-                url += "?" + request.getPostData();
+                String url = request.getUrl() + "?" + request.getPostData();
                 request.setUrl(url);
                 request.setPostData(null);
                 request.setMethod("GET");
