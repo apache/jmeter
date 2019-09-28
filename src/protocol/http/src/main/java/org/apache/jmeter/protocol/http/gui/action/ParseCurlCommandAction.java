@@ -198,7 +198,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         ThreadGroup threadGroup = new ThreadGroup();
         threadGroup.setProperty(TestElement.GUI_CLASS, ThreadGroupGui.class.getName());
         threadGroup.setProperty(TestElement.NAME, "Thread Group");
-        threadGroup.setProperty(ThreadGroup.NUM_THREADS,"${__P(threads,10)}");
+        threadGroup.setProperty(AbstractThreadGroup.NUM_THREADS, "${__P(threads,10)}");
         threadGroup.setProperty(ThreadGroup.RAMP_TIME,"${__P(rampup,30)}");
         threadGroup.setScheduler(true);
         threadGroup.setProperty(ThreadGroup.DURATION,"${__P(duration,3600)}");
