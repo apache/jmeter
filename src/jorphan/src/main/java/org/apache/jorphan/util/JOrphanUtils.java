@@ -45,7 +45,13 @@ public final class JOrphanUtils {
 
     private static final int DEFAULT_CHUNK_SIZE = 4096;
 
-    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    /**
+     * This enables to initialize SecureRandom only in case it is required
+     */
+    private static class LazySecureRandom {
+        private static final SecureRandom INSTANCE = new SecureRandom();
+    }
+
     /**
      * Private constructor to prevent instantiation.
      */
@@ -773,7 +779,7 @@ public final class JOrphanUtils {
     public static String generateRandomAlphanumericPassword(int length) {
         char[][] pairs = {{'a','z'}, {'A','Z'}, {'0','9'}};
         RandomStringGenerator pwdGenerator = new RandomStringGenerator.Builder()
-                .usingRandom(max -> SECURE_RANDOM.nextInt(max))
+                .usingRandom(LazySecureRandom.INSTANCE::nextInt)
                 .withinRange(pairs)
                 .build();
         return pwdGenerator.generate(length);
