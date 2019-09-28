@@ -430,7 +430,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         for (int i = 0; i < authManager.getAuthObjects().size(); i++) {
             if (!authManager.getAuthObjectAt(i).getUser().equals(auth.getUser())
                     || !authManager.getAuthObjectAt(i).getPass().equals(auth.getPass())
-                    || !authManager.getAuthObjectAt(i).getMechanism().equals(auth.getMechanism())) {
+                    || authManager.getAuthObjectAt(i).getMechanism() != auth.getMechanism()) {
                 return true;
             }
         }
