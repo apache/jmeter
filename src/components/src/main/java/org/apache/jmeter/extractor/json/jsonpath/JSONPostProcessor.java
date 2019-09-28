@@ -63,35 +63,16 @@ public class JSONPostProcessor
     public void process() {
         JMeterContext context = getThreadContext();
         JMeterVariables vars = context.getVariables();
-        String jsonResponse;
-        if (isScopeVariable()) {
-            jsonResponse = vars.get(getVariableName());
-            if (log.isDebugEnabled()) {
-                log.debug("JSON Extractor is using variable: {}, which content is: {}", getVariableName(), jsonResponse);
-            }
-        } else {
-            SampleResult previousResult = context.getPreviousResult();
-            if (previousResult == null) {
-                return;
-            }
-            jsonResponse = previousResult.getResponseDataAsString();
-            if (log.isDebugEnabled()) {
-                log.debug("JSON Extractor {} working on Response: {}", getName(), jsonResponse);
-            }
+        String jsonResponse = extractJsonResponse(context, vars);
+        if (jsonResponse == null) {
+            return;
         }
         String[] refNames = getRefNames().split(SEPARATOR);
         String[] jsonPathExpressions = getJsonPathExpressions().split(SEPARATOR);
         String[] defaultValues = getDefaultValues().split(SEPARATOR);
         int[] matchNumbers = getMatchNumbersAsInt(defaultValues.length);
 
-        if (refNames.length != jsonPathExpressions.length ||
-                refNames.length != defaultValues.length) {
-            log.error(
-                    "Number of JSON Path variables must match number of default values and json-path expressions,"
-                    + " check you use separator ';' if you have many values"); // $NON-NLS-1$
-            throw new IllegalArgumentException(JMeterUtils
-                    .getResString("jsonpp_error_number_arguments_mismatch_error")); // $NON-NLS-1$
-        }
+        validateSameLengthOfArguments(refNames, jsonPathExpressions, defaultValues);
 
         for (int i = 0; i < jsonPathExpressions.length; i++) {
             int matchNumber = matchNumbers[i];
@@ -100,75 +81,15 @@ public class JSONPostProcessor
             clearOldRefVars(vars, currentRefName);
             try {
                 if (StringUtils.isEmpty(jsonResponse)) {
-                    if(log.isDebugEnabled()) {
-                        log.debug("Response or source variable is null or empty for {}", getName());
-                    }
-                    vars.put(currentRefName, defaultValues[i]);
+                    handleEmptyResponse(vars, defaultValues, i, currentRefName);
                 } else {
                     List<Object> extractedValues = localMatcher.get()
                             .extractWithJsonPath(jsonResponse, currentJsonPath);
                     // if no values extracted, default value added
                     if (extractedValues.isEmpty()) {
-                        vars.put(currentRefName, defaultValues[i]);
-                        vars.put(currentRefName + REF_MATCH_NR, "0"); //$NON-NLS-1$
-                        if (matchNumber < 0 && getComputeConcatenation()) {
-                            log.debug("No value extracted, storing empty in: {}{}", currentRefName, ALL_SUFFIX);
-                            vars.put(currentRefName + ALL_SUFFIX, "");
-                        }
+                        handleEmptyResult(vars, defaultValues, i, matchNumber, currentRefName);
                     } else {
-                        // if more than one value extracted, suffix with "_index"
-                        if (extractedValues.size() > 1) {
-                            if (matchNumber < 0) {
-                                // Extract all
-                                int index = 1;
-                                StringBuilder concat =
-                                        new StringBuilder(getComputeConcatenation()
-                                                ? extractedValues.size() * 20
-                                                : 1);
-                                for (Object extractedObject : extractedValues) {
-                                    String extractedString = stringify(extractedObject);
-                                    vars.put(currentRefName + "_" + index,
-                                            extractedString); //$NON-NLS-1$
-                                    if (getComputeConcatenation()) {
-                                        concat.append(extractedString)
-                                                .append(JSONPostProcessor.JSON_CONCATENATION_SEPARATOR);
-                                    }
-                                    index++;
-                                }
-                                if (getComputeConcatenation()) {
-                                    concat.setLength(concat.length() - 1);
-                                    vars.put(currentRefName + ALL_SUFFIX, concat.toString());
-                                }
-                            } else if (matchNumber == 0) {
-                                // Random extraction
-                                int matchSize = extractedValues.size();
-                                int matchNr = JMeterUtils.getRandomInt(matchSize);
-                                placeObjectIntoVars(vars, currentRefName,
-                                        extractedValues, matchNr);
-                            } else {
-                                // extract at position
-                                if (matchNumber > extractedValues.size()) {
-                                    if(log.isDebugEnabled()) {
-                                        log.debug(
-                                            "matchNumber({}) exceeds number of items found({}), default value will be used",
-                                            matchNumber, extractedValues.size());
-                                    }
-                                    vars.put(currentRefName, defaultValues[i]);
-                                } else {
-                                    placeObjectIntoVars(vars, currentRefName, extractedValues, matchNumber - 1);
-                                }
-                            }
-                        } else {
-                            // else just one value extracted
-                            String suffix = (matchNumber < 0) ? "_1" : "";
-                            placeObjectIntoVars(vars, currentRefName + suffix, extractedValues, 0);
-                            if (matchNumber < 0 && getComputeConcatenation()) {
-                                vars.put(currentRefName + ALL_SUFFIX, vars.get(currentRefName + suffix));
-                            }
-                        }
-                        if (matchNumber != 0) {
-                            vars.put(currentRefName + REF_MATCH_NR, Integer.toString(extractedValues.size()));
-                        }
+                        handleNonEmptyResult(vars, defaultValues, i, matchNumber, currentRefName, extractedValues);
                     }
                 }
             } catch (Exception e) {
@@ -181,6 +102,123 @@ public class JSONPostProcessor
                 vars.put(currentRefName, defaultValues[i]);
             }
         }
+    }
+
+    private void handleNonEmptyResult(JMeterVariables vars, String[] defaultValues, int i, int matchNumber,
+            String currentRefName, List<Object> extractedValues) {
+        // if more than one value extracted, suffix with "_index"
+        if (extractedValues.size() > 1) {
+            handleListResult(vars, defaultValues, i, matchNumber, currentRefName, extractedValues);
+        } else {
+            // else just one value extracted
+            handleSingleResult(vars, matchNumber, currentRefName, extractedValues);
+        }
+        if (matchNumber != 0) {
+            vars.put(currentRefName + REF_MATCH_NR, Integer.toString(extractedValues.size()));
+        }
+    }
+
+    private void validateSameLengthOfArguments(String[] refNames, String[] jsonPathExpressions,
+            String[] defaultValues) {
+        if (refNames.length != jsonPathExpressions.length ||
+                refNames.length != defaultValues.length) {
+            log.error(
+                    "Number of JSON Path variables must match number of default values and json-path expressions,"
+                    + " check you use separator ';' if you have many values"); // $NON-NLS-1$
+            throw new IllegalArgumentException(JMeterUtils
+                    .getResString("jsonpp_error_number_arguments_mismatch_error")); // $NON-NLS-1$
+        }
+    }
+
+    private void handleSingleResult(JMeterVariables vars, final int matchNumber, String currentRefName,
+            List<Object> extractedValues) {
+        String suffix = (matchNumber < 0) ? "_1" : "";
+        placeObjectIntoVars(vars, currentRefName + suffix, extractedValues, 0);
+        if (matchNumber < 0 && getComputeConcatenation()) {
+            vars.put(currentRefName + ALL_SUFFIX, vars.get(currentRefName + suffix));
+        }
+    }
+
+    private void handleListResult(JMeterVariables vars, String[] defaultValues, final int i, final int matchNumber,
+            String currentRefName, List<Object> extractedValues) {
+        if (matchNumber < 0) {
+            // Extract all
+            int index = 1;
+            StringBuilder concat =
+                    new StringBuilder(getComputeConcatenation()
+                            ? extractedValues.size() * 20
+                            : 1);
+            for (Object extractedObject : extractedValues) {
+                String extractedString = stringify(extractedObject);
+                vars.put(currentRefName + "_" + index,
+                        extractedString); //$NON-NLS-1$
+                if (getComputeConcatenation()) {
+                    concat.append(extractedString)
+                            .append(JSONPostProcessor.JSON_CONCATENATION_SEPARATOR);
+                }
+                index++;
+            }
+            if (getComputeConcatenation()) {
+                concat.setLength(concat.length() - 1);
+                vars.put(currentRefName + ALL_SUFFIX, concat.toString());
+            }
+            return;
+        }
+        if (matchNumber == 0) {
+            // Random extraction
+            int matchSize = extractedValues.size();
+            int matchNr = JMeterUtils.getRandomInt(matchSize);
+            placeObjectIntoVars(vars, currentRefName,
+                    extractedValues, matchNr);
+            return;
+        }
+        // extract at position
+        if (matchNumber > extractedValues.size()) {
+            if(log.isDebugEnabled()) {
+                log.debug(
+                    "matchNumber({}) exceeds number of items found({}), default value will be used",
+                    Integer.valueOf(matchNumber), Integer.valueOf(extractedValues.size()));
+            }
+            vars.put(currentRefName, defaultValues[i]);
+        } else {
+            placeObjectIntoVars(vars, currentRefName, extractedValues, matchNumber - 1);
+        }
+    }
+
+    private void handleEmptyResult(JMeterVariables vars, String[] defaultValues, int i, int matchNumber,
+            String currentRefName) {
+        vars.put(currentRefName, defaultValues[i]);
+        vars.put(currentRefName + REF_MATCH_NR, "0"); //$NON-NLS-1$
+        if (matchNumber < 0 && getComputeConcatenation()) {
+            log.debug("No value extracted, storing empty in: {}{}", currentRefName, ALL_SUFFIX);
+            vars.put(currentRefName + ALL_SUFFIX, "");
+        }
+    }
+
+    private void handleEmptyResponse(JMeterVariables vars, String[] defaultValues, int i, String currentRefName) {
+        if(log.isDebugEnabled()) {
+            log.debug("Response or source variable is null or empty for {}", getName());
+        }
+        vars.put(currentRefName, defaultValues[i]);
+    }
+
+    private String extractJsonResponse(JMeterContext context, JMeterVariables vars) {
+        String jsonResponse = null;
+        if (isScopeVariable()) {
+            jsonResponse = vars.get(getVariableName());
+            if (log.isDebugEnabled()) {
+                log.debug("JSON Extractor is using variable: {}, which content is: {}", getVariableName(), jsonResponse);
+            }
+        } else {
+            SampleResult previousResult = context.getPreviousResult();
+            if (previousResult != null) {
+                jsonResponse = previousResult.getResponseDataAsString();
+                if (log.isDebugEnabled()) {
+                    log.debug("JSON Extractor {} working on Response: {}", getName(), jsonResponse);
+                }
+            }
+        }
+        return jsonResponse;
     }
 
     private void clearOldRefVars(JMeterVariables vars, String refName) {
