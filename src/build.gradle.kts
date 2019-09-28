@@ -56,7 +56,7 @@ subprojects {
         val testRuntimeOnly by configurations
         testImplementation("org.junit.jupiter:junit-jupiter-api")
         testImplementation("org.junit.jupiter:junit-jupiter-params")
-        testImplementation("org.hamcrest:java-hamcrest")
+        testImplementation("org.hamcrest:hamcrest")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
         testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
         testImplementation("junit:junit")

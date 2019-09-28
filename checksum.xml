@@ -103,6 +103,7 @@
     <trusted-key id='9ff25980f5ba7e4f' group='org.fusesource.hawtbuf' />
     <trusted-key id='0050076df689fde2' group='org.hamcrest' />
     <trusted-key id='a6adfc93ef34893e' group='org.hamcrest' />
+    <trusted-key id='bede11eaf1164480' group='org.hamcrest' />
     <trusted-key id='313cba932516c4d3' group='org.hsqldb' />
     <trusted-key id='cb43338e060cf9fa' group='org.jacoco' />
     <trusted-key id='8799af90c06efbbd' group='org.jdom' />
