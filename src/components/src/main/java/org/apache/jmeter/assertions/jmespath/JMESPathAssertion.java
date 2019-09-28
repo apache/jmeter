@@ -78,7 +78,7 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
         JsonNode currentValue = expression.search(input);
         log.debug("JMESPath query {} invoked on response {}. Query result is {}. ", expression,
                 responseDataAsJsonString, currentValue);
-        boolean success = checkResult(OBJECT_MAPPER, currentValue, assertionResult, invert);
+        boolean success = checkResult(OBJECT_MAPPER, currentValue);
         if (!invert) {
             if (!success) {
                 failAssertion(invert, assertionResult);
@@ -125,7 +125,7 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
         }
     }
 
-    private boolean checkResult(ObjectMapper mapper, JsonNode jsonNode, AssertionResult result, boolean invert)
+    private boolean checkResult(ObjectMapper mapper, JsonNode jsonNode)
             throws JsonProcessingException {
         if (!isJsonValidationBool()) {
             return !(jsonNode instanceof NullNode);
