@@ -213,10 +213,10 @@ junit 4.12
 - unit tests, JUnit sampler
 
 HttpComponents
-- HttpComponents Core 4.4.10
+- HttpComponents Core 4.4.12
 - HttpComponents Client 4.5.8
 - HttpComponents AsyncClient 4.1.4
-- HttpComponents Core NIO 4.4.11
+- HttpComponents Core NIO 4.4.12
 -----------
 http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler
