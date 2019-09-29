@@ -122,7 +122,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
     }
 
     private void init() {// called from ctor, so must not be overridable
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
 
         add(makeTitlePanel(), BorderLayout.NORTH);
@@ -277,7 +277,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
         JPanel panel = new JPanel(new BorderLayout(0, 5));
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("headers_stored"))); // $NON-NLS-1$
-        panel.add(new JScrollPane(headerTable), BorderLayout.CENTER);
+        panel.add(GuiUtils.emptyBorder(new JScrollPane(headerTable)), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);
         return panel;
     }

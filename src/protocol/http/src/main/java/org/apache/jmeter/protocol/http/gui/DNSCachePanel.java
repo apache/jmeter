@@ -251,7 +251,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         JPanel panel = new JPanel(new BorderLayout(0, 5));
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("dns_servers"))); // $NON-NLS-1$
-        JScrollPane dnsServScrollPane = new JScrollPane(dnsServersTable);
+        JScrollPane dnsServScrollPane = GuiUtils.emptyBorder(new JScrollPane(dnsServersTable));
         panel.add(dnsServScrollPane, BorderLayout.CENTER);
         dnsServButPanel = createButtonPanel();
         panel.add(dnsServButPanel, BorderLayout.SOUTH);
@@ -268,7 +268,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         JPanel panel = new JPanel(new BorderLayout(0, 5));
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("dns_hosts"))); // $NON-NLS-1$
-        JScrollPane dnsHostsScrollPane = new JScrollPane(dnsHostsTable);
+        JScrollPane dnsHostsScrollPane = GuiUtils.emptyBorder(new JScrollPane(dnsHostsTable));
         panel.add(dnsHostsScrollPane, BorderLayout.CENTER);
         dnsHostsButPanel = createHostsButtonPanel();
         panel.add(dnsHostsButPanel, BorderLayout.SOUTH);

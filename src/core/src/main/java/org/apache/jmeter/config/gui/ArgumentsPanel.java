@@ -34,6 +34,7 @@ import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -70,6 +71,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /** The model for the arguments table. */
     protected transient ObjectTableModel tableModel; // will only contain Argument or HTTPArgument
+
+    private JComponent mainPanel;
 
     /** A button for adding new arguments to the table. */
     private JButton add;
@@ -659,7 +662,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      *
      * @return the main GUI panel
      */
-    private Component makeMainPanel() {
+    private JComponent makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
@@ -755,7 +758,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         p.setLayout(new BorderLayout());
 
         p.add(makeLabelPanel(), BorderLayout.NORTH);
-        p.add(makeMainPanel(), BorderLayout.CENTER);
+        mainPanel = makeMainPanel();
+        p.add(mainPanel, BorderLayout.CENTER);
         // Force a minimum table height of 70 pixels
         p.add(Box.createVerticalStrut(70), BorderLayout.WEST);
         if (!disableButtons) {
@@ -768,5 +772,13 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
         table.revalidate();
         sizeColumns(table);
+    }
+
+    /**
+     * Clear border around "table with arguments".
+     * Extra border is not required when the panel is already surrounded by a border.
+     */
+    public void clearBorderForMainPanel() {
+        GuiUtils.emptyBorder(mainPanel);
     }
 }

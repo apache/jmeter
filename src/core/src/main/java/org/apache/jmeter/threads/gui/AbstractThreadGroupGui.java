@@ -36,6 +36,7 @@ import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
@@ -125,7 +126,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
 
-        Box box = Box.createVerticalBox();
+        VerticalPanel box = new VerticalPanel();
         box.add(makeTitlePanel());
         box.add(createOnErrorPanel());
         add(box, BorderLayout.NORTH);

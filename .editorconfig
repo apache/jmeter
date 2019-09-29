@@ -14,3 +14,9 @@ end_of_line = crlf
 
 [{*.kts,*.kt}]
 ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
+
+[*.java]
+# Doc: https://youtrack.jetbrains.com/issue/IDEA-170643#focus=streamItem-27-3708697.0-0
+#"static ", "java.", "javax", "org", "net", "com", ""
+ij_java_imports_layout = $*,|,java.**,|,javax.**,|,org.**,|,net.**,|,com.**,|,*
+ij_java_use_single_class_imports = true

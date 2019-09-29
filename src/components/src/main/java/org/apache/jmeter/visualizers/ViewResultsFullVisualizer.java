@@ -348,6 +348,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         searchAndMainSP.setOneTouchExpandable(true);
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, makeTitlePanel(), searchAndMainSP);
         splitPane.setOneTouchExpandable(true);
+        splitPane.setBorder(BorderFactory.createEmptyBorder());
         add(splitPane);
 
         // init right side with first render

@@ -363,6 +363,6 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     private JScrollPane makeScrollPane(Component comp) {
         JScrollPane pane = new JScrollPane(comp);
         pane.setPreferredSize(pane.getMinimumSize());
-        return pane;
+        return GuiUtils.emptyBorder(pane);
     }
 }

@@ -194,6 +194,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
                 .getResString("web_testing_advanced"), advancedPanel);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, makeTitlePanel(), tabbedPane);
+        splitPane.setBorder(BorderFactory.createEmptyBorder());
         splitPane.setOneTouchExpandable(true);
         add(splitPane);
     }

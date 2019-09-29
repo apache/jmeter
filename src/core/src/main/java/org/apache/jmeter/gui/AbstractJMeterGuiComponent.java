@@ -35,6 +35,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
+import org.apache.jorphan.gui.GuiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -251,7 +252,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         VerticalPanel titlePanel = new VerticalPanel();
         titlePanel.add(createTitleLabel());
         VerticalPanel contentPanel = new VerticalPanel();
-        contentPanel.setBorder(BorderFactory.createEtchedBorder());
+        contentPanel.setBorder(BorderFactory.createEmptyBorder());
         contentPanel.add(getNamePanel());
         contentPanel.add(getCommentPanel());
         titlePanel.add(contentPanel);

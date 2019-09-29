@@ -197,7 +197,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
         JPanel panel = new JPanel(new BorderLayout(0, 5));
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("jms_props"))); //$NON-NLS-1$
-        panel.add(new JScrollPane(jmsPropertiesTable));
+        panel.add(GuiUtils.emptyBorder(new JScrollPane(jmsPropertiesTable)));
         panel.add(createButtonPanel(), BorderLayout.SOUTH);
         return panel;
     }
