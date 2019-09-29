@@ -83,11 +83,11 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         effectiveLicense = SpdxLicense.BSD_2_Clause
     }
 
-    overrideLicense("com.fifesoft:rsyntaxtextarea:3.0.2") {
+    overrideLicense("com.fifesoft:rsyntaxtextarea:3.0.4") {
         // https://github.com/bobbylight/RSyntaxTextArea/issues/299
         expectedLicense = SimpleLicense(
             "Modified BSD License",
-            uri("http://fifesoft.com/rsyntaxtextarea/RSyntaxTextArea.License.txt")
+            uri("https://github.com/bobbylight/RSyntaxTextArea/blob/master/RSyntaxTextArea/src/main/resources/META-INF/LICENSE")
         )
         effectiveLicense = SpdxLicense.BSD_3_Clause
     }

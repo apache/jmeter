@@ -232,7 +232,7 @@ oro-2.0.8
 http://jakarta.apache.org/site/downloads/downloads_oro.cgi
 - regular expressions: various
 
-rsyntaxtextarea-3.0.2
+rsyntaxtextarea-3.0.4
 ---------------------
 http://fifesoft.com/rsyntaxtextarea/
 - syntax coloration
