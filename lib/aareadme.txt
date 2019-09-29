@@ -111,7 +111,7 @@ hamcrest-core-1.3
 - unit tests, JUnit sampler
 https://github.com/hamcrest/JavaHamcrest
 
-freemarker-2.3.28.jar
+freemarker-2.3.29.jar
 ----------------------
 - used by Report/Dashboard feature
 
