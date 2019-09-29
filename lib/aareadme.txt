@@ -13,7 +13,7 @@ Which jars are used by which modules?
 ====================================
 [not exhaustive]
 
-asm-7.0 (org.ow2.asm)
+asm-7.1 (org.ow2.asm)
 ----------------------
 - JSON Path extractor
 
@@ -67,7 +67,7 @@ commons-lang-2.6
 http://commons.apache.org/downloads/download_lang.cgi
 - velocity (Anakia)
 
-commons-lang3-3.8.1
+commons-lang3-3.9
 ----------------
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
