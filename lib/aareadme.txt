@@ -174,7 +174,7 @@ https://github.com/netplex/json-smart-v2
 - JSON Path Extractor
 - JSON Path Renderer
 
-jsoup-1.11.3
+jsoup-1.12.1
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
