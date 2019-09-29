@@ -41,7 +41,7 @@ https://github.com/ben-manes/caffeine/
 - Used by CssParser
 - Used by JMS Publisher Sampler
 
-commons-codec-1.11
+commons-codec-1.13
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
 - Used by ProxyControl and JSR223Test Element for Base64 and md5 
