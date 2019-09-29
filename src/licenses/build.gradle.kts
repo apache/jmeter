@@ -29,7 +29,7 @@ plugins {
 
 // See https://docs.gradle.org/current/userguide/troubleshooting_dependency_resolution.html#sub:configuration_resolution_constraints
 // Gradle forbids to resolve configurations from other projects, so
-// we create our own copy of the confiruration which belongs to the current project
+// we create our own copy of the configuration which belongs to the current project
 // This is the official recommendation:
 // In most cases, the deprecation warning can be fixed by defining a configuration in
 // the project where the resolution is occurring and setting it to extend from the configuration
@@ -78,8 +78,9 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     // Library is not present in Maven Central
     overrideLicense("com.github.bulenkov.darcula:darcula:e208efb96f70e4be9dc362fbb46f6e181ef501dd", SpdxLicense.Apache_2_0)
 
-    overrideLicense("dnsjava:dnsjava:2.1.8") {
-        expectedLicense = SpdxLicense.BSD_2_Clause
+    overrideLicense("dnsjava:dnsjava:2.1.9") {
+        expectedLicense = SimpleLicense("BSD", uri("https://github.com/dnsjava/dnsjava/blob/master/LICENSE"))
+        effectiveLicense = SpdxLicense.BSD_2_Clause
     }
 
     overrideLicense("com.fifesoft:rsyntaxtextarea:3.0.2") {

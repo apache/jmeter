@@ -97,9 +97,9 @@ darcula
 https://github.com/bulenkov/Darcula/
 - Look and Feel
 
-dnsjava-2.1.8
+dnsjava-2.1.9
 -----------------
-http://www.dnsjava.org/download/
+https://github.com/dnsjava/dnsjava
 - DNSCacheManager
 
 groovy-all-2.4.16
