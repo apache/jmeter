@@ -139,6 +139,7 @@ to view the last release notes of version 5.1.1.
     <li>Updated to commons-codec 1.13 (from 1.11)</li>
     <li>Updated to commons-lang3 3.9 (from 3.8.1)</li>
     <li>Updated to commons-pool 2.7 (from 2.6)</li>
+    <li>Updated to commons-text 1.8 (from 1.6)</li>
     <li><bug>63396</bug>JSR223 Test Elements: Description of Parameters is misleading, same for Script</li>
     <li><bug>63480</bug>XPathAssertion and XPathAssertion2: Improve test coverage for input coming from variable. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63452</bug>Tools / Import from cURL: Complete coverage of all command line options that are valid in JMeter use case. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
