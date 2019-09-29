@@ -45,7 +45,7 @@
     <trusted-key id='33cd6733af5ec452' group='commons-logging' />
     <trusted-key id='a41f13c999945293' group='commons-logging' />
     <trusted-key id='7a8860944fad5f62' group='commons-net' />
-    <trusted-key id='93391910f494b50c' group='dnsjava' />
+    <trusted-key id='3449ec3ac2efe8aa' group='dnsjava' />
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
     <trusted-key id='b2ca0dfe9ed21c6e' group='io.burt' />
     <trusted-key id='5b30d3b10694f057' group='io.codearte.gradle.nexus' />
