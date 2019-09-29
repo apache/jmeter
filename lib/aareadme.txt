@@ -184,12 +184,12 @@ log4j2-2.12.1
 https://logging.apache.org/log4j/2.x/
 - Logging framework
 
-ph-css-6.1.1
+ph-css-6.2.0
 --------
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-9.2.1
+ph-commons-9.3.7
 --------
 https://github.com/phax/ph-commons
 - CssParser
