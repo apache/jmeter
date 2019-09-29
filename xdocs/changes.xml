@@ -131,7 +131,7 @@ to view the last release notes of version 5.1.1.
 
 <h3>General</h3>
 <ul>
-    <li>Updated to httpclient/httpmime 4.5.8 (from 4.5.7)</li>
+    <li>Updated to httpclient/httpmime 4.5.10 (from 4.5.7)</li>
     <li>Updated to dnsjava 2.1.9 (from 2.1.8)</li>
     <li>Updated to jsoup 1.12.1 (from 1.11.3)</li>
     <li>Updated to rsyntaxtextarea 3.0.4 (from 3.0.2)</li>
