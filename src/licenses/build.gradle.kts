@@ -144,6 +144,11 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     overrideLicense("net.sf.saxon:Saxon-HE:9.9.1-1") {
         expectedLicense = SpdxLicense.MPL_2_0
     }
+    
+    overrideLicense("org.mozilla:rhino:1.7.11") {
+        expectedLicense = SimpleLicense("MPL", uri("https://github.com/mozilla/rhino/blob/master/LICENSE.txt"))
+        effectiveLicense = SpdxLicense.MPL_2_0
+    }
 
     overrideLicense("com.sun.mail:all:1.5.0-b01") {
         // Multiple licenses, specify explicitly
