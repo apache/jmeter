@@ -35,7 +35,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
-import org.apache.jorphan.gui.GuiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
