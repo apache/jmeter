@@ -141,7 +141,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("net.sf.saxon:Saxon-HE:9.9.1-1") {
+    overrideLicense("net.sf.saxon:Saxon-HE:9.9.1-5") {
         expectedLicense = SpdxLicense.MPL_2_0
     }
     
