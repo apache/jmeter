@@ -142,7 +142,7 @@ jdom-1.1.3
 http://www.jdom.org/downloads/index.html
 - Anakia
 
-jodd-core-5.0.6
+jodd-core-5.0.13
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency

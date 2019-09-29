@@ -106,7 +106,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     }
 
     for (jodd in listOf("jodd-core", "jodd-lagarto", "jodd-log", "jodd-props")) {
-        overrideLicense("org.jodd:$jodd:5.0.6") {
+        overrideLicense("org.jodd:$jodd:5.0.13") {
             expectedLicense = SpdxLicense.BSD_2_Clause // SimpleLicense("The BSD 2-Clause License", uri("http://jodd.org/license.html"))
             licenseFiles = "jodd"
         }
