@@ -177,67 +177,40 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 
     @Override
     public void threadStarted() {
-        if (bshInterpreter == null || !hasInitFile) {
-            return;
-        }
-        try {
-            bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
-        } catch (JMeterException e) {
-            if (log.isDebugEnabled()) {
-                log.debug("{} : {}", getClass().getName(), e.getLocalizedMessage()); // $NON-NLS-1$
-            }
-        }
+        tryEvalNoLog("threadStarted()"); // $NON-NLS-1$
     }
 
     @Override
     public void threadFinished() {
-        if (bshInterpreter == null || !hasInitFile) {
-            return;
-        }
-        try {
-            bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
-        } catch (JMeterException e) {
-            if (log.isDebugEnabled()) {
-                log.debug("{} : {}", getClass().getName(), e.getLocalizedMessage()); // $NON-NLS-1$
-            }
-        }
+        tryEvalNoLog("threadFinished()"); // $NON-NLS-1$
     }
 
     @Override
     public void testEnded() {
-        if (bshInterpreter == null || !hasInitFile) {
-            return;
-        }
-        try {
-            bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
-        } catch (JMeterException e) {
-            if (log.isDebugEnabled()) {
-                log.debug("{} : {}", getClass().getName(), e.getLocalizedMessage()); // $NON-NLS-1$
-            }
-        }
+        tryEvalNoLog("testEnded()"); // $NON-NLS-1$
     }
 
     @Override
     public void testEnded(String host) {
-        if (bshInterpreter == null || !hasInitFile) {
-            return;
-        }
-        try {
-            bshInterpreter.eval("testEnded(\"" + host + "\")");
-        } catch (JMeterException e) {
-            if (log.isDebugEnabled()) {
-                log.debug("{} : {}", getClass().getName(), e.getLocalizedMessage()); // $NON-NLS-1$
-            }
-        }
+        tryEval("testEnded(\"" + host + "\")"); // $NON-NLS-1$
     }
 
     @Override
     public void testStarted() {
+        tryEvalNoLog("testStarted()");// $NON-NLS-1$
+    }
+
+    @Override
+    public void testStarted(String host) {
+        tryEval("testStarted(\"" + host + "\")"); // $NON-NLS-1$
+    }
+
+    private void tryEval(String code) {
         if (bshInterpreter == null || !hasInitFile) {
             return;
         }
         try {
-            bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
+            bshInterpreter.eval(code);
         } catch (JMeterException e) {
             if (log.isDebugEnabled()) {
                 log.debug("{} : {}", getClass().getName(), e.getLocalizedMessage()); // $NON-NLS-1$
@@ -245,13 +218,12 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
     }
 
-    @Override
-    public void testStarted(String host) {
+    private void tryEvalNoLog(String code) {
         if (bshInterpreter == null || !hasInitFile) {
             return;
         }
         try {
-            bshInterpreter.eval("testStarted(\"" + host + "\")");
+            bshInterpreter.evalNoLog(code);
         } catch (JMeterException e) {
             if (log.isDebugEnabled()) {
                 log.debug("{} : {}", getClass().getName(), e.getLocalizedMessage()); // $NON-NLS-1$
