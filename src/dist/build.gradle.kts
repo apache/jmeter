@@ -21,13 +21,12 @@ import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.git.FindGitAttributes
 import com.github.vlsi.gradle.git.dsl.gitignore
 import com.github.vlsi.gradle.release.ReleaseExtension
-import com.github.vlsi.gradle.release.dsl.dependencyLicenses
-import com.github.vlsi.gradle.release.dsl.licensesCopySpec
 import org.gradle.api.internal.TaskOutputsInternal
 
 plugins {
     id("com.github.vlsi.crlf")
     id("com.github.vlsi.stage-vote-release")
+    signing
 }
 
 var jars = arrayOf(
@@ -51,6 +50,8 @@ var jars = arrayOf(
         ":src:protocol:tcp")
 
 val buildDocs by configurations.creating
+val binLicense by configurations.creating
+val srcLicense by configurations.creating
 
 // Note: you can inspect final classpath (list of jars in the binary distribution)  via
 // gw dependencies --configuration runtimeClasspath
@@ -64,6 +65,9 @@ dependencies {
             It just looks good, however Darcula is not used explicitly,
              so the dependency is added for distribution only""".trimIndent())
     }
+
+    binLicense(project(":src:licenses", "binLicense"))
+    srcLicense(project(":src:licenses", "srcLicense"))
 
     buildDocs(platform(project(":src:bom")))
     buildDocs("org.apache.velocity:velocity")
@@ -169,21 +173,6 @@ val createDist by tasks.registering {
 // This task scans the project for gitignore / gitattributes, and that is reused for building
 // source/binary artifacts with the appropriate eol/executable file flags
 val gitProps by rootProject.tasks.existing(FindGitAttributes::class)
-
-// Project :src:license-* might not be evaluated yet, so "renderLicenseFor..." task
-// might not exist yet
-// So we add "evaluationDependsOn"
-evaluationDependsOn(":src:licenses")
-
-// This workarounds https://github.com/gradle/gradle/issues/10008
-// Gradle does not support CopySpec#with(Provider<CopySpec>) yet :(
-fun licenses(licenseType: String) =
-    licensesCopySpec(
-        project(":src:licenses")
-            .tasks.named("renderLicenseFor${licenseType.capitalize()}"))
-
-val sourceLicense = licenses("source")
-val binaryLicense = licenses("binary")
 
 fun createAnakiaTask(taskName: String,
                      baseDir: String, extension: String = ".html", style: String,
@@ -376,7 +365,8 @@ fun CrLfSpec.binaryLayout() = copySpec {
     into(baseFolder) {
         // Note: license content is taken from "/build/..", so gitignore should not be used
         // Note: this is a "license + third-party licenses", not just Apache-2.0
-        dependencyLicenses(binaryLicense)
+        // Note: files(...) adds both "files" and "dependency"
+        from(files(binLicense))
         from(rootDir) {
             gitignore(gitProps)
             exclude("bin/testfiles")
@@ -409,7 +399,8 @@ fun CrLfSpec.sourceLayout() = copySpec {
     into(baseFolder) {
         // Note: license content is taken from "/build/..", so gitignore should not be used
         // Note: this is a "license + third-party licenses", not just Apache-2.0
-        dependencyLicenses(sourceLicense)
+        // Note: files(...) adds both "files" and "dependency"
+        from(files(srcLicense))
         // Include all the source files
         from(rootDir) {
             gitignore(gitProps)

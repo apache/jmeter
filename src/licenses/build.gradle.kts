@@ -22,10 +22,8 @@ import com.github.vlsi.gradle.release.Apache2LicenseRenderer
 import com.github.vlsi.gradle.release.ArtifactType
 import com.github.vlsi.gradle.release.AsfLicenseCategory
 import com.github.vlsi.gradle.release.ExtraLicense
-
-plugins {
-    id("com.github.vlsi.stage-vote-release")
-}
+import com.github.vlsi.gradle.release.dsl.dependencyLicenses
+import com.github.vlsi.gradle.release.dsl.licensesCopySpec
 
 // See https://docs.gradle.org/current/userguide/troubleshooting_dependency_resolution.html#sub:configuration_resolution_constraints
 // Gradle forbids to resolve configurations from other projects, so
@@ -34,12 +32,25 @@ plugins {
 // In most cases, the deprecation warning can be fixed by defining a configuration in
 // the project where the resolution is occurring and setting it to extend from the configuration
 // in the other project.
-val binaryDependencies by configurations.creating() {
-    extendsFrom(project(":src:dist").configurations.runtimeClasspath.get())
+
+val binaryDependencies by configurations.creating
+val binLicense by configurations.creating
+val srcLicense by configurations.creating
+
+dependencies {
+    binaryDependencies(project(":src:dist", "runtimeElements"))
 }
 
+fun gradleWrapperVersion(wrapperProps: String) =
+    `java.util`.Properties().run {
+        file(wrapperProps).inputStream().buffered().use { load(it) }
+        getProperty("distributionUrl").replace(Regex(".*gradle-(\\d[^-]+)-.*"), "$1")
+    }
+
 val gatherSourceLicenses by tasks.registering(GatherLicenseTask::class) {
-    addDependency("org.gradle:gradle-wrapper:5.5.1", SpdxLicense.Apache_2_0)
+    val wrapperProps = "$rootDir/gradle/wrapper/gradle-wrapper.properties"
+    inputs.file(wrapperProps)
+    addDependency("org.gradle:gradle-wrapper:${gradleWrapperVersion(wrapperProps)}", SpdxLicense.Apache_2_0)
     addDependency(":bootstrap:3.3.4", SpdxLicense.MIT)
     addDependency(":bootstrap-social:4.8.0", SpdxLicense.MIT)
     addDependency(":datatables:1.10.9", SpdxLicense.MIT)
@@ -79,17 +90,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     overrideLicense("com.github.bulenkov.darcula:darcula:e208efb96f70e4be9dc362fbb46f6e181ef501dd", SpdxLicense.Apache_2_0)
 
     overrideLicense("dnsjava:dnsjava:2.1.9") {
-        expectedLicense = SimpleLicense("BSD", uri("https://github.com/dnsjava/dnsjava/blob/master/LICENSE"))
-        effectiveLicense = SpdxLicense.BSD_2_Clause
-    }
-
-    overrideLicense("com.fifesoft:rsyntaxtextarea:3.0.4") {
-        // https://github.com/bobbylight/RSyntaxTextArea/issues/299
-        expectedLicense = SimpleLicense(
-            "Modified BSD License",
-            uri("https://github.com/bobbylight/RSyntaxTextArea/blob/master/RSyntaxTextArea/src/main/resources/META-INF/LICENSE")
-        )
-        effectiveLicense = SpdxLicense.BSD_3_Clause
+        expectedLicense = SpdxLicense.BSD_2_Clause
     }
 
     overrideLicense("com.thoughtworks.xstream:xstream:1.4.11") {
@@ -126,28 +127,18 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("org.jsoup:jsoup:1.12.1") {
-        expectedLicense = SimpleLicense("MIT", uri("https://github.com/jhy/jsoup/blob/master/LICENSE"))
-        effectiveLicense = SpdxLicense.MIT
-    }
-
     overrideLicense("org.slf4j:jcl-over-slf4j:1.7.28") {
         expectedLicense = SpdxLicense.MIT
         // See https://github.com/qos-ch/slf4j/blob/v_1.7.28/jcl-over-slf4j/LICENSE.txt
         effectiveLicense = SpdxLicense.Apache_2_0
     }
 
-    overrideLicense("org.slf4j:slf4j-api:1.7.25") {
+    overrideLicense("org.slf4j:slf4j-api:1.7.28") {
         expectedLicense = SpdxLicense.MIT
     }
 
     overrideLicense("net.sf.saxon:Saxon-HE:9.9.1-5") {
         expectedLicense = SpdxLicense.MPL_2_0
-    }
-    
-    overrideLicense("org.mozilla:rhino:1.7.11") {
-        expectedLicense = SimpleLicense("MPL", uri("https://github.com/mozilla/rhino/blob/master/LICENSE.txt"))
-        effectiveLicense = SpdxLicense.MPL_2_0
     }
 
     overrideLicense("com.sun.mail:all:1.5.0-b01") {
@@ -164,11 +155,13 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.Apache_2_0 and SpdxLicense.SAX_PD and SimpleLicense("The W3C License", uri("http://www.w3.org/TR/2004/REC-DOM-Level-3-Core-20040407/java-binding.zip"))
         effectiveLicense = SpdxLicense.Apache_2_0
     }
-    overrideLicense("org.hamcrest:hamcrest-core:1.3") {
-        // https://github.com/hamcrest/JavaHamcrest/issues/264
-        // pom.xml lists "New BSD License", however it is BSD_3
-        expectedLicense = SimpleLicense("New BSD License", uri("http://www.opensource.org/licenses/bsd-license.php"))
-        effectiveLicense = SpdxLicense.BSD_3_Clause
+    for (lib in listOf("hamcrest-core", "hamcrest")) {
+        overrideLicense("org.hamcrest:$lib:2.1") {
+            // https://github.com/hamcrest/JavaHamcrest/issues/264
+            // pom.xml lists "New BSD License", however it is BSD_3
+            expectedLicense = SpdxLicense.BSD_3_Clause
+            licenseFiles = "hamcrest"
+        }
     }
     overrideLicense("org.exparity:hamcrest-date:2.0.4") {
         // https://github.com/eXparity/hamcrest-date/issues/26
@@ -179,6 +172,10 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     overrideLicense("net.sf.jtidy:jtidy:r938") {
         expectedLicense = SimpleLicense("Java HTML Tidy License", uri("http://jtidy.svn.sourceforge.net/viewvc/jtidy/trunk/jtidy/LICENSE.txt?revision=95"))
         effectiveLicense = SpdxLicense.BSD_3_Clause
+    }
+    // https://github.com/typetools/checker-framework/issues/2798
+    overrideLicense("org.checkerframework:checker-qual:2.10.0") {
+        expectedLicense = SpdxLicense.MIT
     }
 }
 
@@ -202,4 +199,29 @@ val renderLicenseForBinary by tasks.registering(Apache2LicenseRenderer::class) {
 
 tasks.build.configure {
   dependsOn(renderLicenseForSource, renderLicenseForBinary)
+}
+
+// Below is to populate configurations with licenses
+// Note: configuration artifacts consist of files and directories
+// Here directories are used because it simplifies the use (the use site does not have to unzip)
+val binLicenseSpec = licensesCopySpec(renderLicenseForBinary)
+val srcLicenseSpec = licensesCopySpec(renderLicenseForSource)
+
+val binLicenseDir by tasks.registering(Sync::class) {
+    into("$buildDir/$name")
+    dependencyLicenses(binLicenseSpec)
+}
+
+val srcLicenseDir by tasks.registering(Sync::class) {
+    into("$buildDir/$name")
+    dependencyLicenses(srcLicenseSpec)
+}
+
+artifacts {
+    add(binLicense.name, binLicenseDir.get().destinationDir) {
+        builtBy(binLicenseDir)
+    }
+    add(srcLicense.name, srcLicenseDir.get().destinationDir) {
+        builtBy(srcLicenseDir)
+    }
 }

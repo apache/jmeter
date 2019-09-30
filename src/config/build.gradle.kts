@@ -25,23 +25,11 @@ plugins {
     id("com.github.vlsi.crlf")
 }
 
-// Project :src:license-* might not be evaluated yet, so "renderLicenseFor..." task
-// might not exist yet
-// So we add "evaluationDependsOn"
-evaluationDependsOn(":src:licenses")
+val srcLicense by configurations.creating
 
-// This workarounds https://github.com/gradle/gradle/issues/10008
-// Gradle does not support CopySpec#with(Provider<CopySpec>) yet :(
-fun licenses(licenseType: String) =
-    project(":src:licenses").tasks.named("renderLicenseFor${licenseType.capitalize()}")
-        .let { task ->
-            licensesCopySpec(task) {
-                from(task)
-                from("$rootDir/NOTICE")
-            }
-        }
-
-val sourceLicense = licenses("source")
+dependencies {
+    srcLicense(project(":src:licenses", "srcLicense"))
+}
 
 tasks.named<Jar>(JavaPlugin.JAR_TASK_NAME) {
     into("META-INF") {
@@ -49,7 +37,7 @@ tasks.named<Jar>(JavaPlugin.JAR_TASK_NAME) {
         CrLfSpec(LineEndings.LF).run {
             // Note: license content is taken from "/build/..", so gitignore should not be used
             // Note: this is a "license + third-party licenses", not just Apache-2.0
-            dependencyLicenses(sourceLicense)
+            from(files(srcLicense))
         }
     }
     into("run") {
