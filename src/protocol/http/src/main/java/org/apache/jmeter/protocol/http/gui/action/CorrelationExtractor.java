@@ -135,8 +135,12 @@ public class CorrelationExtractor extends ViewResultsFullVisualizer{
         // extractor and XPath2 extractor.
         for (String argument : arguments) {
             try {
-                Map<String, String> htmlExtractor = CreateCssSelectorExtractor.createCssSelectorExtractor(sampleResult.getResponseDataAsString(),
-                        bodyParameterMap.get(argument), argument, sampleResult.getSampleLabel(), sampleResult.getContentType());
+                Map<String, String> htmlExtractor = CreateCssSelectorExtractor.createCssSelectorExtractor(
+                        sampleResult.getResponseDataAsString(),
+                        bodyParameterMap.get(argument),
+                        argument,
+                        sampleResult.getSampleLabel(),
+                        sampleResult.getContentType());
                 if (htmlExtractor != null && htmlExtractor.size() > 0) {
                     listOfMap.add(htmlExtractor);
                 }
@@ -375,8 +379,8 @@ public class CorrelationExtractor extends ViewResultsFullVisualizer{
      * @param arguments
      * @param bodyParameterMap
      */
-    private static void updateJmxFile(List<String> arguments,
-            Map<String, String> bodyParameterMap) {
+    private static void updateJmxFile(
+            List<String> arguments, Map<String, String> bodyParameterMap) {
 
         try {
             if (!listOfMap.isEmpty()) {

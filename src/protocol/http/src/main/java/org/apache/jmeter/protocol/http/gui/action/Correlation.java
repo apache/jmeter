@@ -56,7 +56,7 @@ public class Correlation {
 
     // Initialize member variables
     private static Map<String, List<String>> candidatesMap = new HashMap<>();
-    private static Set<HTTPSamplerProxy> samplerList = new HashSet<>();
+    private static Set<HTTPSamplerProxy> samplerSet = new HashSet<>();
 
     private static final String HTTP_TEST_SAMPLE_GUI = "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui";
     private static final String TEST_NAME = "TestElement.name";
@@ -92,13 +92,13 @@ public class Correlation {
             Set<HTTPSamplerProxy> samplerResult = convertSubTree(tree);
             samplerResult.forEach(proxy ->
                 sampleRequests.add((HTTPSamplerBase) proxy));
-            samplerList.clear();
+            samplerSet.clear();
 
             Set<HTTPSamplerProxy> currentGuiSamplerResult = getSamplerObjectList(rootNode);
             currentGuiSamplerResult.forEach(proxy -> {
                 currentGuiSampleRequests.add((HTTPSamplerBase) proxy);
             });
-            samplerList.clear();
+            samplerSet.clear();
 
         } catch (IOException e) {
             log.error("Unable to parse JMX file.");
@@ -132,12 +132,12 @@ public class Correlation {
             if (testElement.getPropertyAsString(TestElement.GUI_CLASS).equals(HTTP_TEST_SAMPLE_GUI)) {
 
                 HTTPSamplerProxy sample = (HTTPSamplerProxy) testElement;
-                samplerList.add(sample);
+                samplerSet.add(sample);
 
             }
             getSamplerObjectList(child);
         }
-        return samplerList;
+        return samplerSet;
     }
 
     /**
@@ -153,11 +153,11 @@ public class Correlation {
             TestElement item = (TestElement) o;
             if (item instanceof HTTPSamplerProxy) {
                 HTTPSamplerProxy proxyObj = (HTTPSamplerProxy) item;
-                samplerList.add(proxyObj);
+                samplerSet.add(proxyObj);
             }
             convertSubTree(tree.getTree(item));
         }
-        return samplerList;
+        return samplerSet;
     }
 
     /**

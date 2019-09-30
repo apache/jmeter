@@ -52,7 +52,6 @@ public class CreateCssSelectorExtractor {
      * @throws Error
      * @throws UnsupportedEncodingException
      */
-
     public static Map<String, String> createCssSelectorExtractor(String html, String attributeValue,
             String correlationVariableName, String requestUrl, String contentType) throws UnsupportedEncodingException {
 

@@ -26,7 +26,6 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class CorrelationFunction {
 
-    // Initialize constants variables
     private static final String UNDERSCORE = "_";
 
     private CorrelationFunction() {}

@@ -22,9 +22,6 @@ import javax.swing.table.AbstractTableModel;
 
 public class CorrelationTableModel extends AbstractTableModel {
 
-    /**
-     * serialVersionUID
-     */
     private static final long serialVersionUID = 5071306820857374637L;
 
     public static Object[][] rowData = null;

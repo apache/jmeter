@@ -81,9 +81,7 @@ public class CorrelationGui {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        /**
-         * OK event of JFrame
-         */
+        // OK event of JFrame
         ok.addActionListener(event -> {
 
             // Initialize local variables
@@ -106,9 +104,7 @@ public class CorrelationGui {
 
         );
 
-        /**
-         * Cancel event of JFrame
-         */
+        // Cancel event of JFrame
         cancel.addActionListener(actionListener -> {
             frame.dispose();
         });
