@@ -142,14 +142,8 @@ public class XPathUtil {
             throws ParserConfigurationException {
         DocumentBuilder builder = makeDocumentBuilderFactory(validate, whitespace, namespace).newDocumentBuilder();
         builder.setErrorHandler(new MyErrorHandler(validate, false));
-        if (!downloadDTDs){
-            EntityResolver er = new EntityResolver(){
-                @Override
-                public InputSource resolveEntity(String publicId, String systemId)
-                        throws SAXException, IOException {
-                    return new InputSource(new ByteArrayInputStream(new byte[]{}));
-                }
-            };
+        if (!downloadDTDs) {
+            EntityResolver er = (publicId, systemId) -> new InputSource(new ByteArrayInputStream(new byte[0]));
             builder.setEntityResolver(er);
         }
         return builder;
@@ -715,16 +709,14 @@ public class XPathUtil {
                            isNegated ? "Nodes Matched for " + xPathQuery : "No Nodes Matched for " + xPathQuery);
                } catch (ParserConfigurationException | TransformerException e) { // NOSONAR Exception handled by return
                    result.setError(true);
-                   result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage()).append(" for:")
-                           .append(xPathQuery).toString());
+                   result.setFailureMessage("Exception: " + e.getMessage() + " for:" + xPathQuery);
                } finally {
                    if (selector != null) {
                        try {
                            selector.getUnderlyingXPathContext().setContextItem(null);
                        } catch (Exception e) { // NOSONAR Ignored on purpose
                            result.setError(true);
-                           result.setFailureMessage(new StringBuilder("Exception: ").append(e.getMessage())
-                                   .append(" for:").append(xPathQuery).toString());
+                           result.setFailureMessage("Exception: " + e.getMessage() + " for:" + xPathQuery);
                        }
                    }
                }

@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.thinktime;
 
 import org.apache.jmeter.exceptions.IllegalUserActionException;

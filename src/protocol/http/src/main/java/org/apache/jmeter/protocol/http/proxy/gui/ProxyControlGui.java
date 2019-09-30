@@ -1095,7 +1095,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
                 .getResString("patterns_to_include"))); // $NON-NLS-1$
 
-        panel.add(new JScrollPane(includeTable), BorderLayout.CENTER);
+        panel.add(GuiUtils.emptyBorder(new JScrollPane(includeTable)), BorderLayout.CENTER);
         panel.add(createTableButtonPanel(ADD_INCLUDE, DELETE_INCLUDE, ADD_TO_INCLUDE_FROM_CLIPBOARD, null), BorderLayout.SOUTH);
 
         return panel;
@@ -1112,7 +1112,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
                 .getResString("patterns_to_exclude"))); // $NON-NLS-1$
 
-        panel.add(new JScrollPane(excludeTable), BorderLayout.CENTER);
+        panel.add(GuiUtils.emptyBorder(new JScrollPane(excludeTable)), BorderLayout.CENTER);
         panel.add(createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE, ADD_TO_EXCLUDE_FROM_CLIPBOARD, ADD_SUGGESTED_EXCLUDES), BorderLayout.SOUTH);
 
         return panel;

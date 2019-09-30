@@ -24,7 +24,9 @@ val skipMavenPublication = setOf(
     ":src:generator",
     ":src:licenses",
     ":src:protocol",
-    ":src:release"
+    ":src:release",
+    ":src:testkit",
+    ":src:testkit-wiremock"
 )
 
 subprojects {
@@ -43,13 +45,22 @@ subprojects {
     apply<JacocoPlugin>()
 
     dependencies {
+        val api by configurations
+        api(platform(project(":src:bom")))
+
         if (!testsPresent) {
             // No tests => no dependencies required
             return@dependencies
         }
         val testImplementation by configurations
         val testRuntimeOnly by configurations
+        testImplementation("org.junit.jupiter:junit-jupiter-api")
+        testImplementation("org.junit.jupiter:junit-jupiter-params")
+        testImplementation("org.hamcrest:hamcrest")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+        testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
         testImplementation("junit:junit")
+        testImplementation(testFixtures(project(":src:testkit")))
         if (groovyUsed) {
             testImplementation("org.spockframework:spock-core")
         }

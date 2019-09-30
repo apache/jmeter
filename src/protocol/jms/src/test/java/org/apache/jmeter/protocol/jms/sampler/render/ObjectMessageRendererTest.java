@@ -13,23 +13,30 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package org.apache.jmeter.protocol.jms.sampler.render;
 
-import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ObjectMessageRendererTest extends MessageRendererTest<Serializable> {
 
+    private static String CP1252_SAFE_XML =
+            "<org.apache.jmeter.protocol.jms.sampler.render.Person><name>eéè€</name></org.apache.jmeter.protocol.jms.sampler.render.Person>";
+
     private ObjectMessageRenderer render = RendererFactory.getInstance().getObject();
+
     @Override
     public ObjectMessageRenderer getRenderer() {
         return render;
@@ -37,65 +44,63 @@ public class ObjectMessageRendererTest extends MessageRendererTest<Serializable>
 
     @Test
     public void getValueFromText() {
-        Serializable object = render.getValueFromText(getDoeContent());
+        String text = "<org.apache.jmeter.protocol.jms.sampler.render.Person><name>Doe</name></org.apache.jmeter.protocol.jms.sampler.render.Person>";
+        Serializable object = render.getValueFromText(text);
         assertObject(object, "Doe");
     }
 
    private void assertObject(Serializable object, String name) {
-        assertNotNull("object", object);
-        assertEquals("object.class", Person.class, object.getClass());
-        Person p = (Person) object;
-        assertEquals("object.name", name, p.getName());
-    }
+       assertNotNull(object, "object");
+       assertEquals(Person.class, object.getClass(), "object.class");
+       Person p = (Person) object;
+       assertEquals(name, p.getName(), "object.name");
+   }
 
     @Test
-    public void getValueFromFile_inRawMode() {
+    public void getValueFromFile_inRawMode() throws IOException {
+        String fileName = writeFile(
+                "object_doe.xml",
+                "<org.apache.jmeter.protocol.jms.sampler.render.Person><name>Doe</name></org.apache.jmeter.protocol.jms.sampler.render.Person>"
+        );
         assertValueFromFile(object -> {
             assertObject(object, "Doe");
             Person p = (Person) object;
-            assertSame("cache", p, getFirstCachedValue());
-        }, "object_doe.xml", false);
+            assertSame(p, getFirstCachedValue(), "cache");
+        }, fileName, false);
     }
 
     @Test
-    public void getValueFromFile_withForcedEncoding() {
-        String filename = getResourceFile("object_cp1252.xml");
+    public void getValueFromFile_withForcedEncoding() throws IOException {
+        String filename = writeFile("object_cp1252.xml", CP1252_SAFE_XML, Charset.forName("Cp1252"));
         Serializable object = getRenderer().getValueFromFile(filename, "Cp1252", true, cache);
         assertObject(object, "eéè€");
-        assertEquals("cache", getUnicodeContent(), getFirstCachedValue());
-
+        assertEquals(CP1252_SAFE_XML, getFirstCachedValue(), "cache");
     }
 
     @Test
-    public void getValueFromFile_withDefaultEncodingAndNoProlog() {
-        String filename = getResourceFile("object_utf8.xml");
+    public void getValueFromFile_withDefaultEncodingAndNoProlog() throws IOException {
+        String content =
+                "<org.apache.jmeter.protocol.jms.sampler.render.Person><name>eéè€</name></org.apache.jmeter.protocol.jms.sampler.render.Person>";
+        String filename = writeFile("object_utf8.xml", content, StandardCharsets.UTF_8);
         Serializable object = getRenderer().getValueFromFile(filename, PublisherSampler.DEFAULT_ENCODING, true, cache);
         assertObject(object, "eéè€");
-        assertEquals("cache", getUnicodeContent(), getFirstCachedValue());
+        assertEquals(CP1252_SAFE_XML, getFirstCachedValue(), "cache");
 
     }
 
     @Test
-    public void getValueFromFile_withDefaultEncodingAndProlog() {
-        String filename = getResourceFile("object_prolog_cp1252.xml");
+    public void getValueFromFile_withDefaultEncodingAndProlog() throws IOException {
+        String content = "<?xml version=\"1.0\" encoding=\"Windows-1252\"?>\n" + CP1252_SAFE_XML;
+        String filename = writeFile("object_prolog_cp1252.xml", content, Charset.forName("Cp1252"));
         Serializable object = getRenderer().getValueFromFile(filename, PublisherSampler.DEFAULT_ENCODING, true, cache);
         assertObject(object, "eéè€");
         Person p = (Person) object;
-        assertEquals("object.name", "eéè€", p.getName());
+        assertEquals("eéè€", p.getName(), "object.name");
         Object firstCachedValue = getFirstCachedValue();
-        assertEquals("cache", format("<?xml version=\"1.0\" encoding=\"Windows-1252\"?>%n%s", getUnicodeContent()),
-                convertLineEndingsToSystem(firstCachedValue));
+        assertEquals(content, convertLineEndingsToSystem(firstCachedValue), "cache");
     }
 
     private String convertLineEndingsToSystem(Object firstCachedValue) {
-        return firstCachedValue.toString().replaceFirst("[\r\n]+", format("%n"));
-    }
-
-    private String getUnicodeContent() {
-        return "<org.apache.jmeter.protocol.jms.sampler.render.Person><name>eéè€</name></org.apache.jmeter.protocol.jms.sampler.render.Person>";
-    }
-
-    private String getDoeContent() {
-        return "<org.apache.jmeter.protocol.jms.sampler.render.Person><name>Doe</name></org.apache.jmeter.protocol.jms.sampler.render.Person>";
+        return firstCachedValue.toString().replaceAll("[\r\n]+", "\n");
     }
 }

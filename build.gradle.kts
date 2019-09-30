@@ -34,6 +34,7 @@ plugins {
     checkstyle
     id("org.jetbrains.gradle.plugin.idea-ext") version "0.5" apply false
     id("org.nosphere.apache.rat") version "0.5.0"
+    id("com.diffplug.gradle.spotless") version "3.24.3"
     id("com.github.spotbugs") version "1.6.10"
     id("org.sonarqube") version "2.7.1"
     id("com.github.vlsi.crlf") version "1.17.0"
@@ -149,6 +150,10 @@ val skipCheckstyle by extra {
     boolProp("skipCheckstyle") ?: false
 }
 
+val skipSpotless by extra {
+    boolProp("skipSpotless") ?: false
+}
+
 // Allow to skip building source/binary distributions
 val skipDist by extra {
     boolProp("skipDist") ?: false
@@ -241,6 +246,7 @@ if (enableSpotBugs) {
     }
 }
 
+val licenseHeaderFile = file("config/license.header.java")
 allprojects {
     group = "org.apache.jmeter"
     // JMeter ClassFinder parses "class.path" and tries to find jar names there,
@@ -262,12 +268,57 @@ allprojects {
             checkstyle {
                 toolVersion = "checkstyle".v
             }
+            val sourceSets: SourceSetContainer by project
+            if (sourceSets.isNotEmpty()) {
+                tasks.register("checkstyle") {
+                    group = LifecycleBasePlugin.VERIFICATION_GROUP
+                    description = "Executes Checkstyle verifications"
+                    dependsOn(sourceSets.names.map { "checkstyle" + it.capitalize() })
+                }
+            }
         }
         apply<SpotBugsPlugin>()
 
         spotbugs {
             toolVersion = "spotbugs".v
             isIgnoreFailures = ignoreSpotBugsFailures
+        }
+
+        if (!skipSpotless) {
+            apply(plugin = "com.diffplug.gradle.spotless")
+            spotless {
+                java {
+                    licenseHeaderFile(licenseHeaderFile)
+                    importOrder("static ", "java.", "javax", "org", "net", "com", "")
+                    removeUnusedImports()
+                    trimTrailingWhitespace()
+                    indentWithSpaces(4)
+                    endWithNewline()
+                }
+            }
+        }
+        tasks.register("style") {
+            group = LifecycleBasePlugin.VERIFICATION_GROUP
+            description = "Formats code (license header, import order, whitespace at end of line, ...) and executes Checkstyle verifications"
+            if (!skipSpotless) {
+                dependsOn("spotlessApply")
+            }
+            if (!skipCheckstyle) {
+                dependsOn("checkstyle")
+            }
+        }
+    }
+    plugins.withId("groovy") {
+        if (!skipSpotless) {
+            spotless {
+                groovy {
+                    licenseHeaderFile(licenseHeaderFile)
+                    importOrder("static ", "java.", "javax", "org", "net", "com", "")
+                    trimTrailingWhitespace()
+                    indentWithSpaces(4)
+                    endWithNewline()
+                }
+            }
         }
     }
 
@@ -391,8 +442,6 @@ allprojects {
                     include("**/*.dtd")
                     include("**/*.svg")
                     include("**/*.txt")
-                    // Test resources have files in CP1252, and we don't want to parse them as UTF-8
-                    exclude("**/*cp1252*")
                     filteringCharset = "UTF-8"
                     filter(LineEndings.LF)
                 }
@@ -424,12 +473,15 @@ allprojects {
                 }
             }
             withType<Test>().configureEach {
+                useJUnitPlatform()
                 testLogging {
                     exceptionFormat = TestExceptionFormat.FULL
                     showStandardStreams = true
                 }
                 // Pass the property to tests
                 systemProperty("java.awt.headless", System.getProperty("java.awt.headless"))
+                systemProperty("junit.jupiter.execution.parallel.enabled", "true")
+                systemProperty("junit.jupiter.execution.timeout.default", "2 m")
             }
             withType<SpotBugsTask>().configureEach {
                 group = LifecycleBasePlugin.VERIFICATION_GROUP

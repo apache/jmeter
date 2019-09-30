@@ -13,22 +13,30 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package org.apache.jmeter.protocol.jms.sampler.render;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.function.Consumer;
 
-import org.apache.jmeter.test.ResourceLocator;
-import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextServiceHelper;
-import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Rule;
+import org.apache.jmeter.util.JMeterContextExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
+@ExtendWith(JMeterContextExtension.class)
 public abstract class MessageRendererTest<T> {
+    @TempDir
+    public Path tmpDir;
+
 
     protected Cache<Object,Object> cache = Caffeine.newBuilder().build();
 
@@ -36,24 +44,24 @@ public abstract class MessageRendererTest<T> {
         return cache.asMap().values().stream().findFirst().get();
     }
 
-    @Rule
-    public JMeterContextServiceHelper jmeterCtxService = new JMeterContextServiceHelper() {
-        @Override
-        protected void initContext(JMeterContext jMeterContext) {
-            jMeterContext.setVariables(new JMeterVariables());
-        }
-    };
-
     protected abstract MessageRenderer<T> getRenderer();
 
-    protected String getResourceFile(String resource) {
-        return ResourceLocator.getResource(this, resource);
-    }
-
-    protected void assertValueFromFile(Consumer<T> assertion, String resource, boolean hasVariable) {
-        String filename = getResourceFile(resource);
-        T actual = getRenderer().getValueFromFile(filename, "UTF-8", hasVariable, cache);
+    protected void assertValueFromFile(Consumer<T> assertion, String fileName, boolean hasVariable) {
+        T actual = getRenderer().getValueFromFile(fileName, "UTF-8", hasVariable, cache);
         assertion.accept(actual);
     }
 
+    protected String writeFile(String fileName, byte[] contents) throws IOException {
+        Path filePath = tmpDir.resolve(fileName);
+        Files.write(filePath, contents);
+        return filePath.toString();
+    }
+
+    protected String writeFile(String fileName, String text) throws IOException {
+        return writeFile(fileName, text.getBytes(StandardCharsets.UTF_8));
+    }
+
+    protected String writeFile(String fileName, String text, Charset charset) throws IOException {
+        return writeFile(fileName, text.getBytes(charset));
+    }
 }

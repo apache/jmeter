@@ -16,10 +16,6 @@
  *
  */
 
-/*
- * Test class for BinaryTCPClientImpl utility methods.
- *
- */
 package org.apache.jmeter.protocol.tcp.sampler;
 
 import static org.junit.Assert.assertEquals;

@@ -9,17 +9,13 @@
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-
-/**
  *
  */
+
 package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
@@ -353,6 +349,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         searchAndMainSP.setOneTouchExpandable(true);
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, makeTitlePanel(), searchAndMainSP);
         splitPane.setOneTouchExpandable(true);
+        splitPane.setBorder(BorderFactory.createEmptyBorder());
         add(splitPane);
 
         // init right side with first render
@@ -541,11 +538,11 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             // he's ready to wait.
             int len = res.getResponseDataAsString().length();
             if (MAX_DISPLAY_SIZE > 0 && len > MAX_DISPLAY_SIZE) {
-                StringBuilder builder = new StringBuilder(MAX_DISPLAY_SIZE+100);
+                StringBuilder builder = new StringBuilder(MAX_DISPLAY_SIZE + 100);
                 builder.append(JMeterUtils.getResString("view_results_response_too_large_message")) //$NON-NLS-1$
                     .append(len).append(" > Max: ").append(MAX_DISPLAY_SIZE)
                     .append(", ").append(JMeterUtils.getResString("view_results_response_partial_message")) // $NON-NLS-1$
-                    .append("\n").append(res.getResponseDataAsString().substring(0, MAX_DISPLAY_SIZE)).append("\n...");
+                    .append("\n").append(res.getResponseDataAsString(), 0, MAX_DISPLAY_SIZE).append("\n...");
                 response = builder.toString();
             } else {
                 response = res.getResponseDataAsString();

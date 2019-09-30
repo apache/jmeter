@@ -9,13 +9,13 @@
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
+
 package org.apache.commons.cli.avalon;
 
 /**
@@ -55,14 +55,10 @@ public final class CLOptionDescriptor {
     /**
      * Constructor.
      *
-     * @param name
-     *            the name/long option
-     * @param flags
-     *            the flags
-     * @param id
-     *            the id/character option
-     * @param description
-     *            description of option usage
+     * @param name        the name/long option
+     * @param flags       the flags
+     * @param id          the id/character option
+     * @param description description of option usage
      */
     public CLOptionDescriptor(final String name, final int flags, final int id, final String description) {
 
@@ -72,26 +68,21 @@ public final class CLOptionDescriptor {
         this.name = name;
         this.flags = flags;
         this.description = description;
-        this.incompatible = ((flags & DUPLICATES_ALLOWED) != 0) ? new int[0] : new int[] { id };
+        this.incompatible = ((flags & DUPLICATES_ALLOWED) != 0) ? new int[0] : new int[]{id};
     }
 
 
     /**
      * Constructor.
      *
-     * @param name
-     *            the name/long option
-     * @param flags
-     *            the flags
-     * @param id
-     *            the id/character option
-     * @param description
-     *            description of option usage
-     * @param incompatible
-     *            descriptors for incompatible options
+     * @param name         the name/long option
+     * @param flags        the flags
+     * @param id           the id/character option
+     * @param description  description of option usage
+     * @param incompatible descriptors for incompatible options
      */
     public CLOptionDescriptor(final String name, final int flags, final int id, final String description,
-            final CLOptionDescriptor[] incompatible) {
+                              final CLOptionDescriptor[] incompatible) {
 
         checkFlags(flags);
 
@@ -177,23 +168,8 @@ public final class CLOptionDescriptor {
         return this.name;
     }
 
-    /**
-     * Convert to String.
-     *
-     * @return the converted value to string.
-     */
     @Override
     public final String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("[OptionDescriptor ");
-        sb.append(this.name);
-        sb.append(", ");
-        sb.append(this.id);
-        sb.append(", ");
-        sb.append(this.flags);
-        sb.append(", ");
-        sb.append(this.description);
-        sb.append(" ]");
-        return sb.toString();
+        return "[OptionDescriptor " + name + ", " + id + ", " + flags + ", " + description + "]";
     }
 }

@@ -75,6 +75,8 @@ project("http") {
         implementation("dnsjava:dnsjava:2.1.8")
         implementation("org.apache.httpcomponents:httpmime:4.5.8")
         implementation("org.brotli:dec:0.1.2")
+        testImplementation(testFixtures(project(":src:testkit-wiremock")))
+        testImplementation("com.github.tomakehurst:wiremock-jre8")
     }
 
 }
@@ -122,7 +124,7 @@ project("jms") {
 
 project("junit") {
     dependencies {
-        api("junit:junit:4.12")
+        api("junit:junit")
         implementation("org.apache.commons:commons-lang3") {
             because("ArrayUtils")
         }
@@ -134,7 +136,7 @@ project("junit") {
 
 project("junit-sample") {
     dependencies {
-        api("junit:junit:4.12")
+        api("junit:junit")
     }
 }
 

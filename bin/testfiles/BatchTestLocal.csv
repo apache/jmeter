@@ -106,7 +106,6 @@ Java If once 1,,,text,false,,0,1,1,null,,1,1
 Java If once 2,200,OK,text,true,,0,1,1,null,,1,0
 Java If all 1,,,text,false,,0,1,1,null,,1,1
 Java OK,200,OK,text,true,,0,1,1,null,,1,0
-"HTTP ""Request,",200,OK,text,true,,134731,1,1,file:testfiles/BatchTestLocal.jmx,,1,0
 1 1,200,OK,text,true,,0,1,1,null,,1,0
 2 2,200,OK,text,true,,0,1,1,null,,1,0
 3 3,200,OK,text,true,,0,1,1,null,,1,0

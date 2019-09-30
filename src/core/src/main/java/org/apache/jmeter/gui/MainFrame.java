@@ -512,8 +512,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             topAndDown.setDividerSize(0);
         }
         mainPanel = createMainPanel();
+        mainPanel.setBorder(BorderFactory.createEmptyBorder());
 
         logPanel = createLoggerPanel();
+        logPanel.setBorder(BorderFactory.createEmptyBorder());
         errorsAndFatalsCounterLogTarget = new ErrorsAndFatalsCounterLogTarget();
         GuiPackage.getInstance().getLogEventBus().registerEventListener(logPanel);
         GuiPackage.getInstance().getLogEventBus().registerEventListener(errorsAndFatalsCounterLogTarget);

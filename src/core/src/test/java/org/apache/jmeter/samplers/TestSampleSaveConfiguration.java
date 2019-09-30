@@ -188,4 +188,3 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
     }
 
  }
-

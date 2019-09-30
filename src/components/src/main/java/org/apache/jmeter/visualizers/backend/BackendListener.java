@@ -143,13 +143,7 @@ public class BackendListener extends AbstractTestElement
      * @return a String identifier for this sampler instance
      */
     private String whoAmI() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(Thread.currentThread().getName());
-        sb.append("@");
-        sb.append(Integer.toHexString(hashCode()));
-        sb.append("-");
-        sb.append(getName());
-        return sb.toString();
+        return Thread.currentThread().getName() + "@" + Integer.toHexString(hashCode()) + "-" + getName();
     }
 
 
@@ -162,7 +156,7 @@ public class BackendListener extends AbstractTestElement
         BackendListenerContext context = new BackendListenerContext(args);
 
         SampleResult sr = listenerClientData.client.createSampleResult(context, event.getResult());
-        if(sr == null) {
+        if (sr == null) {
             if (log.isDebugEnabled()) {
                 log.debug("{} => Dropping SampleResult: {}", getName(), event.getResult());
             }

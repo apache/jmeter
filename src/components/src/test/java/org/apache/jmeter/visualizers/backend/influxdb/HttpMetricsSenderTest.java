@@ -18,98 +18,66 @@
 
 package org.apache.jmeter.visualizers.backend.influxdb;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import java.io.IOException;
-import java.util.Objects;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.net.HttpURLConnection;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
 
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpStatus;
-import org.apache.http.impl.bootstrap.HttpServer;
-import org.apache.http.impl.bootstrap.ServerBootstrap;
-import org.apache.http.protocol.HttpRequestHandler;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.jmeter.wiremock.WireMockExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.MappingBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.extension.Parameters;
+import com.github.tomakehurst.wiremock.http.RequestMethod;
+import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
+import com.github.tomakehurst.wiremock.matching.StringValuePattern;
+
+@ExtendWith(WireMockExtension.class)
 public class HttpMetricsSenderTest {
+    private static final String API_URL = "/api/v2/write";
 
-    private HttpServer server;
-    private BlockingDeque<HttpRequest> resultQueue = new LinkedBlockingDeque<>();
-
-    @Before
-    public void startServer() {
-
-        HttpRequestHandler requestHandler = (request, response, context) -> {
-            HttpMetricsSenderTest.this.resultQueue.add(request);
-            response.setStatusCode(HttpStatus.SC_NO_CONTENT);
-        };
-
-        // Start HttpServer on free port
-        server = IntStream
-                .range(8183, 8283)
-                .mapToObj(port -> {
-                    HttpServer httpServer = ServerBootstrap.bootstrap()
-                            .setListenerPort(port)
-                            .registerHandler("*", requestHandler)
-                            .create();
-                    try {
-                        httpServer.start();
-                        return httpServer;
-                    } catch (IOException e) {
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Cannot start HttpServer"));
+    private MappingBuilder influxRequest(CountDownLatch latch) {
+        return WireMock.post(API_URL)
+                .willReturn(
+                        WireMock.aResponse().withStatus(HttpURLConnection.HTTP_NO_CONTENT)
+                )
+                .withPostServeAction("countdown", Parameters.one("latch", latch));
     }
 
-    @After
-    public void stopServer() {
-        server.shutdown(1, TimeUnit.SECONDS);
+    static Collection<Arguments> emptyTokens() {
+        return Arrays.asList(arguments((String) null), arguments(""), arguments(" "));
+    }
+
+    @ParameterizedTest(name = "[{index}] token=\"{0}\"")
+    @MethodSource("emptyTokens")
+    public void emptyTokenIsNotSentAsAuthorizedHeader(String token, WireMockServer server) throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        server.stubFor(influxRequest(latch));
+
+        setupSenderAndSendMetric(server.url(API_URL), token);
+
+        latch.await(2, TimeUnit.SECONDS);
+        assertAuthHeader(server, WireMock.absent());
     }
 
     @Test
-    public void checkTokenDoesNotPresentInHeader() throws Exception {
-        String influxdbUrl = getInfluxDbUrl();
-        setupSenderAndSendMetric(influxdbUrl, null);
+    public void checkTokenPresentInHeader(WireMockServer server) throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        server.stubFor(influxRequest(latch));
 
-        assertNoAuthHeader(resultQueue.take());
-    }
+        setupSenderAndSendMetric(server.url(API_URL), "my-token");
 
-
-    @Test
-    public void checkEmptyTokenDoesNotPresentInHeader() throws Exception {
-        String influxdbUrl = getInfluxDbUrl();
-        setupSenderAndSendMetric(influxdbUrl, "");
-
-        assertNoAuthHeader(resultQueue.take());
-    }
-
-    @Test
-    public void checkEmptyOnlyWhitespaceTokenDoesNotPresentInHeader() throws Exception {
-        String influxdbUrl = getInfluxDbUrl();
-        setupSenderAndSendMetric(influxdbUrl, "  ");
-
-        assertNoAuthHeader(resultQueue.take());
-    }
-
-    @Test
-    public void checkTokenPresentInHeader() throws Exception {
-        String influxdbUrl = getInfluxDbUrl();
-        setupSenderAndSendMetric(influxdbUrl, "my-token");
-
-        HttpRequest request = resultQueue.take();
-        assertEquals(
-                "The authorization header should be: 'Token my-token'",
-                "Token my-token",
-                request.getFirstHeader("Authorization").getValue());
+        latch.await(2, TimeUnit.SECONDS);
+        assertAuthHeader(server, WireMock.equalTo("Token my-token"));
     }
 
     private void setupSenderAndSendMetric(String influxdbUrl, String influxDBToken) throws Exception {
@@ -119,14 +87,10 @@ public class HttpMetricsSenderTest {
         metricsSender.writeAndSendMetrics();
     }
 
-    private void assertNoAuthHeader(HttpRequest request) {
-        assertNull(
-                "The authorization header shouldn't be defined.",
-                request.getFirstHeader("Authorization"));
+    private void assertAuthHeader(WireMockServer server, StringValuePattern authHeader) {
+        server.verify(1, RequestPatternBuilder
+                .newRequestPattern(RequestMethod.POST, WireMock.urlEqualTo(API_URL))
+                .withRequestBody(WireMock.matching("measurementlocation=west size=10 \\d{19}\\s*"))
+                .withHeader("Authorization", authHeader));
     }
-
-    private String getInfluxDbUrl() {
-        return String.format("http://localhost:%s/api/v2/write", Integer.valueOf(server.getLocalPort()));
-    }
-
 }

@@ -32,6 +32,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTest;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit;
+import org.junit.runner.Describable;
+import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -43,7 +45,7 @@ import org.xml.sax.SAXException;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
+public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit implements Describable {
 
     private static final Logger log = LoggerFactory.getLogger(ComponentReferenceFunctionTest.class);
 
@@ -59,6 +61,11 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
     public ComponentReferenceFunctionTest(String testName, Function fi) {
         super(testName);// Save the method name
         funcItem = fi;
+    }
+
+    @Override
+    public Description getDescription() {
+        return Description.createTestDescription(getClass(), getName() + (funcItem != null ? " " + funcItem.getClass() : null));
     }
 
     /*

@@ -24,7 +24,7 @@
         </elementProp>
         <longProp name="ThreadGroup.end_time">1172922900000</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">80</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">10</stringProp>
         <stringProp name="TestPlan.comments">N.B. The ramp-up period is set so that the first thread will finish before the second.
 This is to ensure the test output is predictable, whilst still allowing testing of unshared counter etc</stringProp>
       </ThreadGroup>
@@ -58,7 +58,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.value">0x07</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Label" elementType="Argument">
@@ -112,7 +112,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.value">0x07</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Label" elementType="Argument">
@@ -165,7 +165,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                     </elementProp>
                     <elementProp name="Sleep_Mask" elementType="Argument">
                       <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                      <stringProp name="Argument.value">0xFF</stringProp>
+                      <stringProp name="Argument.value">0x07</stringProp>
                       <stringProp name="Argument.metadata">=</stringProp>
                     </elementProp>
                     <elementProp name="Label" elementType="Argument">
@@ -218,7 +218,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                       </elementProp>
                       <elementProp name="Sleep_Mask" elementType="Argument">
                         <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                        <stringProp name="Argument.value">0xFF</stringProp>
+                        <stringProp name="Argument.value">0x07</stringProp>
                         <stringProp name="Argument.metadata">=</stringProp>
                       </elementProp>
                       <elementProp name="Label" elementType="Argument">
@@ -442,7 +442,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                     </elementProp>
                     <elementProp name="Sleep_Mask" elementType="Argument">
                       <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                      <stringProp name="Argument.value">0xFF</stringProp>
+                      <stringProp name="Argument.value">0x07</stringProp>
                       <stringProp name="Argument.metadata">=</stringProp>
                     </elementProp>
                     <elementProp name="Label" elementType="Argument">
@@ -490,7 +490,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                     </elementProp>
                     <elementProp name="Sleep_Mask" elementType="Argument">
                       <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                      <stringProp name="Argument.value">0xFF</stringProp>
+                      <stringProp name="Argument.value">0x07</stringProp>
                       <stringProp name="Argument.metadata">=</stringProp>
                     </elementProp>
                     <elementProp name="Label" elementType="Argument">
@@ -544,7 +544,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                     </elementProp>
                     <elementProp name="Sleep_Mask" elementType="Argument">
                       <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                      <stringProp name="Argument.value">0xFF</stringProp>
+                      <stringProp name="Argument.value">0x07</stringProp>
                       <stringProp name="Argument.metadata">=</stringProp>
                     </elementProp>
                     <elementProp name="Label" elementType="Argument">
@@ -592,7 +592,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                     </elementProp>
                     <elementProp name="Sleep_Mask" elementType="Argument">
                       <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                      <stringProp name="Argument.value">0xFF</stringProp>
+                      <stringProp name="Argument.value">0x07</stringProp>
                       <stringProp name="Argument.metadata">=</stringProp>
                     </elementProp>
                     <elementProp name="Label" elementType="Argument">
@@ -641,7 +641,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.value">0x07</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Label" elementType="Argument">
@@ -694,7 +694,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.value">0x07</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Label" elementType="Argument">
@@ -765,29 +765,6 @@ This is to ensure the test output is predictable, whilst still allowing testing 
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP &quot;Request," enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-            <collectionProp name="Arguments.arguments"/>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
-          <stringProp name="HTTPSampler.protocol">file</stringProp>
-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">testfiles/BatchTestLocal.jmx</stringProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <stringProp name="HTTPSampler.implementation">Java</stringProp>
-          <boolProp name="HTTPSampler.monitor">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-          <stringProp name="TestPlan.comments">N.B. The file that is loaded must have a fixed size, so HTML won&apos;t do as it will be different on Unix and Windows.
-We use this file, which has eol=LF - but of course any changes need to be reflected in the expected test data.</stringProp>
-        </HTTPSamplerProxy>
-        <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
@@ -915,7 +892,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.value">0x07</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Label" elementType="Argument">
@@ -963,7 +940,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.value">0x07</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Label" elementType="Argument">
@@ -1011,7 +988,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.value">0x07</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Label" elementType="Argument">
@@ -1059,7 +1036,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.value">0x07</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Label" elementType="Argument">
@@ -1137,7 +1114,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                <stringProp name="Argument.value">0xFF</stringProp>
+                <stringProp name="Argument.value">0x07</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Label" elementType="Argument">
@@ -1269,7 +1246,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                <stringProp name="Argument.value">0xFF</stringProp>
+                <stringProp name="Argument.value">0x07</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Label" elementType="Argument">
@@ -1319,7 +1296,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                 </elementProp>
                 <elementProp name="Sleep_Mask" elementType="Argument">
                   <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                  <stringProp name="Argument.value">0xFF</stringProp>
+                  <stringProp name="Argument.value">0x07</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
                 <elementProp name="Label" elementType="Argument">
@@ -1375,7 +1352,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.value">0x07</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Label" elementType="Argument">
@@ -1425,7 +1402,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                <stringProp name="Argument.value">0xFF</stringProp>
+                <stringProp name="Argument.value">0x07</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Label" elementType="Argument">
@@ -1479,7 +1456,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.value">0x07</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Label" elementType="Argument">
@@ -1704,7 +1681,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                <stringProp name="Argument.value">0xFF</stringProp>
+                <stringProp name="Argument.value">0x07</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Label" elementType="Argument">
@@ -1840,7 +1817,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                <stringProp name="Argument.value">0xFF</stringProp>
+                <stringProp name="Argument.value">0x07</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Label" elementType="Argument">
@@ -1987,7 +1964,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Mask</stringProp>
-                <stringProp name="Argument.value">0xFF</stringProp>
+                <stringProp name="Argument.value">0x07</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Label" elementType="Argument">

@@ -39,6 +39,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.jmeter.gui.util.JMeterMenuBar;
+import org.junit.runner.Describable;
+import org.junit.runner.Description;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -64,7 +66,7 @@ import junit.framework.TestSuite;
  * why the tests failed.
  */
 
-public class PackageTest extends TestCase {
+public class PackageTest extends TestCase implements Describable {
     // We assume the test starts in "src/core" directory (which is true for Gradle and IDEs)
     private static final File srcFiledir = new File("src/main/java");
     private static final File resourceFiledir = new File("src/main/resources");
@@ -304,6 +306,11 @@ public class PackageTest extends TestCase {
         super(testName);
         lang=_lang;
         resourcePrefix = propName;
+    }
+
+    @Override
+    public Description getDescription() {
+        return Description.createTestDescription(getClass(), getName() + " " + lang + ": " + resourcePrefix);
     }
 
     public void testLang() throws Exception{

@@ -13,7 +13,7 @@ Which jars are used by which modules?
 ====================================
 [not exhaustive]
 
-asm-7.0 (org.ow2.asm)
+asm-7.1 (org.ow2.asm)
 ----------------------
 - JSON Path extractor
 
@@ -35,13 +35,13 @@ dec-0.1.2 (org.brotli.dec)
 https://github.com/google/brotli/tree/master/java/org/brotli
 - Used by HTTP4 HC Impl for brotli decoding
 
-caffeine 2.6.2
+caffeine 2.8.0
 -----------------
 https://github.com/ben-manes/caffeine/
 - Used by CssParser
 - Used by JMS Publisher Sampler
 
-commons-codec-1.11
+commons-codec-1.13
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
 - Used by ProxyControl and JSR223Test Element for Base64 and md5 
@@ -67,7 +67,7 @@ commons-lang-2.6
 http://commons.apache.org/downloads/download_lang.cgi
 - velocity (Anakia)
 
-commons-lang3-3.8.1
+commons-lang3-3.9
 ----------------
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
@@ -82,12 +82,12 @@ commons-net-3.6
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler
 
-commons-pool2-2.6.0
+commons-pool2-2.7.0
 -----------------
 http://commons.apache.org/proper/commons-pool/download_pool.cgi
 - BackendListener
 
-commons-text-1.1
+commons-text-1.8
 -----------------
 https://commons.apache.org/proper/commons-text/
 - Random Strings
@@ -97,9 +97,9 @@ darcula
 https://github.com/bulenkov/Darcula/
 - Look and Feel
 
-dnsjava-2.1.8
+dnsjava-2.1.9
 -----------------
-http://www.dnsjava.org/download/
+https://github.com/dnsjava/dnsjava
 - DNSCacheManager
 
 groovy-all-2.4.16
@@ -111,7 +111,7 @@ hamcrest-core-1.3
 - unit tests, JUnit sampler
 https://github.com/hamcrest/JavaHamcrest
 
-freemarker-2.3.28.jar
+freemarker-2.3.29.jar
 ----------------------
 - used by Report/Dashboard feature
 
@@ -142,7 +142,7 @@ jdom-1.1.3
 http://www.jdom.org/downloads/index.html
 - Anakia
 
-jodd-core-5.0.6
+jodd-core-5.0.13
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
@@ -174,27 +174,27 @@ https://github.com/netplex/json-smart-v2
 - JSON Path Extractor
 - JSON Path Renderer
 
-jsoup-1.11.3
+jsoup-1.12.1
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
-log4j2-2.11.1
+log4j2-2.12.1
 --------
 https://logging.apache.org/log4j/2.x/
 - Logging framework
 
-ph-css-6.1.1
+ph-css-6.2.0
 --------
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-9.2.1
+ph-commons-9.3.7
 --------
 https://github.com/phax/ph-commons
 - CssParser
 
-rhino-1.7.10
+rhino-1.7.11
 --------
 https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino/Download_Rhino
 - javascript function
@@ -213,10 +213,10 @@ junit 4.12
 - unit tests, JUnit sampler
 
 HttpComponents
-- HttpComponents Core 4.4.10
-- HttpComponents Client 4.5.8
+- HttpComponents Core 4.4.12
+- HttpComponents Client 4.5.10
 - HttpComponents AsyncClient 4.1.4
-- HttpComponents Core NIO 4.4.11
+- HttpComponents Core NIO 4.4.12
 -----------
 http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler
@@ -232,7 +232,7 @@ oro-2.0.8
 http://jakarta.apache.org/site/downloads/downloads_oro.cgi
 - regular expressions: various
 
-rsyntaxtextarea-3.0.2
+rsyntaxtextarea-3.0.4
 ---------------------
 http://fifesoft.com/rsyntaxtextarea/
 - syntax coloration
@@ -242,7 +242,7 @@ serialiser-2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 - xalan
 
-slf4j-api-1.7.25
+slf4j-api-1.7.28
 ----------------
 http://www.slf4j.org/
 - jodd-core
@@ -258,7 +258,7 @@ commons-dbcp2-2.5.0 (org.apache.commons.dbcp2)
 --------------------------
 - DataSourceElement (JDBC)
 
-Saxon-HE-9.9.1-1 (net.sf.saxon)
+Saxon-HE-9.9.1-5 (net.sf.saxon)
 --------------------------
 - XPath2Extractor (XML)
 

@@ -18,8 +18,8 @@
 
 package org.apache.jmeter.gui.action
 
+import java.net.URL
 import java.nio.file.Paths
-import java.net.URL;
 import java.text.MessageFormat
 
 import org.apache.commons.io.FileUtils

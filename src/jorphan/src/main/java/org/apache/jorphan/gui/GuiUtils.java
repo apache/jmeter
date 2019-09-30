@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -63,6 +64,18 @@ public final class GuiUtils {
         JScrollPane pane = new JScrollPane(comp);
         pane.setPreferredSize(pane.getMinimumSize());
         return pane;
+    }
+
+    /**
+     * Clears border of the given component.
+     *
+     * @param comp input component
+     * @param <C> component type
+     * @return the given component with border set to empty
+     */
+    public static<C extends JComponent> C emptyBorder(C comp) {
+        comp.setBorder(BorderFactory.createEmptyBorder());
+        return comp;
     }
 
     /**

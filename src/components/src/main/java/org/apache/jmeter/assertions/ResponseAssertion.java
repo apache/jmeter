@@ -300,8 +300,9 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
         result.setFailure(false);
         result.setError(false);
-        boolean notTest = (NOT & getTestType()) > 0;
-        boolean orTest = (OR & getTestType()) > 0;
+        int testType = getTestType();
+        boolean notTest = (NOT & testType) > 0;
+        boolean orTest = (OR & testType) > 0;
         boolean contains = isContainsType(); // do it once outside loop
         boolean equals = isEqualsType();
         boolean substring = isSubstringType();
@@ -487,7 +488,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         } else if (right) {
             return str.substring(0, EQUALS_SECTION_DIFF_LEN) + EQUALS_DIFF_TRUNC;
         } else {
-            return EQUALS_DIFF_TRUNC + str.substring(str.length() - EQUALS_SECTION_DIFF_LEN, str.length());
+            return EQUALS_DIFF_TRUNC + str.substring(str.length() - EQUALS_SECTION_DIFF_LEN);
         }
     }
 

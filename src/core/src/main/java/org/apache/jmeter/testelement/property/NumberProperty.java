@@ -16,9 +16,6 @@
  *
  */
 
-/*
- * Created on May 5, 2003
- */
 package org.apache.jmeter.testelement.property;
 
 public abstract class NumberProperty extends AbstractProperty {

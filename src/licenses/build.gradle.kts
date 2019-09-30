@@ -27,6 +27,17 @@ plugins {
     id("com.github.vlsi.stage-vote-release")
 }
 
+// See https://docs.gradle.org/current/userguide/troubleshooting_dependency_resolution.html#sub:configuration_resolution_constraints
+// Gradle forbids to resolve configurations from other projects, so
+// we create our own copy of the configuration which belongs to the current project
+// This is the official recommendation:
+// In most cases, the deprecation warning can be fixed by defining a configuration in
+// the project where the resolution is occurring and setting it to extend from the configuration
+// in the other project.
+val binaryDependencies by configurations.creating() {
+    extendsFrom(project(":src:dist").configurations.runtimeClasspath.get())
+}
+
 val gatherSourceLicenses by tasks.registering(GatherLicenseTask::class) {
     addDependency("org.gradle:gradle-wrapper:5.5.1", SpdxLicense.Apache_2_0)
     addDependency(":bootstrap:3.3.4", SpdxLicense.MIT)
@@ -46,7 +57,7 @@ val gatherSourceLicenses by tasks.registering(GatherLicenseTask::class) {
 }
 
 val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
-    configuration(project(":src:dist").configurations.runtimeClasspath)
+    configuration(binaryDependencies)
     ignoreMissingLicenseFor.add(SpdxLicense.Apache_2_0.asExpression())
     defaultTextFor.add(SpdxLicense.MPL_2_0.asExpression())
     // There are three major cases here:
@@ -67,15 +78,16 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     // Library is not present in Maven Central
     overrideLicense("com.github.bulenkov.darcula:darcula:e208efb96f70e4be9dc362fbb46f6e181ef501dd", SpdxLicense.Apache_2_0)
 
-    overrideLicense("dnsjava:dnsjava:2.1.8") {
-        expectedLicense = SpdxLicense.BSD_2_Clause
+    overrideLicense("dnsjava:dnsjava:2.1.9") {
+        expectedLicense = SimpleLicense("BSD", uri("https://github.com/dnsjava/dnsjava/blob/master/LICENSE"))
+        effectiveLicense = SpdxLicense.BSD_2_Clause
     }
 
-    overrideLicense("com.fifesoft:rsyntaxtextarea:3.0.2") {
+    overrideLicense("com.fifesoft:rsyntaxtextarea:3.0.4") {
         // https://github.com/bobbylight/RSyntaxTextArea/issues/299
         expectedLicense = SimpleLicense(
             "Modified BSD License",
-            uri("http://fifesoft.com/rsyntaxtextarea/RSyntaxTextArea.License.txt")
+            uri("https://github.com/bobbylight/RSyntaxTextArea/blob/master/RSyntaxTextArea/src/main/resources/META-INF/LICENSE")
         )
         effectiveLicense = SpdxLicense.BSD_3_Clause
     }
@@ -94,7 +106,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     }
 
     for (jodd in listOf("jodd-core", "jodd-lagarto", "jodd-log", "jodd-props")) {
-        overrideLicense("org.jodd:$jodd:5.0.6") {
+        overrideLicense("org.jodd:$jodd:5.0.13") {
             expectedLicense = SpdxLicense.BSD_2_Clause // SimpleLicense("The BSD 2-Clause License", uri("http://jodd.org/license.html"))
             licenseFiles = "jodd"
         }
@@ -114,9 +126,14 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("org.slf4j:jcl-over-slf4j:1.7.25") {
+    overrideLicense("org.jsoup:jsoup:1.12.1") {
+        expectedLicense = SimpleLicense("MIT", uri("https://github.com/jhy/jsoup/blob/master/LICENSE"))
+        effectiveLicense = SpdxLicense.MIT
+    }
+
+    overrideLicense("org.slf4j:jcl-over-slf4j:1.7.28") {
         expectedLicense = SpdxLicense.MIT
-        // See https://github.com/qos-ch/slf4j/blob/v_1.7.25/jcl-over-slf4j/LICENSE.txt
+        // See https://github.com/qos-ch/slf4j/blob/v_1.7.28/jcl-over-slf4j/LICENSE.txt
         effectiveLicense = SpdxLicense.Apache_2_0
     }
 
@@ -124,8 +141,13 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("net.sf.saxon:Saxon-HE:9.9.1-1") {
+    overrideLicense("net.sf.saxon:Saxon-HE:9.9.1-5") {
         expectedLicense = SpdxLicense.MPL_2_0
+    }
+    
+    overrideLicense("org.mozilla:rhino:1.7.11") {
+        expectedLicense = SimpleLicense("MPL", uri("https://github.com/mozilla/rhino/blob/master/LICENSE.txt"))
+        effectiveLicense = SpdxLicense.MPL_2_0
     }
 
     overrideLicense("com.sun.mail:all:1.5.0-b01") {

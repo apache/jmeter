@@ -16,10 +16,6 @@
  *
  */
 
-/*
- * Created on Dec 9, 2003
- *
- */
 package org.apache.jmeter.testelement;
 
 import org.apache.jmeter.testelement.property.IntegerProperty;

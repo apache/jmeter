@@ -50,14 +50,14 @@ public class TestCssParser extends JMeterTestCase {
 
     @Test
     public void testGetEmbeddedResourceURLsnOneUrl() throws Exception {
-        List<?> result;
-        result = extractUrls("@import url(http://example.com/abc.css);");
+        List<?> result = extractUrls("@import url(http://example.com/abc.css);");
         assertThat(result.isEmpty(), CoreMatchers.is(false));
     }
 
-    @Test(expected=LinkExtractorParseException.class)
+    @Test
     public void testExtractUrlsFromBrokenData() throws Exception {
-        extractUrls(CSS_IN_ERROR);
+        List<?> result = extractUrls(CSS_IN_ERROR);
+        assertThat(result.isEmpty(), CoreMatchers.is(true));
     }
 
     @Test
@@ -79,4 +79,3 @@ public class TestCssParser extends JMeterTestCase {
         return result;
     }
 }
-

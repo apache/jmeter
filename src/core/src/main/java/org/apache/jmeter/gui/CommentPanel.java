@@ -20,6 +20,7 @@ package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -51,12 +52,10 @@ public class CommentPanel extends JPanel {
         commentField = new JTextArea();
         JLabel commentLabel = new JLabel(JMeterUtils.getResString("testplan_comments")); //$NON-NLS-1$
         commentLabel.setLabelFor(commentField);
-
-        JPanel commentPanel = new JPanel();
-        commentPanel.setLayout(new BorderLayout(0, 5));
-        commentPanel.add(commentLabel,BorderLayout.WEST);
-        commentPanel.add(commentField,BorderLayout.CENTER);
-        add(commentPanel);
+        commentField.setBorder(BorderFactory.createEtchedBorder());
+        commentLabel.setVerticalAlignment(JLabel.TOP);
+        add(commentLabel, BorderLayout.WEST);
+        add(commentField, BorderLayout.CENTER);
     }
 
     public void setText(String comment) {

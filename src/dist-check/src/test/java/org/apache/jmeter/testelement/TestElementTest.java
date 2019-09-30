@@ -27,17 +27,24 @@ import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.junit.runner.Describable;
+import org.junit.runner.Description;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class TestElementTest extends JMeterTestCaseJUnit {
+public class TestElementTest extends JMeterTestCaseJUnit implements Describable {
 
     private TestElement testItem;
 
     public TestElementTest(String testName, TestElement te) {
         super(testName);// Save the method name
         testItem = te;
+    }
+
+    @Override
+    public Description getDescription() {
+        return Description.createTestDescription(getClass(), getName() + " " + testItem.getClass());
     }
 
     /*
@@ -47,9 +54,7 @@ public class TestElementTest extends JMeterTestCaseJUnit {
         TestSuite suite = new TestSuite("TestElements");
         for (Object o : JMeterTest.getObjects(TestElement.class)) {
             TestElement item = (TestElement) o;
-            TestSuite ts = new TestSuite(item.getClass().getName());
-            ts.addTest(new TestElementTest("runTestElement", item));
-            suite.addTest(ts);
+            suite.addTest(new TestElementTest("runTestElement", item));
         }
         return suite;
     }

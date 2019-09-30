@@ -16,12 +16,6 @@
  *
  */
 
-/*
- * Created on 24-Sep-2003
- *
- * Interface for generic TCP protocol handler
- *
- */
 package org.apache.jmeter.protocol.tcp.sampler;
 
 import java.io.IOException;

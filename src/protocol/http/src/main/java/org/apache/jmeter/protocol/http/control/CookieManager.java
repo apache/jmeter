@@ -16,8 +16,6 @@
  *
  */
 
-// For unit tests @see TestCookieManager
-
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.BufferedReader;

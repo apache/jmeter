@@ -9,18 +9,17 @@
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
+
 package org.apache.commons.cli.avalon;
 
 /**
  * Token handles tokenizing the CLI arguments
- *
  */
 class Token {
     /** Type for a separator token */
@@ -36,10 +35,8 @@ class Token {
     /**
      * New Token object with a type and value
      *
-     * @param type
-     *            type of the token
-     * @param value
-     *            value of the token
+     * @param type  type of the token
+     * @param value value of the token
      */
     Token(final int type, final String value) {
         this.type = type;
@@ -64,15 +61,8 @@ class Token {
         return this.type;
     }
 
-    /**
-     * Convert to a string
-     */
     @Override
     public final String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(this.type);
-        sb.append(":");
-        sb.append(this.value);
-        return sb.toString();
+        return this.type + ":" + this.value;
     }
 }

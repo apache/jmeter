@@ -16,10 +16,6 @@
  *
  */
 
-/**
- * Package to test FileServer methods
- */
-
 package org.apache.jmeter.config;
 
 import java.util.Locale;

@@ -650,7 +650,7 @@
                 </elementProp>
                 <elementProp name="Sleep_Mask" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
-                  <stringProp name="Argument.value">0xFF</stringProp>
+                  <stringProp name="Argument.value">0x03</stringProp>
                   <stringProp name="Argument.name">Sleep_Mask</stringProp>
                 </elementProp>
                 <elementProp name="Label" elementType="Argument">

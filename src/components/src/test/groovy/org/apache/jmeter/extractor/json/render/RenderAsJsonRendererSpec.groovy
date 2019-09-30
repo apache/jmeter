@@ -3,7 +3,7 @@
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License") you may not use this file except in compliance with
+ * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -13,17 +13,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package org.apache.jmeter.extractor.json.render
 
-import org.apache.jmeter.samplers.SampleResult
-import org.apache.jmeter.extractor.json.render.RenderAsJsonRenderer
-import org.apache.jmeter.junit.spock.JMeterSpec
-import org.apache.jmeter.util.JMeterUtils
 import javax.swing.JTabbedPane
+
+import org.apache.jmeter.extractor.json.render.RenderAsJsonRenderer
 import org.apache.jmeter.junit.categories.NeedGuiTests
+import org.apache.jmeter.junit.spock.JMeterSpec
+import org.apache.jmeter.samplers.SampleResult
+import org.apache.jmeter.util.JMeterUtils
 import org.junit.experimental.categories.Category
+
 import spock.lang.IgnoreIf
 
 class RenderAsJsonRendererSpec extends JMeterSpec {
@@ -34,7 +37,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
             sut.init()
         then:
             noExceptionThrown()
-            sut.jsonWithJSonPathPanel != null;
+            sut.jsonWithExtractorPanel != null;
     }
 
     @IgnoreIf({ JMeterSpec.isHeadless() })
@@ -45,7 +48,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
         when:
             sut.renderImage(sampleResult)
         then:
-            sut.jsonDataField.getText() == JMeterUtils.getResString("jsonpath_render_no_text")
+            sut.jsonDataField.getText() == JMeterUtils.getResString("render_no_text")
     }
 
     def "render null Response"() {
@@ -81,12 +84,12 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
     def "execute '#expression' on '#input' results into '#output'"() {
         given:
             sut.init();
-            sut.jsonPathExpressionField.setText(expression);
+            sut.expressionField.setText(expression);
             def sampleResult = new SampleResult();
         when:
-            sut.executeAndJSonPathTester(input);
+            sut.executeTester(input);
         then:
-            output == sut.jsonPathResultField.getText()
+            output == sut.resultField.getText()
         where:
             input               | expression          | output
             "{name:\"Ludwig\",age: 23,city: \"Bonn\"}"   | "\$..name"           | "Result[0]=Ludwig\n"
@@ -98,12 +101,12 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
         given:
             sut.init()
             sut.jsonDataField.setText("blabla")
-            sut.jsonPathResultField.setText("blabla")
+            sut.resultField.setText("blabla")
         when:
             sut.clearData()
         then:
             sut.jsonDataField.getText() == ""
-            sut.jsonPathResultField.getText() == ""
+            sut.resultField.getText() == ""
     }
 
     def "setupTabPane adds the tab to rightSide"() {
@@ -116,7 +119,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
         then:
             sut.rightSide.getTabCount() == 1
             // Investigate why it's failing
-            // sut.rightSide.getTabComponentAt(0) == sut.jsonWithJSonPathPanel
+            // sut.rightSide.getTabComponentAt(0) == sut.jsonWithExtractorPanel
     }
 
     def "setupTabPane called twice does not add twice the tab"() {

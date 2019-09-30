@@ -26,6 +26,7 @@ import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 
 /**
  * Base class for {@link GraphiteMetricsSender}
+ *
  * @since 2.13
  */
 abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
@@ -59,8 +60,7 @@ abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
      * <li>'.' by '_'</li>
      * </ul>
      *
-     * @param s
-     *            text to be sanitized
+     * @param s text to be sanitized
      * @return the sanitized text
      */
     static String sanitizeString(String s) {

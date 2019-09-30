@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.report.processor;
 
 /**
@@ -28,11 +29,11 @@ package org.apache.jmeter.report.processor;
  */
 abstract class Job<T> implements Runnable {
 
-    private volatile boolean resultReady = false;
+    private boolean resultReady = false;
 
     private final Object lock = new Object();
 
-    private volatile T result;
+    private T result;
 
     @Override
     public final void run() {

@@ -9,21 +9,22 @@
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-package org.apache.jorphan.io
 
-import org.apache.commons.io.FileUtils
-import spock.lang.Specification
-import spock.lang.Unroll
+package org.apache.jorphan.io
 
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+
+import org.apache.commons.io.FileUtils
+
+import spock.lang.Specification
+import spock.lang.Unroll
 
 @Unroll
 class TextFileSpec extends Specification {

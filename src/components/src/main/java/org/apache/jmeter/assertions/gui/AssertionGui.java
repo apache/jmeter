@@ -29,7 +29,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -50,6 +49,7 @@ import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.TextAreaCellRenderer;
 import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
@@ -312,7 +312,7 @@ public class AssertionGui extends AbstractAssertionGui {
      */
     void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
-        Box box = Box.createVerticalBox();
+        VerticalPanel box = new VerticalPanel();
         setBorder(makeBorder());
 
         box.add(makeTitlePanel());
@@ -463,7 +463,7 @@ public class AssertionGui extends AbstractAssertionGui {
         panel.setLayout(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_patterns_to_test"))); //$NON-NLS-1$
 
-        panel.add(new JScrollPane(stringTable), BorderLayout.CENTER);
+        panel.add(GuiUtils.emptyBorder(new JScrollPane(stringTable)), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);
 
         return panel;

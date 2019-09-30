@@ -16,12 +16,6 @@
  *
  */
 
-/*
- * TCP Sampler Client implementation which reads and writes binary data.
- *
- * Input/Output strings are passed as hex-encoded binary strings.
- *
- */
 package org.apache.jmeter.protocol.tcp.sampler;
 
 import java.io.ByteArrayOutputStream;
@@ -43,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * the end of the stream is reached.
  * The EOM byte is defined by the property "tcp.BinaryTCPClient.eomByte".
  *
- * Input data is assumed to be in hex, and is converted to binary
+ * <p>Input/Output strings are passed as hex-encoded binary strings.</p>
  */
 public class BinaryTCPClientImpl extends AbstractTCPClient {
     private static final Logger log = LoggerFactory.getLogger(BinaryTCPClientImpl.class);

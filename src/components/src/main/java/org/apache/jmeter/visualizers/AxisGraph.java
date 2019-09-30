@@ -6,15 +6,16 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  */
+
 package org.apache.jmeter.visualizers;
 
 import java.awt.Color;
@@ -50,7 +51,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * Axis graph is used by StatGraphVisualizer, which generates bar graphs
  * from the statistical data.
  */
@@ -344,14 +344,8 @@ public class AxisGraph extends JPanel {
             Font legendFont, Graphics g) {
         double max = maxYAxisScale > 0 ? maxYAxisScale : findMax(_data); // define max scale y axis
         try {
-            /** These controls are already done in StatGraphVisualizer
-            if (_width == 0) {
-                _width = 450;
-            }
-            if (_height == 0) {
-                _height = 250;
-            }
-            **/
+            // Width and Height are already set in StatGraphVisualizer
+
             if (_maxLength < 3) {
                 _maxLength = 3;
             }
@@ -365,7 +359,8 @@ public class AxisGraph extends JPanel {
                 _xAxisLabels[i]=squeeze(label, _maxLength);
             }
             this.setPreferredSize(new Dimension(_width,_height));
-            DataSeries dataSeries = new DataSeries( _xAxisLabels, null, _yAxisTitle, _title ); // replace _xAxisTitle to null (don't display x axis title)
+            // _xAxisTitle to null (don't display x axis title)
+            DataSeries dataSeries = new DataSeries( _xAxisLabels, null, _yAxisTitle, _title );
 
             ClusteredBarChartProperties clusteredBarChartProperties= new ClusteredBarChartProperties();
             clusteredBarChartProperties.setShowOutlinesFlag(outlinesBarFlag);

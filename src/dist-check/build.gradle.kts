@@ -18,6 +18,7 @@
 
 import org.apache.jmeter.buildtools.batchtest.BatchTest
 import org.apache.jmeter.buildtools.batchtest.BatchTestServer
+import java.time.Duration
 
 plugins {
     jmeterbuild.batchtest
@@ -147,7 +148,6 @@ fun createBatchServerTestTask(name: String, suffix: String = "", action: (BatchT
 
 arrayOf(
     "BatchTestLocal",
-    "Bug52310",
     "Bug62239", "Bug52968", "Bug50898",
     "Bug56243",
     // StackOverflowError with ModuleController in Non-GUI mode if its name is the same as the target node
@@ -157,7 +157,6 @@ arrayOf(
     "TestCookieManager",
     "JMS_TESTS",
     "OS_TESTS",
-    "Bug60607",
     "TestKeepAlive",
     "ResponseDecompression",
     "TestSchedulerWithTimer",
@@ -211,7 +210,22 @@ for (impl in arrayOf("Java", "HttpClient4")) {
 
 // Note: original build.xml seem to use Bug54685 test, however in fact batchtestserver target
 // just ignored the given filename
-createBatchServerTestTask("BatchTestLocal")
+val batchTestServerStartupTimeout: String? by project
+val batchTestServerStartupTimeoutDuration =
+    batchTestServerStartupTimeout?.let {
+        try {
+            Duration.parse(it)
+        } catch (e: Exception) {
+            throw IllegalArgumentException(
+                "Unable to parse the value of batchTestServerStartupTimeout property as duration $it." +
+                        " Please ensure it follows java.time.Duration format (e.g. PT5S)", e
+            )
+        }
+    }
+
+createBatchServerTestTask("BatchTestLocal") {
+    batchTestServerStartupTimeoutDuration?.let { startupTimeout.set(it) }
+}
 
 tasks.named(JavaPlugin.TEST_TASK_NAME).configure {
     // Test examine JAR contents in /lib/..., so we need to copy jars to the projectRoot/lib/

@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.report.processor;
 
 import java.util.ArrayList;
@@ -96,10 +97,6 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ListResultData [items=");
-        builder.append(items);
-        builder.append("]");
-        return builder.toString();
+        return "ListResultData [items=" + items + "]";
     }
 }

@@ -251,7 +251,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         VerticalPanel titlePanel = new VerticalPanel();
         titlePanel.add(createTitleLabel());
         VerticalPanel contentPanel = new VerticalPanel();
-        contentPanel.setBorder(BorderFactory.createEtchedBorder());
+        contentPanel.setBorder(BorderFactory.createEmptyBorder());
         contentPanel.add(getNamePanel());
         contentPanel.add(getCommentPanel());
         titlePanel.add(contentPanel);

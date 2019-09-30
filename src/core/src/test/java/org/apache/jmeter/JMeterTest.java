@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter;
 
 import static org.junit.Assert.assertTrue;

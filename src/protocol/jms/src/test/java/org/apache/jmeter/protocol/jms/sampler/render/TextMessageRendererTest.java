@@ -13,16 +13,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package org.apache.jmeter.protocol.jms.sampler.render;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-import org.junit.Test;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class TextMessageRendererTest extends MessageRendererTest<String> {
 
@@ -32,48 +38,49 @@ public class TextMessageRendererTest extends MessageRendererTest<String> {
         return render;
     }
 
-    @Test
-    public void readUTF8File() {
-        assertContent("utf8.txt", "UTF-8");
-    }
+    @ParameterizedTest
+    @ValueSource(strings = {"UTF-8", "Cp1252"})
+    public void testGetContent(String encoding) throws UnsupportedEncodingException, IOException {
+        String value = "éè€";
+        byte[] expected = value.getBytes(encoding);
+        String filename = writeFile(encoding, expected);
 
-    @Test
-    public void readCP1252File() {
-        assertContent("cp1252.txt", "Cp1252");
-    }
-
-    private void assertContent(String resource, String encoding) {
-        String filename = getResourceFile(resource);
+        // The tested method
         String actual = render.getContent(new FileKey(filename, encoding));
-        assertEquals("éè€", actual);
+
+        assertEquals(value, actual);
     }
 
     @Test
-    public void getValueFromFileWithNoVar() {
-        assertValueFromFile("noVar", "noVar.txt", true);
+    public void getValueFromFileWithNoVar() throws IOException {
+        String fileName = writeFile("noVar", "noVar");
+        assertValueFromFile("noVar", fileName, true);
     }
 
     @Test
-    public void getValueFromFileWithOneVar() {
-        jmeterCtxService.get().getVariables().put("oneVar", "foobar");
-        assertValueFromFile("foobar", "oneVar.txt", true);
+    public void getValueFromFileWithOneVar(JMeterVariables vars) throws IOException {
+        String fileName = writeFile("oneVar.txt", "${oneVar}");
+        vars.put("oneVar", "foobar");
+        assertValueFromFile("foobar", fileName, true);
     }
 
     @Test
-    public void checkCache() {
-        jmeterCtxService.get().getVariables().put("oneVar", "foo");
-        assertValueFromFile("foo", "oneVar.txt", true);
+    public void checkCache(JMeterVariables vars) throws IOException {
+        String fileName = writeFile("oneVar.txt", "${oneVar}");
+        vars.put("oneVar", "foo");
+        assertValueFromFile("foo", fileName, true);
         assertEquals("${oneVar}", getFirstCachedValue());
 
-        jmeterCtxService.get().getVariables().put("oneVar", "bar");
-        assertValueFromFile("bar", "oneVar.txt", true);
+        vars.put("oneVar", "bar");
+        assertValueFromFile("bar", fileName, true);
         assertEquals("${oneVar}", getFirstCachedValue());
     }
 
     @Test
-    public void checkNoVariable() {
-        jmeterCtxService.get().getVariables().put("oneVar", "RAW");
-        assertValueFromFile("${oneVar}", "oneVar.txt", false);
+    public void checkNoVariable(JMeterVariables vars) throws IOException {
+        String fileName = writeFile("oneVar.txt", "${oneVar}");
+        vars.put("oneVar", "RAW");
+        assertValueFromFile("${oneVar}", fileName, false);
     }
 
     @Test
@@ -83,7 +90,7 @@ public class TextMessageRendererTest extends MessageRendererTest<String> {
         }
     }
 
-    protected void assertValueFromFile(String expected, String resource, boolean hasVariable) {
-        assertValueFromFile(actual -> assertEquals(expected, actual), resource, hasVariable);
+    protected void assertValueFromFile(String expected, String fileName, boolean hasVariable) {
+        assertValueFromFile(actual -> assertEquals(expected, actual), fileName, hasVariable);
     }
 }

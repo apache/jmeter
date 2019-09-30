@@ -2804,6 +2804,9 @@ may download images, style-sheets, etc. referenced by the HTML code.
 <tr><td><code>JSON Path Tester</code></td>
 <td>The <i>JSON Path Tester view</i> will let you test your JSON-PATH expressions and see the extracted data from a particular response.
 <br/></td></tr>
+<tr><td><code>JMESPath Tester</code></td>
+<td>The <i>JMESPath Tester view</i> will let you test your <a href="http://jmespath.org/">JMESPath</a> expressions and see the extracted data from a particular response.
+<br/></td></tr>
 <tr><td><code>Regexp Tester</code></td>
 <td>The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
 The "<code>Test</code>" button allows the user to apply the Regular Expression to the upper panel and the results
@@ -4902,7 +4905,28 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
         <property name="Invert assertion (will fail if above conditions met)" required="No">Invert assertion (will fail if above conditions met)</property>
     </properties>
 </component>
-
+<component name="JSON JMESPath Assertion" index="&sect-num;.5.15" anchor="JSON_JMESPath_Assertion" width="1095" height="307" screenshot="assertion/jmespath_assertion.png">
+    <description>
+        <p>
+            This component allows you to perform assertion on JSON documents content using <a href="http://jmespath.org/" target="blank">JMESPath</a>.
+            First, it will parse the JSON and fail if the data is not JSON. <br/>
+            Second, it will search for specified path, using JMESPath syntax. <br/>
+            If the path is not found, it will fail. <br/>
+            Third, if JMES path was found in the document, and validation against expected value was requested, it will perform this additional check. 
+            If you want to check for nullity, use the <code>Expect null</code> checkbox. <br/>
+            Note that the path cannot be null as the expression JMESPath will not be compiled and an error will occur. 
+            Even if you expect an empty or null response, you must put a valid JMESPath expression.
+        </p>
+    </description>
+    <properties>
+        <property name="Assert JMESPath exists" required="Yes">Check that JMESPath to JSON element exists</property>
+        <property name="Additionally assert value" required="No">Select checkbox if you check the extracted JMESPath against an expected one</property>
+        <property name="Match as regular expression" required="No">Select checkbox if you want to use a regular expression for matching</property>
+        <property name="Expected Value" required="No">Value to use for exact matching or regular expression if <code>Match as regular expression</code> is checked</property>
+        <property name="Expect null" required="No">Select checkbox if you expect the value to be null</property>
+        <property name="Invert assertion (will fail if above conditions met)" required="No">Invert assertion (will fail if above conditions met)</property>
+    </properties>
+</component>
 <a href="#">^</a>
 
 </section>

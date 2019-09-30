@@ -47,6 +47,8 @@ import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.junit.Assert;
+import org.junit.runner.Describable;
+import org.junit.runner.Description;
 
 import junit.extensions.TestSetup;
 import junit.framework.Test;
@@ -57,7 +59,7 @@ import junit.framework.TestSuite;
  * The samples are executed against the HttpMirrorServer, which is
  * started when the unit tests are executed.
  */
-public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit {
+public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit implements Describable {
     private static final int HTTP_SAMPLER = 0;
     private static final int HTTP_SAMPLER3 = 2;
 
@@ -84,6 +86,11 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     public TestHTTPSamplersAgainstHttpMirrorServer(String arg0, int item) {
         super(arg0);
         this.item = item;
+    }
+
+    @Override
+    public Description getDescription() {
+        return Description.createTestDescription(getClass(), getName() + " " + item);
     }
 
     // This is used to emulate @before class and @after class

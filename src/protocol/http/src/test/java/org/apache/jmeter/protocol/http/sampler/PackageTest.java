@@ -16,9 +16,6 @@
  *
  */
 
-/*
- * Created on Jul 16, 2003
- */
 package org.apache.jmeter.protocol.http.sampler;
 
 import static org.junit.Assert.assertEquals;

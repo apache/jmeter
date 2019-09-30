@@ -325,7 +325,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
                 .getResString("cookies_stored"))); //$NON-NLS-1$
 
-        panel.add(new JScrollPane(cookieTable), BorderLayout.CENTER);
+        panel.add(GuiUtils.emptyBorder(new JScrollPane(cookieTable)), BorderLayout.CENTER);
         panel.add(buttonPanel, BorderLayout.SOUTH);
         return panel;
     }

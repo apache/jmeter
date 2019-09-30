@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<dependency-verification version='1'>
+  <trust-requirement pgp='GROUP' checksum='NONE' />
+  <ignored-keys />
+  <trusted-keys>
+    <trusted-key id='7a01b0f236e5430f' group='com.google.code.gson' />
+    <trusted-key id='72475fd306b9cab7' group='com.googlecode.javaewah' />
+    <trusted-key id='a50569c7ca7fa1f0' group='com.jcraft' />
+    <trusted-key id='86fdc7e2a11262cb' group='commons-codec' />
+    <trusted-key id='a41f13c999945293' group='commons-logging' />
+    <trusted-key id='6449005f96bc97a3' group='de.undercouch' />
+    <trusted-key id='c84125c13bf6f2f2' group='org.ajoberstar.grgit' />
+    <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents' />
+    <trusted-key id='b341ddb020fcb6ab' group='org.bouncycastle' />
+    <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
+    <trusted-key id='bcf4173966770193' group='org.jetbrains' />
+    <trusted-key id='379ce192d401ab61' group='org.jetbrains.intellij.deps' />
+    <trusted-key id='98fe03a974ce0a0b' group='org.jetbrains.kotlin' />
+    <trusted-key id='379ce192d401ab61' group='org.jetbrains.kotlinx' />
+    <trusted-key id='2c7b12f2a511e325' group='org.slf4j' />
+  </trusted-keys>
+  <dependencies>
+    <dependency group='org.gradle.kotlin' module='plugins' version='1.2.8'>
+      <sha512>8EA1B7517CCCC6DD1A41CF0E88613F14548AF9052A0A8E1C68004F3B58A1D26B47A8BDA2D9F663213F59FCDBCEC4BE1A596D8B0B50013C7DD0276140D9DE3391</sha512>
+    </dependency>
+    <dependency group='org.gradle.kotlin' module='plugins' version='1.2.9'>
+      <sha512>F672FEB39919B2A78E0AEFA95E8BE023C856EA802FBB652EE97FF6BC935BB6E29B9E5E36CC62B9B52D970DE6C49AC0D07C1EC5588771FC2B89787AB94CAE6AC7</sha512>
+    </dependency>
+  </dependencies>
+</dependency-verification>

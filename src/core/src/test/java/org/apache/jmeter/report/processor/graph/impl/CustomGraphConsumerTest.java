@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.report.processor.graph.impl;
 
 import static org.hamcrest.core.IsEqual.equalTo;

@@ -16,10 +16,6 @@
  *
  */
 
-/*
- * Created on Apr 25, 2003
- *
- */
 package org.apache.jmeter.gui.util;
 
 import java.awt.BorderLayout;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 package org.apache.jmeter.protocol.java.control.gui;
 
@@ -448,4 +448,3 @@ implements ChangeListener, ActionListener, ItemListener
         }
     }
 }
-

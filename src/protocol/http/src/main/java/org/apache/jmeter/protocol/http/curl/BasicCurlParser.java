@@ -103,6 +103,7 @@ public class BasicCurlParser {
     private static final int LIMIT_RATE_OPT = "limit-rate".hashCode();// $NON-NLS-1$
     private static final int MAX_REDIRS_OPT = "max-redirs".hashCode();// $NON-NLS-1$
     private static final int NOPROXY_OPT = "noproxy".hashCode();// $NON-NLS-1$
+    private static final int URL_OPT = "url".hashCode(); // $NON-NLS-1$
     private static final List<Integer> AUTH_OPT = Arrays.asList(BASIC_OPT, DIGEST_OPT);// $NON-NLS-1$
     private static final List<Integer> SSL_OPT = Arrays.asList(CAFILE_OPT, CAPATH_OPT, CERT_OPT, CIPHERS_OPT,
             CERT_STATUS_OPT, CERT_TYPE_OPT, KEY_OPT, KEY_TYPE_OPT);// $NON-NLS-1$
@@ -532,7 +533,7 @@ public class BasicCurlParser {
             new CLOptionDescriptor("header", CLOptionDescriptor.ARGUMENT_REQUIRED | CLOptionDescriptor.DUPLICATES_ALLOWED, HEADER_OPT,
                     "Pass custom header LINE to server");
     private static final CLOptionDescriptor D_METHOD_OPT =
-            new CLOptionDescriptor("command", CLOptionDescriptor.ARGUMENT_REQUIRED, METHOD_OPT,
+            new CLOptionDescriptor("request", CLOptionDescriptor.ARGUMENT_REQUIRED, METHOD_OPT,
                     "Pass custom header LINE to server");
     private static final CLOptionDescriptor D_DATA_OPT =
             new CLOptionDescriptor("data", CLOptionDescriptor.ARGUMENT_REQUIRED, DATA_OPT,
@@ -561,6 +562,8 @@ public class BasicCurlParser {
             "Sends the 'Referer Page' information to the HTTP server ");
     private static final CLOptionDescriptor D_COOKIE_OPT = new CLOptionDescriptor("cookie",
             CLOptionDescriptor.ARGUMENT_REQUIRED, COOKIE_OPT, "Pass the data to the HTTP server as a cookie");
+    private static final CLOptionDescriptor D_URL_OPT = new CLOptionDescriptor("url",
+            CLOptionDescriptor.ARGUMENT_REQUIRED, URL_OPT, "url");
     private static final CLOptionDescriptor D_USER_OPT = new CLOptionDescriptor("user",
             CLOptionDescriptor.ARGUMENT_REQUIRED, USER_OPT, "User and password to use for server authentication. ");
     private static final CLOptionDescriptor D_BASIC_OPT = new CLOptionDescriptor("basic",
@@ -651,7 +654,7 @@ public class BasicCurlParser {
 
     private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[] {
             D_COMPRESSED_OPT,D_HEADER_OPT, D_METHOD_OPT,D_DATA_OPT, D_DATA_ASCII_OPT, D_DATA_URLENCODE_OPT, D_DATA_RAW_OPT, D_DATA_BINARY_OPT,
-            D_FORM_OPT, D_FORM_STRING_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT, D_USER_OPT,
+            D_FORM_OPT, D_FORM_STRING_OPT, D_USER_AGENT_OPT, D_CONNECT_TIMEOUT_OPT, D_COOKIE_OPT, D_URL_OPT, D_USER_OPT,
             D_BASIC_OPT, D_DIGEST_OPT, D_CACERT_OPT, D_CAPATH_OPT, D_CERT_OPT, D_CERT_STATUS_OPT, D_CERT_TYPE_OPT,
             D_CIPHERS_OPT, D_KEY_OPT, D_KEY_TYPE_OPT, D_GET_OPT, D_DNS_SERVERS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT,
             D_LOCATION_OPT, D_INCLUDE_OPT, D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT,
@@ -671,11 +674,8 @@ public class BasicCurlParser {
             List<CLOption> clOptions = parser.getArguments();
             Request request = new Request();
             for (CLOption option : clOptions) {
-                if (option.getDescriptor().getId() == CLOption.TEXT_ARGUMENT) {
-                    // Curl or URL
-                    if (!"CURL".equalsIgnoreCase(option.getArgument())) {
-                        request.setUrl(option.getArgument());
-                    }
+                if (option.getDescriptor().getId() == URL_OPT) {
+                    request.setUrl(option.getArgument());
                 } else if (option.getDescriptor().getId() == COMPRESSED_OPT) {
                     request.setCompressed(true);
                 } else if (option.getDescriptor().getId() == HEADER_OPT) {
@@ -766,11 +766,19 @@ public class BasicCurlParser {
                 } else if (PROPERTIES_OPT.contains(option.getDescriptor().getId())) {
                     request.addOptionsInProperties(
                             "--" + option.getDescriptor().getName() + " is in 'httpsampler.max_redirects(1062 line)'");
+                } else if (option.getDescriptor().getId() == CLOption.TEXT_ARGUMENT) {
+                    // Curl or CURL
+                    if (!"CURL".equalsIgnoreCase(option.getArgument())) {
+                        try {
+                            request.setUrl(new URL(option.getArgument()).toExternalForm());
+                        } catch (MalformedURLException ex) {
+                            LOGGER.warn("Unhandled option {}", option.getArgument());
+                        }
+                    }
                 }
             }
             if (isPostToGet) {
-                String url = request.getUrl();
-                url += "?" + request.getPostData();
+                String url = request.getUrl() + "?" + request.getPostData();
                 request.setUrl(url);
                 request.setPostData(null);
                 request.setMethod("GET");

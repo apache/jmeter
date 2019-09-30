@@ -20,9 +20,11 @@ package org.apache.jmeter.buildtools.batchtest
 
 import org.gradle.api.GradleException
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.kotlin.dsl.findByType
+import org.gradle.kotlin.dsl.property
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import java.io.File
 import java.net.ConnectException
@@ -46,6 +48,10 @@ open class BatchTestServer @Inject constructor(objects: ObjectFactory) : BatchTe
     @OutputFile
     val jacocoExecFile = objects.fileProperty()
         .convention(project.layout.buildDirectory.file("jacoco/$name.exec"))
+
+    @Input
+    val startupTimeout = objects.property<Duration>()
+        .convention(Duration.ofSeconds(15))
 
     private fun deleteWorkfiles() {
         project.delete(serverLogFile)
@@ -128,7 +134,7 @@ open class BatchTestServer @Inject constructor(objects: ObjectFactory) : BatchTe
                 .assertNormalExitValue()
         }
 
-        waitForPort(serverHost, serverPort, Duration.ofSeconds(5))
+        waitForPort(serverHost, serverPort, startupTimeout.get())
         super.exec()
 
         try {

@@ -6,13 +6,13 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  */
 
@@ -78,7 +78,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
             try {
                 bshInterpreter.reset();
             } catch (ClassNotFoundException e) {
-                log.error("Cannot reset BeanShell: "+e.toString());
+                log.error("Cannot reset BeanShell: {}", e.toString());
             }
         }
 
@@ -92,7 +92,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
             bshInterpreter.set("props", JMeterUtils.getJMeterProperties());
             bshInterpreter.set("vars", vars);//$NON-NLS-1$
         } catch (JMeterException e) {
-            log.warn("Problem setting one or more BeanShell variables "+e);
+            log.warn("Problem setting one or more BeanShell variables {}", e.toString());
         }
         return bshInterpreter;
     }
@@ -106,7 +106,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
             hasInitFile = initFileName != null;
             bshInterpreter = new BeanShellInterpreter(initFileName, log);
         } catch (ClassNotFoundException e) {
-            log.error("Cannot find BeanShell: "+e.toString());
+            log.error("Cannot find BeanShell: {}", e.toString());
         }
     }
 
@@ -177,79 +177,57 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 
     @Override
     public void threadStarted() {
-        if (bshInterpreter == null || !hasInitFile) {
-            return;
-        }
-        try {
-            bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-        }
+        tryEvalNoLog("threadStarted()"); // $NON-NLS-1$
     }
 
     @Override
     public void threadFinished() {
-        if (bshInterpreter == null || !hasInitFile) {
-            return;
-        }
-        try {
-            bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-        }
+        tryEvalNoLog("threadFinished()"); // $NON-NLS-1$
     }
 
     @Override
     public void testEnded() {
-        if (bshInterpreter == null || !hasInitFile) {
-            return;
-        }
-        try {
-            bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-        }
+        tryEvalNoLog("testEnded()"); // $NON-NLS-1$
     }
 
     @Override
     public void testEnded(String host) {
-        if (bshInterpreter == null || !hasInitFile) {
-            return;
-        }
-        try {
-            bshInterpreter.eval((new StringBuilder("testEnded(\"")) // $NON-NLS-1$
-                    .append(host)
-                    .append("\")") // $NON-NLS-1$
-                    .toString()); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-        }
+        tryEval("testEnded(\"" + host + "\")"); // $NON-NLS-1$
     }
 
     @Override
     public void testStarted() {
-        if (bshInterpreter == null || !hasInitFile) {
-            return;
-        }
-        try {
-            bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-        }
+        tryEvalNoLog("testStarted()");// $NON-NLS-1$
     }
 
     @Override
     public void testStarted(String host) {
+        tryEval("testStarted(\"" + host + "\")"); // $NON-NLS-1$
+    }
+
+    private void tryEval(String code) {
         if (bshInterpreter == null || !hasInitFile) {
             return;
         }
         try {
-            bshInterpreter.eval((new StringBuilder("testStarted(\"")) // $NON-NLS-1$
-                    .append(host)
-                    .append("\")") // $NON-NLS-1$
-                    .toString()); // $NON-NLS-1$
-        } catch (JMeterException ignored) {
-            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
+            bshInterpreter.eval(code);
+        } catch (JMeterException e) {
+            if (log.isDebugEnabled()) {
+                log.debug("{} : {}", getClass().getName(), e.getLocalizedMessage()); // $NON-NLS-1$
+            }
+        }
+    }
+
+    private void tryEvalNoLog(String code) {
+        if (bshInterpreter == null || !hasInitFile) {
+            return;
+        }
+        try {
+            bshInterpreter.evalNoLog(code);
+        } catch (JMeterException e) {
+            if (log.isDebugEnabled()) {
+                log.debug("{} : {}", getClass().getName(), e.getLocalizedMessage()); // $NON-NLS-1$
+            }
         }
     }
 

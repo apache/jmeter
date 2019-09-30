@@ -13,14 +13,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package org.apache.jmeter.functions
 
-import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.engine.util.CompoundVariable
+import org.apache.jmeter.samplers.SampleResult
+import org.apache.jmeter.threads.JMeterContextService
+import org.apache.jmeter.threads.JMeterVariables
 
 import spock.lang.Specification
 import spock.lang.Unroll

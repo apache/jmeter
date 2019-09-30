@@ -16,9 +16,6 @@
  *
  */
 
-/*
- * Created on Apr 23, 2003
- */
 package org.apache.jmeter.engine.util;
 
 /**

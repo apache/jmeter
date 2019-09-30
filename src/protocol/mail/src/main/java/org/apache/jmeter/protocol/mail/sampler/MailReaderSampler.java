@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.protocol.mail.sampler;
 
 import java.io.ByteArrayOutputStream;
@@ -220,10 +221,8 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
 
             // Get directory
             Message[] messages = folder.getMessages(1,n);
-            StringBuilder pdata = new StringBuilder();
-            pdata.append(messages.length);
-            pdata.append(" messages found\n");
-            parent.setResponseData(pdata.toString(),null);
+            String pdata = messages.length + " messages found\n";
+            parent.setResponseData(pdata,null);
             parent.setDataType(SampleResult.TEXT);
             parent.setContentType("text/plain"); // $NON-NLS-1$
 
@@ -614,9 +613,6 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
      * @return the constructed name
      */
     private String mailProp(String protocol, String propname) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("mail.").append(protocol).append(".");
-        sb.append(propname);
-        return sb.toString();
+        return "mail." + protocol + "." + propname;
     }
 }

@@ -16,10 +16,6 @@
  *
  */
 
-/**
- * Package to test JOrphanUtils methods
- */
-
 package org.apache.jorphan.util;
 
 import static org.junit.Assert.assertEquals;
@@ -30,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 import java.nio.charset.StandardCharsets;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -401,5 +398,10 @@ public class TestJorphanUtils {
         assertEquals("", JOrphanUtils.unsplit(new Object[] {null, null}, 0));
         assertEquals("11", JOrphanUtils.unsplit(new Object[] {null, 1}, 1));
         assertEquals("-26738698", JOrphanUtils.unsplit(new Object[] {-26_738_698}, 1));
+    }
+
+    @Test
+    public void testGenerateRandomAlphanumericPassword20() {
+        assertThat(JOrphanUtils.generateRandomAlphanumericPassword(20), Matchers.matchesPattern("[A-Za-z0-9]{20}"));
     }
 }

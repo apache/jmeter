@@ -19,11 +19,8 @@
 package org.apache.jmeter.junit;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
 
+import org.apache.jmeter.testkit.ResourceLocator;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class JMeterTestUtils {
@@ -60,19 +57,6 @@ public class JMeterTestUtils {
      * @return "" when input is "", input resource when resource is not found, or absolute file path of a resource
      */
     public static String getResourceFilePath(Class<?> klass, String resource) {
-        try {
-            if ("".equals(resource)) {
-                return resource;
-            }
-            URL url = klass.getResource(resource);
-            if (url == null) {
-                // Resource not found, assume the path is relative to the current dir
-                return resource;
-            }
-            URI uri = url.toURI();
-            return Paths.get(uri).toAbsolutePath().toString();
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("Unable to resolve resource " + resource, e);
-        }
+        return ResourceLocator.getResource(klass, resource);
     }
 }

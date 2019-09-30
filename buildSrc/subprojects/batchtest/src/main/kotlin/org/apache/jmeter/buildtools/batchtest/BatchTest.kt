@@ -107,18 +107,16 @@ open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
     init {
         group = BATCH_TESTS_GROUP_NAME
         description = "Runs jmx file via process fork and verifies outputs"
-        configure {
-            workingDir = File(project.rootDir, "bin")
-            main = "org.apache.jmeter.NewDriver"
-            classpath(jmeterJar)
+        workingDir = File(project.rootDir, "bin")
+        main = "org.apache.jmeter.NewDriver"
+        classpath(jmeterJar)
 
-            // This does not depend on the task configuration, so the properties are initialized early
-            // It enables to override the properties later (e.g. in the build script)
-            maxHeapSize = "128m"
-            jvmArgs("-Xss256k", "-XX:MaxMetaspaceSize=128m")
-            systemProperty("java.rmi.server.hostname", InetAddress.getLocalHost().canonicalHostName)
-            systemProperty("java.awt.headless", "true")
-        }
+        // This does not depend on the task configuration, so the properties are initialized early
+        // It enables to override the properties later (e.g. in the build script)
+        maxHeapSize = "128m"
+        jvmArgs("-Xss256k", "-XX:MaxMetaspaceSize=128m")
+        systemProperty("java.rmi.server.hostname", InetAddress.getLocalHost().canonicalHostName)
+        systemProperty("java.awt.headless", "true")
     }
 
     fun jmeterArgument(name: String, value: String) {
