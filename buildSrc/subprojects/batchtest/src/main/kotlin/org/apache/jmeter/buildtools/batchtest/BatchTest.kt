@@ -25,8 +25,12 @@ import org.eclipse.jgit.diff.RawTextComparator
 import org.eclipse.jgit.util.io.AutoCRLFInputStream
 import org.gradle.api.GradleException
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.tasks.*
-import org.gradle.kotlin.dsl.configure
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.JavaExec
 import org.gradle.kotlin.dsl.property
 import java.io.File
 import java.net.InetAddress
@@ -149,7 +153,7 @@ open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
         val diffAlgorithm = DiffAlgorithm.getAlgorithm(DiffAlgorithm.SupportedAlgorithm.HISTOGRAM)
         val edits = diffAlgorithm.diff(RawTextComparator.DEFAULT, e, a)
         DiffFormatter(System.out).format(edits, e, a)
-        return false;
+        return false
     }
 
     override fun exec() {

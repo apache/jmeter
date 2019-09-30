@@ -18,8 +18,6 @@
 
 import com.github.vlsi.gradle.crlf.CrLfSpec
 import com.github.vlsi.gradle.crlf.LineEndings
-import com.github.vlsi.gradle.release.dsl.dependencyLicenses
-import com.github.vlsi.gradle.release.dsl.licensesCopySpec
 
 plugins {
     id("com.github.vlsi.crlf")

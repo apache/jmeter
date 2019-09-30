@@ -58,7 +58,6 @@ fun Project.boolProp(name: String) =
         ?.let { it as? String }
         ?.equals("false", ignoreCase = true)?.not()
 
-
 // Release candidate index
 val String.v: String get() = rootProject.extra["$this.version"] as String
 version = "jmeter".v + releaseParams.snapshotSuffix
@@ -252,6 +251,16 @@ allprojects {
     // JMeter ClassFinder parses "class.path" and tries to find jar names there,
     // so we should produce jars without versions names for now
     // version = rootProject.version
+    if (!skipSpotless) {
+        apply(plugin = "com.diffplug.gradle.spotless")
+        spotless {
+            kotlinGradle {
+                ktlint()
+                trimTrailingWhitespace()
+                endWithNewline()
+            }
+        }
+    }
     plugins.withType<JavaPlugin> {
         // We don't intend to resolve that configuration
         // It is in line with further Gradle versions: https://github.com/gradle/gradle/issues/8585
@@ -285,7 +294,6 @@ allprojects {
         }
 
         if (!skipSpotless) {
-            apply(plugin = "com.diffplug.gradle.spotless")
             spotless {
                 java {
                     licenseHeaderFile(licenseHeaderFile)

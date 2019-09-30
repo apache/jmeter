@@ -21,7 +21,7 @@ package org.apache.jmeter.buildtools.batchtest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-open class BatchtestPlugin: Plugin<Project> {
+open class BatchtestPlugin : Plugin<Project> {
     override fun apply(target: Project) {
     }
 }

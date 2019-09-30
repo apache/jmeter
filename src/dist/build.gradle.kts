@@ -34,7 +34,7 @@ var jars = arrayOf(
         ":src:launcher",
         ":src:components",
         ":src:core",
-        //":src:examples",
+        // ":src:examples",
         ":src:functions",
         ":src:jorphan",
         ":src:protocol:ftp",
@@ -174,10 +174,16 @@ val createDist by tasks.registering {
 // source/binary artifacts with the appropriate eol/executable file flags
 val gitProps by rootProject.tasks.existing(FindGitAttributes::class)
 
-fun createAnakiaTask(taskName: String,
-                     baseDir: String, extension: String = ".html", style: String,
-                     velocityProperties: String, projectFile: String, excludes: Array<String>,
-                     includes: Array<String>): TaskProvider<Task> {
+fun createAnakiaTask(
+    taskName: String,
+    baseDir: String,
+    extension: String = ".html",
+    style: String,
+    velocityProperties: String,
+    projectFile: String,
+    excludes: Array<String>,
+    includes: Array<String>
+): TaskProvider<Task> {
     val outputDir = "$buildDir/docs/$taskName"
 
     val prepareProps = tasks.register("prepareProperties$taskName") {
@@ -206,7 +212,7 @@ fun createAnakiaTask(taskName: String,
 
                 writer().use {
                     it.appendln("# Auto-generated from $velocityProperties to pass absolute path to Velocity")
-                    for(line in lines) {
+                    for (line in lines) {
                         it.appendln(line)
                     }
                 }
@@ -290,10 +296,12 @@ val previewPrintableDocs by tasks.registering(Copy::class) {
 
 val lastEditYear: String by rootProject.extra
 
-fun xslt(subdir: String,
-         outputDir: String,
-         includes: Array<String> = arrayOf("*.xml"),
-         excludes: Array<String> = arrayOf("extending.xml")) {
+fun xslt(
+    subdir: String,
+    outputDir: String,
+    includes: Array<String> = arrayOf("*.xml"),
+    excludes: Array<String> = arrayOf("extending.xml")
+) {
 
     val relativePath = if (subdir.isEmpty()) "." else ".."
     ant.withGroovyBuilder {
@@ -317,10 +325,10 @@ val processSiteXslt by tasks.registering {
     outputs.dir(outputDir)
 
     doLast {
-        for(f in (outputs as TaskOutputsInternal).previousOutputFiles) {
+        for (f in (outputs as TaskOutputsInternal).previousOutputFiles) {
             f.delete()
         }
-        for(i in arrayOf("", "usermanual", "localising")) {
+        for (i in arrayOf("", "usermanual", "localising")) {
             xslt(i, outputDir)
         }
     }

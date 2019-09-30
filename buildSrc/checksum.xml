@@ -3,15 +3,29 @@
   <trust-requirement pgp='GROUP' checksum='NONE' />
   <ignored-keys />
   <trusted-keys>
+    <trusted-key id='379ce192d401ab61' group='com.diffplug.durian' />
+    <trusted-key id='379ce192d401ab61' group='com.diffplug.spotless' />
+    <trusted-key id='461a804f2609fd89' group='com.github.shyiko.klob' />
     <trusted-key id='7a01b0f236e5430f' group='com.google.code.gson' />
+    <trusted-key id='abe9f3126bb741c1' group='com.google.guava' />
+    <trusted-key id='7eb97d110dfadd60' group='com.googlecode.concurrent-trees' />
     <trusted-key id='72475fd306b9cab7' group='com.googlecode.javaewah' />
     <trusted-key id='a50569c7ca7fa1f0' group='com.jcraft' />
+    <trusted-key id='aa49c633b4734832' group='com.pinterest' />
+    <trusted-key id='aa49c633b4734832' group='com.pinterest.ktlint' />
     <trusted-key id='86fdc7e2a11262cb' group='commons-codec' />
     <trusted-key id='a41f13c999945293' group='commons-logging' />
     <trusted-key id='6449005f96bc97a3' group='de.undercouch' />
+    <trusted-key id='379ce192d401ab61' group='info.picocli' />
     <trusted-key id='c84125c13bf6f2f2' group='org.ajoberstar.grgit' />
+    <trusted-key id='9daadc1c9fcc82d0' group='org.apache.commons' />
     <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents' />
+    <trusted-key id='c7bf26d0bb617866' group='org.apache.maven' />
+    <trusted-key id='e2b3d84202b812d9' group='org.assertj' />
     <trusted-key id='b341ddb020fcb6ab' group='org.bouncycastle' />
+    <trusted-key id='41321490758aad6f' group='org.codehaus.groovy' />
+    <trusted-key id='466caed6e0747d50' group='org.codehaus.plexus' />
+    <trusted-key id='c7bf26d0bb617866' group='org.eclipse.aether' />
     <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
     <trusted-key id='bcf4173966770193' group='org.jetbrains' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.intellij.deps' />
@@ -25,6 +39,15 @@
     </dependency>
     <dependency group='org.gradle.kotlin' module='plugins' version='1.2.9'>
       <sha512>F672FEB39919B2A78E0AEFA95E8BE023C856EA802FBB652EE97FF6BC935BB6E29B9E5E36CC62B9B52D970DE6C49AC0D07C1EC5588771FC2B89787AB94CAE6AC7</sha512>
+    </dependency>
+    <dependency group='org.slf4j' module='jcl-over-slf4j' version='1.6.2'>
+      <sha512>3BA508C96EE0985865C9E86EBE803D1903835F7C198EB15723CDC86B028D6C82DBB7E96ECB01CEFAD7CC6EC7023155676D034B6B730A911D0FFE9F91FE532592</sha512>
+    </dependency>
+    <dependency group='org.slf4j' module='slf4j-api' version='1.6.2'>
+      <sha512>F520620AA2DF7856DEA11E8B310F5F48C7A53444867112F734FFEF6726DF6EB469BF068564AF79B7DE30845906E7B5772CA064A3CC0DA18918E6DE46BD02D6E6</sha512>
+    </dependency>
+    <dependency group='org.slf4j' module='slf4j-nop' version='1.6.2'>
+      <sha512>89F8559C281F6BCEA4EB193C49AA8C960A5FE6762DCA0198A7BB04B9D8A846AC52231F77EC16B2E9C0B48D0F6011517B641B5B93279B24EEF65EE22E2C1167F3</sha512>
     </dependency>
   </dependencies>
 </dependency-verification>

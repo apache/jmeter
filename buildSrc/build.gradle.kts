@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -18,9 +16,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  *
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     java
     `kotlin-dsl` apply false
+    id("com.diffplug.gradle.spotless") version "3.24.3"
 }
 
 repositories {
@@ -50,6 +51,19 @@ fun Project.applyKotlinProjectConventions() {
         targetCompatibility = "unused"
         kotlinOptions {
             jvmTarget = "1.8"
+        }
+    }
+    apply(plugin = "com.diffplug.gradle.spotless")
+    spotless {
+        kotlin {
+            ktlint()
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+        kotlinGradle {
+            ktlint()
+            trimTrailingWhitespace()
+            endWithNewline()
         }
     }
 }
