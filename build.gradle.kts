@@ -284,6 +284,14 @@ allprojects {
                     description = "Executes Checkstyle verifications"
                     dependsOn(sourceSets.names.map { "checkstyle" + it.capitalize() })
                 }
+                // Spotless produces more meaningful error messages, so we ensure it is executed before Checkstyle
+                if (!skipSpotless) {
+                    for (s in sourceSets.names) {
+                        tasks.named("checkstyle" + s.capitalize()) {
+                            dependsOn("spotlessCheck")
+                        }
+                    }
+                }
             }
         }
         apply<SpotBugsPlugin>()
