@@ -327,7 +327,7 @@ fun xslt(
 val processSiteXslt by tasks.registering {
     val outputDir = "$buildDir/siteXslt"
     inputs.files(xdocs)
-    inputs.properties["year"] = lastEditYear
+    inputs.property("year", lastEditYear)
     outputs.dir(outputDir)
 
     doLast {
