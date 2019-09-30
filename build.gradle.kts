@@ -279,16 +279,21 @@ allprojects {
             }
             val sourceSets: SourceSetContainer by project
             if (sourceSets.isNotEmpty()) {
+                tasks.register("checkstyleAll") {
+                    dependsOn(sourceSets.names.map { "checkstyle" + it.capitalize() })
+                }
                 tasks.register("checkstyle") {
                     group = LifecycleBasePlugin.VERIFICATION_GROUP
                     description = "Executes Checkstyle verifications"
-                    dependsOn(sourceSets.names.map { "checkstyle" + it.capitalize() })
+                    dependsOn("checkstyleAll")
+                    dependsOn("spotlessCheck")
                 }
                 // Spotless produces more meaningful error messages, so we ensure it is executed before Checkstyle
                 if (!skipSpotless) {
                     for (s in sourceSets.names) {
                         tasks.named("checkstyle" + s.capitalize()) {
-                            dependsOn("spotlessCheck")
+                            mustRunAfter("spotlessApply")
+                            mustRunAfter("spotlessCheck")
                         }
                     }
                 }
@@ -320,7 +325,7 @@ allprojects {
                 dependsOn("spotlessApply")
             }
             if (!skipCheckstyle) {
-                dependsOn("checkstyle")
+                dependsOn("checkstyleAll")
             }
         }
     }
