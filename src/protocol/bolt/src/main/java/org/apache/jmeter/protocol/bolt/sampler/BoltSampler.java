@@ -20,7 +20,7 @@ package org.apache.jmeter.protocol.bolt.sampler;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,7 +29,7 @@ import java.util.Set;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
-import org.apache.jmeter.protocol.bolt.config.ConnectionElement;
+import org.apache.jmeter.protocol.bolt.config.BoltConnectionElement;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -41,16 +41,16 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.exceptions.Neo4jException;
 import org.neo4j.driver.v1.summary.ResultSummary;
 
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 
 public class BoltSampler extends AbstractBoltTestElement implements Sampler, TestBean, ConfigMergabilityIndicator {
 
     private static final Set<String> APPLICABLE_CONFIG_CLASSES = new HashSet<>(
-            Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
+            Collections.singletonList("org.apache.jmeter.config.gui.SimpleConfigGui")); // $NON-NLS-1$
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectReader objectMapper = new ObjectMapper().readerFor(new TypeReference<HashMap<String, Object>>() {});
 
     @Override
     public SampleResult sample(Entry e) {
@@ -61,6 +61,13 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
         res.setContentType("text/plain"); // $NON-NLS-1$
         res.setDataEncoding(StandardCharsets.UTF_8.name());
 
+        Map<String, Object> params;
+        try {
+            params = getParamsAsMap();
+        } catch (IOException ex) {
+            return handleException(res, ex);
+        }
+
         // Assume we will be successful
         res.setSuccessful(true);
         res.setResponseMessageOK();
@@ -70,17 +77,9 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
 
         try {
             res.setResponseHeaders("Cypher request: " + getCypher());
-            res.setResponseData(execute(ConnectionElement.getDriver()), StandardCharsets.UTF_8.name());
-        } catch (Neo4jException ex) {
-            res.setResponseMessage(ex.toString());
-            res.setResponseCode(ex.code());
-            res.setResponseData(ex.getMessage().getBytes());
-            res.setSuccessful(false);
+            res.setResponseData(execute(BoltConnectionElement.getDriver(), getCypher(), params), StandardCharsets.UTF_8.name());
         } catch (Exception ex) {
-            res.setResponseMessage(ex.toString());
-            res.setResponseCode("000");
-            res.setResponseData(ObjectUtils.defaultIfNull(ex.getMessage(), "NO MESSAGE").getBytes());
-            res.setSuccessful(false);
+            res = handleException(res, ex);
         } finally {
             res.sampleEnd();
         }
@@ -96,17 +95,31 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
         return APPLICABLE_CONFIG_CLASSES.contains(guiClass);
     }
 
-    private String execute(Driver driver) throws IOException {
-        Map<String,Object> params = new HashMap<>();
-        String results;
-        if (getParams() != null && getParams().length() > 0) {
-            params = objectMapper.readValue(getParams(), new TypeReference<HashMap<String, Object>>() {});
-        }
+    private String execute(Driver driver, String cypher, Map<String, Object> params) {
         try (Session session = driver.session()) {
-            StatementResult statementResult = session.run(getCypher(),params);
-            results = response(statementResult);
+            StatementResult statementResult = session.run(cypher, params);
+            return response(statementResult);
         }
-        return results;
+    }
+
+    private SampleResult handleException(SampleResult res, Exception ex) {
+        res.setResponseMessage(ex.toString());
+        if (ex instanceof Neo4jException) {
+            res.setResponseCode(((Neo4jException)ex).code());
+        } else {
+            res.setResponseCode("500");
+        }
+        res.setResponseData(ObjectUtils.defaultIfNull(ex.getMessage(), "NO MESSAGE").getBytes());
+        res.setSuccessful(false);
+        return res;
+    }
+
+    private Map<String, Object> getParamsAsMap() throws IOException {
+        if (getParams() != null && getParams().length() > 0) {
+            return objectMapper.readValue(getParams());
+        } else {
+            return Collections.emptyMap();
+        }
     }
 
     private String request() {
@@ -150,8 +163,7 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
             result.stream().forEach(record -> response.append("\n")
                     .append(record)
             );
-        }
-        else {
+        } else {
             response.append("Skipped");
             result.consume();
         }
