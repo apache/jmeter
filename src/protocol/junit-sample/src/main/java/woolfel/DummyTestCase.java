@@ -20,10 +20,13 @@ package woolfel;
 
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import junit.framework.TestCase;
 
 public class DummyTestCase extends TestCase {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(DummyTestCase.class);
     public DummyTestCase() {
         super();
         System.out.println("public DummyTestCase()");
@@ -49,7 +52,7 @@ public class DummyTestCase extends TestCase {
             TimeUnit.MILLISECONDS.sleep(100);
             assertEquals(10,10);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.warn("Exception on sleep", e);
         }
     }
 
@@ -58,7 +61,7 @@ public class DummyTestCase extends TestCase {
             TimeUnit.MILLISECONDS.sleep(100);
             assertEquals("one","one");
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.warn("Exception on sleep", e);
         }
     }
 
@@ -67,7 +70,7 @@ public class DummyTestCase extends TestCase {
             TimeUnit.MILLISECONDS.sleep(100);
             assertEquals(20,10);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.warn("Exception on sleep", e);
         }
     }
 
@@ -76,7 +79,7 @@ public class DummyTestCase extends TestCase {
             TimeUnit.MILLISECONDS.sleep(100);
             assertEquals("one","two");
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.warn("Exception on sleep", e);
         }
     }
 
