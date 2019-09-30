@@ -232,6 +232,8 @@ to view the last release notes of version 5.1.1.
     <li><bug>63490</bug>At end of scheduler duration lots of Samplers gets executed at the same time</li>
     <li><pr>480</pr><pr>482</pr>Fix a few typos in comments and log messages. Based on patch by Anass Benomar (anassbenomar at gmail.com)</li>
     <li><bug>63751</bug>Correct a typo in Chinese translations. Reported by Jinliang Wang (wjl31802 at 126.com)</li>
+    <li><bug>63723</bug>Distributed testing: JMeter master ends distributed test though some threads still are active</li>
+    <li><bug>63614</bug>Distributed testing: Unable to generate Dashboard report at end of load test</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
