@@ -35,7 +35,7 @@ import javax.net.ssl.X509ExtendedTrustManager;
  * This class can be used as a SocketFactory with SSL-connections.<p>
  * Its purpose is to ensure that all certificates - no matter from which CA - are accepted to secure the SSL-connection.
  */
-public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
+public class TrustAllSSLSocketFactory extends SSLSocketFactory  { // NOSONAR JMeter is a pentest and perf testing tool
 
     private final SSLSocketFactory factory;
 
@@ -56,11 +56,11 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
                             return EMPTY_X509Certificate;
                         }
                         @Override
-                        public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                        public void checkClientTrusted(X509Certificate[] chain, String authType) { // NOSONAR JMeter is a pentest and perf testing tool
                             // NOOP
                         }
                         @Override
-                        public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                        public void checkServerTrusted(X509Certificate[] chain, String authType) { // NOSONAR JMeter is a pentest and perf testing tool
                             // NOOP
                         }
                         @Override
@@ -115,7 +115,7 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
     @Override
     public Socket createSocket(InetAddress address, int port,
             InetAddress localAddress, int localPort) throws IOException {
-        return factory.createSocket(address, port, localAddress, localPort);
+        return factory.createSocket(address, port, localAddress, localPort); // NOSONAR JMeter is a pentest and perf testing tool
     }
 
     /**
@@ -124,7 +124,7 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
     @Override
     public Socket createSocket(InetAddress address, int port) throws
             IOException {
-        return factory.createSocket(address, port);
+        return factory.createSocket(address, port); // NOSONAR JMeter is a pentest and perf testing tool
     }
 
     /**
@@ -133,7 +133,7 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
     @Override
     public Socket createSocket(String host, int port, InetAddress localHost, int localPort)
     throws IOException {
-        return factory.createSocket(host, port, localHost, localPort);
+        return factory.createSocket(host, port, localHost, localPort); // NOSONAR JMeter is a pentest and perf testing tool
     }
 
     /**
@@ -141,7 +141,7 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
      */
     @Override
     public Socket createSocket(String host, int port) throws IOException {
-        return factory.createSocket(host, port);
+        return factory.createSocket(host, port); // NOSONAR JMeter is a pentest and perf testing tool
     }
 
     /**
@@ -149,7 +149,7 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
      */
     @Override
     public Socket createSocket() throws IOException {
-        return factory.createSocket();
+        return factory.createSocket(); // NOSONAR JMeter is a pentest and perf testing tool
     }
 
     /**

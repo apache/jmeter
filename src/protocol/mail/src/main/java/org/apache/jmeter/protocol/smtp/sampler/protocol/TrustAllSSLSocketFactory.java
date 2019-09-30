@@ -56,12 +56,10 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
                             return EMPTY_X509Certificate;
                         }
                         @Override
-                        public void checkClientTrusted(
-                                X509Certificate[] certs, String authType) {
+                        public void checkClientTrusted(X509Certificate[] certs, String authType) { // NOSONAR JMeter is a pentest and perf testing tool
                         }
                         @Override
-                        public void checkServerTrusted(
-                                X509Certificate[] certs, String authType) {
+                        public void checkServerTrusted(X509Certificate[] certs, String authType) { // NOSONAR JMeter is a pentest and perf testing tool
                         }
                     }
                 },
