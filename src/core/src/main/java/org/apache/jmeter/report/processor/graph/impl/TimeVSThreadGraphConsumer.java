@@ -54,7 +54,6 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
         };
     }
 
-
     /*
      * (non-Javadoc)
      *
