@@ -162,6 +162,9 @@
     <dependency group='gradle.plugin.com.github.spotbugs' module='spotbugs-gradle-plugin' version='1.6.10'>
       <sha512>E7486B32EF6C9C14FE879814DA5F06CA6ECABF47195063A93E6FC8CD10119244C5A7BC3C71A4760CCE3AFFA9E9736336D345D8ED84EB65153C15683FA6529D92</sha512>
     </dependency>
+    <dependency group='gradle.plugin.com.github.spotbugs' module='spotbugs-gradle-plugin' version='2.0.0'>
+      <sha512>B3BFAD07E6A3D4D73CBCE802D8614CF4AC84E589166D243D41028DC077F84C027DF4D514F145360405F37DA73A8F2E7B65D90877A9EE1151174D2440530F9051</sha512>
+    </dependency>
     <dependency group='gradle.plugin.org.jetbrains.gradle.plugin.idea-ext' module='gradle-idea-ext' version='0.5'>
       <sha512>4A6B7FA6CD8C6FA82A517C396510E408F1C6FAB5FF6D4C68008F80718F05E5943755AA240F329C95661CCB0231114DD0F6D7C38EFBF73EE6B1ECC70850F40F7E</sha512>
     </dependency>
