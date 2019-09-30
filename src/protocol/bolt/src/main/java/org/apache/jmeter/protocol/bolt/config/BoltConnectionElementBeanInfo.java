@@ -25,12 +25,12 @@ import org.apache.jmeter.testbeans.gui.TypeEditor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConnectionElementBeanInfo extends BeanInfoSupport {
+public class BoltConnectionElementBeanInfo extends BeanInfoSupport {
 
-    private static final Logger log = LoggerFactory.getLogger(ConnectionElementBeanInfo.class);
+    private static final Logger log = LoggerFactory.getLogger(BoltConnectionElementBeanInfo.class);
 
-    public ConnectionElementBeanInfo() {
-        super(ConnectionElement.class);
+    public BoltConnectionElementBeanInfo() {
+        super(BoltConnectionElement.class);
 
         createPropertyGroup("connection", new String[] { "boltUri", "username", "password" });
 

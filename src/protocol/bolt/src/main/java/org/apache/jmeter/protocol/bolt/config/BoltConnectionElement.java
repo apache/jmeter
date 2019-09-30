@@ -31,10 +31,10 @@ import org.neo4j.driver.v1.GraphDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConnectionElement extends AbstractTestElement
+public class BoltConnectionElement extends AbstractTestElement
         implements ConfigElement, TestStateListener, TestBean {
 
-    private static final Logger log = LoggerFactory.getLogger(ConnectionElement.class);
+    private static final Logger log = LoggerFactory.getLogger(BoltConnectionElement.class);
     private String boltUri;
     private String username;
     private String password;
@@ -42,7 +42,7 @@ public class ConnectionElement extends AbstractTestElement
 
     private static final String BOLT_CONNECTION = "boltConnection";
 
-    public ConnectionElement() {
+    public BoltConnectionElement() {
     }
 
     @Override
