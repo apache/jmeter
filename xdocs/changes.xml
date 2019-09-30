@@ -85,6 +85,7 @@ to view the last release notes of version 5.1.1.
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>63450</bug>HTTP(S) Test Script Recorder: Put number at end instead of beginning</li>
+    <li><bug>63790</bug>Embedded Resources download: Optimize CSS parsing by removing source location</li>
 </ul>
 
 <h3>Other samplers</h3>

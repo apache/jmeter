@@ -60,6 +60,7 @@ public class CssParserCacheLoader implements
                 .setFallbackCharset(charset)
                 .setCSSVersion(ECSSVersion.CSS30)
                 .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
+                .setUseSourceLocation(false)
                 .setCustomExceptionHandler(
                         new CSSParseExceptionCallback(baseUrl));
         if (IGNORE_ALL_CSS_ERRORS) {
