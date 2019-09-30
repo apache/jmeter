@@ -40,7 +40,7 @@ public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
 
         propertyDescriptor =  property("params");
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        propertyDescriptor.setValue(DEFAULT, "");
+        propertyDescriptor.setValue(DEFAULT, "{\"paramName\":\"paramValue\"}");
 
         propertyDescriptor =  property("recordQueryResults");
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
