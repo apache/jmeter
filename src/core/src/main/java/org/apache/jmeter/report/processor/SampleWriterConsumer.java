@@ -117,6 +117,8 @@ public class SampleWriterConsumer extends AbstractSampleConsumer {
         for (int i = 0; i < channelsCount; i++) {
             csvWriters[i].close();
         }
-        getWorkingDirectory().delete();
+        if (!getWorkingDirectory().delete()) {
+            LOG.warn("Was not able to delete folder {}", getWorkingDirectory());
+        }
     }
 }
