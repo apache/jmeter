@@ -139,13 +139,19 @@ libs.from(populateLibs)
 libsExt.from(populateLibs)
 binLibs.from(populateLibs)
 
-val copyLibs by tasks.registering(Copy::class) {
+val copyLibs by tasks.registering(Sync::class) {
     val junitSampleJar = project(":src:protocol:junit-sample").tasks.named(JavaPlugin.JAR_TASK_NAME)
     dependsOn(junitSampleJar)
     val generatorJar = project(":src:generator").tasks.named(JavaPlugin.JAR_TASK_NAME)
     // Can't use $rootDir since Gradle somehow reports .gradle/caches/ as "always modified"
     rootSpec.into("$rootDir/lib")
     with(libs)
+    preserve {
+        // Sync does not really know which files it copied during previous times, so
+        // it just removes everything it sees.
+        // We configure it to keep txt files that should be present there (the files come from Git source tree)
+        include("**/*.txt")
+    }
     into("ext") {
         with(libsExt)
         from(generatorJar)
