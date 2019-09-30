@@ -30,14 +30,6 @@ import com.github.vlsi.gradle.release.ExtraLicense
 import com.github.vlsi.gradle.release.dsl.dependencyLicenses
 import com.github.vlsi.gradle.release.dsl.licensesCopySpec
 
-// See https://docs.gradle.org/current/userguide/troubleshooting_dependency_resolution.html#sub:configuration_resolution_constraints
-// Gradle forbids to resolve configurations from other projects, so
-// we create our own copy of the configuration which belongs to the current project
-// This is the official recommendation:
-// In most cases, the deprecation warning can be fixed by defining a configuration in
-// the project where the resolution is occurring and setting it to extend from the configuration
-// in the other project.
-
 val binaryDependencies by configurations.creating
 val binLicense by configurations.creating
 val srcLicense by configurations.creating
@@ -203,7 +195,7 @@ val renderLicenseForBinary by tasks.registering(Apache2LicenseRenderer::class) {
 }
 
 tasks.build.configure {
-  dependsOn(renderLicenseForSource, renderLicenseForBinary)
+    dependsOn(renderLicenseForSource, renderLicenseForBinary)
 }
 
 // Below is to populate configurations with licenses
