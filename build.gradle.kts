@@ -33,7 +33,7 @@ plugins {
     jacoco
     checkstyle
     id("org.jetbrains.gradle.plugin.idea-ext") version "0.5" apply false
-    id("org.nosphere.apache.rat") version "0.5.0"
+    id("org.nosphere.apache.rat") version "0.5.2"
     id("com.diffplug.gradle.spotless") version "3.24.3"
     id("com.github.spotbugs") version "1.6.10"
     id("org.sonarqube") version "2.7.1"
