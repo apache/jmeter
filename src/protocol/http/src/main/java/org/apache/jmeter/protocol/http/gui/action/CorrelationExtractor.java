@@ -96,27 +96,27 @@ public class CorrelationExtractor {
      */
     public static void readBufferObject(List<String> arguments,
             Map<String, String> bodyParameterMap) {
-
+        log.debug("Start Processing sample results in buffer object.");
         for (Object sampler : CorrelationRecorder.buffer) {
-            log.info("processing of buffer objects start.");
             SampleResult sampleResult = (SampleResult) sampler;
             String contentType = sampleResult.getContentType();
 
             // create [CSS|HTML] extractor tag list
             // add later support for JSON and xpath2
             if (contentType.contains(TEXT_HTML)) {
-                log.info("HTML Extractor creation start.");
+                log.debug("Try to create HTML extractor for arguments in response of {}", sampleResult.getSampleLabel());
                 createExtractor(sampleResult,arguments, bodyParameterMap);
                 // create regular expression tags when
                 // no content-type is present
             } else {
-                log.info("Regular Extractor creation start.");
+                log.debug("Try to create Regex extractor for arguments in response of {}", sampleResult.getSampleLabel());
                 createRegularExtractor(sampleResult, arguments, bodyParameterMap);
             }
 
         }
         // update the JMX file with
         // extractor tags
+        log.debug("Processing sample results in buffer object ended.");
         updateJmxFile(arguments, bodyParameterMap);
     }
 
@@ -142,10 +142,11 @@ public class CorrelationExtractor {
                         sampleResult.getContentType());
                 if (htmlExtractor != null && htmlExtractor.size() > 0) {
                     listOfMap.add(htmlExtractor);
+                    log.debug("HTML Extractor created for {} in {}", argument, sampleResult.getSampleLabel());
                 }
 
             } catch (Exception e) {
-                log.error("Unable to create html selector for argument {}, {}", argument, e.getMessage());
+                log.error("Unable to create HTML Extractor for argument {}, {}", argument, e.getMessage());
             }
         }
     }
@@ -386,7 +387,7 @@ public class CorrelationExtractor {
                 Correlation.updateJxmFileWithRegularExtractors(listOfMap, arguments, bodyParameterMap);
             }
         } catch (UnsupportedEncodingException e) {
-            log.error("Could not update the JXM file. {}", e.getMessage());
+            log.error("Could not update the JMX file. {}", e.getMessage());
         }
 
     }
