@@ -35,6 +35,10 @@ public class XmlAssertionTest extends JMeterTestCase {
     private final String invalidXml = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note1>";
     private final String validXml = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>";
     private final String noXml = "response Data";
+    private final String unsecureXML = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" + 
+            "<!DOCTYPE foo [\n" + 
+            "   <!ENTITY xxe SYSTEM \"file:///etc/passwd\" > ]>\n" + 
+            "<foo>&xxe;</foo>";
 
     @Before
     public void setUp() {
@@ -44,6 +48,16 @@ public class XmlAssertionTest extends JMeterTestCase {
         JMeterVariables vars = new JMeterVariables();
         jmctx.setVariables(vars);
         sampleResult = new SampleResult();
+    }
+
+    @Test
+    public void testUnsecureX() throws Exception {
+        sampleResult.setResponseData(unsecureXML, null);
+        result = assertion.getResult(sampleResult);
+        Assert.assertTrue(result.isFailure());
+        Assert.assertTrue(result.isError());
+        Assert.assertEquals("DOCTYPE is disallowed when the feature \"http://apache.org/xml/features/disallow-doctype-decl\" set to true.",
+                    result.getFailureMessage());
     }
 
     @Test
