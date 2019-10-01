@@ -111,7 +111,7 @@ public class JsseSSLManager extends SSLManager {
             }
 
             HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(CPS));
-            HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+            HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true); // NOSONAR JMeter is a pentest and perf testing tool
 
             log.debug("SSL stuff all set");
         } catch (GeneralSecurityException ex) {
