@@ -37,11 +37,10 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.visualizers.CorrelationRecorder;
-import org.apache.jmeter.visualizers.ViewResultsFullVisualizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CorrelationExtractor extends ViewResultsFullVisualizer{
+public class CorrelationExtractor {
 
     private static final Logger log = LoggerFactory.getLogger(CorrelationExtractor.class);
 
