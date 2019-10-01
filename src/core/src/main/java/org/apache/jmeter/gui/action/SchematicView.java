@@ -33,6 +33,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.MenuElement;
+import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -69,6 +70,7 @@ public class SchematicView extends AbstractAction implements MenuCreator {
                 throws Exception {
             TransformerFactory factory = TransformerFactory.newInstance(
                     "net.sf.saxon.BasicTransformerFactory", Thread.currentThread().getContextClassLoader());
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             Source xslt;
             if (!StringUtils.isEmpty(DEFAULT_XSL_FILE)) {
                 log.info("Will use file {} for Schematic View generation", DEFAULT_XSL_FILE);

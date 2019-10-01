@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 
+import javax.xml.XMLConstants;
+
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
@@ -46,7 +48,9 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
         @Override
         protected XMLReader initialValue() {
             try {
-                return XMLReaderFactory.createXMLReader();
+                XMLReader reader = XMLReaderFactory.createXMLReader();
+                reader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+                return reader;
             } catch (SAXException e) {
                 log.error("Error initializing XMLReader in XMLAssertion", e);
                 return null;

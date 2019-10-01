@@ -77,6 +77,16 @@ to view the last release notes of version 5.1.1.
 <ul>
     <li>HTTP(S) Test Script Recorder now appends number at end of names, while previously it added it at beginning. See <bugzilla>63450</bugzilla></li>
     <li>When using XPath Assertion with an XPath expression returning a boolean, <code>True if nothing matches</code> had no effect and always returned true, see <bugzilla>63455</bugzilla></li>
+    <li>XML parsing now refuses unsecure XML, this has impacts on the following features:
+        <ul>
+            <li>XMLAssertion</li>
+            <li>XMLSchemAssertion</li>
+            <li>XPath function</li>
+            <li>XPath 1 &amp; 2 Extractors</li>
+            <li>XPath 1 &amp; 2 Assertions</li>
+        </ul>
+    
+     </li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -234,6 +244,7 @@ to view the last release notes of version 5.1.1.
     <li><bug>63751</bug>Correct a typo in Chinese translations. Reported by Jinliang Wang (wjl31802 at 126.com)</li>
     <li><bug>63723</bug>Distributed testing: JMeter master ends distributed test though some threads still are active</li>
     <li><bug>63614</bug>Distributed testing: Unable to generate Dashboard report at end of load test</li>
+    <li><bug>63793</bug>Fix unsecure XML Parsing</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
