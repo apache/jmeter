@@ -42,15 +42,17 @@ matrix:
       script:
         # This job verifies headless mode to ensure Apache JMeter is workable in headless as well
         - ./gradlew -Djava.awt.headless=true -Duser.language=fr -Duser.country=FR $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build javadocAggregate createDist
-    - name: Tests with OpenJDK 12
-      # Might switch to openjdk-ea when https://github.com/gradle/gradle/issues/10248 is fixed
-      jdk: openjdk12
-      script:
-        - xvfb-run ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build createDist
+    # Java 12 is not here because it has been superceeded by Java 13
+    # Tests with Java 12 do not surface much new, so Java 11 (LTS) and Java 13 (non-LTS) are enough for "post Java 9" testing
     - name: Tests with OpenJDK 13
       jdk: openjdk13
       script:
-        # Should fail as JDK13 is not supported yet by gradle
-        - xvfb-run ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build createDist
+        # ./gradlew wrapper task kills license header from gradle-wrapper.properties, so we use grep/echo to update the file
+        - grep -v Sha256 gradle/wrapper/gradle-wrapper.properties | grep -v Url > gradle/wrapper/gradle-wrapper.properties2
+        - echo 'distributionUrl=https\://services.gradle.org/distributions-snapshots/gradle-6.0-20190929230024+0000-bin.zip' >> gradle/wrapper/gradle-wrapper.properties2
+        - mv gradle/wrapper/gradle-wrapper.properties2 gradle/wrapper/gradle-wrapper.properties
+        - xvfb-run ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build createDist -PchecksumFailOn=never -PchecksumPrint=false
+        # Show difference between the new dependencies and old ones. It is expected that new Gradle version might bring new dependencies
+        - diff -u checksum.xml build/checksum/checksum.xml || true
   allow_failures:
     - jdk: openjdk13
