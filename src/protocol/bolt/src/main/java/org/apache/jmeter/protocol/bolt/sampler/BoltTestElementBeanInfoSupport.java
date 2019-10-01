@@ -22,6 +22,7 @@ import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testbeans.gui.TypeEditor;
 
 public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
     /**
@@ -34,11 +35,11 @@ public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
 
         createPropertyGroup("query", new String[] { "cypher","params","recordQueryResults"});
 
-        PropertyDescriptor propertyDescriptor =  property("cypher");
+        PropertyDescriptor propertyDescriptor =  property("cypher", TypeEditor.TextAreaEditor);
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
         propertyDescriptor.setValue(DEFAULT, "");
 
-        propertyDescriptor =  property("params");
+        propertyDescriptor =  property("params", TypeEditor.TextAreaEditor);
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
         propertyDescriptor.setValue(DEFAULT, "{\"paramName\":\"paramValue\"}");
 
