@@ -24,9 +24,8 @@ subprojects {
 }
 
 project("bolt") {
-
     dependencies {
-        implementation("org.neo4j.driver:neo4j-java-driver:1.7.5")
+        implementation("org.neo4j.driver:neo4j-java-driver")
         implementation("org.apache.commons:commons-lang3")
         implementation("com.fasterxml.jackson.core:jackson-core")
         implementation("com.fasterxml.jackson.core:jackson-databind")
@@ -99,7 +98,6 @@ project("java") {
         implementation("commons-io:commons-io") {
             because("IOUtils")
         }
-        implementation("org.neo4j.driver:neo4j-java-driver:1.7.5")
     }
 }
 
