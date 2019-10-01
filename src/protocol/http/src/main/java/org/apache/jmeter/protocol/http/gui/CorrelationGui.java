@@ -105,9 +105,7 @@ public class CorrelationGui {
         );
 
         // Cancel event of JFrame
-        cancel.addActionListener(actionListener -> {
-            frame.dispose();
-        });
+        cancel.addActionListener(actionListener -> frame.dispose());
 
     }
 }

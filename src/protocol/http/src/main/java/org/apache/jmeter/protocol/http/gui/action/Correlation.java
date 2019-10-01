@@ -95,9 +95,8 @@ public class Correlation {
             samplerSet.clear();
 
             getSamplerObjectList(rootNode);
-            samplerSet.forEach(proxy -> {
-                currentGuiSampleRequests.add((HTTPSamplerBase) proxy);
-            });
+            samplerSet.forEach(proxy ->
+                currentGuiSampleRequests.add((HTTPSamplerBase) proxy));
             samplerSet.clear();
 
         } catch (IOException e) {
