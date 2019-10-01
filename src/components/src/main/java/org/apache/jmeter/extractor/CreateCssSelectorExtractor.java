@@ -59,19 +59,16 @@ public class CreateCssSelectorExtractor {
         Document doc = getDocument(html);
 
         Map<String, String> cssSelectorExtractor = new HashMap<>();
-        String cssSelectorExpression;
-        String attribute;
+        String attribute = "";
 
         // decode the value string if encoded
         attributeValue = java.net.URLDecoder.decode(attributeValue, StandardCharsets.UTF_8.name());
 
         // get all elements with specified attibuteValue with keys: value and content
         // & return empty Map if the parameter isn't found in html
-        Elements valuesForAttributeValue;
-        Elements valuesForAttributeContent;
         Elements values;
-        valuesForAttributeValue = doc.getElementsByAttributeValue(ATTRIBUTE_KEY_VALUE, attributeValue);
-        valuesForAttributeContent = doc.getElementsByAttributeValue(ATTRIBUTE_KEY_CONTENT, attributeValue);
+        Elements valuesForAttributeValue = doc.getElementsByAttributeValue(ATTRIBUTE_KEY_VALUE, attributeValue);
+        Elements valuesForAttributeContent = doc.getElementsByAttributeValue(ATTRIBUTE_KEY_CONTENT, attributeValue);
         if (valuesForAttributeValue.isEmpty()) {
             if (valuesForAttributeContent.isEmpty()) {
                 // return empty cssSelectorExtractor
@@ -86,7 +83,7 @@ public class CreateCssSelectorExtractor {
         }
 
         // get first occurrence of the element and extract its cssSelector
-        cssSelectorExpression = values.first().cssSelector();
+        String cssSelectorExpression = values.first().cssSelector();
 
         // check if cssSelector is a ID selector and contains illegal characters
         // like (:) or (.)]
