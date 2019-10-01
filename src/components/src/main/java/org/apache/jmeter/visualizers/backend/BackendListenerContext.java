@@ -58,6 +58,11 @@ public class BackendListenerContext {
         this.params = args.getArgumentsAsMap();
     }
 
+    /** @param params the initialization parameters. */
+    public BackendListenerContext(Map<String, String> params) {
+        this.params = params;
+    }
+
     /**
      * Determine whether or not a value has been specified for the parameter
      * with this name.
