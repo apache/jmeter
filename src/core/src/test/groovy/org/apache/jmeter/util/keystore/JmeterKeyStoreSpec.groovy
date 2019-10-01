@@ -18,10 +18,10 @@
 
 package org.apache.jmeter.util.keystore
 
+import java.security.KeyStore
+
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import java.security.KeyStore
 
 @Unroll
 class JmeterKeyStoreSpec extends Specification {
