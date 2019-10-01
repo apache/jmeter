@@ -89,13 +89,13 @@ public class Correlation {
         // HTTPSamplerProxy object list.
         try {
             HashTree tree = SaveService.loadTree(file);
-            Set<HTTPSamplerProxy> samplerResult = convertSubTree(tree);
-            samplerResult.forEach(proxy ->
+            convertSubTree(tree);
+            samplerSet.forEach(proxy ->
                 sampleRequests.add((HTTPSamplerBase) proxy));
             samplerSet.clear();
 
-            Set<HTTPSamplerProxy> currentGuiSamplerResult = getSamplerObjectList(rootNode);
-            currentGuiSamplerResult.forEach(proxy -> {
+            getSamplerObjectList(rootNode);
+            samplerSet.forEach(proxy -> {
                 currentGuiSampleRequests.add((HTTPSamplerBase) proxy);
             });
             samplerSet.clear();
@@ -123,7 +123,7 @@ public class Correlation {
      * @param bodyParameterMap
      * @param guiPackage
      */
-    private static Set<HTTPSamplerProxy> getSamplerObjectList(JMeterTreeNode node) {
+    private static void getSamplerObjectList(JMeterTreeNode node) {
 
         Enumeration<?> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
@@ -137,7 +137,6 @@ public class Correlation {
             }
             getSamplerObjectList(child);
         }
-        return samplerSet;
     }
 
     /**
@@ -145,9 +144,8 @@ public class Correlation {
      * prepare a list.
      *
      * @param tree
-     * @return Set of HTTPSampleProxy objects.
      */
-    private static Set<HTTPSamplerProxy> convertSubTree(HashTree tree) {
+    private static void convertSubTree(HashTree tree) {
 
         for (Object o : new LinkedList<>(tree.list())) {
             TestElement item = (TestElement) o;
@@ -157,14 +155,12 @@ public class Correlation {
             }
             convertSubTree(tree.getTree(item));
         }
-        return samplerSet;
     }
 
     /**
      * create the map of JMX object.
      *
      * @param jmxObjectList List of TestElements
-     * @return map of JMX objects
      */
     public static Map<String, String> createJmxObjectMap(List<HTTPSamplerBase> jmxObjectList) {
 
