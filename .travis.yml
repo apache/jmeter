@@ -47,5 +47,10 @@ matrix:
       jdk: openjdk12
       script:
         - xvfb-run ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build createDist
+    - name: Tests with OpenJDK 13
+      jdk: openjdk13
+      script:
+        # Should fail as JDK13 is not supported yet by gradle
+        - xvfb-run ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build createDist
   allow_failures:
-    - jdk: openjdk12
+    - jdk: openjdk13
