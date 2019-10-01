@@ -314,19 +314,19 @@ public class CorrelationExtractor {
 
                 String key = entry.getKey();
                 String temp = map.get(argument);
-                if (temp.indexOf("%3A") >= 0) {
+                if (temp.contains("%3A")) {
                     map.put(key, temp.replace("%3A", ":"));
-                } else if (temp.indexOf('+') >= 0
-                        || java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).indexOf('+') >= 0) {
+                } else if (temp.contains("+")
+                        || java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).contains("+")) {
                     map.put(key, java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).replace("+", "\\+"));
-                } else if (temp.indexOf('$') >= 0
-                        || java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).indexOf('$') >= 0) {
+                } else if (temp.contains("$")
+                        || java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).contains("$")) {
                     map.put(key, java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).replace("$", "\\$"));
-                } else if (temp.indexOf('{') >= 0
-                        || java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).indexOf('{') >= 0) {
+                } else if (temp.contains("{")
+                        || java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).contains("{")) {
                     map.put(key, java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).replace("{", "\\{"));
-                } else if (temp.indexOf('}') >= 0
-                        || java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).indexOf('}') >= 0) {
+                } else if (temp.contains("}")
+                        || java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).contains("}")) {
                     map.put(key, java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()).replace("}", "\\}"));
                 } else {
                     map.put(key, java.net.URLDecoder.decode(temp, StandardCharsets.UTF_8.name()));
