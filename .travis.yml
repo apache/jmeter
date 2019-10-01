@@ -40,7 +40,8 @@ matrix:
         - LANG=fr_FR.UTF-8
         - LC_ALL=fr_FR.UTF-8
       script:
-        - xvfb-run ./gradlew -Duser.language=fr -Duser.country=FR $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build javadocAggregate createDist
+        # This job verifies headless mode to ensure Apache JMeter is workable in headless as well
+        - ./gradlew -Djava.awt.headless=true -Duser.language=fr -Duser.country=FR $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build javadocAggregate createDist
     - name: Tests with OpenJDK 12
       # Might switch to openjdk-ea when https://github.com/gradle/gradle/issues/10248 is fixed
       jdk: openjdk12
