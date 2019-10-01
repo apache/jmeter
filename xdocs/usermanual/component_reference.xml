@@ -1921,6 +1921,36 @@ MongoDB Script is more suitable for functional testing or test setup (setup/tear
 
 <a href="#">^</a>
 
+
+<component name="Bolt Request" index="&sect-num;.1.22" width="711" height="488" screenshot="bolt-request.png">
+    <description>
+        <p>This sampler allows you to run Cypher queries through the Bolt protocol.</p>
+        <p>Before using this you need to set up a <complink name="Bolt Connection Configuration"/></p>
+        <p>Every request uses a connection acquired from the pool and returns when the sampler completes.</p>
+    </description>
+
+    <properties>
+        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+        <property name="Comments" required="No">Free text for additional details.</property>
+        <property name="Cypher statement" required="Yes">
+            The query to execute.
+        </property>
+        <property name="Params" required="No">The parameter values, JSON formatted.</property>
+        <property name="Record Query Results" required="No">
+            Whether to add or not query result data to the sampler response (default false).
+            Note that activating this has a memory overhead, use it wisely.
+        </property>
+    </properties>
+
+    <note>It is strongly advised to use query parameters, allowing the database to cache and reuse execution plans.</note>
+
+    <links>
+        <complink name="Bolt Connection Configuration"/>
+    </links>
+</component>
+
+<a href="#">^</a>
+
 </section>
 
 <section name="&sect-num;.2 Logic Controllers" anchor="logic_controllers">
@@ -4395,6 +4425,22 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
         <property name="Write Concern : Continue on error" required="No">
             If batch inserts should continue after the first error
         </property>
+    </properties>
+</component>
+
+<a href="#">^</a>
+
+<component name="Bolt Connection Configuration" index="&sect-num;.4.21"
+           width="711" height="170" screenshot="bolt-connection-config.png">
+    <description>Creates a Bolt connection pool (used by <complink name="Bolt Request"/> Sampler)
+        from the supplied Connection settings.
+    </description>
+    <properties>
+        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+        <property name="Comments" required="No">Free text for additional details.</property>
+        <property name="Bolt URI" required="Yes">The database URI.</property>
+        <property name="Username" required="No">User account.</property>
+        <property name="Password" required="No">User credentials.</property>
     </properties>
 </component>
 
