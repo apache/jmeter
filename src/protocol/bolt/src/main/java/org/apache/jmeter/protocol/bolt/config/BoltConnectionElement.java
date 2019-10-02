@@ -40,7 +40,7 @@ public class BoltConnectionElement extends AbstractTestElement
     private String password;
     private Driver driver;
 
-    private static final String BOLT_CONNECTION = "boltConnection";
+    public static final String BOLT_CONNECTION = "boltConnection";
 
     public BoltConnectionElement() {
     }
