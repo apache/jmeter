@@ -333,7 +333,7 @@ public class BasicCurlParserTest {
     }
     @Test
     public void testDataUrlEncodeOneParameterWithName() {
-        String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
+        String cmdLine = "curl -s 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
                 + "-H 'cache-control: no-cache' --data-urlencode 'value=é' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
@@ -343,7 +343,7 @@ public class BasicCurlParserTest {
 
     @Test
     public void testDataUrlEncodeMoreThanOneParameters() {
-        String cmdLine = "curl 'https://postman-echo.com/post' -H 'Content-Type: application/x-www-form-urlencoded'"
+        String cmdLine = "curl -v 'https://postman-echo.com/post' -H 'Content-Type: application/x-www-form-urlencoded'"
                 + " -H 'cache-control: no-cache' --data-urlencode 'foo1=!!!&foo2=???'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
