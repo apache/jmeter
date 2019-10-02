@@ -20,7 +20,7 @@ package org.apache.jmeter.protocol.bolt.sampler;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 
-public class AbstractBoltTestElement extends AbstractTestElement {
+public abstract class AbstractBoltTestElement extends AbstractTestElement {
 
     private String cypher;
     private String params;
