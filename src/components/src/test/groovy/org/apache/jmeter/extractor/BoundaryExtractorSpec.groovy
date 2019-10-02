@@ -127,9 +127,6 @@ class BoundaryExtractorSpec extends Specification {
         then:
             thrown(IllegalArgumentException)
         where:
-            lb   | rb   | name
-            null | "r"  | "name"
-            "l"  | null | "name"
             "l"  | "r"  | null
     }
 
