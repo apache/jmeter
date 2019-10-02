@@ -243,23 +243,23 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         if (StringUtils.isBlank(inputString)) {
             return Collections.emptyList();
         }
-		boolean isEmptyLeftBoundary = StringUtils.isEmpty(leftBoundary);
-		boolean isEmptyRightBoundary = StringUtils.isEmpty(rightBoundary);
-		if (isEmptyLeftBoundary && isEmptyRightBoundary) {
-			return Collections.singletonList(inputString);
-		}
-		if (isEmptyLeftBoundary) {
-			int rightBoundaryIndex = inputString.indexOf(rightBoundary);
-			if (rightBoundaryIndex != -1) {
-				return Collections.singletonList(inputString.substring(0, rightBoundaryIndex));
-			}
-		}
-		if (isEmptyRightBoundary) {
-			int leftBoundaryIndex = inputString.indexOf(leftBoundary);
-			if (leftBoundaryIndex != -1) {
-				return Collections.singletonList(inputString.substring(leftBoundaryIndex + leftBoundary.length()));
-			}
-		}
+        boolean isEmptyLeftBoundary = StringUtils.isEmpty(leftBoundary);
+        boolean isEmptyRightBoundary = StringUtils.isEmpty(rightBoundary);
+        if (isEmptyLeftBoundary && isEmptyRightBoundary) {
+            return Collections.singletonList(inputString);
+        }
+        if (isEmptyLeftBoundary) {
+            int rightBoundaryIndex = inputString.indexOf(rightBoundary);
+            if (rightBoundaryIndex != -1) {
+                return Collections.singletonList(inputString.substring(0, rightBoundaryIndex));
+            }
+        }
+        if (isEmptyRightBoundary) {
+            int leftBoundaryIndex = inputString.indexOf(leftBoundary);
+            if (leftBoundaryIndex != -1) {
+                return Collections.singletonList(inputString.substring(leftBoundaryIndex + leftBoundary.length()));
+            }
+        }
         List<String> matches = new ArrayList<>();
         int leftBoundaryLen = leftBoundary.length();
         boolean collectAll = matchNumber <= 0;
