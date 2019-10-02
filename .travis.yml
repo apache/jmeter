@@ -49,10 +49,8 @@ matrix:
       script:
         # ./gradlew wrapper task kills license header from gradle-wrapper.properties, so we use grep/echo to update the file
         - grep -v Sha256 gradle/wrapper/gradle-wrapper.properties | grep -v Url > gradle/wrapper/gradle-wrapper.properties2
-        - echo 'distributionUrl=https\://services.gradle.org/distributions-snapshots/gradle-6.0-20190929230024+0000-bin.zip' >> gradle/wrapper/gradle-wrapper.properties2
+        - echo 'distributionUrl=https\://services.gradle.org/distributions-snapshots/gradle-6.0-20191001230020+0000-bin.zip' >> gradle/wrapper/gradle-wrapper.properties2
         - mv gradle/wrapper/gradle-wrapper.properties2 gradle/wrapper/gradle-wrapper.properties
         - xvfb-run ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build createDist -PchecksumFailOn=never -PchecksumPrint=false
         # Show difference between the new dependencies and old ones. It is expected that new Gradle version might bring new dependencies
         - diff -u checksum.xml build/checksum/checksum.xml || true
-  allow_failures:
-    - jdk: openjdk13

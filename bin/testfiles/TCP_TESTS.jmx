@@ -390,9 +390,9 @@ vars.put(&quot;result_decoded&quot;, new String(hex.decode(prev.getResponseData(
             <stringProp name="script">String oldResponseMessage = prev.getResponseMessage();
 int indexOfParenthesis = oldResponseMessage.indexOf(&quot;(&quot;);
 if(indexOfParenthesis&gt;=0) {
-	prev.setResponseMessage(oldResponseMessage.substring(0, indexOfParenthesis).trim());
-} else {
-	indexOfParenthesis = oldResponseMessage.lastIndexOf(&quot;:&quot;);
+	// Replace &quot;java.net.ConnectException: Connection refused (Connection refused)&quot;
+	// with &quot;java.net.ConnectException: Connection refused&quot;
+	// OpenJDK 8..11 are known to produce the extra (Connection refused)
 	prev.setResponseMessage(oldResponseMessage.substring(0, indexOfParenthesis).trim());
 }
 </stringProp>
