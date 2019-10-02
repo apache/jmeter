@@ -37,8 +37,7 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
  *
  * @since 3.0
  */
-public class TransactionsPerSecondGraphConsumer extends
-        AbstractOverTimeGraphConsumer {
+public class TransactionsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 
     private static final String SUCCESS_SERIES_SUFFIX = "success";
     private static final String FAILURE_SERIES_SUFFIX = "failure";
@@ -65,20 +64,21 @@ public class TransactionsPerSecondGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        GroupInfo value = new GroupInfo(
-                new TimeRateAggregatorFactory(),
-                new AbstractSeriesSelector(true) {
+        AbstractSeriesSelector seriesSelector = new AbstractSeriesSelector(true) {
+            @Override
+            public Iterable<String> select(Sample sample) {
+                String success = sample.getSuccess() ? SUCCESS_SERIES_SUFFIX : FAILURE_SERIES_SUFFIX;
+                String label = sample.getName() + "-" + success;
+                return Arrays.asList(label);
+            }
+        };
 
-                    @Override
-                    public Iterable<String> select(Sample sample) {
-                        String success = sample.getSuccess() ? SUCCESS_SERIES_SUFFIX : FAILURE_SERIES_SUFFIX;
-                        String label = sample.getName() + "-" + success;
-                        return Arrays.asList(label);
-                    }
-                },
-                // We include Transaction Controller results
-                new CountValueSelector(false), false, false);
-        return Collections.singletonMap(AbstractGraphConsumer.DEFAULT_GROUP, value);
+        return Collections.singletonMap(
+                AbstractGraphConsumer.DEFAULT_GROUP,
+                new GroupInfo(
+                        new TimeRateAggregatorFactory(), seriesSelector,
+                        // We include Transaction Controller results
+                        new CountValueSelector(false), false, false));
     }
 
     @Override

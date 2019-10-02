@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.report.processor.graph.impl;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import org.apache.jmeter.report.processor.MeanAggregatorFactory;
@@ -59,11 +59,11 @@ public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer 
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        HashMap<String, GroupInfo> groupInfos = new HashMap<>();
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new MeanAggregatorFactory(), new NameSeriesSelector(),
-                // We ignore Transaction Controller results
-                new LatencyValueSelector(false), false, false));
-        return groupInfos;
+        return Collections.singletonMap(
+                AbstractGraphConsumer.DEFAULT_GROUP,
+                new GroupInfo(
+                        new MeanAggregatorFactory(), new NameSeriesSelector(),
+                        // We ignore Transaction Controller results
+                        new LatencyValueSelector(false), false, false));
     }
 }

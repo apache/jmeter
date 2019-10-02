@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * <code>SampleConsumer</code>s.<br>
  * If there is several other source files with the same root name then those
  * files are produced on their corresponding channels.<br>
- *
+ * <p>
  * The root name of the files is determined by the source file name and is made
  * of its name without the file extension :<br>
  * <b>Example:</b> If <code>results.csv</code> is the source file name then
@@ -82,11 +82,9 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      * Build a sample source from the specified input file and character
      * separator.
      *
-     * @param inputFile
-     *            The input sample file (CSV file) (must not be {@code null})
-     * @param separator
-     *            The character separator to be used for delimiting samples
-     *            columns
+     * @param inputFile The input sample file (CSV file) (must not be {@code null})
+     * @param separator The character separator to be used for delimiting samples
+     *                  columns
      */
     public CsvFileSampleSource(final File inputFile, final char separator) {
         final String inputRootName = getFileRootName(inputFile.getName());
@@ -152,8 +150,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      * Get a readable time as hours, minutes and seconds from the specified time
      * in milliseconds
      *
-     * @return A readable string that displays the time provided as
-     *          milliseconds
+     * @return A readable string that displays the time provided as milliseconds
      */
     private String time(long t) {
         return TimeHelper.time(t);
@@ -187,8 +184,8 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                 csvReader.close();
             }
             if (LOG.isInfoEnabled()) {
-                LOG.info("produce(): " + sampleCount + " samples produced in "
-                        + time(now() - start) + " on channel " + i);
+                LOG.info("produce(): {} samples produced in {} on channel {}",
+                        sampleCount, time(now() - start), i);
             }
         }
     }
@@ -247,9 +244,8 @@ public class CsvFileSampleSource extends AbstractSampleSource {
         /**
          * Set the consumers for the samples that are to be consumed
          *
-         * @param consumers
-         *            list of consumers for the samples (must not be
-         *            {@code null})
+         * @param consumers list of consumers for the samples (must not be
+         *                  {@code null})
          */
         public void setSampleConsumers(List<SampleConsumer> consumers) {
             Validate.notNull(consumers, "consumers must not be null");
