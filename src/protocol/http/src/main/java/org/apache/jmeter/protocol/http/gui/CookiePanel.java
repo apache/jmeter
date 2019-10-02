@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This is the GUI for Cookie Manager {@link CookieManager}
  *
- * Allows the user to specify if she needs cookie services, and give parameters
+ * Allows the user to specify if they need cookie services, and give parameters
  * for this service.
  */
 @GUIMenuSortOrder(3)

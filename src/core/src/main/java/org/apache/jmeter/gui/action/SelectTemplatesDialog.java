@@ -149,7 +149,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
     /**
      * Check if existing Test Plan has been modified and ask user
-     * what he wants to do if test plan is dirty.
+     * what they want to do if test plan is dirty.
      * Also ask user for parameters in case of customizable templates.
      * @param actionEvent {@link ActionEvent}
      */

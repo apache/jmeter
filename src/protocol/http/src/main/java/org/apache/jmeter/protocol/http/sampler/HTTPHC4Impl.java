@@ -1529,7 +1529,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             writeEntityToSB(postedBody, entity, fileBodies, contentEncoding);
         } else { // not multipart
             // Check if the header manager had a content type header
-            // This allows the user to specify his own content-type for a POST request
+            // This allows the user to specify their own content-type for a POST request
             Header contentTypeHeader = entityEnclosingRequest.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
             boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
             // If there are no arguments, we can send a file as the body of the request

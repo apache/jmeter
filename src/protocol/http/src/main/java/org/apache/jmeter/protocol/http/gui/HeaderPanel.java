@@ -49,7 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Allows the user to specify if she needs HTTP header services, and give
+ * Allows the user to specify if they need HTTP header services, and give
  * parameters for this service.
  */
 @GUIMenuSortOrder(2)

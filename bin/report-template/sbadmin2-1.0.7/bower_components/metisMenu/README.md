@@ -101,7 +101,7 @@ Contains a simple HTML file to demonstrate metisMenu plugin.
 
 ## Author
 
-metisMenu was made with love by these guys and a bunch of awesome [contributors](https://github.com/onokumus/metisMenu/graphs/contributors).
+metisMenu was made with love by these folks and a bunch of awesome [contributors](https://github.com/onokumus/metisMenu/graphs/contributors).
 
 [![Osman Nuri Okumuş](https://0.gravatar.com/avatar/4fa374411129d6f574c33e4753ec402e?s=70)](http://onokumus.com) |
 --- | --- | --- | --- | --- | --- | ---
