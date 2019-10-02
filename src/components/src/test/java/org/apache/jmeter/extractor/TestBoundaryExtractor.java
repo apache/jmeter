@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.extractor;
 
 import static org.junit.Assert.assertThat;
