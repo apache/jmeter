@@ -240,8 +240,6 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      *
      * @param propertyKey
      *            the property key
-     * @param defaultValue
-     *            the default value
      * @param seriesName Series name
      * @param valueSelector Graph value selector
      * @param seriesSelector Graph series selector
