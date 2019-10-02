@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Extracts Strings from a text response between a start and end boundary.
+ * @see org.apache.jmeter.extractor.TestBoundaryExtractor for unit tests
  */
 public class BoundaryExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable {
 
