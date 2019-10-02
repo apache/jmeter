@@ -117,7 +117,7 @@ class BoundaryExtractorSpec extends Specification {
             matchNumber << [-1, 0, 1, 2, 100]
     }
 
-    def "IllegalArgumentException when one of left (#lb), right (#rb), name (#name) are null"() {
+    def "IllegalArgumentException when name (#name) is null"() {
         given:
             sut.setLeftBoundary(lb)
             sut.setRightBoundary(rb)
@@ -127,6 +127,7 @@ class BoundaryExtractorSpec extends Specification {
         then:
             thrown(IllegalArgumentException)
         where:
+            lb   | rb   | name
             "l"  | "r"  | null
     }
 
