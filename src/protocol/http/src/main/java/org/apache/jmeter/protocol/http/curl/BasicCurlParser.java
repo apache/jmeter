@@ -57,64 +57,67 @@ import org.slf4j.LoggerFactory;
  */
 public class BasicCurlParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(BasicCurlParser.class);
-    private static final int METHOD_OPT = 'X';
-    private static final int COMPRESSED_OPT      = 'c';// $NON-NLS-1$
-    private static final int HEADER_OPT      = 'H';// $NON-NLS-1$
-    private static final int DATA_OPT      = 'd';// $NON-NLS-1$
-    private static final int DATA_ASCII_OPT = "data-ascii".hashCode();// $NON-NLS-1$
-    private static final int DATA_BINARY_OPT = "data-binary".hashCode();// NOSONAR
-    private static final int DATA_URLENCODE_OPT = "data-urlencode".hashCode();// NOSONAR
-    private static final int DATA_RAW_OPT = "data-raw".hashCode();// NOSONAR
-    private static final int FORM_OPT = 'F';// $NON-NLS-1$
-    private static final int FORM_STRING_OPT = "form".hashCode();// $NON-NLS-1$
-    private static final int USER_AGENT_OPT = 'A';// $NON-NLS-1$
-    private static final int CONNECT_TIMEOUT_OPT = "connect-timeout".hashCode();// $NON-NLS-1$
-    private static final int COOKIE_OPT = 'b';// $NON-NLS-1$
-    private static final int USER_OPT = 'u';// $NON-NLS-1$
-    private static final int BASIC_OPT = "basic".hashCode();// NOSONAR
-    private static final int DIGEST_OPT = "digest".hashCode();// NOSONAR
-    private static final int CERT_OPT = 'E';// $NON-NLS-1$
-    private static final int CAFILE_OPT = "cacert".hashCode();// $NON-NLS-1$
-    private static final int CAPATH_OPT = "capath".hashCode();// $NON-NLS-1$
-    private static final int CIPHERS_OPT = "ciphers".hashCode();// $NON-NLS
-    private static final int CERT_STATUS_OPT = "cert-status".hashCode();// $NON-NLS-1$-1$
-    private static final int CERT_TYPE_OPT = "cert-type".hashCode();// $NON-NLS-1$-1$
-    private static final int KEY_OPT = "key".hashCode();// $NON-NLS-1$-1$
-    private static final int KEY_TYPE_OPT = "key-type".hashCode();// $NON-NLS-1$-1$
-    private static final int GET_OPT = 'G';// $NON-NLS-1$
-    private static final int DNS_OPT = "dns-servers".hashCode();// $NON-NLS-1$
-    private static final int NO_KEEPALIVE_OPT = "no-keepalive".hashCode();// $NON-NLS-1$
-    private static final int REFERER_OPT = 'e';// $NON-NLS-1$
-    private static final int LOCATION_OPT = 'L';// $NON-NLS-1$
-    private static final int INCLUDE_OPT = 'i';// $NON-NLS-1$
-    private static final int HEAD_OPT = 'I';// $NON-NLS-1$
-    private static final int PROXY_OPT = 'x';// $NON-NLS-1$
-    private static final int PROXY_USER_OPT = 'U';// $NON-NLS-1$
-    private static final int PROXY_NTLM_OPT = "proxy-ntlm".hashCode();// $NON-NLS-1$
-    private static final int PROXY_NEGOTIATE_OPT = "proxy-negotiate".hashCode();// $NON-NLS-1$
-    private static final int KEEPALIVETILE_OPT = "keepalive-time".hashCode();// $NON-NLS-1$
-    private static final int MAX_TIME_OPT = 'm';// $NON-NLS-1$
-    private static final int OUTPUT_OPT = 'o';// $NON-NLS-1$
-    private static final int CREATE_DIRS_OPT = "create-dir".hashCode();// $NON-NLS-1$
-    private static final int INSECURE_OPT = 'k';// $NON-NLS-1$
-    private static final int RAW_OPT = "raw".hashCode();// $NON-NLS-1$
-    private static final int INTERFACE_OPT = "interface".hashCode();// $NON-NLS-1$
-    private static final int DNS_RESOLVER_OPT = "resolve".hashCode();// $NON-NLS-1$
-    private static final int LIMIT_RATE_OPT = "limit-rate".hashCode();// $NON-NLS-1$
-    private static final int MAX_REDIRS_OPT = "max-redirs".hashCode();// $NON-NLS-1$
-    private static final int NOPROXY_OPT = "noproxy".hashCode();// $NON-NLS-1$
-    private static final int URL_OPT = "url".hashCode(); // $NON-NLS-1$
-    private static final List<Integer> AUTH_OPT = Arrays.asList(BASIC_OPT, DIGEST_OPT);// $NON-NLS-1$
-    private static final List<Integer> SSL_OPT = Arrays.asList(CAFILE_OPT, CAPATH_OPT, CERT_OPT, CIPHERS_OPT,
+    private static final int METHOD_OPT                 = 'X';
+    private static final int COMPRESSED_OPT             = 'c';// $NON-NLS-1$
+    private static final int HEADER_OPT                 = 'H';// $NON-NLS-1$
+    private static final int DATA_OPT                   = 'd';// $NON-NLS-1$
+    private static final int DATA_ASCII_OPT             = "data-ascii".hashCode();// $NON-NLS-1$
+    private static final int DATA_BINARY_OPT            = "data-binary".hashCode();// NOSONAR
+    private static final int DATA_URLENCODE_OPT         = "data-urlencode".hashCode();// NOSONAR
+    private static final int DATA_RAW_OPT               = "data-raw".hashCode();// NOSONAR
+    private static final int FORM_OPT                   = 'F';// $NON-NLS-1$
+    private static final int FORM_STRING_OPT            = "form".hashCode();// $NON-NLS-1$
+    private static final int USER_AGENT_OPT             = 'A';// $NON-NLS-1$
+    private static final int CONNECT_TIMEOUT_OPT        = "connect-timeout".hashCode();// $NON-NLS-1$
+    private static final int COOKIE_OPT                 = 'b';// $NON-NLS-1$
+    private static final int USER_OPT                   = 'u';// $NON-NLS-1$
+    private static final int BASIC_OPT                  = "basic".hashCode();// NOSONAR
+    private static final int DIGEST_OPT                 = "digest".hashCode();// NOSONAR
+    private static final int CERT_OPT                   = 'E';// $NON-NLS-1$
+    private static final int CAFILE_OPT                 = "cacert".hashCode();// $NON-NLS-1$
+    private static final int CAPATH_OPT                 = "capath".hashCode();// $NON-NLS-1$
+    private static final int CIPHERS_OPT                = "ciphers".hashCode();// $NON-NLS
+    private static final int CERT_STATUS_OPT            = "cert-status".hashCode();// $NON-NLS-1$-1$
+    private static final int CERT_TYPE_OPT              = "cert-type".hashCode();// $NON-NLS-1$-1$
+    private static final int KEY_OPT                    = "key".hashCode();// $NON-NLS-1$-1$
+    private static final int KEY_TYPE_OPT               = "key-type".hashCode();// $NON-NLS-1$-1$
+    private static final int GET_OPT                    = 'G';// $NON-NLS-1$
+    private static final int DNS_OPT                    = "dns-servers".hashCode();// $NON-NLS-1$
+    private static final int NO_KEEPALIVE_OPT           = "no-keepalive".hashCode();// $NON-NLS-1$
+    private static final int REFERER_OPT                = 'e';// $NON-NLS-1$
+    private static final int LOCATION_OPT               = 'L';// $NON-NLS-1$
+    private static final int INCLUDE_OPT                = 'i';// $NON-NLS-1$
+    private static final int HEAD_OPT                   = 'I';// $NON-NLS-1$
+    private static final int PROXY_OPT                  = 'x';// $NON-NLS-1$
+    private static final int PROXY_USER_OPT             = 'U';// $NON-NLS-1$
+    private static final int PROXY_NTLM_OPT             = "proxy-ntlm".hashCode();// $NON-NLS-1$
+    private static final int PROXY_NEGOTIATE_OPT        = "proxy-negotiate".hashCode();// $NON-NLS-1$
+    private static final int KEEPALIVETILE_OPT          = "keepalive-time".hashCode();// $NON-NLS-1$
+    private static final int MAX_TIME_OPT               = 'm';// $NON-NLS-1$
+    private static final int OUTPUT_OPT                 = 'o';// $NON-NLS-1$
+    private static final int CREATE_DIRS_OPT            = "create-dir".hashCode();// $NON-NLS-1$
+    private static final int INSECURE_OPT               = 'k';// $NON-NLS-1$
+    private static final int RAW_OPT                    = "raw".hashCode();// $NON-NLS-1$
+    private static final int INTERFACE_OPT              = "interface".hashCode();// $NON-NLS-1$
+    private static final int DNS_RESOLVER_OPT           = "resolve".hashCode();// $NON-NLS-1$
+    private static final int LIMIT_RATE_OPT             = "limit-rate".hashCode();// $NON-NLS-1$
+    private static final int MAX_REDIRS_OPT             = "max-redirs".hashCode();// $NON-NLS-1$
+    private static final int NOPROXY_OPT                = "noproxy".hashCode();// $NON-NLS-1$
+    private static final int URL_OPT                    = "url".hashCode(); // $NON-NLS-1$
+    private static final int VERBOSE_OPT                = 'v';// $NON-NLS-1$
+    private static final int SILENT_OPT                 = 's';// $NON-NLS-1$
+
+    private static final List<Integer> AUTH_OPT                 = Arrays.asList(BASIC_OPT, DIGEST_OPT);// $NON-NLS-1$
+    private static final List<Integer> SSL_OPT                  = Arrays.asList(CAFILE_OPT, CAPATH_OPT, CERT_OPT, CIPHERS_OPT,
             CERT_STATUS_OPT, CERT_TYPE_OPT, KEY_OPT, KEY_TYPE_OPT);// $NON-NLS-1$
-    private static final List<Integer> DATAS_OPT = Arrays.asList(DATA_OPT, DATA_ASCII_OPT, DATA_BINARY_OPT,
+    private static final List<Integer> DATAS_OPT                = Arrays.asList(DATA_OPT, DATA_ASCII_OPT, DATA_BINARY_OPT,
             DATA_URLENCODE_OPT, DATA_RAW_OPT);// $NON-NLS-1$
-    private static final List<Integer> FORMS_OPT = Arrays.asList(FORM_OPT, FORM_STRING_OPT);// $NON-NLS-1$
-    private static final List<Integer> IGNORE_OPTIONS_OPT = Arrays.asList(OUTPUT_OPT, CREATE_DIRS_OPT, RAW_OPT,
-            INCLUDE_OPT, KEEPALIVETILE_OPT);// $NON-NLS-1$
-    private static final List<Integer> NOSUPPORT_OPTIONS_OPT = Arrays.asList(PROXY_NTLM_OPT, PROXY_NEGOTIATE_OPT);// $NON-NLS-1$
-    private static final List<Integer> PROPERTIES_OPT = Arrays.asList(MAX_REDIRS_OPT);// $NON-NLS-1$
-    private static final List<String> DYNAMIC_COOKIES = Arrays.asList("PHPSESSID", "JSESSIONID", "ASPSESSIONID",
+    private static final List<Integer> FORMS_OPT                = Arrays.asList(FORM_OPT, FORM_STRING_OPT);// $NON-NLS-1$
+    private static final List<Integer> IGNORE_OPTIONS_OPT       = Arrays.asList(OUTPUT_OPT, CREATE_DIRS_OPT, RAW_OPT,
+            INCLUDE_OPT, KEEPALIVETILE_OPT, VERBOSE_OPT, SILENT_OPT);// $NON-NLS-1$
+    private static final List<Integer> NOSUPPORT_OPTIONS_OPT    = Arrays.asList(PROXY_NTLM_OPT, PROXY_NEGOTIATE_OPT);// $NON-NLS-1$
+    private static final List<Integer> PROPERTIES_OPT           = Arrays.asList(MAX_REDIRS_OPT);// $NON-NLS-1$
+    private static final List<String> DYNAMIC_COOKIES           = Arrays.asList("PHPSESSID", "JSESSIONID", "ASPSESSIONID",
             "connect.sid");// $NON-NLS-1$
 
     public static final class Request {
@@ -649,7 +652,10 @@ public class BasicCurlParser {
     private static final CLOptionDescriptor D_NOPROXY = new CLOptionDescriptor("noproxy",
             CLOptionDescriptor.ARGUMENT_REQUIRED, NOPROXY_OPT,
             "Comma-separated list of hosts which do not use a proxy, if one is specified. ");
-
+    private static final CLOptionDescriptor D_SILENT = new CLOptionDescriptor("silent",
+            CLOptionDescriptor.ARGUMENT_OPTIONAL, SILENT_OPT, "silent mode");
+    private static final CLOptionDescriptor D_VERBOSE = new CLOptionDescriptor("verbose",
+            CLOptionDescriptor.ARGUMENT_OPTIONAL, VERBOSE_OPT, "verbose mode");
     private static final Pattern deleteLinePattern = Pattern.compile("\r|\n|\r\n");
 
     private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[] {
@@ -659,7 +665,7 @@ public class BasicCurlParser {
             D_CIPHERS_OPT, D_KEY_OPT, D_KEY_TYPE_OPT, D_GET_OPT, D_DNS_SERVERS_OPT, D_NO_KEEPALIVE_OPT, D_REFERER_OPT,
             D_LOCATION_OPT, D_INCLUDE_OPT, D_INSECURE_OPT, D_HEAD_OPT, D_PROXY_OPT, D_PROXY_USER_OPT, D_PROXY_NTLM_OPT,
             D_PROXY_NEGOTIATE_OPT, D_KEEPALIVETILE_OPT, D_MAX_TIME_OPT, D_OUTPUT_OPT, D_CREATE_DIRS_OPT, D_RAW_OPT,
-            D_INTERFACE_OPT, D_DNS_RESOLVER_OPT, D_LIMIT_RATE_OPT, D_MAX_REDIRS ,D_NOPROXY
+            D_INTERFACE_OPT, D_DNS_RESOLVER_OPT, D_LIMIT_RATE_OPT, D_MAX_REDIRS ,D_NOPROXY, D_VERBOSE, D_SILENT
     };
 
     public BasicCurlParser() {
