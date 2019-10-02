@@ -69,7 +69,7 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
         String seriesName = String.format(PERCENTILE_FORMAT, Integer.valueOf(95));
 
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, //$NON-NLS-1$
-            createPercentileGroupInfo(PERCENTILE_PROPERTY, 95, seriesName,valueSelector,seriesSelector));
+            createPercentileGroupInfo(PERCENTILE_PROPERTY, seriesName,valueSelector,seriesSelector));
 
         return groupInfos;
     }

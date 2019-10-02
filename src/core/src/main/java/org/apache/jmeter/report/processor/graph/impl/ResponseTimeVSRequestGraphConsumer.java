@@ -72,7 +72,7 @@ public class ResponseTimeVSRequestGraphConsumer extends
         String seriesName = String.format(PERCENTILE_FORMAT, Integer.valueOf(95));
 
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, //$NON-NLS-1$
-                createPercentileGroupInfo(PERCENTILE_PROPERTY, 95, //$NON-NLS-1$
+                createPercentileGroupInfo(PERCENTILE_PROPERTY, //$NON-NLS-1$
                         seriesName,valueSelector,seriesSelector));
 
         return groupInfos;

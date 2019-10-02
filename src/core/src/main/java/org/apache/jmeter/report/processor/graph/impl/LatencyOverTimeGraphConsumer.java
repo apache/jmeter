@@ -80,7 +80,7 @@ public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer 
         seriesSelector.setSeriesName(seriesName);
 
         groupInfos.put(PERCENTILE_PROPERTY,
-                createPercentileGroupInfo(PERCENTILE_PROPERTY, 95,
+                createPercentileGroupInfo(PERCENTILE_PROPERTY,
                         seriesName,valueSelector,seriesSelector));
         return groupInfos;
     }

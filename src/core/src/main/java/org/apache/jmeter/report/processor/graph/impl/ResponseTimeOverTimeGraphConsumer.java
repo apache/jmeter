@@ -66,7 +66,7 @@ public class ResponseTimeOverTimeGraphConsumer extends
         String seriesName = String.format(PERCENTILE_FORMAT, Integer.valueOf(95));
 
         groupInfos.put(PERCENTILE_PROPERTY, //$NON-NLS-1$
-                createPercentileGroupInfo(PERCENTILE_PROPERTY, 95, //$NON-NLS-1$
+                createPercentileGroupInfo(PERCENTILE_PROPERTY, //$NON-NLS-1$
                         seriesName,valueSelector,seriesSelector));
         return groupInfos;
     }

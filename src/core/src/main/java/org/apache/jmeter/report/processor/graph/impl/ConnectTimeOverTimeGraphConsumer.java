@@ -69,7 +69,7 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
 
         HashMap<String, GroupInfo> groupInfos = new HashMap<>();
         groupInfos.put(PERCENTILE_PROPERTY, //$NON-NLS-1$
-                createPercentileGroupInfo(PERCENTILE_PROPERTY, 95, //$NON-NLS-1$
+                createPercentileGroupInfo(PERCENTILE_PROPERTY, //$NON-NLS-1$
                         String.format(
                                 PERCENTILE_FORMAT, Integer.valueOf(95)),valueSelector,seriesSelector));
         return groupInfos;

@@ -85,6 +85,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     public static final String RESULT_SERIES_IS_CONTROLLER = "isController";
     public static final String RESULT_SERIES_IS_OVERALL = "isOverall";
 
+    public static final int DEFAULT_PERCENTAGE_VALUE = 95;
     public static final String DEFAULT_OVERALL_SERIES_FORMAT = "Overall %s";
     public static final String DEFAULT_AGGREGATED_KEYS_SERIES_FORMAT = "%s-Aggregated";
 
@@ -247,10 +248,10 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @return the group info
      */
     protected final GroupInfo createPercentileGroupInfo(String propertyKey,
-                                                        int defaultValue, String seriesName,
+                                                        String seriesName,
                                                         AbstractGraphValueSelector valueSelector,
                                                         AbstractSeriesSelector seriesSelector) {
-        int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
+        int property = JMeterUtils.getPropDefault(propertyKey, DEFAULT_PERCENTAGE_VALUE);
         PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
         factory.setPercentileIndex(property);
 
