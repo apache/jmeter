@@ -19,6 +19,8 @@
 package org.apache.jmeter.protocol.bolt.config;
 
 import java.beans.PropertyDescriptor;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
@@ -45,10 +47,10 @@ public class BoltConnectionElementBeanInfo extends BeanInfoSupport {
         propertyDescriptor.setValue(DEFAULT, "");
 
         if(log.isDebugEnabled()) {
-            for (PropertyDescriptor pd : getPropertyDescriptors()) {
-                log.debug(pd.getName());
-                log.debug(pd.getDisplayName());
-            }
+            String descriptorsAsString = Arrays.stream(getPropertyDescriptors())
+                    .map(pd -> pd.getName() + "=" + pd.getDisplayName())
+                    .collect(Collectors.joining(" ,"));
+            log.debug(descriptorsAsString);
         }
 
     }
