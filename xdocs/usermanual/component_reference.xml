@@ -6288,6 +6288,7 @@ generate the template string, and store the result into the given variable name.
     Note that the <code>refName</code> variable is always set to the default value in this case, 
     and the associated group variables are not set.
 </p>
+<note>If both left and right boundary are null, the whole data selected in scope is returned</note>
 </component>
 </section>
 

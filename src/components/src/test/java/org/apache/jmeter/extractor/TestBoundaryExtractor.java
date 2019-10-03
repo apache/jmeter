@@ -18,15 +18,16 @@
 
 package org.apache.jmeter.extractor;
 
-import static org.junit.Assert.assertThat;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestBoundaryExtractor {
 
@@ -38,7 +39,7 @@ public class TestBoundaryExtractor {
 
     private JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         extractor = new BoundaryExtractor();
@@ -56,6 +57,19 @@ public class TestBoundaryExtractor {
     }
 
     @Test
+    public void testNoBoundariesOneVariable() {
+        vars.put("content", "one");
+        extractor.setMatchNumber(1);
+        extractor.setRefName("varname");
+        extractor.setScopeVariable("content");
+        extractor.setThreadContext(jmctx);
+        extractor.process();
+        assertThat(vars.get("varname"), CoreMatchers.is("one"));
+        assertThat("Indexed variable name should be null", vars.get("varname_1"), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertThat("MatchNumber is incorrect", vars.get("varname_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
+    }
+
+    @Test
     public void testNoBoundaries() {
         vars.put("content", "one");
         extractor.setMatchNumber(-1);
@@ -63,9 +77,9 @@ public class TestBoundaryExtractor {
         extractor.setScopeVariable("content");
         extractor.setThreadContext(jmctx);
         extractor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_1"), CoreMatchers.is("one"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("1"));
+        assertThat("Non indexed variable name should be null", vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertThat("First match is incorrect", vars.get("varname_1"), CoreMatchers.is("one"));
+        assertThat("MatchNumber is incorrect", vars.get("varname_matchNr"), CoreMatchers.is("1"));
     }
 
     @Test
@@ -77,9 +91,10 @@ public class TestBoundaryExtractor {
         extractor.setScopeVariable("content");
         extractor.setThreadContext(jmctx);
         extractor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_1"), CoreMatchers.is("ne"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("1"));
+
+        assertThat("Non indexed variable name should be null", vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertThat("First match is incorrect", vars.get("varname_1"), CoreMatchers.is("ne"));
+        assertThat("MatchNumber is incorrect", vars.get("varname_matchNr"), CoreMatchers.is("1"));
     }
 
     @Test
@@ -91,9 +106,8 @@ public class TestBoundaryExtractor {
         extractor.setScopeVariable("content");
         extractor.setThreadContext(jmctx);
         extractor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_1"), CoreMatchers.is("on"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("1"));
+        assertThat("Non indexed variable name should be null", vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertThat("First match is incorrect", vars.get("varname_1"), CoreMatchers.is("on"));
+        assertThat("MatchNumber is incorrect", vars.get("varname_matchNr"), CoreMatchers.is("1"));
     }
-
 }
