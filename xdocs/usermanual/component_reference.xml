@@ -1926,7 +1926,10 @@ MongoDB Script is more suitable for functional testing or test setup (setup/tear
     <description>
         <p>This sampler allows you to run Cypher queries through the Bolt protocol.</p>
         <p>Before using this you need to set up a <complink name="Bolt Connection Configuration"/></p>
-        <p>Every request uses a connection acquired from the pool and returns when the sampler completes.</p>
+        <p>Every request uses a connection acquired from the pool and returns it to the pool when the sampler completes.
+        The connection pool size use the driver defaults (~100) and is not configurable at the moment.</p>
+        <p>The measured response time corresponds to the "full" query execution, including both
+        the time to execute the cypher query AND the time to consume the results sent back by the database.</p>
     </description>
 
     <properties>
