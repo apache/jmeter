@@ -35,14 +35,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestRandomFromMultipleVars extends JMeterTestCase {
+
     private SampleResult result;
-
     private AbstractFunction function;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
     @Before

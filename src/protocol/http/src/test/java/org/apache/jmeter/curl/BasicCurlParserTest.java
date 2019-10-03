@@ -21,7 +21,6 @@ package org.apache.jmeter.curl;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,16 +32,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-/**
- * @since 5.1
- */
 public class BasicCurlParserTest {
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
-    /**
-     *
-     */
+
     public BasicCurlParserTest() {
         super();
     }
@@ -314,6 +308,7 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser',the parameters need to reserve '\n' and '\r' ", "name=test",
                 request.getPostData());
     }
+
     @Test(expected = IllegalArgumentException.class)
     public void testDataReadFromNonexistentFile() {
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
@@ -322,6 +317,7 @@ public class BasicCurlParserTest {
         basicCurlParser.parse(cmdLine);
         Assert.fail("The method 'translateCommandline shouldn't run when the path of file is incorrect");
     }
+
     @Test
     public void testDataUrlEncodeOneParameterWithoutName() {
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
@@ -331,6 +327,7 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser',the parameters need to be encoded' ", "%C3%A9",
                 request.getPostData());
     }
+
     @Test
     public void testDataUrlEncodeOneParameterWithName() {
         String cmdLine = "curl -s 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
@@ -364,6 +361,7 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser',the parameters in the file need to be encoded' ", "name=test",
                 request.getPostData());
     }
+
     @Test
     public void testDataUrlEncodeWith2AtSymbol() throws IOException {
         String encoding = StandardCharsets.UTF_8.name();
@@ -512,12 +510,12 @@ public class BasicCurlParserTest {
         String url = "api.imgur.com/3/upload";
         BasicCurlParser.stringToCookie(cookieStr, url);
     }
+
     @Test
     public void testCookie() {
         String cmdLine = "curl -X POST  \"https://api.imgur.com/3/upload\" -b 'name=Tom;password=123456'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        List<Cookie>cookies=new ArrayList<>();
         Cookie c1=new Cookie();
         c1.setDomain("api.imgur.com");
         c1.setName("name");
@@ -528,8 +526,6 @@ public class BasicCurlParserTest {
         c2.setName("password");
         c2.setValue("123456");
         c2.setPath("/3/upload");
-        cookies.add(c1);
-        cookies.add(c2);
         Assert.assertTrue("With method 'parser', the cookie should be set in CookieManager",
                  request.getCookies("https://api.imgur.com/3/upload").contains(c1));
         Assert.assertTrue("With method 'parser', the cookie should be set in CookieManager",
@@ -537,6 +533,7 @@ public class BasicCurlParserTest {
         Assert.assertEquals("With method 'parser', the cookie should be set in CookieManager", 2,
                 request.getCookies("https://api.imgur.com/3/upload").size());
     }
+
     @Test
     public void testCookieFromFile() throws IOException {
         File file = tempFolder.newFile("test.txt");
@@ -545,7 +542,9 @@ public class BasicCurlParserTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         Assert.assertEquals("With method 'parser', the file of cookie should be uploaded in CookieManager",
-                file.getAbsolutePath(), request.getFilepathCookie());}
+                file.getAbsolutePath(), request.getFilepathCookie());
+    }
+
     @Test
     public void testCookieInHeader() {
         String cmdLine = "curl 'http://jmeter.apache.org/' -H 'cookie: PHPSESSID=testphpsessid;a=b' --compressed";
@@ -560,6 +559,7 @@ public class BasicCurlParserTest {
         Assert.assertEquals("Just static cookie in header can be added in CookieManager", c1, cookies.get(0));
         Assert.assertEquals("Just static cookie in header can be added in CookieManager", 1, cookies.size());
     }
+
     @Test
     public void testIgnoreOptions() {
         String cmdLine = "curl 'http://jmeter.apache.org/' --include --keepalive-time '20'";

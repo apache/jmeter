@@ -41,14 +41,9 @@ import org.junit.Test;
 
 public class TestTransactionController extends JMeterTestCase {
 
-    /**
-     * @see "http://bz.apache.org/bugzilla/show_bug.cgi?id=57958"
-     * @throws Exception when something breaks
-     */
     @Test
     public void testIssue57958() throws Exception {
         JMeterContextService.getContext().setVariables(new JMeterVariables());
-
 
         TestSampleListener listener = new TestSampleListener();
 

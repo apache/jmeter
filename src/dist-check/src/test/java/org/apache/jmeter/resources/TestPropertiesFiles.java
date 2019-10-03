@@ -32,7 +32,6 @@ import org.junit.Test;
 
 public class TestPropertiesFiles extends JMeterTestCase {
 
-
     @Test
     public void testUserProperties() throws Exception {
         Properties props = loadProps(new File(JMeterUtils.getJMeterBinDir(), "user.properties"));

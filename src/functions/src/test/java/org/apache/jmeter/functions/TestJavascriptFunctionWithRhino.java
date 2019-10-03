@@ -22,11 +22,9 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.junit.After;
 import org.junit.Before;
 
-/**
- * Test JavaScript function with Rhino engine
- *
- */
+/** Test JavaScript function with Rhino engine */
 public class TestJavascriptFunctionWithRhino extends TestJavascriptFunction {
+
     @Before
     public void setUp() {
         JMeterUtils.getJMeterProperties().put("javascript.use_rhino", "true");

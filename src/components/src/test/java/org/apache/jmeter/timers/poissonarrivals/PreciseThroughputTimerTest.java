@@ -56,7 +56,8 @@ public class PreciseThroughputTimerTest {
 
         int testDuration = 5;
         for (int i = 0; i < 1000; i++) {
-            ConstantPoissonProcessGenerator gen = getConstantPoissonProcessGenerator(2, testDuration, rnd.nextLong());
+            ConstantPoissonProcessGenerator gen =
+                    getConstantPoissonProcessGenerator(2, testDuration, rnd.nextLong());
             gen.generateNext();
             for (int j = 0; j < 10; j++) {
                 double next = gen.next();

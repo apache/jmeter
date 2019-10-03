@@ -32,22 +32,12 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- *
- * Test {@link IsPropDefined} Function
- *
- * @see IsPropDefined
- *
- */
 public class TestIsPropDefined extends JMeterTestCase {
-    protected AbstractFunction isPropDefined;
 
+    private AbstractFunction isPropDefined;
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
     @Before

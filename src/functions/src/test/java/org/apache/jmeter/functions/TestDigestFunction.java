@@ -31,21 +31,13 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Before;
 import org.junit.Test;
-/**
- * Test Digest function
- * @see DigestEncodeFunction
- * @since 4.0
- *
- */
+
 public class TestDigestFunction extends JMeterTestCase {
-    protected AbstractFunction digest;
 
+    private AbstractFunction digest;
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
     @Before
@@ -60,7 +52,6 @@ public class TestDigestFunction extends JMeterTestCase {
         jmctx.setPreviousResult(result);
         params = new LinkedList<>();
     }
-
 
     @Test
     public void testParameterCount512() throws Exception {

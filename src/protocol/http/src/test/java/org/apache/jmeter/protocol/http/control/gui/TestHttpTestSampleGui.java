@@ -43,7 +43,8 @@ public class TestHttpTestSampleGui {
         HTTPSamplerBase clonedSampler = (HTTPSamplerBase) sampler.clone();
         clonedSampler.setRunningVersion(true);
         sampler.getArguments().getArgument(0).setValue("new value");
-        assertEquals("Sampler didn't clone correctly", "new value", sampler.getArguments().getArgument(0)
-                .getValue());
+        assertEquals("Sampler didn't clone correctly",
+                "new value",
+                sampler.getArguments().getArgument(0).getValue());
     }
 }

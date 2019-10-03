@@ -26,44 +26,31 @@ import java.util.List;
 
 import org.junit.Test;
 
-/**
- *
- */
 public final class ClutilTestCase {
     private static final String[] ARGLIST1 = new String[] { "--you", "are", "--all", "-cler", "kid" };
 
     private static final String[] ARGLIST2 = new String[] { "-Dstupid=idiot", "are", "--all", "here", "-d" };
 
-    private static final String[] ARGLIST3 = new String[] {
     // duplicates
+    private static final String[] ARGLIST3 = new String[] {
             "-Dstupid=idiot", "are", "--all", "--all", "here" };
 
-    private static final String[] ARGLIST4 = new String[] {
     // incompatible (blee/all)
+    private static final String[] ARGLIST4 = new String[] {
             "-Dstupid", "idiot", "are", "--all", "--blee", "here" };
 
     private static final String[] ARGLIST5 = new String[] { "-f", "myfile.txt" };
 
     private static final int DEFINE_OPT = 'D';
-
     private static final int CASE_CHECK_OPT = 'd';
-
     private static final int YOU_OPT = 'y';
-
     private static final int ALL_OPT = 'a';
-
     private static final int CLEAR1_OPT = 'c';
-
     private static final int CLEAR2_OPT = 'l';
-
     private static final int CLEAR3_OPT = 'e';
-
     private static final int CLEAR5_OPT = 'r';
-
     private static final int BLEE_OPT = 'b';
-
     private static final int FILE_OPT = 'f';
-
     private static final int TAINT_OPT = 'T';
 
     private static final CLOptionDescriptor DEFINE = new CLOptionDescriptor("define",
@@ -380,11 +367,8 @@ public final class ClutilTestCase {
     public void testSingleArg2() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
-        final CLArgsParser parser = new CLArgsParser(new String[] { "-f-=,=-" } // Check
-                                                                                // delimiters
-                                                                                // are
-                                                                                // allowed
-                , options);
+        // Check delimiters are allowed
+        final CLArgsParser parser = new CLArgsParser(new String[] { "-f-=,=-" }, options);
 
         assertNull(parser.getErrorString(), parser.getErrorString());
 
@@ -400,11 +384,8 @@ public final class ClutilTestCase {
     public void testSingleArg3() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
-        final CLArgsParser parser = new CLArgsParser(new String[] { "--file=-=,-" } // Check
-                                                                                    // delimiters
-                                                                                    // are
-                                                                                    // allowed
-                , options);
+        // Check delimiters are allowed
+        final CLArgsParser parser = new CLArgsParser(new String[] { "--file=-=,-" }, options);
 
         assertNull(parser.getErrorString(), parser.getErrorString());
 
@@ -534,12 +515,8 @@ public final class ClutilTestCase {
     public void testCombinedArgs3() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { BLEE, TAINT, FILE };
 
-        final CLArgsParser parser = new CLArgsParser(new String[] { "-bT", "--", "-fa" }// Should
-                                                                                        // not
-                                                                                        // detect
-                                                                                        // trailing
-                                                                                        // option
-                , options);
+        // Should not detect trailing option
+        final CLArgsParser parser = new CLArgsParser(new String[] { "-bT", "--", "-fa" }, options);
 
         assertNull(parser.getErrorString(), parser.getErrorString());
 
@@ -556,11 +533,8 @@ public final class ClutilTestCase {
     public void testCombinedArgs4() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { BLEE, TAINT, FILE };
 
-        final CLArgsParser parser = new CLArgsParser(new String[] { "-bT", "rest", "-fa" } // should
-                                                                                            // detect
-                                                                                            // trailing
-                                                                                            // option
-                , options);
+        // should detect trailing option
+        final CLArgsParser parser = new CLArgsParser(new String[] { "-bT", "rest", "-fa" }, options);
 
         assertNull(parser.getErrorString(), parser.getErrorString());
 
@@ -603,13 +577,8 @@ public final class ClutilTestCase {
     public void test2ArgsParse2() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { DEFINE };
 
-        final CLArgsParser parser = new CLArgsParser(new String[] { "--define", "a-b,c=d-e,f" }, // Check
-                                                                                                    // "-"
-                                                                                                    // is
-                                                                                                    // allowed
-                                                                                                    // in
-                                                                                                    // arg2
-                options);
+        // Check "-" is allowed in arg2
+        final CLArgsParser parser = new CLArgsParser(new String[] { "--define", "a-b,c=d-e,f" }, options);
 
         assertNull(parser.getErrorString(), parser.getErrorString());
 

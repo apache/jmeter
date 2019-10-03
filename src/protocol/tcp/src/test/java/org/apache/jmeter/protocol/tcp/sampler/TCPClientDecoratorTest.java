@@ -25,7 +25,6 @@ import org.junit.Test;
 
 public class TCPClientDecoratorTest {
 
-
     @Test
     public void testIntToByteArray() throws Exception {
         byte[] ba;
@@ -235,9 +234,7 @@ public class TCPClientDecoratorTest {
         } catch (IllegalArgumentException expected){
             // ignored
         }
-
     }
-
 
     @Test
     public void testLoopBack() throws Exception {

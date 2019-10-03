@@ -37,18 +37,13 @@ import org.junit.Test;
 /**
  * Test {@link DateTimeConvertFunction}
  * We implement JMeterSerialTest as we change TimeZone
- * @since 4.0
  */
 public class TestDateTimeConvertFunction extends JMeterTestCase implements JMeterSerialTest {
 
-    protected AbstractFunction dateConvert;
-
+    private AbstractFunction dateConvert;
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
     @Before

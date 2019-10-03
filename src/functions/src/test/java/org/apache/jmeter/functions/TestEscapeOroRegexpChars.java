@@ -33,14 +33,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestEscapeOroRegexpChars extends JMeterTestCase {
-    protected AbstractFunction function;
 
+    private AbstractFunction function;
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
     @Before

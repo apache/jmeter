@@ -72,7 +72,6 @@ public class XPathUtilTest {
 
     @Test
     public void testputValuesForXPathInListUsingSaxon() throws SaxonApiException, FactoryConfigurationError{
-
         String xPathQuery="//Employees/Employee/role";
         ArrayList<String> matchStrings = new ArrayList<String>();
         boolean fragment = false;
@@ -162,18 +161,17 @@ public class XPathUtilTest {
                         "")));
     }
 
-    @Test()
+    @Test
     public void testFormatXmlInvalid() {
         PrintStream origErr = System.err;
-        // The parser will print an error, so let it go somewhere, where we will
-        // not see it
+        // The parser will print an error, so let it go where we will not see it
         System.setErr(null);
         assertThat("No well formed xml here", CoreMatchers
                 .is(XPathUtil.formatXml("No well formed xml here")));
         System.setErr(origErr);
     }
 
-    @Test()
+    @Test
     public void testMakeDocument() throws ParserConfigurationException, SAXException, IOException, TidyException {
         String responseData = "<book><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
         Document testDoc = XPathUtil.makeDocument(
@@ -201,7 +199,7 @@ public class XPathUtilTest {
         assertTrue("Should be an error", res.isError());
     }
 
-    @Test()
+    @Test
     public void testMakeDocumentIsnegated()
             throws ParserConfigurationException, SAXException, IOException, TidyException {
         String responseData = "<book><preface>zero</preface><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
@@ -226,7 +224,7 @@ public class XPathUtilTest {
         assertFalse("Should not be a failure", res.isFailure());
     }
 
-    @Test()
+    @Test
     public void testGetNamespaces() throws XMLStreamException, FactoryConfigurationError {
         String responseData = "<age:ag xmlns:age=\"http://www.w3.org/wgs84_pos#\">\n"
                 + "<hd:head xmlns:hd=\"http://www.w3.org/wgs85_pos#\"><title>test</title></hd:head></age:ag>";
@@ -237,7 +235,7 @@ public class XPathUtilTest {
         assertEquals("http://www.w3.org/wgs85_pos#", res.get(1)[1]);
     }
 
-    @Test()
+    @Test
     public void testComputeAssertionResultUsingSaxon() throws SaxonApiException, FactoryConfigurationError {
         //test xpath2 assertion
         AssertionResult res = new AssertionResult("test");
@@ -262,7 +260,8 @@ public class XPathUtilTest {
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure", res.isFailure());
     }
-    @Test()
+
+    @Test
     public void testPutValuesForXPathInList() throws ParserConfigurationException, SAXException, IOException, TidyException, TransformerException {
         String responseData = "<book><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
         Document testDoc = XPathUtil.makeDocument(

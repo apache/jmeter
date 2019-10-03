@@ -25,39 +25,39 @@ import org.junit.Test;
 
 public class TestComboStringEditor {
 
-        private void testSetGet(ComboStringEditor e, Object value) throws Exception {
-            e.setValue(value);
-            assertEquals(value, e.getValue());
-        }
+    private void testSetGet(ComboStringEditor e, Object value) throws Exception {
+        e.setValue(value);
+        assertEquals(value, e.getValue());
+    }
 
-        private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
-            e.setAsText(text);
-            assertEquals(text, e.getAsText());
-        }
+    private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
+        e.setAsText(text);
+        assertEquals(text, e.getAsText());
+    }
 
-        @Test
-        public void testSetGet() throws Exception {
-            @SuppressWarnings("deprecation") // test code, intentional
-            ComboStringEditor e = new ComboStringEditor();
+    @Test
+    public void testSetGet() throws Exception {
+        @SuppressWarnings("deprecation") // test code, intentional
+        ComboStringEditor e = new ComboStringEditor();
 
-            testSetGet(e, "any string");
-            testSetGet(e, "");
-            testSetGet(e, null);
-            testSetGet(e, "${var}");
-        }
+        testSetGet(e, "any string");
+        testSetGet(e, "");
+        testSetGet(e, null);
+        testSetGet(e, "${var}");
+    }
 
-        @Test
-        public void testSetGetAsText() throws Exception {
-            @SuppressWarnings("deprecation") // test code, intentional
-            ComboStringEditor e = new ComboStringEditor();
+    @Test
+    public void testSetGetAsText() throws Exception {
+        @SuppressWarnings("deprecation") // test code, intentional
+        ComboStringEditor e = new ComboStringEditor();
 
-            testSetGetAsText(e, "any string");
-            testSetGetAsText(e, "");
-            testSetGetAsText(e, null);
-            testSetGetAsText(e, "${var}");
+        testSetGetAsText(e, "any string");
+        testSetGetAsText(e, "");
+        testSetGetAsText(e, null);
+        testSetGetAsText(e, "${var}");
 
-            // Check "Undefined" does not become a "reserved word":
-            e.setAsText(e.UNDEFINED.toString());
-            assertNotNull(e.getAsText());
-        }
+        // Check "Undefined" does not become a "reserved word":
+        e.setAsText(e.UNDEFINED.toString());
+        assertNotNull(e.getAsText());
+    }
 }

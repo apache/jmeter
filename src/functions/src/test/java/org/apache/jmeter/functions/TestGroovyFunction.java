@@ -36,14 +36,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestGroovyFunction extends JMeterTestCase implements JMeterSerialTest {
-    protected AbstractFunction function;
 
+    private AbstractFunction function;
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
     @After
@@ -104,7 +101,7 @@ public class TestGroovyFunction extends JMeterTestCase implements JMeterSerialTe
         function.setParameters(params);
         String ret = function.execute(result, null);
         assertEquals("/query.cgi?s1=1&s2=2&s3=3", ret);
-        assertEquals(ret,vars.getObject("URL"));
+        assertEquals(ret, vars.getObject("URL"));
     }
 
     @Test

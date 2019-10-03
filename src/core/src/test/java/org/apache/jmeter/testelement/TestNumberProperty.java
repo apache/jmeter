@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.testelement;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.jmeter.testelement.property.DoubleProperty;
@@ -31,14 +32,14 @@ public class TestNumberProperty {
     public void testDZeroCompareToDZero() {
         NumberProperty n1 = new DoubleProperty("n1", 0.0);
         NumberProperty n2 = new DoubleProperty("n2", 0.0);
-        assertTrue(n1.compareTo(n2) == 0);
+        assertEquals(0, n1.compareTo(n2));
     }
 
     @Test
     public void testIZeroCompareToDZero() {
         NumberProperty n1 = new IntegerProperty("n1", 0);
         NumberProperty n2 = new DoubleProperty("n2", 0.0);
-        assertTrue(n1.compareTo(n2) == 0);
+        assertEquals(0, n1.compareTo(n2));
     }
 
     @Test

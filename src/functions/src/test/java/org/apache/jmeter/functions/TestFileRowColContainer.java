@@ -70,7 +70,6 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
         assertEquals(2, f.nextRow());
         assertEquals(3, f.nextRow());
         assertEquals(0, f.nextRow());
-
     }
 
     @Test
@@ -84,7 +83,6 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
         assertEquals(2, f.nextRow());
         assertEquals(3, f.nextRow());
         assertEquals(0, f.nextRow());
-
     }
 
     @Test

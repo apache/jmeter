@@ -63,7 +63,6 @@ public class TestStatCalculator {
             statistics.addValue(l);
         }
         assertEquals(9, calc.getPercentPoint(0.8999999).intValue());
-        //
         assertEquals(Math.round(statistics.getPercentile(90)),
                 calc.getPercentPoint(0.9).intValue());
     }
@@ -106,36 +105,36 @@ public class TestStatCalculator {
     }
 
     @Test
-    public void testLong(){
+    public void testLong() {
         calc.addValue(0L);
         calc.addValue(2L);
         calc.addValue(2L);
         final Long long0 = Long.valueOf(0);
         final Long long2 = Long.valueOf(2);
-        assertEquals(long2,calc.getMax());
-        assertEquals(long0,calc.getMin());
+        assertEquals(long2, calc.getMax());
+        assertEquals(long0, calc.getMin());
         Map<Number, Number[]> map = calc.getDistribution();
         assertTrue(map.containsKey(long0));
         assertTrue(map.containsKey(long2));
     }
 
     @Test
-    public void testInteger(){
+    public void testInteger() {
         StatCalculatorInteger calci = new StatCalculatorInteger();
         assertEquals(Integer.MIN_VALUE, calci.getMax().intValue());
         assertEquals(Integer.MAX_VALUE, calci.getMin().intValue());
         calci.addValue(0);
         calci.addValue(2);
         calci.addValue(2);
-        assertEquals(Integer.valueOf(2),calci.getMax());
-        assertEquals(Integer.valueOf(0),calci.getMin());
+        assertEquals(Integer.valueOf(2), calci.getMax());
+        assertEquals(Integer.valueOf(0), calci.getMin());
         Map<Number, Number[]> map = calci.getDistribution();
         assertTrue(map.containsKey(Integer.valueOf(0)));
         assertTrue(map.containsKey(Integer.valueOf(2)));
     }
 
     @Test
-    public void testBug52125_1(){ // No duplicates when adding
+    public void testBug52125_1() { // No duplicates when adding
         calc.addValue(1L);
         calc.addValue(2L);
         calc.addValue(3L);
@@ -149,7 +148,7 @@ public class TestStatCalculator {
 
     @Test
     @SuppressWarnings("boxing")
-    public void testBug52125_2(){ // add duplicates
+    public void testBug52125_2() { // add duplicates
         calc.addValue(1L);
         calc.addValue(2L);
         calc.addValue(3L);
@@ -160,7 +159,7 @@ public class TestStatCalculator {
     }
 
     @Test
-    public void testBug52125_2A(){ // as above, but with aggregate sample instead
+    public void testBug52125_2A() { // as above, but with aggregate sample instead
         calc.addValue(1L);
         calc.addValue(2L);
         calc.addValue(3L);
@@ -171,7 +170,7 @@ public class TestStatCalculator {
     }
 
     @Test
-    public void testBug52125_3(){ // add duplicates as per bug
+    public void testBug52125_3() { // add duplicates as per bug
         calc.addValue(1L);
         calc.addValue(2L);
         calc.addValue(3L);

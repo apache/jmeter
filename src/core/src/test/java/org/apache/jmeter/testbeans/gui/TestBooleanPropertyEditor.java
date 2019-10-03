@@ -27,22 +27,18 @@ import java.beans.PropertyEditorManager;
 import org.junit.Test;
 
 /**
- * Test class to check that the JVM provides sensible behaviour for the boolean PropertyEditor, i.e.
- * that getAsText() can only return values that match getTags().
+ * Test class to check that the JVM provides sensible behaviour for the boolean
+ * {@link PropertyEditor}, i.e. that getAsText() only returns values that match getTags().
  *
  * Also checks that BooleanPropertyEditor behaves in the same way.
  */
 public class TestBooleanPropertyEditor {
 
-    /*
-     * N.B.
-     * These values are NOT the same as Boolean.FALSE|TRUE.toString()
-     * which returns lower-case only. The getAsText() method converts
-     * the result to mixed case.
-     */
+     // N.B. These values are NOT the same as Boolean.FALSE|TRUE.toString()
+     // which returns lower-case only.
+     // The getAsText() method converts the result to mixed case.
     private static final String FALSE = "False"; // $NON-NLS-1$
     private static final String TRUE  = "True";  // $NON-NLS-1$
-
 
     @Test
     public void testBooleanEditor(){

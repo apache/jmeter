@@ -25,7 +25,6 @@ import org.junit.Test;
 
 public class StringUtilitiesTest {
 
-
     @Test
     public void testServer() throws Exception {
         BeanShellServer bshs = new BeanShellServer(9876, "");

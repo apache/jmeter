@@ -22,7 +22,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
@@ -44,12 +43,7 @@ public class TestAuthManagerThreadIteration {
 
     public KerberosManager initKerberosManager() throws IllegalAccessException, NoSuchFieldException {
         KerberosManager kerberosManager = new KerberosManager();
-        Future<Subject> future = Executors.newSingleThreadExecutor().submit(new Callable<Subject>() {
-            @Override
-            public Subject call() throws Exception {
-                return new Subject();
-            }
-        });
+        Future<Subject> future = Executors.newSingleThreadExecutor().submit(() -> new Subject());
         subjects.put("test", future);
         Field privateField = kerberosManager.getClass().getDeclaredField("subjects");
         privateField.setAccessible(true);

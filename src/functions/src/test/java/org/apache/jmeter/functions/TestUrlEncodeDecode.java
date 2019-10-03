@@ -33,12 +33,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestUrlEncodeDecode extends JMeterTestCase {
+
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
     @Before
@@ -70,7 +68,6 @@ public class TestUrlEncodeDecode extends JMeterTestCase {
         String returnValue = function.execute(result, null);
         assertEquals("Veni%2C+vidi%2C+vici+%3F", returnValue);
     }
-
 
     @Test
     public void testUrlDecode() throws Exception {

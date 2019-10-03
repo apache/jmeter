@@ -25,7 +25,6 @@ import org.junit.Test;
 
 public class TestJSONPathAssertionGui {
 
-
     @Test
     public void testInit() {
         JSONPathAssertionGui instance = new JSONPathAssertionGui();

@@ -32,6 +32,7 @@ import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Test;
 
 public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
+
     @Test
     public void testFailureWhenJmxDoesntExist() {
         JMeter jmeter = new JMeter();
@@ -39,8 +40,6 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
             jmeter.runNonGui("testPlan.jmx", null, false, null, false);
             fail("Expected ConfigurationException to be thrown");
         } catch (ConfigurationException e) {
-            assertTrue("When the plugin doesn't exist, the method 'runNonGui' should throw a ConfigurationException",
-                    e instanceof ConfigurationException);
             assertTrue("When the file doesn't exist, this method 'runNonGui' should have a detailed message",
                     e.getMessage().contains("doesn't exist or can't be opened"));
         }
@@ -113,8 +112,6 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
             jmeter.runNonGui(temp.getAbsolutePath(), null, false, null, false);
             fail("Expected ConfigurationException to be thrown");
         } catch (ConfigurationException e) {
-            assertTrue("When the plugin doesn't exist, the method 'runNonGui' should throw a ConfigurationException",
-                    e instanceof ConfigurationException);
             assertTrue("When the plugin doesn't exist, the method 'runNonGui' should have a detailed message",
                     e.getMessage().contains("Error in NonGUIDriver Problem loading XML from"));
         } finally {

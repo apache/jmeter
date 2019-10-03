@@ -42,7 +42,7 @@ public class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTe
     }
 
     @Parameters(name = "Run {index}: implementation:{0}")
-    public static final String[] getImplementations() {
+    public static String[] getImplementations() {
         return new String[]{
                 HTTPSamplerFactory.IMPL_HTTP_CLIENT4,
                 HTTPSamplerFactory.IMPL_JAVA};
@@ -64,15 +64,14 @@ public class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTe
         try {
             subResults = doSample(implementation);
             Assert.assertTrue("We should have at least one sample result, we had none", subResults.length > 0);
-            for (int i = 0; i < subResults.length; i++) {
+            for (SampleResult subResult : subResults) {
                 Assert.assertTrue("Expected sample label to start with " + JMETER_HOME_PAGE,
-                        subResults[i].getSampleLabel().startsWith(JMETER_HOME_PAGE));
+                        subResult.getSampleLabel().startsWith(JMETER_HOME_PAGE));
             }
         } finally {
             plan.setFunctionalMode(prevValue);
         }
     }
-
 
     /**
      * @param implementation HTTP implementation

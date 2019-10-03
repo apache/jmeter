@@ -36,14 +36,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestSetProperty extends JMeterTestCase implements JMeterSerialTest {
-    protected AbstractFunction function;
 
+    private AbstractFunction function;
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
     @Before

@@ -33,10 +33,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class UrlConfigTest extends JMeterTestCase {
+
     private HTTPSamplerBase config;
-
     private HTTPSamplerBase defaultConfig;
-
     private HTTPSamplerBase partialConfig;
 
     @Before

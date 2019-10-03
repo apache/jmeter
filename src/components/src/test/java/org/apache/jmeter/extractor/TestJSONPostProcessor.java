@@ -229,8 +229,7 @@ public class TestJSONPostProcessor {
         Assert.assertEquals("3", vars.get(VAR_NAME + "_matchNr"));
     }
 
-    private JSONPostProcessor setupProcessor(JMeterContext context,
-    String matchNumbers) {
+    private JSONPostProcessor setupProcessor(JMeterContext context, String matchNumbers) {
         return setupProcessor(context, matchNumbers, true);
     }
 

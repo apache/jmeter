@@ -44,14 +44,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestTimeShiftFunction extends JMeterTestCase {
+
     private Function function;
-
     private SampleResult result;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx = null;
-
     private String value;
 
     @Before
@@ -135,6 +132,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
     public static void main(String[] args) {
         System.out.println(java.time.Duration.parse("P10DT-1H-5M5S").toMillis());
     }
+
     @Test
     public void testWrongAmountToAdd() throws Exception {
         // Nothing is add with wrong value, so check if return is now
@@ -155,7 +153,6 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         assertThat(value, is(equalTo("")));
     }
 
-
     @Test
     public void testRandomPeriod() throws Exception {
         Random r = new Random();
@@ -173,9 +170,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         randomFutureDate = LocalDateTime.parse(value);
         checkFutureDate = LocalDateTime.now().plusMinutes(randomInt);
         assertThat(randomFutureDate, within(5, ChronoUnit.SECONDS, checkFutureDate) );
-
     }
-
 
     @Test
     public void testNowPlusOneDayWithLocale() throws Exception {

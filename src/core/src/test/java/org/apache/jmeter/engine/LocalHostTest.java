@@ -99,7 +99,7 @@ public class LocalHostTest {
         String host = System.getProperties().getProperty(key); // $NON-NLS-1$
         perr(key + "=" + host);
         InetAddress localHost;
-        if( host==null ) {
+        if (host == null) {
             localHost = InetAddress.getLocalHost();
         } else {
             localHost = InetAddress.getByName(host);
@@ -109,11 +109,11 @@ public class LocalHostTest {
 
     private static void showAddress(InetAddress localHost) {
         perr(localHost);
-        perr("isSiteLocalAddress:"+localHost.isSiteLocalAddress());
-        perr("isAnyLocalAddress:"+localHost.isAnyLocalAddress());
-        perr("isLinkLocalAddress:"+localHost.isLinkLocalAddress());
-        perr("isLoopbackAddress:"+localHost.isLoopbackAddress());
-        perr("isMulticastAddress:"+localHost.isMulticastAddress());
+        perr("isSiteLocalAddress:" + localHost.isSiteLocalAddress());
+        perr("isAnyLocalAddress:" + localHost.isAnyLocalAddress());
+        perr("isLinkLocalAddress:" + localHost.isLinkLocalAddress());
+        perr("isLoopbackAddress:" + localHost.isLoopbackAddress());
+        perr("isMulticastAddress:" + localHost.isMulticastAddress());
     }
 
     private static void perr(Object s) {
