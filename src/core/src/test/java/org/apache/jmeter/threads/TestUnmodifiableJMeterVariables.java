@@ -30,6 +30,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 public class TestUnmodifiableJMeterVariables {
 
@@ -58,50 +59,37 @@ public class TestUnmodifiableJMeterVariables {
 
     @Test
     public void testIncIteration() {
-        Assertions.assertThrows(
-                UnsupportedOperationException.class,
-                unmodifiables::incIteration
-        );
+        assertThrowsUnsupportedOperation(unmodifiables::incIteration);
     }
 
     @Test
     public void testRemove() {
-        Assertions.assertThrows(
-                UnsupportedOperationException.class,
-                () -> unmodifiables.remove("some.key")
-        );
+        assertThrowsUnsupportedOperation(
+                () -> unmodifiables.remove("some.key"));
     }
 
     @Test
     public void testPut() {
-        Assertions.assertThrows(
-                UnsupportedOperationException.class,
-                () -> unmodifiables.put("some.key", "anything")
-        );
+        assertThrowsUnsupportedOperation(
+                () -> unmodifiables.put("some.key", "anything"));
     }
 
     @Test
     public void testPutObject() {
-        Assertions.assertThrows(
-                UnsupportedOperationException.class,
-                () -> unmodifiables.putObject("some.key", new Object())
-        );
+        assertThrowsUnsupportedOperation(
+                () -> unmodifiables.putObject("some.key", new Object()));
     }
 
     @Test
     public void testPutAllMapOfStringQ() {
-        Assertions.assertThrows(
-                UnsupportedOperationException.class,
-                () -> unmodifiables.putAll(Collections.emptyMap())
-        );
+        assertThrowsUnsupportedOperation(
+                () -> unmodifiables.putAll(Collections.emptyMap()));
     }
 
     @Test
     public void testPutAllJMeterVariables() {
-        Assertions.assertThrows(
-                UnsupportedOperationException.class,
-                () -> unmodifiables.putAll(vars)
-        );
+        assertThrowsUnsupportedOperation(
+                () -> unmodifiables.putAll(vars));
     }
 
     @Test
@@ -119,9 +107,13 @@ public class TestUnmodifiableJMeterVariables {
         Iterator<Entry<String, Object>> iterator = unmodifiables.getIterator();
         assertThat(iterator.hasNext(), CoreMatchers.is(true));
         iterator.next();
+        assertThrowsUnsupportedOperation(iterator::remove);
+    }
+
+    private void assertThrowsUnsupportedOperation(Executable executable) {
         Assertions.assertThrows(
                 UnsupportedOperationException.class,
-                iterator::remove
+                executable
         );
     }
 
@@ -166,5 +158,4 @@ public class TestUnmodifiableJMeterVariables {
         UnmodifiableJMeterVariables otherUnmodifiables = new UnmodifiableJMeterVariables(vars);
         assertThat(unmodifiables.hashCode(), CoreMatchers.is(otherUnmodifiables.hashCode()));
     }
-
 }
