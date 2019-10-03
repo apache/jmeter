@@ -17,7 +17,7 @@ Useful commands (`gw` comes from https://github.com/dougborg/gdub, otherwise `./
 
       # Display all submodules
       gw projects
-      
+
       # Different tasks for current module
       gw tasks
 
@@ -28,7 +28,7 @@ However it might be useful to perform a "clean" build:
 
       # Cleans current project (submodule)
       gw clean
-      
+
       # Cleans the specified project
       gw :src:core:clean
 
@@ -54,26 +54,26 @@ However it might be useful to perform a "clean" build:
 
       # Run RAT
       gw rat
-      
+
 ### Code Formatting
-      
+
       # Run spotlessApply and checkstyleAll
       gw style
-      
+
       # Run checkstlye for all
       gw checkstyleAll
-      
+
 #### Fine Grained Formatting Commands
-      
+
       # Run checkstyle for main (non-test) code
       gw checkstyleMain
-      
+
       # Run checkstyle for test code
       gw checkstyleTest
-      
+
       # Run Spotless checks
       gw spotlessCheck
-      
+
       # Fix any issues found by Spotless
       gw spotlessApply
 
@@ -87,13 +87,13 @@ However it might be useful to perform a "clean" build:
 
       # Just build jar (see build/libs/*.jar)
       gw jar
-      
+
       # "build" is a default task to "execute all the actions"
       gw build
-      
+
       # Test might be skipped by `-x test` (Gradle's default way to skip task by name)
       gw -x test build
-      
+
       # Build project in parallel
       gw build --parallel
 
@@ -105,10 +105,10 @@ build only the required jars and files.
 
       # Runs all the tests (unit tests, checkstyle, etc)
       gw check
-      
+
       # Runs just unit tests
       gw test
-      
+
       # Runs just core tests
       gw :src:core:test
 
@@ -116,7 +116,7 @@ build only the required jars and files.
 
       # Generates code coverage report for the test task to build/reports/jacoco/test/html
       gw jacocoTestReport
-      
+
       # Generate combined coverage report
       gw jacocoReport
 
@@ -124,7 +124,7 @@ build only the required jars and files.
 
       # Builds javadoc to build/docs/javadoc subfolder
       gw javadoc
-      
+
       # Builds javadoc jar to build/libs/jorphan-javadoc.jar
       gw javadocJar
 
