@@ -54,7 +54,7 @@ public class TestBoundaryExtractor {
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
     }
-    
+
     @Test
     public void testNoBoundaries() {
         vars.put("content", "one");
