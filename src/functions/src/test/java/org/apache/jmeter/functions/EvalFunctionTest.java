@@ -56,7 +56,6 @@ public class EvalFunctionTest extends JMeterTestCase {
         eval.setParameters(parms);
         s = eval.execute(null,null);
         assertEquals("select name from customers",s);
-
     }
 
     @Test

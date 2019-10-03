@@ -44,8 +44,7 @@ public class TestXPath2Extractor {
     public void setUp() throws UnsupportedEncodingException {
         jmctx = JMeterContextService.getContext();
         extractor = new XPath2Extractor();
-        extractor.setThreadContext(jmctx);// This would be done by the run
-                                          // command
+        extractor.setThreadContext(jmctx);// This would be done by the run command
         extractor.setRefName(VAL_NAME);
         extractor.setDefaultValue("Default");
         result = new SampleResult();
@@ -162,10 +161,8 @@ public class TestXPath2Extractor {
         extractor.setXPathQuery("/book/page[2]/text()");
         extractor.process();
         assertEquals("two", vars.get(VAL_NAME));
-
     }
 
-    //
     @Test
     public void testScope() {
         extractor.setXPathQuery("/book/preface");
@@ -280,8 +277,7 @@ public class TestXPath2Extractor {
     public void testPreviousResultIsEmpty() throws Exception {
         JMeterContext jmc = JMeterContextService.getContext();
         extractor = new XPath2Extractor();
-        extractor.setThreadContext(jmctx);// This would be done by the run
-                                          // command
+        extractor.setThreadContext(jmctx);// This would be done by the run command
         extractor.setRefName(VAL_NAME);
         extractor.setDefaultValue("Default");
         jmc.setPreviousResult(null);

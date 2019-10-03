@@ -32,9 +32,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * Test for {@link ResultSaver}
- */
 public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest {
     private ResultSaver resultSaver;
     private SampleResult sampleResult;
@@ -134,6 +131,5 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
 
         resultSaver.testStarted();
         Assert.assertEquals("test.unknown", resultSaver.makeFileName(null, true, false));
-
     }
 }

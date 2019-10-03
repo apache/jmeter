@@ -28,7 +28,6 @@ import org.junit.Test;
 
 public class MultipartUrlConfigTest {
 
-
     @Test
     @SuppressWarnings("deprecation")
     public void testConstructors() {

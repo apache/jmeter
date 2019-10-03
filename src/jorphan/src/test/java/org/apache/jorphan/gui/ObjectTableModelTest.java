@@ -115,7 +115,6 @@ public class ObjectTableModelTest {
         // Assert
         assertModelRanges();
 
-
         events.assertEvents(
                 events.assertEvent()
                     .source(model)
@@ -154,8 +153,6 @@ public class ObjectTableModelTest {
                    .firstRow(1)
                    .lastRow(1)
       );
-
-
     }
 
     @Test

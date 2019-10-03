@@ -29,10 +29,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-
-/**
- * Test for {@link ResultAction}
- */
 public class TestResultAction extends JMeterTestCase {
     private ResultAction resultAction;
     private SampleResult sampleResult;

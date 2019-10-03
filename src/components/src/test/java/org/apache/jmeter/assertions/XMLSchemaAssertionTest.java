@@ -48,8 +48,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
     public void setUp() throws Exception {
         jmctx = JMeterContextService.getContext();
         assertion = new XMLSchemaAssertion();
-        assertion.setThreadContext(jmctx);// This would be done by the run
-                                            // command
+        assertion.setThreadContext(jmctx);// This would be done by the run command
         result = new SampleResult();
         JMeterVariables vars = new JMeterVariables();
         jmctx.setVariables(vars);

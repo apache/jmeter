@@ -32,12 +32,14 @@ import org.junit.jupiter.api.extension.ParameterResolver;
  * The extension starts and initializes {@link JMeterContext} before each test.
  * The extension can inject {@link JMeterVariables} to a test method parameter.
  */
-public class JMeterContextExtension implements BeforeEachCallback, AfterEachCallback,
-        ParameterResolver {
+public class JMeterContextExtension
+        implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
+
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         Class<?> parameterType = parameterContext.getParameter().getType();
-        return parameterType == JMeterContext.class || parameterType == JMeterVariables.class;
+        return parameterType == JMeterContext.class
+                || parameterType == JMeterVariables.class;
     }
 
     @Override

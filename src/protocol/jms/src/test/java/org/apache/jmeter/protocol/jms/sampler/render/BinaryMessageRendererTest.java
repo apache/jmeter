@@ -39,7 +39,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class BinaryMessageRendererTest extends MessageRendererTest<byte[]> {
 
-    BinaryMessageRenderer render = RendererFactory.getInstance().getBinary();
+    private BinaryMessageRenderer render = RendererFactory.getInstance().getBinary();
+
     @Override
     protected MessageRenderer<byte[]> getRenderer() {
         return render;

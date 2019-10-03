@@ -33,19 +33,15 @@ import org.junit.Test;
 public class TestHtmlExtractorJSoup {
 
     protected HtmlExtractor extractor;
-
     protected SampleResult result;
-
     protected JMeterVariables vars;
-
     protected JMeterContext jmctx;
 
     @Before
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         extractor = new HtmlExtractor();
-        extractor.setThreadContext(jmctx);// This would be done by the run
-                                          // command
+        extractor.setThreadContext(jmctx);// This would be done by the run command
         extractor.setRefName("regVal");
         result = new SampleResult();
         String data = "<p>An <a href='http://example.com/'><b>example1</b></a> link.</p>"+

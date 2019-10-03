@@ -34,12 +34,6 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * Test{@link ChangeCase} ChangeCase
- *
- * @see ChangeCase
- * @since 4.0
- */
 public class TestChangeCase extends JMeterTestCase {
 
     private AbstractFunction changeCase;

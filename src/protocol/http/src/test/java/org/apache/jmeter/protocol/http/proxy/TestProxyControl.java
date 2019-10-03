@@ -28,8 +28,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestProxyControl {
-    private HTTPSamplerBase sampler;
 
+    private HTTPSamplerBase sampler;
     private ProxyControl control;
 
     @Before

@@ -30,26 +30,27 @@ import org.junit.Test;
 public class Junit4AnnotationsTest {
 
     @BeforeClass
-    public static void beforeClass(){
+    public static void beforeClass() {
         System.out.println("beforeClass");
     }
+
     @Before
-    public void before(){
+    public void before() {
         System.out.println("before");
     }
 
     @Test
-    public void test(){
+    public void test() {
         System.out.println("test");
     }
 
     @After
-    public void after(){
+    public void after() {
         System.out.println("after");
     }
 
     @AfterClass
-    public static void afterClass(){
+    public static void afterClass() {
         System.out.println("afterClass");
     }
 }

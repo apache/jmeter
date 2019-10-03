@@ -44,6 +44,7 @@ public class TestJMeterContextService {
     public static void incrNumberOfThreads(){
         JMeterContextService.incrNumberOfThreads();
     }
+
     // Give access to the method for test code
     public static void decrNumberOfThreads(){
         JMeterContextService.decrNumberOfThreads();

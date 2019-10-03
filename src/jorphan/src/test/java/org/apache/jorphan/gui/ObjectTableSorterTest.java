@@ -56,8 +56,7 @@ import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
 public class ObjectTableSorterTest {
-    ObjectTableModel  model;
-    ObjectTableSorter sorter;
+    private ObjectTableSorter sorter;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -66,77 +65,68 @@ public class ObjectTableSorterTest {
 
     @Before
     public void createModelAndSorter() {
-        String[] headers         = { "key", "value", "object" };
-        Functor[] readFunctors   = { new Functor("getKey"), new Functor("getValue"), new Functor("getValue") };
-        Functor[] writeFunctors  = { null, null, null };
-        Class<?>[] editorClasses = { String.class, Integer.class, Object.class };
-        model                    = new ObjectTableModel(headers, readFunctors, writeFunctors, editorClasses);
-        sorter                   = new ObjectTableSorter(model);
-        List<Entry<String,Integer>> data = asList(b2(), a3(), d4(), c1());
+        String[] headers = {"key", "value", "object"};
+        Functor[] readFunctors = {new Functor("getKey"), new Functor("getValue"), new Functor("getValue")};
+        Functor[] writeFunctors = {null, null, null};
+        Class<?>[] editorClasses = {String.class, Integer.class, Object.class};
+        ObjectTableModel model = new ObjectTableModel(headers, readFunctors, writeFunctors, editorClasses);
+        sorter = new ObjectTableSorter(model);
+        List<Entry<String, Integer>> data = asList(b2(), a3(), d4(), c1());
         data.forEach(model::addRow);
     }
 
     @Test
     public void noSorting() {
-        List<SimpleImmutableEntry<String, Integer>> expected = asList(b2(), a3(), d4(), c1());
-        assertRowOrderAndIndexes(expected);
+        assertRowOrderAndIndexes(asList(b2(), a3(), d4(), c1()));
     }
 
     @Test
     public void sortKeyAscending() {
         sorter.setSortKey(new SortKey(0, SortOrder.ASCENDING));
-        List<SimpleImmutableEntry<String, Integer>> expected = asList(a3(), b2(), c1(), d4());
-        assertRowOrderAndIndexes(expected);
+        assertRowOrderAndIndexes(asList(a3(), b2(), c1(), d4()));
     }
 
     @Test
     public void sortKeyDescending() {
         sorter.setSortKey(new SortKey(0, SortOrder.DESCENDING));
-        List<SimpleImmutableEntry<String, Integer>> expected = asList(d4(), c1(), b2(), a3());
-        assertRowOrderAndIndexes(expected);
+        assertRowOrderAndIndexes(asList(d4(), c1(), b2(), a3()));
     }
 
     @Test
     public void sortValueAscending() {
         sorter.setSortKey(new SortKey(1, SortOrder.ASCENDING));
-        List<SimpleImmutableEntry<String, Integer>> expected = asList(c1(), b2(), a3(), d4());
-        assertRowOrderAndIndexes(expected);
+        assertRowOrderAndIndexes(asList(c1(), b2(), a3(), d4()));
     }
 
     @Test
     public void sortValueDescending() {
         sorter.setSortKey(new SortKey(1, SortOrder.DESCENDING));
-        List<SimpleImmutableEntry<String, Integer>> expected = asList(d4(), a3(), b2(), c1());
-        assertRowOrderAndIndexes(expected);
+        assertRowOrderAndIndexes(asList(d4(), a3(), b2(), c1()));
     }
 
 
     @Test
     public void fixLastRowWithAscendingKey() {
         sorter.fixLastRow().setSortKey(new SortKey(0, SortOrder.ASCENDING));
-        List<SimpleImmutableEntry<String, Integer>> expected = asList(a3(), b2(), d4(), c1());
-        assertRowOrderAndIndexes(expected);
+        assertRowOrderAndIndexes(asList(a3(), b2(), d4(), c1()));
     }
 
     @Test
     public void fixLastRowWithDescendingKey() {
         sorter.fixLastRow().setSortKey(new SortKey(0, SortOrder.DESCENDING));
-        List<SimpleImmutableEntry<String, Integer>> expected = asList(d4(), b2(), a3(), c1());
-        assertRowOrderAndIndexes(expected);
+        assertRowOrderAndIndexes(asList(d4(), b2(), a3(), c1()));
     }
 
     @Test
     public void fixLastRowWithAscendingValue() {
         sorter.fixLastRow().setSortKey(new SortKey(1, SortOrder.ASCENDING));
-        List<SimpleImmutableEntry<String, Integer>> expected = asList(b2(), a3(), d4(), c1());
-        assertRowOrderAndIndexes(expected);
+        assertRowOrderAndIndexes(asList(b2(), a3(), d4(), c1()));
     }
 
     @Test
     public void fixLastRowWithDescendingValue() {
         sorter.fixLastRow().setSortKey(new SortKey(1, SortOrder.DESCENDING));
-        List<SimpleImmutableEntry<String, Integer>> expected = asList(d4(), a3(), b2(), c1());
-        assertRowOrderAndIndexes(expected);
+        assertRowOrderAndIndexes(asList(d4(), a3(), b2(), c1()));
     }
 
     @Test
@@ -146,44 +136,40 @@ public class ObjectTableSorterTest {
                     map.put(key, map.size());
                     return map;
                 }, (a, b) -> a);
-        Comparator<String> customKeyComparator = (a,b) -> customKeyOrder.get(a).compareTo(customKeyOrder.get(b));
-        sorter.setValueComparator(0, customKeyComparator).setSortKey(new SortKey(0, SortOrder.ASCENDING));
-        List<SimpleImmutableEntry<String, Integer>> expected = asList(a3(), c1(), b2(), d4());
-        assertRowOrderAndIndexes(expected);
+        Comparator<String> customKeyComparator = Comparator.comparing(customKeyOrder::get);
+        sorter.setValueComparator(0, customKeyComparator)
+                .setSortKey(new SortKey(0, SortOrder.ASCENDING));
+        assertRowOrderAndIndexes(asList(a3(), c1(), b2(), d4()));
     }
 
-    private ObjectTableModel createTableModel(final String name,
-            final Class<?> klass) {
-        return new ObjectTableModel(new String[] { name },
-                new Functor[] { null }, new Functor[] { null },
-                new Class<?>[] { klass });
+    private ObjectTableModel createTableModel(
+            final String name, final Class<?> klass) {
+        return new ObjectTableModel(new String[]{name},
+                new Functor[]{null}, new Functor[]{null},
+                new Class<?>[]{klass});
     }
 
     @Test
     public void getDefaultComparatorForNullClass() {
         ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("null", null));
-
         assertThat(sorter.getValueComparator(0), is(nullValue()));
     }
 
     @Test
     public void getDefaultComparatorForStringClass() {
         ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("string", String.class));
-
         assertThat(sorter.getValueComparator(0), is(CoreMatchers.notNullValue()));
     }
 
     @Test
     public void getDefaultComparatorForIntegerClass() {
         ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("integer", Integer.class));
-
         assertThat(sorter.getValueComparator(0), is(CoreMatchers.notNullValue()));
     }
 
     @Test
     public void getDefaultComparatorForObjectClass() {
         ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("object", Object.class));
-
         assertThat(sorter.getValueComparator(0), is(nullValue()));
     }
 
@@ -250,7 +236,7 @@ public class ObjectTableSorterTest {
     public void setSortKeys_single() {
         List<SortKey> keys = singletonList(new SortKey(0, SortOrder.ASCENDING));
         sorter.setSortKeys(keys);
-        assertThat(sorter.getSortKeys(), allOf(  is(not(sameInstance(keys))),  is(equalTo(keys)) ));
+        assertThat(sorter.getSortKeys(), allOf(is(not(sameInstance(keys))), is(equalTo(keys))));
     }
 
     @Test
@@ -267,31 +253,30 @@ public class ObjectTableSorterTest {
         sorter.setSortKeys(Collections.singletonList(new SortKey(2, SortOrder.ASCENDING)));
     }
 
-
     @SuppressWarnings("unchecked")
-    protected List<Entry<String,Integer>> actual() {
+    protected List<Entry<String, Integer>> actual() {
         return IntStream
                 .range(0, sorter.getViewRowCount())
                 .map(sorter::convertRowIndexToModel)
-                .mapToObj(modelIndex -> (Entry<String,Integer>) sorter.getModel().getObjectListAsList().get(modelIndex))
+                .mapToObj(modelIndex -> (Entry<String, Integer>) sorter.getModel().getObjectListAsList().get(modelIndex))
                 .collect(Collectors.toList())
                 ;
     }
 
     protected SimpleImmutableEntry<String, Integer> d4() {
-        return new AbstractMap.SimpleImmutableEntry<>("d",  4);
+        return new AbstractMap.SimpleImmutableEntry<>("d", 4);
     }
 
     protected SimpleImmutableEntry<String, Integer> c1() {
-        return new AbstractMap.SimpleImmutableEntry<>("c",  1);
+        return new AbstractMap.SimpleImmutableEntry<>("c", 1);
     }
 
     protected SimpleImmutableEntry<String, Integer> b2() {
-        return new AbstractMap.SimpleImmutableEntry<>("b",  2);
+        return new AbstractMap.SimpleImmutableEntry<>("b", 2);
     }
 
     protected SimpleImmutableEntry<String, Integer> a3() {
-        return new AbstractMap.SimpleImmutableEntry<>("a",  3);
+        return new AbstractMap.SimpleImmutableEntry<>("a", 3);
     }
 
     protected void assertRowOrderAndIndexes(List<SimpleImmutableEntry<String, Integer>> expected) {

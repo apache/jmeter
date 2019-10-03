@@ -35,9 +35,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * Package to test FileServer methods
- */
 public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
 
     private JMeterVariables threadVars;
@@ -70,7 +67,6 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
                     "File No.such.filename must exist and be readable",
                     ignored.getMessage());
         }
-
 
         csv = new CSVDataSet();
         csv.setFilename(findTestPath("testfiles/testempty.csv"));
@@ -212,7 +208,6 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
             csv.iterationStart(null);
             fail("Expected JMeterStopThreadException");
         } catch (JMeterStopThreadException expected) {
-
         }
     }
 

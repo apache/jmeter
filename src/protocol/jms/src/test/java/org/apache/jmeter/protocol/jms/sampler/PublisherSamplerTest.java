@@ -31,9 +31,6 @@ import org.junit.Test;
 
 import com.github.benmanes.caffeine.cache.Cache;
 
-/**
- *
- */
 public class PublisherSamplerTest {
 
     @Before

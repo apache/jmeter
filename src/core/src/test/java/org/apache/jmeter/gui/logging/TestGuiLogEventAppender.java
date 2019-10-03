@@ -42,9 +42,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Unit test for {@link GuiLogEventAppender}.
- */
 public class TestGuiLogEventAppender {
 
     private static List<String> log4j2LevelErrorMessages = Collections.synchronizedList(new LinkedList<>());
@@ -58,21 +55,23 @@ public class TestGuiLogEventAppender {
         ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
         builder.setPackages("org.apache.jmeter.gui.logging");
 
-        AppenderComponentBuilder appenderBuilder = builder.newAppender("Stdout", "CONSOLE").addAttribute("target",
-                ConsoleAppender.Target.SYSTEM_OUT);
-        appenderBuilder.add(builder.newLayout("PatternLayout").addAttribute("pattern", "%d %p %c{1.}: %m%n"));
+        AppenderComponentBuilder appenderBuilder = builder
+                .newAppender("Stdout", "CONSOLE")
+                .addAttribute("target", ConsoleAppender.Target.SYSTEM_OUT)
+                .add(builder.newLayout("PatternLayout").addAttribute("pattern", "%d %p %c{1.}: %m%n"));
         builder.add(appenderBuilder);
 
-        appenderBuilder = builder.newAppender("gui-log-event", "GuiLogEvent");
-        appenderBuilder.add(builder.newLayout("PatternLayout").addAttribute("pattern", "%d %p %c{1.}: %m%n"));
+        appenderBuilder = builder
+                .newAppender("gui-log-event", "GuiLogEvent")
+                .add(builder.newLayout("PatternLayout").addAttribute("pattern", "%d %p %c{1.}: %m%n"));
         builder.add(appenderBuilder);
 
         RootLoggerComponentBuilder rootLoggerBuilder = builder.newRootLogger(Level.INFO);
         rootLoggerBuilder.add(builder.newAppenderRef("Stdout")).add(builder.newAppenderRef("gui-log-event"));
         builder.add(rootLoggerBuilder);
 
-        final LoggerContext loggerContext = Configurator.initialize(builder.build());
-        final Appender guiLogEventAppender = loggerContext.getRootLogger().getAppenders().get("gui-log-event");
+        LoggerContext loggerContext = Configurator.initialize(builder.build());
+        Appender guiLogEventAppender = loggerContext.getRootLogger().getAppenders().get("gui-log-event");
 
         guiLogEventAppender.stop();
         guiLogEventAppender.setHandler(new ErrorHandler() {

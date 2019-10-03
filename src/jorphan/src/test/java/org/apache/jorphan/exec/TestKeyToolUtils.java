@@ -45,13 +45,12 @@ public class TestKeyToolUtils {
     public static void setup(@TempDir Path keystoreDir) throws IOException {
         keystore = keystoreDir.resolve("dummy-keystore.jks").toFile();
         password = JOrphanUtils.generateRandomAlphanumericPassword(32);
-        KeyToolUtils.generateProxyCA(keystore, password, validity );
+        KeyToolUtils.generateProxyCA(keystore, password, validity);
     }
 
     /*
      * Check the assumption that a missing executable will generate
      * either an IOException or status which is neither 0 nor 1
-     *
      */
     @Test
     public void testCheckKeytool() throws Exception {

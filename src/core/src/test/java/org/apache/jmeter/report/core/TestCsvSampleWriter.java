@@ -44,16 +44,13 @@ public class TestCsvSampleWriter {
 
     @Test(expected=NullPointerException.class)
     public void testCsvSampleWriterConstructorWithNull() throws Exception {
-        CsvSampleWriter dummy = new CsvSampleWriter(null);
-        dummy.close(); // We should never get here, but it would be a
-                       // writer, so close it
+        new CsvSampleWriter(null);
     }
 
     @Test
     public void testCsvSampleWriterConstructorWithWriter() throws Exception {
         try (Writer writer = new StringWriter();
-                CsvSampleWriter csvWriter = new CsvSampleWriter(writer,
-                        metadata)) {
+             CsvSampleWriter csvWriter = new CsvSampleWriter(writer, metadata)) {
             csvWriter.writeHeader();
             csvWriter.flush();
             assertEquals("a,b" + LINE_SEP, writer.toString());
@@ -63,8 +60,7 @@ public class TestCsvSampleWriter {
     @Test
     public void testWriteWithoutWriter() throws Exception {
         try (CsvSampleWriter csvWriter = new CsvSampleWriter(metadata)) {
-            Sample sample = new SampleBuilder(metadata).add("a1").add("b1")
-                    .build();
+            Sample sample = new SampleBuilder(metadata).add("a1").add("b1").build();
             try {
                 csvWriter.write(sample);
                 fail("ISE expected");
@@ -77,8 +73,7 @@ public class TestCsvSampleWriter {
     @Test
     public void testWriteWithoutSample() throws Exception {
         try (Writer writer = new StringWriter();
-                CsvSampleWriter csvWriter = new CsvSampleWriter(writer,
-                        metadata)) {
+             CsvSampleWriter csvWriter = new CsvSampleWriter(writer, metadata)) {
             try {
                 csvWriter.write(null);
                 fail("NPE expected");
@@ -91,10 +86,8 @@ public class TestCsvSampleWriter {
     @Test
     public void testWrite() throws Exception {
         try (Writer writer = new StringWriter();
-                CsvSampleWriter csvWriter = new CsvSampleWriter(writer,
-                        metadata)) {
-            Sample sample = new SampleBuilder(metadata).add("a1").add("b1")
-                    .build();
+             CsvSampleWriter csvWriter = new CsvSampleWriter(writer, metadata)) {
+            Sample sample = new SampleBuilder(metadata).add("a1").add("b1").build();
             csvWriter.write(sample);
             csvWriter.flush();
             assertEquals("a1,b1" + LINE_SEP, writer.toString());

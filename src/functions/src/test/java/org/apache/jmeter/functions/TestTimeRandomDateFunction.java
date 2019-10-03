@@ -41,13 +41,9 @@ import org.junit.Test;
 public class TestTimeRandomDateFunction extends JMeterTestCase {
 
     private AbstractFunction function;
-
     private SampleResult result;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx = null;
-
     private String value;
 
     @Before

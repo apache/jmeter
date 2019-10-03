@@ -41,11 +41,8 @@ public class XPathAssertionTest extends JMeterTestCase {
     private static final Logger log = LoggerFactory.getLogger(XPathAssertionTest.class);
 
     private XPathAssertion assertion;
-
     private SampleResult result;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
 

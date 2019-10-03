@@ -34,9 +34,9 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 
 @ExtendWith(JMeterContextExtension.class)
 public abstract class MessageRendererTest<T> {
+
     @TempDir
     public Path tmpDir;
-
 
     protected Cache<Object,Object> cache = Caffeine.newBuilder().build();
 

@@ -54,7 +54,6 @@ public class ErrorsSummaryConsumerTest {
         Assert.assertEquals("500/Server Error", ErrorsSummaryConsumer.getErrorKey(sample));
     }
 
-
     @Test
     public void testErrorSampleCounter() {
         ErrorsSummaryConsumer consumer = new ErrorsSummaryConsumer();
@@ -68,19 +67,9 @@ public class ErrorsSummaryConsumerTest {
         Assert.assertEquals(Long.valueOf(2), info.getData());
     }
 
-    /**
-     * Create a dummy sample that is either successful or a failure depending on
-     * the {@code success} flag
-     *
-     * @param success
-     *            flag do determine if the sample should be successful or not
-     * @return newly created sample
-     */
     private Sample createSample(boolean success) {
-        SampleMetadata metadata = new SampleMetadata(',',
-                CSVSaveService.SUCCESSFUL);
-        Sample sample = new Sample(0, metadata, String.valueOf(success));
-        return sample;
+        SampleMetadata metadata = new SampleMetadata(',', CSVSaveService.SUCCESSFUL);
+        return new Sample(0, metadata, String.valueOf(success));
     }
 
 }

@@ -69,6 +69,5 @@ public class PackageTest {
         te.addTestElement(te2);
         assertEquals(2, args.getArgumentCount());
         assertEquals("config1=configValue", args.getArgument(1).toString());
-
     }
 }

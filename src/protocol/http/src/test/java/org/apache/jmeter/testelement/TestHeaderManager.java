@@ -26,6 +26,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.junit.Test;
 
 public class TestHeaderManager extends JMeterTestCase {
+
     @Test
     public void testReplace() throws Exception {
         HeaderManager headerManager = new HeaderManager();

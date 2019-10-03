@@ -38,290 +38,285 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestXPathExtractor {
-        private XPathExtractor extractor;
 
-        private SampleResult result;
+    private XPathExtractor extractor;
+    private SampleResult result;
+    private String data;
+    private JMeterVariables vars;
+    private JMeterContext jmctx;
+    private static final String VAL_NAME = "value";
+    private static final String VAL_NAME_NR = "value_matchNr";
 
-        private String data;
+    @Before
+    public void setUp() throws UnsupportedEncodingException {
+        jmctx = JMeterContextService.getContext();
+        extractor = new XPathExtractor();
+        extractor.setThreadContext(jmctx);// This would be done by the run command
+        extractor.setRefName(VAL_NAME);
+        extractor.setDefaultValue("Default");
+        result = new SampleResult();
+        data = "<book><preface title='Intro'>zero</preface><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
+        result.setResponseData(data.getBytes("UTF-8"));
+        vars = new JMeterVariables();
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(result);
+    }
 
-        private JMeterVariables vars;
+    @Test
+    public void testAttributeExtraction() throws Exception {
+        extractor.setXPathQuery("/book/preface/@title");
+        extractor.process();
+        assertEquals("Intro", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertEquals("Intro", vars.get(VAL_NAME + "_1"));
+        assertNull(vars.get(VAL_NAME + "_2"));
 
+        extractor.setXPathQuery("/book/preface[@title]");
+        extractor.process();
+        assertEquals("zero", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertEquals("zero", vars.get(VAL_NAME + "_1"));
+        assertNull(vars.get(VAL_NAME + "_2"));
 
-        private JMeterContext jmctx;
+        extractor.setXPathQuery("/book/preface[@title='Intro']");
+        extractor.process();
+        assertEquals("zero", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertEquals("zero", vars.get(VAL_NAME + "_1"));
+        assertNull(vars.get(VAL_NAME + "_2"));
 
-        private static final String VAL_NAME = "value";
-        private static final String VAL_NAME_NR = "value_matchNr";
+        extractor.setXPathQuery("/book/preface[@title='xyz']");
+        extractor.process();
+        assertEquals("Default", vars.get(VAL_NAME));
+        assertEquals("0", vars.get(VAL_NAME_NR));
+        assertNull(vars.get(VAL_NAME + "_1"));
+    }
 
-        @Before
-        public void setUp() throws UnsupportedEncodingException {
-            jmctx = JMeterContextService.getContext();
-            extractor = new XPathExtractor();
-            extractor.setThreadContext(jmctx);// This would be done by the run command
-            extractor.setRefName(VAL_NAME);
-            extractor.setDefaultValue("Default");
-            result = new SampleResult();
-            data = "<book><preface title='Intro'>zero</preface><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
-            result.setResponseData(data.getBytes("UTF-8"));
-            vars = new JMeterVariables();
-            jmctx.setVariables(vars);
-            jmctx.setPreviousResult(result);
-        }
+    @Test
+    public void testVariableExtraction() throws Exception {
+        extractor.setXPathQuery("/book/preface");
+        extractor.process();
+        assertEquals("zero", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertEquals("zero", vars.get(VAL_NAME + "_1"));
+        assertNull(vars.get(VAL_NAME + "_2"));
 
-        @Test
-        public void testAttributeExtraction() throws Exception {
-            extractor.setXPathQuery("/book/preface/@title");
-            extractor.process();
-            assertEquals("Intro", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertEquals("Intro", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));
+        extractor.setXPathQuery("/book/page");
+        extractor.process();
+        assertEquals("one", vars.get(VAL_NAME));
+        assertEquals("2", vars.get(VAL_NAME_NR));
+        assertEquals("one", vars.get(VAL_NAME + "_1"));
+        assertEquals("two", vars.get(VAL_NAME + "_2"));
+        assertNull(vars.get(VAL_NAME + "_3"));
 
-            extractor.setXPathQuery("/book/preface[@title]");
-            extractor.process();
-            assertEquals("zero", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertEquals("zero", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));
+        // Test match 1
+        extractor.setXPathQuery("/book/page");
+        extractor.setMatchNumber(1);
+        extractor.process();
+        assertEquals("one", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertEquals("one", vars.get(VAL_NAME + "_1"));
+        assertNull(vars.get(VAL_NAME + "_2"));
+        assertNull(vars.get(VAL_NAME + "_3"));
 
-            extractor.setXPathQuery("/book/preface[@title='Intro']");
-            extractor.process();
-            assertEquals("zero", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertEquals("zero", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));
+        // Test match Random
+        extractor.setXPathQuery("/book/page");
+        extractor.setMatchNumber(0);
+        extractor.process();
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        Assert.assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME)));
+        Assert.assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME + "_1")));
+        assertNull(vars.get(VAL_NAME + "_2"));
+        assertNull(vars.get(VAL_NAME + "_3"));
 
-            extractor.setXPathQuery("/book/preface[@title='xyz']");
-            extractor.process();
-            assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("0", vars.get(VAL_NAME_NR));
-            assertNull(vars.get(VAL_NAME+"_1"));
-        }
+        // Put back default value
+        extractor.setMatchNumber(-1);
 
-        @Test
-        public void testVariableExtraction() throws Exception {
-            extractor.setXPathQuery("/book/preface");
-            extractor.process();
-            assertEquals("zero", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertEquals("zero", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));
+        extractor.setXPathQuery("/book/page[2]");
+        extractor.process();
+        assertEquals("two", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertEquals("two", vars.get(VAL_NAME + "_1"));
+        assertNull(vars.get(VAL_NAME + "_2"));
+        assertNull(vars.get(VAL_NAME + "_3"));
 
-            extractor.setXPathQuery("/book/page");
-            extractor.process();
-            assertEquals("one", vars.get(VAL_NAME));
-            assertEquals("2", vars.get(VAL_NAME_NR));
-            assertEquals("one", vars.get(VAL_NAME+"_1"));
-            assertEquals("two", vars.get(VAL_NAME+"_2"));
-            assertNull(vars.get(VAL_NAME+"_3"));
+        extractor.setXPathQuery("/book/index");
+        extractor.process();
+        assertEquals("Default", vars.get(VAL_NAME));
+        assertEquals("0", vars.get(VAL_NAME_NR));
+        assertNull(vars.get(VAL_NAME + "_1"));
 
-            // Test match 1
-            extractor.setXPathQuery("/book/page");
-            extractor.setMatchNumber(1);
-            extractor.process();
-            assertEquals("one", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertEquals("one", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));
-            assertNull(vars.get(VAL_NAME+"_3"));
+        // Has child, but child is empty
+        extractor.setXPathQuery("/book/a");
+        extractor.process();
+        assertEquals("Default", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertNull(vars.get(VAL_NAME + "_1"));
 
-            // Test match Random
-            extractor.setXPathQuery("/book/page");
-            extractor.setMatchNumber(0);
-            extractor.process();
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            Assert.assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME)));
-            Assert.assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME+"_1")));
-            assertNull(vars.get(VAL_NAME+"_2"));
-            assertNull(vars.get(VAL_NAME+"_3"));
+        // Has no child
+        extractor.setXPathQuery("/book/empty");
+        extractor.process();
+        assertEquals("Default", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertNull(vars.get(VAL_NAME + "_1"));
 
-            // Put back default value
-            extractor.setMatchNumber(-1);
+        // No text
+        extractor.setXPathQuery("//a");
+        extractor.process();
+        assertEquals("Default", vars.get(VAL_NAME));
 
-            extractor.setXPathQuery("/book/page[2]");
-            extractor.process();
-            assertEquals("two", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertEquals("two", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));
-            assertNull(vars.get(VAL_NAME+"_3"));
+        // No text all matches
+        extractor.setXPathQuery("//a");
+        extractor.process();
+        extractor.setMatchNumber(-1);
+        assertEquals("Default", vars.get(VAL_NAME));
 
-            extractor.setXPathQuery("/book/index");
-            extractor.process();
-            assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("0", vars.get(VAL_NAME_NR));
-            assertNull(vars.get(VAL_NAME+"_1"));
+        // No text match second
+        extractor.setXPathQuery("//a");
+        extractor.process();
+        extractor.setMatchNumber(2);
+        assertEquals("Default", vars.get(VAL_NAME));
 
-            // Has child, but child is empty
-            extractor.setXPathQuery("/book/a");
-            extractor.process();
-            assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertNull(vars.get(VAL_NAME+"_1"));
+        // No text match random
+        extractor.setXPathQuery("//a");
+        extractor.process();
+        extractor.setMatchNumber(0);
+        assertEquals("Default", vars.get(VAL_NAME));
 
-            // Has no child
-            extractor.setXPathQuery("/book/empty");
-            extractor.process();
-            assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertNull(vars.get(VAL_NAME+"_1"));
+        extractor.setMatchNumber(-1);
+        // Test fragment
+        extractor.setXPathQuery("/book/page[2]");
+        extractor.setFragment(true);
+        extractor.process();
+        assertEquals("<page>two</page>", vars.get(VAL_NAME));
+        // Now get its text
+        extractor.setXPathQuery("/book/page[2]/text()");
+        extractor.process();
+        assertEquals("two", vars.get(VAL_NAME));
 
-            // No text
-            extractor.setXPathQuery("//a");
-            extractor.process();
-            assertEquals("Default", vars.get(VAL_NAME));
+        // No text, but using fragment mode
+        extractor.setXPathQuery("//a");
+        extractor.process();
+        assertEquals("<a><b/></a>", vars.get(VAL_NAME));
+    }
 
-            // No text all matches
-            extractor.setXPathQuery("//a");
-            extractor.process();
-            extractor.setMatchNumber(-1);
-            assertEquals("Default", vars.get(VAL_NAME));
+    @Test
+    public void testScope() {
+        extractor.setXPathQuery("/book/preface");
+        extractor.process();
+        assertEquals("zero", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertEquals("zero", vars.get(VAL_NAME + "_1"));
+        assertNull(vars.get(VAL_NAME + "_2"));
 
-            // No text match second
-            extractor.setXPathQuery("//a");
-            extractor.process();
-            extractor.setMatchNumber(2);
-            assertEquals("Default", vars.get(VAL_NAME));
+        extractor.setScopeChildren(); // There aren't any
+        extractor.process();
+        assertEquals("Default", vars.get(VAL_NAME));
+        assertEquals("0", vars.get(VAL_NAME_NR));
+        assertNull(vars.get(VAL_NAME + "_1"));
 
-            // No text match random
-            extractor.setXPathQuery("//a");
-            extractor.process();
-            extractor.setMatchNumber(0);
-            assertEquals("Default", vars.get(VAL_NAME));
+        extractor.setScopeAll(); // same as Parent
+        extractor.process();
+        assertEquals("zero", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertEquals("zero", vars.get(VAL_NAME + "_1"));
+        assertNull(vars.get(VAL_NAME + "_2"));
 
-            extractor.setMatchNumber(-1);
-            // Test fragment
-            extractor.setXPathQuery("/book/page[2]");
-            extractor.setFragment(true);
-            extractor.process();
-            assertEquals("<page>two</page>", vars.get(VAL_NAME));
-            // Now get its text
-            extractor.setXPathQuery("/book/page[2]/text()");
-            extractor.process();
-            assertEquals("two", vars.get(VAL_NAME));
-
-            // No text, but using fragment mode
-            extractor.setXPathQuery("//a");
-            extractor.process();
-            assertEquals("<a><b/></a>", vars.get(VAL_NAME));
-        }
-
-        @Test
-        public void testScope(){
-            extractor.setXPathQuery("/book/preface");
-            extractor.process();
-            assertEquals("zero", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertEquals("zero", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));
-
-            extractor.setScopeChildren(); // There aren't any
-            extractor.process();
-            assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("0", vars.get(VAL_NAME_NR));
-            assertNull(vars.get(VAL_NAME+"_1"));
-
-            extractor.setScopeAll(); // same as Parent
-            extractor.process();
-            assertEquals("zero", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertEquals("zero", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));
-
-            // Try to get data from subresult
-            result.sampleStart(); // Needed for addSubResult()
-            result.sampleEnd();
-            SampleResult subResult = new SampleResult();
-            subResult.sampleStart();
-            subResult.setResponseData(result.getResponseData());
-            subResult.sampleEnd();
-            result.addSubResult(subResult);
+        // Try to get data from subresult
+        result.sampleStart(); // Needed for addSubResult()
+        result.sampleEnd();
+        SampleResult subResult = new SampleResult();
+        subResult.sampleStart();
+        subResult.setResponseData(result.getResponseData());
+        subResult.sampleEnd();
+        result.addSubResult(subResult);
 
 
-            // Get data from both
-            extractor.setScopeAll();
-            extractor.process();
-            assertEquals("zero", vars.get(VAL_NAME));
-            assertEquals("2", vars.get(VAL_NAME_NR));
-            assertEquals("zero", vars.get(VAL_NAME+"_1"));
-            assertEquals("zero", vars.get(VAL_NAME+"_2"));
-            assertNull(vars.get(VAL_NAME+"_3"));
+        // Get data from both
+        extractor.setScopeAll();
+        extractor.process();
+        assertEquals("zero", vars.get(VAL_NAME));
+        assertEquals("2", vars.get(VAL_NAME_NR));
+        assertEquals("zero", vars.get(VAL_NAME + "_1"));
+        assertEquals("zero", vars.get(VAL_NAME + "_2"));
+        assertNull(vars.get(VAL_NAME + "_3"));
 
-            // get data from child
-            extractor.setScopeChildren();
-            extractor.process();
-            assertEquals("zero", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertEquals("zero", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));
+        // get data from child
+        extractor.setScopeChildren();
+        extractor.process();
+        assertEquals("zero", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertEquals("zero", vars.get(VAL_NAME + "_1"));
+        assertNull(vars.get(VAL_NAME + "_2"));
 
 
-            // get data from child
-            extractor.setScopeVariable("result");
-            result = new SampleResult();
-            vars.put("result", data);
-            extractor.process();
-            assertEquals("zero", vars.get(VAL_NAME));
-            assertEquals("1", vars.get(VAL_NAME_NR));
-            assertEquals("zero", vars.get(VAL_NAME+"_1"));
-            assertNull(vars.get(VAL_NAME+"_2"));
+        // get data from child
+        extractor.setScopeVariable("result");
+        result = new SampleResult();
+        vars.put("result", data);
+        extractor.process();
+        assertEquals("zero", vars.get(VAL_NAME));
+        assertEquals("1", vars.get(VAL_NAME_NR));
+        assertEquals("zero", vars.get(VAL_NAME + "_1"));
+        assertNull(vars.get(VAL_NAME + "_2"));
 
-            // get data from child
-            extractor.setScopeVariable("result");
-            result = new SampleResult();
-            vars.remove("result");
-            extractor.process();
-            assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("0", vars.get(VAL_NAME_NR));
-        }
+        // get data from child
+        extractor.setScopeVariable("result");
+        result = new SampleResult();
+        vars.remove("result");
+        extractor.process();
+        assertEquals("Default", vars.get(VAL_NAME));
+        assertEquals("0", vars.get(VAL_NAME_NR));
+    }
 
-        @Test
-        public void testInvalidXpath() throws Exception {
-            // The test fails in other locales for some reason
-            extractor.setXPathQuery("<");
-            extractor.process();
-            assertEquals(1, result.getAssertionResults().length);
-            AssertionResult firstResult = result.getAssertionResults()[0];
-            assertEquals(extractor.getName(), firstResult.getName());
+    @Test
+    public void testInvalidXpath() throws Exception {
+        // The test fails in other locales for some reason
+        extractor.setXPathQuery("<");
+        extractor.process();
+        assertEquals(1, result.getAssertionResults().length);
+        AssertionResult firstResult = result.getAssertionResults()[0];
+        assertEquals(extractor.getName(), firstResult.getName());
+        assertThat(
+                "'<' is an invalid character in xpath, so it is expected to be present in the error message",
+                firstResult.getFailureMessage(),
+                containsString("<")
+        );
+        if (Locale.getDefault().getLanguage().startsWith(Locale.ENGLISH.getLanguage())) {
             assertThat(
-                    "'<' is an invalid character in xpath, so it is expected to be present in the error message",
                     firstResult.getFailureMessage(),
-                    containsString("<")
+                    containsString("A location path was expected, but the following token was encountered")
             );
-            if (Locale.getDefault().getLanguage().startsWith(Locale.ENGLISH.getLanguage())) {
-                assertThat(
-                        firstResult.getFailureMessage(),
-                        containsString("A location path was expected, but the following token was encountered")
-                );
-            }
-            assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("0", vars.get(VAL_NAME_NR));
         }
+        assertEquals("Default", vars.get(VAL_NAME));
+        assertEquals("0", vars.get(VAL_NAME_NR));
+    }
 
-        @Test
-        public void testNonXmlDocument() throws Exception {
-            result.setResponseData("Error:exception occurred", null);
-            extractor.setXPathQuery("//test");
-            extractor.process();
-            assertEquals(1, result.getAssertionResults().length);
-            assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-            assertThat(result.getAssertionResults()[0].getFailureMessage(),
-                    containsString("Content is not allowed in prolog"));
-            assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("0", vars.get(VAL_NAME_NR));
-        }
+    @Test
+    public void testNonXmlDocument() throws Exception {
+        result.setResponseData("Error:exception occurred", null);
+        extractor.setXPathQuery("//test");
+        extractor.process();
+        assertEquals(1, result.getAssertionResults().length);
+        assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
+        assertThat(result.getAssertionResults()[0].getFailureMessage(),
+                containsString("Content is not allowed in prolog"));
+        assertEquals("Default", vars.get(VAL_NAME));
+        assertEquals("0", vars.get(VAL_NAME_NR));
+    }
 
-        @Test
-        public void testInvalidDocument() throws Exception {
-            result.setResponseData("<z>", null);
-            extractor.setXPathQuery("//test");
-            extractor.process();
+    @Test
+    public void testInvalidDocument() throws Exception {
+        result.setResponseData("<z>", null);
+        extractor.setXPathQuery("//test");
+        extractor.process();
 
-            assertEquals(1, result.getAssertionResults().length);
-            assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-            assertThat(result.getAssertionResults()[0].getFailureMessage(),
-                    containsString("XML document structures must start and end within the same entity"));
+        assertEquals(1, result.getAssertionResults().length);
+        assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
+        assertThat(result.getAssertionResults()[0].getFailureMessage(),
+                containsString("XML document structures must start and end within the same entity"));
 
-            assertEquals("Default", vars.get(VAL_NAME));
-            assertEquals("0", vars.get(VAL_NAME_NR));
-        }
+        assertEquals("Default", vars.get(VAL_NAME));
+        assertEquals("0", vars.get(VAL_NAME_NR));
+    }
 }

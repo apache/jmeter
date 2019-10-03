@@ -38,8 +38,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialTest {
-    private SampleResult result;
 
+    private SampleResult result;
     private Collection<CompoundVariable> params;
     private JMeterVariables vars;
     private JMeterContext jmctx;
@@ -106,7 +106,6 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
         String ret = function.execute(result, null);
         assertEquals("1", ret);
     }
-
 
     @Test
     public void testUuid() throws Exception {

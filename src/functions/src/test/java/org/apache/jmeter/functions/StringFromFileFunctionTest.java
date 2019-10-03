@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 public class StringFromFileFunctionTest {
-    public static Path dir;
+    private static Path dir;
 
     @BeforeAll
     public static void init(@TempDir Path tempDir) throws IOException {
@@ -144,7 +144,7 @@ public class StringFromFileFunctionTest {
     }
 
     // Create the StringFromFile function and set its parameters.
-    private StringFromFile createSFF(Object...params) throws Exception {
+    private StringFromFile createSFF(Object... params) throws Exception {
         StringFromFile sff = new StringFromFile();
         sff.setParameters(FunctionTestHelper.makeParams(params));
         return sff;

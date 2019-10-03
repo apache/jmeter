@@ -27,6 +27,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 
 public class RequestViewHTTPTest extends TestCase {
+
     @Test
     public void testGetQueryMapValueContainingAmpersand() {
         // see https://bz.apache.org/bugzilla/show_bug.cgi?id=58413
