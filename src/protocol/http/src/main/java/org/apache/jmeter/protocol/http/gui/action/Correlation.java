@@ -73,11 +73,12 @@ public class Correlation {
      * the parameter list which are candidates for correlation.
      *
      * @param file JMX file whose parameters need to be extracted
+     * @throws IOException if unable to load JMX file
      */
-    public static void extractParameters(File file) {
+    public static void extractParameters(File file) throws IOException {
 
         if (file == null) {
-            log.error("Unable to load JMX file.");
+            throw new NullPointerException("JMX file is null.");
         }
         List<HTTPSamplerBase> sampleRequests = new ArrayList<>();
         List<HTTPSamplerBase> currentGuiSampleRequests = new ArrayList<>();
@@ -100,7 +101,8 @@ public class Correlation {
             samplerSet.clear();
 
         } catch (IOException e) {
-            log.error("Unable to parse JMX file.");
+            JMeterUtils.reportErrorToUser(e.getMessage(), e.getClass().getName());
+            throw e;
         }
 
         // create the map for API requests.
