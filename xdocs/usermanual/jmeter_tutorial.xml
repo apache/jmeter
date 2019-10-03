@@ -130,7 +130,7 @@ The folders inside of <code>src</code>
   <dt><code>protocol</code></dt><dd>contains the different protocols JMeter supports</dd>
   <dt><code>release</code></dt><dd>XXX</dd>
   <dt><code>testkit</code></dt><dd>utility code for testing</dd>
-  <dt><code>testkit-wiremock</code></dt><dd>utility code for testing with wiremock</dd>
+  <dt><code>testkit-wiremock</code></dt><dd>utility code for testing with WireMock</dd>
 </dl>
 
 <p>
@@ -861,11 +861,11 @@ p.setPropertyEditorClass(FileEditor.class);
 <subsection name="&sect-num;.6 Building JMeter" anchor="building">
 
 <p>
-JMeter uses gradle to compile and build the distribution. JMeter has
+JMeter uses Gradle to compile and build the distribution. JMeter has
 several tasks defined, which make it easier for developers to build the complete project.
-For those unfamiliar with gradle, it's a build tool similar to make on Unix.
-A list of the gradle tasks with a short description is provided
-in <a href="https://github.com/apache/jmeter/blob/mastergradle.md>gradle.md">gradle.md</a>, which can be found
+For those unfamiliar with Gradle, it's a build tool similar to make on Unix.
+A list of the Gradle tasks with a short description is provided
+in <a href="https://github.com/apache/jmeter/blob/master/gradle.md">gradle.md</a>, which can be found
  in the root source directory.
 </p>
 
