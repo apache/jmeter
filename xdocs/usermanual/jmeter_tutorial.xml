@@ -129,7 +129,7 @@ The folders inside of <code>src</code>
   <dt><code>launcher</code></dt><dd>code to help start and stop JMeter through API</dd>
   <dt><code>licenses</code></dt><dd>contains information about the licenses used in JMeters dependencies</dd>
   <dt><code>protocol</code></dt><dd>contains the different protocols JMeter supports</dd>
-  <dt><code>release</code></dt><dd>XXX</dd>
+  <dt><code>release</code></dt><dd>code related to releasing JMeter distribution</dd>
   <dt><code>testkit</code></dt><dd>utility code for testing</dd>
   <dt><code>testkit-wiremock</code></dt><dd>utility code for testing with WireMock</dd>
 </dl>
