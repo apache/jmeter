@@ -1,6 +1,6 @@
-# Gradle command-line
+# Gradle Command-Line
 
-Useful commands (gw comes from https://github.com/dougborg/gdub, otherwise `./gradlew` can be used instead):
+Useful commands (`gw` comes from https://github.com/dougborg/gdub, otherwise `./gradlew` can be used instead):
 
 ## Build and run
 
@@ -17,15 +17,18 @@ Useful commands (gw comes from https://github.com/dougborg/gdub, otherwise `./gr
 
       # Display all submodules
       gw projects
+      
       # Different tasks for current module
       gw tasks
 
 ## Cleaning build directories
 
-Technically speaking, `clean` should not be required (every time it is required it might be just a bug), however it might be useful to perform a "clean" build 
+Technically `clean` should not be required, every time it is required it might be a bug.
+However it might be useful to perform a "clean" build: 
 
       # Cleans current project (submodule)
       gw clean
+      
       # Cleans the specified project
       gw :src:core:clean
 
@@ -47,38 +50,65 @@ Technically speaking, `clean` should not be required (every time it is required 
 
 ## Static checks
 
+### Release Audit Tool
+
       # Run RAT
       gw rat
+      
+### Code Formatting
+      
+      # Run spotlessApply and checkstyleAll
+      gw style
+      
+      # Run checkstlye for all
+      gw checkstyleAll
+      
+#### Fine Grained Formatting Commands
+      
       # Run checkstyle for main (non-test) code
       gw checkstyleMain
+      
       # Run checkstyle for test code
       gw checkstyleTest
+      
+      # Run Spotless checks
+      gw spotlessCheck
+      
+      # Fix any issues found by Spotless
+      gw spotlessApply
 
-## Compiling code
+## Compiling Code
 
       gw compileJava
       gw compileTestJava
       ...
 
-## Build project
+## Build Project
 
       # Just build jar (see build/libs/*.jar)
       gw jar
+      
       # "build" is a default task to "execute all the actions"
       gw build
+      
       # Test might be skipped by `-x test` (Gradle's default way to skip task by name)
       gw -x test build
+      
       # Build project in parallel
       gw build --parallel
 
 ## Tests
 
-Gradle automatically tracks task dependencies, so if you modify a file in `/src/jorphan/*`, then you can just invoke `gw check` at project level or in `core` module, and Gradle will automatically build the required jars and files.
+Gradle automatically tracks task dependencies, so if you modify a file in `/src/jorphan/*`,
+then you can invoke `gw check` at project level or in `core`, and Gradle will automatically
+build only the required jars and files.
 
       # Runs all the tests (unit tests, checkstyle, etc)
       gw check
+      
       # Runs just unit tests
       gw test
+      
       # Runs just core tests
       gw :src:core:test
 
@@ -86,6 +116,7 @@ Gradle automatically tracks task dependencies, so if you modify a file in `/src/
 
       # Generates code coverage report for the test task to build/reports/jacoco/test/html
       gw jacocoTestReport
+      
       # Generate combined coverage report
       gw jacocoReport
 
@@ -93,6 +124,7 @@ Gradle automatically tracks task dependencies, so if you modify a file in `/src/
 
       # Builds javadoc to build/docs/javadoc subfolder
       gw javadoc
+      
       # Builds javadoc jar to build/libs/jorphan-javadoc.jar
       gw javadocJar
 
@@ -113,25 +145,31 @@ Gradle automatically tracks task dependencies, so if you modify a file in `/src/
       # The resulting files are placed under build/publications folder
       gw generatePom
 
-## Release artifacts
+## Release Artifacts
 
       # Builds ZIP and TGZ artifacts for the release
       gw :src:dist:assemble
 
 ## Signing
 
-It is implemented via [gradle signing plugin](https://docs.gradle.org/5.2.1/userguide/signing_plugin.html), so it is done automatically provided credentials are specified via [signatory credentials](https://docs.gradle.org/5.2.1/userguide/signing_plugin.html#sec:signatory_credentials)
+It is implemented via [gradle signing plugin](https://docs.gradle.org/5.2.1/userguide/signing_plugin.html), 
+so it is done automatically provided credentials are specified via
+[signatory credentials](https://docs.gradle.org/5.2.1/userguide/signing_plugin.html#sec:signatory_credentials)
 
-      # Signs all the artifacts of the current module (see results in build/**/*.asc
+      # Signs all the artifacts of the current module
+      # see results in build/**/*.asc
       gw sign
-> **Note:** signing is performed as a part of *release artifact build* so it will be performed with `gw :src:dist:assemble`
+> **Note:** signing is performed as a part of *release artifact build* so it will be 
+> performed with `gw :src:dist:assemble`
 
 ## Releasing
 
-      # Builds the project, pushes artifacts to svn://.../dev, stages artifacts to Nexus staging repository
+      # Builds the project, pushes artifacts to svn://.../dev,
+      # stages artifacts to Nexus staging repository
       gw prepareVote -Prc=1
 
-> **Note:** The above step uses [an asf-like release environment](https://github.com/vlsi/asflike-release-environment), so it does not alter public repositories
+> **Note:** The above step uses [an asf-like release environment](https://github.com/vlsi/asflike-release-environment),
+> so it does not alter public repositories
 
       # Prepare another release candidate
       gw prepareVote -Prc=2 -Pasf
