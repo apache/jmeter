@@ -68,20 +68,10 @@ public class PreciseThroughputTimerTest {
     protected ConstantPoissonProcessGenerator getConstantPoissonProcessGenerator(
             final double throughput, final int duration, long seed) {
         return new ConstantPoissonProcessGenerator(
-                new ThroughputProvider() {
-                    @Override
-                    public double getThroughput() {
-                        return throughput; // samples per second
-                    }
-                },
+                () -> throughput, // samples per second
                 1,
                 0,
-                new DurationProvider() {
-                    @Override
-                    public long getDuration() {
-                        return duration; // "expected" test duration: 3 seconds
-                    }
-                },
+                () -> duration, // "expected" test duration: 3 seconds
                 10000,
                 0.1,
                 seed, // Seed
