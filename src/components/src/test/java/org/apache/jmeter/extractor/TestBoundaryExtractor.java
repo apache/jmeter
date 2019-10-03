@@ -44,13 +44,7 @@ public class TestBoundaryExtractor {
         extractor.setThreadContext(jmctx);
         extractor.setRefName("regVal");
         result = new SampleResult();
-        String data = "<company-xmlext-query-ret>" + "<row>" + "<value field=\"RetCode\">LIS_OK</value>"
-                + "<value field=\"RetCodeExtension\"></value>" + "<value field=\"alias\"></value>"
-                + "<value field=\"positioncount\"></value>" + "<value field=\"invalidpincount\">0</value>"
-                + "<value field=\"pinposition1\">1</value>" + "<value field=\"pinpositionvalue1\"></value>"
-                + "<value field=\"pinposition2\">5</value>" + "<value field=\"pinpositionvalue2\"></value>"
-                + "<value field=\"pinposition3\">6</value>" + "<value field=\"pinpositionvalue3\"></value>"
-                + "</row>" + "</company-xmlext-query-ret>";
+        String data = "<company-xmlext-query-ret><row></row></company-xmlext-query-ret>";
         result.setResponseData(data, null);
         result.setResponseHeaders("Header1: Value1\nHeader2: Value2");
         result.setResponseCode("abcd");
@@ -64,9 +58,9 @@ public class TestBoundaryExtractor {
     public void testNoBoundaries() {
         vars.put("content", "one");
         extractor.setMatchNumber(-1);
-        extractor.setRefName("varname");        
+        extractor.setRefName("varname");
         extractor.setScopeVariable("content");
-        extractor.setThreadContext(jmctx);        
+        extractor.setThreadContext(jmctx);
         extractor.process();
         assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
         assertThat(vars.get("varname_1"), CoreMatchers.is("one"));
@@ -78,9 +72,9 @@ public class TestBoundaryExtractor {
         vars.put("content", "one");
         extractor.setLeftBoundary("o");
         extractor.setMatchNumber(-1);
-        extractor.setRefName("varname");        
+        extractor.setRefName("varname"); 
         extractor.setScopeVariable("content");
-        extractor.setThreadContext(jmctx);        
+        extractor.setThreadContext(jmctx);
         extractor.process();
         assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
         assertThat(vars.get("varname_1"), CoreMatchers.is("ne"));
@@ -92,9 +86,9 @@ public class TestBoundaryExtractor {
         vars.put("content", "one");
         extractor.setRightBoundary("e");
         extractor.setMatchNumber(-1);
-        extractor.setRefName("varname");        
+        extractor.setRefName("varname"); 
         extractor.setScopeVariable("content");
-        extractor.setThreadContext(jmctx);        
+        extractor.setThreadContext(jmctx);
         extractor.process();
         assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
         assertThat(vars.get("varname_1"), CoreMatchers.is("on"));
