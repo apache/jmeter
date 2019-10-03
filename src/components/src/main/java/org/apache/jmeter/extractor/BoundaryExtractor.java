@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -93,7 +92,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         if (log.isDebugEnabled()) {
             log.debug("Boundary Extractor {}: processing result", getName());
         }
-        if (StringUtils.isAnyEmpty(getLeftBoundary(), getRightBoundary(), getRefName())) {
+        if (StringUtils.isEmpty(getRefName())) {
             throw new IllegalArgumentException(
                     "One of the mandatory properties is missing in Boundary Extractor:" + getName());
         }
@@ -243,9 +242,23 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         if (StringUtils.isBlank(inputString)) {
             return Collections.emptyList();
         }
-        Objects.requireNonNull(leftBoundary);
-        Objects.requireNonNull(rightBoundary);
-
+        boolean isEmptyLeftBoundary = StringUtils.isEmpty(leftBoundary);
+        boolean isEmptyRightBoundary = StringUtils.isEmpty(rightBoundary);
+        if (isEmptyLeftBoundary && isEmptyRightBoundary) {
+            return Collections.singletonList(inputString);
+        }
+        if (isEmptyLeftBoundary) {
+            int rightBoundaryIndex = inputString.indexOf(rightBoundary);
+            if (rightBoundaryIndex != -1) {
+                return Collections.singletonList(inputString.substring(0, rightBoundaryIndex));
+            }
+        }
+        if (isEmptyRightBoundary) {
+            int leftBoundaryIndex = inputString.indexOf(leftBoundary);
+            if (leftBoundaryIndex != -1) {
+                return Collections.singletonList(inputString.substring(leftBoundaryIndex + leftBoundary.length()));
+            }
+        }
         List<String> matches = new ArrayList<>();
         int leftBoundaryLen = leftBoundary.length();
         boolean collectAll = matchNumber <= 0;
