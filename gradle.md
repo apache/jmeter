@@ -129,7 +129,7 @@ It is implemented via [gradle signing plugin](https://docs.gradle.org/5.2.1/user
 ## Releasing
 
       # Builds the project, pushes artifacts to svn://.../dev, stages artifacts to Nexus staging repository
-      gw prepareVote -Prc=1 -Pasf
+      gw prepareVote -Prc=1
 
 > **Note:** The above step uses [an asf-like release environment](https://github.com/vlsi/asflike-release-environment), so it does not alter public repositories
 
