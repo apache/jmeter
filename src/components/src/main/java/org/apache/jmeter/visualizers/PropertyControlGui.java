@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -131,11 +132,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
         }
         Set<Map.Entry<Object, Object>> s = p.entrySet();
         List<Map.Entry<Object, Object>> al = new ArrayList<>(s);
-        al.sort((o1, o2) -> {
-            String m1 = (String) o1.getKey();
-            String m2 = (String) o2.getKey();
-            return m1.compareTo(m2);
-        });
+        al.sort(Comparator.comparing(o -> (String) o.getKey()));
 
         for (Map.Entry<Object, Object> row : al) {
             tableModel.addRow(row);
