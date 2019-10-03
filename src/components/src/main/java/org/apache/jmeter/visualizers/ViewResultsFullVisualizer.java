@@ -534,8 +534,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             // the result.setText
             // call until the user chooses the "Response data" tab. Plus we
             // could warn the user
-            // if this happens and revert the choice if he doesn't confirm
-            // he's ready to wait.
+            // if this happens and revert the choice if they doesn't confirm
+            // they are ready to wait.
             int len = res.getResponseDataAsString().length();
             if (MAX_DISPLAY_SIZE > 0 && len > MAX_DISPLAY_SIZE) {
                 StringBuilder builder = new StringBuilder(MAX_DISPLAY_SIZE + 100);

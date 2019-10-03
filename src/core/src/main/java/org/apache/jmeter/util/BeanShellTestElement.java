@@ -78,7 +78,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
             try {
                 bshInterpreter.reset();
             } catch (ClassNotFoundException e) {
-                log.error("Cannot reset BeanShell: {}", e.toString());
+                log.error("Cannot reset BeanShell: {}", e.toString()); // NOSONAR last arg would be exception
             }
         }
 
@@ -92,7 +92,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
             bshInterpreter.set("props", JMeterUtils.getJMeterProperties());
             bshInterpreter.set("vars", vars);//$NON-NLS-1$
         } catch (JMeterException e) {
-            log.warn("Problem setting one or more BeanShell variables {}", e.toString());
+            log.warn("Problem setting one or more BeanShell variables {}", e.toString()); // NOSONAR last arg would be exception
         }
         return bshInterpreter;
     }
@@ -106,7 +106,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
             hasInitFile = initFileName != null;
             bshInterpreter = new BeanShellInterpreter(initFileName, log);
         } catch (ClassNotFoundException e) {
-            log.error("Cannot find BeanShell: {}", e.toString());
+            log.error("Cannot find BeanShell: {}", e.toString()); // NOSONAR last arg would be exception
         }
     }
 

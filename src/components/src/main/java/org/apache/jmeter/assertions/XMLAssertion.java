@@ -46,7 +46,9 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
         @Override
         protected XMLReader initialValue() {
             try {
-                return XMLReaderFactory.createXMLReader();
+                XMLReader reader = XMLReaderFactory.createXMLReader();
+                reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                return reader;
             } catch (SAXException e) {
                 log.error("Error initializing XMLReader in XMLAssertion", e);
                 return null;

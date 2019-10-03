@@ -44,7 +44,7 @@ public class MongoScriptSampler
 
     public final static String DATABASE = "MongoScriptSampler.database"; //$NON-NLS-1$
     public final static String USERNAME = "MongoScriptSampler.username"; //$NON-NLS-1$
-    public final static String PASSWORD = "MongoScriptSampler.password"; //$NON-NLS-1$
+    public final static String PASSWORD = "MongoScriptSampler.password"; //$NON-NLS-1$ NOSONAR It's not a password
     public final static String SCRIPT = "MongoScriptSampler.script"; //$NON-NLS-1$
 
 

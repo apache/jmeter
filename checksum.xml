@@ -109,6 +109,7 @@
     <trusted-key id='8799af90c06efbbd' group='org.jdom' />
     <trusted-key id='bcf4173966770193' group='org.jetbrains' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.intellij.deps' />
+    <trusted-key id='6a0975f8b1127b83' group='org.jetbrains.kotlin' />
     <trusted-key id='98fe03a974ce0a0b' group='org.jetbrains.kotlin' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.kotlinx' />
     <trusted-key id='91ae1504568ec4dd' group='org.jodd' />
@@ -162,6 +163,9 @@
     <dependency group='gradle.plugin.com.github.spotbugs' module='spotbugs-gradle-plugin' version='1.6.10'>
       <sha512>E7486B32EF6C9C14FE879814DA5F06CA6ECABF47195063A93E6FC8CD10119244C5A7BC3C71A4760CCE3AFFA9E9736336D345D8ED84EB65153C15683FA6529D92</sha512>
     </dependency>
+    <dependency group='gradle.plugin.com.github.spotbugs' module='spotbugs-gradle-plugin' version='2.0.0'>
+      <sha512>B3BFAD07E6A3D4D73CBCE802D8614CF4AC84E589166D243D41028DC077F84C027DF4D514F145360405F37DA73A8F2E7B65D90877A9EE1151174D2440530F9051</sha512>
+    </dependency>
     <dependency group='gradle.plugin.org.jetbrains.gradle.plugin.idea-ext' module='gradle-idea-ext' version='0.5'>
       <sha512>4A6B7FA6CD8C6FA82A517C396510E408F1C6FAB5FF6D4C68008F80718F05E5943755AA240F329C95661CCB0231114DD0F6D7C38EFBF73EE6B1ECC70850F40F7E</sha512>
     </dependency>
@@ -179,6 +183,9 @@
     </dependency>
     <dependency group='org.nosphere.apache' module='creadur-rat-gradle' version='0.5.0'>
       <sha512>45A6A697C4E514893A0AA530D12A61E537FEAA68C2429E959C68541DB08D1BDD52542AF1DE21F4472557551309C54F4E96DF48889F09F77B70C09139352BAA2E</sha512>
+    </dependency>
+    <dependency group='org.nosphere.apache' module='creadur-rat-gradle' version='0.5.2'>
+      <sha512>77A7E43B9CC3AE9676A4B9B6D2CEFFF578D171E6A2741DFA676981856E77DFB990F23BCA5817E8EB0E676CFB2802C7E4A429117F817AF52EE7110DCE4CEBE4CD</sha512>
     </dependency>
     <dependency group='org.ow2.asm' module='asm-analysis' version='6.2.1'>
       <sha512>BE273F8E886BBCFDA81180917145996AB8FD26A17264EBEB5E1FC2337950A309D64DC8CBD373220009728622A8CBF56B8578E960B5561C22EA66848D296AE44E</sha512>

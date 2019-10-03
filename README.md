@@ -80,7 +80,7 @@ The following requirements exist for running Apache JMeter:
 - Optional jars:
 
   Some jars are not included with JMeter.
-  If required, these should be downloaded and placed in he ib directory
+  If required, these should be downloaded and placed in the lib directory
   - JDBC - available from the database supplier
   - JMS - available from the JMS provider
   - [Bouncy Castle](http://www.bouncycastle.org/test_releases.html) -

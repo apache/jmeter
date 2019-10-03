@@ -43,6 +43,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -85,7 +86,6 @@ import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
 import org.apache.jmeter.report.config.ConfigurationException;
-import org.apache.jmeter.report.dashboard.GenerationException;
 import org.apache.jmeter.report.dashboard.ReportGenerator;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
@@ -547,9 +547,9 @@ public class JMeter implements JMeterPlugin {
                 } else { // NON-GUI must be true
                     extractAndSetReportOutputFolder(parser, deleteResultFile);
 
-                    CLOption rem = parser.getArgumentById(REMOTE_OPT_PARAM);
-                    if (rem == null) {
-                        rem = parser.getArgumentById(REMOTE_OPT);
+                    CLOption remoteTest = parser.getArgumentById(REMOTE_OPT_PARAM);
+                    if (remoteTest == null) {
+                        remoteTest = parser.getArgumentById(REMOTE_OPT);
                     }
                     CLOption jtl = parser.getArgumentById(LOGFILE_OPT);
                     String jtlFile = null;
@@ -561,7 +561,7 @@ public class JMeter implements JMeterPlugin {
                         throw new IllegalUserActionException(
                                 "Option -"+ ((char)REPORT_AT_END_OPT)+" requires -"+((char)LOGFILE_OPT )+ " option");
                     }
-                    startNonGui(testFile, jtlFile, rem, reportAtEndOpt != null);
+                    startNonGui(testFile, jtlFile, remoteTest, reportAtEndOpt != null);
                     startOptionalServers();
                 }
             }
@@ -1066,27 +1066,31 @@ public class JMeter implements JMeterPlugin {
             clonedTree.add(clonedTree.getArray()[0], new RemoteThreadsListenerTestElement());
 
             List<JMeterEngine> engines = new LinkedList<>();
-            clonedTree.add(clonedTree.getArray()[0], new ListenToTest(remoteStart && remoteStop ? engines : null, reportGenerator));
             println("Created the tree successfully using "+testFile);
             if (!remoteStart) {
                 JMeterEngine engine = new StandardJMeterEngine();
+                clonedTree.add(clonedTree.getArray()[0], new ListenToTest(
+                        org.apache.jmeter.JMeter.ListenToTest.RunMode.LOCAL, false, reportGenerator));
                 engine.configure(clonedTree);
                 long now=System.currentTimeMillis();
-                println("Starting the test @ "+new Date(now)+" ("+now+")");
-                engine.runTest();
+                println("Starting standalone test @ "+new Date(now)+" ("+now+")");
                 engines.add(engine);
+                engine.runTest();
             } else {
-                java.util.StringTokenizer st = new java.util.StringTokenizer(remoteHostsString, ",");//$NON-NLS-1$
+                java.util.StringTokenizer st = new java.util.StringTokenizer(remoteHostsString.trim(), ",");//$NON-NLS-1$
                 List<String> hosts = new LinkedList<>();
                 while (st.hasMoreElements()) {
-                    hosts.add((String) st.nextElement());
+                    hosts.add(((String) st.nextElement()).trim());
                 }
-
+                ListenToTest testListener = new ListenToTest(
+                        org.apache.jmeter.JMeter.ListenToTest.RunMode.REMOTE, remoteStop, reportGenerator);
+                clonedTree.add(clonedTree.getArray()[0], testListener);
                 DistributedRunner distributedRunner=new DistributedRunner(this.remoteProps);
                 distributedRunner.setStdout(System.out); // NOSONAR
                 distributedRunner.setStdErr(System.err); // NOSONAR
                 distributedRunner.init(hosts, clonedTree);
                 engines.addAll(distributedRunner.getEngines());
+                testListener.setStartedRemoteEngines(engines);
                 distributedRunner.start();
             }
             startUdpDdaemon(engines);
@@ -1225,21 +1229,41 @@ public class JMeter implements JMeterPlugin {
      * If running a remote test, then after waiting a few seconds for listeners to finish files,
      * it calls ClientJMeterEngine.tidyRMI() to deal with the Naming Timer Thread.
      */
-    private static class ListenToTest implements TestStateListener, Runnable, Remoteable {
-        private AtomicInteger startedEngines; // keep track of remote tests
+    private static class ListenToTest implements TestStateListener, Remoteable {
+        enum RunMode {
+            LOCAL,
+            REMOTE
+        }
 
-        private final List<JMeterEngine> engines;
+        private AtomicInteger startedRemoteEngines = new AtomicInteger(0);
+
+        private ConcurrentLinkedQueue<JMeterEngine> remoteEngines = new ConcurrentLinkedQueue<>();
 
         private final ReportGenerator reportGenerator;
 
+        private RunMode runMode;
+
+        private boolean remoteStop;
+
         /**
-         * @param engines List<JMeterEngine>
+         * Listener for remote test
+         * @param runMode RunMode
+         * @param remoteStop
          * @param reportGenerator {@link ReportGenerator}
          */
-        public ListenToTest(List<JMeterEngine> engines, ReportGenerator reportGenerator) {
-            this.engines=engines;
-            this.startedEngines = new AtomicInteger(engines == null ? 0 : engines.size());
+        public ListenToTest(RunMode runMode, boolean remoteStop, ReportGenerator reportGenerator) {
+            this.runMode = runMode;
+            this.remoteStop = remoteStop;
             this.reportGenerator = reportGenerator;
+        }
+
+        public void setStartedRemoteEngines(List<JMeterEngine> engines) {
+            if (runMode != RunMode.REMOTE) {
+                throw new IllegalArgumentException("This method should only be called in RunMode.REMOTE");
+            }
+            this.remoteEngines.clear();
+            this.remoteEngines.addAll(engines);
+            this.startedRemoteEngines = new AtomicInteger(remoteEngines.size());
         }
 
         @Override
@@ -1247,8 +1271,9 @@ public class JMeter implements JMeterPlugin {
         public void testEnded(String host) {
             final long now=System.currentTimeMillis();
             log.info("Finished remote host: {} ({})", host, now);
-            if (startedEngines.decrementAndGet() <= 0) {
-                Thread stopSoon = new Thread(this);
+            if (startedRemoteEngines.decrementAndGet() <= 0) {
+                log.info("All remote engines have ended test, starting RemoteTestStopper thread");
+                Thread stopSoon = new Thread(() -> endTest(true), "RemoteTestStopper");
                 // the calling thread is a daemon; this thread must not be
                 // see Bug 59391
                 stopSoon.setDaemon(false);
@@ -1258,16 +1283,7 @@ public class JMeter implements JMeterPlugin {
 
         @Override
         public void testEnded() {
-            long now = System.currentTimeMillis();
-            println("Tidying up ...    @ "+new Date(now)+" ("+now+")");
-            try {
-                generateReport();
-            } catch (Exception e) {
-                System.err.println("Error generating the report: "+e);//NOSONAR
-                log.error("Error generating the report",e);
-            }
-            checkForRemainingThreads();
-            println("... end of run");
+            endTest(false);
         }
 
         @Override
@@ -1284,52 +1300,42 @@ public class JMeter implements JMeterPlugin {
             }
         }
 
-        /**
-         * This is a hack to allow listeners a chance to close their files. Must
-         * implement a queue for sample responses tied to the engine, and the
-         * engine won't deliver testEnded signal till all sample responses have
-         * been delivered. Should also improve performance of remote JMeter
-         * testing.
-         */
-        @Override
-        public void run() {
+        private void endTest(boolean isDistributed) {
             long now = System.currentTimeMillis();
-            println("Tidying up remote @ "+new Date(now)+" ("+now+")");
-            if (engines!=null){ // it will be null unless remoteStop = true
-                println("Exiting remote servers");
-                for (JMeterEngine e : engines){
-                    e.exit();
-                }
+            if (isDistributed) {
+                println("Tidying up remote @ "+new Date(now)+" ("+now+")");
+            } else {
+                println("Tidying up ...    @ "+new Date(now)+" ("+now+")");
             }
-            try {
-                TimeUnit.SECONDS.sleep(5); // Allow listeners to close files
-            } catch (InterruptedException ignored) {
-                Thread.currentThread().interrupt();
-            }
-            ClientJMeterEngine.tidyRMI(log);
-            try {
-                generateReport();
-            } catch (Exception e) {
-                System.err.println("Error generating the report: "+e);//NOSONAR
-                log.error("Error generating the report",e);
-            }
-            checkForRemainingThreads();
-            println("... end of run");
-        }
 
-        /**
-         * Generate report
-         */
-        private void generateReport() {
+            if (isDistributed) {
+                if (remoteStop) {
+                    println("Exiting remote servers:"+remoteEngines);
+                    for (JMeterEngine engine : remoteEngines){
+                        println("Exiting remote server:"+engine);
+                        engine.exit();
+                    }
+                }
+                try {
+                    TimeUnit.SECONDS.sleep(5); // Allow listeners to close files
+                } catch (InterruptedException ignored) {
+                    Thread.currentThread().interrupt();
+                }
+                ClientJMeterEngine.tidyRMI(log);
+            }
+
             if(reportGenerator != null) {
                 try {
                     log.info("Generating Dashboard");
                     reportGenerator.generate();
                     log.info("Dashboard generated");
-                } catch (GenerationException ex) {
-                    log.error("Error generating dashboard: {}", ex, ex);
+                } catch (Exception ex) {
+                    System.err.println("Error generating the report: "+ex);//NOSONAR
+                    log.error("Error generating the report: {}", ex.getMessage(), ex);
                 }
             }
+            checkForRemainingThreads();
+            println("... end of run");
         }
 
         /**

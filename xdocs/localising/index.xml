@@ -87,7 +87,7 @@ for sending to a translator, just go to the directory above the project root and
 tar czf jmeter-localisation.tgz `find jmeter/src -name "*.properties" -o -name "*.metaprops"`
 </source>
 <p>
-Of course you could also send the translator the whole jmeter directory, but this will make his life easier.
+Of course you could also send the translator the whole jmeter directory, but this will make their life easier.
 </p>
 
 </section>

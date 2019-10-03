@@ -32,9 +32,12 @@ public class XmlAssertionTest extends JMeterTestCase {
     private XMLAssertion assertion;
     private SampleResult sampleResult;
     private AssertionResult result;
-    private final String invalidXml = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note1>";
-    private final String validXml = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>";
-    private final String noXml = "response Data";
+    private static final String INVALID_XML = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>"
+            + "Don't forget me this weekend!</body></note1>";
+    private static final String VALID_XML = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>";
+    private static final String NO_XML = "response Data";
+    private static final String UNSECURE_XML = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" + "<!DOCTYPE foo [\n"
+            + "   <!ENTITY xxe SYSTEM \"file:///etc/passwd\" > ]>\n" + "<foo>&xxe;</foo>";
 
     @Before
     public void setUp() {
@@ -47,8 +50,18 @@ public class XmlAssertionTest extends JMeterTestCase {
     }
 
     @Test
+    public void testUnsecureX() throws Exception {
+        sampleResult.setResponseData(UNSECURE_XML, null);
+        result = assertion.getResult(sampleResult);
+        Assert.assertTrue(result.isFailure());
+        Assert.assertTrue(result.isError());
+        Assert.assertEquals("DOCTYPE is disallowed when the feature \"http://apache.org/xml/features/disallow-doctype-decl\" set to true.",
+                    result.getFailureMessage());
+    }
+
+    @Test
     public void testValidXML() throws Exception {
-        sampleResult.setResponseData(validXml, null);
+        sampleResult.setResponseData(VALID_XML, null);
         result = assertion.getResult(sampleResult);
         Assert.assertFalse(result.isFailure());
         Assert.assertFalse(result.isError());
@@ -57,7 +70,7 @@ public class XmlAssertionTest extends JMeterTestCase {
 
     @Test
     public void testInvalidXML() throws Exception {
-        sampleResult.setResponseData(invalidXml, null);
+        sampleResult.setResponseData(INVALID_XML, null);
         result = assertion.getResult(sampleResult);
         Assert.assertTrue(result.isFailure());
         Assert.assertTrue(result.isError());
@@ -66,7 +79,7 @@ public class XmlAssertionTest extends JMeterTestCase {
 
     @Test
     public void testNoXML() throws Exception {
-        sampleResult.setResponseData(noXml, null);
+        sampleResult.setResponseData(NO_XML, null);
         result = assertion.getResult(sampleResult);
         Assert.assertTrue(result.isFailure());
         Assert.assertTrue(result.isError());

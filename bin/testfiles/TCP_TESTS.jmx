@@ -388,12 +388,14 @@ vars.put(&quot;result_decoded&quot;, new String(hex.decode(prev.getResponseData(
             <stringProp name="filename"></stringProp>
             <stringProp name="cacheKey">d65ff29e-5d0c-47df-b464-e7a84fa88e66</stringProp>
             <stringProp name="script">String oldResponseMessage = prev.getResponseMessage();
-int indexOfParenthesis = oldResponseMessage.indexOf(&quot;(&quot;);
-if(indexOfParenthesis&gt;=0) {
-	prev.setResponseMessage(oldResponseMessage.substring(0, indexOfParenthesis).trim());
-} else {
-	indexOfParenthesis = oldResponseMessage.lastIndexOf(&quot;:&quot;);
-	prev.setResponseMessage(oldResponseMessage.substring(0, indexOfParenthesis).trim());
+// In practice the exception might have lot of flavours:
+//  &quot;java.net.ConnectException: Connection refused&quot;
+//  &quot;java.net.ConnectException: Connection refused (Connection refused)&quot;
+//  &quot;java.net.ConnectException: Connection refused: refused&quot;
+// So we normalize it
+
+if (oldResponseMessage != null &amp;&amp; oldResponseMessage.contains(&quot;java.net.ConnectException: Connection refused&quot;)) {
+    prev.setResponseMessage(&quot;java.net.ConnectException: Connection refused&quot;);
 }
 </stringProp>
           </JSR223PostProcessor>

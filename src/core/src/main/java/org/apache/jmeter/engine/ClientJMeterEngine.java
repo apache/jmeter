@@ -232,4 +232,9 @@ public class ClientJMeterEngine implements JMeterEngine {
     public String getHost() {
         return hostAndPort;
     }
+
+    @Override
+    public String toString() {
+        return "ClientJMeterEngine [hostAndPort=" + hostAndPort + "]";
+    }
 }

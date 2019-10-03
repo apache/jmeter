@@ -320,7 +320,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
         if (this.pool != null) {
             this.pool.shutdown();
         }
-        getWorkingDirectory().delete();
+        if (!getWorkingDirectory().delete()) {
+            LOG.warn("Was not able to delete folder {}", getWorkingDirectory());
+        }
     }
 
     private File sortAndDump(final List<Sample> samples,

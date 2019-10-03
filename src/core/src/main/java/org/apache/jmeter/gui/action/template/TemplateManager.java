@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -167,6 +168,7 @@ public class TemplateManager {
         dbf.setNamespaceAware(true);
         dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
         dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         DocumentBuilder bd = dbf.newDocumentBuilder();
         bd.setEntityResolver(new DefaultEntityResolver());
         LoggingErrorHandler errorHandler = new LoggingErrorHandler(log, file);

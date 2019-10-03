@@ -21,13 +21,12 @@ import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.git.FindGitAttributes
 import com.github.vlsi.gradle.git.dsl.gitignore
 import com.github.vlsi.gradle.release.ReleaseExtension
-import com.github.vlsi.gradle.release.dsl.dependencyLicenses
-import com.github.vlsi.gradle.release.dsl.licensesCopySpec
 import org.gradle.api.internal.TaskOutputsInternal
 
 plugins {
     id("com.github.vlsi.crlf")
     id("com.github.vlsi.stage-vote-release")
+    signing
 }
 
 var jars = arrayOf(
@@ -35,7 +34,7 @@ var jars = arrayOf(
         ":src:launcher",
         ":src:components",
         ":src:core",
-        //":src:examples",
+        // ":src:examples",
         ":src:functions",
         ":src:jorphan",
         ":src:protocol:ftp",
@@ -51,6 +50,8 @@ var jars = arrayOf(
         ":src:protocol:tcp")
 
 val buildDocs by configurations.creating
+val binLicense by configurations.creating
+val srcLicense by configurations.creating
 
 // Note: you can inspect final classpath (list of jars in the binary distribution)  via
 // gw dependencies --configuration runtimeClasspath
@@ -64,6 +65,9 @@ dependencies {
             It just looks good, however Darcula is not used explicitly,
              so the dependency is added for distribution only""".trimIndent())
     }
+
+    binLicense(project(":src:licenses", "binLicense"))
+    srcLicense(project(":src:licenses", "srcLicense"))
 
     buildDocs(platform(project(":src:bom")))
     buildDocs("org.apache.velocity:velocity")
@@ -135,13 +139,19 @@ libs.from(populateLibs)
 libsExt.from(populateLibs)
 binLibs.from(populateLibs)
 
-val copyLibs by tasks.registering(Copy::class) {
+val copyLibs by tasks.registering(Sync::class) {
     val junitSampleJar = project(":src:protocol:junit-sample").tasks.named(JavaPlugin.JAR_TASK_NAME)
     dependsOn(junitSampleJar)
     val generatorJar = project(":src:generator").tasks.named(JavaPlugin.JAR_TASK_NAME)
     // Can't use $rootDir since Gradle somehow reports .gradle/caches/ as "always modified"
     rootSpec.into("$rootDir/lib")
     with(libs)
+    preserve {
+        // Sync does not really know which files it copied during previous times, so
+        // it just removes everything it sees.
+        // We configure it to keep txt files that should be present there (the files come from Git source tree)
+        include("**/*.txt")
+    }
     into("ext") {
         with(libsExt)
         from(generatorJar)
@@ -170,25 +180,16 @@ val createDist by tasks.registering {
 // source/binary artifacts with the appropriate eol/executable file flags
 val gitProps by rootProject.tasks.existing(FindGitAttributes::class)
 
-// Project :src:license-* might not be evaluated yet, so "renderLicenseFor..." task
-// might not exist yet
-// So we add "evaluationDependsOn"
-evaluationDependsOn(":src:licenses")
-
-// This workarounds https://github.com/gradle/gradle/issues/10008
-// Gradle does not support CopySpec#with(Provider<CopySpec>) yet :(
-fun licenses(licenseType: String) =
-    licensesCopySpec(
-        project(":src:licenses")
-            .tasks.named("renderLicenseFor${licenseType.capitalize()}"))
-
-val sourceLicense = licenses("source")
-val binaryLicense = licenses("binary")
-
-fun createAnakiaTask(taskName: String,
-                     baseDir: String, extension: String = ".html", style: String,
-                     velocityProperties: String, projectFile: String, excludes: Array<String>,
-                     includes: Array<String>): TaskProvider<Task> {
+fun createAnakiaTask(
+    taskName: String,
+    baseDir: String,
+    extension: String = ".html",
+    style: String,
+    velocityProperties: String,
+    projectFile: String,
+    excludes: Array<String>,
+    includes: Array<String>
+): TaskProvider<Task> {
     val outputDir = "$buildDir/docs/$taskName"
 
     val prepareProps = tasks.register("prepareProperties$taskName") {
@@ -217,7 +218,7 @@ fun createAnakiaTask(taskName: String,
 
                 writer().use {
                     it.appendln("# Auto-generated from $velocityProperties to pass absolute path to Velocity")
-                    for(line in lines) {
+                    for (line in lines) {
                         it.appendln(line)
                     }
                 }
@@ -301,10 +302,12 @@ val previewPrintableDocs by tasks.registering(Copy::class) {
 
 val lastEditYear: String by rootProject.extra
 
-fun xslt(subdir: String,
-         outputDir: String,
-         includes: Array<String> = arrayOf("*.xml"),
-         excludes: Array<String> = arrayOf("extending.xml")) {
+fun xslt(
+    subdir: String,
+    outputDir: String,
+    includes: Array<String> = arrayOf("*.xml"),
+    excludes: Array<String> = arrayOf("extending.xml")
+) {
 
     val relativePath = if (subdir.isEmpty()) "." else ".."
     ant.withGroovyBuilder {
@@ -324,14 +327,14 @@ fun xslt(subdir: String,
 val processSiteXslt by tasks.registering {
     val outputDir = "$buildDir/siteXslt"
     inputs.files(xdocs)
-    inputs.properties["year"] = lastEditYear
+    inputs.property("year", lastEditYear)
     outputs.dir(outputDir)
 
     doLast {
-        for(f in (outputs as TaskOutputsInternal).previousOutputFiles) {
+        for (f in (outputs as TaskOutputsInternal).previousOutputFiles) {
             f.delete()
         }
-        for(i in arrayOf("", "usermanual", "localising")) {
+        for (i in arrayOf("", "usermanual", "localising")) {
             xslt(i, outputDir)
         }
     }
@@ -376,7 +379,8 @@ fun CrLfSpec.binaryLayout() = copySpec {
     into(baseFolder) {
         // Note: license content is taken from "/build/..", so gitignore should not be used
         // Note: this is a "license + third-party licenses", not just Apache-2.0
-        dependencyLicenses(binaryLicense)
+        // Note: files(...) adds both "files" and "dependency"
+        from(files(binLicense))
         from(rootDir) {
             gitignore(gitProps)
             exclude("bin/testfiles")
@@ -409,7 +413,8 @@ fun CrLfSpec.sourceLayout() = copySpec {
     into(baseFolder) {
         // Note: license content is taken from "/build/..", so gitignore should not be used
         // Note: this is a "license + third-party licenses", not just Apache-2.0
-        dependencyLicenses(sourceLicense)
+        // Note: files(...) adds both "files" and "dependency"
+        from(files(srcLicense))
         // Include all the source files
         from(rootDir) {
             gitignore(gitProps)

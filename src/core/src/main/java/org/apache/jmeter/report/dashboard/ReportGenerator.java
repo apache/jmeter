@@ -114,10 +114,8 @@ public class ReportGenerator {
     /**
      * Instantiates a new report generator.
      *
-     * @param resultsFile
-     *            the test results file
-     * @param resultCollector
-     *            Can be null, used if generation occurs at end of test
+     * @param resultsFile     the test results file
+     * @param resultCollector Can be null, used if generation occurs at end of test
      * @throws ConfigurationException when loading configuration from file fails
      */
     public ReportGenerator(String resultsFile, ResultCollector resultCollector)
@@ -138,8 +136,8 @@ public class ReportGenerator {
             log.info("Will only generate report from results file: {}", resultsFile);
         } else {
             if (file.exists() && file.length() > 0) {
-                throw new IllegalArgumentException("Results file:"
-                        + resultsFile + " is not empty");
+                throw new IllegalArgumentException(
+                        "Results file:" + resultsFile + " is not empty");
             }
             log.info("Will generate report at end of test from  results file: {}", resultsFile);
         }
@@ -147,7 +145,7 @@ public class ReportGenerator {
         this.testFile = file;
         final Properties merged = new Properties();
         File rgp = new File(JMeterUtils.getJMeterBinDir(), REPORTGENERATOR_PROPERTIES);
-        if(log.isInfoEnabled()) {
+        if (log.isInfoEnabled()) {
             log.info("Reading report generator properties from: {}", rgp.getAbsolutePath());
         }
         merged.putAll(loadProps(rgp));
@@ -175,8 +173,7 @@ public class ReportGenerator {
      * E.g : with key set_granularity, returns setGranularity (camel case)
      * </p>
      *
-     * @param propertyKey
-     *            the property key
+     * @param propertyKey the property key
      * @return the name of the property setter
      */
     private static String getSetterName(String propertyKey) {
@@ -192,8 +189,7 @@ public class ReportGenerator {
     /**
      * Generate dashboard reports using the data from the specified CSV File.
      *
-     * @throws GenerationException
-     *             when the generation failed
+     * @throws GenerationException when the generation failed
      */
     public void generate() throws GenerationException {
 
@@ -268,7 +264,6 @@ public class ReportGenerator {
         removeTempDir(tmpDir, tmpDirCreated);
 
         log.debug("End of report generation");
-
     }
 
     /**
@@ -278,24 +273,24 @@ public class ReportGenerator {
         FilterConsumer dateRangeFilter = new FilterConsumer();
         dateRangeFilter.setName(DATE_RANGE_FILTER_CONSUMER_NAME);
         dateRangeFilter.setSamplePredicate(sample -> {
-                long sampleStartTime = sample.getStartTime();
-                if(configuration.getStartDate() != null) {
-                    if(sampleStartTime >= configuration.getStartDate().getTime()) {
-                        if(configuration.getEndDate() != null) {
-                            return sampleStartTime <= configuration.getEndDate().getTime();
-                        } else {
-                            return true;
-                        }
-                    }
-                    return false;
-                } else {
-                    if(configuration.getEndDate() != null) {
+            long sampleStartTime = sample.getStartTime();
+            if (configuration.getStartDate() != null) {
+                if (sampleStartTime >= configuration.getStartDate().getTime()) {
+                    if (configuration.getEndDate() != null) {
                         return sampleStartTime <= configuration.getEndDate().getTime();
                     } else {
                         return true;
                     }
                 }
-            });
+                return false;
+            } else {
+                if (configuration.getEndDate() != null) {
+                    return sampleStartTime <= configuration.getEndDate().getTime();
+                } else {
+                    return true;
+                }
+            }
+        });
         return dateRangeFilter;
     }
 
@@ -310,16 +305,17 @@ public class ReportGenerator {
     }
 
     private boolean createTempDir(File tmpDir) throws GenerationException {
-        boolean tmpDirCreated = false;
-        if (!tmpDir.exists()) {
-            tmpDirCreated = tmpDir.mkdir();
-            if (!tmpDirCreated) {
-                String message = String.format(
-                        "Cannot create temporary directory \"%s\", check property \"%s\"", tmpDir.getAbsolutePath(),
-                        ReportGeneratorConfiguration.REPORT_GENERATOR_KEY_TEMP_DIR);
-                log.error(message);
-                throw new GenerationException(message);
-            }
+        if (tmpDir.exists()) {
+            return false;
+        }
+
+        boolean tmpDirCreated = tmpDir.mkdir();
+        if (!tmpDirCreated) {
+            String message = String.format(
+                    "Cannot create temporary directory \"%s\", check property \"%s\"", tmpDir.getAbsolutePath(),
+                    ReportGeneratorConfiguration.REPORT_GENERATOR_KEY_TEMP_DIR);
+            log.error(message);
+            throw new GenerationException(message);
         }
         return tmpDirCreated;
     }
@@ -505,25 +501,16 @@ public class ReportGenerator {
     /**
      * Try to set a property on an object by reflection.
      *
-     * @param className
-     *            name of the objects class
-     * @param obj
-     *            the object on which the property should be set
-     * @param methods
-     *            methods of the object which will be search for the property
-     *            setter
-     * @param propertyName
-     *            name of the property to be set
-     * @param propertyValue
-     *            value to be set
-     * @param setterName
-     *            name of the property setter that should be used to set the
-     *            property
-     * @throws IllegalAccessException
-     *             if reflection throws an IllegalAccessException
-     * @throws GenerationException
-     *             if conversion of the property value fails or reflection
-     *             throws an InvocationTargetException
+     * @param className     name of the objects class
+     * @param obj           the object on which the property should be set
+     * @param methods       methods of the object to be searched for the property setter
+     * @param propertyName  name of the property to be set
+     * @param propertyValue value to be set
+     * @param setterName    name of the property setter that should be used to set the
+     *                      property
+     * @throws IllegalAccessException if reflection throws an IllegalAccessException
+     * @throws GenerationException    if conversion of the property value fails or reflection
+     *                                throws an InvocationTargetException
      */
     private void setProperty(String className, Object obj, Method[] methods,
             String propertyName, String propertyValue, String setterName)
@@ -533,22 +520,19 @@ public class ReportGenerator {
             while (i < methods.length) {
                 Method method = methods[i];
                 if (method.getName().equals(setterName)) {
-                    Class<?>[] parameterTypes = method
-                            .getParameterTypes();
+                    Class<?>[] parameterTypes = method.getParameterTypes();
                     if (parameterTypes.length == 1) {
                         Class<?> parameterType = parameterTypes[0];
-                        if (parameterType
-                                .isAssignableFrom(String.class)) {
+                        if (parameterType.isAssignableFrom(String.class)) {
                             method.invoke(obj, propertyValue);
                         } else {
-                            StringConverter<?> converter = Converters
-                                    .getConverter(parameterType);
+                            StringConverter<?> converter =
+                                    Converters.getConverter(parameterType);
                             if (converter == null) {
                                 throw new GenerationException(
                                         String.format(
                                                 NOT_SUPPORTED_CONVERSION_FMT,
-                                                parameterType
-                                                        .getName()));
+                                                parameterType.getName()));
                             }
                             method.invoke(obj, converter.convert(propertyValue));
                         }

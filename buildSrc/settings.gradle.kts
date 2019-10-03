@@ -1,7 +1,3 @@
-import org.gradle.api.internal.artifacts.result.DefaultResolvedDependencyResult
-import java.security.MessageDigest
-import java.util.*
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with

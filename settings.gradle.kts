@@ -65,7 +65,7 @@ fun String?.toBool(nullAs: Boolean, blankAs: Boolean, default: Boolean) =
     }
 
 fun property(name: String) =
-        when(extra.has(name)) {
+        when (extra.has(name)) {
                 true -> extra.get(name) as? String
                 else -> null
         }

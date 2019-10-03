@@ -41,7 +41,9 @@ subprojects {
     if (groovyUsed) {
         apply<GroovyPlugin>()
     }
-    apply<MavenPublishPlugin>()
+    if (project.path !in skipMavenPublication) {
+        apply<MavenPublishPlugin>()
+    }
     apply<JacocoPlugin>()
 
     dependencies {
@@ -121,13 +123,13 @@ subprojects {
     }
     setProperty("archivesBaseName", archivesBaseName)
 
+    if (project.path in skipMavenPublication) {
+        return@subprojects
+    }
     // See https://stackoverflow.com/a/53661897/1261287
     // Subprojects can't use "publishing" since that accessor is not available at parent project
     // evaluation time
     configure<PublishingExtension> {
-        if (project.path in skipMavenPublication) {
-            return@configure
-        }
         publications {
             create<MavenPublication>(project.name) {
                 artifactId = archivesBaseName

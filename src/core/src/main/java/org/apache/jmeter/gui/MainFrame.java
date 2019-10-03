@@ -181,7 +181,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000,
             this::computeTestDuration);
 
-    public AtomicInteger errorOrFatal = new AtomicInteger(0);
+    private AtomicInteger errorOrFatal = new AtomicInteger(0);
 
     private javax.swing.Timer refreshErrorsTimer = new javax.swing.Timer(1000,
             this::refreshErrors);

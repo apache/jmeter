@@ -14,7 +14,7 @@ cache:
 
 env:
   global:
-    - GRADLE_ARGS="-Djava.awt.headless=true"
+    - GRADLE_ARGS=""
     # Building source and binary distributions takes time, and it does not verify much, so we skip it in CI
     # However we want to validate licenses
     - SKIP_DIST_TASKS="$GRADLE_ARGS -PskipDist :src:licenses:build"
@@ -26,7 +26,7 @@ matrix:
     - name: Tests with OpenJDK 8 + code coverage
       jdk: openjdk8
       script:
-        - ./gradlew $GRADLE_ARGS check createDist javadocAggregate jacocoReport
+        - xvfb-run ./gradlew $GRADLE_ARGS check createDist javadocAggregate jacocoReport
       after_success:
         - bash <(curl -s https://codecov.io/bash)
     - name: Tests with OpenJDK 11
@@ -40,11 +40,18 @@ matrix:
         - LANG=fr_FR.UTF-8
         - LC_ALL=fr_FR.UTF-8
       script:
-        - ./gradlew -Duser.language=fr -Duser.country=FR $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build javadocAggregate createDist
-    - name: Tests with OpenJDK 12
-      # Might switch to openjdk-ea when https://github.com/gradle/gradle/issues/10248 is fixed
-      jdk: openjdk12
+        # This job verifies headless mode to ensure Apache JMeter is workable in headless as well
+        - ./gradlew -Djava.awt.headless=true -Duser.language=fr -Duser.country=FR $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build javadocAggregate createDist
+    # Java 12 is not here because it has been superceeded by Java 13
+    # Tests with Java 12 do not surface much new, so Java 11 (LTS) and Java 13 (non-LTS) are enough for "post Java 9" testing
+    - name: Tests with OpenJDK 13
+      jdk: openjdk13
       script:
-        - ./gradlew $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build createDist
-  allow_failures:
-    - jdk: openjdk12
+        # ./gradlew wrapper task kills license header from gradle-wrapper.properties, so we use grep/echo to update the file
+        - grep -v Sha256 gradle/wrapper/gradle-wrapper.properties | grep -v Url > gradle/wrapper/gradle-wrapper.properties2
+        - echo 'distributionUrl=https\://services.gradle.org/distributions-snapshots/gradle-6.0-20191001230020+0000-bin.zip' >> gradle/wrapper/gradle-wrapper.properties2
+        - mv gradle/wrapper/gradle-wrapper.properties2 gradle/wrapper/gradle-wrapper.properties
+        # Spotless and Checkstyle are executed here as well to test if the plugins are compatible with Gradle 6.0 / Java 13
+        - xvfb-run ./gradlew $SKIP_DIST_TASKS build createDist -PchecksumFailOn=never -PchecksumPrint=false
+        # Show difference between the new dependencies and old ones. It is expected that new Gradle version might bring new dependencies
+        - diff -u checksum.xml build/checksum/checksum.xml || true

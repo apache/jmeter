@@ -33,7 +33,7 @@ import org.junit.Test;
  */
 public class DummyAnnotatedTest
 {
-    public int two = 1; //very wrong.
+    private int two = 1; //very wrong.
 
     public DummyAnnotatedTest() {
     }

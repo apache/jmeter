@@ -53,7 +53,7 @@ public class CustomX509TrustManager implements X509TrustManager
      * @see javax.net.ssl.X509TrustManager#checkClientTrusted(X509Certificate[],String)
      */
     @Override
-    public void checkClientTrusted(X509Certificate[] certificates, String authType) {
+    public void checkClientTrusted(X509Certificate[] certificates, String authType) { // NOSONAR JMeter is a pentest and perf testing tool
         if (log.isDebugEnabled() && certificates != null) {
             for (int i = 0; i < certificates.length; i++) {
                 X509Certificate cert = certificates[i];
@@ -78,7 +78,8 @@ public class CustomX509TrustManager implements X509TrustManager
      * @see javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[],String)
      */
     @Override
-    public void checkServerTrusted(X509Certificate[] certificates,String authType) throws CertificateException {
+    public void checkServerTrusted(X509Certificate[] certificates,String authType) // NOSONAR JMeter is a pentest and perf testing tool
+            throws CertificateException {
         if (log.isDebugEnabled() && certificates != null) {
             for (int i = 0; i < certificates.length; i++) {
                 X509Certificate cert = certificates[i];

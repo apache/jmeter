@@ -20,10 +20,11 @@ package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -52,7 +53,10 @@ public class CommentPanel extends JPanel {
         commentField = new JTextArea();
         JLabel commentLabel = new JLabel(JMeterUtils.getResString("testplan_comments")); //$NON-NLS-1$
         commentLabel.setLabelFor(commentField);
-        commentField.setBorder(BorderFactory.createEtchedBorder());
+        // JTextArea does not have border by default (see https://bugs.openjdk.java.net/browse/JDK-4139076)
+        // However we want it to look like a text field. So we borrow a border from there
+        Border border = new JTextField().getBorder();
+        commentField.setBorder(border);
         commentLabel.setVerticalAlignment(JLabel.TOP);
         add(commentLabel, BorderLayout.WEST);
         add(commentField, BorderLayout.CENTER);

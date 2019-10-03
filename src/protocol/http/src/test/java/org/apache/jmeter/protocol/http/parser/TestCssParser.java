@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertThat;
 
 import java.net.MalformedURLException;
@@ -45,19 +48,19 @@ public class TestCssParser extends JMeterTestCase {
     public void testGetEmbeddedResourceURLsNoUrls() throws Exception {
         CssParser nonIgnoreParser = new CssParser();
         List<?> result = extractUrls(nonIgnoreParser, "..");
-        assertThat(result.isEmpty(), CoreMatchers.is(true));
+        assertThat(result, is(empty()));
     }
 
     @Test
     public void testGetEmbeddedResourceURLsnOneUrl() throws Exception {
         List<?> result = extractUrls("@import url(http://example.com/abc.css);");
-        assertThat(result.isEmpty(), CoreMatchers.is(false));
+        assertThat(result, is(not(empty())));
     }
 
     @Test
     public void testExtractUrlsFromBrokenData() throws Exception {
         List<?> result = extractUrls(CSS_IN_ERROR);
-        assertThat(result.isEmpty(), CoreMatchers.is(true));
+        assertThat(result, is(empty()));
     }
 
     @Test

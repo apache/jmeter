@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -237,6 +238,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     private static boolean isPotentialXml(String postData) {
         try {
             SAXParserFactory spf = SAXParserFactory.newInstance();
+            spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             SAXParser saxParser = spf.newSAXParser();
             XMLReader xmlReader = saxParser.getXMLReader();
             ErrorDetectionHandler detectionHandler =

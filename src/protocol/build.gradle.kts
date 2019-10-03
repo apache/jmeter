@@ -78,7 +78,6 @@ project("http") {
         testImplementation(testFixtures(project(":src:testkit-wiremock")))
         testImplementation("com.github.tomakehurst:wiremock-jre8")
     }
-
 }
 
 project("java") {

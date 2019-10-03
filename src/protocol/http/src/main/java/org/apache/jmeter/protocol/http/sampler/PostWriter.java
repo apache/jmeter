@@ -251,7 +251,7 @@ public class PostWriter {
         }
         else {
             // Check if the header manager had a content type header
-            // This allows the user to specify his own content-type for a POST request
+            // This allows the user to specify their own content-type for a POST request
             String contentTypeHeader = connection.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE);
             boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0;
 

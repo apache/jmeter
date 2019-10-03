@@ -110,6 +110,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
     private static final String DEFAULT_LOGIN_VALUE = ""; //$NON-NLS-1$
 
+    private static final String MAIL_SMTP_CHECK_SERVER_IDENTITY = "mail.smtp.ssl.checkserveridentity"; //$NON-NLS-1$
+
     /** The listener for changes. */
     private transient ChangeListener changeListener;
 
@@ -347,6 +349,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
                 case SSL:
                     props.put(MAIL_SMTP_SOCKETFACTORY_CLASS,
                             "javax.net.ssl.SSLSocketFactory");
+                    props.put(MAIL_SMTP_CHECK_SERVER_IDENTITY, true);
                     break;
                 case TLS:
                     props.put(MAIL_SMTP_STARTTLS,

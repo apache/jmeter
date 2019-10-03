@@ -18,10 +18,9 @@
 
 package org.apache.jmeter.report.processor.graph.impl;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
-import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.MedianAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractVersusRequestsGraphConsumer;
@@ -47,14 +46,10 @@ public class LatencyVSRequestGraphConsumer extends
      */
     @Override
     protected GraphKeysSelector createKeysSelector() {
-        return new GraphKeysSelector() {
-
-            @Override
-            public Double select(Sample sample) {
-                return sample
-                        .getData(Double.class, AbstractVersusRequestsGraphConsumer.TIME_INTERVAL_LABEL);
-            }
-        };
+        return sample ->
+                sample.getData(
+                        Double.class,
+                        AbstractVersusRequestsGraphConsumer.TIME_INTERVAL_LABEL);
     }
 
     /*
@@ -65,11 +60,11 @@ public class LatencyVSRequestGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
-        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-                new MedianAggregatorFactory(), new StatusSeriesSelector(),
-                // We ignore Transaction Controller results
-                new LatencyValueSelector(true), false, false));
-        return groupInfos;
+        return Collections.singletonMap(
+                AbstractGraphConsumer.DEFAULT_GROUP,
+                new GroupInfo(
+                        new MedianAggregatorFactory(), new StatusSeriesSelector(),
+                        // We ignore Transaction Controller results
+                        new LatencyValueSelector(true), false, false));
     }
 }

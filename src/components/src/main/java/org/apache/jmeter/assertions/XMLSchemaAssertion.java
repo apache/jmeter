@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -102,7 +103,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
             parserFactory.setNamespaceAware(true);
             parserFactory.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
             parserFactory.setAttribute(JAXP_SCHEMA_SOURCE, xsdFileName);
-
+            parserFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             // create a parser:
             DocumentBuilder parser = parserFactory.newDocumentBuilder();
             parser.setErrorHandler(new SAXErrorHandler(result));

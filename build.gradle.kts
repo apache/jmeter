@@ -33,9 +33,9 @@ plugins {
     jacoco
     checkstyle
     id("org.jetbrains.gradle.plugin.idea-ext") version "0.5" apply false
-    id("org.nosphere.apache.rat") version "0.5.0"
+    id("org.nosphere.apache.rat") version "0.5.2"
     id("com.diffplug.gradle.spotless") version "3.24.3"
-    id("com.github.spotbugs") version "1.6.10"
+    id("com.github.spotbugs") version "2.0.0"
     id("org.sonarqube") version "2.7.1"
     id("com.github.vlsi.crlf") version "1.17.0"
     id("com.github.vlsi.ide") version "1.17.0"
@@ -57,7 +57,6 @@ fun Project.boolProp(name: String) =
         // We don't want to use "task" as a boolean property
         ?.let { it as? String }
         ?.equals("false", ignoreCase = true)?.not()
-
 
 // Release candidate index
 val String.v: String get() = rootProject.extra["$this.version"] as String
@@ -252,6 +251,16 @@ allprojects {
     // JMeter ClassFinder parses "class.path" and tries to find jar names there,
     // so we should produce jars without versions names for now
     // version = rootProject.version
+    if (!skipSpotless) {
+        apply(plugin = "com.diffplug.gradle.spotless")
+        spotless {
+            kotlinGradle {
+                ktlint()
+                trimTrailingWhitespace()
+                endWithNewline()
+            }
+        }
+    }
     plugins.withType<JavaPlugin> {
         // We don't intend to resolve that configuration
         // It is in line with further Gradle versions: https://github.com/gradle/gradle/issues/8585
@@ -270,10 +279,23 @@ allprojects {
             }
             val sourceSets: SourceSetContainer by project
             if (sourceSets.isNotEmpty()) {
+                tasks.register("checkstyleAll") {
+                    dependsOn(sourceSets.names.map { "checkstyle" + it.capitalize() })
+                }
                 tasks.register("checkstyle") {
                     group = LifecycleBasePlugin.VERIFICATION_GROUP
                     description = "Executes Checkstyle verifications"
-                    dependsOn(sourceSets.names.map { "checkstyle" + it.capitalize() })
+                    dependsOn("checkstyleAll")
+                    dependsOn("spotlessCheck")
+                }
+                // Spotless produces more meaningful error messages, so we ensure it is executed before Checkstyle
+                if (!skipSpotless) {
+                    for (s in sourceSets.names) {
+                        tasks.named("checkstyle" + s.capitalize()) {
+                            mustRunAfter("spotlessApply")
+                            mustRunAfter("spotlessCheck")
+                        }
+                    }
                 }
             }
         }
@@ -285,7 +307,6 @@ allprojects {
         }
 
         if (!skipSpotless) {
-            apply(plugin = "com.diffplug.gradle.spotless")
             spotless {
                 java {
                     licenseHeaderFile(licenseHeaderFile)
@@ -304,7 +325,7 @@ allprojects {
                 dependsOn("spotlessApply")
             }
             if (!skipCheckstyle) {
-                dependsOn("checkstyle")
+                dependsOn("checkstyleAll")
             }
         }
     }
