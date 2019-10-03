@@ -262,6 +262,7 @@ if (enableSpotBugs) {
 }
 
 val licenseHeaderFile = file("config/license.header.java")
+val grEclipseConfFile = file("config/greclipse.properties")
 allprojects {
     group = "org.apache.jmeter"
     // JMeter ClassFinder parses "class.path" and tries to find jar names there,
@@ -367,6 +368,7 @@ allprojects {
                     trimTrailingWhitespace()
                     indentWithSpaces(4)
                     endWithNewline()
+                    greclipse().configFile(grEclipseConfFile)
                 }
             }
         }

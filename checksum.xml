@@ -15,6 +15,7 @@
     <trusted-key id='1756b920eecf0e90' group='com.github.spotbugs' />
     <trusted-key id='78fcd238c26ea995' group='com.github.tomakehurst' />
     <trusted-key id='59a252fb1199d873' group='com.google.code.findbugs' />
+    <trusted-key id='353a436e043e3145' group='com.google.code.findbugs' />
     <trusted-key id='7a01b0f236e5430f' group='com.google.code.gson' />
     <trusted-key id='9a259c7ee636c5ed' group='com.google.errorprone' />
     <trusted-key id='bf935c771a8474f8' group='com.google.errorprone' />
@@ -99,6 +100,7 @@
     <trusted-key id='c7bf26d0bb617866' group='org.eclipse.aether' />
     <trusted-key id='2d0e1fb8fe4b68b4' group='org.eclipse.jetty' />
     <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
+    <trusted-key id='700e4f39bc05364b' group='org.eclipse.platform' />
     <trusted-key id='8759d8f56d022006' group='org.exparity' />
     <trusted-key id='1939a2520bab1d90' group='org.freemarker' />
     <trusted-key id='9ff25980f5ba7e4f' group='org.fusesource.hawtbuf' />
