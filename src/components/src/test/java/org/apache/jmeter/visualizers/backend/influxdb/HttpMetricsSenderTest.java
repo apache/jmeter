@@ -47,9 +47,7 @@ public class HttpMetricsSenderTest {
 
     private MappingBuilder influxRequest(CountDownLatch latch) {
         return WireMock.post(API_URL)
-                .willReturn(
-                        WireMock.aResponse().withStatus(HttpURLConnection.HTTP_NO_CONTENT)
-                )
+                .willReturn(WireMock.aResponse().withStatus(HttpURLConnection.HTTP_NO_CONTENT))
                 .withPostServeAction("countdown", Parameters.one("latch", latch));
     }
 
@@ -83,14 +81,15 @@ public class HttpMetricsSenderTest {
     private void setupSenderAndSendMetric(String influxdbUrl, String influxDBToken) throws Exception {
         HttpMetricsSender metricsSender = new HttpMetricsSender();
         metricsSender.setup(influxdbUrl, influxDBToken);
-        metricsSender.addMetric("measurement", "location=west", "size=10");
+        metricsSender.addMetric("measurement", ",location=west", "size=10");
         metricsSender.writeAndSendMetrics();
+        metricsSender.destroy();
     }
 
     private void assertAuthHeader(WireMockServer server, StringValuePattern authHeader) {
         server.verify(1, RequestPatternBuilder
                 .newRequestPattern(RequestMethod.POST, WireMock.urlEqualTo(API_URL))
-                .withRequestBody(WireMock.matching("measurementlocation=west size=10 \\d{19}\\s*"))
+                .withRequestBody(WireMock.matching("measurement,location=west size=10 \\d{19}\\s*"))
                 .withHeader("Authorization", authHeader));
     }
 }
