@@ -36,6 +36,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.neo4j.driver.v1.Driver;
+import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.exceptions.Neo4jException;
@@ -160,9 +161,9 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
                 .append(summary.counters().relationshipsDeleted());
         response.append("\n\nRecords: ");
         if (isRecordQueryResults()) {
-            result.stream().forEach(record -> response.append("\n")
-                    .append(record)
-            );
+            for (Record record : result.list()) {
+                response.append("\n").append(record);
+            }
         } else {
             response.append("Skipped");
             result.consume();
