@@ -37,8 +37,8 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * HC4CookieHandler tests
@@ -48,7 +48,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     private CookieManager man = null;
     private JMeterContext jmctx = null;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         jmctx = JMeterContextService.getContext();
         man = new CookieManager();

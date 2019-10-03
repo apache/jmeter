@@ -31,9 +31,10 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestGroovyFunction extends JMeterTestCase implements JMeterSerialTest {
 
@@ -43,12 +44,12 @@ public class TestGroovyFunction extends JMeterTestCase implements JMeterSerialTe
     private JMeterVariables vars;
     private JMeterContext jmctx;
 
-    @After
+    @AfterEach
     public void tearDown() {
         JMeterUtils.getJMeterProperties().remove("groovy.utilities");
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         function = new Groovy();
         result = new SampleResult();
@@ -113,12 +114,13 @@ public class TestGroovyFunction extends JMeterTestCase implements JMeterSerialTe
         assertEquals("3628800", ret);
     }
 
-    @Test(expected=InvalidVariableException.class)
+    @Test
     public void testInvalidFileLoading() throws Exception {
         JMeterUtils.setProperty("groovy.utilities", "bin/missing.groovy");
         params.add(new CompoundVariable("factorial(10)"));
-        function.setParameters(params);
-        String ret = function.execute(result, null);
-        assertEquals("3628800", ret);
+        Assertions.assertThrows(
+                InvalidVariableException.class,
+                () -> function.setParameters(params)
+        );
     }
 }

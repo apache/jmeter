@@ -28,7 +28,7 @@ import org.apache.jmeter.visualizers.StatGraphVisualizer;
 import org.apache.jmeter.visualizers.StatVisualizer;
 import org.apache.jmeter.visualizers.SummaryReport;
 import org.apache.jmeter.visualizers.TableVisualizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /** Unit tests for classes that use Functors */
 public class TestFunctorUsers extends JMeterTestCase {

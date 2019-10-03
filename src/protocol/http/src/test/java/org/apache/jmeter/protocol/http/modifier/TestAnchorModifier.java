@@ -38,15 +38,15 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.io.TextFile;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestAnchorModifier extends JMeterTestCase {
 
     private AnchorModifier parser = new AnchorModifier();
     private JMeterContext jmctx = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         parser.setThreadContext(jmctx);

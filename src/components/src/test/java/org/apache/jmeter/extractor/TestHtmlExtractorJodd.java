@@ -19,10 +19,10 @@
 package org.apache.jmeter.extractor;
 
 import org.apache.jmeter.threads.JMeterContextService;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public class TestHtmlExtractorJodd extends TestHtmlExtractorJSoup {
-    @Before
+    @BeforeEach
     public void setUpJodd() {
         extractor.setExtractor(HtmlExtractor.EXTRACTOR_JODD);
         jmctx = JMeterContextService.getContext();

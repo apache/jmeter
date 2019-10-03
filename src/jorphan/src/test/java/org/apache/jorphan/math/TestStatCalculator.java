@@ -24,16 +24,15 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class TestStatCalculator {
 
     private StatCalculatorLong calc;
 
-
-    @Before
+    @BeforeEach
     public void setUp() {
         calc = new StatCalculatorLong();
     }
@@ -51,7 +50,7 @@ public class TestStatCalculator {
     }
 
     @Test
-    @Ignore
+    @Disabled
     // Disabled due to in progress Bug 61071
     public void testPercentagePointBug() throws Exception {
         long[] values = new long[] {
@@ -89,7 +88,7 @@ public class TestStatCalculator {
     }
 
     @Test
-    @Ignore
+    @Disabled
     // Disabled due to in progress Bug 61071
     public void testMedianBug61071() {
         long[] values = new long[] {

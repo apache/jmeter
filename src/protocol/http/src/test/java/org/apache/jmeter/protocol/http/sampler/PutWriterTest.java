@@ -26,7 +26,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PutWriterTest {
 

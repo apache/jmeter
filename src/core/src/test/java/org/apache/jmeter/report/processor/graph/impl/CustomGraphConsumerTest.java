@@ -35,8 +35,9 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.SeriesData;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 import org.apache.jmeter.save.CSVSaveService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CustomGraphConsumerTest {
 
@@ -49,7 +50,7 @@ public class CustomGraphConsumerTest {
             "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null"};
     private SampleMetadata sampleMetaData = createTestMetaData();
 
-    @Before
+    @BeforeEach
     public void init() {
         customGraphConsumer = new CustomGraphConsumer();
         customGraphConsumer.setGranularity(60000);
@@ -93,7 +94,7 @@ public class CustomGraphConsumerTest {
                 assertThat(testedValue, equalTo("\"X axis name\""));
             } else if (key.equals("Y_Axis")) {
                 assertThat(testedValue, equalTo("\"Y axis name\""));
-            }else if(key.equals("sample_Metric_Name")) {
+            } else if (key.equals("sample_Metric_Name")) {
                 assertThat(testedValue, equalTo("\"ulp_lag_ratio\""));
             } else if (key.equals("content_Message")) {
                 assertThat(testedValue, equalTo("\"content message\""));
@@ -141,13 +142,14 @@ public class CustomGraphConsumerTest {
     }
 
     // Test the exception when the column data is not a Double
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testCreateGroupInfosExceptions() {
         Sample sample = new Sample(0, sampleMetaData, data);
         customGraphConsumer.setSampleVariableName("label");
 
-        // The following line is giving the exception
-        map.get("Generic group").getValueSelector().select("label", sample);
+        Assertions.assertThrows(
+                Exception.class,
+                () -> map.get("Generic group").getValueSelector().select("label", sample));
     }
 
     @Test

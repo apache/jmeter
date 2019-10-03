@@ -26,25 +26,29 @@ import java.io.Writer;
 
 import org.apache.jmeter.junit.JMeterTestUtils;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestCsvSampleWriter {
 
     private static final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
 
-    @Before
+    private SampleMetadata metadata = new SampleMetadata(',', "a", "b");
+
+    @BeforeEach
     public void setUp() throws Exception {
         // We have to initialize JMeterUtils
         JMeterTestUtils.setupJMeterHome();
         JMeterUtils.loadJMeterProperties(JMeterUtils.getJMeterBinDir() + "/jmeter.properties");
     }
 
-    SampleMetadata metadata = new SampleMetadata(',', "a", "b");
-
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testCsvSampleWriterConstructorWithNull() throws Exception {
-        new CsvSampleWriter(null);
+        Assertions.assertThrows(
+                NullPointerException.class,
+                () -> new CsvSampleWriter(null)
+        );
     }
 
     @Test

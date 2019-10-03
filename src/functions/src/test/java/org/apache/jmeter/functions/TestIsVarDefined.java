@@ -29,8 +29,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestIsVarDefined extends JMeterTestCase {
 
@@ -40,7 +41,7 @@ public class TestIsVarDefined extends JMeterTestCase {
     private JMeterVariables vars;
     private JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         isVarDefined = new IsVarDefined();
         result = new SampleResult();
@@ -83,10 +84,11 @@ public class TestIsVarDefined extends JMeterTestCase {
         assertEquals("false", returnValue);
     }
 
-    @Test(expected = InvalidVariableException.class)
+    @Test
     public void testIsVarDefinedError() throws Exception {
-        isVarDefined.setParameters(params);
-        isVarDefined.execute(result, null);
+        Assertions.assertThrows(
+                InvalidVariableException.class,
+                () -> isVarDefined.setParameters(params));
     }
 
     @Test

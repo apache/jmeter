@@ -24,7 +24,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MultipartUrlConfigTest {
 

@@ -19,6 +19,7 @@
 package org.apache.jmeter.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -31,8 +32,8 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link DateTimeConvertFunction}
@@ -46,7 +47,7 @@ public class TestDateTimeConvertFunction extends JMeterTestCase implements JMete
     private JMeterVariables vars;
     private JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         dateConvert = new DateTimeConvertFunction();
         result = new SampleResult();
@@ -108,12 +109,13 @@ public class TestDateTimeConvertFunction extends JMeterTestCase implements JMete
         assertEquals("02-01-2017", vars.get("varName"));
     }
 
-    @Test(expected = InvalidVariableException.class)
+    @Test
     public void testDateConvertError() throws Exception {
         params.add(new CompoundVariable("2017-01-02"));
         params.add(new CompoundVariable("yyyy-MM-dd"));
-        dateConvert.setParameters(params);
-        dateConvert.execute(result, null);
+        assertThrows(
+                InvalidVariableException.class,
+                () -> dateConvert.setParameters(params));
     }
 
     @Test

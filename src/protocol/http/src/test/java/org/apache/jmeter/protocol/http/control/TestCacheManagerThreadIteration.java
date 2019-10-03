@@ -50,9 +50,9 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link CacheManager} that uses HTTPHC4Impl
@@ -244,7 +244,7 @@ public class TestCacheManagerThreadIteration {
     private HttpRequestBase httpMethod;
     private HttpResponse httpResponse;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.cacheManager = new CacheManager();
         this.currentTimeInGMT = makeDate(new Date());
@@ -257,7 +257,7 @@ public class TestCacheManagerThreadIteration {
         jmvars = new JMeterVariables();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         this.url = null;
         this.httpMethod = null;

@@ -29,8 +29,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestUrlEncodeDecode extends JMeterTestCase {
 
@@ -39,7 +39,7 @@ public class TestUrlEncodeDecode extends JMeterTestCase {
     private JMeterVariables vars;
     private JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         result = new SampleResult();
         jmctx = JMeterContextService.getContext();

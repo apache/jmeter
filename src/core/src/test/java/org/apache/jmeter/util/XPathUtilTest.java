@@ -39,7 +39,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.hamcrest.CoreMatchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 

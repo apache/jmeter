@@ -32,20 +32,20 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestWhileController extends JMeterTestCase {
 
     private JMeterContext jmctx;
     private JMeterVariables jmvars;
 
-        @Before
-        public void setUp() {
-            jmctx = JMeterContextService.getContext();
-            jmctx.setVariables(new JMeterVariables());
-            jmvars = jmctx.getVariables();
-        }
+    @BeforeEach
+    public void setUp() {
+        jmctx = JMeterContextService.getContext();
+        jmctx.setVariables(new JMeterVariables());
+        jmvars = jmctx.getVariables();
+    }
 
     private void setLastSampleStatus(boolean status) {
         jmvars.put(JMeterThread.LAST_SAMPLE_OK, Boolean.toString(status));

@@ -30,7 +30,7 @@ import java.util.Properties;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JSyntaxTextAreaTest extends JMeterTestCase {
 

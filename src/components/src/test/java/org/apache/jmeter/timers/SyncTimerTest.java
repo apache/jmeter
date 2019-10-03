@@ -23,7 +23,8 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class SyncTimerTest {
 
@@ -73,7 +74,7 @@ public class SyncTimerTest {
                 duration < schedulerDuration * 2);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTimerWithInvalidTimeout() {
         long schedulerDuration = 200L;
         long timerTimeout = -1L;
@@ -82,7 +83,9 @@ public class SyncTimerTest {
         timer.setGroupSize(2);
         timer.testStarted();
         timer.setTimeoutInMs(timerTimeout);
-        timer.delay();
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                timer::delay);
     }
 
     private long timeDelay(SyncTimer timer) {

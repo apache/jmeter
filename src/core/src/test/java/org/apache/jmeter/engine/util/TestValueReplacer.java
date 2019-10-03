@@ -33,14 +33,14 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestValueReplacer extends JMeterTestCase {
     private TestPlan variables;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         variables = new TestPlan();
         variables.addParameter("server", "jakarta.apache.org");
@@ -180,7 +180,7 @@ public class TestValueReplacer extends JMeterTestCase {
         assertEquals("jakarta.apache.org \\ \\ \\\\ , ", element.getPropertyAsString("domain"));
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         JMeterContextService.getContext().setSamplingStarted(false);
     }

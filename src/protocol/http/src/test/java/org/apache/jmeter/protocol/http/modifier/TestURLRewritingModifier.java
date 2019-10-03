@@ -31,8 +31,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestURLRewritingModifier extends JMeterTestCase {
 
@@ -40,7 +40,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
     private JMeterContext context = null;
     private URLRewritingModifier mod = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         context = JMeterContextService.getContext();
         mod = new URLRewritingModifier();

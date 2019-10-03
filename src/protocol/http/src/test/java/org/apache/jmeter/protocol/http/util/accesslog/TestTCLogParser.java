@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestTCLogParser extends JMeterTestCase {
     private static final TCLogParser tclp = new TCLogParser();

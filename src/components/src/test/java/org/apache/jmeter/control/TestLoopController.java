@@ -37,7 +37,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestLoopController extends JMeterTestCase {
 

@@ -28,7 +28,8 @@ import java.nio.charset.StandardCharsets;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestJorphanUtils {
 
@@ -194,14 +195,18 @@ public class TestJorphanUtils {
         assertThat(JOrphanUtils.split("a,bc,,", ",", ","), CoreMatchers.equalTo(new String[]{"a", "bc", ",", ","}));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testSplitNullStringString() {
-        JOrphanUtils.split(null, ",","?");
+        Assertions.assertThrows(
+                NullPointerException.class,
+                () -> JOrphanUtils.split(null, ",", "?"));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testSplitStringNullString() {
-        JOrphanUtils.split("a,bc,,", null, "?");
+        Assertions.assertThrows(
+                NullPointerException.class,
+                () -> JOrphanUtils.split("a,bc,,", null, "?"));
     }
 
     @Test
@@ -382,9 +387,11 @@ public class TestJorphanUtils {
         String value;
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testReplaceValueWithNullSetterThatGetsCalled() {
-        JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", null);
+        Assertions.assertThrows(
+                NullPointerException.class,
+                () -> JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", null));
     }
 
     @Test

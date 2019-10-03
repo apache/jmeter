@@ -21,14 +21,14 @@ package org.apache.jmeter.visualizers.backend;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SamplerMetricTimedModeTest {
 
     private static final int DEFAULT_ELAPSED_TIME = 1_000;
 
-    @Before
+    @BeforeEach
     public void initMode() throws Exception {
         //noinspection deprecation
         SamplerMetric.setDefaultWindowMode(WindowMode.TIMED);

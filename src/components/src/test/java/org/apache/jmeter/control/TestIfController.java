@@ -32,8 +32,8 @@ import org.apache.jmeter.testkit.BugId;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class TestIfController extends JMeterTestCase {
 
@@ -137,7 +137,7 @@ public class TestIfController extends JMeterTestCase {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testProcessing() throws Exception {
 
         GenericController controller = new GenericController();

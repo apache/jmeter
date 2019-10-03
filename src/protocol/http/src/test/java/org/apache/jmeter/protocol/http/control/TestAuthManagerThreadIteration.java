@@ -32,8 +32,8 @@ import javax.security.auth.Subject;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestAuthManagerThreadIteration {
     private JMeterContext jmctx;
@@ -50,7 +50,8 @@ public class TestAuthManagerThreadIteration {
         privateField.set(kerberosManager, subjects);
         return kerberosManager;
     }
-    @Before
+
+    @BeforeEach
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmvars = new JMeterVariables();

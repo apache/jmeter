@@ -20,7 +20,7 @@ package org.apache.jmeter.util;
 
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PackageTest {
 

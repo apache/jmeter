@@ -36,7 +36,7 @@ import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class TestTransactionController extends JMeterTestCase {

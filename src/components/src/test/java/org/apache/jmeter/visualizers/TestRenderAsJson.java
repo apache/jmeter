@@ -22,8 +22,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Method;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestRenderAsJson {
 
@@ -34,7 +34,7 @@ public class TestRenderAsJson {
         return (String) prettyJSON.invoke(null, prettify);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         prettyJSON = RenderAsJSON.class.getDeclaredMethod("prettyJSON",
                 String.class);

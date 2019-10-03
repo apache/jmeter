@@ -31,7 +31,7 @@ import java.util.List;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.hamcrest.CoreMatchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestCssParser extends JMeterTestCase {
 

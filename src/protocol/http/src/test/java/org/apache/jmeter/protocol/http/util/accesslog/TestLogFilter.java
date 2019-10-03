@@ -23,8 +23,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestLogFilter extends JMeterTestCase {
 
@@ -78,7 +78,7 @@ public class TestLogFilter extends JMeterTestCase {
 
     private LogFilter testf;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         testf = new LogFilter();
     }

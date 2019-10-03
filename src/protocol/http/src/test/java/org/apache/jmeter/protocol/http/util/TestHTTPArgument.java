@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestHTTPArgument {
 

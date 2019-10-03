@@ -29,7 +29,7 @@ import java.nio.file.Files;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestAuthManager extends JMeterTestCase {
 

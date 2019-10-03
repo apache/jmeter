@@ -29,7 +29,7 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestSerializedHTTPSampler extends JMeterTestCase implements JMeterSerialTest {
 

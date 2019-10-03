@@ -30,7 +30,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.PatternMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import jodd.props.Props;
 

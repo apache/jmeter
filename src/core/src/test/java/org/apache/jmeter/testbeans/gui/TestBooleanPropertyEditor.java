@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test class to check that the JVM provides sensible behaviour for the boolean

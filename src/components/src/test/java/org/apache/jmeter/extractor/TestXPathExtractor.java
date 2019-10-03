@@ -18,11 +18,11 @@
 
 package org.apache.jmeter.extractor;
 
-
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
@@ -33,9 +33,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestXPathExtractor {
 
@@ -47,7 +46,7 @@ public class TestXPathExtractor {
     private static final String VAL_NAME = "value";
     private static final String VAL_NAME_NR = "value_matchNr";
 
-    @Before
+    @BeforeEach
     public void setUp() throws UnsupportedEncodingException {
         jmctx = JMeterContextService.getContext();
         extractor = new XPathExtractor();
@@ -124,8 +123,8 @@ public class TestXPathExtractor {
         extractor.setMatchNumber(0);
         extractor.process();
         assertEquals("1", vars.get(VAL_NAME_NR));
-        Assert.assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME)));
-        Assert.assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME + "_1")));
+        assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME)));
+        assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME + "_1")));
         assertNull(vars.get(VAL_NAME + "_2"));
         assertNull(vars.get(VAL_NAME + "_3"));
 

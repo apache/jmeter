@@ -31,6 +31,7 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleImmutableEntry;
@@ -49,21 +50,14 @@ import javax.swing.SortOrder;
 
 import org.apache.jorphan.reflect.Functor;
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ErrorCollector;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ObjectTableSorterTest {
     private ObjectTableSorter sorter;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-    @Rule
-    public ErrorCollector errorCollector = new ErrorCollector();
-
-    @Before
+    @BeforeEach
     public void createModelAndSorter() {
         String[] headers = {"key", "value", "object"};
         Functor[] readFunctors = {new Functor("getKey"), new Functor("getValue"), new Functor("getValue")};
@@ -241,16 +235,16 @@ public class ObjectTableSorterTest {
 
     @Test
     public void setSortKeys_many() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        sorter.setSortKeys(asList(new SortKey(0, SortOrder.ASCENDING), new SortKey(1, SortOrder.ASCENDING)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> sorter.setSortKeys(asList(new SortKey(0, SortOrder.ASCENDING), new SortKey(1, SortOrder.ASCENDING))));
     }
 
     @Test
     public void setSortKeys_invalidColumn() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        sorter.setSortKeys(Collections.singletonList(new SortKey(2, SortOrder.ASCENDING)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> sorter.setSortKeys(Collections.singletonList(new SortKey(2, SortOrder.ASCENDING))));
     }
 
     @SuppressWarnings("unchecked")
@@ -285,14 +279,15 @@ public class ObjectTableSorterTest {
     }
 
     protected void assertRowIndexes() {
-        IntStream
-            .range(0, sorter.getViewRowCount())
-            .forEach(viewIndex -> {
-                int modelIndex = sorter.convertRowIndexToModel(viewIndex);
-                errorCollector.checkThat(format("view(%d) model(%d)", viewIndex, modelIndex),
-                        sorter.convertRowIndexToView(modelIndex),
-                        CoreMatchers.equalTo(viewIndex));
-            });
+        IntStream.range(0, sorter.getViewRowCount())
+                .forEach(viewIndex -> {
+                    int modelIndex = sorter.convertRowIndexToModel(viewIndex);
+                    String errorMsg = format("view(%d) model(%d)", viewIndex, modelIndex);
+                    Assertions.assertEquals(
+                            sorter.convertRowIndexToView(modelIndex),
+                            viewIndex,
+                            errorMsg);
+                });
 
     }
 }
