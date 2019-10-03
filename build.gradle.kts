@@ -259,6 +259,19 @@ allprojects {
                 trimTrailingWhitespace()
                 endWithNewline()
             }
+            if (project == rootProject) {
+                // Spotless does not exclude subprojects when using target(...)
+                // So **/*.md is enough to scan all the md files in JMeter codebase
+                // See https://github.com/diffplug/spotless/issues/468
+                format("markdown") {
+                    target("**/*.md")
+                    // Flot is known to have trailing whitespace, so the files
+                    // are kept in their original format (e.g. to simplify diff on library upgrade)
+                    targetExclude("bin/report-template/**/flot*/*.md")
+                    trimTrailingWhitespace()
+                    endWithNewline()
+                }
+            }
         }
     }
     plugins.withType<JavaPlugin> {
