@@ -73,7 +73,7 @@ public class TestBoundaryExtractor {
         vars.put("content", "one");
         extractor.setLeftBoundary("o");
         extractor.setMatchNumber(-1);
-        extractor.setRefName("varname"); 
+        extractor.setRefName("varname");
         extractor.setScopeVariable("content");
         extractor.setThreadContext(jmctx);
         extractor.process();
@@ -87,7 +87,7 @@ public class TestBoundaryExtractor {
         vars.put("content", "one");
         extractor.setRightBoundary("e");
         extractor.setMatchNumber(-1);
-        extractor.setRefName("varname"); 
+        extractor.setRefName("varname");
         extractor.setScopeVariable("content");
         extractor.setThreadContext(jmctx);
         extractor.process();
