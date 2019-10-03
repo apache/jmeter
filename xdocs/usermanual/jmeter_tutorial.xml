@@ -119,8 +119,9 @@ The folders inside of <code>src</code>
   <dt><code>config</code></dt><dd>XXX</dd>
 -->
   <dt><code>core</code></dt><dd>the core code of JMeter including all core interfaces and abstract classes.</dd>
-  <dt><code>dist</code></dt><dd>build artifacts will be copied here</dd>
-  <dt><code>dist-check</code></dt><dd>code related to testing the distribution</dd>
+  <dt><code>dist</code></dt><dd>builds script that creates a distribution</dd>
+  <dt><code>dist-check</code></dt><dd>code related to testing the distribution. It is the place to look for
+    when you want to update the contents of the resulting source/binary archive</dd>
   <dt><code>examples</code></dt><dd>example sampler demonstrating how to use the new bean framework</dd>
   <dt><code>functions</code></dt><dd>standard functions used by all components</dd>
   <dt><code>generator</code></dt><dd>code to generate a test plan with all elements. Used for testing the distribution</dd>
