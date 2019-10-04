@@ -175,7 +175,14 @@ public final class JmeterKeyStore {
      * @see javax.net.ssl.X509KeyManager#getCertificateChain(String)
      */
     public X509Certificate[] getCertificateChain(String alias) {
-        return this.certsByAlias.get(alias);
+        X509Certificate[] result = this.certsByAlias.get(alias);
+        if (result != null) {
+            return result;
+        }
+        // API expects null not empty array.
+        // See http://docs.oracle.com/javase/7/docs/api/javax/net/ssl/X509KeyManager.html
+        // However, throwing here to provide a better error message to the user
+        throw new IllegalArgumentException("No certificate found for alias:'" + alias + "'");
     }
 
     /**
