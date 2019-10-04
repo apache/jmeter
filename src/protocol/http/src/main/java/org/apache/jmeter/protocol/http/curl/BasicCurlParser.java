@@ -57,7 +57,8 @@ import org.slf4j.LoggerFactory;
  */
 public class BasicCurlParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(BasicCurlParser.class);
-    private static final int METHOD_OPT                 = 'X';
+
+    private static final int METHOD_OPT                 = 'X';// $NON-NLS-1$
     private static final int COMPRESSED_OPT             = 'c';// $NON-NLS-1$
     private static final int HEADER_OPT                 = 'H';// $NON-NLS-1$
     private static final int DATA_OPT                   = 'd';// $NON-NLS-1$
@@ -107,17 +108,17 @@ public class BasicCurlParser {
     private static final int VERBOSE_OPT                = 'v';// $NON-NLS-1$
     private static final int SILENT_OPT                 = 's';// $NON-NLS-1$
 
-    private static final List<Integer> AUTH_OPT                 = Arrays.asList(BASIC_OPT, DIGEST_OPT);// $NON-NLS-1$
-    private static final List<Integer> SSL_OPT                  = Arrays.asList(CAFILE_OPT, CAPATH_OPT, CERT_OPT, CIPHERS_OPT,
-            CERT_STATUS_OPT, CERT_TYPE_OPT, KEY_OPT, KEY_TYPE_OPT);// $NON-NLS-1$
-    private static final List<Integer> DATAS_OPT                = Arrays.asList(DATA_OPT, DATA_ASCII_OPT, DATA_BINARY_OPT,
-            DATA_URLENCODE_OPT, DATA_RAW_OPT);// $NON-NLS-1$
-    private static final List<Integer> FORMS_OPT                = Arrays.asList(FORM_OPT, FORM_STRING_OPT);// $NON-NLS-1$
-    private static final List<Integer> IGNORE_OPTIONS_OPT       = Arrays.asList(OUTPUT_OPT, CREATE_DIRS_OPT, RAW_OPT,
-            INCLUDE_OPT, KEEPALIVETILE_OPT, VERBOSE_OPT, SILENT_OPT);// $NON-NLS-1$
-    private static final List<Integer> NOSUPPORT_OPTIONS_OPT    = Arrays.asList(PROXY_NTLM_OPT, PROXY_NEGOTIATE_OPT);// $NON-NLS-1$
-    private static final List<Integer> PROPERTIES_OPT           = Arrays.asList(MAX_REDIRS_OPT);// $NON-NLS-1$
-    private static final List<String> DYNAMIC_COOKIES           = Arrays.asList("PHPSESSID", "JSESSIONID", "ASPSESSIONID",
+    private static final List<Integer> AUTH_OPT              = Arrays.asList(BASIC_OPT, DIGEST_OPT);
+    private static final List<Integer> SSL_OPT               = Arrays.asList(CAFILE_OPT, CAPATH_OPT, CERT_OPT, CIPHERS_OPT,
+            CERT_STATUS_OPT, CERT_TYPE_OPT, KEY_OPT, KEY_TYPE_OPT);
+    private static final List<Integer> DATAS_OPT             = Arrays.asList(DATA_OPT, DATA_ASCII_OPT, DATA_BINARY_OPT,
+            DATA_URLENCODE_OPT, DATA_RAW_OPT);
+    private static final List<Integer> FORMS_OPT             = Arrays.asList(FORM_OPT, FORM_STRING_OPT);
+    private static final List<Integer> IGNORE_OPTIONS_OPT    = Arrays.asList(OUTPUT_OPT, CREATE_DIRS_OPT, RAW_OPT,
+            INCLUDE_OPT, KEEPALIVETILE_OPT, VERBOSE_OPT, SILENT_OPT);
+    private static final List<Integer> NOSUPPORT_OPTIONS_OPT = Arrays.asList(PROXY_NTLM_OPT, PROXY_NEGOTIATE_OPT);
+    private static final List<Integer> PROPERTIES_OPT        = Arrays.asList(MAX_REDIRS_OPT);
+    private static final List<String> DYNAMIC_COOKIES        = Arrays.asList("PHPSESSID", "JSESSIONID", "ASPSESSIONID",
             "connect.sid");// $NON-NLS-1$
 
     public static final class Request {
@@ -221,6 +222,7 @@ public class BasicCurlParser {
         public void setCookieInHeaders(String cookieInHeaders) {
             this.cookieInHeaders = cookieInHeaders;
         }
+
         /**
          * @return the url
          */
@@ -529,6 +531,7 @@ public class BasicCurlParser {
             return builder.toString();
         }
     }
+
     private static final CLOptionDescriptor D_COMPRESSED_OPT =
             new CLOptionDescriptor("compressed", CLOptionDescriptor.ARGUMENT_DISALLOWED, COMPRESSED_OPT,
                     "Request compressed response (using deflate or gzip)");
@@ -671,6 +674,7 @@ public class BasicCurlParser {
     public BasicCurlParser() {
         super();
     }
+
     public Request parse(String commandLine) {
         String[] args = translateCommandline(commandLine);
         CLArgsParser parser = new CLArgsParser(args, OPTIONS);
@@ -796,6 +800,7 @@ public class BasicCurlParser {
 
     /**
      * Crack a command line.
+     *
      * @param toProcess the command line to process.
      * @return the command line broken into strings.
      * An empty or null toProcess parameter results in a zero sized array.
@@ -860,8 +865,8 @@ public class BasicCurlParser {
         }
         return result.toArray(new String[result.size()]);
     }
+
     /**
-    *
     * Set the username , password and baseurl of authorization
     *
     * @param authentication   the username and password of authorization
@@ -876,7 +881,6 @@ public class BasicCurlParser {
    }
 
    /**
-    *
     * Set the mechanism of authorization
     *
     * @param mechanism     the mechanism of authorization
@@ -896,30 +900,23 @@ public class BasicCurlParser {
    }
 
    /**
-    *
     * Set the parameters of proxy server in http request advanced
     *
-    * @param request         http request
+    * @param request                       http request
     * @param originalProxyServerParameters the parameters of proxy server
-    *
     */
    private void setProxyServer(Request request, String originalProxyServerParameters) {
        String proxyServerParameters = originalProxyServerParameters;
        if (!proxyServerParameters.contains("://")) {
            proxyServerParameters = "http://" + proxyServerParameters;
        }
-       URI uriProxy = null;
        try {
-           uriProxy = new URI(proxyServerParameters);
-            request.setProxyServer("scheme", uriProxy.getScheme());
-            Optional<String> userInfoOptional = Optional.ofNullable(uriProxy.getUserInfo());
-            if (userInfoOptional.isPresent()) {
-                setProxyServerUserInfo(request, userInfoOptional.get());
-            }
-            Optional<String> hostOptional = Optional.ofNullable(uriProxy.getHost());
-            if (hostOptional.isPresent()) {
-               request.setProxyServer("servername", hostOptional.get());
-           }
+           URI uriProxy = new URI(proxyServerParameters);
+           request.setProxyServer("scheme", uriProxy.getScheme());
+           Optional<String> userInfoOptional = Optional.ofNullable(uriProxy.getUserInfo());
+           userInfoOptional.ifPresent(s -> setProxyServerUserInfo(request, s));
+           Optional<String> hostOptional = Optional.ofNullable(uriProxy.getHost());
+           hostOptional.ifPresent(s -> request.setProxyServer("servername", s));
            if (uriProxy.getPort() != -1) {
                request.setProxyServer("port", String.valueOf(uriProxy.getPort()));
            } else {
@@ -972,7 +969,6 @@ public class BasicCurlParser {
     *
     * @param postdata the post data
     * @return the result of encoding
-    *
     */
     private String encodePostdata(String postdata) {
         if (postdata.contains("@")) {
@@ -1028,12 +1024,6 @@ public class BasicCurlParser {
        }
    }
 
-   /**
-    * Delete line break
-    *
-    * @param postdata the post data
-    * @return the string without break line
-    */
     private static String deleteLineBreak(String postdata) {
         Matcher m = deleteLinePattern.matcher(postdata);
         return m.replaceAll("");
