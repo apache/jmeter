@@ -138,8 +138,10 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      *
      * @param event {@link ActionEvent}
      */
-    private final void showInputDialog(ActionEvent event) {
-        EscapeDialog messageDialog = new EscapeDialog(getParentFrame(event), JMeterUtils.getResString("curl_import"), //$NON-NLS-1$
+    private void showInputDialog(ActionEvent event) {
+        EscapeDialog messageDialog = new EscapeDialog(
+                getParentFrame(event),
+                JMeterUtils.getResString("curl_import"), //$NON-NLS-1$
                 false);
         Container contentPane = messageDialog.getContentPane();
         contentPane.setLayout(new BorderLayout());
@@ -264,7 +266,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
 
     /**
      * @param request    {@link Request}
-     * @param statusText
+     * @param commentText
      * @return {@link HTTPSamplerProxy}
      * @throws MalformedURLException
      */
@@ -355,7 +357,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * Create Cookie Manager
      *
      * @param request {@link Request}
-     * @return{@link CookieManager} element
+     * @return {@link CookieManager} element
      */
     private void createCookieManager(CookieManager cookieManager,Request request) {
         cookieManager.setProperty(TestElement.GUI_CLASS, CookiePanel.class.getName());
@@ -389,12 +391,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
     }
 
-    /**
-     * Create Keystore Configuration
-     *
-     * @param request {@link Request}
-     * @return{@link KeystoreConfig} element
-     */
     private KeystoreConfig createKeystoreConfiguration() {
         KeystoreConfig keystoreConfig = new KeystoreConfig();
         keystoreConfig.setProperty(TestElement.GUI_CLASS, TestBeanGUI.class.getName());
@@ -454,12 +450,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         return true;
     }
 
-    /**
-     * Create DnsCacheManager
-     *
-     * @param request {@link Request}
-     * @return{@link DnsCacheManager} element
-     */
     private void createDnsServer(Request request, DNSCacheManager dnsCacheManager) {
         Set<String> dnsServers = request.getDnsServers();
         dnsCacheManager.setProperty(TestElement.GUI_CLASS, DNSCachePanel.class.getName());
@@ -480,12 +470,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
         return !(newDnsServers.size() == currentDnsServers.size() && newDnsServers.containsAll(currentDnsServers));
     }
-    /**
-     * Create DnsCacheManager
-     *
-     * @param request {@link Request}
-     * @return{@link DnsCacheManager} element
-     */
+
     private void createDnsResolver(Request request, DNSCacheManager dnsCacheManager) {
         dnsCacheManager.setProperty(TestElement.GUI_CLASS, DNSCachePanel.class.getName());
         dnsCacheManager.setProperty(TestElement.NAME, "DNS Cache Manager");
@@ -520,12 +505,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
         return true;
     }
-    /**
-     * Set parameters in http request
-     *
-     * @param request     {@link Request}
-     * @param httpSampler
-     */
+
     private void setFormData(Request request, HTTPSamplerProxy httpSampler) {
         if (request.getPostData() != null) {
             throw new IllegalArgumentException("--form and --data can't appear in the same command");
@@ -567,11 +547,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             httpSampler.setHTTPFiles(httpFileArgs.toArray(new HTTPFileArg[httpFileArgs.size()]));
         }
     }
-    /**
-     *
-     * @param request     {@link Request}
-     * @param httpSampler
-     */
+
     private void createProxyServer(Request request, HTTPSamplerProxy httpSampler) {
         Map<String, String> proxyServer = request.getProxyServer();
         for (Map.Entry<String, String> proxyPara : proxyServer.entrySet()) {
