@@ -45,22 +45,14 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
 
     private static final long serialVersionUID = 234L;
 
-    public static final String FILE_NAME_IS_REQUIRED = "FileName is required";
-
-    public static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
-
-    public static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
-
-    public static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
-
     private static final Logger log = LoggerFactory.getLogger(XMLSchemaAssertion.class);
 
+    public static final String FILE_NAME_IS_REQUIRED = "FileName is required";
+    public static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+    public static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
+    public static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
     public static final String XSD_FILENAME_KEY = "xmlschema_assertion_filename";
 
-    /**
-     * getResult
-     *
-     */
     @Override
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
@@ -89,13 +81,6 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         return getPropertyAsString(XSD_FILENAME_KEY);
     }
 
-    /**
-     * set Schema result
-     *
-     * @param result
-     * @param xmlStr
-     * @param xsdFileName
-     */
     private void setSchemaResult(AssertionResult result, String xmlStr, String xsdFileName) {
         try {
             DocumentBuilderFactory parserFactory = DocumentBuilderFactory.newInstance();
@@ -153,9 +138,6 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         return str.toString();
     }
 
-    /**
-     * SAXErrorHandler class
-     */
     private static class SAXErrorHandler implements ErrorHandler {
         private final AssertionResult result;
 
