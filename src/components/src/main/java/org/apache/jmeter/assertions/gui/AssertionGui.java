@@ -461,7 +461,7 @@ public class AssertionGui extends AbstractAssertionGui {
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_patterns_to_test"))); //$NON-NLS-1$
+        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString(COL_RESOURCE_NAME)));
 
         panel.add(GuiUtils.emptyBorder(new JScrollPane(stringTable)), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);
