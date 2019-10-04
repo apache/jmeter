@@ -71,7 +71,7 @@ import org.slf4j.LoggerFactory;
 class SMIMEAssertion {
 
     // Use the name of the test element, otherwise cannot enable/disable debug from the GUI
-    private static final Logger log = LoggerFactory.getLogger(SMIMEAssertionTestElement.class);
+    private static final Logger log = LoggerFactory.getLogger(SMIMEAssertionTestElement.class); // NOSONAR
 
     SMIMEAssertion() {
         super();
