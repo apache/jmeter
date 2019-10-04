@@ -28,7 +28,6 @@ class FieldSampleComparatorSpec extends Specification {
     static char separator = ',' as char
     def multiColSampleMeta = new SampleMetadata(separator, "col1", "col2")
 
-
     def testCompare() {
         given:
             def sampleMetadata = new SampleMetadata(separator, "col1")

@@ -25,24 +25,24 @@ import org.apache.jmeter.junit.spock.JMeterSpec
 import spock.lang.IgnoreIf
 
 @IgnoreIf({ JMeterSpec.isHeadless() })
-class HtmlReportGUISpec extends JMeterSpec{
+class HtmlReportGUISpec extends JMeterSpec {
 
-    def "test HtmlReportUI initialization"(){
+    def "test HtmlReportUI initialization"() {
         given:
-            def HtmlReportUI htmlReportPanel = new HtmlReportUI();
-            def JMeterTreeModel treeModel = new JMeterTreeModel();
-            def JMeterTreeListener treeListener = new JMeterTreeListener(treeModel);
+            def sut = new HtmlReportUI();
+            def treeModel = new JMeterTreeModel();
+            def treeListener = new JMeterTreeListener(treeModel);
             GuiPackage.initInstance(treeListener, treeModel);
             GuiPackage.getInstance().setMainFrame(new MainFrame(treeModel, treeListener));
         when:
-            htmlReportPanel.showInputDialog(GuiPackage.getInstance().getMainFrame())
+            sut.showInputDialog(GuiPackage.getInstance().getMainFrame())
             Thread.sleep(50) // https://bugs.openjdk.java.net/browse/JDK-5109571
-            htmlReportPanel.messageDialog.setVisible(false)
+            sut.messageDialog.setVisible(false)
         then:
-            "" == htmlReportPanel.csvFilePathTextField.getText()
-            "" == htmlReportPanel.userPropertiesFilePathTextField.getText()
-            "" == htmlReportPanel.outputDirectoryPathTextField.getText()
-            "" == htmlReportPanel.reportArea.getText()
-            1 == htmlReportPanel.messageDialog.getComponents().length;
+            sut.csvFilePathTextField.getText() == ""
+            sut.userPropertiesFilePathTextField.getText() == ""
+            sut.outputDirectoryPathTextField.getText() == ""
+            sut.reportArea.getText() == ""
+            sut.messageDialog.getComponents().length == 1;
     }
 }
