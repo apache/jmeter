@@ -51,8 +51,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
     private static final String RAMP_NAME = "Ramp Up Field";
 
-    private static final boolean IS_SAME_USER_ON_NEXT_ITERATION_DEFAULT_VALUE = true;
-
     private JTextField threadInput;
 
     private JTextField rampInput;
@@ -127,8 +125,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
         duration.setText(tg.getPropertyAsString(ThreadGroup.DURATION));
         delay.setText(tg.getPropertyAsString(ThreadGroup.DELAY));
-        final boolean isSameUser = tg.getPropertyAsBoolean(
-                AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION, IS_SAME_USER_ON_NEXT_ITERATION_DEFAULT_VALUE);
+        final boolean isSameUser = tg.getPropertyAsBoolean(AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION, false);
         if (isSameUser){
             sameUserBox.setSelected(true);
         } else {
@@ -210,7 +207,8 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         scheduler.setSelected(false);
         delay.setText(""); // $NON-NLS-1$
         duration.setText(""); // $NON-NLS-1$
-        sameUserBox.setSelected(IS_SAME_USER_ON_NEXT_ITERATION_DEFAULT_VALUE);
+        sameUserBox.setSelected(true);
+        differentUserBox.setSelected(false);
     }
 
    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
@@ -275,7 +273,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
        ButtonGroup group = new ButtonGroup();
        sameUserBox = new JRadioButton(JMeterUtils.getResString("threadgroup_same_user")); //$NON-NLS-1$
        group.add(sameUserBox);
-       sameUserBox.setSelected(IS_SAME_USER_ON_NEXT_ITERATION_DEFAULT_VALUE);
+       sameUserBox.setSelected(true);
        differentUserBox = new JRadioButton(JMeterUtils.getResString("threadgroup_different_user")); //$NON-NLS-1$
        group.add(differentUserBox);
        JPanel optionsPanel = new HorizontalPanel();
