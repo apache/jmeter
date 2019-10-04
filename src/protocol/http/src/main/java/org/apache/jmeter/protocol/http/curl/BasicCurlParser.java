@@ -772,14 +772,12 @@ public class BasicCurlParser {
                 } else if (PROPERTIES_OPT.contains(option.getDescriptor().getId())) {
                     request.addOptionsInProperties(
                             "--" + option.getDescriptor().getName() + " is in 'httpsampler.max_redirects(1062 line)'");
-                } else if (option.getDescriptor().getId() == CLOption.TEXT_ARGUMENT) {
-                    // Curl or CURL
-                    if (!"CURL".equalsIgnoreCase(option.getArgument())) {
-                        try {
-                            request.setUrl(new URL(option.getArgument()).toExternalForm());
-                        } catch (MalformedURLException ex) {
-                            LOGGER.warn("Unhandled option {}", option.getArgument());
-                        }
+                } else if (option.getDescriptor().getId() == CLOption.TEXT_ARGUMENT
+                        && !"CURL".equalsIgnoreCase(option.getArgument())) {
+                    try {
+                        request.setUrl(new URL(option.getArgument()).toExternalForm());
+                    } catch (MalformedURLException ex) {
+                        LOGGER.warn("Unhandled option {}", option.getArgument());
                     }
                 }
             }
