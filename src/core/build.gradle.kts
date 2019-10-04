@@ -45,6 +45,7 @@ dependencies {
     api("org.apache.logging.log4j:log4j-slf4j-impl") {
         because("Both log4j and slf4j are included, so it makes sense to just add log4j->slf4j bridge as well")
     }
+    api("org.apiguardian:apiguardian-api")
     api("oro:oro") {
         because("Perl5Matcher org.apache.jmeter.util.JMeterUtils.getMatcher()")
     }
@@ -70,6 +71,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-annotations")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.miglayout:miglayout-swing")
     implementation("org.freemarker:freemarker")
     implementation("org.mozilla:rhino")
     implementation("org.apache.xmlgraphics:xmlgraphics-commons")

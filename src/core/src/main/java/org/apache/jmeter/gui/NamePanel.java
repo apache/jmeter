@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.gui;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 import java.awt.BorderLayout;
 import java.util.Collection;
 
@@ -30,6 +32,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apiguardian.api.API;
 
 public class NamePanel extends JPanel implements JMeterGUIComponent {
     private static final long serialVersionUID = 240L;
@@ -60,6 +63,11 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 
         add(nameLabel, BorderLayout.WEST);
         add(nameField, BorderLayout.CENTER);
+    }
+
+    @API(status = INTERNAL, since = "5.2.0")
+    public JTextField getNameField() {
+        return nameField;
     }
 
     @Override

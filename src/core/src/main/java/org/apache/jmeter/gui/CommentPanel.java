@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.gui;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
 import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
@@ -27,10 +29,14 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apiguardian.api.API;
 
 /**
  * Generic comment panel for Test Elements
+ * @deprecated {@link AbstractJMeterGuiComponent#createTitleLabel()} for better alignment of the fields
  */
+@API(status = DEPRECATED, since = "5.2.0")
+@Deprecated
 public class CommentPanel extends JPanel {
     private static final long serialVersionUID = 240L;
 

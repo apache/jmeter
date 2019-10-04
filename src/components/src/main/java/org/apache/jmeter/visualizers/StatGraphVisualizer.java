@@ -748,7 +748,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 colorForeGraph = color;
             }
         } else if (eventSource == syncWithName) {
-            graphTitle.setText(namePanel.getName());
+            graphTitle.setText(getName());
         } else if (eventSource == dynamicGraphSize) {
             // if use dynamic graph size is checked, we disable the dimension fields
             if (dynamicGraphSize.isSelected()) {

@@ -6445,16 +6445,16 @@ Behaviour can be modified with some properties by setting in user.properties:
         </property>
         <property name="Number of Threads" required="Yes">Number of users to simulate.</property>
         <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.  If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after the previous thread started, for a total time of 100 seconds to get the test fully up to speed.</property>
-        <property name="Loop Count" required="Yes, unless forever is selected">Number of times to perform the test case.  Alternatively, "<code>forever</code>" can be selected causing the test to run until manually stopped.</property>
+        <property name="Loop Count" required="Yes, unless Infinite is selected">Number of times to perform the test case.  Alternatively, "<code>infinite</code>" can be selected causing the test to run until manually stopped or end of the thread lifetime is reached.</property>
         <property name="Delay Thread creation until needed" required="Yes">
         If selected, threads are created only when the appropriate proportion of the ramp-up time has elapsed.
         This is most appropriate for tests with a ramp-up time that is significantly longer than the time to execute a single thread.
-        I.e. where earlier threads finish before later ones start. 
+        I.e. where earlier threads finish before later ones start.
         <br></br>
         If not selected, all threads are created when the test starts (they then pause for the appropriate proportion of the ramp-up time).
         This is the original default, and is appropriate for tests where threads are active throughout most of the test.
         </property>
-        <property name="Scheduler" required="Yes">If selected, enables the scheduler</property>
+        <property name="Specify Thread lifetime" required="Yes">If selected, confines Thread operation time to the given bounds</property>
         <property name="Duration (seconds)" required="No">
             If the scheduler checkbox is selected, one can choose a relative end time. 
             JMeter will use this to calculate the End Time.
@@ -7054,7 +7054,7 @@ This is done by default since JMeter 2.13.
 </note>
 </component>
 
-<component name="setUp Thread Group" index="&sect-num;.9.10" width="908" height="364" screenshot="setup_thread_group.png">
+<component name="setUp Thread Group" index="&sect-num;.9.10" width="1252" height="828" screenshot="setup_thread_group.png">
 <description>
     <p>
     A special type of ThreadGroup that can be utilized to perform Pre-Test Actions.  The behavior of these threads
@@ -7064,7 +7064,7 @@ This is done by default since JMeter 2.13.
 </description>
 </component>
 
-<component name="tearDown Thread Group" index="&sect-num;.9.11" width="909" height="366" screenshot="teardown_thread_group.png">
+<component name="tearDown Thread Group" index="&sect-num;.9.11" width="1248" height="824" screenshot="teardown_thread_group.png">
 <description>
     <p>
     A special type of ThreadGroup that can be utilized to perform Post-Test Actions.  The behavior of these threads
