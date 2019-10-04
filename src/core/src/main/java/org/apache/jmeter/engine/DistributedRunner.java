@@ -125,27 +125,27 @@ public class DistributedRunner {
      */
     public void start(List<String> addresses) {
         long now = System.currentTimeMillis();
-        println("Starting distributed test with remote engines:" + addresses +" @ " + new Date(now) + " (" + now + ")");
-        List<JMeterEngine> startedEngines = new ArrayList<>(addresses.size());
-        List<JMeterEngine> failedEngines = new ArrayList<>(addresses.size());
+        println("Starting distributed test with remote engines: " + addresses + " @ " + new Date(now) + " (" + now + ")");
+        List<String> startedEngines = new ArrayList<>(addresses.size());
+        List<String> failedEngines = new ArrayList<>(addresses.size());
         for (String address : addresses) {
             JMeterEngine engine = engines.get(address);
             try {
                 if (engine != null) {
                     engine.runTest();
-                    startedEngines.add(engine);
+                    startedEngines.add(address);
                 } else {
                     log.warn(HOST_NOT_FOUND_MESSAGE, address);
-                    failedEngines.add(engine);
+                    failedEngines.add(address);
                 }
             } catch (IllegalStateException | JMeterEngineException e) { // NOSONAR already reported to user
-                failedEngines.add(engine);
+                failedEngines.add(address);
                 JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
             }
         }
-        println("Remote engines have been started:"+engines);
+        println("Remote engines have been started:" + startedEngines);
         if (!failedEngines.isEmpty()) {
-            errln("The following remote engines have not started:"+failedEngines);
+            errln("The following remote engines have not started:" + failedEngines);
         }
     }
 
@@ -153,8 +153,7 @@ public class DistributedRunner {
      * Start all engines that were previously initiated
      */
     public void start() {
-        List<String> addresses = new LinkedList<>();
-        addresses.addAll(engines.keySet());
+        List<String> addresses = new LinkedList<>(engines.keySet());
         start(addresses);
     }
 
@@ -179,8 +178,7 @@ public class DistributedRunner {
      * Stop all engines that were previously initiated
      */
     public void stop() {
-        List<String> addresses = new LinkedList<>();
-        addresses.addAll(engines.keySet());
+        List<String> addresses = new LinkedList<>(engines.keySet());
         stop(addresses);
     }
 
