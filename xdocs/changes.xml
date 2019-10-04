@@ -102,6 +102,7 @@ to view the last release notes of version 5.1.1.
 <ul>
     <li><bug>63406</bug>JDBC connection configuration: new option for pre-initialize to initialize the connection pool. Contributed by Franz Schwab (franz.schwab@exasol.com)</li>
     <li><bug>63561</bug>JDBC Request: Allow to only fetch a certain number of rows. Contributed by Franz Schwab (franz.schwab@exasol.com)</li>
+    <li><bug>63801</bug>Add Bolt protocol support for Neo4j database. Contributed by Luanne Misquitta, Nicolas Mervaillie and Aldrin Misquitta</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -268,6 +269,9 @@ to view the last release notes of version 5.1.1.
   <li>Anass Benomar (anassbenomar at gmail.com)</li>
   <li>Jakub Bednář (https://github.com/bednar)</li>
   <li>Pascal Schumacher (pascalschumacher at apache.org)</li>
+  <li>Luanne Misquitta (https://github.com/luanne)</li>
+  <li>Nicolas Mervaillie (https://github.com/nmervaillie)</li>
+  <li>Aldrin Misquitta (https://github.com/aldrinm)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
