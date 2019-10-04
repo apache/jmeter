@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.util;
 
+import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
@@ -49,6 +50,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -912,6 +914,19 @@ public class JMeterUtils implements UnitTestManager {
         ta.setCaretPosition(0);
         ta.setEditable(false);
         return new JScrollPane(ta);
+    }
+
+    /**
+     * Creates {@link JLabel} that is associated with a given {@link Component} instance.
+     * @param component component for the label
+     * @param resourceId resource ID to be used for retrieving label text
+     * @return JLabel instance
+     */
+    public static JLabel labelFor(Component component, String resourceId) {
+        JLabel label = new JLabel(getResString(resourceId));
+        label.setName(resourceId);
+        label.setLabelFor(component);
+        return label;
     }
 
     /**

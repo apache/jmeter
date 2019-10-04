@@ -41,6 +41,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
+import net.miginfocom.swing.MigLayout;
+
 public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent {
     private static final long serialVersionUID = 240L;
 
@@ -136,7 +138,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
     }
 
     private JPanel createOnErrorPanel() {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new MigLayout());
         panel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("sampler_on_error_action"))); // $NON-NLS-1$
 

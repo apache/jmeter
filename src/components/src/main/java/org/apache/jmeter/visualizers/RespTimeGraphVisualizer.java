@@ -522,7 +522,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 log.error(e.getMessage());
             }
         } else if (eventSource == syncWithName) {
-            graphTitle.setText(namePanel.getName());
+            graphTitle.setText(getName());
         } else if (eventSource == dynamicGraphSize) {
                 enableDynamicGraph(dynamicGraphSize.isSelected());
         } else if (eventSource == samplerSelection) {

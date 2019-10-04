@@ -90,6 +90,14 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.BSD_2_Clause
     }
 
+    for (mig in listOf("com.miglayout:miglayout-core", "com.miglayout:miglayout-swing")) {
+        overrideLicense(mig) {
+            expectedLicense = SimpleLicense("BSD", uri("http://www.debian.org/misc/bsd.license"))
+            effectiveLicense = SpdxLicense.BSD_3_Clause
+            licenseFiles = "miglayout"
+        }
+    }
+
     overrideLicense("com.thoughtworks.xstream:xstream:1.4.11") {
         expectedLicense = SimpleLicense("BSD style", uri("http://x-stream.github.io/license.html"))
         // https://github.com/x-stream/xstream/issues/151
