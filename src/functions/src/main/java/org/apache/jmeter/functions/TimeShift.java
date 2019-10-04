@@ -182,7 +182,7 @@ public class TimeShift extends AbstractFunction {
         if (formatter != null) {
             dateString = localDateTimeToShift.format(formatter);
         } else {
-            ZoneOffset offset = ZoneOffset.systemDefault().getRules().getOffset(localDateTimeToShift);
+            ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(localDateTimeToShift);
             dateString = String.valueOf(localDateTimeToShift.toInstant(offset).toEpochMilli());
         }
 
