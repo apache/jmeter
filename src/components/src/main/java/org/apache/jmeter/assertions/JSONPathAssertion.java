@@ -119,9 +119,8 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
                 return;
             }
         } else {
-            if (isExpectNull() && value == null) {
-                return;
-            } else if (isEquals(value)) {
+            if ((isExpectNull() && value == null)
+                    || isEquals(value)) {
                 return;
             }
         }
@@ -145,8 +144,8 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
         }
 
         for (Object subj : value.toArray()) {
-            if ((subj == null && isExpectNull()) ||
-                    isEquals(subj)) {
+            if ((subj == null && isExpectNull())
+                    || isEquals(subj)) {
                 return true;
             }
         }
