@@ -81,7 +81,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         return result;
     }
 
-    public void setXsdFileName(String xmlSchemaFileName) throws IllegalArgumentException {
+    public void setXsdFileName(String xmlSchemaFileName) {
         setProperty(XSD_FILENAME_KEY, xmlSchemaFileName);
     }
 
