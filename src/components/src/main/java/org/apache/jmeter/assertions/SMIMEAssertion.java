@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.Security;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -330,10 +329,8 @@ class SMIMEAssertion {
      *
      * @param cert the X509 certificate holder
      * @return a List of all email addresses found
-     * @throws CertificateException
      */
-    private static List<String> getEmailFromCert(X509CertificateHolder cert)
-            throws CertificateException {
+    private static List<String> getEmailFromCert(X509CertificateHolder cert) {
         List<String> res = new ArrayList<>();
 
         X500Name subject = cert.getSubject();
