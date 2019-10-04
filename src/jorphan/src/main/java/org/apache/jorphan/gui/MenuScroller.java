@@ -22,6 +22,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
@@ -621,9 +623,12 @@ public class MenuScroller {
         private static final long serialVersionUID = 1;
 
         public MenuScrollTimer(final int increment, int interval) {
-            super(interval, e -> {
-                firstIndex += increment;
-                refreshMenu();
+            super(interval, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    firstIndex += increment;
+                    refreshMenu();
+                }
             });
         }
     }
