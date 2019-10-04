@@ -136,6 +136,7 @@ dependencies {
         apiv("org.jsoup:jsoup")
         apiv("org.mongodb:mongo-java-driver")
         apiv("org.mozilla:rhino")
+        apiv("org.neo4j.driver:neo4j-java-driver")
         apiv("org.objenesis:objenesis")
         apiv("org.slf4j:jcl-over-slf4j", "slf4j")
         apiv("org.slf4j:slf4j-api", "slf4j")

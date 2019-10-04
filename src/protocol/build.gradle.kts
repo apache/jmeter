@@ -23,6 +23,15 @@ subprojects {
     }
 }
 
+project("bolt") {
+    dependencies {
+        implementation("org.neo4j.driver:neo4j-java-driver")
+        implementation("org.apache.commons:commons-lang3")
+        implementation("com.fasterxml.jackson.core:jackson-core")
+        implementation("com.fasterxml.jackson.core:jackson-databind")
+    }
+}
+
 project("ftp") {
     dependencies {
         implementation("commons-net:commons-net:3.6")

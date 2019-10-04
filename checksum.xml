@@ -119,6 +119,7 @@
     <trusted-key id='85911f425ec61b51' group='org.junit.vintage' />
     <trusted-key id='82216a03caa86c78' group='org.mongodb' />
     <trusted-key id='3f36885c24df4b75' group='org.mozilla' />
+    <trusted-key id='7ad289796be2ffe2' group='org.neo4j.driver' />
     <trusted-key id='7c7d8456294423ba' group='org.objenesis' />
     <trusted-key id='85911f425ec61b51' group='org.opentest4j' />
     <trusted-key id='5f69ad087600b22c' group='org.ow2.asm' />
