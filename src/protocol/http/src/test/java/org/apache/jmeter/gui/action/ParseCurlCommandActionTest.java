@@ -23,18 +23,18 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 import javax.swing.JCheckBox;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
@@ -53,20 +53,11 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.io.TempDir;
 
 public class ParseCurlCommandActionTest {
-
-    private File tempFile;
-
-    @BeforeEach
-    public void setUpTempFolder(@TempDir Path tempDir) throws IOException {
-        tempFile = tempDir.resolve("test.txt").toFile();
-        tempFile.createNewFile();
-    }
 
     @Test
     public void testCreateCommentText() {
@@ -78,9 +69,10 @@ public class ParseCurlCommandActionTest {
 
         testCommentText("curl 'http://jmeter.apache.org/' -x 'https://aa:bb@example.com:8042' --proxy-ntlm",
                 "--proxy-ntlm not supported;");
-        testCommentText("curl 'http://jmeter.apache.org/' --include --keepalive-time '20'", "--include --keepalive-time ignoring;");
+        testCommentText("curl 'http://jmeter.apache.org/' --include --keepalive-time '20'",
+                "--include --keepalive-time ignoring;");
         testCommentText("curl 'http://jmeter.apache.org/'", "");
-        // Starts with rather than equals
+
         testCommentTextStartsWith("curl 'http://jmeter.apache.org/' --limit-rate '54M'", "Please configure the limit rate in 'httpclient.socket.http.cps'");
         testCommentTextStartsWith("curl 'http://jmeter.apache.org/' --noproxy ' localhost'", "Please configure noproxy list in terminal and restart JMeter.");
         testCommentTextStartsWith("curl 'http://jmeter.apache.org/' --cacert '<CA certificate>'", "Please configure the SSL file with CA certificates");
@@ -116,18 +108,23 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testReadCurlCommandsFromFile() throws IOException {
-        String encoding = StandardCharsets.UTF_8.name();
+    public void testReadCurlCommandsFromFile(@TempDir Path tempDir) throws Exception {
         String cmdLine = "curl 'http://jmeter.apache.org/' --max-redirs 'b'" + System.lineSeparator()
                 + "curl 'http://jmeter.apache.org/' --include --keepalive-time '20'";
-        FileUtils.writeStringToFile(tempFile, cmdLine, encoding, true);
+        String tempPath = writeToTempFile(tempDir, cmdLine);
         ParseCurlCommandAction p = new ParseCurlCommandAction();
-        List<String> commands = p.readFromFile(tempFile.getAbsolutePath());
+        List<String> commands = p.readFromFile(tempPath);
         assertTrue(commands.contains("curl 'http://jmeter.apache.org/' --max-redirs 'b'"),
                 "Curl commands should be saved in list");
         assertTrue(commands.contains("curl 'http://jmeter.apache.org/' --include --keepalive-time '20'"),
                 "Curl commands should be saved in list");
         assertEquals(2, commands.size());
+    }
+
+    private String writeToTempFile(Path dir, String s) throws IOException {
+        return Files.write(dir.resolve("test.txt"), s.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW)
+                .toAbsolutePath()
+                .toString();
     }
 
     @Test
@@ -149,7 +146,7 @@ public class ParseCurlCommandActionTest {
         commands = p.readFromTextPanel(cmdLine);
         requests = p.parseCommands(true, commands);
         request1 = basicCurlParser.parse("curl 'http://jmeter.apache.org/' --max-redirs 'b'");
-        assertTrue(request1.toString().equals(requests.get(0).toString()), "The command line should be parsed in turn");
+        assertEquals(request1.toString(), requests.get(0).toString(), "The command line should be parsed in turn");
         assertEquals(2, requests.size());
     }
 
@@ -176,8 +173,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCreateProxyServer()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void testCreateProxyServer() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         HTTPSamplerProxy httpSampler = (HTTPSamplerProxy) HTTPSamplerFactory
                 .newInstance(HTTPSamplerFactory.DEFAULT_CLASSNAME);
@@ -200,8 +196,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCreateSampler()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
+    public void testCreateSampler(@TempDir Path tempDir) throws Exception {
         // test proxy in httpsampler
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
@@ -241,7 +236,7 @@ public class ParseCurlCommandActionTest {
         assertEquals("name1", samplerArguments.getArgument(1).getValue(), "form value should be set in httpsampler");
 
         // test form data in httpsampler(upload file)
-        String filePath = tempFile.getAbsolutePath();
+        String filePath = tempDir.resolve("test.txt").toAbsolutePath().toString();
         request = basicCurlParser.parse(
                 "curl 'http://jmeter.apache.org/' -F 'c=@" + filePath + ";type=text/foo' -F 'c1=@" + filePath + "'");
         objs = new Object[]{request, ""};
@@ -259,7 +254,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testDataFormException() throws NoSuchMethodException, SecurityException {
+    public void testDataFormException() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         HTTPSamplerProxy httpSampler = (HTTPSamplerProxy) HTTPSamplerFactory
                 .newInstance(HTTPSamplerFactory.DEFAULT_CLASSNAME);
@@ -282,8 +277,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCreateHttpRequest()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void testCreateHttpRequest() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         ThreadGroup threadGroup = new ThreadGroup();
@@ -305,7 +299,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testConfigureTimeout() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void testConfigureTimeout() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/'  -m '20'  --connect-timeout '1'");
@@ -324,8 +318,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCreateHeaderManager()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void testCreateHeaderManager() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse(
@@ -344,8 +337,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCreateAuthManager()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void testCreateAuthManager() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         AuthManager authManager = new AuthManager();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
@@ -361,8 +353,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCanAddAuthManagerInHttpRequest()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void testCanAddAuthManagerInHttpRequest() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         AuthManager authManager = new AuthManager();
         Authorization authorization = new Authorization();
@@ -388,8 +379,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCanUpdateAuthManagerInThreadGroupt()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void testCanUpdateAuthManagerInThreadGroupt() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         AuthManager authManager = new AuthManager();
         Authorization authorization = new Authorization();
@@ -414,8 +404,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCreateCookieManager()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
+    public void testCreateCookieManager(@TempDir Path tempDir) throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         CookieManager cookieManager = new CookieManager();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
@@ -431,8 +420,10 @@ public class ParseCurlCommandActionTest {
         assertEquals("/", cookieManager.get(0).getPath(), "the path of cookie should be set in cookieManager");
         assertEquals("name", cookieManager.get(0).getName(), "the name of cookie should be set in cookieManager");
         assertEquals("Tom", cookieManager.get(0).getValue(), "the password of cookie should be set in cookieManager");
+
         cookieManager = new CookieManager();
-        String filepath = tempFile.getAbsolutePath();
+        String filepath = tempDir.resolve("test.txt").toAbsolutePath().toString();
+        assertTrue(tempDir.resolve("test.txt").toFile().createNewFile());
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -b '" + filepath + "'");
         method = parseCurlCommandAction.getDeclaredMethod("createCookieManager", classes);
         method.setAccessible(true);
@@ -453,8 +444,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCreateCookieManagerHeader() throws NoSuchMethodException, IllegalAccessException,
-            InvocationTargetException, NoSuchFieldException, SecurityException {
+    public void testCreateCookieManagerHeader() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         CookieManager cookieManager = new CookieManager();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
@@ -476,6 +466,7 @@ public class ParseCurlCommandActionTest {
         assertEquals("a", cookieManager.get(0).getName(), "the name of cookie should be set in cookieManager");
         assertEquals("b", cookieManager.get(0).getValue(), "the password of cookie should be set in cookieManager");
         uploadCookiesCheckBox = new JCheckBox(JMeterUtils.getResString("curl_add_cookie_header_to_cookiemanager"), false);
+
         f.set(p, uploadCookiesCheckBox);
         method = parseCurlCommandAction.getDeclaredMethod("createCookieManager", classes);
         method.setAccessible(true);
@@ -524,8 +515,7 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCreateDnsResolver()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
+    public void testCreateDnsResolver() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         DNSCacheManager dnsCacheManager = new DNSCacheManager();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
@@ -549,12 +539,12 @@ public class ParseCurlCommandActionTest {
     }
 
     @Test
-    public void testCanAddDnsResolverInHttpRequest()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
+    public void testCanAddDnsResolverInHttpRequest() throws Exception {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         DNSCacheManager dnsCacheManager = new DNSCacheManager();
         dnsCacheManager.addHost("moonagic.com", "127.0.0.2");
+
         Request request = basicCurlParser
                 .parse("curl 'http://jmeter.apache.org/'  --resolve 'moonagic.com:443:127.0.0.2'");
         Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
@@ -567,6 +557,7 @@ public class ParseCurlCommandActionTest {
         method.invoke(p, objs);
         assertFalse((boolean) method.invoke(p, objs),
                 "When the Dns servers are the same, shouldn't add the DnsCacheManager in Http Request");
+
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/'  --resolve 'moonagic.com:9090:127.0.0.1'");
         method.setAccessible(true);
         objs = new Object[]{request, dnsCacheManager};
@@ -580,6 +571,7 @@ public class ParseCurlCommandActionTest {
         method.invoke(p, objs);
         assertTrue((boolean) method.invoke(p, objs),
                 "When the Dns servers aren't the same, should add the DnsCacheManager in Http Request");
+
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/'  --resolve 'moonagic.com:9090:127.0.0.1'");
         method.setAccessible(true);
         objs = new Object[]{request, dnsCacheManager};
