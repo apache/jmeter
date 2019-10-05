@@ -152,6 +152,8 @@ val copyLibs by tasks.registering(Sync::class) {
         // it just removes everything it sees.
         // We configure it to keep txt files that should be present there (the files come from Git source tree)
         include("**/*.txt")
+        // Keep jars in lib/ext so developers don't have to re-install the plugsin again and again
+        include("ext/*.jar")
     }
     into("ext") {
         with(libsExt)
