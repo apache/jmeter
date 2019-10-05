@@ -158,6 +158,12 @@ val skipDist by extra {
     boolProp("skipDist") ?: false
 }
 
+// By default use Java implementation to sign artifacts
+// When useGpgCmd=true, then gpg command line tool is used for signing
+val useGpgCmd by extra {
+    boolProp("useGpgCmd") ?: false
+}
+
 allprojects {
     if (project.path != ":src") {
         tasks.register<DependencyInsightReportTask>("allDependencyInsight") {
@@ -426,6 +432,11 @@ allprojects {
     }
 
     plugins.withType<SigningPlugin> {
+        if (useGpgCmd) {
+            configure<SigningExtension> {
+                useGpgCmd()
+            }
+        }
         afterEvaluate {
             configure<SigningExtension> {
                 val release = rootProject.releaseParams.release.get()
