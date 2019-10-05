@@ -114,6 +114,7 @@ The folders inside of <code>src</code>
   <dt><code>bom</code></dt><dd></dd>
 -->
   <dt><code>bshclient</code></dt><dd>code for the BeanShell based client</dd>
+  <dt><code>bolt</code></dt><dd>code for the Bolt protocol</dd>
   <dt><code>components</code></dt><dd>contains non-protocol-specific components like visualizers, assertions, etc.</dd>
 <!--
   <dt><code>config</code></dt><dd>XXX</dd>
