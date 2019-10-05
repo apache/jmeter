@@ -184,6 +184,7 @@ public class ParallelResourcesAndIpSource {
                 }
             } else if (result.isSuccessful() || result.isResponseCodeOK() ||
                     !(result.getResponseDataAsString().contains("ConnectException") ||
+                            result.getResponseDataAsString().contains("BindException") ||
                             result.getResponseDataAsString().contains("SocketException"))) {
                 Assertions.fail("IPv4 <-> IPv6 connectivity must fail." +
                         " sourceIp = " + sourceIp + ", targetHost = " + targetHost +
