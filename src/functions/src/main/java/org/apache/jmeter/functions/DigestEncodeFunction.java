@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -85,7 +84,7 @@ public class DigestEncodeFunction extends AbstractFunction {
             byte[] bytes = md.digest();
             encodedString = uppercase(Hex.encodeHexString(bytes), values, 3);
             addVariableValue(encodedString, values, 4);
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+        } catch (NoSuchAlgorithmException e) {
             log.error("Error calling {} function with value {}, digest algorithm {}, salt {}, ", KEY, stringToEncode,
                     digestAlgorithm, salt, e);
         }
