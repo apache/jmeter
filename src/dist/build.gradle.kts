@@ -20,7 +20,6 @@ import com.github.vlsi.gradle.crlf.CrLfSpec
 import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.git.FindGitAttributes
 import com.github.vlsi.gradle.git.dsl.gitignore
-import com.github.vlsi.gradle.release.ReleaseExtension
 import org.gradle.api.internal.TaskOutputsInternal
 
 plugins {
