@@ -37,9 +37,9 @@ plugins {
     id("com.diffplug.gradle.spotless") version "3.24.3"
     id("com.github.spotbugs") version "2.0.0"
     id("org.sonarqube") version "2.7.1"
-    id("com.github.vlsi.crlf") version "1.17.0"
-    id("com.github.vlsi.ide") version "1.17.0"
-    id("com.github.vlsi.stage-vote-release") version "1.17.0"
+    id("com.github.vlsi.crlf") version "1.32.0"
+    id("com.github.vlsi.ide") version "1.32.0"
+    id("com.github.vlsi.stage-vote-release") version "1.32.0"
     signing
     publishing
 }
@@ -103,14 +103,24 @@ val rat by tasks.getting(org.nosphere.apache.rat.RatTask::class) {
     exclude(rootDir.resolve("rat-excludes.txt").readLines())
 }
 
+releaseArtifacts {
+    fromProject(":src:dist")
+    previewSite {
+        into("rat")
+        from(rat) {
+            filteringCharset = "UTF-8"
+            // XML is not really interesting for now
+            exclude("rat-report.xml")
+            // RAT reports have absolute paths, and we don't want to expose them
+            filter { str: String -> str.replace(rootDir.absolutePath, "") }
+        }
+    }
+}
+
 releaseParams {
     tlp.set("JMeter")
     releaseTag.set("v${project.version.toString().replace('.', '_')}")
     rcTag.set(releaseTag.map { "${it}_RC" + rc.get() })
-    previewSiteContents {
-        into("rat")
-        from(rat)
-    }
     svnDist {
         // All the release versions are put under release/jmeter/{source,binary}
         releaseFolder.set("release/jmeter")

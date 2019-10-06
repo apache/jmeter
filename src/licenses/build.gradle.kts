@@ -30,9 +30,15 @@ import com.github.vlsi.gradle.release.ExtraLicense
 import com.github.vlsi.gradle.release.dsl.dependencyLicenses
 import com.github.vlsi.gradle.release.dsl.licensesCopySpec
 
-val binaryDependencies by configurations.creating
-val binLicense by configurations.creating
-val srcLicense by configurations.creating
+val binaryDependencies by configurations.creating {
+    isCanBeConsumed = false
+}
+val binLicense by configurations.creating {
+    isCanBeResolved = false
+}
+val srcLicense by configurations.creating {
+    isCanBeResolved = false
+}
 
 dependencies {
     binaryDependencies(project(":src:dist", "runtimeElements"))
@@ -223,10 +229,10 @@ val srcLicenseDir by tasks.registering(Sync::class) {
 }
 
 artifacts {
-    add(binLicense.name, binLicenseDir.get().destinationDir) {
+    add(binLicense.name, buildDir.resolve(binLicenseDir.name)) {
         builtBy(binLicenseDir)
     }
-    add(srcLicense.name, srcLicenseDir.get().destinationDir) {
+    add(srcLicense.name, buildDir.resolve(srcLicenseDir.name)) {
         builtBy(srcLicenseDir)
     }
 }
