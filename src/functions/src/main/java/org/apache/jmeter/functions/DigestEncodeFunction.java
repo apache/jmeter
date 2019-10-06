@@ -78,9 +78,9 @@ public class DigestEncodeFunction extends AbstractFunction {
         String encodedString = null;
         try {
             MessageDigest md = MessageDigest.getInstance(digestAlgorithm);
-            md.update(stringToEncode.getBytes(StandardCharsets.UTF_8.name()));
+            md.update(stringToEncode.getBytes(StandardCharsets.UTF_8));
             if (StringUtils.isNotEmpty(salt)) {
-                md.update(salt.getBytes(StandardCharsets.UTF_8.name()));
+                md.update(salt.getBytes(StandardCharsets.UTF_8));
             }
             byte[] bytes = md.digest();
             encodedString = uppercase(Hex.encodeHexString(bytes), values, 3);
