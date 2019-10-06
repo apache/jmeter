@@ -66,56 +66,48 @@ public class TestEncodeDecode extends JMeterTestCase  {
         params.add(new CompoundVariable("salt"));
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
-        assertEquals(
-                "SSBhbSBhIHN0cmluZw==",
-                returnValue);
+        assertEquals("SSBhbSBhIHN0cmluZw==", returnValue);
     }
     
     @Test
     public void testDecodeBase64() throws Exception {
-    	params.add(new CompoundVariable("BASE64_DECODE"));
-    	params.add(new CompoundVariable("SSBhbSBhIHN0cmluZw=="));
-    	encodeDecode.setParameters(params);
-    	String returnValue = encodeDecode.execute(result, null);
-    	assertEquals(
-    			"I am a string",
-    			returnValue);
+        params.add(new CompoundVariable("BASE64_DECODE"));
+        params.add(new CompoundVariable("SSBhbSBhIHN0cmluZw=="));
+        encodeDecode.setParameters(params);
+        String returnValue = encodeDecode.execute(result, null);
+        assertEquals("I am a string", returnValue);
     }
     
     @Test
     public void testHex() throws Exception {
-    	params.add(new CompoundVariable("HEX_ENCODE"));
-    	params.add(new CompoundVariable("I am a string"));
-    	
-    	encodeDecode.setParameters(params);
-    	String returnValue = encodeDecode.execute(result, null);
-    	assertEquals(
-    			"4920616d206120737472696e67",
-    			returnValue);
+        params.add(new CompoundVariable("HEX_ENCODE"));
+        params.add(new CompoundVariable("I am a string"));
+        
+        encodeDecode.setParameters(params);
+        String returnValue = encodeDecode.execute(result, null);
+        assertEquals("4920616d206120737472696e67", returnValue);
     }
     
     @Test
     public void testDecodeHex() throws Exception {
-    	params.add(new CompoundVariable("HEX_DECODE"));
-    	params.add(new CompoundVariable("4920616d206120737472696e67"));
-    	
-    	encodeDecode.setParameters(params);
-    	String returnValue = encodeDecode.execute(result, null);
-    	assertEquals(
-    			"I am a string",
-    			returnValue);
+        params.add(new CompoundVariable("HEX_DECODE"));
+        params.add(new CompoundVariable("4920616d206120737472696e67"));
+        
+        encodeDecode.setParameters(params);
+        String returnValue = encodeDecode.execute(result, null);
+        assertEquals("I am a string", returnValue);
     }
     
     @Test
     public void testInvalid() throws Exception {
-    	params.add(new CompoundVariable(null));
-    	params.add(new CompoundVariable("I am a string"));
-    	
-    	encodeDecode.setParameters(params);
-    	String returnValue = encodeDecode.execute(result, null);
-    	assertEquals(
-    			null,
-    			returnValue);
+        params.add(new CompoundVariable(null));
+        params.add(new CompoundVariable("I am a string"));
+        
+        encodeDecode.setParameters(params);
+        String returnValue = encodeDecode.execute(result, null);
+        assertEquals(
+                null,
+                returnValue);
     }
     
 }
