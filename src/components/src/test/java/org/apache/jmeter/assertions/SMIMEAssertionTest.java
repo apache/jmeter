@@ -31,8 +31,8 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for the SMIMEAssertion.
@@ -96,7 +96,7 @@ public class SMIMEAssertionTest implements JMeterSerialTest {
     private MimeMessage msg;
     private SampleResult parent;
 
-    @Before
+    @BeforeEach
     public void setUp() throws MessagingException, IOException {
         Session mailSession = Session.getDefaultInstance(new Properties());
         msg = new MimeMessage(mailSession, this.getClass().getResourceAsStream(

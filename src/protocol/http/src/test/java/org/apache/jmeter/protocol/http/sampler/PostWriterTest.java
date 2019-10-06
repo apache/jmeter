@@ -41,9 +41,9 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +62,7 @@ public class PostWriterTest {
 
     private PostWriter postWriter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         establishConnection();
         sampler = new HTTPSampler();// This must be the original (Java) HTTP sampler
@@ -84,7 +84,7 @@ public class PostWriterTest {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         // delete temporay file
         if(!temporaryFile.delete()) {

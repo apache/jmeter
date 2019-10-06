@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public final class ClutilTestCase {
     private static final String[] ARGLIST1 = new String[] { "--you", "are", "--all", "-cler", "kid" };

@@ -25,12 +25,12 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public final class TestHtmlParsingUtils extends JMeterTestCase {
 
-    @Before
+    @BeforeEach
     public void setUp() {
     }
 

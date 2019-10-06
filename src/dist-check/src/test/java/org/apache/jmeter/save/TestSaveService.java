@@ -37,7 +37,7 @@ import java.util.List;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestSaveService extends JMeterTestCase {
 

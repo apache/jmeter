@@ -20,7 +20,7 @@ package org.apache.jmeter.assertions.jmespath.gui;
 
 import org.apache.jmeter.assertions.jmespath.JMESPathAssertion;
 import org.apache.jmeter.testelement.TestElement;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JMESPathAssertionGuiTest {
 

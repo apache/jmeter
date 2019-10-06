@@ -22,16 +22,16 @@ import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.junit.categories.NeedGuiTests;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 @Category(NeedGuiTests.class)
 public class TestHttpTestSampleGui {
 
     private HttpTestSampleGui gui;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         gui = new HttpTestSampleGui();
     }

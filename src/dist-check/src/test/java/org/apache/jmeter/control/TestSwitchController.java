@@ -34,7 +34,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestSwitchController extends JMeterTestCase {
 

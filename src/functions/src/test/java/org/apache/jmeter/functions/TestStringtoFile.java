@@ -18,15 +18,19 @@
 
 package org.apache.jmeter.functions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
@@ -34,25 +38,19 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-/**
- * Tests for {@link StringToFile}
- */
 public class TestStringtoFile extends JMeterTestCase {
+
     protected AbstractFunction function;
     private SampleResult result;
     private static final String FILENAME = "test.txt";
     private static final String STRING_TO_WRITE = "test";
     private static final String ENCODING = StandardCharsets.UTF_8.toString();
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         function = new StringToFile();
         result = new SampleResult();
@@ -68,128 +66,118 @@ public class TestStringtoFile extends JMeterTestCase {
     }
 
     @Test
-    public void testWriteToFile() throws Exception {
-        File file = tempFolder.newFile();
-        file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", ENCODING));
+    public void testWriteToFile(@TempDir Path tempDir) throws Exception {
+        String tempAbsolutePath = tempDir.resolve("output.txt").toAbsolutePath().toString();
+        function.setParameters(functionParams(tempAbsolutePath, STRING_TO_WRITE, "true", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should have successfully run", Boolean.parseBoolean(returnValue));
+        assertTrue(Boolean.parseBoolean(returnValue),
+                "This method 'Stringtofile' should have successfully run");
     }
 
     @Test
     public void testWriteToFileWhenDirectoryDoesntExist() throws Exception {
-        File dir = tempFolder.newFolder();
-        Files.delete(dir.toPath());
-        String pathname = Paths.get(dir.getAbsolutePath(), FILENAME).toString();
+        String pathname = Paths.get("/does/not.exist", FILENAME).toString();
         function.setParameters(functionParams(pathname, STRING_TO_WRITE, "true", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertFalse("This method 'Stringtofile' should fail to run since directory does not exist",
-                Boolean.parseBoolean(returnValue));
+        assertFalse(Boolean.parseBoolean(returnValue),
+                "This method 'Stringtofile' should fail to run since directory does not exist");
     }
 
     @Test
-    public void testWriteToFileWhenDirectoryExist() throws Exception {
-        File dir = tempFolder.newFolder();
-        dir.deleteOnExit();
-        String pathname = Paths.get(dir.getAbsolutePath(), FILENAME).toString();
+    public void testWriteToFileWhenDirectoryExist(@TempDir Path tempDir) throws Exception {
+        String pathname = tempDir.resolve(FILENAME).toString();
         function.setParameters(functionParams(pathname, STRING_TO_WRITE, "true", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should have successfully run if parent directory already exists",
-                Boolean.parseBoolean(returnValue));
+        assertTrue(Boolean.parseBoolean(returnValue),
+                "This method 'Stringtofile' should have successfully run if parent directory already exists");
     }
 
     @Test
-    public void testWriteToFileOptParamWayToWriteIsNull() throws Exception {
-        File file = tempFolder.newFile();
-        file.deleteOnExit();
-
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE));
+    public void testWriteToFileOptParamWayToWriteIsNull(@TempDir Path tempDir) throws Exception {
+        String tempAbsolutePath = tempDir.resolve("output.txt").toAbsolutePath().toString();
+        function.setParameters(functionParams(tempAbsolutePath, STRING_TO_WRITE));
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should have successfully run with empty append",
-                Boolean.parseBoolean(returnValue));
+        assertTrue(Boolean.parseBoolean(returnValue),
+                "This method 'Stringtofile' should have successfully run with empty append");
     }
 
     @Test
-    public void testWriteToFileOptParamEncodingIsNull() throws Exception {
-        File file = tempFolder.newFile();
-        file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true"));
+    public void testWriteToFileOptParamEncodingIsNull(@TempDir Path tempDir) throws Exception {
+        String tempAbsolutePath = tempDir.resolve("output.txt").toAbsolutePath().toString();
+        function.setParameters(functionParams(tempAbsolutePath, STRING_TO_WRITE, "true"));
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should have successfully run with no charset",
-                Boolean.parseBoolean(returnValue));
+        assertTrue(Boolean.parseBoolean(returnValue),
+                "This method 'Stringtofile' should have successfully run with no charset");
     }
 
     @Test
-    public void testWriteToFileEncodingNotSupported() throws Exception {
-        File file = tempFolder.newFile();
-        file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", "UTF-20"));
+    public void testWriteToFileEncodingNotSupported(@TempDir Path tempDir) throws Exception {
+        String tempAbsolutePath = tempDir.resolve("output.txt").toAbsolutePath().toString();
+        function.setParameters(functionParams(tempAbsolutePath, STRING_TO_WRITE, "true", "UTF-20"));
         String returnValue = function.execute(result, null);
-        Assert.assertFalse("This method 'Stringtofile' should have failed to run with wrong charset",
-                Boolean.parseBoolean(returnValue));
+        assertFalse(Boolean.parseBoolean(returnValue),
+                "This method 'Stringtofile' should have failed to run with wrong charset");
     }
 
     @Test
-    public void testWriteToFileEncodingNotLegal() throws Exception {
-        File file = tempFolder.newFile();
-        file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", "UTFéé"));
+    public void testWriteToFileEncodingNotLegal(@TempDir Path tempDir) throws Exception {
+        String tempAbsolutePath = tempDir.resolve("output.txt").toAbsolutePath().toString();
+        function.setParameters(functionParams(tempAbsolutePath, STRING_TO_WRITE, "true", "UTFéé"));
         String returnValue = function.execute(result, null);
-        Assert.assertFalse("This method 'Stringtofile' should have failed to run with illegal chars in charset",
-                Boolean.parseBoolean(returnValue));
+        assertFalse(Boolean.parseBoolean(returnValue),
+                "This method 'Stringtofile' should have failed to run with illegal chars in charset");
     }
 
     @Test
-    public void testWriteToFileIOException() throws Exception {
-        File file = tempFolder.newFile();
-        file.deleteOnExit();
-        Assert.assertTrue(file.getAbsolutePath() + " should be set read-only", file.setWritable(false));
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", ENCODING));
+    public void testWriteToFileIOException(@TempDir Path tempDir) throws Exception {
+        File file = new File(tempDir.toAbsolutePath() + "/output.txt");
+        assertTrue(file.createNewFile() && file.setWritable(false), file + " should be set read-only");
+        String tempAbsolutePath = file.getAbsolutePath();
+        function.setParameters(functionParams(tempAbsolutePath, STRING_TO_WRITE, "true", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertFalse("This method 'Stringtofile' should have failed to run with non writable folder",
-                Boolean.parseBoolean(returnValue));
+        assertFalse(Boolean.parseBoolean(returnValue),
+                "This method 'Stringtofile' should have failed to run with non writable folder");
     }
 
     @Test
     public void testWriteToFileRequiredFilePathIsNull() throws Exception {
         function.setParameters(functionParams(null, STRING_TO_WRITE, "true", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertFalse("This method 'Stringtofile' should fail to run with null file",
-                Boolean.parseBoolean(returnValue));
+        assertFalse(Boolean.parseBoolean(returnValue),
+                "This method 'Stringtofile' should fail to run with null file");
     }
 
     @Test
-    public void testWriteToFileRequiredStringIsNull() throws Exception {
-        File file = tempFolder.newFile();
-        file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), "", "true", ENCODING));
+    public void testWriteToFileRequiredStringIsNull(@TempDir Path tempDir) throws Exception {
+        String tempAbsolutePath = tempDir.resolve("output.txt").toAbsolutePath().toString();
+        function.setParameters(functionParams(tempAbsolutePath, "", "true", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should succeed with empty String to write",
-                Boolean.parseBoolean(returnValue));
+        assertTrue(Boolean.parseBoolean(returnValue),
+                "This method 'Stringtofile' should succeed with empty String to write");
     }
 
     @Test
-    public void testOverwrite() throws Exception {
-        File file = tempFolder.newFile();
-        file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "false", ENCODING));
+    public void testOverwrite(@TempDir Path tempDir) throws Exception {
+        Path file = tempDir.resolve("output.txt");
+        String tempAbsolutePath = file.toAbsolutePath().toString();
+        function.setParameters(functionParams(tempAbsolutePath, STRING_TO_WRITE, "false", ENCODING));
         String returnValue = function.execute(result, null);
-        Assert.assertTrue("This method 'Stringtofile' should have successfully run", Boolean.parseBoolean(returnValue));
-        String res = FileUtils.readFileToString(file, ENCODING).trim();
-        Assert.assertEquals("The string should be 'test'", "test", res);
+        assertTrue(Boolean.parseBoolean(returnValue), "This method 'Stringtofile' should have successfully run");
+        String res = new String(Files.readAllBytes(file), StandardCharsets.UTF_8).trim();
+        assertEquals("test", res, "The string should be 'test'");
     }
 
     @Test
-    public void testAppend() throws Exception {
-        File file = tempFolder.newFile();
-        file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), STRING_TO_WRITE, "true", ENCODING));
-        Assert.assertTrue("First call to 'Stringtofile' should succeed",
-                Boolean.parseBoolean(function.execute(result, null)));
-        Assert.assertTrue("Second call to 'Stringtofile' should succeed",
-                Boolean.parseBoolean(function.execute(result, null)));
-        String res = FileUtils.readFileToString(file, ENCODING).trim();
-        Assert.assertEquals("The string should be 'testtest'", "testtest", res);
+    public void testAppend(@TempDir Path tempDir) throws Exception {
+        Path file = tempDir.resolve("output.txt");
+        String tempAbsolutePath = file.toAbsolutePath().toString();
+        function.setParameters(functionParams(tempAbsolutePath, STRING_TO_WRITE, "true", ENCODING));
+        assertTrue(Boolean.parseBoolean(function.execute(result, null)),
+                "First call to 'Stringtofile' should succeed");
+        assertTrue(Boolean.parseBoolean(function.execute(result, null)),
+                "Second call to 'Stringtofile' should succeed");
+        String res = new String(Files.readAllBytes(file), StandardCharsets.UTF_8).trim();
+        assertEquals( "testtest", res);
     }
 
     private Collection<CompoundVariable> functionParams(String... args) {
@@ -198,21 +186,20 @@ public class TestStringtoFile extends JMeterTestCase {
 
     @Test
     public void testDescription() {
-        Assert.assertEquals(
-                "Function 'stringtofile' should have successfully reading the configuration file 'messages.properties'",
-                JMeterUtils.getResString("string_to_file_pathname"), function.getArgumentDesc().get(0));
+        assertEquals(JMeterUtils.getResString("string_to_file_pathname"), function.getArgumentDesc().get(0),
+                "Function 'stringtofile' should have successfully reading the configuration file 'messages.properties'");
     }
 
     @Test
-    public void testLineBreak() throws Exception {
-        File file = tempFolder.newFile();
-        file.deleteOnExit();
-        function.setParameters(functionParams(file.getAbsolutePath(), "test\\\\ntest", "true", ENCODING));
+    public void testLineBreak(@TempDir Path tempDir) throws Exception {
+        Path file = tempDir.resolve("output.txt");
+        String tempAbsolutePath = file.toAbsolutePath().toString();
+        function.setParameters(functionParams(tempAbsolutePath, "test\\\\ntest", "true", ENCODING));
         function.execute();
-        String res = FileUtils.readFileToString(file, ENCODING).trim();
-        Assert.assertEquals("When the user type '\n', ine break should be saved in file",
-                "test" + System.lineSeparator() + "test", res);
-        Assert.assertTrue("When the user type '\\n',line break should be saved in file",
-                res.contains(System.lineSeparator()));
+        String res = new String(Files.readAllBytes(file), StandardCharsets.UTF_8).trim();
+        assertEquals("test" + System.lineSeparator() + "test", res,
+                "When the user type '\n', ine break should be saved in file");
+        assertTrue(res.contains(System.lineSeparator()),
+                "When the user type '\\n',line break should be saved in file");
     }
 }

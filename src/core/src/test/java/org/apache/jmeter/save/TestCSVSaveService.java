@@ -31,7 +31,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestCSVSaveService extends JMeterTestCase {
 

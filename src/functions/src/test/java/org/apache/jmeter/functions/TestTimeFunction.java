@@ -33,8 +33,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestTimeFunction extends JMeterTestCase {
 
@@ -45,7 +45,7 @@ public class TestTimeFunction extends JMeterTestCase {
     private JMeterContext jmctx = null;
     private String value;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         vars = new JMeterVariables();

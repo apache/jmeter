@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 import org.apache.jmeter.testelement.property.DoubleProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.NumberProperty;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestNumberProperty {
 

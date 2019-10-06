@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.jorphan.util.JMeterException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestClassTools {
 

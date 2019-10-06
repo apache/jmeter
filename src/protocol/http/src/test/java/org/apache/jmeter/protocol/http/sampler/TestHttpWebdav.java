@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestHttpWebdav {
 

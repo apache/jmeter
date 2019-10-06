@@ -27,7 +27,7 @@ import org.apache.jmeter.config.LoginConfig;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PackageTest {
 

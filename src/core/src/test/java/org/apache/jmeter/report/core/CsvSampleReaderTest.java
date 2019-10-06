@@ -26,8 +26,9 @@ import java.io.IOException;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CsvSampleReaderTest extends JMeterTestCase {
 
@@ -35,7 +36,7 @@ public class CsvSampleReaderTest extends JMeterTestCase {
     private File tempCsv;
     private SampleMetadata metadata = new SampleMetadata(',', "a","b");
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         tempCsv = File.createTempFile("samplecsv", ".csv");
         tempCsv.deleteOnExit();
@@ -51,12 +52,12 @@ public class CsvSampleReaderTest extends JMeterTestCase {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testConstructorWithInvalidFile() throws Exception {
-        try (CsvSampleReader csv = new CsvSampleReader(
-                new File("/not/available.csv"), metadata)) {
-            Assert.fail("File should not be readable and therefor illegal");
-        }
+    @Test
+    public void testConstructorWithInvalidFile() {
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new CsvSampleReader(new File("/not/available.csv"), metadata)
+        );
     }
 
     @Test

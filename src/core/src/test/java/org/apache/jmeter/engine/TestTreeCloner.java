@@ -32,7 +32,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestTreeCloner extends JMeterTestCase {
 

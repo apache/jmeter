@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.net.util.SubnetUtils;
 import org.apache.commons.net.util.SubnetUtils.SubnetInfo;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Try to establish why some batchtestserver runs fail

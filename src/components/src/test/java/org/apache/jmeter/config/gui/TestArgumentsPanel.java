@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs. These

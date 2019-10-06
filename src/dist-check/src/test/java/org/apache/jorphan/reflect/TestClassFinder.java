@@ -28,8 +28,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.logging.log4j.LoggingException;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestClassFinder {
 
@@ -41,7 +41,7 @@ public class TestClassFinder {
         return Paths.get(path).toRealPath().toString();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         libDirs = new String[] { getJMeterHome() };
     }

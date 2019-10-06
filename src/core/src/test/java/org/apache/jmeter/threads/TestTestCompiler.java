@@ -25,7 +25,7 @@ import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestTestCompiler {
 

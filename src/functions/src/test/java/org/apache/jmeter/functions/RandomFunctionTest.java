@@ -31,18 +31,18 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RandomFunctionTest extends JMeterTestCase {
 
-    @Before
+    @BeforeEach
     public void setup() {
         JMeterContextService.getContext().setVariables(new JMeterVariables());
     }
-    @After
+    @AfterEach
     public void tearDown() {
         JMeterContextService.getContext().clear();
     }

@@ -21,7 +21,9 @@ package org.apache.jmeter.timers.poissonarrivals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
+import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +50,7 @@ public class PreciseThroughputTimerTest {
 
     @Test
     public void testExactNumberOfSamples() throws Exception {
-        java.util.Random rnd = new java.util.Random();
+        Random rnd = new Random();
         long seed = rnd.nextLong();
         // Log seed, so the test can be reproduced in case of failure
         LOG.info("testExactNumberOfSamples is using seed " + seed);

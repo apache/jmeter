@@ -27,8 +27,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestXPath2Extractor {
     private static final String VAL_NAME = "value";
@@ -40,7 +40,7 @@ public class TestXPath2Extractor {
     private JMeterVariables vars;
     private JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() throws UnsupportedEncodingException {
         jmctx = JMeterContextService.getContext();
         extractor = new XPath2Extractor();

@@ -36,9 +36,9 @@ import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
 import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
 import org.apache.logging.log4j.core.config.builder.api.RootLoggerComponentBuilder;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ public class TestGuiLogEventAppender {
      * Configure logging with GuiLogEventAppender for root logger, and override the handler of GuiLogEventAppender
      * to see if there's any log4j2 AppenderControl level error (e.g, "Recursive call to appender gui-log-event").
      */
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
         builder.setPackages("org.apache.jmeter.gui.logging");
@@ -90,7 +90,7 @@ public class TestGuiLogEventAppender {
         guiLogEventAppender.start();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         log4j2LevelErrorMessages.clear();
     }

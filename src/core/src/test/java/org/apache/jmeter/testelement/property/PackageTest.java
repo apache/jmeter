@@ -23,7 +23,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import org.apache.jmeter.config.LoginConfig;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /** Class for testing the property package. */
 public class PackageTest {

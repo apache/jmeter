@@ -30,8 +30,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestRegexFunction extends JMeterTestCase {
 
@@ -43,7 +44,7 @@ public class TestRegexFunction extends JMeterTestCase {
     private JMeterVariables vars;
     private JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         variable = new RegexFunction();
         result = new SampleResult();
@@ -380,7 +381,7 @@ public class TestRegexFunction extends JMeterTestCase {
                 + "</row>", match);
     }
 
-    @Test(expected=NumberFormatException.class)
+    @Test
     public void testExtractionIndexNotNumeric() throws Exception {
         params = new LinkedList<>();
         params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
@@ -389,8 +390,9 @@ public class TestRegexFunction extends JMeterTestCase {
         params.add(new CompoundVariable(""));
         params.add(new CompoundVariable("No Value Found"));
         variable.setParameters(params);
-        String match = variable.execute(result, null);
-        assertEquals("No Value Found", match);
+        Assertions.assertThrows(
+                Exception.class,
+                () -> variable.execute(result, null));
     }
 
     @Test

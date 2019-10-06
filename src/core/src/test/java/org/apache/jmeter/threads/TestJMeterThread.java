@@ -31,7 +31,8 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestJMeterThread {
 
@@ -113,13 +114,15 @@ public class TestJMeterThread {
         }
     }
 
-    @Test(expected=NoClassDefFoundError.class)
-    public void testBug61661OnError(){
-        HashTree hashTree =new HashTree();
+    @Test
+    public void testBug61661OnError() {
+        HashTree hashTree = new HashTree();
         hashTree.add("Test", new ThrowingThreadListener(true));
         JMeterThread.ThreadListenerTraverser traverser =
                 new JMeterThread.ThreadListenerTraverser(true);
-        hashTree.traverse(traverser);
+        Assertions.assertThrows(
+                NoClassDefFoundError.class,
+                () -> hashTree.traverse(traverser));
     }
 
     @Test

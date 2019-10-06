@@ -28,8 +28,8 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /** Unit tests for classes that use Functors */
 public class TestFunctor extends JMeterTestCase {
@@ -88,7 +88,7 @@ public class TestFunctor extends JMeterTestCase {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp(){
         Configurator.setAllLevels(Functor.class.getName(), Level.FATAL);
     }

@@ -24,13 +24,13 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestSave {
     private Save save;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         save = new Save();
     }

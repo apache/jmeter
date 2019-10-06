@@ -29,7 +29,7 @@ import java.util.List;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestRandomController extends JMeterTestCase {
 

@@ -30,15 +30,15 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SplitFunctionTest extends JMeterTestCase {
 
     private JMeterContext jmctx = null;
     private JMeterVariables vars = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmctx.setVariables(new JMeterVariables());

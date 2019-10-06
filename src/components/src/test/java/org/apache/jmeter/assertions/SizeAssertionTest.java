@@ -28,8 +28,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SizeAssertionTest extends JMeterTestCase {
 
@@ -40,7 +40,7 @@ public class SizeAssertionTest extends JMeterTestCase {
     private final String data1 = "response Data\n" + "line 2\n\nEOF";
     private final int data1Len = data1.length();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         JMeterContext jmctx = JMeterContextService.getContext();
         assertion = new SizeAssertion();

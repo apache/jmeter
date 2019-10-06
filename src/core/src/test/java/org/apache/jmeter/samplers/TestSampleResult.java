@@ -30,7 +30,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.LogRecordingDelegatingLogger;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestSampleResult implements JMeterSerialTest {
 
