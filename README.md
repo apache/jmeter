@@ -153,20 +153,6 @@ systemProp.https.proxyUser=your_user_name
 systemProp.https.proxyPassword=your_password
 ```
 
-You might also want to skip some tests - that are failing without proper access to the internet - by adding some more
-properties into `build-local.properties`:
-
-```properties
-skip.bug52310=true
-skip.bug60607=true
-skip.batchtest_Http4ImplPreemptiveBasicAuth=true
-skip.batchtest_SlowCharsFeature=true
-skip.batchtest_TestKeepAlive=true
-skip.batchtest_ResponseDecompression=true
-skip.test_http=true
-skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
-```
-
 ### Test builds
 
 JMeter is built using Gradle.
