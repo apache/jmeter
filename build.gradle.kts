@@ -119,8 +119,8 @@ releaseArtifacts {
 
 releaseParams {
     tlp.set("JMeter")
-    releaseTag.set("v${project.version.toString().replace('.', '_')}")
-    rcTag.set(releaseTag.map { "${it}_RC" + rc.get() })
+    releaseTag.set("rel/v${project.version}")
+    rcTag.set(rc.map { "v${project.version}-rc$it" })
     svnDist {
         // All the release versions are put under release/jmeter/{source,binary}
         releaseFolder.set("release/jmeter")
