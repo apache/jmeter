@@ -275,7 +275,7 @@ https.default.protocol=SSLv3
         When using <code>multipart/form-data</code>, this suppresses the <code>Content-Type</code> and
         <code>Content-Transfer-Encoding</code> headers; only the <code>Content-Disposition</code> header is sent.
         </property>
-        <property name="Path" required="Yes">The path to resource (for example, <code>/servlets/myServlet</code>). If the
+        <property name="Path" required="No">The path to resource (for example, <code>/servlets/myServlet</code>). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.
 <note>
