@@ -2837,8 +2837,8 @@ may download images, style-sheets, etc. referenced by the HTML code.
 <tr><td><code>JSON Path Tester</code></td>
 <td>The <i>JSON Path Tester view</i> will let you test your JSON-PATH expressions and see the extracted data from a particular response.
 <br/></td></tr>
-<tr><td><code>JMESPath Tester</code></td>
-<td>The <i>JMESPath Tester view</i> will let you test your <a href="http://jmespath.org/">JMESPath</a> expressions and see the extracted data from a particular response.
+<tr><td><code>JSON JMESPath Tester</code></td>
+<td>The <i>JSON JMESPath Tester view</i> will let you test your <a href="http://jmespath.org/">JMESPath</a> expressions and see the extracted data from a particular response.
 <br/></td></tr>
 <tr><td><code>Regexp Tester</code></td>
 <td>The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
@@ -6059,7 +6059,7 @@ by:
 where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</code>" namespace.(not applicable if Tidy is selected)
 </component>
 
-<component name="JMESPath Extractor" index="&sect-num;.8.4"  width="729" height="317" screenshot="jmes_extractor.png">
+<component name="JSON JMESPath Extractor" index="&sect-num;.8.4" anchor="JSON_JMESPath_Extractor" width="729" height="317" screenshot="jmes_extractor.png">
     <description>This test element allows the user to extract value(s) from 
         structured response - XML or (X)HTML - using JMESPath
         query language.
