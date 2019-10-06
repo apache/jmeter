@@ -170,18 +170,14 @@ public class ParallelResourcesAndIpSource {
             if (HTTPSamplerFactory.IMPL_JAVA.equals(httpImplementation)) {
                 // Java implementation is known to ignore source IP, so it should connect anyway
                 // pass to "successful" assertion below
-                if (result.getResponseDataAsString().contains("SocketException: Protocol family unavailable")) {
-                    //noinspection ConstantConditions
-                    Assumptions.assumeTrue(false,
-                            "Java implementation might throw 'SocketException: Protocol family unavailable'" +
-                                    " in case it connects from the wrong source IP");
-                }
-                if (result.getResponseDataAsString().contains("BindException: Cannot assign requested address")) {
-                    //noinspection ConstantConditions
-                    Assumptions.assumeTrue(false,
-                            "Java implementation might throw 'BindException: Cannot assign requested address'" +
-                                    " in case it connects from the wrong source IP");
-                }
+                Assumptions.assumeFalse(
+                        result.getResponseDataAsString().contains("SocketException: Protocol family unavailable"),
+                        "Java implementation might throw 'SocketException: Protocol family unavailable'"
+                                + " in case it connects from the wrong source IP");
+                Assumptions.assumeFalse(
+                        result.getResponseDataAsString().contains("BindException: Cannot assign requested address"),
+                        "Java implementation might throw 'BindException: Cannot assign requested address'"
+                                + " in case it connects from the wrong source IP");
             } else if (result.isSuccessful() || result.isResponseCodeOK() ||
                     !(result.getResponseDataAsString().contains("ConnectException") ||
                             result.getResponseDataAsString().contains("BindException") ||
