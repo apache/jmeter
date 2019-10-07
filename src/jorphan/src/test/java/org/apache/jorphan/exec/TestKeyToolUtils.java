@@ -28,7 +28,7 @@ import java.util.List;
 
 import org.apache.jorphan.util.JOrphanUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.parallel.Execution;
@@ -41,8 +41,8 @@ public class TestKeyToolUtils {
     private static String password;
     private static final int validity = 1;
 
-    @BeforeEach
-    public void setup(@TempDir Path keystoreDir) throws IOException {
+    @BeforeAll
+    public static void setup(@TempDir Path keystoreDir) throws IOException {
         keystore = keystoreDir.resolve("dummy-keystore.jks").toFile();
         password = JOrphanUtils.generateRandomAlphanumericPassword(32);
         KeyToolUtils.generateProxyCA(keystore, password, validity);
