@@ -534,9 +534,14 @@ allprojects {
                     showStandardStreams = true
                 }
                 // Pass the property to tests
-                systemProperty("java.awt.headless", System.getProperty("java.awt.headless"))
-                systemProperty("junit.jupiter.execution.parallel.enabled", "true")
-                systemProperty("junit.jupiter.execution.timeout.default", "2 m")
+                fun passProperty(name: String, default: String? = null) {
+                    val value = System.getProperty(name) ?: default
+                    value?.let { systemProperty(name, it) }
+                }
+                passProperty("java.awt.headless")
+                passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
+                passProperty("junit.jupiter.execution.parallel.enabled", "true")
+                passProperty("junit.jupiter.execution.timeout.default", "2 m")
             }
             withType<SpotBugsTask>().configureEach {
                 group = LifecycleBasePlugin.VERIFICATION_GROUP

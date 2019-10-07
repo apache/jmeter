@@ -26,7 +26,7 @@ import spock.lang.IgnoreIf
 
 class DNSCacheManagerSpec extends JMeterSpec {
 
-    private static final String VALID_DNS_SERVER  = ResolverConfig.getCurrentConfig().servers()[0];
+    private static final String[] VALID_DNS_SERVERS  = ResolverConfig.getCurrentConfig().servers()
     private static final String INVALID_DNS_SERVER = "512.1.1.1"
 
     static def localDNSResolverFailed() {
@@ -97,20 +97,24 @@ class DNSCacheManagerSpec extends JMeterSpec {
     })
     def "Valid DNS resolves and caches with custom resolve true"() {
         given:
-            sut.addServer(VALID_DNS_SERVER)
+            for (dns in VALID_DNS_SERVERS) {
+                sut.addServer(dns)
+            }
             sut.setCustomResolver(true)
             sut.setTimeoutMs(5000)
         when:
             sut.resolve("jmeter.apache.org")
         then:
             sut.resolver != null
-            ((ExtendedResolver) sut.resolver).getResolvers().length == 1
+            ((ExtendedResolver) sut.resolver).getResolvers().length == VALID_DNS_SERVERS.length
             sut.cache.size() == 1
     }
 
     def "Cache should be used where entries exist"() {
         given:
-            sut.addServer(VALID_DNS_SERVER)
+            for (dns in VALID_DNS_SERVERS) {
+                sut.addServer(dns)
+            }
             sut.setCustomResolver(true)
             sut.setTimeoutMs(5000)
         when:
