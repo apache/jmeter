@@ -15,32 +15,28 @@
  * limitations under the License.
  *
  */
-package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
+package org.apache.jmeter.functions;
 
 import java.util.Collection;
 import java.util.LinkedList;
-
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestEncodeDecode extends JMeterTestCase  {
     protected AbstractFunction encodeDecode;
-
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
+    
     @Before
     public void setUp() {
         encodeDecode = new EncodeDecodeFunction();
@@ -81,8 +77,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
     @Test
     public void testHex() throws Exception {
         params.add(new CompoundVariable("HEX_ENCODE"));
-        params.add(new CompoundVariable("I am a string"));
-        
+        params.add(new CompoundVariable("I am a string"));        
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
         assertEquals("4920616d206120737472696e67", returnValue);
@@ -92,7 +87,6 @@ public class TestEncodeDecode extends JMeterTestCase  {
     public void testDecodeHex() throws Exception {
         params.add(new CompoundVariable("HEX_DECODE"));
         params.add(new CompoundVariable("4920616d206120737472696e67"));
-        
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
         assertEquals("I am a string", returnValue);
@@ -101,13 +95,10 @@ public class TestEncodeDecode extends JMeterTestCase  {
     @Test
     public void testInvalid() throws Exception {
         params.add(new CompoundVariable(null));
-        params.add(new CompoundVariable("I am a string"));
-        
+        params.add(new CompoundVariable("I am a string"));        
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
-        assertEquals(
-                null,
-                returnValue);
+        assertEquals(null, returnValue);
     }
     
 }
