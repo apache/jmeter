@@ -22,8 +22,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
