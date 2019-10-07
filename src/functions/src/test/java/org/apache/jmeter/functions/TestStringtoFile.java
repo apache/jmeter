@@ -131,12 +131,16 @@ public class TestStringtoFile extends JMeterTestCase {
     @Test
     public void testWriteToFileIOException(@TempDir Path tempDir) throws Exception {
         File file = new File(tempDir.toAbsolutePath() + "/output.txt");
-        assertTrue(file.createNewFile() && file.setWritable(false), file + " should be set read-only");
-        String tempAbsolutePath = file.getAbsolutePath();
-        function.setParameters(functionParams(tempAbsolutePath, STRING_TO_WRITE, "true", ENCODING));
-        String returnValue = function.execute(result, null);
-        assertFalse(Boolean.parseBoolean(returnValue),
-                "This method 'Stringtofile' should have failed to run with non writable folder");
+        try {
+            assertTrue(file.createNewFile() && file.setWritable(false), file + " should be set read-only");
+            String tempAbsolutePath = file.getAbsolutePath();
+            function.setParameters(functionParams(tempAbsolutePath, STRING_TO_WRITE, "true", ENCODING));
+            String returnValue = function.execute(result, null);
+            assertFalse(Boolean.parseBoolean(returnValue),
+                    "This method 'Stringtofile' should have failed to run with non writable folder");
+        } finally {
+            file.setWritable(true);
+        }
     }
 
     @Test
