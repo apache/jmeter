@@ -101,5 +101,5 @@ public class TestEncodeDecode extends JMeterTestCase  {
         String returnValue = encodeDecode.execute(result, null);
         Assert.assertEquals(null, returnValue);
     }
-    
+
 }
