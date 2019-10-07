@@ -33,8 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Encode Decode Function  
- * Supports Hex and Base64 methods 
+ * Encode Decode Function
+ * Supports Hex and Base64 methods
  *
  * @since 5.2
  */
