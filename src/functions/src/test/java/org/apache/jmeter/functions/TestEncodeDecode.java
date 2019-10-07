@@ -26,7 +26,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import static org.junit.Assert.assertEquals;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -62,7 +62,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
         params.add(new CompoundVariable("salt"));
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
-        assertEquals("SSBhbSBhIHN0cmluZw==", returnValue);
+        Assert.assertEquals("SSBhbSBhIHN0cmluZw==", returnValue);
     }
     
     @Test
@@ -71,7 +71,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
         params.add(new CompoundVariable("SSBhbSBhIHN0cmluZw=="));
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
-        assertEquals("I am a string", returnValue);
+        Assert.assertEquals("I am a string", returnValue);
     }
     
     @Test
@@ -80,7 +80,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
         params.add(new CompoundVariable("I am a string"));        
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
-        assertEquals("4920616d206120737472696e67", returnValue);
+        Assert.assertEquals("4920616d206120737472696e67", returnValue);
     }
     
     @Test
@@ -89,7 +89,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
         params.add(new CompoundVariable("4920616d206120737472696e67"));
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
-        assertEquals("I am a string", returnValue);
+        Assert.assertEquals("I am a string", returnValue);
     }
     
     @Test
@@ -98,7 +98,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
         params.add(new CompoundVariable("I am a string"));        
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
-        assertEquals(null, returnValue);
+        Assert.assertEquals(null, returnValue);
     }
     
 }
