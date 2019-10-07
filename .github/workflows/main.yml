@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - 'releases/*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  linux:
+    name: 'Linux (JDK 12)'
+    runs-on: ubuntu-latest
+    container: junitteam/build:latest
+    steps:
+    - uses: actions/checkout@master
+    - name: 'Test'
+      run: |
+        ./gradlew --version
+        ./gradlew build
+
+  windows:
+    name: 'Windows (JDK 12)'
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: 'Set up JDK 12'
+      uses: actions/setup-java@v1
+      with:
+        java-version: 12
+    - name: 'Test'
+      shell: bash
+      run: |
+        ./gradlew --version
+        ./gradlew build
+
+  mac:
+    name: 'Mac OS (JDK 12)'
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: 'Set up JDK 12'
+      uses: actions/setup-java@v1
+      with:
+        java-version: 12
+    - name: 'Test'
+      run: |
+        ./gradlew --version
+        ./gradlew build
