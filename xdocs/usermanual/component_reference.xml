@@ -1158,7 +1158,7 @@ props.put("PROP1","1234");</source>
 </note>
 <properties>
     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-    <property name="Scripting Language" required="No">Name of the JSR223 scripting language to be used. Use groovy as default. 
+    <property name="Scripting Language" required="No">Name of the JSR223 scripting language to be used. Apache Groovy is the default. 
       <note>There are other languages supported than those that appear in the drop-down list.
         Others may be available if the appropriate jar is installed in the JMeter lib directory.<br/>
         Notice that some languages such as Velocity may use a different syntax for JSR223 variables,
@@ -3263,7 +3263,7 @@ The JSR223 Listener allows JSR223 script code to be applied to sample results.
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Language" required="No">The JSR223 language to be used.  Use groovy as default.</property>
+    <property name="Language" required="No">The JSR223 language to be used.  Apache Groovy is the default.</property>
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <dl>
@@ -4840,7 +4840,7 @@ The JSR223 Assertion allows JSR223 script code to be used to check the status of
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Language" required="No">The JSR223 language to be used. Use groovy as default.</property>
+    <property name="Language" required="No">The JSR223 language to be used. Apache Groovy is the default.</property>
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <ul>
@@ -5297,7 +5297,7 @@ The JSR223 Timer can be used to generate a delay using a JSR223 scripting langua
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
     <property name="ScriptLanguage" required="No">
-        The scripting language to be used. Use groovy as default.
+        The scripting language to be used. Apache Groovy is the default.
     </property>
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
@@ -5534,7 +5534,7 @@ The JSR223 PreProcessor allows JSR223 script code to be applied before taking a 
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Language" required="No">The JSR223 language to be used. Use groovy as default.</property>
+    <property name="Language" required="No">The JSR223 language to be used. Apache Groovy is the default.</property>
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <ul>
@@ -6172,7 +6172,7 @@ The JSR223 PostProcessor allows JSR223 script code to be applied after taking a 
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Language" required="No">The JSR223 language to be used. Use groovy as default.</property>
+    <property name="Language" required="No">The JSR223 language to be used. Apache Groovy is the default.</property>
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <ul>
