@@ -20,6 +20,7 @@ package org.apache.jmeter.functions;
 
 import java.util.Collection;
 import java.util.LinkedList;
+
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
@@ -36,7 +37,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
     private Collection<CompoundVariable> params;
     private JMeterVariables vars;
     private JMeterContext jmctx;
-    
+
     @Before
     public void setUp() {
         encodeDecode = new EncodeDecodeFunction();
@@ -64,7 +65,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
         String returnValue = encodeDecode.execute(result, null);
         Assert.assertEquals("SSBhbSBhIHN0cmluZw==", returnValue);
     }
-    
+
     @Test
     public void testDecodeBase64() throws Exception {
         params.add(new CompoundVariable("BASE64_DECODE"));
@@ -73,7 +74,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
         String returnValue = encodeDecode.execute(result, null);
         Assert.assertEquals("I am a string", returnValue);
     }
-    
+
     @Test
     public void testHex() throws Exception {
         params.add(new CompoundVariable("HEX_ENCODE"));
@@ -82,7 +83,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
         String returnValue = encodeDecode.execute(result, null);
         Assert.assertEquals("4920616d206120737472696e67", returnValue);
     }
-    
+
     @Test
     public void testDecodeHex() throws Exception {
         params.add(new CompoundVariable("HEX_DECODE"));
@@ -91,7 +92,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
         String returnValue = encodeDecode.execute(result, null);
         Assert.assertEquals("I am a string", returnValue);
     }
-    
+
     @Test
     public void testInvalid() throws Exception {
         params.add(new CompoundVariable(null));
