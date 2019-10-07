@@ -78,7 +78,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
     @Test
     public void testHex() throws Exception {
         params.add(new CompoundVariable("HEX_ENCODE"));
-        params.add(new CompoundVariable("I am a string"));        
+        params.add(new CompoundVariable("I am a string"));
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
         Assert.assertEquals("4920616d206120737472696e67", returnValue);
@@ -96,7 +96,7 @@ public class TestEncodeDecode extends JMeterTestCase  {
     @Test
     public void testInvalid() throws Exception {
         params.add(new CompoundVariable(null));
-        params.add(new CompoundVariable("I am a string"));        
+        params.add(new CompoundVariable("I am a string"));
         encodeDecode.setParameters(params);
         String returnValue = encodeDecode.execute(result, null);
         Assert.assertEquals(null, returnValue);
