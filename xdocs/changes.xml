@@ -107,6 +107,7 @@ to view the last release notes of version 5.1.1.
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>63565</bug>If Controller: GC issue with JMeter during the endurance run when using with "Interpret Condition as Variable Expression?" unchecked => Improve documentation</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -151,6 +152,7 @@ to view the last release notes of version 5.1.1.
     <li><bug>63760</bug>JOrphanUtils: add random alphanumeric password generator</li>
     <li><bug>63355</bug>View Results Tree: Browser view option is not Available with Java 11, document how to make it available</li>
     <li><bug>62861</bug>Thread Group: Provide ability to configure whether a new iteration is a new user or same user (Would be applied on Cookie Manager, Cache Manager and httpclient.reset_state_on_thread_group_iteration). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63616</bug>Fix Javadoc: <source>JMeterContext#getThreadNum()</source> starts at 0 and not 1. Contributed by Ori Marko (orimarko at gmail.com)</li>
     <li>Updated to httpclient/httpmime 4.5.10 (from 4.5.7)</li>
     <li>Updated to dnsjava 2.1.9 (from 2.1.8)</li>
     <li>Updated to jsoup 1.12.1 (from 1.11.3)</li>
@@ -173,6 +175,8 @@ to view the last release notes of version 5.1.1.
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Migrated from subversion to <a href="https://github.com/apache/jmeter">Git</a></li>
+    <li><bug>63630</bug>Switch build from Apache Ant to Gradle</li>
     <li>Updated to tika-core and tika-parsers 1.22 (from 1.21)</li>
     <li>Updated jackson-annotations, jackson-core and jackson-databind to 2.9.10 (from 2.9.8)</li>
     <li><bug>63529</bug>Add more unit tests for org.apache.jorphan.util.JOrphanUtils. Contributed by John Bergqvist(John.Bergqvist at diffblue.com)</li>
