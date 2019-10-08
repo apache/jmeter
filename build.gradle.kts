@@ -560,6 +560,7 @@ allprojects {
                 (options as StandardJavadocDocletOptions).apply {
                     noTimestamp.value = true
                     showFromProtected()
+                    locale = "en"
                     docEncoding = "UTF-8"
                     charSet = "UTF-8"
                     encoding = "UTF-8"
