@@ -542,6 +542,18 @@ allprojects {
                 passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
                 passProperty("junit.jupiter.execution.parallel.enabled", "true")
                 passProperty("junit.jupiter.execution.timeout.default", "2 m")
+                // https://github.com/junit-team/junit5/issues/2041
+                // Gradle does not print parameterized test names yet :(
+                afterTest(KotlinClosure2<TestDescriptor, TestResult, Any>({ descriptor, result ->
+                    if (result.resultType != TestResult.ResultType.SUCCESS) {
+                        val test = descriptor as org.gradle.api.internal.tasks.testing.TestDescriptorInternal
+                        val classDisplayName = test.className?.let {
+                            if (it.endsWith(test.classDisplayName)) it else "${test.className} [${test.classDisplayName}]"
+                        } ?: test.classDisplayName
+                        val testDisplayName = if (test.name == test.displayName) test.displayName else "${test.name} [${test.displayName}]"
+                        println("\n$classDisplayName > $testDisplayName: ${result.resultType}")
+                    }
+                }))
             }
             withType<SpotBugsTask>().configureEach {
                 group = LifecycleBasePlugin.VERIFICATION_GROUP
