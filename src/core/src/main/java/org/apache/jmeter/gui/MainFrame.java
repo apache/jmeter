@@ -203,7 +203,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
         testTimeDuration = new JLabel("00:00:00"); //$NON-NLS-1$
         testTimeDuration.setToolTipText(JMeterUtils.getResString("duration_tooltip")); //$NON-NLS-1$
-        testTimeDuration.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         activeAndTotalThreads = new JLabel("0/0"); // $NON-NLS-1$
         activeAndTotalThreads.setToolTipText(JMeterUtils.getResString("active_total_threads_tooltip")); // $NON-NLS-1$
