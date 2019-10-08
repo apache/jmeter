@@ -2,9 +2,12 @@
 /backups/
 /build/
 /buildSrc/build/
-/buildSrc/subprojects/*/build/**
-/buildSrc/subprojects/*/bin/**
-/buildSrc/subprojects/*/out/**
+/buildSrc/subprojects/*/build/
+/buildSrc/subprojects/*/bin/
+/buildSrc/subprojects/*/out/
+/src/build/
+/src/bin/
+/src/out/
 /src/*/build/
 /src/*/bin/
 /src/*/out/
