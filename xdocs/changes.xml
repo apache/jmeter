@@ -150,7 +150,7 @@ to view the last release notes of version 5.1.1.
     <li><bug>63452</bug>Tools / Import from cURL: Complete coverage of all command line options that are valid in JMeter use case. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63419</bug>Tools / Import from cURL: Add ability to import a set of cURL commands from a file. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63760</bug>JOrphanUtils: add random alphanumeric password generator</li>
-    <li><bug>63355</bug>View Results Tree: Browser view option is not Available with Java 11, document how to make it available</li>
+    <li><bug>63355</bug>View Results Tree: Browser view option is not Available since Java 11, document how to make it available, see <a href="./usermanual/hints_and_tips.html#browser_renderer_view_results_tree">this</a></li>
     <li><bug>62861</bug>Thread Group: Provide ability to configure whether a new iteration is a new user or same user (Would be applied on Cookie Manager, Cache Manager and httpclient.reset_state_on_thread_group_iteration). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>63616</bug>Fix Javadoc: <source>JMeterContext#getThreadNum()</source> starts at 0 and not 1. Contributed by Ori Marko (orimarko at gmail.com)</li>
     <li>Updated to httpclient/httpmime 4.5.10 (from 4.5.7)</li>
@@ -171,14 +171,14 @@ to view the last release notes of version 5.1.1.
     <li>Updated to Mozilla Rhino 1.7.11 (from 1.7.10)</li>
     <li>Updated to Saxon-HE 9.9.1-5 (from 9.9.1-1)</li>
     <li>Updated to slf4j 1.7.28 (from 1.7.25)</li>
+    <li>Updated to tika-core and tika-parsers 1.22 (from 1.21)</li>
+    <li>Updated jackson-annotations, jackson-core and jackson-databind to 2.9.10 (from 2.9.8)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li>Migrated from subversion to <a href="https://github.com/apache/jmeter">Git</a></li>
     <li><bug>63630</bug>Switch build from Apache Ant to Gradle</li>
-    <li>Updated to tika-core and tika-parsers 1.22 (from 1.21)</li>
-    <li>Updated jackson-annotations, jackson-core and jackson-databind to 2.9.10 (from 2.9.8)</li>
     <li><bug>63529</bug>Add more unit tests for org.apache.jorphan.util.JOrphanUtils. Contributed by John Bergqvist(John.Bergqvist at diffblue.com)</li>
     <li>Updated to latest checkstyle (version 8.22)</li>
     <li>Clean-up of code in <code>CompareAssertion</code> and other locations. Based on patch by Graham Russell (graham at ham1.co.uk)</li>
