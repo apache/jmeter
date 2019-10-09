@@ -345,6 +345,19 @@ JTable selection with keyboard (<keycombo><keysym>SHIFT</keysym><keysym>up/down<
 This is due to a known Java bug <a href="https://bugs.openjdk.java.net/browse/JDK-8025126" >JDK-8025126</a>
 The fix is to use JDK 8 b132 or later.
 </li>
+
+<li>
+Since Java 11 the JavaScript implementation <a href="https://openjdk.java.net/jeps/335">Nashorn has been deprecated</a>.
+Java will emit the following deprecation warnings, if you are using JavaScript based on Nashorn.
+<source>
+Warning: Nashorn engine is planned to be removed from a future JDK release
+</source>
+To silence these warnings, add <code>-Dnashorn.args=--no-deprecation-warning</code> to your Java arguments.
+That can be achieved by setting the enviroment variable <code>JVM_ARGS</code>
+<source>
+export JVM_ARGS="-Dnashorn.args=--no-deprecation-warning"
+</source>
+</li>
 </ul>
 
 </section>
