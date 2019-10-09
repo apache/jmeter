@@ -503,6 +503,12 @@ val runGui by tasks.registering() {
             classpath("$rootDir/bin/ApacheJMeter.jar")
             jvmArgs("-Xss256k")
             jvmArgs("-XX:MaxMetaspaceSize=256m")
+
+            val osName = System.getProperty("os.name")
+            if (osName.contains(Regex("mac os x|darwin|osx", RegexOption.IGNORE_CASE))) {
+                jvmArgs("-Xdock:name=JMeter")
+                jvmArgs("-Xdock:icon=$rootDir/xdocs/images/jmeter_square.png")
+            }
         }
     }
 }
