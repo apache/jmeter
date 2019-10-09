@@ -508,6 +508,8 @@ val runGui by tasks.registering() {
             if (osName.contains(Regex("mac os x|darwin|osx", RegexOption.IGNORE_CASE))) {
                 jvmArgs("-Xdock:name=JMeter")
                 jvmArgs("-Xdock:icon=$rootDir/xdocs/images/jmeter_square.png")
+                jvmArgs("-Dapple.laf.useScreenMenuBar=true")
+                jvmArgs("-Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS")
             }
         }
     }
