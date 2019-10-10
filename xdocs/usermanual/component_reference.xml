@@ -3263,7 +3263,7 @@ The JSR223 Listener allows JSR223 script code to be applied to sample results.
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Language" required="No">The JSR223 language to be used.  Apache Groovy is the default.</property>
+    <property name="Language" required="No">The JSR223 language to be used. Apache Groovy is the default.</property>
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <dl>
