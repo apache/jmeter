@@ -139,7 +139,11 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      */
     @Override
     public String getName() {
-        return namePanel.getName(); // $NON-NLS-1$
+        if (getNamePanel() != null) { // Check is mandatory because some LAFs (Nimbus) call getName() from 
+                                      // super constructor (so can happen before namePanel field is initialized
+            return getNamePanel().getName();
+        }
+        return ""; // $NON-NLS-1$
     }
 
     /**
