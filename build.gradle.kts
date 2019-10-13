@@ -174,6 +174,11 @@ val useGpgCmd by extra {
     boolProp("useGpgCmd") ?: false
 }
 
+// Signing is required for RELEASE version
+val skipSigning by extra {
+    boolProp("skipSigning") ?: boolProp("skipSign") ?: false
+}
+
 allprojects {
     if (project.path != ":src") {
         tasks.register<DependencyInsightReportTask>("allDependencyInsight") {
@@ -452,7 +457,7 @@ allprojects {
                 val release = rootProject.releaseParams.release.get()
                 // Note it would still try to sign the artifacts,
                 // however it would fail only when signing a RELEASE version fails
-                isRequired = release
+                isRequired = release && !skipSigning
             }
         }
     }
