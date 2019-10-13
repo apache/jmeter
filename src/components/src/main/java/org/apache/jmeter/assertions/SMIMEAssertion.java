@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.Security;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -70,8 +69,9 @@ import org.slf4j.LoggerFactory;
  */
 class SMIMEAssertion {
 
-    // Use the name of the test element, otherwise cannot enable/disable debug from the GUI
-    private static final Logger log = LoggerFactory.getLogger(SMIMEAssertionTestElement.class);
+    // Use the name of the test element, SMIMEAssertionTestElement, instead of
+    // the expected SMIMEAssertion, otherwise cannot enable/disable debug in the GUI
+    private static final Logger log = LoggerFactory.getLogger(SMIMEAssertionTestElement.class); // NOSONAR
 
     SMIMEAssertion() {
         super();
@@ -329,10 +329,8 @@ class SMIMEAssertion {
      *
      * @param cert the X509 certificate holder
      * @return a List of all email addresses found
-     * @throws CertificateException
      */
-    private static List<String> getEmailFromCert(X509CertificateHolder cert)
-            throws CertificateException {
+    private static List<String> getEmailFromCert(X509CertificateHolder cert) {
         List<String> res = new ArrayList<>();
 
         X500Name subject = cert.getSubject();

@@ -97,8 +97,7 @@ public class AssertionGui extends AbstractAssertionGui {
     private JCheckBox assumeSuccess;
 
     /**
-     * Radio button indicating to test if the field contains one of the
-     * patterns.
+     * Radio button indicating to test if the field contains one of the patterns.
      */
     private JRadioButton containsBox;
 
@@ -123,15 +122,11 @@ public class AssertionGui extends AbstractAssertionGui {
      */
     private JCheckBox notBox;
 
-    /**
-     * Add new OR checkbox.
-     */
     private JCheckBox orBox;
 
     /** A table of patterns to test against. */
     private JTable stringTable;
 
-    /** Button to delete a pattern. */
     private JButton deletePattern;
 
     /** Table model for the pattern table. */
@@ -139,9 +134,6 @@ public class AssertionGui extends AbstractAssertionGui {
 
     private JSyntaxTextArea alternativeFailureMessage;
 
-    /**
-     * Create a new AssertionGui panel.
-     */
     public AssertionGui() {
         init();
     }
@@ -461,7 +453,7 @@ public class AssertionGui extends AbstractAssertionGui {
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_patterns_to_test"))); //$NON-NLS-1$
+        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString(COL_RESOURCE_NAME)));
 
         panel.add(GuiUtils.emptyBorder(new JScrollPane(stringTable)), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);
@@ -502,7 +494,6 @@ public class AssertionGui extends AbstractAssertionGui {
 
     /**
      * An ActionListener for deleting a pattern.
-     *
      */
     private class ClearPatternsListener implements ActionListener {
         @Override
@@ -582,11 +573,7 @@ public class AssertionGui extends AbstractAssertionGui {
     }
 
     protected void checkButtonsStatus() {
-        // Disable DELETE if there are no rows in the table to delete.
-        if (tableModel.getRowCount() == 0) {
-            deletePattern.setEnabled(false);
-        } else {
-            deletePattern.setEnabled(true);
-        }
+        // Enable DELETE if there are rows in the table to delete.
+        deletePattern.setEnabled(tableModel.getRowCount() != 0);
     }
 }
