@@ -37,9 +37,9 @@ plugins {
     id("com.diffplug.gradle.spotless") version "3.24.3"
     id("com.github.spotbugs") version "2.0.0"
     id("org.sonarqube") version "2.7.1"
-    id("com.github.vlsi.crlf") version "1.32.0"
-    id("com.github.vlsi.ide") version "1.32.0"
-    id("com.github.vlsi.stage-vote-release") version "1.32.0"
+    id("com.github.vlsi.crlf") version "1.33.0"
+    id("com.github.vlsi.ide") version "1.33.0"
+    id("com.github.vlsi.stage-vote-release") version "1.33.0"
     signing
     publishing
 }

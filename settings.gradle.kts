@@ -79,7 +79,7 @@ if (property("localReleasePlugins").toBool(nullAs = false, blankAs = true, defau
 // Checksum plugin sources can be validated at https://github.com/vlsi/vlsi-release-plugins
 buildscript {
     dependencies {
-        classpath("com.github.vlsi.gradle:checksum-dependency-plugin:1.31.0") {
+        classpath("com.github.vlsi.gradle:checksum-dependency-plugin:1.33.0") {
             // Gradle ships kotlin-stdlib which is good enough
             exclude("org.jetbrains.kotlin", "kotlin-stdlib")
         }
@@ -99,8 +99,8 @@ val expectedSha512 = mapOf(
             to "okhttp-4.1.0.jar",
     "93E7A41BE44CC17FB500EA5CD84D515204C180AEC934491D11FC6A71DAEA761FB0EECEF865D6FD5C3D88AAF55DCE3C2C424BE5BA5D43BEBF48D05F1FA63FA8A7"
             to "okio-2.2.2.jar",
-    "DD8025538218DA731D9A79D58DF481F93FEA0B10D6E938B80F3F3F839F740D7169860DFCDBBC9C6350CBA9ECB969573D792E2B0DEE9E3A7C81DF0D9883483352"
-            to "checksum-dependency-plugin-1.31.0.jar"
+    "A9064CB324A9F8936B897ADAEAABC759F8F61C27D1985D5DA87B5DB6B995D02D1F395ACD5D3BC1056CB652ABC5B99B7B110BFAD825D0C0A4819039A04F4D2CE"
+            to "checksum-dependency-plugin-1.33.0.jar"
 )
 
 fun File.sha512(): String {
