@@ -100,8 +100,8 @@ to view the last release notes of version 5.1.1.
 
 <h3>Other samplers</h3>
 <ul>
-    <li><bug>63406</bug>JDBC connection configuration: new option for pre-initialize to initialize the connection pool. Contributed by Franz Schwab (franz.schwab@exasol.com)</li>
-    <li><bug>63561</bug>JDBC Request: Allow to only fetch a certain number of rows. Contributed by Franz Schwab (franz.schwab@exasol.com)</li>
+    <li><bug>63406</bug>JDBC connection configuration: new option for pre-initialize to initialize the connection pool. Contributed by Franz Schwab (franz.schwab at exasol.com)</li>
+    <li><bug>63561</bug>JDBC Request: Allow to only fetch a certain number of rows. Contributed by Franz Schwab (franz.schwab at exasol.com)</li>
     <li><bug>63801</bug>Add Bolt protocol support for Neo4j database. Contributed by GraphAware (www.graphaware.com)</li>
 </ul>
 
