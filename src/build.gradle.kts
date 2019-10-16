@@ -15,6 +15,12 @@
  * limitations under the License.
  */
 
+plugins {
+    // Bring Kotlin plugin to the build script class path, so it can be found when required
+    // in apply(plugin = ...) below
+    kotlin("jvm") apply false
+}
+
 val skipMavenPublication = setOf(
     ":src:bshclient",
     ":src:dist",
@@ -45,11 +51,15 @@ subprojects {
     }
 
     val groovyUsed = file("src/main/groovy").isDirectory || file("src/test/groovy").isDirectory
+    val kotlinUsed = file("src/main/kotlin").isDirectory || file("src/test/kotlin").isDirectory
     val testsPresent = file("src/test").isDirectory
 
     apply<JavaLibraryPlugin>()
     if (groovyUsed) {
         apply<GroovyPlugin>()
+    }
+    if (kotlinUsed) {
+        apply(plugin = "org.jetbrains.kotlin.jvm")
     }
     if (project.path !in skipMavenPublication) {
         apply<MavenPublishPlugin>()
@@ -64,6 +74,7 @@ subprojects {
             // No tests => no dependencies required
             return@dependencies
         }
+        val implementation by configurations
         val testImplementation by configurations
         val testRuntimeOnly by configurations
         testImplementation("org.junit.jupiter:junit-jupiter-api")
@@ -75,6 +86,10 @@ subprojects {
         testImplementation(testFixtures(project(":src:testkit")))
         if (groovyUsed) {
             testImplementation("org.spockframework:spock-core")
+        }
+        if (kotlinUsed) {
+            implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+            testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
         }
         testRuntimeOnly("cglib:cglib-nodep") {
             because("""

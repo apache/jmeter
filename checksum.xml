@@ -51,6 +51,7 @@
     <trusted-key id='33cd6733af5ec452' group='commons-logging' />
     <trusted-key id='a41f13c999945293' group='commons-logging' />
     <trusted-key id='7a8860944fad5f62' group='commons-net' />
+    <trusted-key id='6449005f96bc97a3' group='de.undercouch' />
     <trusted-key id='3449ec3ac2efe8aa' group='dnsjava' />
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
     <trusted-key id='b2ca0dfe9ed21c6e' group='io.burt' />

@@ -87,6 +87,7 @@ dependencies {
         apiv("jcharts:jcharts")
         apiv("junit:junit", "junit4")
         apiv("org.codehaus.groovy:groovy-all")
+        apiv("org.jetbrains.kotlinx:kotlinx-coroutines-core")
         apiv("org.junit.jupiter:junit-jupiter-api", "junit5")
         apiv("org.junit.jupiter:junit-jupiter-params", "junit5")
         runtimev("org.junit.jupiter:junit-jupiter-engine", "junit5")

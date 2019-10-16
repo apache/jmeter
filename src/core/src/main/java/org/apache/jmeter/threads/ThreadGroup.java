@@ -19,6 +19,7 @@ package org.apache.jmeter.threads;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.time.Duration;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -68,9 +69,14 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     /** Scheduler start delay, overrides start time */
     public static final String DELAY = "ThreadGroup.delay";
+
+    /** Use multi-task thread group implementation */
+    public static final String MULTITASK = "ThreadGroup.multitask";
     //- JMX entries
 
     private transient Thread threadStarter;
+
+    private transient MultitaskThreadGroup multitaskThreadGroup;
 
     // List of active threads
     private final ConcurrentHashMap<JMeterThread, Thread> allThreads = new ConcurrentHashMap<>();
@@ -178,6 +184,14 @@ public class ThreadGroup extends AbstractThreadGroup {
         return getPropertyAsBoolean(DELAYED_START);
     }
 
+    public boolean getMultitask() {
+        return getPropertyAsBoolean(ThreadGroup.MULTITASK);
+    }
+
+    public void setMultitask(boolean multitask) {
+        setProperty(ThreadGroup.MULTITASK, multitask);
+    }
+
     /**
      * This will schedule the time for the JMeterThread.
      *
@@ -216,9 +230,21 @@ public class ThreadGroup extends AbstractThreadGroup {
         int rampUpPeriodInSeconds = getRampUp();
         boolean isSameUserOnNextIteration = isSameUserOnNextIteration();
         delayedStartup = isDelayedStartup(); // Fetch once; needs to stay constant
-        log.info("Starting thread group... number={} threads={} ramp-up={} delayedStart={}", groupNumber,
-                numThreads, rampUpPeriodInSeconds, delayedStartup);
-        if (delayedStartup) {
+        boolean multitask = getMultitask();
+        log.info("Starting thread group... number={} threads={} ramp-up={} delayedStart={} multitask={}", groupNumber,
+                numThreads, rampUpPeriodInSeconds, delayedStartup, multitask);
+        if (multitask) {
+            boolean usingScheduler = getScheduler();
+            final JMeterContext context = JMeterContextService.getContext();
+            multitaskThreadGroup = new MultitaskThreadGroup(
+                    getName(),
+                    numThreads,
+                    Duration.ofSeconds(rampUpPeriodInSeconds),
+                    usingScheduler ? Duration.ofSeconds(getDelay()) : Duration.ZERO,
+                    usingScheduler ? getDuration()*1000L + System.currentTimeMillis() : Long.MAX_VALUE,
+                    threadIndex -> makeThread(notifier, threadGroupTree, engine, threadIndex, context, isSameUserOnNextIteration));
+            multitaskThreadGroup.start();
+        } else if (delayedStartup) {
             threadStarter = new Thread(new ThreadStarter(notifier, threadGroupTree, engine), getName()+"-ThreadStarter");
             threadStarter.setDaemon(true);
             threadStarter.start();
@@ -393,6 +419,10 @@ public class ThreadGroup extends AbstractThreadGroup {
                 log.warn("Exception occurred interrupting ThreadStarter", e);
             }
         }
+        MultitaskThreadGroup multitaskThreadGroup = this.multitaskThreadGroup;
+        if (multitaskThreadGroup != null) {
+            multitaskThreadGroup.shutdown();
+        }
 
         allThreads.forEach((key, value) -> stopThread(key, value, now));
     }
@@ -488,6 +518,10 @@ public class ThreadGroup extends AbstractThreadGroup {
     public void waitThreadsStopped() {
         if (delayedStartup) {
             waitThreadStopped(threadStarter);
+        }
+        MultitaskThreadGroup multitaskThreadGroup = this.multitaskThreadGroup;
+        if (multitaskThreadGroup != null) {
+            multitaskThreadGroup.waitThreadsStopped();
         }
         /* @Bugzilla 60933
          * Threads can be added on the fly during a test into allThreads
