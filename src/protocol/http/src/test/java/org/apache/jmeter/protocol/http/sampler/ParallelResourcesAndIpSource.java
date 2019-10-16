@@ -181,6 +181,8 @@ public class ParallelResourcesAndIpSource {
             } else if (result.isSuccessful() || result.isResponseCodeOK() ||
                     !(result.getResponseDataAsString().contains("ConnectException") ||
                             result.getResponseDataAsString().contains("BindException") ||
+                            // java.net.NoRouteToHostException: No route to host
+                            result.getResponseDataAsString().contains("NoRouteToHostException") ||
                             result.getResponseDataAsString().contains("SocketException"))) {
                 Assertions.fail("IPv4 <-> IPv6 connectivity must fail." +
                         " sourceIp = " + sourceIp + ", targetHost = " + targetHost +
