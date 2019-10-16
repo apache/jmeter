@@ -16,12 +16,10 @@
  *
  */
 
-val String.v: String get() = extra["$this.version"] as String
-
-fun PluginDependenciesSpec.idv(id: String) = id(id) version id.v
-
 pluginManagement {
     plugins {
+        fun PluginDependenciesSpec.idv(id: String) = id(id) version extra["$id.version"].toString()
+
         idv("com.diffplug.gradle.spotless")
         idv("com.github.spotbugs")
         idv("com.github.vlsi.crlf")
