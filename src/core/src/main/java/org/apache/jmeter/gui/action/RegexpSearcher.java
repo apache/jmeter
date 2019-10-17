@@ -30,8 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 public class RegexpSearcher implements Searcher {
 
     private boolean caseSensitive;
-    private Pattern pattern;
-
+    private String regexp;
     /**
      * Constructor
      * @param caseSensitive is search case sensitive
@@ -40,24 +39,30 @@ public class RegexpSearcher implements Searcher {
     public RegexpSearcher(boolean caseSensitive, String regexp) {
         super();
         this.caseSensitive = caseSensitive;
-        if (caseSensitive) {
-            pattern = Pattern.compile(regexp);
-        } else {
-            pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
-        }
+        this.regexp = regexp;
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean search(List<String> textTokens) {
+        Pattern pattern;
+        if (caseSensitive) {
+            pattern = Pattern.compile(regexp);
+        } else {
+            pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
+        }
         return textTokens.stream()
                 .filter(token -> !StringUtils.isEmpty(token))
                 .map(token -> caseSensitive ?
                         pattern.matcher(token) :
                         pattern.matcher(token.toLowerCase()))
                 .anyMatch(Matcher::find);
+    }
+
+    @Override
+    public String toString() {
+        return "RegexpSearcher [caseSensitive=" + caseSensitive + ", regexp=" + regexp + "]";
     }
 }

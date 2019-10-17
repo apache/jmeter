@@ -55,4 +55,9 @@ public class RawTextSearcher implements Searcher {
                 .map(token -> caseSensitive ? token : token.toLowerCase())
                 .anyMatch(token -> token.contains(textToSearch));
     }
+
+    @Override
+    public String toString() {
+        return "RawTextSearcher [caseSensitive=" + caseSensitive + ", textToSearch=" + textToSearch + "]";
+    }
 }

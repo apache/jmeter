@@ -207,7 +207,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
             node.updateState();
             return node.isNodeHasMatched() || node.isChildrenNodesHaveMatched();
         } catch (Exception e) {
-            log.error("Error extracting data from tree node");
+            log.error("Error extracting data from tree node using searcher:{}", searcher, e);
             return false;
         }
     }
