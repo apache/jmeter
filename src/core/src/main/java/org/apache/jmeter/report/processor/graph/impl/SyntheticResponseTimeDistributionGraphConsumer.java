@@ -93,14 +93,14 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
             if (sample.getSuccess()) {
                 long elapsedTime = sample.getElapsedTime();
                 if (elapsedTime <= satisfiedThreshold) {
-                    return Double.valueOf(0);
+                    return (double) 0;
                 } else if (elapsedTime <= toleratedThreshold) {
-                    return Double.valueOf(1);
+                    return 1d;
                 } else {
-                    return Double.valueOf(2);
+                    return 2d;
                 }
             } else {
-                return Double.valueOf(3);
+                return 3d;
             }
         };
     }
@@ -125,9 +125,9 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     protected void initializeExtraResults(MapResultData parentResult) {
         ListResultData listResultData = new ListResultData();
         String[] seriesLabels = new String[]{
-                SATISFIED_LABEL.format(new Object[]{Long.valueOf(getSatisfiedThreshold())}),
-                TOLERATED_LABEL.format(new Object[]{Long.valueOf(getSatisfiedThreshold()), Long.valueOf(getToleratedThreshold())}),
-                UNTOLERATED_LABEL.format(new Object[]{Long.valueOf(getToleratedThreshold())}),
+                SATISFIED_LABEL.format(new Object[]{getSatisfiedThreshold()}),
+                TOLERATED_LABEL.format(new Object[]{getSatisfiedThreshold(), getToleratedThreshold()}),
+                UNTOLERATED_LABEL.format(new Object[]{getToleratedThreshold()}),
                 FAILED_LABEL
         };
         String[] colors = new String[]{
@@ -135,7 +135,7 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
         };
         for (int i = 0; i < seriesLabels.length; i++) {
             ListResultData array = new ListResultData();
-            array.addResult(new ValueResultData(Integer.valueOf(i)));
+            array.addResult(new ValueResultData(i));
             array.addResult(new ValueResultData(seriesLabels[i]));
             listResultData.addResult(array);
         }
@@ -192,10 +192,10 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
 
     private void formatLabels() {
         this.satisfiedLabels = Collections.singletonList(
-                SATISFIED_LABEL.format(new Object[]{Long.valueOf(this.satisfiedThreshold)}));
+                SATISFIED_LABEL.format(new Object[]{this.satisfiedThreshold}));
         this.toleratedLabels = Collections.singletonList(
-                TOLERATED_LABEL.format(new Object[]{Long.valueOf(this.satisfiedThreshold), Long.valueOf(this.toleratedThreshold)}));
+                TOLERATED_LABEL.format(new Object[]{this.satisfiedThreshold, this.toleratedThreshold}));
         this.untoleratedLabels = Collections.singletonList(
-                UNTOLERATED_LABEL.format(new Object[]{Long.valueOf(this.toleratedThreshold)}));
+                UNTOLERATED_LABEL.format(new Object[]{this.toleratedThreshold}));
     }
 }

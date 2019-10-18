@@ -42,7 +42,7 @@ public class MapPropertyTest {
 
     public void testGetPropertyTypeOfStringElements() {
         Map<String, Integer> numberMap = new HashMap<>();
-        numberMap.put("One", Integer.valueOf(1));
+        numberMap.put("One", 1);
         MapProperty props = new MapProperty("foo", numberMap);
         assertThat(props.getPropertyType(), CoreMatchers.equalTo(IntegerProperty.class));
     }

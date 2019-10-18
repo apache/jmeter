@@ -92,7 +92,7 @@ public class IntegerProperty extends NumberProperty {
      */
     @Override
     public Object getObjectValue() {
-        return Integer.valueOf(value);
+        return value;
     }
 
     /**

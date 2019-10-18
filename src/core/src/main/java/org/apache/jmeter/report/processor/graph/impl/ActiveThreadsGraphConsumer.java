@@ -78,7 +78,7 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
 
         GraphValueSelector graphValueSelector = (series, sample) -> {
             if (!sample.isEmptyController()) {
-                return Double.valueOf(sample.getGroupThreads());
+                return (double) sample.getGroupThreads();
             } else {
                 return null;
             }

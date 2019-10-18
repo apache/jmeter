@@ -104,7 +104,7 @@ public class MailFileFolder extends Folder {
         if (isFile) {
             f = folderPath;
         } else {
-            f = new File(folderPath,String.format(FILENAME_FORMAT, Integer.valueOf(index)));
+            f = new File(folderPath,String.format(FILENAME_FORMAT, index));
         }
         try (InputStream fis = new FileInputStream(f);
                 InputStream bis = new BufferedInputStream(fis)) {

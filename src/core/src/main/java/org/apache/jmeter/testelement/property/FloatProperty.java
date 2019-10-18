@@ -87,7 +87,7 @@ public class FloatProperty extends NumberProperty {
      */
     @Override
     public Object getObjectValue() {
-        return Float.valueOf(value);
+        return value;
     }
 
     /**

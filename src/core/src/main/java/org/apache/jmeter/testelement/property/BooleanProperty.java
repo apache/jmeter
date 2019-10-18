@@ -60,7 +60,7 @@ public class BooleanProperty extends AbstractProperty {
      */
     @Override
     public Object getObjectValue() {
-        return Boolean.valueOf(value);
+        return value;
     }
 
     @Override

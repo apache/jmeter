@@ -195,7 +195,7 @@ public class BeanShellInterpreter {
     }
 
     public Object set(String s, boolean b) throws JMeterException {
-        return bshInvoke(bshSet, new Object[] { s, Boolean.valueOf(b) }, true);
+        return bshInvoke(bshSet, new Object[] { s, b}, true);
     }
 
     public Object source(String s) throws JMeterException {

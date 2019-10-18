@@ -125,7 +125,7 @@ public final class CLArgsParser {
      * @see CLOption
      */
     public final CLOption getArgumentById(final int id) {
-        return this.optionIndex.get(Integer.valueOf(id));
+        return this.optionIndex.get(id);
     }
 
     /**
@@ -662,7 +662,7 @@ public final class CLArgsParser {
         for (final CLOption option : this.options) {
             final CLOptionDescriptor optionDescriptor = getDescriptorFor(option.getDescriptor().getId());
 
-            this.optionIndex.put(Integer.valueOf(option.getDescriptor().getId()), option);
+            this.optionIndex.put(option.getDescriptor().getId(), option);
 
             if (null != optionDescriptor && null != optionDescriptor.getName()) {
                 this.optionIndex.put(optionDescriptor.getName(), option);

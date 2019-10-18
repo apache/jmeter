@@ -320,7 +320,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                     }
                     // List of value by sampler
                     Map<Long, StatCalculatorLong> subList = pList.get(sampleLabel);
-                    final Long startTimeIntervalLong = Long.valueOf(startTimeInterval);
+                    final Long startTimeIntervalLong = startTimeInterval;
                     if (subList != null) {
                         long respTime = sampleResult.getTime();
                         StatCalculatorLong value = subList.get(startTimeIntervalLong);
@@ -408,7 +408,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             int idx = 0;
             while (idx < durationTest) {
                 long keyShift = minStartTime + idx;
-                StatCalculatorLong value = subList.get(Long.valueOf(keyShift));
+                StatCalculatorLong value = subList.get(keyShift);
                 if (value != null) {
                     nanLast = value.getMean();
                     data[s][idx] = nanLast;
@@ -427,7 +427,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                         nanList.clear();
                     }
                 } else {
-                    nanList.add(Double.valueOf(Double.NaN));
+                    nanList.add(Double.NaN);
                     nanBegin = nanLast;
                     data[s][idx] = Double.NaN;
                 }

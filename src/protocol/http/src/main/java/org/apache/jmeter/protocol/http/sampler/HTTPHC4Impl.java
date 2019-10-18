@@ -358,7 +358,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
             long duration = super.getKeepAliveDuration(response, context);
             if (duration <= 0 && IDLE_TIMEOUT > 0) {// none found by the superclass
-                log.debug("Setting keepalive to {}", Integer.valueOf(IDLE_TIMEOUT));
+                log.debug("Setting keepalive to {}", IDLE_TIMEOUT);
                 return IDLE_TIMEOUT;
             }
             return duration; // return the super-class value
@@ -380,9 +380,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             HttpConnectionMetrics metrics = conn.getMetrics();
             long sentBytesCount = metrics.getSentBytesCount();
             // We save to store sent bytes as we need to reset metrics for received bytes
-            context.setAttribute(CONTEXT_ATTRIBUTE_SENT_BYTES, Long.valueOf(metrics.getSentBytesCount()));
+            context.setAttribute(CONTEXT_ATTRIBUTE_SENT_BYTES, metrics.getSentBytesCount());
             context.setAttribute(CONTEXT_ATTRIBUTE_METRICS, metrics);
-            log.debug("Sent {} bytes", Long.valueOf(sentBytesCount));
+            log.debug("Sent {} bytes", sentBytesCount);
             metrics.reset();
             return response;
         }
@@ -451,11 +451,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final ViewableFileBody[] EMPTY_FILE_BODIES = new ViewableFileBody[0];
 
     static {
-        log.info("HTTP request retry count = {}", Integer.valueOf(RETRY_COUNT));
+        log.info("HTTP request retry count = {}", RETRY_COUNT);
 
         // Set up HTTP scheme override if necessary
         if (CPS_HTTP > 0) {
-            log.info("Setting up HTTP SlowProtocol, cps={}", Integer.valueOf(CPS_HTTP));
+            log.info("Setting up HTTP SlowProtocol, cps={}", CPS_HTTP);
             CONNECTION_SOCKET_FACTORY = new SlowHCPlainConnectionSocketFactory(CPS_HTTP);
         } else {
             CONNECTION_SOCKET_FACTORY = PlainConnectionSocketFactory.getSocketFactory();
@@ -516,7 +516,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         if (log.isDebugEnabled()) {
             log.debug("Start : sample {} method {} followingRedirect {} depth {}",
-                    url, method, Boolean.valueOf(areFollowingRedirect), Integer.valueOf(frameDepth));
+                    url, method, areFollowingRedirect, frameDepth);
         }
         JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
 
@@ -621,7 +621,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (log.isDebugEnabled()) {
                 long total = res.getHeadersSize() + res.getBodySizeAsLong();
                 log.debug("ResponseHeadersSize={} Content-Length={} Total={}",
-                        Integer.valueOf(res.getHeadersSize()), Long.valueOf(res.getBodySizeAsLong()), Long.valueOf(total));
+                        res.getHeadersSize(), res.getBodySizeAsLong(), total);
             }
 
             // If we redirected automatically, the URL may have changed
@@ -1069,13 +1069,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             httpClient = builder.build();
             if (log.isDebugEnabled()) {
-                log.debug("Created new HttpClient: @{} {}", Integer.valueOf(System.identityHashCode(httpClient)), key);
+                log.debug("Created new HttpClient: @{} {}", System.identityHashCode(httpClient), key);
             }
             triple = MutableTriple.of(httpClient, null, pHCCM);
             mapHttpClientPerHttpClientKey.put(key, triple); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {
-                log.debug("Reusing the HttpClient: @{} {}", Integer.valueOf(System.identityHashCode(httpClient)),key);
+                log.debug("Reusing the HttpClient: @{} {}", System.identityHashCode(httpClient),key);
             }
         }
 
@@ -1451,7 +1451,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             if(log.isDebugEnabled()) {
                 log.debug("Building multipart with:getDoBrowserCompatibleMultipart(): {}, with charset:{}, haveContentEncoding:{}",
-                        Boolean.valueOf(getDoBrowserCompatibleMultipart()), charset, Boolean.valueOf(haveContentEncoding));
+                        getDoBrowserCompatibleMultipart(), charset, haveContentEncoding);
             }
             // Write the request to our own stream
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
@@ -1749,7 +1749,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected void notifyFirstSampleAfterLoopRestart() {
         log.debug("notifyFirstSampleAfterLoopRestart called "
                 + "with config(httpclient.reset_state_on_thread_group_iteration={})",
-                Boolean.valueOf(RESET_STATE_ON_THREAD_GROUP_ITERATION));
+                RESET_STATE_ON_THREAD_GROUP_ITERATION);
         JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
         if (jMeterVariables.isSameUserOnNextIteration()) {
             log.debug("Thread Group is configured to simulate a returning visitor on each iteration, ignoring property value {}",
@@ -1758,7 +1758,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         } else {
             log.debug("Thread Group is configured to simulate a new visitor on each iteration, using property value {}",
                     RESET_STATE_ON_THREAD_GROUP_ITERATION);
-            resetStateOnThreadGroupIteration.set(Boolean.valueOf(RESET_STATE_ON_THREAD_GROUP_ITERATION));
+            resetStateOnThreadGroupIteration.set(RESET_STATE_ON_THREAD_GROUP_ITERATION);
         }
         log.debug("Thread state will be reset ?: {}", RESET_STATE_ON_THREAD_GROUP_ITERATION);
     }

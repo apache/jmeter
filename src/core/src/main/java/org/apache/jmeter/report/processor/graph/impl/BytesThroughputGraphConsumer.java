@@ -80,10 +80,9 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
             if (sample.isController()) {
                 return null;
             } else {
-                return Double.valueOf(
-                        RECEIVED_BYTES_SERIES_LABEL.equals(series)
-                                ? sample.getReceivedBytes()
-                                : sample.getSentBytes());
+                return (double) (RECEIVED_BYTES_SERIES_LABEL.equals(series)
+                        ? sample.getReceivedBytes()
+                        : sample.getSentBytes());
             }
         };
 

@@ -72,7 +72,7 @@ class EnumEditor extends PropertyEditorSupport implements ClearGui {
 
     @Override
     public Object getValue() {
-        return Integer.valueOf(combo.getSelectedIndex());
+        return combo.getSelectedIndex();
     }
 
     @Override

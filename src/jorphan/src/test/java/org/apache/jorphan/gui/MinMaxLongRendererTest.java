@@ -35,9 +35,9 @@ public class MinMaxLongRendererTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-            { Long.valueOf(Long.MAX_VALUE), "#N/A" },
-            { Long.valueOf(Long.MIN_VALUE), "#N/A" },
-            { Long.valueOf(0), "0" },
+            {Long.MAX_VALUE, "#N/A" },
+            {Long.MIN_VALUE, "#N/A" },
+            {0L, "0" },
             { null, "#N/A" },
             { "invalid", "#N/A" },
             });

@@ -371,15 +371,15 @@ public class TestJorphanUtils {
 
     @Test
     public void testReplaceValueWithNullValue() {
-        Assert.assertThat(Integer.valueOf(JOrphanUtils.replaceValue(null, null, false, null, null)),
-                CoreMatchers.is(Integer.valueOf(0)));
+        Assert.assertThat(JOrphanUtils.replaceValue(null, null, false, null, null),
+                CoreMatchers.is(0));
     }
 
     @Test
     public void testReplaceValueWithValidValueAndValidSetter() {
         Holder h = new Holder();
-        Assert.assertThat(Integer.valueOf(JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", s -> h.value = s)),
-                CoreMatchers.is(Integer.valueOf(1)));
+        Assert.assertThat(JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", s -> h.value = s),
+                CoreMatchers.is(1));
         Assert.assertThat(h.value, CoreMatchers.is("${port}"));
     }
 

@@ -483,7 +483,7 @@ public class ReportGenerator {
      */
     private AggregateConsumer createEndDateConsumer() {
         AggregateConsumer endDateConsumer = new AggregateConsumer(
-                new MaxAggregator(), sample -> Double.valueOf(sample.getEndTime()));
+                new MaxAggregator(), sample -> (double) sample.getEndTime());
         endDateConsumer.setName(END_DATE_CONSUMER_NAME);
         return endDateConsumer;
     }
@@ -493,7 +493,7 @@ public class ReportGenerator {
      */
     private AggregateConsumer createBeginDateConsumer() {
         AggregateConsumer beginDateConsumer = new AggregateConsumer(
-                new MinAggregator(), sample -> Double.valueOf(sample.getStartTime()));
+                new MinAggregator(), sample -> (double) sample.getStartTime());
         beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
         return beginDateConsumer;
     }

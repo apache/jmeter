@@ -104,9 +104,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private static final String PCT2_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct2", "95");
     private static final String PCT3_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct3", "99");
 
-    private static final Float PCT1_VALUE = Float.valueOf(Float.parseFloat(PCT1_LABEL)/100);
-    private static final Float PCT2_VALUE =  Float.valueOf(Float.parseFloat(PCT2_LABEL)/100);
-    private static final Float PCT3_VALUE =  Float.valueOf(Float.parseFloat(PCT3_LABEL)/100);
+    private static final Float PCT1_VALUE = Float.parseFloat(PCT1_LABEL) / 100;
+    private static final Float PCT2_VALUE = Float.parseFloat(PCT2_LABEL) / 100;
+    private static final Float PCT3_VALUE = Float.parseFloat(PCT3_LABEL) / 100;
 
     private static final Logger log = LoggerFactory.getLogger(StatGraphVisualizer.class);
 

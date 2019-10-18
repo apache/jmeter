@@ -52,7 +52,7 @@ public class DurationAssertion extends AbstractScopedAssertion implements Serial
             // has the Sample lasted too long?
             if ( responseTime > duration ) {
                 result.setFailure(true);
-                Object[] arguments = { Long.valueOf(responseTime), Long.valueOf(duration) };
+                Object[] arguments = {responseTime, duration};
                 String message = MessageFormat.format(
                         JMeterUtils.getResString("duration_assertion_failure") // $NON-NLS-1$
                         , arguments);

@@ -45,7 +45,7 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-        return sample -> Double.valueOf(sample.getAllThreads());
+        return sample -> (double) sample.getAllThreads();
     }
 
     /*

@@ -174,7 +174,7 @@ public class JSONPostProcessor
             if(log.isDebugEnabled()) {
                 log.debug(
                     "matchNumber({}) exceeds number of items found({}), default value will be used",
-                    Integer.valueOf(matchNumber), Integer.valueOf(extractedValues.size()));
+                        matchNumber, extractedValues.size());
             }
             vars.put(currentRefName, defaultValues[i]);
         } else {

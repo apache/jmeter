@@ -33,7 +33,7 @@ public class TimerServiceTest {
         long now = System.currentTimeMillis();
         long adjustedDelay = sut.adjustDelay(Long.MAX_VALUE, now + 1000L, false);
         Assert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
-                Long.valueOf(adjustedDelay), CoreMatchers.is(Long.valueOf(-1)));
+                adjustedDelay, CoreMatchers.is((long) -1));
     }
 
     @Test
@@ -41,7 +41,7 @@ public class TimerServiceTest {
         long now = System.currentTimeMillis();
         long adjustedDelay = sut.adjustDelay(Long.MAX_VALUE, now + 1000L);
         Assert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
-                Long.valueOf(adjustedDelay), isAlmost(1000L, 200L));
+                adjustedDelay, isAlmost(1000L, 200L));
     }
 
     private BaseMatcher<Long> isAlmost(long value, long precision) {
@@ -67,13 +67,13 @@ public class TimerServiceTest {
     public void testSmallInitialDelay() {
         long now = System.currentTimeMillis();
         Assert.assertThat("TimerService should not change the delay as the end time is far away",
-                Long.valueOf(sut.adjustDelay(1000L, now + 20000L)), CoreMatchers.is(Long.valueOf(1000L)));
+                sut.adjustDelay(1000L, now + 20000L), CoreMatchers.is(1000L));
     }
 
     @Test
     public void testNegativeEndTime() {
         Assert.assertThat("TimerService should not change the delay as the indicated end time is far away",
-                Long.valueOf(sut.adjustDelay(1000L, -1)), CoreMatchers.is(Long.valueOf(1000L)));
+                sut.adjustDelay(1000L, -1), CoreMatchers.is(1000L));
     }
 
 }

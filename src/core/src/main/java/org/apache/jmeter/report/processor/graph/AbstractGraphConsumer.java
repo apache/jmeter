@@ -219,16 +219,14 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     private void setMinResult(MapResultData result, String name, Double value) {
         ValueResultData valueResult = (ValueResultData) result.getResult(name);
-        valueResult.setValue(Double.valueOf(
-                Math.min(((Double) valueResult.getValue()).doubleValue(),
-                        value.doubleValue())));
+        valueResult.setValue(Math.min(((Double) valueResult.getValue()).doubleValue(),
+                value.doubleValue()));
     }
 
     private void setMaxResult(MapResultData result, String name, Double value) {
         ValueResultData valueResult = (ValueResultData) result.getResult(name);
-        valueResult.setValue(Double.valueOf(
-                Math.max(((Double) valueResult.getValue()).doubleValue(),
-                        value.doubleValue())));
+        valueResult.setValue(Math.max(((Double) valueResult.getValue()).doubleValue(),
+                value.doubleValue()));
     }
 
     /**
@@ -280,7 +278,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         if (aggregated) {
             aggInfo = new HashMap<>();
             aggInfo.put(
-                    Double.valueOf(seriesData.getKeysAggregator().getResult()),
+                    seriesData.getKeysAggregator().getResult(),
                     seriesData.getValuesAggregator());
         } else {
             aggInfo = seriesData.getAggregatorInfo();
@@ -289,10 +287,10 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             for (Map.Entry<Double, Aggregator> entry : aggInfo.entrySet()) {
                 // Init key and value depending on invertKeysAndValues property
                 Double key = entry.getKey();
-                Double value = Double.valueOf(entry.getValue().getResult());
+                Double value = entry.getValue().getResult();
 
                 if (invertKeysAndValues) {
-                    key = Double.valueOf(entry.getValue().getResult());
+                    key = entry.getValue().getResult();
                     value = entry.getKey();
                 }
 
@@ -321,7 +319,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                     while (percentile < percent) {
                         ListResultData coordResult = new ListResultData();
                         coordResult.addResult(new ValueResultData(
-                                Double.valueOf(percentile)));
+                                percentile));
                         coordResult.addResult(new ValueResultData(value));
                         dataResult.addResult(coordResult);
                         percentile = (double) ++rank / 10;
@@ -329,8 +327,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                     setMinResult(result, RESULT_MIN_Y, value);
                     setMaxResult(result, RESULT_MAX_Y, value);
                 }
-                setMinResult(result, RESULT_MIN_X, Double.valueOf(0d));
-                setMaxResult(result, RESULT_MAX_X, Double.valueOf(100d));
+                setMinResult(result, RESULT_MIN_X, 0d);
+                setMaxResult(result, RESULT_MAX_X, 100d);
             } else {
                 for (Map.Entry<Double, Aggregator> entry : sortedInfo
                         .entrySet()) {
@@ -342,15 +340,15 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                         ListResultData coordResult = new ListResultData();
                         coordResult.addResult(new ValueResultData(value));
                         coordResult.addResult(new ValueResultData(
-                                Double.valueOf(percentile)));
+                                percentile));
                         dataResult.addResult(coordResult);
                         percentile = (double) ++rank / 10;
                     }
                     setMinResult(result, RESULT_MIN_X, value);
                     setMaxResult(result, RESULT_MAX_X, value);
                 }
-                setMinResult(result, RESULT_MIN_Y, Double.valueOf(0d));
-                setMaxResult(result, RESULT_MAX_Y, Double.valueOf(100d));
+                setMinResult(result, RESULT_MIN_Y, 0d);
+                setMaxResult(result, RESULT_MAX_Y, 100d);
             }
         }
     }
@@ -366,10 +364,10 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 new ValueResultData(series));
         seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
                 new ValueResultData(
-                        Boolean.valueOf(seriesData.isControllersSeries())));
+                        seriesData.isControllersSeries()));
         seriesResult.setResult(RESULT_SERIES_IS_OVERALL,
                 new ValueResultData(
-                        Boolean.valueOf(seriesData.isOverallSeries())));
+                        seriesData.isOverallSeries()));
         seriesResult.setResult(RESULT_SERIES_DATA, new ListResultData());
         return seriesResult;
     }
@@ -410,13 +408,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     private MapResultData createResult() {
         MapResultData result = new MapResultData();
         result.setResult(RESULT_MIN_X,
-                new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
+                new ValueResultData(Double.MAX_VALUE));
         result.setResult(RESULT_MAX_X,
-                new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
+                new ValueResultData(Double.MIN_VALUE));
         result.setResult(RESULT_MIN_Y,
-                new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
+                new ValueResultData(Double.MAX_VALUE));
         result.setResult(RESULT_MAX_Y,
-                new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
+                new ValueResultData(Double.MIN_VALUE));
         result.setResult(RESULT_TITLE, new ValueResultData(getTitle()));
         result.setResult(RESULT_SERIES, new ListResultData());
 
@@ -427,7 +425,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
         result.setResult(RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
                 new ValueResultData(
-                        Boolean.valueOf(supportsControllersDiscrimination)));
+                        supportsControllersDiscrimination));
 
         initializeExtraResults(result);
         return result;

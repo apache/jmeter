@@ -40,9 +40,9 @@ public class PowerTableModel extends DefaultTableModel {
 
     private Class<?>[] columnClasses;
 
-    private static final List<Object> DEFAULT_ARGS = Collections.unmodifiableList(Arrays.asList("", Integer.valueOf(0),
-            Long.valueOf(0L), Boolean.FALSE, Float.valueOf(0F), Double.valueOf(0D), Character.valueOf(' '),
-            Byte.valueOf(Byte.MIN_VALUE), Short.valueOf(Short.MIN_VALUE)));
+    private static final List<Object> DEFAULT_ARGS = Collections.unmodifiableList(Arrays.asList("", 0,
+            0L, Boolean.FALSE, 0F, 0D, ' ',
+            Byte.MIN_VALUE, Short.MIN_VALUE));
 
     public PowerTableModel(String[] headers, Class<?>[] classes) {
         if (headers.length != classes.length){

@@ -181,7 +181,7 @@ public class HeapDumper {
             if (exception == null) {
                 server.invoke(hotspotDiagnosticBean,
                         "dumpHeap",
-                        new Object[]{fileName, Boolean.valueOf(live)},
+                        new Object[]{fileName, live},
                         new String[]{"java.lang.String", "boolean"});
             } else {
                 throw exception;

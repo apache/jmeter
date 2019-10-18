@@ -163,7 +163,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
 
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
-        parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(Long.valueOf(getGranularity())));
+        parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(getGranularity()));
         parentResult.setResult(RESULT_Y_AXIS, new ValueResultData(getYAxis()));
         parentResult.setResult(RESULT_X_AXIS, new ValueResultData(getXAxis()));
         parentResult.setResult(RESULT_SAMPLE_VARIABLE_NAME, new ValueResultData(getSampleVariableName()));

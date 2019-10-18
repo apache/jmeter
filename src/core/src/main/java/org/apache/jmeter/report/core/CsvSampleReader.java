@@ -200,7 +200,7 @@ public class CsvSampleReader implements Closeable{
         if (data.length != columnCount + numberOfSampleVariablesInCsv) {
             if (log.isWarnEnabled()) {
                 log.warn("Short CSV read around line {} of file '{}'. Could only read {} elements of {} expected. Data is [{}]",
-                        Long.valueOf(row + 2), file, Integer.valueOf(data.length), Integer.valueOf(columnCount),
+                        row + 2, file, data.length, columnCount,
                         String.join(", ", data));
             }
             throw new SampleException(

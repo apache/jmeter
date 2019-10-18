@@ -134,7 +134,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         Functor f = functors.get(action);
-        f.invoke(saveConfig, new Object[] {Boolean.valueOf(((JCheckBox) e.getSource()).isSelected()) });
+        f.invoke(saveConfig, new Object[] {((JCheckBox) e.getSource()).isSelected()});
     }
 
     private boolean getSaveState(String methodName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {

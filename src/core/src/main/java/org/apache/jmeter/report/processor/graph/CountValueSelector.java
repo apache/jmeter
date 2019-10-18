@@ -28,8 +28,8 @@ import org.apache.jmeter.samplers.SampleResult;
  * @since 3.0
  */
 public class CountValueSelector extends AbstractGraphValueSelector {
-    private static final Double ONE = Double.valueOf(1.0d);
-    private static final Double ZERO = Double.valueOf(0.0d);
+    private static final Double ONE = 1.0d;
+    private static final Double ZERO = 0.0d;
 
     /**
      *
