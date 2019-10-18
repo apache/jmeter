@@ -293,14 +293,18 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      *            {@link Map} of button names and their states
      */
     private void updateButtons(Map<String, Boolean> buttonStates) {
-        for (Component component : getComponents()) {
-            if (component instanceof JButton) {
-                JButton button = (JButton) component;
-                Boolean enabled = buttonStates.get(button.getActionCommand());
-                if (enabled != null) {
-                    button.setEnabled(enabled.booleanValue());
+        // Swing APIs (e.g. Button.setEnabled) must be called on a Swing dispatch thread
+        boolean synchronous = false;
+        JMeterUtils.runSafe(synchronous, () -> {
+            for (Component component : getComponents()) {
+                if (component instanceof JButton) {
+                    JButton button = (JButton) component;
+                    Boolean enabled = buttonStates.get(button.getActionCommand());
+                    if (enabled != null) {
+                        button.setEnabled(enabled);
+                    }
                 }
             }
-        }
+        });
     }
 }
