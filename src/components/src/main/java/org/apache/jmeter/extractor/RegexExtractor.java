@@ -295,7 +295,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 log.debug("RegexExtractor: Template piece {} ({})", obj, obj.getClass());
             }
             if (obj instanceof Integer) {
-                result.append(match.group(((Integer) obj).intValue()));
+                result.append(match.group((Integer) obj));
             } else {
                 result.append(obj);
             }

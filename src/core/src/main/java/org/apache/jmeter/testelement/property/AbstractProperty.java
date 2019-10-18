@@ -272,15 +272,15 @@ public abstract class AbstractProperty implements JMeterProperty {
         if (item instanceof String) {
             return new StringProperty("", item.toString());
         } else if (item instanceof Boolean) {
-            return new BooleanProperty("", ((Boolean) item).booleanValue());
+            return new BooleanProperty("", (Boolean) item);
         } else if (item instanceof Float) {
-            return new FloatProperty("", ((Float) item).floatValue());
+            return new FloatProperty("", (Float) item);
         } else if (item instanceof Double) {
-            return new DoubleProperty("", ((Double) item).doubleValue());
+            return new DoubleProperty("", (Double) item);
         } else if (item instanceof Integer) {
-            return new IntegerProperty("", ((Integer) item).intValue());
+            return new IntegerProperty("", (Integer) item);
         } else if (item instanceof Long) {
-            return new LongProperty("", ((Long) item).longValue());
+            return new LongProperty("", (Long) item);
         } else {
             return new StringProperty("", item.toString());
         }

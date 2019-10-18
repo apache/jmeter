@@ -60,7 +60,7 @@ public class DynamicKerberosSchemeFactory extends KerberosSchemeFactory {
 
     private boolean isEnabled(Object contextAttribute, boolean defaultValue) {
         if (contextAttribute instanceof Boolean) {
-            return ((Boolean) contextAttribute).booleanValue();
+            return (Boolean) contextAttribute;
         }
         return defaultValue;
     }

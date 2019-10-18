@@ -139,7 +139,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 
     private boolean getSaveState(String methodName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Method method = SampleSaveConfiguration.class.getMethod(methodName);
-        return ((Boolean) method.invoke(saveConfig)).booleanValue();
+        return (Boolean) method.invoke(saveConfig);
     }
 
     /**

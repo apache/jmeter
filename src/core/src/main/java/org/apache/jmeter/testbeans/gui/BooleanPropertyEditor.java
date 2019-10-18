@@ -40,7 +40,7 @@ public class BooleanPropertyEditor extends PropertyEditorSupport {
     }
 
     private String toString(Boolean value) {
-        return value.booleanValue() ? TRUE : FALSE;
+        return value ? TRUE : FALSE;
     }
 
     @Override

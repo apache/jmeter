@@ -313,7 +313,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             Long time = getTimeInterval(sample);
             Long count = counts.get(time);
             if (count != null) {
-                counts.put(time, count.longValue() + 1);
+                counts.put(time, count + 1);
             } else {
                 counts.put(time, ONE);
             }

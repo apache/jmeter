@@ -1133,7 +1133,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             JMeterVariables jMeterVariables,
             HttpClientContext clientContext,
             Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
-        if (resetStateOnThreadGroupIteration.get().booleanValue()) {
+        if (resetStateOnThreadGroupIteration.get()) {
             closeCurrentConnections(mapHttpClientPerHttpClientKey);
             clientContext.removeAttribute(HttpClientContext.USER_TOKEN);
             clientContext.removeAttribute(HttpClientContext.PROXY_AUTH_STATE);

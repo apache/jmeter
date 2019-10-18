@@ -194,7 +194,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         public boolean checkResult(DataContext dataContext, ResultData result) {
             boolean supportsControllerDiscrimination = findValue(Boolean.class,
                     AbstractGraphConsumer.RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
-                    result).booleanValue();
+                    result);
 
             if (supportsControllerDiscrimination
                     && showControllerSeriesOnly
@@ -233,7 +233,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                     // Is the current series a controller series ?
                     boolean isController = findValue(Boolean.class,
                             AbstractGraphConsumer.RESULT_SERIES_IS_CONTROLLER,
-                            seriesData).booleanValue();
+                            seriesData);
 
                     matches = filterPattern.matcher(name).matches();
                     if (matches) {

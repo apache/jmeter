@@ -133,7 +133,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
             res.setResponseCode(bshInterpreter.get("ResponseCode").toString());//$NON-NLS-1$
             res.setResponseMessage(bshInterpreter.get("ResponseMessage").toString());//$NON-NLS-1$
             isSuccessful = Boolean.valueOf(bshInterpreter.get("IsSuccess") //$NON-NLS-1$
-                    .toString()).booleanValue();
+                    .toString());
         }
         /*
          * To avoid class loading problems when bsh,jar is missing, we don't try

@@ -216,7 +216,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
             }
         }
         for (Integer indice : removeIndices) {
-            getHeaders().remove(indice.intValue());
+            getHeaders().remove(indice);
         }
     }
 
