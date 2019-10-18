@@ -119,7 +119,7 @@ We highly advise you to install latest minor version of your major version for s
 </note>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
-<note>Although you can use a JRE, it is better to install a JDK as for recording of HTTPS, JMeter needs <code>keytool</code> utility from JDK</note>
+<note>Although you can use a JRE, it is better to install a JDK as for recording of HTTPS, JMeter needs <code>keytool</code> utility from JDK.</note>
 </subsection>
 
 <subsection name="&sect-num;.1.2 Operating Systems" anchor="os">
