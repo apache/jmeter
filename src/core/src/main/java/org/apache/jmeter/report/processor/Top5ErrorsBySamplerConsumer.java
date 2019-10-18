@@ -93,8 +93,8 @@ public class Top5ErrorsBySamplerConsumer extends
                     key != null ? key : JMeterUtils.getResString("reportgenerator_top5_total")));
             long total = data.getTotal();
 
-            result.addResult(new ValueResultData(Long.valueOf(total)));
-            result.addResult(new ValueResultData(Long.valueOf(errors)));
+            result.addResult(new ValueResultData(total));
+            result.addResult(new ValueResultData(errors));
             Object[][] top5 = data.getTop5ErrorsMetrics();
 
             int numberOfValues = 0;

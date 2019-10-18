@@ -710,7 +710,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         private Integer groupOrder(String group) {
             Integer order = (Integer) beanInfo.getBeanDescriptor().getValue(ORDER(group));
             if (order == null) {
-                order = Integer.valueOf(0);
+                order = 0;
             }
             return order;
         }
@@ -724,7 +724,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         private Integer propertyOrder(PropertyDescriptor d) {
             Integer order = (Integer) d.getValue(ORDER);
             if (order == null) {
-                order = Integer.valueOf(0);
+                order = 0;
             }
             return order;
         }

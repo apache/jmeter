@@ -57,7 +57,7 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-        return sample -> Double.valueOf(sample.getElapsedTime());
+        return sample -> (double) sample.getElapsedTime();
     }
 
     /*

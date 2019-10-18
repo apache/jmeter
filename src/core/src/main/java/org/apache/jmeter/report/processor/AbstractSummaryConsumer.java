@@ -197,7 +197,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
         if (data != null) {
             result = new MapResultData();
             result.setResult(RESULT_VALUE_IS_CONTROLLER, new ValueResultData(
-                    Boolean.valueOf(info.isController())));
+                    info.isController()));
             result.setResult(RESULT_VALUE_DATA, createDataResult(key, data));
         }
         return result;
@@ -252,7 +252,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
 
         // Push the support flag in the result
         result.setResult(RESULT_VALUE_SUPPORTS_CONTROLLERS_DISCRIMINATION,
-                new ValueResultData(Boolean.valueOf(supportsControllersDiscrimination)));
+                new ValueResultData(supportsControllersDiscrimination));
 
         // Add headers
         result.setResult(RESULT_VALUE_TITLES, createResultTitles());

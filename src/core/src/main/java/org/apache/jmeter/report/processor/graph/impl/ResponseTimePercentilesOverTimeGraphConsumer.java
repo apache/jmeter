@@ -68,7 +68,7 @@ public class ResponseTimePercentilesOverTimeGraphConsumer
     }
 
     private String formatPercentile(int percentile) {
-        return String.format(PERCENTILE_FORMAT, Integer.valueOf(percentile));
+        return String.format(PERCENTILE_FORMAT, percentile);
     }
 
     private GroupInfo createMinGroupInfo() {

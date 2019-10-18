@@ -240,7 +240,7 @@ public class DataSourceElement extends AbstractTestElement
         dataSource.setMaxTotal(poolSize);
         dataSource.setMaxWaitMillis(Long.parseLong(getTimeout()));
 
-        dataSource.setDefaultAutoCommit(Boolean.valueOf(isAutocommit()));
+        dataSource.setDefaultAutoCommit(isAutocommit());
 
         if (log.isDebugEnabled()) {
             StringBuilder sb = new StringBuilder(40);

@@ -47,11 +47,11 @@ public class LatencyValueSelector extends AbstractGraphValueSelector {
     public Double select(String series, Sample sample) {
         if(isIgnoreTransactionController()) {
             if(!sample.isController()) {
-                return Double.valueOf(sample.getLatency());
+                return (double) sample.getLatency();
             }
         } else {
             if(!sample.isEmptyController()) {
-                return Double.valueOf(sample.getLatency());
+                return (double) sample.getLatency();
             }
         }
         return null;

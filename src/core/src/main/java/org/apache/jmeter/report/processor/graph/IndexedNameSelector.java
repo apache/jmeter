@@ -58,7 +58,7 @@ public class IndexedNameSelector implements GraphKeysSelector {
             names.addLast(name);
             index = names.size() - 1;
         }
-        return Double.valueOf(index);
+        return (double) index;
     }
 
 }

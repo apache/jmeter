@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractVersusRequestsGraphConsumer extends
         AbstractGraphConsumer {
-    private static final Long ONE = Long.valueOf(1L);
+    private static final Long ONE = 1L;
     public static final String RESULT_CTX_GRANULARITY = "granularity";
     public static final String TIME_INTERVAL_LABEL = "Interval";
 
@@ -164,7 +164,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(
-                Long.valueOf(granularity)));
+                granularity));
     }
 
     private static class TimeCountConsumer extends AbstractSampleConsumer {
@@ -220,7 +220,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 
         private Long getTimeInterval(Sample sample) {
             long time = sample.getEndTime();
-            return Long.valueOf(time - (time % parent.getGranularity()));
+            return time - (time % parent.getGranularity());
         }
 
         // Adds a new field in the sample metadata for each channel
@@ -290,7 +290,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                     fileInfos.add(new FileInfo(tmpFile, getConsumedMetadata(i)));
                 } catch (IOException ex) {
                     String message = String.format(
-                            "Cannot create temporary file for channel #%d", Integer.valueOf(i));
+                            "Cannot create temporary file for channel #%d", i);
                     log.error(message, ex);
                     throw new SampleException(message, ex);
                 }
@@ -313,7 +313,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             Long time = getTimeInterval(sample);
             Long count = counts.get(time);
             if (count != null) {
-                counts.put(time, Long.valueOf(count.longValue() + 1));
+                counts.put(time, count.longValue() + 1);
             } else {
                 counts.put(time, ONE);
             }

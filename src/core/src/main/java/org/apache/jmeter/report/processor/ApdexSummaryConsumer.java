@@ -54,10 +54,10 @@ public class ApdexSummaryConsumer extends
 
     @Override
     protected ListResultData createDataResult(String key, ApdexSummaryData data) {
-        Double apdex = Double.valueOf(getApdex(data));
+        Double apdex = getApdex(data);
         ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
-        Long satisfiedThreshold = Long.valueOf(thresholdsInfo.getSatisfiedThreshold());
-        Long toleratedThreshold = Long.valueOf(thresholdsInfo.getToleratedThreshold());
+        Long satisfiedThreshold = thresholdsInfo.getSatisfiedThreshold();
+        Long toleratedThreshold = thresholdsInfo.getToleratedThreshold();
         String keyOrDefault = ObjectUtils.defaultIfNull(
                 key, JMeterUtils.getResString("reportgenerator_summary_total"));
 

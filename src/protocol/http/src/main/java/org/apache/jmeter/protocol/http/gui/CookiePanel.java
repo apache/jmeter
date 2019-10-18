@@ -189,7 +189,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     private void addCookieToTable(Cookie cookie) {
         tableModel.addRow(new Object[] { cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
-                Boolean.valueOf(cookie.getSecure()) });
+                cookie.getSecure()});
     }
 
     /**

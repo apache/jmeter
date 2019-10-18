@@ -88,7 +88,7 @@ public class LongProperty extends NumberProperty {
      */
     @Override
     public Object getObjectValue() {
-        return Long.valueOf(value);
+        return value;
     }
 
     /**

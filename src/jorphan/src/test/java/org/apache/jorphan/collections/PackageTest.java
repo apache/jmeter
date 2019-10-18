@@ -169,7 +169,7 @@ public class PackageTest {
         SearchByClass<Integer> searcher = new SearchByClass<>(Integer.class);
         String one = "one";
         String two = "two";
-        Integer o = Integer.valueOf(1);
+        Integer o = 1;
         tree.add(one, o);
         tree.getTree(one).add(o, two);
         tree.traverse(searcher);

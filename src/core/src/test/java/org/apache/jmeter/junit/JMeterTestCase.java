@@ -153,7 +153,7 @@ public abstract class JMeterTestCase {
     }
 
     public static void assertPrimitiveEquals(boolean expected, boolean actual) {
-        org.junit.Assert.assertEquals(Boolean.valueOf(expected), Boolean.valueOf(actual));
+        org.junit.Assert.assertEquals(expected, actual);
     }
 
     /**

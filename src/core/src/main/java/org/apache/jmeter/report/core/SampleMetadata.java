@@ -143,7 +143,7 @@ public class SampleMetadata {
         this.columns = columns;
         int size = columns.size();
         for (int i = 0; i < size; i++) {
-            index.put(this.columns.get(i).trim(), Integer.valueOf(i));
+            index.put(this.columns.get(i).trim(), i);
         }
     }
 

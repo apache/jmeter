@@ -35,7 +35,7 @@ public final class Converters {
 
         StringConverter<Character> characterConverter = value -> {
             try {
-                return Character.valueOf(value.charAt(0));
+                return value.charAt(0);
             } catch (NumberFormatException ex) {
                 throw new ConvertException(value, Character.class.getName(), ex);
             }

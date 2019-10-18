@@ -70,7 +70,7 @@ public class DoubleProperty extends NumberProperty {
      */
     @Override
     public Object getObjectValue() {
-        return Double.valueOf(value);
+        return value;
     }
 
     /**

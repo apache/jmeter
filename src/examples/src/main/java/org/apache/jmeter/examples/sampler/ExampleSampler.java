@@ -120,7 +120,7 @@ public class ExampleSampler extends AbstractSampler {
      */
     private void trace(String s) {
         if (log.isDebugEnabled()) {
-            log.debug("{} ({}) {} {} {}", Thread.currentThread().getName(), Integer.valueOf(classCount.get()),
+            log.debug("{} ({}) {} {} {}", Thread.currentThread().getName(), classCount.get(),
                     getTitle(), s, this.toString());
         }
     }

@@ -36,10 +36,10 @@ public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport {
 
         PropertyDescriptor p = property("throughput"); //$NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Double.valueOf(0.0));
+        p.setValue(DEFAULT, 0.0);
 
         p = property("calcMode", ConstantThroughputTimer.Mode.class); //$NON-NLS-1$
-        p.setValue(DEFAULT, Integer.valueOf(ConstantThroughputTimer.Mode.ThisThreadOnly.ordinal()));
+        p.setValue(DEFAULT, ConstantThroughputTimer.Mode.ThisThreadOnly.ordinal());
         p.setValue(NOT_UNDEFINED, Boolean.TRUE); // must be defined
     }
 

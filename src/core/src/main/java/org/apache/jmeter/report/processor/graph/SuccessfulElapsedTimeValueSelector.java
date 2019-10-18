@@ -41,7 +41,7 @@ public class SuccessfulElapsedTimeValueSelector extends ElapsedTimeValueSelector
     @Override
     public Double select(String series, Sample sample) {
         if(!sample.isController() && sample.getSuccess()) {
-            return Double.valueOf(sample.getElapsedTime());
+            return (double) sample.getElapsedTime();
         } else {
             return null;
         }

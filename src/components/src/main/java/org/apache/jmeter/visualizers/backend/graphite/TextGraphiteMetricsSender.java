@@ -111,7 +111,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
             // pw is not closed as it would close the underlying pooled out
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, CHARSET_NAME), false);
             for (MetricTuple metric : currentMetrics) {
-                pw.printf("%s %s %d%n", metric.name, metric.value, Long.valueOf(metric.timestamp));
+                pw.printf("%s %s %d%n", metric.name, metric.value, metric.timestamp);
             }
             pw.flush();
             if (log.isDebugEnabled()) {
