@@ -48,11 +48,11 @@ public class StatCalculatorLong extends StatCalculator<Long> {
 
     @Override
     protected Long divide(Long val, int n) {
-        return val.longValue() / n;
+        return val / n;
     }
 
     @Override
     protected Long divide(Long val, long n) {
-        return val.longValue() / n;
+        return val / n;
     }
 }

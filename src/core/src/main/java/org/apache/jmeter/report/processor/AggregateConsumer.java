@@ -98,7 +98,7 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void consume(Sample sample, int channel) {
-        aggregator.addValue(selector.select(sample).doubleValue());
+        aggregator.addValue(selector.select(sample));
         super.produce(sample, channel);
     }
 

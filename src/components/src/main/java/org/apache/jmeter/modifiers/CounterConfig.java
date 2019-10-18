@@ -102,11 +102,11 @@ public class CounterConfig extends AbstractTestElement
                 globalCounter += increment;
             }
         } else {
-            long current = perTheadNumber.get().longValue();
+            long current = perTheadNumber.get();
             if(isResetOnThreadGroupIteration()) {
                 int iteration = variables.getIteration();
                 Long lastIterationNumber = perTheadLastIterationNumber.get();
-                if(iteration != lastIterationNumber.longValue()) {
+                if(iteration != lastIterationNumber) {
                     // reset
                     current = getStart();
                 }

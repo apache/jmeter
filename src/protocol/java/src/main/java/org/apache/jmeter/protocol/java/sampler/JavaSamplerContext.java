@@ -142,7 +142,7 @@ public class JavaSamplerContext {
             throw new NumberFormatException("No value for parameter named '" + name + "'.");
         }
 
-        return Integer.decode(params.get(name)).intValue();
+        return Integer.decode(params.get(name));
     }
 
     /**
@@ -168,7 +168,7 @@ public class JavaSamplerContext {
         }
 
         try {
-            return Integer.decode(params.get(name)).intValue();
+            return Integer.decode(params.get(name));
         } catch (NumberFormatException e) {
             log.warn("Value for parameter '" + name + "' not an integer: '" + params.get(name) + "'.  Using default: '"
                     + defaultValue + "'.", e);
@@ -196,7 +196,7 @@ public class JavaSamplerContext {
             throw new NumberFormatException("No value for parameter named '" + name + "'.");
         }
 
-        return Long.decode(params.get(name)).longValue();
+        return Long.decode(params.get(name));
     }
 
     /**
@@ -220,7 +220,7 @@ public class JavaSamplerContext {
             return defaultValue;
         }
         try {
-            return Long.decode(params.get(name)).longValue();
+            return Long.decode(params.get(name));
         } catch (NumberFormatException e) {
             log.warn("Value for parameter '" + name + "' not a long: '" + params.get(name) + "'.  Using default: '"
                     + defaultValue + "'.", e);

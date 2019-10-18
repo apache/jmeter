@@ -271,7 +271,7 @@ public class Converter {
         if (o == null) {
             return defaultValue;
         } else if (o instanceof Boolean) {
-            return ((Boolean) o).booleanValue();
+            return (Boolean) o;
         }
         return Boolean.parseBoolean(o.toString());
     }
@@ -328,7 +328,7 @@ public class Converter {
                 return defaultValue;
             }
             if (o instanceof Character) {
-                return ((Character) o).charValue();
+                return (Character) o;
             } else if (o instanceof Byte) {
                 return (char) ((Byte) o).byteValue();
             } else if (o instanceof Integer) {

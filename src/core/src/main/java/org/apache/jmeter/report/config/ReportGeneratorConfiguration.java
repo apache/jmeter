@@ -161,7 +161,7 @@ public class ReportGeneratorConfiguration {
                     getExporterPropertyKey(exportId,
                             EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES),
                     EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT,
-                    Boolean.class).booleanValue();
+                    Boolean.class);
             exportConfiguration
                     .filtersOnlySampleSeries(filtersOnlySampleSeries);
 
@@ -181,7 +181,7 @@ public class ReportGeneratorConfiguration {
                     getExporterPropertyKey(exportId,
                             EXPORTER_KEY_SHOW_CONTROLLERS_ONLY),
                     EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT,
-                    Boolean.class).booleanValue();
+                    Boolean.class);
             exportConfiguration
                     .showControllerSeriesOnly(showControllerSeriesOnly);
 
@@ -238,7 +238,7 @@ public class ReportGeneratorConfiguration {
                     getGraphPropertyKey(graphId,
                             GRAPH_KEY_EXCLUDE_CONTROLLERS),
                     GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT,
-                    Boolean.class).booleanValue();
+                    Boolean.class);
             graphConfiguration
                     .setExcludeControllers(excludeControllers);
 
@@ -627,14 +627,14 @@ public class ReportGeneratorConfiguration {
         final long apdexSatisfiedThreshold = getRequiredProperty(props,
                 REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD,
                 REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT,
-                long.class).longValue();
+                long.class);
         configuration.setApdexSatisfiedThreshold(apdexSatisfiedThreshold);
 
         // Load apdex tolerated threshold
         final long apdexToleratedThreshold = getRequiredProperty(props,
                 REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD,
                 REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT,
-                long.class).longValue();
+                long.class);
         configuration.setApdexToleratedThreshold(apdexToleratedThreshold);
 
         // Load apdex per transactions, overridden by user
@@ -647,7 +647,7 @@ public class ReportGeneratorConfiguration {
                 props,
                 REPORT_GENERATOR_KEY_EXCLUDE_TC_FROM_TOP5_ERRORS_BY_SAMPLER,
                 Boolean.TRUE,
-                Boolean.class).booleanValue();
+                Boolean.class);
         configuration.setIgnoreTCFromTop5ErrorsBySampler(ignoreTCFromTop5ErrorsBySampler);
 
         // Load sample filter

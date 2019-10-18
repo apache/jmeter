@@ -49,7 +49,7 @@ public class Top5ErrorsSummaryData {
         if (value == null) {
             countPerError.put(errorMessage, ONE);
         } else {
-            countPerError.put(errorMessage, value.longValue() + 1);
+            countPerError.put(errorMessage, value + 1);
         }
     }
 

@@ -64,8 +64,8 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         result.addResult(new ValueResultData(key != null ? key : JMeterUtils
                 .getResString("reportgenerator_summary_total")));
         result.addResult(new ValueResultData(data));
-        result.addResult(new ValueResultData((double) data.longValue() * 100 / errorCount));
-        result.addResult(new ValueResultData((double) data.longValue() * 100
+        result.addResult(new ValueResultData((double) data * 100 / errorCount));
+        result.addResult(new ValueResultData((double) data * 100
                 / getOverallInfo().getData().doubleValue()));
         return result;
     }
@@ -120,7 +120,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         if (overallData == null) {
             overallData = ZERO;
         }
-        overallInfo.setData(overallData.longValue() + 1);
+        overallInfo.setData(overallData + 1);
 
         // Process only failed samples
         if (!sample.getSuccess()) {
@@ -130,7 +130,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
             if (data == null) {
                 data = ZERO;
             }
-            info.setData(data.longValue() + 1);
+            info.setData(data + 1);
         }
     }
 

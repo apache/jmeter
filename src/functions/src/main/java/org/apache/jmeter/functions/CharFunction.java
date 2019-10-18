@@ -59,7 +59,7 @@ public class CharFunction extends AbstractFunction {
         for (Object val : values) {
             String numberString = ((CompoundVariable) val).execute().trim();
             try {
-                long value = Long.decode(numberString).longValue();
+                long value = Long.decode(numberString);
                 char ch = (char) value;
                 sb.append(ch);
             } catch (NumberFormatException e) {

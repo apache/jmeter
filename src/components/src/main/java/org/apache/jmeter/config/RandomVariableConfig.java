@@ -193,7 +193,7 @@ public class RandomVariableConfig extends ConfigTestElement
         if (randomSeed.length()>0){
             Long seed = getRandomSeedAsLong();
             if(seed != null) {
-                return new Random(seed.longValue());
+                return new Random(seed);
             }
         }
         return new Random();

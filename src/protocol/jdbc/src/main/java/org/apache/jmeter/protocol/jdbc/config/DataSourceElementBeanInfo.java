@@ -134,7 +134,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
                     log.warn("Illegal transaction isolation configuration '" + tag + "'");
                 }
             } else {
-                return isolationMode.intValue();
+                return isolationMode;
             }
         }
         return -1;

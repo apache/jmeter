@@ -51,7 +51,7 @@ public class TimerServiceTest {
             public boolean matches(Object item) {
                 if (item instanceof Long) {
                     Long other = (Long) item;
-                    return Math.abs(other.longValue() - value) < precision;
+                    return Math.abs(other - value) < precision;
                 }
                 return false;
             }

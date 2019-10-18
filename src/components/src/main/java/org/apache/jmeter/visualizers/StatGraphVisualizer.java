@@ -623,16 +623,16 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         graphPanel.setShowGrouping(numberShowGrouping.isSelected());
         graphPanel.setValueOrientation(valueLabelsVertical.isSelected());
         graphPanel.setLegendPlacement(StatGraphProperties.getPlacementNameMap()
-                .get(legendPlacementList.getSelectedItem()).intValue());
+                .get(legendPlacementList.getSelectedItem()));
 
         graphPanel.setTitleFont(new Font(StatGraphProperties.getFontNameMap().get(titleFontNameList.getSelectedItem()),
-                StatGraphProperties.getFontStyleMap().get(titleFontStyleList.getSelectedItem()).intValue(),
+                StatGraphProperties.getFontStyleMap().get(titleFontStyleList.getSelectedItem()),
                 Integer.parseInt((String) titleFontSizeList.getSelectedItem())));
         graphPanel.setLegendFont(new Font(StatGraphProperties.getFontNameMap().get(fontNameList.getSelectedItem()),
-                StatGraphProperties.getFontStyleMap().get(fontStyleList.getSelectedItem()).intValue(),
+                StatGraphProperties.getFontStyleMap().get(fontStyleList.getSelectedItem()),
                 Integer.parseInt((String) fontSizeList.getSelectedItem())));
         graphPanel.setValueFont(new Font(StatGraphProperties.getFontNameMap().get(valueFontNameList.getSelectedItem()),
-                StatGraphProperties.getFontStyleMap().get(valueFontStyleList.getSelectedItem()).intValue(),
+                StatGraphProperties.getFontStyleMap().get(valueFontStyleList.getSelectedItem()),
                 Integer.parseInt((String) valueFontSizeList.getSelectedItem())));
 
         graphPanel.setHeight(height);

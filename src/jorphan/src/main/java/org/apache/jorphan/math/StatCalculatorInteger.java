@@ -43,11 +43,11 @@ public class StatCalculatorInteger extends StatCalculator<Integer> {
 
     @Override
     protected Integer divide(Integer val, int n) {
-        return val.intValue() / n;
+        return val / n;
     }
 
     @Override
     protected Integer divide(Integer val, long n) {
-        return (int) (val.intValue() / n);
+        return (int) (val / n);
     }
 }

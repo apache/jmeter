@@ -219,14 +219,14 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     private void setMinResult(MapResultData result, String name, Double value) {
         ValueResultData valueResult = (ValueResultData) result.getResult(name);
-        valueResult.setValue(Math.min(((Double) valueResult.getValue()).doubleValue(),
-                value.doubleValue()));
+        valueResult.setValue(Math.min((Double) valueResult.getValue(),
+                value));
     }
 
     private void setMaxResult(MapResultData result, String name, Double value) {
         ValueResultData valueResult = (ValueResultData) result.getResult(name);
-        valueResult.setValue(Math.max(((Double) valueResult.getValue()).doubleValue(),
-                value.doubleValue()));
+        valueResult.setValue(Math.max((Double) valueResult.getValue(),
+                value));
     }
 
     /**
@@ -395,7 +395,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         // Aggregate keys if needed (if aggregated keys series is set)
         Aggregator keysAgg = data.getKeysAggregator();
         if (keysAgg != null) {
-            keysAgg.addValue(key.doubleValue());
+            keysAgg.addValue(key);
         }
 
         // Aggregate values if needed (if aggregated keys series is set)
