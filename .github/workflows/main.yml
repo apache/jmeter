@@ -23,7 +23,7 @@ jobs:
     - name: 'Test'
       shell: bash
       run: |
-        ./gradlew build -x distTar -x distTarSha512 -x signDistTar -x distTarSource -x distTarSourceSha512 -x signDistTarSource
+        ./gradlew --no-parallel build -x distTar -x signDistTar -x distTarSource -x signDistTarSource
 
   mac:
     name: 'macOS (JDK 12)'
@@ -38,4 +38,4 @@ jobs:
         java-version: 12
     - name: 'Test'
       run: |
-        ./gradlew build -x distTar -x distTarSha512 -x signDistTar -x distTarSource -x distTarSourceSha512 -x signDistTarSource -Dskip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
+        ./gradlew --no-parallel build -x distTar -x signDistTar -x distTarSource -x signDistTarSource -Dskip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
