@@ -42,6 +42,7 @@ import org.apache.jmeter.samplers.SampleListener
 import org.apache.jmeter.samplers.SampleMonitor
 import org.apache.jmeter.samplers.SampleResult
 import org.apache.jmeter.samplers.Sampler
+import org.apache.jmeter.samplers.SuspendingSampler
 import org.apache.jmeter.testbeans.TestBeanHelper
 import org.apache.jmeter.testelement.AbstractScopedAssertion
 import org.apache.jmeter.testelement.AbstractTestElement
@@ -521,7 +522,7 @@ class JMeterThread @JvmOverloads constructor(
      * @param sampler [Sampler]
      * @return [SampleResult]
      */
-    private fun doSampling(threadContext: JMeterContext, sampler: Sampler): SampleResult? {
+    private suspend fun doSampling(threadContext: JMeterContext, sampler: Sampler): SampleResult? {
         sampler.threadContext = threadContext
         sampler.threadName = threadName
         TestBeanHelper.prepare(sampler)
@@ -537,6 +538,9 @@ class JMeterThread @JvmOverloads constructor(
             }
         }
         try {
+            if (sampler is SuspendingSampler) {
+                return sampler.suspendingSample()
+            }
             return sampler.sample(null)
         } finally {
             if (!sampleMonitors.isEmpty()) {

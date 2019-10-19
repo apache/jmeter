@@ -71,6 +71,7 @@ import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.SuspendingSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.TestStateListener;
@@ -89,8 +90,12 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import kotlin.coroutines.Continuation;
 
 /**
  * Common constants and methods for HTTP samplers
@@ -98,6 +103,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class HTTPSamplerBase extends AbstractSampler
     implements TestStateListener, TestIterationListener, ThreadListener, HTTPConstantsInterface,
+        SuspendingSampler,
         Replaceable {
 
     private static final long serialVersionUID = 242L;
@@ -1309,6 +1315,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     protected abstract HTTPSampleResult sample(URL u,
             String method, boolean areFollowingRedirect, int depth);
+
+    @Nullable
+    @Override
+    public Object suspendingSample(@NotNull Continuation<? super SampleResult> continuation) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Download the resources of an HTML page.
