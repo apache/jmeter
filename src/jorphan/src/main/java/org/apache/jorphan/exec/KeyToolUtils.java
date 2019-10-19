@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -173,7 +174,10 @@ public class KeyToolUtils {
                     + "\n'" + formatCommand(arguments)+"'");
             }
         } catch (InterruptedException e) { // NOSONAR
+            Thread.currentThread().interrupt();
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
+        } catch (TimeoutException e) { // NOSONAR
+            throw new IOException("Timeout reached while executing\n" + nativeCommand.getOutResult(), e);
         }
     }
 
@@ -369,7 +373,10 @@ public class KeyToolUtils {
                 throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
             }
         } catch (InterruptedException e) { // NOSONAR
+            Thread.currentThread().interrupt();
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
+        } catch (TimeoutException e) { // NOSONAR
+            throw new IOException("Timeout reached while executing\n" + nativeCommand.getOutResult(), e);
         }
     }
 
@@ -480,6 +487,10 @@ public class KeyToolUtils {
             return false;
         } catch (InterruptedException e) { // NOSONAR
             log.error("Command was interrupted\n" + nativeCommand.getOutResult(), e);
+            Thread.currentThread().interrupt();
+            return false;
+        } catch (TimeoutException e) { // NOSONAR
+            log.info("Timeout reached while checking for keytool existence, will return false, try another way.", e);
             return false;
         }
     }

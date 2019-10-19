@@ -30,6 +30,8 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.jorphan.util.JOrphanUtils;
 
@@ -37,6 +39,10 @@ import org.apache.jorphan.util.JOrphanUtils;
  * Utility class for invoking native system applications
  */
 public class SystemCommand {
+    /**
+     * @deprecated does not make sense anymore. Superceded by {@link Process#wait(long)}
+     */
+    @Deprecated
     public static final int POLL_INTERVAL = 100;
     private final File directory;
     private final Map<String, String> env;
@@ -53,7 +59,7 @@ public class SystemCommand {
      * @param directory File working directory (may be null)
      */
     public SystemCommand(File directory, Map<String, String> env) {
-        this(directory, 0L, POLL_INTERVAL, env, (InputStream) null, (OutputStream) null, (OutputStream) null);
+        this(directory, 0L, 0, env, (InputStream) null, (OutputStream) null, (OutputStream) null);
     }
 
     /**
@@ -123,13 +129,13 @@ public class SystemCommand {
      * @throws InterruptedException when execution was interrupted
      * @throws IOException when I/O error occurs while execution
      */
-    public int run(List<String> arguments) throws InterruptedException, IOException {
+    public int run(List<String> arguments) throws InterruptedException, IOException, TimeoutException {
         return run(arguments, stdin, stdout, stderr);
     }
 
     // helper method to allow input and output to be changed for chaining
     private int run(List<String> arguments, InputStream in,
-            OutputStream out,OutputStream err) throws InterruptedException, IOException {
+            OutputStream out,OutputStream err) throws InterruptedException, IOException, TimeoutException {
         Process proc = null;
         final ProcessBuilder procBuild = new ProcessBuilder(arguments);
         if (env != null) {
@@ -199,13 +205,14 @@ public class SystemCommand {
      * @param arguments2 second command to run
      * @return exit status
      * @throws InterruptedException when execution gets interrupted
+     * @throws TimeoutException when timeout is reached while execution
      * @throws IOException when I/O error occurs while execution
      */
-    public int run(List<String> arguments1, List<String> arguments2) throws InterruptedException, IOException {
+    public int run(List<String> arguments1, List<String> arguments2) throws InterruptedException, IOException, TimeoutException {
         ByteArrayOutputStream out = new ByteArrayOutputStream(); // capture the intermediate output
-        int exitCode=run(arguments1,stdin,out, stderr);
+        int exitCode = run(arguments1, stdin, out, stderr);
         if (exitCode == 0) {
-            exitCode = run(arguments2,new ByteArrayInputStream(out.toByteArray()),stdout,stderr);
+            exitCode = run(arguments2, new ByteArrayInputStream(out.toByteArray()), stdout, stderr);
         }
         return exitCode;
     }
@@ -215,28 +222,16 @@ public class SystemCommand {
      * @param proc Process
      * @param timeoutInMillis long timeout in ms
      * @return proc exit value
-     * @throws InterruptedException
+     * @throws TimeoutException when timeout is reached while execution
      */
-    private int waitForEndWithTimeout(Process proc, long timeoutInMillis) throws InterruptedException {
+    private int waitForEndWithTimeout(Process proc, long timeoutInMillis) throws InterruptedException, TimeoutException {
         if (timeoutInMillis <= 0L) {
             return proc.waitFor();
-        } else {
-            long now = System.currentTimeMillis();
-            long finish = now + timeoutInMillis;
-            while(System.currentTimeMillis() < finish) {
-                try {
-                    return proc.exitValue();
-                } catch (IllegalThreadStateException e) { // not yet terminated
-                    Thread.sleep(pollInterval);
-                }
-            }
-            try {
-                return proc.exitValue();
-            } catch (IllegalThreadStateException e) { // not yet terminated
-                // N.B. proc.destroy() is called by the finally clause in the run() method
-                throw new InterruptedException( "Process timeout out after " + timeoutInMillis + " milliseconds" );
-            }
         }
+        if (proc.waitFor(timeoutInMillis, TimeUnit.MILLISECONDS)) {
+            return proc.exitValue();
+        }
+        throw new TimeoutException("Process timeout reached after " + timeoutInMillis + " milliseconds");
     }
 
     /**
