@@ -110,6 +110,7 @@ dependencies {
         apiv("org.apache.geronimo.specs:geronimo-jms_1.1_spec")
         apiv("org.apache.httpcomponents:httpasyncclient")
         apiv("org.apache.httpcomponents:httpclient")
+        apiv("org.apache.httpcomponents.client5:httpclient5")
         apiv("org.apache.httpcomponents:httpcore-nio")
         apiv("org.apache.httpcomponents:httpcore")
         apiv("org.apache.httpcomponents:httpmime")

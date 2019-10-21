@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(value = [JMeterContextExtension::class])
-class NonBlockingJettyHttpSamplerTest {
+class NonBlockingHttpSamplerTest {
     private fun WireMockServer.configureStubs(responseDelay: Int) {
         stubFor(
             WireMock.get("/index.html")
@@ -55,7 +55,16 @@ class NonBlockingJettyHttpSamplerTest {
     }
 
     @Test
-    fun `many inflight requests`() {
+    fun jetty() {
+        `many inflight requests`(HTTPSamplerFactory.IMPL_JETTY_NON_BLOCKING)
+    }
+
+    @Test
+    fun httpclient5() {
+        `many inflight requests`(HTTPSamplerFactory.IMPL_APACHE_HTTPCLIENT5_NON_BLOCKING)
+    }
+
+    fun `many inflight requests`(impl: String) {
         val responseDelay = 10000
         val server = createServer().apply {
             start()
@@ -63,8 +72,6 @@ class NonBlockingJettyHttpSamplerTest {
         }
 
         try {
-            val impl = HTTPSamplerFactory.IMPL_JETTY_NON_BLOCKING
-
             val jmeterTheadContext = newFixedThreadPoolContext(3, "async http client")
 
             val now = System.currentTimeMillis()

@@ -35,21 +35,21 @@ import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-const val VAR_JETTY_CLIENT = "_jv_jetty_client"
+private const val VAR_JETTY_CLIENT = "_jv_jetty_client"
 
-val jettyThreadPool by lazy { QueuedThreadPool(15) }
-val jettyClnt by lazy {
+private val jettyPool by lazy { QueuedThreadPool(15) }
+private val sharedHttpClient by lazy {
     HttpClient().also {
         // We don't want each client to create its own thread pool
-        it.executor = jettyThreadPool
+        it.executor = jettyPool
         // No idea if that is needed
         it.start()
         it.maxConnectionsPerDestination = 100500
     }
 }
 
-private val JMeterVariables.jettyClient: HttpClient
-    get() = jettyClnt/* {
+private val JMeterVariables.httpClient: HttpClient
+    get() = sharedHttpClient/* {
         val cache = getObject(VAR_JETTY_CLIENT)
         if (cache != null) {
             return cache as HttpClient
@@ -128,7 +128,7 @@ class HttpJettyHttpClientImpl(testElement: HTTPSamplerBase) : HTTPAbstractImpl(t
 
         val threadContext = JMeterContextService.getContext()
         val vars = threadContext.variables
-        val client = vars.jettyClient.also {
+        val client = vars.httpClient.also {
             it.isFollowRedirects = followRedirects
             it.connectTimeout = connectTimeout.toLong()
             it.addressResolutionTimeout = connectTimeout.toLong()

@@ -42,6 +42,8 @@ public final class HTTPSamplerFactory {
 
     public static final String IMPL_JETTY_NON_BLOCKING = "eclipse-jetty-non-blocking"; // $NON-NLS-1$
 
+    public static final String IMPL_APACHE_HTTPCLIENT5_NON_BLOCKING = "apache-httpclient5-non-blocking"; // $NON-NLS-1$
+
     public static final String IMPL_JAVA = "Java"; // $NON-NLS-1$
     //- JMX
 
@@ -82,13 +84,15 @@ public final class HTTPSamplerFactory {
                 return new HTTPSamplerProxy(IMPL_HTTP_CLIENT4);
             case IMPL_JETTY_NON_BLOCKING:
                 return new HTTPSamplerProxy(IMPL_JETTY_NON_BLOCKING);
+            case IMPL_APACHE_HTTPCLIENT5_NON_BLOCKING:
+                return new HTTPSamplerProxy(IMPL_APACHE_HTTPCLIENT5_NON_BLOCKING);
             default:
                 throw new IllegalArgumentException("Unknown sampler type: '" + alias+"'");
         }
     }
 
     public static String[] getImplementations(){
-        return new String[]{IMPL_HTTP_CLIENT4,IMPL_JAVA,IMPL_JETTY_NON_BLOCKING};
+        return new String[]{IMPL_HTTP_CLIENT4,IMPL_JAVA,IMPL_JETTY_NON_BLOCKING,IMPL_APACHE_HTTPCLIENT5_NON_BLOCKING};
     }
 
     public static HTTPAbstractImpl getImplementation(String impl, HTTPSamplerBase base){
@@ -107,6 +111,8 @@ public final class HTTPSamplerFactory {
                 return new HTTPHC4Impl(base);
             case IMPL_JETTY_NON_BLOCKING:
                 return new HttpJettyHttpClientImpl(base);
+            case IMPL_APACHE_HTTPCLIENT5_NON_BLOCKING:
+                return new HttpApacheHttpClient5Impl(base);
             default:
                 throw new IllegalArgumentException("Unknown implementation type: '" + impl + "'");
         }
