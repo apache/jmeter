@@ -177,6 +177,8 @@ does not have a suitable GUI display.
 ## Developer information
 
 Building and contributing is explained in details at [building JMeter](https://jmeter.apache.org/building.html)
+and [CONTRIBUTING.md](CONTRIBUTING.md). More information on the tasks available for
+building JMeter with Gradle is available in [gradle.md](gradle.md).
 
 The code is maintained at GitHub:
 
