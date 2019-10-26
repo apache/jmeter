@@ -86,7 +86,7 @@ fun classExists(name: String) =
     try {
         Class.forName(name)
         true
-    } catch(e: Throwable) {
+    } catch (e: Throwable) {
         false
     }
 
