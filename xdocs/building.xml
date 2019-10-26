@@ -45,7 +45,8 @@ The basic command is:</p>
 </source>
 <p>
 See the list of available tasks via <code>./gradlew tasks</code> (or <code>./gradlew tasks --all</code>)
-for the other tasks that can be used.
+for the other tasks that can be used. More detailed information about the available tasks can be found
+in <a href="https://github.com/apache/jmeter/blob/master/gradle.md">gradle.md</a>.
 </p>
 
 <h3>Opening project via IntelliJ IDEA</h3>
