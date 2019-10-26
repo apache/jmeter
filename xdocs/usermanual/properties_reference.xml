@@ -761,7 +761,7 @@ JMETER-SERVER</source>
     Defaults to: <code>5000</code>
 </property>
 <property name="proxy.number.requests">
-    Add numeric prefix to Sampler names.<br/>
+    Add numeric suffix to Sampler names.<br/>
     defaults to: <code>true</code>
 </property>
 <property name="proxy.excludes.suggested">
