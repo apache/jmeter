@@ -187,7 +187,7 @@ a results report from a previous CSV/JTL file.
 <ul>
     <li><bug>63201</bug>SearchTreeDialog disappears behind master JFrame. Contributed by Benoit Vatan (benoit.vatan at gmail.com)</li>
     <li><bug>63220</bug><code>Function Helper Dialog</code>, <code>Export transactions for report</code> and <code>Import from cURL</code> disappear being master JFrame. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>63207</bug>java.lang.NullPointerException: null when run Jmeter 5.1 with proxy options</li>
+    <li><bug>63207</bug>java.lang.NullPointerException: null when run JMeter 5.1 with proxy options</li>
     <li><bug>58183</bug>Rampup may not be respected if thread take time to start leading to threads continuing to start post ramp up time</li>
 </ul>
 
@@ -5764,7 +5764,7 @@ When calling "Clear All" command, if Log Viewer is displayed its content will be
 <li><bugzilla>52932</bugzilla> - JDBC Sampler : Sampler is not marked in error in an Exception which is not of class IOException, SQLException, IOException occurs</li>
 <li><bugzilla>52916</bugzilla> - JDBC Exception if there is an empty user defined variable</li>
 <li><bugzilla>52937</bugzilla> - Webservice Sampler : Clear Soap Documents Cache at end of Test </li>
-<li><bugzilla>53027</bugzilla> - Jmeter starts throwing exceptions while using SMTP Sample in a test plan with HTTP Cookie Mngr or HTTP Request Defaults</li>
+<li><bugzilla>53027</bugzilla> - JMeter starts throwing exceptions while using SMTP Sample in a test plan with HTTP Cookie Mngr or HTTP Request Defaults</li>
 <li><bugzilla>53072</bugzilla> - JDBC PREPARED SELECT statements should return results in variables like non prepared SELECT</li>
 </ul>
 
@@ -5810,7 +5810,7 @@ When calling "Clear All" command, if Log Viewer is displayed its content will be
 <li><bugzilla>52843</bugzilla> - Sample headerSize and bodySize not being accumulated for subsamples</li>
 <li><bugzilla>52967</bugzilla> - The function __P() couldn't use default value when running with remote server in GUI mode.</li>
 <li><bugzilla>50799</bugzilla> - Having a non-HTTP sampler in a http test plan prevents multiple header managers from working</li>
-<li><bugzilla>52997</bugzilla> - Jmeter should not exit without saving Test Plan if saving before exit fails</li>
+<li><bugzilla>52997</bugzilla> - JMeter should not exit without saving Test Plan if saving before exit fails</li>
 <li><bugzilla>53136</bugzilla> - Catching Throwable needs to be carefully handled</li>
 </ul>
 
