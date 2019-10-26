@@ -14,7 +14,7 @@ cache:
 
 env:
   global:
-    - SKIP_TAR="-x distTar -x distTarSha512 -x signDistTar -x distTarSource -x distTarSourceSha512 -x signDistTarSource"
+    - SKIP_TAR="-x distTar -x distTarSource"
     - ORG_GRADLE_PROJECT_checksumFailOn=build_finish
     - ORG_GRADLE_PROJECT_checksumPrint=true
 
