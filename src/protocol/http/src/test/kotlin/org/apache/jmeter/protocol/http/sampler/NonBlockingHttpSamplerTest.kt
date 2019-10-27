@@ -23,6 +23,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
@@ -65,7 +66,7 @@ class NonBlockingHttpSamplerTest {
     }
 
     fun `many inflight requests`(impl: String) {
-        val responseDelay = 10000
+        val responseDelay = 10
         val server = createServer().apply {
             start()
             configureStubs(responseDelay)
@@ -84,12 +85,13 @@ class NonBlockingHttpSamplerTest {
                         println("$i) ${r.startTime - now}...${r.endTime - now} = ${r.endTime - r.startTime}, code: ${r.responseCode}, bodySize: ${r.bodySizeAsLong}, ${r.responseDataAsString}")
                     }
                 }
-                withTimeout(2000L + responseDelay) {
+                withTimeout(12000L + responseDelay) {
                     coroutineScope {
                         repeat(200) {
                             val ctx = JMeterContextHolder().apply {
                                 jmeterContext.variables = JMeterVariables()
                             }
+                            delay(10)
                             launch(jmeterTheadContext + ctx) {
                                 results.send(send(impl, server))
                             }

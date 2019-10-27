@@ -42,7 +42,7 @@ class ThreadContext(
     private val threadNo = AtomicInteger()
 
     val executor: ExecutorService =
-        ThreadPoolExecutor(nThreads, nThreads, 60, TimeUnit.SECONDS, LinkedBlockingQueue()) { target ->
+        ThreadPoolExecutor(1, nThreads, 1, TimeUnit.SECONDS, LinkedBlockingQueue()) { target ->
             thread(start = false, isDaemon = true, name = name + "-" + threadNo.incrementAndGet()) {
                 target.run()
             }

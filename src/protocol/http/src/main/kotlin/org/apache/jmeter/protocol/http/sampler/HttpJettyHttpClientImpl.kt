@@ -25,23 +25,67 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
 import org.eclipse.jetty.client.HttpClient
+import org.eclipse.jetty.client.HttpClientTransport
+import org.eclipse.jetty.client.HttpDestination
 import org.eclipse.jetty.client.api.Request
 import org.eclipse.jetty.client.api.Response
 import org.eclipse.jetty.client.api.Result
+import org.eclipse.jetty.client.http.HttpClientTransportOverHTTP
 import org.eclipse.jetty.client.util.BufferingResponseListener
+import org.eclipse.jetty.io.Connection
+import org.eclipse.jetty.io.EndPoint
+import org.eclipse.jetty.io.ManagedSelector
+import org.eclipse.jetty.io.SelectorManager
+import org.eclipse.jetty.io.SocketChannelEndPoint
 import org.eclipse.jetty.util.thread.QueuedThreadPool
+import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler
 import java.net.URL
+import java.nio.channels.SelectableChannel
+import java.nio.channels.SelectionKey
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 private const val VAR_JETTY_CLIENT = "_jv_jetty_client"
 
-private val jettyPool by lazy { QueuedThreadPool(15) }
+private val jettyPool by lazy { Executors.newFixedThreadPool(20) } //QueuedThreadPool(35) }
+private val jettyScheduler by lazy { ScheduledExecutorScheduler("-scheduler", false) }
+private val jettySelectorManager by lazy {
+    object : SelectorManager(jettyPool, jettyScheduler, 4) {
+        override fun newEndPoint(
+            channel: SelectableChannel?,
+            selector: ManagedSelector?,
+            selectionKey: SelectionKey?
+        ): EndPoint =
+            SocketChannelEndPoint(channel, selector, selectionKey, scheduler).apply {
+                // idleTimeout = client.idleTimeout
+            }
+
+        override fun newConnection(
+            channel: SelectableChannel?,
+            endpoint: EndPoint?,
+            attachment: Any
+        ): Connection {
+            @Suppress("UNCHECKED_CAST")
+            val context = attachment as Map<String, Any>
+            val destination =
+                context[HttpClientTransport.HTTP_DESTINATION_CONTEXT_KEY] as HttpDestination
+            return destination.clientConnectionFactory.newConnection(endpoint, context)
+        }
+    }
+}
+
+private val jettyTransport by lazy {
+    object : HttpClientTransportOverHTTP() {
+        override fun newSelectorManager(client: HttpClient?): SelectorManager = jettySelectorManager
+    }
+}
 private val sharedHttpClient by lazy {
-    HttpClient().also {
+    HttpClient(jettyTransport, null).also {
         // We don't want each client to create its own thread pool
         it.executor = jettyPool
+        it.scheduler = jettyScheduler
         // No idea if that is needed
         it.start()
         it.maxConnectionsPerDestination = 100500
@@ -49,19 +93,20 @@ private val sharedHttpClient by lazy {
 }
 
 private val JMeterVariables.httpClient: HttpClient
-    get() = sharedHttpClient/* {
+    get() {
         val cache = getObject(VAR_JETTY_CLIENT)
         if (cache != null) {
             return cache as HttpClient
         }
-        return HttpClient().also {
+        return HttpClient(jettyTransport, null).also {
             putObject(VAR_JETTY_CLIENT, it)
             // We don't want each client to create its own thread pool
-            it.executor = jettyThreadPool
+            it.executor = jettyPool
+            it.scheduler = jettyScheduler
             // No idea if that is needed
             it.start()
         }
-    }*/
+    }
 
 private suspend fun Request.send(sampleResult: HTTPSampleResult, maxLength: Int) {
     suspendCancellableCoroutine<Unit> { continuation ->
