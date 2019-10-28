@@ -255,7 +255,8 @@ public class ParseCurlCommandActionTest {
         assertEquals("@test.txt;type=text/foo", httpSampler.getArguments().getArgument(0).getValue());
 
         // test form data in httpsampler
-        request = basicCurlParser.parse("curl -X PUT \"https://www.example.com:123/12345?param1=value1&param2=value2\" -H  \"accept: */*\" -H  \"X-XSRF-TOKEN: 1234\"");
+        request = basicCurlParser.parse(
+                "curl -X PUT \"https://www.example.com:123/12345?param1=value1&param2=value2\" -H  \"accept: */*\" -H  \"X-XSRF-TOKEN: 1234\"");
         objs = new Object[]{request, ""};
         httpSampler = (HTTPSamplerProxy) method.invoke(p, objs);
         assertEquals(new URL("https://www.example.com:123/12345?param1=value1&param2=value2"), httpSampler.getUrl());
