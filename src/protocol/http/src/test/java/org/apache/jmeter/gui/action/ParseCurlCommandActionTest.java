@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,6 +42,7 @@ import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.DNSCacheManager;
+import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.curl.BasicCurlParser;
@@ -251,6 +253,18 @@ public class ParseCurlCommandActionTest {
         httpSampler = (HTTPSamplerProxy) method.invoke(p, objs);
         assertEquals("c", httpSampler.getArguments().getArgument(0).getName());
         assertEquals("@test.txt;type=text/foo", httpSampler.getArguments().getArgument(0).getValue());
+
+        // test form data in httpsampler
+        request = basicCurlParser.parse("curl -X PUT \"https://www.example.com:123/12345?param1=value1&param2=value2\" -H  \"accept: */*\" -H  \"X-XSRF-TOKEN: 1234\"");
+        objs = new Object[]{request, ""};
+        httpSampler = (HTTPSamplerProxy) method.invoke(p, objs);
+        assertEquals(new URL("https://www.example.com:123/12345?param1=value1&param2=value2"), httpSampler.getUrl());
+        assertEquals(123, httpSampler.getPort());
+        assertEquals("www.example.com", httpSampler.getDomain());
+        assertEquals("/12345?param1=value1&param2=value2", httpSampler.getPath());
+        assertEquals("PUT", httpSampler.getMethod());
+        assertEquals(new Header("accept", "*/*"), httpSampler.getHeaderManager().getHeader(0));
+        assertEquals(new Header("X-XSRF-TOKEN", "1234"), httpSampler.getHeaderManager().getHeader(1));
     }
 
     @Test

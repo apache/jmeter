@@ -51,6 +51,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.KeystoreConfig;
 import org.apache.jmeter.control.Controller;
@@ -286,7 +287,11 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         if (url.getPort() != -1) {
             httpSampler.setPort(url.getPort());
         }
-        httpSampler.setPath(url.getPath());
+        String path = url.getPath();
+        if (StringUtils.isNotEmpty(url.getQuery())) {
+            path += "?" + url.getQuery();
+        }
+        httpSampler.setPath(path);
         httpSampler.setDomain(url.getHost());
         httpSampler.setUseKeepAlive(request.isKeepAlive());
         httpSampler.setFollowRedirects(true);
