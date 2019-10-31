@@ -108,7 +108,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
     }
 
     /**
-     * Clears any stored sampling-informations.
+     * Clears any stored sampling-information.
      */
     @Override
     public synchronized void clearData() {
