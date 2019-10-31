@@ -128,6 +128,7 @@ public class SystemCommand {
      * @return return code
      * @throws InterruptedException when execution was interrupted
      * @throws IOException when I/O error occurs while execution
+     * @throws TimeoutException when timeout is reached while execution
      */
     public int run(List<String> arguments) throws InterruptedException, IOException, TimeoutException {
         return run(arguments, stdin, stdout, stderr);
