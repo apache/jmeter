@@ -52,7 +52,6 @@ public class SystemCommand {
     private final boolean stdoutWasNull;
     private final OutputStream stderr;
     private final long timeoutMillis;
-    private final int pollInterval;
 
     /**
      * @param env Environment variables appended to environment (may be null)
@@ -101,7 +100,7 @@ public class SystemCommand {
      * @param env Environment variables appended to environment (may be null)
      * @param directory File working directory (may be null)
      * @param timeoutMillis timeout in Milliseconds
-     * @param pollInterval Value used to poll for Process execution end
+     * @param pollInterval not used anymore
      * @param stdin File name that will contain data to be input to process (may be null)
      * @param stdout File name that will contain out stream (may be null)
      * @param stderr File name that will contain err stream (may be null)
@@ -112,7 +111,6 @@ public class SystemCommand {
         this.timeoutMillis = timeoutMillis;
         this.directory = directory;
         this.env = env;
-        this.pollInterval = pollInterval;
         this.stdin = stdin;
         this.stdoutWasNull = stdout == null;
         if (stdout == null) {
