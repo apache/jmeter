@@ -40,7 +40,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class SystemCommand {
     /**
-     * @deprecated does not make sense anymore. Superceded by {@link Process#wait(long)}
+     * @deprecated does not make sense anymore. Superseded by {@link Process#wait(long)}
      */
     @Deprecated
     public static final int POLL_INTERVAL = 100;
