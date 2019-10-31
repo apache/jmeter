@@ -5946,7 +5946,7 @@ extracting the node as text or attribute value and store the result into the giv
      <dt><code>compare(/book[1]/page[2],/book[2]/page[2])</code></dt>
     <dd>return Integer value equal 0 to if the 2<sup>nd</sup> page of the first book is equal to the 2<sup>nd</sup> page of the 2<sup>nd</sup> book, else return -1.</dd>
  </dl>
- <p>To see more informations about thoses fuctions, please check <a href="http://saxon.sourceforge.net/saxon7.9.1/functions.html">xPath2 functions</a></p>
+ <p>To see more information about these functions, please check <a href="http://saxon.sourceforge.net/saxon7.9.1/functions.html">xPath2 functions</a></p>
 </component>
 
 <component name="XPath Extractor" index="&sect-num;.8.3"  width="729" height="317" screenshot="xpath_extractor.png">
