@@ -18,15 +18,26 @@
 
 package org.apache.jmeter.extractor;
 
+import java.io.InputStream;
+
+import javax.xml.transform.TransformerException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TestCreateCssSelectorExtractor {
+public class TestCreateXPath2Extractor {
 
     @Test
-    public void testToAttributeSelector() {
-        Assertions.assertEquals("[id=javax.faces.ViewState]",
-                CreateCssSelectorExtractor.toAttributeSelector("#javax.faces.ViewState"));
+    public void testCreateXPath2ExtractorThrowsException() throws TransformerException {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            CreateXPath2Extractor.createXPath2Extractor(null, null, "_csrf", "2 /login", "application/xml");
+        });
+    }
+
+    @Test
+    public void testCheckIfXLSTTransformResourceExists() {
+        InputStream in = CreateXPath2Extractor.class.getResourceAsStream("CreateXPath2ExtractorXLSTransform.xml");
+        Assertions.assertNotEquals(null, in);
     }
 
 }

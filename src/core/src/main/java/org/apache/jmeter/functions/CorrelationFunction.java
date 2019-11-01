@@ -18,42 +18,24 @@
 
 package org.apache.jmeter.functions;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
- * utility class which contains utility methods.
+ * Utility class which contains utility methods.
  *
  */
 public class CorrelationFunction {
 
-    private static final String UNDERSCORE = "_";
+    private static final String PARANTHESES_OPEN = "\\("; //$NON-NLS-1$
 
     private CorrelationFunction() {}
 
     /**
-     * extract argument
-     * @param argument
-     * @return
+     * Extract argument from alias e.g token(1) to token
+     *
+     * @param argument alias
+     * @return argument name
      */
     public static String extractVariable(String argument) {
-
-        String[] arguments = argument.split(UNDERSCORE);
-        int numericStringIndex = -1;
-        StringBuilder result = new StringBuilder();
-
-        for (int i = arguments.length - 1; i >= 0; i--) {
-            if (StringUtils.isNumeric(arguments[i])) {
-                numericStringIndex = i;
-                break;
-            }
-        }
-        for (int i = numericStringIndex + 1; i < arguments.length; i++) {
-            result.append(arguments[i]);
-            if (i != arguments.length - 1) {
-                result.append(UNDERSCORE);
-            }
-        }
-        return result.toString();
+        return argument.split(PARANTHESES_OPEN)[0];
     }
 
 }

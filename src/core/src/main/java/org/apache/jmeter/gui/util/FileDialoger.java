@@ -283,11 +283,11 @@ public final class FileDialoger {
     }
 
     /**
+     * Get a JFileChooser to choose files with provided extensions
      * @param exts file extension array
-     * @return
+     * @return the JFileChooser
      */
     public static JFileChooser promptToCorrelationFile(String[] exts) {
-
         // create the file chooser dialog
         JFileChooser jfc = new JFileChooser();
         jfc.setDialogTitle(JMeterUtils.getResString("correlation"));

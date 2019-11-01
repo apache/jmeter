@@ -25,148 +25,310 @@ import java.util.Map;
 
 import org.apache.jmeter.protocol.http.gui.action.CorrelationExtractor;
 import org.apache.jmeter.samplers.SampleResult;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestCorrelationExtractor {
 
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String APPLICATION_XML = "application/xml";
+    private static final String TEXT_HTML = "text/html";
 
-    @SuppressWarnings("deprecation")
-    @Test
-    public void testcreateExtractor() {
+    private static final String OTHER = "other";
 
-        Map<String, String> bodyParameterMap = new HashMap<>();
-        bodyParameterMap.put("_csrf", "7d1de481-34af-4342-a9b4-b8288c451f7c");
+    private static final String HTML_CONTENT_TYPE = "text/html;charset=UTF-8";
+    private static final String XML_CONTENT_TYPE = "application/xml;charset=UTF-8";
+    private static final String JSON_CONTENT_TYPE = "application/json;charset=UTF-8";
+    private static final String RESPONSE_HEADER = "HTTP/1.1 200 OK";
 
-        List<String> arguments = new ArrayList<>();
-        arguments.add("_csrf");
+    private static final String SAMPLE_LABEL = "2 /login";
+    private static final String HEADER = "header";
 
-        SampleResult sampleResult = new SampleResult();
-        sampleResult.setResponseData("<html><head><title>Login Page</title></head><body onload='document.f.username.focus();'>"
-                + "<h3>Login with Username and Password</h3><form name='f' action='/login' method='POST'><table> "
-                + "<tr><td>User:</td><td><input type='text' name='username' value=''></td></tr>"
-                + "<tr><td>Password:</td><td><input type='password' name='password'/></td></tr>"
-                + "<tr><td colspan='2'><input name=\"submit\" type=\"submit\" value=\"Login\"/></td></tr>"
-                        + "<input name=\"_csrf\" type=\"hidden\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
-                                + "</table></form></body></html>");
-        sampleResult.setSampleLabel("2 /login");
-        sampleResult.setContentType("text/html;charset=UTF-8");
+    Map<String, String> parameterMap;
+    List<Map<String, String>> listOfMap;
+    SampleResult sampleResult;
+    String argument;
 
-        CorrelationExtractor.createExtractor(sampleResult,
-                arguments, bodyParameterMap);
-
+    @BeforeEach
+    public void setup() {
+        parameterMap = new HashMap<>();
+        sampleResult = new SampleResult();
+        listOfMap = new ArrayList<>();
+        sampleResult.setSampleLabel(SAMPLE_LABEL);
+        sampleResult.setResponseHeaders(RESPONSE_HEADER);
+        // create argument and parameterMap
+        argument = "_csrf";
+        parameterMap.put("_csrf", "7d1de481-34af-4342-a9b4-b8288c451f7c");
     }
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testCreateRegularExtractor() {
-
-        Map<String, String> bodyParameterMap = new HashMap<>();
-        bodyParameterMap.put("_csrf", "7d1de481-34af-4342-a9b4-b8288c451f7c");
-
-        List<String> arguments = new ArrayList<>();
-        arguments.add("_csrf");
-
-        SampleResult sampleResult = new SampleResult();
-        sampleResult.setResponseData("<html><head><title>Login Page</title></head><body onload='document.f.username.focus();'>"
-                + "<h3>Login with Username and Password</h3><form name='f' action='/login' method='POST'><table> "
-                + "<tr><td>User:</td><td><input type='text' name='username' value=''></td></tr>"
-                + "<tr><td>Password:</td><td><input type='password' name='password'/></td></tr>"
-                + "<tr><td colspan='2'><input name=\"submit\" type=\"submit\" value=\"Login\"/></td></tr>"
-                        + "<input name=\"_csrf\" type=\"hidden\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
-                                + "</table></form></body></html>");
-        sampleResult.setSampleLabel("2 /login");
-        sampleResult.setContentType("text/html;charset=UTF-8");
-        sampleResult.setResponseHeaders("HTTP/1.1 302 Found "
-                + "Server: Apache-Coyote/1.1"
-                + "X-Content-Type-Options: nosniff"
-                + "X-XSS-Protection: 1; mode=block"
-                + "Cache-Control: no-cache, no-store, max-age=0, must-revalidate"
-                + "Pragma: no-cache"
-                + "Expires: 0"
-                + "X-Frame-Options: DENY"
-                + "Set-Cookie: JSESSIONID=32BD75B4E8DA8B28FC0526E3F1F917CB; Path=/; HttpOnly"
-                + "Location: http://localhost:8080/login"
-                + "Content-Length: 0"
-                + "Date: Tue, 03 Sep 2019 09:14:28 GMT"
-                + "Connection: close");
-
-        CorrelationExtractor.createRegularExtractor(sampleResult, arguments, bodyParameterMap);
-
+    public void testCreateExtractorHtmlExtractor() {
+        CorrelationExtractor.getListOfMap().clear();
+        // Case 1: Parameter in value attribute
+        sampleResult.setResponseData("<html><body><form>"
+                + "<input name=\"_csrf\" type=\"hidden\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
+                + "</form></body></html>");
+        sampleResult.setContentType(HTML_CONTENT_TYPE);
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("HtmlExtractor.refname", "_csrf");
+                put("HtmlExtractor.expr", "html > body > form > input");
+                put("HtmlExtractor.attribute", "value");
+                put("HtmlExtractor.match_number", "1");
+                put("testname", "2 /login");
+                put("contentType", HTML_CONTENT_TYPE);
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, TEXT_HTML);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 2: Parameter in content attribute
+        sampleResult.setResponseData("<html><head>"
+                + "<meta name=\"_csrf\" content=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
+                + "</head></html>");
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("HtmlExtractor.refname", "_csrf");
+                put("HtmlExtractor.expr", "html > head > meta");
+                put("HtmlExtractor.attribute", "content");
+                put("HtmlExtractor.match_number", "1");
+                put("testname", "2 /login");
+                put("contentType", HTML_CONTENT_TYPE);
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, TEXT_HTML);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 3: css selector is id selector with id containing (.) or (:)
+        sampleResult.setResponseData("<html><body><form>"
+                + "<input name=\"_csrf\" id=\"csrf.token\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
+                + "</form></body></html>");
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("HtmlExtractor.refname", "_csrf");
+                put("HtmlExtractor.expr", "[id=csrf.token]");
+                put("HtmlExtractor.attribute", "value");
+                put("HtmlExtractor.match_number", "1");
+                put("testname", "2 /login");
+                put("contentType", HTML_CONTENT_TYPE);
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, TEXT_HTML);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 4: css selector is id selector
+        sampleResult.setResponseData("<html><body><form>"
+                + "<input name=\"_csrf\" id=\"csrfToken\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
+                + "</form></body></html>");
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("HtmlExtractor.refname", "_csrf");
+                put("HtmlExtractor.expr", "#csrfToken");
+                put("HtmlExtractor.attribute", "value");
+                put("HtmlExtractor.match_number", "1");
+                put("testname", "2 /login");
+                put("contentType", HTML_CONTENT_TYPE);
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, TEXT_HTML);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 5: no parameter in response data
+        // This case shouldn't occur but it is still tested
+        sampleResult.setResponseData("<html><head><title>Response</title></head></html>");
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, TEXT_HTML);
+        // No change in result
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 6: invalid/null response data
+        sampleResult.setResponseData("");
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, TEXT_HTML);
+        // No change in result
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
     }
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testCreateRegularExtractorElse() {
-
-        Map<String, String> bodyParameterMap = new HashMap<>();
-        bodyParameterMap.put("csrf", "7d1de481-34af-4342-a9b4-b8288c451f7c");
-
-        List<String> arguments = new ArrayList<>();
-        arguments.add("csrf");
-
-        SampleResult sampleResult = new SampleResult();
-        sampleResult.setResponseData("<html><head><title>Login Page</title></head><body onload='document.f.username.focus();'>"
-                + "<h3>Login with Username and Password</h3><form name='f' action='/login' method='POST'><table> "
-                + "<tr><td>User:</td><td><input type='text' name='username' value=''></td></tr>"
-                + "<tr><td>Password:</td><td><input type='password' name='password'/></td></tr>"
-                + "<tr><td colspan='2'><input name=\"submit\" type=\"submit\" value=\"Login\"/></td></tr>"
-                + "<input name=\"csrf\" type=\"hidden\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
-                + "</table></form></body></html>");
-        sampleResult.setSampleLabel("2 /login");
-        sampleResult.setContentType("text/html;charset=UTF-8");
-        sampleResult.setResponseHeaders("HTTP/1.1 302 Found "
-                + "Server: Apache-Coyote/1.1"
-                + "X-Content-Type-Options: nosniff"
-                + "X-XSS-Protection: 1; mode=block"
-                + "Cache-Control: no-cache, no-store, max-age=0, must-revalidate"
-                + "Pragma: no-cache"
-                + "Expires: 0"
-                + "X-Frame-Options: DENY"
-                + "Set-Cookie: JSESSIONID=32BD75B4E8DA8B28FC0526E3F1F917CB; Path=/; HttpOnly"
-                + "Location: http://localhost:8080/login"
-                + "Content-Length: 0"
-                + "Date: Tue, 03 Sep 2019 09:14:28 GMT"
-                + "Connection: close");
-
-        CorrelationExtractor.createRegularExtractor(sampleResult,arguments, bodyParameterMap);
-
+    public void testCreateExtractorXPath2Extractor() {
+        CorrelationExtractor.getListOfMap().clear();
+        // Case 1: Parameter in XML text
+        sampleResult.setResponseData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                + "<token><_csrf>7d1de481-34af-4342-a9b4-b8288c451f7c</_csrf></token>");
+        sampleResult.setContentType(XML_CONTENT_TYPE);
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("XPathExtractor2.refname", "_csrf");
+                put("XPathExtractor2.xpathQuery", "/token[1]/_csrf[1]/text()");
+                put("XPathExtractor2.matchNumber", "1");
+                put("testname", "2 /login");
+                put("contentType", XML_CONTENT_TYPE);
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_XML);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 2: Parameter in XML tag's attribute
+        sampleResult.setResponseData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                + "<token value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\">_csrf</token>");
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("XPathExtractor2.refname", "_csrf");
+                put("XPathExtractor2.xpathQuery", "/token[1]/@value");
+                put("XPathExtractor2.matchNumber", "1");
+                put("testname", "2 /login");
+                put("contentType", XML_CONTENT_TYPE);
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_XML);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 3: Parameter not present in response
+        // This case shouldn't occur but it is still tested
+        sampleResult.setResponseData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                + "<token>Response</token>");
+        // No change in result
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_XML);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 4: Invalid response
+        sampleResult.setResponseData("{ \"_csrf\": \"7d1de481-34af-4342-a9b4-b8288c451f7c\" }");
+        // No change in result and throws TransformerException
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_XML);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
     }
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testCreateRegularExtractorHeader() {
+    public void testCreateExtractorJsonExtractor() {
+        CorrelationExtractor.getListOfMap().clear();
+        // Case 1: Parameter in JSON text
+        sampleResult.setResponseData("{ \"_csrf\": \"7d1de481-34af-4342-a9b4-b8288c451f7c\" }");
+        sampleResult.setContentType(JSON_CONTENT_TYPE);
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("JSONPostProcessor.referenceNames", "_csrf");
+                put("JSONPostProcessor.jsonPathExprs", "$['_csrf']");
+                put("JSONPostProcessor.match_numbers", "1");
+                put("testname", "2 /login");
+                put("contentType", JSON_CONTENT_TYPE);
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_JSON);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 2: Parameter not present in json
+        // This case shouldn't occur but it is still tested
+        sampleResult.setResponseData("{ \"_csrf\": \"7d1de481-34af-4342\" }");
+        // No change in result, throws PathNotFoundException
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_JSON);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 3: Invalid response
+        sampleResult.setResponseData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                + "<token value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\">_csrf</token>");
+        // No change in result
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_JSON);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+    }
 
-        Map<String, String> bodyParameterMap = new HashMap<>();
-        bodyParameterMap.put("csrf", "7d1de481-34af-4342-a9b4-b8288c451f7c");
+    @SuppressWarnings("deprecation")
+    @Test
+    public void testCreateExtractorRegexExtractorForBody() {
+        CorrelationExtractor.getListOfMap().clear();
+        // Case 1: Parameter in response
+        sampleResult.setResponseData(
+                "<input name=\"_csrf\" type=\"hidden\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />\r\n"
+                + "<test data>");
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("RegexExtractor.refname", "_csrf");
+                put("RegexExtractor.expr", "_csrf\" type=\"hidden\" value=\"(.*?)\" />");
+                put("RegexExtractor.match_number", "1");
+                put("testname", "2 /login");
+                put("RegexExtractor.template", "$1$");
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, OTHER);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 2: Parameter in response with two occurrences of the parameter name
+        sampleResult.setResponseData(
+                "<input name=\"_csrf\" id=\"_csrf\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />");
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("RegexExtractor.refname", "_csrf");
+                put("RegexExtractor.expr", "_csrf\" value=\"(.*?)\" />");
+                put("RegexExtractor.match_number", "1");
+                put("testname", "2 /login");
+                put("RegexExtractor.template", "$1$");
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, OTHER);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 3: Parameter not in response
+        sampleResult.setResponseData("response data");
+        // No change in result
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, OTHER);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+    }
 
-        List<String> arguments = new ArrayList<>();
-        arguments.add("csrf");
-
-        SampleResult sampleResult = new SampleResult();
-        sampleResult.setResponseData("<html><head><title>Login Page</title></head><body onload='document.f.username.focus();'>"
-                + "<h3>Login with Username and Password</h3><form name='f' action='/login' method='POST'><table> "
-                + "<tr><td>User:</td><td><input type='text' name='username' value=''></td></tr>"
-                + "<tr><td>Password:</td><td><input type='password' name='password'/></td></tr>"
-                + "<tr><td colspan='2'><input name=\"submit\" type=\"submit\" value=\"Login\"/></td></tr>"
-                + "</table></form></body></html>");
-        sampleResult.setSampleLabel("2 /login");
-        sampleResult.setContentType("text/html;charset=UTF-8");
-        sampleResult.setResponseHeaders("HTTP/1.1 302 Found "
-                + "Server: Apache-Coyote/1.1"
-                + "X-Content-Type-Options: nosniff"
-                + "X-XSS-Protection: 1; mode=block"
-                + "Cache-Control: no-cache, no-store, max-age=0, must-revalidate"
-                + "Pragma: no-cache"
-                + "Expires: 0"
-                + "X-Frame-Options: DENY"
-                + "Set-Cookie: JSESSIONID=32BD75B4E8DA8B28FC0526E3F1F917CB; Path=/; HttpOnly"
-                + "Location: http://localhost:8080/login"
-                + "Content-Length: 0"
-                + "Date: Tue, 03 Sep 2019 09:14:28 GMT"
-                +"csrf: 7d1de481-34af-4342-a9b4-b8288c451f7c"
-                + "Connection: close");
-
-        CorrelationExtractor.createRegularExtractor(sampleResult,  arguments, bodyParameterMap);
-
+    @Test
+    public void testCreateExtractorRegexExtractorForHeader() {
+        CorrelationExtractor.getListOfMap().clear();
+        // Case 1: Parameter in Header as single value
+        sampleResult.setResponseHeaders("HTTP/1.1 200 OK\r\n" +
+                "Authorization: Bearer hfkjdsafbdzjhkdkjsv\r\n" +
+                "Content-Language: en-US");
+        parameterMap.put("access_token", "Bearer hfkjdsafbdzjhkdkjsv");
+        argument = "access_token";
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("RegexExtractor.refname", "access_token");
+                put("RegexExtractor.expr", "Authorization: (.*?)$");
+                put("RegexExtractor.match_number", "1");
+                put("RegexExtractor.useHeaders", "true");
+                put("testname", "2 /login");
+                put("RegexExtractor.template", "$1$");
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, HEADER);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 2: Parameter in Header in Cookie
+        sampleResult.setResponseHeaders("HTTP/1.1 200 OK\r\n" +
+                "Set-Cookie: X-CSRF-TOKEN=aghvvcga27cac7cacdccdv32; STATE=/;\r\n" +
+                "Content-Language: en-US");
+        parameterMap.put("_csrf(1)", "aghvvcga27cac7cacdccdv32");
+        argument = "_csrf(1)";
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("RegexExtractor.refname", "_csrf(1)");
+                put("RegexExtractor.expr", "Set-Cookie: X-CSRF-TOKEN=(.*?);");
+                put("RegexExtractor.match_number", "1");
+                put("RegexExtractor.useHeaders", "true");
+                put("testname", "2 /login");
+                put("RegexExtractor.template", "$1$");
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, HEADER);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // Case 3: Parameter not in Header
+        // This case shouldn't occur but it is still tested
+        sampleResult.setResponseHeaders("response data");
+        // No change in result
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, OTHER);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
     }
 }

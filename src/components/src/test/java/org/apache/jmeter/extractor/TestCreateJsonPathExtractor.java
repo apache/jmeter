@@ -18,15 +18,18 @@
 
 package org.apache.jmeter.extractor;
 
+import javax.xml.transform.TransformerException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TestCreateCssSelectorExtractor {
+public class TestCreateJsonPathExtractor {
 
     @Test
-    public void testToAttributeSelector() {
-        Assertions.assertEquals("[id=javax.faces.ViewState]",
-                CreateCssSelectorExtractor.toAttributeSelector("#javax.faces.ViewState"));
+    public void testCreateJsonPathExtractorThrowsException() throws TransformerException {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            CreateJsonPathExtractor.createJsonPathExtractor(null, null, "_csrf", "2 /login", "application/xml");
+        });
     }
 
 }

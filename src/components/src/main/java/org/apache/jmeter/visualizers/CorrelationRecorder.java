@@ -22,6 +22,12 @@ import org.apache.commons.collections.Buffer;
 
 public class CorrelationRecorder {
 
+    //TODO: FixMe: Perhaps a Results Collector named Correlation Recorder
+    // (+) HTTP(S) Test Script Recorder
+    //  |-----Correlation Recorder
+    // followed by a Correlation template(?)
+    // Also, based on the recorded data in correlation template,
+    // enable/disable or show/hide(?) the correlation option
     public static Buffer buffer;
 
 }

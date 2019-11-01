@@ -47,7 +47,7 @@ public final class ActionNames {
     public static final String COLLAPSE_ALL     = "collapse all"; // $NON-NLS-1$
     public static final String COMPILE_JSR223   = "compile_jsr223"; // $NON-NLS-1$
     public static final String COPY             = "Copy"; // $NON-NLS-1$
-    public static final String CORRELATION   = "correlation"; //$NON-NLS-1$
+    public static final String CORRELATION      = "correlation"; //$NON-NLS-1$
     public static final String CUT              = "Cut"; // $NON-NLS-1$
     public static final String DEBUG_ON         = "debug_on"; // $NON-NLS-1$
     public static final String DEBUG_OFF        = "debug_off"; // $NON-NLS-1$

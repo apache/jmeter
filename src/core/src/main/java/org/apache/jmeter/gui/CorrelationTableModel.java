@@ -24,14 +24,24 @@ public class CorrelationTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 5071306820857374637L;
 
-    public static Object[][] rowData = null;
+    protected static Object[][] rowData = null;
 
-    String[] columnNames = { "Select field for correlation", "variable name", "value 1", "value 2" };
+    public static Object[][] getRowData() {
+        return rowData;
+    }
+
+    public static void setRowData(Object[][] rowData) {
+        CorrelationTableModel.rowData = rowData;
+    }
+
+    // strings can be externalized?
+    String[] columnNames = { "Select parameters to correlate", "Parameter", "value 1", "value 2" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
     public int getColumnCount() {
         return columnNames.length;
     }
 
+    @Override
     public String getColumnName(int column) {
         return columnNames[column];
     }
@@ -44,14 +54,17 @@ public class CorrelationTableModel extends AbstractTableModel {
         return rowData[row][column];
     }
 
-    public Class getColumnClass(int column) {
+    @Override
+    public Class<?> getColumnClass(int column) {
         return column == 0 ? Boolean.class : String.class;
     }
 
+    @Override
     public void setValueAt(Object value, int row, int column) {
         rowData[row][column] = value;
     }
 
+    @Override
     public boolean isCellEditable(int row, int column) {
         // Only make the first column editable
         return column == 0;

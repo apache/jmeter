@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,54 +29,138 @@ import org.apache.jmeter.protocol.http.gui.action.Correlation;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestCorrelation {
 
-    @Before
-    public void setUp() {
+    private List<HTTPSamplerBase> requests;
+    private Map<String, String> jmxParameterMap;
+    private HTTPSamplerBase loginRequest;
+    private HTTPSamplerBase logoutRequest;
 
+    @BeforeEach
+    public void setup() {
+        requests = new ArrayList<>();
+        loginRequest = new HTTPSamplerProxy();
+        loginRequest.setDomain("localhost");
+        logoutRequest = new HTTPSamplerProxy();
+        logoutRequest.setDomain("localhost");
+        jmxParameterMap = new HashMap<>();
     }
 
     @Test
-    public void testCreateJmxObjectMap() {
+    public void testCreateJmxParameterMapRequestBody() {
+        // One request, distinct parameters
+        loginRequest.setPath("/login");
+        Arguments loginRequestArguments = new Arguments();
+        loginRequestArguments.addArgument(new HTTPArgument("_csrf", "dummytoken"));
+        loginRequestArguments.addArgument(new HTTPArgument("username", "dummyusername"));
+        loginRequestArguments.addArgument(new HTTPArgument("password", "dummypassword"));
+        loginRequest.setArguments(loginRequestArguments);
+        requests.add(loginRequest);
+        // Result Data
+        jmxParameterMap.put("_csrf", "dummytoken");
+        jmxParameterMap.put("username", "dummyusername");
+        jmxParameterMap.put("password", "dummypassword");
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
 
-        List<HTTPSamplerBase> request1 = new ArrayList<>();
-        HTTPSamplerBase base = new HTTPSamplerProxy();
-        base.setPath("/login");
-        base.setDomain("localhost");
-        base.setPort(8080);
-        Arguments arguments = new Arguments();
-        arguments.addArgument(new HTTPArgument("_csrf","abc@1234"));
-        arguments.addArgument(new HTTPArgument("_csrf","av4556svrsh65"));
-        arguments.addArgument(new HTTPArgument("username","ladd"));
-        arguments.addArgument(new HTTPArgument("password","pass"));
-        base.setArguments(arguments);
-        request1.add(base);
-        Correlation.createJmxObjectMap(request1);
+        // Add request with exactly same parameter name and same values
+        requests.add(loginRequest);
+        // Results data should be unchanged
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+
+        // Add request with same parameter name but different value
+        HTTPSamplerBase logoutRequest = new HTTPSamplerProxy();
+        logoutRequest.setPath("/logout");
+        Arguments logoutRequestArguments = new Arguments();
+        logoutRequestArguments.addArgument(new HTTPArgument("_csrf", "dummytoken2"));
+        logoutRequest.setArguments(logoutRequestArguments);
+        requests.add(logoutRequest);
+        // Result Data
+        jmxParameterMap.put("_csrf(1)", "dummytoken2");
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+    }
+
+    @Test
+    public void testCreateJmxParameterMapRequestPath() {
+        // One request, distinct parameters
+        loginRequest.setPath("/login?username=dummyusername&password=dummypassword&_csrf=dummytoken");
+        requests.add(loginRequest);
+        // Result Data
+        jmxParameterMap.put("_csrf", "dummytoken");
+        jmxParameterMap.put("username", "dummyusername");
+        jmxParameterMap.put("password", "dummypassword");
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+
+        // Add request with exactly same parameter name and same values
+        requests.add(loginRequest);
+        // Results data should be unchanged
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+
+        // Add request with same parameter name but different value
+        HTTPSamplerBase logoutRequest = new HTTPSamplerProxy();
+        logoutRequest.setPath("/logout?_csrf=dummytoken2");
+        requests.add(logoutRequest);
+        // Result Data
+        jmxParameterMap.put("_csrf(1)", "dummytoken2");
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+    }
+
+    @Test
+    public void testCreateJmxParameterMapRequestPathAndBody() {
+        // One request, distinct parameters in both path and body
+        loginRequest.setPath("/login?state=dummystate");
+        Arguments loginRequestArguments = new Arguments();
+        loginRequestArguments.addArgument(new HTTPArgument("_csrf", "tokenvalue1"));
+        loginRequestArguments.addArgument(new HTTPArgument("username", "dummyusername"));
+        loginRequestArguments.addArgument(new HTTPArgument("password", "dummypassword"));
+        loginRequest.setArguments(loginRequestArguments);
+        requests.add(loginRequest);
+        // Result Data
+        jmxParameterMap.put("_csrf", "tokenvalue1");
+        jmxParameterMap.put("username", "dummyusername");
+        jmxParameterMap.put("password", "dummypassword");
+        jmxParameterMap.put("state", "dummystate");
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+
+        // Add request with same parameter name and same values
+        requests.add(loginRequest);
+        // Results data should be unchanged
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+
+        // Add request with same parameter name but different values
+        HTTPSamplerBase logoutRequest = new HTTPSamplerProxy();
+        logoutRequest.setPath("/logout?state=dummystate2");
+        Arguments logoutRequestArguments = new Arguments();
+        logoutRequestArguments.addArgument(new HTTPArgument("_csrf", "tokenvalue2"));
+        logoutRequest.setArguments(logoutRequestArguments);
+        requests.add(logoutRequest);
+        // Results data
+        jmxParameterMap.put("_csrf(1)", "tokenvalue2");
+        jmxParameterMap.put("state(1)", "dummystate2");
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
     }
 
     @Test
     public void testExtractCorrelationCandidates() {
-        Map<String, String> firstJmxMap = new HashMap<>();
-        Map<String, String> secondJmxMap = new HashMap<>();
-
-        firstJmxMap.put("_csrf", "abc@123456");
-        secondJmxMap.put("_csrf", "av45svrsh65");
-        Correlation.extractCorrelationCandidates(firstJmxMap,secondJmxMap);
-    }
-
-    @Test
-    public void testExtractCorrelationCandidatesElseBlock() {
-        Map<String, String> firstJmxMap = new HashMap<>();
-        Map<String, String> secondJmxMap = new HashMap<>();
-
-        firstJmxMap.put("_csrf", "abc@123456");
-        firstJmxMap.put("_csrf", "abc@123456890");
-        secondJmxMap.put("_csrf", "av45svrsh65");
-        secondJmxMap.put("_csrf", "av45svrsh232365");
-        Correlation.extractCorrelationCandidates(firstJmxMap,secondJmxMap);
+        // Test Data
+        Map<String, String> firstJmxParameterMap = new LinkedHashMap<>();
+        firstJmxParameterMap.put("username", "john");
+        firstJmxParameterMap.put("password", "secret");
+        firstJmxParameterMap.put("_csrf", "token1");
+        firstJmxParameterMap.put("_csrf(1)", "token2");
+        Map<String, String> secondJmxParameterMap = new LinkedHashMap<>();
+        secondJmxParameterMap.put("username", "john");
+        secondJmxParameterMap.put("password", "secret");
+        secondJmxParameterMap.put("_csrf", "token3");
+        secondJmxParameterMap.put("_csrf(1)", "token4");
+        // Result Data
+        Object[][] tableData = { { Boolean.FALSE, "_csrf", "token1", "token3" },
+                { Boolean.FALSE, "_csrf(1)", "token2", "token4" } };
+        Assertions.assertArrayEquals(tableData,
+                Correlation.extractCorrelationCandidates(firstJmxParameterMap, secondJmxParameterMap));
     }
 
 }

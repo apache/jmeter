@@ -19,7 +19,6 @@
 package org.apache.jmeter.protocol.http.gui;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,8 +35,7 @@ import org.slf4j.LoggerFactory;
 
 public class CorrelationDialoger extends AbstractActionWithNoRunningTest {
 
-    // Initialize variables
-    private static final String[] exts = new String[] { ".jmx" };
+    private static final String[] exts = new String[] { ".jmx" }; //$NON-NLS-1$
     private static final Set<String> commands = new HashSet<>();
     private static final Logger log = LoggerFactory.getLogger(CorrelationDialoger.class);
 
@@ -51,29 +49,20 @@ public class CorrelationDialoger extends AbstractActionWithNoRunningTest {
 
     @Override
     protected void doActionAfterCheck(ActionEvent e) throws IllegalUserActionException {
-
-        final JFileChooser chooser = FileDialoger.promptToCorrelationFile(exts); // $NON-NLS-1$
+        final JFileChooser chooser = FileDialoger.promptToCorrelationFile(exts);
         if (chooser == null) {
             return;
         }
-
-        int retVal = chooser.showDialog(null, JMeterUtils.getResString("correlation"));
+        int retVal = chooser.showDialog(null, JMeterUtils.getResString("correlation")); //$NON-NLS-1$
         if (retVal == JFileChooser.APPROVE_OPTION) {
-
             // extract the candidates variables for
-            //correlation by comparing the JMX request objects.
-            try {
-              Correlation.extractParameters(chooser.getSelectedFile());
-            } catch (IOException ioException) {
-                log.error(ioException.getMessage());
-                return;
-            }
-
+            // correlation by comparing the JMX request objects.
+            Correlation.extractParameters(chooser.getSelectedFile());
             // create the JFrame for showing the list
             // of correlation candidates variables.
-            CorrelationGui.createCoRelationGui(chooser);
+            log.debug("Creating Correlation table");
+            CorrelationGui.createCorrelationGui(chooser);
         }
-
     }
 
     @Override
