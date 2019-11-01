@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.SystemCommand;
@@ -87,9 +88,12 @@ public class HtmlReportGenerator {
                 LOGGER.info("The HTML report generation failed and returned: {}", commandExecutionOutput);
                 return errorMessageList;
             }
-        } catch (InterruptedException | IOException e) {
+        } catch (InterruptedException | TimeoutException | IOException e) {
             errorMessageList.add(commandExecutionOutput.toString());
             LOGGER.error("Error during HTML report generation:", e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
         }
         LOGGER.debug("SystemCommand ran: {}  returned: {}", generationCommand, resultCode);
         return errorMessageList;

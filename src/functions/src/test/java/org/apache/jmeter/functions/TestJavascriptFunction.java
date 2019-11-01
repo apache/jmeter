@@ -30,27 +30,24 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestJavascriptFunction extends JMeterTestCase {
-    protected AbstractFunction function;
 
+    private AbstractFunction function;
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
-    @After
+    @AfterEach
     public void tearDown() {
         JMeterUtils.getJMeterProperties().remove("javascript.use_rhino");
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         function = new JavaScript();
         result = new SampleResult();

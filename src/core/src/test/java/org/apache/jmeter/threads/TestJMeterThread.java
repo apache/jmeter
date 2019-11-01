@@ -31,11 +31,9 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-/**
- * Tests for {@link JMeterThread}
- */
 public class TestJMeterThread {
 
     private static final class DummySampler extends AbstractSampler {
@@ -91,7 +89,6 @@ public class TestJMeterThread {
     }
 
     private static class ThrowingThreadListener implements ThreadListener {
-
         private boolean throwError;
 
         public ThrowingThreadListener(boolean throwError) {
@@ -100,7 +97,7 @@ public class TestJMeterThread {
 
         @Override
         public void threadStarted() {
-            if(throwError) {
+            if (throwError) {
                 throw new NoClassDefFoundError("Throw for Bug TestJMeterThread");
             } else {
                 throw new RuntimeException("Throw for Bug TestJMeterThread");
@@ -109,7 +106,7 @@ public class TestJMeterThread {
 
         @Override
         public void threadFinished() {
-            if(throwError) {
+            if (throwError) {
                 throw new NoClassDefFoundError("Throw for Bug TestJMeterThread");
             } else {
                 throw new RuntimeException("Throw for Bug TestJMeterThread");
@@ -117,18 +114,20 @@ public class TestJMeterThread {
         }
     }
 
-    @Test(expected=NoClassDefFoundError.class)
-    public void testBug61661OnError(){
-        HashTree hashTree =new HashTree();
+    @Test
+    public void testBug61661OnError() {
+        HashTree hashTree = new HashTree();
         hashTree.add("Test", new ThrowingThreadListener(true));
         JMeterThread.ThreadListenerTraverser traverser =
                 new JMeterThread.ThreadListenerTraverser(true);
-        hashTree.traverse(traverser);
+        Assertions.assertThrows(
+                NoClassDefFoundError.class,
+                () -> hashTree.traverse(traverser));
     }
 
     @Test
-    public void testBug61661OnException(){
-        HashTree hashTree =new HashTree();
+    public void testBug61661OnException() {
+        HashTree hashTree = new HashTree();
         hashTree.add("Test", new ThrowingThreadListener(false));
         JMeterThread.ThreadListenerTraverser traverser =
                 new JMeterThread.ThreadListenerTraverser(true);
@@ -137,7 +136,6 @@ public class TestJMeterThread {
 
     @Test
     public void testBug63490EndTestWhenDelayIsTooLongForScheduler() {
-
         JMeterContextService.getContext().setVariables(new JMeterVariables());
 
         HashTree testTree = new HashTree();

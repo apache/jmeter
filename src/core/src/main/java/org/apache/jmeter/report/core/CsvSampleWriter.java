@@ -51,13 +51,10 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     private long sampleCount;
 
     /**
-     * Constructor for a CsvSampleWriter.<br>
-     * The newly created instance has to be supplied with a Writer to work
-     * properly.
+     * The new instance has to be supplied with a Writer to work properly.
      *
-     * @param metadata
-     *            the description for data that this writer will write. (
-     *            {@code metadata} must not be {@code null}.)
+     * @param metadata the description for data that this writer will write
+     *                 ({@code metadata} must not be {@code null}).
      */
     public CsvSampleWriter(SampleMetadata metadata) {
         super();
@@ -68,13 +65,9 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     }
 
     /**
-     * Constructor for a CsvSampleWriter.
-     *
-     * @param output
-     *            the writer to write data to. (Must not be {@code null})
-     * @param metadata
-     *            the description for data that this writer will write. (
-     *            {@code metadata} must not be {@code null}.)
+     * @param output   the writer to write data to. (Must not be {@code null})
+     * @param metadata the description for data that this writer will write. (
+     *                 {@code metadata} must not be {@code null}.)
      */
     public CsvSampleWriter(Writer output, SampleMetadata metadata) {
         this(metadata);
@@ -82,13 +75,9 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     }
 
     /**
-     * Constructor for a CsvSampleWriter.
-     *
-     * @param output
-     *            the output stream to write data to. (Must not be {@code null})
-     * @param metadata
-     *            the description for data that this writer will write. (
-     *            {@code metadata} must not be {@code null}.)
+     * @param output   the output stream to write data to. (Must not be {@code null})
+     * @param metadata the description for data that this writer will write. (
+     *                 {@code metadata} must not be {@code null}.)
      */
     public CsvSampleWriter(OutputStream output, SampleMetadata metadata) {
         this(metadata);
@@ -96,13 +85,9 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     }
 
     /**
-     * Constructor for a CsvSampleWriter.
-     *
-     * @param output
-     *            the output file to write data to. (Must not be {@code null})
-     * @param metadata
-     *            the description for data that this writer will write. (
-     *            {@code metadata} must not be {@code null}.)
+     * @param output   the output file to write data to. (Must not be {@code null})
+     * @param metadata the description for data that this writer will write. (
+     *                 {@code metadata} must not be {@code null}.)
      */
     public CsvSampleWriter(File output, SampleMetadata metadata) {
         this(metadata);
@@ -112,8 +97,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     /**
      * Set the char to use for separation of data in a line.
      *
-     * @param separator
-     *            to use
+     * @param separator to use
      */
     public void setSeparator(char separator) {
         this.separator = separator;

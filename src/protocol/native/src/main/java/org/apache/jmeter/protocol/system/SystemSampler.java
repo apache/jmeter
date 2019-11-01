@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
@@ -38,7 +39,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.SystemCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,8 +47,6 @@ import org.slf4j.LoggerFactory;
  * A sampler for executing a System function.
  */
 public class SystemSampler extends AbstractSampler {
-
-    private static final int POLL_INTERVAL = JMeterUtils.getPropDefault("os_sampler.poll_for_timeout", SystemCommand.POLL_INTERVAL);
 
     private static final long serialVersionUID = 1;
 
@@ -151,7 +149,7 @@ public class SystemSampler extends AbstractSampler {
 
         SystemCommand nativeCommand = null;
         try {
-            nativeCommand = new SystemCommand(directory, getTimeout(), POLL_INTERVAL, env, getStdin(), getStdout(), getStderr());
+            nativeCommand = new SystemCommand(directory, getTimeout(), 0, env, getStdin(), getStdout(), getStderr());
             results.sampleStart();
             int returnCode = nativeCommand.run(cmds);
             results.sampleEnd();
@@ -179,6 +177,11 @@ public class SystemSampler extends AbstractSampler {
             results.setResponseCode("500"); //$NON-NLS-1$
             results.setResponseMessage("System Sampler interrupted whilst executing system call: " + ie);
             Thread.currentThread().interrupt();
+        } catch (TimeoutException e) {
+            results.sampleEnd();
+            results.setSuccessful(false);
+            results.setResponseCode("500");
+            results.setResponseMessage(e.getMessage());
         }
 
         if (nativeCommand != null) {

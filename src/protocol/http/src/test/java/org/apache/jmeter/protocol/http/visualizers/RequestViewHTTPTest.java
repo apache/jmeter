@@ -22,11 +22,12 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import junit.framework.TestCase;
 
 public class RequestViewHTTPTest extends TestCase {
+
     @Test
     public void testGetQueryMapValueContainingAmpersand() {
         // see https://bz.apache.org/bugzilla/show_bug.cgi?id=58413

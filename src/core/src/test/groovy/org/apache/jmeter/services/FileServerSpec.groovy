@@ -31,7 +31,6 @@ class FileServerSpec extends JMeterSpec {
     def emptyFile = getResourceFilePath("testfiles/empty.csv")
     def bomFile = getResourceFilePath("testfiles/bomData.csv")
 
-
     def setup() {
         sut.resetBase()
     }

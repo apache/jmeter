@@ -32,8 +32,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,15 +41,11 @@ public class XPathAssertionTest extends JMeterTestCase {
     private static final Logger log = LoggerFactory.getLogger(XPathAssertionTest.class);
 
     private XPathAssertion assertion;
-
     private SampleResult result;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         jmctx = JMeterContextService.getContext();
         assertion = new XPathAssertion();

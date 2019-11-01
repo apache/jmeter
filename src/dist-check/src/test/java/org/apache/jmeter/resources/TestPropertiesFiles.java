@@ -28,10 +28,9 @@ import java.util.Properties;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestPropertiesFiles extends JMeterTestCase {
-
 
     @Test
     public void testUserProperties() throws Exception {

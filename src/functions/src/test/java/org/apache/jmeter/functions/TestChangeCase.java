@@ -18,7 +18,8 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -31,21 +32,15 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-/**
- * Test{@link ChangeCase} ChangeCase
- *
- * @see ChangeCase
- * @since 4.0
- */
 public class TestChangeCase extends JMeterTestCase {
 
     private AbstractFunction changeCase;
     private SampleResult result;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         changeCase = new ChangeCase();
         JMeterContext jmctx = JMeterContextService.getContext();
@@ -95,10 +90,11 @@ public class TestChangeCase extends JMeterTestCase {
         assertEquals("Ab-CD eF", returnValue);
     }
 
-    @Test(expected = InvalidVariableException.class)
+    @Test
     public void testChangeCaseError() throws Exception {
-        changeCase.setParameters(new LinkedList<>());
-        changeCase.execute(result, null);
+        assertThrows(
+                InvalidVariableException.class,
+                () -> changeCase.setParameters(new LinkedList<>()));
     }
 
     @Test

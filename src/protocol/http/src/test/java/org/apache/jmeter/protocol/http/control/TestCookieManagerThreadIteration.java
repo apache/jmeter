@@ -30,8 +30,8 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestCookieManagerThreadIteration {
     private JMeterContext jmctx;
@@ -40,7 +40,7 @@ public class TestCookieManagerThreadIteration {
     private static final String DYNAMIC_COOKIE = "dynamic_cookie_added_by_user";
     private static final String STATIC_COOKIE = "static_cookie";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmvars = new JMeterVariables();

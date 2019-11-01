@@ -82,12 +82,20 @@ fun String?.toBool(nullAs: Boolean, blankAs: Boolean, default: Boolean) =
         else -> equals("true", ignoreCase = true)
     }
 
+fun classExists(name: String) =
+    try {
+        Class.forName(name)
+        true
+    } catch (e: Throwable) {
+        false
+    }
+
 if (!(project.findProperty("enableJavaFx") as? String)
-        .toBool(nullAs = false, blankAs = true, default = false)
+        .toBool(nullAs = classExists("javafx.application.Platform"), blankAs = true, default = false)
 ) {
     // JavaFX is not present in Maven Central, so exclude the file unless explicitly asked by
     // -PenableJavaFx
-    logger.debug("RenderInBrowser is excluded from compilation. If you want to compile it, add -PenableJavaFx")
+    logger.lifecycle("RenderInBrowser is excluded from compilation. If you want to compile it, add -PenableJavaFx")
     sourceSets {
         main {
             java {

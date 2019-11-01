@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.nio.file.NoSuchFileException;
@@ -30,33 +31,30 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-/**
- * File data container for CSV (and similar delimited) files Data is accessible
- * via row and column number
- *
- */
 public class TestFileRowColContainer extends JMeterTestCase implements JMeterSerialTest {
 
     private String defaultBase = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         defaultBase = FileServer.getDefaultBase();
         FileServer.getFileServer().setBase(new File(JMeterUtils.getJMeterHome() + "/bin"));
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         FileServer.getFileServer().setBase(new File(defaultBase));
     }
 
-    @Test(expected = NoSuchFileException.class)
-    public void testNull() throws Exception {
-        new FileRowColContainer(findTestPath("testfiles/xyzxyz"));
+    @Test
+    public void testNull() {
+        assertThrows(
+                NoSuchFileException.class,
+                () -> new FileRowColContainer(findTestPath("testfiles/xyzxyz")));
     }
 
     @Test
@@ -70,7 +68,6 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
         assertEquals(2, f.nextRow());
         assertEquals(3, f.nextRow());
         assertEquals(0, f.nextRow());
-
     }
 
     @Test
@@ -84,7 +81,6 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
         assertEquals(2, f.nextRow());
         assertEquals(3, f.nextRow());
         assertEquals(0, f.nextRow());
-
     }
 
     @Test

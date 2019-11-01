@@ -31,21 +31,18 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestRandomFromMultipleVars extends JMeterTestCase {
+
     private SampleResult result;
-
     private AbstractFunction function;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         result = new SampleResult();
         jmctx = JMeterContextService.getContext();

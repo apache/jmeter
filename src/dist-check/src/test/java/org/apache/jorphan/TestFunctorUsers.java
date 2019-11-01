@@ -28,48 +28,45 @@ import org.apache.jmeter.visualizers.StatGraphVisualizer;
 import org.apache.jmeter.visualizers.StatVisualizer;
 import org.apache.jmeter.visualizers.SummaryReport;
 import org.apache.jmeter.visualizers.TableVisualizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-/*
- * Unit tests for classes that use Functors
- *
- */
+/** Unit tests for classes that use Functors */
 public class TestFunctorUsers extends JMeterTestCase {
 
     @Test
     @SuppressWarnings("deprecation")
-    public void testSummaryReport() throws Exception{
-        assertTrue("SummaryReport Functor",SummaryReport.testFunctors());
+    public void testSummaryReport() throws Exception {
+        assertTrue("SummaryReport Functor", SummaryReport.testFunctors());
     }
 
     @Test
-    public void testTableVisualizer() throws Exception{
-        assertTrue("TableVisualizer Functor",TableVisualizer.testFunctors());
+    public void testTableVisualizer() throws Exception {
+        assertTrue("TableVisualizer Functor", TableVisualizer.testFunctors());
     }
 
     @Test
-    public void testStatGraphVisualizer() throws Exception{
-        assertTrue("StatGraphVisualizer Functor",StatGraphVisualizer.testFunctors());
+    public void testStatGraphVisualizer() throws Exception {
+        assertTrue("StatGraphVisualizer Functor", StatGraphVisualizer.testFunctors());
     }
 
     @Test
     @SuppressWarnings("deprecation")
-    public void testStatVisualizer() throws Exception{
-        assertTrue("StatVisualizer Functor",StatVisualizer.testFunctors());
+    public void testStatVisualizer() throws Exception {
+        assertTrue("StatVisualizer Functor", StatVisualizer.testFunctors());
     }
 
     @Test
-    public void testArgumentsPanel() throws Exception{
-        assertTrue("ArgumentsPanel Functor",ArgumentsPanel.testFunctors());
+    public void testArgumentsPanel() throws Exception {
+        assertTrue("ArgumentsPanel Functor", ArgumentsPanel.testFunctors());
     }
 
     @Test
-    public void testHTTPArgumentsPanel() throws Exception{
-        assertTrue("HTTPArgumentsPanel Functor",HTTPArgumentsPanel.testFunctors());
+    public void testHTTPArgumentsPanel() throws Exception {
+        assertTrue("HTTPArgumentsPanel Functor", HTTPArgumentsPanel.testFunctors());
     }
 
     @Test
-    public void testLDAPArgumentsPanel() throws Exception{
-        assertTrue("LDAPArgumentsPanel Functor",LDAPArgumentsPanel.testFunctors());
+    public void testLDAPArgumentsPanel() throws Exception {
+        assertTrue("LDAPArgumentsPanel Functor", LDAPArgumentsPanel.testFunctors());
     }
 }

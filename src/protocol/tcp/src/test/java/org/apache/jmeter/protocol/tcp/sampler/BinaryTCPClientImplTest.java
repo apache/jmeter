@@ -27,7 +27,7 @@ import java.io.InputStream;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class BinaryTCPClientImplTest {
 

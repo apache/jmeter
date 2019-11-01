@@ -670,32 +670,24 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                 }
                 final AnnotatedTestCase at = new AnnotatedTestCase(m, expectedException, timeout);
                 testCase = at;
-                protectable = new Protectable() {
-                    @Override
-                    public void protect() throws Throwable {
-                        at.runTest();
-                    }
-                };
+                protectable = at::runTest;
             } else {
                 this.testCase = (TestCase) this.testObject;
                 final Object theClazz = this.testObject; // Must be final to create instance
-                protectable = new Protectable() {
-                    @Override
-                    public void protect() throws Throwable {
-                        try {
-                            m.invoke(theClazz,new Object[0]);
-                        } catch (InvocationTargetException e) {
-                            /*
-                             * Calling a method via reflection results in wrapping any
-                             * Exceptions in ITE; unwrap these here so runProtected can
-                             * allocate them correctly.
-                             */
-                            Throwable t = e.getCause();
-                            if (t != null) {
-                                throw t;
-                            }
-                            throw e;
+                protectable = () -> {
+                    try {
+                        m.invoke(theClazz, new Object[0]);
+                    } catch (InvocationTargetException e) {
+                        /*
+                         * Calling a method via reflection results in wrapping any
+                         * Exceptions in ITE; unwrap these here so runProtected can
+                         * allocate them correctly.
+                         */
+                        Throwable t = e.getCause();
+                        if (t != null) {
+                            throw t;
                         }
+                        throw e;
                     }
                 };
             }

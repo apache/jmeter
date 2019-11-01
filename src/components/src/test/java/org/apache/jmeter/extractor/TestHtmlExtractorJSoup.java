@@ -27,25 +27,21 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestHtmlExtractorJSoup {
 
     protected HtmlExtractor extractor;
-
     protected SampleResult result;
-
     protected JMeterVariables vars;
-
     protected JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         extractor = new HtmlExtractor();
-        extractor.setThreadContext(jmctx);// This would be done by the run
-                                          // command
+        extractor.setThreadContext(jmctx);// This would be done by the run command
         extractor.setRefName("regVal");
         result = new SampleResult();
         String data = "<p>An <a href='http://example.com/'><b>example1</b></a> link.</p>"+

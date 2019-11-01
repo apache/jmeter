@@ -132,8 +132,15 @@ fi
 : "${JMETER_OPTS:=""}"
 case `uname` in
    Darwin*)
-   # Add Mac-specific property - should be ignored elsewhere (Bug 47064)
-   JMETER_OPTS="${JMETER_OPTS} -Xdock:name=JMeter -Xdock:icon=\"${PRGDIR}/../docs/images/jmeter_square.png\" -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"
+   # Add Mac-specific properties - should be ignored elsewhere (Bug 47064)
+   if [ -f ${PRGDIR}/../xdocs/images/jmeter_square.png ]; then
+       JMETER_OPTS="${JMETER_OPTS} -Xdock:icon=${PRGDIR}/../xdocs/images/jmeter_square.png"
+   elif [ -f ${PRGDIR}/../docs/images/jmeter_square.png ]; then
+       JMETER_OPTS="${JMETER_OPTS} -Xdock:icon=${PRGDIR}/../docs/images/jmeter_square.png"
+   fi
+   # Note: macOS still shows "java" process name (see https://bugs.openjdk.java.net/browse/JDK-8173753)
+   # The workaround could be to distribute *.dmg bundle
+   JMETER_OPTS="${JMETER_OPTS} -Xdock:name=JMeter -Xdock:icon=${PRGDIR}/../docs/images/jmeter_square.png -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"
    ;;
 esac
 

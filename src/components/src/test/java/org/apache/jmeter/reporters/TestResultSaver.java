@@ -18,6 +18,11 @@
 
 package org.apache.jmeter.reporters;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -28,20 +33,17 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-/**
- * Test for {@link ResultSaver}
- */
 public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest {
+
     private ResultSaver resultSaver;
     private SampleResult sampleResult;
     private final String data = "response Data";
     private final JMeterVariables vars = new JMeterVariables();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         JMeterContext jmctx = JMeterContextService.getContext();
         resultSaver = new ResultSaver();
@@ -58,11 +60,11 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
         resultSaver.testStarted();
         resultSaver.sampleOccurred(new SampleEvent(sampleResult, "JUnit-TG"));
         String fileName = sampleResult.getResultFileName();
-        Assert.assertNotNull(fileName);
-        Assert.assertEquals("00001.unknown", fileName);
+        assertNotNull(fileName);
+        assertEquals("00001.unknown", fileName);
         File file = new File(FileServer.getDefaultBase(), fileName);
-        Assert.assertTrue(file.exists());
-        Assert.assertTrue(file.delete());
+        assertTrue(file.exists());
+        assertTrue(file.delete());
     }
 
     @Test
@@ -73,12 +75,12 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
         resultSaver.testStarted();
         resultSaver.sampleOccurred(new SampleEvent(sampleResult, "JUnit-TG"));
         String fileName = sampleResult.getResultFileName();
-        Assert.assertNotNull(fileName);
-        Assert.assertEquals("00001.unknown", fileName);
+        assertNotNull(fileName);
+        assertEquals("00001.unknown", fileName);
         File file = new File(FileServer.getDefaultBase(), fileName);
-        Assert.assertTrue(file.exists());
-        Assert.assertTrue(file.delete());
-        Assert.assertEquals("00001.unknown", vars.get("myVar"));
+        assertTrue(file.exists());
+        assertTrue(file.delete());
+        assertEquals("00001.unknown", vars.get("myVar"));
     }
 
     @Test
@@ -90,8 +92,8 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
         resultSaver.testStarted();
         resultSaver.sampleOccurred(new SampleEvent(sampleResult, "JUnit-TG"));
         String fileName = sampleResult.getResultFileName();
-        Assert.assertEquals("", fileName);
-        Assert.assertNull(vars.get("myVar"));
+        assertEquals("", fileName);
+        assertNull(vars.get("myVar"));
     }
 
     @Test
@@ -104,36 +106,35 @@ public class TestResultSaver extends JMeterTestCase implements JMeterSerialTest 
         sampleResult.setSuccessful(false);
         resultSaver.sampleOccurred(new SampleEvent(sampleResult, "JUnit-TG"));
         String fileName = sampleResult.getResultFileName();
-        Assert.assertNotNull(fileName);
-        Assert.assertEquals("00001.unknown", fileName);
+        assertNotNull(fileName);
+        assertEquals("00001.unknown", fileName);
         File file = new File(FileServer.getDefaultBase(), fileName);
-        Assert.assertTrue(file.exists());
-        Assert.assertTrue(file.delete());
-        Assert.assertEquals("00001.unknown", vars.get("myVar"));
+        assertTrue(file.exists());
+        assertTrue(file.delete());
+        assertEquals("00001.unknown", vars.get("myVar"));
     }
 
     @Test
     public void testMakeFileName() {
         resultSaver.setProperty(ResultSaver.FILENAME, "test");
         resultSaver.testStarted();
-        Assert.assertEquals("test", resultSaver.makeFileName(null, true, true));
+        assertEquals("test", resultSaver.makeFileName(null, true, true));
         resultSaver.testStarted();
-        Assert.assertEquals("test", resultSaver.makeFileName("text/plain", true, true));
+        assertEquals("test", resultSaver.makeFileName("text/plain", true, true));
         resultSaver.testStarted();
-        Assert.assertEquals("test", resultSaver.makeFileName("text/plain;charset=utf8", true, true));
+        assertEquals("test", resultSaver.makeFileName("text/plain;charset=utf8", true, true));
 
-        Assert.assertEquals("test1.plain", resultSaver.makeFileName("text/plain", false, false));
+        assertEquals("test1.plain", resultSaver.makeFileName("text/plain", false, false));
         resultSaver.testStarted();
-        Assert.assertEquals("test.plain", resultSaver.makeFileName("text/plain", true, false));
+        assertEquals("test.plain", resultSaver.makeFileName("text/plain", true, false));
         resultSaver.testStarted();
-        Assert.assertEquals("test1", resultSaver.makeFileName("text/plain", false, true));
-        Assert.assertEquals("test2", resultSaver.makeFileName("text/plain", false, true));
-
-        resultSaver.testStarted();
-        Assert.assertEquals("test.plain", resultSaver.makeFileName("text/plain;charset=UTF-8", true, false));
+        assertEquals("test1", resultSaver.makeFileName("text/plain", false, true));
+        assertEquals("test2", resultSaver.makeFileName("text/plain", false, true));
 
         resultSaver.testStarted();
-        Assert.assertEquals("test.unknown", resultSaver.makeFileName(null, true, false));
+        assertEquals("test.plain", resultSaver.makeFileName("text/plain;charset=UTF-8", true, false));
 
+        resultSaver.testStarted();
+        assertEquals("test.unknown", resultSaver.makeFileName(null, true, false));
     }
 }

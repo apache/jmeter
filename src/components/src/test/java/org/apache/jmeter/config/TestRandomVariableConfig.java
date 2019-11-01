@@ -18,15 +18,19 @@
 
 package org.apache.jmeter.config;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Locale;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestRandomVariableConfig extends JMeterTestCase {
 
@@ -36,10 +40,10 @@ public class TestRandomVariableConfig extends JMeterTestCase {
 
     private static final String MIN_VALUE = "0";
     private static final String MAX_VALUE = "10";
-    RandomVariableConfig config = new RandomVariableConfig();
+    private RandomVariableConfig config = new RandomVariableConfig();
 
-    @Before
-    public void setUp(){
+    @BeforeEach
+    public void setUp() {
         JMeterContext jmcx = JMeterContextService.getContext();
         jmcx.setVariables(new JMeterVariables());
         threadVars = jmcx.getVariables();
@@ -51,13 +55,13 @@ public class TestRandomVariableConfig extends JMeterTestCase {
     public void testRandom() throws Exception {
         config.setMinimumValue(MIN_VALUE);
         config.setMaximumValue(MAX_VALUE);
-        for (int i = 0; i < 100;i++) {
+        for (int i = 0; i < 100; i++) {
             config.iterationStart(null);
             String value = threadVars.get(RANDOM_VAR_NAME);
-            Assert.assertNotNull(threadVars.get(RANDOM_VAR_NAME));
+            assertNotNull(threadVars.get(RANDOM_VAR_NAME));
             int numericValue = Integer.parseInt(value);
-            Assert.assertTrue("value:" + numericValue + " is not in range [" + MIN_VALUE + "," + MAX_VALUE + "]",
-                    numericValue >= 0 && numericValue <= 10);
+            assertTrue(numericValue >= 0 && numericValue <= 10,
+                    "value:" + numericValue + " is not in range [" + MIN_VALUE + "," + MAX_VALUE + "]");
         }
     }
 
@@ -72,8 +76,8 @@ public class TestRandomVariableConfig extends JMeterTestCase {
             config.setOutputFormat("000.00");
             config.iterationStart(null);
             String value = threadVars.get(RANDOM_VAR_NAME);
-            Assert.assertNotNull(threadVars.get(RANDOM_VAR_NAME));
-            Assert.assertEquals("010.00", value);
+            assertNotNull(threadVars.get(RANDOM_VAR_NAME));
+            assertEquals("010.00", value);
         } finally {
             Locale.setDefault(prevLocale);
         }
@@ -84,7 +88,7 @@ public class TestRandomVariableConfig extends JMeterTestCase {
         config.setMinimumValue(MAX_VALUE);
         config.setMaximumValue(MIN_VALUE);
         config.iterationStart(null);
-        Assert.assertNull(threadVars.get(RANDOM_VAR_NAME));
+        assertNull(threadVars.get(RANDOM_VAR_NAME));
     }
 
 }

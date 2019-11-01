@@ -325,6 +325,6 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return the kind of user.
      */
     public boolean isSameUserOnNextIteration() {
-        return getPropertyAsBoolean(ThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION);
+        return getPropertyAsBoolean(ThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION, true);
     }
 }

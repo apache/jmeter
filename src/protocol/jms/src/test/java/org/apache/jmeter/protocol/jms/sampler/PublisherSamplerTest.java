@@ -25,23 +25,20 @@ import java.util.Locale;
 
 import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.github.benmanes.caffeine.cache.Cache;
 
-/**
- *
- */
 public class PublisherSamplerTest {
 
-    @Before
+    @BeforeEach
     public void initJMeter() {
         JMeterUtils.setLocale(new Locale("ignoreResources"));
     }
 
-    @After
+    @AfterEach
     public void resetJMeter() {
         JMeterUtils.setLocale(Locale.ENGLISH);
     }

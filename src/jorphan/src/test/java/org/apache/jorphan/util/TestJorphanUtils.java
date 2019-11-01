@@ -28,7 +28,8 @@ import java.nio.charset.StandardCharsets;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestJorphanUtils {
 
@@ -80,84 +81,79 @@ public class TestJorphanUtils {
         // Test ignore trailing split characters
         // Ignore adjacent delimiters
         assertThat("Ignore trailing split chars", JOrphanUtils.split("a,bc,,", ",", true),
-                CoreMatchers.equalTo(new String[] { "a", "bc" }));
+                CoreMatchers.equalTo(new String[]{"a", "bc"}));
     }
 
     @Test
     public void testSplitStringStringFalseWithTrailingSplitChars() {
-         // Test ignore trailing split characters
+        // Test ignore trailing split characters
         assertThat("Include the trailing split chars", JOrphanUtils.split("a,bc,,", ",", false),
-                CoreMatchers.equalTo(new String[] { "a", "bc", "", "" }));
+                CoreMatchers.equalTo(new String[]{"a", "bc", "", ""}));
     }
 
     @Test
     public void testSplitStringStringTrueWithLeadingSplitChars() {
         // Test leading split characters
         assertThat("Ignore leading split chars", JOrphanUtils.split(",,a,bc", ",", true),
-                CoreMatchers.equalTo(new String[] { "a", "bc" }));
+                CoreMatchers.equalTo(new String[]{"a", "bc"}));
     }
 
     @Test
     public void testSplitStringStringFalseWithLeadingSplitChars() {
         // Test leading split characters
         assertThat("Include leading split chars", JOrphanUtils.split(",,a,bc", ",", false),
-                CoreMatchers.equalTo(new String[] { "", "", "a", "bc" }));
+                CoreMatchers.equalTo(new String[]{"", "", "a", "bc"}));
     }
 
     @Test
     public void testSplit3() {
         String in = "a,bc,,"; // Test ignore trailing split characters
-        String[] out = JOrphanUtils.split(in, ",",true);// Ignore adjacent delimiters
-        assertThat(out, CoreMatchers.equalTo(new String[] { "a", "bc" }));
-        out = JOrphanUtils.split(in, ",",false);
-        assertThat(out, CoreMatchers.equalTo(new String[] { "a", "bc", "", "" }));
+        String[] out = JOrphanUtils.split(in, ",", true);// Ignore adjacent delimiters
+        assertThat(out, CoreMatchers.equalTo(new String[]{"a", "bc"}));
+        out = JOrphanUtils.split(in, ",", false);
+        assertThat(out, CoreMatchers.equalTo(new String[]{"a", "bc", "", ""}));
     }
 
     @Test
     public void testSplitStringStringTrueWithLeadingComplexSplitCharacters() {
         // Test leading split characters
-        assertThat(JOrphanUtils.split(" , ,a ,bc", " ,", true), CoreMatchers.equalTo(new String[] { "a", "bc" }));
+        assertThat(JOrphanUtils.split(" , ,a ,bc", " ,", true), CoreMatchers.equalTo(new String[]{"a", "bc"}));
     }
 
     @Test
     public void testSplitStringStringFalseWithLeadingComplexSplitCharacters() {
         // Test leading split characters
         assertThat(JOrphanUtils.split(" , ,a ,bc", " ,", false),
-                CoreMatchers.equalTo(new String[] { "", "", "a", "bc" }));
+                CoreMatchers.equalTo(new String[]{"", "", "a", "bc"}));
     }
 
     @Test
-    public void testSplitStringStringTrueTruncate() throws Exception
-    {
+    public void testSplitStringStringTrueTruncate() throws Exception {
         assertThat(JOrphanUtils.split("a;,b;,;,;,d;,e;,;,f", ";,", true),
-                CoreMatchers.equalTo(new String[] { "a", "b", "d", "e", "f" }));
+                CoreMatchers.equalTo(new String[]{"a", "b", "d", "e", "f"}));
     }
 
     @Test
-    public void testSplitStringStringFalseTruncate() throws Exception
-    {
+    public void testSplitStringStringFalseTruncate() throws Exception {
         assertThat(JOrphanUtils.split("a;,b;,;,;,d;,e;,;,f", ";,", false),
-                CoreMatchers.equalTo(new String[] { "a", "b", "", "", "d", "e", "", "f" }));
+                CoreMatchers.equalTo(new String[]{"a", "b", "", "", "d", "e", "", "f"}));
     }
 
     @Test
-    public void testSplitStringStringTrueDoubledSplitChar() throws Exception
-    {
+    public void testSplitStringStringTrueDoubledSplitChar() throws Exception {
         assertThat(JOrphanUtils.split("a;;b;;;;;;d;;e;;;;f", ";;", true),
-                CoreMatchers.equalTo(new String[] { "a", "b", "d", "e", "f" }));
+                CoreMatchers.equalTo(new String[]{"a", "b", "d", "e", "f"}));
     }
 
     @Test
-    public void testSplitStringStringFalseDoubledSplitChar() throws Exception
-    {
+    public void testSplitStringStringFalseDoubledSplitChar() throws Exception {
         assertThat(JOrphanUtils.split("a;;b;;;;;;d;;e;;;;f", ";;", false),
-                CoreMatchers.equalTo(new String[] { "a", "b", "", "", "d", "e", "", "f" }));
-
+                CoreMatchers.equalTo(new String[]{"a", "b", "", "", "d", "e", "", "f"}));
     }
 
     // Empty string
     @Test
-    public void testEmpty(){
+    public void testEmpty() {
         String[] out = JOrphanUtils.split("", ",", false);
         assertEquals(0, out.length);
     }
@@ -166,124 +162,128 @@ public class TestJorphanUtils {
     @Test
     public void testSplitSSSSingleDelimiterWithDefaultValue() {
         // Test non-empty parameters
-        assertThat(JOrphanUtils.split("a,bc,,", ",", "?"), CoreMatchers.equalTo(new String[] { "a", "bc", "?", "?" }));
+        assertThat(JOrphanUtils.split("a,bc,,", ",", "?"), CoreMatchers.equalTo(new String[]{"a", "bc", "?", "?"}));
     }
 
     @Test
     public void testSplitSSSSingleDelimiterWithEmptyValue() {
         // Empty default
-        assertThat(JOrphanUtils.split("a,bc,,", ",", ""), CoreMatchers.equalTo(new String[] { "a", "bc", "", "" }));
+        assertThat(JOrphanUtils.split("a,bc,,", ",", ""), CoreMatchers.equalTo(new String[]{"a", "bc", "", ""}));
     }
 
     @Test
     public void testSplitSSSEmptyDelimiter() {
         String in = "a,bc,,"; // Empty delimiter
-        assertThat(JOrphanUtils.split(in, "", "?"), CoreMatchers.equalTo(new String[] { in }));
+        assertThat(JOrphanUtils.split(in, "", "?"), CoreMatchers.equalTo(new String[]{in}));
     }
 
     @Test
     public void testSplitSSSMultipleDelimCharsWithDefaultValue() {
         // Multiple delimiters
         assertThat(JOrphanUtils.split("a,b;c,,", ",;", "?"),
-                CoreMatchers.equalTo(new String [] { "a", "b", "c", "?", "?" }));
+                CoreMatchers.equalTo(new String[]{"a", "b", "c", "?", "?"}));
     }
 
     @Test
     public void testSplitSSSMultipleDelimCharsWithEmptyValue() {
         // Multiple delimiters
-        assertThat(JOrphanUtils.split("a,b;c,,", ",;", ""), CoreMatchers.equalTo(new String[] { "a", "b", "c", "", "" }));
+        assertThat(JOrphanUtils.split("a,b;c,,", ",;", ""), CoreMatchers.equalTo(new String[]{"a", "b", "c", "", ""}));
     }
 
     @Test
     public void testSplitSSSSameDelimiterAsDefaultValue() {
-        assertThat(JOrphanUtils.split("a,bc,,", ",", ","), CoreMatchers.equalTo(new String[] { "a", "bc", ",", "," }));
+        assertThat(JOrphanUtils.split("a,bc,,", ",", ","), CoreMatchers.equalTo(new String[]{"a", "bc", ",", ","}));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testSplitNullStringString() {
-        JOrphanUtils.split(null, ",","?");
+        Assertions.assertThrows(
+                NullPointerException.class,
+                () -> JOrphanUtils.split(null, ",", "?"));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testSplitStringNullString() {
-        JOrphanUtils.split("a,bc,,", null, "?");
+        Assertions.assertThrows(
+                NullPointerException.class,
+                () -> JOrphanUtils.split("a,bc,,", null, "?"));
     }
 
     @Test
     public void testSplitStringStringNullWithSingleDelimiter() {
-        assertThat(JOrphanUtils.split("a,bc,,", ",", null), CoreMatchers.equalTo(new String[] { "a", "bc" }));
+        assertThat(JOrphanUtils.split("a,bc,,", ",", null), CoreMatchers.equalTo(new String[]{"a", "bc"}));
     }
 
     @Test
     public void testSplitStringStringNullWithMultipleDelimiter() {
-        assertThat(JOrphanUtils.split("a,;bc,;,", ",;", null), CoreMatchers.equalTo(new String[] { "a", "bc" }));
+        assertThat(JOrphanUtils.split("a,;bc,;,", ",;", null), CoreMatchers.equalTo(new String[]{"a", "bc"}));
     }
 
     @Test
     public void testSplitSSSWithEmptyInput() {
-        String[] out = JOrphanUtils.split("", "," ,"x");
+        String[] out = JOrphanUtils.split("", ",", "x");
         assertEquals(0, out.length);
     }
 
     @Test
     public void testSplitSSSWithEmptyDelimiter() {
         final String in = "a,;bc,;,";
-        assertThat(JOrphanUtils.split(in, "", "x"), CoreMatchers.equalTo(new String[] { in }));
+        assertThat(JOrphanUtils.split(in, "", "x"), CoreMatchers.equalTo(new String[]{in}));
     }
 
     @Test
-    public void testreplaceAllChars(){
-        assertEquals("", JOrphanUtils.replaceAllChars("",' ', "+"));
-        assertEquals("source", JOrphanUtils.replaceAllChars("source",' ', "+"));
-        assertEquals("so+rce", JOrphanUtils.replaceAllChars("source",'u', "+"));
-        assertEquals("+so+urc+", JOrphanUtils.replaceAllChars("esoeurce",'e', "+"));
-        assertEquals("AZAZsoAZurcAZ", JOrphanUtils.replaceAllChars("eesoeurce",'e', "AZ"));
-        assertEquals("A+B++C+", JOrphanUtils.replaceAllChars("A B  C ",' ', "+"));
-        assertEquals("A%20B%20%20C%20", JOrphanUtils.replaceAllChars("A B  C ",' ', "%20"));
+    public void testreplaceAllChars() {
+        assertEquals("", JOrphanUtils.replaceAllChars("", ' ', "+"));
+        assertEquals("source", JOrphanUtils.replaceAllChars("source", ' ', "+"));
+        assertEquals("so+rce", JOrphanUtils.replaceAllChars("source", 'u', "+"));
+        assertEquals("+so+urc+", JOrphanUtils.replaceAllChars("esoeurce", 'e', "+"));
+        assertEquals("AZAZsoAZurcAZ", JOrphanUtils.replaceAllChars("eesoeurce", 'e', "AZ"));
+        assertEquals("A+B++C+", JOrphanUtils.replaceAllChars("A B  C ", ' ', "+"));
+        assertEquals("A%20B%20%20C%20", JOrphanUtils.replaceAllChars("A B  C ", ' ', "%20"));
     }
 
     @Test
-    public void testTrim(){
-        assertEquals("",JOrphanUtils.trim("", " ;"));
-        assertEquals("",JOrphanUtils.trim(" ", " ;"));
-        assertEquals("",JOrphanUtils.trim("; ", " ;"));
-        assertEquals("",JOrphanUtils.trim(";;", " ;"));
-        assertEquals("",JOrphanUtils.trim("  ", " ;"));
-        assertEquals("abc",JOrphanUtils.trim("abc ;", " ;"));
+    public void testTrim() {
+        assertEquals("", JOrphanUtils.trim("", " ;"));
+        assertEquals("", JOrphanUtils.trim(" ", " ;"));
+        assertEquals("", JOrphanUtils.trim("; ", " ;"));
+        assertEquals("", JOrphanUtils.trim(";;", " ;"));
+        assertEquals("", JOrphanUtils.trim("  ", " ;"));
+        assertEquals("abc", JOrphanUtils.trim("abc ;", " ;"));
     }
 
     @Test
     public void testGetByteArraySlice() throws Exception {
-        Assert.assertArrayEquals(new byte[] {1, 2},
-              JOrphanUtils.getByteArraySlice(new byte[]{0, 1, 2, 3}, 1, 2));
+        Assert.assertArrayEquals(new byte[]{1, 2},
+                JOrphanUtils.getByteArraySlice(new byte[]{0, 1, 2, 3}, 1, 2));
     }
 
     @Test
-    public void testbaToHexString(){
-        assertEquals("",JOrphanUtils.baToHexString(new byte[]{}));
-        assertEquals("00",JOrphanUtils.baToHexString(new byte[]{0}));
-        assertEquals("0f107f8081ff",JOrphanUtils.baToHexString(new byte[]{15,16,127,-128,-127,-1}));
+    public void testbaToHexString() {
+        assertEquals("", JOrphanUtils.baToHexString(new byte[]{}));
+        assertEquals("00", JOrphanUtils.baToHexString(new byte[]{0}));
+        assertEquals("0f107f8081ff", JOrphanUtils.baToHexString(new byte[]{15, 16, 127, -128, -127, -1}));
     }
 
     @Test
-    public void testBaToHexStringSeparator(){
+    public void testBaToHexStringSeparator() {
         assertEquals("", JOrphanUtils.baToHexString(new byte[]{}, '-'));
         assertEquals("00", JOrphanUtils.baToHexString(new byte[]{0}, '-'));
-        assertEquals("0f-10-7f-80-81-ff", JOrphanUtils.baToHexString(new byte[]{15,16,127,-128,-127,-1}, '-'));
+        assertEquals("0f-10-7f-80-81-ff", JOrphanUtils.baToHexString(new byte[]{15, 16, 127, -128, -127, -1}, '-'));
     }
 
     @Test
-    public void testbaToByte() throws Exception{
-        assertEqualsArray(new byte[]{},JOrphanUtils.baToHexBytes(new byte[]{}));
-        assertEqualsArray(new byte[]{'0','0'},JOrphanUtils.baToHexBytes(new byte[]{0}));
+    public void testbaToByte() throws Exception {
+        assertEqualsArray(new byte[]{}, JOrphanUtils.baToHexBytes(new byte[]{}));
+        assertEqualsArray(new byte[]{'0', '0'}, JOrphanUtils.baToHexBytes(new byte[]{0}));
         assertEqualsArray("0f107f8081ff".getBytes(StandardCharsets.UTF_8),
-                JOrphanUtils.baToHexBytes(new byte[] { 15, 16, 127, -128, -127, -1 }));
+                JOrphanUtils.baToHexBytes(new byte[]{15, 16, 127, -128, -127, -1}));
     }
 
-    private void assertEqualsArray(byte[] expected, byte[] actual){
-        assertEquals("arrays must be same length",expected.length, actual.length);
-        for(int i=0; i < expected.length; i++){
-            assertEquals("values must be the same for index: "+i,expected[i],actual[i]);
+    private void assertEqualsArray(byte[] expected, byte[] actual) {
+        assertEquals("arrays must be same length", expected.length, actual.length);
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals("values must be the same for index: " + i, expected[i], actual[i]);
         }
     }
 
@@ -313,17 +313,17 @@ public class TestJorphanUtils {
         in = new StringBuilder("A");
         assertEquals("       A", JOrphanUtils.rightAlign(in, 8).toString());
         assertEquals("                                 foo",
-            JOrphanUtils.rightAlign(new StringBuilder("foo"), 39).toString());
+                JOrphanUtils.rightAlign(new StringBuilder("foo"), 39).toString());
     }
 
     @Test
     public void testLeftAlign() {
-      assertEquals("foo  ",
-            JOrphanUtils.leftAlign(new StringBuilder("foo"), 5).toString());
-      assertEquals("foo",
-            JOrphanUtils.leftAlign(new StringBuilder("foo"), 2).toString());
-      assertEquals("foo                                 ",
-            JOrphanUtils.leftAlign(new StringBuilder("foo"), 39).toString());
+        assertEquals("foo  ",
+                JOrphanUtils.leftAlign(new StringBuilder("foo"), 5).toString());
+        assertEquals("foo",
+                JOrphanUtils.leftAlign(new StringBuilder("foo"), 2).toString());
+        assertEquals("foo                                 ",
+                JOrphanUtils.leftAlign(new StringBuilder("foo"), 39).toString());
     }
 
     @Test
@@ -335,39 +335,38 @@ public class TestJorphanUtils {
     @Test
     public void testReplaceAllWithRegexWithSearchValueContainedInReplaceValue() {
         // Bug 61054
-        Assert.assertArrayEquals(new Object[] { "abcd", 1 },
+        Assert.assertArrayEquals(new Object[]{"abcd", 1},
                 JOrphanUtils.replaceAllWithRegex("abc", "abc", "abcd", true));
     }
 
     @Test
     public void testReplaceAllWithRegex() {
-        Assert.assertArrayEquals(new Object[] {"toto", 0},
-                JOrphanUtils.replaceAllWithRegex("toto","ti", "ta", true));
-        Assert.assertArrayEquals(new Object[] {"toto", 0},
-                JOrphanUtils.replaceAllWithRegex("toto","TO", "TI", true));
-        Assert.assertArrayEquals(new Object[] {"TITI", 2},
-                JOrphanUtils.replaceAllWithRegex("toto","TO", "TI", false));
-        Assert.assertArrayEquals(new Object[] {"TITI", 2},
-                JOrphanUtils.replaceAllWithRegex("toto","to", "TI", true));
-        Assert.assertArrayEquals(new Object[] {"TITIti", 2},
-                JOrphanUtils.replaceAllWithRegex("tototi","to", "TI", true));
-        Assert.assertArrayEquals(new Object[] {"TOTIti", 1},
-                JOrphanUtils.replaceAllWithRegex("TOtoti","to", "TI", true));
-        Assert.assertArrayEquals(new Object[] {"TOTI", 1},
-                JOrphanUtils.replaceAllWithRegex("TOtoti","to.*", "TI", true));
-        Assert.assertArrayEquals(new Object[] {"TOTI", 1},
-                JOrphanUtils.replaceAllWithRegex("TOtoti","to.*ti", "TI", true));
-        Assert.assertArrayEquals(new Object[] {"TOTITITITIaTITITIti", 7},
-                JOrphanUtils.replaceAllWithRegex("TO1232a123ti","[0-9]", "TI", true));
-        Assert.assertArrayEquals(new Object[] {"TOTIaTIti", 2},
-                JOrphanUtils.replaceAllWithRegex("TO1232a123ti","[0-9]+", "TI", true));
+        Assert.assertArrayEquals(new Object[]{"toto", 0},
+                JOrphanUtils.replaceAllWithRegex("toto", "ti", "ta", true));
+        Assert.assertArrayEquals(new Object[]{"toto", 0},
+                JOrphanUtils.replaceAllWithRegex("toto", "TO", "TI", true));
+        Assert.assertArrayEquals(new Object[]{"TITI", 2},
+                JOrphanUtils.replaceAllWithRegex("toto", "TO", "TI", false));
+        Assert.assertArrayEquals(new Object[]{"TITI", 2},
+                JOrphanUtils.replaceAllWithRegex("toto", "to", "TI", true));
+        Assert.assertArrayEquals(new Object[]{"TITIti", 2},
+                JOrphanUtils.replaceAllWithRegex("tototi", "to", "TI", true));
+        Assert.assertArrayEquals(new Object[]{"TOTIti", 1},
+                JOrphanUtils.replaceAllWithRegex("TOtoti", "to", "TI", true));
+        Assert.assertArrayEquals(new Object[]{"TOTI", 1},
+                JOrphanUtils.replaceAllWithRegex("TOtoti", "to.*", "TI", true));
+        Assert.assertArrayEquals(new Object[]{"TOTI", 1},
+                JOrphanUtils.replaceAllWithRegex("TOtoti", "to.*ti", "TI", true));
+        Assert.assertArrayEquals(new Object[]{"TOTITITITIaTITITIti", 7},
+                JOrphanUtils.replaceAllWithRegex("TO1232a123ti", "[0-9]", "TI", true));
+        Assert.assertArrayEquals(new Object[]{"TOTIaTIti", 2},
+                JOrphanUtils.replaceAllWithRegex("TO1232a123ti", "[0-9]+", "TI", true));
 
-        Assert.assertArrayEquals(new Object[] {"TO${var}2a${var}ti", 2},
-                JOrphanUtils.replaceAllWithRegex("TO1232a123ti","123", "${var}", true));
+        Assert.assertArrayEquals(new Object[]{"TO${var}2a${var}ti", 2},
+                JOrphanUtils.replaceAllWithRegex("TO1232a123ti", "123", "${var}", true));
 
-        Assert.assertArrayEquals(new Object[] {"TO${var}2a${var}ti${var2}", 2},
-                JOrphanUtils.replaceAllWithRegex("TO1232a123ti${var2}","123", "${var}", true));
-
+        Assert.assertArrayEquals(new Object[]{"TO${var}2a${var}ti${var2}", 2},
+                JOrphanUtils.replaceAllWithRegex("TO1232a123ti${var2}", "123", "${var}", true));
     }
 
     @Test
@@ -388,16 +387,18 @@ public class TestJorphanUtils {
         String value;
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testReplaceValueWithNullSetterThatGetsCalled() {
-        JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", null);
+        Assertions.assertThrows(
+                NullPointerException.class,
+                () -> JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", null));
     }
 
     @Test
     public void testUnsplit() {
-        assertEquals("", JOrphanUtils.unsplit(new Object[] {null, null}, 0));
-        assertEquals("11", JOrphanUtils.unsplit(new Object[] {null, 1}, 1));
-        assertEquals("-26738698", JOrphanUtils.unsplit(new Object[] {-26_738_698}, 1));
+        assertEquals("", JOrphanUtils.unsplit(new Object[]{null, null}, 0));
+        assertEquals("11", JOrphanUtils.unsplit(new Object[]{null, 1}, 1));
+        assertEquals("-26738698", JOrphanUtils.unsplit(new Object[]{-26_738_698}, 1));
     }
 
     @Test

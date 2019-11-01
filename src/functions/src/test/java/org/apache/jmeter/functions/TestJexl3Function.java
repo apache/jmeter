@@ -18,11 +18,11 @@
 
 package org.apache.jmeter.functions;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public class TestJexl3Function extends TestJexl2Function {
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();

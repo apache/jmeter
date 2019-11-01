@@ -21,7 +21,6 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
@@ -199,27 +198,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHC4Impl.class);
 
-    private static final InputStreamFactory GZIP = new InputStreamFactory() {
-        @Override
-        public InputStream create(final InputStream instream) throws IOException {
-            return new LaxGZIPInputStream(instream, GZIP_RELAX_MODE);
-        }
-    };
+    private static final InputStreamFactory GZIP =
+            instream -> new LaxGZIPInputStream(instream, GZIP_RELAX_MODE);
 
-    private static final InputStreamFactory DEFLATE = new InputStreamFactory() {
-        @Override
-        public InputStream create(final InputStream instream) throws IOException {
-            return new LaxDeflateInputStream(instream, DEFLATE_RELAX_MODE);
-        }
+    private static final InputStreamFactory DEFLATE =
+            instream -> new LaxDeflateInputStream(instream, DEFLATE_RELAX_MODE);
 
-    };
-
-    private static final InputStreamFactory BROTLI = new InputStreamFactory() {
-        @Override
-        public InputStream create(final InputStream instream) throws IOException {
-            return new BrotliInputStream(instream);
-        }
-    };
+    private static final InputStreamFactory BROTLI = BrotliInputStream::new;
 
     private static final class PreemptiveAuthRequestInterceptor implements HttpRequestInterceptor {
         @Override
@@ -382,10 +367,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     };
 
     private static final String DIGEST_PARAMETERS = DigestParameters.VARIABLE_NAME;
-
-
     private static final HttpRequestInterceptor PREEMPTIVE_AUTH_INTERCEPTOR = new PreemptiveAuthRequestInterceptor();
-
 
     // see  https://stackoverflow.com/questions/26166469/measure-bandwidth-usage-with-apache-httpcomponents-httpclient
     private static final HttpRequestExecutor REQUEST_EXECUTOR = new HttpRequestExecutor() {
@@ -406,9 +388,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
 
-    /**
-     * Headers to save
-     */
     private static final String[] HEADERS_TO_SAVE = new String[]{
                     "content-length",
                     "content-encoding",
@@ -809,16 +788,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * Setup Body of request if different from GET.
      * Field HTTPSampleResult#queryString of result is modified in the 2 cases
      *
-     * @param method
-     *            String HTTP method
-     * @param result
-     *            {@link HTTPSampleResult}
-     * @param httpRequest
-     *            {@link HttpRequestBase}
-     * @param localContext
-     *            {@link HttpContext}
-     * @throws IOException
-     *             when posting data fails due to I/O
+     * @param method       String HTTP method
+     * @param result       {@link HTTPSampleResult}
+     * @param httpRequest  {@link HttpRequestBase}
+     * @param localContext {@link HttpContext}
+     * @throws IOException when posting data fails due to I/O
      */
     protected void handleMethod(String method, HTTPSampleResult result,
             HttpRequestBase httpRequest, HttpContext localContext) throws IOException {
@@ -1196,14 +1170,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * <li>Calls setConnectionCookie to setup Cookie</li>
      * </ul>
      *
-     * @param url
-     *            {@link URL} of the request
-     * @param httpRequest
-     *            http request for the request
-     * @param res
-     *            sample result to set cookies on
-     * @throws IOException
-     *             if hostname/ip to use could not be figured out
+     * @param url         {@link URL} of the request
+     * @param httpRequest http request for the request
+     * @param res         sample result to set cookies on
+     * @throws IOException if hostname/ip to use could not be figured out
      */
     protected void setupRequest(URL url, HttpRequestBase httpRequest, HTTPSampleResult res)
         throws IOException {
@@ -1266,8 +1236,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * Gets the ResponseHeaders
      *
-     * @param response
-     *            containing the headers
+     * @param response containing the headers
      * @return string containing the headers, one per line
      */
     private String getResponseHeaders(HttpResponse response) {
@@ -1326,14 +1295,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * Extracts all the required non-cookie headers for that particular URL request and
      * sets them in the <code>HttpMethod</code> passed in
      *
-     * @param request
-     *            <code>HttpRequest</code> which represents the request
-     * @param url
-     *            <code>URL</code> of the URL request
-     * @param headerManager
-     *            the <code>HeaderManager</code> containing all the cookies
-     *            for this <code>UrlConfig</code>
-     * @param cacheManager the CacheManager (may be null)
+     * @param request       <code>HttpRequest</code> which represents the request
+     * @param url           <code>URL</code> of the URL request
+     * @param headerManager the <code>HeaderManager</code> containing all the cookies
+     *                      for this <code>UrlConfig</code>
+     * @param cacheManager  the CacheManager (may be null)
      */
     protected void setConnectionHeaders(HttpRequestBase request, URL url, HeaderManager headerManager, CacheManager cacheManager) {
         if (headerManager != null) {
@@ -1375,11 +1341,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * Get port from the value of the Host header, or return the given
      * defaultValue
      *
-     * @param hostHeaderValue
-     *            value of the http Host header
-     * @param defaultValue
-     *            value to be used, when no port could be extracted from
-     *            hostHeaderValue
+     * @param hostHeaderValue value of the http Host header
+     * @param defaultValue    value to be used, when no port could be extracted from
+     *                        hostHeaderValue
      * @return integer representing the port for the host header
      */
     private int getPortFromHostHeader(String hostHeaderValue, int defaultValue) {
@@ -1396,8 +1360,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * Get all the request headers except Cookie for the <code>HttpRequest</code>
      *
-     * @param method
-     *            <code>HttpMethod</code> which represents the request
+     * @param method <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
     private String getAllHeadersExceptCookie(HttpRequest method) {
@@ -1407,8 +1370,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * Get only Cookie header for the <code>HttpRequest</code>
      *
-     * @param method
-     *            <code>HttpMethod</code> which represents the request
+     * @param method <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
     private String getOnlyCookieFromHeaders(HttpRequest method) {
@@ -1423,8 +1385,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * Get only cookies from request headers for the <code>HttpRequest</code>
      *
-     * @param method
-     *            <code>HttpMethod</code> which represents the request
+     * @param method <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
     private String getFromHeadersMatchingPredicate(HttpRequest method, Predicate<String> predicate) {
@@ -1756,7 +1717,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
 
     /**
-     *
      * @return the value of {@link #getContentEncoding()}; forced to null if empty
      */
     private String getContentEncodingOrNull() {
@@ -1809,9 +1769,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         closeThreadLocalConnections();
     }
 
-    /**
-     *
-     */
     private void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
         Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>

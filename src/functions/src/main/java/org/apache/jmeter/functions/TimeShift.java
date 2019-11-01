@@ -158,7 +158,7 @@ public class TimeShift extends AbstractFunction {
                     localDateTimeToShift = LocalDateTime.parse(dateToShift, formatter);
                 } else {
                     localDateTimeToShift = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(dateToShift)),
-                            ZoneId.systemDefault());
+                            systemDefaultZoneID);
                 }
             } catch (DateTimeParseException | NumberFormatException ex) {
                 log.error("Failed to parse the date '{}' to shift with formatter '{}'",
@@ -182,7 +182,7 @@ public class TimeShift extends AbstractFunction {
         if (formatter != null) {
             dateString = localDateTimeToShift.format(formatter);
         } else {
-            ZoneOffset offset = ZoneOffset.systemDefault().getRules().getOffset(localDateTimeToShift);
+            ZoneOffset offset = systemDefaultZoneID.getRules().getOffset(localDateTimeToShift);
             dateString = String.valueOf(localDateTimeToShift.toInstant(offset).toEpochMilli());
         }
 

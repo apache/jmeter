@@ -30,21 +30,18 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestMachineIPName extends JMeterTestCase {
-    protected AbstractFunction function;
 
+    private AbstractFunction function;
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
-
     private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         result = new SampleResult();
         jmctx = JMeterContextService.getContext();
@@ -89,7 +86,6 @@ public class TestMachineIPName extends JMeterTestCase {
         function.setParameters(params);
         String ret = function.execute(result, null);
         assertEquals(JMeterUtils.getLocalHostIP(), ret);
-
     }
 
     @Test

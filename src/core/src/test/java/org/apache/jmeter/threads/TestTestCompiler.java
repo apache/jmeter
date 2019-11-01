@@ -25,40 +25,40 @@ import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestTestCompiler {
 
-        @Test
-        public void testConfigGathering() throws Exception {
-            ListedHashTree testing = new ListedHashTree();
-            GenericController controller = new GenericController();
-            ConfigTestElement config1 = new ConfigTestElement();
-            config1.setName("config1");
-            config1.setProperty("test.property", "A test value");
-            TestSampler sampler = new TestSampler();
-            sampler.setName("sampler");
-            testing.add(controller, config1);
-            testing.add(controller, sampler);
-            TestCompiler.initialize();
+    @Test
+    public void testConfigGathering() throws Exception {
+        ListedHashTree testing = new ListedHashTree();
+        GenericController controller = new GenericController();
+        ConfigTestElement config1 = new ConfigTestElement();
+        config1.setName("config1");
+        config1.setProperty("test.property", "A test value");
+        TestSampler sampler = new TestSampler();
+        sampler.setName("sampler");
+        testing.add(controller, config1);
+        testing.add(controller, sampler);
+        TestCompiler.initialize();
 
-            TestCompiler compiler = new TestCompiler(testing);
-            testing.traverse(compiler);
-            sampler = (TestSampler) compiler.configureSampler(sampler).getSampler();
-            assertEquals("A test value", sampler.getPropertyAsString("test.property"));
+        TestCompiler compiler = new TestCompiler(testing);
+        testing.traverse(compiler);
+        sampler = (TestSampler) compiler.configureSampler(sampler).getSampler();
+        assertEquals("A test value", sampler.getPropertyAsString("test.property"));
+    }
+
+    class TestSampler extends AbstractSampler {
+        private static final long serialVersionUID = 240L;
+
+        @Override
+        public SampleResult sample(org.apache.jmeter.samplers.Entry e) {
+            return null;
         }
 
-        class TestSampler extends AbstractSampler {
-            private static final long serialVersionUID = 240L;
-
-            @Override
-            public SampleResult sample(org.apache.jmeter.samplers.Entry e) {
-                return null;
-            }
-
-            @Override
-            public Object clone() {
-                return new TestSampler();
-            }
+        @Override
+        public Object clone() {
+            return new TestSampler();
         }
+    }
 }

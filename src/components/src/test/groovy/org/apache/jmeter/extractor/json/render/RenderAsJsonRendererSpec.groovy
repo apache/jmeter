@@ -20,12 +20,9 @@ package org.apache.jmeter.extractor.json.render
 
 import javax.swing.JTabbedPane
 
-import org.apache.jmeter.extractor.json.render.RenderAsJsonRenderer
-import org.apache.jmeter.junit.categories.NeedGuiTests
 import org.apache.jmeter.junit.spock.JMeterSpec
 import org.apache.jmeter.samplers.SampleResult
 import org.apache.jmeter.util.JMeterUtils
-import org.junit.experimental.categories.Category
 
 import spock.lang.IgnoreIf
 
@@ -37,14 +34,14 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
             sut.init()
         then:
             noExceptionThrown()
-            sut.jsonWithExtractorPanel != null;
+            sut.jsonWithExtractorPanel != null
     }
 
     @IgnoreIf({ JMeterSpec.isHeadless() })
     def "render image"() {
         given:
             sut.init()
-            def sampleResult = new SampleResult();
+            def sampleResult = new SampleResult()
         when:
             sut.renderImage(sampleResult)
         then:
@@ -54,7 +51,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
     def "render null Response"() {
         given:
             sut.init()
-            def sampleResult = new SampleResult();
+            def sampleResult = new SampleResult()
         when:
             sut.renderResult(sampleResult)
         then:
@@ -64,16 +61,16 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
     @IgnoreIf({ JMeterSpec.isHeadless() })
     def "render '#input' as JSON Response to '#output'"() {
         given:
-            sut.init();
-            def sampleResult = new SampleResult();
+            sut.init()
+            def sampleResult = new SampleResult()
+            sampleResult.setResponseData(input)
         when:
-            sampleResult.setResponseData(input);
             sut.renderResult(sampleResult)
         then:
             output == sut.jsonDataField.getText()
         where:
-            input               |   output
-            "This is not json"  |   "This is not json"
+            input                                      | output
+            "This is not json"                         | "This is not json"
             "{name:\"Ludwig\",age: 23,city: \"Bonn\"}" | '''{
     "city": "Bonn",
     "name": "Ludwig",
@@ -83,18 +80,17 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
 
     def "execute '#expression' on '#input' results into '#output'"() {
         given:
-            sut.init();
-            sut.expressionField.setText(expression);
-            def sampleResult = new SampleResult();
+            sut.init()
+            sut.expressionField.setText(expression)
         when:
-            sut.executeTester(input);
+            sut.executeTester(input)
         then:
             output == sut.resultField.getText()
         where:
-            input               | expression          | output
-            "{name:\"Ludwig\",age: 23,city: \"Bonn\"}"   | "\$..name"           | "Result[0]=Ludwig\n"
-            "This is not json"  | "\$..name" | "NO MATCH"
-            "{name:\"Ludwig\",age: 23,city: \"Bonn\"}" | "\$.." | "Exception: Path must not end with a '.' or '..'"
+            input                                      | expression | output
+            "{name:\"Ludwig\",age: 23,city: \"Bonn\"}" | "\$..name" | "Result[0]=Ludwig\n"
+            "This is not json"                         | "\$..name" | "NO MATCH"
+            "{name:\"Ludwig\",age: 23,city: \"Bonn\"}" | "\$.."     | "Exception: Path must not end with a '.' or '..'"
     }
 
     def "clearData clears expected fields"() {
@@ -112,7 +108,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
     def "setupTabPane adds the tab to rightSide"() {
         given:
             sut.init()
-            def rightSideTabbedPane = new JTabbedPane();
+            def rightSideTabbedPane = new JTabbedPane()
             sut.setRightSide(rightSideTabbedPane)
         when:
             sut.setupTabPane()
@@ -125,7 +121,7 @@ class RenderAsJsonRendererSpec extends JMeterSpec {
     def "setupTabPane called twice does not add twice the tab"() {
         given:
             sut.init()
-            def rightSideTabbedPane = new JTabbedPane();
+            def rightSideTabbedPane = new JTabbedPane()
             sut.setRightSide(rightSideTabbedPane)
             sut.setupTabPane()
         when:

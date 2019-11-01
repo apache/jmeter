@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Locale;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestJSONPathAssertion {
 

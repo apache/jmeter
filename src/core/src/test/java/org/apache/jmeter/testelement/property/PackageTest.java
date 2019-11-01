@@ -23,13 +23,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import org.apache.jmeter.config.LoginConfig;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-/**
- * Class for testing the property package.
- */
+/** Class for testing the property package. */
 public class PackageTest {
-
 
     @Test
     public void testStringProperty() throws Exception {
@@ -79,7 +76,6 @@ public class PackageTest {
         assertEquals(jp1, jp1);
         assertEquals(jp2, jp2);
         assertEquals(jp1.hashCode(), jp2.hashCode());
-
     }
 
     private void checkNotEquals(JMeterProperty jp1, JMeterProperty jp2) {
@@ -311,8 +307,8 @@ public class PackageTest {
             fail("Should have generated an Illegal Argument Exception");
         } catch (IllegalArgumentException e) {
         }
-
     }
+
     @Test
     public void testAddingProperties() throws Exception {
         CollectionProperty coll = new CollectionProperty();

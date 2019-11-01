@@ -27,8 +27,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestXPath2Extractor {
     private static final String VAL_NAME = "value";
@@ -40,12 +40,11 @@ public class TestXPath2Extractor {
     private JMeterVariables vars;
     private JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() throws UnsupportedEncodingException {
         jmctx = JMeterContextService.getContext();
         extractor = new XPath2Extractor();
-        extractor.setThreadContext(jmctx);// This would be done by the run
-                                          // command
+        extractor.setThreadContext(jmctx);// This would be done by the run command
         extractor.setRefName(VAL_NAME);
         extractor.setDefaultValue("Default");
         result = new SampleResult();
@@ -162,10 +161,8 @@ public class TestXPath2Extractor {
         extractor.setXPathQuery("/book/page[2]/text()");
         extractor.process();
         assertEquals("two", vars.get(VAL_NAME));
-
     }
 
-    //
     @Test
     public void testScope() {
         extractor.setXPathQuery("/book/preface");
@@ -280,8 +277,7 @@ public class TestXPath2Extractor {
     public void testPreviousResultIsEmpty() throws Exception {
         JMeterContext jmc = JMeterContextService.getContext();
         extractor = new XPath2Extractor();
-        extractor.setThreadContext(jmctx);// This would be done by the run
-                                          // command
+        extractor.setThreadContext(jmctx);// This would be done by the run command
         extractor.setRefName(VAL_NAME);
         extractor.setDefaultValue("Default");
         jmc.setPreviousResult(null);

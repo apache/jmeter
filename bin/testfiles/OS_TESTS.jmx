@@ -136,7 +136,7 @@
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
               <collectionProp name="Asserion.test_strings">
-                <stringProp name="-57279347">Process timeout out after 1000 milliseconds</stringProp>
+                <stringProp name="-57279347">Process timeout reached after 1000 milliseconds</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
               <boolProp name="Assertion.assume_success">true</boolProp>
@@ -293,7 +293,7 @@
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
               <collectionProp name="Asserion.test_strings">
-                <stringProp name="-57279347">Process timeout out after 1000 milliseconds</stringProp>
+                <stringProp name="-57279347">Process timeout reached after 1000 milliseconds</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
               <boolProp name="Assertion.assume_success">true</boolProp>

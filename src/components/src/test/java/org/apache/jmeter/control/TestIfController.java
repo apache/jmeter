@@ -28,20 +28,16 @@ import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.modifiers.CounterConfig;
 import org.apache.jmeter.sampler.DebugSampler;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testkit.BugId;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class TestIfController extends JMeterTestCase {
 
-    /**
-     * See Bug 56160
-     *
-     * @throws Exception
-     *             if something fails
-     */
+    @BugId("56160")
     @Test
     public void testStackOverflow() throws Exception {
         LoopController controller = new LoopController();
@@ -76,12 +72,7 @@ public class TestIfController extends JMeterTestCase {
         }
     }
 
-    /**
-     * See Bug 53768
-     *
-     * @throws Exception
-     *             if something fails
-     */
+    @BugId("53768")
     @Test
     public void testBug53768() throws Exception {
         LoopController controller = new LoopController();
@@ -146,7 +137,7 @@ public class TestIfController extends JMeterTestCase {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testProcessing() throws Exception {
 
         GenericController controller = new GenericController();
@@ -217,9 +208,6 @@ public class TestIfController extends JMeterTestCase {
 
     /**
      * Test false return on sample3 (sample4 doesn't execute)
-     *
-     * @throws Exception
-     *             if something fails
      */
     @Test
     public void testEvaluateAllChildrenWithoutSubController() throws Exception {
@@ -256,9 +244,6 @@ public class TestIfController extends JMeterTestCase {
 
     /**
      * test 2 loops with a sub generic controller (sample4 doesn't execute)
-     *
-     * @throws Exception
-     *             if something fails
      */
     @Test
     public void testEvaluateAllChildrenWithSubController() throws Exception {

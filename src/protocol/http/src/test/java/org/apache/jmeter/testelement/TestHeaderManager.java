@@ -23,9 +23,10 @@ import static org.junit.Assert.assertEquals;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestHeaderManager extends JMeterTestCase {
+
     @Test
     public void testReplace() throws Exception {
         HeaderManager headerManager = new HeaderManager();

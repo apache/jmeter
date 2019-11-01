@@ -24,29 +24,28 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestSave {
-        private Save save;
+    private Save save;
 
+    @BeforeEach
+    public void setUp() {
+        save = new Save();
+    }
 
-        @Before
-        public void setUp() {
-            save = new Save();
-        }
-
-        @Test
-        public void testTreeConversion() throws Exception {
-            HashTree tree = new ListedHashTree();
-            JMeterTreeNode root = new JMeterTreeNode(new Arguments(), null);
-            tree.add(root, root);
-            tree.getTree(root).add(root, root);
-            save.convertSubTree(tree);
-            assertEquals(tree.getArray()[0].getClass().getName(), root.getTestElement().getClass().getName());
-            tree = tree.getTree(tree.getArray()[0]);
-            assertEquals(tree.getArray()[0].getClass().getName(), root.getTestElement().getClass().getName());
-            assertEquals(tree.getTree(tree.getArray()[0]).getArray()[0].getClass().getName(), root.getTestElement()
-                    .getClass().getName());
-        }
+    @Test
+    public void testTreeConversion() throws Exception {
+        HashTree tree = new ListedHashTree();
+        JMeterTreeNode root = new JMeterTreeNode(new Arguments(), null);
+        tree.add(root, root);
+        tree.getTree(root).add(root, root);
+        save.convertSubTree(tree);
+        assertEquals(tree.getArray()[0].getClass().getName(), root.getTestElement().getClass().getName());
+        tree = tree.getTree(tree.getArray()[0]);
+        assertEquals(tree.getArray()[0].getClass().getName(), root.getTestElement().getClass().getName());
+        assertEquals(tree.getTree(tree.getArray()[0]).getArray()[0].getClass().getName(), root.getTestElement()
+                .getClass().getName());
+    }
 }

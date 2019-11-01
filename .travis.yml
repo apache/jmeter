@@ -14,10 +14,7 @@ cache:
 
 env:
   global:
-    - GRADLE_ARGS=""
-    # Building source and binary distributions takes time, and it does not verify much, so we skip it in CI
-    # However we want to validate licenses
-    - SKIP_DIST_TASKS="$GRADLE_ARGS -PskipDist :src:licenses:build"
+    - SKIP_TAR="-x distTar -x distTarSource"
     - ORG_GRADLE_PROJECT_checksumFailOn=build_finish
     - ORG_GRADLE_PROJECT_checksumPrint=true
 
@@ -26,7 +23,7 @@ matrix:
     - name: Tests with OpenJDK 8 + code coverage
       jdk: openjdk8
       script:
-        - xvfb-run ./gradlew $GRADLE_ARGS check createDist javadocAggregate jacocoReport
+        - xvfb-run ./gradlew build jacocoReport $SKIP_TAR
       after_success:
         - bash <(curl -s https://codecov.io/bash)
     - name: Tests with OpenJDK 11
@@ -41,7 +38,8 @@ matrix:
         - LC_ALL=fr_FR.UTF-8
       script:
         # This job verifies headless mode to ensure Apache JMeter is workable in headless as well
-        - ./gradlew -Djava.awt.headless=true -Duser.language=fr -Duser.country=FR $SKIP_DIST_TASKS -PskipCheckstyle -PskipSpotless build javadocAggregate createDist
+        # Spotless and Checksyle are skipped here to save some time. They are verified anyway in Java 8 and Java 13 builds, so skipping them for Java 11 does not harm
+        - ./gradlew build -Djava.awt.headless=true -Duser.language=fr -Duser.country=FR -PskipCheckstyle -PskipSpotless $SKIP_TAR
     # Java 12 is not here because it has been superceeded by Java 13
     # Tests with Java 12 do not surface much new, so Java 11 (LTS) and Java 13 (non-LTS) are enough for "post Java 9" testing
     - name: Tests with OpenJDK 13
@@ -52,6 +50,6 @@ matrix:
         - echo 'distributionUrl=https\://services.gradle.org/distributions-snapshots/gradle-6.0-20191001230020+0000-bin.zip' >> gradle/wrapper/gradle-wrapper.properties2
         - mv gradle/wrapper/gradle-wrapper.properties2 gradle/wrapper/gradle-wrapper.properties
         # Spotless and Checkstyle are executed here as well to test if the plugins are compatible with Gradle 6.0 / Java 13
-        - xvfb-run ./gradlew $SKIP_DIST_TASKS build createDist -PchecksumFailOn=never -PchecksumPrint=false
+        - xvfb-run ./gradlew build -PchecksumFailOn=never -PchecksumPrint=false $SKIP_TAR
         # Show difference between the new dependencies and old ones. It is expected that new Gradle version might bring new dependencies
         - diff -u checksum.xml build/checksum/checksum.xml || true

@@ -20,26 +20,23 @@ package org.apache.jmeter.protocol.ldap.config.gui;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PackageTest {
 
-        /**
-         * Test that adding an argument to the table results in an appropriate
-         * TestElement being created.
-         *
-         * @throws Exception
-         *             if an exception occurred during the test
-         */
-        @Test
-        public void testLDAPArgumentCreation() throws Exception {
-            LDAPArgumentsPanel gui = new LDAPArgumentsPanel();
-            gui.tableModel.addRow(new LDAPArgument());
-            gui.tableModel.setValueAt("howdy", 0, 0);
-            gui.tableModel.addRow(new LDAPArgument());
-            gui.tableModel.setValueAt("doody", 0, 1);
+    /**
+     * Test that adding an argument to the table results in an appropriate
+     * TestElement being created.
+     */
+    @Test
+    public void testLDAPArgumentCreation() throws Exception {
+        LDAPArgumentsPanel gui = new LDAPArgumentsPanel();
+        gui.tableModel.addRow(new LDAPArgument());
+        gui.tableModel.setValueAt("howdy", 0, 0);
+        gui.tableModel.addRow(new LDAPArgument());
+        gui.tableModel.setValueAt("doody", 0, 1);
 
-            assertEquals("=", ((LDAPArgument) ((LDAPArguments) gui.createTestElement()).getArguments().get(0)
-                    .getObjectValue()).getMetaData());
-        }
+        assertEquals("=", ((LDAPArgument) ((LDAPArguments) gui.createTestElement()).getArguments().get(0)
+                .getObjectValue()).getMetaData());
+    }
 }

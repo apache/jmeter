@@ -18,6 +18,11 @@
 
 package org.apache.jmeter.gui;
 
+import static org.apache.jmeter.util.JMeterUtils.labelFor;
+import static org.apiguardian.api.API.Status.DEPRECATED;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
@@ -28,6 +33,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -35,8 +42,11 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * This abstract class takes care of the most basic functions necessary to
@@ -63,11 +73,16 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     /** Flag indicating whether or not this component is enabled. */
     private boolean enabled = true;
 
-    /** A GUI panel containing the name of this component. */
+    /**
+     *  A GUI panel containing the name of this component.
+     * @deprecated use {@link #getName()} or {@link AbstractJMeterGuiComponent#createTitleLabel()} for better alignment of the fields
+     **/
+    @API(status = INTERNAL, since = "5.2.0")
+    @Deprecated
+    @SuppressWarnings("DeprecatedIsStillUsed")
     protected NamePanel namePanel;
-    // used by AbstractReportGui
 
-    private final CommentPanel commentPanel;
+    private final JTextArea commentField = new JTextArea();
 
     /**
      * When constructing a new component, this takes care of basic tasks like
@@ -76,8 +91,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      */
     public AbstractJMeterGuiComponent() {
         namePanel = new NamePanel();
-        commentPanel=new CommentPanel();
-        initGui();
+        init();
     }
 
     /**
@@ -97,7 +111,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      *            The comment for the property
      */
     public void setComment(String comment) {
-        commentPanel.setText(comment);
+        commentField.setText(comment);
     }
 
     /**
@@ -125,8 +139,11 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      */
     @Override
     public String getName() {
-        if (getNamePanel() != null) {
-            return getNamePanel().getName();
+        NamePanel namePanel = getNamePanel();
+        // Check is mandatory because some LAFs (Nimbus) call getName() from
+        // super constructor (so can happen before namePanel field is initialized)
+        if (namePanel != null) {
+            return namePanel.getName();
         }
         return ""; // $NON-NLS-1$
     }
@@ -138,10 +155,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * @return The comment for the property
      */
     public String getComment() {
-        if (getCommentPanel() != null) {
-            return getCommentPanel().getText();
-        }
-        return ""; // $NON-NLS-1$
+        return commentField.getText();
     }
 
     /**
@@ -151,14 +165,14 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * {@link #makeTitlePanel()} instead of directly calling this method.
      *
      * @return a NamePanel containing the name of this component
+     * @deprecated use {@link #getName()} or {@link AbstractJMeterGuiComponent#createTitleLabel()} for better alignment of the fields
      */
+    @API(status = DEPRECATED, since = "5.2.0")
+    @Deprecated
     protected NamePanel getNamePanel() {
         return namePanel;
     }
 
-    private CommentPanel getCommentPanel(){
-        return commentPanel;
-    }
     /**
      * Provides a label containing the title for the component. Subclasses
      * typically place this label at the top of their GUI. The title is set to
@@ -194,7 +208,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     public void configure(TestElement element) {
         setName(element.getName());
         enabled = element.isEnabled();
-        getCommentPanel().setText(element.getComment());
+        commentField.setText(element.getComment());
     }
 
     /**
@@ -209,10 +223,17 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         enabled = true;
     }
 
-    // helper method - also used by constructor
     private void initGui() {
         setName(getStaticLabel());
-        commentPanel.clearGui();
+        commentField.setText("");
+    }
+
+    private void init() {
+        initGui();
+        // JTextArea does not have border by default (see https://bugs.openjdk.java.net/browse/JDK-4139076)
+        // However we want it to look like a text field. So we borrow a border from there
+        Border border = new JTextField().getBorder();
+        commentField.setBorder(border);
     }
 
     /**
@@ -248,14 +269,29 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * @return a panel containing the component title and name panel
      */
     protected Container makeTitlePanel() {
-        VerticalPanel titlePanel = new VerticalPanel();
-        titlePanel.add(createTitleLabel());
-        VerticalPanel contentPanel = new VerticalPanel();
-        contentPanel.setBorder(BorderFactory.createEmptyBorder());
-        contentPanel.add(getNamePanel());
-        contentPanel.add(getCommentPanel());
-        titlePanel.add(contentPanel);
-        return titlePanel;
+        JPanel titlePanel = new JPanel(new MigLayout("fillx, wrap 2, insets 0", "[][fill,grow]"));
+        titlePanel.add(createTitleLabel(), "span 2");
+
+        JTextField nameField = namePanel.getNameField();
+        titlePanel.add(labelFor(nameField, "name"));
+        titlePanel.add(nameField);
+
+        titlePanel.add(labelFor(nameField, "testplan_comments"));
+        titlePanel.add(commentField);
+
+        // Note: VerticalPanel has a workaround for Box layout which aligns elements, so we can't
+        // use trivial JPanel.
+        // Extra wrapper is often required to ensure that further additions to the panel would be vertical
+        // For instance AbstractVisualizer adds "browse file" panel
+        // If it calls just ..add(browseFilePanel), then it will go to
+        return wrapTitlePanel(titlePanel);
+    }
+
+    @API(status = EXPERIMENTAL, since = "5.2.0")
+    protected Container wrapTitlePanel(Container titlePanel) {
+        VerticalPanel vp = new VerticalPanel();
+        vp.add(titlePanel);
+        return vp;
     }
 
     /**

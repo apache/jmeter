@@ -18,7 +18,8 @@
 
 package org.apache.jmeter.extractor;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.charset.StandardCharsets;
 
@@ -28,8 +29,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
@@ -131,7 +131,6 @@ public class TestJSONPostProcessor {
         processor.process();
         assertThat(vars.get("varname"), CoreMatchers.is("NONE"));
         assertThat(vars.get("varname_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
-
     }
 
     @Test
@@ -196,13 +195,13 @@ public class TestJSONPostProcessor {
         processor.setJsonPathExpressions("$[*]");
         processor.process();
 
-        Assert.assertEquals("1,2,3", vars.get(VAR_NAME+ "_ALL"));
+        assertEquals("1,2,3", vars.get(VAR_NAME+ "_ALL"));
         for (int i = 1; i <= 3; i++) {
             String v = Integer.toString(i);
-            Assert.assertEquals(v, vars.get(VAR_NAME + "_" + v));
+            assertEquals(v, vars.get(VAR_NAME + "_" + v));
         }
 
-        Assert.assertEquals("3", vars.get(VAR_NAME + "_matchNr"));
+        assertEquals("3", vars.get(VAR_NAME + "_matchNr"));
     }
 
     @Test
@@ -220,17 +219,16 @@ public class TestJSONPostProcessor {
         processor.process();
 
         String jsonWithoutOuterParens = data.substring(1, data.length() - 1);
-        Assert.assertEquals(jsonWithoutOuterParens, vars.get(VAR_NAME + "_ALL"));
+        assertEquals(jsonWithoutOuterParens, vars.get(VAR_NAME + "_ALL"));
 
-        Assert.assertEquals("{\"a\":[1,{\"d\":2},3]}", vars.get(VAR_NAME + "_1"));
-        Assert.assertEquals("[\"b\",{\"h\":23}]", vars.get(VAR_NAME + "_2"));
-        Assert.assertEquals("3", vars.get(VAR_NAME + "_3"));
+        assertEquals("{\"a\":[1,{\"d\":2},3]}", vars.get(VAR_NAME + "_1"));
+        assertEquals("[\"b\",{\"h\":23}]", vars.get(VAR_NAME + "_2"));
+        assertEquals("3", vars.get(VAR_NAME + "_3"));
 
-        Assert.assertEquals("3", vars.get(VAR_NAME + "_matchNr"));
+        assertEquals("3", vars.get(VAR_NAME + "_matchNr"));
     }
 
-    private JSONPostProcessor setupProcessor(JMeterContext context,
-    String matchNumbers) {
+    private JSONPostProcessor setupProcessor(JMeterContext context, String matchNumbers) {
         return setupProcessor(context, matchNumbers, true);
     }
 

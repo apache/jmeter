@@ -26,19 +26,15 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-
-/**
- * Test for {@link ResultAction}
- */
 public class TestResultAction extends JMeterTestCase {
     private ResultAction resultAction;
     private SampleResult sampleResult;
     private final String data = "response Data";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         JMeterContext jmctx = JMeterContextService.getContext();
         resultAction = new ResultAction();

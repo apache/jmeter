@@ -26,34 +26,35 @@ import java.io.Writer;
 
 import org.apache.jmeter.junit.JMeterTestUtils;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestCsvSampleWriter {
 
     private static final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
 
-    @Before
+    private SampleMetadata metadata = new SampleMetadata(',', "a", "b");
+
+    @BeforeEach
     public void setUp() throws Exception {
         // We have to initialize JMeterUtils
         JMeterTestUtils.setupJMeterHome();
         JMeterUtils.loadJMeterProperties(JMeterUtils.getJMeterBinDir() + "/jmeter.properties");
     }
 
-    SampleMetadata metadata = new SampleMetadata(',', "a", "b");
-
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testCsvSampleWriterConstructorWithNull() throws Exception {
-        CsvSampleWriter dummy = new CsvSampleWriter(null);
-        dummy.close(); // We should never get here, but it would be a
-                       // writer, so close it
+        Assertions.assertThrows(
+                NullPointerException.class,
+                () -> new CsvSampleWriter(null)
+        );
     }
 
     @Test
     public void testCsvSampleWriterConstructorWithWriter() throws Exception {
         try (Writer writer = new StringWriter();
-                CsvSampleWriter csvWriter = new CsvSampleWriter(writer,
-                        metadata)) {
+             CsvSampleWriter csvWriter = new CsvSampleWriter(writer, metadata)) {
             csvWriter.writeHeader();
             csvWriter.flush();
             assertEquals("a,b" + LINE_SEP, writer.toString());
@@ -63,8 +64,7 @@ public class TestCsvSampleWriter {
     @Test
     public void testWriteWithoutWriter() throws Exception {
         try (CsvSampleWriter csvWriter = new CsvSampleWriter(metadata)) {
-            Sample sample = new SampleBuilder(metadata).add("a1").add("b1")
-                    .build();
+            Sample sample = new SampleBuilder(metadata).add("a1").add("b1").build();
             try {
                 csvWriter.write(sample);
                 fail("ISE expected");
@@ -77,8 +77,7 @@ public class TestCsvSampleWriter {
     @Test
     public void testWriteWithoutSample() throws Exception {
         try (Writer writer = new StringWriter();
-                CsvSampleWriter csvWriter = new CsvSampleWriter(writer,
-                        metadata)) {
+             CsvSampleWriter csvWriter = new CsvSampleWriter(writer, metadata)) {
             try {
                 csvWriter.write(null);
                 fail("NPE expected");
@@ -91,10 +90,8 @@ public class TestCsvSampleWriter {
     @Test
     public void testWrite() throws Exception {
         try (Writer writer = new StringWriter();
-                CsvSampleWriter csvWriter = new CsvSampleWriter(writer,
-                        metadata)) {
-            Sample sample = new SampleBuilder(metadata).add("a1").add("b1")
-                    .build();
+             CsvSampleWriter csvWriter = new CsvSampleWriter(writer, metadata)) {
+            Sample sample = new SampleBuilder(metadata).add("a1").add("b1").build();
             csvWriter.write(sample);
             csvWriter.flush();
             assertEquals("a1,b1" + LINE_SEP, writer.toString());

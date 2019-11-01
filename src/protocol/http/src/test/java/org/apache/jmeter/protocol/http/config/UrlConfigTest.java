@@ -29,17 +29,16 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class UrlConfigTest extends JMeterTestCase {
+
     private HTTPSamplerBase config;
-
     private HTTPSamplerBase defaultConfig;
-
     private HTTPSamplerBase partialConfig;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Arguments args = new Arguments();
         args.addArgument("username", "mstover");

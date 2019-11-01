@@ -34,17 +34,17 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialTest {
-    private SampleResult result;
 
+    private SampleResult result;
     private Collection<CompoundVariable> params;
     private JMeterVariables vars;
     private JMeterContext jmctx;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         result = new SampleResult();
         jmctx = JMeterContextService.getContext();
@@ -106,7 +106,6 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
         String ret = function.execute(result, null);
         assertEquals("1", ret);
     }
-
 
     @Test
     public void testUuid() throws Exception {

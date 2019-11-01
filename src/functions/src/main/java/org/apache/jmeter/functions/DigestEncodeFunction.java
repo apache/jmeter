@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
@@ -47,7 +47,6 @@ import org.slf4j.LoggerFactory;
 public class DigestEncodeFunction extends AbstractFunction {
 
     private static final Logger log = LoggerFactory.getLogger(DigestEncodeFunction.class);
-    private static final String UTF_8 = "UTF-8";
 
     /**
      * The algorithm names in this section can be specified when generating an
@@ -74,21 +73,18 @@ public class DigestEncodeFunction extends AbstractFunction {
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String digestAlgorithm = values[0].execute();
         String stringToEncode = values[1].execute();
-        String salt = null;
-        if (values.length > 2) {
-            salt = values[2].execute();
-        }
+        String salt = values.length > 2 ? values[2].execute() : null;
         String encodedString = null;
         try {
             MessageDigest md = MessageDigest.getInstance(digestAlgorithm);
-            md.update(stringToEncode.getBytes(UTF_8));
+            md.update(stringToEncode.getBytes(StandardCharsets.UTF_8));
             if (StringUtils.isNotEmpty(salt)) {
-                md.update(salt.getBytes(UTF_8));
+                md.update(salt.getBytes(StandardCharsets.UTF_8));
             }
             byte[] bytes = md.digest();
-            encodedString = uppercase(new String(Hex.encodeHex(bytes)), values, 3);
+            encodedString = uppercase(Hex.encodeHexString(bytes), values, 3);
             addVariableValue(encodedString, values, 4);
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+        } catch (NoSuchAlgorithmException e) {
             log.error("Error calling {} function with value {}, digest algorithm {}, salt {}, ", KEY, stringToEncode,
                     digestAlgorithm, salt, e);
         }
@@ -103,12 +99,9 @@ public class DigestEncodeFunction extends AbstractFunction {
      * @return
      */
     private String uppercase(String encodedString, CompoundVariable[] values, int index) {
-        if (values.length > index) {
-            String shouldUpperCase = values[index].execute();
-            boolean shouldDoUpperCase = Boolean.TRUE.toString().equalsIgnoreCase(shouldUpperCase);
-            if (shouldDoUpperCase) {
-                return encodedString.toUpperCase();
-            }
+        String shouldUpperCase = values.length > index ? values[index].execute() : null;
+        if (Boolean.parseBoolean(shouldUpperCase)) {
+            return encodedString.toUpperCase();
         }
         return encodedString;
     }

@@ -20,13 +20,13 @@ package org.apache.jmeter.visualizers;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestSamplingStatCalculator {
 
     private SamplingStatCalculator ssc;
-    @Before
+    @BeforeEach
     public void setUp(){
         ssc = new SamplingStatCalculator("JUnit");
     }

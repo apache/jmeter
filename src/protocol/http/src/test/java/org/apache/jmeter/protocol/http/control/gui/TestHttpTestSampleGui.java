@@ -22,16 +22,16 @@ import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.junit.categories.NeedGuiTests;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 @Category(NeedGuiTests.class)
 public class TestHttpTestSampleGui {
 
     private HttpTestSampleGui gui;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         gui = new HttpTestSampleGui();
     }
@@ -43,7 +43,8 @@ public class TestHttpTestSampleGui {
         HTTPSamplerBase clonedSampler = (HTTPSamplerBase) sampler.clone();
         clonedSampler.setRunningVersion(true);
         sampler.getArguments().getArgument(0).setValue("new value");
-        assertEquals("Sampler didn't clone correctly", "new value", sampler.getArguments().getArgument(0)
-                .getValue());
+        assertEquals("Sampler didn't clone correctly",
+                "new value",
+                sampler.getArguments().getArgument(0).getValue());
     }
 }

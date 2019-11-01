@@ -33,8 +33,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ResponseAssertionTest {
 
@@ -45,7 +45,7 @@ public class ResponseAssertionTest {
     private SampleResult sample;
     private AssertionResult result;
 
-    @Before
+    @BeforeEach
     public void setUp() throws MalformedURLException {
         JMeterContext jmctx = JMeterContextService.getContext();
         assertion = new ResponseAssertion();

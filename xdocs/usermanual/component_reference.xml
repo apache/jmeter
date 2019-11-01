@@ -275,7 +275,7 @@ https.default.protocol=SSLv3
         When using <code>multipart/form-data</code>, this suppresses the <code>Content-Type</code> and
         <code>Content-Transfer-Encoding</code> headers; only the <code>Content-Disposition</code> header is sent.
         </property>
-        <property name="Path" required="Yes">The path to resource (for example, <code>/servlets/myServlet</code>). If the
+        <property name="Path" required="No">The path to resource (for example, <code>/servlets/myServlet</code>). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.
 <note>
@@ -1921,6 +1921,39 @@ MongoDB Script is more suitable for functional testing or test setup (setup/tear
 
 <a href="#">^</a>
 
+
+<component name="Bolt Request" index="&sect-num;.1.22" width="711" height="488" screenshot="bolt-request.png">
+    <description>
+        <p>This sampler allows you to run Cypher queries through the Bolt protocol.</p>
+        <p>Before using this you need to set up a <complink name="Bolt Connection Configuration"/></p>
+        <p>Every request uses a connection acquired from the pool and returns it to the pool when the sampler completes.
+        The connection pool size use the driver defaults (~100) and is not configurable at the moment.</p>
+        <p>The measured response time corresponds to the "full" query execution, including both
+        the time to execute the cypher query AND the time to consume the results sent back by the database.</p>
+    </description>
+
+    <properties>
+        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+        <property name="Comments" required="No">Free text for additional details.</property>
+        <property name="Cypher statement" required="Yes">
+            The query to execute.
+        </property>
+        <property name="Params" required="No">The parameter values, JSON formatted.</property>
+        <property name="Record Query Results" required="No">
+            Whether to add or not query result data to the sampler response (default false).
+            Note that activating this has a memory overhead, use it wisely.
+        </property>
+    </properties>
+
+    <note>It is strongly advised to use query parameters, allowing the database to cache and reuse execution plans.</note>
+
+    <links>
+        <complink name="Bolt Connection Configuration"/>
+    </links>
+</component>
+
+<a href="#">^</a>
+
 </section>
 
 <section name="&sect-num;.2 Logic Controllers" anchor="logic_controllers">
@@ -2804,8 +2837,8 @@ may download images, style-sheets, etc. referenced by the HTML code.
 <tr><td><code>JSON Path Tester</code></td>
 <td>The <i>JSON Path Tester view</i> will let you test your JSON-PATH expressions and see the extracted data from a particular response.
 <br/></td></tr>
-<tr><td><code>JMESPath Tester</code></td>
-<td>The <i>JMESPath Tester view</i> will let you test your <a href="http://jmespath.org/">JMESPath</a> expressions and see the extracted data from a particular response.
+<tr><td><code>JSON JMESPath Tester</code></td>
+<td>The <i>JSON JMESPath Tester view</i> will let you test your <a href="http://jmespath.org/">JMESPath</a> expressions and see the extracted data from a particular response.
 <br/></td></tr>
 <tr><td><code>Regexp Tester</code></td>
 <td>The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
@@ -4395,6 +4428,22 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
         <property name="Write Concern : Continue on error" required="No">
             If batch inserts should continue after the first error
         </property>
+    </properties>
+</component>
+
+<a href="#">^</a>
+
+<component name="Bolt Connection Configuration" index="&sect-num;.4.21"
+           width="711" height="170" screenshot="bolt-connection-config.png">
+    <description>Creates a Bolt connection pool (used by <complink name="Bolt Request"/> Sampler)
+        from the supplied Connection settings.
+    </description>
+    <properties>
+        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+        <property name="Comments" required="No">Free text for additional details.</property>
+        <property name="Bolt URI" required="Yes">The database URI.</property>
+        <property name="Username" required="No">User account.</property>
+        <property name="Password" required="No">User credentials.</property>
     </properties>
 </component>
 
@@ -6010,7 +6059,7 @@ by:
 where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</code>" namespace.(not applicable if Tidy is selected)
 </component>
 
-<component name="JMESPath Extractor" index="&sect-num;.8.4"  width="729" height="317" screenshot="jmes_extractor.png">
+<component name="JSON JMESPath Extractor" index="&sect-num;.8.4" anchor="JSON_JMESPath_Extractor" width="729" height="317" screenshot="jmes_extractor.png">
     <description>This test element allows the user to extract value(s) from 
         structured response - XML or (X)HTML - using JMESPath
         query language.
@@ -6244,8 +6293,8 @@ generate the template string, and store the result into the given variable name.
         Headers can be useful for HTTP samples; it may not be present for other sample types.
         </property>
         <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
-        <property name="Left Boundary" required="Yes">Left boundary of value to find</property>
-        <property name="Right Boundary" required="Yes">Right boundary of value to find</property>
+        <property name="Left Boundary" required="No">Left boundary of value to find</property>
+        <property name="Right Boundary" required="No">Right boundary of value to find</property>
         <property name="Match No. (0 for Random)" required="Yes">Indicates which match to use.  The boundaries may match multiple times.  
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
@@ -6288,6 +6337,7 @@ generate the template string, and store the result into the given variable name.
     Note that the <code>refName</code> variable is always set to the default value in this case, 
     and the associated group variables are not set.
 </p>
+<note>If both left and right boundary are null, the whole data selected in scope is returned</note>
 </component>
 </section>
 
@@ -6395,16 +6445,16 @@ Behaviour can be modified with some properties by setting in user.properties:
         </property>
         <property name="Number of Threads" required="Yes">Number of users to simulate.</property>
         <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.  If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after the previous thread started, for a total time of 100 seconds to get the test fully up to speed.</property>
-        <property name="Loop Count" required="Yes, unless forever is selected">Number of times to perform the test case.  Alternatively, "<code>forever</code>" can be selected causing the test to run until manually stopped.</property>
+        <property name="Loop Count" required="Yes, unless Infinite is selected">Number of times to perform the test case.  Alternatively, "<code>infinite</code>" can be selected causing the test to run until manually stopped or end of the thread lifetime is reached.</property>
         <property name="Delay Thread creation until needed" required="Yes">
         If selected, threads are created only when the appropriate proportion of the ramp-up time has elapsed.
         This is most appropriate for tests with a ramp-up time that is significantly longer than the time to execute a single thread.
-        I.e. where earlier threads finish before later ones start. 
+        I.e. where earlier threads finish before later ones start.
         <br></br>
         If not selected, all threads are created when the test starts (they then pause for the appropriate proportion of the ramp-up time).
         This is the original default, and is appropriate for tests where threads are active throughout most of the test.
         </property>
-        <property name="Scheduler" required="Yes">If selected, enables the scheduler</property>
+        <property name="Specify Thread lifetime" required="Yes">If selected, confines Thread operation time to the given bounds</property>
         <property name="Duration (seconds)" required="No">
             If the scheduler checkbox is selected, one can choose a relative end time. 
             JMeter will use this to calculate the End Time.
@@ -7004,7 +7054,7 @@ This is done by default since JMeter 2.13.
 </note>
 </component>
 
-<component name="setUp Thread Group" index="&sect-num;.9.10" width="908" height="364" screenshot="setup_thread_group.png">
+<component name="setUp Thread Group" index="&sect-num;.9.10" width="1252" height="828" screenshot="setup_thread_group.png">
 <description>
     <p>
     A special type of ThreadGroup that can be utilized to perform Pre-Test Actions.  The behavior of these threads
@@ -7014,7 +7064,7 @@ This is done by default since JMeter 2.13.
 </description>
 </component>
 
-<component name="tearDown Thread Group" index="&sect-num;.9.11" width="909" height="366" screenshot="teardown_thread_group.png">
+<component name="tearDown Thread Group" index="&sect-num;.9.11" width="1248" height="824" screenshot="teardown_thread_group.png">
 <description>
     <p>
     A special type of ThreadGroup that can be utilized to perform Post-Test Actions.  The behavior of these threads

@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     `kotlin-dsl` apply false
-    id("com.diffplug.gradle.spotless") version "3.24.3"
+    id("com.diffplug.gradle.spotless")
 }
 
 repositories {

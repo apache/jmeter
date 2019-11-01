@@ -41,9 +41,9 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +62,7 @@ public class PostWriterTest {
 
     private PostWriter postWriter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         establishConnection();
         sampler = new HTTPSampler();// This must be the original (Java) HTTP sampler
@@ -84,7 +84,7 @@ public class PostWriterTest {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         // delete temporay file
         if(!temporaryFile.delete()) {
@@ -618,57 +618,28 @@ public class PostWriterTest {
         checkContentLength(connection, "title=mytitle&description=mydescription".length());
     }
 
-    /**
-     * setup commons parts of HTTPSampler with a no filename.
-     *
-     * @param httpSampler
-     */
+    /** setup commons parts of HTTPSampler with a no filename. */
     private void setupNoFilename(HTTPSampler httpSampler) {
         setupFilepart(sampler, "upload", null, "application/octet-stream");
     }
 
-    /**
-     * Setup the filepart with default values
-     *
-     * @param httpSampler
-     */
     private void setupFilepart(HTTPSampler httpSampler) {
         setupFilepart(sampler, "upload", temporaryFile, "text/plain");
     }
 
-    /**
-     * Setup the filepart with specified values
-     *
-     * @param httpSampler
-     */
     private void setupFilepart(HTTPSampler httpSampler, String fileField, File file, String mimeType) {
         HTTPFileArg[] hfa = {new HTTPFileArg(file == null ? "" : file.getAbsolutePath(), fileField, mimeType)};
         httpSampler.setHTTPFiles(hfa);
     }
 
-    /**
-     * Setup the form data with default values
-     *
-     * @param httpSampler
-     */
     private void setupFormData(HTTPSampler httpSampler) {
         setupFormData(httpSampler, "mytitle", "mydescription");
     }
 
-    /**
-     * Setup the form data with specified values
-     *
-     * @param httpSampler
-     */
     private void setupFormData(HTTPSampler httpSampler, String titleValue, String descriptionValue) {
         setupFormData(sampler, false, titleValue, descriptionValue);
     }
 
-    /**
-     * Setup the form data with specified values
-     *
-     * @param httpSampler
-     */
     private void setupFormData(HTTPSampler httpSampler, boolean isEncoded, String titleValue, String descriptionValue) {
         Arguments args = new Arguments();
         HTTPArgument argument1 = new HTTPArgument("title", titleValue, isEncoded);
@@ -860,10 +831,6 @@ public class PostWriterTest {
 
     /**
      * Check that the two byte arrays have identical content
-     *
-     * @param expected
-     * @param actual
-     * @throws UnsupportedEncodingException
      */
     private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
@@ -893,9 +860,6 @@ public class PostWriterTest {
 
     /**
      * Check that the two byte arrays different content
-     *
-     * @param expected
-     * @param actual
      */
     private void checkArraysHaveDifferentContent(byte[] expected, byte[] actual) {
         if(expected != null && actual != null) {
@@ -923,9 +887,6 @@ public class PostWriterTest {
 
     private void checkNoContentType(HttpURLConnection conn) {
         assertNull(conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
-    }
-    private void checkContentTypeUrlEncoded(HttpURLConnection conn) {
-        assertEquals(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED, conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
     }
 
     private void checkContentLength(HttpURLConnection conn, int length) {

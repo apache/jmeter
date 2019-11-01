@@ -31,18 +31,15 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.test.JMeterSerialTest;
 import org.apache.jorphan.util.JMeterStopThreadException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-/**
- * Package to test FileServer methods
- */
 public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
 
     private JMeterVariables threadVars;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         JMeterContext jmcx = JMeterContextService.getContext();
         jmcx.setVariables(new JMeterVariables());
@@ -50,7 +47,7 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         threadVars.put("b", "value");
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws IOException {
         // Use of singleton requires this test run in serial
         FileServer.getFileServer().closeFiles();
@@ -70,7 +67,6 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
                     "File No.such.filename must exist and be readable",
                     ignored.getMessage());
         }
-
 
         csv = new CSVDataSet();
         csv.setFilename(findTestPath("testfiles/testempty.csv"));
@@ -212,7 +208,6 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
             csv.iterationStart(null);
             fail("Expected JMeterStopThreadException");
         } catch (JMeterStopThreadException expected) {
-
         }
     }
 

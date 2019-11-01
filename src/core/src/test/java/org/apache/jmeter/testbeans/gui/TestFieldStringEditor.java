@@ -20,37 +20,37 @@ package org.apache.jmeter.testbeans.gui;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestFieldStringEditor {
 
-        private void testSetGet(ComboStringEditor e, Object value) throws Exception {
-            e.setValue(value);
-            assertEquals(value, e.getValue());
-        }
+    private void testSetGet(ComboStringEditor e, Object value) throws Exception {
+        e.setValue(value);
+        assertEquals(value, e.getValue());
+    }
 
-        private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
-            e.setAsText(text);
-            assertEquals(text, e.getAsText());
-        }
+    private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
+        e.setAsText(text);
+        assertEquals(text, e.getAsText());
+    }
 
-        @Test
-        public void testSetGet() throws Exception {
-            @SuppressWarnings("deprecation") // test code, intentional
-            ComboStringEditor e = new ComboStringEditor();
+    @Test
+    public void testSetGet() throws Exception {
+        @SuppressWarnings("deprecation") // test code, intentional
+        ComboStringEditor e = new ComboStringEditor();
 
-            testSetGet(e, "any string");
-            testSetGet(e, "");
-            testSetGet(e, "${var}");
-        }
+        testSetGet(e, "any string");
+        testSetGet(e, "");
+        testSetGet(e, "${var}");
+    }
 
-        @Test
-        public void testSetGetAsText() throws Exception {
-            @SuppressWarnings("deprecation") // test code, intentional
-            ComboStringEditor e = new ComboStringEditor();
+    @Test
+    public void testSetGetAsText() throws Exception {
+        @SuppressWarnings("deprecation") // test code, intentional
+        ComboStringEditor e = new ComboStringEditor();
 
-            testSetGetAsText(e, "any string");
-            testSetGetAsText(e, "");
-            testSetGetAsText(e, "${var}");
-        }
+        testSetGetAsText(e, "any string");
+        testSetGetAsText(e, "");
+        testSetGetAsText(e, "${var}");
+    }
 }

@@ -19,6 +19,7 @@
 package org.apache.jmeter.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -29,38 +30,26 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
-/**
- * Test Digest function
- * @see DigestEncodeFunction
- * @since 4.0
- *
- */
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 public class TestDigestFunction extends JMeterTestCase {
-    protected AbstractFunction digest;
 
+    private AbstractFunction digest;
     private SampleResult result;
-
     private Collection<CompoundVariable> params;
 
-    private JMeterVariables vars;
-
-    private JMeterContext jmctx;
-
-    @Before
+    @BeforeEach
     public void setUp() {
         digest = new DigestEncodeFunction();
         result = new SampleResult();
-        jmctx = JMeterContextService.getContext();
-        String data = "dummy data";
-        result.setResponseData(data, null);
-        vars = new JMeterVariables();
+        JMeterContext jmctx = JMeterContextService.getContext();
+        result.setResponseData("dummy data", null);
+        JMeterVariables vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
         params = new LinkedList<>();
     }
-
 
     @Test
     public void testParameterCount512() throws Exception {
@@ -138,17 +127,19 @@ public class TestDigestFunction extends JMeterTestCase {
                 returnValue);
     }
 
-    @Test(expected=InvalidVariableException.class)
+    @Test
     public void testSha512Error() throws Exception {
         params.add(new CompoundVariable("nofile"));
-        digest.setParameters(params);
-        digest.execute(result, null);
+        assertThrows(
+                InvalidVariableException.class,
+                () -> digest.setParameters(params));
     }
 
-    @Test(expected=InvalidVariableException.class)
+    @Test
     public void testSha1Error() throws Exception {
         params.add(new CompoundVariable("SHA-1"));
-        digest.setParameters(params);
-        digest.execute(result, null);
+        assertThrows(
+                InvalidVariableException.class,
+                () -> digest.setParameters(params));
     }
 }

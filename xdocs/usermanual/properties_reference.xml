@@ -761,7 +761,7 @@ JMETER-SERVER</source>
     Defaults to: <code>5000</code>
 </property>
 <property name="proxy.number.requests">
-    Add numeric prefix to Sampler names.<br/>
+    Add numeric suffix to Sampler names.<br/>
     defaults to: <code>true</code>
 </property>
 <property name="proxy.excludes.suggested">
@@ -1031,13 +1031,6 @@ JMETER-SERVER</source>
 </properties>
 </section>
 <section name="&sect-num;.24 OS Process Sampler configuration" anchor="os_sampler">
-<properties>
-<property name="os_sampler.poll_for_timeout">
-    Polling to see if process has finished its work, used when a timeout
-    is configured on sampler. Specified in milliseconds.<br/>
-    Defaults to: <code>100</code>
-</property>
-</properties>
 </section>
 <section name="&sect-num;.25 TCP Sampler configuration" anchor="tcp_sampler">
 <properties>

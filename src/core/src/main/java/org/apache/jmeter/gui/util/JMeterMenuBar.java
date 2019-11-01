@@ -524,7 +524,11 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         addPluginsMenuItems(fileMenu, menuCreators, MENU_LOCATION.FILE);
 
-        fileMenu.add(fileExit);
+        // When JMeter menu is integrated with macOS system menu, there's no need in extra "exit"
+        // macOS creates the default "Quit" item which is consistently located for all the apps
+        if (!Boolean.getBoolean("apple.laf.useScreenMenuBar")) {
+            fileMenu.add(fileExit);
+        }
     }
 
     private void makeSearchMenu() {

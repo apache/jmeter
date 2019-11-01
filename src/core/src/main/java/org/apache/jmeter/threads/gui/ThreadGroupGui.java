@@ -18,29 +18,27 @@
 
 package org.apache.jmeter.threads.gui;
 
+import static org.apache.jmeter.util.JMeterUtils.labelFor;
+
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
-import org.apache.jmeter.gui.util.HorizontalPanel;
-import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
+
+import net.miginfocom.swing.MigLayout;
 
 public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListener {
     private static final long serialVersionUID = 240L;
@@ -51,23 +49,24 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
     private static final String RAMP_NAME = "Ramp Up Field";
 
-    private JTextField threadInput;
+    private final JTextField threadInput = new JTextField();
 
-    private JTextField rampInput;
+    private final JTextField rampInput = new JTextField();
 
     private final boolean showDelayedStart;
 
     private JCheckBox delayedStart;
 
-    private JCheckBox scheduler;
+    private final JCheckBox scheduler = new JCheckBox(JMeterUtils.getResString("scheduler"));
 
-    private JTextField duration;
+    private final JTextField duration = new JTextField();
+    private final JLabel durationLabel = labelFor(duration, "duration");
 
-    private JTextField delay; // Relative start-up time
+    private final JTextField delay = new JTextField(); // Relative start-up time
+    private final JLabel delayLabel = labelFor(delay, "delay");
 
-    private JRadioButton sameUserBox;
-
-    private JRadioButton differentUserBox;
+    private final JCheckBox sameUserBox =
+            new JCheckBox(JMeterUtils.getResString("threadgroup_same_user"));
 
     public ThreadGroupGui() {
         this(true);
@@ -125,12 +124,8 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
         duration.setText(tg.getPropertyAsString(ThreadGroup.DURATION));
         delay.setText(tg.getPropertyAsString(ThreadGroup.DELAY));
-        final boolean isSameUser = tg.getPropertyAsBoolean(AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION, false);
-        if (isSameUser){
-            sameUserBox.setSelected(true);
-        } else {
-            differentUserBox.setSelected(true);
-        }
+        final boolean isSameUser = tg.getPropertyAsBoolean(AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION, true);
+        sameUserBox.setSelected(isSameUser);
     }
 
     @Override
@@ -145,7 +140,9 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
      */
     private void toggleSchedulerFields(boolean enable) {
         duration.setEnabled(enable);
+        durationLabel.setEnabled(enable);
         delay.setEnabled(enable);
+        delayLabel.setEnabled(enable);
     }
 
     private JPanel createControllerPanel() {
@@ -156,34 +153,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         return loopPanel;
     }
 
-
-    /**
-     * Create a panel containing the Duration field and corresponding label.
-     *
-     * @return a GUI panel containing the Duration field
-     */
-    private JPanel createDurationPanel() {
-        JPanel panel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("duration")); // $NON-NLS-1$
-        panel.add(label, BorderLayout.WEST);
-        duration = new JTextField();
-        panel.add(duration, BorderLayout.CENTER);
-        return panel;
-    }
-
-    /**
-     * Create a panel containing the Duration field and corresponding label.
-     *
-     * @return a GUI panel containing the Duration field
-     */
-    private JPanel createDelayPanel() {
-        JPanel panel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("delay")); // $NON-NLS-1$
-        panel.add(label, BorderLayout.WEST);
-        delay = new JTextField();
-        panel.add(delay, BorderLayout.CENTER);
-        return panel;
-    }
 
     @Override
     public String getLabelResource() {
@@ -208,77 +177,43 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         delay.setText(""); // $NON-NLS-1$
         duration.setText(""); // $NON-NLS-1$
         sameUserBox.setSelected(true);
-        differentUserBox.setSelected(false);
     }
 
-   private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         // THREAD PROPERTIES
-        VerticalPanel threadPropsPanel = new VerticalPanel();
+        JPanel threadPropsPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
         threadPropsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("thread_properties"))); // $NON-NLS-1$
 
         // NUMBER OF THREADS
-        JPanel threadPanel = new JPanel(new BorderLayout(5, 0));
-
-        JLabel threadLabel = new JLabel(JMeterUtils.getResString("number_of_threads")); // $NON-NLS-1$
-        threadPanel.add(threadLabel, BorderLayout.WEST);
-
-        threadInput = new JTextField(5);
+        threadPropsPanel.add(labelFor(threadInput, "number_of_threads")); // $NON-NLS-1$
         threadInput.setName(THREAD_NAME);
-        threadLabel.setLabelFor(threadInput);
-        threadPanel.add(threadInput, BorderLayout.CENTER);
-
-        threadPropsPanel.add(threadPanel);
+        threadPropsPanel.add(threadInput);
 
         // RAMP-UP
-        JPanel rampPanel = new JPanel(new BorderLayout(5, 0));
-        JLabel rampLabel = new JLabel(JMeterUtils.getResString("ramp_up")); // $NON-NLS-1$
-        rampPanel.add(rampLabel, BorderLayout.WEST);
-
-        rampInput = new JTextField(5);
+        threadPropsPanel.add(labelFor(rampInput, "ramp_up"));
         rampInput.setName(RAMP_NAME);
-        rampLabel.setLabelFor(rampInput);
-        rampPanel.add(rampInput, BorderLayout.CENTER);
-
-        threadPropsPanel.add(rampPanel);
+        threadPropsPanel.add(rampInput);
 
         // LOOP COUNT
-        threadPropsPanel.add(createControllerPanel());
-        threadPropsPanel.add(createUserOptionsPanel());
+        LoopControlPanel loopController = (LoopControlPanel) createControllerPanel();
+        threadPropsPanel.add(loopController.getLoopsLabel(), "split 2");
+        threadPropsPanel.add(loopController.getInfinite(), "gapleft push");
+        threadPropsPanel.add(loopController.getLoops());
+        threadPropsPanel.add(sameUserBox, "span 2");
         if (showDelayedStart) {
             delayedStart = new JCheckBox(JMeterUtils.getResString("delayed_start")); // $NON-NLS-1$
-            threadPropsPanel.add(delayedStart);
+            threadPropsPanel.add(delayedStart, "span 2");
         }
-        scheduler = new JCheckBox(JMeterUtils.getResString("scheduler")); // $NON-NLS-1$
         scheduler.addItemListener(this);
-        threadPropsPanel.add(scheduler);
-        VerticalPanel mainPanel = new VerticalPanel();
-        mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("scheduler_configuration"))); // $NON-NLS-1$
 
-        ImageIcon warningImg = JMeterUtils.getImage("warning.png");
-        JLabel warningLabel = new JLabel(JMeterUtils.getResString("thread_group_scheduler_warning"),
-                warningImg, SwingConstants.CENTER); // $NON-NLS-1$
-        mainPanel.add(warningLabel);
-        mainPanel.add(createDurationPanel());
-        mainPanel.add(createDelayPanel());
-        toggleSchedulerFields(false);
-        VerticalPanel intgrationPanel = new VerticalPanel();
-        intgrationPanel.add(threadPropsPanel);
-        intgrationPanel.add(mainPanel);
-        add(intgrationPanel, BorderLayout.CENTER);
+        threadPropsPanel.add(scheduler, "span 2");
+
+        threadPropsPanel.add(durationLabel);
+        threadPropsPanel.add(duration);
+        threadPropsPanel.add(delayLabel);
+        threadPropsPanel.add(delay);
+        add(threadPropsPanel, BorderLayout.CENTER);
     }
 
-   private JPanel createUserOptionsPanel(){
-       ButtonGroup group = new ButtonGroup();
-       sameUserBox = new JRadioButton(JMeterUtils.getResString("threadgroup_same_user")); //$NON-NLS-1$
-       group.add(sameUserBox);
-       sameUserBox.setSelected(true);
-       differentUserBox = new JRadioButton(JMeterUtils.getResString("threadgroup_different_user")); //$NON-NLS-1$
-       group.add(differentUserBox);
-       JPanel optionsPanel = new HorizontalPanel();
-       optionsPanel.add(sameUserBox);
-       optionsPanel.add(differentUserBox);
-       return optionsPanel;
-   }
 }

@@ -20,11 +20,9 @@ package org.apache.jmeter.assertions.gui;
 
 import org.apache.jmeter.assertions.JSONPathAssertion;
 import org.apache.jmeter.testelement.TestElement;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 
 public class TestJSONPathAssertionGui {
-
 
     @Test
     public void testInit() {

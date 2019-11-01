@@ -21,14 +21,14 @@ package org.apache.jmeter.visualizers.backend;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SamplerMetricFixedModeTest {
 
     private static final int DEFAULT_ELAPSED_TIME = 1_000;
 
-    @Before
+    @BeforeEach
     public void initMode() throws Exception {
         //noinspection deprecation
         SamplerMetric.setDefaultWindowMode(WindowMode.FIXED);
@@ -36,7 +36,6 @@ public class SamplerMetricFixedModeTest {
 
     @Test
     public void checkResetOkAndAllStats() throws Exception {
-
         SamplerMetric metric = new SamplerMetric();
         metric.add(createSampleResult(true));
         assertEquals("Before reset  ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 0.001);
@@ -45,8 +44,7 @@ public class SamplerMetricFixedModeTest {
         assertEquals("Before reset sent bytes", 1000, metric.getSentBytes(), 0.0);
         assertEquals("Before reset received bytes", 2000, metric.getReceivedBytes(), 0.0);
 
-        // In fixed mode DescriptiveStatistics are not reset, just sliding on a
-        // window
+        // In fixed mode DescriptiveStatistics are not reset, just sliding on a window
         metric.resetForTimeInterval();
 
         assertEquals("After reset in FIXED mode ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 0.001);
@@ -58,7 +56,6 @@ public class SamplerMetricFixedModeTest {
 
     @Test
     public void checkResetKoAndAllStats() throws Exception {
-
         SamplerMetric metric = new SamplerMetric();
         metric.add(createSampleResult(false));
         assertEquals("Before reset  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 0.001);
@@ -67,8 +64,7 @@ public class SamplerMetricFixedModeTest {
         assertEquals("Before reset sent bytes", 1000, metric.getSentBytes(), 0.0);
         assertEquals("Before reset received bytes", 2000, metric.getReceivedBytes(), 0.0);
 
-        // In fixed mode DescriptiveStatistics are not reset, just sliding on a
-        // window
+        // In fixed mode DescriptiveStatistics are not reset, just sliding on a window
         metric.resetForTimeInterval();
 
         assertEquals("After reset in FIXED mode  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 0.0);
@@ -80,7 +76,6 @@ public class SamplerMetricFixedModeTest {
 
     @Test
     public void checkErrorsDetailStat() {
-
         SamplerMetric metric = new SamplerMetric();
         metric.add(createSampleResult("400", "bad request"));
         metric.add(createSampleResult("400", "Bad Request "));

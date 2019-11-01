@@ -177,14 +177,11 @@ public class Graph extends JComponent implements Scrollable, Clearable {
         }
         final long xPos = model.getCount();
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Graphics g = getGraphics();
+        SwingUtilities.invokeLater(() -> {
+            Graphics g = getGraphics();
 
-                if (g != null) {
-                    drawSample(xPos, oneSample, g);
-                }
+            if (g != null) {
+                drawSample(xPos, oneSample, g);
             }
         });
     }

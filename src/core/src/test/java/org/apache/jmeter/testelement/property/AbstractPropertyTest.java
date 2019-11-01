@@ -29,15 +29,15 @@ import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class AbstractPropertyTest {
 
     private AbstractProperty dummyProperty;
 
     @SuppressWarnings("serial")
-    @Before
+    @BeforeEach
     public void setUp() {
 
         this.dummyProperty = new AbstractProperty() {

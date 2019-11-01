@@ -19,7 +19,7 @@
     <error>false</error>
   </assertionResult>
 </sample>
-<sample s="true" lb="OSPS-sleep" rc="500" rm="System Sampler interrupted whilst executing system call: java.lang.InterruptedException: Process timeout out after 1000 milliseconds" tn="Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+<sample s="true" lb="OSPS-sleep" rc="500" rm="Process timeout reached after 1000 milliseconds" tn="Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>Response Assertion</name>
     <failure>false</failure>

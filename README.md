@@ -153,44 +153,41 @@ systemProp.https.proxyUser=your_user_name
 systemProp.https.proxyPassword=your_password
 ```
 
-You might also want to skip some tests - that are failing without proper access to the internet - by adding some more
-properties into `build-local.properties`:
-
-```properties
-skip.bug52310=true
-skip.bug60607=true
-skip.batchtest_Http4ImplPreemptiveBasicAuth=true
-skip.batchtest_SlowCharsFeature=true
-skip.batchtest_TestKeepAlive=true
-skip.batchtest_ResponseDecompression=true
-skip.test_http=true
-skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
-```
-
 ### Test builds
 
 JMeter is built using Gradle.
 
-Change to the top-level directory and issue the command:
+The following command would build and test JMeter:
 
 ```sh
-./gradlew build
+./gradlew build [-Djava.awt.headless=true]
 ```
 
-This will compile the application and enable you to run `jmeter` from the `bin`
-directory.
-
-```sh
-./gradlew check [-Djava.awt.headless=true]
-```
-
-This will compile and run the unit tests.
 The optional property definition is required if the system
 does not have a suitable GUI display.
+
+The output artifacts (jars, reports) are placed to `build` folders.
+For instance, binary artifacts can be found under `src/dist/build/distributions`.
+
+The following command would compile the application and enable you to run `jmeter` from the `bin`
+directory. Note: it completely refreshes `lib/` contents, so it would remove clustom plugins
+should you have them installed.
+
+```sh
+./gradlew createDist
+```
+
+Alternatively you could start GUI via
+
+```sh
+./gradlew runGui
+```
 
 ## Developer information
 
 Building and contributing is explained in details at [building JMeter](https://jmeter.apache.org/building.html)
+and [CONTRIBUTING.md](CONTRIBUTING.md). More information on the tasks available for
+building JMeter with Gradle is available in [gradle.md](gradle.md).
 
 The code is maintained at GitHub:
 

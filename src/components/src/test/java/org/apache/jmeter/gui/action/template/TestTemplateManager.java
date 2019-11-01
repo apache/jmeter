@@ -33,8 +33,9 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -45,7 +46,7 @@ public class TestTemplateManager extends JMeterTestCase {
 
     private Map<String, Template> templateMap;
 
-    @Before
+    @BeforeEach
     public void setup() {
         templateMap = readTemplateFromFile();
         assertEquals(3, templateMap.size());
@@ -87,10 +88,12 @@ public class TestTemplateManager extends JMeterTestCase {
         assertNull(testTemplate.getParameters());
     }
 
-    @Test(expected = FileNotFoundException.class)
+    @Test
     public void testNonExistantXmlFileThrowsFileNotFoundException() throws Exception {
         File xmlTemplateFile = new File("missing.xml");
-        TemplateManager.getInstance().parseTemplateFile(xmlTemplateFile);
+        Assertions.assertThrows(
+                FileNotFoundException.class,
+                () -> TemplateManager.getInstance().parseTemplateFile(xmlTemplateFile));
     }
 
     @Test

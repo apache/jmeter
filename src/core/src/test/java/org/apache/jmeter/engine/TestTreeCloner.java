@@ -32,54 +32,54 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestTreeCloner extends JMeterTestCase {
 
-        @Test
-        public void testCloning() throws Exception {
-            ListedHashTree original = new ListedHashTree();
-            GenericController controller = new GenericController();
-            controller.setName("controller");
-            Arguments args = new Arguments();
-            args.setName("args");
-            TestPlan plan = new TestPlan();
-            plan.addParameter("server", "jakarta");
-            original.add(controller, args);
-            original.add(plan);
-            ResultCollector listener = new ResultCollector();
-            listener.setName("Collector");
-            original.add(controller, listener);
-            TreeCloner cloner = new TreeCloner();
-            original.traverse(cloner);
-            ListedHashTree newTree = cloner.getClonedTree();
-            assertTrue(original != newTree);
-            assertEquals(original.size(), newTree.size());
-            assertEquals(original.getTree(original.getArray()[0]).size(), newTree.getTree(newTree.getArray()[0]).size());
-            assertTrue(original.getArray()[0] != newTree.getArray()[0]);
-            assertEquals(((GenericController) original.getArray()[0]).getName(), ((GenericController) newTree
-                    .getArray()[0]).getName());
-            assertSame(original.getTree(original.getArray()[0]).getArray()[1], newTree.getTree(newTree.getArray()[0])
-                    .getArray()[1]);
-            TestPlan clonedTestPlan = (TestPlan) newTree.getArray()[1];
-            clonedTestPlan.setRunningVersion(true);
-            clonedTestPlan.recoverRunningVersion();
-            assertTrue(!plan.getUserDefinedVariablesAsProperty().isRunningVersion());
-            assertTrue(clonedTestPlan.getUserDefinedVariablesAsProperty().isRunningVersion());
-            Arguments vars = (Arguments) plan.getUserDefinedVariablesAsProperty().getObjectValue();
-            PropertyIterator iter = ((CollectionProperty) vars.getProperty(Arguments.ARGUMENTS)).iterator();
-            while (iter.hasNext()) {
-                JMeterProperty argProp = iter.next();
-                assertTrue(!argProp.isRunningVersion());
-                assertTrue(argProp.getObjectValue() instanceof Argument);
-                Argument arg = (Argument) argProp.getObjectValue();
-                arg.setValue("yahoo");
-                assertEquals("yahoo", arg.getValue());
-            }
-            vars = (Arguments) clonedTestPlan.getUserDefinedVariablesAsProperty().getObjectValue();
-            iter = vars.propertyIterator();
-            while (iter.hasNext()) {
-                assertTrue(iter.next().isRunningVersion());
-            }
+    @Test
+    public void testCloning() throws Exception {
+        ListedHashTree original = new ListedHashTree();
+        GenericController controller = new GenericController();
+        controller.setName("controller");
+        Arguments args = new Arguments();
+        args.setName("args");
+        TestPlan plan = new TestPlan();
+        plan.addParameter("server", "jakarta");
+        original.add(controller, args);
+        original.add(plan);
+        ResultCollector listener = new ResultCollector();
+        listener.setName("Collector");
+        original.add(controller, listener);
+        TreeCloner cloner = new TreeCloner();
+        original.traverse(cloner);
+        ListedHashTree newTree = cloner.getClonedTree();
+        assertTrue(original != newTree);
+        assertEquals(original.size(), newTree.size());
+        assertEquals(original.getTree(original.getArray()[0]).size(), newTree.getTree(newTree.getArray()[0]).size());
+        assertTrue(original.getArray()[0] != newTree.getArray()[0]);
+        assertEquals(((GenericController) original.getArray()[0]).getName(), ((GenericController) newTree
+                .getArray()[0]).getName());
+        assertSame(original.getTree(original.getArray()[0]).getArray()[1], newTree.getTree(newTree.getArray()[0])
+                .getArray()[1]);
+        TestPlan clonedTestPlan = (TestPlan) newTree.getArray()[1];
+        clonedTestPlan.setRunningVersion(true);
+        clonedTestPlan.recoverRunningVersion();
+        assertTrue(!plan.getUserDefinedVariablesAsProperty().isRunningVersion());
+        assertTrue(clonedTestPlan.getUserDefinedVariablesAsProperty().isRunningVersion());
+        Arguments vars = (Arguments) plan.getUserDefinedVariablesAsProperty().getObjectValue();
+        PropertyIterator iter = ((CollectionProperty) vars.getProperty(Arguments.ARGUMENTS)).iterator();
+        while (iter.hasNext()) {
+            JMeterProperty argProp = iter.next();
+            assertTrue(!argProp.isRunningVersion());
+            assertTrue(argProp.getObjectValue() instanceof Argument);
+            Argument arg = (Argument) argProp.getObjectValue();
+            arg.setValue("yahoo");
+            assertEquals("yahoo", arg.getValue());
         }
+        vars = (Arguments) clonedTestPlan.getUserDefinedVariablesAsProperty().getObjectValue();
+        iter = vars.propertyIterator();
+        while (iter.hasNext()) {
+            assertTrue(iter.next().isRunningVersion());
+        }
+    }
 }

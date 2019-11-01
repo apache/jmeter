@@ -27,7 +27,7 @@ import org.apache.jmeter.config.LoginConfig;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PackageTest {
 
@@ -69,6 +69,5 @@ public class PackageTest {
         te.addTestElement(te2);
         assertEquals(2, args.getArgumentCount());
         assertEquals("config1=configValue", args.getArgument(1).toString());
-
     }
 }

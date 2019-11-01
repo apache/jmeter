@@ -23,6 +23,8 @@ rootProject.configure<ReleaseExtension> {
     voteText.set { it.voteTextGen() }
 }
 
+val String.prop: String? get() = System.getProperty(this)
+
 fun ReleaseParams.voteTextGen(): String = """
 The first release candidate for JMeter $version ($shortGitSha) has been
 prepared, and your votes are solicited.
@@ -65,9 +67,13 @@ Keys are here:
 https://www.apache.org/dist/$tlpUrl/KEYS
 
 N.B.
-To create the jars and test $tlp: "./gradlew build".
+To create the distribution and test $tlp: "./gradlew build -Prelease -PskipSigning".
 
 $tlp $version requires Java 8 or later to run.
+
+The artifacts were built with
+  ${"java.runtime.name".prop} ${"java.vendor".prop} (build ${"java.runtime.version".prop})
+  ${"java.vm.name".prop} ${"java.vm.vendor".prop} (build ${"java.vm.version".prop}, ${"java.vm.info".prop})
 
 Some known issues and incompatible changes are listed on changes page.
 $previewSiteUri/site/changes.html#Known%20problems%20and%20workarounds

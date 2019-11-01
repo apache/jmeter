@@ -22,33 +22,28 @@ import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs. These
  * arguments (or parameters) are usually used to provide configuration values
  * for some other component.
- *
  */
 public class TestArgumentsPanel {
 
+    /**
+     * Test that adding an argument to the table results in an appropriate
+     * TestElement being created.
+     */
+    @Test
+    public void testArgumentCreation() throws Exception {
+        ArgumentsPanel gui = new ArgumentsPanel();
+        gui.tableModel.addRow(new Argument());
+        gui.tableModel.setValueAt("howdy", 0, 0);
+        gui.tableModel.addRow(new Argument());
+        gui.tableModel.setValueAt("doody", 0, 1);
 
-        /**
-         * Test that adding an argument to the table results in an appropriate
-         * TestElement being created.
-         *
-         * @throws Exception
-         *             if an exception occurred during the test
-         */
-        @Test
-        public void testArgumentCreation() throws Exception {
-            ArgumentsPanel gui = new ArgumentsPanel();
-            gui.tableModel.addRow(new Argument());
-            gui.tableModel.setValueAt("howdy", 0, 0);
-            gui.tableModel.addRow(new Argument());
-            gui.tableModel.setValueAt("doody", 0, 1);
-
-            assertEquals("=", ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0).getObjectValue())
-                    .getMetaData());
-        }
+        assertEquals("=", ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0).getObjectValue())
+                .getMetaData());
+    }
 }

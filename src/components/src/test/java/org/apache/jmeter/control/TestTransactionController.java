@@ -36,19 +36,14 @@ import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class TestTransactionController extends JMeterTestCase {
 
-    /**
-     * @see "http://bz.apache.org/bugzilla/show_bug.cgi?id=57958"
-     * @throws Exception when something breaks
-     */
     @Test
     public void testIssue57958() throws Exception {
         JMeterContextService.getContext().setVariables(new JMeterVariables());
-
 
         TestSampleListener listener = new TestSampleListener();
 

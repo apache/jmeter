@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestSessionFilter {
 

@@ -24,15 +24,15 @@ import static org.junit.Assert.assertTrue;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.SampleResult;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestProxyControl {
-    private HTTPSamplerBase sampler;
 
+    private HTTPSamplerBase sampler;
     private ProxyControl control;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         control = new ProxyControl();
         control.addIncludedPattern(".*\\.jsp");

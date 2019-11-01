@@ -38,6 +38,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.backend.AbstractBackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
+import org.apache.jmeter.visualizers.backend.ErrorMetric;
 import org.apache.jmeter.visualizers.backend.SamplerMetric;
 import org.apache.jmeter.visualizers.backend.UserMetric;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Implementation of {@link AbstractBackendListenerClient} to write in an InfluxDB using
  * custom schema
+ *
  * @since 3.2
  */
 public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient implements Runnable {
@@ -96,6 +98,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
     private static final Object LOCK = new Object();
     private static final Map<String, String> DEFAULT_ARGS = new LinkedHashMap<>();
+
     static {
         DEFAULT_ARGS.put("influxdbMetricsSender", HttpMetricsSender.class.getName());
         DEFAULT_ARGS.put("influxdbUrl", "http://host_to_change:8086/write?db=jmeter");
@@ -117,8 +120,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private Map<String, Float> allPercentiles;
     private String testTitle;
     private String testTags;
-    // Name of the application tested
-    private String application = "";
+    private String applicationName = "";
     private String userTag = "";
     private InfluxdbMetricsSender influxdbMetricsManager;
 
@@ -134,13 +136,10 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         sendMetrics();
     }
 
-    /**
-     * Send metrics
-     */
-    protected void sendMetrics() {
+    private void sendMetrics() {
 
         synchronized (LOCK) {
-            for (Map.Entry<String, SamplerMetric> entry : getMetricsInfluxdbPerSampler().entrySet()) {
+            for (Map.Entry<String, SamplerMetric> entry : metricsPerSampler.entrySet()) {
                 SamplerMetric metric = entry.getValue();
                 if (entry.getKey().equals(CUMULATED_METRICS)) {
                     addCumulatedMetrics(metric);
@@ -155,7 +154,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         UserMetric userMetrics = getUserMetrics();
         // For JMETER context
         StringBuilder tag = new StringBuilder(80);
-        tag.append(TAG_APPLICATION).append(application);
+        tag.append(TAG_APPLICATION).append(applicationName);
         tag.append(TAG_TRANSACTION).append("internal");
         tag.append(userTag);
         StringBuilder field = new StringBuilder(80);
@@ -172,124 +171,120 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     @FunctionalInterface
     private interface PercentileProvider {
-        public double getPercentileValue(double percentile);
+        double getPercentileValue(double percentile);
     }
-    /**
-     * Add request metrics to metrics manager.
-     *
-     * @param metric
-     *            {@link SamplerMetric}
-     */
+
     private void addMetrics(String transaction, SamplerMetric metric) {
-        // FOR ALL STATUS
-        addMetric(transaction, metric.getTotal(), metric.getSentBytes(), metric.getReceivedBytes(), TAG_ALL, metric.getAllMean(), metric.getAllMinTime(),
+        // ALL
+        addMetric(transaction, metric.getTotal(), metric.getSentBytes(), metric.getReceivedBytes(),
+                TAG_ALL, metric.getAllMean(), metric.getAllMinTime(),
                 metric.getAllMaxTime(), allPercentiles.values(), metric::getAllPercentile);
-        // FOR OK STATUS
-        addMetric(transaction, metric.getSuccesses(), null, null, TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
+        // OK
+        addMetric(transaction, metric.getSuccesses(), null, null,
+                TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
                 metric.getOkMaxTime(), okPercentiles.values(), metric::getOkPercentile);
-        // FOR KO STATUS
-        addMetric(transaction, metric.getFailures(), null, null, TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
+        // KO
+        addMetric(transaction, metric.getFailures(), null, null,
+                TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
                 metric.getKoMaxTime(), koPercentiles.values(), metric::getKoPercentile);
 
-        metric.getErrors().forEach((error, count) -> addErrorMetric(transaction, error.getResponseCode(),
-                    error.getResponseMessage(), count));
+        metric.getErrors().forEach((err, count) -> addErrorMetric(transaction, err, count));
     }
 
-    private void addErrorMetric(String transaction, String responseCode, String responseMessage, long count) {
-        if (count > 0) {
-            StringBuilder tag = new StringBuilder(70);
-            tag.append(TAG_APPLICATION).append(application);
-            tag.append(TAG_TRANSACTION).append(transaction);
-            tag.append(TAG_RESPONSE_CODE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseCode));
-            tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage));
-            tag.append(userTag);
-
-            StringBuilder field = new StringBuilder(30);
-            field.append(METRIC_COUNT).append(count);
-            influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
+    private void addErrorMetric(String transaction, ErrorMetric err, long count) {
+        if (count <= 0) {
+            return;
         }
+        StringBuilder tag = new StringBuilder(70);
+        tag.append(TAG_APPLICATION).append(applicationName);
+        tag.append(TAG_TRANSACTION).append(transaction);
+        tag.append(TAG_RESPONSE_CODE).append(AbstractInfluxdbMetricsSender.tagToStringValue(err.getResponseCode()));
+        tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(err.getResponseMessage()));
+        tag.append(userTag);
+
+        StringBuilder field = new StringBuilder(30);
+        field.append(METRIC_COUNT).append(count);
+        influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
     }
 
     private void addMetric(String transaction, int count,
-            Long sentBytes, Long receivedBytes,
-            String statut, double mean, double minTime, double maxTime,
-            Collection<Float> pcts, PercentileProvider percentileProvider) {
-        if (count > 0) {
-            StringBuilder tag = new StringBuilder(95);
-            tag.append(TAG_APPLICATION).append(application);
-            tag.append(TAG_STATUS).append(statut);
-            tag.append(TAG_TRANSACTION).append(transaction);
-            tag.append(userTag);
-
-            StringBuilder field = new StringBuilder(80);
-            field.append(METRIC_COUNT).append(count);
-            if (!Double.isNaN(mean)) {
-                field.append(',').append(METRIC_AVG).append(mean);
-            }
-            if (!Double.isNaN(minTime)) {
-                field.append(',').append(METRIC_MIN).append(minTime);
-            }
-            if (!Double.isNaN(maxTime)) {
-                field.append(',').append(METRIC_MAX).append(maxTime);
-            }
-            if(sentBytes != null) {
-                field.append(',').append(METRIC_SENT_BYTES).append(sentBytes);
-            }
-            if(receivedBytes != null) {
-                field.append(',').append(METRIC_RECEIVED_BYTES).append(receivedBytes);
-            }
-            for (Float pct : pcts) {
-                field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(
-                        percentileProvider.getPercentileValue(pct));
-            }
-            influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
+                           Long sentBytes, Long receivedBytes,
+                           String statut, double mean, double minTime, double maxTime,
+                           Collection<Float> pcts, PercentileProvider percentileProvider) {
+        if (count <= 0) {
+            return;
         }
+        StringBuilder tag = new StringBuilder(95);
+        tag.append(TAG_APPLICATION).append(applicationName);
+        tag.append(TAG_STATUS).append(statut);
+        tag.append(TAG_TRANSACTION).append(transaction);
+        tag.append(userTag);
+
+        StringBuilder field = new StringBuilder(80);
+        field.append(METRIC_COUNT).append(count);
+        if (!Double.isNaN(mean)) {
+            field.append(',').append(METRIC_AVG).append(mean);
+        }
+        if (!Double.isNaN(minTime)) {
+            field.append(',').append(METRIC_MIN).append(minTime);
+        }
+        if (!Double.isNaN(maxTime)) {
+            field.append(',').append(METRIC_MAX).append(maxTime);
+        }
+        if (sentBytes != null) {
+            field.append(',').append(METRIC_SENT_BYTES).append(sentBytes);
+        }
+        if (receivedBytes != null) {
+            field.append(',').append(METRIC_RECEIVED_BYTES).append(receivedBytes);
+        }
+        for (Float pct : pcts) {
+            field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(
+                    percentileProvider.getPercentileValue(pct));
+        }
+        influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
     }
 
     private void addCumulatedMetrics(SamplerMetric metric) {
         int total = metric.getTotal();
-        if (total > 0) {
-            StringBuilder tag = new StringBuilder(70);
-            StringBuilder field = new StringBuilder(100);
-            Collection<Float> pcts = allPercentiles.values();
-            tag.append(TAG_APPLICATION).append(application);
-            tag.append(TAG_TRANSACTION).append(CUMULATED_METRICS);
-            tag.append(TAG_STATUS).append(CUMULATED_METRICS);
-            tag.append(userTag);
-
-            field.append(METRIC_COUNT).append(total);
-            field.append(',').append(METRIC_COUNT_ERROR).append(metric.getFailures());
-
-            if (!Double.isNaN(metric.getOkMean())) {
-                field.append(',').append(METRIC_AVG).append(Double.toString(metric.getOkMean()));
-            }
-            if (!Double.isNaN(metric.getOkMinTime())) {
-                field.append(',').append(METRIC_MIN).append(Double.toString(metric.getOkMinTime()));
-            }
-            if (!Double.isNaN(metric.getOkMaxTime())) {
-                field.append(',').append(METRIC_MAX).append(Double.toString(metric.getOkMaxTime()));
-            }
-
-            field.append(',').append(METRIC_HIT).append(metric.getHits());
-            field.append(',').append(METRIC_SENT_BYTES).append(metric.getSentBytes());
-            field.append(',').append(METRIC_RECEIVED_BYTES).append(metric.getReceivedBytes());
-            for (Float pct : pcts) {
-                field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(Double.toString(metric.getAllPercentile(pct)));
-            }
-            influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
+        if (total <= 0) {
+            return;
         }
+        StringBuilder tag = new StringBuilder(70);
+        StringBuilder field = new StringBuilder(100);
+        Collection<Float> pcts = allPercentiles.values();
+        tag.append(TAG_APPLICATION).append(applicationName);
+        tag.append(TAG_TRANSACTION).append(CUMULATED_METRICS);
+        tag.append(TAG_STATUS).append(CUMULATED_METRICS);
+        tag.append(userTag);
+
+        field.append(METRIC_COUNT).append(total);
+        field.append(',').append(METRIC_COUNT_ERROR).append(metric.getFailures());
+
+        if (!Double.isNaN(metric.getOkMean())) {
+            field.append(',').append(METRIC_AVG).append(Double.toString(metric.getOkMean()));
+        }
+        if (!Double.isNaN(metric.getOkMinTime())) {
+            field.append(',').append(METRIC_MIN).append(Double.toString(metric.getOkMinTime()));
+        }
+        if (!Double.isNaN(metric.getOkMaxTime())) {
+            field.append(',').append(METRIC_MAX).append(Double.toString(metric.getOkMaxTime()));
+        }
+
+        field.append(',').append(METRIC_HIT).append(metric.getHits());
+        field.append(',').append(METRIC_SENT_BYTES).append(metric.getSentBytes());
+        field.append(',').append(METRIC_RECEIVED_BYTES).append(metric.getReceivedBytes());
+        for (Float pct : pcts) {
+            field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(Double.toString(metric.getAllPercentile(pct)));
+        }
+        influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
     }
 
-    /**
-     * @return the samplersList
-     */
     public String getSamplersRegex() {
         return samplersRegex;
     }
 
     /**
-     * @param samplersList
-     *            the samplersList to set
+     * @param samplersList the samplersList to set
      */
     public void setSamplersList(String samplersList) {
         this.samplersRegex = samplersList;
@@ -314,83 +309,93 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     @Override
     public void setupTest(BackendListenerContext context) throws Exception {
-        String influxdbMetricsSender = context.getParameter("influxdbMetricsSender");
-        String influxdbUrl = context.getParameter("influxdbUrl");
-        String influxdbToken = context.getParameter("influxdbToken");
         summaryOnly = context.getBooleanParameter("summaryOnly", false);
         samplersRegex = context.getParameter("samplersRegex", "");
-        application = AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter("application", ""));
-        measurement = AbstractInfluxdbMetricsSender
-                .tagToStringValue(context.getParameter("measurement", DEFAULT_MEASUREMENT));
+        applicationName = AbstractInfluxdbMetricsSender.tagToStringValue(
+                context.getParameter("application", ""));
+        measurement = AbstractInfluxdbMetricsSender.tagToStringValue(
+                context.getParameter("measurement", DEFAULT_MEASUREMENT));
         testTitle = context.getParameter("testTitle", "Test");
-        testTags = AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter("eventTags", ""));
-        String percentilesAsString = context.getParameter("percentiles", "");
-        String[] percentilesStringArray = percentilesAsString.split(SEPARATOR);
-        okPercentiles = new HashMap<>(percentilesStringArray.length);
-        koPercentiles = new HashMap<>(percentilesStringArray.length);
-        allPercentiles = new HashMap<>(percentilesStringArray.length);
-        DecimalFormat format = new DecimalFormat("0.##");
-        for (int i = 0; i < percentilesStringArray.length; i++) {
-            if (!StringUtils.isEmpty(percentilesStringArray[i].trim())) {
-                try {
-                    Float percentileValue = Float.valueOf(percentilesStringArray[i].trim());
-                    okPercentiles.put(AbstractInfluxdbMetricsSender.tagToStringValue(format.format(percentileValue)),
-                            percentileValue);
-                    koPercentiles.put(AbstractInfluxdbMetricsSender.tagToStringValue(format.format(percentileValue)),
-                            percentileValue);
-                    allPercentiles.put(AbstractInfluxdbMetricsSender.tagToStringValue(format.format(percentileValue)),
-                            percentileValue);
+        testTags = AbstractInfluxdbMetricsSender.tagToStringValue(
+                context.getParameter("eventTags", ""));
 
-                } catch (Exception e) {
-                    log.error("Error parsing percentile: '{}'", percentilesStringArray[i], e);
-                }
-            }
-        }
-        // Check if more row which started with 'TAG_' are filled ( corresponding to user tag )
-        StringBuilder userTagBuilder = new StringBuilder();
-        context.getParameterNamesIterator().forEachRemaining(name -> {
-            if (StringUtils.isNotBlank(name) && !DEFAULT_ARGS.containsKey(name.trim())
-                    && name.startsWith("TAG_")
-                    && StringUtils.isNotBlank(context.getParameter(name))) {
-                final String tagName = name.trim().substring(4);
-                final String tagValue = context.getParameter(name).trim();
-                userTagBuilder.append(',')
-                        .append(AbstractInfluxdbMetricsSender
-                                .tagToStringValue(tagName))
-                        .append('=')
-                        .append(AbstractInfluxdbMetricsSender.tagToStringValue(
-                                tagValue));
-                log.debug("Adding '{}' tag with '{}' value ", tagName, tagValue);
-            }
-        });
-        userTag = userTagBuilder.toString();
+        initPercentiles(context);
+        initUserTags(context);
+        initInfluxdbMetricsManager(context);
 
-        Class<?> clazz = Class.forName(influxdbMetricsSender);
-        this.influxdbMetricsManager = (InfluxdbMetricsSender) clazz.getDeclaredConstructor().newInstance();
-        influxdbMetricsManager.setup(influxdbUrl, influxdbToken);
         samplersToFilter = Pattern.compile(samplersRegex);
         addAnnotation(true);
 
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
         // Start immediately the scheduler and put the pooling ( 5 seconds by default )
         this.timerHandle = scheduler.scheduleAtFixedRate(this, 0, SEND_INTERVAL, TimeUnit.SECONDS);
-
     }
 
-    protected SamplerMetric getSamplerMetricInfluxdb(String sampleLabel) {
-        SamplerMetric samplerMetric = metricsPerSampler.get(sampleLabel);
-        if (samplerMetric == null) {
-            samplerMetric = new SamplerMetric();
-            SamplerMetric oldValue = metricsPerSampler.putIfAbsent(sampleLabel, samplerMetric);
-            if (oldValue != null) {
-                samplerMetric = oldValue;
+    private void initInfluxdbMetricsManager(BackendListenerContext context) throws Exception {
+        Class<?> clazz = Class.forName(context.getParameter("influxdbMetricsSender"));
+        influxdbMetricsManager = (InfluxdbMetricsSender) clazz.getDeclaredConstructor().newInstance();
+
+        String influxdbUrl = context.getParameter("influxdbUrl");
+        String influxdbToken = context.getParameter("influxdbToken");
+        influxdbMetricsManager.setup(influxdbUrl, influxdbToken);
+    }
+
+    private void initUserTags(BackendListenerContext context) {
+        // Check if more rows which started with 'TAG_' are filled ( corresponding to user tag )
+        StringBuilder userTagBuilder = new StringBuilder();
+        context.getParameterNamesIterator().forEachRemaining(name -> {
+            if (StringUtils.isNotBlank(name)
+                    && !DEFAULT_ARGS.containsKey(name.trim())
+                    && name.startsWith("TAG_")
+                    && StringUtils.isNotBlank(context.getParameter(name))) {
+                final String tagName = name.trim().substring(4);
+                final String tagValue = context.getParameter(name).trim();
+                userTagBuilder.append(',')
+                        .append(AbstractInfluxdbMetricsSender.tagToStringValue(tagName))
+                        .append('=')
+                        .append(AbstractInfluxdbMetricsSender.tagToStringValue(tagValue));
+                log.debug("Adding '{}' tag with '{}' value ", tagName, tagValue);
+            }
+        });
+        userTag = userTagBuilder.toString();
+    }
+
+    private void initPercentiles(BackendListenerContext context) {
+        String percentilesAsString = context.getParameter("percentiles", "");
+        String[] percentilesStringArray = percentilesAsString.split(SEPARATOR);
+        okPercentiles = new HashMap<>(percentilesStringArray.length);
+        koPercentiles = new HashMap<>(percentilesStringArray.length);
+        allPercentiles = new HashMap<>(percentilesStringArray.length);
+        DecimalFormat format = new DecimalFormat("0.##");
+        for (String percentile : percentilesStringArray) {
+            String trimmedPercentile = percentile.trim();
+            if (StringUtils.isEmpty(trimmedPercentile)) {
+                continue;
+            }
+            try {
+                Float percentileValue = Float.valueOf(trimmedPercentile);
+                String key = AbstractInfluxdbMetricsSender.tagToStringValue(format.format(percentileValue));
+                okPercentiles.put(key, percentileValue);
+                koPercentiles.put(key, percentileValue);
+                allPercentiles.put(key, percentileValue);
+            } catch (Exception e) {
+                log.error("Error parsing percentile: '{}'", percentile, e);
             }
         }
-        return samplerMetric;
     }
 
-    private Map<String, SamplerMetric> getMetricsInfluxdbPerSampler() {
-        return metricsPerSampler;
+    private SamplerMetric getSamplerMetricInfluxdb(String sampleLabel) {
+        SamplerMetric samplerMetric = metricsPerSampler.get(sampleLabel);
+        if (samplerMetric != null) {
+            return samplerMetric;
+        }
+
+        SamplerMetric newSamplerMetric = new SamplerMetric();
+        SamplerMetric oldValue = metricsPerSampler.putIfAbsent(sampleLabel, newSamplerMetric);
+        if (oldValue != null) {
+            newSamplerMetric = oldValue;
+        }
+        return newSamplerMetric;
     }
 
     @Override
@@ -422,15 +427,18 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
      * Tags is put as InfluxdbTag for better query performance on it
      * Never double or single quotes in influxdb except for string field
      * see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
-     * * @param startOrEnd boolean true for start, false for end
+     *
+     * @param isStartOfTest boolean true for start, false for end
      */
-    private void addAnnotation(boolean startOrEnd) {
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION,
-                TAG_APPLICATION + application + ",title=ApacheJMeter"+ userTag +
-                (StringUtils.isNotEmpty(testTags) ? TAGS+ testTags : ""),
-                TEXT +
-                        AbstractInfluxdbMetricsSender.fieldToStringValue(testTitle +
-                                (startOrEnd ? " started" : " ended")) + "\"" );
+    private void addAnnotation(boolean isStartOfTest) {
+        String tags = TAG_APPLICATION + applicationName +
+                ",title=ApacheJMeter" + userTag +
+                (StringUtils.isNotEmpty(testTags) ? TAGS + testTags : "");
+        String field = TEXT +
+                AbstractInfluxdbMetricsSender.fieldToStringValue(
+                        testTitle + (isStartOfTest ? " started" : " ended")) + "\"";
+
+        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, tags, field);
     }
 
     @Override

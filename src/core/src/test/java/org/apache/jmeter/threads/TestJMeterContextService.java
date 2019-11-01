@@ -20,7 +20,7 @@ package org.apache.jmeter.threads;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestJMeterContextService {
 
@@ -44,6 +44,7 @@ public class TestJMeterContextService {
     public static void incrNumberOfThreads(){
         JMeterContextService.incrNumberOfThreads();
     }
+
     // Give access to the method for test code
     public static void decrNumberOfThreads(){
         JMeterContextService.decrNumberOfThreads();

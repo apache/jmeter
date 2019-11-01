@@ -26,38 +26,38 @@ class ConvertersSpec extends Specification {
 
     def "Convert number-like (#input) to instance of (#conversionDestClass)"() {
         given:
-           def converter = Converters.getConverter(conversionDestClass)
+            def converter = Converters.getConverter(conversionDestClass)
         when:
             def result = converter.convert(input)
         then:
             result.class == expectedResult.class
             result == expectedResult || Math.abs(expectedResult - result) < precision
         where:
-        input       | conversionDestClass | expectedResult          | precision
-        " 42"       | Integer.class       | Integer.valueOf(42)     | 0
-        "-5"        | int.class           | Integer.valueOf(-5)     | 0
-        "5000000"   | Long.class          | Long.valueOf(5_000_000) | 0
-        "500 "      | long.class          | Long.valueOf(500)       | 0
-        "3.14"      | Double.class        | Double.valueOf(3.14)    | 0.0001
-        " 100 "     | double.class        | Double.valueOf(100)     | 0.0001
-        "+5"        | Float.class         | Float.valueOf(5)        | 0.0001
-        " 1.2E16 "  | float.class         | Float.valueOf(1.2E16)   | 0.0001
+            input      | conversionDestClass | expectedResult          | precision
+            " 42"      | Integer.class       | Integer.valueOf(42)     | 0
+            "-5"       | int.class           | Integer.valueOf(-5)     | 0
+            "5000000"  | Long.class          | Long.valueOf(5_000_000) | 0
+            "500 "     | long.class          | Long.valueOf(500)       | 0
+            "3.14"     | Double.class        | Double.valueOf(3.14)    | 0.0001
+            " 100 "    | double.class        | Double.valueOf(100)     | 0.0001
+            "+5"       | Float.class         | Float.valueOf(5)        | 0.0001
+            " 1.2E16 " | float.class         | Float.valueOf(1.2E16)   | 0.0001
     }
 
     def "Convert (#input) to instance of (#conversionDestClass)"() {
         given:
-        def converter = Converters.getConverter(conversionDestClass)
-     when:
-         def result = converter.convert(input)
-     then:
-         result == expectedResult
-     where:
-     input       | conversionDestClass | expectedResult
-     "FALSE"     | Boolean.class       | Boolean.FALSE
-     "true"      | boolean.class       | Boolean.TRUE
-     " true"     | boolean.class       | Boolean.FALSE
-     "fAlSe "    | boolean.class       | Boolean.FALSE
-     "a"         | Character.class     | 'a'
-     "ä"         | char.class          | 'ä'
+            def converter = Converters.getConverter(conversionDestClass)
+        when:
+            def result = converter.convert(input)
+        then:
+            result == expectedResult
+        where:
+            input    | conversionDestClass | expectedResult
+            "FALSE"  | Boolean.class       | Boolean.FALSE
+            "true"   | boolean.class       | Boolean.TRUE
+            " true"  | boolean.class       | Boolean.FALSE
+            "fAlSe " | boolean.class       | Boolean.FALSE
+            "a"      | Character.class     | 'a'
+            "ä"      | char.class          | 'ä'
     }
 }

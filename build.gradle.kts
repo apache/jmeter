@@ -32,14 +32,14 @@ plugins {
     java
     jacoco
     checkstyle
-    id("org.jetbrains.gradle.plugin.idea-ext") version "0.5" apply false
-    id("org.nosphere.apache.rat") version "0.5.2"
-    id("com.diffplug.gradle.spotless") version "3.24.3"
-    id("com.github.spotbugs") version "2.0.0"
-    id("org.sonarqube") version "2.7.1"
-    id("com.github.vlsi.crlf") version "1.17.0"
-    id("com.github.vlsi.ide") version "1.17.0"
-    id("com.github.vlsi.stage-vote-release") version "1.17.0"
+    id("org.jetbrains.gradle.plugin.idea-ext") apply false
+    id("org.nosphere.apache.rat")
+    id("com.diffplug.gradle.spotless")
+    id("com.github.spotbugs")
+    id("org.sonarqube")
+    id("com.github.vlsi.crlf")
+    id("com.github.vlsi.ide")
+    id("com.github.vlsi.stage-vote-release")
     signing
     publishing
 }
@@ -103,14 +103,24 @@ val rat by tasks.getting(org.nosphere.apache.rat.RatTask::class) {
     exclude(rootDir.resolve("rat-excludes.txt").readLines())
 }
 
+releaseArtifacts {
+    fromProject(":src:dist")
+    previewSite {
+        into("rat")
+        from(rat) {
+            filteringCharset = "UTF-8"
+            // XML is not really interesting for now
+            exclude("rat-report.xml")
+            // RAT reports have absolute paths, and we don't want to expose them
+            filter { str: String -> str.replace(rootDir.absolutePath, "") }
+        }
+    }
+}
+
 releaseParams {
     tlp.set("JMeter")
-    releaseTag.set("v${project.version.toString().replace('.', '_')}")
-    rcTag.set(releaseTag.map { "${it}_RC" + rc.get() })
-    previewSiteContents {
-        into("rat")
-        from(rat)
-    }
+    releaseTag.set("rel/v${project.version}")
+    rcTag.set(rc.map { "v${project.version}-rc$it" })
     svnDist {
         // All the release versions are put under release/jmeter/{source,binary}
         releaseFolder.set("release/jmeter")
@@ -156,6 +166,17 @@ val skipSpotless by extra {
 // Allow to skip building source/binary distributions
 val skipDist by extra {
     boolProp("skipDist") ?: false
+}
+
+// By default use Java implementation to sign artifacts
+// When useGpgCmd=true, then gpg command line tool is used for signing
+val useGpgCmd by extra {
+    boolProp("useGpgCmd") ?: false
+}
+
+// Signing is required for RELEASE version
+val skipSigning by extra {
+    boolProp("skipSigning") ?: boolProp("skipSign") ?: false
 }
 
 allprojects {
@@ -258,6 +279,19 @@ allprojects {
                 ktlint()
                 trimTrailingWhitespace()
                 endWithNewline()
+            }
+            if (project == rootProject) {
+                // Spotless does not exclude subprojects when using target(...)
+                // So **/*.md is enough to scan all the md files in JMeter codebase
+                // See https://github.com/diffplug/spotless/issues/468
+                format("markdown") {
+                    target("**/*.md")
+                    // Flot is known to have trailing whitespace, so the files
+                    // are kept in their original format (e.g. to simplify diff on library upgrade)
+                    targetExclude("bin/report-template/**/flot*/*.md")
+                    trimTrailingWhitespace()
+                    endWithNewline()
+                }
             }
         }
     }
@@ -413,12 +447,17 @@ allprojects {
     }
 
     plugins.withType<SigningPlugin> {
+        if (useGpgCmd) {
+            configure<SigningExtension> {
+                useGpgCmd()
+            }
+        }
         afterEvaluate {
             configure<SigningExtension> {
                 val release = rootProject.releaseParams.release.get()
                 // Note it would still try to sign the artifacts,
                 // however it would fail only when signing a RELEASE version fails
-                isRequired = release
+                isRequired = release && !skipSigning
             }
         }
     }
@@ -500,9 +539,26 @@ allprojects {
                     showStandardStreams = true
                 }
                 // Pass the property to tests
-                systemProperty("java.awt.headless", System.getProperty("java.awt.headless"))
-                systemProperty("junit.jupiter.execution.parallel.enabled", "true")
-                systemProperty("junit.jupiter.execution.timeout.default", "2 m")
+                fun passProperty(name: String, default: String? = null) {
+                    val value = System.getProperty(name) ?: default
+                    value?.let { systemProperty(name, it) }
+                }
+                passProperty("java.awt.headless")
+                passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
+                passProperty("junit.jupiter.execution.parallel.enabled", "true")
+                passProperty("junit.jupiter.execution.timeout.default", "2 m")
+                // https://github.com/junit-team/junit5/issues/2041
+                // Gradle does not print parameterized test names yet :(
+                afterTest(KotlinClosure2<TestDescriptor, TestResult, Any>({ descriptor, result ->
+                    if (result.resultType != TestResult.ResultType.SUCCESS) {
+                        val test = descriptor as org.gradle.api.internal.tasks.testing.TestDescriptorInternal
+                        val classDisplayName = test.className?.let {
+                            if (it.endsWith(test.classDisplayName)) it else "${test.className} [${test.classDisplayName}]"
+                        } ?: test.classDisplayName
+                        val testDisplayName = if (test.name == test.displayName) test.displayName else "${test.name} [${test.displayName}]"
+                        println("\n$classDisplayName > $testDisplayName: ${result.resultType}")
+                    }
+                }))
             }
             withType<SpotBugsTask>().configureEach {
                 group = LifecycleBasePlugin.VERIFICATION_GROUP
@@ -521,6 +577,7 @@ allprojects {
                 (options as StandardJavadocDocletOptions).apply {
                     noTimestamp.value = true
                     showFromProtected()
+                    locale = "en"
                     docEncoding = "UTF-8"
                     charSet = "UTF-8"
                     encoding = "UTF-8"

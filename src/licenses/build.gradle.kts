@@ -30,9 +30,15 @@ import com.github.vlsi.gradle.release.ExtraLicense
 import com.github.vlsi.gradle.release.dsl.dependencyLicenses
 import com.github.vlsi.gradle.release.dsl.licensesCopySpec
 
-val binaryDependencies by configurations.creating
-val binLicense by configurations.creating
-val srcLicense by configurations.creating
+val binaryDependencies by configurations.creating {
+    isCanBeConsumed = false
+}
+val binLicense by configurations.creating {
+    isCanBeResolved = false
+}
+val srcLicense by configurations.creating {
+    isCanBeResolved = false
+}
 
 dependencies {
     binaryDependencies(project(":src:dist", "runtimeElements"))
@@ -88,6 +94,14 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
 
     overrideLicense("dnsjava:dnsjava:2.1.9") {
         expectedLicense = SpdxLicense.BSD_2_Clause
+    }
+
+    for (mig in listOf("com.miglayout:miglayout-core", "com.miglayout:miglayout-swing")) {
+        overrideLicense(mig) {
+            expectedLicense = SimpleLicense("BSD", uri("http://www.debian.org/misc/bsd.license"))
+            effectiveLicense = SpdxLicense.BSD_3_Clause
+            licenseFiles = "miglayout"
+        }
     }
 
     overrideLicense("com.thoughtworks.xstream:xstream:1.4.11") {
@@ -215,10 +229,10 @@ val srcLicenseDir by tasks.registering(Sync::class) {
 }
 
 artifacts {
-    add(binLicense.name, binLicenseDir.get().destinationDir) {
+    add(binLicense.name, buildDir.resolve(binLicenseDir.name)) {
         builtBy(binLicenseDir)
     }
-    add(srcLicense.name, srcLicenseDir.get().destinationDir) {
+    add(srcLicense.name, buildDir.resolve(srcLicenseDir.name)) {
         builtBy(srcLicenseDir)
     }
 }

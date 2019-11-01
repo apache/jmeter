@@ -32,24 +32,20 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class XMLSchemaAssertionTest extends JMeterTestCase {
 
     private XMLSchemaAssertion assertion;
-
     private SampleResult result;
-
     private JMeterContext jmctx;
 
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         jmctx = JMeterContextService.getContext();
         assertion = new XMLSchemaAssertion();
-        assertion.setThreadContext(jmctx);// This would be done by the run
-                                            // command
+        assertion.setThreadContext(jmctx);// This would be done by the run command
         result = new SampleResult();
         JMeterVariables vars = new JMeterVariables();
         jmctx.setVariables(vars);

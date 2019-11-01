@@ -20,7 +20,6 @@ import com.github.vlsi.gradle.crlf.CrLfSpec
 import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.git.FindGitAttributes
 import com.github.vlsi.gradle.git.dsl.gitignore
-import com.github.vlsi.gradle.release.ReleaseExtension
 import org.gradle.api.internal.TaskOutputsInternal
 
 plugins {
@@ -37,6 +36,7 @@ var jars = arrayOf(
         // ":src:examples",
         ":src:functions",
         ":src:jorphan",
+        ":src:protocol:bolt",
         ":src:protocol:ftp",
         ":src:protocol:http",
         ":src:protocol:java",
@@ -49,9 +49,16 @@ var jars = arrayOf(
         ":src:protocol:native",
         ":src:protocol:tcp")
 
-val buildDocs by configurations.creating
-val binLicense by configurations.creating
-val srcLicense by configurations.creating
+// isCanBeConsumed = false ==> other modules must not use the configuration as a dependency
+val buildDocs by configurations.creating {
+    isCanBeConsumed = false
+}
+val binLicense by configurations.creating {
+    isCanBeConsumed = false
+}
+val srcLicense by configurations.creating {
+    isCanBeConsumed = false
+}
 
 // Note: you can inspect final classpath (list of jars in the binary distribution)  via
 // gw dependencies --configuration runtimeClasspath
@@ -151,6 +158,8 @@ val copyLibs by tasks.registering(Sync::class) {
         // it just removes everything it sees.
         // We configure it to keep txt files that should be present there (the files come from Git source tree)
         include("**/*.txt")
+        // Keep jars in lib/ext so developers don't have to re-install the plugsin again and again
+        include("ext/*.jar")
     }
     into("ext") {
         with(libsExt)
@@ -351,10 +360,12 @@ fun CopySpec.siteLayout() {
     manuals()
 }
 
-val previewSite by tasks.registering(Copy::class) {
+// See https://github.com/gradle/gradle/issues/10960
+val previewSiteDir = buildDir.resolve("site")
+val previewSite by tasks.registering(Sync::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Creates preview of a site to build/docs/site"
-    into("$buildDir/site")
+    into(previewSiteDir)
     CrLfSpec().run {
         gitattributes(gitProps)
         siteLayout()
@@ -466,19 +477,16 @@ for (type in listOf("binary", "source")) {
                 with(if (type == "source") sourceLayout() else binaryLayout())
             }
         }
-        rootProject.configure<ReleaseExtension> {
-            archive(archiveTask)
+        releaseArtifacts {
+            artifact(archiveTask)
         }
     }
 }
 
-rootProject.configure<ReleaseExtension> {
-    previewSiteContents {
-        CrLfSpec().run {
-            into("site") {
-                gitattributes(gitProps)
-                siteLayout()
-            }
+releaseArtifacts {
+    previewSite(previewSite) {
+        into("site") {
+            from(previewSiteDir)
         }
     }
 }
@@ -495,6 +503,14 @@ val runGui by tasks.registering() {
             classpath("$rootDir/bin/ApacheJMeter.jar")
             jvmArgs("-Xss256k")
             jvmArgs("-XX:MaxMetaspaceSize=256m")
+
+            val osName = System.getProperty("os.name")
+            if (osName.contains(Regex("mac os x|darwin|osx", RegexOption.IGNORE_CASE))) {
+                jvmArgs("-Xdock:name=JMeter")
+                jvmArgs("-Xdock:icon=$rootDir/xdocs/images/jmeter_square.png")
+                jvmArgs("-Dapple.laf.useScreenMenuBar=true")
+                jvmArgs("-Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS")
+            }
         }
     }
 }

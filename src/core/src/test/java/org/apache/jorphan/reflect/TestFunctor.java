@@ -28,13 +28,10 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-/*
- * Unit tests for classes that use Functors
- *
- */
+/** Unit tests for classes that use Functors */
 public class TestFunctor extends JMeterTestCase {
 
     interface HasName {
@@ -91,7 +88,7 @@ public class TestFunctor extends JMeterTestCase {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp(){
         Configurator.setAllLevels(Functor.class.getName(), Level.FATAL);
     }
@@ -141,6 +138,7 @@ public class TestFunctor extends JMeterTestCase {
         } catch (JMeterError ok){
         }
     }
+
     @Test
     public void testObjectName() throws Exception{
         Test1 t1 = new Test1("t1");
@@ -217,6 +215,7 @@ public class TestFunctor extends JMeterTestCase {
             fail("should have generated IllegalArgumentException;");
         } catch (IllegalArgumentException ok){}
     }
+
     @Test
     public void testIllegalState() throws Exception{
         Functor f = new Functor("method");

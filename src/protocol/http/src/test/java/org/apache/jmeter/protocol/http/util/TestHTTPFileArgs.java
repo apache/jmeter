@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestHTTPFileArgs {
 

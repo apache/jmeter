@@ -30,14 +30,14 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SumFunctionTest extends JMeterTestCase {
 
     private JMeterVariables vars = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         JMeterContext jmctx = JMeterContextService.getContext();
         jmctx.setVariables(new JMeterVariables());

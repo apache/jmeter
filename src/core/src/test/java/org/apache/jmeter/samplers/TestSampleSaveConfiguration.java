@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 // Extends JMeterTest case because it needs access to JMeter properties
 public class TestSampleSaveConfiguration extends JMeterTestCase {

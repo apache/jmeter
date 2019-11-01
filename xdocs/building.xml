@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,7 +45,8 @@ The basic command is:</p>
 </source>
 <p>
 See the list of available tasks via <code>./gradlew tasks</code> (or <code>./gradlew tasks --all</code>)
-for the other tasks that can be used.
+for the other tasks that can be used. More detailed information about the available tasks can be found
+in <a href="https://github.com/apache/jmeter/blob/master/gradle.md">gradle.md</a>.
 </p>
 
 <h3>Opening project via IntelliJ IDEA</h3>
@@ -74,7 +75,7 @@ Once you have downloaded the sources, you can setup the Eclipse project by runni
 
 <source>./gradlew eclipse</source>
 
-You can then import the project using 
+You can then import the project using
 <menuchoice>
     <guimenuitem>File</guimenuitem>
     <guimenuitem>Import</guimenuitem>
@@ -136,7 +137,7 @@ Check that patch does not break JUnit tests by running:
     <li>Open a bugzilla issue, see <a target="_blank" href="issues.html">Issues page</a></li>
     <li>Checkout Apache JMeter source</li>
     <li>Code your fix</li>
-    <li>Create your patch by Right clicking on Eclipse project and select 
+    <li>Create your patch by Right clicking on Eclipse project and select
         <menuchoice>
             <guimenuitem>Team</guimenuitem>
             <guimenuitem>Create Patch &hellip;</guimenuitem>
@@ -149,7 +150,7 @@ Check that patch does not break JUnit tests by running:
 <h2>Automated (nightly) builds</h2>
 <p>
 As part of the development process, the JMeter project has access to various Continuous Integration (CI) server builds.
-The build output can be useful for testing recent changes to the code-base. 
+The build output can be useful for testing recent changes to the code-base.
 </p>
 <p>
 Please note that the builds have not undergone any QA and should only be used for development testing.

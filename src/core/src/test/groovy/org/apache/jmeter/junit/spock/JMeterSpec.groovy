@@ -18,11 +18,8 @@
 
 package org.apache.jmeter.junit.spock
 
-import java.nio.charset.Charset
-
 import org.apache.jmeter.junit.JMeterTestCaseJUnit
 import org.apache.jmeter.junit.JMeterTestUtils
-import org.apache.jmeter.util.JMeterUtils
 
 import spock.lang.Specification
 
@@ -46,10 +43,6 @@ abstract class JMeterSpec extends Specification {
     static {
         // Initialize JMeterTestCaseJUnit which will setup JMeter properties, home, etc
         JMeterTestCaseJUnit.class.getSuperclass();
-    }
-
-    private static void logprop(String prop) {
-        System.out.println(prop + "=" + System.getProperty(prop))
     }
 
     protected String getResourceFilePath(String resource) {

@@ -26,18 +26,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-/**
- * Tests for {@link Converter}
- *
- */
+/** Tests for {@link Converter} */
 public class TestConverter {
 
-    /**
-     * Test {@link Converter#getCalendar(Object, Calendar)} with a given Date
-     * and null as default value
-     */
     @Test
     public void testGetCalendarObjectCalendarWithTimeAndNullDefault() {
         Calendar cal = new GregorianCalendar();
@@ -45,20 +38,12 @@ public class TestConverter {
         assertEquals(cal, Converter.getCalendar(time, null));
     }
 
-    /**
-     * Test {@link Converter#getCalendar(Object, Calendar)} with null as Date
-     * and a sensible default value
-     */
     @Test
     public void testGetCalendarObjectCalendarWithNullAndCalendarAsDefault() {
         Calendar cal = new GregorianCalendar();
         assertEquals(cal, Converter.getCalendar(null, cal));
     }
 
-    /**
-     * Test {@link Converter#getCalendar(Object, Calendar)} with correctly
-     * formatted strings and <code>null</code> as default value
-     */
     @Test
     public void testGetCalendarObjectCalendarWithValidStringAndNullDefault() {
         Calendar cal = new GregorianCalendar();
@@ -75,39 +60,23 @@ public class TestConverter {
         }
     }
 
-    /**
-     * Test {@link Converter#getCalendar(Object, Calendar)} with an invalid
-     * string and <code>null</code> as default value
-     */
     @Test
     public void testGetCalendarObjectCalendarWithInvalidStringAndNullDefault() {
         assertNull(Converter.getCalendar("invalid date", null));
     }
 
-    /**
-     * Test {@link Converter#getDate(Object, Date)} with a given Date
-     * and null as default value
-     */
     @Test
     public void testGetDateObjectDateWithTimeAndNullDefault() {
         Date time = new Date();
         assertEquals(time, Converter.getDate(time, null));
     }
 
-    /**
-     * Test {@link Converter#getDate(Object, Date)} with null as Date
-     * and a sensible default value
-     */
     @Test
     public void testGetDateObjectDateWithNullAndDateAsDefault() {
         Date date = new Date();
         assertEquals(date, Converter.getDate(null, date));
     }
 
-    /**
-     * Test {@link Converter#getDate(Object, Date)} with correctly
-     * formatted strings and <code>null</code> as default value
-     */
     @Test
     public void testGetDateObjectDateWithValidStringAndNullDefault() {
         Calendar cal = new GregorianCalendar();
@@ -124,13 +93,8 @@ public class TestConverter {
         }
     }
 
-    /**
-     * Test {@link Converter#getDate(Object, Date)} with an invalid
-     * string and <code>null</code> as default value
-     */
     @Test
     public void testGetDateObjectDateWithInvalidStringAndNullDefault() {
         assertNull(Converter.getDate("invalid date", null));
     }
-
 }

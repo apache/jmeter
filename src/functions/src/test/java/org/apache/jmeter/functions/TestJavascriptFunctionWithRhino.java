@@ -19,21 +19,19 @@
 package org.apache.jmeter.functions;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
-/**
- * Test JavaScript function with Rhino engine
- *
- */
+/** Test JavaScript function with Rhino engine */
 public class TestJavascriptFunctionWithRhino extends TestJavascriptFunction {
-    @Before
+
+    @BeforeEach
     public void setUp() {
         JMeterUtils.getJMeterProperties().put("javascript.use_rhino", "true");
         super.setUp();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         JMeterUtils.getJMeterProperties().remove("javascript.use_rhino");
     }

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.hamcrest.CoreMatchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestAuthorization {
 

@@ -48,11 +48,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Influxdb sender base on The Line Protocol. The Line Protocol is a text based
- * format for writing points to InfluxDB. Syntax : <measurement>[,<tag_key>=
- * <tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=
- * <field_value>] [<timestamp>] Each line, separated by the newline character,
- * represents a single point in InfluxDB. Line Protocol is whitespace sensitive.
+ * InfluxDB sender base on The Line Protocol.
+ * <p>
+ * The Line Protocol is a text based format for writing points to InfluxDB.
+ * Syntax:
+ * <pre>
+ * weather,location=us-midwest temperature=82 1465839830100400200
+ * |      -------------------- --------------  |
+ * |               |             |             |
+ * +-----------+--------+-+---------+-+---------+
+ * |measurement|,tag_set| |field_set| |timestamp|
+ * +-----------+--------+-+---------+-+---------+
+ * </pre>
+ * Each line, separated by the newline character, represents a single point in InfluxDB.
+ * The Line Protocol is whitespace sensitive.
+ * <p>
+ * See https://docs.influxdata.com/influxdb/v1.7/write_protocols/line_protocol_tutorial/
  *
  * @since 3.2
  */
@@ -67,11 +78,8 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     private List<MetricTuple> metrics = new ArrayList<>();
 
     private HttpPost httpRequest;
-
     private CloseableHttpAsyncClient httpClient;
-
     private URL url;
-
     private String token;
 
     private Future<HttpResponse> lastRequest;
@@ -85,10 +93,8 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
      * sending POST requests to the /write endpoint. Initiate the HttpClient
      * client with a HttpPost request from influxdb url
      *
-     * @param influxdbUrl
-     *            example : http://localhost:8086/write?db=myd&rp=one_week
-     * @param influxDBToken
-     *            example: my-token
+     * @param influxdbUrl   example : http://localhost:8086/write?db=myd&rp=one_week
+     * @param influxDBToken example: my-token
      * @see InfluxdbMetricsSender#setup(String, String)
      */
     @Override
@@ -104,14 +110,14 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
         ConnectingIOReactor ioReactor = new DefaultConnectingIOReactor(ioReactorConfig);
 
         // Create a connection manager with custom configuration.
-        PoolingNHttpClientConnectionManager connManager = new PoolingNHttpClientConnectionManager(
-                ioReactor);
+        PoolingNHttpClientConnectionManager connManager =
+                new PoolingNHttpClientConnectionManager(ioReactor);
 
         httpClient = HttpAsyncClientBuilder.create()
                 .setConnectionManager(connManager)
                 .setMaxConnPerRoute(2)
                 .setMaxConnTotal(2)
-                .setUserAgent("ApacheJMeter"+JMeterUtils.getJMeterVersion())
+                .setUserAgent("ApacheJMeter" + JMeterUtils.getJMeterVersion())
                 .disableCookieManagement()
                 .disableConnectionState()
                 .build();
@@ -122,7 +128,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     }
 
     /**
-     * @param url {@link URL} Influxdb Url
+     * @param url   {@link URL} Influxdb Url
      * @param token Influxdb 2.0 authorization token
      * @return {@link HttpPost}
      * @throws URISyntaxException
@@ -150,73 +156,69 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
         }
     }
 
-    /**
-     * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
-     *      writeAndSendMetrics()
-     */
     @Override
     public void writeAndSendMetrics() {
         List<MetricTuple> copyMetrics;
         synchronized (lock) {
-            if(metrics.isEmpty()) {
+            if (metrics.isEmpty()) {
                 return;
             }
             copyMetrics = metrics;
             metrics = new ArrayList<>(copyMetrics.size());
         }
-        if (!copyMetrics.isEmpty()) {
-            try {
-                if(httpRequest == null) {
-                    httpRequest = createRequest(url, token);
-                }
-                StringBuilder sb = new StringBuilder(copyMetrics.size()*35);
-                for (MetricTuple metric : copyMetrics) {
-                    // Add TimeStamp in nanosecond from epoch ( default in InfluxDB )
-                    sb.append(metric.measurement)
+        writeAndSendMetrics(copyMetrics);
+    }
+
+    private void writeAndSendMetrics(List<MetricTuple> copyMetrics) {
+        try {
+            if (httpRequest == null) {
+                httpRequest = createRequest(url, token);
+            }
+            StringBuilder sb = new StringBuilder(copyMetrics.size() * 35);
+            for (MetricTuple metric : copyMetrics) {
+                // Add TimeStamp in nanosecond from epoch ( default in InfluxDB )
+                sb.append(metric.measurement)
                         .append(metric.tag)
                         .append(" ") //$NON-NLS-1$
                         .append(metric.field)
                         .append(" ")
-                        .append(metric.timestamp+"000000")
+                        .append(metric.timestamp)
+                        .append("000000")
                         .append("\n"); //$NON-NLS-1$
+            }
+
+            httpRequest.setEntity(new StringEntity(sb.toString(), StandardCharsets.UTF_8));
+            lastRequest = httpClient.execute(httpRequest, new FutureCallback<HttpResponse>() {
+                @Override
+                public void completed(final HttpResponse response) {
+                    int code = response.getStatusLine().getStatusCode();
+                    /*
+                     * If your write request received HTTP
+                     * 204 No Content: it was a success!
+                     * 4xx: InfluxDB could not understand the request.
+                     * 5xx: The system is overloaded or significantly impaired.
+                     */
+                    if (MetricUtils.isSuccessCode(code)) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Success, number of metrics written: {}", copyMetrics.size());
+                        }
+                    } else {
+                        log.error("Error writing metrics to influxDB Url: {}, responseCode: {}, responseBody: {}", url, code, getBody(response));
+                    }
                 }
 
-                StringEntity entity = new StringEntity(sb.toString(), StandardCharsets.UTF_8);
+                @Override
+                public void failed(final Exception ex) {
+                    log.error("failed to send data to influxDB server.", ex);
+                }
 
-                httpRequest.setEntity(entity);
-                lastRequest = httpClient.execute(httpRequest, new FutureCallback<HttpResponse>() {
-                    @Override
-                    public void completed(final HttpResponse response) {
-                        int code = response.getStatusLine().getStatusCode();
-                        /*
-                         * HTTP response summary 2xx: If your write request received
-                         * HTTP 204 No Content, it was a success! 4xx: InfluxDB
-                         * could not understand the request. 5xx: The system is
-                         * overloaded or significantly impaired.
-                         */
-                        if (MetricUtils.isSuccessCode(code)) {
-                            if(log.isDebugEnabled()) {
-                                log.debug("Success, number of metrics written: {}", copyMetrics.size());
-                            }
-                        } else {
-                            log.error("Error writing metrics to influxDB Url: {}, responseCode: {}, responseBody: {}", url, code, getBody(response));
-                        }
-                    }
-                    @Override
-                    public void failed(final Exception ex) {
-                        log.error("failed to send data to influxDB server : {}", ex.getMessage());
-                    }
-                    @Override
-                    public void cancelled() {
-                        log.warn("Request to influxDB server was cancelled");
-                    }
-                });
-            }catch (URISyntaxException ex ) {
-                log.error(ex.getMessage());
-            } finally {
-                // We drop metrics in all cases
-                copyMetrics.clear();
-            }
+                @Override
+                public void cancelled() {
+                    log.warn("Request to influxDB server was cancelled");
+                }
+            });
+        } catch (URISyntaxException ex) {
+            log.error(ex.getMessage(), ex);
         }
     }
 
@@ -225,9 +227,9 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
      * @return String entity Body if any
      */
     private static String getBody(final HttpResponse response) {
-        String body= "";
+        String body = "";
         try {
-            if(response != null && response.getEntity() != null) {
+            if (response != null && response.getEntity() != null) {
                 body = EntityUtils.toString(response.getEntity());
             }
         } catch (Exception e) { // NOSONAR
@@ -236,10 +238,6 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
         return body;
     }
 
-    /**
-     * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
-     *      destroy()
-     */
     @Override
     public void destroy() {
         // Give some time to send last metrics before shutting down
@@ -249,7 +247,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             log.error("Error waiting for last request to be send to InfluxDB", e);
         }
-        if(httpRequest != null) {
+        if (httpRequest != null) {
             httpRequest.abort();
         }
         IOUtils.closeQuietly(httpClient);

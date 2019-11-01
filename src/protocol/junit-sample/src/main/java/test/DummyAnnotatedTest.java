@@ -29,7 +29,6 @@ import org.junit.Test;
 
 /**
  * Sample test cases for demonstrating JUnit4 sampler.
- *
  */
 public class DummyAnnotatedTest
 {

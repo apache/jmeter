@@ -65,7 +65,7 @@ You can use these to determine the correct property setting to change the loggin
 
 <p>
 It is sometimes very useful to see Log messages to debug dynamic scripting languages like BeanShell or
-groovy used in JMeter.
+Apache Groovy used in JMeter.
 You can view log messages directly in JMeter GUI, to do so:</p>
 <ul>
 <li>use menu <menuchoice><guimenuitem>Options</guimenuitem><guimenuitem>Log Viewer</guimenuitem></menuchoice>,

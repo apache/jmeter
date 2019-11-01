@@ -61,12 +61,10 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         }
     }
 
-
     @Override
     public int getSourceActions(JComponent c) {
         return MOVE;
     }
-
 
     @Override
     protected Transferable createTransferable(JComponent c) {
@@ -107,22 +105,16 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         return null;
     }
 
-
     private static void sortTreePathByRow(TreePath[] paths, final JTree tree) {
-        Comparator<TreePath> cp = new Comparator<TreePath>() {
+        Comparator<TreePath> cp = (o1, o2) -> {
+            int row1 = tree.getRowForPath(o1);
+            int row2 = tree.getRowForPath(o2);
 
-            @Override
-            public int compare(TreePath o1, TreePath o2) {
-                int row1 = tree.getRowForPath(o1);
-                int row2 = tree.getRowForPath(o2);
-
-                return row1<row2 ? -1 : (row1==row2 ? 0 : 1);
-            }
+            return Integer.compare(row1, row2);
         };
 
         Arrays.sort(paths, cp);
     }
-
 
     @Override
     protected void exportDone(JComponent source, Transferable data, int action) {
@@ -197,7 +189,6 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         // re-use node association logic
         return MenuFactory.canAddTo(target, nodes);
     }
-
 
     @Override
     public boolean importData(TransferHandler.TransferSupport support) {
@@ -275,7 +266,6 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         return true;
     }
 
-
     private JMeterTreeNode[] getDraggedNodes(Transferable t) {
         JMeterTreeNode[] nodes = null;
         try {
@@ -286,7 +276,6 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         }
         return nodes;
     }
-
 
     private class NodesTransferable implements Transferable {
         JMeterTreeNode[] nodes;

@@ -33,6 +33,7 @@ import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apiguardian.api.API;
 
 /**
  * The user interface for a controller which specifies that its subcomponents
@@ -42,7 +43,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 @GUIMenuSortOrder(3)
 public class LoopControlPanel extends AbstractControllerGui implements ActionListener {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     /**
      * A checkbox allowing the user to specify whether or not the controller
@@ -55,6 +56,8 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
      * should loop.
      */
     private JTextField loops;
+
+    private JLabel loopsLabel;
 
     /**
      * Boolean indicating whether or not this component should display its name.
@@ -90,6 +93,21 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         this.displayName = displayName;
         init();
         setState(1);
+    }
+
+    @API(status = API.Status.EXPERIMENTAL)
+    public JLabel getLoopsLabel() {
+        return loopsLabel;
+    }
+
+    @API(status = API.Status.EXPERIMENTAL)
+    public JCheckBox getInfinite() {
+        return infinite;
+    }
+
+    @API(status = API.Status.EXPERIMENTAL)
+    public JTextField getLoops() {
+        return loops;
     }
 
     /**
@@ -202,7 +220,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         JPanel loopPanel = new JPanel(new BorderLayout(5, 0));
 
         // LOOP LABEL
-        JLabel loopsLabel = new JLabel(JMeterUtils.getResString("iterator_num")); // $NON-NLS-1$
+        loopsLabel = new JLabel(JMeterUtils.getResString("iterator_num")); // $NON-NLS-1$
         loopPanel.add(loopsLabel, BorderLayout.WEST);
 
         JPanel loopSubPanel = new JPanel(new BorderLayout(5, 0));

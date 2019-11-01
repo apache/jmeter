@@ -22,7 +22,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
@@ -33,8 +32,8 @@ import javax.security.auth.Subject;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestAuthManagerThreadIteration {
     private JMeterContext jmctx;
@@ -44,19 +43,15 @@ public class TestAuthManagerThreadIteration {
 
     public KerberosManager initKerberosManager() throws IllegalAccessException, NoSuchFieldException {
         KerberosManager kerberosManager = new KerberosManager();
-        Future<Subject> future = Executors.newSingleThreadExecutor().submit(new Callable<Subject>() {
-            @Override
-            public Subject call() throws Exception {
-                return new Subject();
-            }
-        });
+        Future<Subject> future = Executors.newSingleThreadExecutor().submit(() -> new Subject());
         subjects.put("test", future);
         Field privateField = kerberosManager.getClass().getDeclaredField("subjects");
         privateField.setAccessible(true);
         privateField.set(kerberosManager, subjects);
         return kerberosManager;
     }
-    @Before
+
+    @BeforeEach
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmvars = new JMeterVariables();

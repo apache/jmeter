@@ -66,12 +66,12 @@ class RunTimeSpec extends Specification {
             long elapsed = System.currentTimeMillis() - now
         then:
             sut.getIterCount() == 1
-            loopCount >= expectedLoops
+            loopCount >= expectedLoops - tolerance
             loopCount <= expectedLoops + tolerance
-            elapsed >= runTimeMillis
+            elapsed >= runTimeMillis - (tolerance * samplerWaitTime)
             elapsed <= runTimeMillis + (tolerance * samplerWaitTime)
             samp1.getSamples() == sampler1Loops
-            samp2.getSamples() >= expectedLoops - sampler1Loops
+            samp2.getSamples() >= expectedLoops - sampler1Loops - tolerance
             samp2.getSamples() <= expectedLoops - sampler1Loops + tolerance
     }
 

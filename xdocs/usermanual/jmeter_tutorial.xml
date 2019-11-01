@@ -91,12 +91,12 @@ The folders inside of <code>apache-jmeter</code>
 <dl>
   <dt><code>bin</code></dt><dd>contains the <code>.bat</code> and <code>.sh</code> files for starting JMeter.
       It also contains <code>ApacheJMeter.jar</code> and properties file</dd>
-  <dt><code>docs</code></dt><dd>directory contains the JMeter documentation files</dd>
+  <dt><code>build/docs</code></dt><dd>directory contains the JMeter documentation files</dd>
   <dt><code>extras</code></dt><dd>ant related extra files</dd>
   <dt><code>lib</code></dt><dd>contains the required jar files for JMeter</dd>
   <dt><code>lib/ext</code></dt><dd>contains the core jar files for JMeter and the protocols</dd>
   <dt><code>src</code></dt><dd>contains subdirectory for each protocol and component</dd>
-  <dt><code>test</code></dt><dd>unit test related directory</dd>
+  <dt><code>src/*/test</code></dt><dd>unit test related directory</dd>
   <dt><code>xdocs</code></dt><dd>XML files for documentation. JMeter generates its documentation from XML.</dd>
 </dl>
 
@@ -110,12 +110,29 @@ The folders inside of <code>src</code>
 </p>
 
 <dl>
+<!--
+  <dt><code>bom</code></dt><dd></dd>
+-->
+  <dt><code>bshclient</code></dt><dd>code for the BeanShell based client</dd>
+  <dt><code>bolt</code></dt><dd>code for the Bolt protocol</dd>
   <dt><code>components</code></dt><dd>contains non-protocol-specific components like visualizers, assertions, etc.</dd>
+<!--
+  <dt><code>config</code></dt><dd>XXX</dd>
+-->
   <dt><code>core</code></dt><dd>the core code of JMeter including all core interfaces and abstract classes.</dd>
+  <dt><code>dist</code></dt><dd>builds script that creates a distribution</dd>
+  <dt><code>dist-check</code></dt><dd>code related to testing the distribution. It is the place to look for
+    when you want to update the contents of the resulting source/binary archive</dd>
   <dt><code>examples</code></dt><dd>example sampler demonstrating how to use the new bean framework</dd>
   <dt><code>functions</code></dt><dd>standard functions used by all components</dd>
+  <dt><code>generator</code></dt><dd>code to generate a test plan with all elements. Used for testing the distribution</dd>
   <dt><code>jorphan</code></dt><dd>utility classes providing common utility functions</dd>
+  <dt><code>launcher</code></dt><dd>code to help start and stop JMeter through API</dd>
+  <dt><code>licenses</code></dt><dd>contains information about the licenses used in JMeters dependencies</dd>
   <dt><code>protocol</code></dt><dd>contains the different protocols JMeter supports</dd>
+  <dt><code>release</code></dt><dd>code related to releasing JMeter distribution</dd>
+  <dt><code>testkit</code></dt><dd>utility code for testing</dd>
+  <dt><code>testkit-wiremock</code></dt><dd>utility code for testing with WireMock</dd>
 </dl>
 
 <p>
@@ -131,11 +148,15 @@ The folders inside of <code>protocol</code>
   <dt><code>http</code></dt><dd>components for load testing web servers</dd>
   <dt><code>java</code></dt><dd>components for load testing java components</dd>
   <dt><code>jdbc</code></dt><dd>components for load testing database servers using JDBC</dd>
-  <dt><code>jndi</code></dt><dd>components for load testing JNDI</dd>
+  <dt><code>jms</code></dt><dd>components for load testing JMS servers</dd>
+  <dt><code>junit</code></dt><dd>components for load testing using JUnit tests</dd>
+  <dt><code>junit-sample</code></dt><dd>examples for JUnit based test implementations</dd>
   <dt><code>ldap</code></dt><dd>components for load testing LDAP servers</dd>
   <dt><code>mail</code></dt><dd>components for load testing mail servers</dd>
+  <dt><code>native</code></dt><dd>components for load testing OS native commands</dd>
   <dt><code>tcp</code></dt><dd>components for load testing TCP services</dd>
 </dl>
+
 
 <p>
 As a general rule, all samplers related to HTTP will reside in <code>http</code> directory. The exception to the
@@ -842,42 +863,22 @@ p.setPropertyEditorClass(FileEditor.class);
 <subsection name="&sect-num;.6 Building JMeter" anchor="building">
 
 <p>
-Like other Jakarta projects, JMeter uses ANT to compile and build the distribution. JMeter has
-several tasks defined, which make it easier for developers. For those unfamiliar with ANT, it's a
-build tool similar to make on Unix. A list of the ANT tasks with a short description is provided
-below.
+JMeter uses Gradle to compile and build the distribution. JMeter has
+several tasks defined, which make it easier for developers to build the complete project.
+For those unfamiliar with Gradle, it's a build tool similar to make on Unix.
+A list of the Gradle tasks with a short description is provided
+in <a href="https://github.com/apache/jmeter/blob/master/gradle.md">gradle.md</a>, which can be found
+ in the root source directory.
 </p>
-
-<dl>
-  <dt><code>all</code></dt><dd>builds all components and protocols</dd>
-  <dt><code>compile</code></dt><dd>compiles all the directories and components</dd>
-  <dt><code>compile-core</code></dt><dd>compiles the core directory and all dependencies</dd>
-  <dt><code>compile-components</code></dt><dd>compiles the components directory and all dependencies</dd>
-  <dt><code>compile-ftp</code></dt><dd>compiles the samples in ftp directory and all dependencies</dd>
-  <dt><code>compile-functions</code></dt><dd>compiles the functions and all dependencies</dd>
-  <dt><code>compile-htmlparser</code></dt><dd>compiles htmlparser and all dependencies</dd>
-  <dt><code>compile-http</code></dt><dd>compiles the samplers in http directory and all dependencies</dd>
-  <dt><code>compile-java</code></dt><dd>compiles the samplers in java directory and all dependencies</dd>
-  <dt><code>compile-jdbc</code></dt><dd>compiles the samplers in jdbc directory and all dependencies</dd>
-  <dt><code>compile-jorphan</code></dt><dd>compiles the jorphan utility classes</dd>
-  <dt><code>compile-ldap</code></dt><dd>compiles the samplers in ldap directory and all dependencies</dd>
-  <dt><code>compile-monitor</code></dt><dd>compiles the sampler in monitor directory and all dependencies</dd>
-  <dt><code>compile-rmi</code></dt><dd>compiles the samplers in rmi directory and all dependencies</dd>
-  <dt><code>compile-tests</code></dt><dd>compiles the tests and all dependencies</dd>
-  <dt><code>docs-api</code></dt><dd>creates the javadocs</dd>
-  <dt><code>docs-all</code></dt><dd>generates all docs.</dd>
-  <dt><code>package</code></dt><dd>compiles everything and creates jar files of the compiled protocols</dd>
-  <dt><code>package-only</code></dt><dd>creates jar files of the compiled components</dd>
-</dl>
 
 <p>
 Here are some example commands.
 </p>
 
 <dl>
-  <dt><code>ant compile-http</code></dt><dd>Compiles just http components</dd>
-  <dt><code>ant package</code></dt><dd>Creates the jar files</dd>
-  <dt><code>ant docs-all</code></dt><dd>Generates the html documentation and javadocs</dd>
+  <dt><code>./gradlew runGui</code></dt><dd>Build and start JMeter GUI</dd>
+  <dt><code>./gradlew createDist</code></dt><dd>Build project and copy relevant jar files to <code>./lib</code> folder</dd>
+  <dt><code>./gradlew :src:dist:previewSite</code></dt><dd>Creates preview of a site to <code>./build/docs/site</code></dd>
 </dl>
 
 </subsection>
