@@ -45,6 +45,7 @@ public class DnsManagerTest {
         // By default it uses 3 retries (see org.xbill.DNS.ExtendedResolver#setRetries)
         dns.setTimeoutMs(2000);
         try { // Temporary test: what do other hosts generate?
+            System.out.println("Testing localhost");
             java.net.InetAddress ina[];
             ina = dns.resolve("localhost");
             System.out.println(java.util.Arrays.toString(ina));
