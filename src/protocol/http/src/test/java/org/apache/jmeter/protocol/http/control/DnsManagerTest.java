@@ -46,7 +46,7 @@ public class DnsManagerTest {
         dns.setTimeoutMs(2000);
         try { // Temporary test: what do other hosts generate?
             System.out.println("Testing localhost");
-            java.net.InetAddress ina[];
+            java.net.InetAddress[] ina;
             ina = dns.resolve("localhost");
             System.out.println(java.util.Arrays.toString(ina));
         } catch (Exception e) {
