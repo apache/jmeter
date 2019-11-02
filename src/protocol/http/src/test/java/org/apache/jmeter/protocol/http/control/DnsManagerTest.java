@@ -44,15 +44,6 @@ public class DnsManagerTest {
         dns.addServer("20.0.118.11");
         // By default it uses 3 retries (see org.xbill.DNS.ExtendedResolver#setRetries)
         dns.setTimeoutMs(2000);
-        try { // Temporary test: what do other hosts generate?
-            System.out.println("Testing localhost");
-            java.net.InetAddress[] ina;
-            ina = dns.resolve("localhost");
-            System.out.println(java.util.Arrays.toString(ina));
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         HTTPSamplerBase http = HTTPSamplerFactory.newInstance(httpImplementation);
         http.setDNSResolver(dns);
         http.setMethod(HTTPSampler.GET);
