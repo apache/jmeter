@@ -44,7 +44,6 @@ public class DnsManagerTest {
         dns.addServer("20.0.118.11");
         // By default it uses 3 retries (see org.xbill.DNS.ExtendedResolver#setRetries)
         dns.setTimeoutMs(2000);
-
         HTTPSamplerBase http = HTTPSamplerFactory.newInstance(httpImplementation);
         http.setDNSResolver(dns);
         http.setMethod(HTTPSampler.GET);
