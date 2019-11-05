@@ -54,6 +54,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.visualizers.CorrelationRecorder;
 import org.apache.jorphan.collections.HashTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +95,10 @@ public class Correlation {
     public static void extractParameters(File file) throws IllegalUserActionException {
         if (null == file) {
             throw new NullPointerException("JMX file is null. Please check the file and try again"); //$NON-NLS-1$
+        }
+        // Check if response buffer is empty
+        if(CorrelationRecorder.buffer == null || CorrelationRecorder.buffer.isEmpty()) {
+            throw new IllegalUserActionException("No Response data found. Make sure you have recorded the script and not opened it.");
         }
         // Load the imported JMX file and create a list of HTTP sample requests
         List<HTTPSamplerBase> importedJmxSampleRequestList = new ArrayList<>();
