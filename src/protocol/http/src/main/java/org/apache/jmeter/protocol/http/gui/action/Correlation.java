@@ -56,6 +56,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.CorrelationRecorder;
 import org.apache.jorphan.collections.HashTree;
 import org.slf4j.Logger;
@@ -66,6 +67,16 @@ public class Correlation {
     private static final Logger log = LoggerFactory.getLogger(Correlation.class);
 
     private static Set<HTTPSamplerProxy> samplerSet = new LinkedHashSet<>();
+
+    private static int count = 0;
+
+    public static int getCount() {
+        return count;
+    }
+
+    public static void setCount(int count) {
+        Correlation.count = count;
+    }
 
     private static final String PARANTHESES_OPEN = "("; //$NON-NLS-1$
     private static final String PARANTHESES_CLOSED = ")"; //$NON-NLS-1$
@@ -144,6 +155,8 @@ public class Correlation {
         log.info("List of parameters required for correlation is created.");
         // display data into Correlation table
         CorrelationTableModel.setRowData(correlationCandidates);
+        // Set number of extractors added to zero
+        setCount(0);
     }
 
     /**
@@ -313,6 +326,7 @@ public class Correlation {
         // Replace existing correlated parameter values by their correlated variable
         // alias
         replaceParameterValues((JMeterTreeNode) guiPackage.getTreeModel().getRoot(), parameterMap, guiPackage);
+        JMeterUtils.reportInfoToUser("Correlation successful. Added " + count + " extractors.", "Successful");
         // clear the extractors map
         CorrelationExtractor.getListOfMap().clear();
     }
@@ -348,6 +362,7 @@ public class Correlation {
         } catch (IllegalUserActionException err) {
             log.error("Exception while adding a component to tree. {}", err.getMessage());
         }
+        setCount(getCount() + 1);
     }
 
     /**

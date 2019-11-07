@@ -37,6 +37,7 @@ import org.apache.jmeter.extractor.json.jsonpath.JSONPostProcessor;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.CorrelationRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -265,6 +266,9 @@ public class CorrelationExtractor {
         try {
             if (!getListOfMap().isEmpty()) {
                 Correlation.updateJxmFileWithExtractors(getListOfMap(), parameterMap);
+            } else {
+                JMeterUtils.reportErrorToUser(
+                        "Could not find parameters in response data. Please check the logs for more information.", "Failure");
             }
         } catch (UnsupportedEncodingException e) {
             log.error("Could not update the JMX file. {}", e.getMessage());
