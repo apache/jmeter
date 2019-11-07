@@ -125,7 +125,7 @@ releaseParams {
         // All the release versions are put under release/jmeter/{source,binary}
         releaseFolder.set("release/jmeter")
         releaseSubfolder.apply {
-            put(Regex("_src\\."), "sources")
+            put(Regex("_src\\."), "source")
             put(Regex("."), "binaries")
         }
     }
