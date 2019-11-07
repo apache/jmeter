@@ -135,6 +135,12 @@ releaseParams {
             stagingProfileId.set("4d29c092016673")
         }
     }
+    validateReleaseParams += Runnable {
+        if (useGpgCmd && findProperty("signing.gnupg.keyName") == null) {
+            throw GradleException("Please specify signing key id via signing.gnupg.keyName " +
+                    "(see https://github.com/gradle/gradle/issues/8657)")
+        }
+    }
 }
 
 val jacocoReport by tasks.registering(JacocoReport::class) {
