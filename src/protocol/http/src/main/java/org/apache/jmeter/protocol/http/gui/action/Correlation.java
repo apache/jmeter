@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.tree.TreePath;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.jmeter.config.Argument;
@@ -64,7 +65,7 @@ public class Correlation {
 
     private static final Logger log = LoggerFactory.getLogger(Correlation.class);
 
-    private static Set<HTTPSamplerProxy> samplerSet = new HashSet<>();
+    private static Set<HTTPSamplerProxy> samplerSet = new LinkedHashSet<>();
 
     private static final String PARANTHESES_OPEN = "("; //$NON-NLS-1$
     private static final String PARANTHESES_CLOSED = ")"; //$NON-NLS-1$
@@ -275,7 +276,8 @@ public class Correlation {
         // and if the keys are equal and values are different,
         // add them to candidates map
         firstJmxMap.forEach((key, value) -> {
-            if (value != null && secondJmxMap.get(key) != null && !value.equals(secondJmxMap.get(key))) {
+            if (StringUtils.isNotBlank(value) && StringUtils.isNotBlank(secondJmxMap.get(key))
+                    && !value.equals(secondJmxMap.get(key))) {
                 candidatesList.add(Arrays.asList(Boolean.FALSE, key, value, secondJmxMap.get(key)));
             }
         });
@@ -410,7 +412,7 @@ public class Correlation {
                 }
                 // replace query parameters in path
                 String path = sample.getPath();
-                if (path == null || path.isEmpty()) {
+                if (StringUtils.isBlank(path)) {
                     continue;
                 }
                 Optional<String> keyToReplace = parameterMap.entrySet().stream()
