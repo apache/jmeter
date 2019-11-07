@@ -45,6 +45,7 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.functions.CorrelationFunction;
 import org.apache.jmeter.gui.CorrelationTableModel;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -403,8 +404,8 @@ public class Correlation {
                         // Remove the existing http argument and replace its value with the correlated
                         // parameter alias
                         sample.getArguments().removeArgument(entry.getKey());
-                        sample.getArguments()
-                                .addArgument(new HTTPArgument(firstKey.get(), "${" + firstKey.get() + "}")); //$NON-NLS-1$ //$NON-NLS-2$
+                        sample.getArguments().addArgument(new HTTPArgument(
+                                CorrelationFunction.extractVariable(firstKey.get()), "${" + firstKey.get() + "}")); //$NON-NLS-1$ //$NON-NLS-2$
                     }
                 }
                 // replace query parameters in path
