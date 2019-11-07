@@ -70,7 +70,7 @@ public class CorrelationGui {
         JScrollPane sp = new JScrollPane(jTable);
         frame.add(sp, BorderLayout.CENTER);
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // OK event of JFrame
         ok.addActionListener(event -> {
             // Initialize local variables
