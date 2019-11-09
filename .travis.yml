@@ -61,7 +61,7 @@ matrix:
     - name: jmeter-maven-plugin tests
       jdk: openjdk8
       script:
-        - ./gradlew publishToMavenLocal -Pjmeter.version=42.0
+        - ./gradlew -PskipJavadoc publishToMavenLocal -Pjmeter.version=42.0
         - cd ..
         - git clone --depth 100 https://github.com/jmeter-maven-plugin/jmeter-maven-plugin.git
         - cd jmeter-maven-plugin

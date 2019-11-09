@@ -29,6 +29,17 @@ val skipMavenPublication = setOf(
     ":src:testkit-wiremock"
 )
 
+fun Project.boolProp(name: String) =
+    findProperty(name)
+        // Project properties include tasks, extensions, etc, and we want only String properties
+        // We don't want to use "task" as a boolean property
+        ?.let { it as? String }
+        ?.equals("false", ignoreCase = true)?.not()
+
+val skipJavadoc by extra {
+    boolProp("skipJavadoc") ?: false
+}
+
 subprojects {
     if (path == ":src:bom") {
         return@subprojects
@@ -136,10 +147,12 @@ subprojects {
                 version = rootProject.version.toString()
                 from(components["java"])
 
-                // Eager task creation is required due to
-                // https://github.com/gradle/gradle/issues/6246
-                artifact(sourcesJar.get())
-                artifact(javadocJar.get())
+                if (!skipJavadoc) {
+                    // Eager task creation is required due to
+                    // https://github.com/gradle/gradle/issues/6246
+                    artifact(sourcesJar.get())
+                    artifact(javadocJar.get())
+                }
 
                 // Use the resolved versions in pom.xml
                 // Gradle might have different resolution rules, so we set the versions
