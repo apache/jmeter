@@ -146,6 +146,8 @@ releaseParams {
     }
 }
 
+val isReleaseVersion = rootProject.releaseParams.release.get()
+
 val jacocoReport by tasks.registering(JacocoReport::class) {
     group = "Coverage reports"
     description = "Generates an aggregate report from all subprojects"
@@ -447,26 +449,27 @@ allprojects {
     }
 
     // Not all the modules use publishing plugin
-    plugins.withType<PublishingPlugin> {
-        apply<SigningPlugin>()
-        // Sign all the published artifacts
-        signing {
-            sign(publishing.publications)
+    if (isReleaseVersion && !skipSigning) {
+        plugins.withType<PublishingPlugin> {
+            apply<SigningPlugin>()
+            // Sign all the published artifacts
+            signing {
+                sign(publishing.publications)
+            }
         }
     }
 
     plugins.withType<SigningPlugin> {
         if (useGpgCmd) {
-            configure<SigningExtension> {
+            signing {
                 useGpgCmd()
             }
         }
         afterEvaluate {
-            configure<SigningExtension> {
-                val release = rootProject.releaseParams.release.get()
+            signing {
                 // Note it would still try to sign the artifacts,
                 // however it would fail only when signing a RELEASE version fails
-                isRequired = release && !skipSigning
+                isRequired = isReleaseVersion && !skipSigning
             }
         }
     }
