@@ -82,8 +82,6 @@ project("http") {
             exclude("com.google.code.findbugs", "jsr305")
         }
         implementation("dnsjava:dnsjava")
-        implementation("org.apache.httpcomponents:httpclient")
-        implementation("org.apache.httpcomponents:httpcore")
         implementation("org.apache.httpcomponents:httpmime")
         implementation("org.brotli:dec")
         testImplementation(testFixtures(project(":src:testkit-wiremock")))

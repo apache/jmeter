@@ -79,8 +79,6 @@ dependencies {
     implementation("org.apache.commons:commons-math3") {
         because("Mean, DescriptiveStatistics")
     }
-    implementation("xmlpull:xmlpull")
-    implementation("xpp3:xpp3_min")
     // For some reason JMeter bundles just tika-core and tika-parsers without transitive
     // dependencies. So we exclude those
     implementation("org.apache.tika:tika-core") {
