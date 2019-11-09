@@ -55,3 +55,11 @@ matrix:
       script:
         # Spotless, Checksyle, and JaCoCo are verified here to ensure they all work with the latest supported Java
         - xvfb-run ./gradlew build jacocoReport -Duser.language=fr -Duser.country=FR $SKIP_TAR
+    - name: jmeter-maven-plugin tests
+      jdk: openjdk8
+      script:
+        - ./gradlew publishToMavenLocal -Pjmeter.version=42.0
+        - cd ..
+        - git clone --depth 100 https://github.com/jmeter-maven-plugin/jmeter-maven-plugin.git
+        - cd jmeter-maven-plugin
+        - mvn verify -Djmeter.version=42.0-SNAPSHOT
