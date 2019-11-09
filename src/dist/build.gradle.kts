@@ -53,6 +53,12 @@ var jars = arrayOf(
 val buildDocs by configurations.creating {
     isCanBeConsumed = false
 }
+val generatorJar by configurations.creating {
+    isCanBeConsumed = false
+}
+val junitSampleJar by configurations.creating {
+    isCanBeConsumed = false
+}
 val binLicense by configurations.creating {
     isCanBeConsumed = false
 }
@@ -75,6 +81,8 @@ dependencies {
 
     binLicense(project(":src:licenses", "binLicense"))
     srcLicense(project(":src:licenses", "srcLicense"))
+    generatorJar(project(":src:generator", "archives"))
+    junitSampleJar(project(":src:protocol:junit-sample", "archives"))
 
     buildDocs(platform(project(":src:bom")))
     buildDocs("org.apache.velocity:velocity")
@@ -130,10 +138,10 @@ val populateLibs by tasks.registering {
                         jorphanProject, bshclientProject -> libs
                         else -> libsExt
                     }).from(dep.file) {
-                        // Technically speaking, current JMeter artifacts do not have version in the name
-                        // however rename is here just in case
+                        // Remove version from the file name
                         rename { dep.name + "." + dep.extension }
                     }
+
                 else -> libs.from(dep.file)
             }
         }
@@ -147,9 +155,6 @@ libsExt.from(populateLibs)
 binLibs.from(populateLibs)
 
 val copyLibs by tasks.registering(Sync::class) {
-    val junitSampleJar = project(":src:protocol:junit-sample").tasks.named(JavaPlugin.JAR_TASK_NAME)
-    dependsOn(junitSampleJar)
-    val generatorJar = project(":src:generator").tasks.named(JavaPlugin.JAR_TASK_NAME)
     // Can't use $rootDir since Gradle somehow reports .gradle/caches/ as "always modified"
     rootSpec.into("$rootDir/lib")
     with(libs)
@@ -158,15 +163,18 @@ val copyLibs by tasks.registering(Sync::class) {
         // it just removes everything it sees.
         // We configure it to keep txt files that should be present there (the files come from Git source tree)
         include("**/*.txt")
-        // Keep jars in lib/ext so developers don't have to re-install the plugsin again and again
+        // Keep jars in lib/ext so developers don't have to re-install the plugins again and again
         include("ext/*.jar")
+        exclude("ext/ApacheJMeter*.jar")
     }
     into("ext") {
         with(libsExt)
-        from(generatorJar)
+        from(files(generatorJar)) {
+            rename { "ApacheJMeter_generator.jar" }
+        }
     }
     into("junit") {
-        from(junitSampleJar) {
+        from(files(junitSampleJar)) {
             rename { "test.jar" }
         }
     }
@@ -472,6 +480,8 @@ for (type in listOf("binary", "source")) {
             // Gradle defaults to the following pattern, and JMeter was using apache-jmeter-5.1_src.zip
             // [baseName]-[appendix]-[version]-[classifier].[extension]
             archiveBaseName.set("apache-jmeter-${rootProject.version}${if (type == "source") "_src" else ""}")
+            // Discard project version since we want it to be added before "_src"
+            archiveVersion.set("")
             CrLfSpec(eol).run {
                 wa1191SetInputs(gitProps)
                 with(if (type == "source") sourceLayout() else binaryLayout())

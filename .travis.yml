@@ -7,10 +7,13 @@ install: true
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  - rm -rf $HOME/.m2/repository/org/apache/jmeter
+
 cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/.m2/repository
 
 env:
   global:

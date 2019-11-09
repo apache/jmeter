@@ -280,6 +280,7 @@ if (enableSpotBugs) {
 val licenseHeaderFile = file("config/license.header.java")
 allprojects {
     group = "org.apache.jmeter"
+    version = rootProject.version
     // JMeter ClassFinder parses "class.path" and tries to find jar names there,
     // so we should produce jars without versions names for now
     // version = rootProject.version
