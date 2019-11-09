@@ -144,17 +144,17 @@
     <dependency group='com.github.bulenkov.darcula' module='darcula' version='e208efb96f70e4be9dc362fbb46f6e181ef501dd'>
       <sha512>80F3335D8EA3FB3FF07A12A79C958C4E3F8BB542511C52825A8B3694AC96F027E24396CE9EDCEFA44EE93B5CBED4E4AED4575E6AAED56F363BAE92C52EE85D22</sha512>
     </dependency>
-    <dependency group='com.github.vlsi.gradle' module='crlf-plugin' version='1.42.0'>
+    <dependency group='com.github.vlsi.gradle' module='crlf-plugin' version='1.43.0'>
       <sha512>6DF347AE68A114D5FCF561163921A19E299DEB3D5E4EF721602B0144A6AFB8D202C04884DA047E53E0E815101DAAF52858FE33A4C92D5936D5DC9DE300842DA4</sha512>
     </dependency>
-    <dependency group='com.github.vlsi.gradle' module='ide-plugin' version='1.42.0'>
+    <dependency group='com.github.vlsi.gradle' module='ide-plugin' version='1.43.0'>
       <sha512>15BF2B9C358CE9DB843862E26BA130383A41B429FA0B46C53E18C4D0AB55921526502D9D8BEA4F4041BBF0496B5E93C811DAC786CC6A2A8EF5C53C234254D409</sha512>
     </dependency>
-    <dependency group='com.github.vlsi.gradle' module='license-gather-plugin' version='1.42.0'>
+    <dependency group='com.github.vlsi.gradle' module='license-gather-plugin' version='1.43.0'>
       <sha512>2BD5C985444B8AD3899F6210A0889D08FBDF35320D1BA6DF15E7436A345C88BC66B5905FD6DC5BE304E6C2CB08093B6578FF3DC13304EA0B3CE943E3544A0A4B</sha512>
     </dependency>
-    <dependency group='com.github.vlsi.gradle' module='stage-vote-release-plugin' version='1.42.0'>
-      <sha512>EC8B465F4F6FBF928131D3E3626554F5E1857979CE7A764FBD887E1689DFBF3FD79F8CDFE3EE225EB16A8173B8F06421A153B9FD29E6EAD4AD53DEE950C9E7CD</sha512>
+    <dependency group='com.github.vlsi.gradle' module='stage-vote-release-plugin' version='1.43.0'>
+      <sha512>6BE9C5E6AB9A9BE55D87B7DC5CB00EA9FB35E2A25303767574B7F443CFDDD545F4754A087645B842C7540B9C6A9BDD7CEB032AEAC6D45066DE29043C68A8EC2C</sha512>
     </dependency>
     <dependency group='commons-logging' module='commons-logging' version='1.0.4'>
       <sha512>C8D2D39A60ADCC49091D393DAF30473D1776E4B6B09BB86639171F660833A17AFBDC9F3E85843093535DA16FA664CD7CD4CA38F54E141018DD1B78DE681AD668</sha512>
