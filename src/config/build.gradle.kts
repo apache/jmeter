@@ -38,7 +38,7 @@ tasks.named<Jar>(JavaPlugin.JAR_TASK_NAME) {
             from(files(srcLicense))
         }
     }
-into("bin") {
+    into("bin") {
         filteringCharset = "UTF-8"
         CrLfSpec(LineEndings.LF).run {
             textFrom("$rootDir/bin") {
