@@ -36,8 +36,9 @@ dependencies {
     // This is an API-only jar. javax.activation is present in Java 8,
     // however it is not there in Java 9
     compileOnly("javax.activation:javax.activation-api")
-
     implementation("com.github.ben-manes.caffeine:caffeine")
+    implementation("com.miglayout:miglayout-core")
+    implementation("com.miglayout:miglayout-swing")
     implementation("io.burt:jmespath-core")
     implementation("io.burt:jmespath-jackson")
     implementation("jcharts:jcharts")
@@ -53,6 +54,7 @@ dependencies {
     implementation("org.apache.httpcomponents:httpcore-nio")
     implementation("org.jsoup:jsoup")
     implementation("org.apache.commons:commons-lang3")
+    implementation("org.ow2.asm:asm")
     implementation("net.sf.jtidy:jtidy")
     implementation("commons-collections:commons-collections")
     implementation("org.apache.commons:commons-math3")
@@ -62,6 +64,7 @@ dependencies {
     implementation("org.apache.commons:commons-text") {
         because("StringEscapeUtils")
     }
+    implementation("xalan:serializer:xalan")
     // we use bcmail for compilation only, and bcmail is not shipped in the release
     compileOnly("org.bouncycastle:bcmail-jdk15on")
     compileOnly("org.bouncycastle:bcpkix-jdk15on")
