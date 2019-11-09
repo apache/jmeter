@@ -1,9 +1,6 @@
-rat-excludes.txt
 checksum.xml
 buildSrc/checksum.xml
 gradle/wrapper/gradle-wrapper.jar
-gradlew
-gradlew.bat
 .*
 .*/**
 CODE_OF_CONDUCT.md

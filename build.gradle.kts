@@ -100,7 +100,7 @@ val gitProps by tasks.registering(FindGitAttributes::class) {
 val rat by tasks.getting(org.nosphere.apache.rat.RatTask::class) {
     gitignore(gitProps)
     // Note: patterns are in non-standard syntax for RAT, so we use exclude(..) instead of excludeFile
-    exclude(rootDir.resolve("rat-excludes.txt").readLines())
+    exclude(rootDir.resolve(".ratignore").readLines())
 }
 
 releaseArtifacts {
