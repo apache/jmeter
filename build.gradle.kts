@@ -128,6 +128,9 @@ releaseParams {
             put(Regex("_src\\."), "source")
             put(Regex("."), "binaries")
         }
+        staleRemovalFilters {
+            excludes.add(Regex("release/.*/HEADER\\.html"))
+        }
     }
     nexus {
         if (repositoryType.get() == RepositoryType.PROD) {

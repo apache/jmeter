@@ -44,7 +44,7 @@ behavior and measure performance. The current version targets Java 8+
 
 Download - Archives/hashes/sigs:
 $svnStagingUri
-(dist revision TBD:SVN revision of svnmucc stage result)
+(dist revision $svnStagingRevision)
 
 RAT report:
 $previewSiteUri/rat/rat-report.txt
