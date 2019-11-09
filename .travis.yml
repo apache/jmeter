@@ -22,6 +22,9 @@ env:
     - ORG_GRADLE_PROJECT_checksumPrint=true
 
 matrix:
+  allow_failures:
+    # j-m-p does not seem to download all the dependencies: https://github.com/jmeter-maven-plugin/jmeter-maven-plugin/issues/187
+    - name: jmeter-maven-plugin tests
   include:
     - name: Tests with OpenJDK 8 + code coverage
       jdk: openjdk8
@@ -61,7 +64,7 @@ matrix:
     - name: jmeter-maven-plugin tests
       jdk: openjdk8
       script:
-        - ./gradlew -PskipJavadoc publishToMavenLocal -Pjmeter.version=42.0
+        - ./gradlew -PskipJavadoc publishToMavenLocal -Pjmeter.version=42.0 -PchecksumIgnore
         - cd ..
         - git clone --depth 100 https://github.com/jmeter-maven-plugin/jmeter-maven-plugin.git
         - cd jmeter-maven-plugin
