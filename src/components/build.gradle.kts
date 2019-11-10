@@ -20,7 +20,7 @@ dependencies {
     api(project(":src:core"))
     testCompile(project(":src:core", "testClasses"))
 
-    api("org.apache-extras.beanshell:bsh:2.0b6") {
+    api("org.apache-extras.beanshell:bsh") {
         because("""
             BeanShell is not required for JMeter, however it is commonly used in the jmx scripts.
             New scripts should refrain from using BeanShell though and migrate to Groovy or other
@@ -28,7 +28,7 @@ dependencies {
         """.trimIndent())
     }
 
-    api("javax.mail:mail:1.5.0-b01") {
+    api("javax.mail:mail") {
         exclude("javax.activation", "activation")
     }
     // There's no javax.activation:activation:1.2.0, so we use com.sun...

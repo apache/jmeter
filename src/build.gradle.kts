@@ -77,7 +77,7 @@ subprojects {
         if (groovyUsed) {
             testImplementation("org.spockframework:spock-core")
         }
-        testRuntimeOnly("cglib:cglib-nodep:3.2.9") {
+        testRuntimeOnly("cglib:cglib-nodep") {
             because("""
                 org.spockframework.mock.CannotCreateMockException: Cannot create mock for
                  class org.apache.jmeter.report.processor.AbstractSummaryConsumer${'$'}SummaryInfo.
