@@ -24,6 +24,7 @@ import com.github.vlsi.gradle.git.FindGitAttributes
 import com.github.vlsi.gradle.git.dsl.gitignore
 import com.github.vlsi.gradle.properties.dsl.lastEditYear
 import com.github.vlsi.gradle.properties.dsl.props
+import com.github.vlsi.gradle.publishing.dsl.versionFromResolution
 import com.github.vlsi.gradle.release.RepositoryType
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -156,6 +157,23 @@ val skipDist by extra {
     boolProp("skipDist") ?: false
 }
 // Inherited from stage-vote-release-plugin: skipSign, useGpgCmd
+
+val skipMavenPublication by extra {
+    setOf(
+        ":",
+        ":src",
+        ":src:bshclient",
+        ":src:dist",
+        ":src:dist-check",
+        ":src:examples",
+        ":src:generator",
+        ":src:licenses",
+        ":src:protocol",
+        ":src:release",
+        ":src:testkit",
+        ":src:testkit-wiremock"
+    )
+}
 
 allprojects {
     apply(plugin = "com.github.vlsi.gradle-extensions")
@@ -305,7 +323,7 @@ allprojects {
         // It is in line with further Gradle versions: https://github.com/gradle/gradle/issues/8585
         dependencies {
             configurations {
-                compileOnly(platform(project(":src:bom")))
+                compileOnly(platform(project(":src:dependencies-bom")))
             }
         }
 
@@ -548,6 +566,73 @@ allprojects {
                         links("https://docs.oracle.com/javase/9/docs/api/")
                     } else {
                         links("https://docs.oracle.com/javase/8/docs/api/")
+                    }
+                }
+            }
+        }
+    }
+    // This configures default entries for the generated pom.xml files
+    plugins.withId("maven-publish") {
+        configure<PublishingExtension> {
+            publications {
+                create<MavenPublication>(project.name) {
+                    val isPlatform = project.pluginManager.hasPlugin("java-platform")
+                    from(components[if (isPlatform) "javaPlatform" else "java"])
+                    if (artifactId == null) {
+                        artifactId = project.name
+                    }
+                    if (version == null) {
+                        version = project.version.toString()
+                    }
+
+                    // Use the resolved versions in pom.xml
+                    // Gradle might have different resolution rules, so we set the versions
+                    // that were used in Gradle build/test.
+                    versionFromResolution()
+
+                    pom {
+                        withXml {
+                            val sb = asString()
+                            var s = sb.toString()
+                            // <scope>compile</scope> is Maven default, so delete it
+                            s = s.replace("<scope>compile</scope>", "")
+                            if (!isPlatform) {
+                                // For regular (non-platform) modules, we cut dependencyManagement
+                                // Cut <dependencyManagement> because all dependencies have the resolved versions
+                                s = s.replace(
+                                    Regex(
+                                        "<dependencyManagement>.*?</dependencyManagement>",
+                                        RegexOption.DOT_MATCHES_ALL
+                                    ),
+                                    ""
+                                )
+                            }
+                            sb.setLength(0)
+                            sb.append(s)
+                            // Re-format the XML
+                            asNode()
+                        }
+                        name.set("Apache JMeter ${project.name.capitalize()}")
+                        description.set(provider { project.description })
+                        inceptionYear.set("1998")
+                        url.set("http://jmeter.apache.org/")
+                        licenses {
+                            license {
+                                name.set("The Apache License, Version 2.0")
+                                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                                comments.set("A business-friendly OSS license")
+                            }
+                        }
+                        issueManagement {
+                            system.set("bugzilla")
+                            url.set("https://bz.apache.org/bugzilla/describecomponents.cgi?product=JMeter")
+                        }
+                        scm {
+                            connection.set("scm:git:https://gitbox.apache.org/repos/asf/jmeter.git")
+                            developerConnection.set("scm:git:https://gitbox.apache.org/repos/asf/jmeter.git")
+                            url.set("https://github.com/apache/jmeter")
+                            tag.set("HEAD")
+                        }
                     }
                 }
             }

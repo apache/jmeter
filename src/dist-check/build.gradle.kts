@@ -41,7 +41,7 @@ dependencies {
         because("It is used in ReportGeneratorSpec and HtmlReportGeneratorSpec")
     }
 
-    extraTestDependencies(platform(project(":src:bom")))
+    extraTestDependencies(platform(project(":src:dependencies-bom")))
     extraTestDependencies("org.hsqldb:hsqldb")
     extraTestDependencies("org.apache.mina:mina-core")
     extraTestDependencies("org.apache.ftpserver:ftplet-api")
@@ -60,7 +60,7 @@ dependencies {
     // This is not required for regular ./bin/jmeter because activemq/mina is not on the top-level
     // classpath but all the jars are loaded by a custom classloader which is instantiated by NewDriver
     // TODO: implement "extra classpath folder" in DynamicClassLoader
-    loggingClasspath(platform(project(":src:bom")))
+    loggingClasspath(platform(project(":src:dependencies-bom")))
     loggingClasspath("org.slf4j:jcl-over-slf4j")
     loggingClasspath("org.apache.logging.log4j:log4j-api")
     loggingClasspath("org.apache.logging.log4j:log4j-core")

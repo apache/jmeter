@@ -77,7 +77,7 @@ dependencies {
     generatorJar(project(":src:generator", "archives"))
     junitSampleJar(project(":src:protocol:junit-sample", "archives"))
 
-    buildDocs(platform(project(":src:bom")))
+    buildDocs(platform(project(":src:dependencies-bom")))
     buildDocs("org.apache.velocity:velocity")
     buildDocs("commons-lang:commons-lang")
     buildDocs("commons-collections:commons-collections")

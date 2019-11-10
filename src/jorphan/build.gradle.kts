@@ -16,7 +16,7 @@
  */
 
 dependencies {
-    api(platform(project(":src:bom")))
+    api(platform(project(":src:dependencies-bom")))
 
     api("org.apiguardian:apiguardian-api")
     api("org.slf4j:slf4j-api")

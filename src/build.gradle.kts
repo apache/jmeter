@@ -15,18 +15,7 @@
  * limitations under the License.
  */
 
-val skipMavenPublication = setOf(
-    ":src:bshclient",
-    ":src:dist",
-    ":src:dist-check",
-    ":src:examples",
-    ":src:generator",
-    ":src:licenses",
-    ":src:protocol",
-    ":src:release",
-    ":src:testkit",
-    ":src:testkit-wiremock"
-)
+val skipMavenPublication: Set<String> by rootProject.extra
 
 fun Project.boolProp(name: String) =
     findProperty(name)
@@ -40,7 +29,24 @@ val skipJavadoc by extra {
 }
 
 subprojects {
-    if (path == ":src:bom") {
+    val archivesBaseName = when (name) {
+        "jorphan", "bshclient" -> name
+        "launcher" -> "ApacheJMeter"
+        else -> "ApacheJMeter_$name"
+    }
+
+    setProperty("archivesBaseName", archivesBaseName)
+    plugins.withId("maven-publish") {
+        configure<PublishingExtension> {
+            publications {
+                named<MavenPublication>(project.name) {
+                    artifactId = archivesBaseName
+                }
+            }
+        }
+    }
+
+    if (path == ":src:bom" || path == ":src:dependencies-bom") {
         return@subprojects
     }
 
@@ -58,7 +64,7 @@ subprojects {
 
     dependencies {
         val api by configurations
-        api(platform(project(":src:bom")))
+        api(platform(project(":src:dependencies-bom")))
 
         if (!testsPresent) {
             // No tests => no dependencies required
@@ -126,84 +132,15 @@ subprojects {
         }
     }
 
-    val archivesBaseName = when (name) {
-        "jorphan", "bshclient" -> name
-        "launcher" -> "ApacheJMeter"
-        else -> "ApacheJMeter_$name"
-    }
-    setProperty("archivesBaseName", archivesBaseName)
-
-    if (project.path in skipMavenPublication) {
-        return@subprojects
-    }
-    // See https://stackoverflow.com/a/53661897/1261287
-    // Subprojects can't use "publishing" since that accessor is not available at parent project
-    // evaluation time
-    configure<PublishingExtension> {
-        publications {
-            create<MavenPublication>(project.name) {
-                artifactId = archivesBaseName
-                version = rootProject.version.toString()
-                from(components["java"])
-
-                if (!skipJavadoc) {
-                    // Eager task creation is required due to
-                    // https://github.com/gradle/gradle/issues/6246
-                    artifact(sourcesJar.get())
-                    artifact(javadocJar.get())
-                }
-
-                // Use the resolved versions in pom.xml
-                // Gradle might have different resolution rules, so we set the versions
-                // that were used in Gradle build/test.
-                versionMapping {
-                    usage(Usage.JAVA_RUNTIME) {
-                        fromResolutionResult()
-                    }
-                    usage(Usage.JAVA_API) {
-                        fromResolutionOf("runtimeClasspath")
-                    }
-                }
-
-                pom {
-                    withXml {
-                        val sb = asString()
-                        var s = sb.toString()
-                        // <scope>compile</scope> is Maven default, so delete it
-                        s = s.replace("<scope>compile</scope>", "")
-                        // Cut <dependencyManagement> because all dependencies have the resolved versions
-                        s = s.replace(
-                            Regex(
-                                "<dependencyManagement>.*?</dependencyManagement>",
-                                RegexOption.DOT_MATCHES_ALL
-                            ),
-                            ""
-                        )
-                        sb.setLength(0)
-                        sb.append(s)
-                        // Re-format the XML
-                        asNode()
-                    }
-                    name.set("Apache JMeter ${project.name.capitalize()}")
-                    description.set(project.description)
-                    inceptionYear.set("1998")
-                    url.set("http://jmeter.apache.org/")
-                    licenses {
-                        license {
-                            name.set("The Apache License, Version 2.0")
-                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                            comments.set("A business-friendly OSS license")
-                        }
-                    }
-                    issueManagement {
-                        system.set("bugzilla")
-                        url.set("https://bz.apache.org/bugzilla/describecomponents.cgi?product=JMeter")
-                    }
-                    scm {
-                        connection.set("scm:git:https://gitbox.apache.org/repos/asf/jmeter.git")
-                        developerConnection.set("scm:git:https://gitbox.apache.org/repos/asf/jmeter.git")
-                        url.set("https://github.com/apache/jmeter")
-                        tag.set("HEAD")
+    plugins.withId("publish-maven") {
+        configure<PublishingExtension> {
+            publications {
+                named<MavenPublication>(project.name) {
+                    if (!skipJavadoc) {
+                        // Eager task creation is required due to
+                        // https://github.com/gradle/gradle/issues/6246
+                        artifact(sourcesJar.get())
+                        artifact(javadocJar.get())
                     }
                 }
             }
