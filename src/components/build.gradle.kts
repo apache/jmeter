@@ -45,6 +45,7 @@ dependencies {
     implementation("net.minidev:accessors-smart")
     implementation("org.apache.commons:commons-pool2")
     implementation("commons-codec:commons-codec")
+    implementation("org.ow2.asm:asm")
     implementation("org.jodd:jodd-log")
     implementation("org.jodd:jodd-lagarto")
     implementation("com.jayway.jsonpath:json-path")
