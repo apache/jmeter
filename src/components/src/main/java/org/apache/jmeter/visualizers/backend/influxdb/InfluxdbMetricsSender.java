@@ -19,8 +19,8 @@ package org.apache.jmeter.visualizers.backend.influxdb;
 
 /**
  * InfluxDB Sender interface
- * @since 3.2
  *
+ * @since 3.2
  */
 interface InfluxdbMetricsSender {
 
@@ -42,14 +42,22 @@ interface InfluxdbMetricsSender {
     }
 
     /**
-     * @param measurement name of the influxdb measurement
-     * @param tag tag set for influxdb
-     * @param field field set for influxdb
+     * @param measurement name of the InfluxDB measurement
+     * @param tag         tag set for InfluxDB (N.B. Needs to start with a comma)
+     * @param field       field set for InfluxDB
      */
     public void addMetric(String measurement, String tag, String field);
 
     /**
-     * Write metrics to Influxdb with HTTP API with InfluxDB's Line Protocol
+     * @param measurement name of the InfluxDB measurement
+     * @param tag         tag set for InfluxDB (N.B. Needs to start with a comma)
+     * @param field       field set for InfluxDB
+     * @param timestamp   timestamp for InfluxDB
+     */
+    public void addMetric(String measurement, String tag, String field, long timestamp);
+
+    /**
+     * Write metrics to InfluxDB with HTTP API with InfluxDB's Line Protocol
      */
     public void writeAndSendMetrics();
 

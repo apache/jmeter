@@ -149,9 +149,14 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     }
 
     @Override
-    public void addMetric(String mesurement, String tag, String field) {
+    public void addMetric(String measurement, String tag, String field) {
+        addMetric(measurement, tag, field, System.currentTimeMillis());
+    }
+
+    @Override
+    public void addMetric(String measurement, String tag, String field, long timestamp) {
         synchronized (lock) {
-            metrics.add(new MetricTuple(mesurement, tag, field, System.currentTimeMillis()));
+            metrics.add(new MetricTuple(measurement, tag, field, timestamp));
         }
     }
 

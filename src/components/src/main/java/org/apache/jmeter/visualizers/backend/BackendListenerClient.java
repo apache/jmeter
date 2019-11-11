@@ -122,6 +122,8 @@ public interface BackendListenerClient {
      * @param result {@link SampleResult}
      * @return {@link SampleResult}
      */
-    SampleResult createSampleResult(
-            BackendListenerContext context, SampleResult result);
+    default SampleResult createSampleResult(
+            BackendListenerContext context, SampleResult result) {
+        return result;
+    }
 }
