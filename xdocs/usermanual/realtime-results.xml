@@ -149,6 +149,8 @@ In this document we will present the configuration setup to graph and historize 
         <li>For InfluxDB 2 setup, create a <code>jmeter</code> <a href="https://v2.docs.influxdata.com/v2.0/organizations/buckets/create-bucket/" target="_blank">bucket</a></li>
         <li>For InfluxDB 1.x setup, create a <code>jmeter</code> database using the <a href="https://docs.influxdata.com/influxdb/v1.8/introduction/get-started/" target="_blank">Influx CLI</a></li>
     </ul>
+    You can also use the HTTP API i.e.
+        <code>curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE jmeter"</code>
     </p>
 
 <subsection name="&sect-num;.3.1 InfluxDB setup for InfluxDBBackendListenerClient" anchor="influxdb">
