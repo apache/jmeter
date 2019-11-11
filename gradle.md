@@ -130,7 +130,7 @@ build only the required jars and files.
 
 ## Site
 
-      # Creates preview of a site to build/docs/site
+      # Creates preview of a site to src/dist/build/site
       gw :src:dist:previewSite
 
       # Builds and publishes site preview to a Git repository
