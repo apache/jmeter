@@ -60,6 +60,7 @@ import org.apache.jmeter.samplers.SampleResult;
  * @since 2.13
  */
 public interface BackendListenerClient {
+
     /**
      * Do any initialization required by this client. It is generally
      * recommended to do any initialization such as getting parameter values in
