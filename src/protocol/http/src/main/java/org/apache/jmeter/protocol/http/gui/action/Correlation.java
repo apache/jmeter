@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +49,8 @@ import org.apache.jmeter.functions.CorrelationFunction;
 import org.apache.jmeter.gui.CorrelationTableModel;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -66,7 +67,6 @@ public class Correlation {
 
     private static final Logger log = LoggerFactory.getLogger(Correlation.class);
 
-    private static Set<HTTPSamplerProxy> samplerSet = new LinkedHashSet<>();
 
     private static int count = 0;
 
@@ -113,8 +113,8 @@ public class Correlation {
         if(CorrelationRecorder.buffer == null || CorrelationRecorder.buffer.isEmpty()) {
             throw new IllegalUserActionException("No Response data found. Make sure you have recorded the script and not opened it.");
         }
-        // Load the imported JMX file and create a list of HTTP sample requests
-        List<HTTPSamplerBase> importedJmxSampleRequestList = new ArrayList<>();
+        // Load the imported JMX file and create a list of HTTP sample requests and
+        // HeaderManagers
         HashTree tree = null;
         try {
             tree = SaveService.loadTree(file);
@@ -122,35 +122,38 @@ public class Correlation {
             throw new IllegalUserActionException("Could not load the JMX file. Please check the file and try again.",
                     e);
         }
-        getHttpSampleRequests(tree);
-        if (samplerSet.isEmpty()) {
+        List<HTTPSamplerBase> importedJmxSampleRequestList = new ArrayList<>();
+        getHttpSampleRequests(tree, importedJmxSampleRequestList);
+        if (importedJmxSampleRequestList.isEmpty()) {
             throw new IllegalUserActionException(
                     "Imported JMX file doesn't have any HTTP(S) Requests. Please check the file and try again.");
-                    "Imported JMX file doesn't have any HTTP Requests. Please check the file and try again.");
         }
-        samplerSet.forEach(proxy -> importedJmxSampleRequestList.add((HTTPSamplerBase) proxy));
-        samplerSet.clear();
+        List<HeaderManager> importedJmxHeaderManagerList = new ArrayList<>();
+        getHeaderManagers(tree, importedJmxHeaderManagerList);
 
-        // Create a list of HTTP sample requests from currently open JMX TestPlan
-        List<HTTPSamplerBase> currentGuiSampleRequestList = new ArrayList<>();
+        // Create a list of HTTP sample requests and HeaderManagers from currently open
+        // JMX TestPlan
         GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeNode rootNode = (JMeterTreeNode) guiPackage.getTreeModel().getRoot();
-        getHttpSampleRequests(rootNode);
-        if (samplerSet.isEmpty()) {
+        List<JMeterTreeNode> sampleList = guiPackage.getTreeModel().getNodesOfType(HTTPSamplerProxy.class);
+        if (sampleList.isEmpty()) {
             throw new IllegalUserActionException(
                     "Current GUI TestPlan doesn't have any HTTP(S) Requests. Please record a plan and try again.");
-                    "Current GUI TestPlan doesn't have any HTTP Requests. Please create/record a plan and try again.");
         }
-        samplerSet.forEach(proxy -> currentGuiSampleRequestList.add((HTTPSamplerBase) proxy));
-        samplerSet.clear();
+        List<HTTPSamplerBase> currentGuiSampleRequestList = sampleList.stream()
+                .map(node -> (HTTPSamplerBase) node.getTestElement()).collect(Collectors.toList());
+        List<HeaderManager> currentGuiheaderList = guiPackage.getTreeModel().getNodesOfType(HeaderManager.class)
+                .stream().map(node -> (HeaderManager) node.getTestElement()).collect(Collectors.toList());
 
         // Extract API parameters from HTTPSamplerProxy objects
-        // TODO: Add parameters which are used in header
-        Map<String, String> importedJmxHttpParameters = createJmxParameterMap(importedJmxSampleRequestList);
-        Map<String, String> currentGuiHttpParameters = createJmxParameterMap(currentGuiSampleRequestList);
+        Map<String, String> importedJmxHttpParameters = createJmxParameterMap(importedJmxSampleRequestList,
+                importedJmxHeaderManagerList);
+        Map<String, String> currentGuiHttpParameters = createJmxParameterMap(currentGuiSampleRequestList,
+                currentGuiheaderList);
 
-        // Compare the maps of API requests to identify the list of correlation candidates.
-        Object[][] correlationCandidates = extractCorrelationCandidates(importedJmxHttpParameters, currentGuiHttpParameters);
+        // Compare the maps of API requests to identify the list of correlation
+        // candidates.
+        Object[][] correlationCandidates = extractCorrelationCandidates(importedJmxHttpParameters,
+                currentGuiHttpParameters);
         if (0 == correlationCandidates.length) {
             throw new IllegalUserActionException("No candidates for correlation found. Cannot Correlate Script");
         }
@@ -161,23 +164,15 @@ public class Correlation {
         setCount(0);
     }
 
-    /**
-     * Prepare a list of HTTPSamplerProxy objects from current TestPlan GUI opened
-     * in JMeter
-     *
-     * @param node Root Node of the TestPlan tree
-     */
-    private static void getHttpSampleRequests(JMeterTreeNode node) {
-        // traverse the testplan and add the sampler proxy elements to samplerSet
-        Enumeration<?> enumNode = node.children();
-        while (enumNode.hasMoreElements()) {
-            JMeterTreeNode child = (JMeterTreeNode) enumNode.nextElement();
-            TestElement testElement = child.getTestElement();
-            if (testElement.getPropertyAsString(TestElement.GUI_CLASS).equals(HTTP_TEST_SAMPLE_GUI)) {
-                HTTPSamplerProxy sample = (HTTPSamplerProxy) testElement;
-                samplerSet.add(sample);
+    private static void getHeaderManagers(HashTree tree, List<HeaderManager> importedJmxHeaderManagerList) {
+        // traverse the testplan Hashtree and add the sampler proxy elements to samplerSet
+        for (Object o : new LinkedList<>(tree.list())) {
+            TestElement item = (TestElement) o;
+            if (item instanceof HeaderManager) {
+                HeaderManager header = (HeaderManager) item;
+                importedJmxHeaderManagerList.add(header);
             }
-            getHttpSampleRequests(child);
+            getHeaderManagers(tree.getTree(item), importedJmxHeaderManagerList);
         }
     }
 
@@ -185,16 +180,17 @@ public class Correlation {
      * Prepare a list of HTTPSamplerProxy objects from the browsed TestPlan Hashtree
      *
      * @param tree Hashtree containing all the TestElements
+     * @param samplerList List of HTTPSamplerBase elements
      */
-    private static void getHttpSampleRequests(HashTree tree) {
-        // traverse the testplan Hashtree and add the sampler proxy elements to samplerSet
+    private static void getHttpSampleRequests(HashTree tree, List<HTTPSamplerBase> samplerList) {
+        // traverse the testplan Hashtree and add the samplerbase elements to samplerList
         for (Object o : new LinkedList<>(tree.list())) {
             TestElement item = (TestElement) o;
             if (item instanceof HTTPSamplerProxy) {
-                HTTPSamplerProxy proxyObj = (HTTPSamplerProxy) item;
-                samplerSet.add(proxyObj);
+                HTTPSamplerBase request = (HTTPSamplerBase) item;
+                samplerList.add(request);
             }
-            getHttpSampleRequests(tree.getTree(item));
+            getHttpSampleRequests(tree.getTree(item), samplerList);
         }
     }
 
@@ -203,22 +199,29 @@ public class Correlation {
      * test elements
      *
      * @param httpSamplerBaseList List of HTTP Sampler Test Elements
+     * @param headerManagerList   List of HeaderManager Test Elements
      * @return Map with HTTP API parameters (name, value)
      */
-    public static Map<String, String> createJmxParameterMap(List<HTTPSamplerBase> httpSamplerBaseList) {
+    public static Map<String, String> createJmxParameterMap(List<HTTPSamplerBase> httpSamplerBaseList,
+            List<HeaderManager> headerManagerList) {
         Map<String, String> jmxParameterMap = new HashMap<>();
         for (HTTPSamplerBase testElement : httpSamplerBaseList) {
             // extract the parameters from body
             extractParametersFromBody(testElement)
-                    .forEach((key, value) -> addCorrelatableParamaterToMap(jmxParameterMap, key, value));
+                    .forEach((key, value) -> addCorrelatableParameterToMap(jmxParameterMap, key, value));
             // extract the query parameters from API path
             extractParametersFromApiPath(testElement)
-                    .forEach((key, value) -> addCorrelatableParamaterToMap(jmxParameterMap, key, value));
+                    .forEach((key, value) -> addCorrelatableParameterToMap(jmxParameterMap, key, value));
+        }
+        for (HeaderManager header : headerManagerList) {
+            // extract the parameters from Header
+            extractParametersFromHeader(header)
+                    .forEach((key, value) -> addCorrelatableParameterToMap(jmxParameterMap, key, value));
         }
         return jmxParameterMap;
     }
 
-    private static void addCorrelatableParamaterToMap(Map<String, String> jmxParameterMap, String key, String value) {
+    private static void addCorrelatableParameterToMap(Map<String, String> jmxParameterMap, String key, String value) {
         // check if the map contains a parameter with the same key
         if (jmxParameterMap.get(key) == null) {
             jmxParameterMap.put(key, value);
@@ -238,6 +241,19 @@ public class Correlation {
         return name + PARANTHESES_OPEN + keyCount.toString() + PARANTHESES_CLOSED;
     }
 
+    private static Map<String, String> extractParametersFromHeader(HeaderManager header) {
+        Map<String, String> jmxParameterMap = new HashMap<>();
+        PropertyIterator itr = header.getHeaders().iterator();
+        while (itr.hasNext()) {
+            Header headerObj = (Header) itr.next().getObjectValue();
+            // Get the Authorization header
+            if (headerObj.getName().equals("Authorization") && headerObj.getValue().split(" ").length == 2) {
+                jmxParameterMap.put(headerObj.getName(), headerObj.getValue().split(" ")[1].trim());
+                break;
+            }
+        }
+        return jmxParameterMap;
+    }
     private static Map<String, String> extractParametersFromBody(HTTPSamplerBase testElement) {
         Arguments arguments = testElement.getArguments();
         PropertyIterator iter = arguments.iterator();
@@ -257,7 +273,7 @@ public class Correlation {
                 continue; // Skip parameters with a blank name (allows use of optional variables in
                           // parameter lists)
             }
-            addCorrelatableParamaterToMap(jmxParameterMap, name, item.getValue());
+            addCorrelatableParameterToMap(jmxParameterMap, name, item.getValue());
         }
         return jmxParameterMap;
     }
@@ -273,7 +289,7 @@ public class Correlation {
             // return empty map
             return jmxParameterMap;
         }
-        params.forEach(param -> addCorrelatableParamaterToMap(jmxParameterMap, param.getName(), param.getValue()));
+        params.forEach(param -> addCorrelatableParameterToMap(jmxParameterMap, param.getName(), param.getValue()));
         return jmxParameterMap;
     }
 
