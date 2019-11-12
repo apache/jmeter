@@ -26,6 +26,8 @@ import java.util.Map;
 
 import javax.xml.transform.TransformerException;
 
+import org.apache.jmeter.extractor.BoundaryExtractor;
+import org.apache.jmeter.extractor.CreateBoundaryExtractor;
 import org.apache.jmeter.extractor.CreateCssSelectorExtractor;
 import org.apache.jmeter.extractor.CreateJsonPathExtractor;
 import org.apache.jmeter.extractor.CreateRegexExtractor;
@@ -53,6 +55,7 @@ public class CorrelationExtractor {
 
     private static final String OTHER = "other"; //$NON-NLS-1$
     private static final String HEADER = "header"; //$NON-NLS-1$
+    private static final String BOUNDARY = "boundary"; //$NON-NLS-1$
 
     private static List<Map<String, String>> listOfMap = new ArrayList<>();
 
@@ -107,6 +110,7 @@ public class CorrelationExtractor {
             // accordingly
             else if (sampleResult.getResponseDataAsString() != null
                     && sampleResult.getResponseDataAsString().contains(decodedParameter)) {
+                int numberOfExtractors = getListOfMap().size();
                 // create extractor tag list
                 if (contentType.contains(TEXT_HTML)) {
                     log.debug("Try to create HTML extractor for parameters in response of {}",
@@ -124,6 +128,12 @@ public class CorrelationExtractor {
                     log.debug("Try to create Regex extractor for parameters in response of {}",
                             sampleResult.getSampleLabel());
                     createExtractor(sampleResult, parameter, parameterMap, OTHER);
+                }
+                // check if no extractor was added, if no then add default Boundary extractor
+                if(getListOfMap().size() == numberOfExtractors) {
+                    log.debug("Try to create Boundary extractor for parameters in response of {}",
+                            sampleResult.getSampleLabel());
+                    createExtractor(sampleResult, parameter, parameterMap, BOUNDARY);
                 }
             }
         }
@@ -172,6 +182,10 @@ public class CorrelationExtractor {
         case HEADER:
             // Create Regex Extractor for parameter in response header
             createRegexExtractorForHeaderParameter(sampleResult, parameter, parameterMap);
+            break;
+        case BOUNDARY:
+            // Create Boundary Extractor for parameter in response body
+            createBoundaryExtractor(sampleResult, parameter, parameterMap);
             break;
         default:
             return;
@@ -232,6 +246,18 @@ public class CorrelationExtractor {
         }
     }
 
+    private static void createBoundaryExtractor(SampleResult sampleResult, String parameter,
+            Map<String, String> parameterMap) {
+        Map<String, String> boundaryExtractor = CreateBoundaryExtractor.createBoundaryExtractor(
+                sampleResult.getResponseDataAsString(), parameterMap.get(parameter), parameter,
+                sampleResult.getSampleLabel());
+        if (!boundaryExtractor.isEmpty()) {
+            getListOfMap().add(boundaryExtractor);
+            log.debug("Boundary Extractor created for {} in {}", parameter,
+                    sampleResult.getSampleLabel());
+        }
+    }
+
     /**
      * Create the extractor TestElement based on the extractor class.
      *
@@ -252,6 +278,8 @@ public class CorrelationExtractor {
             return CreateJsonPathExtractor.createJsonExtractorTestElement(extractor, testElement);
         } else if (testElement instanceof RegexExtractor) {
             return CreateRegexExtractor.createRegexExtractorTestElement(extractor, testElement);
+        } else if (testElement instanceof BoundaryExtractor) {
+            return CreateBoundaryExtractor.createBoundaryExtractorTestElement(extractor, testElement);
         }
         return null;
     }

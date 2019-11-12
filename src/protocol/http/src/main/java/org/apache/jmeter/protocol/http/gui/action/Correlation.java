@@ -45,7 +45,12 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.functions.CorrelationFunction;
+import org.apache.jmeter.extractor.CreateRegexExtractor;
+import org.apache.jmeter.extractor.gui.BoundaryExtractorGui;
+import org.apache.jmeter.extractor.gui.HtmlExtractorGui;
+import org.apache.jmeter.extractor.gui.RegexExtractorGui;
+import org.apache.jmeter.extractor.gui.XPath2ExtractorGui;
+import org.apache.jmeter.extractor.json.jsonpath.gui.JSONPostProcessorGui;
 import org.apache.jmeter.gui.CorrelationTableModel;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -82,7 +87,6 @@ public class Correlation {
     private static final String PARANTHESES_CLOSED = ")"; //$NON-NLS-1$
 
     private static final String CONTENT_TYPE = "contentType"; //$NON-NLS-1$
-    private static final String HTTP_TEST_SAMPLE_GUI = "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui"; //$NON-NLS-1$
     private static final String TESTNAME = "testname"; //$NON-NLS-1$
 
     private static final String APPLICATION_XML = "application/xml"; //$NON-NLS-1$
@@ -90,10 +94,6 @@ public class Correlation {
     private static final String TEXT_HTML = "text/html"; //$NON-NLS-1$
     private static final String TEXT_XML = "text/xml"; //$NON-NLS-1$
 
-    private static final String HTML_EXTRACTOR_GUI = "org.apache.jmeter.extractor.gui.HtmlExtractorGui"; //$NON-NLS-1$
-    private static final String XPATH2_EXTRACTOR_GUI = "org.apache.jmeter.extractor.gui.XPath2ExtractorGui"; //$NON-NLS-1$
-    private static final String JSONPATH_EXTRACTOR_GUI = "org.apache.jmeter.extractor.json.jsonpath.gui.JSONPostProcessorGui"; //$NON-NLS-1$
-    private static final String REGEX_EXTRACTOR_GUI = "org.apache.jmeter.extractor.gui.RegexExtractorGui"; //$NON-NLS-1$
 
     private Correlation() {}
 
@@ -330,15 +330,17 @@ public class Correlation {
             // Add extractors in TestPlan GUI based on content Type
             if (extractor.get(CONTENT_TYPE) != null) {
                 if (extractor.get(CONTENT_TYPE).contains(TEXT_HTML)) {
-                    addExtractor(extractor.get(TESTNAME), HTML_EXTRACTOR_GUI, extractor);
+                    addExtractor(extractor.get(TESTNAME), HtmlExtractorGui.class.getName(), extractor);
                 } else if (extractor.get(CONTENT_TYPE).contains(APPLICATION_XML)
                         || extractor.get(CONTENT_TYPE).contains(TEXT_XML)) {
-                    addExtractor(extractor.get(TESTNAME), XPATH2_EXTRACTOR_GUI, extractor);
+                    addExtractor(extractor.get(TESTNAME), XPath2ExtractorGui.class.getName(), extractor);
                 } else if (extractor.get(CONTENT_TYPE).contains(APPLICATION_JSON)) {
-                    addExtractor(extractor.get(TESTNAME), JSONPATH_EXTRACTOR_GUI, extractor);
+                    addExtractor(extractor.get(TESTNAME), JSONPostProcessorGui.class.getName(), extractor);
                 }
+            } else if (extractor.get(CreateRegexExtractor.REGEX_EXTRACTOR_EXPRESSION) != null){
+                addExtractor(extractor.get(TESTNAME), RegexExtractorGui.class.getName(), extractor);
             } else {
-                addExtractor(extractor.get(TESTNAME), REGEX_EXTRACTOR_GUI, extractor);
+                addExtractor(extractor.get(TESTNAME), BoundaryExtractorGui.class.getName(), extractor);
             }
         });
         // Replace existing correlated parameter values by their correlated variable
@@ -391,8 +393,7 @@ public class Correlation {
      * @return TestElement node against testName
      */
     private static TestElement traverseAndFind(String testName, JMeterTreeNode node) {
-        if (testName.equals(node.getName())
-                && node.getTestElement().getPropertyAsString(TestElement.GUI_CLASS).equals(HTTP_TEST_SAMPLE_GUI)) {
+        if (testName.equals(node.getName()) && HTTPSamplerProxy.class.isInstance(node.getUserObject())) {
             return node.getTestElement();
         }
         Enumeration<?> enumNode = node.children();
@@ -410,51 +411,76 @@ public class Correlation {
      * Replace the correlation parameter value with variable expression. e.g token =
      * 6aBct12gs replaced with ${token}
      *
-     * @param node             TestPlan root node
-     * @param parameterMap Map containing correlation candidates and their
-     *                         values
-     * @param guiPackage       Current TestPlan GuiPackage object
+     * @param node         TestPlan root node
+     * @param parameterMap Map containing correlation candidates and their values
+     * @param guiPackage   Current TestPlan GuiPackage object
      * @throws UnsupportedEncodingException when decoding value failed
      */
-    private static void replaceParameterValues(JMeterTreeNode node, Map<String, String> parameterMap, GuiPackage guiPackage)
-            throws UnsupportedEncodingException {
+    private static void replaceParameterValues(JMeterTreeNode node, Map<String, String> parameterMap,
+            GuiPackage guiPackage) throws UnsupportedEncodingException {
         guiPackage.updateCurrentNode();
         Enumeration<?> enumNode = node.children();
-        // find all http requests
         while (enumNode.hasMoreElements()) {
             JMeterTreeNode child = (JMeterTreeNode) enumNode.nextElement();
             TestElement testElement = child.getTestElement();
-            if (testElement.getPropertyAsString(TestElement.GUI_CLASS).equals(HTTP_TEST_SAMPLE_GUI)) {
+            if (HTTPSamplerProxy.class.isInstance(child.getUserObject())) {
                 HTTPSamplerProxy sample = (HTTPSamplerProxy) testElement;
-                Set<Entry<String, String>> entrySet = sample.getArguments().getArgumentsAsMap().entrySet();
-                // traverse all http arguments
-                for (Entry<String, String> entry : entrySet) {
-                    String encodedValue = java.net.URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.name());
-                    // find the http argument whose value equals to the correlated parameter
-                    Optional<String> firstKey = parameterMap.entrySet().stream()
-                            .filter(en -> Objects.equals(entry.getValue(), en.getValue())
-                                    || Objects.equals(encodedValue, en.getValue()))
-                            .map(Map.Entry::getKey).findFirst();
-                    if (firstKey.isPresent()) {
-                        // Remove the existing http argument and replace its value with the correlated
-                        // parameter alias
-                        sample.getArguments().removeArgument(entry.getKey());
-                        sample.getArguments().addArgument(new HTTPArgument(
-                                CorrelationFunction.extractVariable(firstKey.get()), "${" + firstKey.get() + "}")); //$NON-NLS-1$ //$NON-NLS-2$
-                    }
-                }
-                // replace query parameters in path
-                String path = sample.getPath();
-                if (StringUtils.isBlank(path)) {
-                    continue;
-                }
-                Optional<String> keyToReplace = parameterMap.entrySet().stream()
-                        .filter(en -> path.contains(en.getValue())).map(Map.Entry::getKey).findFirst();
-                if (keyToReplace.isPresent()) {
-                    sample.setPath(path.replace(parameterMap.get(keyToReplace.get()), "${" + keyToReplace.get() + "}")); //$NON-NLS-1$ //$NON-NLS-2$
-                }
+                // Replace parameters in request body
+                replaceParameterValuesInBody(sample, parameterMap);
+                // Replace query parameters in path
+                replaceParameterValuesInPath(sample, parameterMap);
+            }
+            // Replace header parameters
+            else if (HeaderManager.class.isInstance(child.getUserObject())) {
+                replaceParameterValuesInHeader(child, parameterMap);
             }
             replaceParameterValues(child, parameterMap, guiPackage);
+        }
+    }
+
+    private static void replaceParameterValuesInHeader(JMeterTreeNode child, Map<String, String> parameterMap) {
+        HeaderManager headerManager = (HeaderManager) child.getTestElement();
+        PropertyIterator itr = headerManager.getHeaders().iterator();
+        while (itr.hasNext()) {
+            Header headerObj = (Header) itr.next().getObjectValue();
+            // Update the header with correlated variable alias
+            parameterMap.forEach((key, value) -> {
+                String headerValue = headerObj.getValue();
+                String newValue = headerValue.contains(value) ? headerValue.replace(value, "${" + key + "}") //$NON-NLS-1$ //$NON-NLS-2$
+                        : headerValue;
+                headerObj.setValue(newValue);
+            });
+        }
+    }
+
+    private static void replaceParameterValuesInPath(HTTPSamplerProxy sample, Map<String, String> parameterMap) {
+        String path = sample.getPath();
+        if (StringUtils.isBlank(path)) {
+            return;
+        }
+        Optional<String> keyToReplace = parameterMap.entrySet().stream().filter(en -> path.contains(en.getValue()))
+                .map(Map.Entry::getKey).findFirst();
+        if (keyToReplace.isPresent()) {
+            sample.setPath(path.replace(parameterMap.get(keyToReplace.get()), "${" + keyToReplace.get() + "}")); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+    }
+
+    private static void replaceParameterValuesInBody(HTTPSamplerProxy sample, Map<String, String> parameterMap)
+            throws UnsupportedEncodingException {
+        Set<Entry<String, String>> entrySet = sample.getArguments().getArgumentsAsMap().entrySet();
+        for (Entry<String, String> entry : entrySet) {
+            String encodedValue = java.net.URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.name());
+            // find the http argument whose value equals to the correlated parameter
+            Optional<String> firstKey = parameterMap.entrySet().stream()
+                    .filter(en -> Objects.equals(entry.getValue(), en.getValue())
+                            || Objects.equals(encodedValue, en.getValue()))
+                    .map(Map.Entry::getKey).findFirst();
+            if (firstKey.isPresent()) {
+                // Remove the existing http argument and replace its value with the correlated
+                // parameter alias
+                sample.getArguments().removeArgument(entry.getKey());
+                sample.getArguments().addArgument(new HTTPArgument(entry.getKey(), "${" + firstKey.get() + "}")); //$NON-NLS-1$ //$NON-NLS-2$
+            }
         }
     }
 }
