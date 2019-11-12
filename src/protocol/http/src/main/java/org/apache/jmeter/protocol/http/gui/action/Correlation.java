@@ -125,6 +125,7 @@ public class Correlation {
         getHttpSampleRequests(tree);
         if (samplerSet.isEmpty()) {
             throw new IllegalUserActionException(
+                    "Imported JMX file doesn't have any HTTP(S) Requests. Please check the file and try again.");
                     "Imported JMX file doesn't have any HTTP Requests. Please check the file and try again.");
         }
         samplerSet.forEach(proxy -> importedJmxSampleRequestList.add((HTTPSamplerBase) proxy));
@@ -137,6 +138,7 @@ public class Correlation {
         getHttpSampleRequests(rootNode);
         if (samplerSet.isEmpty()) {
             throw new IllegalUserActionException(
+                    "Current GUI TestPlan doesn't have any HTTP(S) Requests. Please record a plan and try again.");
                     "Current GUI TestPlan doesn't have any HTTP Requests. Please create/record a plan and try again.");
         }
         samplerSet.forEach(proxy -> currentGuiSampleRequestList.add((HTTPSamplerBase) proxy));
