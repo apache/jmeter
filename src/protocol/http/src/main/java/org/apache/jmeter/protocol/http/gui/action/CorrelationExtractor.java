@@ -80,16 +80,19 @@ public class CorrelationExtractor {
     }
 
     /**
-     * Process the sampler and create extractors if the parameter was found in the response
+     * Process the sampler and create extractors if the parameter was found in the
+     * response
      *
      * @param sampler      HTTP Sample Result
      * @param parameters   List of correlation candidate parameters
      * @param parameterMap Map containing correlation candidates and their values
      */
-    public static void findParametersInResponse(Object sampler, List<String> parameters, Map<String, String> parameterMap) {
+    public static void findParametersInResponse(Object sampler, List<String> parameters,
+            Map<String, String> parameterMap) {
         SampleResult sampleResult = (SampleResult) sampler;
         String contentType = sampleResult.getContentType();
-        // Find parameter in current Response (Do not process null response data(Body/Header))
+        // Find parameter in current Response (Do not process null response
+        // data(Body/Header))
         for (String parameter : parameters) {
             // TODO: support more content encodings
             String decodedParameter = "";
@@ -130,7 +133,7 @@ public class CorrelationExtractor {
                     createExtractor(sampleResult, parameter, parameterMap, OTHER);
                 }
                 // check if no extractor was added, if no then add default Boundary extractor
-                if(getListOfMap().size() == numberOfExtractors) {
+                if (getListOfMap().size() == numberOfExtractors) {
                     log.debug("Try to create Boundary extractor for parameters in response of {}",
                             sampleResult.getSampleLabel());
                     createExtractor(sampleResult, parameter, parameterMap, BOUNDARY);
@@ -253,8 +256,7 @@ public class CorrelationExtractor {
                 sampleResult.getSampleLabel());
         if (!boundaryExtractor.isEmpty()) {
             getListOfMap().add(boundaryExtractor);
-            log.debug("Boundary Extractor created for {} in {}", parameter,
-                    sampleResult.getSampleLabel());
+            log.debug("Boundary Extractor created for {} in {}", parameter, sampleResult.getSampleLabel());
         }
     }
 
@@ -288,7 +290,7 @@ public class CorrelationExtractor {
      * Update the GUI with all the created extractors present in listOfMap
      *
      * @param parameterMap Map containing parameter name and values which are a
-     *                         candidate for correlation
+     *                     candidate for correlation
      */
     private static void updateJmxFile(Map<String, String> parameterMap) {
         try {
@@ -296,7 +298,8 @@ public class CorrelationExtractor {
                 Correlation.updateJxmFileWithExtractors(getListOfMap(), parameterMap);
             } else {
                 JMeterUtils.reportErrorToUser(
-                        "Could not find parameters in response data. Please check the logs for more information.", "Failure");
+                        "Could not find parameters in response data. Please check the logs for more information.",
+                        "Failure");
             }
         } catch (UnsupportedEncodingException e) {
             log.error("Could not update the JMX file. {}", e.getMessage());

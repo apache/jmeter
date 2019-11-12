@@ -72,7 +72,6 @@ public class Correlation {
 
     private static final Logger log = LoggerFactory.getLogger(Correlation.class);
 
-
     private static int count = 0;
 
     public static int getCount() {
@@ -94,7 +93,6 @@ public class Correlation {
     private static final String TEXT_HTML = "text/html"; //$NON-NLS-1$
     private static final String TEXT_XML = "text/xml"; //$NON-NLS-1$
 
-
     private Correlation() {}
 
     /**
@@ -110,8 +108,9 @@ public class Correlation {
             throw new NullPointerException("JMX file is null. Please check the file and try again"); //$NON-NLS-1$
         }
         // Check if response buffer is empty
-        if(CorrelationRecorder.buffer == null || CorrelationRecorder.buffer.isEmpty()) {
-            throw new IllegalUserActionException("No Response data found. Make sure you have recorded the script and not opened it.");
+        if (CorrelationRecorder.buffer == null || CorrelationRecorder.buffer.isEmpty()) {
+            throw new IllegalUserActionException(
+                    "No Response data found. Make sure you have recorded the script and not opened it.");
         }
         // Load the imported JMX file and create a list of HTTP sample requests and
         // HeaderManagers
@@ -165,7 +164,8 @@ public class Correlation {
     }
 
     private static void getHeaderManagers(HashTree tree, List<HeaderManager> importedJmxHeaderManagerList) {
-        // traverse the testplan Hashtree and add the sampler proxy elements to samplerSet
+        // traverse the testplan Hashtree and add the sampler proxy elements to
+        // samplerSet
         for (Object o : new LinkedList<>(tree.list())) {
             TestElement item = (TestElement) o;
             if (item instanceof HeaderManager) {
@@ -179,11 +179,12 @@ public class Correlation {
     /**
      * Prepare a list of HTTPSamplerProxy objects from the browsed TestPlan Hashtree
      *
-     * @param tree Hashtree containing all the TestElements
+     * @param tree        Hashtree containing all the TestElements
      * @param samplerList List of HTTPSamplerBase elements
      */
     private static void getHttpSampleRequests(HashTree tree, List<HTTPSamplerBase> samplerList) {
-        // traverse the testplan Hashtree and add the samplerbase elements to samplerList
+        // traverse the testplan Hashtree and add the samplerbase elements to
+        // samplerList
         for (Object o : new LinkedList<>(tree.list())) {
             TestElement item = (TestElement) o;
             if (item instanceof HTTPSamplerProxy) {
@@ -254,6 +255,7 @@ public class Correlation {
         }
         return jmxParameterMap;
     }
+
     private static Map<String, String> extractParametersFromBody(HTTPSamplerBase testElement) {
         Arguments arguments = testElement.getArguments();
         PropertyIterator iter = arguments.iterator();
@@ -318,9 +320,9 @@ public class Correlation {
     /**
      * Update the GUI with all the created extractors present in extractors
      *
-     * @param extractors       list of extractors
+     * @param extractors   list of extractors
      * @param parameterMap Map containing parameter name and values which are a
-     *                         candidate for correlation
+     *                     candidate for correlation
      * @throws UnsupportedEncodingException when variable replacement failed
      */
     public static void updateJxmFileWithExtractors(List<Map<String, String>> extractors,
@@ -337,7 +339,7 @@ public class Correlation {
                 } else if (extractor.get(CONTENT_TYPE).contains(APPLICATION_JSON)) {
                     addExtractor(extractor.get(TESTNAME), JSONPostProcessorGui.class.getName(), extractor);
                 }
-            } else if (extractor.get(CreateRegexExtractor.REGEX_EXTRACTOR_EXPRESSION) != null){
+            } else if (extractor.get(CreateRegexExtractor.REGEX_EXTRACTOR_EXPRESSION) != null) {
                 addExtractor(extractor.get(TESTNAME), RegexExtractorGui.class.getName(), extractor);
             } else {
                 addExtractor(extractor.get(TESTNAME), BoundaryExtractorGui.class.getName(), extractor);
@@ -371,7 +373,7 @@ public class Correlation {
         // get the node in which the extractor will be added
         JMeterTreeNode parentNode = guiPackage
                 .getNodeOf(traverseAndFind(testName, (JMeterTreeNode) guiPackage.getTreeModel().getRoot()));
-        if(parentNode == null) {
+        if (parentNode == null) {
             log.warn("Could not add Extractor for HTTP Sample: {}", testName);
             return;
         }
