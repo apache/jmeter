@@ -346,7 +346,7 @@ public class Correlation {
         // Replace existing correlated parameter values by their correlated variable
         // alias
         replaceParameterValues((JMeterTreeNode) guiPackage.getTreeModel().getRoot(), parameterMap, guiPackage);
-        JMeterUtils.reportInfoToUser("Correlation successful. Added " + count + " extractors.", "Successful");
+        JMeterUtils.reportInfoToUser("Correlation successful. Added " + getCount() + " extractors.", "Successful");
         // clear the extractors map
         CorrelationExtractor.getListOfMap().clear();
     }
@@ -381,6 +381,7 @@ public class Correlation {
             guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
         } catch (IllegalUserActionException err) {
             log.error("Exception while adding a component to tree. {}", err.getMessage());
+            return;
         }
         setCount(getCount() + 1);
     }
