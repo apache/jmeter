@@ -42,8 +42,9 @@ public class TestCorrelationExtractor {
     private static final String JSON_CONTENT_TYPE = "application/json;charset=UTF-8";
     private static final String RESPONSE_HEADER = "HTTP/1.1 200 OK";
 
-    private static final String SAMPLE_LABEL = "2 /login";
+    private static final String BOUNDARY = "boundary";
     private static final String HEADER = "header";
+    private static final String SAMPLE_LABEL = "2 /login";
 
     Map<String, String> parameterMap;
     List<Map<String, String>> listOfMap;
@@ -329,6 +330,28 @@ public class TestCorrelationExtractor {
         sampleResult.setResponseHeaders("response data");
         // No change in result
         CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, OTHER);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test
+    public void testCreateBoundaryExtractor() {
+        CorrelationExtractor.getListOfMap().clear();
+        sampleResult.setResponseData("[1,2,3,4,['randomstringtoken',9],9,8,6]");
+        parameterMap.put("txnid", "randomstringtoken");
+        argument = "txnid";
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("BoundaryExtractor.refname", "txnid");
+                put("BoundaryExtractor.lboundary", "4,['");
+                put("BoundaryExtractor.rboundary", "',9]");
+                put("BoundaryExtractor.match_number", "1");
+                put("testname", "2 /login");
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, BOUNDARY);
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
     }
 }
