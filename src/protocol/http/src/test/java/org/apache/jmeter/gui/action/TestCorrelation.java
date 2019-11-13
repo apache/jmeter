@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.gui.action.Correlation;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
@@ -36,6 +38,7 @@ import org.junit.jupiter.api.Test;
 public class TestCorrelation {
 
     private List<HTTPSamplerBase> requests;
+    private List<HeaderManager> headers;
     private Map<String, String> jmxParameterMap;
     private HTTPSamplerBase loginRequest;
     private HTTPSamplerBase logoutRequest;
@@ -43,6 +46,7 @@ public class TestCorrelation {
     @BeforeEach
     public void setup() {
         requests = new ArrayList<>();
+        headers = new ArrayList<>();
         loginRequest = new HTTPSamplerProxy();
         loginRequest.setDomain("localhost");
         logoutRequest = new HTTPSamplerProxy();
@@ -64,12 +68,12 @@ public class TestCorrelation {
         jmxParameterMap.put("_csrf", "dummytoken");
         jmxParameterMap.put("username", "dummyusername");
         jmxParameterMap.put("password", "dummypassword");
-        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests, headers));
 
         // Add request with exactly same parameter name and same values
         requests.add(loginRequest);
         // Results data should be unchanged
-        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests, headers));
 
         // Add request with same parameter name but different value
         HTTPSamplerBase logoutRequest = new HTTPSamplerProxy();
@@ -80,7 +84,7 @@ public class TestCorrelation {
         requests.add(logoutRequest);
         // Result Data
         jmxParameterMap.put("_csrf(1)", "dummytoken2");
-        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests, headers));
     }
 
     @Test
@@ -92,12 +96,12 @@ public class TestCorrelation {
         jmxParameterMap.put("_csrf", "dummytoken");
         jmxParameterMap.put("username", "dummyusername");
         jmxParameterMap.put("password", "dummypassword");
-        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests, headers));
 
         // Add request with exactly same parameter name and same values
         requests.add(loginRequest);
         // Results data should be unchanged
-        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests, headers));
 
         // Add request with same parameter name but different value
         HTTPSamplerBase logoutRequest = new HTTPSamplerProxy();
@@ -105,7 +109,7 @@ public class TestCorrelation {
         requests.add(logoutRequest);
         // Result Data
         jmxParameterMap.put("_csrf(1)", "dummytoken2");
-        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests, headers));
     }
 
     @Test
@@ -123,12 +127,12 @@ public class TestCorrelation {
         jmxParameterMap.put("username", "dummyusername");
         jmxParameterMap.put("password", "dummypassword");
         jmxParameterMap.put("state", "dummystate");
-        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests, headers));
 
         // Add request with same parameter name and same values
         requests.add(loginRequest);
         // Results data should be unchanged
-        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests, headers));
 
         // Add request with same parameter name but different values
         HTTPSamplerBase logoutRequest = new HTTPSamplerProxy();
@@ -140,7 +144,19 @@ public class TestCorrelation {
         // Results data
         jmxParameterMap.put("_csrf(1)", "tokenvalue2");
         jmxParameterMap.put("state(1)", "dummystate2");
-        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests));
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests, headers));
+    }
+
+    @Test
+    public void testCreateJmxParameterMapRequestHeader() {
+        // Data in request header
+        HeaderManager headerManager = new HeaderManager();
+        headerManager.add(new Header("Authorization", "Basic bhdvjhsavsj"));
+        headerManager.add(new Header("Content-Type", "application/json"));
+        headers.add(headerManager);
+        // Results data
+        jmxParameterMap.put("Authorization", "bhdvjhsavsj");
+        Assertions.assertEquals(jmxParameterMap, Correlation.createJmxParameterMap(requests, headers));
     }
 
     @Test
