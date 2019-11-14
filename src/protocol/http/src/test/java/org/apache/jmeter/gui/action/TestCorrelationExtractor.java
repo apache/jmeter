@@ -333,11 +333,11 @@ public class TestCorrelationExtractor {
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testCreateBoundaryExtractor() {
         CorrelationExtractor.getListOfMap().clear();
-        sampleResult.setResponseData("[1,2,3,4,['randomstringtoken',9],9,8,6]");
+        // case 1: value has 4 characters boundary on the left and right
+        sampleResult.setResponseData("[1,2,3,4,['randomstringtoken',9],9,8,6]", StandardCharsets.UTF_8.name());
         parameterMap.put("txnid", "randomstringtoken");
         argument = "txnid";
         // Result Data
@@ -351,6 +351,26 @@ public class TestCorrelationExtractor {
                 put("testname", "2 /login");
             }
         });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, BOUNDARY);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // case 2: value has less than 4 character boundary on left and right
+        sampleResult.setResponseData("['randomstringtoken',9", StandardCharsets.UTF_8.name());
+        // Result Data
+        listOfMap.add(new HashMap<String, String>() {
+            private static final long serialVersionUID = 1L;
+            {
+                put("BoundaryExtractor.refname", "txnid");
+                put("BoundaryExtractor.lboundary", "['");
+                put("BoundaryExtractor.rboundary", "',9");
+                put("BoundaryExtractor.match_number", "1");
+                put("testname", "2 /login");
+            }
+        });
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, BOUNDARY);
+        Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
+        // case 3: value = responseData
+        sampleResult.setResponseData("randomstringtoken", StandardCharsets.UTF_8.name());
+        // No change in Result
         CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, BOUNDARY);
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
     }
